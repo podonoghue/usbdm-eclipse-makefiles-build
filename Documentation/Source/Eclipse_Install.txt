@@ -6,9 +6,8 @@
 This page provides brief instructions on how to set up CodeSourcery Lite or GNU tools for use with 
 Eclipse IDE and USBDM BDM hardware for Kinetis and Coldfire targets on a MS-Windows platform.
 A similar setup works on Linux with obvious changes.\n
--  <b>It is important that this software is installed before installing USBDM as USBDM must place plugin components into the already present Eclipse installation</b>\n
--  <b>The USBDM plugin may also be used with Kinetis Design Studio but it does NOT require the installation of the CDT plugins described below.</b>\n\n
-
+-  It is important that this software is installed <b>before installing USBDM</b> as USBDM must place plugin components into the already present Eclipse installation\n
+-  The USBDM plugin may also be used with Kinetis Design Studio but it does <b>NOT require the installation</b> of the CDT plugins described below.\n\n
 
 <b>Eclipse Installation Considerations</b> \n
 Some points to note about installing Eclipse plugins (mostly applies to Linux):
@@ -23,7 +22,7 @@ Two solutions:
 -  Do "sudo eclipse" when installing the CDT plug-ins so that they are installed in a shared fashion. OR
 -  Manually install the USBDM plug-ins from the USBDM Update Site installed as part of the USBDM installation. 
 
-The following software needs to be installed:\n
+The following software needs to be installed <b>(Not for KDS)</b>:\n
 -  <b>Eclipse Kepler or Luna</b> \n
    I do java programming as well as C so I usually download the Java version and add CDT plugins from scratch(in the next step).\n
    If you download the C/C++ version then some of the plugins will already be present. \n
@@ -101,12 +100,18 @@ only necessary to set these value once for Eclipse.  These values may also be ac
    These two options can be conveniently set by using the Browse Button to browse to the 
    installation location of the XXXXXgcc.exe program included with the tools e.g. arm-eabi-gcc.exe.\n
    If a particular toolchain is not being used then the entries should be cleared.  
+   
+   For <b>Kinetis Design Studio</b> it is necessary to use the ARM toolchain <b>included in the KDS installation</b>.  This is due to
+   a rather heavy-handed approach taken by KDS in that it modifies tool paths globally.  If you wish to use a later toolchain you have installed
+   it is necessary to rename the KDS toolchain directory.
+   
 - Make command \n
   Under windows it is necessary to provide a GNU make tool to use in project builds.  
   USBDM includes a copy of the GNU make utility renamed as usbdm-make.  This is a convenient choice.
 - Rm (delete) command \n
   Under windows it is necessary to provide a usable delete command to use in project builds.  
   USBDM includes a copy of the GNU rm utility renamed as usbdm-rm.  This is a convenient choice.
+  
   \image html 5.USBDMToolSettings.png
    
 */

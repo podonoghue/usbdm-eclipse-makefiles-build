@@ -26,7 +26,7 @@
    - Unzip the archive.
    - Select import existing projects in Codewarrior.
      
- \section sectionBuildingApplications Building Applications. 
+ \section sectionBuildingApplications Building Applications under Windows. 
   To maintain portability between WIN32 and Linux I have chosen to use wxWidgets to provide the GUI.
   
   While I do the development using the Eclipse IDE I have found it difficult to provide a portable build
@@ -88,6 +88,24 @@
          correct the paths in the command file.
         -# Run the make command "make -f MakeAll.mk all"
   
+ \section sectionBuildingLinuxApplications Building Applications under Linux. 
+  Tested using Ubuntu derivative e.g. Mint
+
+   - sudo apt install git
+   
+   - cd .....WorkDirectory.....
+   - git clone https://github.com/podonoghue/usbdm-eclipse-makefiles-build.git
+   - git clone https://github.com/podonoghue/usbdm-eclipse-plugins.git
+   - cd usbdm-eclipse-makefiles-build
+   - sudo ./linuxPackages
+   - ./MakeAll
+   - ./CreateDebFile
+   - sudo ./Update
+
+  It looks for Eclipse and KDS in several locations.
+  Update usbdm-eclipse-makefiles-build/PackageFiles/MiscellaneousLinux/DEBIAN/postinst, prerm to add extra locations
+
+
 \section Documentation
 	The documentation is built in Eclipse using
 	  - doxygen

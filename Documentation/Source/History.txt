@@ -2,18 +2,139 @@
 \page pageHistory History & Issues
 
 \section sectionHistory Revision History
+USBDM V4_12_1_140 (Sept 2016)  
+
+- Features
+    - Linux build (64-bit only, tested on MINT)  
+    - Added Codewarrior 10.7 to Windows installer  
+    
+USBDM V4_12_1_130 (July 2016)   
+ 
+- Features
+    - None  
+    
+- Bug Fixes
+    - Bleed between launch configs  
+    - Project stationery (minor)  
+
+USBDM V4_12_1_120_b (July 2016)    
+
+- Features
+    - Added installion for Freemaster 2.0  
+   
+- Bug Fixes
+    - Stationery improved (various)  
+    - Nullptr error in some dialogues for corrupt/missing config files  
+    - Restored paged option in Memory dump program   
+
+USBDM V4_12_1_110 (June 2016)  
+
+- Features
+    - Plugins updated for Eclipse Neon  
+   
+- Bug Fixes
+    - Removed dependence on MI plugins (Eclipse plugin)  
+    - Minor plugin changes for Linux (Eclipse plugin)  
+    - Restart sequence improved (Eclipse plugin)  
+    - Stationery improved (FTM, LLWU)  
+
+USBDM V4_12_1_100 (June 2016)   
+
+- Features  
+    - C++ library features for KDS improved  
+   
+- Bug Fixes  
+    - Modified JNI plugin to remove unnecessary dependency. Should allow installation on machines without MINGW!   
+
+   USBDM V4_12_1_90 (June 2016) Pulled    
+   
+- Features  
+    - Added FRDM-K66  
+    - Added Device editor (WIP)  
+   
+- Bug fixes  
+    - Fixed minor error in interaction of "smart" security option & readback verify  
+    - Custom security value now enabled (not much testing done)  
+    
+USBDM V4_12_1_80 (Feb 2016)    
+  
+- Features  
+    - Added stationery for MK22F12 devices  
+    - Added support for OpenSDAv1 FRDM boards with target power control e.g. FRDM-KEA  
+    - Confirmed operation with FRDM-KV31F and FRDM-KV10Z (OpenSDAv2.1)  
+    - Confirmed operation with FRDM-KEA128 (OpenSDAv1 + power)  
+    - Added support for Codewarrior HCS12(X) V5.2  
+    - Added Generic C++ stationery for MKL and MKL devices.  
+    - Updated SVD and regenerated header files  
+    - Added SVD & header files for several MKV devices  
+   
+- Bug fixes  
+    - Fixed support for MKV10Z32VLF7  
+    - Memory dump now skip zero-width memory ranges rather than stopping at first.  
+
+USBDM V4_12_1_70 (Jan 2016)    
+
+- Features  
+    - Added support for MC9S12VR48, MC9S12VR64 (MC9S12VRRMV3)  
+    - Renamed SKEAxxx to S9KEAxxx   
+    - Fix for S32DS clumsy filter option changes (USBDM launch is now visible)   
+   
+- Bug fixes  
+    - Firmware now returns correct error code for pre-command connection check.  
+        - Avoids long delay on initial connection failure   
+        - **Update of BDM firmware is advised (JMxx, JSxx, MKxx)**  
+    - Modifications for Ubuntu GCC V5  
+    - Fixed case of include files (for Linux)   
+    - Changed to static build for plugin DLLs (prevents trap on KDS exit)  
+   
+USBDM V4_12_1_60a (Dec 2015)    
+
+- Features  
+    - MKE flash programmer now disables NMI when mass-erasing  
+
+- Bug fixes  
+    - Added missing file to installation (reason for this refresh)  
+   
+USBDM V4_12_1_60 (Dec 2015)  
+
+- Eclipse plugin
+    - Added DMA information
+    - More extensive logging on programming failure (debug version only)
+   
+- Bug fixes
+    - Fixed bad bug in ELF loader - Failed to relocate .data segment
+   
+USBDM V4_12_1_50 (Dec 2015)  
+
+- Features
+    - Eclipse plugin
+        - Modified the Eclipse stationery to use template classes
+        - Moved Stationery to USBDM namespace
+        - Changed default C Compiler to C++11
+        - Bit-band Macros fixed & CPP bit-band template functions added
+        - Added -fno-rtti option to New Project Wizard (on by default)
+    - Added MK65FX1M0M18, MK66FN2M0M18, corrected names for MK66 family
+    - Added SDID for MK20DX256M7
+    - Added Linear Address mode for HCS12 to Memory Dump utility
+   
+- Bug fixes  
+    - Fixed flash sector sizes on several M5 and M7 devices (affects selective erase)
+    - GDBServer now reports FlexNVM as flash to GDB (allows programming)
+    - Corrected start address for kinetis8K_16K_Ram 
+    - ELF files are loaded based on section headers rather than program headers
+    - Linear address handling for HCS12 verify
+    - Changed SDIDs for MC9S12ZVL(S)32/16/8
+    - Fixed mass-erase option for s12z devices
+    - Fixed size of SDIDs for s12z devices
 
 USBDM V4_12_1_40 (Oct 2015) 
-======================================================================================= 
 - Improved integration with Kinetis Design Studio New Project Wizard
 
 USBDM V4_12_1_30 (Sep 2015) 
-======================================================================================= 
 - Command line tools now return sensible error codes
 - Added/fixed device 9S12T64 
 
 USBDM V4.12.1.20 (Sep 2015) 
-======================================================================================= 
 - Fixes for USBDM Eclipse plugin
 	- JARs are now signed
 	- Threading improved (UI blocking prevented)
@@ -23,25 +144,22 @@ USBDM V4.12.1.20 (Sep 2015)
 - GDB Server now retries correctly on initial connection failure
 
 USBDM V4.12.1.10 (Aug 2015) 
-======================================================================================= 
 - Changes to USBDM new project wizard (new features)
 - Driver related changes
 - Drivers are now signed
 
-********************************************************************************
-********************************************************************************
+=======================================================================================
+
 <b>REQUIREMENTS</b> 
 - BDM firmware <b>must</b> be updated
 - Current drivers <b>must</b> be used
-********************************************************************************
-********************************************************************************
+
+=======================================================================================
 
 USBDM V4.11.1.80 (Not released) 
-======================================================================================= 
 - Changes to USBDM new project wizard (new features)
 
 USBDM V4.11.1.70#2 (Aug 2015) (previous upload was incomplete)
-======================================================================================= 
 - KDS Eclipse plugin installation no longer requires Java to to be installed
 - Installation no longer requires the previous version to be uninstalled
 - Eclipse GDB interface now tracks pre-set breakpoints correctly 
@@ -52,12 +170,10 @@ USBDM V4.11.1.70#2 (Aug 2015) (previous upload was incomplete)
 - Added hardware/software reset choice for kinetis
 
 V4.11.1.60 (Jun 2015) 
-======================================================================================= 
 - Fix for USB bug that prevented BDM use on many Linux machines
 - Minor device connection changes
 
 V4.11.1.50 (Jun 2015) 
-======================================================================================= 
 - Updates and fixes to UsbdmMemoryDump
 - Improvements to JS16_Bootloader & JB16_Bootloader (Linux & USB3 mostly)
 - Fixes to KSDK for Linux
@@ -68,7 +184,6 @@ Known bugs
 - USB3 issues on Windows (JS16 Bootloader)
 
 V4.11.1.40 (May 2015) 
-======================================================================================= 
 - Added UsbdmMemoryDump
 Linux i386 release - only had minimal testing (command line + eclipse, not KDS)  
 Windows - minor bug fixes
@@ -76,12 +191,10 @@ Windows - minor bug fixes
 - Cleanup of debug messages in plugin
 
 V4.11.1.30 (May 2015) 
-======================================================================================= 
 Linux versions added
 Minor fixes
 
 V4.11.1.20 (May 2015) 
-======================================================================================= 
 - Legacy DSC support added
 - KSDK support updated for Kinetis SDK 1.2.0
 - Tested with Kinetis Design Studio 3.0.0
@@ -92,7 +205,6 @@ Bugs & Limitations
 - MQX options in KDS new project wizard are not operational
 
 V4.11.1.10 (May 2015) 
-======================================================================================= 
    - Refactoring of files
    - Now uses a C++ plugin structure for most DLLs
    - Added KL27, MKV30, MKV31 families (wizard may be incomplete)
@@ -105,17 +217,14 @@ Bugs & Limitations
 - Legacy DSC support is not provided
 
 V4.10.6.260 (February 2015)
-======================================================================================= 
    - Improvements to handling of LLS and VLLSx states on Kinetis devices with GDB
       - Option to set connection timeout to indefinite period
       - Options to trap VLLSx reset exits
 
 V4.10.6.250a_Win (January 2015)
-======================================================================================= 
    - Minor changes to the installer to address Eclipse plugin loading issues.
 
 V4.10.6.250 (January 2015)
-======================================================================================= 
    - Eclipse/KDS Plugin
       - Device selection is better organised (easier)
       - Correction to interaction between different options
@@ -135,7 +244,6 @@ V4.10.6.250 (January 2015)
       -  MC56F84585, MC56F84587, MC56F84786, MC56F84789
 
 V4.10.6.240 (December 2014)
-======================================================================================= 
    - Linux
       - Parity with WIN32
       - WxWidgets warning fix
@@ -150,7 +258,6 @@ V4.10.6.240 (December 2014)
    - Provided a build of GCC for m68k since it seems hard to locate one
       
 V4.10.6.230 (December 2014)
-======================================================================================= 
 	- Eclipse Plugin
 		- Some fixes to launch configurations for MKL devices
 		- Project creation is now more modular to allow easier addition of features
@@ -163,7 +270,6 @@ V4.10.6.230 (December 2014)
 	- Addition of MC9S12GA256 device
       
 V4.10.6.220 (November 2014)
-======================================================================================= 
    - Eclipse Plugin
       - Reset button has been replaced with more useful Restart button
       - C compiler default language changed to ISO-C99 (-std=c99)
@@ -179,7 +285,6 @@ V4.10.6.220 (November 2014)
    - Changed ARM disconnect so reset capture is restored to default value
 
 V4.10.6.210 (October 2014)
-======================================================================================= 
 	- Improvements to Eclipse plugins
 	- Addition of Disassembly option to Eclipse plugins
 	- Addition of missing Codewarrior devices (MKL02M4)
@@ -187,7 +292,6 @@ V4.10.6.210 (October 2014)
 	- Added Fault Report Dialogue to Eclipse plugin
 
 V4.10.6.200 (September 2014)
-======================================================================================= 
 	- Added MKL03 devices (programming and SVD files)
 	- Improvements for MKM33
 	- Fixed aliases bug relating to SDID of HCS08 devices
@@ -196,13 +300,11 @@ V4.10.6.200 (September 2014)
 	- Corrected errors in Kinetis SVD file & header files.
    	
 V4.10.6.190 (August 2014)
-======================================================================================= 
 	- Corrected some issues with Mass erase of secured/difficult devices 
 	- Updates SVD files for MK64 
 	- Improved logging for TCL scripts
 
 V4.10.6.180 (August 2014)
-======================================================================================= 
 	- Updated installer for KDS release 
 	- Added MK22FN128M12, MK22FN512M12 (new prog algorithm) 
 	- Added MKM33xx etc 
@@ -215,7 +317,6 @@ V4.10.6.180 (August 2014)
 	- Fixed failure to save some settings in New Project wizard.
 	
 V4.10.6.170 (July 2014)
-======================================================================================= 
    - Added External SVD files
    - Updated internal SVD files (additional devices, vector tables now complete)
    - Updated header files for Kinetis
@@ -226,12 +327,10 @@ V4.10.6.170 (July 2014)
    - Added support for s12z devices (S12Z programmer & Codewarrior 10.x)
 
 V4.10.6.160 (May 2014)
-======================================================================================= 
    - Added option to select external SVD files for peripheral browser in Eclipse (KDS mostly)
    - Drivers have been moved to a different directory on Sourceforge (getting lost amongst other files)
 
 V4.10.6.150 (April 2014)
-======================================================================================= 
    - Added Freescale Kinetis Design Studio to Installer options
    - Updated Eclipse debuggers to use DSF interface (existing projects continue to use MI)
    - Peripheral Register now supports DSF
@@ -239,7 +338,6 @@ V4.10.6.150 (April 2014)
    - Added support for new Kinetis devices MK64FN MK22FN
 
 V4.1.6.140 (April 2014)
-======================================================================================= 
    - Additional Kinetis devices (MKE04, MKE06, MK64F)
    - Bug fixes
    	- Corrected programmer file dialogue wildcards for .axf files
@@ -247,7 +345,6 @@ V4.1.6.140 (April 2014)
    - HCS08 Programmer on PA & PT targets no longer affects WDOG settings 
    	
 V4.1.6.130 (March 2014)
-======================================================================================= 
    - Bug fixes
    	- Fix for the fix applied to 9s08 small targets (i.e. the fix broke other targets)
    	- Fix for MC56F80xx devices in CW 10 
@@ -255,7 +352,6 @@ V4.1.6.130 (March 2014)
 	   - Stripped some missed files.
    	
 V4.1.6.120 (March 2014)
-======================================================================================= 
    - New features in Eclipse
    	- Added project options to Eclipse plugin
    	- Configuration editor (used for clock configuration)
@@ -270,7 +366,6 @@ V4.1.6.120 (March 2014)
    - Stripped binaries to reduce size
 	
 V4.10.6.110 (February 2014)
-======================================================================================= 
    - New features in Eclipse
 	   - Added Peripheral View (Kinetis devices)
 	   - Added SVD files and derived header files
@@ -280,7 +375,6 @@ V4.10.6.110 (February 2014)
    - Corrected errors in programmer device files
    
 V4.10.6.100 (November 2013)
-======================================================================================= 
    - Modified GDB server interrupt masking (ARM+CFV1) 
    - Added interrupt masking option to GDB server
    - Eclipse examples updated
@@ -290,41 +384,34 @@ V4.10.6.100 (November 2013)
      the start-up time of the programs.
    
 V4.10.6.80 (November 2013)
-======================================================================================= 
    - Added support for 9S08PA4 & 9S08PA2
    - Minor fix to Codewarrior 10 interface
    - Added security options to Eclipse & Codewarrior plugins
    - WIN+LINUX versions are feature consistent
 
 V4.10.6.80 (November 2013)
-======================================================================================= 
 	- Deleted as corrupted
 	
 V4.10.6.40 (October 2013) 
-======================================================================================= 
 	- usbdm_4.10.6.40-2-i386.deb
 	- usbdm_4.10.6.40-2-amd64.deb
 	- Updated installer for Ubuntu 32 & 64-bit system 
 	- Added Eclipse and Codewarrior 10.2 plug-ins
       
 V4.10.6c (September 2013) 
-======================================================================================= 
    - Installer updated for CW 10.5 USBDM V4.10.6b 
    - Fix for command-line operation of programmers 
    - Experimental build on Ubuntu 32- & 64-bit system
    - Note: These Linux files do not contain Eclipse or Codewarrior plug-ins
 
 V4.10.6-1 (August 2013) 
-======================================================================================= 
 	- usbdm_4.10.6-1-i386.deb 
 	- usbdm_4.10.6-1-amd64.deb 
 
 V4.10.6a (August 2013) 
-======================================================================================= 
    - Fix for installer bug, installed programs should be unchanged 
    
 V4.10.6 (August 2013) 
-======================================================================================= 
    - This mainly concentrates on Eclipse support   
    - Eclipse Juno and Kepler:
       - Installation no longer adds files to Codesourcery directories
@@ -345,7 +432,6 @@ V4.10.6 (August 2013)
    - Added additional Kinetis devices (KE02 family)
 
 V4.10.5 (May 2013) -
-======================================================================================= 
    - Added support for Codewarrior 10.4 Release
    - Added support for Eclipse CDT projects using Codesourcery (USBDM New project Wizard)
    - Added Plugin for using USBDM + GDB with Eclipse
@@ -359,7 +445,6 @@ V4.10.5 (May 2013) -
    - Updated OpenSDA USBDM firmware to work with later versions of OpenSDA bootloaders 
 
 V4.10.4 (January 2013) -
-======================================================================================= 
    - Added support for Codewarrior 10.3 Release (<b>This version does not work with the BETA</b>)
    - Added customisable security options to programmers
    - Improved HCS08/HCS12 programming speeds (15~30%)
@@ -371,7 +456,6 @@ V4.10.4 (January 2013) -
    - Added OpenSDA firmware (This allows use of FRDM-KL25 board as general purpose Kinetis BDM)
    
 V4.10.3 (November 2012) -
-======================================================================================= 
    - Updated device driver installation (V1.0.1) (removed unnecessary driver). 
    - ELF Files now supported for MC56F80xx devices.
    - Changed to shared DLLs build for wxWidgets.
@@ -383,7 +467,6 @@ V4.10.3 (November 2012) -
      - Corrected corruption in large reads for ARM GDI Interface.
      
 V4.10.2 (October 2012) -
-======================================================================================= 
    - Updated installer for Codewarrior 10.3 Beta
    - Changed to shared DLLs build for wxWidgets
    - Changed to Make based projects
@@ -395,7 +478,6 @@ V4.10.2 (October 2012) -
      - Kinetis-SWD reports memory read/write errors on failing access (not following access) (firmware)
         
 V4.10.0 (September 2012) -
-======================================================================================= 
    - Added support for ARM-SWD interfaces (requires different hardware). \n 
      ARM-SWD is much faster than ARM-JTAG. For reference, programming a file
      to flash using Codewarrior 10.2:     \n

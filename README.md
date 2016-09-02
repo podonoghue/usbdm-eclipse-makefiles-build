@@ -29,10 +29,11 @@ Ubuntu derivative e.g. Mint
 sudo apt install git
 
 cd .....WorkDirectory.....  
+sudo apt-get install git
 git clone https://github.com/podonoghue/usbdm-eclipse-makefiles-build.git  
 git clone https://github.com/podonoghue/usbdm-eclipse-plugins.git  
 cd usbdm-eclipse-makefiles-build  
-sudo ./linuxPackages  
+sudo ./LinuxPackages  
 ./MakeAll  
 ./CreateDebFile  
 sudo ./Update  

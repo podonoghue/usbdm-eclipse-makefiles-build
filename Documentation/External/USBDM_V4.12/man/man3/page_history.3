@@ -1,0 +1,1398 @@
+.TH "page_history" 3 "Thu Sep 1 2016" "Version V4.12" "USBDM" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+page_history \- History & Issues 
+
+.SH "Revision History"
+.PP
+USBDM V4_12_1_140 (Sept 2016)
+.PP
+.IP "\(bu" 2
+Features
+.IP "  \(bu" 4
+Linux build (64-bit only, tested on MINT)
+.IP "  \(bu" 4
+Added Codewarrior 10\&.7 to Windows installer
+.PP
+
+.PP
+.PP
+USBDM V4_12_1_130 (July 2016)
+.PP
+.IP "\(bu" 2
+Features
+.IP "  \(bu" 4
+None
+.PP
+
+.IP "\(bu" 2
+Bug Fixes
+.IP "  \(bu" 4
+Bleed between launch configs
+.IP "  \(bu" 4
+Project stationery (minor)
+.PP
+
+.PP
+.PP
+USBDM V4_12_1_120_b (July 2016)
+.PP
+.IP "\(bu" 2
+Features
+.IP "  \(bu" 4
+Added installion for Freemaster 2\&.0
+.PP
+
+.IP "\(bu" 2
+Bug Fixes
+.IP "  \(bu" 4
+Stationery improved (various)
+.IP "  \(bu" 4
+Nullptr error in some dialogues for corrupt/missing config files
+.IP "  \(bu" 4
+Restored paged option in Memory dump program
+.PP
+
+.PP
+.PP
+USBDM V4_12_1_110 (June 2016)
+.PP
+.IP "\(bu" 2
+Features
+.IP "  \(bu" 4
+Plugins updated for Eclipse Neon
+.PP
+
+.IP "\(bu" 2
+Bug Fixes
+.IP "  \(bu" 4
+Removed dependence on MI plugins (Eclipse plugin)
+.IP "  \(bu" 4
+Minor plugin changes for Linux (Eclipse plugin)
+.IP "  \(bu" 4
+Restart sequence improved (Eclipse plugin)
+.IP "  \(bu" 4
+Stationery improved (FTM, LLWU)
+.PP
+
+.PP
+.PP
+USBDM V4_12_1_100 (June 2016)
+.PP
+.IP "\(bu" 2
+Features
+.IP "  \(bu" 4
+C++ library features for KDS improved
+.PP
+
+.IP "\(bu" 2
+Bug Fixes
+.IP "  \(bu" 4
+Modified JNI plugin to remove unnecessary dependency\&. Should allow installation on machines without MINGW!
+.PP
+.PP
+USBDM V4_12_1_90 (June 2016) Pulled
+.IP "\(bu" 2
+Features
+.IP "  \(bu" 4
+Added FRDM-K66
+.IP "  \(bu" 4
+Added Device editor (WIP)
+.PP
+
+.IP "\(bu" 2
+Bug fixes
+.IP "  \(bu" 4
+Fixed minor error in interaction of 'smart' security option & readback verify
+.IP "  \(bu" 4
+Custom security value now enabled (not much testing done)
+.PP
+
+.PP
+.PP
+USBDM V4_12_1_80 (Feb 2016)
+.PP
+.IP "\(bu" 2
+Features
+.IP "  \(bu" 4
+Added stationery for MK22F12 devices
+.IP "  \(bu" 4
+Added support for OpenSDAv1 FRDM boards with target power control e\&.g\&. FRDM-KEA
+.IP "  \(bu" 4
+Confirmed operation with FRDM-KV31F and FRDM-KV10Z (OpenSDAv2\&.1)
+.IP "  \(bu" 4
+Confirmed operation with FRDM-KEA128 (OpenSDAv1 + power)
+.IP "  \(bu" 4
+Added support for Codewarrior HCS12(X) V5\&.2
+.IP "  \(bu" 4
+Added Generic C++ stationery for MKL and MKL devices\&.
+.IP "  \(bu" 4
+Updated SVD and regenerated header files
+.IP "  \(bu" 4
+Added SVD & header files for several MKV devices
+.PP
+
+.IP "\(bu" 2
+Bug fixes
+.IP "  \(bu" 4
+Fixed support for MKV10Z32VLF7
+.IP "  \(bu" 4
+Memory dump now skip zero-width memory ranges rather than stopping at first\&.
+.PP
+
+.PP
+.PP
+USBDM V4_12_1_70 (Jan 2016)
+.PP
+.IP "\(bu" 2
+Features
+.IP "  \(bu" 4
+Added support for MC9S12VR48, MC9S12VR64 (MC9S12VRRMV3)
+.IP "  \(bu" 4
+Renamed SKEAxxx to S9KEAxxx
+.IP "  \(bu" 4
+Fix for S32DS clumsy filter option changes (USBDM launch is now visible)
+.PP
+
+.IP "\(bu" 2
+Bug fixes
+.IP "  \(bu" 4
+Firmware now returns correct error code for pre-command connection check\&.
+.IP "    \(bu" 6
+Avoids long delay on initial connection failure
+.IP "    \(bu" 6
+\fBUpdate of BDM firmware is advised (JMxx, JSxx, MKxx)\fP
+.PP
+
+.IP "  \(bu" 4
+Modifications for Ubuntu GCC V5
+.IP "  \(bu" 4
+Fixed case of include files (for Linux)
+.IP "  \(bu" 4
+Changed to static build for plugin DLLs (prevents trap on KDS exit)
+.PP
+
+.PP
+.PP
+USBDM V4_12_1_60a (Dec 2015)
+.PP
+.IP "\(bu" 2
+Features
+.IP "  \(bu" 4
+MKE flash programmer now disables NMI when mass-erasing
+.PP
+
+.IP "\(bu" 2
+Bug fixes
+.IP "  \(bu" 4
+Added missing file to installation (reason for this refresh)
+.PP
+
+.PP
+.PP
+USBDM V4_12_1_60 (Dec 2015)
+.PP
+.IP "\(bu" 2
+Eclipse plugin
+.IP "  \(bu" 4
+Added DMA information
+.IP "  \(bu" 4
+More extensive logging on programming failure (debug version only)
+.PP
+
+.IP "\(bu" 2
+Bug fixes
+.IP "  \(bu" 4
+Fixed bad bug in ELF loader - Failed to relocate \&.data segment
+.PP
+
+.PP
+.PP
+USBDM V4_12_1_50 (Dec 2015)
+.PP
+.IP "\(bu" 2
+Features
+.IP "  \(bu" 4
+Eclipse plugin
+.IP "    \(bu" 6
+Modified the Eclipse stationery to use template classes
+.IP "    \(bu" 6
+Moved Stationery to USBDM namespace
+.IP "    \(bu" 6
+Changed default C Compiler to C++11
+.IP "    \(bu" 6
+Bit-band Macros fixed & CPP bit-band template functions added
+.IP "    \(bu" 6
+Added -fno-rtti option to New Project Wizard (on by default)
+.PP
+
+.IP "  \(bu" 4
+Added MK65FX1M0M18, MK66FN2M0M18, corrected names for MK66 family
+.IP "  \(bu" 4
+Added SDID for MK20DX256M7
+.IP "  \(bu" 4
+Added Linear Address mode for HCS12 to Memory Dump utility
+.PP
+
+.IP "\(bu" 2
+Bug fixes
+.IP "  \(bu" 4
+Fixed flash sector sizes on several M5 and M7 devices (affects selective erase)
+.IP "  \(bu" 4
+GDBServer now reports FlexNVM as flash to GDB (allows programming)
+.IP "  \(bu" 4
+Corrected start address for kinetis8K_16K_Ram
+.IP "  \(bu" 4
+ELF files are loaded based on section headers rather than program headers
+.IP "  \(bu" 4
+Linear address handling for HCS12 verify
+.IP "  \(bu" 4
+Changed SDIDs for MC9S12ZVL(S)32/16/8
+.IP "  \(bu" 4
+Fixed mass-erase option for s12z devices
+.IP "  \(bu" 4
+Fixed size of SDIDs for s12z devices
+.PP
+
+.PP
+.PP
+USBDM V4_12_1_40 (Oct 2015)
+.IP "\(bu" 2
+Improved integration with Kinetis Design Studio New Project Wizard
+.PP
+.PP
+USBDM V4_12_1_30 (Sep 2015)
+.IP "\(bu" 2
+Command line tools now return sensible error codes
+.IP "\(bu" 2
+Added/fixed device 9S12T64
+.PP
+.PP
+USBDM V4\&.12\&.1\&.20 (Sep 2015)
+.IP "\(bu" 2
+Fixes for USBDM Eclipse plugin
+.IP "  \(bu" 4
+JARs are now signed
+.IP "  \(bu" 4
+Threading improved (UI blocking prevented)
+.IP "  \(bu" 4
+Improved project renaming support
+.IP "  \(bu" 4
+Peripheral view info-panel now correctly updates information in all cases
+.IP "  \(bu" 4
+Minor fix to header files to prevent documentation warning
+.PP
+
+.IP "\(bu" 2
+GDB Server now retries correctly on initial connection failure
+.PP
+.PP
+USBDM V4\&.12\&.1\&.10 (Aug 2015)
+.IP "\(bu" 2
+Changes to USBDM new project wizard (new features)
+.IP "\(bu" 2
+Driver related changes
+.IP "\(bu" 2
+Drivers are now signed 
+.PP
+
+.PP
+.PP
+\fBREQUIREMENTS\fP
+.IP "\(bu" 2
+BDM firmware \fBmust\fP be updated
+.IP "\(bu" 2
+Current drivers \fBmust\fP be used 
+.PP
+
+.PP
+.PP
+USBDM V4\&.11\&.1\&.80 (Not released)
+.IP "\(bu" 2
+Changes to USBDM new project wizard (new features)
+.PP
+.PP
+USBDM V4\&.11\&.1\&.70#2 (Aug 2015) (previous upload was incomplete)
+.IP "\(bu" 2
+KDS Eclipse plugin installation no longer requires Java to to be installed
+.IP "\(bu" 2
+Installation no longer requires the previous version to be uninstalled
+.IP "\(bu" 2
+Eclipse GDB interface now tracks pre-set breakpoints correctly
+.IP "\(bu" 2
+Fixed bug in eclipse peripheral view that prevented use with non-USBDM interfaces
+.IP "\(bu" 2
+Added wizard options to demonstrate CPP interfaces
+.IP "\(bu" 2
+Added Semi-hosting for ARM GDB (incomplete - output only)
+.IP "\(bu" 2
+Modified MKM programming to improve connection mass-erase reliability
+.IP "\(bu" 2
+Added hardware/software reset choice for kinetis
+.PP
+.PP
+V4\&.11\&.1\&.60 (Jun 2015)
+.IP "\(bu" 2
+Fix for USB bug that prevented BDM use on many Linux machines
+.IP "\(bu" 2
+Minor device connection changes
+.PP
+.PP
+V4\&.11\&.1\&.50 (Jun 2015)
+.IP "\(bu" 2
+Updates and fixes to UsbdmMemoryDump
+.IP "\(bu" 2
+Improvements to JS16_Bootloader & JB16_Bootloader (Linux & USB3 mostly)
+.IP "\(bu" 2
+Fixes to KSDK for Linux
+.IP "\(bu" 2
+General bug fixes for Linux port Known bugs
+.IP "\(bu" 2
+KDS traps on exit on Windows??
+.IP "\(bu" 2
+MQX options in KDS new project wizard are not operational
+.IP "\(bu" 2
+USB3 issues on Windows (JS16 Bootloader)
+.PP
+.PP
+V4\&.11\&.1\&.40 (May 2015)
+.IP "\(bu" 2
+Added UsbdmMemoryDump Linux i386 release - only had minimal testing (command line + eclipse, not KDS) Windows - minor bug fixes
+.IP "\(bu" 2
+Peripheral view now disconnects cleanly on target connect crash etc
+.IP "\(bu" 2
+Cleanup of debug messages in plugin
+.PP
+.PP
+V4\&.11\&.1\&.30 (May 2015) Linux versions added Minor fixes
+.PP
+V4\&.11\&.1\&.20 (May 2015)
+.IP "\(bu" 2
+Legacy DSC support added
+.IP "\(bu" 2
+KSDK support updated for Kinetis SDK 1\&.2\&.0
+.IP "\(bu" 2
+Tested with Kinetis Design Studio 3\&.0\&.0
+.IP "\(bu" 2
+Eclipse plugin installation method changed (should be more reliable)
+.PP
+.PP
+Bugs & Limitations
+.IP "\(bu" 2
+KDS traps on exit??
+.IP "\(bu" 2
+MQX options in KDS new project wizard are not operational
+.PP
+.PP
+V4\&.11\&.1\&.10 (May 2015)
+.IP "\(bu" 2
+Refactoring of files
+.IP "\(bu" 2
+Now uses a C++ plugin structure for most DLLs
+.IP "\(bu" 2
+Added KL27, MKV30, MKV31 families (wizard may be incomplete)
+.IP "\(bu" 2
+USBDM New Project Wizard now include KSDK options
+.IP "\(bu" 2
+Improvements to handling of LLS/VLLSx states on Kinetis when using GDB
+.IP "  \(bu" 4
+Option to set connection timeout to indefinite period
+.IP "  \(bu" 4
+Options to trap VLLSx reset exits
+.PP
+
+.PP
+.PP
+Bugs & Limitations
+.IP "\(bu" 2
+Legacy DSC support is not provided
+.PP
+.PP
+V4\&.10\&.6\&.260 (February 2015)
+.IP "\(bu" 2
+Improvements to handling of LLS and VLLSx states on Kinetis devices with GDB
+.IP "  \(bu" 4
+Option to set connection timeout to indefinite period
+.IP "  \(bu" 4
+Options to trap VLLSx reset exits
+.PP
+
+.PP
+.PP
+V4\&.10\&.6\&.250a_Win (January 2015)
+.IP "\(bu" 2
+Minor changes to the installer to address Eclipse plugin loading issues\&.
+.PP
+.PP
+V4\&.10\&.6\&.250 (January 2015)
+.IP "\(bu" 2
+Eclipse/KDS Plugin
+.IP "  \(bu" 4
+Device selection is better organised (easier)
+.IP "  \(bu" 4
+Correction to interaction between different options
+.IP "  \(bu" 4
+Linker/MACRO support for Bit-manipulation-engine (MKE, MKL)
+.IP "  \(bu" 4
+Linker/MACRO support for Bit-band (MKE,MK)
+.IP "  \(bu" 4
+Updated CMSIS to 4\&.75
+.IP "  \(bu" 4
+More compact handling of SVD clusters in Peripheral display
+.PP
+
+.IP "\(bu" 2
+Added DSC unsecure (mass-erase) operation to DSC programmer
+.IP "\(bu" 2
+Removed stand-alone DSC unsecure program (due to above)
+.IP "\(bu" 2
+Added support for DSC devices using FTFA & FTFL flash:
+.IP "  \(bu" 4
+MC56F82723, MC56F82726, MC56F82728, MC56F82733,
+.IP "  \(bu" 4
+MC56F82736, MC56F82738, MC56F82743, MC56F82746, MC56F82748
+.IP "  \(bu" 4
+MC56F82313, MC56F82716, MC56F82723
+.IP "  \(bu" 4
+MC56F84441, MC56F84442, MC56F84540, MC56F84543
+.IP "  \(bu" 4
+MC56F84451, MC56F84452, MC56F84550, MC56F84553
+.IP "  \(bu" 4
+MC56F84462, MC56F84565, MC56F84567, MC56F84763, MC56F84766, MC56F84769
+.IP "  \(bu" 4
+MC56F84585, MC56F84587, MC56F84786, MC56F84789
+.PP
+
+.PP
+.PP
+V4\&.10\&.6\&.240 (December 2014)
+.IP "\(bu" 2
+Linux
+.IP "  \(bu" 4
+Parity with WIN32
+.IP "  \(bu" 4
+WxWidgets warning fix
+.PP
+
+.IP "\(bu" 2
+Eclipse/KDS Plugin
+.IP "  \(bu" 4
+Added support for peripheral view for Coldfire devices
+.IP "  \(bu" 4
+Updated SVD files for more informative display
+.IP "  \(bu" 4
+Added SVD files for MCF5223x, MCF5225x, MCF51JFxxx, MCF51JUxxx
+.IP "  \(bu" 4
+Added USBDM build of m68k GCC since Codesourcery is no longer available
+.PP
+
+.IP "\(bu" 2
+Added some Coldfire devices (MCF5225x family)
+.IP "\(bu" 2
+Fixes relating to TCL intepreter that interfered with security detection
+.IP "\(bu" 2
+Fixes for S12Z programmer
+.IP "\(bu" 2
+Provided a build of GCC for m68k since it seems hard to locate one
+.PP
+.PP
+V4\&.10\&.6\&.230 (December 2014)
+.IP "\(bu" 2
+Eclipse Plugin
+.IP "  \(bu" 4
+Some fixes to launch configurations for MKL devices
+.IP "  \(bu" 4
+Project creation is now more modular to allow easier addition of features
+.PP
+
+.IP "\(bu" 2
+OpenSDA-USBDM firmware
+.IP "  \(bu" 4
+Fixed a bug that prevented USBDM use with SOME versions of P&E Bootloader
+.IP "  \(bu" 4
+ARM register read now consistently returns TARGET_BUSY when reading registers while target is running\&.
+.PP
+
+.IP "\(bu" 2
+Bug fixes on Project Wizard for Codewarrior Legacy
+.IP "\(bu" 2
+Addition of MKL43 device
+.IP "\(bu" 2
+Addition of MC9S12GA256 device
+.PP
+.PP
+V4\&.10\&.6\&.220 (November 2014)
+.IP "\(bu" 2
+Eclipse Plugin
+.IP "  \(bu" 4
+Reset button has been replaced with more useful Restart button
+.IP "  \(bu" 4
+C compiler default language changed to ISO-C99 (-std=c99)
+.IP "  \(bu" 4
+C++ compiler default language changed to 1998 ISO C++ (-std=c++98)
+.IP "  \(bu" 4
+Correction to overlapping optimization options\&.
+.IP "  \(bu" 4
+Improved Fault Report Dialogue
+.IP "  \(bu" 4
+Changes to launcher
+.IP "    \(bu" 6
+Simplified Startup options
+.IP "    \(bu" 6
+Added options for connection to running target
+.IP "    \(bu" 6
+May now disconnect from target w/o affecting execution
+.IP "    \(bu" 6
+Added restart options
+.IP "    \(bu" 6
+Launch is now available in Run mode (may be used as Flash programmer)
+.PP
+
+.PP
+
+.IP "\(bu" 2
+Changed ARM disconnect so reset capture is restored to default value
+.PP
+.PP
+V4\&.10\&.6\&.210 (October 2014)
+.IP "\(bu" 2
+Improvements to Eclipse plugins
+.IP "\(bu" 2
+Addition of Disassembly option to Eclipse plugins
+.IP "\(bu" 2
+Addition of missing Codewarrior devices (MKL02M4)
+.IP "\(bu" 2
+Increased retry time in GDB server to allow limited DeepSleep debugging
+.IP "\(bu" 2
+Added Fault Report Dialogue to Eclipse plugin
+.PP
+.PP
+V4\&.10\&.6\&.200 (September 2014)
+.IP "\(bu" 2
+Added MKL03 devices (programming and SVD files)
+.IP "\(bu" 2
+Improvements for MKM33
+.IP "\(bu" 2
+Fixed aliases bug relating to SDID of HCS08 devices
+.IP "\(bu" 2
+Fixed bug in ARG_GDBServer that prevents re-use on failure
+.IP "\(bu" 2
+Decreased retry time for drivers (give up quicker)
+.IP "\(bu" 2
+Corrected errors in Kinetis SVD file & header files\&.
+.PP
+.PP
+V4\&.10\&.6\&.190 (August 2014)
+.IP "\(bu" 2
+Corrected some issues with Mass erase of secured/difficult devices
+.IP "\(bu" 2
+Updates SVD files for MK64
+.IP "\(bu" 2
+Improved logging for TCL scripts
+.PP
+.PP
+V4\&.10\&.6\&.180 (August 2014)
+.IP "\(bu" 2
+Updated installer for KDS release
+.IP "\(bu" 2
+Added MK22FN128M12, MK22FN512M12 (new prog algorithm)
+.IP "\(bu" 2
+Added MKM33xx etc
+.IP "\(bu" 2
+Corrected SDIDs for several devices
+.IP "\(bu" 2
+Added OpenSDAV2\&.1 Flash driver
+.IP "\(bu" 2
+Fixes for Processor Expert in Eclipse & KDS (linker options, default build options)
+.IP "\(bu" 2
+Fixes for Linux builds
+.IP "\(bu" 2
+Fixes for 9S08P8 etc devices (SDIDs)
+.IP "\(bu" 2
+CMSIS link now uses variable
+.IP "\(bu" 2
+Fixed failure to save some settings in New Project wizard\&.
+.PP
+.PP
+V4\&.10\&.6\&.170 (July 2014)
+.IP "\(bu" 2
+Added External SVD files
+.IP "\(bu" 2
+Updated internal SVD files (additional devices, vector tables now complete)
+.IP "\(bu" 2
+Updated header files for Kinetis
+.IP "\(bu" 2
+Peripheral Register view now displays additional information
+.IP "\(bu" 2
+Added Target Reset function
+.IP "\(bu" 2
+Updated Eclipse examples
+.IP "\(bu" 2
+Updated Eclipse new project wizard (more options for clock etc)
+.IP "\(bu" 2
+Added support for s12z devices (S12Z programmer & Codewarrior 10\&.x)
+.PP
+.PP
+V4\&.10\&.6\&.160 (May 2014)
+.IP "\(bu" 2
+Added option to select external SVD files for peripheral browser in Eclipse (KDS mostly)
+.IP "\(bu" 2
+Drivers have been moved to a different directory on Sourceforge (getting lost amongst other files)
+.PP
+.PP
+V4\&.10\&.6\&.150 (April 2014)
+.IP "\(bu" 2
+Added Freescale Kinetis Design Studio to Installer options
+.IP "\(bu" 2
+Updated Eclipse debuggers to use DSF interface (existing projects continue to use MI)
+.IP "\(bu" 2
+Peripheral Register now supports DSF
+.IP "\(bu" 2
+Corrected some errors in device header files etc\&.
+.IP "\(bu" 2
+Added support for new Kinetis devices MK64FN MK22FN
+.PP
+.PP
+V4\&.1\&.6\&.140 (April 2014)
+.IP "\(bu" 2
+Additional Kinetis devices (MKE04, MKE06, MK64F)
+.IP "\(bu" 2
+Bug fixes
+.IP "  \(bu" 4
+Corrected programmer file dialogue wildcards for \&.axf files
+.IP "  \(bu" 4
+Fixes for MKE devices (failed to program except after Mass Erase)
+.PP
+
+.IP "\(bu" 2
+HCS08 Programmer on PA & PT targets no longer affects WDOG settings
+.PP
+.PP
+V4\&.1\&.6\&.130 (March 2014)
+.IP "\(bu" 2
+Bug fixes
+.IP "  \(bu" 4
+Fix for the fix applied to 9s08 small targets (i\&.e\&. the fix broke other targets)
+.IP "  \(bu" 4
+Fix for MC56F80xx devices in CW 10
+.IP "    \(bu" 6
+Improved mass erase for Kinetis devices with reset problems
+.IP "    \(bu" 6
+Stripped some missed files\&.
+.PP
+
+.PP
+
+.PP
+.PP
+V4\&.1\&.6\&.120 (March 2014)
+.IP "\(bu" 2
+New features in Eclipse
+.IP "  \(bu" 4
+Added project options to Eclipse plugin
+.IP "  \(bu" 4
+Configuration editor (used for clock configuration)
+.IP "  \(bu" 4
+Clock configurations for Kinetis devices
+.IP "  \(bu" 4
+Clock configurations for (some) Coldfire devices
+.IP "  \(bu" 4
+Standard Peripheral Library & CMSIS for STM devices
+.PP
+
+.IP "\(bu" 2
+Bug Fixes
+.IP "  \(bu" 4
+Fixed bug affecting 9S08AC8,-QA2,-QD4 & -SF4 devices (small memory HCS08 devices)
+.IP "  \(bu" 4
+Fixed bug affecting 9s08PT16 and similar (removed needless restriction of EEPROM alignment)
+.PP
+
+.IP "\(bu" 2
+Firmware
+.IP "  \(bu" 4
+Greatly extended timeouts in ARM interfaces\&. Improves operation with slow clocks (16kHz)
+.PP
+
+.IP "\(bu" 2
+Stripped binaries to reduce size
+.PP
+.PP
+V4\&.10\&.6\&.110 (February 2014)
+.IP "\(bu" 2
+New features in Eclipse
+.IP "  \(bu" 4
+Added Peripheral View (Kinetis devices)
+.IP "  \(bu" 4
+Added SVD files and derived header files
+.IP "  \(bu" 4
+Added CMSIS-RTX support (Kinetis devices)
+.IP "  \(bu" 4
+Added UART support for some devices (Kinetis devices)
+.IP "  \(bu" 4
+Added Clock support for some devices (Kinetis devices)
+.PP
+
+.IP "\(bu" 2
+Corrected errors in programmer device files
+.PP
+.PP
+V4\&.10\&.6\&.100 (November 2013)
+.IP "\(bu" 2
+Modified GDB server interrupt masking (ARM+CFV1)
+.IP "\(bu" 2
+Added interrupt masking option to GDB server
+.IP "\(bu" 2
+Eclipse examples updated
+.IP "\(bu" 2
+NOTE: The Win versions of the software are no longer compressed with UPX so the executables and downloads are much larger\&. The compression was greatly affecting the installation time of the \&.msi file\&. This change also improves the start-up time of the programs\&.
+.PP
+.PP
+V4\&.10\&.6\&.80 (November 2013)
+.IP "\(bu" 2
+Added support for 9S08PA4 & 9S08PA2
+.IP "\(bu" 2
+Minor fix to Codewarrior 10 interface
+.IP "\(bu" 2
+Added security options to Eclipse & Codewarrior plugins
+.IP "\(bu" 2
+WIN+LINUX versions are feature consistent
+.PP
+.PP
+V4\&.10\&.6\&.80 (November 2013)
+.IP "\(bu" 2
+Deleted as corrupted
+.PP
+.PP
+V4\&.10\&.6\&.40 (October 2013)
+.IP "\(bu" 2
+usbdm_4\&.10\&.6\&.40-2-i386\&.deb
+.IP "\(bu" 2
+usbdm_4\&.10\&.6\&.40-2-amd64\&.deb
+.IP "\(bu" 2
+Updated installer for Ubuntu 32 & 64-bit system
+.IP "\(bu" 2
+Added Eclipse and Codewarrior 10\&.2 plug-ins
+.PP
+.PP
+V4\&.10\&.6c (September 2013)
+.IP "\(bu" 2
+Installer updated for CW 10\&.5 USBDM V4\&.10\&.6b
+.IP "\(bu" 2
+Fix for command-line operation of programmers
+.IP "\(bu" 2
+Experimental build on Ubuntu 32- & 64-bit system
+.IP "\(bu" 2
+Note: These Linux files do not contain Eclipse or Codewarrior plug-ins
+.PP
+.PP
+V4\&.10\&.6-1 (August 2013)
+.IP "\(bu" 2
+usbdm_4\&.10\&.6-1-i386\&.deb
+.IP "\(bu" 2
+usbdm_4\&.10\&.6-1-amd64\&.deb
+.PP
+.PP
+V4\&.10\&.6a (August 2013)
+.IP "\(bu" 2
+Fix for installer bug, installed programs should be unchanged
+.PP
+.PP
+V4\&.10\&.6 (August 2013)
+.IP "\(bu" 2
+This mainly concentrates on Eclipse support
+.IP "\(bu" 2
+Eclipse Juno and Kepler:
+.IP "  \(bu" 4
+Installation no longer adds files to Codesourcery directories
+.IP "  \(bu" 4
+Support for other ARM GCC toolchains with Kinetis
+.IP "  \(bu" 4
+GDB server (sprite) bug fixes (GDB no longer dies if R0/D0 contains Exxxxxxx!)\&.
+.IP "  \(bu" 4
+GDB socket based server introduced (ARM+Coldfire)\&.
+.IP "  \(bu" 4
+GDB servers support float registers on ARM
+.IP "  \(bu" 4
+Additional example projects for ARM targets\&.
+.IP "  \(bu" 4
+Support for Floating point options with ARM Ltd toolchain
+.IP "  \(bu" 4
+Newlib support (stdio using serial port)
+.IP "  \(bu" 4
+Added USBDM menu items (Examples, Configuration)
+.IP "  \(bu" 4
+USBDM now includes make tools from GNU to conveniently support Builds on windows
+.IP "  \(bu" 4
+Added a range of programming options to GDB server e\&.g\&. trimming of target clock\&.
+.PP
+
+.IP "\(bu" 2
+Programmer dialogues slightly smaller
+.IP "\(bu" 2
+Linux CDC devices (serial ports) appear as ttyUsbdm devices so they are easier to locate
+.IP "\(bu" 2
+Multiple Linux install scripts (Base, Codewarrior and Eclipse Juno installation)
+.IP "\(bu" 2
+Added MC9S08PA4
+.IP "\(bu" 2
+Added additional Kinetis devices (KE02 family)
+.PP
+.PP
+V4\&.10\&.5 (May 2013) -
+.IP "\(bu" 2
+Added support for Codewarrior 10\&.4 Release
+.IP "\(bu" 2
+Added support for Eclipse CDT projects using Codesourcery (USBDM New project Wizard)
+.IP "\(bu" 2
+Added Plugin for using USBDM + GDB with Eclipse
+.IP "\(bu" 2
+Updated Codesourcery and USBDM API examples (for Eclipse)
+.IP "\(bu" 2
+Updated Codesourcery instructions in help files
+.IP "\(bu" 2
+Bug fixes to GDB sprites
+.IP "\(bu" 2
+OpenSDA firmware now supports CDC interface (serial over USB)\&.
+.IP "\(bu" 2
+Updated Kinetis device description files (Added devices, added GDB information)
+.IP "\(bu" 2
+Updated Codlfire device description files (Added GDB information)
+.IP "\(bu" 2
+Fixes to programmer GUI (setting trim options)
+.IP "\(bu" 2
+Updated OpenSDA USBDM firmware to work with later versions of OpenSDA bootloaders
+.PP
+.PP
+V4\&.10\&.4 (January 2013) -
+.IP "\(bu" 2
+Added support for Codewarrior 10\&.3 Release (\fBThis version does not work with the BETA\fP)
+.IP "\(bu" 2
+Added customisable security options to programmers
+.IP "\(bu" 2
+Improved HCS08/HCS12 programming speeds (15~30%)
+.IP "\(bu" 2
+Added Codesourcery and USBDM API examples to installation
+.IP "\(bu" 2
+Updated/added Codesourcery instructions to help files
+.IP "\(bu" 2
+Numerous bug fixes to GDB Server
+.IP "\(bu" 2
+Improvements to handling secured devices
+.IP "\(bu" 2
+Added Examples to installation
+.IP "\(bu" 2
+Added OpenSDA firmware (This allows use of FRDM-KL25 board as general purpose Kinetis BDM)
+.PP
+.PP
+V4\&.10\&.3 (November 2012) -
+.IP "\(bu" 2
+Updated device driver installation (V1\&.0\&.1) (removed unnecessary driver)\&.
+.IP "\(bu" 2
+ELF Files now supported for MC56F80xx devices\&.
+.IP "\(bu" 2
+Changed to shared DLLs build for wxWidgets\&.
+.IP "\(bu" 2
+Bug fixes:
+.IP "  \(bu" 4
+DSC Access to ONCE registers when target running
+.IP "  \(bu" 4
+Fixed BDM doing reset when setting target even if already powered\&. This was interfering with doing a 'gentle' connection to a running target\&.
+.IP "  \(bu" 4
+ARM interface now reports access errors on failing memory access rather than following access\&.
+.IP "  \(bu" 4
+Corrected corruption in large reads for ARM GDI Interface\&.
+.PP
+
+.PP
+.PP
+V4\&.10\&.2 (October 2012) -
+.IP "\(bu" 2
+Updated installer for Codewarrior 10\&.3 Beta
+.IP "\(bu" 2
+Changed to shared DLLs build for wxWidgets
+.IP "\(bu" 2
+Changed to Make based projects
+.IP "\(bu" 2
+Support added for Kinetis KLxx devices
+.IP "\(bu" 2
+Updated libusbx version (& changed to static linkage) Bug Fixes
+.IP "  \(bu" 4
+Kinetis & CFV1 targets now correctly support RAM only targets (again)
+.IP "  \(bu" 4
+Fixes for an output glitch on USBDM_JMxx_CLD & CLC\&. (firmware)
+.IP "  \(bu" 4
+Kinetis-SWD reports memory read/write errors on failing access (not following access) (firmware)
+.PP
+
+.PP
+.PP
+V4\&.10\&.0 (September 2012) -
+.IP "\(bu" 2
+Added support for ARM-SWD interfaces (requires different hardware)\&. 
+.br
+ ARM-SWD is much faster than ARM-JTAG\&. For reference, programming a file to flash using Codewarrior 10\&.2: 
+.br
+.PP
+.nf
+                   Readback     Without 
+                   verify       readback
+     OSJTAG        1m 20s         53s
+     USBDM-JTAG       47s         23s
+     USBDM-SWD        21s         17s         .fi
+.PP
+
+.IP "\(bu" 2
+Improved ARM-JTAG interface speed\&.
+.IP "\(bu" 2
+ARM interfaces (JTAG & SWD) are now provided by USBDM interface DLL\&. This means that the ARM API is now uniform with the RS08, HCS08, HCS12 and CFV1 interfaces\&. A compatibility DLL is provided for legacy use\&.
+.IP "\(bu" 2
+Simple ARM-SWD interface hardware designs are provided\&.
+.IP "\(bu" 2
+Bug fixes
+.IP "  \(bu" 4
+Alignment error in programming code for some S12 targets
+.IP "  \(bu" 4
+Corrected load addresses for ELF files for HCS08 and HCS12
+.IP "  \(bu" 4
+Added support for MCF51AG128
+.PP
+
+.PP
+.PP
+V4\&.9\&.5 (July 2012) -
+.IP "\(bu" 2
+Added Support for ELF file format (only tested with Kinetis/Coldefire+)
+.IP "\(bu" 2
+DSC programmer extended
+.IP "  \(bu" 4
+Programming firmware updated\&.
+.IP "  \(bu" 4
+MC56F83xx family extended but untested and limited device entries have been created\&. It may be possible to add other devices\&.
+.PP
+
+.IP "\(bu" 2
+Added device entries for MM912H634 etc\&.
+.IP "\(bu" 2
+Programmer dialogue size reduced\&.
+.IP "\(bu" 2
+Added support for FlexNVM partitioning in Coldfire+ and Kinetis devices
+.IP "\(bu" 2
+Added support for programming FlexNVM regions when partitioned (at least partially) as data Flash\&.
+.IP "\(bu" 2
+Added GDB servers for Kinetis and Coldfire devices\&. Tested with Codesourcery (Tutorial to follow)\&.
+.IP "\(bu" 2
+Versioning of BDM firmware now has minor numbers
+.IP "\(bu" 2
+Programming of FlexNVM memory partitioned as Flash is now supported
+.IP "\(bu" 2
+Partitioning of FlexNVM as EEEPROM is now supported
+.IP "\(bu" 2
+XML Memory descriptions extended (improved syntax, flexNVM syntax added)
+.IP "\(bu" 2
+Bug fixes
+.IP "  \(bu" 4
+Added/corrected entries for several HCS12 devices
+.IP "  \(bu" 4
+Improved DSC communication routines to work correctly with a wider range of devices\&.
+.IP "  \(bu" 4
+Kinetis device descriptions extended
+.PP
+
+.PP
+.PP
+V4\&.9\&.4 (April 2012) -
+.IP "\(bu" 2
+Programmers
+.IP "  \(bu" 4
+Added Load and Go\&.
+.IP "  \(bu" 4
+Added check for disk file change and Auto Reload option\&.
+.IP "  \(bu" 4
+Added Smart security option\&.
+.IP "  \(bu" 4
+Deleted Prompt to cycle power option - This was being ignored in most cases anyway :)
+.IP "  \(bu" 4
+Added Advanced option page etc\&.
+.IP "  \(bu" 4
+Added several command line options corresponding to above\&.
+.PP
+
+.IP "\(bu" 2
+More bug fixes
+.IP "  \(bu" 4
+HCS08 programming in Codewarrior 10\&.1 may fail without warning
+.PP
+
+.IP "\(bu" 2
+Extended reset & power options added to GDI & Programmers
+.PP
+.PP
+V4\&.9\&.3 (March 2012) -
+.IP "\(bu" 2
+More late bug fixes
+.IP "\(bu" 2
+Command line operation of stand-alone programmer results in disconnected process\&.
+.IP "\(bu" 2
+Added '-execute' option to above\&.
+.IP "\(bu" 2
+Fixed bug in Codewarrior 10\&.1 install, CW 10\&.1 & 10\&.2 may both be installed together\&. V4\&.9\&.2 (February 2012) -
+.IP "\(bu" 2
+More late bug fixes
+.IP "\(bu" 2
+Fixed alignment bug in HCS12 programmer for newer targets using PFlash\&. V4\&.9\&.1 (February 2012) -
+.IP "\(bu" 2
+Some late bug fixes V4\&.9 (February 2012) -
+.IP "\(bu" 2
+Extensive changes to HCS12 programmer
+.IP "\(bu" 2
+Added programming algorithms for several HCS12 devices (HY,HA,XE,XS,P)\&. V4\&.8 (December 2011) -
+.IP "\(bu" 2
+General update of how the programming algorithms are controlled\&. 
+.br
+ They are much more configurable by the external XML and TCL files\&. This allows for some customisation of the memory map on HCS12 devices or custom startup operations\&.
+.IP "\(bu" 2
+Added Coldfire+ devices & algorithms\&.
+.IP "\(bu" 2
+Erase options extended (on some targets)\&.
+.IP "\(bu" 2
+Re-testing of all devices (see list below) where complete memory images including paging were used\&.
+.IP "\(bu" 2
+Bug fixes on HCS08 programming\&. Unsure were these were introduced but (hopefully) now squashed\&.
+.IP "\(bu" 2
+Paging of Flash and EEPROM has been updated for HCS12 and HCS08 devices\&.
+.IP "\(bu" 2
+The memory image descriptions are now more detailed and are more carefully enforced when programming\&. Attempting to program non-existent memory is now reported before programming is attempted\&. This should result in more meaningful error messages\&.
+.IP "\(bu" 2
+msi install updated for Codewarrior 10\&.2
+.IP "\(bu" 2
+Testing with Codewarrior 10\&.2 Beta V4\&.7 (October 2011) -
+.IP "\(bu" 2
+Improved support for devices in low power modes (Eclipse)\&.
+.IP "\(bu" 2
+Improved support for secured devices (Eclipse)\&.
+.IP "\(bu" 2
+BDM interface speed control implemented for CFVx devices
+.IP "\(bu" 2
+Windows Installer
+.IP "\(bu" 2
+Updates for Eclipse Kinetis device name changes
+.IP "\(bu" 2
+BDM firmware (including bootloader) will now auto-detect 4, 8 or 12 MHz crystals\&. (JS16/JMxx)
+.IP "\(bu" 2
+Added progress dialogues for programmers\&.
+.IP "\(bu" 2
+Programmer erase options are more consistent\&.
+.IP "\(bu" 2
+Bug fixes
+.IP "  \(bu" 4
+Devices incorrectly identified as secured
+.IP "  \(bu" 4
+Failure to connect to device in low power modes
+.IP "  \(bu" 4
+Corrections to CFVx connection sequences
+.IP "  \(bu" 4
+Corrections to USB CDC Driver installation
+.IP "  \(bu" 4
+Bootloader reliability improved
+.IP "  \(bu" 4
+Corrections to USB CDC driver installation file\&. V4\&.6 (June 2011) -
+.PP
+
+.IP "\(bu" 2
+Support for Kinetis Targets in Codewarrior V10\&.1 (Eclipse, USBDM/CF only)
+.IP "\(bu" 2
+Improvements to USB error checking (JMxx/JS16 only)
+.IP "\(bu" 2
+TCL scripting V4\&.5 (February 2011) -
+.IP "\(bu" 2
+Added devices
+.IP "\(bu" 2
+Added EEPROM support
+.IP "\(bu" 2
+Added Dual-flash support
+.IP "\(bu" 2
+Restored command line operation
+.IP "\(bu" 2
+Flash image now dynamically allocated so no (realistic) size limitation
+.IP "\(bu" 2
+Support for Codesourcery Lite - Coldfire Vx
+.IP "\(bu" 2
+Support for Coldfire Flasher (CFFlasher) Coldfire V2,3,4 only
+.IP "\(bu" 2
+Support for Codewarrior Eclipse 10\&.1
+.IP "\(bu" 2
+Flash buffer is now dynamically sized in Flash programmers
+.IP "\(bu" 2
+Added fix for Legacy Codewarrior tools missing TBDML/OSBDM targets V4\&.4 (January 2011) -
+.IP "\(bu" 2
+Less intrusive auto speed detection for targets without sync
+.IP "\(bu" 2
+Unlocking improved for targets using slow external clocks
+.IP "\(bu" 2
+Codewarrior V10 New Project Wizard now includes USBDM
+.IP "\(bu" 2
+Programming support for HCS12/HCS08 targets with EEPROM
+.IP "\(bu" 2
+Programming support for CFV1 target with multiple Flash (Dual Flash)
+.IP "\(bu" 2
+Use of XML based device files (needed for above two items)
+.IP "\(bu" 2
+Automatic unsecure for Legacy HCS12 targets V4\&.3 (December 2010) -
+.IP "\(bu" 2
+Bug fixes (DSC Speed)
+.IP "\(bu" 2
+Improved Codewarrior V10 integration
+.IP "\(bu" 2
+Serial interface on JS16 versions (supported in JMxx but no example implementation) V4\&.0 (September 2010) - \fBSignificant changes in some areas - Please read carefully\fP
+.IP "\(bu" 2
+Support for Linux (Eclipse version of Codewarrior only) 
+.br
+ Installation is still somewhat of a challenge!
+.IP "\(bu" 2
+Support for Linux and Windows7 64-bit (Eclipse version of Codewarrior only) 
+.br
+ To support the 64-bit version of Windows it has been necessary to update to using libusb-V1 drivers\&. For consistency this is also done on Linux\&. As part of this process the VID/PID for the hardware (BDM) has been changed\&. This will allow the co-existence of Freescale's OSBDM-JM60 hardware while using a new driver for USBDM\&. Formerly both these BDMs used the same VID/PID and changes to the driver would not be possible\&.
+.IP "\(bu" 2
+Programming utilities for RS08, HCS08 and CFV1 are now (officially) included\&.
+.IP "\(bu" 2
+Support for MC56F800x (digital signal controllers) added\&. This is only available on USBDM_CF BDMs and the Axiom MC56F8006 Demoboard\&.
+.IP "\(bu" 2
+Minor bug fixes (installation script)
+.IP "\(bu" 2
+The addition of DSC support has pushed the firmware size to greater than 16K on the USBDM_JMxx-CF version\&. This means that MC9S08JM32/60 chip must be used\&.
+.IP "\(bu" 2
+Changed to wxWidgets for common GUI code on Windows and Linux V3\&.0 (May 2010) - \fBSignificant changes in some areas - Please read \fP
+.IP "\(bu" 2
+Support for Codewarrior V10 has been introduced\&. This has required the development of specific GDI Dlls for each target type i\&.e\&. RS08, HCS08, CFV1 and CFV2-4\&.
+.IP "\(bu" 2
+The handling of RS08 devices has been further changed and now no RS08 derivative specific code is contained in the BDM firmware or USBDM\&.dll\&. RS08 code is handled by the GDI layer for Codewarrior V10 or in the OpenSourceBDM\&.dll for the older version of Codewarrior\&. This should mean that further devices may be added with no changes to either USBDM\&.dll or BDM Firmware\&.
+.IP "\(bu" 2
+Minor bug fixes in the BDM Firmware\&.
+.IP "\(bu" 2
+Added support for paged memory (-AC128, -DZ128 etc)
+.IP "\(bu" 2
+Changed trim algorithm to use linear curve fitting\&.
+.IP "\(bu" 2
+FTRIM now combined with existing image value if present\&.
+.IP "\(bu" 2
+Changed console handling on command line version\&.
+.IP "\(bu" 2
+Fixed 'Image' security option modifying flash image\&. This could prevent programming the clock trim value by itself\&.
+.IP "\(bu" 2
+The calculated trim value is now available on the dialogue for use when debugging with a particular chip\&. V2\&.0 (September 2009) - \fBMajor change - Please read \fP
+.IP "\(bu" 2
+Major revision\&. The structure of the software has been revised and the operation with various targets made more uniform\&.
+.IP "\(bu" 2
+Introduction of a new API for using the BDM\&. Existing APIs (TBDML, OSBDM, TBLCF) are now supported by a separate compatibility layer\&. This has resulted in a very significant reduction in the complexity of both the BDM firmware and the interface DLLs\&. The previous arrangement was becoming impossible to maintain\&.
+.IP "\(bu" 2
+The handling of RS08 devices has been re-written in a more sensible fashion\&. This involved moving the bulk of the RS08 code from the BDM firmware to the interface DLLs\&. This should mean that additional devices can be introduced without changing the BDM firmware\&. Support for additional RS08 devices has been added\&. The BDM now supports KA1, KA2, KA4, KA8, LA8 and LE4\&.
+.IP "\(bu" 2
+Because of the above changes, the BDM \fBREQUIRES\fP the use of the provided interface DLLs\&. The BDM is no longer compatible with the original TBDML or OSBDM dlls\&. 
+.br
+ The provided DLLs maintain some limited compatibility with earlier versions of TBDML, OSBDM and USBDM but may not support all features or targets V1\&.5 (June 2009) \fBInitial USBDM-JMxx-CF release\&.\fP
+.IP "\(bu" 2
+Improved/corrected connection strategy for external power cycling
+.IP "\(bu" 2
+Minor bug fixed (glitch removal)
+.IP "\(bu" 2
+Improvements to ALT clock handling
+.IP "\(bu" 2
+Changes to USB code to fixed bugs with BDM being recognized on some PCs (Thanks to Macias & Enrico for bug chasing and testing)
+.IP "\(bu" 2
+Minor changes to USB code - Tested with USBCV13\&.exe from USB\&.ORG - now passes V1\&.4 (February 2009)
+.IP "\(bu" 2
+Fixed a bug in the USB code (unlikely to occur but worth fixing)
+.IP "\(bu" 2
+Added extra dialogues prompting the user to cycle target power when necessary\&. Corresponding options added\&.
+.IP "\(bu" 2
+Added connection retry when target power is absent\&.
+.IP "\(bu" 2
+Added support for MC51AC256 (a bit of a hack!)
+.IP "\(bu" 2
+Modified HCS macros (to provide considerable size reduction as needed for USBDM_CF in 16K)
+.IP "\(bu" 2
+General clean up of code V1\&.3 (November 2008)
+.IP "\(bu" 2
+Unified Timer MACROS
+.IP "\(bu" 2
+Re-arrangement of Target Vdd control routines
+.IP "\(bu" 2
+Minor mods & corrected comments in bdm_syncMeasure()
+.IP "\(bu" 2
+Reviewed stack size
+.IP "\(bu" 2
+Increased cable_status\&.waitX size V1\&.2 (October 2008)
+.IP "\(bu" 2
+Removed library reference in ICP code - ICP broken when non-ICP code was changed! This update requires the ICP code to be replaced when updating any code\&.
+.IP "\(bu" 2
+Increased stack size (stack overflow was possible)
+.IP "\(bu" 2
+Utilities (setBoot) updated to match
+.IP "\(bu" 2
+Other cosmetic changes V1\&.1 (August 2008)
+.IP "\(bu" 2
+Vista compatibility
+.IP "\(bu" 2
+Fixed several bugs related to use of 1T45 buffers (Witztronics etc\&.) V1\&.0 (Dec 2009) Initial Release
+.IP "\(bu" 2
+Initial release\&.
+.PP
+.SH "Limitations & Maintenance"
+.PP
+.IP "\(bu" 2
+The devices supported are limited to those that I've had a chance to investigate\&. The configuration for particular devices are contained in the various \fBxxxx_devices\&.xml\fP files\&. This may be modified by hand to include other devices if they are similar to those already supported i\&.e\&. have a supported clock type and the usual type of Flash memory\&.
+.br
+
+.IP "\(bu" 2
+EEPROM (HCS12) and dual-flash (CFV1) are supported but not extensively tested\&.
+.IP "\(bu" 2
+The programmer \fBrequires\fP the use of USBDM Ver 4\&.9 or later BDMs with \fBmatching firmware\fP\&. It should be possible to adapt the software to the OSBDM API relatively easily\&.
+.IP "\(bu" 2
+Note that Coldfire+ & Kinetis devices are limited to basic Flash programming and partitioning of FlexNVM\&. Programming of EEEPROM (simulated EEPROM) is not supported\&. Any region of FlexNVM not allocated to EEEPROM backing store may ben programmed as conventional Flash\&.
+.PP
+.SH "Unusual Errors"
+.PP
+The following error indicates that the memory image being programmed contains data outside of the Flash memory of the target\&. This includes the target RAM\&.
+.br
+ The USBDM stand-alone programmer produces an error because it doesn't make sense to 'program' something to, for example, RAM\&. If your program image contains data destined to RAM then it would (usually) indicate that there is a mistake in the memory map since such data would be lost when the target is reset\&. It seems sensible to flag this as an error\&.
+.PP
+.PP
+.IP "\(bu" 2
+Common Reason
+.br
+ When using the trace function in Codewarrior with KL targets it creates a buffer in RAM to store the trace information\&. It also includes an zeroed region in the binary file image to initialise the buffer to zero when the image is loaded into the target\&. This situation is accepted by USBDM when working within Codewarrior since it makes some sense to download 'stuff' to RAM when debugging a target\&. For example, during development you might want to run a program entirely in RAM\&.
+.br
+
+.br
+ Solution - You should turn off the trace function when producing a final image for production\&. This is sensible in any case since tracing should not (normally) be in use in the production target\&.
+.br
+
+.br
+ When I have time I will consider adding an option to the programmer to ignore writes to RAM but I really think this is of little value since it is better to alert you to what is likely an error or at least an oversight\&.
+.PP
+.SH "Known Issues"
+.PP
+.IP "\(bu" 2
+Codewarrior Legacy
+.IP "  \(bu" 4
+Trim programming is not supported on older Codewarrior version\&. It is only available in the Eclipse version and stand-alone programmers\&. Trimming is done by Codewarrior not USBDM in the earlier versions\&. It is simply not implemented by Codewarrior (despite there being a nice dialogue box!)\&. I can't do anything about this\&. It is NOT a bug in USBDM\&.
+.PP
+
+.IP "\(bu" 2
+HCS12
+.IP "  \(bu" 4
+The use of WAI or STOP instructions on HCS12 targets with the clocks disabled will cause the BDM to lose connection\&. There is no solution to this as it is a target BDM limitation\&.
+.IP "  \(bu" 4
+The use of WAI or STOP instructions on HCS12 targets with the clocks enabled will cause the BDM target connection to become unreliable when the target is executing\&. This will cause the debugger to occasionally update the screen incorrectly and to report that the target is starting or stopping (in the status area)\&. The screen will be correctly updated when the target is next halted so this is more of a cosmetic problem\&.
+.IP "  \(bu" 4
+On early HCS12 targets (Version <4 BDM interfaces) there may be some minor problems with single-stepping when using a clock multiplier\&. The reason is unknown but I suspect it is a limitation of the Target BDM hardware\&. Enabling the 'Force BDM Clock Source' option and selecting 'Bus clock' prevents this problem but results in a very high frequency for the BDM interface\&.
+.PP
+
+.IP "\(bu" 2
+RS08
+.IP "  \(bu" 4
+Programming is not supported on older Codewarrior version\&. You must use the Eclipse version\&.
+.PP
+
+.IP "\(bu" 2
+568xx
+.IP "  \(bu" 4
+The Codewarrior 56800E Flash Programmer does not work with the USBDM GDI interface\&. I cannot find a reason for this but since it doesn't work with OSBDM either I suspect that the GDI interface on the programmer is broken\&.
+.br
+
+.IP "  \(bu" 4
+The support of MC56F80xx devices by the programmer is very limited since the devices differ significantly in their operation\&. To add a device requires considerable work although this has improved somewhat recently\&.
+.IP "  \(bu" 4
+MC56F80xx devices are NOT supported in the Codewarrior Eclipse version since this version uses extension to the GDI API that are undocumented\&. Some devices may be programmed but the debugging operation is limited as Flash based breakpoints are not properly supported\&.
+.PP
+
+.IP "\(bu" 2
+Coldfire
+.IP "  \(bu" 4
+The use of low power modes and STOP instructions has some issues on Coldfire V2, 3 & 4 targets\&.
+.IP "    \(bu" 6
+Despite what the device manuals indicates it is not always possible to wake the target using the BKPT signal\&. In some cases the only usable method is to reset the target\&. 
+.br
+ Because of this, it may be desirable to disable the automatic re-connect option as it may lead to unintended resets when the BDM polls a sleeping target\&. 
+.br
+
+.IP "    \(bu" 6
+A reset may still be done if the debugger tries to halt the target when sleeping (after unsuccessful BKPT attempts)\&. This situation is reported to the user\&.
+.br
+ The only guaranteed workaround for this problem it to use the RUN mode in the LPCR register although it should not be a real problem provided the target is not continuously sleeping i\&.e\&. it is being regularly woken by interrupts etc\&.
+.IP "    \(bu" 6
+If not using the PST signals it may not be possible to differentiate between STOP (the target is sleeping but is considered to still be executing) and HALT (the target is suspended to allow debugging) states\&. Because of this the debugger may incorrectly indicate that the target is halted when it is actually stopped (waiting for interrupts etc)\&. This also varies with the actual sleep mode selected\&. It is necessary to restart code execution and then halt the target to synchronise the debugger state if this occurs\&.
+.br
+ There is no workaround for this problem as it is a limitation of the register polling method used in lieu of the PST signals\&.
+.PP
+
+.PP
+
+.IP "\(bu" 2
+Kinetis & Coldfire+
+.IP "  \(bu" 4
+It is possible to program the these devices with an invalid program that will make it difficult to connect in debug mode\&. This can be the case if the device is suffering from a reset trap or watch-dog timer failure\&. In these cases it is necessary to do a mass erase of the device to restore function\&. Since it is difficult to identify this situation the programmers and Codewarrior interfaces may not do this automatically\&. If connection problems are encountered it may be necessary to use the mass erase option on the \fBstand-alone programmer\fP to erase the device\&.
+.PP
+
+.IP "\(bu" 2
+Kinetis
+.IP "  \(bu" 4
+If the flash has been protected (using FDPROT etc\&.) then it is necessary to use the Mass-erase option for programming\&. I believe this is due to a hardware bug in the devices\&. (FDPROT etc are NOT writable in debug mode\&.)
+.PP
+
+.PP
+.SH "Compatibility"
+.PP
+.IP "\(bu" 2
+The hardware is not compatible with existing TBDML, OSBDM or TBLCF \fBhardware\fP and \fBrequires\fP the use of custom driver DLLs\&.
+.PP
+.SH "Testing"
+.PP
+The drivers and programmers have been tested with the following devices where supported by the particular programmer version (basic programming, debugging and clock trim where applicable):
+.IP "\(bu" 2
+RS08KA1, -KA2, -KA8, -LA8, -LE4 (\fIonly with Codewarrior 10\&.x\fP)
+.IP "\(bu" 2
+MC9S08AC60, -AC128, -AW60, -DN16, -DZ128, -EL16, -FL16, -GB60A, -GT16A, -GT32, -JM16, -JM60, -LC36, -JS16, -LG32, 
+.br
+ -LL64, -LM26, -PA4, -PT60, -QA4, -QB8, -QD4, -QE8, -QE16, -QE128, -QG8, -RD16, -SE8, -SF4, -SH8, -SV16, 
+.br
+
+.IP "\(bu" 2
+MC13213, FXTH870911 
+.br
+
+.IP "\(bu" 2
+MC9S12A64, -C32, -C128, -DP256B, -DG128, -DT256, -G128, -HY64, -NE64, -P128, -XEP100, -XD256, -XDT512, -XS128,
+.br
+ -UF32(check hardware errata on this chip!)
+.IP "\(bu" 2
+MM912H634, MM912G634
+.IP "\(bu" 2
+FXTH8715026, FXTH870511
+.IP "\(bu" 2
+MCF51AC256, -CN128, -EM256, -JE256, -JF64, -JF128, -JM128, -JU128, -MM256, -QE96, -QE128, -QM128, -QU128 
+.br
+
+.IP "\(bu" 2
+MCF52233, MCF52210, MCF52259 and some other ones that I can't recall at the moment\&. These are all V2 chips - I don't have any V3/4 to test with\&.
+.IP "\(bu" 2
+MC56F8006, MC56F8013, MC56F8014, MC56F8023, MC56F8245, MC56F8323, MC56F82748, MC56F84452, MC56F84763
+.IP "\(bu" 2
+MKE02Z20, MKE02Z40, MKE04Z40, MKE06Z40, MKL02Z, MKL03Z, MKL05Z, MKL25Z, MKL26Z, MKL43Z, MKL46Z
+.IP "\(bu" 2
+MK10DX256VLH7, MK10DX64VLH5, MK10FX512VLQ12, MK20DN512VLK10, MK20DX128VFM5, MK20DX128VLH5, MK20DX256VLH7, MK20X128VLH5, MK20DX128M5, MK22DX128M12, MK20DX128M5, MK22DN512VLH5, MK20DX256M7, PK20X128M5, PK40X256, PK60N512, MK64,
+.IP "\(bu" 2
+MKV31F256VLH12
+.IP "\(bu" 2
+Complete systems - Axiom MC56F8006 Demo board, TWR-K40, TWR-K60, TWR-CFV1, TWR-RS08/HCS08 and all FRDMxxxx 
+.br
+ Please advise of any problems with particular chips\&.
+.PP
+.SH "Hardware Errata"
+.PP
+.IP "\(bu" 2
+The previous version of the JM & JS BDMs used a 10M resistor for the crystal clock bias\&. I have discovered that this value is intended for lower frequency cystals\&. A 1M resistor is recommended\&. I have had no problems with boards using the 10M value but there may be some issues with some crystals or chips\&. I don't recommend changing the value in existing hardware unless there are problems\&. 
+.PP
+
