@@ -10,9 +10,9 @@ Refer to sourceforge for release files:
 Release files: http://sourceforge.net/projects/usbdm/files/
 Documentation: http://usbdm.sourceforge.net/
 
-The projects can be build at the command line using the MakeAll or MakeAll.cmd files.
+The projects can be buildt at the command line using the MakeAll or MakeAll.cmd files.
 
-Alternatively the projects can be imported into Eclipse CDT and built using MinGW or Linux GCC
+Alternatively, the projects can be imported into Eclipse CDT and built using MinGW or Linux GCC
 
 To Build under Windows
 =====================
@@ -38,5 +38,6 @@ sudo ./LinuxPackages
 ./CreateDebFile  
 sudo ./Update  
 
+Eclipse or Kinetis Design Studio should be run at least once before installing USBDM as the installer will run these programs as root which may create inaccessible log or configuration files. 
 It looks for Eclipse and KDS in several locations.  
 Update usbdm-eclipse-makefiles-build/PackageFiles/MiscellaneousLinux/DEBIAN/postinst, prerm
