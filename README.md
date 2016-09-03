@@ -27,7 +27,6 @@ Ubuntu derivative e.g. Mint
 ~~~~
 cd WorkDirectory
 sudo apt-get install git  
-sudo apt-get install git  
 git clone https://github.com/podonoghue/usbdm-eclipse-makefiles-build.git  
 git clone https://github.com/podonoghue/usbdm-eclipse-plugins.git  
 cd usbdm-eclipse-makefiles-build  
