@@ -7,8 +7,8 @@ Source for USBDM binary files
 Programmers and Utilities for Freescale microcontrollers  
 
 Refer to sourceforge for release files:  
-Release files: http://sourceforge.net/projects/usbdm/files/  
-Documentation: http://usbdm.sourceforge.net/  
+#Release files: http://sourceforge.net/projects/usbdm/files/  
+#Documentation: http://usbdm.sourceforge.net/  
 
 The projects can be buildt at the command line using the MakeAll or MakeAll.cmd files.
 
