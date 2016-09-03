@@ -39,4 +39,4 @@ sudo ./Update
 
 **_Eclipse_** or **_Kinetis_** **_Design_** **_Studio_** should be run at least once before installing USBDM as the installer will run these programs as root which may create **inaccessible** log or configuration files.   
 It looks for Eclipse and KDS in several locations.  
-Update usbdm-eclipse-makefiles-build/PackageFiles/MiscellaneousLinux/DEBIAN/postinst, prerm
+Update `usbdm-eclipse-makefiles-build/PackageFiles/MiscellaneousLinux/DEBIAN/postinst`, `prerm`
