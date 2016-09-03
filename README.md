@@ -26,7 +26,8 @@ Ubuntu derivative e.g. Mint
 
 sudo apt install git
 
-`cd _.....WorkDirectory....._  
+~~~~
+cd .....WorkDirectory.....  
 sudo apt-get install git  
 git clone https://github.com/podonoghue/usbdm-eclipse-makefiles-build.git  
 git clone https://github.com/podonoghue/usbdm-eclipse-plugins.git  
@@ -34,7 +35,8 @@ cd usbdm-eclipse-makefiles-build
 sudo ./LinuxPackages  
 ./MakeAll  
 ./CreateDebFile  
-sudo ./Update  `
+sudo ./Update  
+~~~~
 
 _Eclipse_ or _Kinetis_ _Design_ _Studio_ should be run at least once before installing USBDM as the installer will run these programs as root which may create **inaccessible** log or configuration files.   
 It looks for Eclipse and KDS in several locations.  
