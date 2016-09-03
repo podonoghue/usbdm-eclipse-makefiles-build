@@ -94,7 +94,7 @@ installKDSInstance() {
    local WIZARD_PATCH_FILE=${USBDM_WIZARD_PATCH_DIR}/"PatchNewWizardPlugin_KDS_${KDS_VER}.xml"
    local WIZARD_BASE_DIR=${KDS_ECLIPSE_PLUGIN_DIR}/"com.freescale.processorexpert.ui.kds.newprojectwizard_"
    echo ${USBDM_BIN_DIR}/MergeXML ${WIZARD_BASE_DIR}\* plugin.xml ${WIZARD_PATCH_FILE}
-   ${USBDM_BIN_DIR}/MergeXML ${WIZARD_BASE_DIR}\* plugin.xml ${WIZARD_PATCH_FILE}
+   ${USBDM_BIN_DIR}/MergeXML ${WIZARD_BASE_DIR}\* plugin.xml ${WIZARD_PATCH_FILE} || true
    echo touch ${WIZARD_BASE_DIR}\*
    touch ${WIZARD_BASE_DIR}*
 
@@ -103,7 +103,7 @@ installKDSInstance() {
    local LAUNCH_PATCH_FILE=${USBDM_WIZARD_PATCH_DIR}/"PatchLaunchConfiguration_KDS_${KDS_VER}.xml"
    local LAUNCH_BASE_DIR=${KDS_PE_WIZARD_DIR}/kd
    echo ${USBDM_BIN_DIR}/MergeXML ${LAUNCH_BASE_DIR}\* "_sdk.xml" ${LAUNCH_PATCH_FILE}
-   ${USBDM_BIN_DIR}/MergeXML ${LAUNCH_BASE_DIR}\* "_sdk.xml" ${LAUNCH_PATCH_FILE}
+   ${USBDM_BIN_DIR}/MergeXML ${LAUNCH_BASE_DIR}\* "_sdk.xml" ${LAUNCH_PATCH_FILE} || true
    echo touch ${LAUNCH_BASE_DIR}\*
    touch ${LAUNCH_BASE_DIR}*
 
@@ -249,7 +249,7 @@ installCodewarriorInstance() {
    CODEWARRIOR_PATCH_NEW_WIZARD="PatchNewWizardPlugin_V10.2.xml"
    WIZARD_PATCH_FILE=${USBDM_WIZARD_PATCH_DIR}/${CODEWARRIOR_PATCH_NEW_WIZARD}
    WIZARD_BASE_DIR=${CW_PLUGIN_DIRECTORY}/"com.freescale.mcu.projectwizard_"  
-   ${USBDM_BIN_DIR}/MergeXML ${WIZARD_BASE_DIR}\* plugin.xml ${WIZARD_PATCH_FILE}
+   ${USBDM_BIN_DIR}/MergeXML ${WIZARD_BASE_DIR}\* plugin.xml ${WIZARD_PATCH_FILE} || true
    echo touch ${WIZARD_BASE_DIR}\*
    touch ${WIZARD_BASE_DIR}*
 
@@ -258,7 +258,7 @@ installCodewarriorInstance() {
    CODEWARRIOR_PATCH_CHANGE_WIZARD="PatchChangeWizardPlugin_V10.2.xml"
    WIZARD_PATCH_FILE=${USBDM_WIZARD_PATCH_DIR}/${CODEWARRIOR_PATCH_CHANGE_WIZARD}
    WIZARD_BASE_DIR=${CW_PLUGIN_DIRECTORY}/"com.freescale.mcu.changewizard_"  
-   ${USBDM_BIN_DIR}/MergeXML ${WIZARD_BASE_DIR}\* plugin.xml ${WIZARD_PATCH_FILE}
+   ${USBDM_BIN_DIR}/MergeXML ${WIZARD_BASE_DIR}\* plugin.xml ${WIZARD_PATCH_FILE} || true
 
    echo 
    echo "Refreshing Eclipse"
@@ -327,9 +327,8 @@ USBDM_LAUNCH_CONFIG_DIR="${USBDM_SHARED_DIR}/LaunchConfig"
 USBDM_WIZARD_PATCH_DIR="${USBDM_SHARED_DIR}/WizardPatches"
 
 # CDT Features and where to look for them
-#CDT_FEATURES="org.eclipse.cdt.debug.gdbjtag.feature.group,net.sourceforge.usbdm.cdt.feature.feature.group"
 CDT_FEATURES="net.sourceforge.usbdm.cdt.feature.feature.group"
-CDT_REPOS="file:/${USBDM_UPDATE_SITE},http://download.eclipse.org/releases/mars"
+CDT_REPOS="file:/${USBDM_UPDATE_SITE}"
 
 # CW Features and where to look for them
 CW_FEATURE_GROUP="net.sourceforge.usbdm.cw.feature.feature.group"
@@ -345,4 +344,3 @@ installEclipse
 installKDS
 installCodewarrior
 #libraryUpdate $1
-
