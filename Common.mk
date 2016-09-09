@@ -1,5 +1,5 @@
 # Shared make definitions
-#
+# Modified for Raspberry Pi
 
 #.SILENT :
 
