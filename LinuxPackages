@@ -23,6 +23,7 @@ fi
 if [ "${BITNESS}" == "32" ]; then
 # 32-bit build
 # =====================================================
+sudo apt-get update
 sudo apt-get -y install libusb-1.0-0-dev
 sudo apt-get -y install tcl8.6-dev
 sudo apt-get -y install tcl8.6
@@ -37,6 +38,7 @@ sudo apt-get -y install default-jdk
 elif [ "${BITNESS}" == "64" ]; then
 # 64-bit build
 # =====================================================
+sudo apt-get update
 sudo apt-get -y install libusb-1.0-0-dev
 sudo apt-get -y install tcl8.6-dev
 sudo apt-get -y install tcl8.6
