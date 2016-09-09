@@ -8,20 +8,17 @@ NANO=150
 DEBIAN_VERSION=1
 VERSION=${MAJOR}.${MINOR}.${MICRO}.${NANO}
 
+MULTIARCH=`gcc --print-multiarch`
+ARCH=`uname -n`
+
 BITNESS=`getconf LONG_BIT`
 
-if [[ (${BITNESS} == "32") ]]; then
-   # Where to construct the install tree
-   PACKAGE_FILE="../usbdm_${VERSION}-${DEBIAN_VERSION}-i386.deb"
-else
-   # Where to construct the install tree
-   PACKAGE_FILE="../usbdm_${VERSION}-${DEBIAN_VERSION}-amd64.deb"
-fi
+# Where to construct the install tree
+PACKAGE_FILE="../usbdm_${VERSION}-${DEBIAN_VERSION}-${ARCH}.deb"
 
 echo "Removing usbdm"
 sudo apt-get -y remove usbdm
 
 echo "Installing ${PACKAGE_FILE}"
-sudo dpkg -i ${PACKAGE_FILE} 
-
+sudo dpkg -i ${PACKAGE_FILE}
 
