@@ -10,11 +10,6 @@ USBDM_VERSION := $(MAJOR_VERSION).$(MINOR_VERSION)
 
 
 #===========================================================
-# Where to find private libraries on linux
-USBDM_LIBDIR32="/usr/lib/i386-linux-gnu/usbdm"
-USBDM_LIBDIR64="/usr/lib/x86_64-linux-gnu/usbdm"
-
-#===========================================================
 # Shared directories - Relative to child directory
 SHARED_SRC     := ../Shared_V4/src
 SHARED_LIBDIRS := ../Shared_V4/i386-win-gnu
@@ -24,9 +19,15 @@ DUMMY_CHILD    := PackageFiles
 
 ifeq ($(OS),Windows_NT)
     UNAME_S := Windows
+	UNAME_M := i386
 else
     UNAME_S := $(shell uname -s)
+    UNAME_S := $(shell uname -m)
 endif
+
+#===========================================================
+# Where to find private libraries on linux
+USBDM_LIBDIR="/usr/lib/$(UNAME_M)-linux-gnu/usbdm"
 
 #===========================================================
 # Where to build
@@ -34,18 +35,18 @@ endif
 ifeq ($(UNAME_S),Windows)
    DIRS = $(COMMON_DIRS) $(WIN_DIRS)
    BITNESS         ?= 32
-   TARGET_BINDIR   ?= ../PackageFiles/bin/i386-win-gnu
-   TARGET_LIBDIR   ?= ../PackageFiles/bin/i386-win-gnu
-   BUILDDIR_SUFFIX ?= .i386
+   TARGET_BINDIR   ?= ../PackageFiles/bin/$(UNAME_S)-win-gnu
+   TARGET_LIBDIR   ?= ../PackageFiles/bin/$(UNAME_S)-win-gnu
+   BUILDDIR_SUFFIX ?= .$(UNAME_S)
    VSUFFIX         ?= .$(MAJOR_VERSION)
 else
    # Assume Linux
    DIRS = $(COMMON_DIRS)
    BITNESS ?= $(shell getconf LONG_BIT)
    ifeq ($(BITNESS),32)
-      TARGET_BINDIR   ?= ../PackageFiles/bin/i386-linux-gnu
-      TARGET_LIBDIR   ?= ../PackageFiles/lib/i386-linux-gnu
-      BUILDDIR_SUFFIX ?= .i386
+      TARGET_BINDIR   ?= ../PackageFiles/bin/$(UNAME_S)-linux-gnu
+      TARGET_LIBDIR   ?= ../PackageFiles/lib/$(UNAME_S)-linux-gnu
+      BUILDDIR_SUFFIX ?= .$(UNAME_S)
    endif
    ifeq ($(BITNESS),64)
       TARGET_BINDIR   ?= ../PackageFiles/bin/x86_64-linux-gnu
@@ -369,13 +370,15 @@ else
 endif
 
 ifneq ($(OS),Windows_NT)
-   ifeq ($(BITNESS),32)
+   CFLAGS  +=
+   LDFLAGS += -Wl,-rpath,${USBDM_LIBDIR}
+
+   ifeq ($(UNAME_M),x86)
       CFLAGS  += -m32
-      LDFLAGS += -m32 -Wl,-rpath,${USBDM_LIBDIR32}
-   endif
-   ifeq ($(BITNESS),64)
+      LDFLAGS += -m32
+   else ifeq ($(UNAME_M),x86_64)
       CFLAGS  += -m64
-      LDFLAGS += -m64 -Wl,-rpath,${USBDM_LIBDIR64}
+      LDFLAGS += -m64
    endif
 endif
 
