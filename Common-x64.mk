@@ -8,7 +8,6 @@ MINOR_VERSION := 12
 MICRO_VERSION := 1
 USBDM_VERSION := $(MAJOR_VERSION).$(MINOR_VERSION)
 
-
 # Used as prefix with the above when in build directory $(DUMMY_CHILD)/$(SHARED_SRC) = PackageFiles/src
 DUMMY_CHILD    := PackageFiles
 
@@ -306,11 +305,9 @@ ifeq ($(UNAME_S),Windows)
    LIB_USB = -l$(_LIB_USB_STATIC)
    ifdef DEBUG
       USBDM_LIBS     := -lusbdm-debug$(VSUFFIX) 
-      USBDM_TCL_LIBS := -ldeleteTCL_LIBS
       USBDM_DSC_LIBS := -lusbdm-dsc-debug$(VSUFFIX) 
    else
       USBDM_LIBS     := -lusbdm$(VSUFFIX) 
-      USBDM_TCL_LIBS := -ldeleteTCL_LIBS
       USBDM_DSC_LIBS := -lusbdm-dsc$(VSUFFIX) 
    endif
 else
@@ -359,6 +356,7 @@ endif
 ifneq ($(OS),Windows_NT)
    CFLAGS  +=
    LDFLAGS += -Wl,-rpath,${USBDM_LIBDIR}
+   LDFLAGS += -Wl,-rpath-link,${TARGET_LIBDIR}
 
    ifeq ($(UNAME_M),x86)
       CFLAGS  += -m32
