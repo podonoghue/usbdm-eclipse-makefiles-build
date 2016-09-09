@@ -34,22 +34,19 @@ makeDebFile() {
 
    local BITNESS="$1"
 
-   # Where to find 32-bit libraries and binaries
-   USBDM_SOURCE_LIBDIR32=${SOURCE_DIRECTORY}/PackageFiles/lib/$(MULTIARCH)
+   # Where to find libraries and binaries
+   USBDM_SOURCE_LIBDIR=${SOURCE_DIRECTORY}/PackageFiles/lib/${MULTIARCH}
 
    USBDM_UPDATE_SITE=${SOURCE_DIRECTORY}/../usbdm-eclipse-plugins/UpdateSite
 
    # Where to construct the install tree
-   DUMMY_ROOT="../usbdm_${VERSION}-${DEBIAN_VERSION}-$(ARCH)"
-
-   # Where to copy libraries from
-   USBDM_SOURCE_LIBDIR=${USBDM_SOURCE_LIBDIR}
+   DUMMY_ROOT="../usbdm_${VERSION}-${DEBIAN_VERSION}-${ARCH}"
 
    # Where to copy executables from
    USBDM_SOURCE_BINDIR=${USBDM_SOURCE_BINDIR}
 
    # Where to copy libraries to
-   USBDM_LIBDIR="${DUMMY_ROOT}/usr/lib/$(MULTIARCH)/usbdm"
+   USBDM_LIBDIR="${DUMMY_ROOT}/usr/lib/${MULTIARCH}/usbdm"
 
    # Shared files
    USBDM_SHARED_DIR="${DUMMY_ROOT}/usr/share/usbdm"
@@ -154,11 +151,17 @@ makeDebFile() {
       chmod 755 ${USBDM_CONTROL_DIR}/${CONTROL_FILE} 
    done
 
-   if [[ (${BITNESS} == "32") ]]; then
-      ${CP} "${SOURCE_DIRECTORY}/PackageFiles"/MiscellaneousLinux/DEBIAN/control.i386  ${USBDM_CONTROL_DIR}/control
-   else
-      ${CP} "${SOURCE_DIRECTORY}/PackageFiles"/MiscellaneousLinux/DEBIAN/control.amd64 ${USBDM_CONTROL_DIR}/control
-   fi
+  case "${MULTIARCH}" in
+      i386-linux-gnu)
+         ${CP} "${SOURCE_DIRECTORY}/PackageFiles"/MiscellaneousLinux/DEBIAN/control.i386  ${USBDM_CONTROL_DIR}/control
+         ;;
+      x86_64-linux-gnu)
+         ${CP} "${SOURCE_DIRECTORY}/PackageFiles"/MiscellaneousLinux/DEBIAN/control.amd64 ${USBDM_CONTROL_DIR}/control
+         ;;
+      arm-linux-gnueabihf)
+        ${CP} "${SOURCE_DIRECTORY}/PackageFiles"/MiscellaneousLinux/DEBIAN/control.armhf ${USBDM_CONTROL_DIR}/control
+        ;;
+   esac
    chmod 755 ${USBDM_CONTROL_DIR}/control 
 
    find ${DUMMY_ROOT}   -type d -exec chmod 755 {} \;
