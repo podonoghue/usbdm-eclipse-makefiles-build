@@ -22,7 +22,7 @@ ifeq ($(OS),Windows_NT)
 	UNAME_M := i386
 else
     UNAME_S := $(shell uname -s)
-    UNAME_S := $(shell uname -m)
+    UNAME_M := $(shell uname -m)
 endif
 
 #===========================================================
