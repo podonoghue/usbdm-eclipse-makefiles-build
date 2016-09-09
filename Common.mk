@@ -367,7 +367,7 @@ endif
 ifneq ($(OS),Windows_NT)
    CFLAGS  +=
    LDFLAGS += -Wl,-rpath,${USBDM_LIBDIR}
-   LDFLAGS += -Wl,-rpath-link,${USBDM_LIBDIR}
+   LDFLAGS += -Wl,-rpath-link,${SHARED_LIBDIRS}
 
    ifeq ($(UNAME_M),x86)
       CFLAGS  += -m32
