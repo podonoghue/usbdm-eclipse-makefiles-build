@@ -21,6 +21,8 @@ Release/
 *.x86_64/
 *.i386-win-gnu/
 *.x86_64-win-gnu/
+*.i386-linux-gnu/
+*.x86_64-linux-gnu/
 
 # Packages #
 ############
