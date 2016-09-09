@@ -4,28 +4,32 @@
 #.SILENT :
 
 MAJOR_VERSION := 4
-MINOR_VERSION := 11
+MINOR_VERSION := 12
 MICRO_VERSION := 1
 USBDM_VERSION := $(MAJOR_VERSION).$(MINOR_VERSION)
 
-#===========================================================
-# Where to find private libraries on linux
-USBDM_LIBDIR32="/usr/lib/i386-linux-gnu/usbdm"
-USBDM_LIBDIR64="/usr/lib/x86_64-linux-gnu/usbdm"
-
-#===========================================================
-# Shared directories - Relative to child directory
-SHARED_SRC     := ../Shared_V4/src
-SHARED_LIBDIRS := ../Shared_V4/x86_64-win-gnu
 
 # Used as prefix with the above when in build directory $(DUMMY_CHILD)/$(SHARED_SRC) = PackageFiles/src
 DUMMY_CHILD    := PackageFiles
 
 ifeq ($(OS),Windows_NT)
     UNAME_S := Windows
+    UNAME_M := x86_64
+    MULTIARCH := x86_64-win-gnu
 else
     UNAME_S := $(shell uname -s)
+    UNAME_M := $(shell uname -m)
+    MULTIARCH := $(shell gcc --print-multiarch)
 endif
+
+#===========================================================
+# Shared directories - Relative to child directory
+SHARED_SRC     := ../Shared_V4/src
+SHARED_LIBDIRS := ../Shared_V4/$(MULTIARCH)
+
+#===========================================================
+# Where to find private libraries on linux
+USBDM_LIBDIR="/usr/lib/$(MULTIARCH)/usbdm"
 
 #===========================================================
 # Where to build
@@ -33,24 +37,18 @@ endif
 ifeq ($(UNAME_S),Windows)
    DIRS = $(COMMON_DIRS) $(WIN_DIRS)
    BITNESS         ?= 32
-   TARGET_BINDIR   ?= ../PackageFiles/bin/x86_64-win-gnu
-   TARGET_LIBDIR   ?= ../PackageFiles/bin/x86_64-win-gnu
-   BUILDDIR_SUFFIX ?= .x86_64
+   TARGET_BINDIR   ?= ../PackageFiles/bin/$(MULTIARCH)
+   TARGET_LIBDIR   ?= ../PackageFiles/bin/$(MULTIARCH)
+   BUILDDIR_SUFFIX ?= .$(MULTIARCH)
    VSUFFIX         ?= .$(MAJOR_VERSION)
 else
    # Assume Linux
    DIRS = $(COMMON_DIRS)
    BITNESS ?= $(shell getconf LONG_BIT)
-   ifeq ($(BITNESS),32)
-      TARGET_BINDIR   ?= ../PackageFiles/bin/i386-linux-gnu
-      TARGET_LIBDIR   ?= ../PackageFiles/lib/i386-linux-gnu
-      BUILDDIR_SUFFIX ?= .i386
-   endif
-   ifeq ($(BITNESS),64)
-      TARGET_BINDIR   ?= ../PackageFiles/bin/x86_64-linux-gnu
-      TARGET_LIBDIR   ?= ../PackageFiles/lib/x86_64-linux-gnu
-      BUILDDIR_SUFFIX ?= .x86_64
-   endif
+   TARGET_BINDIR   ?= ../PackageFiles/bin/$(MULTIARCH)
+   TARGET_LIBDIR   ?= ../PackageFiles/lib/$(MULTIARCH)
+   BUILDDIR_SUFFIX ?= .$(MULTIARCH)
+   include /usr/share/java/java_defaults.mk
 endif
 
 ifeq ($(UNAME_S),Windows)
@@ -128,7 +126,7 @@ WDI_LIBS       := -lwdi-static -lsetupapi -lole32  -lcomctl32
 TCL_LIBDIRS    := 
 ifeq ($(UNAME_S),Windows)
    TCL_INC        := -IC:/Apps/Tcl/include
-   TCL_LIBS       := -ltcl85
+   TCL_LIBS       := -ltcl86
 else
    TCL_INC        := -I/usr/include/tcl8.6
    TCL_LIBS       := -ltcl8.6
@@ -294,7 +292,7 @@ ifeq ($(UNAME_S),Windows)
    JAVA_INC := -I$(PROGRAM_DIR_JAVA)/Java/jdk1.8.0_60/include
    JAVA_INC += -I$(PROGRAM_DIR_JAVA)/Java/jdk1.8.0_60/include/win32
 else
-   JAVA_INC := -I/usr/lib/jvm/default-java/include
+   JAVA_INC := -I/usr/lib/jvm/default-java/include $(jvm_includes)
 endif
 
 #=============================================================
@@ -359,13 +357,15 @@ else
 endif
 
 ifneq ($(OS),Windows_NT)
-   ifeq ($(BITNESS),32)
+   CFLAGS  +=
+   LDFLAGS += -Wl,-rpath,${USBDM_LIBDIR}
+
+   ifeq ($(UNAME_M),x86)
       CFLAGS  += -m32
-      LDFLAGS += -m32 -Wl,-rpath,${USBDM_LIBDIR32}
-   endif
-   ifeq ($(BITNESS),64)
+      LDFLAGS += -m32
+   else ifeq ($(UNAME_M),x86_64)
       CFLAGS  += -m64
-      LDFLAGS += -m64 -Wl,-rpath,${USBDM_LIBDIR64}
+      LDFLAGS += -m64
    endif
 endif
 

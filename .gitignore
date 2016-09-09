@@ -19,6 +19,8 @@ Debug/
 Release/
 *.i386/
 *.x86_64/
+*.i386-win-gnu/
+*.x86_64-win-gnu/
 
 # Packages #
 ############

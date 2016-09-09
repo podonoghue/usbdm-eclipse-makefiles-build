@@ -9,23 +9,23 @@ MICRO_VERSION := 1
 USBDM_VERSION := $(MAJOR_VERSION).$(MINOR_VERSION)
 
 
-#===========================================================
-# Shared directories - Relative to child directory
-SHARED_SRC     := ../Shared_V4/src
-SHARED_LIBDIRS := ../Shared_V4/i386-win-gnu
-
 # Used as prefix with the above when in build directory $(DUMMY_CHILD)/$(SHARED_SRC) = PackageFiles/src
 DUMMY_CHILD    := PackageFiles
 
 ifeq ($(OS),Windows_NT)
     UNAME_S := Windows
-	UNAME_M := i386
-	MULTIARCH := x86_64-win-gnu 
+    UNAME_M := i386
+    MULTIARCH := i386-win-gnu
 else
     UNAME_S := $(shell uname -s)
     UNAME_M := $(shell uname -m)
-	MULTIARCH := $(shell gcc --print-multiarch)
+    MULTIARCH := $(shell gcc --print-multiarch)
 endif
+
+#===========================================================
+# Shared directories - Relative to child directory
+SHARED_SRC     := ../Shared_V4/src
+SHARED_LIBDIRS := ../Shared_V4/$(MULTIARCH)
 
 #===========================================================
 # Where to find private libraries on linux
@@ -37,24 +37,17 @@ USBDM_LIBDIR="/usr/lib/$(MULTIARCH)/usbdm"
 ifeq ($(UNAME_S),Windows)
    DIRS = $(COMMON_DIRS) $(WIN_DIRS)
    BITNESS         ?= 32
-   TARGET_BINDIR   ?= ../PackageFiles/bin/$(UNAME_S)-win-gnu
-   TARGET_LIBDIR   ?= ../PackageFiles/bin/$(UNAME_S)-win-gnu
-   BUILDDIR_SUFFIX ?= .$(UNAME_S)
+   TARGET_BINDIR   ?= ../PackageFiles/bin/$(MULTIARCH)
+   TARGET_LIBDIR   ?= ../PackageFiles/bin/$(MULTIARCH)
+   BUILDDIR_SUFFIX ?= .$(MULTIARCH)
    VSUFFIX         ?= .$(MAJOR_VERSION)
 else
    # Assume Linux
    DIRS = $(COMMON_DIRS)
    BITNESS ?= $(shell getconf LONG_BIT)
-   ifeq ($(BITNESS),32)
-      TARGET_BINDIR   ?= ../PackageFiles/bin/$(UNAME_S)-linux-gnu
-      TARGET_LIBDIR   ?= ../PackageFiles/lib/$(UNAME_S)-linux-gnu
-      BUILDDIR_SUFFIX ?= .$(UNAME_S)
-   endif
-   ifeq ($(BITNESS),64)
-      TARGET_BINDIR   ?= ../PackageFiles/bin/x86_64-linux-gnu
-      TARGET_LIBDIR   ?= ../PackageFiles/lib/x86_64-linux-gnu
-      BUILDDIR_SUFFIX ?= .x86_64
-   endif
+   TARGET_BINDIR   ?= ../PackageFiles/bin/$(MULTIARCH)
+   TARGET_LIBDIR   ?= ../PackageFiles/lib/$(MULTIARCH)
+   BUILDDIR_SUFFIX ?= .$(MULTIARCH)
    include /usr/share/java/java_defaults.mk
 endif
 
