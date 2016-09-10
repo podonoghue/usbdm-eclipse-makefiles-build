@@ -2,6 +2,9 @@
 # Where Eclipse files are
 ECLIPSE_HOME=.
 
+MULTIARCH=`gcc --print-multiarch`
+ARCH=`uname -n`
+
 # Where to place test files
 TEST_DIR=${ECLIPSE_HOME}/Tests
 
@@ -11,8 +14,8 @@ DEVICE_DATA=${ECLIPSE_HOME}/PackageFiles/DeviceData
 mkdir -p ${TEST_DIR}
 
 # Executables that are produced as part of USBDM
-cp "${ECLIPSE_HOME}/PackageFiles/bin/x86_64-linux-gnu/"*                "${TEST_DIR}"
-cp "${ECLIPSE_HOME}/PackageFiles/lib/x86_64-linux-gnu/"*                "${TEST_DIR}"
+cp "${ECLIPSE_HOME}/PackageFiles/bin/${MULTIARCH}/"*                "${TEST_DIR}"
+cp "${ECLIPSE_HOME}/PackageFiles/lib/${MULTIARCH}/"*                "${TEST_DIR}"
 
 # Misc commands
 cp "${ECLIPSE_HOME}/PackageFiles/Miscellaneous/"*.tcl  "${TEST_DIR}"
