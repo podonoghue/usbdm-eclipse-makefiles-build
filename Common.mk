@@ -356,7 +356,7 @@ ifdef DEBUG
    DEFS   := -DLOG
 else
    # Compiler flags
-   CFLAGS += -O3 -g0 
+   CFLAGS += -O3 -g3 
    # Compiler flags (Linking)
    LDFLAGS = -s
 endif
