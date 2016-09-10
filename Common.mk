@@ -351,14 +351,15 @@ ifdef DEBUG
    # Compiler flags
    CFLAGS += -O0 -g3
    # Compiler flags (Linking)
-   LDFLAGS = 
+   LDFLAGS = -O0 -g3
    # C Definitions
    DEFS   := -DLOG
 else
    # Compiler flags
    CFLAGS += -O3 -g3 
    # Compiler flags (Linking)
-   LDFLAGS = -s
+#   LDFLAGS = -s -O3 -g3 
+   LDFLAGS = -O3 -g3 
 endif
 
 ifneq ($(OS),Windows_NT)
