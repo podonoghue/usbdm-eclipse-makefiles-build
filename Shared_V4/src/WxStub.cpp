@@ -103,7 +103,10 @@ bool __attribute__ ((constructor)) wx_dll_open(void) {
       wxApp::SetInstance(pApp);
       wxInitializationDone = wxEntryStart(argc, argv);
       log.print("Created wxTheApp = %p\n", wxTheApp);
-      //log.print("AppName = %s\n", (const char *)wxTheApp->GetAppName().c_str());
+      wxString appName = wxTheApp->GetAppName();
+      if (!appName.IsEmpty()) {
+         log.print("AppName = %s\n", (const char *)appName.c_str());
+      }
       if (wxInitializationDone) {
          log.print("wxEntryStart() successful\n");
       }

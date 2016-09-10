@@ -21,7 +21,7 @@ Change History
 #include <wx/app.h>
 #include <wx/evtloop.h>
 #include <wx/msgdlg.h>
-
+#include <exception>
 
 #include <wx/msgdlg.h>
 #include <wx/app.h>
@@ -62,7 +62,11 @@ long WxPluginImp::display(std::string message, std::string caption, long style) 
    log.print("Message   = %s\n", message.c_str());
    log.print("Caption   = %s\n", caption.c_str());
    log.print("Style     = %ld\n", style);
-   long rc =  wxMessageBox(message, caption, style);
+   long rc = 0;
+      try {
+         rc = wxMessageBox(message, caption, style);
+      } catch (std::exception &) {
+      }
 #if defined(__linux__)
    runGuiEventLoop();
 #endif

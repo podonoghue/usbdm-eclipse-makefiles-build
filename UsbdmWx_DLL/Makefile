@@ -8,12 +8,11 @@ TestWx-debug:
 	@echo "================================================================"
 	$(MAKE) exe -f Target.mk BUILDDIR=$@$(BUILDDIR_SUFFIX) MODULE=TestWx TARGET=$@ CDEFS='$(DEFS)' DEBUG='Y'
 
-# Always enable debugging
 usbdm-wx-plugin:
 	@echo
 	@echo  Building $@
 	@echo "================================================================"
-	$(MAKE) dll -f Target.mk BUILDDIR=$@$(BUILDDIR_SUFFIX) MODULE=wxPlugin TARGET=$@$(VSUFFIX) CDEFS='$(DEFS) -DCOMPILE_WX_PLUGIN_DLL'  DEBUG='Y'
+	$(MAKE) dll -f Target.mk BUILDDIR=$@$(BUILDDIR_SUFFIX) MODULE=wxPlugin TARGET=$@$(VSUFFIX) CDEFS='$(DEFS) -DCOMPILE_WX_PLUGIN_DLL'
 	
 usbdm-wx-plugin-debug:
 	@echo
