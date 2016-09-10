@@ -124,7 +124,7 @@ bool MemoryDumpApp::OnInit() {
    // Create and display the main application window
    MemoryDumpDialogue *dialogue = new MemoryDumpDialogue(NULL, appsettings);
    SetTopWindow((wxWindow*)dialogue);
-   dialogue->Show();
+   dialogue->ShowModal();
    appsettings->save();
    dialogue->Destroy();
 
