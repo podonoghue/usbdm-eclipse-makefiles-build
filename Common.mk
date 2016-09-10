@@ -129,7 +129,6 @@ WDI_LIBS       := -lwdi-static -lsetupapi -lole32  -lcomctl32
 
 #===========================================================
 # TCL
-# Pick up shared DLLs from Shared_V4/lib
 TCL_LIBDIRS    := 
 ifeq ($(UNAME_S),Windows)
    TCL_INC        := -IC:/Apps/Tcl/include
@@ -236,12 +235,10 @@ ifeq ($(UNAME_S),Windows)
    #-lwxscintilla           
 
 else
-#   WXWIDGETS_INC     := `wx-config --cppflags`
    WXWIDGETS_INC     := $(shell wx-config --cppflags)
    WXWIDGETS_DEFS    := -DuseWxWidgets
 
    WXWIDGETS_SHARED_LIBDIRS :=
-#   WXWIDGETS_SHARED_LIBS    := `wx-config --libs`
    WXWIDGETS_SHARED_LIBS    := $(shell wx-config --libs)
 
    WXWIDGETS_STATIC_LIBDIRS := 
@@ -389,5 +386,5 @@ else
 endif
 
 #===========================================================
-# Look in shared Library dir first
+# Look in build and shared library directories first
 LIBDIRS := -L$(TARGET_LIBDIR) -L$(SHARED_LIBDIRS)
