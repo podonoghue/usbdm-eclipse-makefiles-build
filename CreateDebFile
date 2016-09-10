@@ -38,7 +38,7 @@ makeDebFile() {
    USBDM_SOURCE_LIBDIR=${SOURCE_DIRECTORY}/PackageFiles/lib/${MULTIARCH}
 
    # Where to copy executables from
-   USBDM_SOURCE_LIBDIR=${SOURCE_DIRECTORY}/PackageFiles/bin/${MULTIARCH}
+   USBDM_SOURCE_BINDIR=${SOURCE_DIRECTORY}/PackageFiles/bin/${MULTIARCH}
    
    USBDM_UPDATE_SITE=${SOURCE_DIRECTORY}/../usbdm-eclipse-plugins/UpdateSite
 
