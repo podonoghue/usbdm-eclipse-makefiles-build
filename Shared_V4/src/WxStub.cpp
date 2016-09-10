@@ -104,10 +104,10 @@ bool __attribute__ ((constructor)) wx_dll_open(void) {
       wxInitializationDone = wxEntryStart(argc, argv);
       log.print("Created wxTheApp = %p\n", wxTheApp);
       wxTheApp->SetAppName("Usbdm-wx-stub");
-      wxString appName = wxTheApp->GetAppName();
-      if (!appName.IsEmpty()) {
-         log.print("AppName = %s\n", (const char *)appName.c_str());
-      }
+//      wxString appName = wxTheApp->GetAppName();
+//      if (!appName.IsEmpty()) {
+//         log.print("AppName = %s\n", (const char *)appName.c_str());
+//      }
       if (wxInitializationDone) {
          log.print("wxEntryStart() successful\n");
       }
