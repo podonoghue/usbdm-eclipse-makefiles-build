@@ -357,8 +357,7 @@ ifdef DEBUG
 else
    # Compiler flags
    CFLAGS += -O3 -g3 
-   # Compiler flags (Linking)
-#   LDFLAGS = -s -O3 -g3 
+   # Compiler flags (Linking) - include DEBUG info as can be stripped later
    LDFLAGS = -O3 -g3 
 endif
 
