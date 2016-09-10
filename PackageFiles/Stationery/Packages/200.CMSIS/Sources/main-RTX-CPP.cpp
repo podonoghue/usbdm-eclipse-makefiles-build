@@ -6,7 +6,7 @@
  */
 #include "cmsis_os.h"                   // CMSIS RTX
 #include "derivative.h"                 // Device header
-#include "gpio.h"
+#include "hardware.h"
 
 osThreadId tid_redThread;               // Thread id of redThread
 osThreadId tid_blueThread;              // Thread id of blueThread
