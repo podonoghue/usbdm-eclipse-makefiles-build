@@ -75,9 +75,9 @@ MemoryDumpDialogue::~MemoryDumpDialogue() {
    saveSettings();
 }
 
-int  MemoryDumpDialogue::ShowModal() {
+int  MemoryDumpDialogue::Show() {
    loadSettings();
-   int rc = MemoryDumpDialogueSkeleton::ShowModal();
+   int rc = MemoryDumpDialogueSkeleton::Show();
    saveSettings();
    return rc;
 }

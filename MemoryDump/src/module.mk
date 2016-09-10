@@ -6,10 +6,10 @@ SRC += Version.rc
 SRC += MemoryDumpApp.cpp
 SRC += MemoryDumpDialogueSkeleton.cpp
 SRC += MemoryDumpDialogue.cpp
-SRC += AppSettings.cpp
 
 # Shared files $(SHARED_SRC)
 VPATH := $(SHARED_SRC) $(VPATH)
 INCS  += -I$(SHARED_SRC)
-SRC  += Names.cpp
-SRC  += ProgressDialogue.cpp
+SRC += AppSettings.cpp
+SRC += Names.cpp
+SRC += ProgressDialogue.cpp

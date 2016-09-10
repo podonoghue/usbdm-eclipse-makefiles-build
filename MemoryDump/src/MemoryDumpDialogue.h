@@ -74,7 +74,7 @@ protected:
 public:
    MemoryDumpDialogue(wxWindow* parent, AppSettingsPtr appSettings);
    virtual ~MemoryDumpDialogue();
-   virtual int  ShowModal();
+   virtual int  Show();
 };
 
 #endif /* SRC_MEMORYDUMPDIALOGUE_H_ */
