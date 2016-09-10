@@ -37,13 +37,13 @@ makeDebFile() {
    # Where to find libraries and binaries
    USBDM_SOURCE_LIBDIR=${SOURCE_DIRECTORY}/PackageFiles/lib/${MULTIARCH}
 
+   # Where to copy executables from
+   USBDM_SOURCE_LIBDIR=${SOURCE_DIRECTORY}/PackageFiles/bin/${MULTIARCH}
+   
    USBDM_UPDATE_SITE=${SOURCE_DIRECTORY}/../usbdm-eclipse-plugins/UpdateSite
 
    # Where to construct the install tree
    DUMMY_ROOT="../usbdm_${VERSION}-${DEBIAN_VERSION}-${ARCH}"
-
-   # Where to copy executables from
-   USBDM_SOURCE_BINDIR=${USBDM_SOURCE_BINDIR}
 
    # Where to copy libraries to
    USBDM_LIBDIR="${DUMMY_ROOT}/usr/lib/${MULTIARCH}/usbdm"
