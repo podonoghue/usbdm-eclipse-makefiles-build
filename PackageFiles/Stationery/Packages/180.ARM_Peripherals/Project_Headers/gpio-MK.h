@@ -267,7 +267,7 @@ public:
     * @param mask Mask for pin directions (1=>out, 0=>in)
     */
    static void setDirection(uint32_t mask) {
-      gpio->PDDR = (gpio->PDDR&~MASK)|(mask<<right)&MASK;
+      gpio->PDDR = (gpio->PDDR&~MASK)|((mask<<right)&MASK);
    }
    /**
     * Set bits in field
@@ -307,7 +307,7 @@ public:
     * @param value to insert as field
     */
    static void write(uint32_t value) {
-      (gpio->PDOR) = (gpio->PDOR) & ~MASK | ((value<<right)&MASK);
+      gpio->PDOR = ((gpio->PDOR) & ~MASK) | ((value<<right)&MASK);
    }
 };
 
