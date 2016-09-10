@@ -30,7 +30,7 @@
 							<tool id="cdt.managedbuild.tool.gnu.assembler.mingw.base.2121330370" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.base">
 								<option id="gnu.both.asm.option.include.paths.1136630793" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${WXWIN}/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${WXWIN}/lib/gcc_lib/mswu&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${WXWIN}/lib/gcc_lib/mswud&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${WXWIN}/lib/gcc_dll/mswu&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.769505028" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
@@ -39,7 +39,7 @@
 							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base.1624802614" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base">
 								<option id="gnu.cpp.compiler.option.include.paths.639773202" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${WXWIN}/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${WXWIN}/lib/gcc_lib/mswu&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${WXWIN}/lib/gcc_lib/mswud&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${WXWIN}/lib/gcc_dll/mswu&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.1878407177" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
@@ -54,7 +54,7 @@
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.mingw.base.1771296721" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.mingw.base">
 								<option id="gnu.c.compiler.option.include.paths.882461399" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${WXWIN}/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${WXWIN}/lib/gcc_lib/mswu&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${WXWIN}/lib/gcc_lib/mswud&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${WXWIN}/lib/gcc_dll/mswu&quot;"/>
 								</option>
 								<option id="gnu.c.compiler.option.preprocessor.def.symbols.1702185299" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
