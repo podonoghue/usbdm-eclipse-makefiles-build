@@ -1,0 +1,28 @@
+Package: usbdm
+Version: 4.12-1
+Section: embedded
+Priority: optional
+Architecture: armhf
+Installed-Size: 123300
+Depends: libwxgtk3.0-0, libwxbase3.0-0, libgcc1, libstdc++6, libxerces-c3.1, libc6, libtcl8.6, libusb-1.0-0 
+Maintainer: Peter O'Donoghue <podonoghue@swin.edu.au>
+Description: Debugger Hardware & Software for Freescale microcontrollers.
+ USBDM is a debugger hardware interface and programming software for a range of Freescale 
+ microcontrollers. 
+ .
+ It is designed to work with Freescale's Codewarrior software under Windows
+ and Linux. 
+ .
+ Support for Eclipse is provided allowing programming of Coldfire and Kinetis
+ using the Codesourcery Tool chain or ARM Ltd GNU Tools for ARM.
+ . 
+ Stand-alone programmers are also provided.
+ .
+ USBDM supports the following targets:
+ .
+    RS08
+    HCS08,
+    HC12, S12Z,
+    Coldfire V1-4,
+    Kinetis ARM-cortex,
+    MC56F800xx Digital Signal Controllers (very limited range).
