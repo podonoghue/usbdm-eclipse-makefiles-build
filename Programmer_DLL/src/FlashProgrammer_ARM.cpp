@@ -1629,7 +1629,7 @@ USBDM_ErrorCode FlashProgrammer_ARM::eraseFlash(void) {
       if (!memoryRegionPtr->isProgrammableMemory()) {
          continue;
       }
-      log.print("Erasing %s[0x%06X...]\n", memoryRegionPtr->getMemoryTypeName(), memoryRegionPtr->getMemoryRange(0)->start);
+      log.print("Erasing %s[0x%06X...0x%06X]\n", memoryRegionPtr->getMemoryTypeName(), memoryRegionPtr->getMemoryRange(0)->start, memoryRegionPtr->getMemoryRange(0)->end);
 
       uint32_t addressFlag  = 0;
       uint32_t flashAddress = memoryRegionPtr->getDummyAddress();
