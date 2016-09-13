@@ -85,39 +85,7 @@ protected:
    static void calculateDelay(float clockFrequency, float delay, int &bestPrescale, int &bestDivider);
 
    /**
-    * Calculate Delay factors for ASC
-    *
-    * @param delay          => Desired delay in seconds
-    * @param clockFrequency => Clock frequency of SPI in Hz
-    *
-    * @return Masks for CTAR register
-    *
-    * Note: Determines value for the smallest delay that is not less than delay.
-    */
-   static uint32_t calculateASC(float clockFrequency, float delay) {
-      int bestPrescale, bestDivider;
-      calculateDelay(clockFrequency, delay, bestPrescale, bestDivider);
-      return SPI_CTAR_PASC(bestPrescale)|SPI_CTAR_ASC(bestDivider);
-   }
-
-   /**
-    * Calculate Delay factors for DT
-    *
-    * @param delay          => Desired delay in seconds
-    * @param clockFrequency => Clock frequency of SPI in Hz
-    *
-    * @return Masks for CTAR register
-    *
-    * Note: Determines value for the smallest delay that is not less than delay.
-    */
-   static uint32_t calculateDT(float clockFrequency, float delay) {
-      int bestPrescale, bestDivider;
-      calculateDelay(clockFrequency, delay, bestPrescale, bestDivider);
-      return SPI_CTAR_PDT(bestPrescale)|SPI_CTAR_DT(bestDivider);
-   }
-
-   /**
-    * Calculate Delay factors for CSSCK
+    * Calculate Delay factors for CSSCK (PCS assertion to SCK Delay Scaler)
     *
     * @param delay          => Desired delay in seconds
     * @param clockFrequency => Clock frequency of SPI in Hz
@@ -133,17 +101,50 @@ protected:
    }
 
    /**
-    * Calculates the CTAR value for a given communication delays for SPI
+    * Calculate Delay factors for ASC (SCK to PCS negation delay)
     *
-    * @param asc   => After SCK delay
-    * @param dt    => Delay after Transfer
-    * @param cssck => PCS to SCK Delay Scaler
+    * @param delay          => Desired delay in seconds
+    * @param clockFrequency => Clock frequency of SPI in Hz
+    *
+    * @return Masks for CTAR register
+    *
+    * Note: Determines value for the smallest delay that is not less than delay.
+    */
+   static uint32_t calculateASC(float clockFrequency, float delay) {
+      int bestPrescale, bestDivider;
+      calculateDelay(clockFrequency, delay, bestPrescale, bestDivider);
+      return SPI_CTAR_PASC(bestPrescale)|SPI_CTAR_ASC(bestDivider);
+   }
+
+   /**
+    * Calculate Delay factors for DT (PCS negation to PCS assertion delay between transfers)
+    *
+    * @param delay          => Desired delay in seconds
+    * @param clockFrequency => Clock frequency of SPI in Hz
+    *
+    * @return Masks for CTAR register
+    *
+    * Note: Determines value for the smallest delay that is not less than delay.
+    */
+   static uint32_t calculateDT(float clockFrequency, float delay) {
+      int bestPrescale, bestDivider;
+      calculateDelay(clockFrequency, delay, bestPrescale, bestDivider);
+      return SPI_CTAR_PDT(bestPrescale)|SPI_CTAR_DT(bestDivider);
+   }
+
+   /**
+    * Calculates the CTAR value for a given set of communication delays for SPI
+    *
+    * @param clockFrequency => Clock frequency of SPI in Hz
+    * @param cssck          => PCS assertion to SCK Delay Scaler
+    * @param asc            => SCK to PCS negation delay
+    * @param dt             => PCS negation to PCS assertion delay between transfers
     *
     * @return Masks for CTAR register
     *
     * Note: Determines values for the smallest delay that is not less than specified delays.
     */
-   static uint32_t calculateDelays(uint32_t clockFrequency, float asc=1*USBDM::ms, float dt=1*USBDM::ms, float cssck=1*USBDM::ms) {
+   static uint32_t calculateDelays(uint32_t clockFrequency, float cssck=1*USBDM::us, float asc=1*USBDM::us, float dt=1*USBDM::us) {
       uint32_t ctarValue;
       ctarValue  = calculateASC(clockFrequency, asc);
       ctarValue |= calculateDT(clockFrequency, dt);
@@ -169,14 +170,14 @@ protected:
     * Sets the CTAR value for a given set of communication delays
     *
     * @param clockFrequency => Clock frequency of SPI in Hz
+    * @param cssck          => PCS assertion to SCK Delay Scaler
+    * @param asc            => SCK to PCS negation delay
+    * @param dt             => PCS negation to PCS assertion delay between transfers
     * @param ctarNum        => Index of CTAR register to modify
-    * @param asc            => After SCK delay
-    * @param dt             => Delay after Transfer
-    * @param cssck          => PCS to SCK Delay Scaler
     *
     * Note: Determines values for the smallest delay that is not less than specified delays.
     */
-   void setDelays(uint32_t clockFrequency, int ctarNum, float asc=1*USBDM::ms, float dt=1*USBDM::ms, float cssck=1*USBDM::ms) {
+   void setDelays(uint32_t clockFrequency, float cssck=10*USBDM::us, float asc=10*USBDM::us, float dt=10*USBDM::us, int ctarNum=0) {
 
       uint32_t ctarValue = spi->CTAR[ctarNum] &
             ~(SPI_CTAR_ASC_MASK|SPI_CTAR_PASC_MASK|SPI_CTAR_DT_MASK|SPI_CTAR_PDT_MASK|SPI_CTAR_CSSCK_MASK|SPI_CTAR_PCSSCK_MASK);
@@ -197,18 +198,17 @@ public:
    /**
     * Sets the CTAR value for a given set of communication delays
     *
-    * @param clockFrequency => Clock frequency of SPI in Hz
+    * @param cssck          => PCS assertion to SCK Delay Scaler
+    * @param asc            => SCK to PCS negation delay
+    * @param dt             => PCS negation to PCS assertion delay between transfers
     * @param ctarNum        => Index of CTAR register to modify
-    * @param asc            => After SCK delay
-    * @param dt             => Delay after Transfer
-    * @param cssck          => PCS to SCK Delay Scaler
     *
     * Note: Determines values for the smallest delay that is not less than specified delays.
     */
-   virtual void setDelays(float asc=1*USBDM::ms, float dt=1*USBDM::ms, float cssck=1*USBDM::ms, int ctarNum=0) = 0;
+   virtual void setDelays(float cssck=1*USBDM::ms, float asc=1*USBDM::ms, float dt=1*USBDM::ms, int ctarNum=0) = 0;
 
    /**
-    * Sets Communication speed for SPI
+    * Sets the CTAR value for a given communication speed
     *
     * @param frequency => Frequency in Hz (0 => use default value)
     * @param ctarNum   => Index of CTAR register to modify
@@ -325,7 +325,7 @@ class Spi_T : public Spi {
 public:
    virtual void enablePins() {
       // Configure SPI pins
-      Info::initPCRs();
+      Info::initPCRs(PORT_PCR_DSE(1)|PORT_PCR_SRE(1)|PORT_PCR_PE(1)|PORT_PCR_PS(1));
    }
 
    virtual void disablePins() {
@@ -348,15 +348,15 @@ public:
    /**
     * Sets the CTAR value for a given set of communication delays
     *
-    * @param asc            => After SCK delay
-    * @param dt             => Delay after Transfer
-    * @param cssck          => PCS to SCK Delay Scaler
+    * @param cssck          => PCS assertion to SCK Delay Scaler
+    * @param asc            => SCK to PCS negation delay
+    * @param dt             => PCS negation to PCS assertion delay between transfers
     * @param ctarNum        => Index of CTAR register to modify
     *
     * Note: Determines values for the smallest delay that is not less than specified delays.
     */
-   void setDelays(float asc=10*USBDM::us, float dt=10*USBDM::us, float cssck=10*USBDM::us, int ctarNum=0) {
-      Spi::setDelays(Info::getClockFrequency(), ctarNum, asc, dt, cssck);
+   void setDelays(float cssck=10*USBDM::us, float asc=10*USBDM::us, float dt=10*USBDM::us, int ctarNum=0) {
+      Spi::setDelays(Info::getClockFrequency(), cssck, asc, dt, ctarNum);
    }
 
    /**

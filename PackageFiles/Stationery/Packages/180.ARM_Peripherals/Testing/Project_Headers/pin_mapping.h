@@ -48,7 +48,7 @@ public:
    static constexpr volatile OSC_Type *osc   = (volatile OSC_Type *)OSC0_BasePtr;
 
    //! Base value for PCR (excluding MUX value)
-   static constexpr uint32_t pcrValue  = 0;
+   static constexpr uint32_t defaultPcrValue  = 0;
 
    //! Number of IRQs for hardware
    static constexpr uint32_t irqCount  = 0;
@@ -108,7 +108,7 @@ public:
    /**
     * Initialise pins used by peripheral
     */
-   static void initPCRs() {
+   static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
    }
 
    /**
@@ -138,7 +138,7 @@ public:
    static constexpr volatile RTC_Type *rtc   = (volatile RTC_Type *)RTC_BasePtr;
 
    //! Base value for PCR (excluding MUX value)
-   static constexpr uint32_t pcrValue  = DEFAULT_PCR;
+   static constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;
 
    //! Clock mask for peripheral
    static constexpr uint32_t clockMask = SIM_SCGC6_RTC_MASK;
@@ -188,7 +188,7 @@ public:
    /**
     * Initialise pins used by peripheral
     */
-   static void initPCRs() {
+   static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
    }
 
    /**
@@ -504,7 +504,7 @@ public:
    static constexpr volatile ADC_Type *adc   = (volatile ADC_Type *)ADC0_BasePtr;
 
    //! Base value for PCR (excluding MUX value)
-   static constexpr uint32_t pcrValue  = DEFAULT_PCR;
+   static constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;
 
    //! Clock mask for peripheral
    static constexpr uint32_t clockMask = SIM_SCGC6_ADC0_MASK;
@@ -600,7 +600,7 @@ public:
    /**
     * Initialise pins used by peripheral
     */
-   static void initPCRs() {
+   static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
    }
 
    /**
@@ -627,7 +627,7 @@ public:
       /**
        * Initialise pins used by peripheral
        */
-      static void initPCRs() {
+      static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
       }
 
       /**
@@ -656,7 +656,7 @@ public:
       /**
        * Initialise pins used by peripheral
        */
-      static void initPCRs() {
+      static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
       }
 
       /**
@@ -688,7 +688,7 @@ public:
    static constexpr volatile CMP_Type *cmp   = (volatile CMP_Type *)CMP0_BasePtr;
 
    //! Base value for PCR (excluding MUX value)
-   static constexpr uint32_t pcrValue  = DEFAULT_PCR;
+   static constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;
 
    //! Clock mask for peripheral
    static constexpr uint32_t clockMask = SIM_SCGC4_CMP_MASK;
@@ -768,7 +768,7 @@ public:
    /**
     * Initialise pins used by peripheral
     */
-   static void initPCRs() {
+   static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
    }
 
    /**
@@ -795,7 +795,7 @@ public:
 class ControlInfo {
 public:
    //! Base value for PCR (excluding MUX value)
-   static constexpr uint32_t pcrValue  = DEFAULT_PCR;
+   static constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;
 
    //! Number of signals available in info table
    static constexpr int numSignals  = 5;
@@ -814,7 +814,7 @@ public:
    /**
     * Initialise pins used by peripheral
     */
-   static void initPCRs() {
+   static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
    }
 
    /**
@@ -853,7 +853,7 @@ public:
    static constexpr volatile DAC_Type *dac   = (volatile DAC_Type *)DAC0_BasePtr;
 
    //! Base value for PCR (excluding MUX value)
-   static constexpr uint32_t pcrValue  = DEFAULT_PCR;
+   static constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;
 
    //! Clock mask for peripheral
    static constexpr uint32_t clockMask = SIM_SCGC6_DAC0_MASK;
@@ -905,7 +905,7 @@ public:
    /**
     * Initialise pins used by peripheral
     */
-   static void initPCRs() {
+   static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
    }
 
    /**
@@ -1032,7 +1032,7 @@ public:
 class ExternaltriggerInfo {
 public:
    //! Base value for PCR (excluding MUX value)
-   static constexpr uint32_t pcrValue  = DEFAULT_PCR;
+   static constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;
 
    //! Number of signals available in info table
    static constexpr int numSignals  = 1;
@@ -1047,7 +1047,7 @@ public:
    /**
     * Initialise pins used by peripheral
     */
-   static void initPCRs() {
+   static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
    }
 
    /**
@@ -1109,7 +1109,7 @@ public:
    static constexpr uint32_t gpioAddress   = GPIOA_BasePtr;
 
    //! Value for PCR (including MUX value)
-   static constexpr uint32_t pcrValue  = GPIO_DEFAULT_PCR;
+   static constexpr uint32_t defaultPcrValue  = GPIO_DEFAULT_PCR;
 
    //! Clock mask for peripheral
    static constexpr uint32_t clockMask = SIM_SCGC5_PORTA_MASK;
@@ -1146,7 +1146,7 @@ public:
    static constexpr uint32_t gpioAddress   = GPIOB_BasePtr;
 
    //! Value for PCR (including MUX value)
-   static constexpr uint32_t pcrValue  = GPIO_DEFAULT_PCR;
+   static constexpr uint32_t defaultPcrValue  = GPIO_DEFAULT_PCR;
 
    //! Clock mask for peripheral
    static constexpr uint32_t clockMask = SIM_SCGC5_PORTB_MASK;
@@ -1177,7 +1177,7 @@ public:
    static constexpr uint32_t gpioAddress   = GPIOC_BasePtr;
 
    //! Value for PCR (including MUX value)
-   static constexpr uint32_t pcrValue  = GPIO_DEFAULT_PCR;
+   static constexpr uint32_t defaultPcrValue  = GPIO_DEFAULT_PCR;
 
    //! Clock mask for peripheral
    static constexpr uint32_t clockMask = SIM_SCGC5_PORTC_MASK;
@@ -1214,7 +1214,7 @@ public:
    static constexpr uint32_t gpioAddress   = GPIOD_BasePtr;
 
    //! Value for PCR (including MUX value)
-   static constexpr uint32_t pcrValue  = GPIO_DEFAULT_PCR;
+   static constexpr uint32_t defaultPcrValue  = GPIO_DEFAULT_PCR;
 
    //! Clock mask for peripheral
    static constexpr uint32_t clockMask = SIM_SCGC5_PORTD_MASK;
@@ -1251,7 +1251,7 @@ public:
    static constexpr uint32_t gpioAddress   = GPIOE_BasePtr;
 
    //! Value for PCR (including MUX value)
-   static constexpr uint32_t pcrValue  = GPIO_DEFAULT_PCR;
+   static constexpr uint32_t defaultPcrValue  = GPIO_DEFAULT_PCR;
 
    //! Clock mask for peripheral
    static constexpr uint32_t clockMask = SIM_SCGC5_PORTE_MASK;
@@ -1288,7 +1288,7 @@ public:
    static constexpr volatile I2C_Type *i2c   = (volatile I2C_Type *)I2C0_BasePtr;
 
    //! Base value for PCR (excluding MUX value)
-   static constexpr uint32_t pcrValue  = I2C_DEFAULT_PCR;
+   static constexpr uint32_t defaultPcrValue  = I2C_DEFAULT_PCR;
 
    //! Clock mask for peripheral
    static constexpr uint32_t clockMask = SIM_SCGC4_I2C0_MASK;
@@ -1326,14 +1326,14 @@ public:
    static constexpr PcrInfo  info[] = {
 
          //      Signal                 Pin                                 clockMask          pcrAddress      gpioAddress     bit  PCR value
-         /*   0: I2C0_SCL             = PTE24 (MAG_SCL/ACC_SCL)        */  { PORTE_CLOCK_MASK, PORTE_BasePtr,  GPIOE_BasePtr,  24,  PORT_PCR_MUX(5)|pcrValue  },
-         /*   1: I2C0_SDA             = PTE25 (MAG_SDA/ACC_SDA)        */  { PORTE_CLOCK_MASK, PORTE_BasePtr,  GPIOE_BasePtr,  25,  PORT_PCR_MUX(5)|pcrValue  },
+         /*   0: I2C0_SCL             = PTE24 (MAG_SCL/ACC_SCL)        */  { PORTE_CLOCK_MASK, PORTE_BasePtr,  GPIOE_BasePtr,  24,  PORT_PCR_MUX(5)|defaultPcrValue  },
+         /*   1: I2C0_SDA             = PTE25 (MAG_SDA/ACC_SDA)        */  { PORTE_CLOCK_MASK, PORTE_BasePtr,  GPIOE_BasePtr,  25,  PORT_PCR_MUX(5)|defaultPcrValue  },
    };
 
    /**
     * Initialise pins used by peripheral
     */
-   static void initPCRs() {
+   static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
       enablePortClocks(PORTE_CLOCK_MASK);
 
       ((PORT_Type *)PORTE_BasePtr)->GPCHR = pcrValue|PORT_PCR_MUX(5)|PORT_GPCHR_GPWE(0x0300UL);
@@ -1360,7 +1360,7 @@ public:
    static constexpr volatile I2C_Type *i2c   = (volatile I2C_Type *)I2C1_BasePtr;
 
    //! Base value for PCR (excluding MUX value)
-   static constexpr uint32_t pcrValue  = I2C_DEFAULT_PCR;
+   static constexpr uint32_t defaultPcrValue  = I2C_DEFAULT_PCR;
 
    //! Clock mask for peripheral
    static constexpr uint32_t clockMask = SIM_SCGC4_I2C1_MASK;
@@ -1405,7 +1405,7 @@ public:
    /**
     * Initialise pins used by peripheral
     */
-   static void initPCRs() {
+   static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
    }
 
    /**
@@ -1435,7 +1435,7 @@ public:
    static constexpr volatile I2S_Type *i2s   = (volatile I2S_Type *)I2S0_BasePtr;
 
    //! Base value for PCR (excluding MUX value)
-   static constexpr uint32_t pcrValue  = DEFAULT_PCR;
+   static constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;
 
    //! Clock mask for peripheral
    static constexpr uint32_t clockMask = SIM_SCGC6_I2S_MASK;
@@ -1469,7 +1469,7 @@ public:
    /**
     * Initialise pins used by peripheral
     */
-   static void initPCRs() {
+   static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
    }
 
    /**
@@ -1499,7 +1499,7 @@ public:
    static constexpr volatile LCD_Type *lcd   = (volatile LCD_Type *)LCD_BasePtr;
 
    //! Base value for PCR (excluding MUX value)
-   static constexpr uint32_t pcrValue  = 0;
+   static constexpr uint32_t defaultPcrValue  = 0;
 
    //! Clock mask for peripheral
    static constexpr uint32_t clockMask = SIM_SCGC5_SLCD_MASK;
@@ -1543,19 +1543,19 @@ public:
          /*   4: LCD_P4               = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*   5: LCD_P5               = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*   6: LCD_P6               = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
-         /*   7: LCD_P7               = PTB7                           */  { PORTB_CLOCK_MASK, PORTB_BasePtr,  GPIOB_BasePtr,  7,   PORT_PCR_MUX(0)|pcrValue  },
-         /*   8: LCD_P8               = PTB8                           */  { PORTB_CLOCK_MASK, PORTB_BasePtr,  GPIOB_BasePtr,  8,   PORT_PCR_MUX(0)|pcrValue  },
+         /*   7: LCD_P7               = PTB7                           */  { PORTB_CLOCK_MASK, PORTB_BasePtr,  GPIOB_BasePtr,  7,   PORT_PCR_MUX(0)|defaultPcrValue  },
+         /*   8: LCD_P8               = PTB8                           */  { PORTB_CLOCK_MASK, PORTB_BasePtr,  GPIOB_BasePtr,  8,   PORT_PCR_MUX(0)|defaultPcrValue  },
          /*   9: LCD_P9               = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
-         /*  10: LCD_P10              = PTB10                          */  { PORTB_CLOCK_MASK, PORTB_BasePtr,  GPIOB_BasePtr,  10,  PORT_PCR_MUX(0)|pcrValue  },
-         /*  11: LCD_P11              = PTB11                          */  { PORTB_CLOCK_MASK, PORTB_BasePtr,  GPIOB_BasePtr,  11,  PORT_PCR_MUX(0)|pcrValue  },
-         /*  12: LCD_P12              = PTB16 (Touch1)                 */  { PORTB_CLOCK_MASK, PORTB_BasePtr,  GPIOB_BasePtr,  16,  PORT_PCR_MUX(0)|pcrValue  },
-         /*  13: LCD_P13              = PTB17 (Touch2)                 */  { PORTB_CLOCK_MASK, PORTB_BasePtr,  GPIOB_BasePtr,  17,  PORT_PCR_MUX(0)|pcrValue  },
+         /*  10: LCD_P10              = PTB10                          */  { PORTB_CLOCK_MASK, PORTB_BasePtr,  GPIOB_BasePtr,  10,  PORT_PCR_MUX(0)|defaultPcrValue  },
+         /*  11: LCD_P11              = PTB11                          */  { PORTB_CLOCK_MASK, PORTB_BasePtr,  GPIOB_BasePtr,  11,  PORT_PCR_MUX(0)|defaultPcrValue  },
+         /*  12: LCD_P12              = PTB16 (Touch1)                 */  { PORTB_CLOCK_MASK, PORTB_BasePtr,  GPIOB_BasePtr,  16,  PORT_PCR_MUX(0)|defaultPcrValue  },
+         /*  13: LCD_P13              = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*  14: LCD_P14              = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*  15: LCD_P15              = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*  16: LCD_P16              = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
-         /*  17: LCD_P17              = PTB21                          */  { PORTB_CLOCK_MASK, PORTB_BasePtr,  GPIOB_BasePtr,  21,  PORT_PCR_MUX(0)|pcrValue  },
-         /*  18: LCD_P18              = PTB22                          */  { PORTB_CLOCK_MASK, PORTB_BasePtr,  GPIOB_BasePtr,  22,  PORT_PCR_MUX(0)|pcrValue  },
-         /*  19: LCD_P19              = PTB23                          */  { PORTB_CLOCK_MASK, PORTB_BasePtr,  GPIOB_BasePtr,  23,  PORT_PCR_MUX(0)|pcrValue  },
+         /*  17: LCD_P17              = PTB21                          */  { PORTB_CLOCK_MASK, PORTB_BasePtr,  GPIOB_BasePtr,  21,  PORT_PCR_MUX(0)|defaultPcrValue  },
+         /*  18: LCD_P18              = PTB22                          */  { PORTB_CLOCK_MASK, PORTB_BasePtr,  GPIOB_BasePtr,  22,  PORT_PCR_MUX(0)|defaultPcrValue  },
+         /*  19: LCD_P19              = PTB23                          */  { PORTB_CLOCK_MASK, PORTB_BasePtr,  GPIOB_BasePtr,  23,  PORT_PCR_MUX(0)|defaultPcrValue  },
          /*  20: LCD_P20              = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*  21: LCD_P21              = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*  22: LCD_P22              = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
@@ -1573,10 +1573,10 @@ public:
          /*  34: --                   = --                             */  { 0, 0, 0, INVALID_PCR,  0 },
          /*  35: --                   = --                             */  { 0, 0, 0, INVALID_PCR,  0 },
          /*  36: LCD_P36              = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
-         /*  37: LCD_P37              = PTC17                          */  { PORTC_CLOCK_MASK, PORTC_BasePtr,  GPIOC_BasePtr,  17,  PORT_PCR_MUX(0)|pcrValue  },
-         /*  38: LCD_P38              = PTC18                          */  { PORTC_CLOCK_MASK, PORTC_BasePtr,  GPIOC_BasePtr,  18,  PORT_PCR_MUX(0)|pcrValue  },
+         /*  37: LCD_P37              = PTC17                          */  { PORTC_CLOCK_MASK, PORTC_BasePtr,  GPIOC_BasePtr,  17,  PORT_PCR_MUX(0)|defaultPcrValue  },
+         /*  38: LCD_P38              = PTC18                          */  { PORTC_CLOCK_MASK, PORTC_BasePtr,  GPIOC_BasePtr,  18,  PORT_PCR_MUX(0)|defaultPcrValue  },
          /*  39: LCD_P39              = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
-         /*  40: LCD_P40              = PTD0                           */  { PORTD_CLOCK_MASK, PORTD_BasePtr,  GPIOD_BasePtr,  0,   PORT_PCR_MUX(0)|pcrValue  },
+         /*  40: LCD_P40              = PTD0                           */  { PORTD_CLOCK_MASK, PORTD_BasePtr,  GPIOD_BasePtr,  0,   PORT_PCR_MUX(0)|defaultPcrValue  },
          /*  41: LCD_P41              = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*  42: LCD_P42              = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*  43: LCD_P43              = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
@@ -1588,8 +1588,8 @@ public:
          /*  49: LCD_P49              = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*  50: LCD_P50              = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*  51: LCD_P51              = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
-         /*  52: LCD_P52              = PTE4                           */  { PORTE_CLOCK_MASK, PORTE_BasePtr,  GPIOE_BasePtr,  4,   PORT_PCR_MUX(0)|pcrValue  },
-         /*  53: LCD_P53              = PTE5                           */  { PORTE_CLOCK_MASK, PORTE_BasePtr,  GPIOE_BasePtr,  5,   PORT_PCR_MUX(0)|pcrValue  },
+         /*  52: LCD_P52              = PTE4                           */  { PORTE_CLOCK_MASK, PORTE_BasePtr,  GPIOE_BasePtr,  4,   PORT_PCR_MUX(0)|defaultPcrValue  },
+         /*  53: LCD_P53              = PTE5                           */  { PORTE_CLOCK_MASK, PORTE_BasePtr,  GPIOE_BasePtr,  5,   PORT_PCR_MUX(0)|defaultPcrValue  },
          /*  54: LCD_P54              = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*  55: LCD_P55              = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*  56: LCD_P56              = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
@@ -1602,11 +1602,11 @@ public:
    /**
     * Initialise pins used by peripheral
     */
-   static void initPCRs() {
+   static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
       enablePortClocks(PORTB_CLOCK_MASK|PORTC_CLOCK_MASK|PORTD_CLOCK_MASK|PORTE_CLOCK_MASK);
 
       ((PORT_Type *)PORTB_BasePtr)->GPCLR = pcrValue|PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x0D80UL);
-      ((PORT_Type *)PORTB_BasePtr)->GPCHR = pcrValue|PORT_PCR_MUX(0)|PORT_GPCHR_GPWE(0x00E3UL);
+      ((PORT_Type *)PORTB_BasePtr)->GPCHR = pcrValue|PORT_PCR_MUX(0)|PORT_GPCHR_GPWE(0x00E1UL);
       ((PORT_Type *)PORTC_BasePtr)->GPCHR = pcrValue|PORT_PCR_MUX(0)|PORT_GPCHR_GPWE(0x0006UL);
       ((PORT_Type *)PORTD_BasePtr)->GPCLR = pcrValue|PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x0001UL);
       ((PORT_Type *)PORTE_BasePtr)->GPCLR = pcrValue|PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x0030UL);
@@ -1619,7 +1619,7 @@ public:
       enablePortClocks(PORTB_CLOCK_MASK|PORTC_CLOCK_MASK|PORTD_CLOCK_MASK|PORTE_CLOCK_MASK);
 
       ((PORT_Type *)PORTB_BasePtr)->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0xD80U);
-      ((PORT_Type *)PORTB_BasePtr)->GPCHR = PORT_PCR_MUX(0)|PORT_GPCHR_GPWE(0xE3U);
+      ((PORT_Type *)PORTB_BasePtr)->GPCHR = PORT_PCR_MUX(0)|PORT_GPCHR_GPWE(0xE1U);
       ((PORT_Type *)PORTC_BasePtr)->GPCHR = PORT_PCR_MUX(0)|PORT_GPCHR_GPWE(0x6U);
       ((PORT_Type *)PORTD_BasePtr)->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x1U);
       ((PORT_Type *)PORTE_BasePtr)->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x30U);
@@ -1643,7 +1643,7 @@ public:
 class Lcd_powerInfo {
 public:
    //! Base value for PCR (excluding MUX value)
-   static constexpr uint32_t pcrValue  = DEFAULT_PCR;
+   static constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;
 
    //! Number of signals available in info table
    static constexpr int numSignals  = 5;
@@ -1662,7 +1662,7 @@ public:
    /**
     * Initialise pins used by peripheral
     */
-   static void initPCRs() {
+   static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
    }
 
    /**
@@ -1692,7 +1692,7 @@ public:
    static constexpr volatile LLWU_Type *llwu   = (volatile LLWU_Type *)LLWU_BasePtr;
 
    //! Base value for PCR (excluding MUX value)
-   static constexpr uint32_t pcrValue  = DEFAULT_PCR;
+   static constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;
 
    //! Number of IRQs for hardware
    static constexpr uint32_t irqCount  = 1;
@@ -1762,7 +1762,7 @@ public:
    /**
     * Initialise pins used by peripheral
     */
-   static void initPCRs() {
+   static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
    }
 
    /**
@@ -1792,7 +1792,7 @@ public:
    static constexpr volatile LPTMR_Type *lptmr   = (volatile LPTMR_Type *)LPTMR0_BasePtr;
 
    //! Base value for PCR (excluding MUX value)
-   static constexpr uint32_t pcrValue  = DEFAULT_PCR;
+   static constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;
 
    //! Clock mask for peripheral
    static constexpr uint32_t clockMask = SIM_SCGC5_LPTMR_MASK;
@@ -1891,7 +1891,7 @@ public:
    /**
     * Initialise pins used by peripheral
     */
-   static void initPCRs() {
+   static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
    }
 
    /**
@@ -1935,12 +1935,10 @@ public:
    // Template:pit_2ch_chain_ltmr
 
    //! Callback handler has been installed in vector table
-   static constexpr bool irqHandlerInstalled = false;
+   static constexpr bool irqHandlerInstalled = true;
 
    //! Default IRQ level
    static constexpr uint32_t irqLevel =  0;
-
-   static constexpr uint16_t pit_ldval = 1243;
 
    /**
     * Get clock frequency
@@ -1953,7 +1951,7 @@ public:
 
    //! Default value for PIT->SC register
    static constexpr uint32_t loadValue  = 
-      1243;
+      1;
 
    //! PIT operation in debug mode
    static constexpr uint32_t mcr = 
@@ -1977,7 +1975,7 @@ public:
 class PowerInfo {
 public:
    //! Base value for PCR (excluding MUX value)
-   static constexpr uint32_t pcrValue  = DEFAULT_PCR;
+   static constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;
 
    //! Number of signals available in info table
    static constexpr int numSignals  = 17;
@@ -2008,7 +2006,7 @@ public:
    /**
     * Initialise pins used by peripheral
     */
-   static void initPCRs() {
+   static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
    }
 
    /**
@@ -2084,7 +2082,7 @@ public:
    static constexpr volatile SPI_Type *spi   = (volatile SPI_Type *)SPI0_BasePtr;
 
    //! Base value for PCR (excluding MUX value)
-   static constexpr uint32_t pcrValue  = DEFAULT_PCR;
+   static constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;
 
    //! Clock mask for peripheral
    static constexpr uint32_t clockMask = SIM_SCGC4_SPI0_MASK;
@@ -2130,7 +2128,7 @@ public:
 
          //      Signal                 Pin                                 clockMask          pcrAddress      gpioAddress     bit  PCR value
          /*   0: SPI0_SCK             = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
-         /*   1: SPI0_MISO            = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
+         /*   1: SPI0_MISO            = PTC7                           */  { PORTC_CLOCK_MASK, PORTC_BasePtr,  GPIOC_BasePtr,  7,   PORT_PCR_MUX(2)|defaultPcrValue  },
          /*   2: SPI0_MOSI            = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*   3: SPI0_PCS0            = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
    };
@@ -2138,13 +2136,19 @@ public:
    /**
     * Initialise pins used by peripheral
     */
-   static void initPCRs() {
+   static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
+      enablePortClocks(PORTC_CLOCK_MASK);
+
+      ((PORT_Type *)PORTC_BasePtr)->GPCLR = pcrValue|PORT_PCR_MUX(2)|PORT_GPCLR_GPWE(0x0080UL);
    }
 
    /**
     * Resets pins used by peripheral
     */
    static void clearPCRs() {
+      enablePortClocks(PORTC_CLOCK_MASK);
+
+      ((PORT_Type *)PORTC_BasePtr)->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x80U);
    }
 
 };
@@ -2159,7 +2163,7 @@ public:
    static constexpr volatile SPI_Type *spi   = (volatile SPI_Type *)SPI1_BasePtr;
 
    //! Base value for PCR (excluding MUX value)
-   static constexpr uint32_t pcrValue  = DEFAULT_PCR;
+   static constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;
 
    //! Clock mask for peripheral
    static constexpr uint32_t clockMask = SIM_SCGC4_SPI1_MASK;
@@ -2213,7 +2217,7 @@ public:
    /**
     * Initialise pins used by peripheral
     */
-   static void initPCRs() {
+   static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
    }
 
    /**
@@ -2240,7 +2244,7 @@ public:
 class TpmInfo {
 public:
    //! Base value for PCR (excluding MUX value)
-   static constexpr uint32_t pcrValue  = DEFAULT_PCR;
+   static constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;
 
    //! Number of signals available in info table
    static constexpr int numSignals  = 2;
@@ -2256,7 +2260,7 @@ public:
    /**
     * Initialise pins used by peripheral
     */
-   static void initPCRs() {
+   static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
    }
 
    /**
@@ -2277,7 +2281,7 @@ public:
    static constexpr volatile TPM_Type *tpm   = (volatile TPM_Type *)TPM0_BasePtr;
 
    //! Base value for PCR (excluding MUX value)
-   static constexpr uint32_t pcrValue  = DEFAULT_PCR;
+   static constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;
 
    //! Clock mask for peripheral
    static constexpr uint32_t clockMask = SIM_SCGC6_TPM0_MASK;
@@ -2312,7 +2316,7 @@ public:
    //! Default IRQ level
    static constexpr uint32_t irqLevel =  0;
 
-   static constexpr uint32_t tpmMinimumResolution=100;
+   static constexpr uint32_t minimumResolution=100;
 
    /**
     * Get input clock frequency
@@ -2370,7 +2374,7 @@ public:
    /**
     * Initialise pins used by peripheral
     */
-   static void initPCRs() {
+   static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
    }
 
    /**
@@ -2391,7 +2395,7 @@ public:
    static constexpr volatile TPM_Type *tpm   = (volatile TPM_Type *)TPM1_BasePtr;
 
    //! Base value for PCR (excluding MUX value)
-   static constexpr uint32_t pcrValue  = DEFAULT_PCR;
+   static constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;
 
    //! Clock mask for peripheral
    static constexpr uint32_t clockMask = SIM_SCGC6_TPM1_MASK;
@@ -2426,7 +2430,7 @@ public:
    //! Default IRQ level
    static constexpr uint32_t irqLevel =  0;
 
-   static constexpr uint32_t tpmMinimumResolution=100;
+   static constexpr uint32_t minimumResolution=100;
 
    /**
     * Get input clock frequency
@@ -2480,7 +2484,7 @@ public:
    /**
     * Initialise pins used by peripheral
     */
-   static void initPCRs() {
+   static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
    }
 
    /**
@@ -2501,7 +2505,7 @@ public:
    static constexpr volatile TPM_Type *tpm   = (volatile TPM_Type *)TPM2_BasePtr;
 
    //! Base value for PCR (excluding MUX value)
-   static constexpr uint32_t pcrValue  = DEFAULT_PCR;
+   static constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;
 
    //! Clock mask for peripheral
    static constexpr uint32_t clockMask = SIM_SCGC6_TPM2_MASK;
@@ -2536,7 +2540,7 @@ public:
    //! Default IRQ level
    static constexpr uint32_t irqLevel =  0;
 
-   static constexpr uint32_t tpmMinimumResolution=100;
+   static constexpr uint32_t minimumResolution=100;
 
    /**
     * Get input clock frequency
@@ -2590,7 +2594,7 @@ public:
    /**
     * Initialise pins used by peripheral
     */
-   static void initPCRs() {
+   static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
    }
 
    /**
@@ -2620,7 +2624,7 @@ public:
    static constexpr volatile TSI_Type *tsi   = (volatile TSI_Type *)TSI0_BasePtr;
 
    //! Base value for PCR (excluding MUX value)
-   static constexpr uint32_t pcrValue  = DEFAULT_PCR;
+   static constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;
 
    //! Clock mask for peripheral
    static constexpr uint32_t clockMask = SIM_SCGC5_TSI0_MASK;
@@ -2675,8 +2679,8 @@ public:
          /*   6: TSI0_CH6             = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*   7: TSI0_CH7             = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*   8: TSI0_CH8             = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
-         /*   9: TSI0_CH9             = PTB16 (Touch1)                 */  { PORTB_CLOCK_MASK, PORTB_BasePtr,  GPIOB_BasePtr,  16,  PORT_PCR_MUX(0)|pcrValue  },
-         /*  10: TSI0_CH10            = PTB17 (Touch2)                 */  { PORTB_CLOCK_MASK, PORTB_BasePtr,  GPIOB_BasePtr,  17,  PORT_PCR_MUX(0)|pcrValue  },
+         /*   9: TSI0_CH9             = PTB16 (Touch1)                 */  { PORTB_CLOCK_MASK, PORTB_BasePtr,  GPIOB_BasePtr,  16,  PORT_PCR_MUX(0)|defaultPcrValue  },
+         /*  10: TSI0_CH10            = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*  11: TSI0_CH11            = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*  12: TSI0_CH12            = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
          /*  13: TSI0_CH13            = --                             */  { 0, 0, 0, UNMAPPED_PCR, 0 },
@@ -2687,10 +2691,10 @@ public:
    /**
     * Initialise pins used by peripheral
     */
-   static void initPCRs() {
+   static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
       enablePortClocks(PORTB_CLOCK_MASK);
 
-      ((PORT_Type *)PORTB_BasePtr)->GPCHR = pcrValue|PORT_PCR_MUX(0)|PORT_GPCHR_GPWE(0x0003UL);
+      ((PORT_Type *)PORTB_BasePtr)->GPCHR = pcrValue|PORT_PCR_MUX(0)|PORT_GPCHR_GPWE(0x0001UL);
    }
 
    /**
@@ -2699,7 +2703,7 @@ public:
    static void clearPCRs() {
       enablePortClocks(PORTB_CLOCK_MASK);
 
-      ((PORT_Type *)PORTB_BasePtr)->GPCHR = PORT_PCR_MUX(0)|PORT_GPCHR_GPWE(0x3U);
+      ((PORT_Type *)PORTB_BasePtr)->GPCHR = PORT_PCR_MUX(0)|PORT_GPCHR_GPWE(0x1U);
    }
 
 };
@@ -2723,7 +2727,7 @@ public:
    static constexpr volatile UART_Type *uart   = (volatile UART_Type *)UART0_BasePtr;
 
    //! Base value for PCR (excluding MUX value)
-   static constexpr uint32_t pcrValue  = DEFAULT_PCR;
+   static constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;
 
    //! Clock mask for peripheral
    static constexpr uint32_t clockMask = SIM_SCGC4_UART0_MASK;
@@ -2765,14 +2769,14 @@ public:
    static constexpr PcrInfo  info[] = {
 
          //      Signal                 Pin                                 clockMask          pcrAddress      gpioAddress     bit  PCR value
-         /*   0: UART0_TX             = PTA2 (D1)                      */  { PORTA_CLOCK_MASK, PORTA_BasePtr,  GPIOA_BasePtr,  2,   PORT_PCR_MUX(2)|pcrValue  },
-         /*   1: UART0_RX             = PTA1 (D0)                      */  { PORTA_CLOCK_MASK, PORTA_BasePtr,  GPIOA_BasePtr,  1,   PORT_PCR_MUX(2)|pcrValue  },
+         /*   0: UART0_TX             = PTA2 (D1)                      */  { PORTA_CLOCK_MASK, PORTA_BasePtr,  GPIOA_BasePtr,  2,   PORT_PCR_MUX(2)|defaultPcrValue  },
+         /*   1: UART0_RX             = PTA1 (D0)                      */  { PORTA_CLOCK_MASK, PORTA_BasePtr,  GPIOA_BasePtr,  1,   PORT_PCR_MUX(2)|defaultPcrValue  },
    };
 
    /**
     * Initialise pins used by peripheral
     */
-   static void initPCRs() {
+   static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
       enablePortClocks(PORTA_CLOCK_MASK);
 
       ((PORT_Type *)PORTA_BasePtr)->GPCLR = pcrValue|PORT_PCR_MUX(2)|PORT_GPCLR_GPWE(0x0006UL);
@@ -2799,7 +2803,7 @@ public:
    static constexpr volatile UART_Type *uart   = (volatile UART_Type *)UART1_BasePtr;
 
    //! Base value for PCR (excluding MUX value)
-   static constexpr uint32_t pcrValue  = DEFAULT_PCR;
+   static constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;
 
    //! Clock mask for peripheral
    static constexpr uint32_t clockMask = SIM_SCGC4_UART1_MASK;
@@ -2848,7 +2852,7 @@ public:
    /**
     * Initialise pins used by peripheral
     */
-   static void initPCRs() {
+   static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
    }
 
    /**
@@ -2869,7 +2873,7 @@ public:
    static constexpr volatile UART_Type *uart   = (volatile UART_Type *)UART2_BasePtr;
 
    //! Base value for PCR (excluding MUX value)
-   static constexpr uint32_t pcrValue  = DEFAULT_PCR;
+   static constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;
 
    //! Clock mask for peripheral
    static constexpr uint32_t clockMask = SIM_SCGC4_UART2_MASK;
@@ -2918,7 +2922,7 @@ public:
    /**
     * Initialise pins used by peripheral
     */
-   static void initPCRs() {
+   static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
    }
 
    /**
@@ -2948,7 +2952,7 @@ public:
    static constexpr volatile USB_Type *usb   = (volatile USB_Type *)USB0_BasePtr;
 
    //! Base value for PCR (excluding MUX value)
-   static constexpr uint32_t pcrValue  = DEFAULT_PCR;
+   static constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;
 
    //! Clock mask for peripheral
    static constexpr uint32_t clockMask = SIM_SCGC4_USBOTG_MASK;
@@ -2986,7 +2990,7 @@ public:
    /**
     * Initialise pins used by peripheral
     */
-   static void initPCRs() {
+   static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
    }
 
    /**
@@ -3065,7 +3069,7 @@ extern void mapAllPins();
  *  PTB10                    | LCD_P10                                     |                           | LCD       
  *  PTB11                    | LCD_P11                                     |                           | LCD       
  *  PTB16                    | LCD_P12/TSI0_CH9                            | Touch1                    | -       
- *  PTB17                    | LCD_P13/TSI0_CH10                           | Touch2                    | -       
+ *  PTB17                    | -                                           | Touch2                    | -       
  *  PTB18                    | -                                           |                           | -       
  *  PTB19                    | -                                           |                           | -       
  *  PTB20                    | -                                           |                           | -       
@@ -3079,7 +3083,7 @@ extern void mapAllPins();
  *  PTC4                     | -                                           |                           | -       
  *  PTC5                     | -                                           | ACC_INT1                  | -       
  *  PTC6                     | -                                           |                           | -       
- *  PTC7                     | -                                           |                           | -       
+ *  PTC7                     | SPI0_MISO                                   |                           | -       
  *  PTC8                     | -                                           | D6                        | -       
  *  PTC9                     | -                                           | D7                        | -       
  *  PTC10                    | -                                           |                           | -       
@@ -3176,7 +3180,7 @@ extern void mapAllPins();
  *  PTE24                    | I2C0_SCL                                    | MAG_SCL/ACC_SCL           | onboard I2C       
  *  PTE25                    | I2C0_SDA                                    | MAG_SDA/ACC_SDA           | onboard I2C       
  *  PTB16                    | LCD_P12/TSI0_CH9                            | Touch1                    | -       
- *  PTB17                    | LCD_P13/TSI0_CH10                           | Touch2                    | -       
+ *  PTB17                    | -                                           | Touch2                    | -       
  *
  *
  * @section PinsByFunction Pins by Function
@@ -3193,7 +3197,6 @@ extern void mapAllPins();
  *  PTB10                    | LCD_P10                                     |                           | LCD       
  *  PTB11                    | LCD_P11                                     |                           | LCD       
  *  PTB16                    | LCD_P12/TSI0_CH9                            | Touch1                    | -       
- *  PTB17                    | LCD_P13/TSI0_CH10                           | Touch2                    | -       
  *  PTB21                    | LCD_P17                                     |                           | LCD       
  *  PTB22                    | LCD_P18                                     |                           | LCD       
  *  PTB23                    | LCD_P19                                     |                           | LCD       
@@ -3202,6 +3205,7 @@ extern void mapAllPins();
  *  PTD0                     | LCD_P40                                     |                           | LCD       
  *  PTE4                     | LCD_P52                                     |                           | -       
  *  PTE5                     | LCD_P53                                     |                           | -       
+ *  PTC7                     | SPI0_MISO                                   |                           | -       
  *  PTA1                     | UART0_RX                                    | D0                        | Console Rx       
  *  PTA2                     | UART0_TX                                    | D1                        | Console Tx       
  *  USB0_DM                  | USB0_DM                                     |                           | USB       

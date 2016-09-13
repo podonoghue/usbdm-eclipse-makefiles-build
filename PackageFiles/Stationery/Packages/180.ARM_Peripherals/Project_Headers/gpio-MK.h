@@ -165,7 +165,7 @@ public:
  * @tparam bitNum          Bit number within PORT/GPIO
  * @tparam defPcrValue     Default value for PCR including MUX value
  */
-template<class Info, const uint32_t bitNum, uint32_t defPcrValue=Info::pcrValue>
+template<class Info, const uint32_t bitNum, uint32_t defPcrValue=Info::defaultPcrValue>
 class  Gpio_T : public GpioBase_T<Info::clockMask, Info::pcrAddress, Info::gpioAddress, bitNum, defPcrValue> {
    static_assert((bitNum<32), "Illegal signal");
 };
@@ -177,7 +177,7 @@ class  Gpio_T : public GpioBase_T<Info::clockMask, Info::pcrAddress, Info::gpioA
  * @tparam index           Index of signal within the info table
  * @tparam defPcrValue     Default value for PCR including MUX value
  */
-template<class Info, const uint32_t index, uint32_t defPcrValue=Info::pcrValue>
+template<class Info, const uint32_t index, uint32_t defPcrValue=Info::defaultPcrValue>
 using  GpioTable_T = GpioBase_T<Info::info[index].clockMask, Info::info[index].pcrAddress, Info::info[index].gpioAddress, Info::info[index].gpioBit, defPcrValue>;
 
 /**
@@ -215,7 +215,7 @@ using  GpioTable_T = GpioBase_T<Info::info[index].clockMask, Info::info[index].p
  * @tparam right          Bit number of rightmost bit in GPIO (inclusive)
  * @tparam defPcrValue    Default value for PCR including multiplexor value
  */
-template<class Info, const uint32_t left, const uint32_t right, uint32_t defPcrValue=Info::pcrValue>
+template<class Info, const uint32_t left, const uint32_t right, uint32_t defPcrValue=Info::defaultPcrValue>
 class Field_T {
 
 private:
