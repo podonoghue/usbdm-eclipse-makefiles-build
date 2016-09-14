@@ -388,6 +388,21 @@ public:
       // Configure SPI pins
       enablePins();
    }
+
+   /**
+    * Set polarity of hardware PCS signals
+    *
+    * @param signal   Signal number
+    * @param polarity Bit-mask for polarity of PCSn true=>active high, false=>active low
+    */
+   void setPcsPolarity(int signal, bool polarity=true) {
+      if (polarity) {
+         spi->MCR |= SPI_MCR_PCSIS(1<<signal);
+      }
+      else {
+         spi->MCR &= ~SPI_MCR_PCSIS(1<<signal);
+      }
+   }
 };
 
 #if defined(USBDM_SPI0_IS_DEFINED)
