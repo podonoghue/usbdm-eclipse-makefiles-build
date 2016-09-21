@@ -107,7 +107,7 @@ public:
     * @param channel Channel being modified
     * @param enable  True => enable, False => disable
     */
-   static void enableInterrupts(int channel, bool enable=true) {
+   static void enableInterrupts(unsigned channel, bool enable=true) {
       if (enable) {
          pit->CHANNEL[channel].TCTRL |= PIT_TCTRL_TIE_MASK;
       }
@@ -122,7 +122,7 @@ public:
     * @param channel  The PIT channel to modify
     * @param callback The function to call from stub ISR
     */
-   static void setCallback(int channel, PITCallbackFunction callback) {
+   static void setCallback(unsigned channel, PITCallbackFunction callback) {
       Pit_T::callback[channel] = callback;
    }
 
@@ -146,7 +146,7 @@ public:
 
       // Enable timer
       pit->MCR = mcr;
-      for (int i=0; i<Info::irqCount; i++) {
+      for (unsigned i=0; i<Info::irqCount; i++) {
          enableNvicInterrupts(i);
       }
    }
@@ -163,7 +163,7 @@ public:
     * @param channel Channel being modified
     * @param enable True => enable, False => disable
     */
-   static void enableNvicInterrupts(int channel, bool enable=true) {
+   static void enableNvicInterrupts(unsigned channel, bool enable=true) {
       if (channel>=Info::irqCount) {
          setAndCheckErrorCode(E_ILLEGAL_PARAM);
       }
@@ -218,7 +218,7 @@ public:
     * @param channel Channel being modified
     * @param interval Interval in seconds
     */
-   static void setPeriod(int channel, float interval) {
+   static void setPeriod(unsigned channel, float interval) {
       pit->CHANNEL[channel].LDVAL = round(interval*PitInfo::getClockFrequency());
    }
    /**
