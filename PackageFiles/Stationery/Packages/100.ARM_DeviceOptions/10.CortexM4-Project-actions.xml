@@ -18,7 +18,7 @@ Cortex-M4
             <variableRef idRef="outputType" condition="matches" value=".*\.newProjectType\.exe$" />
          </and>
       </applyWhen>
-      
+
       <!--  Common Cortex-M4 files -->
       <createFolder target="Sources"                                        />
       <createFolder target="Startup_Code"                                   />

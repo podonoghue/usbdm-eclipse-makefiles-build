@@ -208,6 +208,7 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
       . = . + __heap_size__;
    } > ram
 
+$(linkerExtraRegions:)
    /* STACK space - between HEAP and end of RAM (or bitband_bytes) */
    PROVIDE ( __sram_u_size = 0 );
    .stack :
