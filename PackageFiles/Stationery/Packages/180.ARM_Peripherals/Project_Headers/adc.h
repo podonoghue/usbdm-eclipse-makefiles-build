@@ -174,7 +174,7 @@ public:
    /**
     * Set conversion mode
     *
-    * @param mode Mode for converter e.g. resolution_16bit_se
+    * @param resolution Resolution for converter e.g. resolution_16bit_se
     *
     * @note This affects all channels on the ADC
     */
