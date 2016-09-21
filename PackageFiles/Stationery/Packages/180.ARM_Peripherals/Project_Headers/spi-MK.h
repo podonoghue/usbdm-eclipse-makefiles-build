@@ -177,7 +177,7 @@ protected:
     *
     * Note: Determines values for the smallest delay that is not less than specified delays.
     */
-   void setDelays(uint32_t clockFrequency, float cssck=10*USBDM::us, float asc=10*USBDM::us, float dt=10*USBDM::us, int ctarNum=0) {
+   void setDelays(uint32_t clockFrequency, float cssck, float asc, float dt, int ctarNum) {
 
       uint32_t ctarValue = spi->CTAR[ctarNum] &
             ~(SPI_CTAR_ASC_MASK|SPI_CTAR_PASC_MASK|SPI_CTAR_DT_MASK|SPI_CTAR_PDT_MASK|SPI_CTAR_CSSCK_MASK|SPI_CTAR_PCSSCK_MASK);
@@ -297,20 +297,35 @@ public:
       spi->CTAR[1] = ctar;
    }
 
-   /** Set SPI.CTAR0 value
+   /** Get SPI.CTAR0 value
     *
-    * @param ctar 32-bit CTAR value
+    * @return ctar 32-bit CTAR value
     */
    uint32_t getCTAR0Value() {
       return spi->CTAR[0];
    }
 
-   /** Set SPI.CTAR1 value
+   /** Get SPI.CTAR1 value
     *
-    * @param ctar 32-bit CTAR value
+    * @return ctar 32-bit CTAR value
     */
    uint32_t getCTAR1Value() {
       return spi->CTAR[1];
+   }
+
+   /**
+    * Set polarity of hardware PCS signals
+    *
+    * @param signal     Signal number
+    * @param activeHigh Bit-mask for polarity of PCSn true=>active high, false=>active low
+    */
+   void setPcsPolarity(int signal, bool activeHigh=true) {
+      if (activeHigh) {
+         spi->MCR &= ~SPI_MCR_PCSIS(1<<signal);
+      }
+      else {
+         spi->MCR |= SPI_MCR_PCSIS(1<<signal);
+      }
    }
 };
 
@@ -389,20 +404,6 @@ public:
       enablePins();
    }
 
-   /**
-    * Set polarity of hardware PCS signals
-    *
-    * @param signal   Signal number
-    * @param polarity Bit-mask for polarity of PCSn true=>active high, false=>active low
-    */
-   void setPcsPolarity(int signal, bool polarity=true) {
-      if (polarity) {
-         spi->MCR |= SPI_MCR_PCSIS(1<<signal);
-      }
-      else {
-         spi->MCR &= ~SPI_MCR_PCSIS(1<<signal);
-      }
-   }
 };
 
 #if defined(USBDM_SPI0_IS_DEFINED)
