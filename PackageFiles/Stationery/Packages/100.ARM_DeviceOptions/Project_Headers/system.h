@@ -66,6 +66,22 @@ void SystemCoreClockUpdate(void);
 #define DEFAULT_BAUD_RATE 115200 
 #endif
 
+/**
+ * Disable interrupts
+ *
+ * This function keeps a count of the number of times interrupts is enabled/disabled so may be called in recursive routines
+ */
+extern void disableInterrupts();
+
+/**
+ * Enable interrupts
+ *
+ * This function keeps a count of the number of times interrupts is enabled/disabled so may be called in recursive routines
+ *
+ * @return true if interrupts are now enabled
+ */
+extern int enableInterrupts();
+
 #ifdef __cplusplus
 }
 #endif
