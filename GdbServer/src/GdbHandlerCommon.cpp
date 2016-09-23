@@ -740,9 +740,6 @@ void GdbHandlerCommon::createMemoryMapXML(const char **buffer, unsigned *bufferS
          case MemPRAM:
             log.printq(" - XRAM/XROM - Ignored\n");
             break;
-         case MemFlexRAM:
-            log.printq(" - FlexNVM/FlexNVM - Ignored\n");
-            break;
          case MemEEPROM:
             log.printq(" - EEPROM - Ignored\n");
             break;
@@ -759,7 +756,8 @@ void GdbHandlerCommon::createMemoryMapXML(const char **buffer, unsigned *bufferS
                            "   </memory>\n",
                            start, size);
             break;
-         case MemIO:  // Treat I/O as RAM
+         case MemFlexRAM:// Treat FlexRAM as RAM
+         case MemIO:     // Treat I/O as RAM
          case MemRAM:
             start = memoryRange->start;
             size  = memoryRange->end - start + 1;
