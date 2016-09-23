@@ -203,6 +203,15 @@ public:
       enableNvicInterrupts(channel);
    }
    /**
+    *  Disable the PIT channel
+    *
+    *  @param channel   Channel to configure
+    */
+   static void disableChannel(const uint8_t channel) {
+      pit->CHANNEL[channel].TCTRL = 0;
+      enableNvicInterrupts(channel, false);
+   }
+   /**
     *  Configure the PIT channel
     *
     *  @param channel   Channel to configure
