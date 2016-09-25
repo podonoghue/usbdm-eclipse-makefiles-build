@@ -80,19 +80,14 @@ public:
    PID_T(double Kp, double Ki, double Kd, double interval, double outMin, double outMax) :
       interval(interval), outMin(outMin), outMax(outMax)  {
 
-      // Controller initially disabled
-      enabled = false;
-
       setTunings(Kp, Ki, Kd);
 
-//      std::function<void(void)> yy = std::bind(&PID_T::update, this);
-//
-//      yy();
-
+      // Using PIT
       USBDM::Pit::enable();
-      USBDM::Pit::configureChannel(timerChannel, (float)interval);
       USBDM::Pit::setCallback(timerChannel, functionWrapper->f);
-      USBDM::Pit::enableInterrupts(timerChannel);
+
+      // Controller initially disabled
+      enable(false);
    }
 
    ~PID_T() {
@@ -105,13 +100,16 @@ public:
     * @param enable True to enable
     */
    void enable(bool enable = true) {
-      if(enable != enabled) {
+      if (enable && !enabled) {
          // Just enabled
          currentInput = inputFn();
          integral     = currentOutput;
          tickCount    = 0;
       }
       enabled = enable;
+      USBDM::Pit::setPeriod(timerChannel, interval);
+      USBDM::Pit::enableChannel(timerChannel, enable);
+      USBDM::Pit::enableInterrupts(timerChannel, enable);
    }
 
    /**
