@@ -20,7 +20,17 @@ static const char *messages[] = {
       "Too large",
       "Illegal parameter",
       "Interrupt handler not installed",
+      "Flash initialisation failed"
 };
+
+/**
+ * Get USBDM error code
+ *
+ * @return  err Error code
+ */
+ErrorCode getError() {
+   return errorCode;
+}
 
 /**
  * Get error message from error code or last
