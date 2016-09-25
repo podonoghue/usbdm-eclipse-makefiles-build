@@ -128,6 +128,18 @@ public:
          cmp->SCR &= ~CMP_SCR_IEF_MASK;
       }
    }
+
+   /**
+    * Configure DAC
+    *
+    * @param level  DAC level to select (0..63)
+    * @param source Reference source select (0..1) Usually 0=>Vin, 1=>Vdd
+    * @param enable True=>enable, False=>disable
+    */
+   static void setDacLevel(uint8_t level, uint8_t source=1, bool enable=true) {
+      cmp->DACCR = CMP_DACCR_DACEN(enable)|CMP_DACCR_VRSEL(source)|CMP_DACCR_VOSEL(level);
+   }
+
 };
 
 /**
