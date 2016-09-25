@@ -706,6 +706,21 @@ public:
       FtmBase_T<Info>::setDutyCycle(dutyCycle, channel);
    }
 
+   /**
+    * Get channel number
+    *
+    * @return Channel number (0-7)
+    */
+   static constexpr int getChannelNumber(void) {
+      return channel;
+   }
+
+   /**
+    * Clear interrupt flag on channel
+    */
+   static void clearInterruptFlag(void) {
+      FtmBase_T<Info>::tmr->CONTROLS[channel].CnSC &= ~FTM_CnSC_CHF_MASK;
+   }
 };
 
 #ifdef USBDM_FTM0_IS_DEFINED
