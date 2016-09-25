@@ -21,16 +21,24 @@ static constexpr float us = 1E-6;
 static constexpr float ms = 1E-3;
 
 enum ErrorCode {
-   E_NO_ERROR = 0,   // No error
-   E_ERROR,          // General error
-   E_TOO_SMALL,      // Value too small
-   E_TOO_LARGE,      // Value too large
-   E_ILLEGAL_PARAM,  // Parameter has illegal value
-   E_NO_HANDLER,     // No handler installed
+   E_NO_ERROR = 0,      // No error
+   E_ERROR,             // General error
+   E_TOO_SMALL,         // Value too small
+   E_TOO_LARGE,         // Value too large
+   E_ILLEGAL_PARAM,     // Parameter has illegal value
+   E_NO_HANDLER,        // No handler installed
+   E_FLASH_INIT_FAILED, // Flash initialisation failed
 };
 
 /** Last error set by USBDM code */
 extern volatile ErrorCode errorCode;
+
+/**
+ * Get USBDM error code
+ *
+ * @return  err Error code
+ */
+ErrorCode getError();
 
 /**
  * Get error message from error code or last
