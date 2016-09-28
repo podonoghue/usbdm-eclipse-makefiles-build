@@ -140,6 +140,19 @@ public:
       cmp->DACCR = CMP_DACCR_DACEN(enable)|CMP_DACCR_VRSEL(source)|CMP_DACCR_VOSEL(level);
    }
 
+   /**
+    * Configure Comparator input sources
+    *
+    * @param positiveSource (0..7) (7 => DAC)
+    * @param negativeSource (0..7) (7 => DAC)
+    */
+   static void selectInputs(uint8_t positiveSource, uint8_t negativeSource) {
+      //! MUX Control Register
+      cmp->MUXCR =
+         CMP_MUXCR_PSEL(positiveSource)| // Plus Input Mux Control
+         CMP_MUXCR_MSEL(negativeSource); // Minus Input Mux Control
+   }
+
 };
 
 /**
