@@ -54,6 +54,21 @@ extern void disableInterrupts();
 extern int enableInterrupts();
 
 #ifdef __cplusplus
+/**
+ * Class used to protect a block of C++ code from interrupts
+ */
+class IrqProtect {
+public:
+   inline IrqProtect() {
+      disableInterrupts();
+   }
+   inline ~IrqProtect() {
+      enableInterrupts();
+   }
+};
+#endif
+
+#ifdef __cplusplus
 }
 #endif
 
