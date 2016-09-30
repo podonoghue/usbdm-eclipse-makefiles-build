@@ -45,7 +45,7 @@ template<class Info>
 class Pit_T {
 protected:
    /** Default TCTRL value for timer channel */
-   static constexpr uint32_t PIT_TCTRL_DEFAULT_VALUE = (PIT_TCTRL_TEN_MASK|PIT_TCTRL_TIE_MASK);
+   static constexpr uint32_t PIT_TCTRL_DEFAULT_VALUE = (PIT_TCTRL_TEN_MASK);
 
    /** Number of timer channels */
    static constexpr uint32_t PIT_NUMBER_OF_CHANNELS  = 2;
@@ -70,12 +70,27 @@ public:
 
 public:
    /**
+    * Enable/disable channel interrupts
+    *
+    * @param channel Channel being modified
+    * @param enable  True => enable, False => disable
+    */
+   static void enableInterrupts(unsigned channel, bool enable=true) {
+      if (enable) {
+         pit->CHANNEL[channel].TCTRL |= PIT_TCTRL_TIE_MASK;
+      }
+      else {
+         pit->CHANNEL[channel].TCTRL &= ~PIT_TCTRL_TIE_MASK;
+      }
+   }
+
+   /**
     * Set callback for ISR
     *
     * @param channel  The PIT channel to modify
     * @param callback The function to call from stub ISR
     */
-   static void setCallback(int channel, PITCallbackFunction callback) {
+   static void setCallback(unsigned channel, PITCallbackFunction callback) {
       Pit_T::callback[channel] = callback;
    }
 
@@ -114,7 +129,7 @@ public:
     *
     * @param enable True => enable, False => disable
     */
-   static void enableNvicInterrupts(bool enable=true) {
+   static ErrorCode enableNvicInterrupts(bool enable=true) {
       if (enable) {
          // Enable interrupts
          NVIC_EnableIRQ(Info::irqNums[0]);
@@ -126,8 +141,22 @@ public:
          // Disable interrupts
          NVIC_DisableIRQ(Info::irqNums[0]);
       }
+      return E_NO_ERROR;
    }
-
+   /**
+    *  Enable/Disable the PIT channel
+    *
+    *  @param channel   Channel to enable
+    */
+   static void enableChannel(const uint8_t channel, bool enable=true) {
+      if (enable) {
+         pit->CHANNEL[channel].TCTRL |= PIT_TCTRL_TEN_MASK;
+      }
+      else {
+         pit->CHANNEL[channel].TCTRL &= ~PIT_TCTRL_TEN_MASK;
+      }
+      enableNvicInterrupts(enable);
+   }
    /**
     *  Configure the PIT channel
     *
@@ -135,11 +164,12 @@ public:
     *  @param interval  Interval in timer ticks (usually bus clock period)
     *  @param tctrl     Timer Control Register value
     */
-   static void configureChannel(const uint8_t channel, int interval=Info::loadValue, uint32_t tctrl=PIT_TCTRL_DEFAULT_VALUE) {
-
+   static void configureChannel(const uint8_t channel, uint32_t interval=Info::loadValue, uint32_t tctrl=PIT_TCTRL_DEFAULT_VALUE) {
       pit->CHANNEL[channel].LDVAL = interval;
       pit->CHANNEL[channel].TCTRL = tctrl;
       pit->CHANNEL[channel].TFLG  = PIT_TFLG_TIF_MASK;
+
+      enableNvicInterrupts();
    }
    /**
     *  Configure the PIT channel
@@ -149,14 +179,15 @@ public:
     *  @param tctrl     Timer Control Register value
     */
    static void configureChannel(const uint8_t channel, float interval, uint32_t tctrl=PIT_TCTRL_DEFAULT_VALUE) {
-      configureChannel(channel, (int)round(interval*PitInfo::getClockFrequency()), tctrl);
+      configureChannel(channel, (uint32_t)round(interval*PitInfo::getClockFrequency()), tctrl);
    }
    /**
     * Set period in seconds
     *
+    * @param channel Channel being modified
     * @param interval Interval in seconds
     */
-   static void setPeriod(int channel, float interval) {
+   static void setPeriod(unsigned channel, float interval) {
       pit->CHANNEL[channel].LDVAL = round(interval*PitInfo::getClockFrequency());
    }
    /**
@@ -180,7 +211,7 @@ public:
       while (pit->CHANNEL[channel].TFLG == 0) {
          __NOP();
       }
-      configureChannel(channel, 0, 0);
+      configureChannel(channel, (uint32_t)0, 0);
    }
 
 };
