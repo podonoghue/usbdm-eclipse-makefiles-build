@@ -9,54 +9,52 @@
 #define PROJECT_HEADERS_PID_H_
 
 #include <time.h>
-#include <functional>
 #include "pit.h"
 #include "pid.h"
 
-class PID {
+class Pid {
 public:
    typedef float  InFunction();
    typedef void   OutFunction(float);
 };
 
 /**
- * These template parameters connect the PID controller to the control variables/operations
+ * These template parameters connect the Pid controller to the control variables/operations
  *
  * @tparam inputFn      Input function  - used to obtain value of system state
  * @tparam outputFn     Output function - used to control the output variable
  * @tparam timerChannel The PIT channel to use for timing
  */
-template<PID::InFunction inputFn, PID::OutFunction outputFn, unsigned timerChannel>
-class PID_T : PID {
+template<Pid::InFunction inputFn, Pid::OutFunction outputFn, unsigned timerChannel>
+class Pid_T : Pid {
 
 private:
-   const double interval;
-   const double outMin;
-   const double outMax;
+   const double interval;     //! Interval for sampling
+   const double outMin;       //! Minimum limit for output
+   const double outMax;       //! Maximum limit for output
 
-   double kp;                 // Proportional Tuning Parameter
-   double ki;                 // Integral Tuning Parameter
-   double kd;                 // Derivative Tuning Parameter
+   double kp;                 //! Proportional Tuning Parameter
+   double ki;                 //! Integral Tuning Parameter
+   double kd;                 //! Derivative Tuning Parameter
 
-   bool   enabled;            // Enable for controller
+   bool   enabled;            //! Enable for controller
 
-   double integral;           // Integral accumulation term
+   double integral;           //! Integral accumulation term
 
-   double lastInput;          // Last input sample
-   double currentInput;       // Current input sample
-   double currentOutput;      // Current output
-   double setpoint;           // Setpoint for controller
-   double currentError;
+   double lastInput;          //! Last input sample
+   double currentInput;       //! Current input sample
+   double currentOutput;      //! Current output
+   double setpoint;           //! Set-point for controller
+   double currentError;       //! Current error calculation
 
-   unsigned tickCount = 0;
+   unsigned tickCount = 0;    //! Time in ticks since last enabled
 
-public:
-
+private:
    class FunctionWrapper {
-      static PID_T *This;
+      static Pid_T *This;
 
    public:
-      FunctionWrapper(PID_T *This) {
+      FunctionWrapper(Pid_T *This) {
          this->This = This;
       };
       static void f(void) {
@@ -67,17 +65,18 @@ public:
    /** Used to wrap the class function for passing to PIT callback */
    FunctionWrapper *functionWrapper = new FunctionWrapper(this);
 
+public:
    /**
     * Constructor
     *
     * @param Kp          Initial proportional constant
     * @param Ki          Initial integral constant
     * @param Kd          Initial differential constant
-    * @param interval    Sample interval for controller. (update() should be called at this interval)
+    * @param interval    Sample interval for controller
     * @param outMin      Minimum value of output variable
     * @param outMax      Maximum value of output variable
     */
-   PID_T(double Kp, double Ki, double Kd, double interval, double outMin, double outMax) :
+   Pid_T(double Kp, double Ki, double Kd, double interval, double outMin, double outMax) :
       interval(interval), outMin(outMin), outMax(outMax)  {
 
       setTunings(Kp, Ki, Kd);
@@ -90,9 +89,10 @@ public:
       enable(false);
    }
 
-   ~PID_T() {
+   ~Pid_T() {
       delete functionWrapper;
    }
+
    /**
     * Enable controller\n
     * Note: Controller is re-initialised when enabled
@@ -130,41 +130,12 @@ public:
       }
       return tickCount;
    }
+
    /**
-    * Main PID calculation
-    *
-    * Should be called \ref interval interval
+    * Get number of seconds since last enabled
     */
-   void update() {
-      if(!enabled) {
-         return;
-      }
-
-      tickCount++;
-
-      // Update input samples & error
-      lastInput = currentInput;
-      currentInput = inputFn();
-      currentError = setpoint - currentInput;
-
-      integral += (ki * currentError);
-      if(integral > outMax) {
-         integral = outMax;
-      }
-      else if(integral < outMin) {
-         integral = outMin;
-      }
-      double dInput = (currentInput - lastInput);
-
-      currentOutput = kp * currentError + integral - kd * dInput;
-      if(currentOutput > outMax) {
-         currentOutput = outMax;
-      }
-      else if(currentOutput < outMin) {
-         currentOutput = outMin;
-      }
-      // Update output
-      outputFn(currentOutput);
+   double getElapsedTime() {
+      return (tickCount*interval);
    }
 
    /**
@@ -185,17 +156,11 @@ public:
    }
 
    /**
-    * Change setpoint of controller
+    * Change set-point of controller
     *
     * @param value Value to set
     */
    void setSetpoint(double value) {
-      if (value>5000.0) {
-         return;
-      }
-      if (value<-5000.0) {
-         return;
-      }
       setpoint = value;
    }
 
@@ -260,7 +225,46 @@ public:
       return  kd*interval;
    }
 
+private:
+   /**
+    * Main PID calculation
+    *
+    * Executed at \ref interval by PIT callback
+    */
+   void update() {
+      if(!enabled) {
+         return;
+      }
+
+      tickCount++;
+
+      // Update input samples & error
+      lastInput = currentInput;
+      currentInput = inputFn();
+      currentError = setpoint - currentInput;
+
+      integral += (ki * currentError);
+      if(integral > outMax) {
+         integral = outMax;
+      }
+      else if(integral < outMin) {
+         integral = outMin;
+      }
+      double deltaInput = (currentInput - lastInput);
+
+      currentOutput = kp * currentError + integral - kd * deltaInput;
+      if(currentOutput > outMax) {
+         currentOutput = outMax;
+      }
+      else if(currentOutput < outMin) {
+         currentOutput = outMin;
+      }
+      // Update output
+      outputFn(currentOutput);
+   }
+
 };
-template<PID::InFunction inputFn, PID::OutFunction outputFn, unsigned timerChannel> PID_T<inputFn, outputFn, timerChannel>* PID_T<inputFn, outputFn, timerChannel>::FunctionWrapper::This = nullptr;
+template<Pid::InFunction inputFn, Pid::OutFunction outputFn, unsigned timerChannel>
+Pid_T<inputFn, outputFn, timerChannel>* Pid_T<inputFn, outputFn, timerChannel>::FunctionWrapper::This = nullptr;
 
 #endif // PROJECT_HEADERS_PID_H_
