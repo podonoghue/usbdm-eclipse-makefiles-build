@@ -368,7 +368,7 @@ ifneq ($(OS),Windows_NT)
    endif
 endif
 
-CFLAGS  += ${THREADS} -Wall -shared ${GCC_VISIBILITY_DEFS}
+CFLAGS  += ${THREADS} -Wall -W -shared ${GCC_VISIBILITY_DEFS}
 LDFLAGS += ${THREADS}
 
 #CFLAGS += -Wshadow -DWINVER=0x500 -D_WIN32_IE=0x500 -std=gnu99 -Wall -Wundef -Wunused -Wstrict-prototypes -Werror-implicit-function-declaration -Wno-pointer-sign
