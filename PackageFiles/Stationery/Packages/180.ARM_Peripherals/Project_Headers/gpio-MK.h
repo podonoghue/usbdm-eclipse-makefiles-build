@@ -22,6 +22,8 @@
 
 namespace USBDM {
 
+enum {ActiveLow=false, ActiveHigh=true};
+
 /**
  * @addtogroup GPIO_Group GPIO, Digital Input/Output
  * @{
@@ -65,9 +67,10 @@ namespace USBDM {
  * @tparam pcrAddress      Address of PORT (PCR register array) associated with GPIO
  * @tparam gpioAddress     GPIO hardware address
  * @tparam bitNum          Bit number within PORT/GPIO
+ * @tparam polarity        True => Active high, False => Active low
  * @tparam defPcrValue     Default value for PCR including MUX value
  */
-template<uint32_t clockMask, uint32_t pcrAddress, uint32_t gpioAddress, uint32_t bitNum, uint32_t defPcrValue>
+template<uint32_t clockMask, uint32_t pcrAddress, uint32_t gpioAddress, uint32_t bitNum, bool polarity, uint32_t defPcrValue>
 class GpioBase_T {
 
 public:
@@ -102,16 +105,26 @@ public:
       gpio->PTOR = (1<<bitNum);
    }
    /**
-    * Set pin high
+    * Set pin active (Polarity  is significant)
     */
    static void set() {
-      gpio->PSOR = (1<<bitNum);
+      if (polarity) {
+         gpio->PSOR = (1<<bitNum);
+      }
+      else {
+         gpio->PCOR = (1<<bitNum);
+      }
    }
    /**
-    * Set pin low
+    * Set pin inactive (Polarity  is significant)
     */
    static void clear() {
-      gpio->PCOR = (1<<bitNum);
+      if (polarity) {
+         gpio->PCOR = (1<<bitNum);
+      }
+      else {
+         gpio->PSOR = (1<<bitNum);
+      }
    }
    /**
     * Set pin high
@@ -128,7 +141,7 @@ public:
    /**
     * Write boolean value to digital output
     *
-    * @param value true/false value
+    * @param value true/false value (Polarity  is significant)
     */
    static void write(bool value) {
       if (value) {
@@ -142,19 +155,29 @@ public:
     * Read pin value
     * Note: this reads the PDIR not the PDOR
     *
-    * @return true/false reflecting pin value
+    * @return true/false reflecting pin value. (Polarity  is significant)
     */
    static bool read() {
-      return (gpio->PDIR & (1<<bitNum));
+      if (polarity) {
+         return (gpio->PDIR & (1<<bitNum));
+      }
+      else {
+         return !(gpio->PDIR & (1<<bitNum));
+      }
    }
    /**
     * Read value being driven to pin if output
     * Note: this reads the PDOR not the PDIR
     *
-    * @return true/false reflecting value in output register
+    * @return true/false reflecting value in output register. (Polarity  is significant)
     */
    static bool readState() {
-      return (gpio->PDOR & (1<<bitNum));
+      if (polarity) {
+         return (gpio->PDOR & (1<<bitNum));
+      }
+      else {
+         return !(gpio->PDOR & (1<<bitNum));
+      }
    }
 };
 
@@ -163,10 +186,11 @@ public:
  *
  * @tparam Info            Gpio information class
  * @tparam bitNum          Bit number within PORT/GPIO
+ * @tparam polarity        True => Active high, False => Active low
  * @tparam defPcrValue     Default value for PCR including MUX value
  */
-template<class Info, const uint32_t bitNum, uint32_t defPcrValue=Info::defaultPcrValue>
-class  Gpio_T : public GpioBase_T<Info::clockMask, Info::pcrAddress, Info::gpioAddress, bitNum, defPcrValue> {
+template<class Info, const uint32_t bitNum, bool polarity=ActiveHigh, uint32_t defPcrValue=Info::defaultPcrValue>
+class  Gpio_T : public GpioBase_T<Info::clockMask, Info::pcrAddress, Info::gpioAddress, bitNum, polarity, defPcrValue> {
    static_assert((bitNum<32), "Illegal signal");
 };
 
@@ -175,10 +199,11 @@ class  Gpio_T : public GpioBase_T<Info::clockMask, Info::pcrAddress, Info::gpioA
  *
  * @tparam Info            Peripheral information class
  * @tparam index           Index of signal within the info table
+ * @tparam polarity        True => Active high, False => Active low
  * @tparam defPcrValue     Default value for PCR including MUX value
  */
-template<class Info, const uint32_t index, uint32_t defPcrValue=Info::defaultPcrValue>
-using  GpioTable_T = GpioBase_T<Info::info[index].clockMask, Info::info[index].pcrAddress, Info::info[index].gpioAddress, Info::info[index].gpioBit, defPcrValue>;
+template<class Info, const uint32_t index, bool polarity=ActiveHigh, uint32_t defPcrValue=Info::defaultPcrValue>
+using  GpioTable_T = GpioBase_T<Info::info[index].clockMask, Info::info[index].pcrAddress, Info::info[index].gpioAddress, Info::info[index].gpioBit, polarity, defPcrValue>;
 
 /**
  * @brief Template representing a field within a port
@@ -346,8 +371,9 @@ public:
  * @endcode
  *
  * @tparam bitNum        Bit number in the port
+ * @tparam polarity      True => Active high, False => Active low
  */
-template<uint8_t bitNum> class GpioA : public Gpio_T<GpioAInfo, bitNum> {};
+template<uint8_t bitNum, bool polarity=ActiveHigh> class GpioA : public Gpio_T<GpioAInfo, bitNum, polarity> {};
 
 /**
  * @brief Convenience template for GpioA fields. See @ref Field_T
@@ -420,8 +446,9 @@ template<int left, int right> class GpioAField : public Field_T<GpioAInfo, left,
  * @endcode
  *
  * @tparam bitNum        Bit number in the port
+ * @tparam polarity      True => Active high, False => Active low
  */
-template<uint8_t bitNum> class GpioB : public Gpio_T<GpioBInfo, bitNum> {};
+template<uint8_t bitNum, bool polarity=ActiveHigh> class GpioB : public Gpio_T<GpioBInfo, bitNum, polarity> {};
 
 /**
  * @brief Convenience template for GpioB fields. See @ref Field_T
@@ -494,8 +521,9 @@ template<int left, int right> class GpioBField : public Field_T<GpioBInfo, left,
  * @endcode
  *
  * @tparam bitNum        Bit number in the port
+ * @tparam polarity      True => Active high, False => Active low
  */
-template<uint8_t bitNum> class GpioC : public Gpio_T<GpioCInfo, bitNum> {};
+template<uint8_t bitNum, bool polarity=ActiveHigh> class GpioC : public Gpio_T<GpioCInfo, bitNum, polarity> {};
 
 /**
  * @brief Convenience template for GpioC fields. See @ref Field_T
@@ -568,8 +596,9 @@ template<int left, int right> class GpioCField : public Field_T<GpioCInfo, left,
  * @endcode
  *
  * @tparam bitNum        Bit number in the port
+ * @tparam polarity      True => Active high, False => Active low
  */
-template<uint8_t bitNum> class GpioD : public Gpio_T<GpioDInfo, bitNum> {};
+template<uint8_t bitNum, bool polarity=ActiveHigh> class GpioD : public Gpio_T<GpioDInfo, bitNum, polarity> {};
 
 /**
  * @brief Convenience template for GpioD fields. See @ref Field_T
@@ -642,8 +671,9 @@ template<int left, int right> class GpioDField : public Field_T<GpioDInfo, left,
  * @endcode
  *
  * @tparam bitNum        Bit number in the port
+ * @tparam polarity      True => Active high, False => Active low
  */
-template<uint8_t bitNum> class GpioE : public Gpio_T<GpioEInfo, bitNum> {};
+template<uint8_t bitNum, bool polarity=ActiveHigh> class GpioE : public Gpio_T<GpioEInfo, bitNum, polarity> {};
 
 /**
  * @brief Convenience template for GpioE fields. See @ref Field_T
