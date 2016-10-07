@@ -91,7 +91,7 @@ public:
    virtual void setInteractive(bool isInteractive = true) = 0;
 
 protected:
-   UsbdmTclInterpreter(bool doInit=false) {};
+   UsbdmTclInterpreter(bool doInit=false) {(void)doInit; };
 };
 
 typedef std::tr1::shared_ptr<UsbdmTclInterpreter> UsbdmTclInterperPtr;

@@ -234,7 +234,7 @@ public:
        *  @param name Name of the function to use in messages
        *  @param when Whether to log entry/exit etc of this function
        */
-      Log(const char *name, When when=both) {};
+      Log(const char *name, When when=both) { (void)name; (void)when; };
       Log() {};
       /**  \brief Record exit from a function
        *
@@ -247,7 +247,7 @@ public:
        *
        *  @note logging is enabled and timestamp disabled
        */
-      static void openLogFile(const char *logFileName, const char *description="") {}
+      static void openLogFile(const char *logFileName, const char *description="") {(void)logFileName; (void)description; }
       /**  \brief Close the log file
        *
        */
@@ -256,13 +256,13 @@ public:
        *
        *  @param value - true/false => on/off logging
        */
-      static void enableLogging(bool value) {}
+      static void enableLogging(bool value) {(void)value;}
       /**  \brief Set logging level relative to current level
        *
        *  @param level - level to log below \n
        *         A 0 value suppresses logging below the current level.
        */
-      static void setLoggingLevel(int level) {}
+      static void setLoggingLevel(int level) {(void)level;}
       /**  \brief Get logging level relative to current level
        *
        */
@@ -271,22 +271,22 @@ public:
        *
        *  @param format Format and parameters as for printf()
        */
-      static void error(const char *format, ...) {}
+      static void error(const char *format, ...) {(void)format;}
       /** \brief Provides a print function which prints data into a log file.
        *
        *  @param format Format and parameters as for printf()
        */
-      static void print(const char *format, ...) {}
+      static void print(const char *format, ...) {(void)format;}
       /** \brief Provides a print function which prints data into a log file.
        *
        *  @param format Format and parameters as for printf()
        */
-      static void warning(const char *format, ...) {}
+      static void warning(const char *format, ...) {(void)format;}
       /** \brief Provides a print function which prints data into a log file.
        *
        *  @param format Format and parameters as for printf()
        */
-      static void printq(const char *format, ...) {}
+      static void printq(const char *format, ...) {(void)format;}
       /** \brief Print a formatted dump of binary data in Hex
        *
        * @param data         Pointer to data to print
@@ -297,7 +297,7 @@ public:
       static void printDump(const uint8_t *data,
                             unsigned int size,
                             unsigned int startAddress=0x0000,
-                            unsigned int organization=BYTE_ADDRESS|BYTE_DISPLAY) {}
+                            unsigned int organization=BYTE_ADDRESS|BYTE_DISPLAY) {(void)data;(void)size;(void)startAddress;(void)organization;}
       /**
        * Get logging handle
        *
@@ -309,12 +309,12 @@ public:
        *
        * @param newLogFile file handle to set
        */
-      static void setLogFileHandle(FILE *logFile) {}
+      static void setLogFileHandle(FILE *logFile) {(void)logFile;}
       /** \brief Sets timestamping mode
        *
        *  @param mode - mode of timestamping
        */
-      static void enableTimestamping(bool enable=true) {}
+      static void enableTimestamping(bool enable=true) {(void)enable;}
    };
    //! Enable loggin in function
    #define LOGGING_Q UsbdmSystem::Log log

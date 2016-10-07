@@ -34,7 +34,7 @@
 //! Information about a BDM
 class BdmInformation {
 private:
-   unsigned                deviceNumber;
+   int                     deviceNumber;
    std::string             serialNumber;
    std::string             description;
    USBDM_ErrorCode         suitable;

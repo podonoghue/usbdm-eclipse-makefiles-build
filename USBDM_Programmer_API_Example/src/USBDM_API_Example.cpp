@@ -58,6 +58,7 @@ public:
  * than use a WxWidget dialogue
  */
 long nullCallback(std::string message, std::string caption, long style) {
+   (void) style;
    fprintf(stderr, "Failing on error message %s:%s\n", caption.c_str(), message.c_str());
    return UsbdmWxConstants::NO;
 }

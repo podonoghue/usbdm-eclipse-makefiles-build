@@ -1054,7 +1054,7 @@ public:
 
    const std::string              getTargetName() const;
    const std::string              getAliasName() const;
-   const TargetType_t             getTargetType() const;
+   TargetType_t                   getTargetType() const;
    bool                           isHidden() const;
    uint32_t                       getRamStart() const;
    uint32_t                       getRamEnd() const;

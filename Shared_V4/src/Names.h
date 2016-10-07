@@ -60,49 +60,49 @@ const char *getOnceStatusName(int status);
 
 #else // defined(LOG) || defined(NEED_ALL_NAMES)
 // Dummy the routines if logging is not required
-static inline char const *getCommandName(unsigned char command)                         { return ""; }
-static inline char const *getDebugCommandName(unsigned char cmd)                        { return ""; }
-static inline char const *getRS08RegName( unsigned int regAddr )                        { return ""; }
-static inline char const *getDSCRegName( unsigned int regAddr)                          { return ""; }
-static inline char const *getHCS08RegName( unsigned int regAddr )                       { return ""; }
-static inline char const *getHCS12RegName( unsigned int regAddr )                       { return ""; }
-static inline char const *getCFV1RegName( unsigned int regAddr )                        { return ""; }
-static inline char const *getCFVxRegName( unsigned int regAddr )                        { return ""; }
-static inline char const *getARMRegName( unsigned int regAddr )                         { return ""; }
-static inline char const *getRegName( unsigned int targetType, unsigned int regAddr )   { return ""; }
-static inline char const *getHCS12DebugRegName( unsigned int regAddr )                  { return ""; }
-static inline char const *getCFV1DebugRegName( unsigned int regAddr )                   { return ""; }
-static inline char const *getCFVxDebugRegName( unsigned int regAddr )                   { return ""; }
-static inline char const *getSWDDebugRegName( unsigned int regAddr )                    { return ""; }
-static inline char const *getCFV1ControlRegName( unsigned int regAddr )                 { return ""; }
-static inline char const *getCFVxControlRegName( unsigned int regAddr )                 { return ""; }
-static inline char const *getARMControlRegName( unsigned int regAddr )                  { return ""; }
-static inline char const *getSWDControlRegName( unsigned int regAddr )                  { return ""; }
-static inline char const *getRS08_BDCSCR_Name( unsigned int BDCSCR)                     { return ""; }
-static inline char const *getHCS08_BDCSCR_Name( unsigned int BDCSCR)                    { return ""; }
-static inline char const *getHCS12_BDMSTS_Name( unsigned int BDMSTS)                    { return ""; }
-static inline char const *getCFV1_XCSR_Name( unsigned int XCSR)                         { return ""; }
-static inline char const *getCFVx_CSR_Name( unsigned int CSR)                           { return ""; }
-static inline char const *getStatusRegName(unsigned int targetType, unsigned int value) { return ""; }
-static inline char const *getCapabilityName(unsigned int vector)                        { return ""; }
-static inline char const *getControlLevelName(InterfaceLevelMasks_t level)              { return ""; }
-static inline char const *getClockSelectName(ClkSwValues_t level)                       { return ""; }
-static inline char const *getVoltageSelectName(TargetVddSelect_t level)                 { return ""; }
-static inline char const *getVppSelectName(TargetVppSelect_t level)                     { return ""; }
-static inline char const *getPinLevelName(PinLevelMasks_t level)                        { return ""; }
-static inline char const *getExitAction(int action)                                     { return ""; }
-static inline char const *getMemSpaceName(MemorySpace_t memSpace)                       { return ""; }
-static inline const char *getMemSpaceAbbreviatedName(MemorySpace_t memSpace)            { return ""; }
-static inline const char *getDHCSRName(uint32_t dhcsrValue)                             { return ""; }
-static inline const char *getDEMCRName(uint32_t demcrValue)                             { return ""; }
-static inline char const *getMDM_APControlName(uint32_t mdmApValue)                     { return ""; }
-static inline char const *getMDM_APStatusName(uint32_t mdmApValue)                      { return ""; }
-static inline char const *getARM_CTRL_STATUSRName(uint32_t demcrValue)                  { return ""; }
-static inline char const *getS12ZRegName( unsigned int regAddr )                        { return ""; }
-static inline char const *getSRSLName(uint32_t srslValue)                               { return ""; }
-static inline char const *getSRSHName(uint32_t srshValue)                               { return ""; }
-static inline char const *printBdmOptions(const USBDM_ExtendedOptions_t *options)       { return ""; }
-static inline char const *getOnceStatusName(int status)                                 { return ""; }
+static inline char const *getCommandName(unsigned char command)                         { (void) command; return ""; }
+static inline char const *getDebugCommandName(unsigned char cmd)                        { (void) cmd; return ""; }
+static inline char const *getRS08RegName( unsigned int regAddr )                        { (void) regAddr; return ""; }
+static inline char const *getDSCRegName( unsigned int regAddr)                          { (void) regAddr; return ""; }
+static inline char const *getHCS08RegName( unsigned int regAddr )                       { (void) regAddr; return ""; }
+static inline char const *getHCS12RegName( unsigned int regAddr )                       { (void) regAddr; return ""; }
+static inline char const *getCFV1RegName( unsigned int regAddr )                        { (void) regAddr; return ""; }
+static inline char const *getCFVxRegName( unsigned int regAddr )                        { (void) regAddr; return ""; }
+static inline char const *getARMRegName( unsigned int regAddr )                         { (void) regAddr; return ""; }
+static inline char const *getRegName( unsigned int targetType, unsigned int regAddr )   { (void) targetType; (void) regAddr; return ""; }
+static inline char const *getHCS12DebugRegName( unsigned int regAddr )                  { (void) regAddr; return ""; }
+static inline char const *getCFV1DebugRegName( unsigned int regAddr )                   { (void) regAddr; return ""; }
+static inline char const *getCFVxDebugRegName( unsigned int regAddr )                   { (void) regAddr; return ""; }
+static inline char const *getSWDDebugRegName( unsigned int regAddr )                    { (void) regAddr; return ""; }
+static inline char const *getCFV1ControlRegName( unsigned int regAddr )                 { (void) regAddr; return ""; }
+static inline char const *getCFVxControlRegName( unsigned int regAddr )                 { (void) regAddr; return ""; }
+static inline char const *getARMControlRegName( unsigned int regAddr )                  { (void) regAddr; return ""; }
+static inline char const *getSWDControlRegName( unsigned int regAddr )                  { (void) regAddr; return ""; }
+static inline char const *getRS08_BDCSCR_Name( unsigned int BDCSCR)                     { (void) BDCSCR; return ""; }
+static inline char const *getHCS08_BDCSCR_Name( unsigned int BDCSCR)                    { (void) BDCSCR; return ""; }
+static inline char const *getHCS12_BDMSTS_Name( unsigned int BDMSTS)                    { (void) BDMSTS; return ""; }
+static inline char const *getCFV1_XCSR_Name( unsigned int XCSR)                         { (void) XCSR; return ""; }
+static inline char const *getCFVx_CSR_Name( unsigned int CSR)                           { (void) CSR; return ""; }
+static inline char const *getStatusRegName(unsigned int targetType, unsigned int value) { (void) targetType; (void) value; return ""; }
+static inline char const *getCapabilityName(unsigned int vector)                        { (void) vector; return ""; }
+static inline char const *getControlLevelName(InterfaceLevelMasks_t level)              { (void) level; return ""; }
+static inline char const *getClockSelectName(ClkSwValues_t level)                       { (void) level; return ""; }
+static inline char const *getVoltageSelectName(TargetVddSelect_t level)                 { (void) level; return ""; }
+static inline char const *getVppSelectName(TargetVppSelect_t level)                     { (void) level; return ""; }
+static inline char const *getPinLevelName(PinLevelMasks_t level)                        { (void) level; return ""; }
+static inline char const *getExitAction(int action)                                     { (void) action; return ""; }
+static inline char const *getMemSpaceName(MemorySpace_t memSpace)                       { (void) memSpace; return ""; }
+static inline const char *getMemSpaceAbbreviatedName(MemorySpace_t memSpace)            { (void) memSpace; return ""; }
+static inline const char *getDHCSRName(uint32_t dhcsrValue)                             { (void) dhcsrValue; return ""; }
+static inline const char *getDEMCRName(uint32_t demcrValue)                             { (void) demcrValue; return ""; }
+static inline char const *getMDM_APControlName(uint32_t mdmApValue)                     { (void) mdmApValue; return ""; }
+static inline char const *getMDM_APStatusName(uint32_t mdmApValue)                      { (void) mdmApValue; return ""; }
+static inline char const *getARM_CTRL_STATUSRName(uint32_t demcrValue)                  { (void) demcrValue; return ""; }
+static inline char const *getS12ZRegName( unsigned int regAddr )                        { (void) regAddr; return ""; }
+static inline char const *getSRSLName(uint32_t srslValue)                               { (void) srslValue; return ""; }
+static inline char const *getSRSHName(uint32_t srshValue)                               { (void) srshValue; return ""; }
+static inline char const *printBdmOptions(const USBDM_ExtendedOptions_t *options)       { (void) options; return ""; }
+static inline char const *getOnceStatusName(int status)                                 { (void) status; return ""; }
 #endif
 
 char const *getTargetModeName(TargetMode_t type);
