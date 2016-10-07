@@ -103,7 +103,7 @@ public:
       if (enable && !enabled) {
          // Just enabled
          currentInput = inputFn();
-         integral     = currentOutput;
+         integral     = 0; //currentOutput;
          tickCount    = 0;
       }
       enabled = enable;
@@ -125,9 +125,6 @@ public:
     * Get number of ticks since last enabled
     */
    unsigned getTicks() {
-      if (!enabled) {
-         return 0;
-      }
       return tickCount;
    }
 
@@ -149,7 +146,6 @@ public:
       if (Kp<0 || Ki<0 || Kd<0) {
          USBDM::setAndCheckErrorCode(USBDM::E_ILLEGAL_PARAM);
       }
-
       kp = Kp;
       ki = Ki * interval;
       kd = Kd / interval;
