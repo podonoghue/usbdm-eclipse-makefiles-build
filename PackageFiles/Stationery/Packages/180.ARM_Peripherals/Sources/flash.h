@@ -288,6 +288,17 @@ public:
    }
 
    /**
+    * Assign to underlying array
+    *
+    * This adds a wait for the Flash to be updated after each element is assigned
+    */
+   void copyTo(T *other) const {
+      for (int index=0; index<dimension; index++) {
+         other[index] = data[index];
+      }
+   }
+
+   /**
     * Return a reference to the underlying array element - read-only!
     */
    const T operator [](int i) {
