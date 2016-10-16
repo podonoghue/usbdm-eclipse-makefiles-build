@@ -331,6 +331,17 @@ Devices using this peripheral:
       \t//! System Clock Divider Register 2
       \tstatic constexpr uint32_t clkdiv2 = 
       \t   $(sim_clkdiv2_usb);  // USB clock divider divisor & fraction \n\n
+      
+      \t/**
+      \t * Get USB clock frequency
+      \t *
+      \t * @return Clock frequency as a uint32_t in Hz
+      \t */
+      \tstatic uint32_t getUsbClock() {
+      \t   return (getPeripheralClock()*
+      \t      (((sim->CLKDIV2&SIM_CLKDIV2_USBFRAC_MASK)>>SIM_CLKDIV2_USBFRAC_SHIFT)+1))/
+      \t      (((sim->CLKDIV2&SIM_CLKDIV2_USBDIV_MASK)>>SIM_CLKDIV2_USBDIV_SHIFT)+1);
+      \t}\n\n
    ]]></template>
    
    <intOption name="system_core_clock" 
