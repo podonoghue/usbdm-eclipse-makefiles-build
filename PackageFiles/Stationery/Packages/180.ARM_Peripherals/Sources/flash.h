@@ -337,5 +337,4 @@ public:
 
 } // namespace USBDM
 
-
 #endif /* SOURCES_FLASH_H_ */

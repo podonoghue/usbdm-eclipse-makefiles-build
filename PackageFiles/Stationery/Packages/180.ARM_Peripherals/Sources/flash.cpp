@@ -20,27 +20,27 @@
 namespace USBDM {
 
 // Flash commands
-static constexpr uint8_t  F_RD1BLK      =  0x00;
-static constexpr uint8_t  F_RD1SEC      =  0x01;
-static constexpr uint8_t  F_PGMCHK      =  0x02;
+//static constexpr uint8_t  F_RD1BLK      =  0x00;
+//static constexpr uint8_t  F_RD1SEC      =  0x01;
+//static constexpr uint8_t  F_PGMCHK      =  0x02;
 static constexpr uint8_t  F_RDRSRC      =  0x03;
-static constexpr uint8_t  F_PGM4        =  0x06;
-static constexpr uint8_t  F_ERSBLK      =  0x08;
-static constexpr uint8_t  F_ERSSCR      =  0x09;
-static constexpr uint8_t  F_PGMSEC      =  0x0B;
-static constexpr uint8_t  F_RD1ALL      =  0x40;
-static constexpr uint8_t  F_RDONCE      =  0x41;
-static constexpr uint8_t  F_PGMONCE     =  0x43;
-static constexpr uint8_t  F_ERSALL      =  0x44;
-static constexpr uint8_t  F_VFYKEY      =  0x45;
+//static constexpr uint8_t  F_PGM4        =  0x06;
+//static constexpr uint8_t  F_ERSBLK      =  0x08;
+//static constexpr uint8_t  F_ERSSCR      =  0x09;
+//static constexpr uint8_t  F_PGMSEC      =  0x0B;
+//static constexpr uint8_t  F_RD1ALL      =  0x40;
+//static constexpr uint8_t  F_RDONCE      =  0x41;
+//static constexpr uint8_t  F_PGMONCE     =  0x43;
+//static constexpr uint8_t  F_ERSALL      =  0x44;
+//static constexpr uint8_t  F_VFYKEY      =  0x45;
 static constexpr uint8_t  F_PGMPART     =  0x80;
-static constexpr uint8_t  F_SETRAM      =  0x81;
+//static constexpr uint8_t  F_SETRAM      =  0x81;
 
 /** A23 == 0 => indicates PROGRAM flash */
-static constexpr uint32_t PROGRAM_ADDRESS_FLAG = (0<<23);
+//static constexpr uint32_t PROGRAM_ADDRESS_FLAG = (0<<23);
 
 /** A23 == 1 => indicates DATA flash */
-static constexpr uint32_t DATA_ADDRESS_FLAG    = (1<<23);
+//static constexpr uint32_t DATA_ADDRESS_FLAG    = (1<<23);
 
 /**
  * Launch & wait for Flash command to complete
