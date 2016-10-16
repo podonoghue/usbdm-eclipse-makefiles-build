@@ -43,6 +43,9 @@ static constexpr uint32_t SPI_MODE3 (SPI_CPOL|SPI_CPHA);
  */
 class Spi {
 protected:
+   ~Spi() {}
+
+protected:
    volatile  SPI_Type *spi;       //!< SPI hardware
    uint32_t  pushrMask;           //!< Value to combine with data
 
@@ -338,6 +341,8 @@ template<class Info>
 class Spi_T : public Spi {
 
 public:
+   virtual ~Spi_T() {}
+
    virtual void enablePins() {
       // Configure SPI pins
       Info::initPCRs(PORT_PCR_DSE(1)|PORT_PCR_SRE(1)|PORT_PCR_PE(1)|PORT_PCR_PS(1));
