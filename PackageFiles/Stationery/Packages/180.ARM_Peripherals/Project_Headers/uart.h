@@ -38,6 +38,9 @@ namespace USBDM {
 class Uart {
 
 protected:
+
+   virtual ~Uart() {}
+
    volatile UART_Type *uart;            //!< UART hardware instance
 
    /**
@@ -278,6 +281,8 @@ public:
       setBaudRate(baudrate);
    }
 
+   ~Uart_T() {}
+
    /**
     * Set baud factor value for interface
     *
@@ -288,6 +293,7 @@ public:
    void setBaudRate(unsigned baudrate) {
       Uart::setBaudRate(baudrate, Info::getInputClockFrequency());
    }
+
 protected:
    /**
     * Clear UART error status
