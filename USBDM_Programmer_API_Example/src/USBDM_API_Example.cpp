@@ -72,8 +72,17 @@ int main(void) {
 
    try {
       fprintf(stderr, "Creating interface\n");
+
       BdmInterfacePtr bdmInterface(BdmInterfaceFactory::createInterface(TARGET_TYPE, nullCallback));
       bdmInterface->setBdmSerialNumber(INTERFACE, false);
+
+      // Print list of connected devices (for infomation only)
+      std::vector<BdmInformation> bdmInformation;
+      bdmInterface->findBDMs(bdmInformation);
+      vector<BdmInformation>::iterator it;
+      for ( it=bdmInformation.begin(); it<bdmInformation.end(); it++ ) {
+         printf("Found %s\n", (const char *)(it->getSerialNumber().c_str()));
+      }
 
       fprintf(stderr, "Changing interface options\n");
       USBDM_ExtendedOptions_t &bdmOptions(bdmInterface->getBdmOptions());
@@ -88,6 +97,8 @@ int main(void) {
 
       fprintf(stderr, "Creating device database\n");
       DeviceInterfacePtr deviceInterface(new DeviceInterface(TARGET_TYPE));
+
+      DeviceDataBasePtr deviceDataBasePtr = deviceInterface->getDeviceDatabase();
 
       fprintf(stderr, "Selecting device \'%s\'\n", DEVICE);
       CHECK(deviceInterface->setCurrentDeviceByName(DEVICE));
