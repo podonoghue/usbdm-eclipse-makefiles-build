@@ -133,7 +133,7 @@ void SystemInit(void) {
 #endif
 }
 
-// Code below assumes interrupts start oiut enabled!
+// Code below assumes interrupts start out enabled!
 
 /** Nesting count for interrupt disable */
 static int disableInterruptCount = 0;
