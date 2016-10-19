@@ -45,11 +45,9 @@ class Spi {
 protected:
    ~Spi() {}
 
-protected:
    volatile  SPI_Type *spi;       //!< SPI hardware
    uint32_t  pushrMask;           //!< Value to combine with data
 
-protected:
    /**
     * Constructor
     *
@@ -59,19 +57,30 @@ protected:
       spi(baseAddress), pushrMask(SPI_PUSHR_PCS_MASK) {
    }
 
+public:
    /**
     * Calculate communication speed factors for SPI
     *
-    * @param frequency      => Communication frequency in Hz
     * @param clockFrequency => Clock frequency of SPI in Hz
+    * @param frequency      => Communication frequency in Hz
     *
-    * @return CTAR register value only including SPI_CTAR_BR, SPI_CTAR_PBR fields
+    * @return CTAR register value including SPI_CTAR_BR, SPI_CTAR_PBR fields
     *
     * Note: Chooses the highest speed that is not greater than frequency.
-    * Note: Only has effect from when the CTAR value is next changed
     */
-   static uint32_t calculateSpeed(uint32_t clockFrequency, uint32_t frequency);
+   static uint32_t calculateDividers(uint32_t clockFrequency, uint32_t frequency);
 
+   /**
+    * Calculate communication speed from SPI clock frequency and speed factors
+    *
+    * @param clockFrequency => Clock frequency of SPI in Hz
+    * @param clockFactors   => CTAR register value providing SPI_CTAR_BR, SPI_CTAR_PBR fields
+    *
+    * @return Clock frequency of SPI in Hz for these factors
+    */
+   static uint32_t calculateSpeed(uint32_t clockFrequency, uint32_t clockFactors);
+
+protected:
    /**
     * Calculate Delay factors
     * Used for ASC, DT and CSSCK
@@ -166,7 +175,7 @@ protected:
     */
    void setSpeed(uint32_t clockFrequency, uint32_t frequency, int ctarNum) {
       spi->CTAR[ctarNum] = (spi->CTAR[ctarNum] & ~(SPI_CTAR_BR_MASK|SPI_CTAR_PBR_MASK)) |
-            (calculateSpeed(clockFrequency, frequency) & (SPI_CTAR_BR_MASK|SPI_CTAR_PBR_MASK));
+            (calculateDividers(clockFrequency, frequency) & (SPI_CTAR_BR_MASK|SPI_CTAR_PBR_MASK));
    }
 
    /**

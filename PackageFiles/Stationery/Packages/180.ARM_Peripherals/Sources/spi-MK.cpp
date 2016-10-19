@@ -35,7 +35,7 @@ static const uint16_t brFactors[]  = {2,4,6,8,16,32,64,128,256,512,1024,2048,409
  * Note: Chooses the highest speed that is not greater than frequency.
  * Note: Only has effect from when the CTAR value is next changed
  */
-uint32_t Spi::calculateSpeed(uint32_t clockFrequency, uint32_t frequency) {
+uint32_t Spi::calculateDividers(uint32_t clockFrequency, uint32_t frequency) {
    int bestPBR = 0;
    int bestBR  = 0;
    uint32_t difference = -1;
@@ -55,6 +55,12 @@ uint32_t Spi::calculateSpeed(uint32_t clockFrequency, uint32_t frequency) {
       }
    }
    return SPI_CTAR_BR(bestBR)|SPI_CTAR_PBR(bestPBR);
+}
+
+uint32_t Spi::calculateSpeed(uint32_t clockFactors, uint32_t clockFrequency) {
+   int pbr = (clockFactors&SPI_CTAR_PBR_MASK)>>SPI_CTAR_PBR_SHIFT;
+   int br  = (clockFactors&SPI_CTAR_BR_MASK)>>SPI_CTAR_BR_SHIFT;
+   return clockFrequency/(pbrFactors[pbr]*brFactors[br]);
 }
 
 /**
