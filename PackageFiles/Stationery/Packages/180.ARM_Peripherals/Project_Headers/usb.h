@@ -85,23 +85,6 @@ public:
       usb->OTGICR = mask;
    }
 
-private:
-   static void handleTokenComplete();
-   static void handleUSBResume();
-   static void handleUSBReset();
-   static void handleStallComplete();
-   static void handleSOFToken();
-   static void handleUSBSuspend();
-
-public:
-
-   static void initialise();
-   /**
-    * Handler for USB interrupt
-    *
-    * Determines source and dispatches to appropriate routine.
-    */
-   static void irqHandler(void);
 };
 
 #ifdef USBDM_USB0_IS_DEFINED
@@ -109,9 +92,50 @@ public:
  * Class representing USB
  */
 class Usb0 : public UsbBase_T<Usb0Info> {
+
+private:
+   static void handleTokenComplete();
+   /**
+    * Handler for USB Bus reset\n
+    * Re-initialises the interface
+    */
+   static void handleUSBReset();
+   /**
+    * STALL completed - re-enable ep0 for SETUP
+    */
+   static void handleStallComplete();
+   /**
+    * Handler for Start of Frame Token interrupt (~1ms interval)
+    */
+   static void handleSOFToken();
+   /*
+    * Handler for USB Suspend
+    *   - Enables the USB module to wake-up the CPU
+    *   - Stops the CPU
+    * On wake-up
+    *   - Re-checks the USB after a small delay to avoid wake-ups by noise
+    *   - The RESUME interrupt is left pending so the resume handler can execute
+    */
+   static void handleUSBSuspend();
+   /**
+    * Handler for USB Resume
+    *
+    * Disables further USB module wakeups
+    */
+   static void handleUSBResume();
+
 public:
-   static void receiveUSBCommand(uint8_t maxSize, uint8_t *buffer);
-   static void sendUSBResponse( uint8_t size, const uint8_t *buffer);
+
+   /**
+    * Initialise the USB interaface
+    */
+   static void initialise();
+   /**
+    * Handler for USB interrupt
+    *
+    * Determines source and dispatches to appropriate routine.
+    */
+   static void irqHandler(void);
 };
 
 #endif
