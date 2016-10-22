@@ -45,9 +45,11 @@ class Spi {
 protected:
    ~Spi() {}
 
+protected:
    volatile  SPI_Type *spi;       //!< SPI hardware
    uint32_t  pushrMask;           //!< Value to combine with data
 
+protected:
    /**
     * Constructor
     *

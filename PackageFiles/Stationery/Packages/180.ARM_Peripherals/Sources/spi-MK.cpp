@@ -27,8 +27,8 @@ static const uint16_t brFactors[]  = {2,4,6,8,16,32,64,128,256,512,1024,2048,409
 /**
  * Calculate communication speed factors for SPI
  *
- * @param frequency      => Communication frequency in Hz
  * @param clockFrequency => Clock frequency of SPI in Hz
+ * @param frequency      => Communication frequency in Hz
  *
  * @return CTAR register value only including SPI_CTAR_BR, SPI_CTAR_PBR fields
  *
@@ -36,12 +36,18 @@ static const uint16_t brFactors[]  = {2,4,6,8,16,32,64,128,256,512,1024,2048,409
  * Note: Only has effect from when the CTAR value is next changed
  */
 uint32_t Spi::calculateDividers(uint32_t clockFrequency, uint32_t frequency) {
+
+   if (clockFrequency <= (2*frequency)) {
+      // Use highest possible rate
+      return SPI_CTAR_DBR_MASK;
+   }
    int bestPBR = 0;
    int bestBR  = 0;
    uint32_t difference = -1;
+   uint32_t calculatedFrequency;
    for (int pbr = 3; pbr >= 0; pbr--) {
       for (int br = 15; br >= 0; br--) {
-         uint32_t calculatedFrequency = clockFrequency/(pbrFactors[pbr]*brFactors[br]);
+         calculatedFrequency = clockFrequency/(pbrFactors[pbr]*brFactors[br]);
          if (calculatedFrequency > frequency) {
             // Too high stop looking here
             break;
@@ -54,13 +60,22 @@ uint32_t Spi::calculateDividers(uint32_t clockFrequency, uint32_t frequency) {
          }
       }
    }
-   return SPI_CTAR_BR(bestBR)|SPI_CTAR_PBR(bestPBR);
+   uint32_t clockFactors = SPI_CTAR_BR(bestBR)|SPI_CTAR_PBR(bestPBR);
+   if ((clockFactors == 0) && (clockFrequency<=(2*frequency))) {
+      // Use highest possible rate
+      clockFactors = SPI_CTAR_DBR_MASK;
+   }
+   return clockFactors;
 }
 
-uint32_t Spi::calculateSpeed(uint32_t clockFactors, uint32_t clockFrequency) {
+uint32_t Spi::calculateSpeed(uint32_t clockFrequency, uint32_t clockFactors) {
    int pbr = (clockFactors&SPI_CTAR_PBR_MASK)>>SPI_CTAR_PBR_SHIFT;
    int br  = (clockFactors&SPI_CTAR_BR_MASK)>>SPI_CTAR_BR_SHIFT;
-   return clockFrequency/(pbrFactors[pbr]*brFactors[br]);
+   uint32_t frequency = clockFrequency/(pbrFactors[pbr]*brFactors[br]);
+   if (clockFactors&SPI_CTAR_DBR_MASK) {
+      frequency *= 2;
+   }
+   return frequency;
 }
 
 /**
