@@ -1161,25 +1161,28 @@ USBDM_ErrorCode USBDM_ControlInterface(unsigned char duration_10us, unsigned int
 /*!
  * Send Custom BDM command
  *
- * @param txSize
- * @param rxSize
- * @param data
+ * @param txSize  Transmission size
+ * @param rxSize  Maximum size to receive
+ * @param data    IN/OUT buffer
  */
 USBDM_API
 USBDM_ErrorCode USBDM_BDMCommand(unsigned int txSize, unsigned int rxSize, unsigned char data[]) {
    LOGGING;
-
    if (txSize > MAX_PACKET_SIZE-10) {
       return BDM_RC_ILLEGAL_PARAMS;
    }
    if (rxSize > MAX_PACKET_SIZE-10) {
       return BDM_RC_ILLEGAL_PARAMS;
    }
+   log.printq("=>");
    log.printDump(data, txSize,0,0);
-//   log.print("txSize=%d, data=[%02X,0x%02X, \n", txSize, data[0], data[1]);
    usb_data[0] = 0;
    memccpy(usb_data+1, data, txSize, sizeof(usb_data));
-   USBDM_ErrorCode rc = bdm_usb_transaction(txSize+1, rxSize, usb_data);
+   unsigned int actualSize;
+   USBDM_ErrorCode rc = bdm_usb_transaction(txSize+1, rxSize, usb_data, 500, &actualSize);
+   memcpy(data, usb_data, actualSize);
+   log.printq("<=");
+   log.printDump(data, actualSize,0,0);
    return rc;
 }
 

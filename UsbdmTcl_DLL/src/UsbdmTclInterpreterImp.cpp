@@ -2850,103 +2850,103 @@ static int cmd_sync(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *ar
    return TCL_OK;
 }
 
-////! Send debug command to BDM
-//static int debugCommand(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-//// debug <control_value>
-//   const char *currentToken;
-//   int command, arg1 = 0, arg2=0;
-//   unsigned char usb_data[20] = {0};
-//   unsigned temp;
-//
-//   if (argc < 2) {
-//      Tcl_WrongNumArgs(interp, 1, argv, "<control_value>");
-//      return TCL_ERROR;
-//   }
-//   // Control value
-//   currentToken = Tcl_GetString(argv[1]);
-//   if (sscanf(currentToken,"%i",&command) != 1) {
-//      Tcl_WrongNumArgs(interp, 1, argv, "<control_value>");
-//      return TCL_ERROR;
-//   }
-//
-//   if (argc > 2) {
-//      // Arg #1
-//      currentToken = Tcl_GetString(argv[2]);
-//      if (sscanf(currentToken,"%i",&arg1) != 1) {
-//         Tcl_WrongNumArgs(interp, 1, argv, "<control_value>");
-//         return TCL_ERROR;
-//      }
-//   }
-//   if (argc > 3) {
-//      // Arg #1
-//      currentToken = Tcl_GetString(argv[3]);
-//      if (sscanf(currentToken,"%i",&arg2) != 1) {
-//         Tcl_WrongNumArgs(interp, 1, argv, "<control_value>");
-//         return TCL_ERROR;
-//      }
-//   }
-//   unsigned char usb_data[20] = {0};
-//   usb_data[0] = 0;
-//   usb_data[1] = CMD_USBDM_DEBUG;
-//   usb_data[2] = command;
-//   usb_data[3] = arg1;
-//   usb_data[4] = arg2;
-//
-//   if (checkUsbdmRC(interp,  bdmInterface->bdmCommand(3, sizeof(usb_data), usb_data)) != 0) {
-//      PRINT(":debug Failed\n");
-//      return TCL_ERROR;
-//   }
-//
-//   switch (command) {
-//      case BDM_DBG_STACKSIZE :
-//         temp = 256*usb_data[1]+usb_data[2];
-//         PRINT(":debug %10s => stacksize = %d (0x%X) bytes\n", getDebugCommandName(command), temp, temp);
-//         break;
-//      case BDM_DBG_MEASURE_VDD :
-//         PRINT(":debug %10s => Vdd = %2.1f V\n", getDebugCommandName(command), 5.0*usb_data[1]/255);
-//         break;
-//      case BDM_DBG_SWD:
-//         PRINT(":debug %10s 0x%2.2X 0x%2.2X =>\n "
-//               "0x%2.2X(%2.2d), 0x%2.2X(%2.2d), "
-//               "0x%2.2X(%2.2d), 0x%2.2X(%2.2d), "
-//               "0x%2.2X(%2.2d), 0x%2.2X(%2.2d), "
-//               "0x%2.2X(%2.2d), 0x%2.2X(%2.2d), "
-//               "\n"
-//               "0x%2.2X(%2.2d), 0x%2.2X(%2.2d), "
-//               "0x%2.2X(%2.2d), 0x%2.2X(%2.2d), "
-//               "0x%2.2X(%2.2d), 0x%2.2X(%2.2d), "
-//               "0x%2.2X(%2.2d), 0x%2.2X(%2.2d), "
-//               "\n"
-//               "0x%2.2X(%2.2d), 0x%2.2X(%2.2d), "
-//               "\n",
-//                getDebugCommandName(command), arg1, arg2,
-//                usb_data[1],  usb_data[1],  usb_data[2],  usb_data[2],
-//                usb_data[3],  usb_data[3],  usb_data[4],  usb_data[4],
-//                usb_data[5],  usb_data[5],  usb_data[6],  usb_data[6],
-//                usb_data[7],  usb_data[7],  usb_data[8],  usb_data[8],
-//                usb_data[9],  usb_data[9],  usb_data[10], usb_data[10],
-//                usb_data[11], usb_data[11], usb_data[12], usb_data[12],
-//                usb_data[13], usb_data[13], usb_data[14], usb_data[14],
-//                usb_data[15], usb_data[15], usb_data[16], usb_data[16],
-//                usb_data[17], usb_data[17], usb_data[18], usb_data[18]
-//                );
-//         return BDM_RC_OK;
-//      default :
-//         PRINT(":debug %10s 0x%2.2X 0x%2.2X => "
-//               "0x%2.2X(%2.2d), 0x%2.2X(%2.2d), "
-//               "0x%2.2X(%2.2d), 0x%2.2X(%2.2d), "
-//               "0x%2.2X(%2.2d), 0x%2.2X(%2.2d), "
-//               "0x%2.2X(%2.2d), 0x%2.2X(%2.2d), "
-//               "\n",
-//                getDebugCommandName(command), arg1, arg2,
-//                usb_data[1], usb_data[1], usb_data[2], usb_data[2],
-//                usb_data[3], usb_data[3], usb_data[4], usb_data[4],
-//                usb_data[5], usb_data[5], usb_data[6], usb_data[6],
-//                usb_data[7], usb_data[7], usb_data[8], usb_data[8]);
-//         break;
-//   }
-//   return reportState(interp);
-//}
+//! Send debug command to BDM
+static int cmd_debug(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
+// debug <control_value>
+   const char *currentToken;
+   int command, arg1 = 0, arg2=0;
+   unsigned temp;
+
+   if (argc < 2) {
+      Tcl_WrongNumArgs(interp, 1, argv, "<control_value>");
+      return TCL_ERROR;
+   }
+   // Control value
+   currentToken = Tcl_GetString(argv[1]);
+   if (sscanf(currentToken,"%i",&command) != 1) {
+      Tcl_WrongNumArgs(interp, 1, argv, "<control_value>");
+      return TCL_ERROR;
+   }
+
+   if (argc > 2) {
+      // Arg #1
+      currentToken = Tcl_GetString(argv[2]);
+      if (sscanf(currentToken,"%i",&arg1) != 1) {
+         Tcl_WrongNumArgs(interp, 1, argv, "<control_value>");
+         return TCL_ERROR;
+      }
+   }
+   if (argc > 3) {
+      // Arg #1
+      currentToken = Tcl_GetString(argv[3]);
+      if (sscanf(currentToken,"%i",&arg2) != 1) {
+         Tcl_WrongNumArgs(interp, 1, argv, "<control_value>");
+         return TCL_ERROR;
+      }
+   }
+
+   unsigned char usb_data[20] = {0};
+   usb_data[0] = CMD_USBDM_DEBUG;
+   usb_data[1] = command;
+   usb_data[2] = arg1;
+   usb_data[3] = arg2;
+
+   if (checkUsbdmRC(interp,  bdmInterface->bdmCommand(4, sizeof(usb_data), usb_data)) != 0) {
+      PRINT(":debug Failed\n");
+      return TCL_ERROR;
+   }
+
+   switch (command) {
+      case BDM_DBG_STACKSIZE :
+         temp = 256*usb_data[1]+usb_data[2];
+         PRINT(":debug %10s => stacksize = %d (0x%X) bytes\n", getDebugCommandName(command), temp, temp);
+         break;
+      case BDM_DBG_MEASURE_VDD :
+         PRINT(":debug %10s => %02X,%02X,%02X,%20X\n",  getDebugCommandName(command), usb_data[0], usb_data[1], usb_data[2], usb_data[3]);
+         PRINT(":debug %10s => Vdd = %2.1f V\n", getDebugCommandName(command), (5.0*((usb_data[1]<<8)|usb_data[2]))/255);
+         break;
+      case BDM_DBG_SWD:
+         PRINT(":debug %10s 0x%2.2X 0x%2.2X =>\n "
+               "0x%2.2X(%2.2d), 0x%2.2X(%2.2d), "
+               "0x%2.2X(%2.2d), 0x%2.2X(%2.2d), "
+               "0x%2.2X(%2.2d), 0x%2.2X(%2.2d), "
+               "0x%2.2X(%2.2d), 0x%2.2X(%2.2d), "
+               "\n"
+               "0x%2.2X(%2.2d), 0x%2.2X(%2.2d), "
+               "0x%2.2X(%2.2d), 0x%2.2X(%2.2d), "
+               "0x%2.2X(%2.2d), 0x%2.2X(%2.2d), "
+               "0x%2.2X(%2.2d), 0x%2.2X(%2.2d), "
+               "\n"
+               "0x%2.2X(%2.2d), 0x%2.2X(%2.2d), "
+               "\n",
+                getDebugCommandName(command), arg1, arg2,
+                usb_data[1],  usb_data[1],  usb_data[2],  usb_data[2],
+                usb_data[3],  usb_data[3],  usb_data[4],  usb_data[4],
+                usb_data[5],  usb_data[5],  usb_data[6],  usb_data[6],
+                usb_data[7],  usb_data[7],  usb_data[8],  usb_data[8],
+                usb_data[9],  usb_data[9],  usb_data[10], usb_data[10],
+                usb_data[11], usb_data[11], usb_data[12], usb_data[12],
+                usb_data[13], usb_data[13], usb_data[14], usb_data[14],
+                usb_data[15], usb_data[15], usb_data[16], usb_data[16],
+                usb_data[17], usb_data[17], usb_data[18], usb_data[18]
+                );
+         return BDM_RC_OK;
+      default :
+         PRINT(":debug %10s 0x%2.2X 0x%2.2X => "
+               "0x%2.2X(%2.2d), 0x%2.2X(%2.2d), "
+               "0x%2.2X(%2.2d), 0x%2.2X(%2.2d), "
+               "0x%2.2X(%2.2d), 0x%2.2X(%2.2d), "
+               "0x%2.2X(%2.2d), 0x%2.2X(%2.2d), "
+               "\n",
+                getDebugCommandName(command), arg1, arg2,
+                usb_data[1], usb_data[1], usb_data[2], usb_data[2],
+                usb_data[3], usb_data[3], usb_data[4], usb_data[4],
+                usb_data[5], usb_data[5], usb_data[6], usb_data[6],
+                usb_data[7], usb_data[7], usb_data[8], usb_data[8]);
+         break;
+   }
+   return reportState(interp);
+}
 
 //! Reset JTAG chain
 static int jtagResetCommand(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
@@ -3278,7 +3278,7 @@ static int cmd_exit(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *ar
 static const char usageText[] =
    "connect                      - Connect to target\n"
    "closeBDM                     - Close BDM connection\n"
-   "debug <value>                - Debug commands\n"
+//   "debug <value>                - Debug commands\n"
    "defaultMemorySpace N,X,P     - Set default memory space (N:None,X:Data,P:Program)\n"
    "dialogue <title> <body> yes_no|cancel|ok|i_exclaim|i_question|i_info|i_err\n"
    "       returns 0=>cancel, 1=yes, 2=no, 3=ok\n"
@@ -3384,7 +3384,7 @@ const char *name;
 //    { initialiseCommand,        "initialise" },
       { cmd_setMemorySpace,       "defaultMemorySpace" },
       { cmd_pinSet,               "pinSet" },
-//    { debugCommand,             "debug"},
+      { cmd_debug,             "debug"},
       { cmd_go,                   "go"},
       { cmd_status,               "gs"},
       { cmd_getLastError,         "getLastError"},

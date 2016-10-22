@@ -1081,6 +1081,9 @@ USBDM_ErrorCode bdmJMxx_simple_usb_transaction( bool                 commandTogg
    if (rc != BDM_RC_OK) {
       log.error("Non-USB error, rc = %s\n", UsbdmSystem::getErrorString(rc));
    }
+#ifdef LOG_LOW_LEVEL
+   log.printDump(inData, *actualRxSize);
+#endif // LOG_LOW_LEVEL
    return rc;
 }
 
@@ -1153,7 +1156,7 @@ USBDM_ErrorCode bdm_usb_transaction( unsigned int   txSize,
    unsigned tempRxSize;
    uint8_t command = data[1];
    LOGGING_Q;
-   log.setLoggingLevel(0);
+//   log.setLoggingLevel(0);
 
    if (usbDeviceHandle==NULL) {
       log.error("device not open\n");
@@ -1181,6 +1184,10 @@ USBDM_ErrorCode bdm_usb_transaction( unsigned int   txSize,
       log.error("Failed, cmd = %s, rc = %s\n",
             getCommandName(command), UsbdmSystem::getErrorString(rc));
    }
+#ifdef LOG_LOW_LEVEL
+   log.printq("<=1 ");
+   log.printDump(data, tempRxSize);
+#endif // LOG_LOW_LEVEL
    return rc;
 }
 #endif
