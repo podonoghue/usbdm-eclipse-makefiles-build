@@ -1,11 +1,11 @@
 <!--
 Devices using this peripheral: 
-      MK10D5
+      MK20D5
 -->
       <peripheral>
-         <?sourceFile "PDB0_1CH_2TRIG_0DAC_2PO" ?>
+         <?sourceFile "PDB0_2CH_2TRIG_0DAC_2PO" ?>
          <name>PDB0</name>
-         <description>Programmable Delay Block (1 channel, 2 triggers, 0 DAC, 2 pulse outputs)</description>
+         <description>Programmable Delay Block (2 channels, 2 triggers, 0 DAC, 2 pulse outputs)</description>
          <groupName>PDB</groupName>
          <prependToName>PDB0</prependToName>
          <headerStructName>PDB</headerStructName>
@@ -17,6 +17,11 @@ Devices using this peripheral:
          <addressBlock>
             <offset>0x0</offset>
             <size>0x20</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x38</offset>
+            <size>0x10</size>
             <usage>registers</usage>
          </addressBlock>
          <addressBlock>
@@ -409,9 +414,9 @@ Reading this field returns the value that is effective for the current cycle of 
                </fields>
             </register>
             <cluster>
-               <dim>1</dim>
+               <dim>2</dim>
                <dimIncrement>40</dimIncrement>
-               <dimIndex>0</dimIndex>
+               <dimIndex>0,1</dimIndex>
                <name>CH,@pCH@i@f</name>
                <addressOffset>0x10</addressOffset>
                <register>
