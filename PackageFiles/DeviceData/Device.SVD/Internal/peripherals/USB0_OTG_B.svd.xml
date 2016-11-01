@@ -528,12 +528,12 @@ Indicates if the most recent transaction was a transmit operation</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Transmit</description>
+                           <description>Receive</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Receive</description>
+                           <description>Transmit</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
