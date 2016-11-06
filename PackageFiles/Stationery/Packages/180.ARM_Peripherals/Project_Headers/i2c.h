@@ -63,8 +63,14 @@ protected:
     * @param mode Mode of operation (i2c_interrupt or i2c_polled)
     *
     */
-   I2c(volatile I2C_Type *i2c, I2c_Mode mode) : i2c(i2c), state(i2c_idle), mode(mode), rxBytesRemaining(0), rxDataPtr(0), addressedDevice(0), errorCode(0) {
+   I2c(volatile I2C_Type *i2c, I2c_Mode mode) :
+      i2c(i2c), state(i2c_idle), mode(mode), rxBytesRemaining(0), txBytesRemaining(0), rxDataPtr(0), txDataPtr(0), addressedDevice(0), errorCode(0) {
    }
+
+   /**
+    * Destructor
+    */
+   ~I2c() {}
 
    /**
     * Calculate value for baud rate register of I2C
@@ -226,6 +232,18 @@ public:
       setBPS(bps);
    }
 
+   /**
+    * Destructor
+    */
+   virtual ~I2c_T() {}
+
+   /**
+    * Set baud factor value for interface
+    *
+    * This is calculated from processor frequency and given bits-per-second
+    *
+    * @param bps            - Interface speed in bits-per-second
+    */
    void setBPS(uint32_t bps) {
      I2c::setBPS(bps, Info::getInputClockFrequency());
    }
@@ -265,28 +283,28 @@ public:
     */
    virtual void busHangReset() {
       // GPIOs used for bit-banging
-      using SclGpio = GpioTable_T<Info, 0, I2C_DEFAULT_PCR|PORT_PCR_MUX(FIXED_GPIO_FN)>;
-      using SdaGpio = GpioTable_T<Info, 1, I2C_DEFAULT_PCR|PORT_PCR_MUX(FIXED_GPIO_FN)>;
-
-      SdaGpio::setInput();
+      GpioTable_T<Info, 0> sclGpio;
+      GpioTable_T<Info, 1> sdaGpio;
+      sclGpio.setOutput(Info::defaultPcrValue);
+      sdaGpio.setInput(Info::defaultPcrValue);
       /*
        * Set SCL initially high before enabling to minimise disturbance to bus
        */
-      SclGpio::setInput();
-      SclGpio::set();
-      SclGpio::setOutput();
+      sclGpio.setInput();
+      sclGpio.set();
+      sclGpio.setOutput();
       for (int i=0; i<9; i++) {
          // Set clock high (3-state)
-         SclGpio::set();
+         sclGpio.set();
          for(int j=0; j<20; j++) {
             __asm__("nop");
          }
          // If data is high bus is OK
-         if (SdaGpio::read()) {
+         if (sdaGpio.read()) {
             break;
          }
          // Set clock low
-         SclGpio::clear();
+         sclGpio.clear();
          for(int j=0; j<20; j++) {
             __asm__("nop");
          }
