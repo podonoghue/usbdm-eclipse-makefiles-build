@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"
+?>
+<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!-- smc_mk10d7.xml -->
+<!-- INCOMPLETE -->
+
+<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Low Leakage Wakeup Unit">
+
+   <binaryOption name="smc_pmprot_avlp" 
+      description="Allow very low power modes" 
+      toolTip="This write-once bit allows the MCU to enter any very low power modes: VLPR, VLPW, and VLPS" >
+      <choice name="VLPR, VLPW and VLPS are not allowed" value="0" isDefault="true" />
+      <choice name="VLPR, VLPW and VLPS are allowed"     value="1" />
+   </binaryOption>   
+   
+   <binaryOption name="smc_pmprot_alls" 
+      description="Allow low leakage stop mode" 
+      toolTip="This write once bit allows the MCU to enter any low leakage stop mode: LLS" >
+      <choice name="LLS is not allowed" value="0" isDefault="true" />
+      <choice name="LLS is allowed"     value="1" />
+   </binaryOption>   
+   
+   <binaryOption name="smc_pmprot_avlls" 
+      description="Allow very low leakage stop mode" 
+      toolTip="This write once bit allows the MCU to enter any low leakage stop mode: VLLSx" >
+      <choice name="VLLSx is not allowed" value="0" isDefault="true" />
+      <choice name="VLLSx is allowed"     value="1" />
+   </binaryOption>   
+   
+   <template><![CDATA[
+      #ifndef SMC_PMPROT_AHSRUN
+      #define SMC_PMPROT_AHSRUN(x) 0
+      #endif\n\n
+      
+      \t// Power Mode Protection Register
+      \tstatic constexpr uint8_t pmprot =  
+      \t   SMC_PMPROT_AHSRUN($(smc_pmprot_ahsrun:0)) |  // Allow High Speed Run mode
+      \t   SMC_PMPROT_AVLP($(smc_pmprot_avlp:0)) |  // Allow very low power modes
+      \t   SMC_PMPROT_ALLS($(smc_pmprot_alls:0)) |  // Allow low leakage stop mode
+      \t   SMC_PMPROT_AVLLS($(smc_pmprot_avlls:0));  // Allow very low leakage stop mode\n\n
+   ]]></template>
+      
+   <binaryOption name="smc_pmctrl_lpwui" 
+      description="Low Power Wake Up on Interrupt" 
+      toolTip="Causes the SMC to exit to normal RUN mode when any active \n
+         MCU interrupt occurs while in a VLP mode (VLPR, VLPW or VLPS)" >
+      <choice name="The system remains in a VLP mode on an interrupt"     value="0" />
+      <choice name="The system exits to normal RUN mode on an interrupt"  value="1" isDefault="true" />
+   </binaryOption>   
+      
+   <template><![CDATA[
+      #ifndef SMC_PMCTRL_LPWUI
+      #define SMC_PMCTRL_LPWUI(x) 0
+      #endif\n\n
+      
+      \t// Power Mode Control Register
+      \tstatic constexpr uint8_t pmctrl =  
+      \t   SMC_PMCTRL_LPWUI($(smc_pmctrl_lpwui:0));   // Low Power Wake Up on Interrupt\n\n
+   ]]></template>
+      
+   <binaryOption name="smc_stopctrl_porpo" 
+      description="POR Power Option" 
+      toolTip="This bit controls whether the POR detect circuit is enabled in VLLS0 mode." >
+      <choice name="POR detect circuit is enabled in VLLS0"  value="0" isDefault="true" />
+      <choice name="POR detect circuit is disabled in VLLS0" value="1" />
+   </binaryOption>   
+   
+   <choiceOption name="smc_stopctrl_llsm" 
+      description="LLS or VLLS Mode Control"
+      toolTip="This field controls which LLS or VLLS sub-mode to enter if STOPM = VLLS">
+      <choice value="0" name="VLLS0" />
+      <choice value="1" name="VLLS1" />
+      <choice value="2" name="VLLS2 (if supported)" />
+      <choice value="3" name="VLLS3" />
+      <choice value="4" name="Reserved" />
+      <choice value="5" name="Reserved" />
+      <choice value="6" name="Reserved" />
+      <choice value="7" name="Reserved" />
+   </choiceOption>
+
+   <template><![CDATA[
+      #ifndef SMC_STOPCTRL_PSTOPO
+      #define SMC_STOPCTRL_PSTOPO(x) 0
+      #endif\n\n
+      
+      #ifndef SMC_STOPCTRL_LPOPO
+      #define SMC_STOPCTRL_LPOPO(x) 0
+      #endif\n\n
+      
+      #ifndef SMC_STOPCTRL_PORPO
+      #define SMC_STOPCTRL_PORPO(x) 0
+      #endif\n\n
+      
+      \t// VLLS Control Register
+      \tstatic constexpr uint8_t stopctrl =  
+      \t   SMC_STOPCTRL_PSTOPO($(smc_stopctrl_pstopo:0)) |  // Partial Stop Option (if present)
+      \t   SMC_STOPCTRL_PORPO($(smc_stopctrl_porpo:0)) |  // POR Power Option
+      \t   SMC_STOPCTRL_LPOPO($(smc_stopctrl_lpopo:0)) |  // POR Power Option (if present)
+      \t   SMC_STOPCTRL_LLSM($(smc_stopctrl_llsm:0));   // LLS or VLLS Mode Control\n\n
+   ]]></template>
+
+   <projectActionList id = "smc_def" >
+      <copy source="Project_Headers/smc.h"         target="Project_Headers/smc.h"         replace="true" derived="true" />
+   </projectActionList>
+         
+</devicePage>

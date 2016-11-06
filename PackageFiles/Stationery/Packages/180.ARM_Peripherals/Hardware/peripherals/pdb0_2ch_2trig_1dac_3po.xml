@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!-- pdb0_2ch_2trig_1dac_3po.xml -->
+<!--  INCOMPLETE  -->
+<!--
+Devices using this peripheral: 
+-->
+<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="PDB">
+
+   <xi:include href="_irqOption.xml"/>
+
+   <projectActionList id = "pdb_files">
+      <copy source="Project_Headers/pdb.h"  target="Project_Headers/pdb.h"  replace="true"  derived="true" />
+   </projectActionList>
+         
+   <template><![CDATA[
+   ]]></template>
+
+   <signals/>
+</devicePage>
