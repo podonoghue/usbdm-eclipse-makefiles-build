@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2016/07
+ * @date     2016/10
  *
  *******************************************************************************************************/
 
@@ -4367,11 +4367,11 @@ typedef struct {                                /*       OSC0 Structure         
 */
 
 /* ================================================================================ */
-/* ================           PDB0 (file:PDB0_1CH_2TRIG_0DAC_2PO)       ================ */
+/* ================           PDB0 (file:PDB0_2CH_2TRIG_0DAC_2PO)       ================ */
 /* ================================================================================ */
 
 /**
- * @brief Programmable Delay Block (1 channel, 2 triggers, 0 DAC, 2 pulse outputs)
+ * @brief Programmable Delay Block (2 channels, 2 triggers, 0 DAC, 2 pulse outputs)
  */
 /**
 * @addtogroup PDB_structs_GROUP PDB struct
@@ -4388,8 +4388,8 @@ typedef struct {                                /*       PDB0 Structure         
       __IO uint32_t  S;                         /**< 0014: Channel  Status Register                                     */
       __IO uint32_t  DLY[2];                    /**< 0018: Channel Delay  Register                                      */
       __I  uint32_t  RESERVED0[6];             
-   } CH[1];                                     /**< 0010: (cluster: size=0x0028, 40)                                   */
-   __I  uint32_t  RESERVED0[86];               
+   } CH[2];                                     /**< 0010: (cluster: size=0x0050, 80)                                   */
+   __I  uint32_t  RESERVED0[76];               
    __IO uint32_t  POEN;                         /**< 0190: Pulse-Out Enable Register                                    */
    __IO uint32_t  PODLY[2];                     /**< 0194: Pulse-Out  Delay Register                                    */
 } PDB_Type;
