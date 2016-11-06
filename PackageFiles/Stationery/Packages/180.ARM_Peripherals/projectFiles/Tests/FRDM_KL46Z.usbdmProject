@@ -17,7 +17,6 @@
    <item key="$signal$PTB11_descriptionSetting"            value="LCD" />
    <item key="$signal$PTB11_muxSetting"                    value="mux0" />
    <item key="$signal$PTB16_muxSetting"                    value="mux0" />
-   <item key="$signal$PTB17_muxSetting"                    value="mux0" />
    <item key="$signal$PTB21_descriptionSetting"            value="LCD" />
    <item key="$signal$PTB21_muxSetting"                    value="mux0" />
    <item key="$signal$PTB22_descriptionSetting"            value="LCD" />
@@ -32,6 +31,7 @@
    <item key="$signal$PTC17_muxSetting"                    value="mux0" />
    <item key="$signal$PTC18_descriptionSetting"            value="LCD" />
    <item key="$signal$PTC18_muxSetting"                    value="mux0" />
+   <item key="$signal$PTC7_muxSetting"                     value="mux2" />
    <item key="$signal$PTD0_descriptionSetting"             value="LCD" />
    <item key="$signal$PTD0_muxSetting"                     value="mux0" />
    <item key="$signal$PTD5_muxSetting"                     value="mux1" />

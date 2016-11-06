@@ -119,7 +119,12 @@
 
 #if defined(DEBUG_BUILD)
 #define PUTS(x)     puts(x)
-#define PRINTF(...) printf (__VA_ARGS__)
+#define PRINTF(...) printf(__VA_ARGS__)
+//extern char debugBuffer[200];
+//#define PRINTF(...) snprintf (debugBuffer, sizeof(debugBuffer), __VA_ARGS__)
+//extern char logBuffer[128];
+//extern char logIndex;
+//#define pushState(x) logBuffer[(logIndex++)&0x7F] = (x);
 #else
 #define PUTS(x)
 #define PRINTF(...)

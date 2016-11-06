@@ -5,7 +5,7 @@
 -->
 
 <section name="USBDM">
-   <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_K22F" />
+   <item key="$$DeviceInfo_Device_Variant"                 value="MK22F_Module" />
    <item key="$$DeviceInfo_Target_Device"                  value="FRDM_K22F" />
    <item key="$$Hardware_Source_Filename"                  value="MK22F51212.usbdmHardware" />
    <item key="$signal$EXTAL32_descriptionSetting"          value="Reserved(Crystal)" />
@@ -18,7 +18,7 @@
    <item key="$signal$PTA19_descriptionSetting"            value="Reserved(Crystal)" />
    <item key="$signal$PTA19_muxSetting"                    value="mux0" />
    <item key="$signal$PTA1_descriptionSetting"             value="Red LED" />
-   <item key="$signal$PTA1_muxSetting"                     value="mux1" />
+   <item key="$signal$PTA1_muxSetting"                     value="mux2" />
    <item key="$signal$PTA2_descriptionSetting"             value="Green LED" />
    <item key="$signal$PTA2_muxSetting"                     value="mux1" />
    <item key="$signal$PTA3_descriptionSetting"             value="Reserved(SWD)" />
@@ -26,7 +26,6 @@
    <item key="$signal$PTA4_muxSetting"                     value="mux1" />
    <item key="$signal$PTA5_muxSetting"                     value="mux1" />
    <item key="$signal$PTB0_muxSetting"                     value="mux0" />
-   <item key="$signal$PTB16_muxSetting"                    value="mux1" />
    <item key="$signal$PTB17_descriptionSetting"            value="SW3" />
    <item key="$signal$PTB17_muxSetting"                    value="mux1" />
    <item key="$signal$PTB18_muxSetting"                    value="mux1" />
@@ -58,12 +57,9 @@
    <item key="$signal$PTD4_muxSetting"                     value="mux1" />
    <item key="$signal$PTD5_descriptionSetting"             value="Blue LED" />
    <item key="$signal$PTD5_muxSetting"                     value="mux1" />
-   <item key="$signal$PTD6_muxSetting"                     value="mux1" />
    <item key="$signal$PTD7_muxSetting"                     value="mux1" />
    <item key="$signal$PTE0_descriptionSetting"             value="USB Serial Tx" />
-   <item key="$signal$PTE0_muxSetting"                     value="mux3" />
    <item key="$signal$PTE1_descriptionSetting"             value="USB Serial Rx" />
-   <item key="$signal$PTE1_muxSetting"                     value="mux3" />
    <item key="$signal$RESET_b_descriptionSetting"          value="Reserved(Reset*)" />
    <item key="$signal$USB0_DM_descriptionSetting"          value="Reserved(USB_DM)" />
    <item key="$signal$USB0_DP_descriptionSetting"          value="Reserved(USB_DP)" />
