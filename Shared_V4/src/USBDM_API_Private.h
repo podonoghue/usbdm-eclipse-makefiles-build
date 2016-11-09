@@ -30,7 +30,7 @@
 //! Each command returns a status value (see \ref  USBDM_ErrorCode) as the first byte
 //! followed by any results as indicated below.
 //!
-typedef enum {
+enum BDMCommands {
    // Common to all targets
    CMD_USBDM_GET_COMMAND_RESPONSE  = 0,   //!< Status of last/current command
    CMD_USBDM_SET_TARGET            = 1,   //!< Set target,  @param [2] 8-bit target value @ref TargetType_t
@@ -99,11 +99,11 @@ typedef enum {
    CMD_USBDM_SET_VPP               = 42,  //!< Set VPP level
    CMD_USBDM_JTAG_READ_WRITE       = 43,  //!< Read & Write to JTAG chain (in-out buffer)
    CMD_USBDM_JTAG_EXECUTE_SEQUENCE = 44,  //!< Execute sequence of JTAG commands
-} BDMCommands;
+};
 
 //! Debugging sub commands (used with \ref CMD_USBDM_DEBUG )
 //! @note Not for general use! (Dangerous - don't try turning on VPP with the wrong chip!)
-typedef enum  {
+enum DebugSubCommands {
   BDM_DBG_ACKN             = 0,  //!< - Test ACKN
   BDM_DBG_SYNC             = 1,  //!< - Test SYNC
   BDM_DBG_TESTPORT         = 2,  //!< - Test BDM port timing
@@ -123,11 +123,11 @@ typedef enum  {
   BDM_DBG_TESTALTSPEED     = 16, //!< - Test bdmHC12_alt_speed_detect()
   BDM_DBG_TESTBDMTX        = 17, //!< - Test various BDM tx routines with dummy data
   BDM_DBG_SWD              = 18, //!< - SWD tests
-} DebugSubCommands;
+} ;
 
 //! Commands for BDM when in ICP mode
 //!
-typedef enum {
+enum ICPCommandCodes {
    ICP_GET_RESULT    =  1,            //!< Get result of last command 
                                       //!< @return [0] 8-bit Error code, see ICP_ErrorCode_t
    ICP_ERASE_PAGE    =  2,            //!< Erase page (must be within a single Flash memory page)
@@ -144,7 +144,7 @@ typedef enum {
    ICP_GET_VER       =  CMD_USBDM_GET_VER,  //!< Get version - must be common to both modes
                                       //!< @return [0] 16-bit Version number major.minor
                                       //!< @return Error code, see ICP_ErrorCode_t
-} ICPCommandCodes;
+};
 
 //! Target Status bit masks
 //!     9       8       7       6       5        4       3       2       1       0
@@ -152,7 +152,7 @@ typedef enum {
 //! |      VPP      |     Power     |  Halt  | Communication | Reset | ResDet| Ackn  |
 //! +-------+-------+-------+-------+--------+-------+-------+-------+-------+-------+
 //!
-typedef enum  {
+enum StatusBitMasks_t {
    S_ACKN            = (1<<0),  //!< - Target supports BDM ACK
    S_RESET_DETECT    = (1<<1),  //!< - Target has been reset since status last polled
    S_RESET_STATE     = (1<<2),  //!< - Current state of target reset pin (RESET or RSTO) (active low!)
@@ -172,25 +172,26 @@ typedef enum  {
    S_VPP_ON          = (2<<8),  //!< - Vpp On
    S_VPP_ERR         = (3<<8),  //!< - Vpp Error - not used
    S_VPP_MASK        = (3<<8),  //!< - Mask for Vpp
-} StatusBitMasks_t;
+};
 
 
 //! Part of Hack to reduce USB polling rate
-typedef enum {
+enum BDMActivityState_t {
    BDM_STATUS     = 1,  //!< BDM status should be refreshed
    BDM_STATUSREG  = 2,  //!< BDM status register should be refreshed
    BDM_ACTIVE     = 3,  //!< Both of the above
    BDM_INACTIVE   = 0,
-} BDMActivityState_t;
+};
 
 //! Structure for internal state USBDM DLL
-typedef struct {
+struct BDMState_t {
    bool                    initialised;          //!< Indicates if the DLL has been initialised
-   int                     powerCycleRetryAbort; //!< Disable connection retries
-   int                     useOnlyEp0;           //!< JB16 BDM only use EP0
+   bool                    powerCycleRetryAbort; //!< Disable connection retries
+   bool                    useOnlyEp0;           //!< JB16 BDM only use EP0
+   bool                    version5Protocol;     //!< Kinetis V5
    TargetType_t            targetType;           //!< Target connected to BDM
    BDMActivityState_t      activityFlag;         //!< Indicates the BDM has been asked to do something interesting
-} BDMState_t;
+};
 
 //! Internal state USBDM DLL
 extern BDMState_t bdmState;
