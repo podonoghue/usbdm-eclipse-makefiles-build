@@ -100,11 +100,13 @@
 
 //! Internal state USBDM library
 static const BDMState_t defaultBDMState = {
-      false,           // initialised;          - Indicates if the library has been initialised
-      false,           // powerCycleRetryAbort; - Disable connection retries
-      true,            // useOnlyEp0;           - JB16 BDM only use EP0
-      T_OFF,           // targetType;           - Target connected to BDM
-      BDM_INACTIVE};   // activityFlag;         - Indicates the BDM has been asked to do something interesting
+  /*  initialised          */  false,         // Indicates if the library has been initialised
+  /*  powerCycleRetryAbort */  false,         // Disable connection retries
+  /*  useOnlyEp0           */  true,          // JB16 BDM only use EP0
+  /*  version5Protocol     */  false,         // JB16 BDM only use EP0
+  /*  targetType           */  T_OFF,         // Target connected to BDM
+  /*  activityFlag         */  BDM_INACTIVE}; // Indicates the BDM has been asked to do something interesting
+
 CPP_DLL_LOCAL
 BDMState_t bdmState = defaultBDMState;
 
@@ -557,6 +559,9 @@ static USBDM_ErrorCode updateBdmInfo(void) {
    // Use EP0 for JB16 version hardware
    bdmState.useOnlyEp0   = ((USBDMVersion.icpHardwareVersion & 0xC0) == 0);
    log.print("=> useOnlyEp0 = %s\n", bdmState.useOnlyEp0?"True":"False");
+
+   // Use simplified protocol
+   bdmState.version5Protocol = (bdmInfo.BDMsoftwareVersion > 0x050000);
 
    if (USBDMVersion.bdmSoftwareVersion == 0xFF) {
       // In ICP mode - use defaults

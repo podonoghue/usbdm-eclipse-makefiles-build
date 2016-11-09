@@ -146,6 +146,8 @@ static libusb_device_handle *usbDeviceHandle = NULL;
 // Indicates LIBUSB has been initialized
 static bool initialised = FALSE;
 
+static int outEndpointMaxPacketSize = 32;
+
 libusb_context *context;
 
 //**********************************************************
@@ -326,6 +328,40 @@ USBDM_ErrorCode bdm_usb_findDevices(unsigned *devCount, const UsbId usbIds[]) {
 
 //**********************************************************
 //!
+//! Walks the device configuration to find the OUT end-point size
+//!
+//! @return BDM_RC_OK => success (ignores errors)
+//!
+DLL_LOCAL
+USBDM_ErrorCode bdm_walkConfig( libusb_device *device ) {
+   LOGGING;
+   const int BULK_INTF_ID      = 0;
+   const int BULK_OUT_ENDPOINT = EP_OUT|1;
+
+   libusb_config_descriptor *config;
+   int rc = libusb_get_active_config_descriptor(device, &config);
+   if (rc != LIBUSB_SUCCESS) {
+      log.error("libusb_get_active_config_descriptor() failed, rc = %s\n", libusb_error_name((libusb_error)rc));
+      return BDM_RC_USB_ERROR;
+   }
+   for (int interface=0; interface<config->bNumInterfaces; interface++) {
+      // Find interface
+      if (config->interface[interface].altsetting[0].bInterfaceNumber != BULK_INTF_ID) {
+         continue;
+      }
+      if (config->interface[interface].altsetting[0].endpoint[0].bEndpointAddress != BULK_OUT_ENDPOINT) {
+         log.error("unexpected end-point address 0x%2.2X\n",
+               config->interface[interface].altsetting[0].endpoint[0].bEndpointAddress);
+         return BDM_RC_USB_ERROR;
+      }
+      outEndpointMaxPacketSize = config->interface[interface].altsetting[0].endpoint[0].wMaxPacketSize;
+      log.print("endpointMaxPacketSize = %d\n", outEndpointMaxPacketSize);
+   }
+   return (BDM_RC_OK);
+}
+
+//**********************************************************
+//!
 //! Open connection to device enumerated by bdm_usb_find_devices()
 //!
 //! @param device_no Device number to open
@@ -399,6 +435,12 @@ USBDM_ErrorCode bdm_usb_open( unsigned int device_no ) {
          return BDM_RC_DEVICE_OPEN_FAILED;
       }
    }
+   rc = bdm_walkConfig(bdmDevices[device_no]);
+   if (rc != LIBUSB_SUCCESS) {
+      log.error("bdm_walkConfig(0) failed, rc = (%d):%s\n", rc, libusb_error_name(rc));
+      return BDM_RC_USB_ERROR;
+   }
+
 //   log.print("libusb_claim_interface() done\n");
 //   This breaks USB-3 under linux
 //   rc = libusb_clear_halt(usbDeviceHandle, EP_IN);
@@ -413,6 +455,7 @@ USBDM_ErrorCode bdm_usb_open( unsigned int device_no ) {
 //   }
    return (BDM_RC_OK);
 }
+
 
 //**********************************************************
 //!
@@ -1121,6 +1164,109 @@ USBDM_ErrorCode bdmJMxx_usb_transaction( unsigned int   txSize,
 
 //! \brief Executes an USB transaction.
 //! This consists of a transmission of a command and reception of the response
+//! JMxx Version - see \ref bdm_usb_transaction()
+//!
+static
+USBDM_ErrorCode bdmVersion5_simple_usb_transaction(
+      bool                 commandToggle,
+      unsigned int         txSize,
+      unsigned int         rxSize,
+      const unsigned char *outData,
+      unsigned char       *inData,
+      unsigned int        *actualRxSize) {
+
+   uint8_t         sendBuffer[txSize];
+   USBDM_ErrorCode rc;
+   LOGGING;
+
+   memcpy(sendBuffer, outData, txSize);
+   if (commandToggle) {
+      sendBuffer[1] |= 0x80;
+   }
+   else {
+      sendBuffer[1] &= ~0x80;
+   }
+
+   // An initial transaction of up to MaxFirstTransaction bytes is sent
+   // This is guaranteed to fit in a single pkt (<= endpoint MAXPACKETSIZE)
+   sendBuffer[0] = txSize;
+   rc = bdm_usb_send_epOut(txSize, (const unsigned char *)sendBuffer);
+   if (rc != BDM_RC_OK) {
+      log.error("Tx failed\n");
+      return rc;
+   }
+   // Get response
+   rc = bdm_usb_recv_epIn(rxSize, inData, actualRxSize);
+   if (rc == BDM_RC_USB_ERROR) {
+      // Single retry on Rx error
+      log.error("USB Rx error\n");
+      timeoutValue *= 4;
+      rc = bdm_usb_recv_epIn(rxSize, inData, actualRxSize);
+      if (rc == BDM_RC_USB_ERROR) {
+         log.error("USB Rx error - retry failed\n");
+         return rc;
+      }
+      log.error(" USB Rx error- retry success\n");
+   }
+   bool receivedCommandToggle = (inData[0]&0x80) != 0;
+   if (commandToggle != receivedCommandToggle) {
+      // Single retry on toggle error (clear any pending Rx)
+      log.error("USB Toggle error, S=%d, R=%d\n", commandToggle?1:0, receivedCommandToggle?1:0);
+      UsbdmSystem::milliSleep(100);
+      rc = bdm_usb_recv_epIn(rxSize, inData, actualRxSize);
+      receivedCommandToggle = (inData[0]&0x80) != 0;
+      if ((rc == BDM_RC_USB_ERROR) || (commandToggle != receivedCommandToggle)) {
+         log.error("Immediate retry failed, S=%d, R=%d\n", commandToggle?1:0, receivedCommandToggle?1:0);
+         return BDM_RC_USB_ERROR;
+      }
+      log.error("Immediate retry succeeded, S=%d, R=%d\n", commandToggle?1:0, receivedCommandToggle?1:0);
+   }
+   // Mask toggle bit out of data
+   inData[0] &= ~0x80;
+   if (rc != BDM_RC_OK) {
+      log.error("Non-USB error, rc = %s\n", UsbdmSystem::getErrorString(rc));
+   }
+#ifdef LOG_LOW_LEVEL
+   log.printDump(inData, *actualRxSize);
+#endif // LOG_LOW_LEVEL
+   return rc;
+}
+
+//! \brief Executes an USB transaction.
+//! This consists of a transmission of a command and reception of the response
+//! JMxx Version - see \ref bdm_usb_transaction()
+//!
+//! @Note includes retries
+//!
+static
+USBDM_ErrorCode bdmVersion5_usb_transaction(
+      unsigned int   txSize,
+      unsigned int   rxSize,
+      unsigned char *data,
+      unsigned int  *actualRxSize) {
+   static bool     commandToggle       = 0;
+   static int      sequence            = 0;
+//   bool            resetFlag           = false;
+//   bool            reportFlag          = false;
+//   USBDM_ErrorCode rc                  = BDM_RC_OK;
+   unsigned char   outData[txSize];
+   LOGGING;
+
+   // Save copy of data for retry
+   memcpy(outData, data, txSize);
+
+   if (data[1] == CMD_USBDM_GET_CAPABILITIES) {
+      log.print("Setting toggle=0\n");
+      commandToggle = 0;
+      sequence      = 0;
+   }
+   sequence++;
+
+   return bdmVersion5_simple_usb_transaction(commandToggle, txSize, rxSize, outData, data, actualRxSize);
+}
+
+//! \brief Executes an USB transaction.
+//! This consists of a transmission of a command and reception of the response
 //!
 //! @param txSize = size of transmitted packet
 //!
@@ -1166,6 +1312,9 @@ USBDM_ErrorCode bdm_usb_transaction( unsigned int   txSize,
 
    if (bdmState.useOnlyEp0) {
       rc = bdmJB16_usb_transaction(txSize, rxSize, data, &tempRxSize);
+   }
+   else if (bdmState.version5Protocol) {
+      rc = bdmVersion5_usb_transaction(txSize, rxSize, data, &tempRxSize);
    }
    else {
       rc = bdmJMxx_usb_transaction(txSize, rxSize, data, &tempRxSize);
