@@ -89,6 +89,9 @@ protected:
    /** Count of remaining bytes in external data buffer to Rx/Tx */
    static uint16_t fDataRemaining;
 
+   /** Count of data bytes transferred to/from data buffer */
+   static uint16_t fDataTransferred;
+
    /**
     *  Indicates that the IN transaction needs to be
     *  terminated with ZLP if size is a multiple of EP_MAXSIZE
@@ -107,6 +110,12 @@ public:
     */
    static uint8_t *getBuffer() {
       return fDataBuffer;
+   }
+   /**
+    * Gets size of last completed transfer
+    */
+   static uint16_t getDataTransferredSize() {
+      return fDataTransferred;
    }
    /**
     * Flip active odd/even buffer state
@@ -193,11 +202,12 @@ public:
     */
    static void initialise() {
       static const EPHardwareState initialHardwareState = {DATA0,DATA0,EVEN,EVEN,EPIdle};
-      fHardwareState = initialHardwareState;
-      fDataPtr       = nullptr;
-      fDataRemaining = 0;
-      fNeedZLP       = false;
-      fCallback      = nullptr;
+      fHardwareState    = initialHardwareState;
+      fDataPtr          = nullptr;
+      fDataTransferred  = 0;
+      fDataRemaining    = 0;
+      fNeedZLP          = false;
+      fCallback         = nullptr;
 
       // Assumes single buffer
       endPointBdts[ENDPOINT_NUM].rxEven.addr = nativeToLe32((uint32_t)fDataBuffer);
@@ -209,16 +219,18 @@ public:
    /**
     * Start IN transaction [Tx, device -> host, DATA0/1]
     *
-    * @param bufSize Size of buffer to send
+    * @param bufSize Size of buffer to send e.g. EPDataIn, EPStatusIn
     * @param bufPtr  Pointer to buffer (may be NULL to indicate fDatabuffer is being used directly)
+    * @param state   State to adopt for transaction
     */
    static void startTxTransaction( uint8_t bufSize, const uint8_t *bufPtr, EndpointState state ) {
       // Pointer to data
       fDataPtr       = (uint8_t*)bufPtr;
 
+      // Count of bytes transferred
+      fDataTransferred  = 0;
       // Count of remaining bytes
-      fDataRemaining = bufSize;
-
+      fDataRemaining    = bufSize;
       if (state == EPDataIn) {
          if ((bufSize < EP_MAXSIZE) ||                   // Undersize packet OR
                ((bufSize == EP_MAXSIZE) && !fNeedZLP)) { // even but don't need ZLP
@@ -257,8 +269,10 @@ public:
          // Pointer to _next_ data
          fDataPtr += size;
       }
+      // Count of transferred bytes
+      fDataTransferred += size;
       // Count of remaining bytes
-      fDataRemaining -= size;
+      fDataRemaining   -= size;
 
       // Set up to Tx packet
       bdt->bc     = (uint8_t)size;
@@ -273,17 +287,18 @@ public:
    /**
     *  Start an OUT transaction [Rx, device <- host, DATA0/1]
     *
+    *   @param state   - State to adopt for transaction e.g. EPIdle, EPDataOut, EPStatusOut
     *   @param bufSize - Size of data to transfer (may be zero)
     *   @param bufPtr  - Buffer for data (may be nullptr)
-    *   @param state   - State to adopt e.g. EPIdle, EPDataOut, EPStatusOut
     *
     *   @note The end-point is configured to to accept EP_MAXSIZE packet irrespective of bufSize
     */
-   static void startRxTransaction( uint8_t bufSize, uint8_t *bufPtr, EndpointState  state ) {
-      fDataRemaining       = bufSize; // Total bytes to Rx
-      fDataPtr             = bufPtr;  // Where to (eventually) place data
-      fHardwareState.state = state;   // State to adopt
-      initialiseBdtRx(); // Configure the BDT for transfer
+   static void startRxTransaction( EndpointState state, uint8_t bufSize=0, uint8_t *bufPtr=nullptr ) {
+      fDataTransferred     = 0;        // Count of bytes transferred
+      fDataRemaining       = bufSize;  // Total bytes to Rx
+      fDataPtr             = bufPtr;   // Where to (eventually) place data
+      fHardwareState.state = state;    // State to adopt
+      initialiseBdtRx();               // Configure the BDT for transfer
    }
 
    /**
@@ -336,8 +351,10 @@ public:
             // Advance buffer ptr
             fDataPtr    += size;
          }
+         // Count of transferred bytes
+         fDataTransferred += size;
          // Count down bytes to go
-         fDataRemaining -= size;
+         fDataRemaining   -= size;
       }
       return size;
    }
@@ -581,6 +598,10 @@ uint8_t* Endpoint<Info, ENDPOINT_NUM, EP_MAXSIZE>::fDataPtr = nullptr;
 /** Count of remaining bytes to Rx/Tx */
 template<class Info, int ENDPOINT_NUM, int EP_MAXSIZE>
 uint16_t Endpoint<Info, ENDPOINT_NUM, EP_MAXSIZE>::fDataRemaining = 0;
+
+/** Count of data bytes transferred to/from data buffer */
+template<class Info, int ENDPOINT_NUM, int EP_MAXSIZE>
+uint16_t Endpoint<Info, ENDPOINT_NUM, EP_MAXSIZE>::fDataTransferred = 0;
 
 /**
  *  Indicates that the IN transaction needs to be

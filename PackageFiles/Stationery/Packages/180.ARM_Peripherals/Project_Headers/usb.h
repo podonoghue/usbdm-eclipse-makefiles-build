@@ -91,13 +91,13 @@ extern const char *reportSetupPacket(SetupPacket *p);
 /**
  *  Creates a valid string descriptor in UTF-16-LE from a limited UTF-8 string
  *
- *  @param source - Zero terminated UTF-8 C string
+ *  @param to       - Where to place descriptor
+ *  @param from     - Zero terminated UTF-8 C string
+ *  @param maxSize  - Size of destination
  *
- *  @param dest   - Where to place descriptor
- *
- *  @note Only handles UTF-16 characters that fit in a single UTF-16 'character'.
+ *  @note Only handles UTF-8 characters that fit in a single UTF-16 value.
  */
-extern void utf8ToStringDescriptor(uint8_t *dest, const uint8_t *source, unsigned maxSize);
+extern void utf8ToStringDescriptor(uint8_t *to, const uint8_t *from, unsigned maxSize);
 
 /**
  * Class representing an USB Interface
@@ -227,7 +227,7 @@ protected:
    /**
     * Callback used for EP0 transaction state changes
     */
-   static void ep0Callback(EndpointState state);
+   static void ep0TransactionCallback(EndpointState state);
 
    /**
     * Does base initialisation
@@ -277,7 +277,7 @@ protected:
     * @param bufSize Size of buffer to send
     * @param bufPtr  Pointer to buffer (may be NULL to indicate ep0.fDatabuffer is being used directly)
     */
-   static void ep0StartTxTransaction( uint16_t bufSize, const uint8_t *bufPtr) {
+   static void ep0StartTxTransaction(uint16_t bufSize, const uint8_t *bufPtr) {
       if (bufSize > ep0SetupBuffer.wLength) {
          // More data than requested in SETUP request - truncate
          bufSize = (uint8_t)ep0SetupBuffer.wLength;
@@ -294,7 +294,7 @@ protected:
     */
    static void ep0ConfigureSetupTransaction() {
       // Set up EP0-RX to Rx SETUP packets
-      ep0.startRxTransaction(0, nullptr, EPIdle);
+      ep0.startRxTransaction(EPIdle);
    }
 
    /**
@@ -355,8 +355,11 @@ protected:
    /**
     * Handler for Token Complete USB interrupt for EP0\n
     * Handles ep0 [SETUP, IN & OUT]
+    *
+    * @return true indicates token has been processed.\n
+    * false token still needs processing
     */
-   static void handleTokenComplete();
+   static bool handleTokenComplete();
 
    /**
     * Handler for USB Bus reset\n
@@ -400,7 +403,7 @@ protected:
 
    /**
     * Handles unexpected SETUP requests on EP0\n
-    * May call unhandledSetupCallback if initialised \n
+    * May call unhandledSetupCallback() if initialised \n
     * otherwise stalls EP0
     */
    static void handleUnexpected() {
@@ -635,11 +638,11 @@ void UsbBase_T<Info, EP0_SIZE>::handleSetupToken() {
             case MS_VENDOR_CODE :
                //               PUTS("REQ_TYPE_VENDOR - VENDOR_CODE");
                if (ep0SetupBuffer.wIndex == 0x0004) {
-                  //                  PUTS("REQ_TYPE_VENDOR - msCompatibleIdFeatureDescriptor");
+                  //                  PUTS("REQ_TYPE_VENDOR - MS_CompatibleIdFeatureDescriptor");
                   ep0StartTxTransaction(sizeof(MS_CompatibleIdFeatureDescriptor), (const uint8_t *)&msCompatibleIdFeatureDescriptor);
                }
                else if (ep0SetupBuffer.wIndex == 0x0005) {
-                  //                  PUTS("REQ_TYPE_VENDOR - msPropertiesFeatureDescriptor");
+                  //                  PUTS("REQ_TYPE_VENDOR - MS_PropertiesFeatureDescriptor");
                   ep0StartTxTransaction(sizeof(MS_PropertiesFeatureDescriptor), (const uint8_t *)&msPropertiesFeatureDescriptor);
                }
                else {
@@ -666,26 +669,28 @@ void UsbBase_T<Info, EP0_SIZE>::handleSetupToken() {
 }
 
 /**
- * Handler for Token Complete USB interrupt\n
- * Handles ep0 [SETUP, IN & OUT] directly and delegates other end-points
+ * Handler for Token Complete USB interrupt for EP0\n
+ * Handles ep0 [SETUP, IN & OUT]
+ *
+ * @return true indicates token has been processed.\n
+ * false token still needs processing
  */
 template<class Info, int EP0_SIZE>
-void UsbBase_T<Info, EP0_SIZE>::handleTokenComplete() {
+bool UsbBase_T<Info, EP0_SIZE>::handleTokenComplete() {
    // Status from Token
    uint8_t usbStat  = usb->STAT;
-
-   // Relevant BDT
-   BdtEntry *bdt = &bdts[usbStat>>2];
 
    // Endpoint number
    uint8_t   endPoint = ((uint8_t)usbStat)>>4;
 
    if (endPoint != CONTROL_ENDPOINT) {
-      // Other end-points handled by derived class
-      UsbImplementation::handleTokenComplete();
-      return;
+      // Hasn't been processed
+      return false;
    }
    ep0.flipOddEven(usbStat);
+
+   // Relevant BDT
+   BdtEntry *bdt = &bdts[usbStat>>2];
 
    // Control - Accept SETUP, IN or OUT token
 #if 0
@@ -714,6 +719,8 @@ void UsbBase_T<Info, EP0_SIZE>::handleTokenComplete() {
          PRINTF("Unexpected token on EP0 = %s\n", getTokenName(bdt->u.result.tok_pid));
          break;
    }
+   // Indicate processed
+   return true;
 }
 
 /**
@@ -828,19 +835,27 @@ void UsbBase_T<Info, EP0_SIZE>::handleUSBResume() {
    usb->CTL = USB_CTL_USBENSOFEN_MASK;
 }
 
+/**
+ * Callback used for EP0 transaction complete
+ *
+ * @param state State active immediately before call-back\n
+ * (End-point state is currently EPIdle)
+ */
 template<class Info, int EP0_SIZE>
-void UsbBase_T<Info, EP0_SIZE>::ep0Callback(EndpointState state) {
+void UsbBase_T<Info, EP0_SIZE>::ep0TransactionCallback(EndpointState state) {
    switch (state) {
       case EPDataOut:
          // Just completed a series of OUT transfers on EP0 -
          // Do empty status packet transmission - no response expected
-         ep0.startTxTransaction(0, nullptr, EPStatusIn);
+         ep0TxStatus();
+         // Make sure end-point OUT direction ready for SETUP reception
+         ep0.initialiseBdtRx();
          break;
       case EPDataIn:
       case EPLastIn:
          // Just completed a series of IN transfers on EP0 -
          // Do empty status packet reception
-         ep0.startRxTransaction(0, nullptr, EPStatusOut);
+         ep0.startRxTransaction(EPStatusOut);
          break;
       case EPStatusIn:
          // Just completed an IN transaction acknowledging a series of OUT transfers -
@@ -972,7 +987,7 @@ void UsbBase_T<Info, EP0_SIZE>::initialiseEndpoints() {
 
    ep0.initialise();
 
-   ep0.setCallback(ep0Callback);
+   ep0.setCallback(ep0TransactionCallback);
 
    // Set up to receive 1st SETUP packet
    ep0ConfigureSetupTransaction();
@@ -1169,7 +1184,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleGetDescriptor() {
          }
          if (descriptorIndex == 0) {
             // Language bytes (unchanged)
-            dataPtr  = (uint8_t *)UsbImplementation::stringDescriptors[0];
+            dataPtr  = UsbImplementation::stringDescriptors[0];
          }
 #if defined(UNIQUE_ID)
          else if (descriptorIndex == UsbImplementation::s_serial_index) {
@@ -1179,15 +1194,13 @@ void UsbBase_T<Info, EP0_SIZE>::handleGetDescriptor() {
             uint32_t uid = SIM->UIDH^SIM->UIDMH^SIM->UIDML^SIM->UIDL;
             snprintf((char *)utf8Buff, sizeof(utf8Buff), SERIAL_NO, uid);
 
+            // Use end-point internal buffer directly - may result in truncation
             dataPtr = ep0.getBuffer();
             utf8ToStringDescriptor(ep0.getBuffer(), utf8Buff, ep0.BUFFER_SIZE);
          }
 #endif
          else {
-            // Strings are stored in limited UTF-8 and need conversion
-            //            static uint8_t buffer[100];
-            //            dataPtr = buffer;
-            //            utf8ToStringDescriptor(buffer, UsbImplementation::stringDescriptors[descriptorIndex], sizeof(buffer));
+            // Use end-point internal buffer directly - may result in truncation
             dataPtr = ep0.getBuffer();
             utf8ToStringDescriptor(ep0.getBuffer(), UsbImplementation::stringDescriptors[descriptorIndex], ep0.BUFFER_SIZE);
          }

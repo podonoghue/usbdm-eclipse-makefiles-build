@@ -280,9 +280,9 @@ typedef struct {
 typedef struct {
    uint8_t  bmRequestType;	//!< Request type
    uint8_t  bNotification;	//!< Notification
-   uint16_t wValue;			//!< Value
-   uint16_t wIndex;			//!< Index
-   uint16_t wLength;	    //!< Length
+   uint16_t wValue;		    //!< Value
+   uint16_t wIndex;	        //!< Index
+   uint16_t wLength;        //!< Length
 } CDCNotification;
 
 #define CDC_NOTIFICATION   (0xA1)

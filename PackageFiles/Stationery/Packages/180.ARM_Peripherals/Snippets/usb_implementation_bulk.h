@@ -11,6 +11,16 @@
 #ifndef PROJECT_HEADERS_USB_IMPLEMENTATION_H_
 #define PROJECT_HEADERS_USB_IMPLEMENTATION_H_
 
+/*
+ * Under Windows 8, or 10 there is no need to install a driver for
+ * the bulk end-points if the MS_COMPATIBLE_ID_FEATURE is enabled.
+ * winusb.sys driver will be automatically loaded.
+ *
+ * Under Windows 10 the usbser.sys driver will be loaded automatically
+ * for the CDC (serial) interface
+ *
+ * Under Linux drivers for bulk and CDC are automatically loaded
+ */
 #define MS_COMPATIBLE_ID_FEATURE
 
 namespace USBDM {
@@ -18,6 +28,8 @@ namespace USBDM {
 //======================================================================
 // Customise for each USB device
 //
+
+/** Causes a semi-unique serial number to be generated for each USB device */
 #define UNIQUE_ID
 
 #ifndef SERIAL_NO
@@ -48,7 +60,9 @@ namespace USBDM {
 // Maximum packet sizes for each endpoint
 //
 static constexpr uint  CONTROL_EP_MAXSIZE           = 64; //!< Control in/out    64
-
+/*
+ *  TODO Define end-point sizes
+ */
 static constexpr uint  BULK_OUT_EP_MAXSIZE          = 64; //!< Bulk out          64
 static constexpr uint  BULK_IN_EP_MAXSIZE           = 64; //!< Bulk in           64
 
@@ -57,8 +71,10 @@ static constexpr uint  BULK_IN_EP_MAXSIZE           = 64; //!< Bulk in          
  * Class representing USB0
  */
 class Usb0 : public UsbBase_T<Usb0Info, CONTROL_EP_MAXSIZE> {
-public:
 
+   friend UsbBase_T<Usb0Info, CONTROL_EP_MAXSIZE>;
+
+public:
    /**
     * String indexes
     *
@@ -73,10 +89,15 @@ public:
       s_product_index,
       /** Serial Number */
       s_serial_index,
+      /** Configuration Index */
+      s_config_index,
 
       /** Name of Bulk interface */
       s_bulk_interface_index,
 
+      /*
+       * TODO Add additional String indexes
+       */
 
       /** Marks last entry */
       s_last_string_descriptor_index
@@ -97,6 +118,10 @@ public:
       /** Bulk in endpoint number */
       BULK_IN_ENDPOINT,
 
+
+      /*
+       * TODO Add additional Endpoint numbers here
+       */
       /** Total number of end-points */
       NUMBER_OF_ENDPOINTS,
    };
@@ -123,6 +148,9 @@ protected:
    static const OutEndpoint <Usb0Info, Usb0::BULK_OUT_ENDPOINT, BULK_OUT_EP_MAXSIZE> epBulkOut;
    static const InEndpoint  <Usb0Info, Usb0::BULK_IN_ENDPOINT,  BULK_IN_EP_MAXSIZE>  epBulkIn;
 
+   /*
+    * TODO Add additional End-points here
+    */
 
 public:
 
@@ -132,6 +160,52 @@ public:
    static void initialise();
 
    /**
+    * Handler for USB interrupt
+    *
+    * Determines source and dispatches to appropriate routine.
+    */
+   static void irqHandler(void);
+
+   /**
+    *  Blocking transmission of data over bulk IN end-point
+    *
+    *  @param size   Number of bytes to send
+    *  @param buffer Pointer to bytes to send
+    *
+    *  @note : Waits for idle BEFORE transmission but\n
+    *  returns before data has been transmitted
+    */
+   static void sendBulkData(const uint8_t size, const uint8_t *buffer);
+
+   /**
+    *  Blocking reception of data over bulk OUT end-point
+    *
+    * @param maxSize  = Maximum number of bytes to receive
+    * @param buffer   = Pointer to buffer for bytes received
+    *
+    * @return Number of bytes received
+    *
+    * @note : Doesn't return until bytes received.
+    */
+   static int receiveBulkData(uint8_t maxSize, uint8_t *buffer);
+
+   /**
+    * Device Descriptor
+    */
+   static const DeviceDescriptor deviceDescriptor;
+
+   /**
+    * Other descriptors type
+    */
+   struct Descriptors;
+
+   /**
+    * Other descriptors
+    */
+   static const Descriptors otherDescriptors;
+
+protected:
+   /**
     * Initialises all end-points
     */
    static void initialiseEndpoints(void) {
@@ -140,48 +214,35 @@ public:
       epBulkOut.initialise();
       epBulkIn.initialise();
 
-      epBulkOut.setCallback(bulkOutCallback);
-      epBulkIn.setCallback(bulkInCallback);
-   }
+      epBulkOut.setCallback(bulkOutTransactionCallback);
+      epBulkIn.setCallback(bulkInTransactionCallback);
 
-   /**
-    * Handler for USB interrupt
-    *
-    * Determines source and dispatches to appropriate routine.
-    */
-   static void irqHandler(void);
+      /*
+       * TODO Initialise additional End-points here
+       */
+   }
 
    /**
     * Callback for SOF tokens
     */
    static void sofCallback();
 
-   static void bulkOutCallback(EndpointState state);
-   static void bulkInCallback(EndpointState state);
-
-   static void sendData( uint8_t size, const uint8_t *buffer);
-   static void receiveData(uint8_t maxSize, uint8_t *buffer);
+   /**
+    * Call-back handling BULK-OUT transaction complete
+    */
+   static void bulkOutTransactionCallback(EndpointState state);
 
    /**
-    * Handler for Token Complete USB interrupts for
+    * Call-back handling BULK-IN transaction complete
+    */
+   static void bulkInTransactionCallback(EndpointState state);
+
+   /**
+    * Handler for Token Complete USB interrupts for\n
     * end-points other than EP0
     */
    static void handleTokenComplete(void);
 
-   /**
-    * Device Descriptor
-    */
-   static const DeviceDescriptor deviceDescriptor;
-
-   /**
-    * Other descriptors
-    */
-   struct Descriptors;
-
-   /**
-    * Other descriptors
-    */
-   static const Descriptors otherDescriptors;
 };
 
 using UsbImplementation = Usb0;

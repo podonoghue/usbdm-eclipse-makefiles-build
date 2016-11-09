@@ -13,6 +13,9 @@ namespace USBDM {
 enum InterfaceNumbers {
    /** Interface number for BDM channel */
    BULK_INTF_ID,
+   /*
+    * TODO Add additional Interface numbers here
+    */
    /** Total number of interfaces */
    NUMBER_OF_INTERFACES,
 };
@@ -24,9 +27,13 @@ static const uint8_t s_language[]        = {4, DT_STRING, 0x09, 0x0C};  //!< Lan
 static const uint8_t s_manufacturer[]    = MANUFACTURER;                //!< Manufacturer
 static const uint8_t s_product[]         = PRODUCT_DESCRIPTION;         //!< Product Description
 static const uint8_t s_serial[]          = SERIAL_NO;                   //!< Serial Number
+static const uint8_t s_config[]          = "Default configuration";     //!< Configuration name
 
-static const uint8_t s_bulk_interface[]   = "Bulk Interface";            //!< Bulk Interface
+static const uint8_t s_bulk_interface[]   = "Bulk Interface";           //!< Bulk Interface
 
+/*
+ * Add additional String descriptors here
+ */
 
 /**
  * String descriptor table
@@ -36,7 +43,12 @@ const uint8_t *const Usb0::stringDescriptors[] = {
       s_manufacturer,
       s_product,
       s_serial,
+      s_config,
+	  
       s_bulk_interface,
+      /*
+       * Add additional String descriptors here
+       */
 };
 
 /**
@@ -60,13 +72,17 @@ const DeviceDescriptor Usb0::deviceDescriptor = {
 };
 
 /**
- * Other descriptors
+ * Other descriptors type
  */
 struct Usb0::Descriptors {
    ConfigurationDescriptor                  configDescriptor;
+
    InterfaceDescriptor                      bulk_interface;
    EndpointDescriptor                       bulk_out_endpoint;
    EndpointDescriptor                       bulk_in_endpoint;
+   /*
+    * TODO Add additional Descriptors here
+    */
 };
 
 /**
@@ -79,7 +95,7 @@ const Usb0::Descriptors Usb0::otherDescriptors = {
             /* wTotalLength            */ nativeToLe16(sizeof(otherDescriptors)),
             /* bNumInterfaces          */ NUMBER_OF_INTERFACES,
             /* bConfigurationValue     */ CONFIGURATION_NUM,
-            /* iConfiguration          */ 0,
+            /* iConfiguration          */ s_config_index,
             /* bmAttributes            */ 0x80,     //  = Bus powered, no wake-up
             /* bMaxPower               */ USBMilliamps(500)
       },
@@ -105,7 +121,7 @@ const Usb0::Descriptors Usb0::otherDescriptors = {
             /* wMaxPacketSize          */ nativeToLe16(BULK_OUT_EP_MAXSIZE),
             /* bInterval               */ USBMilliseconds(1)
       },
-      { // bulk_in_endpoint - IN, BULK
+      { // bulk_in_endpoint - IN, Bulk
             /* bLength                 */ sizeof(EndpointDescriptor),
             /* bDescriptorType         */ DT_ENDPOINT,
             /* bEndpointAddress        */ EP_IN|BULK_IN_ENDPOINT,
@@ -113,6 +129,9 @@ const Usb0::Descriptors Usb0::otherDescriptors = {
             /* wMaxPacketSize          */ nativeToLe16(BULK_IN_EP_MAXSIZE),
             /* bInterval               */ USBMilliseconds(1)
       },
+      /*
+       * TODO Add additional Descriptors here
+       */
 };
 
 /**
@@ -150,11 +169,18 @@ void Usb0::sofCallback() {
       }
    }
 }
+
 /**
  * Handler for Token Complete USB interrupts for
  * end-points other than EP0
  */
 void Usb0::handleTokenComplete(void) {
+
+   // Let parent process first
+   if (UsbBase_T::handleTokenComplete()) {
+      // Done
+      return;
+   }
 
    // Status from Token
    uint8_t   usbStat  = usb->STAT;
@@ -163,27 +189,33 @@ void Usb0::handleTokenComplete(void) {
    uint8_t   endPoint = ((uint8_t)usbStat)>>4;
 
    switch (endPoint) {
-      case BULK_OUT_ENDPOINT: // Bulk OUT - Accept OUT token
+      case BULK_OUT_ENDPOINT: // Accept OUT token
          setActive();
          epBulkOut.flipOddEven(usbStat);
          epBulkOut.handleOutToken();
          return;
-      case BULK_IN_ENDPOINT: // Bulk IN - Accept IN token
+      case BULK_IN_ENDPOINT: // Accept IN token
          epBulkIn.flipOddEven(usbStat);
          epBulkIn.handleInToken();
          return;
    }
 }
 
-void Usb0::bulkOutCallback(EndpointState state) {
+/**
+ * Call-back handling BULK-OUT transaction complete
+ */
+void Usb0::bulkOutTransactionCallback(EndpointState state) {
    static uint8_t buff[] = "";
-   PRINTF("%c\n", buff[0]);
+//   PRINTF("%c\n", buff[0]);
    if (state == EPDataOut) {
-      epBulkOut.startRxTransaction(sizeof(buff), buff, EPDataOut);
+      epBulkOut.startRxTransaction(EPDataOut, sizeof(buff), buff);
    }
 }
 
-void Usb0::bulkInCallback(EndpointState state) {
+/**
+ * Call-back handling BULK-IN transaction complete
+ */
+void Usb0::bulkInTransactionCallback(EndpointState state) {
    static const uint8_t buff[] = "Hello There\n\r";
    if (state == EPDataIn) {
       epBulkIn.startTxTransaction(sizeof(buff), buff, EPDataIn);
@@ -197,6 +229,9 @@ void Usb0::bulkInCallback(EndpointState state) {
  */
 void Usb0::initialise() {
    UsbBase_T::initialise();
+   /*
+    * TODO Additional initialisation
+    */
 }
 
 /**
@@ -207,6 +242,10 @@ void Usb0::initialise() {
 void Usb0::irqHandler() {
    // All active flags
    uint8_t interruptFlags = usb->ISTAT;
+
+   //   if (interruptFlags&~USB_ISTAT_SOFTOK_MASK) {
+   //      PRINTF("ISTAT=%2X\n", interruptFlags);
+   //   }
 
    // Get active and enabled interrupt flags
    uint8_t enabledInterruptFlags = interruptFlags & usb->INTEN;
@@ -219,7 +258,7 @@ void Usb0::irqHandler() {
    }
    if ((enabledInterruptFlags&USB_ISTAT_TOKDNE_MASK) != 0) {
       // Token complete interrupt
-      UsbBase_T::handleTokenComplete();
+      handleTokenComplete();
       // Clear source
       usb->ISTAT = USB_ISTAT_TOKDNE_MASK;
    }
@@ -263,12 +302,6 @@ void Usb0::irqHandler() {
    }
 }
 
-void idleLoop() {
-   for(;;) {
-      __asm__("nop");
-   }
-}
-
 /**
  *  Blocking reception of data over bulk OUT end-point
  *
@@ -277,16 +310,18 @@ void idleLoop() {
  *
  *   @note : Doesn't return until command has been received.
  */
-void Usb0::receiveData(uint8_t maxSize, uint8_t *buffer) {
+int Usb0::receiveBulkData(uint8_t maxSize, uint8_t *buffer) {
    // Wait for USB connection
    while(deviceState.state != USBconfigured) {
       __WFI();
    }
    Usb0::enableNvicInterrupts(true);
-   epBulkOut.startRxTransaction(maxSize, buffer, EPDataOut);
+   epBulkOut.startRxTransaction(EPDataOut, maxSize, buffer);
    while(epBulkOut.getHardwareState().state != EPIdle) {
       __WFI();
    }
+   // TODO fix
+   return 0;
 }
 
 /**
@@ -295,20 +330,23 @@ void Usb0::receiveData(uint8_t maxSize, uint8_t *buffer) {
  *  @param size   Number of bytes to send
  *  @param buffer Pointer to bytes to send
  *
- *  @note : Returns before the data has been transmitted.\n
- *  So buffer may not be re-used unless smaller than epBulkIn.BUFFER_SIZE
+ *   @note : Waits for idle BEFORE transmission but\n
+ *   returns before data has been transmitted
  *
- *  @note : Format
- *      - [0]    = response
- *      - [1..N] = parameters
  */
-void Usb0::sendData( uint8_t size, const uint8_t *buffer) {
+void Usb0::sendBulkData( uint8_t size, const uint8_t *buffer) {
 //   commandBusyFlag = false;
    //   enableUSBIrq();
    while (epBulkIn.getHardwareState().state != EPIdle) {
       __WFI();
    }
    epBulkIn.startTxTransaction(size, buffer, EPDataIn);
+}
+
+void idleLoop() {
+   for(;;) {
+      __asm__("nop");
+   }
 }
 
 } // End namespace USBDM

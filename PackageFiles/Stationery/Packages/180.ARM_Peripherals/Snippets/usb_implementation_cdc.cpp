@@ -7,7 +7,7 @@
 #include <string.h>
 
 #include "usb.h"
-#include "cdc_uart.h"
+#include "usb_cdc_uart.h"
 
 namespace USBDM {
 
@@ -16,6 +16,9 @@ enum InterfaceNumbers {
    CDC_COMM_INTF_ID,
    /** Interface number for CDC Data channel */
    CDC_DATA_INTF_ID,
+   /*
+    * TODO Add additional Interface numbers here
+    */
    /** Total number of interfaces */
    NUMBER_OF_INTERFACES,
 };
@@ -27,10 +30,14 @@ static const uint8_t s_language[]        = {4, DT_STRING, 0x09, 0x0C};  //!< Lan
 static const uint8_t s_manufacturer[]    = MANUFACTURER;                //!< Manufacturer
 static const uint8_t s_product[]         = PRODUCT_DESCRIPTION;         //!< Product Description
 static const uint8_t s_serial[]          = SERIAL_NO;                   //!< Serial Number
+static const uint8_t s_config[]          = "Default configuration";     //!< Configuration name
 
 static const uint8_t s_cdc_interface[]   = "CDC Interface";             //!< Interface Association #2
 static const uint8_t s_cdc_control[]     = "CDC Control Interface";     //!< CDC Control Interface
 static const uint8_t s_cdc_data[]        = "CDC Data Interface";        //!< CDC Data Interface
+/*
+ * Add additional String descriptors here
+ */
 
 /**
  * String descriptor table
@@ -40,9 +47,14 @@ const uint8_t *const Usb0::stringDescriptors[] = {
       s_manufacturer,
       s_product,
       s_serial,
+      s_config,
+
       s_cdc_interface,
       s_cdc_control,
       s_cdc_data
+      /*
+       * Add additional String descriptors here
+       */
 };
 
 /**
@@ -66,7 +78,7 @@ const DeviceDescriptor Usb0::deviceDescriptor = {
 };
 
 /**
- * Other descriptors
+ * Other descriptors type
  */
 struct Usb0::Descriptors {
    ConfigurationDescriptor                  configDescriptor;
@@ -81,6 +93,9 @@ struct Usb0::Descriptors {
    InterfaceDescriptor                      cdc_DCI_Interface;
    EndpointDescriptor                       cdc_dataOut_Endpoint;
    EndpointDescriptor                       cdc_dataIn_Endpoint;
+   /*
+    * TODO Add additional Descriptors here
+    */
 };
 
 /**
@@ -93,7 +108,7 @@ const Usb0::Descriptors Usb0::otherDescriptors = {
             /* wTotalLength            */ nativeToLe16(sizeof(otherDescriptors)),
             /* bNumInterfaces          */ NUMBER_OF_INTERFACES,
             /* bConfigurationValue     */ CONFIGURATION_NUM,
-            /* iConfiguration          */ 0,
+            /* iConfiguration          */ s_config_index,
             /* bmAttributes            */ 0x80,     //  = Bus powered, no wake-up
             /* bMaxPower               */ USBMilliamps(500)
       },
@@ -175,31 +190,10 @@ const Usb0::Descriptors Usb0::otherDescriptors = {
             /* wMaxPacketSize          */ nativeToLe16(2*CDC_DATA_IN_EP_MAXSIZE), // x2 so all packets are terminating (short))
             /* bInterval               */ USBMilliseconds(1)
       },
+      /*
+       * TODO Add additional Descriptors here
+       */
 };
-
-/**
- * Configure epCdcNotification for an IN transaction [Tx, device -> host, DATA0/1]
- */
-void Usb0::epCdcCheckStatus() {
-   const CDCNotification cdcNotification= {CDC_NOTIFICATION, SERIAL_STATE, 0, RT_INTERFACE, nativeToLe16(2)};
-   uint8_t status = CdcUart::getSerialState().bits;
-
-   if ((status & CdcUart::CDC_STATE_CHANGE_MASK) == 0) {
-      // No change
-      epCdcNotification.getHardwareState().state = EPIdle;
-      return;
-   }
-   static_assert(epCdcNotification.BUFFER_SIZE>=sizeof(CDCNotification), "Buffer size insufficient");
-
-   // Copy the Tx data to Tx buffer
-   (void)memcpy(epCdcNotification.getBuffer(), &cdcNotification, sizeof(cdcNotification));
-   epCdcNotification.getBuffer()[sizeof(cdcNotification)+0] = status&~CdcUart::CDC_STATE_CHANGE_MASK;
-   epCdcNotification.getBuffer()[sizeof(cdcNotification)+1] = 0;
-
-   // Set up to Tx packet
-//   PRINTF("epCdcCheckStatus()\n");
-   epCdcNotification.startTxTransaction(sizeof(cdcNotification)+2, nullptr, EPDataIn);
-}
 
 /**
  * Handler for Start of Frame Token interrupt (~1ms interval)
@@ -237,6 +231,30 @@ void Usb0::sofCallback() {
    }
 }
 
+/**
+ * Configure epCdcNotification for an IN transaction [Tx, device -> host, DATA0/1]
+ */
+void Usb0::epCdcSendNotification() {
+   const CDCNotification cdcNotification= {CDC_NOTIFICATION, SERIAL_STATE, 0, RT_INTERFACE, nativeToLe16(2)};
+   uint8_t status = CdcUart::getSerialState().bits;
+
+   if ((status & CdcUart::CDC_STATE_CHANGE_MASK) == 0) {
+      // No change
+      epCdcNotification.getHardwareState().state = EPIdle;
+      return;
+   }
+   static_assert(epCdcNotification.BUFFER_SIZE>=sizeof(CDCNotification), "Buffer size insufficient");
+
+   // Copy the data to Tx buffer
+   (void)memcpy(epCdcNotification.getBuffer(), &cdcNotification, sizeof(cdcNotification));
+   epCdcNotification.getBuffer()[sizeof(cdcNotification)+0] = status&~CdcUart::CDC_STATE_CHANGE_MASK;
+   epCdcNotification.getBuffer()[sizeof(cdcNotification)+1] = 0;
+
+   // Set up to Tx packet
+//   PRINTF("epCdcSendNotification()\n");
+   epCdcNotification.startTxTransaction(sizeof(cdcNotification)+2, nullptr, EPDataIn);
+}
+
 static uint8_t cdcOutBuff[10] = "Welcome\n";
 static int cdcOutByteCount    = 8;
 
@@ -254,52 +272,55 @@ void Usb0::startCdcIn() {
  */
 void Usb0::handleTokenComplete(void) {
 
+   // Let parent process first
+   if (UsbBase_T::handleTokenComplete()) {
+      // Done
+      return;
+   }
+
    // Status from Token
    uint8_t   usbStat  = usb->STAT;
 
    // Endpoint number
    uint8_t   endPoint = ((uint8_t)usbStat)>>4;
 
-   int size;
-
    switch (endPoint) {
       case CDC_NOTIFICATION_ENDPOINT: // Accept IN token
 //         PRINTF("CDC_NOTIFICATION_ENDPOINT\n");
          epCdcNotification.flipOddEven(usbStat);
-         epCdcCheckStatus();
+         epCdcSendNotification();
          return;
       case CDC_DATA_OUT_ENDPOINT: // Accept OUT token
 //         PRINTF("CDC_DATA_OUT_ENDPOINT\n");
          epCdcDataOut.flipOddEven(usbStat);
-         size = epCdcDataOut.handleOutToken();
-         if (epCdcDataOut.getHardwareState().state == EPIdle) {
-            cdcOutByteCount = size;
-            epCdcDataOut.startRxTransaction(sizeof(cdcOutBuff), cdcOutBuff, EPDataOut);
-         }
-         break;
+         epCdcDataOut.handleOutToken();
+         return;
       case CDC_DATA_IN_ENDPOINT:  // Accept IN token
 //         PRINTF("CDC_DATA_IN_ENDPOINT\n");
          epCdcDataIn.flipOddEven(usbStat);
          epCdcDataIn.handleInToken();
-         if ((epCdcDataIn.getHardwareState().state == EPIdle) && (cdcOutByteCount>0)) {
-            static_assert(epCdcDataIn.BUFFER_SIZE>sizeof(cdcOutBuff), "Buffer too small");
-            memcpy(epCdcDataIn.getBuffer(), cdcOutBuff, cdcOutByteCount);
-            epCdcDataIn.startTxTransaction(cdcOutByteCount, nullptr, EPDataIn);
-            cdcOutByteCount = 0;
-         }
          return;
+      /*
+       * TODO Add additional End-point handling here
+       */
    }
 }
 
-void Usb0::cdcOutCallback(EndpointState state) {
+/**
+ * Call-back handling CDC-OUT transaction complete
+ */
+void Usb0::cdcOutTransactionCallback(EndpointState state) {
    static uint8_t buff[] = "";
-   PRINTF("%c\n", buff[0]);
+//   PRINTF("%c\n", buff[0]);
    if (state == EPDataOut) {
-      epCdcDataOut.startRxTransaction(sizeof(buff), buff, EPDataOut);
+      epCdcDataOut.startRxTransaction(EPDataOut, sizeof(buff), buff);
    }
 }
 
-void Usb0::cdcInCallback(EndpointState state) {
+/**
+ * Call-back handling CDC-IN transaction complete
+ */
+void Usb0::cdcInTransactionCallback(EndpointState state) {
    static const uint8_t buff[] = "Hello There\n\r";
    if (state == EPDataIn) {
       epCdcDataIn.startTxTransaction(sizeof(buff), buff, EPDataIn);
@@ -315,7 +336,12 @@ void Usb0::initialise() {
    UsbBase_T::initialise();
 
    // Add extra handling of CDC packets directed to EP0
-   setUnhandledSetupCallback(handleCdcEp0);
+   setUnhandledSetupCallback(handleUserEp0SetupRequests);
+
+   setSOFCallback(sofCallback);
+   /*
+    * TODO Additional initialisation
+    */
 }
 
 /**
@@ -326,6 +352,10 @@ void Usb0::initialise() {
 void Usb0::irqHandler() {
    // All active flags
    uint8_t interruptFlags = usb->ISTAT;
+
+   //   if (interruptFlags&~USB_ISTAT_SOFTOK_MASK) {
+   //      PRINTF("ISTAT=%2X\n", interruptFlags);
+   //   }
 
    // Get active and enabled interrupt flags
    uint8_t enabledInterruptFlags = interruptFlags & usb->INTEN;
@@ -338,7 +368,7 @@ void Usb0::irqHandler() {
    }
    if ((enabledInterruptFlags&USB_ISTAT_TOKDNE_MASK) != 0) {
       // Token complete interrupt
-      UsbBase_T::handleTokenComplete();
+      handleTokenComplete();
       // Clear source
       usb->ISTAT = USB_ISTAT_TOKDNE_MASK;
    }
@@ -389,7 +419,8 @@ void Usb0::handleSetLineCoding() {
 //   PRINTF("handleSetLineCoding()\n");
 
    // Call-back to do after transaction complete
-   auto callback = [](){
+   static auto callback = []() {
+      // The ep0 buffer will contain the LineCodingStructure data at call-back time
       CdcUart::setLineCoding((LineCodingStructure * const)ep0.getBuffer());
       setSetupCompleteCallback(nullptr);
    };
@@ -397,7 +428,7 @@ void Usb0::handleSetLineCoding() {
 
    // Don't use external buffer - this requires response to fit in internal EP buffer
    static_assert(sizeof(LineCodingStructure) < ep0.BUFFER_SIZE, "Buffer insufficient size");
-   ep0.startRxTransaction(sizeof(LineCodingStructure), nullptr, EPDataOut);
+   ep0.startRxTransaction(EPDataOut, sizeof(LineCodingStructure));
 }
 
 /**
@@ -430,9 +461,14 @@ void Usb0::handleSendBreak() {
 }
 
 /**
- * CDC EP0 SETUP handler
+ * Handle SETUP requests not handled by base handler
+ *
+ * @param setup SETUP packet received from host
+ *
+ * @note Provides CDC extensions
  */
-void Usb0::handleCdcEp0(const SetupPacket &setup) {
+void Usb0::handleUserEp0SetupRequests(const SetupPacket &setup) {
+   //PRINTF("handleUserEp0SetupRequests()\n");
    switch(REQ_TYPE(setup.bmRequestType)) {
       case REQ_TYPE_CLASS :
          // Class requests
