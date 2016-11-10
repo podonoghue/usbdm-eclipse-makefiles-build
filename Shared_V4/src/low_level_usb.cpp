@@ -148,6 +148,8 @@ static bool initialised = FALSE;
 
 static int outEndpointMaxPacketSize = 32;
 
+#define SEQUENCE_MASK (0xC0)
+
 libusb_context *context;
 
 //**********************************************************
@@ -869,6 +871,15 @@ USBDM_ErrorCode bdm_usb_send_epOut(unsigned int count, const unsigned char *data
    log.printDump(data, count);
 #endif // LOG_LOW_LEVEL
 
+#ifdef LOG_LOW_LEVEL
+   if (count>2) {
+      log.print("bdm_usb_send_epOut() - USB EP0ut send (%s, size=%d):\n", getCommandName(data[1]&~SEQUENCE_MASK), count);
+   }
+   else  {
+      log.print("bdm_usb_send_epOut() - USB EP0ut send (size=%d):\n", count);
+   }
+   log.printDump(data, count);
+#endif // LOG_LOW_LEVEL
    rc = libusb_bulk_transfer(usbDeviceHandle,
                        EP_OUT,                  // Endpoint & direction
                        (unsigned char *)data,   // ptr to Tx data
@@ -878,6 +889,10 @@ USBDM_ErrorCode bdm_usb_send_epOut(unsigned int count, const unsigned char *data
                        );
    if (rc != LIBUSB_SUCCESS) {
       log.error("Transfer failed (USB error = %s, timeout=%d)\n", libusb_error_name((libusb_error)rc), timeoutValue);
+      return BDM_RC_USB_ERROR;
+   }
+   if (count != (unsigned)transferCount) {
+      log.error("Transfer failed (USB error = \'incomplete\', timeout=%d)\n", timeoutValue);
       return BDM_RC_USB_ERROR;
    }
    return BDM_RC_OK;
@@ -946,7 +961,7 @@ USBDM_ErrorCode bdm_usb_recv_epIn(unsigned count, unsigned char *data, unsigned 
       return BDM_RC_USB_ERROR;
    }
    memcpy(data, dummyBuffer, transferCount);
-   rc = data[0]&0x7F;
+   rc = data[0]&~SEQUENCE_MASK;
 
    if (rc != BDM_RC_OK) {
       log.error("Error Return %d (%s):\n", rc, UsbdmSystem::getErrorString(rc));
@@ -1120,7 +1135,7 @@ USBDM_ErrorCode bdmJMxx_simple_usb_transaction( bool                 commandTogg
       log.error("Immediate retry succeeded, S=%d, R=%d\n", commandToggle?1:0, receivedCommandToggle?1:0);
    }
    // Mask toggle bit out of data
-   inData[0] &= ~0x80;
+   inData[0] &= ~SEQUENCE_MASK;
    if (rc != BDM_RC_OK) {
       log.error("Non-USB error, rc = %s\n", UsbdmSystem::getErrorString(rc));
    }
@@ -1168,7 +1183,6 @@ USBDM_ErrorCode bdmJMxx_usb_transaction( unsigned int   txSize,
 //!
 static
 USBDM_ErrorCode bdmVersion5_simple_usb_transaction(
-      bool                 commandToggle,
       unsigned int         txSize,
       unsigned int         rxSize,
       const unsigned char *outData,
@@ -1177,23 +1191,27 @@ USBDM_ErrorCode bdmVersion5_simple_usb_transaction(
 
    uint8_t         sendBuffer[txSize];
    USBDM_ErrorCode rc;
+   static int sequenceNumber = 0;
+
    LOGGING;
 
+   sequenceNumber = (sequenceNumber + 1)&0x3;
+   if (outData[1] == CMD_USBDM_GET_CAPABILITIES) {
+      log.print("Resetting sequence number=0\n");
+      sequenceNumber = 0;
+   }
    memcpy(sendBuffer, outData, txSize);
-   if (commandToggle) {
-      sendBuffer[1] |= 0x80;
-   }
-   else {
-      sendBuffer[1] &= ~0x80;
-   }
+   sendBuffer[1] |= (sequenceNumber<<6)&0xC0;
 
-   // An initial transaction of up to MaxFirstTransaction bytes is sent
-   // This is guaranteed to fit in a single pkt (<= endpoint MAXPACKETSIZE)
    sendBuffer[0] = txSize;
    rc = bdm_usb_send_epOut(txSize, (const unsigned char *)sendBuffer);
    if (rc != BDM_RC_OK) {
       log.error("Tx failed\n");
       return rc;
+   }
+   if ((txSize%outEndpointMaxPacketSize) == 0) {
+      // Send ZLP
+      rc = bdm_usb_send_epOut(0, NULL);
    }
    // Get response
    rc = bdm_usb_recv_epIn(rxSize, inData, actualRxSize);
@@ -1208,21 +1226,21 @@ USBDM_ErrorCode bdmVersion5_simple_usb_transaction(
       }
       log.error(" USB Rx error- retry success\n");
    }
-   bool receivedCommandToggle = (inData[0]&0x80) != 0;
-   if (commandToggle != receivedCommandToggle) {
-      // Single retry on toggle error (clear any pending Rx)
-      log.error("USB Toggle error, S=%d, R=%d\n", commandToggle?1:0, receivedCommandToggle?1:0);
+   int receivedSequenceNumber = (inData[0]>>6)&0x03;
+   if (sequenceNumber != receivedSequenceNumber) {
+      // Single retry on sequence error (clear any pending Rx)
+      log.error("USB Sequence error, S=%d, R=%d\n", sequenceNumber, receivedSequenceNumber);
       UsbdmSystem::milliSleep(100);
       rc = bdm_usb_recv_epIn(rxSize, inData, actualRxSize);
-      receivedCommandToggle = (inData[0]&0x80) != 0;
-      if ((rc == BDM_RC_USB_ERROR) || (commandToggle != receivedCommandToggle)) {
-         log.error("Immediate retry failed, S=%d, R=%d\n", commandToggle?1:0, receivedCommandToggle?1:0);
+      receivedSequenceNumber = (inData[0]>>6)&0x03;
+      if ((rc == BDM_RC_USB_ERROR) || (sequenceNumber != receivedSequenceNumber)) {
+         log.error("Immediate retry failed, S=%d, R=%d\n", sequenceNumber, receivedSequenceNumber);
          return BDM_RC_USB_ERROR;
       }
-      log.error("Immediate retry succeeded, S=%d, R=%d\n", commandToggle?1:0, receivedCommandToggle?1:0);
+      log.error("Immediate retry succeeded, S=%d, R=%d\n", sequenceNumber, receivedSequenceNumber);
    }
-   // Mask toggle bit out of data
-   inData[0] &= ~0x80;
+   // Mask sequence bits out of data
+   inData[0] &= ~SEQUENCE_MASK;
    if (rc != BDM_RC_OK) {
       log.error("Non-USB error, rc = %s\n", UsbdmSystem::getErrorString(rc));
    }
@@ -1230,6 +1248,7 @@ USBDM_ErrorCode bdmVersion5_simple_usb_transaction(
    log.printDump(inData, *actualRxSize);
 #endif // LOG_LOW_LEVEL
    return rc;
+
 }
 
 //! \brief Executes an USB transaction.
@@ -1244,25 +1263,16 @@ USBDM_ErrorCode bdmVersion5_usb_transaction(
       unsigned int   rxSize,
       unsigned char *data,
       unsigned int  *actualRxSize) {
-   static bool     commandToggle       = 0;
-   static int      sequence            = 0;
 //   bool            resetFlag           = false;
 //   bool            reportFlag          = false;
 //   USBDM_ErrorCode rc                  = BDM_RC_OK;
-   unsigned char   outData[txSize];
+   unsigned char   outData[txSize+5];
    LOGGING;
 
    // Save copy of data for retry
    memcpy(outData, data, txSize);
 
-   if (data[1] == CMD_USBDM_GET_CAPABILITIES) {
-      log.print("Setting toggle=0\n");
-      commandToggle = 0;
-      sequence      = 0;
-   }
-   sequence++;
-
-   return bdmVersion5_simple_usb_transaction(commandToggle, txSize, rxSize, outData, data, actualRxSize);
+   return bdmVersion5_simple_usb_transaction(txSize, rxSize, outData, data, actualRxSize);
 }
 
 //! \brief Executes an USB transaction.
