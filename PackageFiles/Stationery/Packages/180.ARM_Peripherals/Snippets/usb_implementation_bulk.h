@@ -22,6 +22,8 @@
  * Under Linux drivers for bulk and CDC are automatically loaded
  */
 #define MS_COMPATIBLE_ID_FEATURE
+#define UNIQUE_ID
+//#include "configure.h"
 
 namespace USBDM {
 
@@ -61,7 +63,7 @@ namespace USBDM {
 //
 static constexpr uint  CONTROL_EP_MAXSIZE           = 64; //!< Control in/out    64
 /*
- *  TODO Define end-point sizes
+ *  TODO Define additional end-point sizes
  */
 static constexpr uint  BULK_OUT_EP_MAXSIZE          = 64; //!< Bulk out          64
 static constexpr uint  BULK_IN_EP_MAXSIZE           = 64; //!< Bulk in           64
@@ -212,9 +214,11 @@ protected:
       UsbBase_T::initialiseEndpoints();
 
       epBulkOut.initialise();
-      epBulkIn.initialise();
-
+      addEndpoint(&epBulkOut);
       epBulkOut.setCallback(bulkOutTransactionCallback);
+
+      epBulkIn.initialise();
+      addEndpoint(&epBulkIn);
       epBulkIn.setCallback(bulkInTransactionCallback);
 
       /*

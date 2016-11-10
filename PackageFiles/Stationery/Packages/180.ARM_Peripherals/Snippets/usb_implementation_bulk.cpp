@@ -29,7 +29,7 @@ static const uint8_t s_product[]         = PRODUCT_DESCRIPTION;         //!< Pro
 static const uint8_t s_serial[]          = SERIAL_NO;                   //!< Serial Number
 static const uint8_t s_config[]          = "Default configuration";     //!< Configuration name
 
-static const uint8_t s_bulk_interface[]   = "Bulk Interface";           //!< Bulk Interface
+static const uint8_t s_bulk_interface[]  = "Bulk Interface";           //!< Bulk Interface
 
 /*
  * Add additional String descriptors here
@@ -44,7 +44,7 @@ const uint8_t *const Usb0::stringDescriptors[] = {
       s_product,
       s_serial,
       s_config,
-	  
+
       s_bulk_interface,
       /*
        * Add additional String descriptors here
@@ -198,6 +198,9 @@ void Usb0::handleTokenComplete(void) {
          epBulkIn.flipOddEven(usbStat);
          epBulkIn.handleInToken();
          return;
+      /*
+       * TODO Add additional End-point handling here
+       */
    }
 }
 
@@ -218,7 +221,7 @@ void Usb0::bulkOutTransactionCallback(EndpointState state) {
 void Usb0::bulkInTransactionCallback(EndpointState state) {
    static const uint8_t buff[] = "Hello There\n\r";
    if (state == EPDataIn) {
-      epBulkIn.startTxTransaction(sizeof(buff), buff, EPDataIn);
+      epBulkIn.startTxTransaction(EPDataIn, sizeof(buff), buff);
    }
 }
 
@@ -229,6 +232,8 @@ void Usb0::bulkInTransactionCallback(EndpointState state) {
  */
 void Usb0::initialise() {
    UsbBase_T::initialise();
+
+   setSOFCallback(sofCallback);
    /*
     * TODO Additional initialisation
     */
@@ -308,6 +313,8 @@ void Usb0::irqHandler() {
  *   @param maxSize  = max # of bytes to receive
  *   @param buffer   = ptr to buffer for bytes received
  *
+ *   @return Number of bytes received
+ *
  *   @note : Doesn't return until command has been received.
  */
 int Usb0::receiveBulkData(uint8_t maxSize, uint8_t *buffer) {
@@ -315,13 +322,12 @@ int Usb0::receiveBulkData(uint8_t maxSize, uint8_t *buffer) {
    while(deviceState.state != USBconfigured) {
       __WFI();
    }
-   Usb0::enableNvicInterrupts(true);
    epBulkOut.startRxTransaction(EPDataOut, maxSize, buffer);
    while(epBulkOut.getHardwareState().state != EPIdle) {
       __WFI();
    }
-   // TODO fix
-   return 0;
+   setActive();
+   return epBulkOut.getDataTransferredSize();
 }
 
 /**
@@ -334,13 +340,13 @@ int Usb0::receiveBulkData(uint8_t maxSize, uint8_t *buffer) {
  *   returns before data has been transmitted
  *
  */
-void Usb0::sendBulkData( uint8_t size, const uint8_t *buffer) {
+void Usb0::sendBulkData(uint8_t size, const uint8_t *buffer) {
 //   commandBusyFlag = false;
    //   enableUSBIrq();
    while (epBulkIn.getHardwareState().state != EPIdle) {
       __WFI();
    }
-   epBulkIn.startTxTransaction(size, buffer, EPDataIn);
+   epBulkIn.startTxTransaction(EPDataIn, size, buffer);
 }
 
 void idleLoop() {

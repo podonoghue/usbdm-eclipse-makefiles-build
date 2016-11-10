@@ -65,7 +65,7 @@ namespace USBDM {
 //
 static constexpr uint  CONTROL_EP_MAXSIZE           = 64; //!< Control in/out    64
 /*
- *  TODO Define end-point sizes
+ *  TODO Define additional end-point sizes
  */
 static constexpr uint  BULK_OUT_EP_MAXSIZE          = 64; //!< Bulk out          64
 static constexpr uint  BULK_IN_EP_MAXSIZE           = 64; //!< Bulk in           64
@@ -253,16 +253,22 @@ protected:
       UsbBase_T::initialiseEndpoints();
 
       epBulkOut.initialise();
-      epBulkIn.initialise();
-
+      addEndpoint(&epBulkOut);
       epBulkOut.setCallback(bulkOutTransactionCallback);
+
+      epBulkIn.initialise();
+      addEndpoint(&epBulkIn);
       epBulkIn.setCallback(bulkInTransactionCallback);
 	  
       epCdcNotification.initialise();
-      epCdcDataOut.initialise();
-      epCdcDataIn.initialise();
+      addEndpoint(&epCdcNotification);
 
+      epCdcDataOut.initialise();
+      addEndpoint(&epCdcDataOut);
       epCdcDataOut.setCallback(cdcOutTransactionCallback);
+
+      epCdcDataIn.initialise();
+      addEndpoint(&epCdcDataIn);
       epCdcDataIn.setCallback(cdcInTransactionCallback);
 
       // Start CDC status transmission
@@ -272,7 +278,7 @@ protected:
       epCdcDataOut.startRxTransaction(EPDataOut);
 
       static const uint8_t cdcInBuff[] = "Hello there\n";
-      epCdcDataIn.startTxTransaction(sizeof(cdcInBuff), cdcInBuff, EPDataIn);
+      epCdcDataIn.startTxTransaction(EPDataIn, sizeof(cdcInBuff), cdcInBuff);
       /*
        * TODO Initialise additional End-points here
        */

@@ -195,6 +195,13 @@ const Usb0::Descriptors Usb0::otherDescriptors = {
        */
 };
 
+/*
+ * TODO Add additional end-points here
+ */
+const InEndpoint  <Usb0Info, Usb0::CDC_NOTIFICATION_ENDPOINT, CDC_NOTIFICATION_EP_MAXSIZE>  Usb0::epCdcNotification;
+const OutEndpoint <Usb0Info, Usb0::CDC_DATA_OUT_ENDPOINT,     CDC_DATA_OUT_EP_MAXSIZE>      Usb0::epCdcDataOut;
+const InEndpoint  <Usb0Info, Usb0::CDC_DATA_IN_ENDPOINT,      CDC_DATA_IN_EP_MAXSIZE>       Usb0::epCdcDataIn;
+
 /**
  * Handler for Start of Frame Token interrupt (~1ms interval)
  */
@@ -252,7 +259,7 @@ void Usb0::epCdcSendNotification() {
 
    // Set up to Tx packet
 //   PRINTF("epCdcSendNotification()\n");
-   epCdcNotification.startTxTransaction(sizeof(cdcNotification)+2, nullptr, EPDataIn);
+   epCdcNotification.startTxTransaction(EPDataIn, sizeof(cdcNotification)+2);
 }
 
 static uint8_t cdcOutBuff[10] = "Welcome\n";
@@ -262,7 +269,7 @@ void Usb0::startCdcIn() {
    if ((epCdcDataIn.getHardwareState().state == EPIdle) && (cdcOutByteCount>0)) {
       static_assert(epCdcDataIn.BUFFER_SIZE>sizeof(cdcOutBuff), "Buffer too small");
       memcpy(epCdcDataIn.getBuffer(), cdcOutBuff, cdcOutByteCount);
-      epCdcDataIn.startTxTransaction(cdcOutByteCount, nullptr, EPDataIn);
+      epCdcDataIn.startTxTransaction(EPDataIn, cdcOutByteCount);
       cdcOutByteCount = 0;
    }
 }
@@ -323,7 +330,7 @@ void Usb0::cdcOutTransactionCallback(EndpointState state) {
 void Usb0::cdcInTransactionCallback(EndpointState state) {
    static const uint8_t buff[] = "Hello There\n\r";
    if (state == EPDataIn) {
-      epCdcDataIn.startTxTransaction(sizeof(buff), buff, EPDataIn);
+      epCdcDataIn.startTxTransaction(EPDataIn, sizeof(buff), buff);
    }
 }
 
