@@ -314,7 +314,10 @@ USBDM_ErrorCode MemoryDumpDialogue::readMemoryBlocks(ProgressDialoguePtr progres
          if (rc != BDM_RC_OK) {
             return rc;
          }
-         flashImage->loadData(size, start, data);
+         rc = flashImage->loadData(size, start, data);
+         if (rc != BDM_RC_OK) {
+            return rc;
+         }
          start += size;
       }
    }
