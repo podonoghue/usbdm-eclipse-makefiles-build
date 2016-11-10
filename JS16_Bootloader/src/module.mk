@@ -9,7 +9,6 @@ SRC += JS16_BootloaderApp.cpp
 SRC += low_level_usb.cpp
 SRC += MainDialogue.cpp
 SRC += AppSettings.cpp
-SRC += Version.rc
 
 # Shared files $(SHARED_SRC)
 VPATH := $(VPATH) $(SHARED_SRC)
