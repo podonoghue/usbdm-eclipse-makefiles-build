@@ -104,6 +104,7 @@ static const DropDownType CFVx_Speeds[] = {
    { 4000, _("4MHz")   },
    { 6000, _("6MHz")   },
    {12000, _("12MHz")  }, // Not supported on JTAG etc
+   {24000, _("24MHz")  }, // Only supported for SWD on V5
    {  0,   wxEmptyString },
 };
 
@@ -729,7 +730,8 @@ void UsbdmDialogue::populateInterfaceSpeeds() {
       int maxSpeed;
       switch(bdmInterface->getBdmOptions().targetType) {
       case T_ARM_JTAG : maxSpeed =  6000; break;
-      case T_ARM_SWD  : maxSpeed = 12000; break;
+      case T_ARM      : maxSpeed = 24000; break;
+      case T_ARM_SWD  : maxSpeed = 24000; break;
       case T_CFVx     : maxSpeed = 12000; break;
       default         : maxSpeed = 12000; break;
       }
