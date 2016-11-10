@@ -90,17 +90,17 @@ extern USBDM_ExtendedOptions_t bdmOptions;
 
 DLL_LOCAL USBDM_ErrorCode resetDebugInterface(void);
 
-//! Information describing the debug Interface
+/**  Information describing the debug Interface */
 static struct ARM_DebugInformation {
    // Details from AHB-AP
-   uint8_t          componentClass;              //!< Component class
-   uint32_t         debugBaseaddr;               //!< Base address of Debug ROM
-   unsigned         size4Kb;                     //!< Size of Debug ROM
-   bool             MDM_AP_present;              //!< Indicates if target has Kinetis MDM-AP
+   uint8_t          componentClass;               //!< Component class
+   uint32_t         debugBaseaddr;                //!< Base address of Debug ROM
+   unsigned         size4Kb;                      //!< Size of Debug ROM
+   bool             MDM_AP_present;               //!< Indicates if target has Kinetis MDM-AP
    // Memory interface capabilities
-   bool             memAccessLimitsChecked;      //!< Have they been checked?
-   bool             byteAccessSupported;         //!< Byte/Halfword access supported?
-   uint32_t         memAPConfig;                 //!< Memory CFG register contents
+   bool             memAccessLimitsChecked;       //!< Have they been checked?
+   bool             byteAccessSupported;          //!< Byte/Halfword access supported?
+   uint32_t         memAPConfig;                  //!< Memory CFG register contents
 } armDebugInformation = {
       0x0,
       0x0,
@@ -111,21 +111,21 @@ static struct ARM_DebugInformation {
       0x0,
 };
 
-// Additional bits to set when writing to DP_CONTROL/STAT register
+/** Additional bits to set when writing to DP_CONTROL/STAT register */
 static const uint32_t dpControlStatBaseValue = CSYSPWRUPREQ|CDBGPWRUPREQ;
 
 
 USBDM_ErrorCode targetDebugEnable();
 
-//! Reads a word from ARM target memory
-//!
-//! @note Breaks transfers on 2**10 boundary as TAR may not increment across this boundary
-//!
-//! @param address  - 32-bit starting address (aligned)
-//! @param data     - pointer to buffer for word
-//!
-//! @return error code
-//!
+/** Reads a word from ARM target memory
+ *
+ *  @note Breaks transfers on 2**10 boundary as TAR may not increment across this boundary
+ *
+ *  @param address  - 32-bit starting address (aligned)
+ *  @param data     - pointer to buffer for word
+ *
+ *  @return error code
+ */
 static USBDM_ErrorCode armReadMemoryWord(unsigned long address, unsigned long *data) {
    LOGGING_Q;
 
@@ -150,16 +150,16 @@ static USBDM_ErrorCode armReadMemoryWord(unsigned long address, unsigned long *d
    return rc;
 }
 
-//! Writes a word to ARM target memory
-//!
-//! @note Assumes aligned address
-//! @note Breaks transfers on 2**10 boundary as TAR may not increment across this boundary
-//!
-//! @param address - 32-bit address
-//! @param data    - ptr to buffer containing words
-//!
-//! @return error code
-//!
+/** Writes a word to ARM target memory
+ *
+ *  @note Assumes aligned address
+ *  @note Breaks transfers on 2**10 boundary as TAR may not increment across this boundary
+ *
+ *  @param address - 32-bit address
+ *  @param data    - ptr to buffer containing words
+ *
+ *  @return error code
+ */
 static USBDM_ErrorCode armWriteMemoryWord(unsigned long address, unsigned long data) {
    LOGGING_Q;
 
@@ -183,11 +183,11 @@ static USBDM_ErrorCode armWriteMemoryWord(unsigned long address, unsigned long d
    return rc;
 }
 
-//! Reset ARM-SWD target
-//!
-//! @param target_mode - Reset mode \n
-//!        RESET_SPECIAL/RESET_NORMAL
-//!
+/** Reset ARM-SWD target
+ *
+ *  @param target_mode - Reset mode \n
+ *         RESET_SPECIAL/RESET_NORMAL
+ */
 static USBDM_ErrorCode armSoftwareReset(TargetMode_t resetMode) {
    LOGGING_Q;
    USBDM_ErrorCode rc;
@@ -240,11 +240,11 @@ static USBDM_ErrorCode armSoftwareReset(TargetMode_t resetMode) {
    return rc;
 }
 
-//! Reset ARM-SWD target using Freescale Kinetis specific features
-//!
-//! @param target_mode - Reset mode \n
-//!        RESET_SPECIAL/RESET_NORMAL
-//!
+/** Reset ARM-SWD target using Freescale Kinetis specific features
+ *
+ *  @param target_mode - Reset mode \n
+ *         RESET_SPECIAL/RESET_NORMAL
+ */
 static USBDM_ErrorCode kinetisSoftwareReset(TargetMode_t resetMode) {
    LOGGING;
    USBDM_ErrorCode rc;
@@ -253,7 +253,6 @@ static USBDM_ErrorCode kinetisSoftwareReset(TargetMode_t resetMode) {
    if (rc != BDM_RC_OK) {
       return rc;
    }
-
    resetMode   = (TargetMode_t)(resetMode&RESET_MODE_MASK);
 
    log.print("Using Freescale MDM-AP\n");
@@ -312,8 +311,9 @@ static USBDM_ErrorCode kinetisSoftwareReset(TargetMode_t resetMode) {
    return rc;
 }
 
-//! Request reset of the ARM debug interface
-//!
+/*
+ * Request reset of the ARM debug interface
+ */
 DLL_LOCAL
 USBDM_ErrorCode resetDebugInterface(void) {
    USBDM_ErrorCode rc;
@@ -336,13 +336,13 @@ USBDM_ErrorCode resetDebugInterface(void) {
    return rc;
 }
 
-//!
-//! Reset sequence for ARM-SWD or ARM-JTAG
-//!
-//! @param target_mode - Reset method & mode \n
-//!         RESET_DEFAULT/RESET_POWER/RESET_HARDWARE \n
-//!        +RESET_SPECIAL/RESET_NORMAL
-//!
+/*
+ *  Reset sequence for ARM-SWD or ARM-JTAG
+ *
+ *  @param target_mode - Reset method & mode \n
+ *          RESET_DEFAULT/RESET_POWER/RESET_HARDWARE \n
+ *         +RESET_SPECIAL/RESET_NORMAL
+ */
 DLL_LOCAL
 USBDM_ErrorCode resetARM(TargetMode_t targetMode) {
    LOGGING;
@@ -454,8 +454,9 @@ USBDM_ErrorCode resetARM(TargetMode_t targetMode) {
    return rc;
 }
 
-//! Read information that describes the APs present
-//!
+/*
+ * Read information that describes the APs present
+ */
 static USBDM_ErrorCode armCheckAPs(void) {
    LOGGING_Q;
    USBDM_ErrorCode rc;
@@ -502,8 +503,8 @@ static USBDM_ErrorCode armCheckAPs(void) {
    return BDM_RC_OK;
 }
 #if 0
-//! Read Information that describes the debug interface
-//!
+ *  Read Information that describes the debug interface
+ *
 static USBDM_ErrorCode armReadDebugInformation(void) {
    LOGGING_Q;
    USBDM_ErrorCode rc;
@@ -546,8 +547,9 @@ static USBDM_ErrorCode armReadDebugInformation(void) {
 DLL_LOCAL
 bool armInitialiseDone = false;
 
-//! Check for target power
-//!
+/*
+ * Check for target power
+ */
 static USBDM_ErrorCode checkTargetPower(void) {
    LOGGING;
    USBDM_ErrorCode rc = BDM_RC_OK;
@@ -564,8 +566,9 @@ static USBDM_ErrorCode checkTargetPower(void) {
    return BDM_RC_OK;
 }
 
-//! Enable the Debug power
-//!
+/*
+ *   Enable the Debug power
+ */
 static USBDM_ErrorCode debugPowerUp(void) {
    LOGGING_Q;
    USBDM_ErrorCode rc = BDM_RC_OK;
@@ -596,10 +599,11 @@ static USBDM_ErrorCode debugPowerUp(void) {
    return rc;
 }
 
-//! Initialise ARM-SWD interface
-//!
-//! @note Assumes low-level SWD connection has been done
-//!
+/*
+ *  Initialise ARM-SWD interface
+ *
+ *  @note Assumes low-level SWD connection has been done
+ */
 static USBDM_ErrorCode armSwdInitialise() {
    LOGGING_Q;
    USBDM_ErrorCode rc = BDM_RC_OK;
@@ -708,10 +712,11 @@ USBDM_ErrorCode targetDebugEnable() {
    return BDM_RC_OK;
 }
 
-//! Connect to ARM-SWD Target
-//!
-//! @note Assumes low-level SWD connection has been done
-//!
+/*
+ *  Connect to ARM-SWD Target
+ *
+ *  @note Assumes low-level SWD connection has been done
+ */
 static USBDM_ErrorCode armSwdConnect() {
    LOGGING;
    USBDM_ErrorCode rc;
@@ -736,15 +741,15 @@ static USBDM_ErrorCode armSwdConnect() {
 // ARM JTAG Commands
 #define ARM_JTAG_MASTER_IR_LENGTH   (4)     // IR length for commands below
 
-//! Read IDCODE from JTAG TAP
-//!
-//! @param idCode   - 32-bit IDCODE returned from TAP
-//! @param resetTAP - Optionally resets the TAP to RUN-TEST/IDLE before reading IDCODE
-//!                   This will enable the MASTER TAP!
-//!
-//! @note - resetTAP=true will enable the Master TAP & disable the Code TAP
-//! @note - Leaves Core TAP in RUN-TEST/IDLE
-//!
+/** Read IDCODE from JTAG TAP
+ *
+ *  @param idCode   - 32-bit IDCODE returned from TAP
+ *  @param resetTAP - Optionally resets the TAP to RUN-TEST/IDLE before reading IDCODE
+ *                    This will enable the MASTER TAP!
+ *
+ *  @note - resetTAP=true will enable the Master TAP & disable the Code TAP
+ *  @note - Leaves Core TAP in RUN-TEST/IDLE
+ */
 static USBDM_ErrorCode readIDCODE(uint32_t *idCode, uint8_t command, uint8_t length, bool resetTAP) {
    LOGGING_E;
    // Sequence using readIdcode command to read IDCODE
@@ -782,8 +787,9 @@ static USBDM_ErrorCode readIDCODE(uint32_t *idCode, uint8_t command, uint8_t len
    return rc;
 }
 
-//! Initialise ARM-JTAG Target
-//!
+/*
+ *  Initialise ARM-JTAG Target
+ */
 static USBDM_ErrorCode armJtagInitialise() {
    LOGGING;
    USBDM_ErrorCode rc = BDM_RC_OK;
@@ -864,10 +870,11 @@ static USBDM_ErrorCode armJtagInitialise() {
    return BDM_RC_OK;
 }
 
-//! Connect to ARM-SWD Target
-//!
-//! @note Assumes low-level SWD connection has been done
-//!
+/*
+ *  Connect to ARM-SWD Target
+ *
+ *  @note Assumes low-level SWD connection has been done
+ */
 DLL_LOCAL
 USBDM_ErrorCode armJtagConnect() {
    LOGGING;
@@ -891,10 +898,11 @@ USBDM_ErrorCode armJtagConnect() {
    return rc;
 }
 
-//! Connect to ARM Target
-//!
-//! @note Assumes low-level SWD connection has been done
-//!
+/*
+ *  Connect to ARM Target
+ *
+ *  @note Assumes low-level SWD connection has been done
+ */
 DLL_LOCAL
 USBDM_ErrorCode armConnect(TargetType_t targetType) {
    USBDM_ErrorCode rc;
@@ -914,10 +922,11 @@ USBDM_ErrorCode armConnect(TargetType_t targetType) {
    return rc;
 }
 
-//! Disconnect from ARM Target
-//!
-//! @note Ignores errors
-//!
+/*
+ *  Disconnect from ARM Target
+ *
+ *  @note Ignores errors
+ */
 DLL_LOCAL
 USBDM_ErrorCode armDisconnect(TargetType_t targetType) {
    if (armInitialiseDone) {

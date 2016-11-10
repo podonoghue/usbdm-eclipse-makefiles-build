@@ -1,4 +1,4 @@
-/*! \file
+/** \file
    \brief Entry points for USBDM library
 
    \verbatim
@@ -160,18 +160,20 @@ static unsigned char usb_data[MAX_PACKET_SIZE+1]; //!< Buffer for USB I/O messag
 
 static USBDM_ErrorCode updateBdmInfo(void);
 
-//=============================================================================
-//=============================================================================
-//=============================================================================
+/*
+ * =============================================================================
+ * =============================================================================
+ */
 
-//! Initialises USB interface
-//!
-//! This must be done before any other operations.
-//!
-//! @return \n
-//!     BDM_RC_OK => OK \n
-//!     other     => USB Error - see \ref USBDM_ErrorCode
-//!
+/**
+ * Initialises USB interface
+ *
+ * This must be done before any other operations.
+ *
+ * @return \n
+ *     BDM_RC_OK => OK \n
+ *     other     => USB Error - see \ref USBDM_ErrorCode
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_Init(void) {
    UsbdmSystem::Log::openLogFile("usbdm.log", "USBDM Low level interface");
@@ -191,14 +193,15 @@ USBDM_ErrorCode USBDM_Init(void) {
    return rc;
 }
 
-//! Clean up
-//!
-//! This must be called after all USBDM operations are finished
-//!
-//! @return \n
-//!     BDM_RC_OK => OK \n
-//!     other     => USB Error - see \ref USBDM_ErrorCode
-//!
+/**
+ * Clean up
+ *
+ * This must be called after all USBDM operations are finished
+ *
+ * @return \n
+ *     BDM_RC_OK => OK \n
+ *     other     => USB Error - see \ref USBDM_ErrorCode
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_Exit(void) {
    LOGGING_E;
@@ -213,13 +216,14 @@ USBDM_ErrorCode USBDM_Exit(void) {
    return rc;
 }
 
-//! Get version of the library
-//!
-//! @return version number (e.g. V4.9.5 => 0x40905)
-//!
-//! @note Prior to V4.9.5 an 8-bit version number (2 BCD digits, major-minor) was returned\n
-//!       This shouldn't be a problem as still monotonic
-//!
+/**
+ * Get version of the library
+ *
+ * @return version number (e.g. V4.9.5 => 0x40905)
+ *
+ * @note Prior to V4.9.5 an 8-bit version number (2 BCD digits, major-minor) was returned\n
+ *       This shouldn't be a problem as still monotonic
+ */
 USBDM_API
 unsigned int USBDM_DLLVersion(void) {
    LOGGING_Q;
@@ -232,21 +236,22 @@ unsigned int USBDM_DLLVersion(void) {
            (USBDM_VERSION_MICRO));
 }
 
-//! Get version string for library
-//!
-//! @return ptr to static ASCII string
-//!
+/** Get version string for library
+ *
+ * @return ptr to static ASCII string
+ */
 USBDM_API
 const char *USBDM_DLLVersionString(void) {
    return (USBDM_VERSION_STRING);
 }
 
-//! Gets string describing a USBDM error code
-//!
-//! @param errorCode - error code returned from USBDM API routine.
-//!
-//! @return - ptr to static string describing the error.
-//!
+/**
+ *  Gets string describing a USBDM error code
+ *
+ *  @param errorCode - error code returned from USBDM API routine.
+ *
+ *  @return - ptr to static string describing the error.
+ */
 USBDM_API
 const char *USBDM_GetErrorString(USBDM_ErrorCode errorCode) {
 const char *errMsg;
@@ -256,26 +261,28 @@ const char *errMsg;
    return errMsg;
 }
 
-//=============================================================================
-//=============================================================================
-//=============================================================================
+/*
+ * =============================================================================
+ * =============================================================================
+ */
 // USBDM Device handling
 
-//! Find USBDM Devices \n
-//! This function creates an internal list of USBDM devices.  The list is held until
-//! USBDM_ReleaseDevices() is called. \n
-//! USBDM_FindDevices() must be done before any device may be opened.
-//!
-//! @param deviceCount Number of BDM devices found
-//!
-//! @return \n
-//!     BDM_RC_OK                => OK \n
-//!     BDM_RC_NO_USBDM_DEVICE   => No devices found.
-//!     other                    => other Error - see \ref USBDM_ErrorCode
-//!
-//! @note deviceCount == 0 on any error so may be used w/o checking rc
-//! @note The device list is held until USBDM_ReleaseDevices() is called
-//!
+/**
+ * Find USBDM Devices \n
+ * This function creates an internal list of USBDM devices.  The list is held until
+ * USBDM_ReleaseDevices() is called. \n
+ * USBDM_FindDevices() must be done before any device may be opened.
+ *
+ * @param deviceCount Number of BDM devices found
+ *
+ * @return \n
+ *     BDM_RC_OK                => OK \n
+ *     BDM_RC_NO_USBDM_DEVICE   => No devices found.
+ *     other                    => other Error - see \ref USBDM_ErrorCode
+ *
+ * @note deviceCount == 0 on any error so may be used w/o checking rc
+ * @note The device list is held until USBDM_ReleaseDevices() is called
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_FindDevices(unsigned int *deviceCount) {
    LOGGING_Q;
@@ -298,12 +305,13 @@ USBDM_ErrorCode USBDM_FindDevices(unsigned int *deviceCount) {
    return rc;
 }
 
-//! Release USBDM Device list
-//!
-//! @return \n
-//!     BDM_RC_OK => OK \n
-//!     other     => USB Error - see \ref USBDM_ErrorCode
-//!
+/**
+ * Release USBDM Device list
+ *
+ * @return \n
+ *     BDM_RC_OK => OK \n
+ *     other     => USB Error - see \ref USBDM_ErrorCode
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_ReleaseDevices(void) {
    LOGGING_Q;
@@ -311,16 +319,17 @@ USBDM_ErrorCode USBDM_ReleaseDevices(void) {
    return bdm_usb_releaseDevices();
 }
 
-//! Obtain serial number of the currently opened BDM
-//!
-//! @param deviceSerialNumber  Updated to point to UTF-16LE serial number
-//!
-//! @return \n
-//!    == BDM_RC_OK (0)     => Success\n
-//!    == BDM_RC_USB_ERROR  => USB failure
-//!
-//! @note deviceDescription points at a statically allocated buffer - do not free
-//!
+/**
+ * Obtain serial number of the currently opened BDM
+ *
+ * @param deviceSerialNumber  Updated to point to UTF-16LE serial number
+ *
+ * @return \n
+ *    == BDM_RC_OK (0)     => Success\n
+ *    == BDM_RC_USB_ERROR  => USB failure
+ *
+ * @note deviceDescription points at a statically allocated buffer - do not free
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_GetBDMSerialNumber(const char **deviceSerialNumber) {
    if (!bdmState.initialised) {
@@ -339,16 +348,17 @@ USBDM_ErrorCode USBDM_GetBDMSerialNumber(const char **deviceSerialNumber) {
    return rc;
 }
 
-//! Obtain description of the currently opened BDM
-//!
-//! @param deviceDescription  Updated to point to UTF-16LE device description
-//!
-//! @return \n
-//!    == BDM_RC_OK (0)     => Success\n
-//!    == BDM_RC_USB_ERROR  => USB failure
-//!
-//! @note deviceDescription points at a statically allocated buffer - do not free
-//!
+/**
+ *  Obtain description of the currently opened BDM
+ *
+ * @param deviceDescription  Updated to point to UTF-16LE device description
+ *
+ * @return \n
+ *    == BDM_RC_OK (0)     => Success\n
+ *    == BDM_RC_USB_ERROR  => USB failure
+ *
+ * @note deviceDescription points at a statically allocated buffer - do not free
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_GetBDMDescription(const char **deviceDescription) {
    if (!bdmState.initialised) {
@@ -367,18 +377,19 @@ USBDM_ErrorCode USBDM_GetBDMDescription(const char **deviceDescription) {
    return rc;
 }
 
-//! Opens a device
-//!
-//! @param deviceNo Number (0..N) of device to open.
-//! A device must be open before any communication with the device can take place.
-//!
-//! @note The range of device numbers must be obtained from USBDM_FindDevices() before
-//! calling this function.
-//!
-//! @return \n
-//!     BDM_RC_OK => OK \n
-//!     other     => Error code - see \ref USBDM_ErrorCode
-//!
+/**
+ *  Opens a device
+ *
+ *  @param deviceNo Number (0..N) of device to open.
+ *  A device must be open before any communication with the device can take place.
+ *
+ *  @note The range of device numbers must be obtained from USBDM_FindDevices() before
+ *  calling this function.
+ *
+ *  @return \n
+ *      BDM_RC_OK => OK \n
+ *      other     => Error code - see \ref USBDM_ErrorCode
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_Open(unsigned char deviceNo) {
    LOGGING_Q;
@@ -419,11 +430,12 @@ USBDM_ErrorCode USBDM_Open(unsigned char deviceNo) {
    return (rc);
 }
 
-//! Closes currently open device
-//!
-//! @return \n
-//!     BDM_RC_OK => OK
-//!
+/**
+ *  Closes currently open device
+ *
+ *  @return \n
+ *      BDM_RC_OK => OK
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_Close(void) {
 //   uint8_t debugCommand[2] = {sizeof(debugCommand),BDM_DBG_TESTALTSPEED};
@@ -448,23 +460,24 @@ USBDM_ErrorCode USBDM_Close(void) {
    return BDM_RC_OK;
 }
 
-//! Gets BDM software version and type of hardware
-//!
-//! @param version Version numbers (4 bytes)
-//!  - USBDM software version              \n
-//!  - USBDM hardware type                 \n
-//!  - ICP software version                \n
-//!  - ICP hardware type                   \n
-//!  USBDM & ICP hardware versions should always agree
-//!
-//! @return \n
-//!     BDM_RC_OK   => OK \n
-//!     other       => Error code - see \ref USBDM_ErrorCode
-//!
-//! @note - This command is directed to EP0 and is also allowed in ICP mode
-//!
-//! @deprecated: use USBDM_GetBdmInformation()
-//!
+/**
+ *  Gets BDM software version and type of hardware
+ *
+ *  @param version Version numbers (4 bytes)
+ *   - USBDM software version              \n
+ *   - USBDM hardware type                 \n
+ *   - ICP software version                \n
+ *   - ICP hardware type                   \n
+ *   USBDM & ICP hardware versions should always agree
+ *
+ *  @return \n
+ *      BDM_RC_OK   => OK \n
+ *      other       => Error code - see \ref USBDM_ErrorCode
+ *
+ *  @note - This command is directed to EP0 and is also allowed in ICP mode
+ *
+ *  @deprecated: use USBDM_GetBdmInformation()
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_GetVersion(USBDM_Version_t *version) {
    LOGGING_Q;
@@ -498,17 +511,18 @@ USBDM_ErrorCode USBDM_GetVersion(USBDM_Version_t *version) {
 
 #define VERSION_NUM(w,x,y) (((w)<<16)+((x)<<8)+(y))
 
-//! \brief Obtains the Capability vector from the BDM interface
-//!
-//! @param capabilities : ptr to where to return capability vector see \ref HardwareCapabilities_t
-//! @return \n
-//!     BDM_RC_OK                 => OK \n
-//!     BDM_RC_WRONG_BDM_REVISION => BDM firmware/library are incompatible \n
-//!     other                     => Error code - see \ref USBDM_ErrorCode
-//!
-//! @note Uses cached information from when the BDM was opened.
-//! @note Can be used to check BDM firmware/library compatibility
-//!
+/**
+ *  Obtains the Capability vector from the BDM interface
+ *
+ *  @param capabilities : ptr to where to return capability vector see \ref HardwareCapabilities_t
+ *  @return \n
+ *      BDM_RC_OK                 => OK \n
+ *      BDM_RC_WRONG_BDM_REVISION => BDM firmware/library are incompatible \n
+ *      other                     => Error code - see \ref USBDM_ErrorCode
+ *
+ *  @note Uses cached information from when the BDM was opened.
+ *  @note Can be used to check BDM firmware/library compatibility
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_GetCapabilities(HardwareCapabilities_t *capabilities) {
    LOGGING_Q;
@@ -531,12 +545,13 @@ USBDM_ErrorCode USBDM_GetCapabilities(HardwareCapabilities_t *capabilities) {
    return BDM_RC_OK;
 }
 
-//! \brief Updates information about the currently open BDM interface by polling the device
-//!
-//! @return \n
-//!     BDM_RC_OK => OK \n
-//!     other     => Error code - see \ref USBDM_ErrorCode
-//!
+/**
+ *  Updates information about the currently open BDM interface by polling the device
+ *
+ *  @return \n
+ *      BDM_RC_OK => OK \n
+ *      other     => Error code - see \ref USBDM_ErrorCode
+ */
 static USBDM_ErrorCode updateBdmInfo(void) {
    USBDM_ErrorCode rc;
    USBDM_Version_t USBDMVersion;
@@ -561,7 +576,9 @@ static USBDM_ErrorCode updateBdmInfo(void) {
    log.print("=> useOnlyEp0 = %s\n", bdmState.useOnlyEp0?"True":"False");
 
    // Use simplified protocol
-   bdmState.version5Protocol = (bdmInfo.BDMsoftwareVersion > 0x050000);
+   log.print("bdmInfo.BDMsoftwareVersion = 0x%X\n", bdmInfo.BDMsoftwareVersion);
+   bdmState.version5Protocol = (bdmInfo.BDMsoftwareVersion >= 0x050000);
+   log.print("bdmState.version5Protocol = %s\n", bdmState.version5Protocol?"true":"false");
 
    if (USBDMVersion.bdmSoftwareVersion == 0xFF) {
       // In ICP mode - use defaults
@@ -600,17 +617,18 @@ static USBDM_ErrorCode updateBdmInfo(void) {
    return rc;
 }
 
-//! \brief Obtains information about the currently open BDM interface
-//!
-//! @param info ptr to structure to contain the information
-//!
-//! @return \n
-//!     BDM_RC_OK => OK \n
-//!     other     => Error code - see \ref USBDM_ErrorCode
-//!
-//! @note The size element of info should be initialised before call.
-//! @note Uses cached information from when the BDM was opened.
-//!
+/**
+ *  Obtains information about the currently open BDM interface
+ *
+ *  @param info ptr to structure to contain the information
+ *
+ *  @return \n
+ *      BDM_RC_OK => OK \n
+ *      other     => Error code - see \ref USBDM_ErrorCode
+ *
+ *  @note The size element of info should be initialised before call.
+ *  @note Uses cached information from when the BDM was opened.
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_GetBdmInformation(USBDM_bdmInformation_t *info) {
    LOGGING_Q;
@@ -650,13 +668,14 @@ USBDM_ErrorCode USBDM_GetBdmInformation(USBDM_bdmInformation_t *info) {
    return BDM_RC_OK;
 }
 
-//! \brief Transmits BDM options to BDM interface
-//! Versions prior to 4.12.1.10
-//!
-//! @return \n
-//!     BDM_RC_OK => OK \n
-//!     other     => Error code - see \ref USBDM_ErrorCode
-//!
+/**
+ *  Transmits BDM options to BDM interface
+ *  Versions prior to 4.12.1.10
+ *
+ *  @return \n
+ *      BDM_RC_OK => OK \n
+ *      other     => Error code - see \ref USBDM_ErrorCode
+ */
 static USBDM_ErrorCode sendBdmOptions_old(void) {
    LOGGING_E;
    bdmState.activityFlag = BDM_ACTIVE;
@@ -676,13 +695,14 @@ static USBDM_ErrorCode sendBdmOptions_old(void) {
    return bdm_usb_transaction(index, 1, usb_data);
 }
 
-//! \brief Transmits BDM options to BDM interface
-//! Version 4.12.1.10 and later
-//!
-//! @return \n
-//!     BDM_RC_OK => OK \n
-//!     other     => Error code - see \ref USBDM_ErrorCode
-//!
+/**
+ *  Transmits BDM options to BDM interface
+ *  Version 4.12.1.10 and later
+ *
+ *  @return \n
+ *      BDM_RC_OK => OK \n
+ *      other     => Error code - see \ref USBDM_ErrorCode
+ */
 static USBDM_ErrorCode sendBdmOptionsV4_12_1(void) {
    LOGGING_E;
    bdmState.activityFlag = BDM_ACTIVE;
@@ -718,12 +738,12 @@ static USBDM_ErrorCode sendBdmOptionsV4_12_1(void) {
    return bdm_usb_transaction(index, 1, usb_data);
 }
 
-//! \brief Transmits BDM options to BDM interface
-//!
-//! @return \n
-//!     BDM_RC_OK => OK \n
-//!     other     => Error code - see \ref USBDM_ErrorCode
-//!
+/**  Transmits BDM options to BDM interface
+ *
+ *  @return \n
+ *      BDM_RC_OK => OK \n
+ *      other     => Error code - see \ref USBDM_ErrorCode
+ */
 static USBDM_ErrorCode sendBdmOptions(void) {
    if (bdmInfo.BDMsoftwareVersion>=0x040C01) {
       return sendBdmOptionsV4_12_1();
@@ -732,11 +752,13 @@ static USBDM_ErrorCode sendBdmOptions(void) {
       return sendBdmOptions_old();
    }
 }
-//! Adapts the bdm options to the specified target
-//! This only changes the REQUIRED options
-//!
-//! @param bdmOptions - The options to modify
-//!
+
+/**
+ *  Adapts the bdm options to the specified target
+ *  This only changes the REQUIRED options
+ *
+ *  @param bdmOptions - The options to modify
+ */
 static void adaptRequiredBdmOptions(USBDM_ExtendedOptions_t *bdmOptions) {
 
    switch (bdmOptions->targetType) {
@@ -780,11 +802,12 @@ static void adaptRequiredBdmOptions(USBDM_ExtendedOptions_t *bdmOptions) {
    }
 }
 
-//! Adapts the default bdm options to the specified target
-//! This changes the recommended options
-//!
-//! @param bdmOptions - The options to modify
-//!
+/**
+ *  Adapts the default bdm options to the specified target
+ *  This changes the recommended options
+ *
+ *  @param bdmOptions - The options to modify
+ */
 static void adaptDefaultBdmOptions(USBDM_ExtendedOptions_t *bdmOptions) {
 
    adaptRequiredBdmOptions(bdmOptions);
@@ -811,16 +834,17 @@ static void adaptDefaultBdmOptions(USBDM_ExtendedOptions_t *bdmOptions) {
    }
 }
 
-//! Set BDM interface options
-//!
-//! @param newBdmOptions : Options to pass to BDM interface
-//!
-//! @return \n
-//!     BDM_RC_OK => OK \n
-//!     other     => Error code - see \ref USBDM_ErrorCode
-//!
-//! @deprecated - Use USBDM_SetExtendedOptions()
-//!
+/**
+ *  Set BDM interface options
+ *
+ *  @param newBdmOptions : Options to pass to BDM interface
+ *
+ *  @return \n
+ *      BDM_RC_OK => OK \n
+ *      other     => Error code - see \ref USBDM_ErrorCode
+ *
+ *  @deprecated - Use USBDM_SetExtendedOptions()
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_SetOptions(BDM_Options_t *newBdmOptions) {
    LOGGING_Q;
@@ -850,18 +874,19 @@ USBDM_ErrorCode USBDM_SetOptions(BDM_Options_t *newBdmOptions) {
    return sendBdmOptions();
 }
 
-//! Get default (target specific) BDM interface options
-//!
-//! @param bdmOptions : Current options from BDM interface\n
-//!                        Note - bdmOptions.size must be initialised \n
-//!                             - bdmOptions.targetType may be set (and is preserved)
-//!
-//! @return \n
-//!     BDM_RC_OK => OK \n
-//!     other     => Error code - see \ref USBDM_ErrorCode
-//!
-//! @note newBdmOptions.targetType should be set if called before USBDM_SetTarget()
-//!
+/**
+ *  Get default (target specific) BDM interface options
+ *
+ *  @param bdmOptions : Current options from BDM interface\n
+ *                         Note - bdmOptions.size must be initialised \n
+ *                              - bdmOptions.targetType may be set (and is preserved)
+ *
+ *  @return \n
+ *      BDM_RC_OK => OK \n
+ *      other     => Error code - see \ref USBDM_ErrorCode
+ *
+ *  @note newBdmOptions.targetType should be set if called before USBDM_SetTarget()
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_GetDefaultExtendedOptions(USBDM_ExtendedOptions_t *bdmOptions) {
    LOGGING_E;
@@ -889,7 +914,8 @@ USBDM_ErrorCode USBDM_GetDefaultExtendedOptions(USBDM_ExtendedOptions_t *bdmOpti
    return BDM_RC_OK;
 }
 
-/*!  Set BDM interface options
+/**
+ *  Set BDM interface options
  *
  *   @param newBdmOptions : Options to pass to BDM interface\n
  *
@@ -978,15 +1004,16 @@ USBDM_ErrorCode USBDM_SetExtendedOptions(const USBDM_ExtendedOptions_t *newBdmOp
    return sendBdmOptions();
 }
 
-//! Get BDM interface options
-//!
-//! @param currentBdmOptions : Current options from BDM interface\n
-//!                            Note - currentBdmOptions.size must be initialised
-//!
-//! @return \n
-//!     BDM_RC_OK => OK \n
-//!     other     => Error code - see \ref USBDM_ErrorCode
-//!
+/**
+ *  Get BDM interface options
+ *
+ *  @param currentBdmOptions : Current options from BDM interface\n
+ *                             Note - currentBdmOptions.size must be initialised
+ *
+ *  @return \n
+ *      BDM_RC_OK => OK \n
+ *      other     => Error code - see \ref USBDM_ErrorCode
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_GetExtendedOptions(USBDM_ExtendedOptions_t *currentBdmOptions) {
    unsigned size = currentBdmOptions->size;
@@ -1008,20 +1035,21 @@ USBDM_ErrorCode USBDM_GetExtendedOptions(USBDM_ExtendedOptions_t *currentBdmOpti
    return BDM_RC_OK;
 }
 
-//! Sets Target Vdd voltage
-//!
-//! @param targetVdd => control value for Vdd
-//!
-//! @return \n
-//!     BDM_RC_OK     => OK \n
-//!     else          => Various errors
-//!
-//! @note
-//! - BDM_TARGET_VDD_ENABLE & BDM_TARGET_VDD_DISABLE should be used to enable and disable Vdd
-//! - BDM_TARGET_VDD_OFF, BDM_TARGET_VDD_3V3 & BDM_TARGET_VDD_5V should be used to set the required Vdd.
-//! - It is expected that the USBDM_SetTargetVdd() will be used to set the initial Vdd before calling
-//!   USBDM_SetTarget() so that the appropriate power on sequence may be used.
-//!
+/**
+ *  Sets Target Vdd voltage
+ *
+ *  @param targetVdd => control value for Vdd
+ *
+ *  @return \n
+ *      BDM_RC_OK     => OK \n
+ *      else          => Various errors
+ *
+ *  @note
+ *  - BDM_TARGET_VDD_ENABLE & BDM_TARGET_VDD_DISABLE should be used to enable and disable Vdd
+ *  - BDM_TARGET_VDD_OFF, BDM_TARGET_VDD_3V3 & BDM_TARGET_VDD_5V should be used to set the required Vdd.
+ *  - It is expected that the USBDM_SetTargetVdd() will be used to set the initial Vdd before calling
+ *    USBDM_SetTarget() so that the appropriate power on sequence may be used.
+ */
 USBDM_API
 USBDM_ErrorCode  USBDM_SetTargetVdd(TargetVddSelect_t targetVdd) {
    USBDM_ErrorCode rc;
@@ -1062,20 +1090,21 @@ USBDM_ErrorCode  USBDM_SetTargetVdd(TargetVddSelect_t targetVdd) {
    return rc;
 }
 
-//! Sets Target programming voltage
-//!
-//! @param targetVpp => control value for Vpp
-//!
-//! @note Before enabling target Vpp it is necessary to do the following: \n
-//! - Target device must be set to T_RS08 \n
-//! - Target Vdd must be present (internally or externally) \n
-//! - The Target Vpp must be first set to BDM_TARGET_VPP_STANDBY then BDM_TARGET_VPP_ON \n
-//! The above is checked by the BDM firmware
-//!
-//! @return \n
-//!     BDM_RC_OK     => OK \n
-//!     else          => Various errors
-//!
+/**
+ *  Sets Target programming voltage
+ *
+ *  @param targetVpp => control value for Vpp
+ *
+ *  @note Before enabling target Vpp it is necessary to do the following: \n
+ *  - Target device must be set to T_RS08 \n
+ *  - Target Vdd must be present (internally or externally) \n
+ *  - The Target Vpp must be first set to BDM_TARGET_VPP_STANDBY then BDM_TARGET_VPP_ON \n
+ *  The above is checked by the BDM firmware
+ *
+ *  @return \n
+ *      BDM_RC_OK     => OK \n
+ *      else          => Various errors
+ */
 USBDM_API
 USBDM_ErrorCode  USBDM_SetTargetVpp(TargetVppSelect_t targetVpp) {
    USBDMStatus_t   USBDMStatus;
@@ -1092,19 +1121,20 @@ USBDM_ErrorCode  USBDM_SetTargetVpp(TargetVppSelect_t targetVpp) {
    return rc;
 }
 
-//! Directly manipulate interface levels
-//!
-//! @param control       => mask indicating interface levels see \ref InterfaceLevelMasks_t
-//! @param duration_10us => time (in 10us ticks) to assert level
-//!                         (0 = indefinite)
-//!
-//! @return \n
-//!     BDM_RC_OK    => OK \n
-//!     other        => Error code - see \ref USBDM_ErrorCode
-//!
-//! @note - Only partially implemented in BDM firmware
-//! @deprecated - use \ref USBDM_ControlPins()
-//!
+/**
+ *   Directly manipulate interface levels
+ *
+ *   @param control       => mask indicating interface levels see \ref InterfaceLevelMasks_t
+ *   @param duration_10us => time (in 10us ticks) to assert level
+ *                           (0 = indefinite)
+ *
+ *   @return \n
+ *       BDM_RC_OK    => OK \n
+ *       other        => Error code - see \ref USBDM_ErrorCode
+ *
+ *   @note - Only partially implemented in BDM firmware
+ *   @deprecated - use \ref USBDM_ControlPins()
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_ControlInterface(unsigned char duration_10us, unsigned int  control) {
    unsigned int controlValue = 0;
@@ -1163,7 +1193,7 @@ USBDM_ErrorCode USBDM_ControlInterface(unsigned char duration_10us, unsigned int
    }
 }
 
-/*!
+/**
  * Send Custom BDM command
  *
  * @param txSize  Transmission size
@@ -1191,15 +1221,16 @@ USBDM_ErrorCode USBDM_BDMCommand(unsigned int txSize, unsigned int rxSize, unsig
    return rc;
 }
 
-//! Directly manipulate interface levels
-//!
-//! @param control       => mask indicating interface levels see \ref PinLevelMasks_t
-//! @param status        => values on pins after action (not yet implemented). May be NULL.
-//!
-//! @return \n
-//!     BDM_RC_OK    => OK \n
-//!     other        => Error code - see \ref USBDM_ErrorCode
-//!
+/**
+ *  Directly manipulate interface levels
+ *
+ *  @param control       => mask indicating interface levels see \ref PinLevelMasks_t
+ *  @param status        => values on pins after action (not yet implemented). May be NULL.
+ *
+ *  @return \n
+ *      BDM_RC_OK    => OK \n
+ *      other        => Error code - see \ref USBDM_ErrorCode
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_ControlPins(unsigned int control, unsigned int *status) {
    LOGGING_Q;
@@ -1224,25 +1255,27 @@ USBDM_ErrorCode USBDM_ControlPins(unsigned int control, unsigned int *status) {
    return rc;
 }
 
-//=============================================================================
-//=============================================================================
-//=============================================================================
+/*
+ * =============================================================================
+ * =============================================================================
+ */
 // Target handling
 
-//! Sets target MCU type
-//! If the BDM has target power control then it will also:
-//!   - Turn on target power
-//!   - Halt the target if power has been newly applied (in special mode if appropriate)
-//!   - ARM targets have hardware reset still active to avoid power-on lockups or COP timeouts
-//!
-//! @param target_type type of target
-//!
-//! @return 0 => Success,\n !=0 => Fail
-//!
-//! @return \n
-//!     BDM_RC_OK => OK \n
-//!     other     => Error code - see \ref USBDM_ErrorCode
-//!
+/**
+ *   Sets target MCU type
+ *   If the BDM has target power control then it will also:
+ *     - Turn on target power
+ *     - Halt the target if power has been newly applied (in special mode if appropriate)
+ *     - ARM targets have hardware reset still active to avoid power-on lockups or COP timeouts
+ *
+ *   @param target_type type of target
+ *
+ *   @return 0 => Success,\n !=0 => Fail
+ *
+ *   @return \n
+ *       BDM_RC_OK => OK \n
+ *       other     => Error code - see \ref USBDM_ErrorCode
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_SetTargetType(TargetType_t targetType) {
    USBDM_ErrorCode rc = BDM_RC_OK;
@@ -1400,14 +1433,15 @@ USBDM_ErrorCode USBDM_SetTargetType(TargetType_t targetType) {
    return rc;
 }
 
-//! Execute debug command (various, see DebugSubCommands)
-//!
-//! @param usb_data - Command for BDM
-//!
-//! @return \n
-//!     BDM_RC_OK => OK \n
-//!     other     => Error code - see \ref USBDM_ErrorCode
-//!
+/**
+ *  Execute debug command (various, see DebugSubCommands)
+ *
+ *  @param usb_data - Command for BDM
+ *
+ *  @return \n
+ *      BDM_RC_OK => OK \n
+ *      other     => Error code - see \ref USBDM_ErrorCode
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_Debug(unsigned char *usb_data) {
    unsigned int actualRxSize;
@@ -1423,13 +1457,14 @@ USBDM_ErrorCode USBDM_Debug(unsigned char *usb_data) {
    return rc;
 }
 
-//! Get status of the last command
-//!
-//! @return \n
-//!     BDM_RC_OK          => OK \n
-//!     BDM_RC_USB_ERROR   => USB failure \n
-//!     other              => Error code - see \ref USBDM_ErrorCode
-//!
+/**
+ *  Get status of the last command
+ *
+ *  @return \n
+ *      BDM_RC_OK          => OK \n
+ *      BDM_RC_USB_ERROR   => USB failure \n
+ *      other              => Error code - see \ref USBDM_ErrorCode
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_GetCommandStatus(void) {
    USBDM_ErrorCode rc;
@@ -1443,14 +1478,15 @@ USBDM_ErrorCode USBDM_GetCommandStatus(void) {
    return rc;
 }
 
-//! Fills user supplied structure with state of BDM communication channel
-//!
-//! @param USBDMStatus Pointer to structure to receive status, see \ref USBDMStatus_t
-//!
-//! @return \n
-//!     BDM_RC_OK => OK \n
-//!     other     => Error code - see \ref USBDM_ErrorCode
-//!
+/**
+ *   Fills user supplied structure with state of BDM communication channel
+ *
+ *   @param USBDMStatus Pointer to structure to receive status, see \ref USBDMStatus_t
+ *
+ *   @return \n
+ *       BDM_RC_OK => OK \n
+ *       other     => Error code - see \ref USBDM_ErrorCode
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_GetBDMStatus(USBDMStatus_t *USBDMStatus) {
    LOGGING_Q;
@@ -1506,17 +1542,18 @@ USBDM_ErrorCode USBDM_GetBDMStatus(USBDMStatus_t *USBDMStatus) {
    return rc;
 }
 
-//! Connects to Target.
-//!
-//! This will cause the BDM module to attempt to connect to the Target.
-//! In most cases the BDM module will automatically determine the connection
-//! speed and successfully connect.  If unsuccessful, it may be necessary
-//! to manually set the speed using set_speed().
-//!
-//! @return \n
-//!     BDM_RC_OK  => OK \n
-//!     other      => Error code - see \ref USBDM_ErrorCode
-//!
+/**
+ *  Connects to Target.
+ *
+ *   This will cause the BDM module to attempt to connect to the Target.
+ *   In most cases the BDM module will automatically determine the connection
+ *   speed and successfully connect.  If unsuccessful, it may be necessary
+ *   to manually set the speed using set_speed().
+ *
+ *   @return \n
+ *       BDM_RC_OK  => OK \n
+ *       other      => Error code - see \ref USBDM_ErrorCode
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_Connect(void) {
 USBDM_ErrorCode rc;
@@ -1550,20 +1587,21 @@ USBDM_ErrorCode rc;
    return rc;
 }
 
-//! Sets the BDM communication speed.
-//!
-//! @param frequency => BDM Communication speed in kHz \n
-//! - T_CFVx, T_JTAG, T_MC56F80xx : JTAG clock frequency \n
-//! - RS08, HCS08, HCS12, CFV1    : BDM interface frequency \n
-//!    Usually equal to the CPU Bus frequency. \n
-//!    May be unrelated to bus speed if alternative BDM clock is in use. \n
-//!    Once a speed is set then automatic speed determination (by sync etc)
-//!    is disabled.  Automatic operation is restored by setting a speed of zero. \n
-//!
-//! @return \n
-//!     BDM_RC_OK  => OK \n
-//!     other      => Error code - see \ref USBDM_ErrorCode
-//!
+/**
+ *  Sets the BDM communication speed.
+ *
+ *  @param frequency => BDM Communication speed in kHz \n
+ *  - T_CFVx, T_JTAG, T_MC56F80xx : JTAG clock frequency \n
+ *  - RS08, HCS08, HCS12, CFV1    : BDM interface frequency \n
+ *     Usually equal to the CPU Bus frequency. \n
+ *     May be unrelated to bus speed if alternative BDM clock is in use. \n
+ *     Once a speed is set then automatic speed determination (by sync etc)
+ *     is disabled.  Automatic operation is restored by setting a speed of zero. \n
+ *
+ *  @return \n
+ *      BDM_RC_OK  => OK \n
+ *      other      => Error code - see \ref USBDM_ErrorCode
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_SetSpeed( unsigned long frequency) {
    unsigned int value;
@@ -1608,14 +1646,15 @@ USBDM_ErrorCode USBDM_SetSpeed( unsigned long frequency) {
    return bdm_usb_transaction(4, 1, usb_data);
 }
 
-//! Get the BDM communication speed in kHz
-//!
-//! @param frequency => BDM Communication speed in kHz
-//!
-//! @return \n
-//!     BDM_RC_OK  => OK \n
-//!     other      => Error code - see \ref USBDM_ErrorCode
-//!
+/**
+ *  Get the BDM communication speed in kHz
+ *
+ *  @param frequency => BDM Communication speed in kHz
+ *
+ *  @return \n
+ *      BDM_RC_OK  => OK \n
+ *      other      => Error code - see \ref USBDM_ErrorCode
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_GetSpeed(unsigned long *frequency /* kHz */) {
    USBDM_ErrorCode rc = USBDM_GetSpeedHz(frequency);
@@ -1623,14 +1662,15 @@ USBDM_ErrorCode USBDM_GetSpeed(unsigned long *frequency /* kHz */) {
    return rc;
 }
 
-//! Get the BDM communication speed in Hz
-//!
-//! @param frequency => BDM Communication speed in Hz
-//!
-//! @return \n
-//!     BDM_RC_OK  => OK \n
-//!     other      => Error code - see \ref USBDM_ErrorCode
-//!
+/**
+ *  Get the BDM communication speed in Hz
+ *
+ *  @param frequency => BDM Communication speed in Hz
+ *
+ *  @return \n
+ *      BDM_RC_OK  => OK \n
+ *      other      => Error code - see \ref USBDM_ErrorCode
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_GetSpeedHz(unsigned long *frequency /* Hz */) {
    USBDM_ErrorCode rc;
@@ -1673,23 +1713,24 @@ USBDM_ErrorCode USBDM_GetSpeedHz(unsigned long *frequency /* Hz */) {
    return rc;
 }
 
-//! Reads Target Status register byte
-//!
-//! @param BDMStatusReg => status register value read. \n
-//! The register read depends on target:
-//!  - HCS12   = BDMSTS, BDM Status register \n
-//!  - HCS08   = BDCSCR, BDM Status & Control register \n
-//!  - RS08    = BDCSCR, BDM Status & Control register \n
-//!  - CFV1    = XCSR[31..24], Extended Configuration/Status Register \n
-//!  - CFVx    = CSR, Configuration/Status Register (CSR)
-//!
-//! @return \n
-//!     BDM_RC_OK  => OK \n
-//!     other      => Error code - see \ref USBDM_ErrorCode
-//!
-//! @note \n
-//!    The BDM may resynchronize/reconnect with the target before doing this read.
-//!
+/**
+ *  Reads Target Status register byte
+ *
+ *   @param BDMStatusReg => status register value read. \n
+ *   The register read depends on target:
+ *    - HCS12   = BDMSTS, BDM Status register \n
+ *    - HCS08   = BDCSCR, BDM Status & Control register \n
+ *    - RS08    = BDCSCR, BDM Status & Control register \n
+ *    - CFV1    = XCSR[31..24], Extended Configuration/Status Register \n
+ *    - CFVx    = CSR, Configuration/Status Register (CSR)
+ *
+ *   @return \n
+ *       BDM_RC_OK  => OK \n
+ *       other      => Error code - see \ref USBDM_ErrorCode
+ *
+ *   @note \n
+ *      The BDM may resynchronize/reconnect with the target before doing this read.
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_ReadStatusReg(unsigned long *BDMStatusReg) {
    USBDM_ErrorCode rc;
@@ -1757,20 +1798,21 @@ USBDM_ErrorCode USBDM_ReadStatusReg(unsigned long *BDMStatusReg) {
    return rc;
 }
 
-//! Write Target Control Register byte
-//!
-//! @param value => value to write
-//! The register written depends on target:
-//!  - HCS12 = BDMSTS, BDM Status register \n
-//!  - HCS08 = BDCSCR, BDM Status & Control register \n
-//!  - RS08  = BDCSCR, BDM Status & Control register \n
-//!  - CFV1  = XCSR[31..24], Extended Configuration/Status Register \n
-//!  - CFVx  not supported (Access CSR through writeControlReg())
-//!
-//! @return \n
-//!     BDM_RC_OK  => OK \n
-//!     other      => Error code - see \ref USBDM_ErrorCode
-//!
+/**
+ *  Write Target Control Register byte
+ *
+ *  @param value => value to write
+ *  The register written depends on target:
+ *   - HCS12 = BDMSTS, BDM Status register \n
+ *   - HCS08 = BDCSCR, BDM Status & Control register \n
+ *   - RS08  = BDCSCR, BDM Status & Control register \n
+ *   - CFV1  = XCSR[31..24], Extended Configuration/Status Register \n
+ *   - CFVx  not supported (Access CSR through writeControlReg())
+ *
+ *  @return \n
+ *      BDM_RC_OK  => OK \n
+ *      other      => Error code - see \ref USBDM_ErrorCode
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_WriteControlReg(unsigned int value) {
    LOGGING_Q;
@@ -1787,18 +1829,19 @@ USBDM_ErrorCode USBDM_WriteControlReg(unsigned int value) {
    return bdm_usb_transaction(6, 1, usb_data);
 }
 
-//*****************************************************************************
-//*****************************************************************************
-//*****************************************************************************
+/*
+ * =============================================================================
+ * =============================================================================
+ */
 // Target run control
 
-//!
-//! Reset sequence for RS08/HCS08/HCS12/CFV1
-//!
-//! @param target_mode - Reset method \n
-//!         RESET_DEFAULT/RESET_POWER/RESET_HARDWARE/RESET_SOFTWARE \n
-//!        +RESET_SPECIAL/RESET_NORMAL
-//!
+/**
+ *  Reset sequence for RS08/HCS08/HCS12/CFV1
+ *
+ *  @param target_mode - Reset method \n
+ *          RESET_DEFAULT/RESET_POWER/RESET_HARDWARE/RESET_SOFTWARE \n
+ *         +RESET_SPECIAL/RESET_NORMAL
+ */
 static USBDM_ErrorCode resetHCS(TargetMode_t targetMode) {
    LOGGING_Q;
    USBDM_ErrorCode rc;
@@ -1874,13 +1917,13 @@ static USBDM_ErrorCode resetHCS(TargetMode_t targetMode) {
    return rc;
 }
 
-//!
-//! Reset sequence for CFVx
-//!
-//! @param target_mode - Reset method \n
-//!         RESET_DEFAULT/RESET_POWER/RESET_HARDWARE \n
-//!        +RESET_SPECIAL/RESET_NORMAL
-//!
+/**
+ *  Reset sequence for CFVx
+ *
+ *  @param target_mode - Reset method \n
+ *          RESET_DEFAULT/RESET_POWER/RESET_HARDWARE \n
+ *         +RESET_SPECIAL/RESET_NORMAL
+ */
 static USBDM_ErrorCode resetCFVx(TargetMode_t targetMode) {
    LOGGING_Q;
    USBDM_ErrorCode rc;
@@ -1935,12 +1978,12 @@ static USBDM_ErrorCode resetCFVx(TargetMode_t targetMode) {
    return BDM_RC_ILLEGAL_PARAMS;
 }
 
-//!
-//! Reset sequence for Other targets
-//!
-//! @param target_mode - Reset method \n
-//!                         RESET_POWER/RESET_HARDWARE
-//!
+/**
+ *   Reset sequence for Other targets
+ *
+ *   @param target_mode - Reset method \n
+ *                           RESET_POWER/RESET_HARDWARE
+ */
 static USBDM_ErrorCode resetOther(TargetMode_t targetMode) {
    LOGGING_Q;
    USBDM_ErrorCode rc;
@@ -1981,18 +2024,19 @@ static USBDM_ErrorCode resetOther(TargetMode_t targetMode) {
    return BDM_RC_ILLEGAL_PARAMS;
 }
 
-//! Resets the target to normal or special mode
-//!
-//! @param target_mode see
-//!
-//! @return \n
-//!     BDM_RC_OK   => OK \n
-//!     other       => Error code - see \ref USBDM_ErrorCode
-//!
-//! @note V4.4 onwards - Communication with the target may be lost.  It is necessary to use
-//! USBDM_Connect() to re-connect.  This is no longer done automatically
-//! as it may interfere with security checking if attempted too soon after reset.
-//!
+/**
+ *  Resets the target to normal or special mode
+ *
+ *  @param target_mode see
+ *
+ *  @return \n
+ *      BDM_RC_OK   => OK \n
+ *      other       => Error code - see \ref USBDM_ErrorCode
+ *
+ *  @note V4.4 onwards - Communication with the target may be lost.  It is necessary to use
+ *  USBDM_Connect() to re-connect.  This is no longer done automatically
+ *  as it may interfere with security checking if attempted too soon after reset.
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_TargetReset(TargetMode_t target_mode) {
    LOGGING;
@@ -2023,12 +2067,13 @@ USBDM_ErrorCode USBDM_TargetReset(TargetMode_t target_mode) {
    }
 }
 
-//! Steps over a single target instruction
-//!
-//! @return \n
-//!     BDM_RC_OK    => OK \n
-//!     other        => Error code - see \ref USBDM_ErrorCode
-//!
+/**
+ *  Steps over a single target instruction
+ *
+ *  @return \n
+ *      BDM_RC_OK    => OK \n
+ *      other        => Error code - see \ref USBDM_ErrorCode
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_TargetStep(void) {
    LOGGING_E;
@@ -2040,12 +2085,13 @@ USBDM_ErrorCode USBDM_TargetStep(void) {
    return bdm_usb_transaction(2, 1, usb_data);
 }
 
-//! Starts target execution from current PC address
-//!
-//! @return \n
-//!     BDM_RC_OK    => OK \n
-//!     other        => Error code - see \ref USBDM_ErrorCode
-//!
+/**
+ *   Starts target execution from current PC address
+ *
+ *   @return \n
+ *       BDM_RC_OK    => OK \n
+ *       other        => Error code - see \ref USBDM_ErrorCode
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_TargetGo(void) {
    LOGGING_E;
@@ -2057,12 +2103,13 @@ USBDM_ErrorCode USBDM_TargetGo(void) {
    return bdm_usb_transaction(2, 1, usb_data);
 }
 
-//! Brings the target into active background mode.  The target will be halted.
-//!
-//! @return \n
-//!     BDM_RC_OK    => OK \n
-//!     other        => Error code - see \ref USBDM_ErrorCode
-//!
+/**
+ *  Brings the target into active background mode.  The target will be halted.
+ *
+ *  @return \n
+ *      BDM_RC_OK    => OK \n
+ *      other        => Error code - see \ref USBDM_ErrorCode
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_TargetHalt(void) {
    LOGGING_E;
@@ -2074,27 +2121,29 @@ USBDM_ErrorCode USBDM_TargetHalt(void) {
    return bdm_usb_transaction(2, 1, usb_data);
 }
 
-//*****************************************************************************
-//*****************************************************************************
-//*****************************************************************************
+/*
+ * =============================================================================
+ * =============================================================================
+ */
 // Target register Read/Write
 
-//! Write Target Core register
-//!
-//! @param regNo    Register #
-//!  - HCS12     = D,X,Y,SP,PC see \ref HCS12_Registers_t          \n
-//!  - HCS08     = A,HX,SP,CCR,PC see \ref HCS08_Registers_t       \n
-//!  - RS08      = CCR_PC,SPC,A see \ref RS08_Registers_t          \n
-//!  - CFV1      = Core register space D0-D7, A0-A7 see \ref CFV1_Registers_t  \n
-//!  - CFVx      = Core register space D0-D7, A0-A7 see \ref CFVx_Registers_t
-//!  - JTAG_SWD  = ARM Core Registers see \ref ARM_Registers_t
-//!  - JTAG_ARM  = ARM Core Registers see \ref ARM_Registers_t
-//! @param regValue 8/16/32-bit value
-//!
-//! @return error code \n
-//!     BDM_RC_OK    => OK \n
-//!     other        => Error code - see \ref USBDM_ErrorCode
-//!
+/**
+ *  Write Target Core register
+ *
+ *  @param regNo    Register #
+ *   - HCS12     = D,X,Y,SP,PC see \ref HCS12_Registers_t          \n
+ *   - HCS08     = A,HX,SP,CCR,PC see \ref HCS08_Registers_t       \n
+ *   - RS08      = CCR_PC,SPC,A see \ref RS08_Registers_t          \n
+ *   - CFV1      = Core register space D0-D7, A0-A7 see \ref CFV1_Registers_t  \n
+ *   - CFVx      = Core register space D0-D7, A0-A7 see \ref CFVx_Registers_t
+ *   - JTAG_SWD  = ARM Core Registers see \ref ARM_Registers_t
+ *   - JTAG_ARM  = ARM Core Registers see \ref ARM_Registers_t
+ *  @param regValue 8/16/32-bit value
+ *
+ *  @return error code \n
+ *      BDM_RC_OK    => OK \n
+ *      other        => Error code - see \ref USBDM_ErrorCode
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_WriteReg(unsigned int regNo, unsigned long regValue) {
    LOGGING_Q;
@@ -2122,24 +2171,25 @@ USBDM_ErrorCode USBDM_WriteReg(unsigned int regNo, unsigned long regValue) {
    return bdm_usb_transaction(8, 1, usb_data);
 }
 
-//! Read Target Core register
-//!
-//! @param regNo    Register #
-//!  - HCS12     = D,X,Y,SP,PC see \ref HCS12_Registers_t          \n
-//!  - HCS08     = A,HX,SP,CCR,PC see \ref HCS08_Registers_t       \n
-//!  - RS08      = CCR_PC,SPC,A see \ref RS08_Registers_t          \n
-//!  - CFV1      = Core register space D0-D7, A0-A7, PSTBASE+n, see \ref CFV1_Registers_t  \n
-//!  - CFVx      = Core register space D0-D7, A0-A7 see \ref CFVx_Registers_t
-//!  - JTAG_SWD  = ARM Core Registers see \ref ARM_Registers_t
-//!  - JTAG_ARM  = ARM Core Registers see \ref ARM_Registers_t
-//! @param regValue 8/16/32-bit value
-//!
-//! @return error code \n
-//!     BDM_RC_OK    => OK \n
-//!     other        => Error code - see \ref USBDM_ErrorCode
-//!
-//! @note HCS12_RegCCR is accessed through \ref USBDM_ReadDReg()
-//!
+/**
+ *  Read Target Core register
+ *
+ *  @param regNo    Register #
+ *   - HCS12     = D,X,Y,SP,PC see \ref HCS12_Registers_t          \n
+ *   - HCS08     = A,HX,SP,CCR,PC see \ref HCS08_Registers_t       \n
+ *   - RS08      = CCR_PC,SPC,A see \ref RS08_Registers_t          \n
+ *   - CFV1      = Core register space D0-D7, A0-A7, PSTBASE+n, see \ref CFV1_Registers_t  \n
+ *   - CFVx      = Core register space D0-D7, A0-A7 see \ref CFVx_Registers_t
+ *   - JTAG_SWD  = ARM Core Registers see \ref ARM_Registers_t
+ *   - JTAG_ARM  = ARM Core Registers see \ref ARM_Registers_t
+ *  @param regValue 8/16/32-bit value
+ *
+ *  @return error code \n
+ *      BDM_RC_OK    => OK \n
+ *      other        => Error code - see \ref USBDM_ErrorCode
+ *
+ *  @note HCS12_RegCCR is accessed through \ref USBDM_ReadDReg()
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_ReadReg(unsigned int regNo, unsigned long *regValue) {
    LOGGING_Q;
@@ -2178,19 +2228,20 @@ USBDM_ErrorCode USBDM_ReadReg(unsigned int regNo, unsigned long *regValue) {
 return rc;
 }
 
-//! Read Multiple Core registers
-//!
-//! @param regValueBuffer Values in Target byte order??
-//! @param startRegIndex     Register index (inclusive) to start reading at
-//! @param endRegIndex       Register index (inclusive) to stop reading at
-//!
-//! @return error code \n
-//!     BDM_RC_OK    => OK \n
-//!     other        => Error code - see \ref USBDM_ErrorCode
-//!
-//! @note The indexes mentioned above are magic numbers indexing an arbitrary table.\n
-//!       Use only the predefined values provided in the USBDM_API.h  /ref ARM_RegisterIndex_t, /ref CFV1_RegisterIndex_t, /ref CFVx_RegisterIndex_t
-//!
+/**
+ * Read Multiple Core registers
+ *
+ *  @param regValueBuffer Values in Target byte order??
+ *  @param startRegIndex     Register index (inclusive) to start reading at
+ *  @param endRegIndex       Register index (inclusive) to stop reading at
+ *
+ *  @return error code \n
+ *      BDM_RC_OK    => OK \n
+ *      other        => Error code - see \ref USBDM_ErrorCode
+ *
+ *  @note The indexes mentioned above are magic numbers indexing an arbitrary table.\n
+ *        Use only the predefined values provided in the USBDM_API.h  /ref ARM_RegisterIndex_t, /ref CFV1_RegisterIndex_t, /ref CFVx_RegisterIndex_t
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_ReadMultipleRegs(unsigned char regValueBuffer[], unsigned int startRegIndex, unsigned int endRegIndex) {
    LOGGING;
@@ -2222,23 +2273,24 @@ USBDM_ErrorCode USBDM_ReadMultipleRegs(unsigned char regValueBuffer[], unsigned 
 return rc;
 }
 
-//! Write Target Control register
-//!
-//! @param regNo    Register #
-//!    - HCS12     = not used \n
-//!    - HCS08     = not used \n
-//!    - RS08      = not used \n
-//!    - CFV1      = Control register space, see \ref CFV1_CRegisters_t\n
-//!    - CFVx      = Control register space, see \ref CFVx_CRegisters_t
-//!    - JTAG_SWD  = AP memory space see \ref ARM_CRegisters_t
-//!    - JTAG_ARM  = AP memory space see \ref ARM_CRegisters_t
-//!
-//! @param regValue 8/16/32-bit value
-//!
-//! @return error code \n
-//!     BDM_RC_OK    => OK \n
-//!     other        => Error code - see \ref USBDM_ErrorCode
-//!
+/**
+ * Write Target Control register
+ *
+ *  @param regNo    Register #
+ *     - HCS12     = not used \n
+ *     - HCS08     = not used \n
+ *     - RS08      = not used \n
+ *     - CFV1      = Control register space, see \ref CFV1_CRegisters_t\n
+ *     - CFVx      = Control register space, see \ref CFVx_CRegisters_t
+ *     - JTAG_SWD  = AP memory space see \ref ARM_CRegisters_t
+ *     - JTAG_ARM  = AP memory space see \ref ARM_CRegisters_t
+ *
+ *  @param regValue 8/16/32-bit value
+ *
+ *  @return error code \n
+ *      BDM_RC_OK    => OK \n
+ *      other        => Error code - see \ref USBDM_ErrorCode
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_WriteCReg(unsigned int regNo, unsigned long regValue) {
    LOGGING_Q;
@@ -2293,23 +2345,24 @@ USBDM_ErrorCode USBDM_WriteCReg(unsigned int regNo, unsigned long regValue) {
    return bdm_usb_transaction(8, 1, usb_data);
 }
 
-//! Read Target Control register
-//!
-//! @param regNo    Register # or address
-//!    - HCS12     = not used \n
-//!    - HCS08     = not used \n
-//!    - RS08      = not used \n
-//!    - CFV1      = Control register space, see \ref CFV1_CRegisters_t\n
-//!    - CFVx      = Control register space, see \ref CFVx_CRegisters_t \n
-//!    - JTAG_SWD  = AP memory space see \ref ARM_CRegisters_t
-//!    - JTAG_ARM  = AP memory space see \ref ARM_CRegisters_t
-//!
-//! @param regValue 8/16/32-bit value
-//!
-//! @return error code \n
-//!     BDM_RC_OK    => OK \n
-//!     other        => Error code - see \ref USBDM_ErrorCode
-//!
+/**
+ * Read Target Control register
+ *
+ *  @param regNo    Register # or address
+ *     - HCS12     = not used \n
+ *     - HCS08     = not used \n
+ *     - RS08      = not used \n
+ *     - CFV1      = Control register space, see \ref CFV1_CRegisters_t\n
+ *     - CFVx      = Control register space, see \ref CFVx_CRegisters_t \n
+ *     - JTAG_SWD  = AP memory space see \ref ARM_CRegisters_t
+ *     - JTAG_ARM  = AP memory space see \ref ARM_CRegisters_t
+ *
+ *  @param regValue 8/16/32-bit value
+ *
+ *  @return error code \n
+ *      BDM_RC_OK    => OK \n
+ *      other        => Error code - see \ref USBDM_ErrorCode
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_ReadCReg(unsigned int regNo, unsigned long *regValue) {
    LOGGING_Q;
@@ -2371,22 +2424,23 @@ USBDM_ErrorCode USBDM_ReadCReg(unsigned int regNo, unsigned long *regValue) {
 #endif
    return rc;
 }
-//! Write Target Debug register
-//!
-//! @param regNo    Register #
-//!   - HCS12     = BD memory space, see \ref HCS12_DRegisters_t   \n
-//!   - HCS08     = BKPT register, see \ref HCS08_DRegisters_t   \n
-//!   - RS08      = BKPT register, see \ref RS08_DRegisters_t   \n
-//!   - CFV1      = Debug register space, see \ref CFV1_DRegisters_t\n
-//!   - CFVx      = Debug register space, see \ref CFVx_DRegisters_t
-//!   - JTAG_SWD  = DP/AP Registers see \ref ARM_DRegisters_t
-//!   - JTAG_ARM  = DP/AP Registers see \ref ARM_DRegisters_t
-//! @param regValue 8/16/32-bit value
-//!
-//! @return error code \n
-//!     BDM_RC_OK    => OK \n
-//!     other        => Error code - see \ref USBDM_ErrorCode
-//!
+/**
+ * Write Target Debug register
+ *
+ *  @param regNo    Register #
+ *    - HCS12     = BD memory space, see \ref HCS12_DRegisters_t   \n
+ *    - HCS08     = BKPT register, see \ref HCS08_DRegisters_t   \n
+ *    - RS08      = BKPT register, see \ref RS08_DRegisters_t   \n
+ *    - CFV1      = Debug register space, see \ref CFV1_DRegisters_t\n
+ *    - CFVx      = Debug register space, see \ref CFVx_DRegisters_t
+ *    - JTAG_SWD  = DP/AP Registers see \ref ARM_DRegisters_t
+ *    - JTAG_ARM  = DP/AP Registers see \ref ARM_DRegisters_t
+ *  @param regValue 8/16/32-bit value
+ *
+ *  @return error code \n
+ *      BDM_RC_OK    => OK \n
+ *      other        => Error code - see \ref USBDM_ErrorCode
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_WriteDReg(unsigned int regNo, unsigned long regValue) {
    LOGGING_Q;
@@ -2444,22 +2498,23 @@ USBDM_ErrorCode USBDM_WriteDReg(unsigned int regNo, unsigned long regValue) {
    return bdm_usb_transaction(8, 1, usb_data);
 }
 
-//! Read Target Debug register
-//!
-//! @param regNo    Register #
-//!   - HCS12     = BD memory space, see \ref HCS12_DRegisters_t   \n
-//!   - HCS08     = BKPT register, see \ref HCS08_DRegisters_t   \n
-//!   - RS08      = BKPT register, see \ref RS08_DRegisters_t   \n
-//!   - CFV1      = Debug register space, see \ref CFV1_DRegisters_t\n
-//!   - CFVx      = Debug register space, see \ref CFVx_DRegisters_t
-//!   - JTAG_SWD  = DP/AP Registers see \ref ARM_DRegisters_t
-//!   - JTAG_ARM  = DP/AP Registers see \ref ARM_DRegisters_t
-//! @param regValue 8/16/32-bit value
-//!
-//! @return error code \n
-//!     BDM_RC_OK    => OK \n
-//!     other        => Error code - see \ref USBDM_ErrorCode
-//!
+/**
+ * Read Target Debug register
+ *
+ *  @param regNo    Register #
+ *    - HCS12     = BD memory space, see \ref HCS12_DRegisters_t   \n
+ *    - HCS08     = BKPT register, see \ref HCS08_DRegisters_t   \n
+ *    - RS08      = BKPT register, see \ref RS08_DRegisters_t   \n
+ *    - CFV1      = Debug register space, see \ref CFV1_DRegisters_t\n
+ *    - CFVx      = Debug register space, see \ref CFVx_DRegisters_t
+ *    - JTAG_SWD  = DP/AP Registers see \ref ARM_DRegisters_t
+ *    - JTAG_ARM  = DP/AP Registers see \ref ARM_DRegisters_t
+ *  @param regValue 8/16/32-bit value
+ *
+ *  @return error code \n
+ *      BDM_RC_OK    => OK \n
+ *      other        => Error code - see \ref USBDM_ErrorCode
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_ReadDReg(unsigned int regNo, unsigned long *regValue) {
    LOGGING_Q;
@@ -2521,42 +2576,44 @@ USBDM_ErrorCode USBDM_ReadDReg(unsigned int regNo, unsigned long *regValue) {
    return rc;
 }
 
-//*****************************************************************************
-//*****************************************************************************
-//*****************************************************************************
+/*
+ * =============================================================================
+ * =============================================================================
+ */
 //  Memory read write
 
 
-//=======================================================================
-//! Assemble a memory read/write message header into the usb data buffer
-//!
-//! @param command     = Target command
-//! @param memorySpace = Memory space & size of data elements (1/2/4)
-//! @param count       = Count of bytes to transfer
-//! @param address     = Memory address
-//! \verbatim
-//! +---+----------------------------------+ \n
-//! | 0 |   uint8_t: --------              | \n
-//! +---+----------------------------------+ \n
-//! | 1 |   uint8_t: command               | \n
-//! +---+----------------------------------+ \n
-//! | 2 |   uint8_t: memorySpace (1/2/4)   | \n
-//! +---+----------------------------------+ \n
-//! | 3 |   uint8_t: count                 | \n
-//! +---+----------------------------------+ \n
-//! | 4 |                                  | \n
-//! +---+-                                -+ \n
-//! | 5 |                                  | \n
-//! +---+-  uint32_t: address             -+ \n
-//! | 6 |   (BigEndian)                    | \n
-//! +---+-                                -+ \n
-//! | 7 |                                  | \n
-//! +---+----------------------------------+ \n
-//! | 8 |                                  | \n
-//! +---+-  uint8_t[]: Data               -+ \n
-//! ~   ~                                  ~ \n
-//! +---+----------------------------------+ \n
-//! \endverbatim
+/** ======================================================================
+ *  Assemble a memory read/write message header into the usb data buffer
+ *
+ *  @param command     = Target command
+ *  @param memorySpace = Memory space & size of data elements (1/2/4)
+ *  @param count       = Count of bytes to transfer
+ *  @param address     = Memory address
+ *  \verbatim
+ *  +---+----------------------------------+ \n
+ *  | 0 |   uint8_t: --------              | \n
+ *  +---+----------------------------------+ \n
+ *  | 1 |   uint8_t: command               | \n
+ *  +---+----------------------------------+ \n
+ *  | 2 |   uint8_t: memorySpace (1/2/4)   | \n
+ *  +---+----------------------------------+ \n
+ *  | 3 |   uint8_t: count                 | \n
+ *  +---+----------------------------------+ \n
+ *  | 4 |                                  | \n
+ *  +---+-                                -+ \n
+ *  | 5 |                                  | \n
+ *  +---+-  uint32_t: address             -+ \n
+ *  | 6 |   (BigEndian)                    | \n
+ *  +---+-                                -+ \n
+ *  | 7 |                                  | \n
+ *  +---+----------------------------------+ \n
+ *  | 8 |                                  | \n
+ *  +---+-  uint8_t[]: Data               -+ \n
+ *  ~   ~                                  ~ \n
+ *  +---+----------------------------------+ \n
+ *  \endverbatim
+ */
 static void assembleMessageHeader(uint8_t command,
                                   uint8_t memorySpace,
                                   uint8_t count,
@@ -2577,18 +2634,18 @@ static void assembleMessageHeader(uint8_t command,
 #endif
 }
 
-//=======================================================================
-//! Write data to target memory
-//!
-//! @param memorySpace = Size of data elements (1/2/4 bytes)
-//! @param byteCount   = Number of _bytes_ to transfer
-//! @param address     = Memory address
-//! @param data        = Ptr to block of data to write
-//!
-//! @return error code \n
-//!     BDM_RC_OK    => OK \n
-//!     other        => Error code - see \ref USBDM_ErrorCode
-//!
+/** ======================================================================
+ *  Write data to target memory
+ *
+ *  @param memorySpace = Size of data elements (1/2/4 bytes)
+ *  @param byteCount   = Number of _bytes_ to transfer
+ *  @param address     = Memory address
+ *  @param data        = Ptr to block of data to write
+ *
+ *  @return error code \n
+ *      BDM_RC_OK    => OK \n
+ *      other        => Error code - see \ref USBDM_ErrorCode
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_WriteMemory( unsigned int        memorySpace,
                                    unsigned int        byteCount,
@@ -2722,18 +2779,18 @@ USBDM_ErrorCode USBDM_WriteMemory( unsigned int        memorySpace,
    return stickyRc;
 }
 
-//=======================================================================
-//! Read data from target memory
-//!
-//! @param elementSize = Size of data (1/2/4 bytes)
-//! @param byteCount   = Number of bytes to transfer
-//! @param address     = Memory address
-//! @param data        = Where to place data
-//!
-//! @return error code \n
-//!     BDM_RC_OK    => OK \n
-//!     other        => Error code - see \ref USBDM_ErrorCode
-//!
+/** ======================================================================
+ *  Read data from target memory
+ *
+ *  @param elementSize = Size of data (1/2/4 bytes)
+ *  @param byteCount   = Number of bytes to transfer
+ *  @param address     = Memory address
+ *  @param data        = Where to place data
+ *
+ *  @return error code \n
+ *      BDM_RC_OK    => OK \n
+ *      other        => Error code - see \ref USBDM_ErrorCode
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_ReadMemory( unsigned int  memorySpace,
                                   unsigned int  byteCount,
@@ -2872,25 +2929,26 @@ USBDM_ErrorCode USBDM_ReadMemory( unsigned int  memorySpace,
 
 #if 0
 
-//! (RS08) Prepare for RS08 Flash programming
-//!
-//!  This routine does the following:
-//!   - Resets the target
-//!   - Re-connects
-//!   - Checks that the target SDID is correct for the target selected.
-//!   - Disables the COP on the target
-//!   - Downloads the Flash programming code into the direct memory of
-//!     the RS08 target and then verifies this by reading it back.
-//!   - Starts the target program execution (program will be idle).
-//!   - Instructs the BDM to enable the Flash programming voltage
-//!
-//!  USBDM_RS08WriteFlash() may now be be used to program blocks of data
-//!     to the RS08 Flash.
-//!
-//! @return \n
-//!     BDM_RC_OK    => OK \n
-//!     other        => Error code - see \ref USBDM_ErrorCode
-//!
+/**
+ * (RS08) Prepare for RS08 Flash programming
+ *
+ *   This routine does the following:
+ *    - Resets the target
+ *    - Re-connects
+ *    - Checks that the target SDID is correct for the target selected.
+ *    - Disables the COP on the target
+ *    - Downloads the Flash programming code into the direct memory of
+ *      the RS08 target and then verifies this by reading it back.
+ *    - Starts the target program execution (program will be idle).
+ *    - Instructs the BDM to enable the Flash programming voltage
+ *
+ *   USBDM_RS08WriteFlash() may now be be used to program blocks of data
+ *      to the RS08 Flash.
+ *
+ *  @return \n
+ *      BDM_RC_OK    => OK \n
+ *      other        => Error code - see \ref USBDM_ErrorCode
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_RS08FlashProgramPreamble(void) {
    LOGGING_Q;
@@ -2981,12 +3039,12 @@ USBDM_ErrorCode USBDM_RS08FlashProgramPreamble(void) {
    return USBDM_SetTargetVpp(BDM_TARGET_VPP_ON);
 }
 
-//! (RS08) Check status of RS08 Flash programming
-//!
-//! @return \n
-//!     BDM_RC_OK    => OK \n
-//!     other        => Error code - see \ref USBDM_ErrorCode
-//!
+/**  (RS08) Check status of RS08 Flash programming
+ *
+ *  @return \n
+ *      BDM_RC_OK    => OK \n
+ *      other        => Error code - see \ref USBDM_ErrorCode
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_RS08FlashStatus(void) {
    LOGGING_Q;
@@ -3010,15 +3068,16 @@ USBDM_ErrorCode USBDM_RS08FlashStatus(void) {
    return BDM_RC_OK;
 }
 
-//! (RS08) Tidy up after Flash programming
-//!
-//! - Restore/program clock trim value
-//! - Vpp off
-//!
-//! @return \n
-//!     BDM_RC_OK    => OK \n
-//!     other        => Error code - see \ref USBDM_ErrorCode
-//!
+/**
+ * (RS08) Tidy up after Flash programming
+ *
+ *  - Restore/program clock trim value
+ *  - Vpp off
+ *
+ *  @return \n
+ *      BDM_RC_OK    => OK \n
+ *      other        => Error code - see \ref USBDM_ErrorCode
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_RS08FlashProgramPostamble(void){
    LOGGING_Q;
@@ -3064,16 +3123,16 @@ USBDM_ErrorCode USBDM_RS08FlashProgramPostamble(void){
    return rc;
 }
 
-//=============================================================================
-//! Calculate delay value for Flash programming. \n
-//! See flash program for calculation method.
-//!
-//! @param delayValue  = Delay value passed to target program
-//!
-//! @return error code \n
-//!     BDM_RC_OK    => OK \n
-//!     other        => Error code - see \ref USBDM_ErrorCode
-//!
+/** ============================================================================
+ *  Calculate delay value for Flash programming. \n
+ *  See flash program for calculation method.
+ *
+ *  @param delayValue  = Delay value passed to target program
+ *
+ *  @return error code \n
+ *      BDM_RC_OK    => OK \n
+ *      other        => Error code - see \ref USBDM_ErrorCode
+ */
 USBDM_ErrorCode USBDM_RS08CalculateFlashDelay(uint8_t *delayValue) {
    LOGGING_Q;
    unsigned long bdmFrequency;
@@ -3091,18 +3150,18 @@ USBDM_ErrorCode USBDM_RS08CalculateFlashDelay(uint8_t *delayValue) {
    return BDM_RC_OK;
 }
 
-//==================================================================================
-//! Write data to RS08 Flash memory - (within a single page of Flash, & buffer size)
-//!
-//! @param byteCount   = Number of bytes to transfer
-//! @param address     = Memory address
-//! @param data        = Ptr to block of data to write
-//! @param delayValue  = Delay value for target program
-//!
-//! @return error code \n
-//!     BDM_RC_OK    => OK \n
-//!     other        => Error code - see \ref USBDM_ErrorCode
-//!
+/** =================================================================================
+ *  Write data to RS08 Flash memory - (within a single page of Flash, & buffer size)
+ *
+ *  @param byteCount   = Number of bytes to transfer
+ *  @param address     = Memory address
+ *  @param data        = Ptr to block of data to write
+ *  @param delayValue  = Delay value for target program
+ *
+ *  @return error code \n
+ *      BDM_RC_OK    => OK \n
+ *      other        => Error code - see \ref USBDM_ErrorCode
+ */
 static
 USBDM_ErrorCode USBDM_RS08WriteFlashBlock( unsigned int        byteCount,
                                           unsigned int        address,
@@ -3196,19 +3255,20 @@ USBDM_ErrorCode USBDM_RS08WriteFlashBlock( unsigned int        byteCount,
    return BDM_RC_OK;
 }
 
-//=======================================================================
-//! Write data to RS08 Flash memory
-//! The data is subdivided based upon buffer size and Flash alignment
-//!
-//! @param elementSize = Size of data elements (=1 byte)
-//! @param byteCount   = Number of _bytes_ to transfer
-//! @param address     = Memory address
-//! @param data        = Ptr to block of data to write
-//!
-//! @return error code \n
-//!     BDM_RC_OK    => OK \n
-//!     other        => Error code - see \ref USBDM_ErrorCode
-//!
+/**
+ * ======================================================================
+ *  Write data to RS08 Flash memory
+ *  The data is subdivided based upon buffer size and Flash alignment
+ *
+ *  @param elementSize = Size of data elements (=1 byte)
+ *  @param byteCount   = Number of _bytes_ to transfer
+ *  @param address     = Memory address
+ *  @param data        = Ptr to block of data to write
+ *
+ *  @return error code \n
+ *      BDM_RC_OK    => OK \n
+ *      other        => Error code - see \ref USBDM_ErrorCode
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_RS08WriteFlash( unsigned int        elementSize,
                                       unsigned int        byteCount,
@@ -3286,10 +3346,11 @@ USBDM_ErrorCode USBDM_RS08WriteFlash( unsigned int        elementSize,
    return BDM_RC_OK;
 }
 
-//! \brief Does Bulk Erase of Target Flash.
-//!
-//! @return error code, see \ref FlashError_t
-//!
+/**
+ * \brief Does Bulk Erase of Target Flash.
+ *
+ *  @return error code, see \ref FlashError_t
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_RS08BulkEraseFlash() {
    LOGGING_Q;
@@ -3328,22 +3389,24 @@ USBDM_ErrorCode USBDM_RS08BulkEraseFlash() {
 }
 #endif
 
-//*****************************************************************************
-//*****************************************************************************
-//*****************************************************************************
+/*
+ * =============================================================================
+ * =============================================================================
+ */
 // JTAG Entry points
 //
 
-//! JTAG - Moves the TAP to \b TEST-LOGIC-RESET state
-//! TMS=11111, TDI=00000 or similar
-//!
-//! @return \n
-//!     BDM_RC_OK    => OK \n
-//!     other        => Error code - see \ref USBDM_ErrorCode
-//!
-//! @note This uses the CMD_USBDM_JTAG_GOTORESET to move the TAP, it does
-//!       not use TRST.
-//!
+/**
+ * JTAG - Moves the TAP to \b TEST-LOGIC-RESET state
+ *  TMS=11111, TDI=00000 or similar
+ *
+ *  @return \n
+ *      BDM_RC_OK    => OK \n
+ *      other        => Error code - see \ref USBDM_ErrorCode
+ *
+ *  @note This uses the CMD_USBDM_JTAG_GOTORESET to move the TAP, it does
+ *        not use TRST.
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_JTAG_Reset(void) {
    LOGGING_Q;
@@ -3353,19 +3416,20 @@ USBDM_ErrorCode USBDM_JTAG_Reset(void) {
    return bdm_usb_transaction(2, 1, usb_data);
 }
 
-//! JTAG - move the TAP to \b SHIFT-DR or \b SHIFT-IR state
-//! SHIFT_DR => TMS=100,  TDI=0 (Actually TMS=0000_0100)
-//! SHIFT_IR => TMS=1100, TDI=0 (Actually TMS=0000_1100)
-//!
-//! @param mode Action, ref \ref JTAG_ExitActions_t \n
-//!      - SHIFT_DR - Enter SHIFT-DR \n
-//!      - SHIFT_IR - Enter SHIFT-IR \n
-//! @return \n
-//!     BDM_RC_OK    => OK \n
-//!     other        => Error code - see \ref USBDM_ErrorCode
-//!
-//! @note - Requires the tap to be initially in \b TEST-LOGIC-RESET or \b RUN-TEST/IDLE
-//!
+/**
+ * JTAG - move the TAP to \b SHIFT-DR or \b SHIFT-IR state
+ *  SHIFT_DR => TMS=100,  TDI=0 (Actually TMS=0000_0100)
+ *  SHIFT_IR => TMS=1100, TDI=0 (Actually TMS=0000_1100)
+ *
+ *  @param mode Action, ref \ref JTAG_ExitActions_t \n
+ *       - SHIFT_DR - Enter SHIFT-DR \n
+ *       - SHIFT_IR - Enter SHIFT-IR \n
+ *  @return \n
+ *      BDM_RC_OK    => OK \n
+ *      other        => Error code - see \ref USBDM_ErrorCode
+ *
+ *  @note - Requires the tap to be initially in \b TEST-LOGIC-RESET or \b RUN-TEST/IDLE
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_JTAG_SelectShift(unsigned char mode) {
    LOGGING_Q;
@@ -3377,28 +3441,29 @@ USBDM_ErrorCode USBDM_JTAG_SelectShift(unsigned char mode) {
    return bdm_usb_transaction(3, 1, usb_data);
 }
 
-//! JTAG - write data to JTAG shift register
-//! STAY_SHIFT    => TMS=Nx0,       TDI=NxData
-//! EXIT_SHIFT_DR => TMS=Nx0,11100  TDI=NxData,00000
-//! EXIT_SHIFT_IR => TMS=Nx0,111100 TDI=NxData,000000
-//! EXIT_IDLE     => TMS=Nx0,10     TDI=NxData,00
-//!
-//!  @param exit action after shift, see \ref JTAG_ExitActions_t \n
-//!      - JTAG_STAY_SHIFT    - Remain in SHIFT-DR or SHIFT-IR \n
-//!      - JTAG_EXIT_IDLE     - Exit SHIFT-XX to RUN-TEST/IDLE
-//!      - JTAG_EXIT_SHIFT_DR - Exit SHIFT-XX & enter SHIFT-DR w/o crossing RUN-TEST/IDLE
-//!      - JTAG_EXIT_SHIFT_IR - Exit SHIFT-XX & enter SHIFT-IR w/o crossing RUN-TEST/IDLE
-//!
-//!  @param bitCount 8-bit count of \b bits to shift in. [>0]\n
-//!                  It is not possible to do 0 bits.
-//!  @param buffer Pointer to data buffer.  The data is shifted in LSB (last byte) first,
-//!                unused bits (if any) are in the MSB (first) byte;
-//!  @note Requires the tap to be in \b SHIFT-DR or \b SHIFT-IR state.
-//!
-//! @return \n
-//!     BDM_RC_OK    => OK \n
-//!     other        => Error code - see \ref USBDM_ErrorCode
-//!
+/**
+ * JTAG - write data to JTAG shift register
+ *  STAY_SHIFT    => TMS=Nx0,       TDI=NxData
+ *  EXIT_SHIFT_DR => TMS=Nx0,11100  TDI=NxData,00000
+ *  EXIT_SHIFT_IR => TMS=Nx0,111100 TDI=NxData,000000
+ *  EXIT_IDLE     => TMS=Nx0,10     TDI=NxData,00
+ *
+ *   @param exit action after shift, see \ref JTAG_ExitActions_t \n
+ *       - JTAG_STAY_SHIFT    - Remain in SHIFT-DR or SHIFT-IR \n
+ *       - JTAG_EXIT_IDLE     - Exit SHIFT-XX to RUN-TEST/IDLE
+ *       - JTAG_EXIT_SHIFT_DR - Exit SHIFT-XX & enter SHIFT-DR w/o crossing RUN-TEST/IDLE
+ *       - JTAG_EXIT_SHIFT_IR - Exit SHIFT-XX & enter SHIFT-IR w/o crossing RUN-TEST/IDLE
+ *
+ *   @param bitCount 8-bit count of \b bits to shift in. [>0]\n
+ *                   It is not possible to do 0 bits.
+ *   @param buffer Pointer to data buffer.  The data is shifted in LSB (last byte) first,
+ *                 unused bits (if any) are in the MSB (first) byte;
+ *   @note Requires the tap to be in \b SHIFT-DR or \b SHIFT-IR state.
+ *
+ *  @return \n
+ *      BDM_RC_OK    => OK \n
+ *      other        => Error code - see \ref USBDM_ErrorCode
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_JTAG_Write(unsigned char       bitCount,
                                  unsigned char       exit,
@@ -3424,26 +3489,27 @@ USBDM_ErrorCode USBDM_JTAG_Write(unsigned char       bitCount,
    return bdm_usb_transaction(byteSize+4, 1, usb_data, 100);
 }
 
-//! JTAG - read data from JTAG shift register
-//! SHIFT_DR => TMS=Nx0, TDI=0, TDO=NxData (captured)
-//!
-//!  @param exit action after shift, see \ref JTAG_ExitActions_t \n
-//!      - JTAG_STAY_SHIFT    - Remain in SHIFT-DR or SHIFT-IR \n
-//!      - JTAG_EXIT_IDLE     - Exit SHIFT-XX to RUN-TEST/IDLE
-//!      - JTAG_EXIT_SHIFT_DR - Exit SHIFT-XX & enter SHIFT-DR w/o crossing RUN-TEST/IDLE
-//!      - JTAG_EXIT_SHIFT_IR - Exit SHIFT-XX & enter SHIFT-IR w/o crossing RUN-TEST/IDLE
-//!      - +JTAG_WRITE_0      - Write 0's when reading - combined with one of above
-//!      - +JTAG_WRITE_1      - Write 1's when reading - combined with one of above
-//!
-//!  @param bitCount 8-bit count of \b bits to shift in. [>0]\n
-//!                  It is not possible to do 0 bits.
-//!  @param buffer Pointer to buffer for data read out of the device (first bit in LSB of the last byte in the buffer)
-//!  @note Requires the tap to be in \b SHIFT-DR or \b SHIFT-IR state.
-//!
-//! @return \n
-//!     BDM_RC_OK    => OK \n
-//!     other        => Error code - see \ref USBDM_ErrorCode
-//!
+/**
+ *  JTAG - read data from JTAG shift register
+ *  SHIFT_DR => TMS=Nx0, TDI=0, TDO=NxData (captured)
+ *
+ *   @param exit action after shift, see \ref JTAG_ExitActions_t \n
+ *       - JTAG_STAY_SHIFT    - Remain in SHIFT-DR or SHIFT-IR \n
+ *       - JTAG_EXIT_IDLE     - Exit SHIFT-XX to RUN-TEST/IDLE
+ *       - JTAG_EXIT_SHIFT_DR - Exit SHIFT-XX & enter SHIFT-DR w/o crossing RUN-TEST/IDLE
+ *       - JTAG_EXIT_SHIFT_IR - Exit SHIFT-XX & enter SHIFT-IR w/o crossing RUN-TEST/IDLE
+ *       - +JTAG_WRITE_0      - Write 0's when reading - combined with one of above
+ *       - +JTAG_WRITE_1      - Write 1's when reading - combined with one of above
+ *
+ *   @param bitCount 8-bit count of \b bits to shift in. [>0]\n
+ *                   It is not possible to do 0 bits.
+ *   @param buffer Pointer to buffer for data read out of the device (first bit in LSB of the last byte in the buffer)
+ *   @note Requires the tap to be in \b SHIFT-DR or \b SHIFT-IR state.
+ *
+ *  @return \n
+ *      BDM_RC_OK    => OK \n
+ *      other        => Error code - see \ref USBDM_ErrorCode
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_JTAG_Read( unsigned char bitCount,
                                  unsigned char exit,
@@ -3476,28 +3542,29 @@ USBDM_ErrorCode USBDM_JTAG_Read( unsigned char bitCount,
    return rc;
 }
 
-//! JTAG - read data from JTAG shift register
-//! SHIFT_DR => TMS=Nx0, TDI=0, TDO=NxData (captured)
-//!
-//!  @param exit action after shift, see \ref JTAG_ExitActions_t \n
-//!      - JTAG_STAY_SHIFT    - Remain in SHIFT-DR or SHIFT-IR \n
-//!      - JTAG_EXIT_IDLE     - Exit SHIFT-XX to RUN-TEST/IDLE
-//!      - JTAG_EXIT_SHIFT_DR - Exit SHIFT-XX & enter SHIFT-DR w/o crossing RUN-TEST/IDLE
-//!      - JTAG_EXIT_SHIFT_IR - Exit SHIFT-XX & enter SHIFT-IR w/o crossing RUN-TEST/IDLE
-//!      - +JTAG_WRITE_0      - Write 0's when reading - combined with one of above
-//!      - +JTAG_WRITE_1      - Write 1's when reading - combined with one of above
-//!
-//!  @param bitCount 8-bit count of \b bits to shift in. [>0]\n
-//!                  It is not possible to do 0 bits.
-//!  @param inBuffer  Pointer to buffer for data written to the device (first bit in LSB of the last byte in the buffer)
-//!  @param outBuffer Pointer to buffer for data read out of the device (first bit in LSB of the last byte in the buffer)
-//!  @note Requires the tap to be in \b SHIFT-DR or \b SHIFT-IR state.
-//!  @note inbuffer and outbuffer may be the same location
-//!
-//! @return \n
-//!     BDM_RC_OK    => OK \n
-//!     other        => Error code - see \ref USBDM_ErrorCode
-//!
+/**
+ * JTAG - read data from JTAG shift register
+ *  SHIFT_DR => TMS=Nx0, TDI=0, TDO=NxData (captured)
+ *
+ *   @param exit action after shift, see \ref JTAG_ExitActions_t \n
+ *       - JTAG_STAY_SHIFT    - Remain in SHIFT-DR or SHIFT-IR \n
+ *       - JTAG_EXIT_IDLE     - Exit SHIFT-XX to RUN-TEST/IDLE
+ *       - JTAG_EXIT_SHIFT_DR - Exit SHIFT-XX & enter SHIFT-DR w/o crossing RUN-TEST/IDLE
+ *       - JTAG_EXIT_SHIFT_IR - Exit SHIFT-XX & enter SHIFT-IR w/o crossing RUN-TEST/IDLE
+ *       - +JTAG_WRITE_0      - Write 0's when reading - combined with one of above
+ *       - +JTAG_WRITE_1      - Write 1's when reading - combined with one of above
+ *
+ *   @param bitCount 8-bit count of \b bits to shift in. [>0]\n
+ *                   It is not possible to do 0 bits.
+ *   @param inBuffer  Pointer to buffer for data written to the device (first bit in LSB of the last byte in the buffer)
+ *   @param outBuffer Pointer to buffer for data read out of the device (first bit in LSB of the last byte in the buffer)
+ *   @note Requires the tap to be in \b SHIFT-DR or \b SHIFT-IR state.
+ *   @note inbuffer and outbuffer may be the same location
+ *
+ *  @return \n
+ *      BDM_RC_OK    => OK \n
+ *      other        => Error code - see \ref USBDM_ErrorCode
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_JTAG_ReadWrite( unsigned char bitCount,
                                       unsigned char exit,
@@ -3535,16 +3602,17 @@ USBDM_ErrorCode USBDM_JTAG_ReadWrite( unsigned char bitCount,
    return rc;
 }
 
-//! Execute JTAG Sequence
-//!  @param length   - JTAG sequence length.
-//!  @param sequence - Pointer to sequence.
-//!  @param inLength - Expected length of input data
-//!  @param inBuffer - Returned values
-//!
-//! @return \n
-//!     BDM_RC_OK    => OK \n
-//!     other        => Error code - see \ref USBDM_ErrorCode
-//!
+/**
+ * Execute JTAG Sequence
+ *   @param length   - JTAG sequence length.
+ *   @param sequence - Pointer to sequence.
+ *   @param inLength - Expected length of input data
+ *   @param inBuffer - Returned values
+ *
+ *  @return \n
+ *      BDM_RC_OK    => OK \n
+ *      other        => Error code - see \ref USBDM_ErrorCode
+ */
 USBDM_API
 USBDM_ErrorCode USBDM_JTAG_ExecuteSequence(unsigned char       length,
                                            const unsigned char *sequence,
@@ -3598,15 +3666,17 @@ USBDM_ErrorCode USBDM_JTAG_ExecuteSequence(unsigned char       length,
 //====================================================================================================
 //====================================================================================================
 
-//! Set log file for messages
-//!
+/**
+ * Set log file for messages
+ */
 USBDM_API
 void USBDM_SetLogFile(FILE *fp) {
    UsbdmSystem::Log::setLogFileHandle(fp);
 }
 
-//! Get current log file for messages
-//!
+/**
+ * Get current log file for messages
+ */
 USBDM_API
 FILE *USBDM_GetLogFile(void) {
    return UsbdmSystem::Log::getLogFileHandle();
