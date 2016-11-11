@@ -1,8 +1,12 @@
-/*
- * usb_implementation_bulk.cpp
+/**
+ * @file     usb_implementation_bulk.cpp
+ * @brief    USB Kinetis implementation
  *
- *  Created on: 30Oct.,2016
- *      Author: podonoghue
+ * @version  V4.12.1.80
+ * @date     13 April 2016
+ *
+ *  This file provides the implementation specific code for the USB interface.
+ *  It will need to be modified to suit an application.
  */
 #include <string.h>
 
@@ -134,6 +138,12 @@ const Usb0::Descriptors Usb0::otherDescriptors = {
        */
 };
 
+/*
+ * TODO Add additional end-points here
+ */
+OutEndpoint <Usb0Info, Usb0::BULK_OUT_ENDPOINT, BULK_OUT_EP_MAXSIZE> Usb0::epBulkOut;
+InEndpoint  <Usb0Info, Usb0::BULK_IN_ENDPOINT,  BULK_IN_EP_MAXSIZE>  Usb0::epBulkIn;
+
 /**
  * Handler for Start of Frame Token interrupt (~1ms interval)
  */
@@ -146,7 +156,7 @@ void Usb0::sofCallback() {
    if (usb->FRMNUML==0) { // Every ~256 ms
       switch (usb->FRMNUMH&0x03) {
          case 0:
-            if (deviceState.state == USBconfigured) {
+            if (connectionState == USBconfigured) {
                // Activity LED on when USB connection established
 //               UsbLed::on();
             }
@@ -174,7 +184,7 @@ void Usb0::sofCallback() {
  * Handler for Token Complete USB interrupts for
  * end-points other than EP0
  */
-void Usb0::handleTokenComplete(void) {
+void Usb0::handleTokenComplete() {
 
    // Let parent process first
    if (UsbBase_T::handleTokenComplete()) {
@@ -206,6 +216,8 @@ void Usb0::handleTokenComplete(void) {
 
 /**
  * Call-back handling BULK-OUT transaction complete
+ *
+ * @param state Current end-point state
  */
 void Usb0::bulkOutTransactionCallback(EndpointState state) {
    static uint8_t buff[] = "";
@@ -217,6 +229,8 @@ void Usb0::bulkOutTransactionCallback(EndpointState state) {
 
 /**
  * Call-back handling BULK-IN transaction complete
+ *
+ * @param state Current end-point state
  */
 void Usb0::bulkInTransactionCallback(EndpointState state) {
    static const uint8_t buff[] = "Hello There\n\r";
@@ -232,6 +246,9 @@ void Usb0::bulkInTransactionCallback(EndpointState state) {
  */
 void Usb0::initialise() {
    UsbBase_T::initialise();
+
+   // Add extra handling of CDC packets directed to EP0
+//   setUnhandledSetupCallback(handleUserEp0SetupRequests);
 
    setSOFCallback(sofCallback);
    /*
@@ -315,11 +332,11 @@ void Usb0::irqHandler() {
  *
  *   @return Number of bytes received
  *
- *   @note : Doesn't return until command has been received.
+ *   @note Doesn't return until command has been received.
  */
 int Usb0::receiveBulkData(uint8_t maxSize, uint8_t *buffer) {
    // Wait for USB connection
-   while(deviceState.state != USBconfigured) {
+   while(connectionState != USBconfigured) {
       __WFI();
    }
    epBulkOut.startRxTransaction(EPDataOut, maxSize, buffer);

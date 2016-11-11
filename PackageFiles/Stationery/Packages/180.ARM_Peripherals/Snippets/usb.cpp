@@ -1,5 +1,6 @@
-/*! \file
-    \brief Simple USB Stack for Kinetis
+/** 
+    @file usb.cpp
+    @brief Simple USB Stack for Kinetis
 
    \verbatim
     Kinetis USB Code
@@ -108,7 +109,7 @@ const MS_PropertiesFeatureDescriptor msPropertiesFeatureDescriptor = {
  *
  * @return Pointer to static string
  */
-const char *getTokenName(unsigned token) {
+const char *UsbBase::getTokenName(unsigned token) {
    static const char *names[] = {
          "Unknown #0",
          "OUTToken",   //  (0x1) - Out token
@@ -141,13 +142,12 @@ const char *getTokenName(unsigned token) {
  *
  * @return Pointer to static string
  */
-const char *getStateName(EndpointState state){
+const char *UsbBase::getStateName(EndpointState state){
    switch (state) {
       default         : return "Unknown";
       case EPIdle     : return "EPIdle";
       case EPDataIn   : return "EPDataIn";
       case EPDataOut  : return "EPDataOut,";
-      case EPLastIn   : return "EPLastIn";
       case EPStatusIn : return "EPStatusIn";
       case EPStatusOut: return "EPStatusOut";
       case EPThrottle : return "EPThrottle";
@@ -163,7 +163,7 @@ const char *getStateName(EndpointState state){
  *
  * @return Pointer to static string
  */
-const char *getRequestName(uint8_t reqType){
+const char *UsbBase::getRequestName(uint8_t reqType){
    static const char *names[] = {
          "GET_STATUS",              /* 0x00 */
          "CLEAR_FEATURE",           /* 0x01 */
@@ -195,7 +195,7 @@ const char *getRequestName(uint8_t reqType){
  * @param name    Descriptive name to use
  * @param bdt     BDT to report
  */
-void reportBdt(const char *name, BdtEntry *bdt) {
+void UsbBase::reportBdt(const char *name, BdtEntry *bdt) {
    (void)name;
    (void)bdt;
    if (bdt->u.setup.own) {
@@ -232,7 +232,7 @@ void reportLineCoding(const LineCodingStructure *lineCodingStructure) {
  *
  * @return Pointer to static buffer
  */
-const char *reportSetupPacket(SetupPacket *p) {
+const char *UsbBase::reportSetupPacket(SetupPacket *p) {
    static char buff[100];
    snprintf(buff, sizeof(buff), "[%2X,%s,%d,%d,%d]",
          p->bmRequestType,
@@ -258,7 +258,7 @@ void reportLineState(uint8_t value) {
  *
  *  @note Only handles UTF-8 characters that fit in a single UTF-16 value.
  */
-void utf8ToStringDescriptor(uint8_t *to, const uint8_t *from, unsigned maxSize) {
+void UsbBase::utf8ToStringDescriptor(uint8_t *to, const uint8_t *from, unsigned maxSize) {
    uint8_t *size = to; // 1st byte is where to place descriptor size
 
    *to++ = 2;         // 1st byte = descriptor size (2 bytes so far)

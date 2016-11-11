@@ -1,3 +1,10 @@
+/**
+ * @file     usb_defs.h
+ * @brief    Universal Serial Bus definitions
+ *
+ * @version  V4.12.1.80
+ * @date     13 April 2016
+ */
 #ifndef PROJECT_HEADERS_USB_DEFS_H_
 #define PROJECT_HEADERS_USB_DEFS_H_
 /*

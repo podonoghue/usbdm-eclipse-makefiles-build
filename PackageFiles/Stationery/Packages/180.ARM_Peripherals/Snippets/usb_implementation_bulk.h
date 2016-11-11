@@ -1,13 +1,13 @@
-/*
- * usb_implementation.h
+/**
+ * @file     usb_implementation_bulk.h
+ * @brief    USB Kinetis implementation
  *
- *  Created on: 30Oct.,2016
- *      Author: podonoghue
+ * @version  V4.12.1.80
+ * @date     13 April 2016
  *
  *  This file provides the implementation specific code for the USB interface.
  *  It will need to be modified to suit an application.
  */
-
 #ifndef PROJECT_HEADERS_USB_IMPLEMENTATION_H_
 #define PROJECT_HEADERS_USB_IMPLEMENTATION_H_
 
@@ -147,8 +147,8 @@ public:
 
 protected:
    /* end-points */
-   static const OutEndpoint <Usb0Info, Usb0::BULK_OUT_ENDPOINT, BULK_OUT_EP_MAXSIZE> epBulkOut;
-   static const InEndpoint  <Usb0Info, Usb0::BULK_IN_ENDPOINT,  BULK_IN_EP_MAXSIZE>  epBulkIn;
+   static OutEndpoint <Usb0Info, Usb0::BULK_OUT_ENDPOINT, BULK_OUT_EP_MAXSIZE> epBulkOut;
+   static InEndpoint  <Usb0Info, Usb0::BULK_IN_ENDPOINT,  BULK_IN_EP_MAXSIZE>  epBulkIn;
 
    /*
     * TODO Add additional End-points here
@@ -182,12 +182,12 @@ public:
    /**
     *  Blocking reception of data over bulk OUT end-point
     *
-    * @param maxSize  = Maximum number of bytes to receive
-    * @param buffer   = Pointer to buffer for bytes received
+    *   @param maxSize Maximum number of bytes to receive
+    *   @param buffer  Pointer to buffer for bytes received
     *
-    * @return Number of bytes received
+    *   @return Number of bytes received
     *
-    * @note : Doesn't return until bytes received.
+    *   @note Doesn't return until command has been received.
     */
    static int receiveBulkData(uint8_t maxSize, uint8_t *buffer);
 

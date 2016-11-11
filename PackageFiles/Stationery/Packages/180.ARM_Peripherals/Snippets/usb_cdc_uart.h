@@ -1,8 +1,9 @@
-/*
- * uart.h
+/**
+ * @file     usb_cdc_uart.h
+ * @brief    USB-UART interface
  *
- *  Created on: 6Nov.,2016
- *      Author: podonoghue
+ * @version  V4.12.1.80
+ * @date     13 April 2016
  */
 
 #ifndef PROJECT_HEADERS_CDC_UART_H_

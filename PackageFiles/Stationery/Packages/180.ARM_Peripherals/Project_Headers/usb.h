@@ -1,10 +1,10 @@
-/*
- * usb.h
+/**
+ * @file     usb.h
+ * @brief    Universal Serial Bus
  *
- *  Created on: 25/10/2013
- *      Author: podonoghue
+ * @version  V4.12.1.80
+ * @date     13 April 2016
  */
-
 #ifndef PROJECT_HEADERS_USB_H_
 #define PROJECT_HEADERS_USB_H_
 /*
@@ -25,88 +25,10 @@
 namespace USBDM {
 
 /**
- * Type definition for USB interrupt call back
- *
- *  @param status Interrupt status e.g. USB_ISTAT_SOFTOK_MASK, USB_ISTAT_STALL_MASK etc
+ * Base class representing an USB Interface.\n
+ * Holds shared constants and utility functions.
  */
-//typedef void (*USBCallbackFunction)(uint8_t status);
-
-/**
- * Type definition for USB SOF call back
- */
-typedef void (*SOFCallbackFunction)();
-
-/**
- * Type definition for USB SETUP call back\n
- * This function is called for SETUP transactions not automatically handled
- *
- *  @param setup SETUP packet information
- */
-typedef void (*SetupCallbackFunction)(const SetupPacket &setup);
-
-/**
- * Get name of USB token
- *
- * @param  token USB token
- *
- * @return Pointer to static string
- */
-extern const char *getTokenName(unsigned token);
-
-/**
- * Get name of USB state
- *
- * @param  state USB state
- *
- * @return Pointer to static string
- */
-extern const char *getStateName(EndpointState state);
-
-/**
- * Get name of USB request
- *
- * @param  reqType Request type
- *
- * @return Pointer to static string
- */
-extern const char *getRequestName(uint8_t reqType);
-
-/**
- * Report contents of BDT
- *
- * @param name    Descriptive name to use
- * @param bdt     BDT to report
- */
-extern void reportBdt(const char *name, BdtEntry *bdt);
-
-/**
- * Format SETUP packet as string
- *
- * @param p SETUP packet
- *
- * @return Pointer to static buffer
- */
-extern const char *reportSetupPacket(SetupPacket *p);
-
-/**
- *  Creates a valid string descriptor in UTF-16-LE from a limited UTF-8 string
- *
- *  @param to       - Where to place descriptor
- *  @param from     - Zero terminated UTF-8 C string
- *  @param maxSize  - Size of destination
- *
- *  @note Only handles UTF-8 characters that fit in a single UTF-16 value.
- */
-extern void utf8ToStringDescriptor(uint8_t *to, const uint8_t *from, unsigned maxSize);
-
-/**
- * Class representing an USB Interface
- *
- * @tparam Info      USB info class
- * @tparam EP0_SIZE  Size of EP0 endpoint transactions
- */
-template <class Info, int EP0_SIZE>
-class UsbBase_T {
+class UsbBase {
 
 public:
    /**
@@ -121,22 +43,97 @@ public:
    };
 
    /**
-    * Device State
+    * Endpoint Status in USB format
     */
-   struct DeviceState {
-      DeviceConnectionStates  state:8;
-      uint8_t                 configuration;
-      uint8_t                 interfaceAltSetting;
-      DeviceStatus            status;
-      uint8_t                 newUSBAddress;
+   struct EndpointStatus {
+      int stall  : 1;   //!< Endpoint is stalled
+      int res1   : 7;   //!< Reserved
+      int res2   : 8;   //!< Reserved
    };
+   /**
+    * Type definition for USB SOF call back
+    */
+   typedef void (*SOFCallbackFunction)();
+
+   /**
+    * Type definition for USB SETUP call back\n
+    * This function is called for SETUP transactions not automatically handled
+    *
+    *  @param setup SETUP packet information
+    */
+   typedef void (*SetupCallbackFunction)(const SetupPacket &setup);
+
+   /**
+    * Get name of USB token
+    *
+    * @param  token USB token
+    *
+    * @return Pointer to static string
+    */
+   static const char *getTokenName(unsigned token);
+
+   /**
+    * Get name of USB state
+    *
+    * @param  state USB state
+    *
+    * @return Pointer to static string
+    */
+   static const char *getStateName(EndpointState state);
+
+   /**
+    * Get name of USB request
+    *
+    * @param  reqType Request type
+    *
+    * @return Pointer to static string
+    */
+   static const char *getRequestName(uint8_t reqType);
+
+   /**
+    * Report contents of BDT
+    *
+    * @param name    Descriptive name to use
+    * @param bdt     BDT to report
+    */
+   static void reportBdt(const char *name, BdtEntry *bdt);
+
+   /**
+    * Format SETUP packet as string
+    *
+    * @param p SETUP packet
+    *
+    * @return Pointer to static buffer
+    */
+   static const char *reportSetupPacket(SetupPacket *p);
+
+   /**
+    *  Creates a valid string descriptor in UTF-16-LE from a limited UTF-8 string
+    *
+    *  @param to       - Where to place descriptor
+    *  @param from     - Zero terminated UTF-8 C string
+    *  @param maxSize  - Size of destination
+    *
+    *  @note Only handles UTF-8 characters that fit in a single UTF-16 value.
+    */
+   static void utf8ToStringDescriptor(uint8_t *to, const uint8_t *from, unsigned maxSize);
+};
+
+/**
+ * Class representing an USB Interface
+ *
+ * @tparam Info      USB info class
+ * @tparam EP0_SIZE  Size of EP0 endpoint transactions
+ */
+template <class Info, int EP0_SIZE>
+class UsbBase_T : public UsbBase {
 
 protected:
    /** USB Control endpoint number - must be zero */
    static constexpr int CONTROL_ENDPOINT = 0;
 
-   /** EP0 = Required control endpoint */
-   static const ControlEndpoint<Info, EP0_SIZE>ep0;
+   /** USB Control endpoint - always EP0 */
+   static ControlEndpoint<Info, EP0_SIZE>controlEndpoint;
 
    /** Magic number for MS driver feature */
    static constexpr uint8_t MS_VENDOR_CODE = 0x30;
@@ -145,7 +142,7 @@ protected:
    static const     uint8_t ms_osStringDescriptor[];
 
    /** End-points in use */
-   static const Endpoint *endPoints[];
+   static Endpoint *endPoints[];
 
    /** Mask for all USB interrupts */
    static constexpr uint8_t USB_INTMASKS =
@@ -153,11 +150,17 @@ protected:
          USB_INTEN_SOFTOKEN_MASK|USB_INTEN_USBRSTEN_MASK|
          USB_INTEN_SLEEPEN_MASK;
 
-   /** USB device state information */
-   static DeviceState deviceState;
+   /** USB connection state */
+   static volatile DeviceConnectionStates connectionState;
+
+   /** Active USB configuration */
+   static uint8_t deviceConfiguration;
+
+   /** USB Device status */
+   static DeviceStatus deviceStatus;
 
    /** Pointer to USB hardware */
-   static constexpr volatile USB_Type *usb      = Info::usb;
+   static constexpr volatile USB_Type *usb = Info::usb;
 
    /** Pointer to USB clock register */
    static constexpr volatile uint32_t *clockReg = Info::clockReg;
@@ -166,15 +169,15 @@ protected:
    static SetupPacket ep0SetupBuffer;
 
    /** USB activity indicator */
-   static bool activityFlag;
+   static volatile bool activityFlag;
 
    /** SOF callback */
    static SOFCallbackFunction sofCallbackFunction;
 
    /**
-    *  Unhandled SETUP callback \n
-     * Called for unhandled SETUP transactions
-     */
+    * Unhandled SETUP callback \n
+    * Called for unhandled SETUP transactions
+    */
    static SetupCallbackFunction unhandledSetupCallback;
 
    /** Function to call when SETUP transaction is complete */
@@ -232,6 +235,15 @@ public:
       usb->OTGICR = mask;
    }
 
+   /**
+    * Checks if the USB device is configured i.e. connected and enumerated etc.
+    *
+    * @return true if configured
+    */
+   static bool isConfigured() {
+      return connectionState == USBconfigured;
+   }
+
 protected:
    /**
     * Callback used for EP0 transaction complete
@@ -253,7 +265,7 @@ protected:
     *
     * @param endpoint The end-point to add
     */
-   static void addEndpoint(const Endpoint *endpoint);
+   static void addEndpoint(Endpoint *endpoint);
 
    /**
     * Set the USB activity flag
@@ -296,7 +308,7 @@ protected:
     * Used to acknowledge a DATA out transaction
     */
    static void ep0TxStatus() {
-      ep0.startTxTransaction(EPStatusIn);
+      controlEndpoint.startTxTransaction(EPStatusIn);
    }
 
    /**
@@ -305,7 +317,7 @@ protected:
     * The data may be split into multiple DATA0/DATA1 packets
     *
     * @param bufSize Size of buffer to send
-    * @param bufPtr  Pointer to buffer (may be NULL to indicate ep0.fDatabuffer is being used directly)
+    * @param bufPtr  Pointer to buffer (may be NULL to indicate controlEndpoint.fDatabuffer is being used directly)
     */
    static void ep0StartTxTransaction(uint16_t bufSize, const uint8_t *bufPtr) {
       if (bufSize > ep0SetupBuffer.wLength) {
@@ -313,8 +325,8 @@ protected:
          bufSize = (uint8_t)ep0SetupBuffer.wLength;
       }
       // If short response we may need ZLP
-      ep0.setNeedZLP(bufSize < ep0SetupBuffer.wLength);
-      ep0.startTxTransaction(EPDataIn, bufSize, bufPtr);
+      controlEndpoint.setNeedZLP(bufSize < ep0SetupBuffer.wLength);
+      controlEndpoint.startTxTransaction(EPDataIn, bufSize, bufPtr);
    }
 
    /**
@@ -324,17 +336,16 @@ protected:
     */
    static void ep0ConfigureSetupTransaction() {
       // Set up EP0-RX to Rx SETUP packets
-      ep0.startRxTransaction(EPIdle);
+      controlEndpoint.startRxTransaction(EPIdle);
    }
 
    /**
     * Set USB interface to default state
     */
    static void setUSBdefaultState() {
-      deviceState.state                = USBdefault;
+      connectionState                = USBdefault;
       usb->ADDR                        = 0;
-      deviceState.configuration        = 0;
-      deviceState.interfaceAltSetting  = 0;
+      deviceConfiguration        = 0;
    }
 
    /**
@@ -348,10 +359,9 @@ protected:
          setUSBdefaultState();
       }
       else {
-         deviceState.state                = USBaddressed;
+         connectionState                = USBaddressed;
          usb->ADDR                        = address;
-         deviceState.configuration        = 0;
-         deviceState.interfaceAltSetting  = 0;
+         deviceConfiguration        = 0;
       }
    }
 
@@ -366,14 +376,13 @@ protected:
          setUSBaddressedState(usb->ADDR);
       }
       else {
-         deviceState.state                = USBconfigured;
-         deviceState.configuration        = config;
-         deviceState.interfaceAltSetting  = 0;
+         connectionState                = USBconfigured;
+         deviceConfiguration        = config;
       }
    }
 
    /**
-    * Initialises EP0 and clear other end-points
+    * Initialises EP0 and clears other end-points
     */
    static void initialiseEndpoints(void);
 
@@ -384,7 +393,7 @@ protected:
 
    /**
     * Handler for Token Complete USB interrupt for EP0\n
-    * Handles ep0 [SETUP, IN & OUT]
+    * Handles controlEndpoint [SETUP, IN & OUT]
     *
     * @return true indicates token has been processed.\n
     * false token still needs processing
@@ -398,10 +407,10 @@ protected:
    static void handleUSBReset();
 
    /**
-    * STALL completed - re-enable ep0 for SETUP
+    * STALL completed - re-enable controlEndpoint for SETUP
     */
    static void handleStallComplete() {
-      ep0.clearStall();
+      controlEndpoint.clearStall();
       ep0ConfigureSetupTransaction();
    }
 
@@ -414,7 +423,7 @@ protected:
       }
    }
 
-   /*
+   /**
     * Handler for USB Suspend
     *   - Enables the USB module to wake-up the CPU
     *   - Stops the CPU
@@ -441,38 +450,38 @@ protected:
          unhandledSetupCallback(ep0SetupBuffer);
       }
       else {
-         ep0.stall();
+         controlEndpoint.stall();
       }
    }
 
    /**
-    * Get Status - Device Req 0x00
+    * Get Status - Device Request 0x00
     */
    static void handleGetStatus();
 
    /**
-    * Clear Feature - Device Req 0x01
+    * Clear Feature - Device Request 0x01
     */
    static void handleClearFeature();
 
    /**
-    * Set Feature - Device Req 0x03
+    * Set Feature - Device Request 0x03
     */
    static void handleSetFeature();
 
    /**
-    * Get Descriptor - Device Req 0x06
+    * Get Descriptor - Device Request 0x06
     */
    static void handleGetDescriptor();
 
    /**
-    * Set device Address - Device Req 0x05
+    * Set device Address - Device Request 0x05
     */
    static void handleSetAddress() {
       //   PUTS("setAddress - ");
 
       if (ep0SetupBuffer.bmRequestType != (EP_OUT|RT_DEVICE)) {// Out,Standard,Device
-         ep0.stall(); // Illegal format - stall ep0
+         controlEndpoint.stall(); // Illegal format - stall controlEndpoint
          return;
       }
 
@@ -487,26 +496,27 @@ protected:
    }
 
    /**
-    * Get Configuration - Device Req 0x08
+    * Get Configuration - Device Request 0x08
     */
    static void handleGetConfiguration() {
-      ep0StartTxTransaction( 1, &deviceState.configuration );
+      static uint8_t temp = deviceConfiguration;
+      ep0StartTxTransaction( 1, &temp );
    }
 
    /**
-    * Set Configuration - Device Req 0x09
+    * Set Configuration - Device Request 0x09
     * Treated as soft reset
     */
    static void handleSetConfiguration();
 
    /**
-    * Set interface - Device Req 0x0B
+    * Set interface - Device Request 0x0B
     * Not required to be implemented
     */
    static void handleSetInterface();
 
    /**
-    * Get interface - Device Req 0x0A
+    * Get interface - Device Request 0x0A
     */
    static void handleGetInterface() {
       static const uint8_t interfaceAltSetting = 0;
@@ -515,7 +525,7 @@ protected:
 
       if ((ep0SetupBuffer.bmRequestType != (EP_IN|RT_INTERFACE)) || // NOT In,Standard,Interface
             (ep0SetupBuffer.wLength != 1)) {                        // NOT correct length
-         ep0.stall(); // Error
+         controlEndpoint.stall(); // Error
          return;
       }
       // Send packet
@@ -528,31 +538,42 @@ public:
 
 /** SOF callback */
 template<class Info, int EP0_SIZE>
-SOFCallbackFunction UsbBase_T<Info, EP0_SIZE>::sofCallbackFunction = nullptr;
+UsbBase::SOFCallbackFunction UsbBase_T<Info, EP0_SIZE>::sofCallbackFunction = nullptr;
 
-/** Called for unhandled SETUP transactions */
+/**
+ * Unhandled SETUP callback \n
+ * Called for unhandled SETUP transactions
+ */
 template<class Info, int EP0_SIZE>
-SetupCallbackFunction UsbBase_T<Info, EP0_SIZE>::unhandledSetupCallback = nullptr;
+UsbBase::SetupCallbackFunction UsbBase_T<Info, EP0_SIZE>::unhandledSetupCallback = nullptr;
 
 /** Function to call when SETUP transaction is complete */
 template <class Info, int EP0_SIZE>
 void (*UsbBase_T<Info, EP0_SIZE>::setupCompleteCallback)();
 
-/** USB device state information */
+/** USB connection state */
 template<class Info, int EP0_SIZE>
-typename UsbBase_T<Info, EP0_SIZE>::DeviceState UsbBase_T<Info, EP0_SIZE>::deviceState = {USBattached, 0, 0, {0,0,0,0,0}, 0};
+volatile DeviceConnectionStates UsbBase_T<Info, EP0_SIZE>::connectionState;
+
+/** Active USB configuration */
+template<class Info, int EP0_SIZE>
+uint8_t UsbBase_T<Info, EP0_SIZE>::deviceConfiguration;
+
+/** USB Device status */
+template<class Info, int EP0_SIZE>
+UsbBase::DeviceStatus UsbBase_T<Info, EP0_SIZE>::deviceStatus;
 
 /** Buffer for EP0 Setup packet (copied from USB RAM) */
 template<class Info, int EP0_SIZE>
-SetupPacket UsbBase_T<Info, EP0_SIZE>::ep0SetupBuffer;   //!< Buffer for EP0 Setup packet (copied from USB RAM)
+SetupPacket UsbBase_T<Info, EP0_SIZE>::ep0SetupBuffer;
 
 /** USB activity indicator */
 template<class Info, int EP0_SIZE>
-bool UsbBase_T<Info, EP0_SIZE>::activityFlag = false;
+volatile bool UsbBase_T<Info, EP0_SIZE>::activityFlag = false;
 
-/** USB Control endpoint EP0 */
+/** USB Control endpoint - always EP0 */
 template <class Info, int EP0_SIZE>
-const ControlEndpoint<Info, EP0_SIZE> UsbBase_T<Info, EP0_SIZE>::ep0;
+ControlEndpoint<Info, EP0_SIZE> UsbBase_T<Info, EP0_SIZE>::controlEndpoint;
 
 } // End namespace USBDM
 
@@ -568,7 +589,7 @@ namespace USBDM {
 
 /** End-points in use */
 template <class Info, int EP0_SIZE>
-const Endpoint *UsbBase_T<Info, EP0_SIZE>::endPoints[UsbImplementation::NUMBER_OF_ENDPOINTS];
+Endpoint *UsbBase_T<Info, EP0_SIZE>::endPoints[UsbImplementation::NUMBER_OF_ENDPOINTS];
 
 #if defined(MS_COMPATIBLE_ID_FEATURE)
 template<class Info, int EP0_SIZE>
@@ -614,11 +635,11 @@ template<class Info, int EP0_SIZE>
 void UsbBase_T<Info, EP0_SIZE>::handleSetupToken() {
 
    // Save data from SETUP packet
-   memcpy(&ep0SetupBuffer, ep0.getBuffer(), sizeof(ep0SetupBuffer));
+   memcpy(&ep0SetupBuffer, controlEndpoint.getBuffer(), sizeof(ep0SetupBuffer));
 
-   ep0.getHardwareState().state   = EPIdle;
-   ep0.getHardwareState().txData1 = DATA1;
-   ep0.getHardwareState().rxData1 = DATA1;
+   controlEndpoint.getHardwareState().state   = EPIdle;
+   controlEndpoint.getHardwareState().txData1 = DATA1;
+   controlEndpoint.getHardwareState().rxData1 = DATA1;
 
    // Call-backs only persist during a SETUP transaction
    setSetupCompleteCallback(nullptr);
@@ -680,7 +701,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleSetupToken() {
          break;
    }
    // In case another SETUP packet
-   ep0.initialiseBdtRx();
+   controlEndpoint.initialiseBdtRx();
 
    // Allow transactions post SETUP packet (clear TXSUSPENDTOKENBUSY)
    usb->CTL = USB_CTL_USBENSOFEN_MASK;
@@ -688,7 +709,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleSetupToken() {
 
 /**
  * Handler for Token Complete USB interrupt for EP0\n
- * Handles ep0 [SETUP, IN & OUT]
+ * Handles controlEndpoint [SETUP, IN & OUT]
  *
  * @return true indicates token has been processed.\n
  * false token still needs processing
@@ -705,7 +726,7 @@ bool UsbBase_T<Info, EP0_SIZE>::handleTokenComplete() {
       // Hasn't been processed
       return false;
    }
-   ep0.flipOddEven(usbStat);
+   controlEndpoint.flipOddEven(usbStat);
 
    // Relevant BDT
    BdtEntry *bdt = &bdts[usbStat>>2];
@@ -717,7 +738,7 @@ bool UsbBase_T<Info, EP0_SIZE>::handleTokenComplete() {
    }
    PRINTF("\nTOKEN=%s, STATE=%s, size=%d, %s, %s, %s\n",
          getTokenName(bdt->u.result.tok_pid),
-         getStateName(ep0.getHardwareState().state),
+         getStateName(controlEndpoint.getHardwareState().state),
          bdt->bc,
          (usbStat&USB_STAT_TX_MASK)?"Tx":"Rx",
                bdt->u.result.data0_1?"DATA1":"DATA0",
@@ -728,10 +749,10 @@ bool UsbBase_T<Info, EP0_SIZE>::handleTokenComplete() {
          handleSetupToken();
          break;
       case INToken:
-         ep0.handleInToken();
+         controlEndpoint.handleInToken();
          break;
       case OUTToken:
-         ep0.handleOutToken();
+         controlEndpoint.handleOutToken();
          break;
       default:
          PRINTF("Unexpected token on EP0 = %s\n", getTokenName(bdt->u.result.tok_pid));
@@ -781,7 +802,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleUSBReset() {
 template<class Info, int EP0_SIZE>
 void UsbBase_T<Info, EP0_SIZE>::handleUSBSuspend() {
    //   PUTS("Suspend");
-   if (deviceState.state != USBconfigured) {
+   if (connectionState != USBconfigured) {
       // Ignore if not configured
       return;
    }
@@ -794,7 +815,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleUSBSuspend() {
 
    // Enable resume detection or reset interrupts from the USB
    usb->INTEN   |= (USB_ISTAT_RESUME_MASK|USB_ISTAT_USBRST_MASK);
-   deviceState.state = USBsuspended;
+   connectionState = USBsuspended;
 
    // A re-check loop is used here to ensure USB bus noise doesn't wake-up the CPU
    do {
@@ -835,7 +856,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleUSBResume() {
    // Mask further resume interrupts
    usb->INTEN   &= ~USB_INTEN_RESUMEEN_MASK;
 
-   if (deviceState.state != USBsuspended) {
+   if (connectionState != USBsuspended) {
       // Ignore if not suspended
       return;
    }
@@ -845,7 +866,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleUSBResume() {
    // Clear the sleep and resume interrupt flags
    usb->ISTAT = USB_ISTAT_SLEEP_MASK|USB_ISTAT_RESUME_MASK;
 
-   deviceState.state = USBconfigured;
+   connectionState = USBconfigured;
 
    UsbImplementation::initialiseEndpoints();
 
@@ -864,16 +885,15 @@ void UsbBase_T<Info, EP0_SIZE>::ep0TransactionCallback(EndpointState state) {
    switch (state) {
       case EPDataOut:
          // Just completed a series of OUT transfers on EP0 -
+         // Now idle - make sure ready for SETUP reception
+         ep0ConfigureSetupTransaction();
          // Do empty status packet transmission - no response expected
          ep0TxStatus();
-         // Make sure end-point OUT direction ready for SETUP reception
-         ep0.initialiseBdtRx();
          break;
       case EPDataIn:
-      case EPLastIn:
          // Just completed a series of IN transfers on EP0 -
          // Do empty status packet reception
-         ep0.startRxTransaction(EPStatusOut);
+         controlEndpoint.startRxTransaction(EPStatusOut);
          break;
       case EPStatusIn:
          // Just completed an IN transaction acknowledging a series of OUT transfers -
@@ -884,8 +904,9 @@ void UsbBase_T<Info, EP0_SIZE>::ep0TransactionCallback(EndpointState state) {
          }
          break;
       case EPStatusOut:
+         // Just completed an OUT transaction acknowledging a series of IN transfers -
          // Now idle - make sure ready for SETUP reception
-         ep0.initialiseBdtRx();
+         ep0ConfigureSetupTransaction();
          break;
       default:
          PRINTF("Unhandled %d\n", state);
@@ -985,7 +1006,7 @@ void UsbBase_T<Info, EP0_SIZE>::initialise() {
  * @param endpoint The end-point to add
  */
 template<class Info, int EP0_SIZE>
-void UsbBase_T<Info, EP0_SIZE>::addEndpoint(const Endpoint *endpoint) {
+void UsbBase_T<Info, EP0_SIZE>::addEndpoint(Endpoint *endpoint) {
    endPoints[endpoint->fEndpointNumber] = endpoint;
 }
 
@@ -1013,28 +1034,22 @@ void UsbBase_T<Info, EP0_SIZE>::initialiseEndpoints() {
    usb->CTL = USB_CTL_USBENSOFEN_MASK|USB_CTL_ODDRST_MASK;
    usb->CTL = USB_CTL_USBENSOFEN_MASK;
 
-   ep0.initialise();
+   controlEndpoint.initialise();
 
-   ep0.setCallback(ep0TransactionCallback);
+   controlEndpoint.setCallback(ep0TransactionCallback);
 
    // Set up to receive 1st SETUP packet
    ep0ConfigureSetupTransaction();
 }
 
 /**
- * Get Status - Device Req 0x00
+ * Get Status - Device Request 0x00
  */
 template<class Info, int EP0_SIZE>
 void UsbBase_T<Info, EP0_SIZE>::handleGetStatus() {
 
    PRINTF("handleGetStatus()\n");
 
-   /** Endpoint Status in USB format */
-   struct EndpointStatus {
-      int stall  : 1;   //!< Endpoint is stalled
-      int res1   : 7;   //!< Reserved
-      int res2   : 8;   //!< Reserved
-   };
    static const uint8_t        zeroReturn[]    = {0,0};
    static const EndpointStatus epStatusStalled = {1,0,0};
    static const EndpointStatus epStatusOK      = {0,0,0};
@@ -1045,8 +1060,8 @@ void UsbBase_T<Info, EP0_SIZE>::handleGetStatus() {
 
    switch(ep0SetupBuffer.bmRequestType) {
       case EP_IN|RT_DEVICE : // Device Status
-      dataPtr = (uint8_t *) &deviceState.status;
-      size    = sizeof(deviceState.status);
+      dataPtr = (uint8_t *) &deviceStatus;
+      size    = sizeof(deviceStatus);
       break;
 
       case EP_IN|RT_INTERFACE : // Interface Status - reserved
@@ -1071,12 +1086,12 @@ void UsbBase_T<Info, EP0_SIZE>::handleGetStatus() {
       ep0StartTxTransaction( size, dataPtr );
    }
    else {
-      ep0.stall();
+      controlEndpoint.stall();
    }
 }
 
 /**
- * Clear Feature - Device Req 0x01
+ * Clear Feature - Device Request 0x01
  */
 template<class Info, int EP0_SIZE>
 void UsbBase_T<Info, EP0_SIZE>::handleClearFeature() {
@@ -1088,7 +1103,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleClearFeature() {
                (ep0SetupBuffer.wIndex != 0))   {                // Device index must be 0
             break;
          }
-         deviceState.status.remoteWakeup = 0;
+         deviceStatus.remoteWakeup = 0;
          okResponse                      = true;
          break;
 
@@ -1115,12 +1130,12 @@ void UsbBase_T<Info, EP0_SIZE>::handleClearFeature() {
       ep0TxStatus(); // Tx empty Status packet
    }
    else {
-      ep0.stall();
+      controlEndpoint.stall();
    }
 }
 
 /**
- * Set Feature - Device Req 0x03
+ * Set Feature - Device Request 0x03
  */
 template<class Info, int EP0_SIZE>
 void UsbBase_T<Info, EP0_SIZE>::handleSetFeature() {
@@ -1132,7 +1147,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleSetFeature() {
                (ep0SetupBuffer.wIndex != 0)) {                  // device wIndex must be 0
             break;
          }
-         deviceState.status.remoteWakeup = 1;
+         deviceStatus.remoteWakeup = 1;
          okResponse                      = true;
          break;
 
@@ -1158,12 +1173,12 @@ void UsbBase_T<Info, EP0_SIZE>::handleSetFeature() {
       ep0TxStatus(); // Tx empty Status packet
    }
    else {
-      ep0.stall();
+      controlEndpoint.stall();
    }
 }
 
 /**
- * Get Descriptor - Device Req 0x06
+ * Get Descriptor - Device Request 0x06
  */
 template<class Info, int EP0_SIZE>
 void UsbBase_T<Info, EP0_SIZE>::handleGetDescriptor() {
@@ -1175,7 +1190,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleGetDescriptor() {
 
    if (ep0SetupBuffer.bmRequestType != (EP_IN|RT_DEVICE)) {
       // Must be In,Standard,Device
-      ep0.stall();
+      controlEndpoint.stall();
       return;
    }
    switch (ep0SetupBuffer.wValue.hi()) {
@@ -1188,7 +1203,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleGetDescriptor() {
       case DT_CONFIGURATION: // Get Configuration Descriptor - 2
          //      PUTS("getDescriptor-config - ");
          if (ep0SetupBuffer.wValue.lo() != 0) {
-            ep0.stall();
+            controlEndpoint.stall();
             return;
          }
          dataPtr  = (uint8_t *) &UsbImplementation::otherDescriptors;
@@ -1196,7 +1211,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleGetDescriptor() {
          break;
       case DT_DEVICEQUALIFIER: // Get Device Qualifier Descriptor
          //      PUTS("getDescriptor-deviceQ - ");
-         ep0.stall();
+         controlEndpoint.stall();
          return;
       case DT_STRING: // Get String Desc.- 3
          //      PRINTF("getDescriptor-string - %d\n", descriptorIndex);
@@ -1210,7 +1225,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleGetDescriptor() {
 #endif
          if (descriptorIndex >= sizeof(UsbImplementation::stringDescriptors)/sizeof(UsbImplementation::stringDescriptors[0])) {
             // Illegal string index - stall
-            ep0.stall();
+            controlEndpoint.stall();
             return;
          }
          if (descriptorIndex == 0) {
@@ -1226,20 +1241,20 @@ void UsbBase_T<Info, EP0_SIZE>::handleGetDescriptor() {
             snprintf((char *)utf8Buff, sizeof(utf8Buff), SERIAL_NO, uid);
 
             // Use end-point internal buffer directly - may result in truncation
-            dataPtr = ep0.getBuffer();
-            utf8ToStringDescriptor(ep0.getBuffer(), utf8Buff, ep0.BUFFER_SIZE);
+            dataPtr = controlEndpoint.getBuffer();
+            utf8ToStringDescriptor(controlEndpoint.getBuffer(), utf8Buff, controlEndpoint.BUFFER_SIZE);
          }
 #endif
          else {
             // Use end-point internal buffer directly - may result in truncation
-            dataPtr = ep0.getBuffer();
-            utf8ToStringDescriptor(ep0.getBuffer(), UsbImplementation::stringDescriptors[descriptorIndex], ep0.BUFFER_SIZE);
+            dataPtr = controlEndpoint.getBuffer();
+            utf8ToStringDescriptor(controlEndpoint.getBuffer(), UsbImplementation::stringDescriptors[descriptorIndex], controlEndpoint.BUFFER_SIZE);
          }
          dataSize = *dataPtr;
          break;
       default:
          // Shouldn't happen
-         ep0.stall();
+         controlEndpoint.stall();
          return;
    } // switch
 
@@ -1248,7 +1263,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleGetDescriptor() {
 }
 
 /**
- * Set Configuration - Device Req 0x09
+ * Set Configuration - Device Request 0x09
  * Treated as soft reset
  */
 template<class Info, int EP0_SIZE>
@@ -1256,7 +1271,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleSetConfiguration() {
    if ((ep0SetupBuffer.bmRequestType != (EP_OUT|RT_DEVICE)) || // Out,Standard,Device
          ((ep0SetupBuffer.wValue.lo() != 0) &&       // Only supports 0=> un-configure, 1=> only valid configuration
                (ep0SetupBuffer.wValue.lo() != UsbImplementation::CONFIGURATION_NUM))) {
-      ep0.stall();
+      controlEndpoint.stall();
       return;
    }
    setUSBconfiguredState(ep0SetupBuffer.wValue.lo());
@@ -1269,7 +1284,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleSetConfiguration() {
 }
 
 /**
- * Set interface - Device Req 0x0B
+ * Set interface - Device Request 0x0B
  * Not required to be implemented
  */
 template<class Info, int EP0_SIZE>
@@ -1278,13 +1293,13 @@ void UsbBase_T<Info, EP0_SIZE>::handleSetInterface() {
 
    if ((ep0SetupBuffer.bmRequestType != (EP_OUT|RT_INTERFACE)) || // NOT In,Standard,Interface
          (ep0SetupBuffer.wLength != 0) ||                         // NOT correct length
-         (deviceState.state != USBconfigured)) {                  // NOT in addressed state
-      ep0.stall(); // Error
+         (connectionState != USBconfigured)) {                  // NOT in addressed state
+      controlEndpoint.stall(); // Error
       return;
    }
    // Only support one Alternate Setting == 0
    if (ep0SetupBuffer.wValue != 0) {
-      ep0.stall(); // Error
+      controlEndpoint.stall(); // Error
       return;
    }
    for (int epNum=1; epNum<UsbImplementation::NUMBER_OF_ENDPOINTS; epNum++) {
