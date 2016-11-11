@@ -39,7 +39,7 @@ public:
 #endif
 
    enum {
-      wake_onInt  = SMC_PMCTRL_LPWUI,
+      wake_onInt  = SMC_PMCTRL_LPWUI(1),
    };
 
    enum {
