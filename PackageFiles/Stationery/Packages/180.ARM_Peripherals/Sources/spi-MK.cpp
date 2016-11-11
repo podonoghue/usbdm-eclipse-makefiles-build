@@ -1,4 +1,4 @@
-/*
+/**
  * spi.cpp (derived from spi-MK.cpp)
  *
  * @version  V4.12.1.80

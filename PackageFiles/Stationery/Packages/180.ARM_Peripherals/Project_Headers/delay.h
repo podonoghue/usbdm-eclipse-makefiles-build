@@ -31,6 +31,8 @@ static constexpr uint32_t TIMER_MASK = ((1UL<<24)-1UL);
 /**
  * Convert milliseconds to timer ticks
  *
+ * @param ms Time in milliseconds
+ *
  * @return Time value in timer ticks
  */
 static inline int64_t convertMSToTicks(uint32_t ms) {
@@ -40,7 +42,9 @@ static inline int64_t convertMSToTicks(uint32_t ms) {
 /**
  * Convert timer ticks to milliseconds
  *
- * @return Time value in timer ticks
+ * @param ticks Time in ticks
+ *
+ * @return Time value in milliseconds
  */
 static inline int64_t convertTicksToMS(uint32_t ticks) {
    return ((uint64_t)ticks * 1000 / SystemCoreClock);

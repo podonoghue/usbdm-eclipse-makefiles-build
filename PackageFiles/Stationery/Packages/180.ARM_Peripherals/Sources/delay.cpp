@@ -1,4 +1,4 @@
-/*
+/**
  * @file delay.cpp
  *
  * @brief Delay routines using Systick Counter

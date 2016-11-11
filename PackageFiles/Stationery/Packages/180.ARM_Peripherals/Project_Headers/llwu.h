@@ -1,10 +1,10 @@
-/*
- * llwu.h
+/**
+ * @file     llwu.h
+ * @brief    Low leakage wake-up unit
  *
- *  Created on: 25/10/2013
- *      Author: podonoghue
+ * @version  V4.12.1.80
+ * @date     13 April 2016
  */
-
 #ifndef LLWU_H_
 #define LLWU_H_
  /*

@@ -1,7 +1,6 @@
 /****************************************************************************************************//**
  * @file     uart.h
- *
- * @brief    Abstracion layer for UART interface
+ * @brief    Universal Asynchronous Receiver/Transmitter interface
  *
  * @version  V0.0
  * @date     2015/06

@@ -1,10 +1,10 @@
-/*
- * rtc.h
+/**
+ * @file     rtc.h
+ * @brief    Real Time Clock
  *
- *  Created on: 25/10/2013
- *      Author: podonoghue
+ * @version  V4.12.1.80
+ * @date     13 April 2016
  */
-
 #ifndef RTC_H_
 #define RTC_H_
  /*

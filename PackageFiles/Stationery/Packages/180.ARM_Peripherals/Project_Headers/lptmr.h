@@ -52,6 +52,8 @@ public:
     * Set callback for ISR
     *
     * @param theCallback The function to call from stub ISR
+    *
+    * @return E_NO_ERROR on success
     */
    static ErrorCode setCallback(LPTMRCallbackFunction theCallback) {
       if (!Info::irqHandlerInstalled) {

@@ -1,10 +1,10 @@
-/*
- * smc.h
+/**
+ * @file     smc.h
+ * @brief    System Management Controller
  *
- *  Created on: 25/10/2013
- *      Author: podonoghue
+ * @version  V4.12.1.80
+ * @date     13 April 2016
  */
-
 #ifndef SMC_H_
 #define SMC_H_
  /*

@@ -1,6 +1,6 @@
 /**
- * @file     pcr.h (from pcr-MK.h)
- * @brief    Port Control Register interface
+ * @file     pcr.h
+ * @brief    Port Control Register interface (generated from pcr-MK.h)
  *
  * @version  V4.12.1.80
  * @date     13 April 2016

@@ -72,6 +72,8 @@ public:
     * Transition from current clock mode to mode given
     *
     * @param to Clock mode to transition to
+    *
+    * @return E_NO_ERROR on success
     */
    static int clockTransition(const McgInfo::ClockInfo &to);
 

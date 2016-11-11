@@ -1,6 +1,6 @@
 /**
  * @file     ftm.h
- * @brief    GPIO Pin routines
+ * @brief    Fleximble Timer Module
  *
  * @version  V4.12.1.80
  * @date     13 April 2016
@@ -180,7 +180,7 @@ public:
     * Used to change configuration after enabling interface
     *
     * @param period  Period in ticks
-    * @param mode    Mode of operation see @ref Ftm_Mode
+    * @param mode    Mode of operation see USBDM::Ftm_Mode
     *
     * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
     */
@@ -275,6 +275,8 @@ public:
     * Set period
     *
     * @param period Period in ticks
+    *
+    * @return E_NO_ERROR on success
     *
     * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
     */
@@ -499,6 +501,8 @@ public:
     *
     * @param highTime   PWM high time in ticks
     * @param channel    Timer channel
+    *
+    * @return E_NO_ERROR on success
     */
    static ErrorCode setHighTime(uint32_t highTime, int channel) {
 #ifdef DEBUG_BUILD
@@ -515,6 +519,8 @@ public:
     *
     * @param highTime   PWM high time in seconds
     * @param channel    Timer channel
+    *
+    * @return E_NO_ERROR on success
     */
    static ErrorCode setHighTime(float highTime, int channel) {
       return setHighTime(convertSecondsToTicks(highTime), channel);
@@ -631,7 +637,9 @@ public:
     * Enables owning FTM if not already enabled\n
     * Also see /ref enableChannel()
     *
-    * Enabled FTM as well
+    * @param mode Mode of operation for FTM e.g.ftm_pwmHighTruePulses
+    *
+    * @note Enables FTM as well
     */
    static void enable(Ftm_ChannelMode mode = ftm_pwmHighTruePulses) {
       if (!FtmBase_T<Info>::isEnabled()) {
@@ -673,6 +681,8 @@ public:
     * Assumes value is less than period
     *
     * @param highTime   PWM high time in ticks
+    *
+    * @return E_NO_ERROR on success
     */
    static ErrorCode setHighTime(uint32_t highTime) {
       return FtmBase_T<Info>::setHighTime(highTime, channel);
@@ -683,6 +693,8 @@ public:
     * Higher precision float version
     *
     * @param highTime   PWM high time in seconds
+    *
+    * @return E_NO_ERROR on success
     */
    static ErrorCode setHighTime(float highTime) {
       return FtmBase_T<Info>::setHighTime(highTime, channel);

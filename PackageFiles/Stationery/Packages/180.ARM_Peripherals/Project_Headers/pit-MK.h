@@ -1,7 +1,6 @@
 /**
- * @file      pit.h (derived from pit-MK.h)
- *
- * @brief    Abstraction layer for PIT interface
+ * @file     pit.h
+ * @brief    Programmable Interrupt Timer interface (derived from pit-MK.h)
  *
  * @version  V4.12.1.80
  * @date     13 April 2016
@@ -162,6 +161,8 @@ public:
     *
     * @param channel Channel being modified
     * @param enable True => enable, False => disable
+    *
+    * @return E_NO_ERROR on success
     */
    static ErrorCode enableNvicInterrupts(unsigned channel, bool enable=true) {
       if (channel>=Info::irqCount) {

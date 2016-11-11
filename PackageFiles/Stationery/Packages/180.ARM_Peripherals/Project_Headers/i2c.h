@@ -77,8 +77,10 @@ protected:
     *
     * This is calculated from processor bus frequency and given bps
     *
-    * @param bps            - Interface speed in bits-per-second
-    * @param clockFrequency - Frequency of I2C input clock
+    * @param bps            Interface speed in bits-per-second
+    * @param clockFrequency Frequency of I2C input clock
+    *
+    * @return I2C_F value representing speed
     */
    static uint8_t getBPSValue(uint32_t bps, uint32_t clockFrequency);
 
@@ -136,6 +138,8 @@ public:
     * @param address  Address of slave to communicate with
     * @param size     Size of transmission data
     * @param data     Data to transmit, 0th byte is often register address
+    *
+    * @return E_NO_ERROR on success
     */
    int transmit(uint8_t address, uint16_t size, const uint8_t data[]);
 
@@ -145,6 +149,8 @@ public:
     * @param address  Address of slave to communicate with
     * @param size     Size of reception data
     * @param data     Data buffer for reception
+    *
+    * @return E_NO_ERROR on success
     */
    int receive(uint8_t address, uint16_t size,  uint8_t data[]);
 
@@ -158,6 +164,8 @@ public:
     * @param txData   Data for transmission
     * @param rxSize   Size of reception data
     * @param rxData   Date buffer for reception
+    *
+    * @return E_NO_ERROR on success
     */
    int txRx(uint8_t address, uint16_t txSize, const uint8_t txData[], uint16_t rxSize, uint8_t rxData[] );
 
@@ -170,6 +178,8 @@ public:
     * @param txSize   Size of transmission data
     * @param rxSize   Size of reception data
     * @param data     Data for transmission and reception
+    *
+    * @return E_NO_ERROR on success
     */
    int txRx(uint8_t address, uint16_t txSize, uint16_t rxSize, uint8_t data[] );
 

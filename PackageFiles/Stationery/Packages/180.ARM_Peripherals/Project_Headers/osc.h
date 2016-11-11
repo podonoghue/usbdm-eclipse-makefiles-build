@@ -1,10 +1,10 @@
-/*
- * osc.h
+/**
+ * @file     osc.h
+ * @brief    Oscillator interface
  *
- *  Created on: 25/10/2013
- *      Author: podonoghue
+ * @version  V4.12.1.80
+ * @date     13 April 2016
  */
-
 #ifndef OSC_H_
 #define OSC_H_
  /*

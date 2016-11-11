@@ -1,10 +1,10 @@
-/*
- * pdb.h
+/**
+ * @file     pdb.h
+ * @brief    Programmable Delay Block
  *
- *  Created on: 25/10/2013
- *      Author: podonoghue
+ * @version  V4.12.1.80
+ * @date     13 April 2016
  */
-
 #ifndef PDB_H_
 #define PDB_H_
  /*

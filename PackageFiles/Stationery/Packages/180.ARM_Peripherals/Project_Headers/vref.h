@@ -1,6 +1,6 @@
 /**
  * @file     vref.h
- * @brief    Voltage Reference Pin routines
+ * @brief    Voltage Reference
  *
  * @version  V4.12.1.80
  * @date     13 April 2016

@@ -1,6 +1,6 @@
 /**
  * @file     utilities.h
- * @brief    Convenience macros for port access
+ * @brief    Utility Routines
  * @version  V4.11.1.70
  * @date     13 May 2013
  */
@@ -143,19 +143,19 @@ public:
    /**
     * @return Value as 16-bit unsigned in native format
     */
-   operator uint16_t() const {
+   operator uint16_t() const volatile {
       return leToNative16(value);
    }
    /**
     * @return Lower byte of value as 8-bit unsigned value
     */
-   uint8_t lo() {
+   uint8_t lo() volatile {
       return leToNative16(value)&0xFF;
    }
    /**
     * @return Upper byte of value as 8-bit unsigned value
     */
-   uint8_t hi() {
+   uint8_t hi() volatile {
       return (leToNative16(value)>>8)&0xFF;
    }
 };

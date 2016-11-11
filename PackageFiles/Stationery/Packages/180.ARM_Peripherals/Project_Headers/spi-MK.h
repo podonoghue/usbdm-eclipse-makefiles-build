@@ -1,12 +1,10 @@
 /**
- * @file     spi.h (derived from spi-MK.h)
- *
- * @brief    Abstraction layer for SPI interface
+ * @file     spi.h
+ * @brief    Serial Peripheral Interface (derived from spi-MK.h)
  *
  * @version  V4.12.1.80
  * @date     13 April 2016
  */
-
 #ifndef INCLUDE_USBDM_SPI_H_
 #define INCLUDE_USBDM_SPI_H_
 /*

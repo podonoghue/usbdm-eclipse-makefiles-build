@@ -1,4 +1,4 @@
-/*
+/**
  * @file i2c.cpp
  *
  * @version  V4.12.1.80
@@ -29,8 +29,10 @@ const uint16_t I2c::I2C_DIVISORS[] = {
  *
  * This is calculated from processor bus frequency and given bps
  *
- * @param bps            - Interface speed in bits-per-second
- * @param clockFrequency - Frequency of I2C input clock
+ * @param bps            Interface speed in bits-per-second
+ * @param clockFrequency Frequency of I2C input clock
+ *
+ * @return I2C_F value representing speed
  */
 uint8_t I2c::getBPSValue(uint32_t bps, uint32_t clockFrequency) {
    uint8_t  best_mul   = 0;
@@ -199,6 +201,8 @@ void I2c::poll(void) {
  * @param address  Address of slave to communicate with
  * @param size     Size of transmission data
  * @param data     Data to transmit, 0th byte is often register address
+ *
+ * @return E_NO_ERROR on success
  */
 int I2c::transmit(uint8_t address, uint16_t size, const uint8_t data[]) {
    errorCode = 0;
@@ -224,6 +228,8 @@ int I2c::transmit(uint8_t address, uint16_t size, const uint8_t data[]) {
  * @param address  Address of slave to communicate with
  * @param size     Size of reception data
  * @param data     Data buffer for reception
+ *
+ * @return E_NO_ERROR on success
  */
 int I2c::receive(uint8_t address, uint16_t size,  uint8_t data[]) {
    errorCode = 0;
@@ -252,6 +258,8 @@ int I2c::receive(uint8_t address, uint16_t size,  uint8_t data[]) {
  * @param txData   Data for transmission
  * @param rxSize   Size of reception data
  * @param rxData   Date buffer for reception
+ *
+ * @return E_NO_ERROR on success
  */
 int I2c::txRx(uint8_t address, uint16_t txSize, const uint8_t txData[], uint16_t rxSize, uint8_t rxData[] ) {
    errorCode = 0;
@@ -279,6 +287,8 @@ int I2c::txRx(uint8_t address, uint16_t txSize, const uint8_t txData[], uint16_t
  * @param txSize   Size of transmission data
  * @param rxSize   Size of reception data
  * @param data     Data for transmission and reception
+ *
+ * @return E_NO_ERROR on success
  */
 int I2c::txRx(uint8_t address, uint16_t txSize, uint16_t rxSize, uint8_t data[] ) {
    return txRx(address, txSize, data, rxSize, data);

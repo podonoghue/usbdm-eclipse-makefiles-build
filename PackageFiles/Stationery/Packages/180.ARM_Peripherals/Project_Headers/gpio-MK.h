@@ -1,6 +1,6 @@
 /**
- * @file     gpio.h (from gpio-MK.h)
- * @brief    GPIO interface
+ * @file     gpio.h
+ * @brief    General Purpose Input/Output (generated from gpio-MK.h)
  *
  * @version  V4.12.1.80
  * @date     13 April 2016

@@ -208,6 +208,8 @@ public:
     * Intended for use with interrupts
     *
     * @param sc1Value SC1 register value including the ADC channel to use
+    *
+    * @return E_NO_ERROR on success
     */
    static ErrorCode startConversion(const int sc1Value) {
       if (!Info::irqHandlerInstalled) {

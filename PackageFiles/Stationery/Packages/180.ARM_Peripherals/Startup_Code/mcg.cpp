@@ -161,6 +161,8 @@ constexpr uint8_t clockTransitionTable[8][8] = {
  * Transition from current clock mode to mode given
  *
  * @param to Clock mode to transition to
+ *
+ * @return E_NO_ERROR on success
  */
 int Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
    McgInfo::ClockMode to = clockInfo.clockMode;
@@ -312,6 +314,8 @@ int Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
 
          case McgInfo::ClockMode_BLPE: // from FBE, PBE (registers differ depending on transition)
             externalClockInUse = true;
+            //no break
+
          case McgInfo::ClockMode_BLPI: // from FBI
             // Set LP
             mcg->C2 = clockInfo.c2|MCG_C2_LP_MASK;
