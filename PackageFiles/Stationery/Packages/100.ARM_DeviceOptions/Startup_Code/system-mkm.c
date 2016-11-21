@@ -105,3 +105,36 @@ void SystemInit(void) {
 
 }
 
+// Code below assumes interrupts start out enabled!
+
+/** Nesting count for interrupt disable */
+static int disableInterruptCount = 0;
+
+/**
+ * Disable interrupts
+ *
+ * This function keeps a count of the number of times interrupts is enabled/disabled so may be called in recursive routines
+ */
+void disableInterrupts() {
+   __disable_irq();
+   disableInterruptCount++;
+}
+
+/**
+ * Enable interrupts
+ *
+ * This function keeps a count of the number of times interrupts is enabled/disabled so may be called in recursive routines
+ *
+ * @return true if interrupts are now enabled
+ */
+int enableInterrupts() {
+   if (disableInterruptCount>0) {
+      disableInterruptCount--;
+   }
+   if (disableInterruptCount == 0) {
+      __enable_irq();
+      return 1;
+   }
+   return 0;
+}
+

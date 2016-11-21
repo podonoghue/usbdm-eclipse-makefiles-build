@@ -36,15 +36,16 @@ extern volatile ErrorCode errorCode;
 /**
  * Get USBDM error code
  *
- * @return  err Error code
+ * @return  Error code
  */
 ErrorCode getError();
 
 /**
- * Get error message from error code or last
- * error if not provided
+ * Get error message from error code or last error if not provided
  *
  * @param  err Error code
+ *
+ * @return Pointer to static string
  */
 const char *getErrorMessage(ErrorCode err = errorCode);
 
@@ -62,13 +63,25 @@ inline static ErrorCode checkError() {
 extern ErrorCode checkError();
 #endif
 
-/** Set error code */
+/**
+ * Set error code
+ *
+ * @param err Error code to set
+ *
+ * @return Error code
+ */
 inline static ErrorCode setErrorCode(ErrorCode err) {
    errorCode = err;
    return errorCode;
 }
 
-/** Set error code and check for error */
+/**
+ * Set error code and check for error
+ *
+ * @param err Error code to set
+ *
+ * @return Error code
+ */
 inline static ErrorCode setAndCheckErrorCode(ErrorCode err) {
    errorCode = err;
    return checkError();

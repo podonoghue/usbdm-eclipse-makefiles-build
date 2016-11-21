@@ -193,7 +193,7 @@ protected:
 
       uint32_t ctarValue = spi->CTAR[ctarNum] &
             ~(SPI_CTAR_ASC_MASK|SPI_CTAR_PASC_MASK|SPI_CTAR_DT_MASK|SPI_CTAR_PDT_MASK|SPI_CTAR_CSSCK_MASK|SPI_CTAR_PCSSCK_MASK);
-      spi->CTAR[ctarNum] = ctarValue|calculateDelays(clockFrequency, asc, dt, cssck);
+      spi->CTAR[ctarNum] = ctarValue|calculateDelays(clockFrequency, cssck, asc, dt);
    }
 
 public:

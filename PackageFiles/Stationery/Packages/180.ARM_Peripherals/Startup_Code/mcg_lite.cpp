@@ -246,12 +246,6 @@ void Mcg::initialise(void) {
 
    currentClockMode = McgInfo::ClockMode::ClockMode_None;
 
-   if (McgInfo::clockInfo[0].clockMode == McgInfo::ClockMode::ClockMode_None) {
-      // No clock setup
-      SimInfo::initRegs();
-      return;
-   }
-
    // Transition to desired clock mode
    clockTransition(McgInfo::clockInfo[0]);
 

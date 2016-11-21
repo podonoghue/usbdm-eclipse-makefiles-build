@@ -1,8 +1,9 @@
-/*
- * usbdmError.cpp
+/**
+ * @file     usbdmError.cpp
+ * @brief    Error handling
  *
- *  Created on: 8 Jun 2016
- *      Author: podonoghue
+ * @version  V4.12.1.80
+ * @date     13 April 2016
  */
 #include <stdio.h>
 #include "hardware.h"
@@ -33,10 +34,11 @@ ErrorCode getError() {
 }
 
 /**
- * Get error message from error code or last
- * error if not provided
+ * Get error message from error code or last error if not provided
  *
  * @param  err Error code
+ *
+ * @return Pointer to static string
  */
 const char *getErrorMessage(ErrorCode err) {
    if (err>(sizeof(messages)/sizeof(messages[0]))) {

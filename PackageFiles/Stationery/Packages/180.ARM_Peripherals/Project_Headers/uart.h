@@ -46,7 +46,6 @@ protected:
     * Construct UART interface
     *
     * @param uart             Base address of UART hardware
-    *
     */
    Uart(volatile UART_Type *uart) : uart(uart) {
    }

@@ -149,13 +149,13 @@ public:
    /**
     * @return Lower byte of value as 8-bit unsigned value
     */
-   uint8_t lo() volatile {
+   uint8_t lo() const volatile {
       return leToNative16(value)&0xFF;
    }
    /**
     * @return Upper byte of value as 8-bit unsigned value
     */
-   uint8_t hi() volatile {
+   uint8_t hi() const volatile {
       return (leToNative16(value)>>8)&0xFF;
    }
 };
@@ -171,43 +171,43 @@ public:
    /**
     * @return Value as 32-bit unsigned in native format
     */
-   operator uint32_t() const {
+   operator uint32_t() const volatile {
       return leToNative32(value);
    }
    /**
     * @return Lower 16-bits of value as unsigned value
     */
-   uint16_t lo() {
+   uint16_t lo() const volatile {
       return leToNative16(value)&0xFFFF;
    }
    /**
     * @return Upper 16-bits of value as unsigned value
     */
-   uint16_t hi() {
+   uint16_t hi() const volatile {
       return (leToNative16(value)>>16)&0xFFFF;
    }
    /**
     * @return Lowest byte of value as unsigned value
     */
-   uint16_t b0() {
+   uint16_t b0() const volatile {
       return leToNative16(value)&0xFF;
    }
    /**
     * @return Lower-middle byte of value as unsigned value
     */
-   uint16_t b1() {
+   uint16_t b1() const volatile {
       return (leToNative16(value)>>8)&0xFF;
    }
    /**
     * @return Upper-middle byte of value as unsigned value
     */
-   uint16_t b2() {
+   uint16_t b2() const volatile {
       return (leToNative16(value)>>16)&0xFF;
    }
    /**
     * @return Uppermost byte of value as unsigned value
     */
-   uint16_t b3() {
+   uint16_t b3() const volatile {
       return (leToNative16(value)>>24)&0xFF;
    }
 };

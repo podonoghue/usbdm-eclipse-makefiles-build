@@ -2,8 +2,8 @@
  * @file     usb.h
  * @brief    Universal Serial Bus
  *
- * @version  V4.12.1.80
- * @date     13 April 2016
+ * @version  V4.12.1.150
+ * @date     13 Nov 2016
  */
 #ifndef PROJECT_HEADERS_USB_H_
 #define PROJECT_HEADERS_USB_H_
@@ -110,9 +110,9 @@ public:
    /**
     *  Creates a valid string descriptor in UTF-16-LE from a limited UTF-8 string
     *
-    *  @param to       - Where to place descriptor
-    *  @param from     - Zero terminated UTF-8 C string
-    *  @param maxSize  - Size of destination
+    *  @param to       Where to place descriptor
+    *  @param from     Zero terminated UTF-8 C string
+    *  @param maxSize  Size of destination
     *
     *  @note Only handles UTF-8 characters that fit in a single UTF-16 value.
     */
@@ -146,9 +146,11 @@ protected:
 
    /** Mask for all USB interrupts */
    static constexpr uint8_t USB_INTMASKS =
-         USB_INTEN_STALLEN_MASK|USB_INTEN_TOKDNEEN_MASK|
-         USB_INTEN_SOFTOKEN_MASK|USB_INTEN_USBRSTEN_MASK|
-         USB_INTEN_SLEEPEN_MASK;
+         USB_INTEN_STALLEN_MASK|
+         USB_INTEN_SLEEPEN_MASK|
+         USB_INTEN_TOKDNEEN_MASK|
+         USB_INTEN_SOFTOKEN_MASK|
+         USB_INTEN_USBRSTEN_MASK;
 
    /** USB connection state */
    static volatile DeviceConnectionStates connectionState;
@@ -343,9 +345,9 @@ protected:
     * Set USB interface to default state
     */
    static void setUSBdefaultState() {
-      connectionState                = USBdefault;
-      usb->ADDR                        = 0;
-      deviceConfiguration        = 0;
+      connectionState      = USBdefault;
+      usb->ADDR            = 0;
+      deviceConfiguration  = 0;
    }
 
    /**
@@ -359,9 +361,9 @@ protected:
          setUSBdefaultState();
       }
       else {
-         connectionState                = USBaddressed;
-         usb->ADDR                        = address;
-         deviceConfiguration        = 0;
+         connectionState       = USBaddressed;
+         usb->ADDR             = address;
+         deviceConfiguration   = 0;
       }
    }
 
@@ -376,8 +378,8 @@ protected:
          setUSBaddressedState(usb->ADDR);
       }
       else {
-         connectionState                = USBconfigured;
-         deviceConfiguration        = config;
+         connectionState      = USBconfigured;
+         deviceConfiguration  = config;
       }
    }
 
@@ -533,6 +535,7 @@ protected:
    }
 
 public:
+   static void irqHandler();
 
 };
 
@@ -637,9 +640,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleSetupToken() {
    // Save data from SETUP packet
    memcpy(&ep0SetupBuffer, controlEndpoint.getBuffer(), sizeof(ep0SetupBuffer));
 
-   controlEndpoint.getHardwareState().state   = EPIdle;
-   controlEndpoint.getHardwareState().txData1 = DATA1;
-   controlEndpoint.getHardwareState().rxData1 = DATA1;
+   controlEndpoint.setupReceived();
 
    // Call-backs only persist during a SETUP transaction
    setSetupCompleteCallback(nullptr);
@@ -768,7 +769,7 @@ bool UsbBase_T<Info, EP0_SIZE>::handleTokenComplete() {
  */
 template<class Info, int EP0_SIZE>
 void UsbBase_T<Info, EP0_SIZE>::handleUSBReset() {
-//   PUTS("\nReset");
+   PUTS("\nReset");
    //   pushState('R');
 
    // Disable all interrupts
@@ -778,12 +779,12 @@ void UsbBase_T<Info, EP0_SIZE>::handleUSBReset() {
    // Clear USB error flags
    usb->ERRSTAT = 0xFF;
 
-   // Clear all USB interrupt flags
-   usb->ISTAT = 0xFF;
+   // Clear most USB interrupt flags
+   usb->ISTAT = (uint8_t)~USB_ISTAT_TOKDNE_MASK;
 
    setUSBdefaultState();
 
-   // Initialise end-points via derived class
+   // Initialise control end-point
    initialiseEndpoints();
 
    // Enable various interrupts
@@ -814,7 +815,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleUSBSuspend() {
    //   usb->USBTRC0  |= USB_USBTRC0_USBRESMEN_MASK;
 
    // Enable resume detection or reset interrupts from the USB
-   usb->INTEN   |= (USB_ISTAT_RESUME_MASK|USB_ISTAT_USBRST_MASK);
+   usb->INTEN   |= (USB_INTEN_RESUMEEN_MASK|USB_INTEN_USBRSTEN_MASK);
    connectionState = USBsuspended;
 
    // A re-check loop is used here to ensure USB bus noise doesn't wake-up the CPU
@@ -841,7 +842,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleUSBSuspend() {
    } while ((usb->ISTAT&(USB_ISTAT_RESUME_MASK|USB_ISTAT_USBRST_MASK)) == 0);
 
    // Disable resume interrupts
-   usb->INTEN   &= ~USB_ISTAT_RESUME_MASK;
+   usb->INTEN   &= ~USB_INTEN_RESUMEEN_MASK;
    return;
 }
 
@@ -868,6 +869,8 @@ void UsbBase_T<Info, EP0_SIZE>::handleUSBResume() {
 
    connectionState = USBconfigured;
 
+   // Initialise all end-points
+   initialiseEndpoints();
    UsbImplementation::initialiseEndpoints();
 
    // Enable the transmit or receive of packets
@@ -993,7 +996,10 @@ void UsbBase_T<Info, EP0_SIZE>::initialise() {
    // Enable interface
    usb->CTL = USB_CTL_USBENSOFEN_MASK;
 
-   // Initialise end-points
+   // Clear EP0 BDTs
+   memset((uint8_t*)endPointBdts, 0, sizeof(EndpointBdtEntry[4]));
+
+   // Initialise control end-point
    initialiseEndpoints();
 
    // Enable USB interrupts
@@ -1011,26 +1017,18 @@ void UsbBase_T<Info, EP0_SIZE>::addEndpoint(Endpoint *endpoint) {
 }
 
 /**
- * Initialises EP0 and clears other end-points
+ * Initialise control end-point.\n
+ * Clears other end-points
  */
 template<class Info, int EP0_SIZE>
 void UsbBase_T<Info, EP0_SIZE>::initialiseEndpoints() {
 
    //   PUTS("initialiseEndpoints()");
 
-   // Clear all BDTs
-   memset((uint8_t*)endPointBdts, 0, sizeof(EndpointBdtEntry[UsbImplementation::NUMBER_OF_ENDPOINTS]));
+   // Clear BDTs apart from EP0
+   memset((uint8_t*)(endPointBdts+1), 0, sizeof(EndpointBdtEntry[UsbImplementation::NUMBER_OF_ENDPOINTS-1]));
 
-   // Clear hardware state
-   //   memset((uint8_t*)epHardwareState, 0, sizeof(epHardwareState));
-
-#if (HW_CAPABILITY&CAP_CDC)
-   ep3StartTxTransaction();       // Interrupt pipe IN - status
-   ep4InitialiseBdtRx();          // Tx pipe OUT
-   ep5StartTxTransactionIfIdle(); // Rx pipe IN
-#endif
-
-   // Clear odd/even bits & Enable Rx/Tx
+   // Clear odd/even bits & enable USB device
    usb->CTL = USB_CTL_USBENSOFEN_MASK|USB_CTL_ODDRST_MASK;
    usb->CTL = USB_CTL_USBENSOFEN_MASK;
 
@@ -1223,7 +1221,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleGetDescriptor() {
             break;
          }
 #endif
-         if (descriptorIndex >= sizeof(UsbImplementation::stringDescriptors)/sizeof(UsbImplementation::stringDescriptors[0])) {
+         if (descriptorIndex >= UsbImplementation::s_number_of_string_descriptors) {
             // Illegal string index - stall
             controlEndpoint.stall();
             return;
@@ -1276,7 +1274,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleSetConfiguration() {
    }
    setUSBconfiguredState(ep0SetupBuffer.wValue.lo());
 
-   // Initialise end-points via derived class
+   // Initialise non-control end-points
    UsbImplementation::initialiseEndpoints();
 
    // Tx empty Status packet
@@ -1308,6 +1306,77 @@ void UsbBase_T<Info, EP0_SIZE>::handleSetInterface() {
    }
    // Transmit empty Status packet
    ep0TxStatus();
+}
+
+/**
+ * Handler for USB interrupt
+ *
+ * Determines source and dispatches to appropriate routine.
+ */
+template<class Info, int EP0_SIZE>
+void UsbBase_T<Info, EP0_SIZE>::irqHandler() {
+
+   //   if (interruptFlags&~USB_ISTAT_SOFTOK_MASK) {
+   //      PRINTF("ISTAT=%2X\n", interruptFlags);
+   //   }
+
+   do {
+      // Get active and enabled flags only
+      uint8_t enabledInterruptFlags = usb->ISTAT & usb->INTEN;
+
+      if (enabledInterruptFlags == 0) {
+         return;
+      }
+      if ((enabledInterruptFlags&USB_ISTAT_TOKDNE_MASK) != 0) {
+         // Token complete interrupt
+         if (!handleTokenComplete()) {
+            // Pass to extension routine
+            UsbImplementation::handleTokenComplete();
+         }
+         /*
+          *  Clear source
+          *  Must be done after processing token as pops USB0_STAT register
+          */
+         usb->ISTAT = USB_ISTAT_TOKDNE_MASK;
+      }
+      if ((enabledInterruptFlags&USB_ISTAT_USBRST_MASK) != 0) {
+         // Reset signaled on Bus
+         usb->ISTAT = USB_ISTAT_USBRST_MASK; // Clear source
+         handleUSBReset();
+         return;
+      }
+      if ((enabledInterruptFlags&USB_ISTAT_RESUME_MASK) != 0) {
+         // Resume signaled on Bus
+         handleUSBResume();
+         // Clear source
+         usb->ISTAT = USB_ISTAT_RESUME_MASK;
+      }
+      if ((enabledInterruptFlags&USB_ISTAT_STALL_MASK) != 0) {
+         // Stall sent
+         handleStallComplete();
+         // Clear source
+         usb->ISTAT = USB_ISTAT_STALL_MASK;
+      }
+      if ((enabledInterruptFlags&USB_ISTAT_SOFTOK_MASK) != 0) {
+         // SOF Token
+         handleSOFToken();
+         usb->ISTAT = USB_ISTAT_SOFTOK_MASK; // Clear source
+      }
+      if ((enabledInterruptFlags&USB_ISTAT_SLEEP_MASK) != 0) {
+         // Bus Idle 3ms => sleep
+         //      PUTS("Suspend");
+         handleUSBSuspend();
+         // Clear source
+         usb->ISTAT = USB_ISTAT_SLEEP_MASK;
+      }
+      if ((enabledInterruptFlags&USB_ISTAT_ERROR_MASK) != 0) {
+         // Any Error
+         PRINTF("Error s=0x%02X\n", usb->ERRSTAT);
+         usb->ERRSTAT = 0xFF;
+         // Clear source
+         usb->ISTAT = USB_ISTAT_ERROR_MASK;
+      }
+   } while(true);
 }
 
 }; // namespace

@@ -1,6 +1,6 @@
 /**
  * @file     utilities.h
- * @brief    Convenience macros for port access
+ * @brief    Utility Routines
  * @version  V4.11.1.70
  * @date     13 May 2013
  */
@@ -119,7 +119,12 @@
 
 #if defined(DEBUG_BUILD)
 #define PUTS(x)     puts(x)
-#define PRINTF(...) printf (__VA_ARGS__)
+#define PRINTF(...) printf(__VA_ARGS__)
+//extern char debugBuffer[200];
+//#define PRINTF(...) snprintf (debugBuffer, sizeof(debugBuffer), __VA_ARGS__)
+//extern char logBuffer[128];
+//extern char logIndex;
+//#define pushState(x) logBuffer[(logIndex++)&0x7F] = (x);
 #else
 #define PUTS(x)
 #define PRINTF(...)
@@ -138,19 +143,19 @@ public:
    /**
     * @return Value as 16-bit unsigned in native format
     */
-   operator uint16_t() const {
+   operator uint16_t() const volatile {
       return leToNative16(value);
    }
    /**
     * @return Lower byte of value as 8-bit unsigned value
     */
-   uint8_t lo() {
+   uint8_t lo() const volatile {
       return leToNative16(value)&0xFF;
    }
    /**
     * @return Upper byte of value as 8-bit unsigned value
     */
-   uint8_t hi() {
+   uint8_t hi() const volatile {
       return (leToNative16(value)>>8)&0xFF;
    }
 };
@@ -166,43 +171,43 @@ public:
    /**
     * @return Value as 32-bit unsigned in native format
     */
-   operator uint32_t() const {
+   operator uint32_t() const volatile {
       return leToNative32(value);
    }
    /**
     * @return Lower 16-bits of value as unsigned value
     */
-   uint16_t lo() {
+   uint16_t lo() const volatile {
       return leToNative16(value)&0xFFFF;
    }
    /**
     * @return Upper 16-bits of value as unsigned value
     */
-   uint16_t hi() {
+   uint16_t hi() const volatile {
       return (leToNative16(value)>>16)&0xFFFF;
    }
    /**
     * @return Lowest byte of value as unsigned value
     */
-   uint16_t b0() {
+   uint16_t b0() const volatile {
       return leToNative16(value)&0xFF;
    }
    /**
     * @return Lower-middle byte of value as unsigned value
     */
-   uint16_t b1() {
+   uint16_t b1() const volatile {
       return (leToNative16(value)>>8)&0xFF;
    }
    /**
     * @return Upper-middle byte of value as unsigned value
     */
-   uint16_t b2() {
+   uint16_t b2() const volatile {
       return (leToNative16(value)>>16)&0xFF;
    }
    /**
     * @return Uppermost byte of value as unsigned value
     */
-   uint16_t b3() {
+   uint16_t b3() const volatile {
       return (leToNative16(value)>>24)&0xFF;
    }
 };

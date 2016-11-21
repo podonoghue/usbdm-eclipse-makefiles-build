@@ -3278,7 +3278,7 @@ static int cmd_exit(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *ar
 static const char usageText[] =
    "connect                      - Connect to target\n"
    "closeBDM                     - Close BDM connection\n"
-//   "debug <value>                - Debug commands\n"
+   "debug <value>                - Debug commands\n"
    "defaultMemorySpace N,X,P     - Set default memory space (N:None,X:Data,P:Program)\n"
    "dialogue <title> <body> yes_no|cancel|ok|i_exclaim|i_question|i_info|i_err\n"
    "       returns 0=>cancel, 1=yes, 2=no, 3=ok\n"
@@ -3384,7 +3384,7 @@ const char *name;
 //    { initialiseCommand,        "initialise" },
       { cmd_setMemorySpace,       "defaultMemorySpace" },
       { cmd_pinSet,               "pinSet" },
-      { cmd_debug,             "debug"},
+      { cmd_debug,                "debug"},
       { cmd_go,                   "go"},
       { cmd_status,               "gs"},
       { cmd_getLastError,         "getLastError"},

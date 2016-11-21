@@ -245,7 +245,9 @@ void os_tmr_call(uint16_t  info __attribute__((unused))) {
 __attribute__((__weak__))
 void _exit(int rc __attribute__((unused))) {
    for(;;) {
-	 // If you end up here it probably means you fell of the end of main()!
+      /*
+       * If you end up here it probably means you fell of the end of main()!
+       */
       __asm__("bkpt");
    }
 }

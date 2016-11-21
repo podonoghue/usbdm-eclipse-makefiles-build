@@ -133,7 +133,7 @@ void SystemInit(void) {
 #endif
 }
 
-// Code below assumes interrupts start oiut enabled!
+// Code below assumes interrupts start out enabled!
 
 /** Nesting count for interrupt disable */
 static int disableInterruptCount = 0;
@@ -161,7 +161,8 @@ int enableInterrupts() {
    }
    if (disableInterruptCount == 0) {
       __enable_irq();
+      return 1;
    }
-   return disableInterruptCount>0;
+   return 0;
 }
 

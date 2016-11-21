@@ -135,7 +135,8 @@ int enableInterrupts() {
    }
    if (disableInterruptCount == 0) {
       __enable_irq();
+      return 1;
    }
-   return disableInterruptCount>0;
+   return 0;
 }
 

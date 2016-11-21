@@ -272,9 +272,8 @@ int Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
             return -1;
          }
       } while (currentClockMode != to);
-
-      setSysDividers(SimInfo::clkdiv1);
    }
+   setSysDividers(SimInfo::clkdiv1);
 
    SystemCoreClockUpdate();
    return 0;
@@ -356,12 +355,6 @@ void Mcg::initialise(void) {
 
    currentClockMode = McgInfo::ClockMode::ClockMode_None;
 
-   if (McgInfo::clockInfo[0].clockMode == McgInfo::ClockMode::ClockMode_None) {
-      // No clock setup
-      SimInfo::initRegs();
-      return;
-   }
-
    // Transition to desired clock mode
    clockTransition(McgInfo::clockInfo[0]);
 
@@ -388,7 +381,6 @@ void clock_initialise(void) {
 
 #ifdef USBDM_MCG_IS_DEFINED
    USBDM::Mcg::initialise();
-   USBDM::Mcg::SystemCoreClockUpdate();
 #endif
 
 }

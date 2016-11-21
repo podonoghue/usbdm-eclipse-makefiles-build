@@ -2,6 +2,9 @@
     @file usb.cpp
     @brief Simple USB Stack for Kinetis
 
+    @version  V4.12.1.150
+    @date     13 Nov 2016
+
    \verbatim
     Kinetis USB Code
 
@@ -252,9 +255,9 @@ void reportLineState(uint8_t value) {
 /**
  *  Creates a valid string descriptor in UTF-16-LE from a limited UTF-8 string
  *
- *  @param to       - Where to place descriptor
- *  @param from     - Zero terminated UTF-8 C string
- *  @param maxSize  - Size of destination
+ *  @param to       Where to place descriptor
+ *  @param from     Zero terminated UTF-8 C string
+ *  @param maxSize  Size of destination
  *
  *  @note Only handles UTF-8 characters that fit in a single UTF-16 value.
  */

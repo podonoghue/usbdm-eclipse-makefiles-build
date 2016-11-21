@@ -2,8 +2,8 @@
  * @file     usb_implementation_bulk.cpp
  * @brief    USB Kinetis implementation
  *
- * @version  V4.12.1.80
- * @date     13 April 2016
+ * @version  V4.12.1.150
+ * @date     13 Nov 2016
  *
  *  This file provides the implementation specific code for the USB interface.
  *  It will need to be modified to suit an application.
@@ -14,6 +14,9 @@
 
 namespace USBDM {
 
+/**
+ * Interface numbers for USB descriptors
+ */
 enum InterfaceNumbers {
    /** Interface number for BDM channel */
    BULK_INTF_ID,
@@ -73,20 +76,6 @@ const DeviceDescriptor Usb0::deviceDescriptor = {
       /* iProduct            */ s_product_index,                // String index of product description
       /* iSerialNumber       */ s_serial_index,                 // String index of serial number
       /* bNumConfigurations  */ NUMBER_OF_CONFIGURATIONS        // Number of configurations
-};
-
-/**
- * Other descriptors type
- */
-struct Usb0::Descriptors {
-   ConfigurationDescriptor                  configDescriptor;
-
-   InterfaceDescriptor                      bulk_interface;
-   EndpointDescriptor                       bulk_out_endpoint;
-   EndpointDescriptor                       bulk_in_endpoint;
-   /*
-    * TODO Add additional Descriptors here
-    */
 };
 
 /**
@@ -186,26 +175,19 @@ void Usb0::sofCallback() {
  */
 void Usb0::handleTokenComplete() {
 
-   // Let parent process first
-   if (UsbBase_T::handleTokenComplete()) {
-      // Done
-      return;
-   }
-
    // Status from Token
    uint8_t   usbStat  = usb->STAT;
 
    // Endpoint number
    uint8_t   endPoint = ((uint8_t)usbStat)>>4;
 
+   endPoints[endPoint]->flipOddEven(usbStat);
    switch (endPoint) {
       case BULK_OUT_ENDPOINT: // Accept OUT token
          setActive();
-         epBulkOut.flipOddEven(usbStat);
          epBulkOut.handleOutToken();
          return;
       case BULK_IN_ENDPOINT: // Accept IN token
-         epBulkIn.flipOddEven(usbStat);
          epBulkIn.handleInToken();
          return;
       /*
@@ -257,74 +239,6 @@ void Usb0::initialise() {
 }
 
 /**
- * Handler for USB0 interrupt
- *
- * Determines source and dispatches to appropriate routine.
- */
-void Usb0::irqHandler() {
-   // All active flags
-   uint8_t interruptFlags = usb->ISTAT;
-
-   //   if (interruptFlags&~USB_ISTAT_SOFTOK_MASK) {
-   //      PRINTF("ISTAT=%2X\n", interruptFlags);
-   //   }
-
-   // Get active and enabled interrupt flags
-   uint8_t enabledInterruptFlags = interruptFlags & usb->INTEN;
-
-   if ((enabledInterruptFlags&USB_ISTAT_USBRST_MASK) != 0) {
-      // Reset signaled on Bus
-      handleUSBReset();
-      usb->ISTAT = USB_ISTAT_USBRST_MASK; // Clear source
-      return;
-   }
-   if ((enabledInterruptFlags&USB_ISTAT_TOKDNE_MASK) != 0) {
-      // Token complete interrupt
-      handleTokenComplete();
-      // Clear source
-      usb->ISTAT = USB_ISTAT_TOKDNE_MASK;
-   }
-   else if ((enabledInterruptFlags&USB_ISTAT_RESUME_MASK) != 0) {
-      // Resume signaled on Bus
-      handleUSBResume();
-      // Clear source
-      usb->ISTAT = USB_ISTAT_RESUME_MASK;
-   }
-   else if ((enabledInterruptFlags&USB_ISTAT_STALL_MASK) != 0) {
-      // Stall sent
-      handleStallComplete();
-      // Clear source
-      usb->ISTAT = USB_ISTAT_STALL_MASK;
-   }
-   else if ((enabledInterruptFlags&USB_ISTAT_SOFTOK_MASK) != 0) {
-      // SOF Token?
-      handleSOFToken();
-      usb->ISTAT = USB_ISTAT_SOFTOK_MASK; // Clear source
-   }
-   else if ((enabledInterruptFlags&USB_ISTAT_SLEEP_MASK) != 0) {
-      // Bus Idle 3ms => sleep
-      //      PUTS("Suspend");
-      handleUSBSuspend();
-      // Clear source
-      usb->ISTAT = USB_ISTAT_SLEEP_MASK;
-   }
-   else if ((enabledInterruptFlags&USB_ISTAT_ERROR_MASK) != 0) {
-      // Any Error
-      PRINTF("Error s=0x%02X\n", usb->ERRSTAT);
-      usb->ERRSTAT = 0xFF;
-      // Clear source
-      usb->ISTAT = USB_ISTAT_ERROR_MASK;
-   }
-   else  {
-      // Unexpected interrupt
-      // Clear & ignore
-      PRINTF("Unexpected interrupt, flags=0x%02X\n", interruptFlags);
-      // Clear & ignore
-      usb->ISTAT = interruptFlags;
-   }
-}
-
-/**
  *  Blocking reception of data over bulk OUT end-point
  *
  *   @param maxSize  = max # of bytes to receive
@@ -335,12 +249,8 @@ void Usb0::irqHandler() {
  *   @note Doesn't return until command has been received.
  */
 int Usb0::receiveBulkData(uint8_t maxSize, uint8_t *buffer) {
-   // Wait for USB connection
-   while(connectionState != USBconfigured) {
-      __WFI();
-   }
    epBulkOut.startRxTransaction(EPDataOut, maxSize, buffer);
-   while(epBulkOut.getHardwareState().state != EPIdle) {
+   while(epBulkOut.getState() != EPIdle) {
       __WFI();
    }
    setActive();
@@ -360,7 +270,7 @@ int Usb0::receiveBulkData(uint8_t maxSize, uint8_t *buffer) {
 void Usb0::sendBulkData(uint8_t size, const uint8_t *buffer) {
 //   commandBusyFlag = false;
    //   enableUSBIrq();
-   while (epBulkIn.getHardwareState().state != EPIdle) {
+   while (epBulkIn.getState() != EPIdle) {
       __WFI();
    }
    epBulkIn.startTxTransaction(EPDataIn, size, buffer);
