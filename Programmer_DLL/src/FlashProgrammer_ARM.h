@@ -102,11 +102,20 @@ protected:
    USBDM_ErrorCode setFlashSecurity(FlashImagePtr flashImage, MemoryRegionConstPtr flashRegion);
    USBDM_ErrorCode setFlashSecurity(FlashImagePtr flashImage);
    USBDM_ErrorCode trimTargetClock(uint32_t trimAddress, unsigned long  targetBusFrequency, uint16_t *returnTrimValue,
-                                   unsigned long *measuredBusFrequency, int do9BitTrim) { return  PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED; }
+                                   unsigned long *measuredBusFrequency, int do9BitTrim) {
+      UsbdmSystem::Log::error("Clock trimming not supported\n");
+      return  PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
+   }
    USBDM_ErrorCode trimMCG_Clock(MK_MCG_ClockParameters_t *clockParameters);
    USBDM_ErrorCode configureMCG_Clock(unsigned long *busFrequency, MK_MCG_ClockParameters_t *clockParameters);
-   USBDM_ErrorCode configureTargetClock(unsigned long *busFrequency)  { return  PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED; }
-   USBDM_ErrorCode configureExternal_Clock(unsigned long *busFrequency)  { return  PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED; }
+   USBDM_ErrorCode configureTargetClock(unsigned long *busFrequency)  {
+      UsbdmSystem::Log::error("Clock configuration not supported\n");
+      return  PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
+   }
+   USBDM_ErrorCode configureExternal_Clock(unsigned long *busFrequency)  {
+      UsbdmSystem::Log::error("Clock configuration not supported\n");
+      return  PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
+   }
    USBDM_ErrorCode eraseFlash(void);
    USBDM_ErrorCode convertTargetErrorCode(FlashDriverError_t rc);
    USBDM_ErrorCode initSmallTargetBuffer(uint8_t *buffer);
@@ -130,7 +139,10 @@ protected:
          FlashProgramConstPtr flashProgram, FlashOperation flashOperation);
    USBDM_ErrorCode loadLargeTargetProgram(uint8_t *buffer, uint32_t loadAddress, uint32_t size,
          FlashProgramConstPtr flashProgram, FlashOperation flashOperation);
-   USBDM_ErrorCode dummyTrimLocations(FlashImagePtr flashImage)  { return  PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED; };
+   USBDM_ErrorCode dummyTrimLocations(FlashImagePtr flashImage)  {
+      UsbdmSystem::Log::error("Clock trimming not supported\n");
+      return  PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
+   };
    USBDM_ErrorCode partitionFlexNVM(void);
 
 public:

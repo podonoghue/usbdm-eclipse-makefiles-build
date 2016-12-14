@@ -1754,6 +1754,7 @@ USBDM_ErrorCode FlashProgrammer_ARM::selectiveEraseFlashSecurity(void) {
 #endif
       flashOperationInfo.flashAddress = securityAddress|addressFlag;
       if (flashOperationInfo.sectorSize == 0) {
+         log.error("sectorSize must not be zero\n");
          return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
       }
       rc = executeTargetProgram();
@@ -1979,6 +1980,7 @@ USBDM_ErrorCode FlashProgrammer_ARM::setFlashSecurity(FlashImagePtr flashImage, 
          securityInfo = flashRegion->getUnsecureInfo();
          break;
       default:
+         log.error("Unknown SecurityOption\n");
          return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
    if (securityInfo == NULL) {

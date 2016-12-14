@@ -1247,6 +1247,7 @@ USBDM_ErrorCode FlashProgrammerCommon::probeMemory(MemorySpace_t memorySpace, ui
       }
       if ((memcmp(probe1, probeResult1, memorySpace&MS_SIZE) != 0) ||
           (memcmp(probe2, probeResult2, memorySpace&MS_SIZE) != 0)) {
+         log.error("Memory probe failed\n");
          rc = PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
          break;
       }
@@ -1290,9 +1291,11 @@ USBDM_ErrorCode FlashProgrammerCommon::recordSecurityArea(FlashImagePtr flashIma
    LOGGING_Q;
    log.print("[0x%08X...0x%08X\n", startAddress, startAddress+size-1);
    if (securityAreaCount >= sizeof(securityData)/sizeof(securityData[0])) {
+      log.error("Invalid securityAreaCount size");
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
    if (size > MaxSecurityAreaSize) {
+      log.error("Invalid security size");
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
   securityData[securityAreaCount].address = startAddress;
