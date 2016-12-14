@@ -7,6 +7,8 @@
 #ifndef UTILTIES_H_
 #define UTILTIES_H_
 
+#include <stdint.h>
+
 /**
  * @brief Concatenate two tokens
  *
@@ -211,6 +213,114 @@ public:
       return (leToNative16(value)>>24)&0xFF;
    }
 };
+
+/**
+ * Pack 4 bytes into a 32-bit value in LITTLE-ENDIAN order order
+ *
+ * @param  data Data value in LITTLE-ENDIAN order order
+ *
+ * @return Value
+ */
+static inline
+constexpr uint32_t pack32LE(const uint8_t data[4]) {
+   return data[0]+(data[1]<<8)+(data[2]<<16)+(data[3]<<24);
+}
+
+/**
+ * Pack 4 bytes into a 32-bit value in BIG-ENDIAN order order
+ *
+ * @param  data Data value in BIG_ENDIAN order
+ *
+ * @return Value
+ */
+static inline
+constexpr uint32_t pack32BE(const uint8_t data[4]) {
+   return (data[0]<<24)+(data[1]<<16)+(data[2]<<8)+data[3];
+}
+
+/**
+ * Pack 4 bytes into a 32-bit value in LITTLE-ENDIAN order order
+ *
+ * @param  data Data value in LITTLE-ENDIAN order order
+ *
+ * @return Value
+ */
+static inline
+constexpr uint32_t pack16LE(const uint8_t data[2]) {
+   return data[0]+(data[1]<<8);
+}
+
+/**
+ * Pack 4 bytes into a 32-bit value in BIG-ENDIAN order order
+ *
+ * @param  data Data value in BIG_ENDIAN order
+ *
+ * @return Value
+ */
+static inline
+constexpr uint32_t pack16BE(const uint8_t data[2]) {
+   return (data[0]<<8)+data[1];
+}
+
+/**
+ * Unpack a 32-bit value into 4 bytes in LE order
+ *
+ * @param  data    Value to unpack
+ * @param  ar   Buffer for data value in LITTLE-ENDIAN order order
+ *
+ * @return Value
+ */
+static inline
+void unpack32LE(uint32_t data, uint8_t ar[4]) {
+   ar[3] = data>>24;
+   ar[2] = data>>16;
+   ar[1] = data>>8;
+   ar[0] = data;
+}
+
+/**
+ * Unpack a 32-bit value into 4 bytes in BE order
+ *
+ * @param  data    Value to unpack
+ * @param  ar      Buffer for data value in BIG-ENDIAN order
+ *
+ * @return Value
+ */
+static inline
+void unpack32BE(uint32_t data, uint8_t ar[4]) {
+   ar[0] = data>>24;
+   ar[1] = data>>16;
+   ar[2] = data>>8;
+   ar[3] = data;
+}
+
+/**
+ * Unpack a 32-bit value into 4 bytes in LE order
+ *
+ * @param  data    Value to unpack
+ * @param  ar   Buffer for data value in LITTLE-ENDIAN order order
+ *
+ * @return Value
+ */
+static inline
+void unpack16LE(uint32_t data, uint8_t ar[2]) {
+   ar[1] = data>>8;
+   ar[0] = data;
+}
+
+/**
+ * Unpack a 32-bit value into 4 bytes in BE order
+ *
+ * @param  data    Value to unpack
+ * @param  ar      Buffer for data value in BIG-ENDIAN order
+ *
+ * @return Value
+ */
+static inline
+void unpack16BE(uint32_t data, uint8_t ar[2]) {
+   ar[0] = data>>8;
+   ar[1] = data;
+}
 
 #endif /* __cplusplus */
 

@@ -2,6 +2,7 @@
 <!DOCTYPE root SYSTEM "../package.dtd"
 [
 <!ENTITY DEVICE_SUB_FAMILY  "MK">
+<!ENTITY DEVICE_FAMILY      "MK">
 <!ENTITY FILE_NAME          "Generic-MK">
 ]>
 
@@ -34,13 +35,14 @@
          <deleteResource target="Project_Headers/leds.h" />
          <deleteResource target="Sources/leds.cpp" />
          <createFolder   target="Snippets" />
-         <copy source="Snippets/digital-example1.cpp"                      target="Snippets/digital-example1.cpp" />
-         <copy source="Snippets/digital-example2.cpp"                      target="Snippets/digital-example2.cpp" />
-         <copy source="Project_Headers/gpio-Generic.h"                     target="Project_Headers/hardware.h" />
-         <copy source="Project_Headers/gpio_defs-&DEVICE_SUB_FAMILY;.h"    target="Project_Headers/gpio.h" />
-         <copy source="Project_Headers/pin_mapping-&FILE_NAME;.h"          target="Project_Headers/pin_mapping.h" />
-         <copy source="Sources/main.cpp"                                   target="Sources/main.cpp" replace="true" />
+         <copy source="Snippets/digital-example1.cpp"                         target="Snippets/digital-example1.cpp" />
+         <copy source="Snippets/digital-example2.cpp"                         target="Snippets/digital-example2.cpp" />
          <excludeSourceFolder target="Snippets" />
+         <copy source="Project_Headers/hardware.h"                            target="Project_Headers/hardware.h" />
+         <copy source="Project_Headers/pcr-&DEVICE_FAMILY;.h"                 target="Project_Headers/pcr.h" />
+         <copy source="Project_Headers/gpio-&DEVICE_FAMILY;.h"                target="Project_Headers/gpio.h" />
+         <copy source="Project_Headers/pin_mapping-Generic-&DEVICE_FAMILY;.h" target="Project_Headers/pin_mapping.h" />
+         <copy source="Sources/main.cpp"                                      target="Sources/main.cpp" replace="true" />
       </projectActionList>
    </projectActionList>
 </root>

@@ -1,6 +1,6 @@
 /**
  * @file     tpm.h
- * @brief    GPIO Pin routines
+ * @brief    Flexitimer Timer Module
  *
  * @version  V4.12.1.80
  * @date     13 April 2016
@@ -98,14 +98,13 @@ enum Tpm_Mode {
 /**
  * Type definition for TPM timer overflow interrupt call back
  */
-typedef void (*TPMToiCallbackFunction)();
+typedef void (*TPMCallbackFunction)(volatile TPM_Type *tmr);
 /**
  * Type definition for TPM channel interrupt call back
  *
  * @param status Flags indicating interrupt source channels
- *
  */
-typedef void (*TPMCallbackFunction)(int status);
+typedef void (*TPMChannelCallbackFunction)(volatile TPM_Type *tmr, int status);
 
 /**
  * Base class representing an TPM
@@ -170,7 +169,7 @@ public:
     * Used to change configuration after enabling interface
     *
     * @param period  Period in ticks
-    * @param mode    Mode of operation see @ref Tpm_Mode
+    * @param mode    Mode of operation see USBDM::Tpm_Mode
     *
     * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
     */
@@ -233,7 +232,7 @@ public:
     * @param period Period in seconds as a float
     *
     * @note Adjusts TPM pre-scaler to appropriate value.
-    *       This will affect all channels on the TPM
+    *       This will affect all channels
     *
     * @return true => success, false => failed to find suitable values
     */
@@ -268,6 +267,8 @@ public:
     * Set period
     *
     * @param period Period in ticks
+    *
+    * @return E_NO_ERROR on success
     *
     * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
     */
@@ -399,11 +400,29 @@ public:
    }
 
    /**
+    * Set PWM duty cycle\n
+    * Higher precision float version
+    *
+    * @param dutyCycle  Duty-cycle as percentage (float)
+    * @param channel Timer channel
+    */
+   static void setDutyCycle(float dutyCycle, int channel) {
+      if (tmr->SC&TPM_SC_CPWMS_MASK) {
+         tmr->CONTROLS[channel].CnV  = round((dutyCycle*tmr->MOD)/100.0f);
+      }
+      else {
+         tmr->CONTROLS[channel].CnV  = round((dutyCycle*(tmr->MOD+1))/100.0f);
+      }
+   }
+
+   /**
     * Set PWM high time in ticks
     * Assumes value is less than period
     *
     * @param highTime   PWM high time in ticks
     * @param channel    Timer channel
+    *
+    * @return E_NO_ERROR on success
     */
    static ErrorCode setHighTime(uint32_t highTime, int channel) {
 #ifdef DEBUG_BUILD
@@ -420,6 +439,8 @@ public:
     *
     * @param highTime   PWM high time in seconds
     * @param channel    Timer channel
+    *
+    * @return E_NO_ERROR on success
     */
    static ErrorCode setHighTime(float highTime, int channel) {
       return setHighTime(convertSecondsToTicks(highTime), channel);
@@ -435,20 +456,20 @@ class TpmIrq_T : public TpmBase_T<Info> {
 
 protected:
    /** Callback function for TOI ISR */
-   static TPMToiCallbackFunction toiCallback;
+   static TPMCallbackFunction toiCallback;
    /** Callback function for Channel ISR */
-   static TPMCallbackFunction callback;
+   static TPMChannelCallbackFunction callback;
 
 public:
    /**
     * IRQ handler
     */
    static void irqHandler() {
-      if (TpmBase_T<Info>::tmr->SC&TPM_SC_TOF_MASK) {
+      if ((TpmBase_T<Info>::tmr->SC&(TPM_SC_TOF_MASK|TPM_SC_TOIE_MASK)) == (TPM_SC_TOF_MASK|TPM_SC_TOIE_MASK)) {
          // Clear TOI flag
          TpmBase_T<Info>::tmr->SC &= ~TPM_SC_TOF_MASK;
          if (toiCallback != 0) {
-            toiCallback();
+            toiCallback(TpmBase_T<Info>::tmr);
          }
          else {
             setAndCheckErrorCode(E_NO_HANDLER);
@@ -459,10 +480,7 @@ public:
          // Clear channel event flags
          TpmBase_T<Info>::tmr->STATUS &= ~status;
          if (callback != 0) {
-            callback(status);
-         }
-         else {
-            setAndCheckErrorCode(E_NO_HANDLER);
+            callback(TpmBase_T<Info>::tmr, status);
          }
       }
    }
@@ -472,7 +490,7 @@ public:
     *
     * @param theCallback Callback function to execute on interrupt
     */
-   static void setToiCallback(TPMToiCallbackFunction theCallback) {
+   static void setToiCallback(TPMCallbackFunction theCallback) {
       toiCallback = theCallback;
    }
    /**
@@ -480,13 +498,13 @@ public:
     *
     * @param theCallback Callback function to execute on interrupt
     */
-   static void setChannelCallback(TPMCallbackFunction theCallback) {
+   static void setChannelCallback(TPMChannelCallbackFunction theCallback) {
       callback = theCallback;
    }
 };
 
-template<class Info> TPMToiCallbackFunction TpmIrq_T<Info>::toiCallback = 0;
-template<class Info> TPMCallbackFunction    TpmIrq_T<Info>::callback = 0;
+template<class Info> TPMCallbackFunction         TpmIrq_T<Info>::toiCallback = 0;
+template<class Info> TPMChannelCallbackFunction  TpmIrq_T<Info>::callback = 0;
 
 /**
  * Template class representing a TPM timer channel
@@ -521,7 +539,10 @@ public:
     * Enabled TPM as well
     */
    static void enable(Tpm_ChannelMode mode = tpm_pwmHighTruePulses) {
-      TpmBase_T<Info>::enable();
+      if (!TpmBase_T<Info>::isEnabled()) {
+         // Enable parent FTM if needed
+         TpmBase_T<Info>::enable();
+      }
       TpmBase_T<Info>::tmr->CONTROLS[channel].CnSC = mode;
    }
 
@@ -553,6 +574,29 @@ public:
    }
 
    /**
+    * Set PWM high time in ticks\n
+    * Assumes value is less than period
+    *
+    * @param highTime   PWM high time in ticks
+    *
+    * @return E_NO_ERROR on success
+    */
+   static ErrorCode setHighTime(uint32_t highTime) {
+      return TpmBase_T<Info>::setHighTime(highTime, channel);
+   }
+
+   /**
+    * Set PWM high time in seconds\n
+    * Higher precision float version
+    *
+    * @param highTime   PWM high time in seconds
+    *
+    * @return E_NO_ERROR on success
+    */
+   static ErrorCode setHighTime(float highTime) {
+      return TpmBase_T<Info>::setHighTime(highTime, channel);
+   }
+   /**
     * Set PWM duty cycle
     *
     * @param dutyCycle  Duty-cycle as percentage
@@ -560,25 +604,32 @@ public:
    static void setDutyCycle(int dutyCycle) {
       TpmBase_T<Info>::setDutyCycle(dutyCycle, channel);
    }
+
    /**
-    * Set PWM high time in ticks\n
-    * Assumes value is less than period
+    * Set PWM duty cycle
     *
-    * @param highTime   PWM high time in ticks
+    * @param dutyCycle  Duty-cycle as percentage
     */
-   static ErrorCode setHighTime(uint32_t highTime) {
-      return TpmBase_T<Info>::setHighTime(highTime, channel);
+   static void setDutyCycle(float dutyCycle) {
+
+      TpmBase_T<Info>::setDutyCycle(dutyCycle, channel);
    }
 
    /**
-    * Set PWM high time in seconds
+    * Get channel number
     *
-    * @param highTime   PWM high time in seconds
+    * @return Channel number (0-7)
     */
-   static ErrorCode setHighTime(float highTime) {
-      return TpmBase_T<Info>::setHighTime(highTime, channel);
+   static constexpr int getChannelNumber(void) {
+      return channel;
    }
 
+   /**
+    * Clear interrupt flag on channel
+    */
+   static void clearInterruptFlag(void) {
+      TpmBase_T<Info>::tmr->CONTROLS[channel].CnSC &= ~TPM_CnSC_CHF_MASK;
+   }
 };
 
 #ifdef USBDM_TPM0_IS_DEFINED
@@ -603,7 +654,7 @@ public:
  * @tparam channel TPM timer channel
  */
 template <int channel>
-class Tpm0Channel : public TpmBase_T<Tpm0Info>, CheckSignal<Tpm0Info, channel> {};
+class Tpm0Channel : public TpmChannel_T<Tpm0Info, channel> {};
 
 /**
  * Class representing TPM0

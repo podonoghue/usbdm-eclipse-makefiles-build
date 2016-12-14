@@ -292,7 +292,7 @@ class LpuartIrq_T : public Lpuart_T<Info> {
 
 protected:
    /** Callback function for ISR */
-   static UARTCallbackFunction callback;
+   static LPUARTCallbackFunction callback;
 
    LpuartIrq_T(unsigned baud) : Lpuart_T<Info>(baud) {
    }
@@ -313,7 +313,7 @@ public:
     *
     *   @param theCallback - Callback function to be executed on UART alarm interrupt
     */
-   static void setCallback(UARTCallbackFunction theCallback) {
+   static void setCallback(LPUARTCallbackFunction theCallback) {
       callback = theCallback;
    }
 };

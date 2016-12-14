@@ -12,7 +12,32 @@
 
 //#define USE_IRQ
 
-#if defined(MCU_MK22F51212)
+#if defined(MCU_MKV31F51212)
+//=================================================================================
+// UART to use
+//
+#define UART  UART0
+#define UART_CLOCK SYSTEM_UART0_CLOCK
+
+//=================================================================================
+// UART Port pin setup
+//
+__attribute__((always_inline))
+inline static void initDefaultUart()  {
+   // Enable clock to UART
+   SIM->SCGC4 |= SIM_SCGC4_UART0_MASK;
+
+   // Enable clock to port pins used by UART
+   SIM->SCGC5 |= SIM_SCGC5_PORTB_MASK;
+
+   // Select Tx & Rx pins to use
+   SIM->SOPT5 &= ~(SIM_SOPT5_UART0RXSRC_MASK|SIM_SOPT5_UART0TXSRC_MASK);
+
+   // Set Tx & Rx Pin function
+   PORTB->PCR[16] = PORT_PCR_MUX(3);
+   PORTB->PCR[17] = PORT_PCR_MUX(3);
+}
+#elif defined(MCU_MK22F51212)
 //=================================================================================
 // UART to use
 //

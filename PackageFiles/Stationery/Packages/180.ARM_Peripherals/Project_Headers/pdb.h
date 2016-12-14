@@ -124,7 +124,6 @@ public:
     * IRQ handler
     */
    static void irqHandler(void) {
-      //TODO fix this
       if (callback != 0) {
          callback();
       }

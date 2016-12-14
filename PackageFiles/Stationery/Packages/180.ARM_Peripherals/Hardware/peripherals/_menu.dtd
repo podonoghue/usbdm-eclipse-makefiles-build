@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!ENTITY % gui_items        "(xi:include|category|constant|floatOption|intOption|bitmaskOption|choiceOption|binaryOption|stringOption|numericListOption|aliasOption|signals)" >
+<!ENTITY % gui_items        "(xi:include|category|constant|floatOption|intOption|bitmaskOption|choiceOption|binaryOption|stringOption|numericListOption|pinListOption|aliasOption|signals)" >
 <!ENTITY % structure_items  "((section*)|(tab)*)" >
 <!ENTITY % control_items    "(xi:include|template|validate|projectActionList)" >
 
@@ -108,6 +108,18 @@
    <!ATTLIST numericListOption max          CDATA        #IMPLIED>
    <!ATTLIST numericListOption indexedBy    CDATA        #IMPLIED>
    <!ATTLIST numericListOption derived      (false|true) "false">
+  
+<!ELEMENT pinListOption EMPTY >
+   <!ATTLIST pinListOption constant     (false|true) "false">
+   <!ATTLIST pinListOption name         ID           #REQUIRED>
+   <!ATTLIST pinListOption key          CDATA        #IMPLIED>
+   <!ATTLIST pinListOption origin       CDATA        #IMPLIED>
+   <!ATTLIST pinListOption description  CDATA        #REQUIRED>
+   <!ATTLIST pinListOption toolTip      CDATA        "">
+   <!ATTLIST pinListOption value        CDATA        "0">
+   <!ATTLIST pinListOption size         CDATA        #IMPLIED>
+   <!ATTLIST pinListOption indexedBy    CDATA        #IMPLIED>
+   <!ATTLIST pinListOption derived      (false|true) "false">
   
 <!ELEMENT choiceOption (choice)+ >
    <!ATTLIST choiceOption constant     (false|true) "false">

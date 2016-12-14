@@ -14,8 +14,8 @@
  * Any manual changes will be lost.
  */
 
-#ifndef UART_H_
-#define UART_H_
+#ifndef CONSOLE_H_
+#define CONSOLE_H_
 
 #ifdef __cplusplus
 namespace USBDM {
@@ -76,4 +76,4 @@ int  console_rxChar(void);
 #ifdef __cplusplus
 }
 #endif
-#endif /* UART_H_ */
+#endif /* CONSOLE_H_ */

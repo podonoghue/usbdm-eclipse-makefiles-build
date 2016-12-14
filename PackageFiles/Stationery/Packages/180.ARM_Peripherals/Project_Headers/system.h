@@ -30,12 +30,6 @@ void SystemInitLowLevel(void);
  * Setup the microcontroller system.
  */
 void SystemInit(void);
-/**
- * @brief Update SystemCoreClock variable
- *
- * Updates the SystemCoreClock & SystemBusClock variables with current core Clock retrieved from CPU registers.
- */
-//void SystemCoreClockUpdate(void);
 
 /**
  * Disable interrupts

@@ -238,10 +238,12 @@
    <pins>
       <pin name="ADC0_DM0"     isFixed="true">
          <mux sel="fixed"         signal="ADC0_DM0" />
+         <mux sel="fixed"         signal="ADC0_SE19" />
          <reset sel="fixed" />
       </pin>
       <pin name="ADC0_DP0"     isFixed="true">
          <mux sel="fixed"         signal="ADC0_DP0" />
+         <mux sel="fixed"         signal="ADC0_SE0" />
          <reset sel="fixed" />
       </pin>
       <pin name="EXTAL32"      isFixed="true">

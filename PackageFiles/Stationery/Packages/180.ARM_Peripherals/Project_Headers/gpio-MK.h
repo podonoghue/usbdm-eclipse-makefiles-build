@@ -268,7 +268,7 @@ using  GpioTable_T = GpioBase_T<Info::info[index].clockMask, Info::info[index].p
  * @tparam right          Bit number of rightmost bit in GPIO (inclusive)
  * @tparam defPcrValue    Default value for PCR including multiplexor value
  */
-template<class Info, const uint32_t left, const uint32_t right, uint32_t defPcrValue=Info::defaultPcrValue>
+template<class Info, const uint32_t left, const uint32_t right, uint32_t defPcrValue=Info::pcrValue>
 class Field_T {
 
 private:
