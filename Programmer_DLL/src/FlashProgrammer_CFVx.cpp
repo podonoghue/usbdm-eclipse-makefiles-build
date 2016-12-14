@@ -2979,7 +2979,7 @@ USBDM_ErrorCode FlashProgrammer_CFVx::programFlash(FlashImagePtr flashImage,
       }
       if (rc != PROGRAMMING_RC_OK) {
          log.error("Erasing failed, Reason= %s\n", bdmInterface->getErrorString(rc));
-         return rc;
+         break;
       }
       eraseTime = progressTimer->totalTime();
       if (eraseTime <= 0.0) {

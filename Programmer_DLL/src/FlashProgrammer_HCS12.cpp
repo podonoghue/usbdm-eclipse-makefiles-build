@@ -2662,11 +2662,11 @@ USBDM_ErrorCode FlashProgrammer_HCS12::verifyFlash(FlashImagePtr flashImage,
    // Delay checking some errors until after security check so
    // error message is more meaningful
    if ((rcReset != BDM_RC_OK) &&
-       (rcReset != PROGRAMMING_RC_ERROR_SECURED) &&      // Secured device
-       (rcReset != BDM_RC_SECURED) &&                    // Secured device
-       (rcReset != BDM_RC_BDM_EN_FAILED) &&              // BDM enable failed (on HCS devices)
-       (rcReset != BDM_RC_RESET_TIMEOUT_RISE)            // Reset pulsing on Kinetis etc.
-       ) {
+         (rcReset != PROGRAMMING_RC_ERROR_SECURED) &&      // Secured device
+         (rcReset != BDM_RC_SECURED) &&                    // Secured device
+         (rcReset != BDM_RC_BDM_EN_FAILED) &&              // BDM enable failed (on HCS devices)
+         (rcReset != BDM_RC_RESET_TIMEOUT_RISE)            // Reset pulsing on Kinetis etc.
+   ) {
       return rcReset;
    }
    rc = checkTargetUnSecured();
@@ -2891,7 +2891,7 @@ USBDM_ErrorCode FlashProgrammer_HCS12::programFlash(FlashImagePtr flashImage,
       }
       if (rc != PROGRAMMING_RC_OK) {
          log.error("Erasing failed, Reason= %s\n", bdmInterface->getErrorString(rc));
-         return rc;
+         break;
       }
       eraseTime = progressTimer->totalTime();
       if (eraseTime <= 0.0) {
