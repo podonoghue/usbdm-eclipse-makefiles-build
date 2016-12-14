@@ -588,12 +588,12 @@ typedef enum {
    // May be others
 } CFVx_CRegisters_t;
 
-//! regNo Parameter for USBDM_ReadCReg() with SWD-ARM target    \n
+//! regNo Parameter for USBDM_ReadCReg() with SWD-ARM target
 //!
-//! The regNo is actually a AP bus address as follows:          \n
-//!   -  A[31:24]  => DP-AP-SELECT[31:24] (AP # Select)           \n
-//!   -  A[23:8]   => unused (0)                                  \n
-//!   -  A[7:4]    => DP-AP-SELECT[7:4]   (Bank select within AP) \n
+//! The regNo is actually a AP bus address as follows: 
+//!   -  A[31:24]  => DP-AP-SELECT[31:24] (AP # Select)       
+//!   -  A[23:8]   => unused (0)                                
+//!   -  A[7:4]    => DP-AP-SELECT[7:4]   (Bank select within AP)
 //!   -  A[3:2]    => APACC[3:2]          (Register select within AP bank)
 //!   -  A[1:0]    => unused (0)
 //!
@@ -625,9 +625,9 @@ typedef enum {
 //!
 typedef enum {
    // 8-bit accesses using READ_BD_BYTE
-   HCS12_DRegBDMSTS = 0xFF01, //!< BDMSTS (debug status/control) register
-   HCS12_DRegCCR    = 0xFF06, //!< Saved Target CCR
-   HCS12_DRegBDMINR = 0xFF07, //!< BDM Internal Register Position Register
+   HCS12_DRegBDMSTS = (int)0xFF01, //!< - BDMSTS (debug status/control) register
+   HCS12_DRegCCR    = (int)0xFF06, //!< - Saved Target CCR
+   HCS12_DRegBDMINR = (int)0xFF07, //!< - BDM Internal Register Position Register
    // Others may be device dependent
 } HCS12_DRegisters_t;
 
@@ -637,7 +637,7 @@ typedef enum {
    HCS08_DRegBKPT = 0x0, //!< Breakpoint register
 } HCS08_DRegisters_t;
 
-//! regNo Parameter for \ref USBDM_ReadDReg() with RS08 target (BKPT)
+//! regNo Parameter for USBDM_ReadDReg() with RS08 target (BKPT)
 //!
 typedef enum {
    RS08_DRegBKPT = 0x0, //!< Breakpoint register
@@ -746,41 +746,6 @@ typedef enum {
    JTAG_SHIFT_IR         = 1,     //!< Enter SHIFT-IR (from TEST-LOGIC-RESET or RUN-TEST/IDLE)
 } JTAG_ExitActions_t;
 
-//=======================================================================
-//
-//=======================================================================
-
-//! Control signal masks for CMD_USBDM_CONTROL_INTERFACE
-//! @deprecated
-//!
-typedef enum {
-   SI_BKGD_OFF       = (0),
-   SI_BKGD           = (3<<SI_BKGD_OFF),  //!< Mask for BKGD values (SI_BKGD_LOW, SI_BKGD_HIGH & SI_BKGD_3STATE)
-   SI_BKGD_LOW       = (0<<SI_BKGD_OFF),  //!< Set BKGD low
-   SI_BKGD_HIGH      = (1<<SI_BKGD_OFF),  //!< Set BKGD high
-   SI_BKGD_3STATE    = (2<<SI_BKGD_OFF),  //!< Set BKGD 3-state
-   SI_BKGD_NONE      = (3<<SI_BKGD_OFF),
-
-   SI_RESET_OFF      = (2),
-   SI_RESET          = (3<<SI_RESET_OFF), //!< Mask for RESET values (SI_RESET_LOW & SI_RESET_3STATE)
-   SI_RESET_LOW      = (0<<SI_RESET_OFF), //!< Set Reset low
-   SI_RESET_3STATE   = (2<<SI_RESET_OFF), //!< Set Reset 3-state
-   SI_RESET_NONE     = (3<<SI_RESET_OFF),
-
-   SI_TA_OFF         = (4),
-   SI_TA             = (3<<SI_TA_OFF),    //!< Mask for TA signal (not implemented)
-   SI_TA_LOW         = (0<<SI_TA_OFF),    //!< Set TA low
-   SI_TA_3STATE      = (2<<SI_TA_OFF),    //!< Set TA 3-state
-   SI_TA_NONE        = (3<<SI_TA_OFF),
-
-   SI_TRST_OFF       = (6),
-   SI_TRST           = (3<<SI_TRST_OFF),  //!< Mask for TRST signal (not implemented)
-   SI_TRST_LOW       = (0<<SI_TRST_OFF),  //!< Set TRST low
-   SI_TRST_3STATE    = (2<<SI_TRST_OFF),  //!< Set TRST 3-state
-   SI_TRST_NONE      = (3<<SI_TRST_OFF),
-
-   SI_DISABLE        = -1,                //!< Release control (or use CMD_SET_TARGET)
-} InterfaceLevelMasks_t ;
 
 //! Control signal masks for CMD_USBDM_CONTROL_PIN (USBDM_ControlPins())
 typedef enum {
@@ -796,6 +761,7 @@ typedef enum {
    PIN_RESET_NC       = (0<<PIN_RESET_OFFS), //!< No change
    PIN_RESET_3STATE   = (1<<PIN_RESET_OFFS), //!< Set Reset 3-state
    PIN_RESET_LOW      = (2<<PIN_RESET_OFFS), //!< Set Reset low
+   PIN_RESET_HIGH     = (3<<PIN_RESET_OFFS), //!< Status only - Reset high
 
    PIN_TA_OFFS        = (4),
    PIN_TA             = (3<<PIN_TA_OFFS),    //!< Mask for TA signal
@@ -827,6 +793,13 @@ typedef enum {
    PIN_SWD_3STATE     = (1<<PIN_SWD_OFFS),   //!< Set SWD 3-state
    PIN_SWD_LOW        = (2<<PIN_SWD_OFFS),   //!< Set SWD low
    PIN_SWD_HIGH       = (3<<PIN_SWD_OFFS),   //!< Set SWD high
+
+   PIN_SWCLK_OFFS     = (12),
+   PIN_SWCLK          = (3<<PIN_SWCLK_OFFS),   //!< Mask for SWD values (PIN_SWCLK_LOW, PIN_SWCLK_HIGH & PIN_SWCLK_3STATE)
+   PIN_SWCLK_NC       = (0<<PIN_SWCLK_OFFS),   //!< No change
+   PIN_SWCLK_3STATE   = (1<<PIN_SWCLK_OFFS),   //!< Set SWD 3-state
+   PIN_SWCLK_LOW      = (2<<PIN_SWCLK_OFFS),   //!< Set SWD low
+   PIN_SWCLK_HIGH     = (3<<PIN_SWCLK_OFFS),   //!< Set SWD high
 
    PIN_NOCHANGE       = 0,    //!< No change to pins (used to get pin status)
    PIN_RELEASE        = -1,   //!< Release all pins (go to default for current target)
@@ -1182,8 +1155,8 @@ USBDM_ErrorCode  USBDM_SetTargetVpp(TargetVppSelect_t targetVpp);
 //! @note - Only partially implemented in BDM firmware
 //! @deprecated - use \ref USBDM_ControlPins()
 //!
-USBDM_API
-USBDM_ErrorCode USBDM_ControlInterface(unsigned char duration_10us, unsigned int  control);
+//USBDM_API
+//USBDM_ErrorCode USBDM_ControlInterface(unsigned char duration_10us, unsigned int  control);
 
 //! Directly manipulate interface levels
 //!

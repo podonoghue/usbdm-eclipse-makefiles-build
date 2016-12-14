@@ -37,7 +37,7 @@ char const *getCFV1_XCSR_Name( unsigned int XCSR);
 char const *getCFVx_CSR_Name( unsigned int CSR);
 char const *getStatusRegName(unsigned int targetType, unsigned int value);
 char const *getCapabilityName(unsigned int cmd);
-char const *getControlLevelName(InterfaceLevelMasks_t level);
+//char const *getControlLevelName(InterfaceLevelMasks_t level);
 char const *getClockSelectName(ClkSwValues_t level);
 char const *getVoltageStatusName(TargetVddState_t level);
 char const *getVoltageSelectName(TargetVddSelect_t level);
@@ -85,7 +85,7 @@ static inline char const *getCFV1_XCSR_Name( unsigned int XCSR)                 
 static inline char const *getCFVx_CSR_Name( unsigned int CSR)                           { (void) CSR; return ""; }
 static inline char const *getStatusRegName(unsigned int targetType, unsigned int value) { (void) targetType; (void) value; return ""; }
 static inline char const *getCapabilityName(unsigned int vector)                        { (void) vector; return ""; }
-static inline char const *getControlLevelName(InterfaceLevelMasks_t level)              { (void) level; return ""; }
+//static inline char const *getControlLevelName(InterfaceLevelMasks_t level)              { (void) level; return ""; }
 static inline char const *getClockSelectName(ClkSwValues_t level)                       { (void) level; return ""; }
 static inline char const *getVoltageSelectName(TargetVddSelect_t level)                 { (void) level; return ""; }
 static inline char const *getVppSelectName(TargetVppSelect_t level)                     { (void) level; return ""; }

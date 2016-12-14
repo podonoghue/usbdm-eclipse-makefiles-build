@@ -1134,33 +1134,33 @@ static char buff[100];
    return buff;
 }
 
-char const *getControlLevelName(InterfaceLevelMasks_t level) {
-static char buff[100];
-
-   if (level == SI_DISABLE)
-      return "SI_DISABLE";
-
-   sprintf(buff, "(0x%4.4X) ", level);
-
-   switch (level & SI_BKGD) {
-      case SI_BKGD_3STATE   : strcat(buff, "SI_BKGD_3STATE|");  break;
-      case SI_BKGD_HIGH     : strcat(buff, "SI_BKGD_HIGH|");    break;
-      case SI_BKGD_LOW      : strcat(buff, "SI_BKGD_LOW|");     break;
-   }
-   switch (level & SI_TRST) {
-      case SI_TRST_3STATE   : strcat(buff, "SI_TRST_3STATE|");  break;
-      case SI_TRST_LOW      : strcat(buff, "SI_TRST_LOW|");     break;
-   }
-   switch (level & SI_RESET) {
-      case SI_RESET_3STATE  : strcat(buff, "SI_RESET_3STATE|"); break;
-      case SI_RESET_LOW     : strcat(buff, "SI_RESET_LOW|");    break;
-   }
-   switch (level & SI_TA) {
-      case SI_TA_3STATE     : strcat(buff, "SI_TA_HIGH|");      break;
-      case SI_TA_LOW        : strcat(buff, "SI_TA_LOW|");       break;
-   }
-   return buff;
-}
+//char const *getControlLevelName(InterfaceLevelMasks_t level) {
+//static char buff[100];
+//
+//   if (level == SI_DISABLE)
+//      return "SI_DISABLE";
+//
+//   sprintf(buff, "(0x%4.4X) ", level);
+//
+//   switch (level & SI_BKGD) {
+//      case SI_BKGD_3STATE   : strcat(buff, "SI_BKGD_3STATE|");  break;
+//      case SI_BKGD_HIGH     : strcat(buff, "SI_BKGD_HIGH|");    break;
+//      case SI_BKGD_LOW      : strcat(buff, "SI_BKGD_LOW|");     break;
+//   }
+//   switch (level & SI_TRST) {
+//      case SI_TRST_3STATE   : strcat(buff, "SI_TRST_3STATE|");  break;
+//      case SI_TRST_LOW      : strcat(buff, "SI_TRST_LOW|");     break;
+//   }
+//   switch (level & SI_RESET) {
+//      case SI_RESET_3STATE  : strcat(buff, "SI_RESET_3STATE|"); break;
+//      case SI_RESET_LOW     : strcat(buff, "SI_RESET_LOW|");    break;
+//   }
+//   switch (level & SI_TA) {
+//      case SI_TA_3STATE     : strcat(buff, "SI_TA_HIGH|");      break;
+//      case SI_TA_LOW        : strcat(buff, "SI_TA_LOW|");       break;
+//   }
+//   return buff;
+//}
 
 char const *getVoltageSelectName(TargetVddSelect_t level) {
    switch (level) {
