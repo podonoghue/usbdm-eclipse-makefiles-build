@@ -1272,7 +1272,7 @@ USBDM_ErrorCode FlashProgrammerCommon::probeMemory(MemorySpace_t memorySpace, ui
 USBDM_ErrorCode FlashProgrammerCommon::checkNoSecurityAreas(void) {
    LOGGING;
    if (securityAreaCount > 0) {
-      log.print("Areas not empty\n");
+      log.error("Security areas not empty\n");
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
    return BDM_RC_OK;

@@ -618,7 +618,7 @@ USBDM_ErrorCode FlashProgrammer_HCS12::initialiseTargetFlash() {
    uint32_t targetBusFrequency = (uint32_t)round(busFrequency/1000.0);
    flashOperationInfo.targetBusFrequency = targetBusFrequency;
 
-   log.print("Target Bus Frequency = %ud kHz\n", targetBusFrequency);
+   log.print("Target Bus Frequency = %ld kHz\n", (unsigned long)targetBusFrequency);
 #endif
 
    char buffer[100];
@@ -1657,6 +1657,7 @@ USBDM_ErrorCode FlashProgrammer_HCS12::selectiveEraseFlashSecurity(void) {
 #endif
       flashOperationInfo.flashAddress = securityAddress|addressFlag;
       if (flashOperationInfo.sectorSize == 0) {
+         log.error("sectorSize must not be zero\n");
          return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
       }
       rc = executeTargetProgram();
@@ -1882,6 +1883,7 @@ USBDM_ErrorCode FlashProgrammer_HCS12::setFlashSecurity(FlashImagePtr flashImage
          securityInfo = flashRegion->getUnsecureInfo();
          break;
       default:
+         log.error("Unexpected securityInfo value");
          return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
    if (securityInfo == NULL) {
@@ -2076,7 +2078,7 @@ USBDM_ErrorCode FlashProgrammer_HCS12::doFlashBlock(FlashImagePtr   flashImage,
             return BDM_RC_OK;
          default:
             // Unexpected
-            log.print("  ...Unexpected flashOperation\n");
+            log.error("  ...Unexpected flashOperation\n");
             return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
       }
    }
@@ -2100,7 +2102,7 @@ USBDM_ErrorCode FlashProgrammer_HCS12::doFlashBlock(FlashImagePtr   flashImage,
             break;
          default:
             // Unexpected
-            log.print("  ...Unexpected ramOperation\n");
+            log.error("  ...Unexpected ramOperation\n");
             return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
          }
    }
@@ -2624,7 +2626,7 @@ USBDM_ErrorCode FlashProgrammer_HCS12::verifyFlash(FlashImagePtr flashImage,
    LOGGING;
    USBDM_ErrorCode rc;
    if ((this == NULL) || (device->getTargetName().empty())) {
-      log.print("Error: device parameters not set\n");
+      log.error("Error: device parameters not set\n");
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
    log.print("===========================================================\n");
@@ -2676,30 +2678,25 @@ USBDM_ErrorCode FlashProgrammer_HCS12::verifyFlash(FlashImagePtr flashImage,
       return rcReset;
    }
    // Modify flash image according to security options - to be consistent with what is programmed
-   rc = setFlashSecurity(flashImage);
-   if (rc != PROGRAMMING_RC_OK) {
-      return rc;
-   }
+   do {
+      rc = setFlashSecurity(flashImage);
+      if (rc != PROGRAMMING_RC_OK) {
+         break;
+      }
 #if (TARGET == CFV1) || (TARGET == HCS08)
-   // Modify flash image according to trim options - to be consistent with what is programmed
-   rc = dummyTrimLocations(flashImage);
-   if (rc != PROGRAMMING_RC_OK) {
-      return rc;
-   }
+      // Modify flash image according to trim options - to be consistent with what is programmed
+      rc = dummyTrimLocations(flashImage);
+      if (rc != PROGRAMMING_RC_OK) {
+         break;
+      }
 #endif
-//#if (TARGET == CFVx) || (TARGET == MC56F80xx)
-//   rc = determineTargetSpeed();
-//   if (rc != PROGRAMMING_RC_OK) {
-//      return rc;
-//   }
-//#endif
-   // Set up for Flash operations (clock etc)
-   rc = initialiseTargetFlash();
-   if (rc != PROGRAMMING_RC_OK) {
-      return rc;
-   }
-   rc = doVerify(flashImage);
-
+      // Set up for Flash operations (clock etc)
+      rc = initialiseTargetFlash();
+      if (rc != PROGRAMMING_RC_OK) {
+         break;
+      }
+      rc = doVerify(flashImage);
+   } while (false);
    restoreSecurityAreas(flashImage);
 
    log.print("Verifying Time = %3.2f s, rc = %d\n", progressTimer->elapsedTime(), rc);
@@ -2837,88 +2834,91 @@ USBDM_ErrorCode FlashProgrammer_HCS12::programFlash(FlashImagePtr flashImage,
       return rc;
    }
 #endif
-   // Modify flash image according to security options
-   rc = setFlashSecurity(flashImage);
-   if (rc != PROGRAMMING_RC_OK) {
-      return rc;
-   }
-#if (TARGET == CFVx) || (TARGET == MC56F80xx)// || (TARGET == ARM)
-   rc = determineTargetSpeed();
-   if (rc != PROGRAMMING_RC_OK) {
-      return rc;
-   }
-#endif
-#if (TARGET == RS08) || (TARGET == CFV1) || (TARGET == HCS08) || (TARGET == ARM)
-   // Calculate clock trim values & update memory image
-   // log.print("setFlashTrimValues() - trimming\n");
-   progressTimer->restart("Calculating Clock Trim");
-
-   rc = setFlashTrimValues(flashImage);
-   if (rc != PROGRAMMING_RC_OK) {
-      return rc;
-   }
-#endif
-   // Set up for Flash operations (clock etc)
-   rc = initialiseTargetFlash();
-   if (rc != PROGRAMMING_RC_OK) {
-      return rc;
-   }
-   //
-   // The above leaves the Flash ready for programming
-   //
-#if (TARGET==ARM) || (TARGET == CFV1) || (TARGET == S12Z) || (TARGET == MC56F80xx)
-   if (device->getEraseOption() == DeviceData::eraseMass) {
-      // Erase the security area as Mass erase programs it to a non-blank value
-      rc = selectiveEraseFlashSecurity();
+   double eraseTime = 0;
+   do {
+      // Modify flash image according to security options
+      rc = setFlashSecurity(flashImage);
       if (rc != PROGRAMMING_RC_OK) {
+         break;
+      }
+#if (TARGET == CFVx) || (TARGET == MC56F80xx)// || (TARGET == ARM)
+      rc = determineTargetSpeed();
+      if (rc != PROGRAMMING_RC_OK) {
+         break;
+      }
+#endif
+#if (TARGET == RS08) || (TARGET == CFV1) || (TARGET == HCS08)
+      // Calculate clock trim values & update memory image
+      // log.print("setFlashTrimValues() - trimming\n");
+      progressTimer->restart("Calculating Clock Trim");
+
+      rc = setFlashTrimValues(flashImage);
+      if (rc != PROGRAMMING_RC_OK) {
+         break;
+      }
+#endif
+      // Set up for Flash operations (clock etc)
+      rc = initialiseTargetFlash();
+      if (rc != PROGRAMMING_RC_OK) {
+         break;
+      }
+      //
+      // The above leaves the Flash ready for programming
+      //
+#if (TARGET==ARM) || (TARGET == CFV1) || (TARGET == S12Z) || (TARGET == MC56F80xx)
+      if (device->getEraseOption() == DeviceData::eraseMass) {
+         // Erase the security area as Mass erase programs it to a non-blank value
+         rc = selectiveEraseFlashSecurity();
+         if (rc != PROGRAMMING_RC_OK) {
+            break;
+         }
+      }
+#if (TARGET==ARM) || (TARGET == CFV1)
+      // Program EEPROM/DFLASH Split
+      rc = partitionFlexNVM();
+      if (rc != PROGRAMMING_RC_OK) {
+         break;
+      }
+#endif
+#endif
+      if (device->getEraseOption() == DeviceData::eraseAll) {
+         // Erase all flash arrays
+         rc = eraseFlash();
+      }
+      else if (device->getEraseOption() == DeviceData::eraseSelective) {
+         // Selective erase area to be programmed - this may have collateral damage!
+         rc = doSelectiveErase(flashImage);
+      }
+      if (rc != PROGRAMMING_RC_OK) {
+         log.error("Erasing failed, Reason= %s\n", bdmInterface->getErrorString(rc));
          return rc;
       }
-   }
-#if (TARGET==ARM) || (TARGET == CFV1)
-   // Program EEPROM/DFLASH Split
-   rc = partitionFlexNVM();
-   if (rc != PROGRAMMING_RC_OK) {
-      return rc;
-   }
-#endif
-#endif
-   if (device->getEraseOption() == DeviceData::eraseAll) {
-      // Erase all flash arrays
-      rc = eraseFlash();
-   }
-   else if (device->getEraseOption() == DeviceData::eraseSelective) {
-      // Selective erase area to be programmed - this may have collateral damage!
-      rc = doSelectiveErase(flashImage);
-   }
-   if (rc != PROGRAMMING_RC_OK) {
-      log.error("Erasing failed, Reason= %s\n", bdmInterface->getErrorString(rc));
-      return rc;
-   }
-   double eraseTime = progressTimer->totalTime();
-   if (eraseTime <= 0.0) {
-      eraseTime = 0.05;
-   }
+      eraseTime = progressTimer->totalTime();
+      if (eraseTime <= 0.0) {
+         eraseTime = 0.05;
+      }
 #ifdef GDI
-   mtwksDisplayLine("Erase Time = %3.2f s, Speed = %2.2f kBytes/s, rc = %d\n",
-         eraseTime, flashImage->getByteCount()/(1024*eraseTime),  rc);
+      mtwksDisplayLine("Erase Time = %3.2f s, Speed = %2.2f kBytes/s, rc = %d\n",
+            eraseTime, flashImage->getByteCount()/(1024*eraseTime),  rc);
 #endif
 #ifdef LOG
-   log.print("Erase Time = %3.2f s, Speed = %2.2f kBytes/s, rc = %d\n",
-         eraseTime, flashImage->getByteCount()/(1+1024*eraseTime),  rc);
+      log.print("Erase Time = %3.2f s, Speed = %2.2f kBytes/s, rc = %d\n",
+            eraseTime, flashImage->getByteCount()/(1+1024*eraseTime),  rc);
 #endif
-   // Program flash
-   rc = doProgram(flashImage);
-   if (rc != PROGRAMMING_RC_OK) {
-      log.error("Programming failed, Reason= %s\n", bdmInterface->getErrorString(rc));
-      return rc;
-   }
-   if (doRamWrites){
-      rc = doWriteRam(flashImage);
+      // Program flash
+      rc = doProgram(flashImage);
       if (rc != PROGRAMMING_RC_OK) {
-         log.error("RAM write failed, Reason= %s\n", bdmInterface->getErrorString(rc));
-         return rc;
+         log.error("Programming failed, Reason= %s\n", bdmInterface->getErrorString(rc));
+         break;
       }
-   }
+      if (doRamWrites){
+         rc = doWriteRam(flashImage);
+         if (rc != PROGRAMMING_RC_OK) {
+            log.error("RAM write failed, Reason= %s\n", bdmInterface->getErrorString(rc));
+            break;
+         }
+      }
+   } while (false);
    restoreSecurityAreas(flashImage);
 
    double programTime = progressTimer->totalTime() - eraseTime;
