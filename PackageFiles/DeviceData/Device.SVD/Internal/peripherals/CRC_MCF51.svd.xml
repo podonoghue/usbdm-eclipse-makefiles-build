@@ -5,7 +5,7 @@ Devices using this peripheral:
 -->
       <peripheral>
          <?sourceFile "CRC_MCF51" ?>
-         <name>CRC</name>
+         <name>CRC0</name>
          <description>Cyclic Redundancy Check</description>
          <groupName>CRC</groupName>
          <prependToName>CRC</prependToName>

@@ -4,7 +4,7 @@
 <!ENTITY VECTOR_TABLE SYSTEM "vectorTables/MKV31F25612_VectorTable.svd.xml">
 <!ENTITY ADC0         SYSTEM "peripherals/ADC0_DIFF_A.svd.xml">
 <!ENTITY CMP0         SYSTEM "peripherals/CMP0_MKV.svd.xml">
-<!ENTITY CRC          SYSTEM "peripherals/CRC_0x40032000.svd.xml">
+<!ENTITY CRC0         SYSTEM "peripherals/CRC0_0x40032000.svd.xml">
 <!ENTITY DAC0         SYSTEM "peripherals/DAC0_16CH_FIFO16.svd.xml">
 <!ENTITY DMA0         SYSTEM "peripherals/DMA0_16CH_EARS16.svd.xml">
 <!ENTITY DMAMUX0      SYSTEM "peripherals/DMAMUX0_16CH_TRIG.svd.xml">
@@ -27,7 +27,7 @@
 <!ENTITY PIT          SYSTEM "peripherals/PIT_4CH_CHAIN.svd.xml">
 <!ENTITY PMC          SYSTEM "peripherals/PMC_MK.svd.xml">
 <!ENTITY PORTA        SYSTEM "peripherals/PORTA.svd.xml">
-<!ENTITY PORTD        SYSTEM "peripherals/PORTD_FILT.svd.xml">
+<!ENTITY PORTD        SYSTEM "peripherals/PORTD_DFER.svd.xml">
 <!ENTITY RCM          SYSTEM "peripherals/RCM_MK_SSRS.svd.xml">
 <!ENTITY RFSYS        SYSTEM "peripherals/RFSYS_0.svd.xml">
 <!ENTITY RNG          SYSTEM "peripherals/RNG_1.svd.xml">
@@ -62,7 +62,7 @@
 <peripheral derivedFrom="ADC0"><name>ADC1</name><prependToName>ADC1</prependToName><baseAddress>0x40027000</baseAddress></peripheral>
 &CMP0;
 <peripheral derivedFrom="CMP0"><name>CMP1</name><prependToName>CMP1</prependToName><baseAddress>0x40073008</baseAddress></peripheral>
-&CRC;
+&CRC0;
 &DAC0;
 &DMA0;
 &DMAMUX0;

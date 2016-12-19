@@ -14,7 +14,9 @@
 #include "utilities.h"
 #include "stdbool.h"
 #include "hardware.h"
+#ifdef USBDM_RTC_IS_DEFINED
 #include "rtc.h"
+#endif
 #include "mcg.h"
 #include "osc.h"
  /*

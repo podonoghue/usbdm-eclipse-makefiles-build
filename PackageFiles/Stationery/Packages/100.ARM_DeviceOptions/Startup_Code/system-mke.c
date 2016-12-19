@@ -132,9 +132,9 @@ void SystemInit(void) {
 
    /* Use RTC initialisation - if present */
    rtc_initialise();
+}
 
-
-// Code below assumes interrupts start oiut enabled!
+// Code below assumes interrupts start out enabled!
 
 /** Nesting count for interrupt disable */
 static int disableInterruptCount = 0;
@@ -165,5 +165,4 @@ int enableInterrupts() {
       return 1;
    }
    return 0;
-}
-
+} 

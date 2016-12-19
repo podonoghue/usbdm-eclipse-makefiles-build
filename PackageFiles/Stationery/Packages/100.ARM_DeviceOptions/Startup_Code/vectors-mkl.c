@@ -1,6 +1,6 @@
 /*
- *  @file Vectors.c
- *  Derived from  Vectors-mkl.c
+ *  @file vectors.c
+ *  Derived from  vectors-mkl.c
  *
  *  Generic vectors and security for Kinetis MKLxx
  *
@@ -47,38 +47,38 @@ typedef struct {
    <h> Program Flash Region Protect (NV_FPROT0-3)
       <i> Each program flash region can be protected from program and erase operation by clearing the associated PROT bit.
       <i> Each bit protects a 1/32 region of the program flash memory.
-	   <q.31>   FPROT0.0	<0=>protected  <1=>unprotected   <info>lowest 1/32 block
-	   <q.30>   FPROT0.1	<0=>protected  <1=>unprotected
-	   <q.29>   FPROT0.2	<0=>protected  <1=>unprotected
-	   <q.28>   FPROT0.3	<0=>protected  <1=>unprotected
-	   <q.27>   FPROT0.4	<0=>protected  <1=>unprotected
-	   <q.26>   FPROT0.5	<0=>protected  <1=>unprotected
-	   <q.25>   FPROT0.6	<0=>protected  <1=>unprotected
-	   <q.24>   FPROT0.7	<0=>protected  <1=>unprotected
-	   <q.23>   FPROT1.0	<0=>protected  <1=>unprotected
-	   <q.22>   FPROT1.1	<0=>protected  <1=>unprotected
-	   <q.21>   FPROT1.2	<0=>protected  <1=>unprotected
-	   <q.20>   FPROT1.3	<0=>protected  <1=>unprotected
-	   <q.19>   FPROT1.4	<0=>protected  <1=>unprotected
-	   <q.18>   FPROT1.5	<0=>protected  <1=>unprotected
-	   <q.17>   FPROT1.6	<0=>protected  <1=>unprotected
-	   <q.16>   FPROT1.7	<0=>protected  <1=>unprotected
-	   <q.15>   FPROT2.0	<0=>protected  <1=>unprotected
-	   <q.14>   FPROT2.1	<0=>protected  <1=>unprotected
-	   <q.13>   FPROT2.2	<0=>protected  <1=>unprotected
-	   <q.12>   FPROT2.3	<0=>protected  <1=>unprotected
-	   <q.11>   FPROT2.4	<0=>protected  <1=>unprotected
-	   <q.10>   FPROT2.5	<0=>protected  <1=>unprotected
-	   <q.9>    FPROT2.6	<0=>protected  <1=>unprotected
-	   <q.8>    FPROT2.7	<0=>protected  <1=>unprotected
-	   <q.7>    FPROT3.0	<0=>protected  <1=>unprotected
-	   <q.6>    FPROT3.1	<0=>protected  <1=>unprotected
-	   <q.5>    FPROT3.2	<0=>protected  <1=>unprotected
-	   <q.4>    FPROT3.3	<0=>protected  <1=>unprotected
-	   <q.3>    FPROT3.4	<0=>protected  <1=>unprotected
-	   <q.2>    FPROT3.5	<0=>protected  <1=>unprotected
-	   <q.1>    FPROT3.6	<0=>protected  <1=>unprotected
-	   <q.0>    FPROT3.7	<0=>protected  <1=>unprotected   <info> highest 1/32 block
+      <q.31>   FPROT0.0 <0=>protected  <1=>unprotected   <info>lowest 1/32 block
+      <q.30>   FPROT0.1 <0=>protected  <1=>unprotected
+      <q.29>   FPROT0.2 <0=>protected  <1=>unprotected
+      <q.28>   FPROT0.3 <0=>protected  <1=>unprotected
+      <q.27>   FPROT0.4 <0=>protected  <1=>unprotected
+      <q.26>   FPROT0.5 <0=>protected  <1=>unprotected
+      <q.25>   FPROT0.6 <0=>protected  <1=>unprotected
+      <q.24>   FPROT0.7 <0=>protected  <1=>unprotected
+      <q.23>   FPROT1.0 <0=>protected  <1=>unprotected
+      <q.22>   FPROT1.1 <0=>protected  <1=>unprotected
+      <q.21>   FPROT1.2 <0=>protected  <1=>unprotected
+      <q.20>   FPROT1.3 <0=>protected  <1=>unprotected
+      <q.19>   FPROT1.4 <0=>protected  <1=>unprotected
+      <q.18>   FPROT1.5 <0=>protected  <1=>unprotected
+      <q.17>   FPROT1.6 <0=>protected  <1=>unprotected
+      <q.16>   FPROT1.7 <0=>protected  <1=>unprotected
+      <q.15>   FPROT2.0 <0=>protected  <1=>unprotected
+      <q.14>   FPROT2.1 <0=>protected  <1=>unprotected
+      <q.13>   FPROT2.2 <0=>protected  <1=>unprotected
+      <q.12>   FPROT2.3 <0=>protected  <1=>unprotected
+      <q.11>   FPROT2.4 <0=>protected  <1=>unprotected
+      <q.10>   FPROT2.5 <0=>protected  <1=>unprotected
+      <q.9>    FPROT2.6 <0=>protected  <1=>unprotected
+      <q.8>    FPROT2.7 <0=>protected  <1=>unprotected
+      <q.7>    FPROT3.0 <0=>protected  <1=>unprotected
+      <q.6>    FPROT3.1 <0=>protected  <1=>unprotected
+      <q.5>    FPROT3.2 <0=>protected  <1=>unprotected
+      <q.4>    FPROT3.3 <0=>protected  <1=>unprotected
+      <q.3>    FPROT3.4 <0=>protected  <1=>unprotected
+      <q.2>    FPROT3.5 <0=>protected  <1=>unprotected
+      <q.1>    FPROT3.6 <0=>protected  <1=>unprotected
+      <q.0>    FPROT3.7 <0=>protected  <1=>unprotected   <info> highest 1/32 block
    </h>
 */
 #define FPROT_VALUE 0xFFFFFFFF
@@ -99,7 +99,7 @@ typedef struct {
 #define FEPROT_VALUE 0xFF
 /*
    <h> Data Flash Region Protect (NV_FDPROT)
-      <i> Each bit protects a 1/8 region of the data flash memory.
+      <i> Each bit protects a 1/8 region of the flash memory.
       <i> (Device with Data flash only)
       <q.0>   FDPROT.0	<0=>protected  <1=>unprotected   <info> lowest 1/8 block
       <q.1>   FDPROT.1  <0=>protected  <1=>unprotected
@@ -152,16 +152,15 @@ Control extended Boot features on these devices
 <h> Flash boot options (NV_FOPT)
    <e0> Boot ROM Options
       <i> Only available on devices with internal ROM
-      <i> Currently: KL03,KL17,KL27,KL43
       <0=> Disabled
       <1=> Enabled
    <o1> Boot Source Selection (FOPT.BOOTSRC_SEL)
       <i> These bits select the boot sources if FOPT.BOOTPIN_OPT = 1
-	  <info>BOOTSRC_SEL
+      <info>BOOTSRC_SEL
       <0=> 0: Boot from Flash
       <64=> 1: Reserved
-      <128=> 2: Boot from ROM
-      <192=> 3: Boot from ROM
+      <128=> 2: Boot from ROM, configure QSPI0, and enter boot loader mode.
+      <192=> 3: Boot from ROM and enter boot loader mode.
    <q2.1> External pin selects boot options (FOPT.BOOTPIN_OPT)
       <i> Note: RESET pin must be enabled if BOOTCFG0 is used.
 	  <info>BOOTPIN_OPT
@@ -221,30 +220,48 @@ const SecurityInfo securityInfo = {
  * Security information
  */
 typedef struct {
-    char     magic[4];           // Magic number indicating valid configuration - 'kcfg'
-    uint8_t  reserved[12];       // Reserved
-    uint8_t  enabledPeripherals; // 0:LPUART, 1:I2C, 2:SPI, 4:USB
-    uint8_t  i2cAddress;         // If not 0xFF, used as the 7-bit I2C slave address.
-    uint16_t peripheralTimeout;  // Timeout in milliseconds for active peripheral detection
-    uint16_t usbVid;             // Sets the USB Vendor ID reported by the device during enumeration.
-    uint16_t usbPid;             // Sets the USB Product ID reported by the device during enumeration.
-    uint32_t usbStringsPointer;  // Sets the USB Strings reported by the device during enumeration.
-    uint8_t  clockFlags;         // See Table 13-4, clockFlags Configuration Field
-    uint8_t  clockDivider;       // Divider to use for core and bus clocks when in high speed mode
+    char     tag[4];                 // Magic number indicating valid configuration - 'kcfg'
+    uint32_t crcStartAddress;        // Start address for application image CRC check.
+    uint32_t crcByteCount;           // Byte count for application image CRC check.
+    uint32_t crcExpectedValue;       // Expected CRC value for application CRC check.
+    uint8_t  enabledPeripherals;     // 0:LPUART, 1:I2C, 2:SPI, 4:USB
+    uint8_t  i2cAddress;             // If not 0xFF, used as the 7-bit I2C slave address.
+    uint16_t peripheralTimeout;      // Timeout in milliseconds for active peripheral detection
+    uint16_t usbVid;                 // Sets the USB Vendor ID reported by the device during enumeration.
+    uint16_t usbPid;                 // Sets the USB Product ID reported by the device during enumeration.
+    uint32_t usbStringsPointer;      // Sets the USB Strings reported by the device during enumeration.
+    uint8_t  clockFlags;             // See Table 13-4, clockFlags Configuration Field
+    uint8_t  clockDivider;           // Divider to use for core and bus clocks when in high speed mode
+    uint8_t  bootFlags;              // Bit0: 0=>Quad SPI Flash or internal flash, 1 => communication boot-loader
+    uint8_t  padbyte;
+    uint8_t  reserved[4];
+    uint32_t keyblobDataPointer;     // A pointer to the keyblob data in memory.
+    uint8_t  reserved1[8];
+    uint32_t qspiConfigBlockPointer; // A pointer to the QSPI config block in internal flash array.
+    uint8_t  reserved2[12];
 } BootloaderConfiguration;
 
 __attribute__ ((section(".bootloader_configuration")))
 const BootloaderConfiguration bootloaderConfiguration = {
-    /* magic               */ "kcfg",
-    /* reserved            */ {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF },
-    /* enabledPeripherals  */ 0xFF, /* all peripherals */
-    /* i2cAddress          */ 0x11,
-    /* peripheralTimeout   */ 1000, /* ms */
-    /* usbVid              */ 0,
-    /* usbPid              */ 0,
-    /* usbStringsPointer   */ 0,
-    /* clockFlags          */ 0,
-    /* clockDivider        */ 0,    /* 0 => high-speed 48MHz */
+    /* tag[4];                */ {0xFF, 0xFF, 0xFF, 0xFF, }, //"kcfg",
+    /* crcStartAddress;       */ 0xFFFFFFFF,
+    /* crcByteCount;          */ 0xFFFFFFFF,
+    /* crcExpectedValue;      */ 0xFFFFFFFF,
+    /* enabledPeripherals;    */ 0xFF,
+    /* i2cAddress;            */ 0xFF,
+    /* peripheralTimeout;     */ 0xFFFF,
+    /* usbVid;                */ 0xFFFF,
+    /* usbPid;                */ 0xFFFF,
+    /* usbStringsPointer;     */ 0xFFFFFFFF,
+    /* clockFlags;            */ 0xFF,
+    /* clockDivider;          */ 0xFF,
+    /* bootFlags;             */ 0xFF,
+    /* padbyte;               */ 0xFF,
+    /* reserved[4];           */ {0xFF, 0xFF, 0xFF, 0xFF, },
+    /* keyblobDataPointer;    */ 0xFFFFFFFF,
+    /* reserved[8];           */ {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, },
+    /* qspiConfigBlockPointer */ 0xFFFFFFFF,
+    /* reserved[12];          */ {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, },
 };
 #endif
 
@@ -348,6 +365,7 @@ void _HardFault_Handler(volatile ExceptionFrame *exceptionFrame __attribute__((_
 }
 
 void __HardReset(void) __attribute__((__interrupt__));
+
 extern uint32_t __StackTop;
 
 /*

@@ -1,0 +1,59 @@
+<!--
+Devices using this peripheral: 
+      MKL82Z7
+-->
+      <peripheral>
+         <?sourceFile "RFVBAT_MKL82Z7" ?>
+         <name>RFVBAT</name>
+         <description>VBAT register file</description>
+         <groupName>RFVBAT</groupName>
+         <prependToName>RFVBAT_</prependToName>
+         <headerStructName>RFVBAT</headerStructName>
+         <baseAddress>0x4003E000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x20</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <dim>8</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
+               <name>REG%s</name>
+               <description>VBAT register file register</description>
+               <addressOffset>0x0</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>LL</name>
+                     <description>Low lower byte</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>LH</name>
+                     <description>Low higher byte</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>HL</name>
+                     <description>High lower byte</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>HH</name>
+                     <description>High higher byte</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

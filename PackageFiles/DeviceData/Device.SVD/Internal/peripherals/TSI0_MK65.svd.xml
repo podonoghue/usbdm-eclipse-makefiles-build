@@ -2,6 +2,8 @@
 Devices using this peripheral: 
       MK65F18
       MK66F18
+      MK82F25615
+      MKL82Z7
 -->
       <peripheral>
          <?sourceFile "TSI0_MK65" ?>

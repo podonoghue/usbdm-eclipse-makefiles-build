@@ -1,0 +1,123 @@
+<!--
+Devices using this peripheral: 
+      MKE15Z7
+-->
+      <peripheral>
+         <?sourceFile "TRGMUX1_MKE15Z7" ?>
+         <name>TRGMUX1</name>
+         <description>Trigger MUX Control</description>
+         <groupName>TRGMUX</groupName>
+         <headerStructName>TRGMUX1</headerStructName>
+         <baseAddress>0x40063000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>TRGMUX_CTRL0</name>
+               <description>TRGMUX Register</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>SEL0</name>
+                     <description>Trigger MUX Input 0 Source Select</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>SEL1</name>
+                     <description>Trigger MUX Input 1 Source Select</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>SEL2</name>
+                     <description>Trigger MUX Input 2 Source Select</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>SEL3</name>
+                     <description>Trigger MUX Input 3 Source Select</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>LK</name>
+                     <description>Enable</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Register can be written</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Register cannot be written until the next system Reset</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TRGMUX_CTRL1</name>
+               <description>TRGMUX Register</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>SEL0</name>
+                     <description>Trigger MUX Input 0 Source Select</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>SEL1</name>
+                     <description>Trigger MUX Input 1 Source Select</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>SEL2</name>
+                     <description>Trigger MUX Input 2 Source Select</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>SEL3</name>
+                     <description>Trigger MUX Input 3 Source Select</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>LK</name>
+                     <description>Enable</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Register can be written</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Register cannot be written until the next system Reset</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

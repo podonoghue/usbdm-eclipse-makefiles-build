@@ -2,6 +2,7 @@
 Devices using this peripheral: 
       MK65F18
       MK66F18
+      MK82F25615
 -->
       <peripheral>
          <?sourceFile "SDRAMC_0" ?>
@@ -70,7 +71,7 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>IS</name>
-                     <description>no description available</description>
+                     <description>Initiate self-refresh command</description>
                      <bitOffset>11</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>

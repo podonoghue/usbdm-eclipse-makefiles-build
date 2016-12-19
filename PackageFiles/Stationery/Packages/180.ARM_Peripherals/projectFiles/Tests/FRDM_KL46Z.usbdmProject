@@ -13,28 +13,32 @@
    <item key="$signal$PTA2_descriptionSetting"             value="Console Tx" />
    <item key="$signal$PTA2_muxSetting"                     value="mux2" />
    <item key="$signal$PTB10_descriptionSetting"            value="LCD" />
-   <item key="$signal$PTB10_muxSetting"                    value="mux0" />
    <item key="$signal$PTB11_descriptionSetting"            value="LCD" />
-   <item key="$signal$PTB11_muxSetting"                    value="mux0" />
-   <item key="$signal$PTB16_muxSetting"                    value="mux0" />
+   <item key="$signal$PTB11_muxSetting"                    value="mux1" />
+   <item key="$signal$PTB19_muxSetting"                    value="mux0" />
    <item key="$signal$PTB21_descriptionSetting"            value="LCD" />
-   <item key="$signal$PTB21_muxSetting"                    value="mux0" />
    <item key="$signal$PTB22_descriptionSetting"            value="LCD" />
-   <item key="$signal$PTB22_muxSetting"                    value="mux0" />
    <item key="$signal$PTB23_descriptionSetting"            value="LCD" />
-   <item key="$signal$PTB23_muxSetting"                    value="mux0" />
    <item key="$signal$PTB7_descriptionSetting"             value="LCD" />
-   <item key="$signal$PTB7_muxSetting"                     value="mux0" />
    <item key="$signal$PTB8_descriptionSetting"             value="LCD" />
-   <item key="$signal$PTB8_muxSetting"                     value="mux0" />
+   <item key="$signal$PTB9_muxSetting"                     value="mux0" />
    <item key="$signal$PTC17_descriptionSetting"            value="LCD" />
    <item key="$signal$PTC17_muxSetting"                    value="mux0" />
    <item key="$signal$PTC18_descriptionSetting"            value="LCD" />
    <item key="$signal$PTC18_muxSetting"                    value="mux0" />
-   <item key="$signal$PTC7_muxSetting"                     value="mux2" />
+   <item key="$signal$PTC4_muxSetting"                     value="mux0" />
+   <item key="$signal$PTC5_muxSetting"                     value="mux0" />
+   <item key="$signal$PTC6_muxSetting"                     value="mux0" />
+   <item key="$signal$PTC7_muxSetting"                     value="mux0" />
    <item key="$signal$PTD0_descriptionSetting"             value="LCD" />
    <item key="$signal$PTD0_muxSetting"                     value="mux0" />
-   <item key="$signal$PTD5_muxSetting"                     value="mux1" />
+   <item key="$signal$PTD1_muxSetting"                     value="mux0" />
+   <item key="$signal$PTD2_muxSetting"                     value="mux0" />
+   <item key="$signal$PTD3_muxSetting"                     value="mux0" />
+   <item key="$signal$PTD4_muxSetting"                     value="mux0" />
+   <item key="$signal$PTD5_muxSetting"                     value="mux0" />
+   <item key="$signal$PTD6_muxSetting"                     value="mux0" />
+   <item key="$signal$PTD7_muxSetting"                     value="mux0" />
    <item key="$signal$PTE24_descriptionSetting"            value="onboard I2C" />
    <item key="$signal$PTE24_muxSetting"                    value="mux5" />
    <item key="$signal$PTE25_descriptionSetting"            value="onboard I2C" />

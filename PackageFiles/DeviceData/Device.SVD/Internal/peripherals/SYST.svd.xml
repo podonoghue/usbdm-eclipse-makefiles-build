@@ -52,6 +52,7 @@ Devices using this peripheral:
       MK65F18
       MK66F18
       MK70F15
+      MK82F25615
       MKE02Z2
       MKE02Z4
       MKE04Z4
@@ -59,6 +60,7 @@ Devices using this peripheral:
       MKE06Z4
       MKE14D7
       MKE15D7
+      MKE15Z7
       MKL02Z4
       MKL03Z4
       MKL04Z4
@@ -77,6 +79,7 @@ Devices using this peripheral:
       MKL36Z4
       MKL43Z4
       MKL46Z4
+      MKL82Z7
       MKM33Z5
       MKM34Z5
       MKV10Z7

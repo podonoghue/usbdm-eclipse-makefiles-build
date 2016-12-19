@@ -1407,6 +1407,13 @@ USBDM_ErrorCode FlashProgrammer_ARM::executeTargetProgram(uint8_t *pBuffer, uint
       }
    }
 #endif
+//   uint8_t buff[4] = {0xFF,0xFF,0xFF,0xFF,};
+//   bdmInterface->writeMemory(MS_Long, 4, 0x4007f018, buff);
+//   uint8_t buff2[4] = {0x24,0x20,0x0,0x0,};
+//   bdmInterface->writeMemory(MS_Long, 4, 0x40052000, buff2);
+//   UsbdmSystem::milliSleep(100);
+//   bdmInterface->readMemory(MS_Long, 4, 0x40052000, buff);
+//   log.print("WDOG_CS = 0x%08X\n", (buff[0]<<0)|(buff[1]<<8)|(buff[2]<<16)|(buff[3]<<24));
    // Execute the Flash program on target
    if (bdmInterface->go() != BDM_RC_OK) {
       log.error("bdmInterface->go() failed\n");
@@ -1447,6 +1454,10 @@ USBDM_ErrorCode FlashProgrammer_ARM::executeTargetProgram(uint8_t *pBuffer, uint
    bdmInterface->connect();
    bdmInterface->readPC(&value);
    log.print("Start PC = 0x%08lX, end PC = 0x%08lX\n", (unsigned long)targetRegPC, (unsigned long)value);
+//   bdmInterface->readMemory(MS_Long, 4, 0x4007f018, buff);
+//   log.print("RCM_SSRS = 0x%08X\n", (buff[0]<<0)|(buff[1]<<8)|(buff[2]<<16)|(buff[3]<<24));
+//   bdmInterface->readMemory(MS_Long, 4, 0x40052000, buff);
+//   log.print("WDOG_CS = 0x%08X\n", (buff[0]<<0)|(buff[1]<<8)|(buff[2]<<16)|(buff[3]<<24));
 
    // Read the flash parameters back from target memory
    ResultStruct executionResult;

@@ -5,13 +5,14 @@
 <!ENTITY ADC0         SYSTEM "peripherals/ADC0_MCF51.svd.xml">
 <!ENTITY CMP0         SYSTEM "peripherals/CMP0_MCF51.svd.xml">
 <!ENTITY CMT          SYSTEM "peripherals/CMT_MCF51.svd.xml">
-<!ENTITY CRC          SYSTEM "peripherals/CRC_MCF51.svd.xml">
+<!ENTITY CRC0         SYSTEM "peripherals/CRC_MCF51.svd.xml">
 <!ENTITY DAC0         SYSTEM "peripherals/DAC0_MCF51.svd.xml">
 <!ENTITY DMA0         SYSTEM "peripherals/DMA0_MCF51.svd.xml">
 <!ENTITY FB           SYSTEM "peripherals/FB_MCF51.svd.xml">
 <!ENTITY FTFL         SYSTEM "peripherals/FTFL_MCF51.svd.xml">
 <!ENTITY FTM0         SYSTEM "peripherals/FTM0_2CH_MCF51.svd.xml">
 <!ENTITY FTM1         SYSTEM "peripherals/FTM1_6CH_MCF51.svd.xml">
+<!ENTITY GPIOA        SYSTEM "peripherals/PTA_MCF51.svd.xml">
 <!ENTITY I2C0         SYSTEM "peripherals/I2C0_MCF51.svd.xml">
 <!ENTITY I2S0         SYSTEM "peripherals/I2S0_MCF51.svd.xml">
 <!ENTITY INTC0        SYSTEM "peripherals/INTC0_MCF51.svd.xml">
@@ -25,7 +26,6 @@
 <!ENTITY PCTLA        SYSTEM "peripherals/PCTLA_MCF51.svd.xml">
 <!ENTITY PDB0         SYSTEM "peripherals/PDB0_MCF51_1CH_2TRIG_1PO.svd.xml">
 <!ENTITY PMC          SYSTEM "peripherals/PMC_MCF51.svd.xml">
-<!ENTITY PTA          SYSTEM "peripherals/PTA_MCF51.svd.xml">
 <!ENTITY RCM          SYSTEM "peripherals/RCM_MCF51.svd.xml">
 <!ENTITY RFSYS        SYSTEM "peripherals/RFSYS_MCF51.svd.xml">
 <!ENTITY RGPIO        SYSTEM "peripherals/RGPIO_MCF51.svd.xml">
@@ -60,13 +60,19 @@
 &ADC0;
 &CMP0;
 &CMT;
-&CRC;
+&CRC0;
 &DAC0;
 &DMA0;
 &FB;
 &FTFL;
 &FTM0;
 &FTM1;
+&GPIOA;
+<peripheral derivedFrom="GPIOA"><name>GPIOB</name><baseAddress>0xFFFF8010</baseAddress></peripheral>
+<peripheral derivedFrom="GPIOA"><name>GPIOC</name><baseAddress>0xFFFF8020</baseAddress></peripheral>
+<peripheral derivedFrom="GPIOA"><name>GPIOD</name><baseAddress>0xFFFF8030</baseAddress></peripheral>
+<peripheral derivedFrom="GPIOA"><name>GPIOE</name><baseAddress>0xFFFF8040</baseAddress></peripheral>
+<peripheral derivedFrom="GPIOA"><name>GPIOF</name><baseAddress>0xFFFF8050</baseAddress></peripheral>
 &I2C0;
 <peripheral derivedFrom="I2C0"><name>I2C1</name><prependToName>I2C1</prependToName><baseAddress>0xFFFF81D0</baseAddress></peripheral>
 <peripheral derivedFrom="I2C0"><name>I2C2</name><prependToName>I2C2</prependToName><baseAddress>0xFFFF81E0</baseAddress></peripheral>
@@ -90,12 +96,6 @@
 <peripheral derivedFrom="PCTLA"><name>PCTLF</name><prependToName>PCTLF</prependToName><baseAddress>0xFFFF9250</baseAddress></peripheral>
 &PDB0;
 &PMC;
-&PTA;
-<peripheral derivedFrom="PTA"><name>PTB</name><baseAddress>0xFFFF8010</baseAddress></peripheral>
-<peripheral derivedFrom="PTA"><name>PTC</name><baseAddress>0xFFFF8020</baseAddress></peripheral>
-<peripheral derivedFrom="PTA"><name>PTD</name><baseAddress>0xFFFF8030</baseAddress></peripheral>
-<peripheral derivedFrom="PTA"><name>PTE</name><baseAddress>0xFFFF8040</baseAddress></peripheral>
-<peripheral derivedFrom="PTA"><name>PTF</name><baseAddress>0xFFFF8050</baseAddress></peripheral>
 &RCM;
 &RFSYS;
 &RGPIO;

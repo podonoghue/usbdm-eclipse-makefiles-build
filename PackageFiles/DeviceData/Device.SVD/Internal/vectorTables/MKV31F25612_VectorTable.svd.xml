@@ -87,7 +87,7 @@ Devices using this vector table:
          </interrupt>
          <interrupt>
             <name>DMA_Error</name>
-            <description>Direct memory access controller</description>
+            <description>DMA error interrupt all channels</description>
             <value>16</value>
          </interrupt>
          <interrupt>
@@ -97,7 +97,7 @@ Devices using this vector table:
          </interrupt>
          <interrupt>
             <name>FTF_Command</name>
-            <description>Flash Command complete or error</description>
+            <description>Flash Memory Interface</description>
             <value>18</value>
          </interrupt>
          <interrupt>
@@ -227,7 +227,7 @@ Devices using this vector table:
          </interrupt>
          <interrupt>
             <name>PIT3</name>
-            <description>Periodic Interrupt Timer 3</description>
+            <description>Periodic Interrupt Timer</description>
             <value>51</value>
          </interrupt>
          <interrupt>
@@ -237,8 +237,13 @@ Devices using this vector table:
          </interrupt>
          <interrupt>
             <name>DAC0</name>
-            <description>12-Bit Digital to Analogue Converter</description>
+            <description>Digital to Analogue Converter</description>
             <value>56</value>
+         </interrupt>
+         <interrupt>
+            <name>MCG</name>
+            <description>Multipurpose Clock Generator</description>
+            <value>57</value>
          </interrupt>
          <interrupt>
             <name>LPTMR0</name>

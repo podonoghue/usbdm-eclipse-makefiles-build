@@ -1,0 +1,232 @@
+<!--
+Devices using this peripheral: 
+      MKL82Z7
+-->
+      <peripheral>
+         <?sourceFile "INTMUX0_MKL82Z7" ?>
+         <name>INTMUX0</name>
+         <description>Interrupt Multiplexer</description>
+         <groupName>INTMUX</groupName>
+         <prependToName>INTMUX0_</prependToName>
+         <headerStructName>INTMUX</headerStructName>
+         <baseAddress>0x40024000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x10</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x20</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x40</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x50</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x60</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x80</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x90</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xA0</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xC0</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xD0</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xE0</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <cluster>
+               <dim>4</dim>
+               <dimIncrement>64</dimIncrement>
+               <dimIndex>0,1,2,3</dimIndex>
+               <name>CHANNEL,@p@f@i</name>
+               <addressOffset>0x0</addressOffset>
+               <register>
+                  <name>CSR</name>
+                  <description>Channel n Control Status Register</description>
+                  <addressOffset>0x0</addressOffset>
+                  <fields>
+                     <field>
+                        <name>RST</name>
+                        <description>Software Reset</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0</name>
+                              <description>No operation</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>1</name>
+                              <description>Perform a software reset on this channel</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>AND</name>
+                        <description>Logic AND</description>
+                        <bitOffset>1</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0</name>
+                              <description>Logic OR all enabled interrupt inputs</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>1</name>
+                              <description>Logic AND all enabled interrupt inputs</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>IRQN</name>
+                        <description>Channel Input Number</description>
+                        <bitOffset>4</bitOffset>
+                        <bitWidth>2</bitWidth>
+                        <access>read-only</access>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>00</name>
+                              <description>32 interrupt inputs</description>
+                              <value>0b00</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>CHIN</name>
+                        <description>Channel Instance Number</description>
+                        <bitOffset>8</bitOffset>
+                        <bitWidth>4</bitWidth>
+                        <access>read-only</access>
+                     </field>
+                     <field>
+                        <name>IRQP</name>
+                        <description>Channel Interrupt Request Pending</description>
+                        <bitOffset>31</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <access>read-only</access>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0</name>
+                              <description>No interrupt is pending</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>1</name>
+                              <description>The interrupt output of this channel is pending</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>VEC</name>
+                  <description>Channel n Vector Number Register</description>
+                  <addressOffset>0x4</addressOffset>
+                  <access>read-only</access>
+                  <fields>
+                     <field>
+                        <name>VECN</name>
+                        <description>Vector Number</description>
+                        <bitOffset>2</bitOffset>
+                        <bitWidth>12</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>IER_31_0</name>
+                  <description>Channel n Interrupt Enable Register</description>
+                  <addressOffset>0x10</addressOffset>
+                  <fields>
+                     <field>
+                        <name>INTE</name>
+                        <description>Interrupt Enable</description>
+                        <bitOffset>0</bitOffset>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0</name>
+                              <description>Interrupt is disabled</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>1</name>
+                              <description>Interrupt is enabled</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>IPR_31_0</name>
+                  <description>Channel n Interrupt Pending Register</description>
+                  <addressOffset>0x20</addressOffset>
+                  <access>read-only</access>
+                  <fields>
+                     <field>
+                        <name>INTP</name>
+                        <description>Interrupt Pending</description>
+                        <bitOffset>0</bitOffset>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0</name>
+                              <description>No interrupt</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>1</name>
+                              <description>Interrupt is pending</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                  </fields>
+               </register>
+            </cluster>
+         </registers>
+      </peripheral>

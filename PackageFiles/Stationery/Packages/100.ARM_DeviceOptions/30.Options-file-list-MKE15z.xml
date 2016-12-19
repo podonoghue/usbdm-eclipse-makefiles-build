@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0">
+   <!-- Extra Optional files for MKE15Z with ICM48MHz Clock -->
+   <projectActionList id="Options-file-list-MKE15Z">
+      <applyWhen>
+         <and>
+            <deviceSubfamilyIs>MKE15Z7</deviceSubfamilyIs>
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+      <copy source="Startup_Code/system-mke15z.c"       target="Startup_Code/system.c" overwrite="true" />
+      <copy source="Startup_Code/vectors-mke15z.c"      target="Startup_Code/vectors.c" overwrite="true" />
+      <variable id="projectOptionValue.UART-setup" 
+         name="UART setup code" 
+         description="Adds C stdio (UART) support for newlib"          
+         checkGroup="group-additional-options" >
+         <enableWhen>
+            <requirement idRef="projectOptionValue.Clock-setup"/>
+         </enableWhen>
+      </variable>
+      
+      <projectActionList>
+         <applyWhen>
+            <variableRef idRef="projectOptionValue.UART-setup" />
+         </applyWhen>
+         <copy source="Startup_Code/console-mk.c" target="Startup_Code/console.c" />
+         <copy source="Project_Headers/console.h" target="Project_Headers/console.h" />
+      </projectActionList>
+   </projectActionList>
+
+</root>

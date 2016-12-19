@@ -9,6 +9,7 @@ Devices using this peripheral:
       MK65F18
       MK66F18
       MK70F15WS
+      MK82F25615
 -->
       <peripheral>
          <?sourceFile "SPI0_MK_PCSIS6_PCSSE" ?>
@@ -203,12 +204,12 @@ Controls whether the Rx FIFO discards new data when overflowing</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>PCS5/PCSS is used as Chip Select signal</description>
+                           <description>PCS5/ PCSS is used as the Peripheral Chip Select[5] signal</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>PCS5/PCSS is used as active-low PCS Strobe signal</description>
+                           <description>PCS5/ PCSS is used as an active-low PCS Strobe signal</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

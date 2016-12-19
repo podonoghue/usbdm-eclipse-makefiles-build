@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Configure.usbdmProject -->
+<!-- FRDM_K20D50M.usbdmProject -->
 <!-- 
    Settings
 -->
@@ -136,6 +136,7 @@
    <item key="/FTM0/irqHandlerInstalled"                   value="false" />
    <item key="/FTM0/irqLevel"                              value="0" />
    <item key="/FTM0/maximumPeriod"                         value="0.17476266666666668" />
+   <item key="/FTM0/minimumResolution"                     value="100" />
    <item key="/FTM0/period"                                value="10000" />
    <item key="/FTM1/clockFrequency"                        value="375000.0" />
    <item key="/FTM1/clockPeriod"                           value="2.666666666666667E-6" />
@@ -147,6 +148,7 @@
    <item key="/FTM1/irqHandlerInstalled"                   value="false" />
    <item key="/FTM1/irqLevel"                              value="0" />
    <item key="/FTM1/maximumPeriod"                         value="0.17476266666666668" />
+   <item key="/FTM1/minimumResolution"                     value="100" />
    <item key="/FTM1/period"                                value="10000" />
    <item key="/GPIOA/irqHandlerInstalled"                  value="false" />
    <item key="/GPIOA/irqLevel"                             value="0" />
@@ -325,8 +327,8 @@
    <item key="/SMC/smc_pmprot_alls"                        value="true" />
    <item key="/SMC/smc_pmprot_avlls"                       value="true" />
    <item key="/SMC/smc_pmprot_avlp"                        value="true" />
-   <item key="/SMC/smc_vllsctrl_porpo"                     value="true" />
-   <item key="/SMC/smc_vllsctrl_vllsm"                     value="2" />
+   <item key="/SMC/smc_stopctrl_llsm"                      value="0" />
+   <item key="/SMC/smc_stopctrl_porpo"                     value="false" />
    <item key="/SPI0/irqHandlerInstalled"                   value="false" />
    <item key="/SPI0/irqLevel"                              value="0" />
    <item key="/SPI0/speed"                                 value="100000" />

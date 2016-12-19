@@ -6,7 +6,7 @@
 <!ENTITY AIPS0        SYSTEM "peripherals/AIPS0_8M_PACRU_C.svd.xml">
 <!ENTITY CMP0         SYSTEM "peripherals/CMP0_MKE10.svd.xml">
 <!ENTITY CMT          SYSTEM "peripherals/CMT_MKE10.svd.xml">
-<!ENTITY CRC          SYSTEM "peripherals/CRC_0x40024000.svd.xml">
+<!ENTITY CRC0         SYSTEM "peripherals/CRC0_0x40024000.svd.xml">
 <!ENTITY DMA0         SYSTEM "peripherals/DMA0_14CH_MKE10.svd.xml">
 <!ENTITY DMAMUX0      SYSTEM "peripherals/DMAMUX0_14CH_TRIG.svd.xml">
 <!ENTITY EWM          SYSTEM "peripherals/EWM_MKE10.svd.xml">
@@ -66,7 +66,7 @@
 <peripheral derivedFrom="CMP0"><name>CMP2</name><prependToName>CMP2</prependToName><baseAddress>0x40052000</baseAddress></peripheral>
 <peripheral derivedFrom="CMP0"><name>CMP3</name><prependToName>CMP3</prependToName><baseAddress>0x40053000</baseAddress></peripheral>
 &CMT;
-&CRC;
+&CRC0;
 &DMA0;
 &DMAMUX0;
 &EWM;

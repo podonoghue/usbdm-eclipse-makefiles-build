@@ -372,25 +372,10 @@ Write protects the Time Compensation Register</description>
                   </field>
                   <field derivedFrom="TCL" > <name>CRL</name> <description>Control Register Lock\n
 Write protects the Control Register</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="TCL" > <name>SRL</name> <description>Status Register Lock</description> <bitOffset>5</bitOffset> </field>
-                  <field>
-                     <name>LRL</name>
-                     <description>Lock Register Lock</description>
-                     <bitOffset>6</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Lock Register is locked and writes are ignored</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Lock Register is not locked and writes complete as normal</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="TCL" > <name>SRL</name> <description>Status Register Lock\n
+Write protects the Status Register</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="TCL" > <name>LRL</name> <description>Lock Register Lock\n
+Write protects the Lock Register</description> <bitOffset>6</bitOffset> </field>
                </fields>
             </register>
             <register>

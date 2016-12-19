@@ -202,7 +202,8 @@ Protects the registers when locked</description>
                   </field>
                   <field>
                      <name>WPS</name>
-                     <description>Wakeup Pin Select</description>
+                     <description>Wakeup Pin Select\n
+The wakeup pin is optional and not available on all devices</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -213,7 +214,7 @@ Protects the registers when locked</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Wakeup pin instead outputs the RTC 32kHz clock, provided the wakeup pin is turned on and the 32kHz clock is output to other peripherals</description>
+                           <description>Wakeup pin outputs the RTC 32kHz clock, provided the wakeup pin is turned on and the 32kHz clock is output to other peripherals</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -352,25 +353,9 @@ Set when alarm time reached</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>MOF</name>
-                     <description>Monotonic Overflow Flag</description>
-                     <bitOffset>3</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <access>read-only</access>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Monotonic counter overflow has not occurred</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Monotonic counter overflow has occurred and monotonic counter is read as zero</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="TOF" > <name>MOF</name> <description>Monotonic Overflow Flag\n
+Indicates Monotonic counter overflow has occurred.\n
+On overflow the counter reads as zero</description> <bitOffset>3</bitOffset> </field>
                   <field>
                      <name>TCE</name>
                      <description>Time Counter Enable</description>
@@ -627,7 +612,7 @@ Protects register against writes.  Any writes are ignored</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Writes OK</description>
+                           <description>Writes allowed</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

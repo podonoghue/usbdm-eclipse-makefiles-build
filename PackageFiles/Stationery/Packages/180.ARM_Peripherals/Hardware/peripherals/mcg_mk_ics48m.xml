@@ -6,8 +6,8 @@
 
    <section>
       <category name="RTC" description="RTC External Reference Clock/Oscillator [ERCLK32K]">
-         <aliasOption key="/RTC/rtc_input_freq"  constant="false" />
-         <aliasOption key="/RTC/rtcclk_clock" />
+         <aliasOption key="/RTC/rtc_input_freq"  constant="false"  optional="true"/>
+         <aliasOption key="/RTC/rtcclk_clock"  optional="true"/>
          <aliasOption key="/SIM/sim_sopt1_osc32ksel"   optional="true" constant="false" />
          <aliasOption key="/SIM/system_erclk32k_clock" optional="true"/>
       </category>

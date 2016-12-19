@@ -7,7 +7,7 @@
 <!ENTITY AOI          SYSTEM "peripherals/AOI_0.svd.xml">
 <!ENTITY CAN0         SYSTEM "peripherals/CAN0_MKV.svd.xml">
 <!ENTITY CMP0         SYSTEM "peripherals/CMP0_MKV.svd.xml">
-<!ENTITY CRC          SYSTEM "peripherals/CRC_0x40032000.svd.xml">
+<!ENTITY CRC0         SYSTEM "peripherals/CRC0_0x40032000.svd.xml">
 <!ENTITY DAC0         SYSTEM "peripherals/DAC0_16CH_FIFO16.svd.xml">
 <!ENTITY DMA0         SYSTEM "peripherals/DMA0_16CH_EARS16.svd.xml">
 <!ENTITY DMAMUX0      SYSTEM "peripherals/DMAMUX0_16CH_TRIG.svd.xml">
@@ -30,7 +30,7 @@
 <!ENTITY PIT          SYSTEM "peripherals/PIT_4CH_CHAIN.svd.xml">
 <!ENTITY PMC          SYSTEM "peripherals/PMC_MKM.svd.xml">
 <!ENTITY PORTA        SYSTEM "peripherals/PORTA.svd.xml">
-<!ENTITY PORTD        SYSTEM "peripherals/PORTD_FILT.svd.xml">
+<!ENTITY PORTD        SYSTEM "peripherals/PORTD_DFER.svd.xml">
 <!ENTITY PWMA         SYSTEM "peripherals/PWMA_0.svd.xml">
 <!ENTITY RCM          SYSTEM "peripherals/RCM_MKV40F15.svd.xml">
 <!ENTITY SCB          SYSTEM "peripherals/SCB_CM4_CPACR.svd.xml">
@@ -69,7 +69,7 @@
 <peripheral derivedFrom="CMP0"><name>CMP1</name><prependToName>CMP1</prependToName><baseAddress>0x40073008</baseAddress></peripheral>
 <peripheral derivedFrom="CMP0"><name>CMP2</name><prependToName>CMP2</prependToName><baseAddress>0x40073010</baseAddress></peripheral>
 <peripheral derivedFrom="CMP0"><name>CMP3</name><prependToName>CMP3</prependToName><baseAddress>0x40073018</baseAddress></peripheral>
-&CRC;
+&CRC0;
 &DAC0;
 &DMA0;
 &DMAMUX0;

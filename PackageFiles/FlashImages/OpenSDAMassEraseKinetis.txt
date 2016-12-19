@@ -1,4 +1,4 @@
-==== What is it =====
+==== What it is =====
 This is a utility to mass erase the TARGET chip on a FRDM Kinetis board.  It is intended
 to be quite aggressive in attempting to do this and may be useful for erasing targets that have
 become unusable due to the following reasons:
@@ -9,7 +9,7 @@ become unusable due to the following reasons:
 - Combinations of the above
 
 Doing any of the above may result in the on-board P&E debugger being unable to re-program the target chip.
-The current version of the USBDM software also find this difficult but the next version will incorporate 
+The current version of the USBDM software also finds this difficult but the next version will incorporate 
 this option.
 
 It can also be used with external chips if the 20-pin SWD connector is populated on the FRDM board.

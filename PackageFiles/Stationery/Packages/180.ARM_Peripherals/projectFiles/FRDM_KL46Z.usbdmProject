@@ -13,28 +13,32 @@
    <item key="$signal$PTA2_descriptionSetting"             value="Console Tx" />
    <item key="$signal$PTA2_muxSetting"                     value="mux2" />
    <item key="$signal$PTB10_descriptionSetting"            value="LCD" />
-   <item key="$signal$PTB10_muxSetting"                    value="mux0" />
    <item key="$signal$PTB11_descriptionSetting"            value="LCD" />
-   <item key="$signal$PTB11_muxSetting"                    value="mux0" />
-   <item key="$signal$PTB16_muxSetting"                    value="mux0" />
-   <item key="$signal$PTB17_muxSetting"                    value="mux0" />
+   <item key="$signal$PTB11_muxSetting"                    value="mux1" />
+   <item key="$signal$PTB19_muxSetting"                    value="mux0" />
    <item key="$signal$PTB21_descriptionSetting"            value="LCD" />
-   <item key="$signal$PTB21_muxSetting"                    value="mux0" />
    <item key="$signal$PTB22_descriptionSetting"            value="LCD" />
-   <item key="$signal$PTB22_muxSetting"                    value="mux0" />
    <item key="$signal$PTB23_descriptionSetting"            value="LCD" />
-   <item key="$signal$PTB23_muxSetting"                    value="mux0" />
    <item key="$signal$PTB7_descriptionSetting"             value="LCD" />
-   <item key="$signal$PTB7_muxSetting"                     value="mux0" />
    <item key="$signal$PTB8_descriptionSetting"             value="LCD" />
-   <item key="$signal$PTB8_muxSetting"                     value="mux0" />
+   <item key="$signal$PTB9_muxSetting"                     value="mux0" />
    <item key="$signal$PTC17_descriptionSetting"            value="LCD" />
    <item key="$signal$PTC17_muxSetting"                    value="mux0" />
    <item key="$signal$PTC18_descriptionSetting"            value="LCD" />
    <item key="$signal$PTC18_muxSetting"                    value="mux0" />
+   <item key="$signal$PTC4_muxSetting"                     value="mux0" />
+   <item key="$signal$PTC5_muxSetting"                     value="mux0" />
+   <item key="$signal$PTC6_muxSetting"                     value="mux0" />
+   <item key="$signal$PTC7_muxSetting"                     value="mux0" />
    <item key="$signal$PTD0_descriptionSetting"             value="LCD" />
    <item key="$signal$PTD0_muxSetting"                     value="mux0" />
-   <item key="$signal$PTD5_muxSetting"                     value="mux1" />
+   <item key="$signal$PTD1_muxSetting"                     value="mux0" />
+   <item key="$signal$PTD2_muxSetting"                     value="mux0" />
+   <item key="$signal$PTD3_muxSetting"                     value="mux0" />
+   <item key="$signal$PTD4_muxSetting"                     value="mux0" />
+   <item key="$signal$PTD5_muxSetting"                     value="mux0" />
+   <item key="$signal$PTD6_muxSetting"                     value="mux0" />
+   <item key="$signal$PTD7_muxSetting"                     value="mux0" />
    <item key="$signal$PTE24_descriptionSetting"            value="onboard I2C" />
    <item key="$signal$PTE24_muxSetting"                    value="mux5" />
    <item key="$signal$PTE25_descriptionSetting"            value="onboard I2C" />
@@ -201,10 +205,10 @@
    <item key="/OSC0/range"                                 value="1" />
    <item key="/OSC0/range_out"                             value="1" />
    <item key="/OSC0/system_oscerclk_clock"                 value="8000000" />
-   <item key="/PIT/irqHandlerInstalled"                    value="false" />
+   <item key="/PIT/irqHandlerInstalled"                    value="true" />
    <item key="/PIT/irqLevel"                               value="0" />
-   <item key="/PIT/pit_ldval"                              value="10000" />
-   <item key="/PIT/pit_mcr_frz"                            value="false" />
+   <item key="/PIT/pit_ldval"                              value="1" />
+   <item key="/PIT/pit_mcr_frz"                            value="true" />
    <item key="/PIT/pit_tctrl_ch1"                          value="false" />
    <item key="/PIT/pit_tctrl_ch3"                          value="false" />
    <item key="/RTC/irqHandlerInstalled"                    value="false" />
@@ -271,6 +275,7 @@
    <item key="/TPM0/irqHandlerInstalled"                   value="false" />
    <item key="/TPM0/irqLevel"                              value="0" />
    <item key="/TPM0/maximumPeriod"                         value="0.0013653333333333334" />
+   <item key="/TPM0/minimumResolution"                     value="100" />
    <item key="/TPM0/period"                                value="10000" />
    <item key="/TPM0/tpmExternalClock"                      value="0" />
    <item key="/TPM0/tpm_sc_cmod"                           value="1" />
@@ -282,6 +287,7 @@
    <item key="/TPM1/irqHandlerInstalled"                   value="false" />
    <item key="/TPM1/irqLevel"                              value="0" />
    <item key="/TPM1/maximumPeriod"                         value="0.0013653333333333334" />
+   <item key="/TPM1/minimumResolution"                     value="100" />
    <item key="/TPM1/period"                                value="10000" />
    <item key="/TPM1/tpmExternalClock"                      value="0" />
    <item key="/TPM1/tpm_sc_cmod"                           value="1" />
@@ -293,6 +299,7 @@
    <item key="/TPM2/irqHandlerInstalled"                   value="false" />
    <item key="/TPM2/irqLevel"                              value="0" />
    <item key="/TPM2/maximumPeriod"                         value="0.0013653333333333334" />
+   <item key="/TPM2/minimumResolution"                     value="100" />
    <item key="/TPM2/period"                                value="10000" />
    <item key="/TPM2/tpmExternalClock"                      value="0" />
    <item key="/TPM2/tpm_sc_cmod"                           value="1" />

@@ -166,6 +166,8 @@
       <device name="MK70FN1M0M15">     <svdFileName>MK70F15</svdFileName>    </device>
       <device name="MK70FX512M15">     <svdFileName>MK70F15</svdFileName>    </device>
 
+      <device name="MK82FN256M15">     <svdFileName>MK82F25615</svdFileName> </device>
+
       <device name="S9KEAZN16M4">      <svdFileName>MKE02Z4</svdFileName>    </device>
       <device name="S9KEAZN32M4">      <svdFileName>MKE02Z4</svdFileName>    </device>
       <device name="S9KEAZN64M4">      <svdFileName>MKE02Z4</svdFileName>    </device>
@@ -189,6 +191,11 @@
       
       <device name="MKE06Z64M4">       <svdFileName>MKE06Z4</svdFileName>    </device>
       <device name="MKE06Z128M4">      <svdFileName>MKE06Z4</svdFileName>    </device>
+
+      <device name="MKE14Z128M7">      <svdFileName>MKE15Z7</svdFileName>    </device>
+      <device name="MKE14Z256M7">      <svdFileName>MKE15Z7</svdFileName>    </device>
+      <device name="MKE15Z128M7">      <svdFileName>MKE15Z7</svdFileName>    </device>
+      <device name="MKE15Z256M7">      <svdFileName>MKE15Z7</svdFileName>    </device>
 
       <device name="MKL02Z8M4">        <svdFileName>MKL02Z4</svdFileName>    </device>
       <device name="MKL02Z16M4">       <svdFileName>MKL02Z4</svdFileName>    </device>
@@ -251,6 +258,7 @@
       
       <device name="MKL46Z128M4">      <svdFileName>MKL46Z4</svdFileName>    </device>
       <device name="MKL46Z256M4">      <svdFileName>MKL46Z4</svdFileName>    </device>
+      <device name="MKL82Z128M7">      <svdFileName>MKL82Z7</svdFileName>    </device>
       
       <device name="MKM14Z64M5">       <svdFileName>MKM14Z5</svdFileName>    </device>
       <device name="MKM14Z128M5">      <svdFileName>MKM14Z5</svdFileName>    </device>
@@ -275,11 +283,13 @@
       <device name="FRDM_K22F1M0">     <svdFileName>MK22FA12</svdFileName>    </device>
       <device name="FRDM_K64F">        <svdFileName>MK64F12</svdFileName>     </device>
       <device name="FRDM_K66F">        <svdFileName>MK66F18</svdFileName>     </device>
+      <device name="FRDM_K82F">        <svdFileName>MK82F25615</svdFileName> </device>
       
       <device name="FRDM_KE02Z">       <svdFileName>MKE02Z2</svdFileName>     </device>
       <device name="FRDM_KE02Z40M">    <svdFileName>MKE02Z4</svdFileName>     </device>
       <device name="FRDM_KE04Z">       <svdFileName>MKE04Z8M4</svdFileName>   </device>
       <device name="FRDM_KE06Z">       <svdFileName>MKE06Z4</svdFileName>     </device>
+      <device name="FRDM_KE15Z">       <svdFileName>MKE15Z7</svdFileName>    </device>
 
       <device name="FRDM_KEAZ128Q80">  <svdFileName>S9KEAZ128M4</svdFileName> </device>
       
@@ -291,6 +301,7 @@
       <device name="FRDM_KL27Z">       <svdFileName>MKL27Z644</svdFileName>   </device>
       <device name="FRDM_KL43Z">       <svdFileName>MKL43Z4</svdFileName>     </device>
       <device name="FRDM_KL46Z">       <svdFileName>MKL46Z4</svdFileName>     </device>
+      <device name="FRDM_KL82Z">       <svdFileName>MKL82Z7</svdFileName>    </device>
       
       <device name="FRDM_KV10Z">       <svdFileName>MKV10Z7</svdFileName>     </device>
       <device name="FRDM_KV31F">       <svdFileName>MKV31F51212</svdFileName> </device>

@@ -1,0 +1,225 @@
+<!--
+Devices using this peripheral: 
+      MKE15Z7
+-->
+      <peripheral>
+         <?sourceFile "SMC_MKE15Z7" ?>
+         <name>SMC</name>
+         <description>System Mode Controller</description>
+         <groupName>SMC</groupName>
+         <prependToName>SMC_</prependToName>
+         <headerStructName>SMC</headerStructName>
+         <baseAddress>0x4007E000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x18</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>VERID</name>
+               <description>SMC Version ID Register</description>
+               <addressOffset>0x0</addressOffset>
+               <access>read-only</access>
+               <resetValue>0x1000000</resetValue>
+               <fields>
+                  <field>
+                     <name>FEATURE</name>
+                     <description>Feature Specification Number</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Standard features implemented</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MINOR</name>
+                     <description>Minor Version Number</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>MAJOR</name>
+                     <description>Major Version Number</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PARAM</name>
+               <description>SMC Parameter Register</description>
+               <addressOffset>0x4</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>EHSRUN</name>
+                     <description>Existence of HSRUN feature</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>The feature is not available</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>The feature is available</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="EHSRUN" > <name>ELLS</name> <description>Existence of LLS feature</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="EHSRUN" > <name>ELLS2</name> <description>Existence of LLS2 feature</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="EHSRUN" > <name>EVLLS0</name> <description>Existence of VLLS0 feature</description> <bitOffset>6</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>PMPROT</name>
+               <description>Power Mode Protection register</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>AVLP</name>
+                     <description>Allow Very-Low-Power Modes</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>VLPR, VLPW, and VLPS are not allowed</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>VLPR, VLPW, and VLPS are allowed</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PMCTRL</name>
+               <description>Power Mode Control register</description>
+               <addressOffset>0xC</addressOffset>
+               <fields>
+                  <field>
+                     <name>STOPM</name>
+                     <description>Stop Mode Control</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>000</name>
+                           <description>Normal Stop (STOP)</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>010</name>
+                           <description>Very-Low-Power Stop (VLPS)</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>110</name>
+                           <description>Reseved</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>STOPA</name>
+                     <description>Stop Aborted</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>The previous stop mode entry was successful</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>The previous stop mode entry was aborted</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RUNM</name>
+                     <description>Run Mode Control</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>00</name>
+                           <description>Normal Run mode (RUN)</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10</name>
+                           <description>Very-Low-Power Run mode (VLPR)</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>STOPCTRL</name>
+               <description>Stop Control Register</description>
+               <addressOffset>0x10</addressOffset>
+               <resetValue>0x3</resetValue>
+               <fields>
+                  <field>
+                     <name>PSTOPO</name>
+                     <description>Partial Stop Option</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>00</name>
+                           <description>STOP - Normal Stop mode</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01</name>
+                           <description>PSTOP1 - Partial Stop with both system and bus clocks disabled</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10</name>
+                           <description>PSTOP2 - Partial Stop with system clock disabled and bus clock enabled</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PMSTAT</name>
+               <description>Power Mode Status register</description>
+               <addressOffset>0x14</addressOffset>
+               <access>read-only</access>
+               <resetValue>0x1</resetValue>
+               <fields>
+                  <field>
+                     <name>PMSTAT</name>
+                     <description>Power Mode Status</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

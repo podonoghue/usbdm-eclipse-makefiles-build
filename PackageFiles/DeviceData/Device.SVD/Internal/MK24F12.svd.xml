@@ -9,7 +9,7 @@
 <!ENTITY CAU          SYSTEM "peripherals/CAU_0.svd.xml">
 <!ENTITY CMP0         SYSTEM "peripherals/CMP0_PSTM7.svd.xml">
 <!ENTITY CMT          SYSTEM "peripherals/CMT_0.svd.xml">
-<!ENTITY CRC          SYSTEM "peripherals/CRC_0x40032000.svd.xml">
+<!ENTITY CRC0         SYSTEM "peripherals/CRC0_0x40032000.svd.xml">
 <!ENTITY CoreDebug    SYSTEM "peripherals/CoreDebug.svd.xml">
 <!ENTITY DAC0         SYSTEM "peripherals/DAC0_16CH_0x400CC000.svd.xml">
 <!ENTITY DMA0         SYSTEM "peripherals/DMA0_16CH.svd.xml">
@@ -42,7 +42,7 @@
 <!ENTITY PIT          SYSTEM "peripherals/PIT_4CH_CHAIN.svd.xml">
 <!ENTITY PMC          SYSTEM "peripherals/PMC_MK.svd.xml">
 <!ENTITY PORTA        SYSTEM "peripherals/PORTA.svd.xml">
-<!ENTITY PORTD        SYSTEM "peripherals/PORTD_FILT.svd.xml">
+<!ENTITY PORTD        SYSTEM "peripherals/PORTD_DFER.svd.xml">
 <!ENTITY RCM          SYSTEM "peripherals/RCM_MK10D5.svd.xml">
 <!ENTITY RFSYS        SYSTEM "peripherals/RFSYS_0.svd.xml">
 <!ENTITY RFVBAT       SYSTEM "peripherals/RFVBAT_0.svd.xml">
@@ -91,7 +91,7 @@
 <peripheral derivedFrom="CMP0"><name>CMP1</name><prependToName>CMP1</prependToName><baseAddress>0x40073008</baseAddress></peripheral>
 <peripheral derivedFrom="CMP0"><name>CMP2</name><prependToName>CMP2</prependToName><baseAddress>0x40073010</baseAddress></peripheral>
 &CMT;
-&CRC;
+&CRC0;
 &CoreDebug;
 &DAC0;
 <peripheral derivedFrom="DAC0"><name>DAC1</name><prependToName>DAC1</prependToName><baseAddress>0x400CD000</baseAddress></peripheral>

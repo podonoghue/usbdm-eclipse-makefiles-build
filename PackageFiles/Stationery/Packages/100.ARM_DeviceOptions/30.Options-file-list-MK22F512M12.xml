@@ -6,7 +6,10 @@
    <projectActionList id="Options-file-list-MK22F512M12">
       <applyWhen>
          <and>
-            <deviceSubfamilyIs>MK22F51212</deviceSubfamilyIs>
+	    <or>
+               <deviceSubfamilyIs>MK22F51212</deviceSubfamilyIs>
+               <deviceSubfamilyIs>MK82F25615</deviceSubfamilyIs>
+	    </or>
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>

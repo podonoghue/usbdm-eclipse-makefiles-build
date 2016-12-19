@@ -25,19 +25,34 @@ uint32_t SystemCoreClock = 4000000;
 extern int const __vector_table[];
 
 #ifndef SCB
-   #define SCB_VTOR                 (*(uint32_t *)0xE000ED08)
-   #define SCB_CCR                  (*(uint32_t *)0xE000ED14)
-   #define SCB_CCR_DIV_0_TRP_MASK   (1<<4)
-   #define SCB_CCR_UNALIGN_TRP_MASK (1<<3)
+#define SCB_VTOR                 (*(uint32_t *)0xE000ED08)
+#define SCB_CCR                  (*(uint32_t *)0xE000ED14)
+#define SCB_CCR_DIV_0_TRP_MASK   (1<<4)
+#define SCB_CCR_UNALIGN_TRP_MASK (1<<3)
 #else
-   #define SCB_VTOR  (SCB->VTOR)
-   #define SCB_CCR   (SCB->CCR)
+#define SCB_VTOR  (SCB->VTOR)
+#define SCB_CCR   (SCB->CCR)
 #endif
 
 #if !defined(SIM)
-   #define SIM_COPC (*(uint32_t *)0x40048100)
-#else
-   #define SIM_COPC (SIM->COPC)
+// Default to most popular KL Watchdog
+#define SIM_COPC (*(uint32_t *)0x40048100)
+
+#elif defined(SIM_COPT)
+#define SIM_COPC (SIM->COPC)
+
+#elif defined(WDOG_STCTRLH_CLKSRC_MASK)
+/* Unlocking Watchdog sequence words*/
+#define KINETIS_WDOG_UNLOCK_SEQ_1   0xC520
+#define KINETIS_WDOG_UNLOCK_SEQ_2   0xD928
+
+/* Word to disable the Watchdog */
+#define KINETIS_WDOG_DISABLED_CTRLX  (0xD2)
+#define KINETIS_WDOG_DISABLED_CTRL (     \
+      WDOG_STCTRLH_WAITEN_MASK|           \
+      WDOG_STCTRLH_STOPEN_MASK|           \
+      WDOG_STCTRLH_ALLOWUPDATE_MASK|      \
+      WDOG_STCTRLH_CLKSRC(1))
 #endif
 
 
@@ -81,8 +96,21 @@ void SystemInitLowLevel(void) {
    SCB_VTOR = (uint32_t)__vector_table;
 #endif
 
+#ifdef RCM_MR_BOOTROM
+   // Clear Boot ROM flag (future boots from Flash)
+   RCM->MR = RCM_MR_BOOTROM(3);
+#endif
+
    // Disable watch-dog
+#if defined(SIM_COPC)
    SIM_COPC = 0x00;
+#elif defined (WDOG)
+   // Disable watch-dog
+   WDOG->UNLOCK  = KINETIS_WDOG_UNLOCK_SEQ_1;
+   WDOG->UNLOCK  = KINETIS_WDOG_UNLOCK_SEQ_2;
+   __DSB();
+   WDOG->STCTRLH = KINETIS_WDOG_DISABLED_CTRL;
+#endif
 }
 
 /**
@@ -106,7 +134,7 @@ void SystemInit(void) {
 
 }
 
-// Code below assumes interrupts start oiut enabled!
+// Code below assumes interrupts start out enabled!
 
 /** Nesting count for interrupt disable */
 static int disableInterruptCount = 0;

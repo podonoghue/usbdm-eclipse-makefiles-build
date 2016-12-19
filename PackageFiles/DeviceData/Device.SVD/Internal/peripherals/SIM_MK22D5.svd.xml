@@ -687,34 +687,7 @@ Allows extra drive-strength for PTD7</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>UART1TXSRC</name>
-                     <description>UART1 Transmit Data Source Select</description>
-                     <bitOffset>4</bitOffset>
-                     <bitWidth>2</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b00</name>
-                           <description>Direct</description>
-                           <value>0b00</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b01</name>
-                           <description>Modulated by FTM1 CH0</description>
-                           <value>0b01</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b10</name>
-                           <description>Modulated by FTM2 CH0</description>
-                           <value>0b10</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b11</name>
-                           <description>Reserved</description>
-                           <value>0b11</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="UART0TXSRC" > <name>UART1TXSRC</name> <description>UART1 Transmit Data Source Select</description> <bitOffset>4</bitOffset> </field>
                   <field>
                      <name>UART1RXSRC</name>
                      <description>UART1 Receive Data Source Select</description>

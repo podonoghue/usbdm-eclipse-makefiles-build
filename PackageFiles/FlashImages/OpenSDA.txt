@@ -1,23 +1,41 @@
-The OpenSDAxxx.sx flash images are USBDM firmware for FRDM-xxxx boards.  This can
+The OpenSDAxxx.sx flash images are USBDM firmware for FRDM-xxxx boards.  These can
 be used as cheap Kinetis programmers.
+
+For convenience, different file images are provided for each FRDM board. However there
+are actually a limited number of versions copied to various files.
 
 Versions:
 ===========
-Open-SDA Version 1 - Used with earlier FRDM boards
+Open-SDA Version 1 - Used with original FRDM boards with OSDAv1
 OpenSDAv1.sx              Firmware with serial number 0001
 OpenSDAv1_Unique_ID.sx    Firmware with device specific serial number, i.e. each BDM has an unique ID
+Boards: 
+FRDM-KE02Z, FRDM-KE02Z40M, FRDM-KE04Z, FRDM-KE06Z, FRDM-KL02Z, FRDM-KL03Z, FRDM-KL05Z, FRDM-KL25Z, FRDM-KL25Z,  
+FRDM-KL26Z, FRDM-KL27Z, FRDM-KL43Z, FRDM-KL46Z, FRDM-K20D50M
 
-Open-SDA Version 1 - Used with newer FRDM boards using OSDAv1 but with target power control e.g. FRDM-KEAZ
+Open-SDA Version 1 - Used with FRDM boards using OSDAv1 but with target power control e.g. FRDM-KEAZ
 OpenSDAv1_Power.sx              Firmware with serial number 0001
-OpenSDAv1_Power_Unique_ID.sx    Firmware with device specific serial number, i.e. each BDM has an unique ID
+OpenSDAv1_Unique_ID_Power.sx    Firmware with device specific serial number, i.e. each BDM has an unique ID
+Boards: 
+FRDM-KEAZ64Q64, FRDM-KEAZN32Q64, FRDM-KEAZ128Q80 
 
-Open-SDA Version 2.0 - Used with FRM-K64F (MBED version of Freedom boards)
+Open-SDA Version 2.0 - Used with MBED version of Freedom boards with power control (original load address 0x5000)
+OpenSDAv2_0_Power.sx             Firmware with serial number 0001
+OpenSDAv2_0_Unique_ID_Power.sx   Firmware with device specific serial number, i.e. each BDM has an unique ID
+Boards: 
+FRDM-K64F
+
+Open-SDA Version 2.0 - Used with MBED version of Freedom boards without power control (original load address 0x5000)
 OpenSDAv2_0.sx             Firmware with serial number 0001
 OpenSDAv2_0_Unique_ID.sx   Firmware with device specific serial number, i.e. each BDM has an unique ID
+Boards: 
+FRDM-KL82Z
 
-Open-SDA Version 2.1 - Used with FRM-K22F (newer MBED version of Freedom boards)
-OpenSDAv2_1.sx             Firmware with serial number 0001
-OpenSDAv2_1_Unique_ID.sx   Firmware with device specific serial number, i.e. each BDM has an unique ID
+Open-SDA Version 2.1 - Used with newer MBED version of Freedom boards with power control (new load address 0x8000)
+OpenSDAv2_1_Power.sx             Firmware with serial number 0001
+OpenSDAv2_1_Unique_ID_Power.sx   Firmware with device specific serial number, i.e. each BDM has an unique ID
+Boards: 
+FRDM-K22F, FRDM-K66F, FRDM-K82F, FRDM-KV10Z, FRDM-KV31F, FRDM-KE15Z
 
 The first version of each firmware is useful if you are using BDMs as a 'class set' as it means that each BDM 
 should end up appearing as the same serial port e.g. COM8.
@@ -25,7 +43,7 @@ The second version is useful if you wish to use two BDMs on the same machine at 
 used will be tied to the BDM i.e. each BDM will end up with a board specific COM port even if plugged into 
 another USB port.  This means the COM numbers doesn't change each time you plug in the BDM.
 
-These are OpenSDA application and is loaded by the following actions:
+These are OpenSDA application and are loaded by the following actions:
 
 (Before doing the following install the USBDM drivers).
 

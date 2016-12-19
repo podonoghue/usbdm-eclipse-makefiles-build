@@ -352,7 +352,7 @@ Indicates if the DAC buffer read pointer has reached the watermark level</descri
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>Reserved</description>
+                           <description>FIFO mode (if supported)</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -365,22 +365,22 @@ Indicates if the DAC buffer read pointer has reached the watermark level</descri
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>1 word</description>
+                           <description>1 word/(FIFO&lt;=2)</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>2 words</description>
+                           <description>2 words/(FIFO&lt;=MAX/4)</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>3 words</description>
+                           <description>3 words/(FIFO&lt;=MAX/2)</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>4 words</description>
+                           <description>4 words/(FIFO&lt;=MAX-2)</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>

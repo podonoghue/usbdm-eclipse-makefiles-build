@@ -5,7 +5,7 @@
 <!ENTITY ADC0         SYSTEM "peripherals/ADC0_DIFF_A.svd.xml">
 <!ENTITY BP           SYSTEM "peripherals/BP_CM0.svd.xml">
 <!ENTITY CMP0         SYSTEM "peripherals/CMP0_PSTM_TRIGM.svd.xml">
-<!ENTITY CRC          SYSTEM "peripherals/CRC_0x40032000.svd.xml">
+<!ENTITY CRC0         SYSTEM "peripherals/CRC0_0x40032000.svd.xml">
 <!ENTITY CoreDebug    SYSTEM "peripherals/CoreDebug.svd.xml">
 <!ENTITY DMA0         SYSTEM "peripherals/DMA0_MKL.svd.xml">
 <!ENTITY DMAMUX0      SYSTEM "peripherals/DMAMUX0_4CH.svd.xml">
@@ -26,7 +26,7 @@
 <!ENTITY OSC0         SYSTEM "peripherals/OSC0_MK.svd.xml">
 <!ENTITY PIT          SYSTEM "peripherals/PIT_2CH_CHAIN_LTMR.svd.xml">
 <!ENTITY PMC          SYSTEM "peripherals/PMC_MKL27644.svd.xml">
-<!ENTITY PORTA        SYSTEM "peripherals/PORTA_MKL03Z4.svd.xml">
+<!ENTITY PORTA        SYSTEM "peripherals/PORTA_MKL04Z4.svd.xml">
 <!ENTITY RCM          SYSTEM "peripherals/RCM_MKL03Z4.svd.xml">
 <!ENTITY RFSYS        SYSTEM "peripherals/RFSYS_0.svd.xml">
 <!ENTITY ROM          SYSTEM "peripherals/ROM_MKL.svd.xml">
@@ -62,7 +62,7 @@
 &ADC0;
 &BP;
 &CMP0;
-&CRC;
+&CRC0;
 &CoreDebug;
 &DMA0;
 &DMAMUX0;

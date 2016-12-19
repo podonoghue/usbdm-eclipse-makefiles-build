@@ -878,12 +878,12 @@ Devices using this peripheral:
                         <enumeratedValue>
                            <name>0b0</name>
                            <description>Divisor by 1</description>
-                           <value>0b0</value>
+                           <value>0b0000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
                            <description>Divisor by 2</description>
-                           <value>0b1</value>
+                           <value>0b0001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1110</name>

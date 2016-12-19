@@ -1,0 +1,1476 @@
+<!--
+Devices using this peripheral: 
+      MKL82Z7
+-->
+      <peripheral>
+         <?sourceFile "LTC0_MKL82Z7" ?>
+         <name>LTC0</name>
+         <description>LTC</description>
+         <groupName>LTC</groupName>
+         <headerStructName>LTC</headerStructName>
+         <baseAddress>0x40051000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x8</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x10</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x18</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x30</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x34</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x40</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x48</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x58</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x60</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x68</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x80</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x88</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x90</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x98</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x100</offset>
+            <size>0x40</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x200</offset>
+            <size>0x20</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x4F0</offset>
+            <size>0xC</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x7C0</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x7E0</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x7F0</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x800</offset>
+            <size>0x100</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xA00</offset>
+            <size>0x100</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xC00</offset>
+            <size>0x100</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xE00</offset>
+            <size>0x100</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>MD</name>
+               <description>LTC Mode Register (non-PKHA/non-RNG use)</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>ENC</name>
+                     <description>Encrypt/Decrypt. This bit selects encryption or decryption</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Decrypt</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Encrypt</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ICV_TEST</name>
+                     <description>ICV Checking / Test AES fault detection</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AS</name>
+                     <description>Algorithm State</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>00</name>
+                           <description>Update</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01</name>
+                           <description>Initialize</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10</name>
+                           <description>Finalize</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>11</name>
+                           <description>Initialize/Finalize</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>AAI</name>
+                     <description>Additional Algorithm information</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>9</bitWidth>
+                  </field>
+                  <field>
+                     <name>ALG</name>
+                     <description>Algorithm. This field specifies which algorithm is being selected</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>00010000</name>
+                           <description>AES</description>
+                           <value>0b10000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00100000</name>
+                           <description>DES</description>
+                           <value>0b100000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00100001</name>
+                           <description>3DES</description>
+                           <value>0b100001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01000001</name>
+                           <description>MDHA - SHA-1</description>
+                           <value>0b1000001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01000010</name>
+                           <description>MDHA - SHA-224</description>
+                           <value>0b1000010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01000011</name>
+                           <description>MDHA - SHA-256</description>
+                           <value>0b1000011</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MDPK</name>
+               <description>LTC Mode Register (PublicKey)</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>PKHA_MODE_LS</name>
+                     <description>PKHA_MODE least significant 12 bits</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+                  <field>
+                     <name>PKHA_MODE_MS</name>
+                     <description>PKHA_MODE most-significant 4 bits</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>ALG</name>
+                     <description>Algorithm. This field specifies which algorithm is being selected</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>1000</name>
+                           <description>PKHA</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>KS</name>
+               <description>LTC Key Size Register</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>KS</name>
+                     <description>Key Size. This is the size of a Key measured in bytes</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DS</name>
+               <description>LTC Data Size Register</description>
+               <addressOffset>0x10</addressOffset>
+               <fields>
+                  <field>
+                     <name>DS</name>
+                     <description>Data Size</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ICVS</name>
+               <description>LTC ICV Size Register</description>
+               <addressOffset>0x18</addressOffset>
+               <fields>
+                  <field>
+                     <name>ICVS</name>
+                     <description>ICV Size, in Bytes</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>COM</name>
+               <description>LTC Command Register</description>
+               <addressOffset>0x30</addressOffset>
+               <access>write-only</access>
+               <fields>
+                  <field>
+                     <name>ALL</name>
+                     <description>Reset All Internal Logic</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Do Not Reset</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Reset all CHAs in use by this CCB</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>AES</name>
+                     <description>Reset AESA. Writing a 1 to this bit resets the AES Accelerator core engine</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Do Not Reset</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Reset AES Accelerator</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DES</name>
+                     <description>Reset DESA. Writing a 1 to this bit resets the DES Accelerator</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Do Not Reset</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Reset DES Accelerator</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PK</name>
+                     <description>Reset PKHA. Writing a 1 to this bit resets the Public Key Hardware Accelerator</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Do Not Reset</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Reset Public Key Hardware Accelerator</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MD</name>
+                     <description>Reset MDHA. Writing a 1 to this bit resets the Message Digest Hardware Accelerator</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Do Not Reset</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Reset Message Digest Hardware Accelerator</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CTL</name>
+               <description>LTC Control Register</description>
+               <addressOffset>0x34</addressOffset>
+               <fields>
+                  <field>
+                     <name>IM</name>
+                     <description>Interrupt Mask. Once this bit is set, it can only be cleared by hard reset</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Interrupt not masked</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Interrupt masked</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PDE</name>
+                     <description>PKHA Register DMA Enable</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>DMA Request and Done signals disabled for the PKHA</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>DMA Request and Done signals enabled for the PKHA</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>IFE</name>
+                     <description>Input FIFO DMA Enable</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>DMA Request and Done signals disabled for the Input FIFO</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>DMA Request and Done signals enabled for the Input FIFO</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>IFR</name>
+                     <description>Input FIFO DMA Request Size</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>DMA request size is 1 entry</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>DMA request size is 4 entries</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>OFE</name>
+                     <description>Output FIFO DMA Enable</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>DMA Request and Done signals disabled for the Output FIFO</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>DMA Request and Done signals enabled for the Output FIFO</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="IFR" > <name>OFR</name> <description>Output FIFO DMA Request Size</description> <bitOffset>13</bitOffset> </field>
+                  <field>
+                     <name>IFS</name>
+                     <description>Input FIFO Byte Swap. Byte swap all data that is written to the Input FIFO</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Do Not Byte Swap Data</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Byte Swap Data</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="IFS" > <name>OFS</name> <description>Output FIFO Byte Swap. Byte swap all data that is read from the Onput FIFO</description> <bitOffset>17</bitOffset> </field>
+                  <field derivedFrom="IFS" > <name>KIS</name> <description>Key Register Input Byte Swap</description> <bitOffset>20</bitOffset> </field>
+                  <field derivedFrom="IFS" > <name>KOS</name> <description>Key Register Output Byte Swap</description> <bitOffset>21</bitOffset> </field>
+                  <field derivedFrom="IFS" > <name>CIS</name> <description>Context Register Input Byte Swap</description> <bitOffset>22</bitOffset> </field>
+                  <field derivedFrom="IFS" > <name>COS</name> <description>Context Register Output Byte Swap</description> <bitOffset>23</bitOffset> </field>
+                  <field>
+                     <name>KAL</name>
+                     <description>Key Register Access Lock</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Key Register is readable</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Key Register is not readable</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CW</name>
+               <description>LTC Clear Written Register</description>
+               <addressOffset>0x40</addressOffset>
+               <access>write-only</access>
+               <fields>
+                  <field>
+                     <name>CM</name>
+                     <description>Clear the Mode Register. Writing a one to this bit causes the Mode Register to be cleared</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CDS</name>
+                     <description>Clear the Data Size Register</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CICV</name>
+                     <description>Clear the ICV Size Register. Writing a one to this bit causes the ICV Size Register to be cleared</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CCR</name>
+                     <description>Clear the Context Register. Writing a one to this bit causes the Context Register to be cleared</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CKR</name>
+                     <description>Clear the Key Register</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CPKA</name>
+                     <description>Clear the PKHA A Size Register</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CPKB</name>
+                     <description>Clear the PKHA B Size Register</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CPKN</name>
+                     <description>Clear the PKHA N Size Register</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CPKE</name>
+                     <description>Clear the PKHA E Size Register</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>COF</name>
+                     <description>Clear Output FIFO. Writing a 1 to this bit causes the Output FIFO to be cleared</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CIF</name>
+                     <description>Clear Input FIFO. Writing a 1 to this bit causes the Input Data FIFO</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>STA</name>
+               <description>LTC Status Register</description>
+               <addressOffset>0x48</addressOffset>
+               <fields>
+                  <field>
+                     <name>AB</name>
+                     <description>AESA Busy</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>AESA Idle</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>AESA Busy</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DB</name>
+                     <description>DESA Busy</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>DESA Idle</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>DESA Busy</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PB</name>
+                     <description>PKHA Busy</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>PKHA Idle</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>PKHA Busy</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MB</name>
+                     <description>MDHA Busy</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>MDHA Idle</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>MDHA Busy</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DI</name>
+                     <description>Done Interrupt</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EI</name>
+                     <description>Error Interrupt</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Not Error</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Error Interrupt</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DPARRN</name>
+                     <description>This bit is asserted after POR and after every 50K blocks processed by AESA to indicate it is advisable for added security to write a new seed to</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>PKP</name>
+                     <description>Public Key is Prime</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>PKO</name>
+                     <description>Public Key Operation is One</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>PKZ</name>
+                     <description>Public Key Operation is Zero</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ESTA</name>
+               <description>LTC Error Status Register</description>
+               <addressOffset>0x4C</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>ERRID1</name>
+                     <description>Error ID 1</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0001</name>
+                           <description>Mode Error</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0010</name>
+                           <description>Data Size Error, including PKHA N Register Size Error</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0011</name>
+                           <description>Key Size Error, including PKHA E Register Size Error</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0100</name>
+                           <description>PKHA A Register Size Error</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0101</name>
+                           <description>PKHA B Register Size Error</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0110</name>
+                           <description>Data Arrived out of Sequence Error</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0111</name>
+                           <description>PKHA Divide by Zero Error</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1000</name>
+                           <description>PKHA Modulus Even Error</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1001</name>
+                           <description>DES Key Parity Error</description>
+                           <value>0b1001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1010</name>
+                           <description>ICV Check Failed</description>
+                           <value>0b1010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1011</name>
+                           <description>Internal Hardware Failure</description>
+                           <value>0b1011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1100</name>
+                           <description>CCM AAD Size Error (either 1. AAD flag in B0 =1 and no AAD type provided, 2. AAD flag in B0 = 0 and AAD povided, or 3. AAD flag in B0 =1 and not enough AAD provided - expecting more based on AAD size.)</description>
+                           <value>0b1100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1111</name>
+                           <description>Invalid Crypto Engine Selected</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CL1</name>
+                     <description>algorithms. The algorithms field indicates which algorithm is asserting an error. Others reserved</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0000</name>
+                           <description>LTC General Error</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0001</name>
+                           <description>AES</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0010</name>
+                           <description>DES</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0100</name>
+                           <description>MDHA</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1000</name>
+                           <description>Public Key</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>AADSZ</name>
+               <description>LTC AAD Size Register</description>
+               <addressOffset>0x58</addressOffset>
+               <fields>
+                  <field>
+                     <name>AADSZ</name>
+                     <description>AAD size in Bytes, mod 16</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>AL</name>
+                     <description>AAD Last. Only AAD data will be written into the Input FIFO</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>IVSZ</name>
+               <description>LTC IV Size Register</description>
+               <addressOffset>0x60</addressOffset>
+               <fields>
+                  <field>
+                     <name>IVSZ</name>
+                     <description>IV size in Bytes, mod 16</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>IL</name>
+                     <description>IV Last. Only IV data will be written into the Input FIFO</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DPAMS</name>
+               <description>LTC DPA Mask Seed Register</description>
+               <addressOffset>0x68</addressOffset>
+               <access>write-only</access>
+               <fields>
+                  <field>
+                     <name>DPAMS</name>
+                     <description>Differential Power Analysis Mask Seed</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PKASZ</name>
+               <description>LTC PKHA A Size Register</description>
+               <addressOffset>0x80</addressOffset>
+               <fields>
+                  <field>
+                     <name>PKASZ</name>
+                     <description>PKHA A Size. This is the size of the numeric value, in bytes, contained within the PKHA A Register</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>9</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PKBSZ</name>
+               <description>LTC PKHA B Size Register</description>
+               <addressOffset>0x88</addressOffset>
+               <fields>
+                  <field>
+                     <name>PKBSZ</name>
+                     <description>PKHA B Size. This is the size of the numeric value, in bytes, contained within the PKHA B Register</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>9</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PKNSZ</name>
+               <description>LTC PKHA N Size Register</description>
+               <addressOffset>0x90</addressOffset>
+               <fields>
+                  <field>
+                     <name>PKNSZ</name>
+                     <description>PKHA N Size. This is the size of the numeric value, in bytes, contained within the PKHA N Register</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>9</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PKESZ</name>
+               <description>LTC PKHA E Size Register</description>
+               <addressOffset>0x98</addressOffset>
+               <fields>
+                  <field>
+                     <name>PKESZ</name>
+                     <description>PKHA E Size. This is the size of the numeric value, in bytes, contained within the PKHA E Register</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>9</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>16</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
+               <name>CTX%s</name>
+               <description>LTC Context Register</description>
+               <addressOffset>0x100</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>CTX</name>
+                     <description>CTX</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>8</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
+               <name>KEY%s</name>
+               <description>LTC Key</description>
+               <addressOffset>0x200</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>KEY</name>
+                     <description>KEY</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>VID1</name>
+               <description>LTC Version ID Register</description>
+               <addressOffset>0x4F0</addressOffset>
+               <access>read-only</access>
+               <resetValue>0x340100</resetValue>
+               <fields>
+                  <field>
+                     <name>MIN_REV</name>
+                     <description>Minor revision number</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>MAJ_REV</name>
+                     <description>Major revision number</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>IP_ID</name>
+                     <description>ID(0x0038)</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>VID2</name>
+               <description>LTC Version ID 2 Register</description>
+               <addressOffset>0x4F4</addressOffset>
+               <access>read-only</access>
+               <resetValue>0x101</resetValue>
+               <fields>
+                  <field>
+                     <name>ECO_REV</name>
+                     <description>ECO revision number</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>ARCH_ERA</name>
+                     <description>Architectural ERA</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CHAVID</name>
+               <description>LTC CHA Version ID Register</description>
+               <addressOffset>0x4F8</addressOffset>
+               <access>read-only</access>
+               <resetValue>0x40440251</resetValue>
+               <fields>
+                  <field>
+                     <name>AESREV</name>
+                     <description>AES Revision Number</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>AESVID</name>
+                     <description>AES Version ID</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>DESREV</name>
+                     <description>DES Revision Number</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>DESVID</name>
+                     <description>DES Version ID(0x0). 0000 - High-performance DESA 0001 - Low-performance DESA</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>PKHAREV</name>
+                     <description>PK Revision Number</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>PKHAVID</name>
+                     <description>PK Version ID 0001 - 32-bit PKHA-SD 0010 - 64-bit PKHA-SD 0011 - 128-bit PKHA-SD 0100 - 16-bit PKHA-SD</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>MDHAREV</name>
+                     <description>MDHA Revision Number</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>MDHAVID</name>
+                     <description>MDHA Hashing Version ID</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FIFOSTA</name>
+               <description>LTC FIFO Status Register</description>
+               <addressOffset>0x7C0</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>IFL</name>
+                     <description>Input FIFO Level. These bits indicate the current number of entries in the Input FIFO</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>IFF</name>
+                     <description>Input FIFO Full. The Input FIFO is full and should not be written to</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>OFL</name>
+                     <description>Output FIFO Level. These bits indicate the current number of entries in the Output FIFO</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>OFF</name>
+                     <description>Output FIFO Full. The Output FIFO is full and should not be written to</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>IFIFO</name>
+               <description>LTC Input Data FIFO</description>
+               <addressOffset>0x7E0</addressOffset>
+               <access>write-only</access>
+               <fields>
+                  <field>
+                     <name>IFIFO</name>
+                     <description>IFIFO</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>OFIFO</name>
+               <description>LTC Output Data FIFO</description>
+               <addressOffset>0x7F0</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>OFIFO</name>
+                     <description>Output FIFO</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>64</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63</dimIndex>
+               <name>PKA%s</name>
+               <description>LTC PKHA A %s Register</description>
+               <addressOffset>0x800</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <dim>16</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
+               <name>PKA0%s</name>
+               <description>LTC PKHA A%s 0 Register</description>
+               <addressOffset>0x800</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>PKHA_A0</name>
+                     <description>A0 VALUE</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>16</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
+               <name>PKA1%s</name>
+               <description>LTC PKHA A1 %s Register</description>
+               <addressOffset>0x840</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>PKHA_A1</name>
+                     <description>A1 VALUE</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>16</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
+               <name>PKA2%s</name>
+               <description>LTC PKHA A2 %s Register</description>
+               <addressOffset>0x880</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>PKHA_A2</name>
+                     <description>A2 VALUE</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>16</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
+               <name>PKA3%s</name>
+               <description>LTC PKHA A3 %s Register</description>
+               <addressOffset>0x8C0</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>PKHA_A3</name>
+                     <description>A3 VALUE</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>64</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63</dimIndex>
+               <name>PKB%s</name>
+               <description>LTC PKHA B %s Register</description>
+               <addressOffset>0xA00</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <dim>16</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
+               <name>PKB0%s</name>
+               <description>LTC PKHA B%s 0 Register</description>
+               <addressOffset>0xA00</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>PKHA_B0</name>
+                     <description>B0 VALUE</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>16</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
+               <name>PKB1%s</name>
+               <description>LTC PKHA B1 %s Register</description>
+               <addressOffset>0xA40</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>PKHA_B1</name>
+                     <description>B1 VALUE</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>16</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
+               <name>PKB2%s</name>
+               <description>LTC PKHA B2 %s Register</description>
+               <addressOffset>0xA80</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>PKHA_B2</name>
+                     <description>B2 VALUE</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>16</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
+               <name>PKB3%s</name>
+               <description>LTC PKHA B3 %s Register</description>
+               <addressOffset>0xAC0</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>PKHA_B3</name>
+                     <description>B3 VALUE</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>64</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63</dimIndex>
+               <name>PKN%s</name>
+               <description>LTC PKHA N %s Register</description>
+               <addressOffset>0xC00</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <dim>16</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
+               <name>PKN0%s</name>
+               <description>LTC PKHA N%s 0 Register</description>
+               <addressOffset>0xC00</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>PKHA_N0</name>
+                     <description>N0 VALUE</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>16</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
+               <name>PKN1%s</name>
+               <description>LTC PKHA N1 %s Register</description>
+               <addressOffset>0xC40</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>PKHA_N1</name>
+                     <description>N1 VALUE</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>16</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
+               <name>PKN2%s</name>
+               <description>LTC PKHA N2 %s Register</description>
+               <addressOffset>0xC80</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>PKHA_N2</name>
+                     <description>N2 VALUE</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>16</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
+               <name>PKN3%s</name>
+               <description>LTC PKHA N3 %s Register</description>
+               <addressOffset>0xCC0</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>PKHA_N3</name>
+                     <description>N3 VALUE</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>64</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63</dimIndex>
+               <name>PKE%s</name>
+               <description>LTC PKHA E %s Register</description>
+               <addressOffset>0xE00</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <dim>16</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
+               <name>PKE0%s</name>
+               <description>LTC PKHA E%s 0 Register</description>
+               <addressOffset>0xE00</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>PKHA_E0</name>
+                     <description>E0 VALUE</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>16</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
+               <name>PKE1%s</name>
+               <description>LTC PKHA E1 %s Register</description>
+               <addressOffset>0xE40</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>PKHA_E1</name>
+                     <description>E1 VALUE</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>16</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
+               <name>PKE2%s</name>
+               <description>LTC PKHA E2 %s Register</description>
+               <addressOffset>0xE80</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>PKHA_E2</name>
+                     <description>E2 VALUE</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>16</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
+               <name>PKE3%s</name>
+               <description>LTC PKHA E3 %s Register</description>
+               <addressOffset>0xEC0</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>PKHA_E3</name>
+                     <description>E3 VALUE</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

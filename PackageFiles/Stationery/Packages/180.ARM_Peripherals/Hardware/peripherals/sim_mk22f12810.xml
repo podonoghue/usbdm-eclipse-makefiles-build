@@ -54,6 +54,7 @@ Devices using this peripheral:
       \t   }
       \t}\n\n
    ]]></template>
+   
    <category name="SOPT2" description="Clock Gating">
       <binaryOption name="sim_sopt2_rtcclkoutsel" 
          description="RTC clock out select [RTC_CLKOUT pin]"
@@ -79,9 +80,9 @@ Devices using this peripheral:
          
       <choiceOption name="sim_sopt2_lpuartsrc" 
          description="LPUART Clock select"
-         toolTip="Selects the clock source for the LPUART transmit and receive clock">
+         toolTip="Selects the clock source for the transmit and receive clock">
          <choice value="0"  name="Disabled" />
-         <choice value="1"  name="MCGFLLCLK or IRC48MCLK (see SOPT_PLLFLLSEL)" />
+         <choice value="1"  name="Peripheral Clock" />
          <choice value="2"  name="OSCERCLK clock" />
          <choice value="3"  name="MCGIRCLK clock"  isDefault="true" />
       </choiceOption>
@@ -132,7 +133,7 @@ Devices using this peripheral:
       \t/**
       \t * Get Peripheral clock frequency
       \t *
-      \t * @return Clock frequency as a uint32_t in Hz
+      \t * @return Frequency as a uint32_t in Hz
       \t */
       \tstatic uint32_t getPeripheralClock() {
       \t   
@@ -146,7 +147,7 @@ Devices using this peripheral:
       \t/**
       \t * Get LPUART0 input clock frequency
       \t *
-      \t * @return Clock frequency as a uint32_t in Hz
+      \t * @return Frequency as a uint32_t in Hz
       \t */
       \tstatic uint32_t getLpuart0InputClock() {
       \t   
@@ -162,7 +163,7 @@ Devices using this peripheral:
       \t/**
       \t * Get LPUART0 clock frequency
       \t *
-      \t * @return Clock frequency as a uint32_t in Hz
+      \t * @return Frequency as a uint32_t in Hz
       \t */
       \tstatic uint32_t getLpuart0Clock() {
       \t   
@@ -188,8 +189,8 @@ Devices using this peripheral:
       <binaryOption name="sim_sopt4_ftm0trg0src" 
          description="FlexTimer 0 Hardware Trigger 0 Source Select"
          toolTip="Selects the source of FTM hardware trigger 0" >
-         <choice value="0"  name="HSCMP0 output drives FTM0 hardware trigger 0" isDefault="true" />
-         <choice value="1"  name="FTM1 channel match drives FTM0 hardware trigger 0" />
+         <choice value="0"  name="HSCMP0 output" isDefault="true" />
+         <choice value="1"  name="FTM1 channel match" />
       </binaryOption>
    
       <binaryOption name="sim_sopt4_ftm2clksel" 
@@ -245,7 +246,7 @@ Devices using this peripheral:
          description="FlexTimer 2 Fault 0 Select"
          toolTip="Selects the source of FTM fault input  0" >
          <choice value="0"  name="FTM2_FLT0 pin" isDefault="true" />
-         <choice value="1"  name="CMP0 out" />
+         <choice value="1"  name="CMP0 output" />
       </binaryOption>
    
       <binaryOption name="sim_sopt4_ftm1flt0" 
@@ -569,10 +570,10 @@ Devices using this peripheral:
          
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate">
-      <param type="long" value="$(coreFreq)" />    <!-- Core         -->
-      <param type="long" value="$(busFreq)" />     <!-- Bus          -->
-      <param type="long" value="$(flashFreq)" />   <!-- Flash        -->
-      <param type="long" value="$(flexFreq)" />    <!-- FlexBus      -->
+      <param type="long" value="120MHz" />    <!-- Core         -->
+      <param type="long" value="60MHz" />     <!-- Bus          -->
+      <param type="long" value="27MHz" />     <!-- Flash        -->
+      <param type="long" value="30MHz" />     <!-- FlexBus      -->
    </validate>
 
    <xi:include href="_simFiles.xml"/>

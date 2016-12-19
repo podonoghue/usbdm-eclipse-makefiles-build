@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0">
+   <!-- Extra Optional files for MKL82Z7 -->
+   <projectActionList id="Options-file-list-MKL82Z7">
+      <applyWhen>
+         <and>
+            <deviceSubfamilyIs>MKL82Z7</deviceSubfamilyIs>
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+      <copy source="Startup_Code/vectors-mkl-boot.c" target="Startup_Code/vectors.c" overwrite="true" />
+      <variable id="projectOptionValue.UART-setup" 
+         name="UART setup code" 
+         description="Adds C stdio (UART) support for newlib"          
+         checkGroup="group-additional-options" >
+         <enableWhen>
+            <requirement idRef="projectOptionValue.Clock-setup"/>
+         </enableWhen>
+      </variable>
+      
+      <projectActionList>
+         <applyWhen>
+            <variableRef idRef="projectOptionValue.UART-setup" />
+         </applyWhen>
+         <copy source="Startup_Code/console-mkl.c" target="Startup_Code/console.c" />
+         <copy source="Project_Headers/console.h" target="Project_Headers/console.h" />
+      </projectActionList>
+   </projectActionList>
+
+</root>

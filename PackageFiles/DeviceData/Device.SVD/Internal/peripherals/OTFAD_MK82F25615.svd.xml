@@ -1,0 +1,409 @@
+<!--
+Devices using this peripheral: 
+      MK82F25615
+-->
+      <peripheral>
+         <?sourceFile "OTFAD_MK82F25615" ?>
+         <name>OTFAD</name>
+         <description>OTFAD</description>
+         <groupName>OTFAD</groupName>
+         <prependToName>OTFAD_</prependToName>
+         <headerStructName>OTFAD</headerStructName>
+         <baseAddress>0x400DAC00</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0xC</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x100</offset>
+            <size>0x20</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x140</offset>
+            <size>0x20</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x180</offset>
+            <size>0x20</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x1C0</offset>
+            <size>0x20</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>CR</name>
+               <description>Control Register</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>FSVM</name>
+                     <description>Force Security Violation Mode</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>No effect on the operating mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Force entry into SVM after a write with this data bit set and the data bit associated with FLDM cleared. SR[MODE] signals the operating mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FLDM</name>
+                     <description>Force Logically Disabled Mode</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>No effect on the operating mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Force entry into LDM after a write with this data bit set. SR[MODE] signals the operating mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RRAE</name>
+                     <description>Restricted Register Access Enable</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Register access is fully enabled. The OTFAD programming model registers can be accessed &quot;normally&quot;</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Register access is restricted and only the CR, SR and CRC can be accessed; others are treated as RAZ/WI</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CCTX</name>
+                     <description>CRC Context</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>00</name>
+                           <description>Enable CTX0 CRC check</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01</name>
+                           <description>Enable CTX1 CRC check</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10</name>
+                           <description>Enable CTX2 CRC check</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>11</name>
+                           <description>Enable CTX3 CRC check</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CRCE</name>
+                     <description>CRC Enable</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>CRC-32 is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>CRC-32 for the context defined by CR[CCTRX] is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CRCI</name>
+                     <description>CRC Initialization</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>CRC data register is unaffected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>CRC data register is immediately initialized after a write with this data bit set</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>GE</name>
+                     <description>Global OTFAD Enable</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>OTFAD has decryption disabled, and bypasses all data fetched by the QuadSPI</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>OTFAD has decryption enabled, and processes fetched data as defined by the hardware configuration</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SR</name>
+               <description>Status Register</description>
+               <addressOffset>0x4</addressOffset>
+               <access>read-only</access>
+               <resetValue>0x40</resetValue>
+               <fields>
+                  <field>
+                     <name>MDPCP</name>
+                     <description>MDPC Present</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>MODE</name>
+                     <description>Operating Mode</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>00</name>
+                           <description>Operating in Normal mode (NRM)</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01</name>
+                           <description>Unused (reserved)</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10</name>
+                           <description>Operating in Security Violation Mode (SVM)</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>11</name>
+                           <description>Operating in Logically Disabled Mode (LDM)</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>NCTX</name>
+                     <description>Number of Contexts</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>HRL</name>
+                     <description>Hardware Revision Level</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>RRAM</name>
+                     <description>Restricted Register Access Mode</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Register access is fully enabled. The OTFAD programming model registers can be accessed &quot;normally&quot;</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Register access is restricted and only the CR, SR and CRC can be accessed; others are treated as RAZ/WI</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>GEM</name>
+                     <description>Global Enable Mode</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>OTFAD is disabled, and bypasses all data fetched by the QuadSPI</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>OTFAD is enabled, and processes data fetched by the QuadSPI as defined by the hardware configuration</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CRC</name>
+               <description>Cyclic Redundancy Check Register</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>CRCD</name>
+                     <description>CRC Data</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <cluster>
+               <dim>4</dim>
+               <dimIncrement>64</dimIncrement>
+               <dimIndex>0,1,2,3</dimIndex>
+               <name>CTX,@p@a@i_@f</name>
+               <addressOffset>0x100</addressOffset>
+               <register>
+                  <dim>4</dim>
+                  <dimIncrement>4</dimIncrement>
+                  <dimIndex>0,1,2,3</dimIndex>
+                  <name>KEY</name>
+                  <description>AES Key Word%s</description>
+                  <addressOffset>0x0</addressOffset>
+                  <fields>
+                     <field>
+                        <name>W0KEY</name>
+                        <description>AES Key</description>
+                        <bitOffset>0</bitOffset>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <dim>2</dim>
+                  <dimIncrement>4</dimIncrement>
+                  <dimIndex>0,1</dimIndex>
+                  <name>CTR</name>
+                  <description>AES Counter Word%s</description>
+                  <addressOffset>0x10</addressOffset>
+                  <fields>
+                     <field>
+                        <name>W0CTR</name>
+                        <description>AES Counter</description>
+                        <bitOffset>0</bitOffset>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>RGD0</name>
+                  <description>AES Region Descriptor Word0</description>
+                  <addressOffset>0x18</addressOffset>
+                  <fields>
+                     <field>
+                        <name>SRTADDR</name>
+                        <description>Start Address</description>
+                        <bitOffset>10</bitOffset>
+                        <bitWidth>22</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>RGD1</name>
+                  <description>AES Region Descriptor Word1</description>
+                  <addressOffset>0x1C</addressOffset>
+                  <resetValue>0x3F8</resetValue>
+                  <fields>
+                     <field>
+                        <name>VLD</name>
+                        <description>Valid</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0</name>
+                              <description>Context is invalid</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>1</name>
+                              <description>Context is valid</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>ADE</name>
+                        <description>Aes Decryption Enable</description>
+                        <bitOffset>1</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0</name>
+                              <description>Bypass the fetched data</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>1</name>
+                              <description>Perform the CTR-AES128 mode decryption on the fetched data</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>RO</name>
+                        <description>Read-Only</description>
+                        <bitOffset>2</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0</name>
+                              <description>The context registers can be accessed normally (as defined by SR[RRAM])</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>1</name>
+                              <description>The context registers are read-only and accesses may be further restricted based on SR[RRAM]</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>ENDADDR</name>
+                        <description>End Address</description>
+                        <bitOffset>10</bitOffset>
+                        <bitWidth>22</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+            </cluster>
+         </registers>
+      </peripheral>

@@ -453,7 +453,7 @@ Protects register against writes.  Any writes are ignored</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Writes OK</description>
+                           <description>Writes allowed</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

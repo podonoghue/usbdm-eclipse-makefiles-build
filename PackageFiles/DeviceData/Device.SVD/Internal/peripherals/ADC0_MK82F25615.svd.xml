@@ -1,0 +1,967 @@
+<!--
+Devices using this peripheral: 
+      MK82F25615
+      MKL82Z7
+-->
+      <peripheral>
+         <?sourceFile "ADC0_MK82F25615" ?>
+         <name>ADC0</name>
+         <description>Analog-to-Digital Converter</description>
+         <groupName>ADC</groupName>
+         <prependToName>ADC0_</prependToName>
+         <headerStructName>ADC</headerStructName>
+         <baseAddress>0x4003B000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x50</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x54</offset>
+            <size>0x1C</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <dim>2</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>A,B</dimIndex>
+               <name>SC1%s</name>
+               <description>ADC Status and Control Registers 1</description>
+               <addressOffset>0x0</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>ADCH</name>
+                     <description>Input channel select</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>5</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>00000</name>
+                           <description>When DIFF=0, DADP0 is selected as input; when DIFF=1, DAD0 is selected as input</description>
+                           <value>0b00000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00001</name>
+                           <description>When DIFF=0, DADP1 is selected as input; when DIFF=1, DAD1 is selected as input</description>
+                           <value>0b00001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00010</name>
+                           <description>When DIFF=0, DADP2 is selected as input; when DIFF=1, DAD2 is selected as input</description>
+                           <value>0b00010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00011</name>
+                           <description>When DIFF=0, DADP3 is selected as input; when DIFF=1, DAD3 is selected as input</description>
+                           <value>0b00011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00100</name>
+                           <description>When DIFF=0, AD4 is selected as input; when DIFF=1, it is reserved</description>
+                           <value>0b00100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00101</name>
+                           <description>When DIFF=0, AD5 is selected as input; when DIFF=1, it is reserved</description>
+                           <value>0b00101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00110</name>
+                           <description>When DIFF=0, AD6 is selected as input; when DIFF=1, it is reserved</description>
+                           <value>0b00110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00111</name>
+                           <description>When DIFF=0, AD7 is selected as input; when DIFF=1, it is reserved</description>
+                           <value>0b00111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01000</name>
+                           <description>When DIFF=0, AD8 is selected as input; when DIFF=1, it is reserved</description>
+                           <value>0b01000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01001</name>
+                           <description>When DIFF=0, AD9 is selected as input; when DIFF=1, it is reserved</description>
+                           <value>0b01001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01010</name>
+                           <description>When DIFF=0, AD10 is selected as input; when DIFF=1, it is reserved</description>
+                           <value>0b01010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01011</name>
+                           <description>When DIFF=0, AD11 is selected as input; when DIFF=1, it is reserved</description>
+                           <value>0b01011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01100</name>
+                           <description>When DIFF=0, AD12 is selected as input; when DIFF=1, it is reserved</description>
+                           <value>0b01100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01101</name>
+                           <description>When DIFF=0, AD13 is selected as input; when DIFF=1, it is reserved</description>
+                           <value>0b01101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01110</name>
+                           <description>When DIFF=0, AD14 is selected as input; when DIFF=1, it is reserved</description>
+                           <value>0b01110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01111</name>
+                           <description>When DIFF=0, AD15 is selected as input; when DIFF=1, it is reserved</description>
+                           <value>0b01111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10000</name>
+                           <description>When DIFF=0, AD16 is selected as input; when DIFF=1, it is reserved</description>
+                           <value>0b10000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10001</name>
+                           <description>When DIFF=0, AD17 is selected as input; when DIFF=1, it is reserved</description>
+                           <value>0b10001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10010</name>
+                           <description>When DIFF=0, AD18 is selected as input; when DIFF=1, it is reserved</description>
+                           <value>0b10010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10011</name>
+                           <description>When DIFF=0, AD19 is selected as input; when DIFF=1, it is reserved</description>
+                           <value>0b10011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10100</name>
+                           <description>When DIFF=0, AD20 is selected as input; when DIFF=1, it is reserved</description>
+                           <value>0b10100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10101</name>
+                           <description>When DIFF=0, AD21 is selected as input; when DIFF=1, it is reserved</description>
+                           <value>0b10101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10110</name>
+                           <description>When DIFF=0, AD22 is selected as input; when DIFF=1, it is reserved</description>
+                           <value>0b10110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10111</name>
+                           <description>When DIFF=0, AD23 is selected as input; when DIFF=1, it is reserved</description>
+                           <value>0b10111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>11010</name>
+                           <description>When DIFF=0, Temp Sensor (single-ended) is selected as input; when DIFF=1, Temp Sensor (differential) is selected as input</description>
+                           <value>0b11010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>11011</name>
+                           <description>When DIFF=0, Bandgap (single-ended) is selected as input; when DIFF=1, Bandgap (differential) is selected as input</description>
+                           <value>0b11011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>11101</name>
+                           <description>When DIFF=0,VREFSH is selected as input; when DIFF=1, -VREFSH (differential) is selected as input. Voltage reference selected is determined by SC2[REFSEL]</description>
+                           <value>0b11101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>11110</name>
+                           <description>When DIFF=0,VREFSL is selected as input; when DIFF=1, it is reserved. Voltage reference selected is determined by SC2[REFSEL]</description>
+                           <value>0b11110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>11111</name>
+                           <description>Module is disabled</description>
+                           <value>0b11111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DIFF</name>
+                     <description>Differential Mode Enable</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Single-ended conversions and input channels are selected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Differential conversions and input channels are selected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>AIEN</name>
+                     <description>Interrupt Enable</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Conversion complete interrupt is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Conversion complete interrupt is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>COCO</name>
+                     <description>Conversion Complete Flag</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Conversion is not completed</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Conversion is completed</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CFG1</name>
+               <description>ADC Configuration Register 1</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>ADICLK</name>
+                     <description>Input Clock Select</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>00</name>
+                           <description>Bus clock</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01</name>
+                           <description>Alternate clock 2 (ALTCLK2)</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10</name>
+                           <description>Alternate clock (ALTCLK)</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>11</name>
+                           <description>Asynchronous clock (ADACK)</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MODE</name>
+                     <description>Conversion mode selection</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>00</name>
+                           <description>When DIFF=0:It is single-ended 8-bit conversion; when DIFF=1, it is differential 9-bit conversion with 2&apos;s complement output</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01</name>
+                           <description>When DIFF=0:It is single-ended 12-bit conversion ; when DIFF=1, it is differential 13-bit conversion with 2&apos;s complement output</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10</name>
+                           <description>When DIFF=0:It is single-ended 10-bit conversion. ; when DIFF=1, it is differential 11-bit conversion with 2&apos;s complement output</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>11</name>
+                           <description>When DIFF=0:It is single-ended 16-bit conversion..; when DIFF=1, it is differential 16-bit conversion with 2&apos;s complement output</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ADLSMP</name>
+                     <description>Sample Time Configuration</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Short sample time</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Long sample time</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ADIV</name>
+                     <description>Clock Divide Select</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>00</name>
+                           <description>The divide ratio is 1 and the clock rate is input clock</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01</name>
+                           <description>The divide ratio is 2 and the clock rate is (input clock)/2</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10</name>
+                           <description>The divide ratio is 4 and the clock rate is (input clock)/4</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>11</name>
+                           <description>The divide ratio is 8 and the clock rate is (input clock)/8</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ADLPC</name>
+                     <description>Low-Power Configuration</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Normal power configuration</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Low-power configuration. The power is reduced at the expense of maximum clock speed</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CFG2</name>
+               <description>ADC Configuration Register 2</description>
+               <addressOffset>0xC</addressOffset>
+               <fields>
+                  <field>
+                     <name>ADLSTS</name>
+                     <description>Long Sample Time Select</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>00</name>
+                           <description>Default longest sample time; 20 extra ADCK cycles; 24 ADCK cycles total</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01</name>
+                           <description>12 extra ADCK cycles; 16 ADCK cycles total sample time</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10</name>
+                           <description>6 extra ADCK cycles; 10 ADCK cycles total sample time</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>11</name>
+                           <description>2 extra ADCK cycles; 6 ADCK cycles total sample time</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ADHSC</name>
+                     <description>High-Speed Configuration</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Normal conversion sequence selected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>High-speed conversion sequence selected with 2 additional ADCK cycles to total conversion time</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ADACKEN</name>
+                     <description>Asynchronous Clock Output Enable</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Asynchronous clock output disabled; Asynchronous clock is enabled only if selected by ADICLK and a conversion is active</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Asynchronous clock and clock output is enabled regardless of the state of the ADC</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MUXSEL</name>
+                     <description>ADC Mux Select</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>ADxxa channels are selected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>ADxxb channels are selected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>2</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>A,B</dimIndex>
+               <name>R%s</name>
+               <description>ADC Data Result Register</description>
+               <addressOffset>0x10</addressOffset>
+               <access>read-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>D</name>
+                     <description>Data result</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>2</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>1,2</dimIndex>
+               <name>CV%s</name>
+               <description>Compare Value</description>
+               <addressOffset>0x18</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>CV</name>
+                     <description>Compare Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SC2</name>
+               <description>Status and Control Register 2</description>
+               <addressOffset>0x20</addressOffset>
+               <fields>
+                  <field>
+                     <name>REFSEL</name>
+                     <description>Voltage Reference Selection</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>00</name>
+                           <description>Default voltage reference pin pair, that is, external pins VREFH and VREFL</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01</name>
+                           <description>Alternate reference pair, that is, VALTH and VALTL . This pair may be additional external pins or internal sources depending on the MCU configuration. See the chip configuration information for details specific to this MCU</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DMAEN</name>
+                     <description>DMA Enable</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>DMA is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>DMA is enabled and will assert the ADC DMA request during an ADC conversion complete event noted when any of the SC1n[COCO] flags is asserted</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ACREN</name>
+                     <description>Compare Function Range Enable</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Range function disabled. Only CV1 is compared</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Range function enabled. Both CV1 and CV2 are compared</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ACFGT</name>
+                     <description>Compare Function Greater Than Enable</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Configures less than threshold, outside range not inclusive and inside range not inclusive; functionality based on the values placed in CV1 and CV2</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Configures greater than or equal to threshold, outside and inside ranges inclusive; functionality based on the values placed in CV1 and CV2</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ACFE</name>
+                     <description>Compare Function Enable</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Compare function disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Compare function enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ADTRG</name>
+                     <description>Conversion Trigger Select</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Software trigger selected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Hardware trigger selected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ADACT</name>
+                     <description>Conversion Active</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Conversion not in progress</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Conversion in progress</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SC3</name>
+               <description>Status and Control Register 3</description>
+               <addressOffset>0x24</addressOffset>
+               <fields>
+                  <field>
+                     <name>AVGS</name>
+                     <description>Hardware Average Select</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>00</name>
+                           <description>4 samples averaged</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01</name>
+                           <description>8 samples averaged</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10</name>
+                           <description>16 samples averaged</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>11</name>
+                           <description>32 samples averaged</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>AVGE</name>
+                     <description>Hardware Average Enable</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Hardware average function disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Hardware average function enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ADCO</name>
+                     <description>Continuous Conversion Enable</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>One conversion or one set of conversions if the hardware average function is enabled, that is, AVGE=1, after initiating a conversion</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Continuous conversions or sets of conversions if the hardware average function is enabled, that is, AVGE=1, after initiating a conversion</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CALF</name>
+                     <description>Calibration Failed Flag</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Calibration completed normally</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Calibration failed. ADC accuracy specifications are not guaranteed</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CAL</name>
+                     <description>Calibration</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>OFS</name>
+               <description>ADC Offset Correction Register</description>
+               <addressOffset>0x28</addressOffset>
+               <resetValue>0x4</resetValue>
+               <fields>
+                  <field>
+                     <name>OFS</name>
+                     <description>Offset Error Correction Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PG</name>
+               <description>ADC Plus-Side Gain Register</description>
+               <addressOffset>0x2C</addressOffset>
+               <resetValue>0x8200</resetValue>
+               <fields>
+                  <field>
+                     <name>PG</name>
+                     <description>Plus-Side Gain</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MG</name>
+               <description>ADC Minus-Side Gain Register</description>
+               <addressOffset>0x30</addressOffset>
+               <resetValue>0x8200</resetValue>
+               <fields>
+                  <field>
+                     <name>MG</name>
+                     <description>Minus-Side Gain</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CLPD</name>
+               <description>ADC Plus-Side General Calibration Value Register</description>
+               <addressOffset>0x34</addressOffset>
+               <resetValue>0xA</resetValue>
+               <fields>
+                  <field>
+                     <name>CLPD</name>
+                     <description>Calibration Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CLPS</name>
+               <description>ADC Plus-Side General Calibration Value Register</description>
+               <addressOffset>0x38</addressOffset>
+               <resetValue>0x20</resetValue>
+               <fields>
+                  <field>
+                     <name>CLPS</name>
+                     <description>Calibration Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CLP4</name>
+               <description>ADC Plus-Side General Calibration Value Register</description>
+               <addressOffset>0x3C</addressOffset>
+               <resetValue>0x200</resetValue>
+               <fields>
+                  <field>
+                     <name>CLP4</name>
+                     <description>Calibration Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CLP3</name>
+               <description>ADC Plus-Side General Calibration Value Register</description>
+               <addressOffset>0x40</addressOffset>
+               <resetValue>0x100</resetValue>
+               <fields>
+                  <field>
+                     <name>CLP3</name>
+                     <description>Calibration Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>9</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CLP2</name>
+               <description>ADC Plus-Side General Calibration Value Register</description>
+               <addressOffset>0x44</addressOffset>
+               <resetValue>0x80</resetValue>
+               <fields>
+                  <field>
+                     <name>CLP2</name>
+                     <description>Calibration Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CLP1</name>
+               <description>ADC Plus-Side General Calibration Value Register</description>
+               <addressOffset>0x48</addressOffset>
+               <resetValue>0x40</resetValue>
+               <fields>
+                  <field>
+                     <name>CLP1</name>
+                     <description>Calibration Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CLP0</name>
+               <description>ADC Plus-Side General Calibration Value Register</description>
+               <addressOffset>0x4C</addressOffset>
+               <resetValue>0x20</resetValue>
+               <fields>
+                  <field>
+                     <name>CLP0</name>
+                     <description>Calibration Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CLMD</name>
+               <description>ADC Minus-Side General Calibration Value Register</description>
+               <addressOffset>0x54</addressOffset>
+               <resetValue>0xA</resetValue>
+               <fields>
+                  <field>
+                     <name>CLMD</name>
+                     <description>Calibration Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CLMS</name>
+               <description>ADC Minus-Side General Calibration Value Register</description>
+               <addressOffset>0x58</addressOffset>
+               <resetValue>0x20</resetValue>
+               <fields>
+                  <field>
+                     <name>CLMS</name>
+                     <description>Calibration Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CLM4</name>
+               <description>ADC Minus-Side General Calibration Value Register</description>
+               <addressOffset>0x5C</addressOffset>
+               <resetValue>0x200</resetValue>
+               <fields>
+                  <field>
+                     <name>CLM4</name>
+                     <description>Calibration Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CLM3</name>
+               <description>ADC Minus-Side General Calibration Value Register</description>
+               <addressOffset>0x60</addressOffset>
+               <resetValue>0x100</resetValue>
+               <fields>
+                  <field>
+                     <name>CLM3</name>
+                     <description>Calibration Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>9</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CLM2</name>
+               <description>ADC Minus-Side General Calibration Value Register</description>
+               <addressOffset>0x64</addressOffset>
+               <resetValue>0x80</resetValue>
+               <fields>
+                  <field>
+                     <name>CLM2</name>
+                     <description>Calibration Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CLM1</name>
+               <description>ADC Minus-Side General Calibration Value Register</description>
+               <addressOffset>0x68</addressOffset>
+               <resetValue>0x40</resetValue>
+               <fields>
+                  <field>
+                     <name>CLM1</name>
+                     <description>Calibration Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CLM0</name>
+               <description>ADC Minus-Side General Calibration Value Register</description>
+               <addressOffset>0x6C</addressOffset>
+               <resetValue>0x20</resetValue>
+               <fields>
+                  <field>
+                     <name>CLM0</name>
+                     <description>Calibration Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

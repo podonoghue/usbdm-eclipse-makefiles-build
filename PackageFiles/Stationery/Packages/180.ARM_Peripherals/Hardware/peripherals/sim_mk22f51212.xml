@@ -673,10 +673,10 @@ Devices using this peripheral:
          
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate">
-      <param type="long" value="120000000" />    <!-- Core         -->
-      <param type="long" value="60000000" />     <!-- Bus          -->
-      <param type="long" value="30000000" />     <!-- Flash        -->
-      <param type="long" value="26670000" />     <!-- FlexBus      -->
+      <param type="long" value="120MHz" />    <!-- Core         -->
+      <param type="long" value="60MHz" />     <!-- Bus          -->
+      <param type="long" value="27MHz" />     <!-- Flash        -->
+      <param type="long" value="30MHz" />     <!-- FlexBus      -->
    </validate>
 
    <xi:include href="_simFiles.xml"/>

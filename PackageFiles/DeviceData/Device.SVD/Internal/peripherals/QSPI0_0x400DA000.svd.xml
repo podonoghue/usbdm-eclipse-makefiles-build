@@ -1,0 +1,1974 @@
+<!--
+Devices using this peripheral: 
+      MK82F25615
+-->
+      <peripheral>
+         <?sourceFile "QSPI0_0x400DA000" ?>
+         <name>QSPI0</name>
+         <description>QSPI</description>
+         <groupName>QSPI</groupName>
+         <prependToName>QSPI0</prependToName>
+         <headerStructName>QSPI</headerStructName>
+         <baseAddress>0x400DA000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x8</offset>
+            <size>0x20</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x30</offset>
+            <size>0xC</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x100</offset>
+            <size>0x14</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x150</offset>
+            <size>0x1C</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x16C</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x180</offset>
+            <size>0x14</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x200</offset>
+            <size>0x40</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x300</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x310</offset>
+            <size>0x100</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>MCR</name>
+               <description>Module Configuration Register</description>
+               <addressOffset>0x0</addressOffset>
+               <resetValue>0xF400C</resetValue>
+               <fields>
+                  <field>
+                     <name>SWRSTSD</name>
+                     <description>Software reset for Serial Flash domain</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>No action</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Serial Flash domain flops are reset. Does not reset configuration registers. It is advisable to reset both the serial flash domain and AHB domain at the same time. Resetting only one domain might lead to side effects. The software resets need the clock to be running to propagate to the design. The MCR[MDIS] should therefore be set to 0 when the software reset bits are asserted. Also, before they can be deasserted again (by setting MCR[SWRSTSD] to 0), it is recommended to set the MCR[MDIS] bit to 1. Once the software resets have been deasserted, the normal operation can be started by setting the MCR[MDIS] bit to 0</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SWRSTHD</name>
+                     <description>Software reset for AHB domain</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>No action</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>AHB domain flops are reset. Does not reset configuration registers. It is advisable to reset both the serial flash domain and AHB domain at the same time. Resetting only one domain might lead to side effects. The software resets need the clock to be running to propagate to the design. The MCR[MDIS] should therefore be set to 0 when the software reset bits are asserted. Also, before they can be deasserted again (by setting MCR[SWRSTHD] to 0), it is recommended to set the MCR[MDIS] bit to 1. Once the software resets have been deasserted, the normal operation can be started by setting the MCR[MDIS] bit to 0</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>END_CFG</name>
+                     <description>Defines the endianness of the QSPI module.For more details refer to Byte Ordering Endianess</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>DQS_LAT_EN</name>
+                     <description>DQS Latency Enable:\n
+This field is valid when latency is included in between read access from FLash in case when QSPI_MCR[DQS_EN] is 1</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>DQS Latency disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>DQS feature with latency included enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DQS_EN</name>
+                     <description>DQS enable:\n
+This field is valid for both SDR and DDR mode</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>DQS disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>DQS enabled. When enabled, the incoming data is sampled on both the edges of DQS input when QSPI_MCR[DDR_EN] is set, else, on only one edge when QSPI_MCR[DDR_EN] is 0. The QSPI_SMPR[DDR_SMP] values are ignored</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DDR_EN</name>
+                     <description>DDR mode enable</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>2x and 4x clocks are disabled for SDR instructions only</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>2x and 4x clocks are enabled supports both SDR and DDR instruction</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CLR_RXF</name>
+                     <description>Clear RX FIFO. Invalidates the RX Buffer. This is a self-clearing field</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>No action</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Read and write pointers of the RX Buffer are reset to 0. QSPI_RBSR[RDBFL] is reset to 0</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CLR_TXF</name>
+                     <description>Clear TX FIFO/Buffer. Invalidates the TX Buffer content. This is a self-clearing field</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>No action</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Read and write pointers of the TX Buffer are reset to 0. QSPI_TBSR[TRCTR] is reset to 0</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MDIS</name>
+                     <description>Module Disable</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Enable QSPI clocks</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Allow external logic to disable QSPI clocks</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SCLKCFG</name>
+                     <description>Serial Clock Configuration</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>IPCR</name>
+               <description>IP Configuration Register</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>IDATSZ</name>
+                     <description>IP data transfer size. Defines the data transfer size in bytes of the IP command</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>PAR_EN</name>
+                     <description>When set, a transaction to two serial flash devices is triggered in parallel mode</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SEQID</name>
+                     <description>Points to a sequence in the Look-up table</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FLSHCR</name>
+               <description>Flash Configuration Register</description>
+               <addressOffset>0xC</addressOffset>
+               <resetValue>0x303</resetValue>
+               <fields>
+                  <field>
+                     <name>TCSS</name>
+                     <description>Serial flash CS setup time in terms of serial flash clock cycles</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>TCSH</name>
+                     <description>Serial flash CS hold time in terms of serial flash clock cycles</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>TDH</name>
+                     <description>Serial flash Data In hold time:\n
+This helps in meeting the Data In Hold time requirement of a Flash</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>00</name>
+                           <description>Data aligned with the posedge of Internal reference clock of QSPI</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01</name>
+                           <description>Data aligned with 2x serial flash half clock</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10</name>
+                           <description>Data aligned with 4x serial flash half clock</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>BUF0CR</name>
+               <description>Buffer0 Configuration Register</description>
+               <addressOffset>0x10</addressOffset>
+               <resetValue>0x2</resetValue>
+               <fields>
+                  <field>
+                     <name>MSTRID</name>
+                     <description>Master ID:\n
+The ID of the AHB master associated with BUFFER0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>ADATSZ</name>
+                     <description>AHB data transfer size</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>HP_EN</name>
+                     <description>High Priority Enable: When set, the master associated with this buffer is assigned a priority higher than the rest of the masters</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>BUF1CR</name>
+               <description>Buffer1 Configuration Register</description>
+               <addressOffset>0x14</addressOffset>
+               <resetValue>0x3</resetValue>
+               <fields>
+                  <field>
+                     <name>MSTRID</name>
+                     <description>Master ID:\n
+The ID of the AHB master associated with BUFFER1</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>ADATSZ</name>
+                     <description>AHB data transfer size</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>BUF2CR</name>
+               <description>Buffer2 Configuration Register</description>
+               <addressOffset>0x18</addressOffset>
+               <resetValue>0x4</resetValue>
+               <fields>
+                  <field>
+                     <name>MSTRID</name>
+                     <description>Master ID:\n
+The ID of the AHB master associated with BUFFER2</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>ADATSZ</name>
+                     <description>AHB data transfer size</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>BUF3CR</name>
+               <description>Buffer3 Configuration Register</description>
+               <addressOffset>0x1C</addressOffset>
+               <resetValue>0x80000000</resetValue>
+               <fields>
+                  <field>
+                     <name>MSTRID</name>
+                     <description>Master ID:\n
+The ID of the AHB master associated with BUFFER3</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>ADATSZ</name>
+                     <description>AHB data transfer size</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>ALLMST</name>
+                     <description>All master enable:\n
+When set, buffer3 acts as an all-master buffer</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>BFGENCR</name>
+               <description>Buffer Generic Configuration Register</description>
+               <addressOffset>0x20</addressOffset>
+               <fields>
+                  <field>
+                     <name>SEQID</name>
+                     <description>Points to a sequence in the Look-up-table</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>PAR_EN</name>
+                     <description>When set, a transaction to two serial flash devices is triggered in parallel mode</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SOCCR</name>
+               <description>SOC Configuration Register</description>
+               <addressOffset>0x24</addressOffset>
+               <fields>
+                  <field>
+                     <name>QSPISRC</name>
+                     <description>QSPI clock source select</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>000</name>
+                           <description>Core/system clock</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>001</name>
+                           <description>MCGFLL clock</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>010</name>
+                           <description>MCGPLL clock</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>011</name>
+                           <description>MCGPLL 2x clock (DDR mode specific)</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>100</name>
+                           <description>IRC48M clock</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>101</name>
+                           <description>OSCERCLK clock</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>110</name>
+                           <description>MCGIRCLK clock</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DQSLPEN</name>
+                     <description>When this bit is set the internal generated DQS is selected and looped back to QSPI, without going to DQS pad. DQSPADLPEN should be cleared when this bit is set</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>DQS loop back is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>DQS loop back is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DQSPADLPEN</name>
+                     <description>When this bit is set the internal generated DQS will be sent to the DQS pad first and then looped back to QSPI. DQSLPEN should be cleared when this bit is set</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>DQS loop back from DQS pad is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>DQS loop back from DQS pad is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DQSPHASEL</name>
+                     <description>Select phase shift for internal DQS generation. These bits are always zero in SDR mode</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>00</name>
+                           <description>No phase shift</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01</name>
+                           <description>Select 45 degree phase shift</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10</name>
+                           <description>Select 90 degree phase shift</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>11</name>
+                           <description>Select 135 degree phase shift</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DQSINVSEL</name>
+                     <description>Select clock source for internal DQS generation</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Use 1x internal reference clock for the DQS generation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Use inverse 1x internal reference clock for the DQS generation</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CK2EN</name>
+                     <description>Flash CK2 clock pin enable</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>CK2 flash clock is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>CK2 flash clock is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DIFFCKEN</name>
+                     <description>Differential flash clock pins enable</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Differential flash clock is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Differential flash clock is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>OCTEN</name>
+                     <description>Octal data pins enable</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>QSPI0B_DATAx pins are assigned to QSPI Port B</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>QSPI0B_DATAx pins are assigned to QSPI Port A</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DLYTAPSELA</name>
+                     <description>Delay chain tap number selection for QSPI Port A DQS</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>6</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>000000</name>
+                           <description>Select 1 delay chain tap</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>000001</name>
+                           <description>Select 2 delay chain tap</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0000010</name>
+                           <description>Select 3 delay chain tap</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0000011</name>
+                           <description>Select 4 delay chain tap</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000100</name>
+                           <description>Select 5 delay chain tap</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000101</name>
+                           <description>Select 6 delay chain tap</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000110</name>
+                           <description>Select 7 delay chain tap</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000111</name>
+                           <description>Select 8 delay chain tap</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>000001000</name>
+                           <description>Select 9 delay chain tap</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>000001001</name>
+                           <description>Select 10 delay chain tap</description>
+                           <value>0b1001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>000001010</name>
+                           <description>Select 11 delay chain tap</description>
+                           <value>0b1010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>000001011</name>
+                           <description>Select 12 delay chain tap</description>
+                           <value>0b1011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>000001100</name>
+                           <description>Select 13 delay chain tap</description>
+                           <value>0b1100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>000001101</name>
+                           <description>Select 14 delay chain tap</description>
+                           <value>0b1101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>000001110</name>
+                           <description>Select 15 delay chain tap</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>000001111</name>
+                           <description>Select 16 delay chain tap</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0000010000</name>
+                           <description>Select 17 delay chain tap</description>
+                           <value>0b10000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0000010001</name>
+                           <description>Select 18 delay chain tap</description>
+                           <value>0b10001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0000010010</name>
+                           <description>Select 19 delay chain tap</description>
+                           <value>0b10010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0000010011</name>
+                           <description>Select 20 delay chain tap</description>
+                           <value>0b10011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0000010100</name>
+                           <description>Select 21 delay chain tap</description>
+                           <value>0b10100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0000010101</name>
+                           <description>Select 22 delay chain tap</description>
+                           <value>0b10101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0000010110</name>
+                           <description>Select 23 delay chain tap</description>
+                           <value>0b10110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0000010111</name>
+                           <description>Select 24 delay chain tap</description>
+                           <value>0b10111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0000011000</name>
+                           <description>Select 25 delay chain tap</description>
+                           <value>0b11000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0000011001</name>
+                           <description>Select 26 delay chain tap</description>
+                           <value>0b11001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0000011010</name>
+                           <description>Select 27 delay chain tap</description>
+                           <value>0b11010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0000011011</name>
+                           <description>Select 28 delay chain tap</description>
+                           <value>0b11011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0000011100</name>
+                           <description>Select 29 delay chain tap</description>
+                           <value>0b11100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0000011101</name>
+                           <description>Select 30 delay chain tap</description>
+                           <value>0b11101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0000011110</name>
+                           <description>Select 31 delay chain tap</description>
+                           <value>0b11110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0000011111</name>
+                           <description>Select 32 delay chain tap</description>
+                           <value>0b11111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000100000</name>
+                           <description>Select 33 delay chain tap</description>
+                           <value>0b100000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000100001</name>
+                           <description>Select 34 delay chain tap</description>
+                           <value>0b100001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000100010</name>
+                           <description>Select 35 delay chain tap</description>
+                           <value>0b100010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000100011</name>
+                           <description>Select 36 delay chain tap</description>
+                           <value>0b100011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000100100</name>
+                           <description>Select 37 delay chain tap</description>
+                           <value>0b100100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000100101</name>
+                           <description>Select 38 delay chain tap</description>
+                           <value>0b100101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000100110</name>
+                           <description>Select 39 delay chain tap</description>
+                           <value>0b100110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000100111</name>
+                           <description>Select 40 delay chain tap</description>
+                           <value>0b100111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000101000</name>
+                           <description>Select 41 delay chain tap</description>
+                           <value>0b101000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000101001</name>
+                           <description>Select 42 delay chain tap</description>
+                           <value>0b101001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000101010</name>
+                           <description>Select 43 delay chain tap</description>
+                           <value>0b101010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000101011</name>
+                           <description>Select 44 delay chain tap</description>
+                           <value>0b101011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000101100</name>
+                           <description>Select 45 delay chain tap</description>
+                           <value>0b101100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000101101</name>
+                           <description>Select 46 delay chain tap</description>
+                           <value>0b101101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000101110</name>
+                           <description>Select 47 delay chain tap</description>
+                           <value>0b101110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000101111</name>
+                           <description>Select 48 delay chain tap</description>
+                           <value>0b101111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000110000</name>
+                           <description>Select 49 delay chain tap</description>
+                           <value>0b110000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000110001</name>
+                           <description>Select 50 delay chain tap</description>
+                           <value>0b110001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000110010</name>
+                           <description>Select 51 delay chain tap</description>
+                           <value>0b110010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000110011</name>
+                           <description>Select 52 delay chain tap</description>
+                           <value>0b110011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000110100</name>
+                           <description>Select 53 delay chain tap</description>
+                           <value>0b110100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000110101</name>
+                           <description>Select 54 delay chain tap</description>
+                           <value>0b110101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000110110</name>
+                           <description>Select 55 delay chain tap</description>
+                           <value>0b110110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000110111</name>
+                           <description>Select 56 delay chain tap</description>
+                           <value>0b110111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000111000</name>
+                           <description>Select 57 delay chain tap</description>
+                           <value>0b111000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000111001</name>
+                           <description>Select 58 delay chain tap</description>
+                           <value>0b111001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000111010</name>
+                           <description>Select 59 delay chain tap</description>
+                           <value>0b111010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000111011</name>
+                           <description>Select 60 delay chain tap</description>
+                           <value>0b111011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000111100</name>
+                           <description>Select 61 delay chain tap</description>
+                           <value>0b111100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000111101</name>
+                           <description>Select 62 delay chain tap</description>
+                           <value>0b111101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000111110</name>
+                           <description>Select 63 delay chain tap</description>
+                           <value>0b111110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>00000111111</name>
+                           <description>Select 64 delay chain tap</description>
+                           <value>0b111111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="DLYTAPSELA" > <name>DLYTAPSELB</name> <description>Delay chain tap number selection for QSPI Port B DQS</description> <bitOffset>24</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>BUF0IND</name>
+               <description>Buffer0 Top Index Register</description>
+               <addressOffset>0x30</addressOffset>
+               <fields>
+                  <field>
+                     <name>TPINDX0</name>
+                     <description>Top index of buffer 0</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>29</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>BUF1IND</name>
+               <description>Buffer1 Top Index Register</description>
+               <addressOffset>0x34</addressOffset>
+               <fields>
+                  <field>
+                     <name>TPINDX1</name>
+                     <description>Top index of buffer 1</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>29</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>BUF2IND</name>
+               <description>Buffer2 Top Index Register</description>
+               <addressOffset>0x38</addressOffset>
+               <fields>
+                  <field>
+                     <name>TPINDX2</name>
+                     <description>Top index of buffer 2</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>29</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SFAR</name>
+               <description>Serial Flash Address Register</description>
+               <addressOffset>0x100</addressOffset>
+               <fields>
+                  <field>
+                     <name>SFADR</name>
+                     <description>Serial Flash Address. The register content is used as byte address for all following IP Commands</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SFACR</name>
+               <description>Serial Flash Address Configuration Register</description>
+               <addressOffset>0x104</addressOffset>
+               <fields>
+                  <field>
+                     <name>CAS</name>
+                     <description>Column Address Space</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>WA</name>
+                     <description>Word Addressable</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Byte addressable serial flash mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Word (2 byte) addressable serial flash mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SMPR</name>
+               <description>Sampling Register</description>
+               <addressOffset>0x108</addressOffset>
+               <fields>
+                  <field>
+                     <name>HSENA</name>
+                     <description>Half Speed serial flash clock Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Disable divide by 2 of serial flash clock for half speed commands</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Enable divide by 2 of serial flash clock for half speed commands</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>HSPHS</name>
+                     <description>Half Speed Phase selection for SDR instructions</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Select sampling at non-inverted clock</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Select sampling at inverted clock</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>HSDLY</name>
+                     <description>Half Speed Delay selection for SDR instructions</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>One clock cycle delay</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Two clock cycle delay</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FSPHS</name>
+                     <description>Full Speed Phase selection for SDR instructions</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Select sampling at non-inverted clock</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Select sampling at inverted clock. This bit is also used in DQS mode and ignored when using non-DQS DDR instructions</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FSDLY</name>
+                     <description>Full Speed Delay selection for SDR instructions. Select the delay with respect to the reference edge for the sample point valid for full speed commands:</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>One clock cycle delay</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Two clock cycles delay. This bit is also used in DQS mode and ignored when using non-DQS DDR instructions</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DDRSMP</name>
+                     <description>DDR Sampling point</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RBSR</name>
+               <description>RX Buffer Status Register</description>
+               <addressOffset>0x10C</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>RDBFL</name>
+                     <description>RX Buffer Fill Level, indicates how many entries of 4 bytes are still available in the RX Buffer</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>RDCTR</name>
+                     <description>Read Counter, indicates how many entries of 4 bytes have been removed from the RX Buffer</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RBCT</name>
+               <description>RX Buffer Control Register</description>
+               <addressOffset>0x110</addressOffset>
+               <fields>
+                  <field>
+                     <name>WMRK</name>
+                     <description>RX Buffer Watermark: This field determines when the readout action of the RX Buffer is triggered</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>RXBRD</name>
+                     <description>RX Buffer Readout: This bit specifies the access scheme for the RX Buffer readout</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>RX Buffer content is read using the AHB Bus registers QSPI_ARDB0 to QSPI_ARDB15. For details, refer to Exclusive Access to Serial Flash for AHB Commands</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>RX Buffer content is read using the IP Bus registers QSPI_RBDR0 to QSPI_RBDR15</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TBSR</name>
+               <description>TX Buffer Status Register</description>
+               <addressOffset>0x150</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>TRBFL</name>
+                     <description>TX Buffer Fill Level</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>TRCTR</name>
+                     <description>Transmit Counter</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TBDR</name>
+               <description>TX Buffer Data Register</description>
+               <addressOffset>0x154</addressOffset>
+               <fields>
+                  <field>
+                     <name>TXDATA</name>
+                     <description>TX Data On write access the data is written into the next available entry of the TX Buffer and the QPSI_TBSR[TRBFL] field is updated accordingly</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TBCT</name>
+               <description>Tx Buffer Control Register</description>
+               <addressOffset>0x158</addressOffset>
+               <fields>
+                  <field>
+                     <name>WMRK</name>
+                     <description>Determines the watermark for the TX Buffer</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SR</name>
+               <description>Status Register</description>
+               <addressOffset>0x15C</addressOffset>
+               <access>read-only</access>
+               <resetValue>0x2003800</resetValue>
+               <fields>
+                  <field>
+                     <name>BUSY</name>
+                     <description>Module Busy: Asserted when module is currently busy handling a transaction to an external flash device</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>IP_ACC</name>
+                     <description>IP Access: Asserted when transaction currently executed was initiated by IP bus</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AHB_ACC</name>
+                     <description>AHB Access: Asserted when the transaction currently executed was initiated by AHB bus</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AHBGNT</name>
+                     <description>AHB Command priority Granted: Asserted when another module has been granted priority of AHB Commands against IP Commands</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AHBTRN</name>
+                     <description>AHB Access Transaction pending: Asserted when there is a pending request on the AHB interface</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AHB0NE</name>
+                     <description>AHB 0 Buffer Not Empty: Asserted when AHB 0 buffer contains data</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AHB1NE</name>
+                     <description>AHB 1 Buffer Not Empty: Asserted when AHB 1 buffer contains data</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AHB2NE</name>
+                     <description>AHB 2 Buffer Not Empty: Asserted when AHB 2 buffer contains data</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AHB3NE</name>
+                     <description>AHB 3 Buffer Not Empty: Asserted when AHB 3 buffer contains data</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AHB0FUL</name>
+                     <description>AHB 0 Buffer Full: Asserted when AHB 0 buffer is full</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AHB1FUL</name>
+                     <description>AHB 1 Buffer Full: Asserted when AHB 1 buffer is full</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AHB2FUL</name>
+                     <description>AHB 2 Buffer Full: Asserted when AHB 2 buffer is full</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AHB3FUL</name>
+                     <description>AHB 3 Buffer Full: Asserted when AHB 3 buffer is full</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RXWE</name>
+                     <description>RX Buffer Watermark Exceeded: Asserted when the number of valid entries in the RX Buffer exceeds the number given in the QSPI_RBCT[WMRK] field</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RXFULL</name>
+                     <description>RX Buffer Full: Asserted when the RX Buffer is full, i</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RXDMA</name>
+                     <description>RX Buffer DMA: Asserted when RX Buffer read out via DMA is active i.e DMA is requested or running</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TXEDA</name>
+                     <description>Tx Buffer Enough Data Available</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TXWA</name>
+                     <description>TX Buffer watermark Available</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TXDMA</name>
+                     <description>TXDMA</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TXFULL</name>
+                     <description>TX Buffer Full: Asserted when no more data can be stored</description>
+                     <bitOffset>27</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DLPSMP</name>
+                     <description>Data learning pattern sampling point: The sampling point found by the controller with the data learning pattern</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FR</name>
+               <description>Flag Register</description>
+               <addressOffset>0x160</addressOffset>
+               <resetValue>0x8000000</resetValue>
+               <fields>
+                  <field>
+                     <name>TFF</name>
+                     <description>IP Command Transaction Finished Flag: Set when the QSPI module has finished a running IP Command</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>IPGEF</name>
+                     <description>IP Command Trigger during AHB Grant Error Flag: Set when the following condition occurs: A write access occurs to the QSPI_IPCR[SEQID] field and the QSPI_SR[AHBGNT] bit is set</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>IPIEF</name>
+                     <description>IP Command Trigger could not be executed Error Flag</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>IPAEF</name>
+                     <description>IP Command Trigger during AHB Access Error Flag</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>IUEF</name>
+                     <description>IP Command Usage Error Flag: Set when in parallel flash mode the execution of an IP Command is started with more than one pad enabled and the sequence pointed to by the sequence ID contains a WRITE or a WRITE_DDR command</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ABOF</name>
+                     <description>AHB Buffer Overflow Flag: Set when the size of the AHB access exceeds the size of the AHB buffer</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AIBSEF</name>
+                     <description>AHB Illegal Burst Size Error Flag: Set whenever the total burst size(size x beat) of an AHB transaction is greater than the prefetch data size</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AITEF</name>
+                     <description>AHB Illegal transaction error flag</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ABSEF</name>
+                     <description>AHB Sequence Error Flag: Set when the execution of an AHB Command is started with a WRITE or WRITE_DDR Command in the sequence pointed to by the QSPI_BUFxCR register</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RBDF</name>
+                     <description>RX Buffer Drain Flag: Will be set if the QSPI_SR[RXWE] status bit is asserted</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RBOF</name>
+                     <description>RX Buffer Overflow Flag: Set when not all the data read from the serial flash device could be pushed into the RX Buffer</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ILLINE</name>
+                     <description>Illegal Instruction Error Flag: Set when an illegal instruction is encountered by the controller in any of the sequences</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TBUF</name>
+                     <description>TX Buffer Underrun Flag: Set when the module tried to pull data although TX Buffer was emptyor the buffer contains less than 128bits of data</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TBFF</name>
+                     <description>TX Buffer Fill Flag: Before writing to the TX buffer, this bit should be cleared</description>
+                     <bitOffset>27</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DLPFF</name>
+                     <description>Data Learning Pattern Failure Flag: Set when DATA_LEARN instruction was encountered in a sequence but no sampling point was found for the data learning patternin case only 8 bit data learning is requested for non DQS mode</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RSER</name>
+               <description>Interrupt and DMA Request Select and Enable Register</description>
+               <addressOffset>0x164</addressOffset>
+               <fields>
+                  <field>
+                     <name>TFIE</name>
+                     <description>Transaction Finished Interrupt Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>No TFF interrupt will be generated</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>TFF interrupt will be generated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>IPGEIE</name>
+                     <description>IP Command Trigger during AHB Grant Error Interrupt Enable</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>No IPGEF interrupt will be generated</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>IPGEF interrupt will be generated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>IPIEIE</name>
+                     <description>IP Command Trigger during IP Access Error Interrupt Enable</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>No IPIEF interrupt will be generated</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>IPIEF interrupt will be generated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>IPAEIE</name>
+                     <description>IP Command Trigger during AHB Access Error Interrupt Enable</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>No IPAEF interrupt will be generated</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>IPAEF interrupt will be generated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>IUEIE</name>
+                     <description>IP Command Usage Error Interrupt Enable</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>No IUEF interrupt will be generated</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>IUEF interrupt will be generated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ABOIE</name>
+                     <description>AHB Buffer Overflow Interrupt Enable</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>No ABOF interrupt will be generated</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>ABOF interrupt will be generated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>AIBSIE</name>
+                     <description>AHB Illegal Burst Size Interrupt Enable</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>No AIBSEF interrupt will be generated</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>AIBSEF interrupt will be generated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>AITIE</name>
+                     <description>AHB Illegal transaction interrupt enable</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>No AITEF interrupt will be generated</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>AITEF interrupt will be generated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ABSEIE</name>
+                     <description>AHB Sequence Error Interrupt Enable: Triggered by ABSEF flags of QSPI_FR</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>No ABSEF interrupt will be generated</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>ABSEF interrupt will be generated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RBDIE</name>
+                     <description>RX Buffer Drain Interrupt Enable: Enables generation of IRQ requests for RX Buffer Drain</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>No RBDF interrupt will be generated</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>RBDF Interrupt will be generated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RBOIE</name>
+                     <description>RX Buffer Overflow Interrupt Enable</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>No RBOF interrupt will be generated</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>RBOF interrupt will be generated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RBDDE</name>
+                     <description>RX Buffer Drain DMA Enable: Enables generation of DMA requests for RX Buffer Drain</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>No DMA request will be generated</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>DMA request will be generated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ILLINIE</name>
+                     <description>Illegal Instruction Error Interrupt Enable. Triggered by ILLINE flag in QSPI_FR</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>No ILLINE interrupt will be generated</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>ILLINE interrupt will be generated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="RBDDE" > <name>TBFDE</name> <description>TX Buffer Fill DMA Enable</description> <bitOffset>25</bitOffset> </field>
+                  <field>
+                     <name>TBUIE</name>
+                     <description>TX Buffer Underrun Interrupt Enable</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>No TBUF interrupt will be generated</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>TBUF interrupt will be generated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TBFIE</name>
+                     <description>TX Buffer Fill Interrupt Enable</description>
+                     <bitOffset>27</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>No TBFF interrupt will be generated</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>TBFF interrupt will be generated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DLPFIE</name>
+                     <description>Data Learning Pattern Failure Interrupt enable . Triggered by DLPFF flag in QSPI_FR register</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>No DLPFF interrupt will be generated</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>DLPFF interrupt will be generated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SPNDST</name>
+               <description>Sequence Suspend Status Register</description>
+               <addressOffset>0x168</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>SUSPND</name>
+                     <description>When set, it signifies that a sequence is in suspended state</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SPDBUF</name>
+                     <description>Suspended Buffer: Provides the suspended buffer number. Valid only when SUSPND is set to 1&apos;b1</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>DATLFT</name>
+                     <description>Data left: Provides information about the amount of data left to be read in the suspended sequence</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SPTRCLR</name>
+               <description>Sequence Pointer Clear Register</description>
+               <addressOffset>0x16C</addressOffset>
+               <access>write-only</access>
+               <fields>
+                  <field>
+                     <name>BFPTRC</name>
+                     <description>Buffer Pointer Clear: 1: Clears the sequence pointer for AHB accesses as defined in QSPI_BFGENCR</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>IPPTRC</name>
+                     <description>IP Pointer Clear: 1: Clears the sequence pointer for IP accesses as defined in QSPI_IPCR This is a self-clearing field</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SFA1AD</name>
+               <description>Serial Flash A1 Top Address</description>
+               <addressOffset>0x180</addressOffset>
+               <resetValue>0x6FFFFC00</resetValue>
+               <fields>
+                  <field>
+                     <name>TPADA1</name>
+                     <description>Top address for Serial Flash A1. In effect, TPADxx is the first location of the next memory</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>22</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SFA2AD</name>
+               <description>Serial Flash A2 Top Address</description>
+               <addressOffset>0x184</addressOffset>
+               <resetValue>0x6FFFFC00</resetValue>
+               <fields>
+                  <field>
+                     <name>TPADA2</name>
+                     <description>Top address for Serial Flash A2. In effect, TPxxAD is the first location of the next memory</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>22</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SFB1AD</name>
+               <description>Serial Flash B1Top Address</description>
+               <addressOffset>0x188</addressOffset>
+               <resetValue>0x6FFFFC00</resetValue>
+               <fields>
+                  <field>
+                     <name>TPADB1</name>
+                     <description>Top address for Serial Flash B1.In effect, TPxxAD is the first location of the next memory</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>22</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SFB2AD</name>
+               <description>Serial Flash B2Top Address</description>
+               <addressOffset>0x18C</addressOffset>
+               <resetValue>0x6FFFFC00</resetValue>
+               <fields>
+                  <field>
+                     <name>TPADB2</name>
+                     <description>Top address for Serial Flash B2. In effect, TPxxAD is the first location of the next memory</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>22</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DLPR</name>
+               <description>Data Learn Pattern Register</description>
+               <addressOffset>0x190</addressOffset>
+               <resetValue>0xAA553443</resetValue>
+               <fields>
+                  <field>
+                     <name>DLPV</name>
+                     <description>Data Learning Pattern Value: This value is used for data learning in DDR and DQS mode</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>16</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
+               <name>RBDR%s</name>
+               <description>RX Buffer Data Register</description>
+               <addressOffset>0x200</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>RXDATA</name>
+                     <description>RX Data</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LUTKEY</name>
+               <description>LUT Key Register</description>
+               <addressOffset>0x300</addressOffset>
+               <resetValue>0x5AF05AF0</resetValue>
+               <fields>
+                  <field>
+                     <name>KEY</name>
+                     <description>The key to lock or unlock the LUT. The KEY is 0x5AF05AF0. The read value is always 0x5AF05AF0</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LCKCR</name>
+               <description>LUT Lock Configuration Register</description>
+               <addressOffset>0x304</addressOffset>
+               <resetValue>0x2</resetValue>
+               <fields>
+                  <field>
+                     <name>LOCK</name>
+                     <description>Locks the LUT when the following condition is met: This register is written just after the LUTKEYLUT Key Register The LUT key register was written with 0x5AF05AF0 key</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>UNLOCK</name>
+                     <description>Unlocks the LUT when the following two conditions are met: 1</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>64</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63</dimIndex>
+               <name>LUT%s</name>
+               <description>Look-up Table register</description>
+               <addressOffset>0x310</addressOffset>
+               <fields>
+                  <field>
+                     <name>OPRND0</name>
+                     <description>Operand for INSTR0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>PAD0</name>
+                     <description>Pad information for INSTR0</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>00</name>
+                           <description>1 Pad</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01</name>
+                           <description>2 Pads</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10</name>
+                           <description>4 Pads</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>11</name>
+                           <description>8 Pads</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>INSTR0</name>
+                     <description>Instruction 0</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>OPRND1</name>
+                     <description>Operand for INSTR1</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field derivedFrom="PAD0" > <name>PAD1</name> <description>Pad information for INSTR1</description> <bitOffset>24</bitOffset> </field>
+                  <field>
+                     <name>INSTR1</name>
+                     <description>Instruction 1</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

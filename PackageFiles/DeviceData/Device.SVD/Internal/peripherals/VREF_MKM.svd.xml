@@ -30,7 +30,7 @@ Devices using this peripheral:
          </addressBlock>
          <registers>
             <register>
-               <name>VREFH_TRM</name>
+               <name>TRM</name>
                <description>VREFH Trim Register</description>
                <addressOffset>0x0</addressOffset>
                <size>8</size>
@@ -64,12 +64,12 @@ When set, internal chopping operation is enabled and the internal analog offset 
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Chopping is disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Chopping is enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -77,11 +77,10 @@ When set, internal chopping operation is enabled and the internal analog offset 
                </fields>
             </register>
             <register>
-               <name>VREFH_SC</name>
+               <name>SC</name>
                <description>Status and Control Register</description>
                <addressOffset>0x1</addressOffset>
                <size>8</size>
-               <resetValue>0x20</resetValue>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
@@ -155,7 +154,7 @@ Enabled the internal 1.75 V regulator</description>
                </fields>
             </register>
             <register>
-               <name>VREFL_TRM</name>
+               <name>TRML</name>
                <description>VREFL TRIM Register</description>
                <addressOffset>0x5</addressOffset>
                <size>8</size>

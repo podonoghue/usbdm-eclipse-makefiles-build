@@ -330,25 +330,9 @@ Set when alarm time reached</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>MOF</name>
-                     <description>Monotonic Overflow Flag</description>
-                     <bitOffset>3</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <access>read-only</access>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Monotonic counter overflow has not occurred</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Monotonic counter overflow has occurred and monotonic counter is read as zero</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="TOF" > <name>MOF</name> <description>Monotonic Overflow Flag\n
+Indicates Monotonic counter overflow has occurred.\n
+On overflow the counter reads as zero</description> <bitOffset>3</bitOffset> </field>
                   <field>
                      <name>TCE</name>
                      <description>Time Counter Enable</description>
@@ -605,7 +589,7 @@ Protects register against writes.  Any writes are ignored</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Writes OK</description>
+                           <description>Writes allowed</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
