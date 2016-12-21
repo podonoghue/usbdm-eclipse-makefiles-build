@@ -1091,6 +1091,70 @@ USBDM_ErrorCode  USBDM_SetTargetVdd(TargetVddSelect_t targetVdd) {
 }
 
 /**
+ *   Fills user supplied structure with state of BDM communication channel
+ *
+ *   @param USBDMStatus Pointer to structure to receive status, see \ref USBDMStatus_t
+ *
+ *   @return \n
+ *       BDM_RC_OK => OK \n
+ *       other     => Error code - see \ref USBDM_ErrorCode
+ */
+USBDM_API
+USBDM_ErrorCode USBDM_GetBDMStatus(USBDMStatus_t *USBDMStatus) {
+   LOGGING_Q;
+
+   unsigned          BDMStatus       = 0;
+   USBDM_ErrorCode   rc;
+
+   USBDMStatus->target_type = bdmState.targetType;
+
+   // Poll the BDM
+   usb_data[0] = 0;
+   usb_data[1] = CMD_USBDM_GET_BDM_STATUS;
+   rc = bdm_usb_transaction(2, 3, usb_data);
+   if (rc == BDM_RC_OK) {
+      BDMStatus = (usb_data[1]<<8)+usb_data[2];
+   }
+   USBDMStatus->ackn_state   = (BDMStatus&S_ACKN)?ACKN:WAIT;
+   USBDMStatus->reset_state  = (BDMStatus&S_RESET_STATE)?RSTO_INACTIVE:RSTO_ACTIVE; // Active LOW!
+   USBDMStatus->reset_recent = (BDMStatus&S_RESET_DETECT)?RESET_DETECTED:NO_RESET_ACTIVITY;
+   USBDMStatus->halt_state   = (BDMStatus&S_HALT)?TARGET_HALTED:TARGET_RUNNING;
+
+   switch(BDMStatus&S_POWER_MASK) {
+      case S_POWER_NONE : // Target has no power
+         USBDMStatus->power_state = BDM_TARGET_VDD_NONE;      break;
+      case S_POWER_EXT : // Target has external power
+         USBDMStatus->power_state = BDM_TARGET_VDD_EXT;       break;
+      case S_POWER_INT  : // Target has internal power
+         USBDMStatus->power_state = BDM_TARGET_VDD_INT;       break;
+      case S_POWER_ERR : // Target power error (internal but overload)
+         USBDMStatus->power_state = BDM_TARGET_VDD_ERR;       break;
+   };
+   switch(BDMStatus&S_COMM_MASK) {
+      case S_NOT_CONNECTED : // No connection with target
+         USBDMStatus->connection_state = SPEED_NO_INFO;       break;
+      case S_SYNC_DONE     : // Speed from BDM SYNC
+         USBDMStatus->connection_state = SPEED_SYNC;          break;
+      case S_GUESS_DONE    : // Speed guessed
+         USBDMStatus->connection_state = SPEED_GUESSED;       break;
+      case S_USER_DONE     : // Speed given by user
+         USBDMStatus->connection_state = SPEED_USER_SUPPLIED; break;
+   };
+   switch(BDMStatus&S_VPP_MASK) {
+      case S_VPP_OFF : // Programming Voltage off
+         USBDMStatus->flash_state = BDM_TARGET_VPP_OFF;      break;
+      case S_VPP_ON     : // Programming Voltage on
+         USBDMStatus->flash_state = BDM_TARGET_VPP_ON;       break;
+      case S_VPP_STANDBY : // Programming Voltage standby
+         USBDMStatus->flash_state = BDM_TARGET_VPP_STANDBY;  break;
+      case S_VPP_ERR    : // Error
+         USBDMStatus->flash_state = BDM_TARGET_VPP_ERROR;    break;
+   };
+   log.print("=> %s\n", getBDMStatusName(USBDMStatus));
+   return rc;
+}
+
+/**
  *  Sets Target programming voltage
  *
  *  @param targetVpp => control value for Vpp
@@ -1475,70 +1539,6 @@ USBDM_ErrorCode USBDM_GetCommandStatus(void) {
    rc = bdm_usb_transaction(2, 1, usb_data);
    log.print("=>%s\n", UsbdmSystem::getErrorString(rc));
 
-   return rc;
-}
-
-/**
- *   Fills user supplied structure with state of BDM communication channel
- *
- *   @param USBDMStatus Pointer to structure to receive status, see \ref USBDMStatus_t
- *
- *   @return \n
- *       BDM_RC_OK => OK \n
- *       other     => Error code - see \ref USBDM_ErrorCode
- */
-USBDM_API
-USBDM_ErrorCode USBDM_GetBDMStatus(USBDMStatus_t *USBDMStatus) {
-   LOGGING_Q;
-
-   unsigned          BDMStatus       = 0;
-   USBDM_ErrorCode   rc;
-
-   USBDMStatus->target_type = bdmState.targetType;
-
-   // Poll the BDM
-   usb_data[0] = 0;
-   usb_data[1] = CMD_USBDM_GET_BDM_STATUS;
-   rc = bdm_usb_transaction(2, 3, usb_data);
-   if (rc == BDM_RC_OK) {
-      BDMStatus = (usb_data[1]<<8)+usb_data[2];
-   }
-   USBDMStatus->ackn_state   = (BDMStatus&S_ACKN)?ACKN:WAIT;
-   USBDMStatus->reset_state  = (BDMStatus&S_RESET_STATE)?RSTO_INACTIVE:RSTO_ACTIVE; // Active LOW!
-   USBDMStatus->reset_recent = (BDMStatus&S_RESET_DETECT)?RESET_DETECTED:NO_RESET_ACTIVITY;
-   USBDMStatus->halt_state   = (BDMStatus&S_HALT)?TARGET_HALTED:TARGET_RUNNING;
-
-   switch(BDMStatus&S_POWER_MASK) {
-      case S_POWER_NONE : // Target has no power
-         USBDMStatus->power_state = BDM_TARGET_VDD_NONE;      break;
-      case S_POWER_EXT : // Target has external power
-         USBDMStatus->power_state = BDM_TARGET_VDD_EXT;       break;
-      case S_POWER_INT  : // Target has internal power
-         USBDMStatus->power_state = BDM_TARGET_VDD_INT;       break;
-      case S_POWER_ERR : // Target power error (internal but overload)
-         USBDMStatus->power_state = BDM_TARGET_VDD_ERR;       break;
-   };
-   switch(BDMStatus&S_COMM_MASK) {
-      case S_NOT_CONNECTED : // No connection with target
-         USBDMStatus->connection_state = SPEED_NO_INFO;       break;
-      case S_SYNC_DONE     : // Speed from BDM SYNC
-         USBDMStatus->connection_state = SPEED_SYNC;          break;
-      case S_GUESS_DONE    : // Speed guessed
-         USBDMStatus->connection_state = SPEED_GUESSED;       break;
-      case S_USER_DONE     : // Speed given by user
-         USBDMStatus->connection_state = SPEED_USER_SUPPLIED; break;
-   };
-   switch(BDMStatus&S_VPP_MASK) {
-      case S_VPP_OFF : // Programming Voltage off
-         USBDMStatus->flash_state = BDM_TARGET_VPP_OFF;      break;
-      case S_VPP_ON     : // Programming Voltage on
-         USBDMStatus->flash_state = BDM_TARGET_VPP_ON;       break;
-      case S_VPP_STANDBY : // Programming Voltage standby
-         USBDMStatus->flash_state = BDM_TARGET_VPP_STANDBY;  break;
-      case S_VPP_ERR    : // Error
-         USBDMStatus->flash_state = BDM_TARGET_VPP_ERROR;    break;
-   };
-   log.print("=> %s\n", getBDMStatusName(USBDMStatus));
    return rc;
 }
 
