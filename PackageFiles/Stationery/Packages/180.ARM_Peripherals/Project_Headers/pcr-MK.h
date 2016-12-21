@@ -146,6 +146,31 @@ static constexpr uint32_t  I2C_DEFAULT_PCR = DEFAULT_PCR|PORT_PCR_ODE_MASK;
 static constexpr uint32_t  XTAL_DEFAULT_PCR = 0;
 
 /**
+ * Pull device modes
+ */
+enum PullModes {
+   PullNone = PORT_PCR_PE(0),
+   PullUp   = PORT_PCR_PE(1)|PORT_PCR_PS(1),
+   PullDown = PORT_PCR_PE(1)|PORT_PCR_PS(0),
+};
+/**
+ * Pin interrupt/DMA modes
+ */
+enum InterruptMode {
+   IrqNone     = PORT_PCR_IRQC(0),
+
+   DmaRising   = PORT_PCR_IRQC(1),
+   DmaFalling  = PORT_PCR_IRQC(2),
+   DmaEither   = PORT_PCR_IRQC(3),
+
+   IrqLow      = PORT_PCR_IRQC(8),
+   IrqRising   = PORT_PCR_IRQC(9),
+   IrqFalling  = PORT_PCR_IRQC(10),
+   IrqEither   = PORT_PCR_IRQC(11),
+   IrqHigh     = PORT_PCR_IRQC(12),
+};
+
+/**
  * @brief Template representing a Pin Control Register (PCR)
  *
  * Code examples:
@@ -179,6 +204,8 @@ private:
    static_assert((bitNum == UNMAPPED_PCR)||(bitNum == INVALID_PCR)||(bitNum >= 0), "Pcr_T: Illegal bit number");
 #endif
 
+   static constexpr volatile uint32_t *pcrReg = reinterpret_cast<volatile uint32_t *>(pcrAddress+offsetof(PORT_Type,PCR[bitNum]));
+
 public:
    /**
     * Set pin PCR value\n
@@ -191,7 +218,6 @@ public:
          enablePortClocks(clockMask);
 
          // Pointer to PCR register for pin
-         constexpr volatile uint32_t *pcrReg = reinterpret_cast<volatile uint32_t *>(pcrAddress+offsetof(PORT_Type,PCR[bitNum]));
          *pcrReg = pcrValue;
       }
    }
@@ -205,10 +231,52 @@ public:
    static void setMUX(uint32_t muxValue) {
       if ((pcrAddress != 0) && (bitNum >= 0)) {
          // Pointer to PCR register for pin
-         constexpr volatile uint32_t *pcrReg = reinterpret_cast<volatile uint32_t *>(pcrAddress+offsetof(PORT_Type,PCR[bitNum]));
          *pcrReg = (defPcrValue&~PORT_PCR_MUX_MASK)|PORT_PCR_MUX(muxValue);
       }
    }
+   /**
+    * Sets pin interrupt mode
+    *
+    * @param mode Interrupt/DMA mode
+    */
+   static void setIrq(InterruptMode mode) {
+      *pcrReg = (*pcrReg&~PORT_PCR_IRQC_MASK) | mode;
+   }
+
+   /**
+    * Set pull device on pin
+    */
+   static void setPullDevice(PullModes mode) {
+      *pcrReg = (*pcrReg&~PORT_PCR_PS_MASK) | mode;
+   }
+
+   /**
+    * Locks most of the PCR properties e.g. drive strength, pull-device etc.
+    */
+   static void lock() {
+      *pcrReg |= PORT_PCR_LK_MASK;
+   }
+
+   /**
+    * Enable/disable interrupts in NVIC
+    *
+    * @param enable True => enable, False => disable
+    */
+   static void enableNvicInterrupts(bool enable=true) {
+      //TODO enableNvicInterrupts()
+      if (enable) {
+         // Enable interrupts
+         NVIC_EnableIRQ((IRQn_Type)0);
+
+         // Set priority level
+         NVIC_SetPriority((IRQn_Type)0, 0);
+      }
+      else {
+         // Disable interrupts
+         NVIC_DisableIRQ((IRQn_Type)0);
+      }
+   }
+
 
 };
 

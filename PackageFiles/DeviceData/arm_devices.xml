@@ -2932,7 +2932,7 @@ NOTES:
       <device name="FRDM_KL03Z"      alias="MKL03Z32M4"     hardware="frdmkl03z48m" />
       <device name="FRDM_KL05Z"      alias="MKL05Z32M4"     hardware="frdmkl05z" />
       <device name="FRDM_KL25Z"      alias="MKL25Z128M4"    hardware="frdmkl25z" />
-      <device name="FRDM_KL26Z"      alias="MKL26Z64M4"     hardware="frdmkl26z" />
+      <device name="FRDM_KL26Z"      alias="MKL26Z128M4"    hardware="frdmkl26z" />
       <device name="FRDM_KL27Z"      alias="MKL27Z64M4"     hardware="frdmkl27z" />
       <device name="FRDM_KL43Z"      alias="MKL43Z256M4"    hardware="frdmkl43z" />
       <device name="FRDM_KL46Z"      alias="MKL46Z256M4"    hardware="frdmkl46z" />

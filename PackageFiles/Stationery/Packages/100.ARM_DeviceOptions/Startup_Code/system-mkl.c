@@ -38,7 +38,7 @@ extern int const __vector_table[];
 // Default to most popular KL Watchdog
 #define SIM_COPC (*(uint32_t *)0x40048100)
 
-#elif defined(SIM_COPT)
+#elif defined(SIM_COPC_COPCLKS_MASK)
 #define SIM_COPC (SIM->COPC)
 
 #elif defined(WDOG_STCTRLH_CLKSRC_MASK)
