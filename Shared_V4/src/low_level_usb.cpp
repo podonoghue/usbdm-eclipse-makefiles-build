@@ -162,7 +162,7 @@ libusb_context *context;
 //!
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_init( void ) {
-   LOGGING;
+   LOGGING_Q;
 
    // Not initialised
    initialised = FALSE;
@@ -201,7 +201,7 @@ USBDM_ErrorCode bdm_usb_init( void ) {
 //!
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_exit( void ) {
-   LOGGING;
+   LOGGING_Q;
    if (initialised) {
       bdm_usb_close();     // Close any open devices
       libusb_exit(context);
@@ -251,7 +251,7 @@ USBDM_ErrorCode bdm_usb_releaseDevices(void) {
 //!
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_findDevices(unsigned *devCount, const UsbId usbIds[]) {
-   LOGGING;
+   LOGGING_Q;
    log.print("Looking for device(s): ");
    for(const UsbId *p=usbIds; p->vid!=0; p++) {
       log.printq("[v:%4.4X,p:%4.4X] ", p->vid, p->pid);
@@ -336,7 +336,7 @@ USBDM_ErrorCode bdm_usb_findDevices(unsigned *devCount, const UsbId usbIds[]) {
 //!
 DLL_LOCAL
 USBDM_ErrorCode bdm_walkConfig( libusb_device *device ) {
-   LOGGING;
+   LOGGING_Q;
    const int BULK_INTF_ID      = 0;
    const int BULK_OUT_ENDPOINT = EP_OUT|1;
 
@@ -374,7 +374,7 @@ USBDM_ErrorCode bdm_walkConfig( libusb_device *device ) {
 //!
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_open( unsigned int device_no ) {
-   LOGGING;
+   LOGGING_Q;
    if (!initialised) {
       return BDM_RC_NOT_INITIALISED;
    }
@@ -468,7 +468,7 @@ USBDM_ErrorCode bdm_usb_open( unsigned int device_no ) {
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_close( void ) {
    int rc;
-   LOGGING;
+   LOGGING_Q;
 
    if (usbDeviceHandle == NULL) {
       log.print("Device not open - no action\n");
@@ -514,7 +514,7 @@ USBDM_ErrorCode bdm_usb_close( void ) {
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_getStringDescriptor(int index, char *descriptorBuffer, unsigned maxLength) {
    const int DT_STRING = 3;
-   LOGGING;
+   LOGGING_Q;
 
    memset(descriptorBuffer, '\0', maxLength);
 
@@ -581,7 +581,7 @@ USBDM_ErrorCode bdm_usb_send_ep0( const unsigned char * data ) {
    unsigned char size       = data[0];   // Size is the first byte
    int rc;
    unsigned index;
-   LOGGING;
+   LOGGING_Q;
 
    if (usbDeviceHandle == NULL) {
       log.error("Device handle NULL!\n");
@@ -643,7 +643,7 @@ USBDM_ErrorCode bdm_usb_recv_ep0(unsigned char *data, unsigned *actualRxSize) {
    unsigned char cmd  = data[1];   // OSBDM/USBDM Command byte
    int rc;
    int retry = 5;
-   LOGGING;
+   LOGGING_Q;
    unsigned dummy;
 
    if (actualRxSize == 0) {
@@ -737,7 +737,7 @@ USBDM_ErrorCode bdm_usb_raw_send_ep0(unsigned int         bmRequest,
                                      const unsigned char *data,
                                      unsigned int         timeout) {
    int rc;
-   LOGGING;
+   LOGGING_Q;
 
    if (usbDeviceHandle == NULL) {
       log.error("Device not open\n");
@@ -851,7 +851,7 @@ DLL_LOCAL
 USBDM_ErrorCode bdm_usb_send_epOut(unsigned int count, const unsigned char *data) {
    int rc;
    int transferCount;
-   LOGGING;
+   LOGGING_Q;
 
    if (usbDeviceHandle==NULL) {
       log.error("Device not open\n");
@@ -924,7 +924,7 @@ DLL_LOCAL
 USBDM_ErrorCode bdm_usb_recv_epIn(unsigned count, unsigned char *data, unsigned *actualCount) {
    int rc;
    int transferCount;
-   LOGGING;
+   LOGGING_Q;
 
    *actualCount = 0; // Assume failure
 
@@ -984,7 +984,7 @@ USBDM_ErrorCode bdm_usb_recv_epIn(unsigned count, unsigned char *data, unsigned 
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_reset_connection(void) {
    int rc;
-   LOGGING;
+   LOGGING_Q;
 
    rc = libusb_set_configuration(usbDeviceHandle, 1);
    if (rc != LIBUSB_SUCCESS) {
@@ -1034,7 +1034,7 @@ USBDM_ErrorCode bdmJB16_usb_transaction( unsigned int   txSize,
                                          unsigned char *data,
                                          unsigned int  *actualRxSize) {
    USBDM_ErrorCode rc;
-   LOGGING;
+   LOGGING_Q;
    if (txSize <= 5) {
       // Transmission fits in SETUP pkt, Use single IN Data transfer to/from EP0
       *data = rxSize;
@@ -1074,7 +1074,7 @@ USBDM_ErrorCode bdmJMxx_simple_usb_transaction( bool                 commandTogg
 //   uint8_t        *sendBuffer = (uint8_t*) alloca(txSize);
    uint8_t         sendBuffer[txSize];
    USBDM_ErrorCode rc;
-   LOGGING;
+   LOGGING_Q;
 
    memcpy(sendBuffer, outData, txSize);
    if (commandToggle) {
@@ -1162,7 +1162,7 @@ USBDM_ErrorCode bdmJMxx_usb_transaction( unsigned int   txSize,
 //   bool            reportFlag          = false;
 //   USBDM_ErrorCode rc                  = BDM_RC_OK;
    unsigned char   outData[txSize];
-   LOGGING;
+   LOGGING_Q;
 
    // Save copy of data for retry
    memcpy(outData, data, txSize);
@@ -1193,7 +1193,7 @@ USBDM_ErrorCode bdmVersion5_simple_usb_transaction(
    USBDM_ErrorCode rc;
    static int sequenceNumber = 0;
 
-   LOGGING;
+   LOGGING_Q;
 
    sequenceNumber = (sequenceNumber + 1)&0x3;
    if (outData[1] == CMD_USBDM_GET_CAPABILITIES) {
@@ -1267,7 +1267,7 @@ USBDM_ErrorCode bdmVersion5_usb_transaction(
 //   bool            reportFlag          = false;
 //   USBDM_ErrorCode rc                  = BDM_RC_OK;
    unsigned char   outData[txSize+5];
-   LOGGING;
+   LOGGING_Q;
 
    // Save copy of data for retry
    memcpy(outData, data, txSize);
