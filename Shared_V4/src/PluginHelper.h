@@ -47,22 +47,40 @@
    #endif
 #endif
 
+/**
+ * Helper function for doing placement new
+ *
+ * @tparam T      Type of object being allocated
+ * @param  pp     Allocated storage (may be NULL to obtain required size without doing placement new())
+ *
+ * @return Size of object
+ */
 template<typename T>
 size_t TcreatePluginInstance(void *pp) {
    LOGGING_Q;
    if (pp != NULL) {
-//      log.print("Creating instance\n");
+      log.print("Creating instance, version %s, size = %d\n", __DATE__ ", " __TIME__, sizeof(T));
       new (pp) T();
    }
 //   log.print("Returning size %ld\n", (long)sizeof(T));
    return sizeof(T);
 }
 
+/**
+ * Helper function for doing placement new
+ *
+ * @tparam T      Type of object being allocated
+ * @tparam A      Type of argument to constructor
+ * @param  pp     Allocated storage (may be NULL to obtain required size without doing placement new())
+ * @param  arg    Argument to constructor
+ *
+ * @return Size of object
+ */
 template<typename T, typename A>
 size_t TcreatePluginInstance(void *pp, A arg) {
    LOGGING_Q;
    if (pp != NULL) {
-//      log.print("Creating instance\n");
+      log.print("Creating instance, version %s, size = %d\n", __DATE__ ", " __TIME__, sizeof(T));
       new (pp) T(arg);
    }
 //   log.print("Returning size %ld\n", (long)sizeof(T));
