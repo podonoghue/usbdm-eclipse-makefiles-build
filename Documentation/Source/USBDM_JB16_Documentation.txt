@@ -24,8 +24,8 @@
  \subsection QuickLinks Quick Links
 
    - @htmlonly <a href="http://sourceforge.net/projects/usbdm/"><b>Release versions of the software for the various BDMs are available on Sourceforge.</b></a> @endhtmlonly
-   - @htmlonly <a href="USBDM_V4.11/USBDM_FlashProgrammers/html/index.html"><b>Various stand-alone programmers are provided to support the USBDM hardware.</b></a> @endhtmlonly 
-   - @htmlonly <a href="https://github.com/podonoghue"><b>Source code is available on GitHub</b></a>@endhtmlonly 
+   - @htmlonly <a href="/../../../programmer.html"><b>Various stand-alone programmers are provided to support the USBDM hardware.</b></a> @endhtmlonly 
+   - @htmlonly <a href="https://github.com/podonoghue"><b>Source code available on GitHub</b></a>@endhtmlonly 
    - @htmlonly <a href="https://community.freescale.com/community/bdm"><b>Post queries on OSBDM and TBDML Discussion Board</b></a>@endhtmlonly 
      
    <hr>

@@ -11,10 +11,10 @@
 
    <hr>
  \subsection QuickLinks Quick Links
-
    - @htmlonly <a href="http://sourceforge.net/projects/usbdm/"><b>Release versions of the software for the various BDMs are available on Sourceforge.</b></a> @endhtmlonly
-   - @htmlonly <a href="USBDM_V4.11/USBDM_FlashProgrammers/html/index.html"><b>Various stand-alone programmers are provided to support the USBDM hardware.</b></a> @endhtmlonly 
-   - @htmlonly <a href="https://github.com/podonoghue"><b>Source code is available on GitHub</b></a>@endhtmlonly 
+   - @htmlonly <a href="/../../../programmer.html"><b>Various stand-alone programmers are provided to support the USBDM hardware.</b></a> @endhtmlonly 
+   - @htmlonly <a href="https://github.com/podonoghue"><b>Source code available on GitHub</b></a>@endhtmlonly 
+   - @htmlonly <a href="https://github.com/podonoghue/usbdm-hcs08"><b>Hardware descriptions available on GitHub</b></a>@endhtmlonly 
    - @htmlonly <a href="https://community.freescale.com/community/bdm"><b>Post queries on OSBDM and TBDML Discussion Board</b></a>@endhtmlonly 
      
    <hr>
@@ -28,17 +28,15 @@
 
    -  No re-flashing of the BDM is required when changing between targets
    -  Compatible IDEs
-      - Codewarrior V10.1/2 (Eclipse version)
-        - Tested on Windows-XP-32bit, Windows-7-32bit, Windows-7-64bit
-        - Tested on Ubuntu-32-bit
+      - Codewarrior V10.x (Eclipse version)
+        - Tested on Windows-XP-32bit, Windows-7-32bit, Windows-7-64bit, Windows 8, Windows 10
+        - Tested on Ubuntu-32-bit, 64-bit
       - Codewarrior Legacy versions
       - Codewarrior Development Studio for HCS12(X) V5.1 & \n
         CW for Microcontrollers V6.3 (RS08 is not supported)\n
-\if Coldfire   -	CW for Coldfire V7.1  \endif
         - Tested on Windows-XP-32bit, Windows-Vista-32bit
       - Initial support for CodeSourcery Lite for Coldfire
          - Tested on Windows-XP-32bit
-
    -  Trimming of target internal clock (Eclipse version or standalone programming tools only).
    -  Higher USB communication speed cf. JB16 version BDMs (USB full speed cf. USB low speed)
    -  Vista compatible
@@ -79,18 +77,15 @@
 \endif
 
  \subsection pictureSection Pictures (USBDM_JS16_SWD - HCS08/HCS12/CFV1/ARM-SWD)
-   - <b>USBDM Minimal HCS08/HCS12/CFV1 & SWD interfaces</b>
-   \image html "USBDM_JS16_SWD_Top.png"
+   - <b>USBDM Minimal HCS08/HCS12/CFV1 & SWD interfaces with manual target power.</b>
+   \image html "https://raw.githubusercontent.com/podonoghue/usbdm-hcs08/master/Hardware/USBDM_SWD_JS16CWJ/Top.png"
          
    - <b>USBDM HCS08/HCS12/CFV1, SWD & Serial interfaces with manual target power.</b>
-   \image html "USBDM_JS16_SWD_SER_Top.png"
+   \image html "https://raw.githubusercontent.com/podonoghue/usbdm-hcs08/master/Hardware/USBDM_SWD_SER_JS16CWJ/Top.png"
          
  \section sectionHardwareDesign Hardware Design
-   Please refer to the following PDF documents for Schematics, Assembly Overlays & Bill of Materials:
-   - @htmlonly <a href="USBDM_JS16CWJ.pdf">Minimal HCS08/HCS12/CFV1 interface</a> @endhtmlonly
-   - @htmlonly <a href="USBDM_SWD_JS16CWJ.pdf">Minimal HCS08/HCS12/CFV1 & SWD interfaces</a> @endhtmlonly 
-   - @htmlonly <a href="USBDM_SWD_SER_JS16CWJ.pdf">HCS08/HCS12/CFV1, SWD & Serial interfaces with
-     manual target power.</a> @endhtmlonly 
+   Please refer to the following Hardware Page for Schematics, Assembly Overlays & Bill of Materials:
+   - @htmlonly <a href="https://github.com/podonoghue/usbdm-hcs08/tree/master/Hardware">Minimal HCS08/HCS12/CFV1 & SWD interfaces</a> @endhtmlonly 
 
  \section differenceSection Differences to JB16 TBDML/OSBDM
    -  The PCB artwork provided is for a double-sided plated-through-hole board using surface mount components.
