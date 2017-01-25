@@ -956,6 +956,14 @@ void UsbBase_T<Info, EP0_SIZE>::initialise() {
    SIM->SOPT1CFG  = SIM_SOPT1CFG_URWE_MASK;
    SIM->SOPT1    |= SIM_SOPT1_USBREGEN_MASK;
 
+#ifdef USB_CLK_RECOVER_IRC_EN_IRC_EN
+   // IRC clock enable
+   usb->CLK_RECOVER_IRC_EN = Usb0Info::clk_recovery_irc_en;
+
+   // Clock recovery options
+   usb->CLK_RECOVER_CTRL = Usb0Info::clk_recovery_ctrl;
+#endif
+
 #if 0
    // Enable in LP modes
    SIM->SOPT1CFG  = SIM_SOPT1CFG_URWE_MASK;

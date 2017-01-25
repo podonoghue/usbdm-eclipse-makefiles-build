@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE devicePage SYSTEM "_menu.dtd" >
-<!-- usb_def.xml -->
+<!-- usb_clkrcv_def.xml -->
 <!--
 Devices using this peripheral: 
 -->
-
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="USB">
 
    <aliasOption key="/MCG/system_usb_clkin_clock" constant="false" optional="true"/>
@@ -12,8 +11,10 @@ Devices using this peripheral:
    <aliasOption key="/SIM/sim_clkdiv2_usb" constant="false" optional="true"/>
    <aliasOption key="/SIM/system_usbfs_clock" optional="true"/>
 
+   <xi:include href="usb_clkrcv.xml"/>
+
    <xi:include href="_irqOption.xml"/>
-   
+
    <xi:include href="usb_files.xml"/>
 
    <signals/>

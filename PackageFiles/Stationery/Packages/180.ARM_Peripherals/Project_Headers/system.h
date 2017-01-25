@@ -32,6 +32,13 @@ void SystemInitLowLevel(void);
 void SystemInit(void);
 
 /**
+ * Check interrupt status
+ *
+ * @return true if interrupts are enabled
+ */
+int areInterruptsEnabled();
+
+/**
  * Disable interrupts
  *
  * This function keeps a count of the number of times interrupts is enabled/disabled so may be called in recursive routines

@@ -9,7 +9,7 @@
 <!ENTITY CAU          SYSTEM "peripherals/CAU_MK82F25615.svd.xml">
 <!ENTITY CMP0         SYSTEM "peripherals/CMP0_MKV.svd.xml">
 <!ENTITY CMT          SYSTEM "peripherals/CMT_0.svd.xml">
-<!ENTITY CRC0         SYSTEM "peripherals/CRC0_0x40032000.svd.xml">
+<!ENTITY CRC          SYSTEM "peripherals/CRC_0x40032000.svd.xml">
 <!ENTITY DAC0         SYSTEM "peripherals/DAC0_MK82F25615.svd.xml">
 <!ENTITY DMA0         SYSTEM "peripherals/DMA_MK82F25615.svd.xml">
 <!ENTITY DMAMUX       SYSTEM "peripherals/DMAMUX_MK82F25615.svd.xml">
@@ -89,7 +89,7 @@
          </interrupt>
 </peripheral>
 &CMT;
-&CRC0;
+&CRC;
 &DAC0;
 &DMA0;
 &DMAMUX;

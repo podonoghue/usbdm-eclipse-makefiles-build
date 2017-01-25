@@ -5,7 +5,7 @@
 <!ENTITY ACMP0        SYSTEM "peripherals/ACMP0_MKE.svd.xml">
 <!ENTITY ADC0         SYSTEM "peripherals/ADC0_MKE02.svd.xml">
 <!ENTITY BP           SYSTEM "peripherals/BP_CM0.svd.xml">
-<!ENTITY CRC0         SYSTEM "peripherals/CRC0_0x40032000.svd.xml">
+<!ENTITY CRC          SYSTEM "peripherals/CRC_0x40032000.svd.xml">
 <!ENTITY CoreDebug    SYSTEM "peripherals/CoreDebug.svd.xml">
 <!ENTITY DWT          SYSTEM "peripherals/DWT_CM0Plus.svd.xml">
 <!ENTITY FGPIOA       SYSTEM "peripherals/FGPIOA_MKE.svd.xml">
@@ -55,7 +55,7 @@
 <peripheral derivedFrom="ACMP0"><name>ACMP1</name><prependToName>ACMP1</prependToName><baseAddress>0x40074000</baseAddress></peripheral>
 &ADC0;
 &BP;
-&CRC0;
+&CRC;
 &CoreDebug;
 &DWT;
 &FGPIOA;

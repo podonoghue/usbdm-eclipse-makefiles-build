@@ -2,7 +2,7 @@
  *  @file vectors.c
  *  Derived from  vectors-mkl.c
  *
- *  Generic vectors and security for Kinetis MKLxx
+ *  Vectors and security for Kinetis MKLxxx
  *
  *  Created on: 07/12/2012
  *      Author: podonoghue
@@ -282,6 +282,7 @@ typedef void( *const intfunc )( void );
  * Most of the vector table is initialised to point at this handler.
  *
  * If you end up here it probably means:
+ *   - Failed to enable the interrupt handler in the USBDM device configuration
  *   - You have accidently enabled an interrupt source in a peripheral
  *   - Enabled the wrong interrupt source
  *   - Failed to install or create a handler for an interrupt you intended using e.g. mis-spelled the name.

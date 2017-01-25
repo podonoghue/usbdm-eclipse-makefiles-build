@@ -20,6 +20,7 @@
 ;#####################################################################################
 ;#  History
 ;#
+;#  V4.12.1.150 - Changed to use more uniform method and re-tested
 ;#  V4.19.4.250 - Simplified
 ;#  V4.19.4.240 - Added return error codes
 ;#  V4.10.4.190 - Simplified Mass erase sequence according to App note AN4835
@@ -207,6 +208,7 @@ proc initTarget { args } {
 ;#  frequency - Target bus frequency in kHz
 ;#
 proc initFlash { frequency } {
+   ;# Not used
    ;# Uprotecting flash and caching done  by target routines
    ;# puts [format "MDM-AP-CONTROL = 0x%08X" [rcreg $::MDM_AP_Control]]
    return $::PROGRAMMING_RC_OK
@@ -222,21 +224,22 @@ proc massEraseTarget { } {
    pinSet rst=0
 
    ;# Cycle power if feature available   
-   if [expr ( [getcap] & $::BDM_CAP_VDDCONTROL) != 0] {
-      puts "massEraseTarget{} - Cycling Vdd"
-      settargetvdd off
-      after 200
-      settargetvdd on
-      after 10
-   }
+   ;# Upsets things on MK devices
+   ;#if [expr ( [getcap] & $::BDM_CAP_VDDCONTROL) != 0] {
+   ;#   puts "massEraseTarget{} - Cycling Vdd"
+   ;#   settargetvdd off
+   ;#   after 200
+   ;#   settargetvdd on
+   ;#   after 10
+   ;#}
 
    ;# Connect with reset asserted, ignore errors as may be secured
    puts "massEraseTarget{} - Connecting (Ignoring errors)"
    catch { connect }
    rcreg $::MDM_AP_Status
 
-   puts "massEraseTarget{} - reset sh (Ignoring errors)"
-   catch { reset s h }
+   puts "massEraseTarget{} - reset s s (Ignoring errors)"
+   catch { reset s s }
    rcreg $::MDM_AP_Status
 
    ;# Wait for Flash Ready
@@ -295,6 +298,37 @@ proc isUnsecure { } {
    }
    puts "isUnsecure{} - Target is unsecured"
    return $::PROGRAMMING_RC_OK
+}
+
+;# For testing
+proc o { } {
+   settarget arm
+   openbdm 0
+   catch { connect }
+   pinSet rst=0
+   catch { reset ss }
+   isUnsecure
+   catch { connect }
+}
+
+;# For testing
+proc c { } {
+   closebdm
+}
+
+;# For testing
+proc m { } {
+   massEraseTarget
+}
+
+;# For testing
+proc d { } {
+   puts ""
+   puts ""
+   puts ""
+   o
+   m
+   c
 }
 
 ;######################################################################################

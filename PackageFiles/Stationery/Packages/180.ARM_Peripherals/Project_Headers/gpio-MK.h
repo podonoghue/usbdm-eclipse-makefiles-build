@@ -221,6 +221,7 @@ public:
    }
    /**
     * Sets pin interrupt mode
+    * Convenience wrapper for PCR function
     *
     * @param mode Interrupt/DMA mode
     */
@@ -230,6 +231,7 @@ public:
 
    /**
     * Set pull device on pin
+    * Convenience wrapper for PCR function
     *
     * @param mode Pull control value (PullNone, PullUp, PullDown)
     */
@@ -239,6 +241,7 @@ public:
 
    /**
     * Locks most of the pin properties e.g. drive strength, pull-device etc.
+    * Convenience wrapper for PCR function
     */
    static void lock() {
       Pcr::lock();
@@ -246,11 +249,22 @@ public:
 
    /**
     * Enable/disable pin interrupts
+    * Convenience wrapper for PCR function
     *
     * @param enable True => enable, False => disable
     */
    static void enableNvicInterrupts(bool enable=true) {
       Pcr::enableNvicInterrupts(enable);
+   }
+
+   /**
+    * Set callback for ISR \n
+    * Convenience wrapper for PCR function
+    *
+    * @param callback The function to call from stub ISR
+    */
+   static void setCallback(PinCallbackFunction callback) {
+      Pcr::setCallback(callback);
    }
 
 };
@@ -321,7 +335,7 @@ private:
    /**
     * Mask for the bits being manipulated
     */
-   static constexpr uint32_t    MASK = ((1<<(left-right+1))-1)<<right;
+   static constexpr uint32_t MASK = ((1<<(left-right+1))-1)<<right;
    /**
     * Utility function to set multiple PCRs using GPCLR & GPCHR
     *

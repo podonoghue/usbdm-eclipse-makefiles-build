@@ -663,48 +663,48 @@ typedef struct {                                /*       CMP0 Structure         
 */
 typedef struct {                                /*       CRC Structure                                                */
    union {                                      /**< 0000: (size=0004)                                                  */
-      __IO uint32_t  DATA;                      /**< 0000: CRC Data register                                            */
+      __IO uint32_t  DATA;                      /**< 0000: Data register                                                */
       struct {                                  /**< 0000: (size=0004)                                                  */
          union {                                /**< 0000: (size=0002)                                                  */
-            __IO uint16_t  DATAL;               /**< 0000: CRC_DATAL register                                           */
+            __IO uint16_t  DATAL;               /**< 0000: DATAL register                                               */
             struct {                            /**< 0000: (size=0002)                                                  */
-               __IO uint8_t   DATALL;           /**< 0000: CRC_DATALL register                                          */
-               __IO uint8_t   DATALU;           /**< 0001: CRC_DATALU register                                          */
+               __IO uint8_t   DATALL;           /**< 0000: DATALL register                                              */
+               __IO uint8_t   DATALU;           /**< 0001: DATALU register                                              */
             };
          };
          union {                                /**< 0000: (size=0002)                                                  */
-            __IO uint16_t  DATAH;               /**< 0002: CRC_DATAH register                                           */
+            __IO uint16_t  DATAH;               /**< 0002: DATAH register                                               */
             struct {                            /**< 0000: (size=0002)                                                  */
-               __IO uint8_t   DATAHL;           /**< 0002: CRC_DATAHL register                                          */
-               __IO uint8_t   DATAHU;           /**< 0003: CRC_DATAHU register                                          */
+               __IO uint8_t   DATAHL;           /**< 0002: DATAHL register                                              */
+               __IO uint8_t   DATAHU;           /**< 0003: DATAHU register                                              */
             };
          };
       };
    };
    union {                                      /**< 0000: (size=0004)                                                  */
-      __IO uint32_t  GPOLY;                     /**< 0004: CRC Polynomial register                                      */
+      __IO uint32_t  GPOLY;                     /**< 0004: Polynomial register                                          */
       struct {                                  /**< 0000: (size=0004)                                                  */
          union {                                /**< 0000: (size=0002)                                                  */
-            __IO uint16_t  GPOLYL;              /**< 0004: CRC_GPOLYL register                                          */
+            __IO uint16_t  GPOLYL;              /**< 0004: GPOLYL register                                              */
             struct {                            /**< 0000: (size=0002)                                                  */
-               __IO uint8_t   GPOLYLL;          /**< 0004: CRC_GPOLYLL register                                         */
-               __IO uint8_t   GPOLYLU;          /**< 0005: CRC_GPOLYLU register                                         */
+               __IO uint8_t   GPOLYLL;          /**< 0004: GPOLYLL register                                             */
+               __IO uint8_t   GPOLYLU;          /**< 0005: GPOLYLU register                                             */
             };
          };
          union {                                /**< 0000: (size=0002)                                                  */
-            __IO uint16_t  GPOLYH;              /**< 0006: CRC_GPOLYH register                                          */
+            __IO uint16_t  GPOLYH;              /**< 0006: GPOLYH register                                              */
             struct {                            /**< 0000: (size=0002)                                                  */
-               __IO uint8_t   GPOLYHL;          /**< 0006: CRC_GPOLYHL register                                         */
-               __IO uint8_t   GPOLYHU;          /**< 0007: CRC_GPOLYHU register                                         */
+               __IO uint8_t   GPOLYHL;          /**< 0006: GPOLYHL register                                             */
+               __IO uint8_t   GPOLYHU;          /**< 0007: GPOLYHU register                                             */
             };
          };
       };
    };
    union {                                      /**< 0000: (size=0004)                                                  */
-      __IO uint32_t  CTRL;                      /**< 0008: CRC Control register                                         */
+      __IO uint32_t  CTRL;                      /**< 0008: Control register                                             */
       struct {                                  /**< 0000: (size=0004)                                                  */
               uint8_t   RESERVED_6[3];         
-         __IO uint8_t   CTRLHU;                 /**< 000B: CRC_CTRLHU register                                          */
+         __IO uint8_t   CTRLHU;                 /**< 000B: Control register (byte access)                               */
       };
    };
 } CRC_Type;

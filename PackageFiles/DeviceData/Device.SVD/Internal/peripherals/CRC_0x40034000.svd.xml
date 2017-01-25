@@ -1,94 +1,17 @@
 <!--
 Devices using this peripheral: 
-      MK02F12810
-      MK10D5
-      MK10D7
-      MK10D10
-      MK10DZ10
-      MK10F12
-      MK11D5
-      MK11DA5
-      MK11D5WS
-      MK12D5
-      MK20D5
-      MK20D7
-      MK20D10
-      MK20DZ10
-      MK20F12
-      MK21D5
-      MK21DA5
-      MK21D5WS
-      MK21F12
-      MK21FA12
-      MK22D5
-      MK22F12
-      MK22F12810
-      MK22F25612
-      MK22F51212
-      MK22FA12
-      MK24F12
-      MK24F25612
-      MK30D7
-      MK30D10
-      MK30DZ10
-      MK40D7
-      MK40D10
-      MK40DZ10
-      MK50D7
-      MK50D10
-      MK50DZ10
-      MK51D7
-      MK51D10
-      MK51DZ10
-      MK52D10
-      MK52DZ10
-      MK53D10
-      MK53DZ10
-      MK60D10
-      MK60DZ10
-      MK60F12
-      MK60F15
-      MK61F15
-      MK61F15WS
-      MK63F12
-      MK64F12
-      MK65F18
-      MK66F18
-      MK70F15
-      MK70F15WS
-      MK82F25615
-      MKE02Z2
-      MKE02Z4
-      MKE04Z4
-      MKE04Z1284
-      MKE06Z4
-      MKL27Z644
-      MKV10Z7
-      MKV11Z7
-      MKV30F12810
-      MKV31F12810
-      MKV31F25612
-      MKV31F51212
-      MKV40F15
-      MKV43F15
-      MKV44F15
-      MKV45F15
-      MKV46F15
-      MKW21D5
-      MKW22D5
-      MKW24D5
-      SKEAZ1284
-      SKEAZN84
-      SKEAZN642
+      MKM14Z5
+      MKM33Z5
+      MKM34Z5
 -->
       <peripheral>
-         <?sourceFile "CRC0_0x40032000" ?>
-         <name>CRC0</name>
+         <?sourceFile "CRC_0x40034000" ?>
+         <name>CRC</name>
          <description>Cyclic Redundancy Check</description>
          <groupName>CRC</groupName>
          <prependToName>CRC</prependToName>
          <headerStructName>CRC</headerStructName>
-         <baseAddress>0x40032000</baseAddress>
+         <baseAddress>0x40034000</baseAddress>
          <size>32</size>
          <access>read-write</access>
          <resetValue>0x0</resetValue>
@@ -100,7 +23,7 @@ Devices using this peripheral:
          </addressBlock>
          <registers>
             <register>
-               <name>CRC</name>
+               <name>DATA</name>
                <description>Data register</description>
                <addressOffset>0x0</addressOffset>
                <resetValue>0xFFFFFFFF</resetValue>
@@ -132,97 +55,97 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <name>CRCL</name>
+               <name>DATAL</name>
                <?hide?>
-               <description>CRCL register</description>
+               <description>DATAL register</description>
                <addressOffset>0x0</addressOffset>
                <size>16</size>
                <resetValue>0xFFFF</resetValue>
                <resetMask>0xFFFF</resetMask>
                <fields>
                   <field>
-                     <name>CRCL</name>
-                     <description>CRCL stores the lower 16 bits of the 16/32 bit CRC</description>
+                     <name>DATAL</name>
+                     <description>DATAL stores the lower 16 bits of the 16/32 bit CRC</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
             </register>
             <register>
-               <name>CRCLL</name>
+               <name>DATALL</name>
                <?hide?>
-               <description>CRCLL register</description>
+               <description>DATALL register</description>
                <addressOffset>0x0</addressOffset>
                <size>8</size>
                <resetValue>0xFF</resetValue>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
-                     <name>CRCLL</name>
-                     <description>CRCLL stores the first 8 bits of the 32 bit CRC</description>
+                     <name>DATALL</name>
+                     <description>DATALL stores the first 8 bits of the 32 bit CRC</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
             </register>
             <register>
-               <name>CRCLU</name>
+               <name>DATALU</name>
                <?hide?>
-               <description>CRCLU register</description>
+               <description>DATALU register</description>
                <addressOffset>0x1</addressOffset>
                <size>8</size>
                <resetValue>0xFF</resetValue>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
-                     <name>CRCLU</name>
-                     <description>CRCLL stores the second 8 bits of the 32 bit CRC</description>
+                     <name>DATALU</name>
+                     <description>DATALL stores the second 8 bits of the 32 bit CRC</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
             </register>
             <register>
-               <name>CRCH</name>
+               <name>DATAH</name>
                <?hide?>
-               <description>CRCH register</description>
+               <description>DATAH register</description>
                <addressOffset>0x2</addressOffset>
                <size>16</size>
                <resetValue>0xFFFF</resetValue>
                <resetMask>0xFFFF</resetMask>
                <fields>
                   <field>
-                     <name>CRCH</name>
-                     <description>CRCH stores the high 16 bits of the 16/32 bit CRC</description>
+                     <name>DATAH</name>
+                     <description>DATAH stores the high 16 bits of the 16/32 bit CRC</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
             </register>
             <register>
-               <name>CRCHL</name>
+               <name>DATAHL</name>
                <?hide?>
-               <description>CRCHL register</description>
+               <description>DATAHL register</description>
                <addressOffset>0x2</addressOffset>
                <size>8</size>
                <resetValue>0xFF</resetValue>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
-                     <name>CRCHL</name>
-                     <description>CRCHL stores the third 8 bits of the 32 bit CRC</description>
+                     <name>DATAHL</name>
+                     <description>DATAHL stores the third 8 bits of the 32 bit CRC</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
             </register>
             <register>
-               <name>CRCHU</name>
+               <name>DATAHU</name>
                <?hide?>
-               <description>CRCHU register</description>
+               <description>DATAHU register</description>
                <addressOffset>0x3</addressOffset>
                <size>8</size>
                <resetValue>0xFF</resetValue>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
-                     <name>CRCHU</name>
-                     <description>CRCHU stores the fourth 8 bits of the 32 bit CRC</description>
+                     <name>DATAHU</name>
+                     <description>DATAHU stores the fourth 8 bits of the 32 bit CRC</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
@@ -509,7 +432,7 @@ Asserting this bit enables on the fly complementing of read data</description>
                   </field>
                   <field>
                      <name>TOTR</name>
-                     <description>Type of Transpose For Read\n
+                     <description>Type of Transpose For Reads\n
 Identify the transpose configuration of values read from the CRC Data register.\n
 Controls transposition of bits within the bytes and bytes within the whole value</description>
                      <bitOffset>4</bitOffset>

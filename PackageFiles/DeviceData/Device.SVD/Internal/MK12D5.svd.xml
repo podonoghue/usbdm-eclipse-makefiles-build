@@ -6,7 +6,7 @@
 <!ENTITY AIPS0        SYSTEM "peripherals/AIPS0_8M_B.svd.xml">
 <!ENTITY CMP0         SYSTEM "peripherals/CMP0_PSTM7.svd.xml">
 <!ENTITY CMT          SYSTEM "peripherals/CMT_0.svd.xml">
-<!ENTITY CRC0         SYSTEM "peripherals/CRC0_0x40032000.svd.xml">
+<!ENTITY CRC          SYSTEM "peripherals/CRC_0x40032000.svd.xml">
 <!ENTITY CoreDebug    SYSTEM "peripherals/CoreDebug.svd.xml">
 <!ENTITY DAC0         SYSTEM "peripherals/DAC0_16CH_FIFO16.svd.xml">
 <!ENTITY DMA0         SYSTEM "peripherals/DMA0_16CH.svd.xml">
@@ -72,7 +72,7 @@
 &CMP0;
 <peripheral derivedFrom="CMP0"><name>CMP1</name><prependToName>CMP1</prependToName><baseAddress>0x40073008</baseAddress></peripheral>
 &CMT;
-&CRC0;
+&CRC;
 &CoreDebug;
 &DAC0;
 &DMA0;

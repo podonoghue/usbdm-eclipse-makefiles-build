@@ -208,7 +208,7 @@
    <item key="/FTM3/maximumPeriod"                         value="0.0016384" />
    <item key="/FTM3/minimumResolution"                     value="100" />
    <item key="/FTM3/period"                                value="10000" />
-   <item key="/GPIOA/irqHandlerInstalled"                  value="false" />
+   <item key="/GPIOA/irqHandlerInstalled"                  value="true" />
    <item key="/GPIOA/irqLevel"                             value="0" />
    <item key="/GPIOB/irqHandlerInstalled"                  value="false" />
    <item key="/GPIOB/irqLevel"                             value="0" />

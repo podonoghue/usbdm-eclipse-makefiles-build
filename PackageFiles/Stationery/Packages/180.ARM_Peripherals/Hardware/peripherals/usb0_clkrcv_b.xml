@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE devicePage SYSTEM "_menu.dtd" >
-<!-- usb0_otg_c.xml -->
+<!-- usb0_clkrcv_b.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="usb_def.xml"/>
+<xi:include href="usb_clkrcv_def.xml"/>
 </fragment>

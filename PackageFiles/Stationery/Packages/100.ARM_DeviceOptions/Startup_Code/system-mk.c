@@ -144,6 +144,15 @@ void SystemInit(void) {
 static int disableInterruptCount = 0;
 
 /**
+ * Check interrupt status
+ *
+ * @return true if interrupts are enabled
+ */
+int areInterruptsEnabled() {
+   return disableInterruptCount == 0;
+}
+
+/**
  * Disable interrupts
  *
  * This function keeps a count of the number of times interrupts is enabled/disabled so may be called in recursive routines

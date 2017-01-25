@@ -5,7 +5,7 @@
 <!ENTITY ADC0         SYSTEM "peripherals/ADC0_DIFF_A.svd.xml">
 <!ENTITY BP           SYSTEM "peripherals/BP_CM0.svd.xml">
 <!ENTITY CMP0         SYSTEM "peripherals/CMP0_PSTM_TRIGM.svd.xml">
-<!ENTITY CRC0         SYSTEM "peripherals/CRC0_0x40032000.svd.xml">
+<!ENTITY CRC          SYSTEM "peripherals/CRC_0x40032000.svd.xml">
 <!ENTITY CoreDebug    SYSTEM "peripherals/CoreDebug.svd.xml">
 <!ENTITY DMA0         SYSTEM "peripherals/DMA0_MKL.svd.xml">
 <!ENTITY DMAMUX0      SYSTEM "peripherals/DMAMUX0_4CH.svd.xml">
@@ -62,7 +62,7 @@
 &ADC0;
 &BP;
 &CMP0;
-&CRC0;
+&CRC;
 &CoreDebug;
 &DMA0;
 &DMAMUX0;

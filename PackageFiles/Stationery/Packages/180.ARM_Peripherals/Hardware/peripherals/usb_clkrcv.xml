@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+
+<!-- usb_clkrcv.xml -->
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
+    <category name="Clock Recovery" description="USB clock recovery options">
+      <binaryOption 
+         name="usb_clk_recovery_irc_en_en" 
+         description="Enable clock recovery"
+         toolTip="Must be selected to enable USB clock recovery">
+         <choice value="0"  name="Disabled" isDefault="true" />
+         <choice value="1"  name="Enabled" />
+      </binaryOption>
+      <binaryOption 
+         name="clk_recovery_ctrl_reset_resume_rough_en" 
+         description="Reset/resume to rough phase enable"
+         toolTip="The clock recovery block tracks the IRC48Mhz to get an accurate 48Mhz clock.\n
+         It has two phases after user enables clock_recover_en bit, rough phase and tracking phase.\n
+         The step to fine tune the IRC 48Mhz by adjusting the trim fine value is different during these two phases.\n
+         The step in rough phase is larger than that in tracking phase. \n
+         Switch back to rough stage whenever USB bus reset or bus resume occurs.">
+         <choice value="0"  name="Always works in tracking phase after the 1st time rough to track transition" isDefault="true" />
+         <choice value="1"  name="Go back to rough stage whenever bus reset or bus resume occurs" />
+      </binaryOption>
+      <binaryOption 
+         name="clk_recovery_ctrl_restart_ifttrim_en" 
+         description="Restart from IFR trim value"
+         toolTip="IRC48 has a default trim fine value whose default value is factory trimmed (the IFR trim value).\n
+         Clock recover block tracks the accuracy of the clock 48Mhz and keeps updating the trim fine value accordingly">
+         <choice value="0"  name="Start from last trim value" isDefault="true" />
+         <choice value="1"  name="Restart from factory IFR value" />
+      </binaryOption>
+   </category>
+   
+   <template><![CDATA[
+   
+   \t// Enable IRC Clock
+   \tstatic constexpr uint32_t clk_recovery_irc_en =
+   \t      USB_CLK_RECOVER_IRC_EN_IRC_EN($(usb_clk_recovery_irc_en_en))|  // Enable
+   \t      USB_CLK_RECOVER_IRC_EN_REG_EN($(usb_clk_recovery_irc_en_en));  // Enable power regulator\n\n
+
+   \t// Clock recovery options
+   \tstatic constexpr uint32_t clk_recovery_ctrl =
+   \t      USB_CLK_RECOVER_CTRL_CLOCK_RECOVER_EN($(usb_clk_recovery_irc_en_en))|       // Enable clock recovery
+   \t      USB_CLK_RECOVER_CTRL_RESET_RESUME_ROUGH_EN($(clk_recovery_ctrl_reset_resume_rough_en))|  // Go to rough mode when reset/resumed
+   \t      USB_CLK_RECOVER_CTRL_RESTART_IFRTRIM_EN($(clk_recovery_ctrl_restart_ifttrim_en));     // Always use trim value as starting point\n\n
+   ]]></template>
+</fragment>

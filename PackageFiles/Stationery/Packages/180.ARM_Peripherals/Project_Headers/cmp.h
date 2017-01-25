@@ -116,6 +116,12 @@ public:
       }
    }
    /**
+    * Clear edge interrupt flags
+    */
+   static void clearInterruptFlags() {
+      cmp->SCR |= CMP_SCR_CFR_MASK|CMP_SCR_CFF_MASK;
+   }
+   /**
     * Enable/disable falling edge interrupts
     *
     * @param enable True=>enable, False=>disable

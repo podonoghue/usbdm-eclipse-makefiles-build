@@ -7,7 +7,7 @@
 <!ENTITY AOI          SYSTEM "peripherals/AOI_0.svd.xml">
 <!ENTITY CAN0         SYSTEM "peripherals/CAN0_MKV.svd.xml">
 <!ENTITY CMP0         SYSTEM "peripherals/CMP0_MKV.svd.xml">
-<!ENTITY CRC0         SYSTEM "peripherals/CRC0_0x40032000.svd.xml">
+<!ENTITY CRC          SYSTEM "peripherals/CRC_0x40032000.svd.xml">
 <!ENTITY DAC0         SYSTEM "peripherals/DAC0_16CH_FIFO16.svd.xml">
 <!ENTITY DMA0         SYSTEM "peripherals/DMA0_16CH_EARS16.svd.xml">
 <!ENTITY DMAMUX0      SYSTEM "peripherals/DMAMUX0_16CH_TRIG.svd.xml">
@@ -69,7 +69,7 @@
 <peripheral derivedFrom="CMP0"><name>CMP1</name><prependToName>CMP1</prependToName><baseAddress>0x40073008</baseAddress></peripheral>
 <peripheral derivedFrom="CMP0"><name>CMP2</name><prependToName>CMP2</prependToName><baseAddress>0x40073010</baseAddress></peripheral>
 <peripheral derivedFrom="CMP0"><name>CMP3</name><prependToName>CMP3</prependToName><baseAddress>0x40073018</baseAddress></peripheral>
-&CRC0;
+&CRC;
 &DAC0;
 &DMA0;
 &DMAMUX0;

@@ -587,48 +587,48 @@ typedef struct {                                /*       CMP0 Structure         
 */
 typedef struct {                                /*       CRC Structure                                                */
    union {                                      /**< 0000: (size=0004)                                                  */
-      __IO uint32_t  DATA;                      /**< 0000: CRC Data register                                            */
+      __IO uint32_t  DATA;                      /**< 0000: Data register                                                */
       struct {                                  /**< 0000: (size=0004)                                                  */
          union {                                /**< 0000: (size=0002)                                                  */
-            __IO uint16_t  CRCL;                /**< 0000: CRC_CRCL register                                            */
+            __IO uint16_t  DATAL;               /**< 0000: DATAL register                                               */
             struct {                            /**< 0000: (size=0002)                                                  */
-               __IO uint8_t   CRCLL;            /**< 0000: CRC_CRCLL register                                           */
-               __IO uint8_t   CRCLU;            /**< 0001: CRC_CRCLU register                                           */
+               __IO uint8_t   DATALL;           /**< 0000: DATALL register                                              */
+               __IO uint8_t   DATALU;           /**< 0001: DATALU register                                              */
             };
          };
          union {                                /**< 0000: (size=0002)                                                  */
-            __IO uint16_t  CRCH;                /**< 0002: CRC_CRCH register                                            */
+            __IO uint16_t  DATAH;               /**< 0002: DATAH register                                               */
             struct {                            /**< 0000: (size=0002)                                                  */
-               __IO uint8_t   CRCHL;            /**< 0002: CRC_CRCHL register                                           */
-               __IO uint8_t   CRCHU;            /**< 0003: CRC_CRCHU register                                           */
+               __IO uint8_t   DATAHL;           /**< 0002: DATAHL register                                              */
+               __IO uint8_t   DATAHU;           /**< 0003: DATAHU register                                              */
             };
          };
       };
    };
    union {                                      /**< 0000: (size=0004)                                                  */
-      __IO uint32_t  GPOLY;                     /**< 0004: CRC Polynomial register                                      */
+      __IO uint32_t  GPOLY;                     /**< 0004: Polynomial register                                          */
       struct {                                  /**< 0000: (size=0004)                                                  */
          union {                                /**< 0000: (size=0002)                                                  */
-            __IO uint16_t  GPOLYL;              /**< 0004: CRC_GPOLYL register                                          */
+            __IO uint16_t  GPOLYL;              /**< 0004: GPOLYL register                                              */
             struct {                            /**< 0000: (size=0002)                                                  */
-               __IO uint8_t   GPOLYLL;          /**< 0004: CRC_GPOLYLL register                                         */
-               __IO uint8_t   GPOLYLU;          /**< 0005: CRC_GPOLYLU register                                         */
+               __IO uint8_t   GPOLYLL;          /**< 0004: GPOLYLL register                                             */
+               __IO uint8_t   GPOLYLU;          /**< 0005: GPOLYLU register                                             */
             };
          };
          union {                                /**< 0000: (size=0002)                                                  */
-            __IO uint16_t  GPOLYH;              /**< 0006: CRC_GPOLYH register                                          */
+            __IO uint16_t  GPOLYH;              /**< 0006: GPOLYH register                                              */
             struct {                            /**< 0000: (size=0002)                                                  */
-               __IO uint8_t   GPOLYHL;          /**< 0006: CRC_GPOLYHL register                                         */
-               __IO uint8_t   GPOLYHU;          /**< 0007: CRC_GPOLYHU register                                         */
+               __IO uint8_t   GPOLYHL;          /**< 0006: GPOLYHL register                                             */
+               __IO uint8_t   GPOLYHU;          /**< 0007: GPOLYHU register                                             */
             };
          };
       };
    };
    union {                                      /**< 0000: (size=0004)                                                  */
-      __IO uint32_t  CTRL;                      /**< 0008: CRC Control register                                         */
+      __IO uint32_t  CTRL;                      /**< 0008: Control register                                             */
       struct {                                  /**< 0000: (size=0004)                                                  */
               uint8_t   RESERVED_6[3];         
-         __IO uint8_t   CTRLHU;                 /**< 000B: CRC_CTRLHU register                                          */
+         __IO uint8_t   CTRLHU;                 /**< 000B: Control register (byte access)                               */
       };
    };
 } CRC_Type;
@@ -659,30 +659,30 @@ typedef struct {                                /*       CRC Structure          
 #define CRC_DATA_HU_MASK                         (0xFF000000U)                                       /*!< CRC_DATA: HU Mask                       */
 #define CRC_DATA_HU_SHIFT                        (24U)                                               /*!< CRC_DATA: HU Position                   */
 #define CRC_DATA_HU(x)                           (((uint32_t)(((uint32_t)(x))<<CRC_DATA_HU_SHIFT))&CRC_DATA_HU_MASK) /*!< CRC_DATA                                */
-/* ------- CRCL Bit Fields                          ------ */
-#define CRC_CRCL_CRCL_MASK                       (0xFFFFU)                                           /*!< CRC_CRCL: CRCL Mask                     */
-#define CRC_CRCL_CRCL_SHIFT                      (0U)                                                /*!< CRC_CRCL: CRCL Position                 */
-#define CRC_CRCL_CRCL(x)                         (((uint16_t)(((uint16_t)(x))<<CRC_CRCL_CRCL_SHIFT))&CRC_CRCL_CRCL_MASK) /*!< CRC_CRCL                                */
-/* ------- CRCLL Bit Fields                         ------ */
-#define CRC_CRCLL_CRCLL_MASK                     (0xFFU)                                             /*!< CRC_CRCLL: CRCLL Mask                   */
-#define CRC_CRCLL_CRCLL_SHIFT                    (0U)                                                /*!< CRC_CRCLL: CRCLL Position               */
-#define CRC_CRCLL_CRCLL(x)                       (((uint8_t)(((uint8_t)(x))<<CRC_CRCLL_CRCLL_SHIFT))&CRC_CRCLL_CRCLL_MASK) /*!< CRC_CRCLL                               */
-/* ------- CRCLU Bit Fields                         ------ */
-#define CRC_CRCLU_CRCLU_MASK                     (0xFFU)                                             /*!< CRC_CRCLU: CRCLU Mask                   */
-#define CRC_CRCLU_CRCLU_SHIFT                    (0U)                                                /*!< CRC_CRCLU: CRCLU Position               */
-#define CRC_CRCLU_CRCLU(x)                       (((uint8_t)(((uint8_t)(x))<<CRC_CRCLU_CRCLU_SHIFT))&CRC_CRCLU_CRCLU_MASK) /*!< CRC_CRCLU                               */
-/* ------- CRCH Bit Fields                          ------ */
-#define CRC_CRCH_CRCH_MASK                       (0xFFFFU)                                           /*!< CRC_CRCH: CRCH Mask                     */
-#define CRC_CRCH_CRCH_SHIFT                      (0U)                                                /*!< CRC_CRCH: CRCH Position                 */
-#define CRC_CRCH_CRCH(x)                         (((uint16_t)(((uint16_t)(x))<<CRC_CRCH_CRCH_SHIFT))&CRC_CRCH_CRCH_MASK) /*!< CRC_CRCH                                */
-/* ------- CRCHL Bit Fields                         ------ */
-#define CRC_CRCHL_CRCHL_MASK                     (0xFFU)                                             /*!< CRC_CRCHL: CRCHL Mask                   */
-#define CRC_CRCHL_CRCHL_SHIFT                    (0U)                                                /*!< CRC_CRCHL: CRCHL Position               */
-#define CRC_CRCHL_CRCHL(x)                       (((uint8_t)(((uint8_t)(x))<<CRC_CRCHL_CRCHL_SHIFT))&CRC_CRCHL_CRCHL_MASK) /*!< CRC_CRCHL                               */
-/* ------- CRCHU Bit Fields                         ------ */
-#define CRC_CRCHU_CRCHU_MASK                     (0xFFU)                                             /*!< CRC_CRCHU: CRCHU Mask                   */
-#define CRC_CRCHU_CRCHU_SHIFT                    (0U)                                                /*!< CRC_CRCHU: CRCHU Position               */
-#define CRC_CRCHU_CRCHU(x)                       (((uint8_t)(((uint8_t)(x))<<CRC_CRCHU_CRCHU_SHIFT))&CRC_CRCHU_CRCHU_MASK) /*!< CRC_CRCHU                               */
+/* ------- DATAL Bit Fields                         ------ */
+#define CRC_DATAL_DATAL_MASK                     (0xFFFFU)                                           /*!< CRC_DATAL: DATAL Mask                   */
+#define CRC_DATAL_DATAL_SHIFT                    (0U)                                                /*!< CRC_DATAL: DATAL Position               */
+#define CRC_DATAL_DATAL(x)                       (((uint16_t)(((uint16_t)(x))<<CRC_DATAL_DATAL_SHIFT))&CRC_DATAL_DATAL_MASK) /*!< CRC_DATAL                               */
+/* ------- DATALL Bit Fields                        ------ */
+#define CRC_DATALL_DATALL_MASK                   (0xFFU)                                             /*!< CRC_DATALL: DATALL Mask                 */
+#define CRC_DATALL_DATALL_SHIFT                  (0U)                                                /*!< CRC_DATALL: DATALL Position             */
+#define CRC_DATALL_DATALL(x)                     (((uint8_t)(((uint8_t)(x))<<CRC_DATALL_DATALL_SHIFT))&CRC_DATALL_DATALL_MASK) /*!< CRC_DATALL                              */
+/* ------- DATALU Bit Fields                        ------ */
+#define CRC_DATALU_DATALU_MASK                   (0xFFU)                                             /*!< CRC_DATALU: DATALU Mask                 */
+#define CRC_DATALU_DATALU_SHIFT                  (0U)                                                /*!< CRC_DATALU: DATALU Position             */
+#define CRC_DATALU_DATALU(x)                     (((uint8_t)(((uint8_t)(x))<<CRC_DATALU_DATALU_SHIFT))&CRC_DATALU_DATALU_MASK) /*!< CRC_DATALU                              */
+/* ------- DATAH Bit Fields                         ------ */
+#define CRC_DATAH_DATAH_MASK                     (0xFFFFU)                                           /*!< CRC_DATAH: DATAH Mask                   */
+#define CRC_DATAH_DATAH_SHIFT                    (0U)                                                /*!< CRC_DATAH: DATAH Position               */
+#define CRC_DATAH_DATAH(x)                       (((uint16_t)(((uint16_t)(x))<<CRC_DATAH_DATAH_SHIFT))&CRC_DATAH_DATAH_MASK) /*!< CRC_DATAH                               */
+/* ------- DATAHL Bit Fields                        ------ */
+#define CRC_DATAHL_DATAHL_MASK                   (0xFFU)                                             /*!< CRC_DATAHL: DATAHL Mask                 */
+#define CRC_DATAHL_DATAHL_SHIFT                  (0U)                                                /*!< CRC_DATAHL: DATAHL Position             */
+#define CRC_DATAHL_DATAHL(x)                     (((uint8_t)(((uint8_t)(x))<<CRC_DATAHL_DATAHL_SHIFT))&CRC_DATAHL_DATAHL_MASK) /*!< CRC_DATAHL                              */
+/* ------- DATAHU Bit Fields                        ------ */
+#define CRC_DATAHU_DATAHU_MASK                   (0xFFU)                                             /*!< CRC_DATAHU: DATAHU Mask                 */
+#define CRC_DATAHU_DATAHU_SHIFT                  (0U)                                                /*!< CRC_DATAHU: DATAHU Position             */
+#define CRC_DATAHU_DATAHU(x)                     (((uint8_t)(((uint8_t)(x))<<CRC_DATAHU_DATAHU_SHIFT))&CRC_DATAHU_DATAHU_MASK) /*!< CRC_DATAHU                              */
 /* ------- GPOLY Bit Fields                         ------ */
 #define CRC_GPOLY_LOW_MASK                       (0xFFFFU)                                           /*!< CRC_GPOLY: LOW Mask                     */
 #define CRC_GPOLY_LOW_SHIFT                      (0U)                                                /*!< CRC_GPOLY: LOW Position                 */
