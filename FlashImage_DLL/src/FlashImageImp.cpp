@@ -1,4 +1,4 @@
-/*! \file
+/** \file
    \brief Utility Routines for loading Freescale S-Record Files
 
    FlashImageImp.cpp
@@ -24,6 +24,7 @@
 \verbatim
  Change History
 +========================================================================================
+| 29 Dec 16 | Revised loading ELF files                                 V4.12.1.150 - pgo
 |  4 Mar 16 | Improved format of dumpRange()                            V4.12.1.80  - pgo
 | 29 May 15 | Added saveFile()                                          V4.11.1.40  - pgo
 | 10 Feb 15 | Now discards S5 & S6 SRECs                                V4.10.6.260 - pgo
@@ -48,65 +49,39 @@
 #include <malloc.h>
 
 #include "FlashImage.h"
-
 #include "MyException.h"
 #include "Elf.h"
 #include "Utils.h"
-
 #include "FlashImageImp.h"
 #include "PluginHelper.h"
 
 using namespace std;
 
 /*
- * Create the plugin instance
+ * Create the plug-in instance
  */
 extern "C"
 size_t CPP_DLL_EXPORT createPluginInstance(void *pp) {
+
    return TcreatePluginInstance<FlashImageImp>(pp);
-}
-
-const char* FlashImageImp::get_pFlagsName(unsigned int flags) {
-   static char buff[20];
-   buff[0] = '\0';
-   if (flags&PF_X) {
-      strcat(buff,"PF_X|");
-   }
-   if (flags&PF_W) {
-      strcat(buff,"PF_W|");
-   }
-   if (flags&PF_R) {
-      strcat(buff,"PF_R|");
-   }
-   return buff;
-}
-
-const char* FlashImageImp::get_ptTypeName(unsigned int type) {
-   switch (type) {
-   case PT_NULL:      return "PT_NULL";
-   case PT_LOAD:      return "PT_LOAD";
-   case PT_DYNAMIC:   return "PT_DYNAMIC";
-   case PT_INTERP:    return "PT_INTERP";
-   case PT_NOTE:      return "PT_NOTE";
-   case PT_SHLIB:     return "PT_SHLIB";
-   case PT_PHDR:      return "PT_PHDR";
-   case PT_ARM_EXIDX: return "PT_ARM_EXIDX";
-   default :          return "????";
-   }
 }
 
 /*
  * ======================================================================
  */
 
-class MemoryPage {
-/* Represents a memory 'page'.
- * Note: A page does not correspond to a flash page or sector!
+/**
+ *  Represents a memory 'page'.
+ *  Note: A page does not correspond to a flash page or sector!
  */
+class MemoryPage {
 
 public:
-   uint8_t data[FlashImageImp::PAGE_SIZE];           //!< Page of memory
-   uint8_t validBits[FlashImageImp::PAGE_SIZE/8];    //!< Indicates valid bytes in data
+   /** Page of memory */
+   uint8_t data[FlashImageImp::PAGE_SIZE];
+
+   /** Indicates valid bytes in data */
+   uint8_t validBits[FlashImageImp::PAGE_SIZE/8];
 
 public:
    MemoryPage();
@@ -117,7 +92,7 @@ public:
    uint8_t  getValue(unsigned index);
 };
 
-/*!
+/**
  * Constructor
  */
 MemoryPage::MemoryPage() {
@@ -125,7 +100,7 @@ MemoryPage::MemoryPage() {
    memset(validBits, 0, sizeof(validBits));
 }
 
-/*!
+/**
  * Indicates if a page[index] has been written to
  */
 bool MemoryPage::isValid(unsigned index) const {
@@ -135,7 +110,7 @@ bool MemoryPage::isValid(unsigned index) const {
    return (validBits[index/8] & (1<<(index&0x7)))?true:false;
 }
 
-/*!
+/**
  * Sets page[index] to value & marks as valid
  */
 void MemoryPage::setValue(unsigned index, uint8_t value) {
@@ -146,7 +121,7 @@ void MemoryPage::setValue(unsigned index, uint8_t value) {
    validBits[index/8] |= (1<<(index&0x7));
 }
 
-/*!
+/**
  *  Sets page[index] to 0xFF & marks as invalid
  */
 void MemoryPage::remove(unsigned index) {
@@ -157,7 +132,7 @@ void MemoryPage::remove(unsigned index) {
    validBits[index/8] &= ~(1<<(index&0x7));
 }
 
-/*!
+/**
  *  Returns contents of page[index] if valid or (uint8_t)-1 otherwise
  */
 uint8_t MemoryPage::getValue(unsigned index) {
@@ -171,7 +146,7 @@ uint8_t MemoryPage::getValue(unsigned index) {
  * ======================================================================
  */
 
-/*!
+/**
  *    Class to enumerate the occupied locations within the memory image
  *    @note may be invalidated by changes to the referenced image
  */
@@ -191,7 +166,8 @@ public:
    virtual void       lastValid();
 };
 
-/*! Construct an enumerator positioned at a given starting address
+/**
+ *  Construct an enumerator positioned at a given starting address
  *  Note: if address is unallocated then the Enumerator is advanced to next allocated address
  */
 EnumeratorImp::EnumeratorImp(FlashImageImp &memoryImage, uint32_t address) : memoryImage(memoryImage), address(address) {
@@ -203,34 +179,34 @@ EnumeratorImp::EnumeratorImp(FlashImageImp &memoryImage, uint32_t address) : mem
          log.print("Advanced to 1st valid address: 0x%08X\n", this->address);
       }
       else {
-         log.print("No allocated address found");
+         log.print("No allocated address found\n");
       }
    }
 }
 
-/*! Get the current location as a flat address
+/**
+ *  Get the current location as a flat address
  */
 uint32_t EnumeratorImp::getAddress() const {
    return address;
 }
 
-/*! Indicates if the current memory location is valid (occupied)
+/**
+ *  Indicates if the current memory location is valid (occupied)
  *
- * @return \n
- *         true  => current location is occupied
- *        false => current location is unoccupied/unallocated
+ *  @return true  => current location is occupied
+ *  @return false => current location is unoccupied/unallocated
  */
 bool EnumeratorImp::isValid() const {
 //   UsbdmSystem::Log::print("addr = 0x%06X\n", address);
    return memoryImage.isValid(address);
 }
 
-/*!
- * Sets the iterator to the given address
+/**
+ *  Sets the iterator to the given address
  *
- *  @return \n
- *         true  => current location is occupied
- *         false => current location is unoccupied/unallocated
+ *  @return true  => current location is occupied
+ *  @return false => current location is unoccupied/unallocated
  */
 bool EnumeratorImp::setAddress(uint32_t addr) {
 //   log.print("addr = 0x%06X\n", address);
@@ -241,12 +217,11 @@ bool EnumeratorImp::setAddress(uint32_t addr) {
    return true;
 }
 
-/*!
- * Advance to next occupied flash location
+/**
+ *  Advance to next occupied flash location
  *
- * @return \n
- *        true  => advanced to next occupied location
- *        false => no occupied locations remain, enumerator is left at last \e unoccupied location
+ *  @return true  => Advanced to next occupied location
+ *  @return false => No occupied locations remain, enumerator is left at last \e unoccupied location
  */
 bool EnumeratorImp::nextValid() {
    MemoryPagePtr memoryPage;
@@ -289,7 +264,7 @@ bool EnumeratorImp::nextValid() {
    return false;
 }
 
-/*!
+/**
  *  Advance location to just before the next unoccupied flash location or page boundary
  *  Assumes current location is occupied.
  */
@@ -325,7 +300,7 @@ void EnumeratorImp::lastValid() {
  * ======================================================================
  */
 
-/*!
+/**
  *   Constructor - creates an empty Flash image
  */
 FlashImageImp::FlashImageImp() :
@@ -344,10 +319,10 @@ FlashImageImp::FlashImageImp() :
       symTable(0) {
 }
 
-/*!
- *   Set target type of image
+/**
+ *  Set target type of image
  *
- *   @param targetType - Target type to set
+ *  @param targetType - Target type to set
  */
 void FlashImageImp::setTargetType(TargetType_t targetType) {
    this->targetType = targetType;
@@ -357,25 +332,25 @@ void FlashImageImp::setTargetType(TargetType_t targetType) {
    clear();
 }
 
-/*!
+/**
  *  ~Constructor
  */
 FlashImageImp::~FlashImageImp() {
    clear();
 }
 
-/*!
- * Get string describing the error code
+/**
+ *  Get string describing the error code
  *
- * @param rc - Error code
+ *  @param rc - Error code
  *
- * @return String describing the error
+ *  @return String describing the error
  */
 const char *FlashImageImp::getErrorString(USBDM_ErrorCode rc) {
    return USBDM_GetErrorString(rc);
 }
 
-/*!
+/**
  *  Initialises the memory to empty
  */
 void FlashImageImp::clear(void) {
@@ -395,7 +370,7 @@ void FlashImageImp::clear(void) {
    littleEndian           = false;
 }
 
-/*!
+/**
  *  Checks if the memory location is valid (has been written to)
  *
  *  @param address - 32-bit memory address
@@ -412,24 +387,24 @@ bool FlashImageImp::isValid(uint32_t address) {
    return (memoryPage != NULL) && (memoryPage->isValid(offset));
 }
 
-/*!
- *   Gets an enumerator for the memory
+/**
+ *  Gets an enumerator for the memory
  */
 FlashImage::EnumeratorPtr FlashImageImp::getEnumerator(uint32_t address) {
    return EnumeratorPtr(new EnumeratorImp(*this, address));
 }
 
-/*!
- * Check if image is entirely empty (never written to)
+/**
+ *  Check if image is entirely empty (never written to)
  *
- * @return true=>image is entirely empty,\n
- *               image is not empty
+ *  @return true  => image is entirely empty
+ *  @return false => image is not empty
  */
 bool FlashImageImp::isEmpty() const {
    return elementCount==0;
 }
 
-/*!
+/**
  *  Prints a summary of the Flash memory allocated/used.
  */
 void FlashImageImp::printMemoryMap() {
@@ -448,26 +423,26 @@ void FlashImageImp::printMemoryMap() {
    UsbdmSystem::Log::print("======================>\n");
 }
 
-/*!
+/**
  *  Returns an approximate count of occupied bytes
  */
 unsigned FlashImageImp::getByteCount() const {
    return elementCount*sizeof(uint8_t);
 }
 
-/*
+/**
  *  Get pathname of last file loaded
  */
 const string & FlashImageImp::getSourcePathname() const {
    return sourcePath;
 }
 
-/*!
- * Locate Page from page number
+/**
+ *  Locate Page from page number
  *
- * @param   pageNum
+ *  @param   pageNum
  *
- * @return  memory page or NULL if not found
+ *  @return  memory page or NULL if not found
  */
 MemoryPagePtr FlashImageImp::getmemoryPage(uint32_t pageNum) {
    MemoryPagePtr memoryPage;
@@ -489,10 +464,10 @@ MemoryPagePtr FlashImageImp::getmemoryPage(uint32_t pageNum) {
    return memoryPage;
 }
 
-/*!
- *   Allocate page
+/**
+ *  Allocate page
  *
- *   @param pageNum
+ *  @param pageNum
  */
 MemoryPagePtr FlashImageImp::allocatePage(uint32_t pageNum) {
    LOGGING_Q;
@@ -500,7 +475,7 @@ MemoryPagePtr FlashImageImp::allocatePage(uint32_t pageNum) {
 
    memoryPage = getmemoryPage(pageNum);
    if (memoryPage == NULL) {
-//XXX       log.print( "Allocating page #%2.2X [0x%06X-0x%06X]\n", pageNum, pageOffsetToAddress(pageNum, 0), pageOffsetToAddress(pageNum, PAGE_SIZE-1));
+// log.print( "Allocating page #%2.2X [0x%06X-0x%06X]\n", pageNum, pageOffsetToAddress(pageNum, 0), pageOffsetToAddress(pageNum, PAGE_SIZE-1));
       memoryPage.reset(new MemoryPage);
       memoryPages.insert(pair<const uint32_t, MemoryPagePtr>(pageNum, memoryPage));
       // Update cache
@@ -509,13 +484,13 @@ MemoryPagePtr FlashImageImp::allocatePage(uint32_t pageNum) {
    return memoryPage;
 }
 
-/*!
+/**
  *    Load a S19 or ELF file into the buffer. \n
  *
- *  @param filePath      : Path of file to load
- *  @param clearBuffer   : Clear buffer before loading
+ *  @param filePath     Path of file to load
+ *  @param clearBuffer  Clear buffer before loading
  *
- *  @return error code see \ref USBDM_ErrorCode
+ *  @return Error code
  */
 USBDM_ErrorCode  FlashImageImp::loadFile(const string &filePath, bool clearBuffer) {
    LOGGING_Q;
@@ -544,18 +519,18 @@ USBDM_ErrorCode  FlashImageImp::loadFile(const string &filePath, bool clearBuffe
 //      printMemoryMap();
 
       sourcePath      = filePath;
-      sourceFilename  = filePath; //!Todo Fix
+      sourceFilename  = filePath;
    }
    return rc;
 }
 
-/*!
- *    Save image buffer as a S19 file. \n
+/**
+ *  Save image buffer as a S19 file. \n
  *
- *  @param filePath      : Path of file to load
- *  @param discardFF     : Discard sizable blocks of consecutive 0xFF values (assumed blank)
+ *  @param filePath    Path of file to load
+ *  @param discardFF   Discard sizable blocks of consecutive 0xFF values (assumed blank)
  *
- *  @return error code see \ref USBDM_ErrorCode
+ *  @return Error code
  */
 USBDM_ErrorCode FlashImageImp::saveFile(const std::string &filePath, bool discardFF) {
    LOGGING;
@@ -582,18 +557,19 @@ USBDM_ErrorCode FlashImageImp::saveFile(const std::string &filePath, bool discar
    return BDM_RC_OK;
 }
 
-//! Dump a single S-record to stdout
-//!
-//! @param file     file handle for writes
-//! @param buffer   location of data to dump
-//! @param address  base address of data
-//! @param size     number of bytes to dump
-//!
-//! @note size must be less than or equal to \ref maxSrecSize
-//! @note S-records filled with 0xFF are discarded
-//!
+/**
+ *  Dump a single S-record to stdout
+ *
+ *  @param file     File handle for writes
+ *  @param buffer   Location of data to dump
+ *  @param address  Base address of data
+ *  @param size     Number of bytes to dump
+ *
+ *  @note size must be less than or equal to \ref maxSrecSize
+ *  @note S-records filled with 0xFF are discarded
+ */
 void FlashImageImp::writeSrec(uint8_t *buffer, uint32_t address, unsigned size) {
-   LOGGING;
+   LOGGING_Q;
    log.print("[0x%06X..0x%06X]\n", address, address+size-1);
 
    // Discard 0xFF filled records (blank Flash)
@@ -640,15 +616,16 @@ void FlashImageImp::writeSrec(uint8_t *buffer, uint32_t address, unsigned size) 
    fprintf(fp, "%02X\n", checkSum);
 }
 
-//! Dump data as S-records to stdout
-//!
-//! @param file     file handle for writes
-//! @param buffer   location of data to dump
-//! @param address  base address of data
-//! @param size     number of bytes to dump
-//!
-//! @note Regions filled with 0xFF are discarded
-//!
+/**
+ *  Dump data as S-records to stdout
+ *
+ *  @param file     File handle for writes
+ *  @param buffer   Location of data to dump
+ *  @param address  Base address of data
+ *  @param size     Number of bytes to dump
+ *
+ *  @note Regions filled with 0xFF are discarded
+ */
 void FlashImageImp::writeData(uint8_t *buffer, uint32_t address, unsigned size) {
    LOGGING;
    log.print("[0x%06X..0x%06X]\n", address, address+size-1);
@@ -665,12 +642,12 @@ void FlashImageImp::writeData(uint8_t *buffer, uint32_t address, unsigned size) 
    }
 }
 
-/*!
+/**
  *  Obtain the value of a Flash memory location
  *
- *  @param address - 32-bit memory address
+ *  @param address Memory address
  *
- *  @return - uint8_t value (dummy value of 0xFF.. is unallocated address)
+ *  @return Value (dummy value of 0xFF.. is unallocated address)
  */
 uint8_t FlashImageImp::getValue(uint32_t address) {
    uint16_t         offset;
@@ -684,13 +661,13 @@ uint8_t FlashImageImp::getValue(uint32_t address) {
       return memoryPage->getValue(offset);
 }
 
-/*!
- *   Set a Flash memory location
+/**
+ *  Set a Flash memory location
  *
- *   @param address - 32-bit memory address
- *   @param value   - uint8_t value to write to image
+ *  @param address Memory address
+ *  @param value   Value to write to image
  *
- *   @note Allocates a memory location if necessary
+ *  @note Allocates a memory location if necessary
  */
 void FlashImageImp::setValue(uint32_t address, uint8_t value) {
    uint16_t offset;
@@ -712,9 +689,9 @@ void FlashImageImp::setValue(uint32_t address, uint8_t value) {
 }
 
 /*
- * Remove a Flash memory location (set to unprogrammed)
+ *  Remove a Flash memory location (set to unprogrammed)
  *
- * @param address - 32-bit memory address
+ *  @param address - Memory address
  */
 void FlashImageImp::remove(uint32_t address) {
    uint16_t offset;
@@ -730,11 +707,11 @@ void FlashImageImp::remove(uint32_t address) {
    memoryPage->remove(offset);
 }
 
-/*!
+/**
  *  Dump the contents of a range of memory to log file
  *
- * @param startAddress - start of range
- * @param endAddress   - end of range
+ *  @param startAddress Start of range
+ *  @param endAddress   End of range
  *
  */
 void FlashImageImp::dumpRange(uint32_t startAddress, uint32_t endAddress) {
@@ -810,13 +787,13 @@ void FlashImageImp::dumpRange(uint32_t startAddress, uint32_t endAddress) {
    UsbdmSystem::Log::print("\n");
 }
 
-/*!
- * Load data into Flash image
+/**
+ *  Load data into Flash image
  *
- * @param bufferSize    - size of data to load (in uint8_t)
- * @param address       - address to load at
- * @param data          - data to load
- * @param dontOverwrite - produce error if overwriting existing data
+ *  @param bufferSize    Size of data to load (in uint8_t)
+ *  @param address       Address to load at
+ *  @param data          Data to load
+ *  @param dontOverwrite Produce error if overwriting existing data
  */
 USBDM_ErrorCode FlashImageImp::loadData(uint32_t       bufferSize,
       uint32_t       address,
@@ -843,15 +820,15 @@ USBDM_ErrorCode FlashImageImp::loadData(uint32_t       bufferSize,
    return SFILE_RC_OK;
 }
 
-/*!
- * Load data into Flash image from byte array
+/**
+ *  Load data into Flash image from byte array
  *
- * @param bufferSize    - size of data to load (in bytes)
- * @param address       - address to load at (byte/word address)
- * @param data          - data to load
- * @param dontOverwrite - true to prevent overwriting data
+ *  @param bufferSize     Size of data to load (in bytes)
+ *  @param address        Address to load at (byte/word address)
+ *  @param data           Data to load
+ *  @param dontOverwrite  True to prevent overwriting data
  *
- * @note This is only of use if uint8_t is not a byte
+ *  @note This is only of use if uint8_t is not a byte
  */
 USBDM_ErrorCode FlashImageImp::loadDataBytes(uint32_t        bufferSize,
                                              uint32_t        address,
@@ -887,13 +864,14 @@ void FlashImageImp::fillUnused(uint32_t size, uint32_t address, uint8_t fillValu
    }
 }
 
-/*! Maps Address to PageNum:offset
+/**
+ *  Maps Address to PageNum:offset
  *
- * @param address - 32-bit address
- * @param pageNum - page number portion of address
- * @param offset  - offset within page
+ *  @param address  Address
+ *  @param pageNum  Page number portion of address
+ *  @param offset   Offset within page
  *
- * @note - These values do NOT refer to the paging structure used by the target!
+ *  @note - These values do NOT refer to the paging structure used by the target!
  */
 void FlashImageImp::addressToPageOffset(uint32_t address, uint16_t &pageNum, uint16_t &offset) {
    offset  = address & PAGE_MASK;
@@ -901,14 +879,15 @@ void FlashImageImp::addressToPageOffset(uint32_t address, uint16_t &pageNum, uin
    //      printf("%8.8X=>%2.2X:%4.4X\n", address, pageNum, offset);
 }
 
-/*! Maps PageNum:offset to Address
+/**
+ *  Maps PageNum:offset to Address
  *
- * @param pageNum - page number portion of address
- * @param offset  - offset within page
+ *  @param pageNum  Page number portion of address
+ *  @param offset   Offset within page
  *
- * @return 32-bit address
+ *  @return Address
  *
- * @note - These values do NOT refer to the paging structure used by the target!
+ *  @note - These values do NOT refer to the paging structure used by the target!
  */
 uint32_t FlashImageImp::pageOffsetToAddress(uint16_t pageNum, uint16_t offset) {
    if (offset>=PAGE_SIZE)
@@ -916,11 +895,12 @@ uint32_t FlashImageImp::pageOffsetToAddress(uint16_t pageNum, uint16_t offset) {
    return (pageNum << PAGE_BIT_OFFSET) + offset;
 }
 
-/*! Convert a 32-bit unsigned number between Target and Native format
+/**
+ *  Convert a 32-bit unsigned number between Target and Native format
  *
- * @param value - value to convert
+ *  @param value Value to convert
  *
- * @return - converted value
+ *  @return Converted value
  */
 
 uint32_t FlashImageImp::targetToNative(uint32_t &value) {
@@ -934,11 +914,12 @@ uint32_t FlashImageImp::targetToNative(uint32_t &value) {
    return relocAddress;
 }
 
-/*! Convert a 16-bit unsigned number between Target and Native format
+/**
+ *  Convert a 16-bit unsigned number between Target and Native format
  *
- * @param value - value to convert
+ *  @param value Value to convert
  *
- * @return - converted value
+ *  @return Converted value
  */
 
 uint16_t FlashImageImp::targetToNative(uint16_t &value) {
@@ -948,13 +929,13 @@ uint16_t FlashImageImp::targetToNative(uint16_t &value) {
    return ((value<<8)&0xFF00) + ((value>>8)&0x00FF);
 }
 
-/*! Convert a 32-bit signed number between Target and Native format
+/**
+ *  Convert a 32-bit signed number between Target and Native format
  *
- * @param value - value to convert
+ *  @param value Value to convert
  *
- * @return - converted value
+ *  @return Converted value
  */
-
 int32_t FlashImageImp::targetToNative(int32_t &value) {
    if (littleEndian) {
       return value;
@@ -963,13 +944,13 @@ int32_t FlashImageImp::targetToNative(int32_t &value) {
          ((value>>8) &0x0000FF00) + ((value>>24)&0x000000FF);
 }
 
-/*! Convert a 16-bit signed number between Target and Native format
+/**
+ *  Convert a 16-bit signed number between Target and Native format
  *
- * @param value - value to convert
+ *  @param value Value to convert
  *
- * @return - converted value
+ *  @return Converted value
  */
-
 int16_t FlashImageImp::targetToNative(int16_t &value) {
    if (littleEndian) {
       return value;
@@ -978,14 +959,14 @@ int16_t FlashImageImp::targetToNative(int16_t &value) {
 }
 
 /*
- *   Load a Freescale S-record file into the buffer. \n
+ *  Load a Freescale S-record file into the buffer. \n
  *
- *   The buffer is cleared to 0xFFFF before loading.  Modified locations will
- *   have a non-0xFF upper byte so used locations can be differentiated. \n
+ *  The buffer is cleared to 0xFFFF before loading.  Modified locations will
+ *  have a non-0xFF upper byte so used locations can be differentiated. \n
  *
- * @param fileName         : Path of file to load
+ *  @param fileName Path of file to load
  *
- * @return error code see \ref USBDM_ErrorCode
+ *  @return Error code
  */
 USBDM_ErrorCode FlashImageImp::loadS1S9File(const string &fileName) {
    LOGGING_Q;
@@ -1102,149 +1083,60 @@ USBDM_ErrorCode FlashImageImp::loadS1S9File(const string &fileName) {
    return SFILE_RC_OK;
 }
 
-/*
- *   Load a ELF block into the buffer. \n
- *
- *   The buffer is cleared to 0xFFFF before loading.  Modified locations will
- *   have a non-0xFF upper byte so used locations can be differentiated. \n
- *
- * @param fp            : Open file pointer
- * @param fOffset       : Offset to block in file
- * @param size          : Size of block in bytes
- * @param addr          : Bytes address to load block
- */
-USBDM_ErrorCode FlashImageImp::loadElfBlock(FILE *fp,
-      long        fOffset,
-      Elf32_Word  size,
-      Elf32_Addr  addr) {
+/*=============================================================================
+ * ELF Files
+ *===========================================================================*/
 
-   LOGGING_Q;
-#if defined(TARGET) && (TARGET == MC56F80xx)
-   // DSC image uses word addresses
-   addr /= 2;
-#endif
-   if (size == 0) {
-      log.print("[empty]\n");
+/**
+ *  Get string describing pFlags
+ *
+ *  @param  flags
+ *
+ *  @return Pointer to static string
+ */
+static const char* get_pFlagsName(unsigned int flags) {
+   static char buff[20];
+   buff[0] = '\0';
+   if (flags&PF_X) {
+      strcat(buff,"PF_X|");
    }
-   else {
-#if defined(TARGET) && (TARGET == MC56F80xx)
-      log.print("[0x%08X..0x%08X]\n", addr, addr+size/2-1);
-#else
-      log.print("[0x%08X..0x%08X]\n", addr, addr+size-1);
-#endif
+   if (flags&PF_W) {
+      strcat(buff,"PF_W|");
    }
-   fseek(fp, fOffset, SEEK_SET);
-   while (size>0) {
-      uint8_t buff[1000];
-      Elf32_Word blockSize = size;
-      if (blockSize > sizeof(buff)) {
-         blockSize = sizeof(buff);
-      }
-      size_t sz;
-      if ((sz=fread(buff, 1, blockSize, fp)) != blockSize) {
-         log.print("- Failed - Undersize read of Block (Expected %lu, read %lu)\n", (unsigned long)blockSize, (unsigned long)sz);
-         return SFILE_RC_ELF_FORMAT_ERROR;
-      }
-//      #if defined(TARGET) && (TARGET == MC56F80xx)
-//            printDump(buff, blockSize, addr, WORD_ADDRESS|WORD_DISPLAY);
-//      #else
-//            printDump(buff, blockSize, addr, BYTE_ADDRESS);
-//      #endif
-      for (unsigned index=0; index<blockSize; ) {
-         uint16_t value;
-#if defined(TARGET) && (TARGET == MC56F80xx)
-         value  = buff[index++];
-         value += buff[index++]<<8;
-#else
-         value = buff[index++];
-#endif
-         this->setValue(addr++, value);
-      }
-      size -= blockSize;
+   if (flags&PF_R) {
+      strcat(buff,"PF_R|");
    }
-   return SFILE_RC_OK;
+   return buff;
 }
 
-/*
- * Print ELF Header
+/**
+ *  Get string describing pTypeName
  *
- * @param elfHeader -  ELF header to print
- */
-void FlashImageImp::printElfHeader(Elf32_Ehdr *elfHeader) {
-   UsbdmSystem::Log::print("e_type      = 0x%04X\n"
-         "e_machine   = 0x%04X\n"
-         "e_version   = 0x%08X\n"
-         "e_entry     = 0x%08X\n"
-         "e_phoff     = 0x%08X\n"
-         "e_shoff     = 0x%08X\n"
-         "e_flags     = 0x%08X\n"
-         "e_ehsize    = 0x%04X\n"
-         "e_phentsize = 0x%04X\n"
-         "e_phnum     = 0x%04X\n"
-         "e_shentsize = 0x%04X\n"
-         "e_shnum     = 0x%04X\n"
-         "e_shstrndx  = 0x%04X\n",
-         elfHeader->e_type,
-         elfHeader->e_machine,
-         elfHeader->e_version,
-         elfHeader->e_entry,
-         elfHeader->e_phoff,
-         elfHeader->e_shoff,
-         elfHeader->e_flags,
-         elfHeader->e_ehsize,
-         elfHeader->e_phentsize,
-         elfHeader->e_phnum,
-         elfHeader->e_shentsize,
-         elfHeader->e_shnum,
-         elfHeader->e_shstrndx );
-}
-
-/*
- * Convert fields in ELF header to native format
+ *  @param  type
  *
- * @param elfHeader -  ELF header to convert
+ *  @return Pointer to static string
  */
-void FlashImageImp::fixElfHeaderSex(Elf32_Ehdr *elfHeader) {
-   // Convert to native format
-   elfHeader->e_type      = targetToNative(elfHeader->e_type     );
-   elfHeader->e_machine   = targetToNative(elfHeader->e_machine  );
-   elfHeader->e_version   = targetToNative(elfHeader->e_version  );
-   elfHeader->e_entry     = targetToNative(elfHeader->e_entry    );
-   elfHeader->e_phoff     = targetToNative(elfHeader->e_phoff    );
-   elfHeader->e_shoff     = targetToNative(elfHeader->e_shoff    );
-   elfHeader->e_flags     = targetToNative(elfHeader->e_flags    );
-   elfHeader->e_ehsize    = targetToNative(elfHeader->e_ehsize   );
-   elfHeader->e_phentsize = targetToNative(elfHeader->e_phentsize);
-   elfHeader->e_phnum     = targetToNative(elfHeader->e_phnum    );
-   elfHeader->e_shentsize = targetToNative(elfHeader->e_shentsize);
-   elfHeader->e_shnum     = targetToNative(elfHeader->e_shnum    );
-   elfHeader->e_shstrndx  = targetToNative(elfHeader->e_shstrndx );
-}
-
-/*
- * Print ELF Program Header
- *
- * @param programHeader -  ELF Program header to print
- */
-void FlashImageImp::printElfProgramHeader(Elf32_Phdr *programHeader) {
-   if (printHeader) {
-      UsbdmSystem::Log::printq("===================\n"
-            "p_type                       p_offset   p_vaddr    p_paddr    p_filesz   p_memsz    p_align    p_flags\n");
-      printHeader = false;
+static const char* get_pTypeName(unsigned int type) {
+   switch (type) {
+   case PT_NULL:      return "PT_NULL";
+   case PT_LOAD:      return "PT_LOAD";
+   case PT_DYNAMIC:   return "PT_DYNAMIC";
+   case PT_INTERP:    return "PT_INTERP";
+   case PT_NOTE:      return "PT_NOTE";
+   case PT_SHLIB:     return "PT_SHLIB";
+   case PT_PHDR:      return "PT_PHDR";
+   case PT_ARM_EXIDX: return "PT_ARM_EXIDX";
+   default :          return "????";
    }
-   UsbdmSystem::Log::printq(
-         "0x%08X (%-15s) 0x%08X 0x%08X 0x%08X 0x%08X 0x%08X 0x%08X 0x%08X (%-20s)\n",
-         programHeader->p_type  , get_ptTypeName(programHeader->p_type),
-         programHeader->p_offset,
-         programHeader->p_vaddr ,
-         programHeader->p_paddr ,
-         programHeader->p_filesz,
-         programHeader->p_memsz ,
-         programHeader->p_align ,
-         programHeader->p_flags , get_pFlagsName(programHeader->p_flags)
-   );
 }
 
+/**
+ *  Get string describing shtype
+ *
+ *  @param  type
+ *
+ *  @return Pointer to static string
+ */
 static const char *getshTypeName(Elf32_Word shtype) {
    static char buff[30] = {0};
    buff[0] = '\0';
@@ -1280,6 +1172,13 @@ static const char *getshTypeName(Elf32_Word shtype) {
    //#define SHT_HIUSER      0xffffffff
 }
 
+/**
+ *  Get string describing shflags
+ *
+ *  @param  type
+ *
+ *  @return Pointer to static string
+ */
 static const char *getshFlagName(Elf32_Word shflags) {
    static char buff[100];
    buff[0] = '\0';
@@ -1299,10 +1198,194 @@ static const char *getshFlagName(Elf32_Word shflags) {
    strcat(buff, ")");
    return buff;
 }
-/*
- * Print ELF Program Header
+
+/**
+ *  Check if ELF machine ID agrees with target
  *
- * @param programHeader -  ELF Program header to print
+ *  @param e_machine  ID from ELF file
+ *  @param targetType Target type to check against
+ *
+ *  @return Error code on mismatch
+ */
+USBDM_ErrorCode FlashImageImp::checkTargetType(Elf32_Half e_machine, TargetType_t targetType) {
+   static const Elf32_Half e_machine_types[] = {
+         /* T_HCS12     */ EM_68HC12,
+         /* T_HCS08     */ EM_68HC08,
+         /* T_RS08      */ 0,
+         /* T_CFV1      */ EM_68K,
+         /* T_CFVx      */ EM_68K,
+         /* T_JTAG      */ 0,
+         /* T_EZFLASH   */ 0,
+         /* T_MC56F80xx */ EM_56K,
+         /* T_ARM_JTAG  */ EM_ARM,
+         /* T_ARM_SWD   */ EM_ARM,
+         /* T_ARM       */ EM_ARM,
+         /* T_S12Z      */ EM_S12X,
+   };
+
+   if ((targetType<0) || (targetType >= (sizeof(e_machine_types)/sizeof(e_machine_types[0])))) {
+      UsbdmSystem::Log::error("Invalid e_machine = %X\n", e_machine);
+      return BDM_RC_UNKNOWN_TARGET;
+   }
+   // Special case for MC56K as it used two IDs
+   if ((targetType = T_MC56F80xx) && ((e_machine != EM_56K) && (e_machine != EM_56K_2))) {
+      UsbdmSystem::Log::error("Invalid e_machine = %X\n", e_machine);
+      return SFILE_RC_ELF_WRONG_TARGET;
+   }
+   if (e_machine != e_machine_types[targetType]) {
+      UsbdmSystem::Log::error("Invalid e_machine = %X\n", e_machine);
+      return SFILE_RC_ELF_WRONG_TARGET;
+   }
+   return BDM_RC_OK;
+}
+
+/**
+ *  Load a ELF block into the buffer.
+ *
+ *  The buffer is cleared to 0xFFFF before loading.  Modified locations will
+ *  have a non-0xFF upper byte so used locations can be differentiated. \n
+ *
+ *  @param fp       Open file pointer
+ *  @param fOffset  Offset to block in file
+ *  @param size     Size of block in bytes
+ *  @param addr     Bytes address to load block
+ */
+USBDM_ErrorCode FlashImageImp::loadElfBlock(
+      FILE       *fp,
+      long        fOffset,
+      Elf32_Word  size,
+      Elf32_Addr  addr) {
+
+   LOGGING_Q;
+#if defined(TARGET) && (TARGET == MC56F80xx)
+   // DSC image uses word addresses
+   addr /= 2;
+#endif
+   if (size == 0) {
+      //      log.print("[empty]\n");
+      return BDM_RC_OK;
+   }
+#if defined(TARGET) && (TARGET == MC56F80xx)
+      log.print("[0x%08X..0x%08X]\n", addr, addr+size/2-1);
+#else
+      log.print("[0x%08X..0x%08X]\n", addr, addr+size-1);
+#endif
+   fseek(fp, fOffset, SEEK_SET);
+   while (size>0) {
+      uint8_t buff[1000];
+      Elf32_Word blockSize = size;
+      if (blockSize > sizeof(buff)) {
+         blockSize = sizeof(buff);
+      }
+      size_t sz;
+      if ((sz=fread(buff, 1, blockSize, fp)) != blockSize) {
+         log.print("- Failed - Undersize read of Block (Expected %lu, read %lu)\n", (unsigned long)blockSize, (unsigned long)sz);
+         return SFILE_RC_ELF_FORMAT_ERROR;
+      }
+//      #if defined(TARGET) && (TARGET == MC56F80xx)
+//            printDump(buff, blockSize, addr, WORD_ADDRESS|WORD_DISPLAY);
+//      #else
+//            printDump(buff, blockSize, addr, BYTE_ADDRESS);
+//      #endif
+      for (unsigned index=0; index<blockSize; ) {
+         uint16_t value;
+#if defined(TARGET) && (TARGET == MC56F80xx)
+         value  = buff[index++];
+         value += buff[index++]<<8;
+#else
+         value = buff[index++];
+#endif
+         this->setValue(addr++, value);
+      }
+      size -= blockSize;
+   }
+   return SFILE_RC_OK;
+}
+
+/**
+ *  Print ELF Header
+ *
+ *  @param elfHeader ELF header to print
+ */
+void FlashImageImp::printElfHeader(Elf32_Ehdr *elfHeader) {
+   UsbdmSystem::Log::print("e_type      = 0x%04X\n"
+         "e_machine   = 0x%04X\n"
+         "e_version   = 0x%08X\n"
+         "e_entry     = 0x%08X\n"
+         "e_phoff     = 0x%08X\n"
+         "e_shoff     = 0x%08X\n"
+         "e_flags     = 0x%08X\n"
+         "e_ehsize    = 0x%04X\n"
+         "e_phentsize = 0x%04X\n"
+         "e_phnum     = 0x%04X\n"
+         "e_shentsize = 0x%04X\n"
+         "e_shnum     = 0x%04X\n"
+         "e_shstrndx  = 0x%04X\n",
+         elfHeader->e_type,
+         elfHeader->e_machine,
+         elfHeader->e_version,
+         elfHeader->e_entry,
+         elfHeader->e_phoff,
+         elfHeader->e_shoff,
+         elfHeader->e_flags,
+         elfHeader->e_ehsize,
+         elfHeader->e_phentsize,
+         elfHeader->e_phnum,
+         elfHeader->e_shentsize,
+         elfHeader->e_shnum,
+         elfHeader->e_shstrndx );
+}
+
+/**
+ *  Convert fields in ELF header to native format
+ *
+ *  @param elfHeader ELF header to convert
+ */
+void FlashImageImp::fixElfHeaderSex(Elf32_Ehdr *elfHeader) {
+   // Convert to native format
+   elfHeader->e_type      = targetToNative(elfHeader->e_type     );
+   elfHeader->e_machine   = targetToNative(elfHeader->e_machine  );
+   elfHeader->e_version   = targetToNative(elfHeader->e_version  );
+   elfHeader->e_entry     = targetToNative(elfHeader->e_entry    );
+   elfHeader->e_phoff     = targetToNative(elfHeader->e_phoff    );
+   elfHeader->e_shoff     = targetToNative(elfHeader->e_shoff    );
+   elfHeader->e_flags     = targetToNative(elfHeader->e_flags    );
+   elfHeader->e_ehsize    = targetToNative(elfHeader->e_ehsize   );
+   elfHeader->e_phentsize = targetToNative(elfHeader->e_phentsize);
+   elfHeader->e_phnum     = targetToNative(elfHeader->e_phnum    );
+   elfHeader->e_shentsize = targetToNative(elfHeader->e_shentsize);
+   elfHeader->e_shnum     = targetToNative(elfHeader->e_shnum    );
+   elfHeader->e_shstrndx  = targetToNative(elfHeader->e_shstrndx );
+}
+
+/**
+ *  Print ELF Program Header
+ *
+ *  @param programHeader ELF Program header to print
+ */
+void FlashImageImp::printElfProgramHeader(Elf32_Phdr *programHeader) {
+   if (printHeader) {
+      UsbdmSystem::Log::printq("=== Program Header Table (Segments) ===\n"
+            "p_type                       p_offset   p_vaddr    p_paddr    p_filesz   p_memsz    p_align    p_flags\n");
+      printHeader = false;
+   }
+   UsbdmSystem::Log::printq(
+         "0x%08X (%-15s) 0x%08X 0x%08X 0x%08X 0x%08X 0x%08X 0x%08X 0x%08X (%-20s)\n",
+         programHeader->p_type  , get_pTypeName(programHeader->p_type),
+         programHeader->p_offset,
+         programHeader->p_vaddr ,
+         programHeader->p_paddr ,
+         programHeader->p_filesz,
+         programHeader->p_memsz ,
+         programHeader->p_align ,
+         programHeader->p_flags , get_pFlagsName(programHeader->p_flags)
+   );
+}
+
+/**
+ *  Print ELF Program Header
+ *
+ *  @param programHeader -  ELF Program header to print
  */
 void FlashImageImp::printElfSectionHeader(Elf32_Shdr *elfsHeader) {
    if (elfsHeader->sh_type == SHT_NULL) {
@@ -1310,7 +1393,7 @@ void FlashImageImp::printElfSectionHeader(Elf32_Shdr *elfsHeader) {
    }
    if (printHeader) {
       printHeader = false;
-      UsbdmSystem::Log::printq("===================\n"
+      UsbdmSystem::Log::printq("=== Section Header Table (Sections) ===\n"
             "shtype                            shflags                             shaddr,    shoffset   shsize     shlink     shinfo     shaddralign shentsize\n");
    }
    UsbdmSystem::Log::printq(
@@ -1328,10 +1411,10 @@ void FlashImageImp::printElfSectionHeader(Elf32_Shdr *elfsHeader) {
    );
 }
 
-/*
- * Convert fields to native format
+/**
+ *  Convert fields to native format
  *
- * @param elfHeader -  ELF Program header to convert
+ *  @param elfHeader -  ELF Program header to convert
  */
 void FlashImageImp::fixElfProgramHeaderSex(Elf32_Phdr *elfHeader) {
    elfHeader->p_type    = targetToNative(elfHeader->p_type  );
@@ -1344,10 +1427,10 @@ void FlashImageImp::fixElfProgramHeaderSex(Elf32_Phdr *elfHeader) {
    elfHeader->p_align   = targetToNative(elfHeader->p_align );
 }
 
-/*
- * Convert fields to native format
+/**
+ *  Convert fields to native format
  *
- * @param elfHeader -  ELF Program header to convert
+ *  @param elfHeader -  ELF Program header to convert
  */
 void FlashImageImp::fixElfSectionHeaderSex(Elf32_Shdr *elfsHeader) {
    elfsHeader->sh_name      = targetToNative(elfsHeader->sh_name      );
@@ -1362,6 +1445,15 @@ void FlashImageImp::fixElfSectionHeaderSex(Elf32_Shdr *elfsHeader) {
    elfsHeader->sh_entsize   = targetToNative(elfsHeader->sh_entsize   );
 }
 
+/**
+ *  Get string from ELF file string area
+ *
+ *  @param index ELF string index
+ *
+ *  @return Pointer to static string
+ *
+ *  @note Will trigger loading of entire symbol table
+ */
 const char * FlashImageImp::getElfString(unsigned index) {
    static const char *empty = "-";
    static bool noSymTable = false;
@@ -1405,34 +1497,14 @@ const char * FlashImageImp::getElfString(unsigned index) {
    return symTable+index;
 }
 
-/**
- * Translate section address into load addres (physical address)
- * Most needed for .data
- *
- * @param   sectionAddress  Section address
- * @return Corresponding load address (may be the same)
- */
-Elf32_Addr FlashImageImp::getLoadAddress(Elf32_Shdr *sectionHeader) {
-   for(Elf32_Phdr *programHeader=programHeaders;
-         programHeader<(programHeaders+elfHeader.e_phnum);
-         programHeader++) {
-      if ((programHeader->p_offset<=sectionHeader->sh_offset) &&
-          ((programHeader->p_offset+programHeader->p_filesz)>=(sectionHeader->sh_offset+sectionHeader->sh_size))) {
-//         Elf32_Addr lAddress = sectionHeader->sh_addr;
-         Elf32_Addr pAddress = sectionHeader->sh_offset - programHeader->p_offset + programHeader->p_paddr;
-//         UsbdmSystem::Log::print("L:0x%08X ==> P:0x%08X\n",lAddress, pAddress);
-         return pAddress;
-      }
-   }
-   throw new MyException(SFILE_RC_ELF_FORMAT_ERROR);
-}
+#define USE_SECTIONS
 
-/*
- * Load a ELF file into the buffer. \n
+/**
+ *  Load a ELF file into the buffer. \n
  *
- * @param filePath         : Path of file to load
+ *  @param filePath Path of file to load
  *
- * @return error code see \ref USBDM_ErrorCode
+ *  @return Error code
  */
 USBDM_ErrorCode FlashImageImp::loadElfFile(const string &filePath) {
    LOGGING_Q;
@@ -1489,17 +1561,21 @@ USBDM_ErrorCode FlashImageImp::loadElfFile(const string &filePath) {
    fseek(fp, elfHeader.e_phoff, SEEK_SET);
    size_t sz;
    if ((sz=fread(programHeaders, 1, totalProgramHeaderSize, fp)) != totalProgramHeaderSize) {
-      log.error("Undersize read of Header (Expected %lu, read %lu)\n", (unsigned long)totalProgramHeaderSize, (unsigned long)sz);
+      log.error("Undersize read of Header (Expected %lu, read %lu)\n",
+            (unsigned long)totalProgramHeaderSize, (unsigned long)sz);
       return SFILE_RC_ELF_FORMAT_ERROR;
    }
 
+   // Convert program headers to native format (and print)
    printHeader = true;
    for(Elf32_Phdr *programHeader=programHeaders;
          programHeader<(programHeaders+elfHeader.e_phnum);
          programHeader++) {
       fixElfProgramHeaderSex(programHeader);
 #ifdef LOG
-      printElfProgramHeader(programHeader);
+      if (programHeader->p_filesz != 0) {
+         printElfProgramHeader(programHeader);
+      }
 #endif
    }
 
@@ -1514,9 +1590,13 @@ USBDM_ErrorCode FlashImageImp::loadElfFile(const string &filePath) {
          return SFILE_RC_ELF_FORMAT_ERROR;
       }
       fixElfSectionHeaderSex(&sectionHeader);
-      printElfSectionHeader(&sectionHeader);
+      if (sectionHeader.sh_type&SHT_PROGBITS) {
+         printElfSectionHeader(&sectionHeader);
+      }
    }
 #endif
+
+#ifdef USE_SECTIONS
    if (elfHeader.e_shoff == 0) {
       log.print("No section headers present\n");
       return SFILE_RC_ELF_FORMAT_ERROR;
@@ -1533,10 +1613,55 @@ USBDM_ErrorCode FlashImageImp::loadElfFile(const string &filePath) {
       fixElfSectionHeaderSex(&sectionHeader);
       loadElfBlock(&sectionHeader);
    }
-
+#else
+   // Load image based on suitable segments
+   log.print("Loading Program Header Segments\n");
+   for(Elf32_Phdr *programHeader=programHeaders;
+         programHeader<(programHeaders+elfHeader.e_phnum);
+         programHeader++) {
+      if (programHeader->p_filesz>0) {
+         printElfProgramHeader(programHeader);
+      }
+      USBDM_ErrorCode rc = loadElfBlock(programHeader);
+      if (rc != BDM_RC_OK) {
+         return rc;
+      }
+   }
+#endif
    return SFILE_RC_OK;
 }
 
+#ifdef USE_SECTIONS
+/**
+ *  Gets load address (physical address)
+ *  Most needed for .data
+ *
+ *  @param  sectionHeader  Section Header to determine load address for
+ *
+ *  @return Corresponding load address (may be the same)
+ */
+Elf32_Addr FlashImageImp::getLoadAddress(Elf32_Shdr *sectionHeader) {
+   for(Elf32_Phdr *programHeader=programHeaders;
+         programHeader<(programHeaders+elfHeader.e_phnum);
+         programHeader++) {
+      if ((programHeader->p_offset<=sectionHeader->sh_offset) &&
+          ((programHeader->p_offset+programHeader->p_filesz)>=(sectionHeader->sh_offset+sectionHeader->sh_size))) {
+         Elf32_Addr lAddress = sectionHeader->sh_addr;
+         Elf32_Addr pAddress = sectionHeader->sh_offset - programHeader->p_offset + programHeader->p_paddr;
+         UsbdmSystem::Log::print("L:0x%08X ==> P:0x%08X\n", lAddress, pAddress);
+         return pAddress;
+      }
+   }
+   throw new MyException(SFILE_RC_ELF_FORMAT_ERROR);
+}
+
+/**
+ *  Load ELF block based on section header
+ *
+ *  @param sectionHeader Section header describing section to load into image
+ *
+ *  @return Error code
+ */
 USBDM_ErrorCode FlashImageImp::loadElfBlock(Elf32_Shdr *sectionHeader) {
    LOGGING_Q;
 
@@ -1546,7 +1671,7 @@ USBDM_ErrorCode FlashImageImp::loadElfBlock(Elf32_Shdr *sectionHeader) {
    if (sectionHeader->sh_type == SHT_NOBITS) {
       return BDM_RC_OK;
    }
-   Elf32_Addr loadAddress = getLoadAddress(sectionHeader);
+   Elf32_Addr loadAddress = sectionHeader->sh_addr; //getLoadAddress(sectionHeader);
    Elf32_Word size        = sectionHeader->sh_size;
 
 #if defined(TARGET) && (TARGET == MC56F80xx)
@@ -1554,15 +1679,14 @@ USBDM_ErrorCode FlashImageImp::loadElfBlock(Elf32_Shdr *sectionHeader) {
    addr /= 2;
 #endif
    if (size == 0) {
-      log.print("[empty]\n");
+//      log.print("[empty]\n");
+      return BDM_RC_OK;
    }
-   else {
 #if defined(TARGET) && (TARGET == MC56F80xx)
       log.print("loading [0x%08X..0x%08X] @0x%08X\n", sectionHeader->sh_addr, sectionHeader->sh_addr+size/2-1 loadAddress);
 #else
       log.print("loading [0x%08X..0x%08X] @0x%08X\n", sectionHeader->sh_addr, sectionHeader->sh_addr+size-1, loadAddress);
 #endif
-   }
    fseek(fp, sectionHeader->sh_offset, SEEK_SET);
    while (size>0) {
       uint8_t buff[1000];
@@ -1590,59 +1714,43 @@ USBDM_ErrorCode FlashImageImp::loadElfBlock(Elf32_Shdr *sectionHeader) {
    }
    return SFILE_RC_OK;
 }
+#else
+/**
+ *  Load ELF block based on program header
+ *
+ *  @param sectionHeader Program header describing program segment to load into image
+ *
+ *  @return Error code
+ */
+USBDM_ErrorCode FlashImageImp::loadElfBlock(Elf32_Phdr *programHeader) {
+   LOGGING_Q;
 
-//USBDM_ErrorCode FlashImageImp::loadElfBlock(Elf32_Phdr *programHeader) {
-//
-////   printElfProgramHeader(programHeader);
-//
-//   Elf32_Addr loadAddress;
-//
-//   if ((targetType == T_RS08) || (targetType == T_HCS08) || (targetType == T_HCS12) || (targetType == T_S12Z) || (targetType == T_MC56F80xx)) {
-//      // These targets use the virtual address as the load address
-//      loadAddress = programHeader->p_vaddr;
-//#if defined(TARGET) && (TARGET == MC56F80xx)
-//      if ((programHeader->p_flags&PF_X) == 0) {
-//         // Indicates X:ROM/X:RAM (not executable)
-//         loadAddress += (DataOffset<<1);
-//      }
-//#endif
-//   }
-//   else {
-//      // Other targets load at the physical address (VADDR is RAM copy destination)
-//      loadAddress = programHeader->p_paddr;
-//   }
-//   return loadElfBlock(fp, programHeader->p_offset, programHeader->p_filesz, loadAddress);
-//}
+//   printElfProgramHeader(programHeader);
 
-
-USBDM_ErrorCode FlashImageImp::checkTargetType(Elf32_Half e_machine, TargetType_t targetType) {
-   static const Elf32_Half e_machine_types[] = {
-         /* T_HCS12     */ EM_68HC12,
-         /* T_HCS08     */ EM_68HC08,
-         /* T_RS08      */ 0,
-         /* T_CFV1      */ EM_68K,
-         /* T_CFVx      */ EM_68K,
-         /* T_JTAG      */ 0,
-         /* T_EZFLASH   */ 0,
-         /* T_MC56F80xx */ EM_56K,
-         /* T_ARM_JTAG  */ EM_ARM,
-         /* T_ARM_SWD   */ EM_ARM,
-         /* T_ARM       */ EM_ARM,
-         /* T_S12Z      */ EM_S12X,
-   };
-
-   if ((targetType<0) || (targetType >= (sizeof(e_machine_types)/sizeof(e_machine_types[0])))) {
-      UsbdmSystem::Log::error("Invalid e_machine = %X\n", e_machine);
-      return BDM_RC_UNKNOWN_TARGET;
+   Elf32_Addr loadAddress;
+   if ((programHeader->p_type&PT_LOAD) == 0) {
+      return BDM_RC_OK;
    }
-   // Special case for MC56K as it used two IDs
-   if ((targetType = T_MC56F80xx) && ((e_machine != EM_56K) && (e_machine != EM_56K_2))) {
-      UsbdmSystem::Log::error("Invalid e_machine = %X\n", e_machine);
-      return SFILE_RC_ELF_WRONG_TARGET;
+   if (programHeader->p_filesz == 0) {
+      return BDM_RC_OK;
    }
-   if (e_machine != e_machine_types[targetType]) {
-      UsbdmSystem::Log::error("Invalid e_machine = %X\n", e_machine);
-      return SFILE_RC_ELF_WRONG_TARGET;
+   if ((targetType == T_RS08) || (targetType == T_HCS08) || (targetType == T_HCS12) || (targetType == T_S12Z) || (targetType == T_MC56F80xx)) {
+      // These targets use the virtual address as the load address
+      loadAddress = programHeader->p_vaddr;
+      log.print("Using p_vaddr = 0x%08X\n", loadAddress);
+#if defined(TARGET) && (TARGET == MC56F80xx)
+      if ((programHeader->p_flags&PF_X) == 0) {
+         // Indicates X:ROM/X:RAM (not executable)
+         loadAddress += (DataOffset<<1);
+      }
+#endif
    }
-   return BDM_RC_OK;
+   else {
+      // Other targets load at the physical address (VADDR is RAM copy destination)
+      loadAddress = programHeader->p_paddr;
+      log.print("Using p_paddr = 0x%08X\n", loadAddress);
+   }
+   return loadElfBlock(fp, programHeader->p_offset, programHeader->p_filesz, loadAddress);
 }
+#endif // USE_SECTIONS
+

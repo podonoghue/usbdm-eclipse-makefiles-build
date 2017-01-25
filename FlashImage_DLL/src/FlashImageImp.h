@@ -89,7 +89,7 @@ protected:
    static const int                  PAGE_BIT_OFFSET =  (15-sizeof(uint8_t));  // 2**14 = 16K pages
    static const unsigned             PAGE_SIZE       =  (1U<<PAGE_BIT_OFFSET);
    static const int                  PAGE_MASK       =  (PAGE_SIZE-1U);
-   static const int                  MAX_SREC_SIZE   =  (1<<5);//! Maximum size of a S-record (2^N)
+   static const int                  MAX_SREC_SIZE   =  (1<<4);//! Maximum size of a S-record (2^N)
 
 protected:
    TargetType_t                      targetType;
@@ -139,9 +139,6 @@ public:
    virtual void                  fillUnused(uint32_t size, uint32_t address, uint8_t fillValue = 0xFF);
 
 protected:
-   static const char*      get_pFlagsName(unsigned int flags);
-   static const char*      get_ptTypeName(unsigned int type);
-
    virtual MemoryPagePtr   getmemoryPage(uint32_t pageNum);
    virtual MemoryPagePtr   allocatePage(uint32_t pageNum);
    uint32_t                targetToNative(uint32_t &);
@@ -158,7 +155,7 @@ protected:
    void                    fixElfProgramHeaderSex(Elf32_Phdr *programHeader);
    void                    fixElfSectionHeaderSex(Elf32_Shdr *elfsHeader);
    USBDM_ErrorCode         loadElfBlock(FILE *fp, long fOffset, Elf32_Word size, Elf32_Addr addr);
-//   USBDM_ErrorCode         loadElfBlock(Elf32_Phdr *programHeader);
+   USBDM_ErrorCode         loadElfBlock(Elf32_Phdr *programHeader);
    USBDM_ErrorCode         loadElfBlock(Elf32_Shdr *programHeader);
    USBDM_ErrorCode         recordElfProgramBlock(Elf32_Phdr *programHeader);
    USBDM_ErrorCode         loadElfFile(const std::string &fileName);

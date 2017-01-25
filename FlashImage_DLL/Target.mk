@@ -124,18 +124,17 @@ endif
 # Create required directories for targets
 #==============================================
 $(BUILDDIR) :
-	@echo -- Making directory $(BUILDDIR)
+	@echo -- Making BUILDDIR directory $(BUILDDIR)
 	-$(MKDIR) $(BUILDDIR)
     
 ifneq ($(TARGET_LIBDIR),$(TARGET_BINDIR))
 $(TARGET_LIBDIR) :
-	@echo -- Making directory $(TARGET_LIBDIR)
+	@echo -- Making TARGET_LIBDIR directory $(TARGET_LIBDIR)
 	-$(MKDIR) $(TARGET_LIBDIR)
-    
 endif
 
 $(TARGET_BINDIR) :
-	@echo -- Making directory $(TARGET_BINDIR)
+	@echo -- Making TARGET_BINDIR directory $(TARGET_BINDIR)
 	-$(MKDIR) $(TARGET_BINDIR)
     
 $(TARGET_LIBDIR)/$(TARGET_DLL): | $(TARGET_LIBDIR)
@@ -143,6 +142,8 @@ $(TARGET_LIBDIR)/$(TARGET_DLL): | $(TARGET_LIBDIR)
 $(TARGET_BINDIR)/$(TARGET_EXE): | $(TARGET_BINDIR)
 
 $(BUILDDIR)/$(TARGET_DLL) $(OBJ) $(RESOURCE_OBJ): | $(BUILDDIR)
+
+$(BUILDDIR)/$(TARGET_EXE) $(OBJ) $(RESOURCE_OBJ): | $(BUILDDIR)
 
 # Main targets
 #==============================================
