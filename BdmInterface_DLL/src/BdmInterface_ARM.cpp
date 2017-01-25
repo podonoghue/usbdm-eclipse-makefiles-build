@@ -18,10 +18,10 @@ USBDM_ErrorCode BdmInterface_ARM::targetConnectWithRetry(USBDMStatus_t *usbdmSta
    LOGGING;
    USBDM_ErrorCode rc = connect();
    if (rc != BDM_RC_OK) {
-      log.print("Doing 1st retry\n");
+      log.print("Failed rc=%s, Doing 1st retry\n", USBDM_GetErrorString(rc));
       rc = connect(); // retry
       if ((rc != BDM_RC_OK) && ((retryMode&BdmInterface::retryByReset) != 0)) {
-         log.print("Doing retry under reset\n");
+         log.print("Failed rc=%s, Doing retry under reset\n", USBDM_GetErrorString(rc));
          controlPins(PIN_RESET_LOW);
          rc = connect(); // retry
       }
