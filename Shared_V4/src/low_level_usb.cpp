@@ -162,10 +162,10 @@ libusb_context *context;
 //!
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_init( void ) {
-   LOGGING_Q;
+   LOGGING;
 
    // Not initialised
-   initialised = FALSE;
+   initialised = false;
 
    // Clear array of devices found so far
    for (int i=0; i<=MAX_BDM_DEVICES; i++) {
@@ -187,7 +187,7 @@ USBDM_ErrorCode bdm_usb_init( void ) {
       log.error("libusb_init() Failed, rc=%d, %s\n", rc, libusb_error_name(rc));
       return BDM_RC_USB_ERROR;
    }
-   initialised = TRUE;
+   initialised = true;
    return BDM_RC_OK;
 }
 
@@ -309,7 +309,7 @@ USBDM_ErrorCode bdm_usb_findDevices(unsigned *devCount, const UsbId usbIds[]) {
          }
          bdmDevices[deviceCount++] = currentDevice; // Record found device
          libusb_ref_device(currentDevice);          // Reference so we don't lose it
-         bdmDevices[deviceCount]=NULL;              // Terminate the list again
+         bdmDevices[deviceCount]=NULL;           // Terminate the list again
          if (deviceCount>MAX_BDM_DEVICES) {
             break;
          }
@@ -336,7 +336,7 @@ USBDM_ErrorCode bdm_usb_findDevices(unsigned *devCount, const UsbId usbIds[]) {
 //!
 DLL_LOCAL
 USBDM_ErrorCode bdm_walkConfig( libusb_device *device ) {
-   LOGGING_Q;
+   LOGGING;
    const int BULK_INTF_ID      = 0;
    const int BULK_OUT_ENDPOINT = EP_OUT|1;
 
@@ -346,13 +346,29 @@ USBDM_ErrorCode bdm_walkConfig( libusb_device *device ) {
       log.error("libusb_get_active_config_descriptor() failed, rc = %s\n", libusb_error_name((libusb_error)rc));
       return BDM_RC_USB_ERROR;
    }
+   if (config == NULL) {
+      log.error("USB config is NULL\n");
+      return BDM_RC_USB_ERROR;
+   }
+//   log.print("config->bNumInterfaces = %d\n", config->bNumInterfaces);
    for (int interface=0; interface<config->bNumInterfaces; interface++) {
       // Find interface
+//      log.print("config->interface[%d].altsetting[0].bInterfaceNumber = %d\n",
+//            interface,
+//            config->interface[interface].altsetting[0].bInterfaceNumber);
       if (config->interface[interface].altsetting[0].bInterfaceNumber != BULK_INTF_ID) {
+//         log.print("Wrong interface - Continue\n");
          continue;
       }
+      if (config->interface[interface].altsetting[0].bNumEndpoints == 0) {
+//         log.print("No endpoints - Continue\n");
+         continue;
+      }
+//      log.print("config->interface[%d].altsetting[0].endpoint[0].bEndpointAddress = %d\n",
+//            interface,
+//            config->interface[interface].altsetting[0].endpoint[0].bEndpointAddress);
       if (config->interface[interface].altsetting[0].endpoint[0].bEndpointAddress != BULK_OUT_ENDPOINT) {
-         log.error("unexpected end-point address 0x%2.2X\n",
+         log.error("Unexpected end-point address 0x%2.2X\n",
                config->interface[interface].altsetting[0].endpoint[0].bEndpointAddress);
          return BDM_RC_USB_ERROR;
       }
@@ -375,7 +391,9 @@ USBDM_ErrorCode bdm_walkConfig( libusb_device *device ) {
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_open( unsigned int device_no ) {
    LOGGING_Q;
+//   log.print("device_no = %d\n", device_no);
    if (!initialised) {
+      log.error("Not Initialised device\n");
       return BDM_RC_NOT_INITIALISED;
    }
    if (device_no >= deviceCount) {
@@ -386,6 +404,7 @@ USBDM_ErrorCode bdm_usb_open( unsigned int device_no ) {
       log.print("Closing previous device\n");
       bdm_usb_close();
    }
+//   log.print("libusb_open(), bdmDevices[device_no] = %p\n", bdmDevices[device_no]);
    int rc = libusb_open(bdmDevices[device_no], &usbDeviceHandle);
 
    if (rc != LIBUSB_SUCCESS) {
@@ -404,7 +423,6 @@ USBDM_ErrorCode bdm_usb_open( unsigned int device_no ) {
          return BDM_RC_DEVICE_OPEN_FAILED;
       }
    }
-//   log.print("libusb_open() done\n");
    int configuration = 0;
    rc = libusb_get_configuration(usbDeviceHandle, &configuration);
    if (rc != LIBUSB_SUCCESS) {
@@ -421,7 +439,6 @@ USBDM_ErrorCode bdm_usb_open( unsigned int device_no ) {
          usbDeviceHandle = NULL;
          return BDM_RC_DEVICE_OPEN_FAILED;
       }
-      log.print("libusb_set_configuration() done\n");
    }
    rc = libusb_claim_interface(usbDeviceHandle, 0);
    if (rc != LIBUSB_SUCCESS) {

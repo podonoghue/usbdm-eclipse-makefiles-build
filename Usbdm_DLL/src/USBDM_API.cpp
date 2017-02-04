@@ -392,7 +392,7 @@ USBDM_ErrorCode USBDM_GetBDMDescription(const char **deviceDescription) {
  */
 USBDM_API
 USBDM_ErrorCode USBDM_Open(unsigned char deviceNo) {
-   LOGGING_Q;
+   LOGGING;
 
    if (!bdmState.initialised) {
       return BDM_RC_NOT_INITIALISED;

@@ -126,7 +126,7 @@ USBDM_API void USBDM_ICP_SetCallback(ProgressDialogue *icp_CallBack) {
 USBDM_API USBDM_ErrorCode USBDM_ICP_Program(unsigned int  addr,
                                             unsigned int  count,
                                             unsigned char *data) {
-   LOGGING_Q;
+   LOGGING;
    unsigned int dataSize; // Bytes to program this row
    USBDM_ErrorCode rc;
    unsigned int temp;
@@ -145,7 +145,7 @@ USBDM_API USBDM_ErrorCode USBDM_ICP_Program(unsigned int  addr,
       }
       icpCallBack->incrementalUpdate(dataSize);
       // Check if empty block (all 0xFF)
-      doBlock = FALSE;
+      doBlock = false;
       for (temp = 0; temp < dataSize; temp++) {
          doBlock = doBlock || (data[temp] != 0xFF);
       }
@@ -259,7 +259,7 @@ USBDM_API USBDM_ErrorCode USBDM_ICP_Verify(unsigned int  addr,
 //!
 USBDM_API USBDM_ErrorCode USBDM_ICP_Erase(unsigned int addr,
                                           unsigned int count) {
-   LOGGING_Q;
+   LOGGING;
    unsigned int blockSize;
    unsigned int sectorSize = ICP_JM60_BLOCKSIZE;
    USBDM_ErrorCode rc;
