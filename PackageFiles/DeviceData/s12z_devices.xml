@@ -10,7 +10,7 @@
 <!ENTITY Custom-Devices             SYSTEM "Custom/custom-s12z.xml">
 ]>
 <!-- 
-      V4.11.1.150 - Added MC9S12ZVM
+      V4.11.1.150 - Added MC9S12ZVM, MC9S12ZVC, MC9S12ZVCA
       V4.10.6.230 - Added MC9S12ZVL-Family, untested
       V4.10.6.170 - Created
  -->
