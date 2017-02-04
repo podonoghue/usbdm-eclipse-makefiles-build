@@ -360,7 +360,7 @@ void UsbdmSystem::Log::print(const char *format, ...)  {
       format = "print() - Error - empty format string!\n";
    }
    if (timestampMode != none) {
-      fprintf(logFile, getTimeStamp());
+      fprintf(logFile, "%s", getTimeStamp());
    }
    fprintf(logFile, "%*s", 3*indent, "");
    if (currentName!=NULL) {
@@ -385,7 +385,7 @@ void UsbdmSystem::Log::error(const char *format, ...)  {
       format = "error() - Error - empty format string!\n";
    }
    if (timestampMode != none) {
-      fprintf(logFile, getTimeStamp());
+      fprintf(logFile, "%s", getTimeStamp());
    }
    fprintf(logFile, "%*s", 3*indent, "");
    if (currentName!=NULL) {
@@ -409,7 +409,7 @@ void UsbdmSystem::Log::warning(const char *format, ...) {
       format = "error() - Error - empty format string!\n";
    }
    if (timestampMode != none) {
-      fprintf(logFile, getTimeStamp());
+      fprintf(logFile, "%s", getTimeStamp());
    }
    fprintf(logFile, "%*s", 3*indent, "");
    if (currentName!=NULL) {
@@ -468,7 +468,7 @@ void UsbdmSystem::Log::printDump(const uint8_t *data,
       if (eolFlag) {
          eolFlag = false;
          if (timestampMode) {
-            fprintf(logFile, getTimeStamp());
+            fprintf(logFile, "%s", getTimeStamp());
          }
          fprintf(logFile, "%*s", 3*indent, "");
          fprintf(logFile,"   %s%8.8X:", prefix, address>>addressShift);

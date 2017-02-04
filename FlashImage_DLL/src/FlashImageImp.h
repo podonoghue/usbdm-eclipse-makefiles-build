@@ -47,7 +47,7 @@ class FlashImageImp : public FlashImage {
       T *alloc(size_t size) {
          free();
          ptr = (T*)malloc(size);
-         UsbdmSystem::Log::print("Allocated %ld @0x%p\n", ptr, (long)size);
+         UsbdmSystem::Log::print("Allocated %ld @0x%p\n", (long)size, ptr);
          return ptr;
       }
       void free() {

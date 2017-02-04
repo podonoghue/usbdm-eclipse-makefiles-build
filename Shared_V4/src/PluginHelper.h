@@ -59,7 +59,7 @@ template<typename T>
 size_t TcreatePluginInstance(void *pp) {
    LOGGING_Q;
    if (pp != NULL) {
-      log.print("Creating instance, version %s, size = %d\n", __DATE__ ", " __TIME__, sizeof(T));
+      log.print("Creating instance, version %s, size = %ld\n", __DATE__ ", " __TIME__, sizeof(T));
       new (pp) T();
    }
 //   log.print("Returning size %ld\n", (long)sizeof(T));
@@ -80,7 +80,7 @@ template<typename T, typename A>
 size_t TcreatePluginInstance(void *pp, A arg) {
    LOGGING_Q;
    if (pp != NULL) {
-      log.print("Creating instance, version %s, size = %d\n", __DATE__ ", " __TIME__, sizeof(T));
+      log.print("Creating instance, version %s, size = %ld\n", __DATE__ ", " __TIME__, sizeof(T));
       new (pp) T(arg);
    }
 //   log.print("Returning size %ld\n", (long)sizeof(T));
