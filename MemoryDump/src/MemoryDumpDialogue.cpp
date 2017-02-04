@@ -653,6 +653,8 @@ void MemoryDumpDialogue::setTargetType(TargetType_t targetType) {
 
    int selection = 0;
    switch (targetType) {
+   case T_S12Z :  selection++;
+   //no break
    case T_RS08 :  selection++;
    //no break
    case T_HC12 :  selection++;
@@ -710,7 +712,7 @@ bool MemoryDumpDialogue::isPagedDevice() {
 
 TargetType_t MemoryDumpDialogue::getTargetType() {
    static const TargetType_t targetTypes[] = {
-      T_ARM, T_CFV1, T_CFVx, T_HCS08, T_HCS12, T_RS08,
+      T_ARM, T_CFV1, T_CFVx, T_HCS08, T_HCS12, T_RS08, T_S12Z,
    };
    return (targetTypes[targetTypeRadioBox->GetSelection()]);
 }
