@@ -1328,11 +1328,11 @@ void FlashProgrammerCommon::restoreSecurityAreas(FlashImagePtr flashImage) {
       for (uint32_t count=0; count<securityData[index].size; count++) {
          if (securityData[index].data[count] == SecurityDataCache::BLANK) {
             flashImage->remove(securityData[index].address+count);
-            log.print("Blank\n");
+            log.print("%2d: Blank 0x%02X\n", count, (uint8_t)securityData[index].data[count]);
          }
          else {
             flashImage->setValue(securityData[index].address+count, (uint8_t)securityData[index].data[count]);
-            log.print("Write 0x%02X\n", (uint8_t)securityData[index].data[count]);
+            log.print("%2d: Write 0x%02X\n", count, (uint8_t)securityData[index].data[count]);
          }
       }
       flashImage->dumpRange(securityData[index].address, securityData[index].address+securityData[index].size-1);
