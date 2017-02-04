@@ -501,7 +501,7 @@ USBDM_ErrorCode  FlashImageImp::loadFile(const string &filePath, bool clearBuffe
    if (clearBuffer) {
       clear();
    }
-   log.print("FlashImageImp::MemorySpace::loadFile(\"%s\")\n", filePath.c_str());
+   log.print("File: \"%s\"\n", filePath.c_str());
 
    // Try ELF Format
    USBDM_ErrorCode rc = loadElfFile(filePath);
@@ -1528,7 +1528,7 @@ USBDM_ErrorCode FlashImageImp::loadElfFile(const string &filePath) {
    if ((elfHeader.e_ident[EI_MAG0]  != ELFMAG0V) || (elfHeader.e_ident[EI_MAG1] != ELFMAG1V) ||
        (elfHeader.e_ident[EI_MAG2]  != ELFMAG2V) || (elfHeader.e_ident[EI_MAG3] != ELFMAG3V) ||
        (elfHeader.e_ident[EI_CLASS] != ELFCLASS32)) {
-      log.error("Invalid  format\n");
+      log.error("Unsupported ELF format\n");
       return SFILE_RC_UNKNOWN_FILE_FORMAT;
    }
    littleEndian = elfHeader.e_ident[EI_DATA] == ELFDATA2LSB;
@@ -1597,6 +1597,7 @@ USBDM_ErrorCode FlashImageImp::loadElfFile(const string &filePath) {
 #endif
 
 #ifdef USE_SECTIONS
+   log.print("Loading by Section Headers\n");
    if (elfHeader.e_shoff == 0) {
       log.print("No section headers present\n");
       return SFILE_RC_ELF_FORMAT_ERROR;
@@ -1611,18 +1612,18 @@ USBDM_ErrorCode FlashImageImp::loadElfFile(const string &filePath) {
          return SFILE_RC_ELF_FORMAT_ERROR;
       }
       fixElfSectionHeaderSex(&sectionHeader);
-      loadElfBlock(&sectionHeader);
+      loadElfBlockBySectionHeader(&sectionHeader);
    }
 #else
    // Load image based on suitable segments
-   log.print("Loading Program Header Segments\n");
+   log.print("Loading by Program Headers\n");
    for(Elf32_Phdr *programHeader=programHeaders;
          programHeader<(programHeaders+elfHeader.e_phnum);
          programHeader++) {
       if (programHeader->p_filesz>0) {
          printElfProgramHeader(programHeader);
       }
-      USBDM_ErrorCode rc = loadElfBlock(programHeader);
+      USBDM_ErrorCode rc = loadElfBlockByProgramHeader(programHeader);
       if (rc != BDM_RC_OK) {
          return rc;
       }
@@ -1662,7 +1663,7 @@ Elf32_Addr FlashImageImp::getLoadAddress(Elf32_Shdr *sectionHeader) {
  *
  *  @return Error code
  */
-USBDM_ErrorCode FlashImageImp::loadElfBlock(Elf32_Shdr *sectionHeader) {
+USBDM_ErrorCode FlashImageImp::loadElfBlockBySectionHeader(Elf32_Shdr *sectionHeader) {
    LOGGING_Q;
 
    if ((sectionHeader->sh_flags&SHF_ALLOC) == 0) {
@@ -1722,7 +1723,7 @@ USBDM_ErrorCode FlashImageImp::loadElfBlock(Elf32_Shdr *sectionHeader) {
  *
  *  @return Error code
  */
-USBDM_ErrorCode FlashImageImp::loadElfBlock(Elf32_Phdr *programHeader) {
+USBDM_ErrorCode FlashImageImp::loadElfBlockByProgramHeader(Elf32_Phdr *programHeader) {
    LOGGING_Q;
 
 //   printElfProgramHeader(programHeader);

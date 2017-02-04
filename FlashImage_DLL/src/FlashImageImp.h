@@ -47,12 +47,12 @@ class FlashImageImp : public FlashImage {
       T *alloc(size_t size) {
          free();
          ptr = (T*)malloc(size);
-         UsbdmSystem::Log::print("Allocated 0x%p, %ld\n", ptr, (long)size);
+         UsbdmSystem::Log::print("Allocated %ld @0x%p\n", ptr, (long)size);
          return ptr;
       }
       void free() {
          if (ptr != 0) {
-            UsbdmSystem::Log::print("Freeing 0x%p\n", ptr);
+            UsbdmSystem::Log::print("Freeing @0x%p\n", ptr);
             ::free(ptr);
             ptr = 0;
          }
@@ -74,7 +74,6 @@ class FlashImageImp : public FlashImage {
          return  fp;
       }
       ~Openfile() {
-         LOGGING_Q;
 //         UsbdmSystem::Log::print("Closing file (fp=%p)\n", fp);
          if (fp != 0) {
             fclose(fp);
@@ -155,8 +154,8 @@ protected:
    void                    fixElfProgramHeaderSex(Elf32_Phdr *programHeader);
    void                    fixElfSectionHeaderSex(Elf32_Shdr *elfsHeader);
    USBDM_ErrorCode         loadElfBlock(FILE *fp, long fOffset, Elf32_Word size, Elf32_Addr addr);
-   USBDM_ErrorCode         loadElfBlock(Elf32_Phdr *programHeader);
-   USBDM_ErrorCode         loadElfBlock(Elf32_Shdr *programHeader);
+   USBDM_ErrorCode         loadElfBlockByProgramHeader(Elf32_Phdr *programHeader);
+   USBDM_ErrorCode         loadElfBlockBySectionHeader(Elf32_Shdr *sectionHeader);
    USBDM_ErrorCode         recordElfProgramBlock(Elf32_Phdr *programHeader);
    USBDM_ErrorCode         loadElfFile(const std::string &fileName);
    USBDM_ErrorCode         checkTargetType(Elf32_Half e_machine, TargetType_t targetType);
