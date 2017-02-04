@@ -2,6 +2,7 @@
 
 # List source file to include from current directory
 SRC += Version.rc
+
 SRC += GdbBreakpoints_ARM.cpp
 SRC += GdbBreakpoints_CFV1.cpp
 SRC += GdbBreakpoints.cpp
@@ -21,6 +22,7 @@ SRC += SocketTty.cpp
 
 # Shared files $(SHARED_SRC)
 VPATH := $(SHARED_SRC) $(VPATH)
+
 INCS  += -I$(SHARED_SRC)
 SRC += AppSettings.cpp
 SRC += Names.cpp
