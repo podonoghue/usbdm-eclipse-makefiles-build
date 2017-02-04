@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2016/12
+ * @date     2017/01
  *
  *******************************************************************************************************/
 
@@ -608,7 +608,7 @@ typedef struct {                                /*       AXBS Structure         
 */
 
 /* ================================================================================ */
-/* ================           CMP0 (file:CMP0_MKV)                 ================ */
+/* ================           CMP0 (file:CMP0_MK22F)               ================ */
 /* ================================================================================ */
 
 /**
@@ -731,16 +731,52 @@ typedef struct {                                /*       CMP0 Structure         
 */
 
 /* ================================================================================ */
-/* ================           CMP1 (derived from CMP0)             ================ */
+/* ================           CMP1 (file:CMP1_MK22F)               ================ */
 /* ================================================================================ */
 
 /**
  * @brief Comparator, Voltage Ref, D-to-A Converter and Analog Mux
  */
+/**
+* @addtogroup CMP_structs_GROUP CMP struct
+* @brief Struct for CMP
+* @{
+*/
+typedef struct {                                /*       CMP1 Structure                                               */
+   __IO uint8_t   CR0;                          /**< 0000: CMP Control Register 0                                       */
+   __IO uint8_t   CR1;                          /**< 0001: CMP Control Register 1                                       */
+   __IO uint8_t   FPR;                          /**< 0002: CMP Filter Period Register                                   */
+   __IO uint8_t   SCR;                          /**< 0003: CMP Status and Control Register                              */
+   __IO uint8_t   DACCR;                        /**< 0004: DAC Control Register                                         */
+   __IO uint8_t   MUXCR;                        /**< 0005: MUX Control Register                                         */
+} CMP1_Type;
+
+/**
+ * @} */ /* End group CMP_structs_GROUP 
+ */
+
+/* -------------------------------------------------------------------------------- */
+/* -----------     'CMP1' Position & Mask macros                        ----------- */
+/* -------------------------------------------------------------------------------- */
+
+/**
+* @addtogroup CMP_Register_Masks_GROUP CMP Register Masks
+* @brief Register Masks for CMP
+* @{
+*/
+/* ------- CR0 Bit Fields                           ------ */
+/* ------- CR1 Bit Fields                           ------ */
+/* ------- FPR Bit Fields                           ------ */
+/* ------- SCR Bit Fields                           ------ */
+/* ------- DACCR Bit Fields                         ------ */
+/* ------- MUXCR Bit Fields                         ------ */
+/**
+ * @} */ /* End group CMP_Register_Masks_GROUP 
+ */
 
 /* CMP1 - Peripheral instance base addresses */
 #define CMP1_BasePtr                   0x40073008UL //!< Peripheral base address
-#define CMP1                           ((CMP_Type *) CMP1_BasePtr) //!< Freescale base pointer
+#define CMP1                           ((CMP1_Type *) CMP1_BasePtr) //!< Freescale base pointer
 #define CMP1_BASE_PTR                  (CMP1) //!< Freescale style base pointer
 /**
  * @} */ /* End group CMP_Peripheral_access_layer_GROUP 

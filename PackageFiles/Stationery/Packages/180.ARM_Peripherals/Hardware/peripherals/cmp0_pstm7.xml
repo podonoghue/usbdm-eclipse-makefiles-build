@@ -2,6 +2,45 @@
 <!DOCTYPE devicePage SYSTEM "_menu.dtd" >
 <!-- cmp0_pstm7.xml -->
 
-<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="cmp_def.xml"/>
-</fragment>
+<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Comparitor">
+ 
+   <xi:include href="cmp_base.xml"/>
+ 
+   <choiceOption name="cmp_muxcr_psel" 
+      description="Plus Input Mux Control"
+      toolTip="Determines which input is selected for the plus input of the comparator" >
+      <choice value="0" name="CMP_IN0" />
+      <choice value="1" name="CMP_IN1" />
+      <choice value="2" name="CMP_IN2" />
+      <choice value="3" name="CMP_IN3" />
+      <choice value="4" name="CMP_IN4" />
+      <choice value="5" name="CMP_IN5/VREF_OUT" />
+      <choice value="6" name="Bandgap" />
+      <choice value="7" name="6-bit DAC" />
+   </choiceOption>
+
+   <choiceOption name="cmp_muxcr_msel" 
+      description="Minus Input Mux Control"
+      toolTip="Determines which input is selected for the minus input of the comparator" >
+      <choice value="0" name="CMP_IN0" />
+      <choice value="1" name="CMP_IN1" />
+      <choice value="2" name="CMP_IN2" />
+      <choice value="3" name="CMP_IN3" />
+      <choice value="4" name="CMP_IN4" />
+      <choice value="5" name="CMP_IN5/VREF_OUT" />
+      <choice value="6" name="Bandgap" />
+      <choice value="7" name="6-bit DAC" />
+   </choiceOption>
+
+   <template><![CDATA[
+      \t//! MUX Control Register
+      \tstatic constexpr uint32_t muxcr =
+      \t   CMP_MUXCR_PSEL($(cmp_muxcr_psel))| // Plus Input Mux Control
+      \t   CMP_MUXCR_MSEL($(cmp_muxcr_msel)); // Minus Input Mux Control\n\n
+   ]]></template>
+
+   <xi:include href="_irqOption.xml"/>         
+
+   <signals/>
+   
+</devicePage>

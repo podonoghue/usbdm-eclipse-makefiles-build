@@ -39,9 +39,16 @@ typedef void (*CMPCallbackFunction)(int status);
  * @tparam info      Information class for CMP
  *
  * @code
- * using cmp = CmpIrq_T<CmpInfo>;
+ *  // Example using an interrupt handler on both rising and falling edges
  *
- *  cmp::initialise();
+ *  // Connections - change as required
+ *  using Cmp = USBDM::Cmp0;
+ *
+ *  Cmp::enable();
+ *  Cmp::setDacLevel(20);
+ *  Cmp::setCallback(callback);
+ *  Cmp::enableFallingEdgeInterrupts(true);
+ *  Cmp::enableRisingEdgeInterrupts(true);
  *
  * @endcode
  */
@@ -142,7 +149,7 @@ public:
     * @param source Reference source select (0..1) Usually 0=>Vin, 1=>Vdd
     * @param enable True=>enable, False=>disable
     */
-   static void setDacLevel(uint8_t level, uint8_t source=1, bool enable=true) {
+   static void setDacLevel(uint8_t level, uint8_t source=(Info::daccr&CMP_DACCR_VRSEL_MASK)?1:0, bool enable=true) {
       cmp->DACCR = CMP_DACCR_DACEN(enable)|CMP_DACCR_VRSEL(source)|CMP_DACCR_VOSEL(level);
    }
 

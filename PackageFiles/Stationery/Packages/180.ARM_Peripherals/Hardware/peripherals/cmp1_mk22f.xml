@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE devicePage SYSTEM "_menu.dtd" >
-<!-- cmp0.xml -->
+<!-- cmp0_mkv.xml -->
 
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Comparitor">
  
@@ -9,27 +9,25 @@
    <choiceOption name="cmp_muxcr_psel" 
       description="Plus Input Mux Control"
       toolTip="Determines which input is selected for the plus input of the comparator" >
-      <choice value="0" name="CMP_IN0" />
-      <choice value="1" name="CMP_IN1" />
-      <choice value="2" name="CMP_IN2" />
-      <choice value="3" name="CMP_IN3" />
-      <choice value="4" name="CMP_IN4" />
-      <choice value="5" name="CMP_IN5/VREF_OUT" />
+      <choice value="0" name="CMP1_IN0" />
+      <choice value="1" name="CMP1_IN1" />
+      <choice value="2" name="CMP1_IN2" />
+      <choice value="3" name="CMP1_IN3/12-bit DAC0" />
+      <choice value="5" name="CMP1_IN5/VREF_OUT" />
       <choice value="6" name="Bandgap" />
-      <choice value="7" name="6-bit DAC" />
+      <choice value="7" name="6-bit DAC1" />
    </choiceOption>
 
    <choiceOption name="cmp_muxcr_msel" 
       description="Minus Input Mux Control"
       toolTip="Determines which input is selected for the minus input of the comparator" >
-      <choice value="0" name="CMP_IN0" />
-      <choice value="1" name="CMP_IN1" />
-      <choice value="2" name="CMP_IN2" />
-      <choice value="3" name="CMP_IN3" />
-      <choice value="4" name="CMP_IN4" />
-      <choice value="5" name="CMP_IN5/VREF_OUT" />
+      <choice value="0" name="CMP1_IN0" />
+      <choice value="1" name="CMP1_IN1" />
+      <choice value="2" name="CMP1_IN2" />
+      <choice value="3" name="CMP1_IN3/12-bit DAC0" />
+      <choice value="5" name="CMP1_IN5/VREF_OUT" />
       <choice value="6" name="Bandgap" />
-      <choice value="7" name="6-bit DAC" />
+      <choice value="7" name="6-bit DAC1" />
    </choiceOption>
 
    <template><![CDATA[

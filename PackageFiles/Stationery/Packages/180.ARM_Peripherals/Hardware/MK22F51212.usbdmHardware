@@ -25,12 +25,12 @@
          <clock reg="SCGC6"         mask="SIM_SCGC6_ADC1_MASK" />
          <irq num="ADC1_IRQn" />
       </peripheral>
-      <peripheral baseName="CMP"      instance="0"        version="cmp0_mkv">
+      <peripheral baseName="CMP"      instance="0"        version="cmp0_mk22f">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCmp" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_CMP_MASK" />
          <irq num="CMP0_IRQn" />
       </peripheral>
-      <peripheral baseName="CMP"      instance="1"        version="cmp0_mkv">
+      <peripheral baseName="CMP"      instance="1"        version="cmp1_mk22f">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCmp" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_CMP_MASK" />
          <irq num="CMP1_IRQn" />

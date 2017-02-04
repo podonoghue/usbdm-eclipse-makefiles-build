@@ -18,7 +18,7 @@
    <item key="$signal$PTA19_descriptionSetting"            value="Reserved(Crystal)" />
    <item key="$signal$PTA19_muxSetting"                    value="mux0" />
    <item key="$signal$PTA1_descriptionSetting"             value="Red LED" />
-   <item key="$signal$PTA1_muxSetting"                     value="mux2" />
+   <item key="$signal$PTA1_muxSetting"                     value="mux1" />
    <item key="$signal$PTA2_descriptionSetting"             value="Green LED" />
    <item key="$signal$PTA2_muxSetting"                     value="mux1" />
    <item key="$signal$PTA3_descriptionSetting"             value="Reserved(SWD)" />
