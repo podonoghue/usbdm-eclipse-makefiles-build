@@ -1,23 +1,9 @@
 <!--
 Devices using this peripheral: 
-      MK02F12810
-      MK22F12810
-      MK22F25612
-      MK82F25615
-      MKV10Z7
-      MKV11Z7
-      MKV30F12810
-      MKV31F12810
-      MKV31F25612
-      MKV31F51212
-      MKV40F15
-      MKV43F15
-      MKV44F15
-      MKV45F15
-      MKV46F15
+      MK22F51212
 -->
       <peripheral>
-         <?sourceFile "CMP0_MKV" ?>
+         <?sourceFile "CMP0_MK22F" ?>
          <name>CMP0</name>
          <description>Comparator, Voltage Ref, D-to-A Converter and Analog Mux</description>
          <groupName>CMP</groupName>
@@ -427,42 +413,42 @@ Controls availability of the comparator output on the associated CMPO output pin
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b000</name>
-                           <description>IN0</description>
+                           <description>CMP0_IN0</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b001</name>
-                           <description>IN1</description>
+                           <description>CMP0_IN1</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b010</name>
-                           <description>IN2</description>
+                           <description>CMP0_IN2</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b011</name>
-                           <description>IN3</description>
+                           <description>CMP0_IN3</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b100</name>
-                           <description>IN4</description>
+                           <description>CMP0_IN4/12-bit DAC1 Output</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b101</name>
-                           <description>IN5</description>
+                           <description>CMP0_IN5/VREF Output</description>
                            <value>0b101</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b110</name>
-                           <description>IN6</description>
+                           <description>Bandgap</description>
                            <value>0b110</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b111</name>
-                           <description>IN7</description>
+                           <description>6b DAC0 Reference</description>
                            <value>0b111</value>
                         </enumeratedValue>
                      </enumeratedValues>

@@ -4,7 +4,8 @@
 <!ENTITY VECTOR_TABLE SYSTEM "vectorTables/MK22F51212_VectorTable.svd.xml">
 <!ENTITY ADC0         SYSTEM "peripherals/ADC0_DIFF_A.svd.xml">
 <!ENTITY AXBS         SYSTEM "peripherals/AXBS_6M_5S.svd.xml">
-<!ENTITY CMP0         SYSTEM "peripherals/CMP0_MKV.svd.xml">
+<!ENTITY CMP0         SYSTEM "peripherals/CMP0_MK22F.svd.xml">
+<!ENTITY CMP1         SYSTEM "peripherals/CMP1_MK22F.svd.xml">
 <!ENTITY CRC          SYSTEM "peripherals/CRC_0x40032000.svd.xml">
 <!ENTITY CoreDebug    SYSTEM "peripherals/CoreDebug.svd.xml">
 <!ENTITY DAC0         SYSTEM "peripherals/DAC0_16CH_FIFO16.svd.xml">
@@ -77,7 +78,7 @@
 <peripheral derivedFrom="ADC0"><name>ADC1</name><prependToName>ADC1</prependToName><baseAddress>0x40027000</baseAddress></peripheral>
 &AXBS;
 &CMP0;
-<peripheral derivedFrom="CMP0"><name>CMP1</name><prependToName>CMP1</prependToName><baseAddress>0x40073008</baseAddress></peripheral>
+&CMP1;
 &CRC;
 &CoreDebug;
 &DAC0;
