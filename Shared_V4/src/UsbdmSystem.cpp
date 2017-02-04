@@ -158,9 +158,11 @@ double UsbdmSystem::Log::getCurrentTime(void) {
    return (tv.tv_sec*1000.0)+(tv.tv_usec/1000.0);
 }
 
-double UsbdmSystem::Log::getTimeStamp(void) {
+const char *UsbdmSystem::Log::getTimeStamp(void) {
    static double loggingStartTime = -1.0;
    static double lastTimestamp    = -1;
+   static char buff[20];
+
    if (loggingStartTime < 0.0) {
       loggingStartTime = getCurrentTime();
       lastTimestamp    = loggingStartTime;
@@ -181,7 +183,8 @@ double UsbdmSystem::Log::getTimeStamp(void) {
    if (timestamp<.001) {
       timestamp = 0;
    }
-   return timestamp;
+   snprintf(buff, sizeof(buff), "/* %7.2f */ ", timestamp);
+   return buff;
 }
 
 /**  \brief Object to allow logging the execution of a function
@@ -252,8 +255,11 @@ void UsbdmSystem::Log::openLogFile(const char *logFileName, const char *descript
 
    time_t time_now;
    time(&time_now);
-   fprintf(logFile, "Log file created on: %s"
-         "==============================================\n\n", ctime(&time_now));
+   fprintf(logFile,
+         "/*\n"
+         " * Log file created on: %s"
+         " * ==============================================\n"
+         " */\n", ctime(&time_now));
    fflush(logFile);
 }
 
@@ -354,7 +360,7 @@ void UsbdmSystem::Log::print(const char *format, ...)  {
       format = "print() - Error - empty format string!\n";
    }
    if (timestampMode != none) {
-      fprintf(logFile, "%10.2f: ", getTimeStamp());
+      fprintf(logFile, getTimeStamp());
    }
    fprintf(logFile, "%*s", 3*indent, "");
    if (currentName!=NULL) {
@@ -379,7 +385,7 @@ void UsbdmSystem::Log::error(const char *format, ...)  {
       format = "error() - Error - empty format string!\n";
    }
    if (timestampMode != none) {
-      fprintf(logFile, "%10.2f: ", getTimeStamp());
+      fprintf(logFile, getTimeStamp());
    }
    fprintf(logFile, "%*s", 3*indent, "");
    if (currentName!=NULL) {
@@ -403,7 +409,7 @@ void UsbdmSystem::Log::warning(const char *format, ...) {
       format = "error() - Error - empty format string!\n";
    }
    if (timestampMode != none) {
-      fprintf(logFile, "%10.2f: ", getTimeStamp());
+      fprintf(logFile, getTimeStamp());
    }
    fprintf(logFile, "%*s", 3*indent, "");
    if (currentName!=NULL) {
@@ -462,7 +468,7 @@ void UsbdmSystem::Log::printDump(const uint8_t *data,
       if (eolFlag) {
          eolFlag = false;
          if (timestampMode) {
-            fprintf(logFile, "%10.2f: ", getTimeStamp());
+            fprintf(logFile, getTimeStamp());
          }
          fprintf(logFile, "%*s", 3*indent, "");
          fprintf(logFile,"   %s%8.8X:", prefix, address>>addressShift);

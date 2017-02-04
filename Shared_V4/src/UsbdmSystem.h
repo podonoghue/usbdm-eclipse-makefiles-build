@@ -203,7 +203,7 @@ public:
       static void    setLoggingLevel(int level);
       static int     getLoggingLevel();
       static double  getCurrentTime();
-      static double  getTimeStamp();
+      static const char   *getTimeStamp();
       static void    error(const char *format, ...)   __attribute__ ((format (printf, 1, 2)));
       static void    warning(const char *format, ...) __attribute__ ((format (printf, 1, 2)));
       static void    print(const char *format, ...)   __attribute__ ((format (printf, 1, 2)));
