@@ -62,6 +62,9 @@
          <memory id="s12z8K_Ram" type="ram">
             <memoryRange start="0x001000" size="8K" />
          </memory>
+         <memory id="s12z12K_Ram" type="ram">
+            <memoryRange start="0x001000" size="12K" />
+         </memory>
    
       <!--  
          EEPROM Memory 
@@ -294,8 +297,8 @@
       <device family="S12Z" name="MC9S12ZVLS32" alias="MC9S12ZVL32" />
 
  <!-- 
-   MC9S12ZVC
-   MC9S12ZVCA 
+   MC9S12ZVC (MC9S12ZVC64, MC9S12ZVC96, MC9S12ZVC128, MC9S12ZVC192)
+   MC9S12ZVCA (MC9S12ZVCA64, MC9S12ZVCA96, MC9S12ZVCA128, MC9S12ZVCA192)
   -->
       <device family="S12Z" name="MC9S12ZVCA64">
          <clock type="External" />
@@ -315,7 +318,7 @@
 
       <device family="S12Z" name="MC9S12ZVCA96">
          <clock type="External" />
-         <memoryRef ref="s12z4K_Ram" />
+         <memoryRef ref="s12z8K_Ram" />
          <memoryRef ref="FTMRZ_EEPROM_2K_4bS" />
          <memoryRef ref="FTMRZ_PFlash0_SEC_96K_512bS" />
          <copctlAddress value="0x06CC" />
@@ -331,7 +334,7 @@
 
       <device family="S12Z" name="MC9S12ZVCA128">
          <clock type="External" />
-         <memoryRef ref="s12z4K_Ram" />
+         <memoryRef ref="s12z8K_Ram" />
          <memoryRef ref="FTMRZ_EEPROM_2K_4bS" />
          <memoryRef ref="FTMRZ_PFlash0_SEC_128K_512bS" />
          <copctlAddress value="0x06CC" />
