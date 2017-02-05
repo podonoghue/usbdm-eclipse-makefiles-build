@@ -29,7 +29,10 @@
 
 namespace USBDM {
 
-enum Polarity {ActiveLow=false, ActiveHigh=true};
+enum Polarity {
+   ActiveLow=false,
+   ActiveHigh=true
+};
 
 /**
  * @addtogroup GPIO_Group GPIO, Digital Input/Output
@@ -83,32 +86,47 @@ public:
    using Pcr = Pcr_T<clockMask, pcrAddress, bitNum, GPIO_DEFAULT_PCR>;
 
    static constexpr volatile GPIO_Type *gpio = reinterpret_cast<volatile GPIO_Type *>(gpioAddress);
+   static constexpr uint32_t MASK = (1<<bitNum);
 
    /**
-    * Set pin as digital output
+    * Enable pin as digital output
     *
     * @param pcrValue PCR value to use in configuring port (excluding MUX value)
     */
    static void setOutput(uint32_t pcrValue=GPIO_DEFAULT_PCR) {
       bmeOr(gpio->PDDR, 1<<bitNum);
-//      gpio->PDDR |= (1<<bitNum);
+//      gpio->PDDR |= MASK;
       Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|PORT_PCR_MUX(FIXED_GPIO_FN));
    }
    /**
-    * Set pin as digital input
+    * Enable pin as digital input
     *
     * @param pcrValue PCR value to use in configuring port (excluding MUX value)
     */
    static void setInput(uint32_t pcrValue=GPIO_DEFAULT_PCR) {
       bmeAnd(gpio->PDDR, ~(1<<bitNum));
-//      gpio->PDDR &= ~(1<<bitNum);
+//      gpio->PDDR &= ~MASK;
       Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|PORT_PCR_MUX(FIXED_GPIO_FN));
+   }
+   /**
+    * Set pin as digital output
+    */
+   static void setOut() {
+      bmeOr(gpio->PDDR, 1<<bitNum);
+//      gpio->PDDR |= MASK;
+   }
+   /**
+    * Set pin as digital input
+    */
+   static void setIn() {
+      bmeAnd(gpio->PDDR, ~(1<<bitNum));
+//      gpio->PDDR &= ~MASK;
    }
    /**
     * Toggle pin (if output)
     */
    static void toggle() {
-      gpio->PTOR = (1<<bitNum);
+      gpio->PTOR = MASK;
    }
    /**
     * Set pin to active level (if output)
@@ -117,10 +135,10 @@ public:
     */
    static void set() {
       if (polarity) {
-         gpio->PSOR = (1<<bitNum);
+         gpio->PSOR = MASK;
       }
       else {
-         gpio->PCOR = (1<<bitNum);
+         gpio->PCOR = MASK;
       }
    }
    /**
@@ -130,10 +148,10 @@ public:
     */
    static void clear() {
       if (polarity) {
-         gpio->PCOR = (1<<bitNum);
+         gpio->PCOR = MASK;
       }
       else {
-         gpio->PSOR = (1<<bitNum);
+         gpio->PSOR = MASK;
       }
    }
    /**
@@ -186,7 +204,7 @@ public:
     * @note Polarity is NOT significant
     */
    static void high() {
-      gpio->PSOR = (1<<bitNum);
+      gpio->PSOR = MASK;
    }
    /**
     * Set pin low
@@ -194,7 +212,7 @@ public:
     * @note Polarity is NOT significant
     */
    static void low() {
-      gpio->PCOR = (1<<bitNum);
+      gpio->PCOR = MASK;
    }
    /**
     * Checks if pin is high
@@ -216,6 +234,62 @@ public:
    static bool isLow() {
       return !bmeExtract(gpio->PDIR, bitNum, 1);
    }
+   /**
+    * Sets pin interrupt mode
+    * Convenience wrapper for PCR function
+    *
+    * @param mode Interrupt/DMA mode
+    */
+   static void setIrq(InterruptMode mode) {
+      Pcr::setIrq(mode);
+   }
+
+   /**
+    * Clear interrupt flag for pin
+    * Convenience wrapper for PCR function
+    */
+   static void clearIrqFlag() {
+      Pcr::clearIrqFlag();
+   }
+
+   /**
+    * Set pull device on pin
+    * Convenience wrapper for PCR function
+    *
+    * @param mode Pull control value (PullNone, PullUp, PullDown)
+    */
+   static void setPullDevice(PullModes mode) {
+      Pcr::setPullDevice(mode);
+   }
+
+   /**
+    * Locks most of the pin properties e.g. drive strength, pull-device etc.
+    * Convenience wrapper for PCR function
+    */
+   static void lock() {
+      Pcr::lock();
+   }
+
+   /**
+    * Enable/disable pin interrupts
+    * Convenience wrapper for PCR function
+    *
+    * @param enable True => enable, False => disable
+    */
+   static void enableNvicInterrupts(bool enable=true) {
+      Pcr::enableNvicInterrupts(enable);
+   }
+
+   /**
+    * Set callback for ISR \n
+    * Convenience wrapper for PCR function
+    *
+    * @param callback The function to call from stub ISR
+    */
+   static void setCallback(PinCallbackFunction callback) {
+      Pcr::setCallback(callback);
+   }
+
 };
 
 /**
@@ -284,7 +358,7 @@ private:
    /**
     * Mask for the bits being manipulated
     */
-   static constexpr uint32_t    MASK = ((1<<(left-right+1))-1)<<right;
+   static constexpr uint32_t MASK = ((1<<(left-right+1))-1)<<right;
    /**
     * Utility function to set multiple PCRs using GPCLR & GPCHR
     *
@@ -409,6 +483,7 @@ public:
  * @tparam polarity      True => Active high, False => Active low
  */
 template<uint8_t bitNum, Polarity polarity=ActiveHigh> class GpioA : public Gpio_T<GpioAInfo, bitNum, polarity> {};
+using PortA = PcrBase_T<USBDM::GpioAInfo::pcrAddress>;
 
 /**
  * @brief Convenience template for GpioA fields. See @ref Field_T
@@ -484,6 +559,7 @@ template<int left, int right> class GpioAField : public Field_T<GpioAInfo, left,
  * @tparam polarity      True => Active high, False => Active low
  */
 template<uint8_t bitNum, Polarity polarity=ActiveHigh> class GpioB : public Gpio_T<GpioBInfo, bitNum, polarity> {};
+using PortB = PcrBase_T<USBDM::GpioBInfo::pcrAddress>;
 
 /**
  * @brief Convenience template for GpioB fields. See @ref Field_T
@@ -559,6 +635,7 @@ template<int left, int right> class GpioBField : public Field_T<GpioBInfo, left,
  * @tparam polarity      True => Active high, False => Active low
  */
 template<uint8_t bitNum, Polarity polarity=ActiveHigh> class GpioC : public Gpio_T<GpioCInfo, bitNum, polarity> {};
+using PortC = PcrBase_T<USBDM::GpioCInfo::pcrAddress>;
 
 /**
  * @brief Convenience template for GpioC fields. See @ref Field_T
@@ -634,6 +711,7 @@ template<int left, int right> class GpioCField : public Field_T<GpioCInfo, left,
  * @tparam polarity      True => Active high, False => Active low
  */
 template<uint8_t bitNum, Polarity polarity=ActiveHigh> class GpioD : public Gpio_T<GpioDInfo, bitNum, polarity> {};
+using PortD = PcrBase_T<USBDM::GpioDInfo::pcrAddress>;
 
 /**
  * @brief Convenience template for GpioD fields. See @ref Field_T
@@ -709,6 +787,7 @@ template<int left, int right> class GpioDField : public Field_T<GpioDInfo, left,
  * @tparam polarity      True => Active high, False => Active low
  */
 template<uint8_t bitNum, Polarity polarity=ActiveHigh> class GpioE : public Gpio_T<GpioEInfo, bitNum, polarity> {};
+using PortE = PcrBase_T<USBDM::GpioEInfo::pcrAddress>;
 
 /**
  * @brief Convenience template for GpioE fields. See @ref Field_T

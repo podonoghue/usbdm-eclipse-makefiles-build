@@ -173,8 +173,50 @@ enum InterruptMode {
 
 /**
  * Type definition for PIT interrupt call back
+ *
+ * @param status 32-bit value from ISFR (each bit indicates an interrupt source)
  */
-typedef void (*PinCallbackFunction)(void);
+typedef void (*PinCallbackFunction)(uint32_t status);
+
+template<uint32_t pcrAddress>
+class PcrBase_T {
+
+private:
+   static constexpr volatile PORT_Type *port = reinterpret_cast<volatile PORT_Type *>(pcrAddress);
+
+   /** Callback functions for ISRs */
+   static PinCallbackFunction fCallback;
+
+public:
+   /**
+    * Interrupt handler -  Calls callback
+    */
+   static void irqHandler() {
+      // Capture interrupt flags
+      uint32_t status = port->ISFR;
+
+      // Clear flags
+      port->ISFR = status;
+
+      if (fCallback != 0) {
+         fCallback(status);
+      }
+      else {
+         setAndCheckErrorCode(E_NO_HANDLER);
+      }
+   }
+   /**
+    * Set callback for ISR
+    *
+    * @param callback The function to call from stub ISR
+    */
+   static void setCallback(PinCallbackFunction callback) {
+      fCallback = callback;
+   }
+};
+
+template<uint32_t pcrAddress>
+PinCallbackFunction USBDM::PcrBase_T<pcrAddress>::fCallback = nullptr;
 
 /**
  * @brief Template representing a Pin Control Register (PCR)
@@ -200,45 +242,20 @@ typedef void (*PinCallbackFunction)(void);
  * @tparam defPcrValue     Default value for PCR (including MUX value)
  */
 template<uint32_t clockMask, uint32_t pcrAddress, int32_t bitNum, uint32_t defPcrValue>
-class Pcr_T {
+class Pcr_T : public PcrBase_T<pcrAddress>{
 
 private:
-   /** Callback functions for ISRs */
-   static PinCallbackFunction fCallback;
 
-private:
 #ifdef DEBUG_BUILD
    static_assert((bitNum != UNMAPPED_PCR), "Pcr_T: Signal is not mapped to a pin - Modify Configure.usbdm");
    static_assert((bitNum != INVALID_PCR),  "Pcr_T: Non-existent signal");
    static_assert((bitNum == UNMAPPED_PCR)||(bitNum == INVALID_PCR)||(bitNum >= 0), "Pcr_T: Illegal bit number");
 #endif
 
-   static constexpr volatile PORT_Type *port  = reinterpret_cast<volatile PORT_Type *>(pcrAddress);
    static constexpr volatile uint32_t *pcrReg = reinterpret_cast<volatile uint32_t *>(pcrAddress+offsetof(PORT_Type,PCR[bitNum]));
 
 public:
-   /** Interrupt handler -  Calls callback */
-   static void irqHandler() {
-
-      // Clear interrupt flag
-      *pcrReg |= PORT_PCR_ISF_MASK;
-
-      if (fCallback != 0) {
-         fCallback();
-      }
-      else {
-         setAndCheckErrorCode(E_NO_HANDLER);
-      }
-   }
-
-   /**
-    * Set callback for ISR
-    *
-    * @param callback The function to call from stub ISR
-    */
-   static void setCallback(PinCallbackFunction callback) {
-      fCallback = callback;
-   }
+   using PcrBase = PcrBase_T<pcrAddress>;
 
    /**
     * Set pin PCR value\n
@@ -274,6 +291,13 @@ public:
     */
    static void setIrq(InterruptMode mode) {
       *pcrReg = (*pcrReg&~PORT_PCR_IRQC_MASK) | mode;
+   }
+
+   /**
+    * Clear interrupt flag
+    */
+   static void clearIrqFlag() {
+      *pcrReg |= PORT_PCR_ISF_MASK;
    }
 
    /**
@@ -313,9 +337,6 @@ public:
       }
    }
 };
-
-template<uint32_t clockMask, uint32_t pcrAddress, int32_t bitNum, uint32_t defPcrValue>
-PinCallbackFunction USBDM::Pcr_T<clockMask, pcrAddress, bitNum, defPcrValue>::fCallback = nullptr;
 
 /**
  * @brief Template function to set a PCR to the default value
