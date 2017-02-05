@@ -3,19 +3,19 @@ include ../Common.mk
 DEFS = -DMINIMAL_APP=wxPluginApp
 
 TestWx-debug:
-	@echo
+	@echo ''
 	@echo  Building $@
 	@echo "================================================================"
 	$(MAKE) exe -f Target.mk BUILDDIR=$@$(BUILDDIR_SUFFIX) MODULE=TestWx TARGET=$@ CDEFS='$(DEFS)' DEBUG='Y'
 
 usbdm-wx-plugin:
-	@echo
+	@echo ''
 	@echo  Building $@
 	@echo "================================================================"
 	$(MAKE) dll -f Target.mk BUILDDIR=$@$(BUILDDIR_SUFFIX) MODULE=wxPlugin TARGET=$@$(VSUFFIX) CDEFS='$(DEFS) -DCOMPILE_WX_PLUGIN_DLL'
 	
 usbdm-wx-plugin-debug:
-	@echo
+	@echo ''
 	@echo  Building $@
 	@echo "================================================================"
 	$(MAKE) dll -f Target.mk BUILDDIR=$@$(BUILDDIR_SUFFIX) MODULE=wxPlugin TARGET=$@$(VSUFFIX) CDEFS='$(DEFS) -DCOMPILE_WX_PLUGIN_DLL' DEBUG='Y'
