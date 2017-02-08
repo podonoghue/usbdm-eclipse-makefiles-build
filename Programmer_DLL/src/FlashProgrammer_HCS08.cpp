@@ -582,8 +582,7 @@ USBDM_ErrorCode FlashProgrammer_HCS08::initialiseTarget() {
       if (!memoryRegionPtr->isProgrammableMemory()) {
          continue;
       }
-      sprintf(argPtr, "{%s 0x%04X} ",
-            memoryRegionPtr->getMemoryTypeName(),
+      sprintf(argPtr, "0x%04X ",
             memoryRegionPtr->getDummyAddress()&0xFFFF);
       argPtr += strlen(argPtr);
    }
