@@ -36,23 +36,23 @@
       </DirectoryRef>
      
       <!--======================================================
-               Registry searches
+               Searches
       =======================================================-->
      
       <!-- Check for presence of Eclipse -->
+      <!--Property Id="P.$(var.ECLIPSE_VER)_ECLIPSE">
+         <DirectorySearch Id='DirectorySearch1' Path='D.$(var.ECLIPSE_VER)_ECLIPSE' AssignToProperty="yes" />
+      </Property-->
+
       <Property Id="P.$(var.ECLIPSE_VER)_ECLIPSE">
-         <RegistrySearch Id="Rs.$(var.ECLIPSE_VER)_ECLIPSE"
-                    Root="HKLM"
-                    Win64="no"
-                    Key="SOFTWARE\Eclipse Foundation\Eclipse"
-                    Name="InstallationDirectory"
-                    Type="directory" />
+         <DirectorySearch Id='DirectorySearch1' Path='Apps\eclipse' AssignToProperty="yes" />
       </Property>
 
+
       <!-- Modify default install path for Eclipse -->
-      <Property Id="D.$(var.ECLIPSE_VER)_ECLIPSE">
+      <!--Property Id="D.$(var.ECLIPSE_VER)_ECLIPSE">
          <RegistrySearchRef Id="Rs.$(var.ECLIPSE_VER)_ECLIPSE" />
-      </Property>
+      </Property -->
       
       <!--=================================================================================
            Actions
