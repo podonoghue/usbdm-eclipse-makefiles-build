@@ -154,7 +154,7 @@ USBDM_ErrorCode FlashProgrammerApp::doCommandLineProgram() {
          break;
       }
       if (!hexFileName.IsEmpty()) {
-         returnValue = flashImage->loadFile((const char *)hexFileName.ToAscii(), targetType);
+         returnValue = flashImage->loadFile((const char *)hexFileName.c_str(), targetType);
          if (returnValue != BDM_RC_OK) {
             break;
          }
@@ -481,7 +481,7 @@ USBDM_ErrorCode FlashProgrammerApp::parseCommandLine(wxCmdLineParser& parser) {
    }
 
    // Ignore other options unless "verify" or "program" are given
-   if (!parser.Found(_("verify")) && !parser.Found(_("program"))) {
+   if (!parser.Found("verify") && !parser.Found("program")) {
       bdmInterface = BdmInterfaceFactory::createInterface(targetType, connectionCallback);
       deviceInterface.reset(new DeviceInterface(targetType));
       return BDM_RC_OK;
@@ -503,9 +503,9 @@ USBDM_ErrorCode FlashProgrammerApp::parseCommandLine(wxCmdLineParser& parser) {
       return(BDM_RC_ILLEGAL_PARAMS);
    }
    
-   rc = deviceInterface->setCurrentDeviceByName((const char *)sValue.ToAscii());
+   rc = deviceInterface->setCurrentDeviceByName((const char *)sValue.c_str());
    if (rc != BDM_RC_OK) {
-      log.error("Failed to set device to \'%s\'\n", (const char *)sValue.ToAscii());
+      log.error("Failed to set device to \'%s\'\n", (const char *)sValue.c_str());
       logUsageError(parser, _("***** Error: Failed to find device.\n"));
       return rc;
    }
@@ -563,7 +563,7 @@ USBDM_ErrorCode FlashProgrammerApp::parseCommandLine(wxCmdLineParser& parser) {
       }
       else {
          deviceData->setSecurity(SEC_CUSTOM);
-         customSecurityValue = std::string(sValue.ToAscii());
+         customSecurityValue = std::string(sValue.c_str());
       }
    }
    verify   = parser.Found(_("verify"));
@@ -608,7 +608,7 @@ USBDM_ErrorCode FlashProgrammerApp::parseCommandLine(wxCmdLineParser& parser) {
       }
    }
    if (parser.Found(_("bdm"), &sValue)) {
-      bdmInterface->setBdmSerialNumber((const char *)sValue.ToAscii(), false);
+      bdmInterface->setBdmSerialNumber((const char *)sValue.c_str(), false);
    }
    if (parser.Found(_("requiredBdm"), &sValue)) {
       bdmInterface->setBdmSerialNumber(sValue.ToStdString(), true);
