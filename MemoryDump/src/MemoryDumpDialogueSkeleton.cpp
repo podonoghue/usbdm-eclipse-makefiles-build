@@ -1,4 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
+// C++ code generated with wxFormBuilder (version Jun  5 2014)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO "NOT" EDIT THIS FILE!
@@ -30,10 +31,10 @@ MemoryDumpDialogueSkeleton::MemoryDumpDialogueSkeleton( wxWindow* parent, wxWind
 	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
 	
 	bdmRefreshButtonControl = new wxButton( this, wxID_ANY, wxT("Detect"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer3->Add( bdmRefreshButtonControl, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	bSizer3->Add( bdmRefreshButtonControl, 0, wxLEFT|wxRIGHT, 5 );
 	
 	bdmSelectChoiceControl = new wxComboBox( this, wxID_ANY, wxT("[No devices Found]"), wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY ); 
-	bSizer3->Add( bdmSelectChoiceControl, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	bSizer3->Add( bdmSelectChoiceControl, 1, wxLEFT|wxRIGHT, 5 );
 	
 	
 	sbSizer1->Add( bSizer3, 1, wxEXPAND, 5 );
@@ -43,7 +44,7 @@ MemoryDumpDialogueSkeleton::MemoryDumpDialogueSkeleton( wxWindow* parent, wxWind
 	sbSizer1->Add( bdmDescriptionStaticControl, 0, wxALL, 5 );
 	
 	
-	bSizer1->Add( sbSizer1, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	bSizer1->Add( sbSizer1, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxHORIZONTAL );

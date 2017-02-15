@@ -176,10 +176,10 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	
 	dllVersionstaticControl = new wxStaticText( fInterfacePanel, wxID_ANY, wxT("DLL Ver ?.?.?.?"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT );
 	dllVersionstaticControl->Wrap( -1 );
-	bSizer12->Add( dllVersionstaticControl, 1, wxALIGN_RIGHT|wxALL, 5 );
+	bSizer12->Add( dllVersionstaticControl, 1, wxALL, 5 );
 	
 	
-	bSizer3->Add( bSizer12, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizer3->Add( bSizer12, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	
 	fInterfacePanel->SetSizer( bSizer3 );
@@ -629,7 +629,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	closeButton = new wxButton( this, wxID_OK, wxT("Close"), wxDefaultPosition, wxDefaultSize, 0 );
 	closeButton->SetToolTip( wxT("Close Programmer") );
 	
-	bSizer132->Add( closeButton, 0, wxALIGN_RIGHT|wxALL, 5 );
+	bSizer132->Add( closeButton, 0, wxALL, 5 );
 	
 	
 	bSizer2->Add( bSizer132, 0, wxALIGN_RIGHT, 5 );

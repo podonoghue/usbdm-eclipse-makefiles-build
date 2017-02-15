@@ -84,7 +84,7 @@ GdbServerWindowSkeleton::GdbServerWindowSkeleton( wxWindow* parent, wxWindowID i
 	statusTextControl = new wxTextCtrl( mainPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY );
 	bSizer2->Add( statusTextControl, 1, wxEXPAND, 5 );
 	
-	entryTextControl = new wxTextCtrl( mainPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	entryTextControl = new wxTextCtrl( mainPanel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
 	bSizer2->Add( entryTextControl, 0, wxEXPAND, 5 );
 	
 	

@@ -34,6 +34,7 @@
 
 #include <windows.h>
 #include <tr1/memory>
+#include <stdio.h>
 
 #include "UsbdmSystem.h"
 #include "MyException.h"
@@ -139,7 +140,7 @@ void PluginFactory<T>::loadClass(const char *moduleName, const char *createInsta
       throw MyException("Module already loaded\n");
    }
 
-   moduleHandle = LoadLibraryA((LPCSTR)moduleName);
+   moduleHandle = LoadLibraryA(moduleName);
 
    if (moduleHandle == NULL) {
 //      log.print("Module \'%s\' failed to load\n", moduleName);
@@ -147,10 +148,10 @@ void PluginFactory<T>::loadClass(const char *moduleName, const char *createInsta
 
       string extendedPath = UsbdmSystem::getApplicationPath("");
 //      log.print("Trying extended search path \'%s\'\n", extendedPath.c_str());
-      SetDllDirectoryA(UsbdmSystem::getApplicationPath("").c_str());
+      SetDllDirectoryA((const char *)UsbdmSystem::getApplicationPath("").c_str());
 
-      moduleHandle = LoadLibraryA((LPCSTR)moduleName);
-      SetDllDirectoryA(0);
+      moduleHandle = LoadLibraryA(moduleName);
+      SetDllDirectoryA((const char *)0);
 
       if (moduleHandle == NULL) {
          log.error("Module \'%s\' failed to load\n", moduleName);
@@ -165,9 +166,8 @@ void PluginFactory<T>::loadClass(const char *moduleName, const char *createInsta
    }
    newInstance  = (size_t (__attribute__((__stdcall__)) *)(...))GetProcAddress(moduleHandle, createInstanceFunctioName);
    if (newInstance == 0) {
-      char buff[1000];
-      snprintf(buff, sizeof(buff), "Entry point \'%s\' not found in module \'%s\'\n", createInstanceFunctioName, moduleName);
-      throw MyException(std::string(buff));
+      log.print("Entry point \'%s\' not found in module \'%s\'\n", createInstanceFunctioName, moduleName);
+      throw MyException("Entry point not found in module");
    }
 //   log.print("Entry point \'%s\' found @0x%p\n", createInstanceFunctioName, newInstance);
 }

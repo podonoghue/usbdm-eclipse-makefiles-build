@@ -219,7 +219,7 @@ USBDM_ErrorCode MemoryDumpDialogue::readMemoryBlocks(ProgressDialoguePtr progres
    LOGGING;
    USBDM_ErrorCode rc;
 
-   for (int row = 0; row < memoryRangesGrid->GetRows(); row++) {
+   for (int row = 0; row < memoryRangesGrid->GetNumberRows(); row++) {
       long int start, end, width;
       wxString startValue = memoryRangesGrid->GetCellValue(row,0);
       wxString endValue   = memoryRangesGrid->GetCellValue(row,1);
@@ -359,14 +359,14 @@ void MemoryDumpDialogue::loadSettings() {
    initializationCheckbox->SetValue(appSettings->getValue("initializeTarget", false));
    initialializeTextCntrl->SetValue(wxString(appSettings->getValue("initializationString", "")));
 
-   for (int row = 0; row < memoryRangesGrid->GetRows(); row++) {
+   for (int row = 0; row < memoryRangesGrid->GetNumberRows(); row++) {
       long int start, end, width;
 
       char key[100];
       snprintf(key, sizeof(key), "dataWidth%d", row);
       width = appSettings->getValue(key, 0);
       wxString widthValue = wxString::Format("%ld", width);
-      memoryRangesGrid->SetCellValue(widthValue, row, 2);
+      memoryRangesGrid->SetCellValue(row, 2, widthValue);
       wxString startValue;
       wxString endValue;
       if (width>0) {
@@ -378,8 +378,8 @@ void MemoryDumpDialogue::loadSettings() {
          end = appSettings->getValue(key, 0);
          endValue = wxString::Format("%lX", end);
       }
-      memoryRangesGrid->SetCellValue(startValue, row, 0);
-      memoryRangesGrid->SetCellValue(endValue,   row, 1);
+      memoryRangesGrid->SetCellValue(row, 0, startValue);
+      memoryRangesGrid->SetCellValue(row, 1, endValue);
    }
 
    setTargetType((TargetType_t)appSettings->getValue("targetType", (int)T_ARM));
@@ -407,7 +407,7 @@ void MemoryDumpDialogue::saveSettings() {
    appSettings->addValue("interfaceSpeed",   getInterfaceSpeed());
    appSettings->addValue("linearAddressing", flatAddressRadioButton->GetValue());
 
-   for (int row = 0; row < memoryRangesGrid->GetRows(); row++) {
+   for (int row = 0; row < memoryRangesGrid->GetNumberRows(); row++) {
       long int start, end, width;
       wxString startValue = memoryRangesGrid->GetCellValue(row, 0);
       wxString endValue   = memoryRangesGrid->GetCellValue(row, 1);
