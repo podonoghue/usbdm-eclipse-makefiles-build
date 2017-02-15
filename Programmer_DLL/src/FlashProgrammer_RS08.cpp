@@ -1753,6 +1753,6 @@ USBDM_ErrorCode FlashProgrammer_RS08::setDeviceData(const DeviceDataConstPtr dev
  * Create the plugin instance
  */
 extern "C"
-size_t CPP_DLL_EXPORT createPluginInstance(void *pp) {
+size_t CPP_DLL_EXPORT createPluginInstance(FlashProgrammer_RS08 *pp) {
    return TcreatePluginInstance<FlashProgrammer_RS08>(pp);
 }

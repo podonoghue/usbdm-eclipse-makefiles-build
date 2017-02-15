@@ -46,6 +46,6 @@ USBDM_ErrorCode BdmInterface_ARM::setProgrammingMode(bool) {
  * Create the plugin instance
  */
 extern "C"
-size_t CPP_DLL_EXPORT createPluginInstance(void *pp) {
+size_t CPP_DLL_EXPORT createPluginInstance(BdmInterface_ARM *pp) {
    return TcreatePluginInstance<BdmInterface_ARM>(pp);
 }

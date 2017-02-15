@@ -78,7 +78,7 @@ long WxPluginImp::display(std::string message, std::string caption, long style) 
  * Create the plug-in instance
  */
 extern "C"
-size_t CPP_DLL_EXPORT createPluginInstance(void *pp) {
+size_t CPP_DLL_EXPORT createPluginInstance(WxPluginImp *pp) {
    return TcreatePluginInstance<WxPluginImp>(pp);
 }
 

@@ -3039,6 +3039,6 @@ USBDM_ErrorCode FlashProgrammer_ARM::programFlash(FlashImagePtr flashImage,
  * Create the plugin instance
  */
 extern "C"
-size_t CPP_DLL_EXPORT createPluginInstance(void *pp) {
+size_t CPP_DLL_EXPORT createPluginInstance(FlashProgrammer_ARM *pp) {
    return TcreatePluginInstance<FlashProgrammer_ARM>(pp);
 }

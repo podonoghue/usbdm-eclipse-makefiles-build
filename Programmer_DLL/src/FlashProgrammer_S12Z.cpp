@@ -2948,6 +2948,6 @@ USBDM_ErrorCode FlashProgrammer_S12Z::programFlash(FlashImagePtr flashImage,
  * Create the plugin instance
  */
 extern "C"
-size_t CPP_DLL_EXPORT createPluginInstance(void *pp) {
+size_t CPP_DLL_EXPORT createPluginInstance(FlashProgrammer_S12Z *pp) {
    return TcreatePluginInstance<FlashProgrammer_S12Z>(pp);
 }

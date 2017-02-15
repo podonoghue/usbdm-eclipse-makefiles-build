@@ -61,7 +61,7 @@ using namespace std;
  * Create the plug-in instance
  */
 extern "C"
-size_t CPP_DLL_EXPORT createPluginInstance(void *pp) {
+size_t CPP_DLL_EXPORT createPluginInstance(FlashImageImp *pp) {
 
    return TcreatePluginInstance<FlashImageImp>(pp);
 }

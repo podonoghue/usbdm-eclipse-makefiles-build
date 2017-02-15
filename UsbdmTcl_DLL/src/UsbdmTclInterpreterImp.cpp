@@ -57,10 +57,10 @@ static void printChannel(int ch, const char *format, ...) __attribute__ ((format
 #define PRINT_ERROR(format, ...) printChannel(TCL_STDERR, format, ##__VA_ARGS__)
 
 /**
- * Create the plugin instance
+ * Create the plug-in instance
  */
 extern "C"
-size_t CPP_DLL_EXPORT createPluginInstance(void *pp) {
+size_t CPP_DLL_EXPORT createPluginInstance(UsbdmTclInterpreterImp *pp) {
    return TcreatePluginInstance<UsbdmTclInterpreterImp>(pp, true);
 }
 
@@ -68,7 +68,7 @@ size_t CPP_DLL_EXPORT createPluginInstance(void *pp) {
  * Create the plugin instance
  */
 extern "C"
-size_t CPP_DLL_EXPORT createInteractivePluginInstance(void *pp) {
+size_t CPP_DLL_EXPORT createInteractivePluginInstance(UsbdmTclInterpreterImp *pp) {
    return TcreatePluginInstance<UsbdmTclInterpreterImp>(pp, false);
 }
 

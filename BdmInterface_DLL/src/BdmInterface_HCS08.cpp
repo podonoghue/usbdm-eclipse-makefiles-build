@@ -26,6 +26,6 @@ USBDM_ErrorCode BdmInterface_HCS08::readPC(unsigned long *regValue) {
  * Create the plugin instance
  */
 extern "C"
-size_t CPP_DLL_EXPORT createPluginInstance(void *pp) {
+size_t CPP_DLL_EXPORT createPluginInstance(BdmInterface_HCS08 *pp) {
    return TcreatePluginInstance<BdmInterface_HCS08>(pp);
 }

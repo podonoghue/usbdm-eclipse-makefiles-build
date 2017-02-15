@@ -26,6 +26,6 @@ USBDM_ErrorCode BdmInterface_CFV1::readPC(unsigned long *regValue) {
  * Create the plugin instance
  */
 extern "C"
-size_t CPP_DLL_EXPORT createPluginInstance(void *pp) {
+size_t CPP_DLL_EXPORT createPluginInstance(BdmInterface_CFV1 *pp) {
    return TcreatePluginInstance<BdmInterface_CFV1>(pp);
 }

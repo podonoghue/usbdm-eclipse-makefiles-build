@@ -261,6 +261,6 @@ USBDM_ErrorCode BdmInterface_DSC::getStatus(unsigned int *status) {
  * Create the plugin instance
  */
 extern "C"
-size_t CPP_DLL_EXPORT createPluginInstance(void *pp) {
+size_t CPP_DLL_EXPORT createPluginInstance(BdmInterface_DSC *pp) {
    return TcreatePluginInstance<BdmInterface_DSC>(pp);
 }

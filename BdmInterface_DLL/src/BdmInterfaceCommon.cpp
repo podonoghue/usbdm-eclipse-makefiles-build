@@ -46,7 +46,7 @@ using namespace UsbdmWxConstants;
  * Create the plugin instance
  */
 extern "C"
-size_t CPP_DLL_EXPORT createDefaultPluginInstance(void *pp) {
+size_t CPP_DLL_EXPORT createDefaultPluginInstance(BdmInterfaceCommon *pp) {
    return TcreatePluginInstance<BdmInterfaceCommon>(pp, T_OFF);
 }
 

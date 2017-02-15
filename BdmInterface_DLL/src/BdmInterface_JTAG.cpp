@@ -18,6 +18,6 @@ BdmInterface_JTAG::~BdmInterface_JTAG() {
  * Create the plugin instance
  */
 extern "C"
-size_t CPP_DLL_EXPORT createPluginInstance(void *pp) {
+size_t CPP_DLL_EXPORT createPluginInstance(BdmInterface_JTAG *pp) {
    return TcreatePluginInstance<BdmInterface_JTAG>(pp);
 }

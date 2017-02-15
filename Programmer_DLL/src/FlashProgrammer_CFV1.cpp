@@ -2994,6 +2994,6 @@ USBDM_ErrorCode FlashProgrammer_CFV1::programFlash(FlashImagePtr flashImage,
  * Create the plugin instance
  */
 extern "C"
-size_t CPP_DLL_EXPORT createPluginInstance(void *pp) {
+size_t CPP_DLL_EXPORT createPluginInstance(FlashProgrammer_CFV1 *pp) {
    return TcreatePluginInstance<FlashProgrammer_CFV1>(pp);
 }

@@ -30,6 +30,6 @@ USBDM_ErrorCode GdiDialoguePluginImp::execute(BdmInterfacePtr bdmInterface, AppS
  * Create the plugin instance
  */
 extern "C"
-size_t CPP_DLL_EXPORT createPluginInstance(void *pp) {
+size_t CPP_DLL_EXPORT createPluginInstance(GdiDialoguePluginImp *pp) {
    return TcreatePluginInstance<GdiDialoguePluginImp>(pp);
 }

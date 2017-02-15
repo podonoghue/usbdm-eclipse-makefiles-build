@@ -2949,6 +2949,6 @@ USBDM_ErrorCode FlashProgrammer_HCS12::programFlash(FlashImagePtr flashImage,
  * Create the plugin instance
  */
 extern "C"
-size_t CPP_DLL_EXPORT createPluginInstance(void *pp) {
+size_t CPP_DLL_EXPORT createPluginInstance(FlashProgrammer_HCS12 *pp) {
    return TcreatePluginInstance<FlashProgrammer_HCS12>(pp);
 }
