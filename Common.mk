@@ -131,7 +131,7 @@ WDI_LIBS       := -lwdi-static -lsetupapi -lole32  -lcomctl32
 # TCL
 TCL_LIBDIRS    := 
 ifeq ($(UNAME_S),Windows)
-   TCL_INC        := -IC:/Apps/Tcl/include
+   TCL_INC        := #-IC:/Apps/Tcl/include
    TCL_LIBS       := -ltcl86
 else
    TCL_INC        := -I/usr/include/tcl8.6
@@ -185,9 +185,9 @@ endif
 #===========================================================
 # WXWIDGETS
 ifeq ($(UNAME_S),Windows)
-   WXWIDGETS_INSTALL_DIR=C:/Apps/wxWidgets-3.0.2
-   WXWIDGETS_VERSION_NUM=30
-   WXWIDGETS_INC     := -I$(WXWIDGETS_INSTALL_DIR)/lib/gcc_lib/mswu -I$(WXWIDGETS_INSTALL_DIR)/include -IC:\Apps\wxWidgets-3.0.2\lib\gcc_dll\mswu
+   WXWIDGETS_INSTALL_DIR=C:/Apps/wxWidgets-3.1.0
+   WXWIDGETS_VERSION_NUM=311
+   WXWIDGETS_INC     := -I$(WXWIDGETS_INSTALL_DIR)/lib/gcc_lib/mswu -I$(WXWIDGETS_INSTALL_DIR)/include -I$(WXWIDGETS_INSTALL_DIR)/lib/gcc_dll/mswu
    WXWIDGETS_DEFS    := -DuseWxWidgets -D__WXMSW__ -D__GNUWIN32__ -DUNICODE
 
    # Pick up shared DLLs from Shared_V4/lib
@@ -337,7 +337,7 @@ endif
 ifeq ($(UNAME_S),Windows)
    GCC_VISIBILITY_DEFS :=
    THREADS := -mthreads
-   CFLAGS  :=
+   CFLAGS  := -DWINVER=_WIN32_WINNT_WIN6 -D_WIN32_WINNT=_WIN32_WINNT_WIN6
 else
    GCC_VISIBILITY_DEFS :=-fvisibility=hidden -fvisibility-inlines-hidden
    THREADS := 
@@ -359,7 +359,6 @@ else
 endif
 
 ifneq ($(OS),Windows_NT)
-   CFLAGS  +=
    LDFLAGS += -Wl,-rpath,${USBDM_LIBDIR}
    LDFLAGS += -Wl,-rpath-link,${TARGET_LIBDIR}
 
@@ -372,6 +371,7 @@ ifneq ($(OS),Windows_NT)
    endif
 endif
 
+CFLAGS += -std=gnu++11
 CFLAGS  += ${THREADS} -Wall -shared ${GCC_VISIBILITY_DEFS}
 LDFLAGS += ${THREADS}
 

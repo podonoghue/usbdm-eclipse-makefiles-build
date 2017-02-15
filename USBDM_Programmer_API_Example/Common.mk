@@ -179,9 +179,9 @@ endif
 #===========================================================
 # WXWIDGETS
 ifeq ($(UNAME_S),Windows)
-   WXWIDGETS_INSTALL_DIR=C:/Apps/wxWidgets-3.0.2
-   WXWIDGETS_VERSION_NUM=30
-   WXWIDGETS_INC     := -I$(WXWIDGETS_INSTALL_DIR)/lib/gcc_lib/mswu -I$(WXWIDGETS_INSTALL_DIR)/include -IC:\Apps\wxWidgets-3.0.2\lib\gcc_dll\mswu
+   WXWIDGETS_INSTALL_DIR=C:/Apps/wxWidgets-3.1.0
+   WXWIDGETS_VERSION_NUM=311
+   WXWIDGETS_INC     := -I$(WXWIDGETS_INSTALL_DIR)/lib/gcc_lib/mswu -I$(WXWIDGETS_INSTALL_DIR)/include -I$(WXWIDGETS_INSTALL_DIR)/lib/gcc_dll/mswu
    WXWIDGETS_DEFS    := -DuseWxWidgets -D__WXMSW__ -D__GNUWIN32__ -DUNICODE
 
    # Pick up shared DLLs from Shared_V4/lib
@@ -229,12 +229,10 @@ ifeq ($(UNAME_S),Windows)
    #-lwxscintilla           
 
 else
-#   WXWIDGETS_INC     := `wx-config --cppflags`
    WXWIDGETS_INC     := $(shell wx-config --cppflags)
    WXWIDGETS_DEFS    := -DuseWxWidgets
 
    WXWIDGETS_SHARED_LIBDIRS :=
-#   WXWIDGETS_SHARED_LIBS    := `wx-config --libs`
    WXWIDGETS_SHARED_LIBS    := $(shell wx-config --libs)
 
    WXWIDGETS_STATIC_LIBDIRS := 
@@ -333,7 +331,7 @@ endif
 ifeq ($(UNAME_S),Windows)
    GCC_VISIBILITY_DEFS :=
    THREADS := -mthreads
-   CFLAGS  :=
+   CFLAGS  := -DWINVER=_WIN32_WINNT_WIN6 -D_WIN32_WINNT=_WIN32_WINNT_WIN6
 else
    GCC_VISIBILITY_DEFS :=-fvisibility=hidden -fvisibility-inlines-hidden
    THREADS := 
@@ -344,18 +342,17 @@ ifdef DEBUG
    # Compiler flags
    CFLAGS += -O0 -g3
    # Compiler flags (Linking)
-   LDFLAGS = 
+   LDFLAGS = -O0 -g3
    # C Definitions
    DEFS   := -DLOG
 else
    # Compiler flags
-   CFLAGS += -O3 -g0 
-   # Compiler flags (Linking)
-   LDFLAGS = -s
+   CFLAGS += -O3 -g3 
+   # Compiler flags (Linking) - include DEBUG info as can be stripped later
+   LDFLAGS = -O3 -g3 
 endif
 
 ifneq ($(OS),Windows_NT)
-   CFLAGS  +=
    LDFLAGS += -Wl,-rpath,${USBDM_LIBDIR}
    LDFLAGS += -Wl,-rpath-link,${TARGET_LIBDIR}
 
@@ -368,7 +365,8 @@ ifneq ($(OS),Windows_NT)
    endif
 endif
 
-CFLAGS  += ${THREADS} -Wall -W -shared ${GCC_VISIBILITY_DEFS}
+CFLAGS += -std=gnu++11
+CFLAGS  += ${THREADS} -Wall -shared ${GCC_VISIBILITY_DEFS}
 LDFLAGS += ${THREADS}
 
 #CFLAGS += -Wshadow -DWINVER=0x500 -D_WIN32_IE=0x500 -std=gnu99 -Wall -Wundef -Wunused -Wstrict-prototypes -Werror-implicit-function-declaration -Wno-pointer-sign
@@ -382,5 +380,5 @@ else
 endif
 
 #===========================================================
-# Look in shared Library dir first
+# Look in build and shared library directories first
 LIBDIRS := -L$(TARGET_LIBDIR) -L$(SHARED_LIBDIRS)
