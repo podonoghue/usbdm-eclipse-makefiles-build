@@ -258,7 +258,7 @@ public:
     * @param matchRequired If set, the opened BDM must have the given serial number, otherwise
     *                      the serial number is treated as a preferred BDM
     */
-   virtual void                       setBdmSerialNumber(std::string serialNumber, bool matchRequired = false) = 0;
+   virtual void                       setBdmSerialNumber(const std::string serialNumber, bool matchRequired = false) = 0;
 
    /**
     * Get serial number of preferred/required BDM

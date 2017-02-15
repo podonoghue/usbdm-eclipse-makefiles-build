@@ -56,7 +56,7 @@
  * @return Size of object
  */
 template<typename T>
-size_t TcreatePluginInstance(void *pp) {
+size_t TcreatePluginInstance(T *pp) {
    LOGGING_Q;
    if (pp != NULL) {
       log.print("Creating instance, version %s, size = %ld\n", __DATE__ ", " __TIME__, (long)sizeof(T));
@@ -77,7 +77,7 @@ size_t TcreatePluginInstance(void *pp) {
  * @return Size of object
  */
 template<typename T, typename A>
-size_t TcreatePluginInstance(void *pp, A arg) {
+size_t TcreatePluginInstance(T *pp, A arg) {
    LOGGING_Q;
    if (pp != NULL) {
       log.print("Creating instance, version %s, size = %ld\n", __DATE__ ", " __TIME__, (long)sizeof(T));

@@ -47,7 +47,7 @@ class PluginFactory {
 
 protected:
    static std::string   dllName;
-   static size_t        (*__attribute__((__stdcall__)) newInstance)(...);
+   static size_t        (*__attribute__((__stdcall__)) newInstance)(T*, ...);
    static int           instanceCount;
    static HINSTANCE     moduleHandle;
 
@@ -71,11 +71,11 @@ protected:
 //      log.print("Getting size\n");
       size_t classSize = (*newInstance)(0);
 //      log.print("Calling new\n");
-      void *p = ::operator new(classSize);
+      T* p = static_cast<T*>(::operator new(classSize));
 //      log.print("Allocated storage @%p, size = %d\n", p, classSize);
 //      log.print("Calling placement constructor\n");
       (*newInstance)(p);
-      std::tr1::shared_ptr<T> pp((T*)p, deleter);
+      std::tr1::shared_ptr<T> pp(p, deleter);
       instanceCount++;
       return pp;
    }
@@ -107,7 +107,7 @@ protected:
 };
 
 template <class T> HINSTANCE PluginFactory<T>::moduleHandle = 0;
-template <class T> size_t (*__attribute__((__stdcall__))PluginFactory<T>::newInstance)(...) = 0;
+template <class T> size_t (*__attribute__((__stdcall__))PluginFactory<T>::newInstance)(T*, ...) = 0;
 template <class T> int  PluginFactory<T>::instanceCount = 0;
 
 using namespace std;
@@ -164,7 +164,7 @@ void PluginFactory<T>::loadClass(const char *moduleName, const char *createInsta
    if (GetModuleFileNameA(moduleHandle, executableName, sizeof(executableName)) > 0) {
       log.print("Module path = %s\n", executableName);
    }
-   newInstance  = (size_t (__attribute__((__stdcall__)) *)(...))GetProcAddress(moduleHandle, createInstanceFunctioName);
+   newInstance  = (size_t (__attribute__((__stdcall__)) *)(T*, ...))GetProcAddress(moduleHandle, createInstanceFunctioName);
    if (newInstance == 0) {
       log.print("Entry point \'%s\' not found in module \'%s\'\n", createInstanceFunctioName, moduleName);
       throw MyException("Entry point not found in module");
