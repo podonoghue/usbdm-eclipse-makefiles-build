@@ -1,6 +1,5 @@
 # Build list for Module
 # List source file to include from current directory
-SRC += Version.rc
 SRC += FirmwareChangerSkeleton.cpp
 SRC += FirmwareChanger.cpp
 SRC += ProgressDialogue.cpp
