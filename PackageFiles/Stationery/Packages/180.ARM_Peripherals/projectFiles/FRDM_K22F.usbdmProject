@@ -59,7 +59,9 @@
    <item key="$signal$PTD5_muxSetting"                     value="mux1" />
    <item key="$signal$PTD7_muxSetting"                     value="mux1" />
    <item key="$signal$PTE0_descriptionSetting"             value="USB Serial Tx" />
+   <item key="$signal$PTE0_muxSetting"                     value="mux3" />
    <item key="$signal$PTE1_descriptionSetting"             value="USB Serial Rx" />
+   <item key="$signal$PTE1_muxSetting"                     value="mux3" />
    <item key="$signal$RESET_b_descriptionSetting"          value="Reserved(Reset*)" />
    <item key="$signal$USB0_DM_descriptionSetting"          value="Reserved(USB_DM)" />
    <item key="$signal$USB0_DP_descriptionSetting"          value="Reserved(USB_DP)" />
@@ -342,7 +344,7 @@
    <item key="/SIM/sim_clkdiv1_outdiv2"                    value="2" />
    <item key="/SIM/sim_clkdiv1_outdiv3"                    value="3" />
    <item key="/SIM/sim_clkdiv1_outdiv4"                    value="4" />
-   <item key="/SIM/sim_clkdiv2_usb"                        value="3" />
+   <item key="/SIM/sim_clkdiv2_usb"                        value="0" />
    <item key="/SIM/sim_sopt1_osc32kout"                    value="0" />
    <item key="/SIM/sim_sopt1_osc32ksel"                    value="2" />
    <item key="/SIM/sim_sopt2_clkoutsel"                    value="6" />
@@ -430,8 +432,11 @@
    <item key="/UART2/defaultBaudRate"                      value="115200" />
    <item key="/UART2/irqHandlerInstalled"                  value="false" />
    <item key="/UART2/irqLevel"                             value="0" />
+   <item key="/USB0/clk_recovery_ctrl_reset_resume_rough_en" value="false" />
+   <item key="/USB0/clk_recovery_ctrl_restart_ifttrim_en"  value="false" />
    <item key="/USB0/irqHandlerInstalled"                   value="false" />
    <item key="/USB0/irqLevel"                              value="0" />
+   <item key="/USB0/usb_clk_recovery_irc_en_en"            value="false" />
    <item key="/VREF/vref_sc_icompen"                       value="true" />
    <item key="/VREF/vref_sc_mode_lv"                       value="1" />
    <item key="/VREF/vref_sc_regen"                         value="true" />

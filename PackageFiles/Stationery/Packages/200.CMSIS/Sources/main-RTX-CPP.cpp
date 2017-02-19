@@ -5,8 +5,7 @@
  *----------------------------------------------------------------------------
  */
 #include "cmsis_os.h"                   // CMSIS RTX
-#include "derivative.h"                 // Device header
-#include "hardware.h"
+#include "hardware.h"                   // Hardware interface
 
 osThreadId tid_redThread;               // Thread id of redThread
 osThreadId tid_blueThread;              // Thread id of blueThread
@@ -18,7 +17,7 @@ osThreadId tid_lcdThread;               // Thread id of lcdThread
 
 using RED_LED   = USBDM::$(demo.cpp.red.led:GpioB<3>);
 using GREEN_LED = USBDM::$(demo.cpp.green.led:GpioB<4>);
-using BLUE_LED  = USBDM::$(demo.cpp.blue.led:GpioB<5);
+using BLUE_LED  = USBDM::$(demo.cpp.blue.led:GpioB<5>);
 
 /*----------------------------------------------------------------------------
      Function that turns on Red LED

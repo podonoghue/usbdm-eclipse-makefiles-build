@@ -171,6 +171,19 @@ bool wait(float seconds, bool testFn(void)) {
 /**
  * Simple delay routine
  *
+ * @param seconds How many seconds to busy-wait
+ *
+ * @note Limited to 2^32 ms (71,582 minutes)
+ * @note Uses busy-waiting based on Systick timer
+ */
+void wait(float seconds) {
+   // Convert duration to ticks
+   osDelay((int)round(seconds * 1000));
+}
+
+/**
+ * Simple delay routine
+ *
  * @param msToWait How many milliseconds to wait
  */
 void waitMS(uint32_t msToWait) {

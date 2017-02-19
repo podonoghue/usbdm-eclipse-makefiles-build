@@ -28,6 +28,8 @@ enum ErrorCode {
    E_ILLEGAL_PARAM,     // Parameter has illegal value
    E_NO_HANDLER,        // No handler installed
    E_FLASH_INIT_FAILED, // Flash initialisation failed
+
+   E_CMSIS_ERR_OFFSET = 1<<20,
 };
 
 /** Last error set by USBDM code */
@@ -86,6 +88,41 @@ inline static ErrorCode setAndCheckErrorCode(ErrorCode err) {
    errorCode = err;
    return checkError();
 }
+
+#ifdef __CMSIS_RTOS
+
+/**
+ * Set error code
+ *
+ * @param err Error code to set
+ *
+ * @return Error code
+ */
+inline static ErrorCode setCmsisErrorCode(int err) {
+   if (err != 0) {
+      // Bump error CMSIS error code to avoid conflict with USBDM error codes
+      err |= E_CMSIS_ERR_OFFSET;
+   }
+   errorCode = (ErrorCode)err;
+   return errorCode;
+}
+
+/**
+ * Set error code and check for error
+ *
+ * @param err Error code to set
+ *
+ * @return Error code
+ */
+inline static ErrorCode setAndCheckCmsisErrorCode(int err) {
+   if (err != 0) {
+      // Bump error CMSIS error code to avoid conflict with USBDM error codes
+      err |= E_CMSIS_ERR_OFFSET;
+   }
+   errorCode = (ErrorCode)(err);
+   return checkError();
+}
+#endif
 
 /**
  * Clear error code

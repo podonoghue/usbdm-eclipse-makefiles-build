@@ -16,6 +16,74 @@
          name="CMSIS RTOS" 
          description="Adds CMSIS-RTOS framework for Cortex M3" 
          checkGroup="group-additional-options" />
+      
+      <projectActionList>
+         <applyWhen>
+            <and>
+               <variableRef idRef="projectOptionValue.CMSIS-RTOS" defaultValue="false" />
+               <not><variableRef idRef="projectOptionValue.CPP-abstraction"  defaultValue="false" /></not>
+               <not><variableRef idRef="projectOptionValue.FRDM-Blinky"      defaultValue="false" /></not>
+            </and>
+         </applyWhen>
+         <!-- Default RTX C main -->
+         <projectActionList>
+            <applyWhen>
+               <not><variableRef idRef="hasCCNature" condition="isTrue" /></not>
+            </applyWhen>
+            <copy source="Sources/main-RTX.c" target="Sources/main.c" replace="true" />
+         </projectActionList>
+         <!-- Default RTX CPP main -->
+         <projectActionList>
+            <applyWhen>
+               <variableRef idRef="hasCCNature" condition="isTrue" />
+            </applyWhen>
+            <copy source="Sources/main-RTX.c" target="Sources/main.cpp" replace="true" />
+         </projectActionList>
+      </projectActionList>
+      
+      <projectActionList>
+         <applyWhen>
+            <and>
+               <variableRef idRef="projectOptionValue.CMSIS-RTOS" />
+               <not><variableRef idRef="projectOptionValue.CPP-abstraction"  defaultValue="false" /></not>
+               <variableRef idRef="projectOptionValue.FRDM-Blinky"      defaultValue="false" />
+            </and>
+         </applyWhen>
+         <!-- Blinky RTX C main -->
+         <projectActionList>
+            <applyWhen>
+               <not><variableRef idRef="hasCCNature" condition="isTrue" /></not>
+            </applyWhen>
+            <copy source="Sources/main-RTX-Blinky.c" target="Sources/main.c" replace="true" />
+         </projectActionList>
+         <!-- Blinky RTX CPP main -->
+         <projectActionList>
+            <applyWhen>
+               <variableRef idRef="hasCCNature" condition="isTrue" />
+            </applyWhen>
+            <copy source="Sources/main-RTX-Blinky.c" target="Sources/main.cpp" replace="true" />
+         </projectActionList>
+      </projectActionList>
+
+      <!-- CPP-abstraction RTX files -->
+      <projectActionList>
+         <applyWhen>
+            <and>
+               <variableRef idRef="projectOptionValue.CMSIS-RTOS" />
+               <variableRef idRef="projectOptionValue.CPP-abstraction"  defaultValue="false" />
+            </and>
+         </applyWhen>
+         <copy source="Sources/main-RTX-CPP.cpp"      target="Sources/main.cpp"              replace="true" />
+         <copy source="Snippets/cmsis-isr.cpp"        target="Snippets/cmsis-isr.cpp"        replace="true" />
+         <copy source="Snippets/cmsis-mailbox.cpp"    target="Snippets/cmsis-mailbox.cpp"    replace="true" />
+         <copy source="Snippets/cmsis-messages.cpp"   target="Snippets/cmsis-messages.cpp"   replace="true" />
+         <copy source="Snippets/cmsis-mutex.cpp"      target="Snippets/cmsis-mutex.cpp"      replace="true" />
+         <copy source="Snippets/cmsis-semaphore.cpp"  target="Snippets/cmsis-semaphore.cpp"  replace="true" />
+         <copy source="Snippets/cmsis-signals.cpp"    target="Snippets/cmsis-signals.cpp"    replace="true" />
+         <copy source="Snippets/cmsis-thread.cpp"     target="Snippets/cmsis-thread.cpp"     replace="true" />
+         <copy source="Snippets/cmsis-timer.cpp"      target="Snippets/cmsis-timer.cpp"      replace="true" />
+      </projectActionList>
+
       <projectActionList>
          <applyWhen>
             <variableRef idRef="projectOptionValue.CMSIS-RTOS" />
@@ -28,7 +96,6 @@
          <copy source="../cmsis/GCC/SVC_Table.S" target="cmsis/GCC/SVC_Table.S" />
          <copy source="../cmsis/GCC/HAL_CM3.S" target="cmsis/GCC/HAL_CM3.S" />
          <copy source="Sources/RTX_Conf_CM.c" target="Sources/RTX_Conf_CM.c" />
-         <copy source="Sources/main-RTX.c" target="Sources/main.c" replace="true" />
          <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
             <value>&quot;${ProjDirPath}/cmsis/INC&quot;</value>
             <value>&quot;${ProjDirPath}/cmsis/SRC&quot;</value>

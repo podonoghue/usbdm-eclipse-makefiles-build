@@ -1,11 +1,13 @@
 /**
- * @file     utilities.h
- * @brief    Convenience macros for port access
- * @version  V4.11.1.70
+ * @file     utilities.h (derived from utilities-mkl.h)
+ * @brief    Utility Routines
+ * @version  V4.12.1.160
  * @date     13 May 2013
  */
 #ifndef UTILTIES_H_
 #define UTILTIES_H_
+
+#include <stdint.h>
 
 /**
  * @brief Concatenate two tokens
@@ -119,7 +121,12 @@
 
 #if defined(DEBUG_BUILD)
 #define PUTS(x)     puts(x)
-#define PRINTF(...) printf (__VA_ARGS__)
+#define PRINTF(...) printf(__VA_ARGS__)
+//extern char debugBuffer[200];
+//#define PRINTF(...) snprintf (debugBuffer, sizeof(debugBuffer), __VA_ARGS__)
+//extern char logBuffer[128];
+//extern char logIndex;
+//#define pushState(x) logBuffer[(logIndex++)&0x7F] = (x);
 #else
 #define PUTS(x)
 #define PRINTF(...)
@@ -138,19 +145,19 @@ public:
    /**
     * @return Value as 16-bit unsigned in native format
     */
-   operator uint16_t() const {
+   operator uint16_t() const volatile {
       return leToNative16(value);
    }
    /**
     * @return Lower byte of value as 8-bit unsigned value
     */
-   uint8_t lo() {
+   uint8_t lo() const volatile {
       return leToNative16(value)&0xFF;
    }
    /**
     * @return Upper byte of value as 8-bit unsigned value
     */
-   uint8_t hi() {
+   uint8_t hi() const volatile {
       return (leToNative16(value)>>8)&0xFF;
    }
 };
@@ -166,46 +173,154 @@ public:
    /**
     * @return Value as 32-bit unsigned in native format
     */
-   operator uint32_t() const {
+   operator uint32_t() const volatile {
       return leToNative32(value);
    }
    /**
     * @return Lower 16-bits of value as unsigned value
     */
-   uint16_t lo() {
+   uint16_t lo() const volatile {
       return leToNative16(value)&0xFFFF;
    }
    /**
     * @return Upper 16-bits of value as unsigned value
     */
-   uint16_t hi() {
+   uint16_t hi() const volatile {
       return (leToNative16(value)>>16)&0xFFFF;
    }
    /**
     * @return Lowest byte of value as unsigned value
     */
-   uint16_t b0() {
+   uint16_t b0() const volatile {
       return leToNative16(value)&0xFF;
    }
    /**
     * @return Lower-middle byte of value as unsigned value
     */
-   uint16_t b1() {
+   uint16_t b1() const volatile {
       return (leToNative16(value)>>8)&0xFF;
    }
    /**
     * @return Upper-middle byte of value as unsigned value
     */
-   uint16_t b2() {
+   uint16_t b2() const volatile {
       return (leToNative16(value)>>16)&0xFF;
    }
    /**
     * @return Uppermost byte of value as unsigned value
     */
-   uint16_t b3() {
+   uint16_t b3() const volatile {
       return (leToNative16(value)>>24)&0xFF;
    }
 };
+
+/**
+ * Pack 4 bytes into a 32-bit value in LITTLE-ENDIAN order
+ *
+ * @param  data Data value in LITTLE-ENDIAN order
+ *
+ * @return Value
+ */
+static inline
+constexpr uint32_t pack32LE(const uint8_t data[4]) {
+   return data[0]+(data[1]<<8)+(data[2]<<16)+(data[3]<<24);
+}
+
+/**
+ * Pack 4 bytes into a 32-bit value in BIG-ENDIAN order
+ *
+ * @param  data Data value in BIG_ENDIAN order
+ *
+ * @return Value
+ */
+static inline
+constexpr uint32_t pack32BE(const uint8_t data[4]) {
+   return (data[0]<<24)+(data[1]<<16)+(data[2]<<8)+data[3];
+}
+
+/**
+ * Pack 4 bytes into a 32-bit value in LITTLE-ENDIAN order
+ *
+ * @param  data Data value in LITTLE-ENDIAN order
+ *
+ * @return Value
+ */
+static inline
+constexpr uint32_t pack16LE(const uint8_t data[2]) {
+   return data[0]+(data[1]<<8);
+}
+
+/**
+ * Pack 4 bytes into a 32-bit value in BIG-ENDIAN order
+ *
+ * @param  data Data value in BIG_ENDIAN order
+ *
+ * @return Value
+ */
+static inline
+constexpr uint32_t pack16BE(const uint8_t data[2]) {
+   return (data[0]<<8)+data[1];
+}
+
+/**
+ * Unpack a 32-bit value into 4 bytes in LE order
+ *
+ * @param  data    Value to unpack
+ * @param  ar   Buffer for data value in LITTLE-ENDIAN order
+ *
+ * @return Value
+ */
+static inline
+void unpack32LE(uint32_t data, uint8_t ar[4]) {
+   ar[3] = data>>24;
+   ar[2] = data>>16;
+   ar[1] = data>>8;
+   ar[0] = data;
+}
+
+/**
+ * Unpack a 32-bit value into 4 bytes in BE order
+ *
+ * @param  data    Value to unpack
+ * @param  ar      Buffer for data value in BIG-ENDIAN order
+ *
+ * @return Value
+ */
+static inline
+void unpack32BE(uint32_t data, uint8_t ar[4]) {
+   ar[0] = data>>24;
+   ar[1] = data>>16;
+   ar[2] = data>>8;
+   ar[3] = data;
+}
+
+/**
+ * Unpack a 32-bit value into 4 bytes in LE order
+ *
+ * @param  data    Value to unpack
+ * @param  ar   Buffer for data value in LITTLE-ENDIAN order
+ *
+ * @return Value
+ */
+static inline
+void unpack16LE(uint32_t data, uint8_t ar[2]) {
+   ar[1] = data>>8;
+   ar[0] = data;
+}
+
+/**
+ * Unpack a 32-bit value into 4 bytes in BE order
+ *
+ * @param  data    Value to unpack
+ * @param  ar      Buffer for data value in BIG-ENDIAN order
+ *
+ * @return Value
+ */
+static inline
+void unpack16BE(uint32_t data, uint8_t ar[2]) {
+   ar[0] = data>>8;
+   ar[1] = data;
+}
 
 #endif /* __cplusplus */
 

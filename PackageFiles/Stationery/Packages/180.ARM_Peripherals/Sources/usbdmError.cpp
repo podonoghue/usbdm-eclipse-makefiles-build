@@ -41,6 +41,12 @@ ErrorCode getError() {
  * @return Pointer to static string
  */
 const char *getErrorMessage(ErrorCode err) {
+#ifdef __CMSIS_RTOS
+   // Check for CMSIS error codes
+   if (err & E_CMSIS_ERR_OFFSET) {
+      return "CMSIS error";
+   }
+#endif
    if (err>(sizeof(messages)/sizeof(messages[0]))) {
       return "Unknown error";
    }

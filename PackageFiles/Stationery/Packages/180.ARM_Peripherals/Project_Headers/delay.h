@@ -28,6 +28,8 @@ static constexpr uint32_t TIMER_MASK = ((1UL<<24)-1UL);
 #include <stdbool.h>
 #endif
 
+#ifndef __CMSIS_RTOS
+
 /**
  * Convert milliseconds to timer ticks
  *
@@ -81,6 +83,7 @@ static inline uint32_t getTicks() {
  * @param usToWait How many microseconds to busy-wait
  */
 void waitUS(uint32_t usToWait);
+#endif
 
 /**
  * Simple delay routine
@@ -100,6 +103,7 @@ void waitMS(uint32_t msToWait);
 void wait(float seconds);
 
 #ifdef __cplusplus
+#ifndef __CMSIS_RTOS
 /**
  * Routine to wait for an event with timeout
  *
@@ -135,8 +139,9 @@ bool waitMS(uint32_t msToWait, bool testFn(void));
  * Note: Accuracy is affected by execution time of function.
  */
 bool wait(float seconds, bool testFn(void));
+#endif /* __CMSIS_RTOS */
 
 } // End namespace USBDM
-#endif
+#endif /* __cplusplus */
 
 #endif /* INCLUDE_USBDM_DELAY_H_ */

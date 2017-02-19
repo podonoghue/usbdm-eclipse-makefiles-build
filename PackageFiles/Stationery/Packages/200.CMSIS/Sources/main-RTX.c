@@ -6,9 +6,9 @@
  */
 #include <stdio.h>
 
-#include "derivative.h"
+#include "cmsis_os.h"                   // CMSIS RTX
+#include "derivative.h"                 // Device header
 #include "utilities.h"
-#include "cmsis_os.h"
 //#include "leds.h"
 
 // Forward references
