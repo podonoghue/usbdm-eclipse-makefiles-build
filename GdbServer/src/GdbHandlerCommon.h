@@ -36,6 +36,7 @@ public:
 protected:
    GdbBreakpoints             *gdbBreakpoints;
    bool                       initBreakpointsDone;
+   bool                       programmingDone;
    USBDM_ErrorCode           (*gdbCallBackPtr)(const char *msg, GdbMessageLevel level, USBDM_ErrorCode rc);
 
    TargetType_t                targetType;
@@ -83,7 +84,8 @@ protected:
    virtual uint32_t           getCachedPC();
    virtual const char        *getCachedPcAsString();
    virtual USBDM_ErrorCode    readRegs(void);
-   virtual int                readReg(unsigned regNo, unsigned char *buffPtr);
+   virtual USBDM_ErrorCode    readReg(unsigned regNo, unsigned char *&buffPtr);
+   USBDM_ErrorCode            readReg(unsigned regNo, unsigned char const *buffPtr);
    virtual void               sendRegs(void);
    virtual void               writeReg(unsigned regNo, unsigned long regValue);
    virtual void               writeRegs(const char *ccPtr);

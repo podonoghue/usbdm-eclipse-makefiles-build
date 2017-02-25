@@ -218,38 +218,37 @@ bool GdbHandler_ARM::isValidRegister(unsigned regNo) {
 //!
 //! @note bytes are read in target byte order
 //!
-int GdbHandler_ARM::readReg(unsigned regNo, char *buffPtr) {
+USBDM_ErrorCode GdbHandler_ARM::readReg(unsigned regNo, char *&buffPtr) {
    LOGGING_Q;
    unsigned long regValue;
 
    if (!isValidRegister(regNo)) {
       log.print("reg[%d] => Invalid GDB register number\n", regNo);
-      reportGdbPrintf(GdbHandler::M_WARN, BDM_RC_ILLEGAL_PARAMS, "Invalid GDB register number. ");
+      reportGdbPrintf(GdbHandler::M_ERROR, BDM_RC_ILLEGAL_PARAMS, "Invalid GDB register number. ");
       memset(buffPtr, 0x00, 4);
-      return 4;
+      return BDM_RC_ILLEGAL_PARAMS;
    }
    int usbdmRegNo = registerMap[regNo];
 
    USBDM_ErrorCode rc;
-
    rc = bdmInterface->readReg((ARM_Registers_t)usbdmRegNo, &regValue);
    log.print("%s(0x%02X) => %08lX\n", getARMRegName(usbdmRegNo), usbdmRegNo, regValue);
-   regValue = targetToNative32(regValue);
    if (rc == BDM_RC_TARGET_BUSY) {
       // Special case - target running so regs can't be read
+      // Return dummy information so GDB doesn't abort
       log.print("Register read(%d) failed, reason = %s\n", regNo, bdmInterface->getErrorString(rc));
-      memset(buffPtr, 0x00, 4);
-      return 4;
+      reportGdbPrintf(GdbHandler::M_WARN, rc, "Register read failed - ignored. ");
+      regValue = 0;
+      rc = BDM_RC_OK;
    }
    else if (rc != BDM_RC_OK) {
       log.print("Register read(%d) failed, reason = %s\n", regNo, bdmInterface->getErrorString(rc));
       reportGdbPrintf(GdbHandler::M_ERROR, rc, "Register read failed. ");
-      memset(buffPtr, 0x00, 4);
-      return 4;
+      regValue = 0;
    }
-   regValue = targetToNative32(regValue);
    memcpy(buffPtr, &regValue, 4);
-   return 4;
+   buffPtr += 4;
+   return rc;
 }
 
 /*
@@ -356,7 +355,7 @@ USBDM_ErrorCode GdbHandler_ARM::armReadMemoryWord(unsigned long address, unsigne
    return rc;
 }
 
-//! Get ARM run state by polling target
+//! Get run state by polling target
 //!
 //! @return status - status of target T_UNKNOWN/T_SLEEP/T_HALT/T_RUNNING
 //!

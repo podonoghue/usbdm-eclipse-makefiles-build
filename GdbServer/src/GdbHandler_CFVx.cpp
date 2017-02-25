@@ -65,10 +65,7 @@ uint32_t GdbHandler_CFVx::targetToBE32(uint32_t data) {
 USBDM_ErrorCode GdbHandler_CFVx::initialise() {
 
    USBDM_ErrorCode rc = GdbHandlerCommon::initialise();
-   if (rc != BDM_RC_OK) {
-      return rc;
-   }
-   return initBreakpoints();
+   return rc;
 }
 
 USBDM_ErrorCode GdbHandler_CFVx::resetTarget(TargetMode_t mode) {
@@ -186,15 +183,15 @@ bool GdbHandler_CFVx::isValidRegister(unsigned regNo) {
 //!
 //! @note bytes are read in target byte order
 //!
-int GdbHandler_CFVx::readReg(unsigned regNo, char *buffPtr) {
+USBDM_ErrorCode GdbHandler_CFVx::readReg(unsigned regNo, char *&buffPtr) {
    LOGGING_Q;
    unsigned long regValue;
 
    if (!isValidRegister(regNo)) {
       log.print("reg[%d] => Invalid GDB register number\n", regNo);
-      reportGdbPrintf(GdbHandler::M_WARN, BDM_RC_ILLEGAL_PARAMS, "Invalid GDB register number. ");
+      reportGdbPrintf(GdbHandler::M_ERROR, BDM_RC_ILLEGAL_PARAMS, "Invalid GDB register number. ");
       memset(buffPtr, 0x00, 4);
-      return 4;
+      return BDM_RC_ILLEGAL_PARAMS;
    }
    int usbdmRegNo = registerMap[regNo];
 
@@ -211,19 +208,21 @@ int GdbHandler_CFVx::readReg(unsigned regNo, char *buffPtr) {
    }
    if (rc == BDM_RC_TARGET_BUSY) {
       // Special case - target running so regs can't be read
+      // Return dummy information so GDB doesn't abort
       log.print("Register read(%d) failed, reason = %s\n", regNo, bdmInterface->getErrorString(rc));
-      memset(buffPtr, 0x00, 4);
-      return 4;
+      reportGdbPrintf(GdbHandler::M_WARN, rc, "Register read failed - ignored. ");
+      regValue = 0;
+      rc = BDM_RC_OK;
    }
    else if (rc != BDM_RC_OK) {
       log.print("Register read(%d) failed, reason = %s\n", regNo, bdmInterface->getErrorString(rc));
       reportGdbPrintf(GdbHandler::M_ERROR, rc, "Register read failed. ");
-      memset(buffPtr, 0x00, 4);
-      return 4;
+      regValue = 0;
    }
    regValue = targetToNative32(regValue);
    memcpy(buffPtr, &regValue, 4);
-   return 4;
+   buffPtr += 4;
+   return rc;
 }
 
 /*
@@ -345,6 +344,7 @@ GdbHandler::GdbTargetStatus GdbHandler_CFVx::handleHalted() {
    }
    switch(runState) {
    case Halted :  // halted -> halted
+      // No change
       break;
    case Breaking : // user breaking -> halted
       reportLocation('T', TARGET_SIGNAL_INT);
@@ -352,6 +352,7 @@ GdbHandler::GdbTargetStatus GdbHandler_CFVx::handleHalted() {
       reportGdbPrintf(M_INFO, "Target has halted (due to user break)  @0x%08X\n", lastStoppedPC);
       deactivateBreakpoints();
       checkAndAdjustBreakpointHalt();
+      runState = Halted;
       break;
    case Stepping : // stepping -> halted
       // GDB has a bug where stepping on an empty loop will cause an infinite loop of trying to step to the next location
@@ -366,6 +367,7 @@ GdbHandler::GdbTargetStatus GdbHandler_CFVx::handleHalted() {
       reportGdbPrintf(M_BORINGINFO, "Target has halted (from stepping) @0x%08X\n", lastStoppedPC);
       deactivateBreakpoints();
       checkAndAdjustBreakpointHalt();
+      runState = Halted;
       break;
    default:       // ???     -> halted
    case Running : // running -> halted
@@ -379,10 +381,10 @@ GdbHandler::GdbTargetStatus GdbHandler_CFVx::handleHalted() {
       reportGdbPrintf(M_INFO, "Target has halted (from running)  @%s\n", getCachedPcAsString());
       deactivateBreakpoints();
       checkAndAdjustBreakpointHalt();
+      runState = Halted;
       break;
    }
    targetBreakPending = false;
-   runState = Halted;
    return T_HALT;
 }
 
@@ -395,12 +397,19 @@ GdbHandler::GdbTargetStatus GdbHandler_CFVx::handleHalted() {
  *   @return Target status
  */
 GdbHandler::GdbTargetStatus GdbHandler_CFVx::pollTarget(void) {
-   LOGGING_Q;
-
+   LOGGING;
+   static int  unsuccessfulPollCount = 0;                    // Count of unsuccessful polls of the target
    static bool resetAttempted = false;                       // Set if reset already tried
-   unsigned    timeoutLimit   = getConnectionTimeout() * 10; // Scale to 100 ms ticks
+   int         timeoutLimit   = getConnectionTimeout() * 10; // Scale to 100 ms ticks
 
+   if (targetBreakPending) {
+      // Halt target
+      bdmInterface->halt();
+   }
    GdbTargetStatus gdbTargetStatus = getTargetStatus();
+   log.print("gdbTargetStatus(on poll) = %s\n", getStatusName(gdbTargetStatus));
+   log.print("runState(on entry)       = %s\n", getRunStateName(runState));
+
    if (gdbTargetStatus == T_NOCONNECTION) {
       if (resetAttempted) {
          return T_NOCONNECTION;
@@ -413,14 +422,9 @@ GdbHandler::GdbTargetStatus GdbHandler_CFVx::pollTarget(void) {
       resetAttempted = true;
       return T_UNKNOWN;
    }
-
    resetAttempted = false;
-
-   if (targetBreakPending) {
-      // halt target
-      bdmInterface->halt();
-   }
    unsuccessfulPollCount = 0;
+
    if ((gdbTargetStatus == T_HALT)) {
       // Check for semi-hosting
       unsigned long pc;
@@ -430,12 +434,11 @@ GdbHandler::GdbTargetStatus GdbHandler_CFVx::pollTarget(void) {
       }
    }
    if ((gdbTargetStatus == T_HALT)) {
-      return handleHalted();
+      gdbTargetStatus = handleHalted();
    }
-   else {
-      runState = Running;
-      return gdbTargetStatus;
-   }
+   log.print("gdbTargetStatus(on exit) = %s\n", getStatusName(gdbTargetStatus));
+   log.print("runState(on exit)        = %s\n", getRunStateName(runState));
+   return gdbTargetStatus;
 }
 
 USBDM_ErrorCode GdbHandler_CFVx::writePC(unsigned long value) {

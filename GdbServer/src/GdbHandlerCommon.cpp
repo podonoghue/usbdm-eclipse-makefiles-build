@@ -38,6 +38,7 @@ GdbHandlerCommon::GdbHandlerCommon(
          GdbHandler(),
          gdbBreakpoints(gdbBreakpoints),
          initBreakpointsDone(false),
+         programmingDone(false),
          targetType(targetType),
          gdbInOut(gdbInOut),
          bdmInterface(bdmInterface),
@@ -83,6 +84,7 @@ USBDM_ErrorCode GdbHandlerCommon::initialise() {
       log.error("Connect failed, rc = %s\n", bdmInterface->getErrorString(rc));
    }
    initBreakpointsDone = false;
+   programmingDone     = false;
    return rc;
 }
 
@@ -696,8 +698,10 @@ USBDM_ErrorCode GdbHandlerCommon::programImage(FlashImagePtr flashImage) {
    }
    if (rc != PROGRAMMING_RC_OK) {
       log.print("programImage() - failed, rc = %s\n", bdmInterface->getErrorString(rc));
+      return rc;
    }
-   return rc;
+   programmingDone = true;
+   return BDM_RC_OK;
 }
 
 //!
@@ -847,36 +851,58 @@ USBDM_ErrorCode GdbHandlerCommon::readRegs(void) {
    reportGdbPrintf("Reading Registers\n");
 
    if (useFastRegisterRead) {
-      // Read registers
+      // Try reading registers using fast method
       USBDM_ErrorCode rc = bdmInterface->readMultipleRegs(registerBuffer, 0, targetLastRegIndex);
       if (rc == BDM_RC_OK) {
          // OK
          registerBufferSize = 4*(targetLastRegIndex+1);
          return BDM_RC_OK;
       }
-      if (rc != BDM_RC_ILLEGAL_COMMAND) {
-         // Failed read - dummy response
+      switch(rc) {
+      case BDM_RC_ILLEGAL_COMMAND:
+         // Failed read due to lack of support for fast register read - try the old method
+         useFastRegisterRead = false;
+         log.print("Switching to old register read method\n");
+         break;
+      default:
+         // Ignore errors until programming complete
+         // Prevent GDB aborting due to secured device etc
+         if (programmingDone) {
+            // Failed read - error response
+            reportGdbPrintf("Register read failed, rc = %s\n", bdmInterface->getErrorString(rc));
+            log.error("Register read failed, rc = %s\n", bdmInterface->getErrorString(rc));
+            return rc;
+         }
+         // Return dummy register information
+         // no break
+      case BDM_RC_TARGET_BUSY:
+         // Failed due to processor running - ignore so GDB doesn;t abort
+         // Return dummy register information
          reportGdbPrintf("Register read failed - ignored, rc = %s\n", bdmInterface->getErrorString(rc));
          log.error("Register read failed - ignored, rc = %s\n", bdmInterface->getErrorString(rc));
          registerBufferSize = 4*(targetLastRegIndex+1);
          memset(registerBuffer, 0, 4*(targetLastRegIndex+1));
          return BDM_RC_OK;
       }
-//
-//      if (rc == BDM_RC_TARGET_BUSY) {
-//         // Target running - dummy response
-//         registerBufferSize = 4*(targetLastRegIndex+1);
-//         memset(registerBuffer, 0, 4*(targetLastRegIndex+1));
-//         return BDM_RC_OK;
-//      }
 //      if (rc != BDM_RC_ILLEGAL_COMMAND) {
-//         // Unknown failure
-//         registerBufferSize = 0;
+//         // Failed read NOT due to lack of firmware support for fast register read
+//         if (rc == BDM_RC_TARGET_BUSY || (!programmingDone)) {
+//            // Ignore errors until programming has been done
+//            // Return dummy register information
+//            reportGdbPrintf("Register read failed - ignored, rc = %s\n", bdmInterface->getErrorString(rc));
+//            log.error("Register read failed - ignored, rc = %s\n", bdmInterface->getErrorString(rc));
+//            registerBufferSize = 4*(targetLastRegIndex+1);
+//            memset(registerBuffer, 0, 4*(targetLastRegIndex+1));
+//            return BDM_RC_OK;
+//         }
+//         // Failed read - error response
+//         reportGdbPrintf("Register read failed, rc = %s\n", bdmInterface->getErrorString(rc));
+//         log.error("Register read failed, rc = %s\n", bdmInterface->getErrorString(rc));
 //         return rc;
 //      }
-      // Try the old method
-      useFastRegisterRead = false;
-      log.print("Switching to old register read method\n");
+//      // Failed read due to lack of support for fast register read - try the old method
+//      useFastRegisterRead = false;
+//      log.print("Switching to old register read method\n");
    }
    if (!useFastRegisterRead) {
       unsigned regNo;
@@ -1003,8 +1029,13 @@ uint32_t GdbHandlerCommon::getCachedPC() {
    return 0;
 }
 
-int GdbHandlerCommon::readReg(unsigned regNo, unsigned char *buffPtr) {
-   return 0;
+USBDM_ErrorCode GdbHandlerCommon::readReg(unsigned regNo, unsigned char *&buffPtr) {
+   return BDM_RC_ILLEGAL_COMMAND;
+}
+
+USBDM_ErrorCode GdbHandlerCommon::readReg(unsigned regNo, unsigned char const *buffPtr) {
+   unsigned char const *buffP = buffPtr;
+   return readReg(regNo, buffP);
 }
 
 void GdbHandlerCommon::writeReg(unsigned regNo, unsigned long regValue) {

@@ -22,36 +22,36 @@ public:
 
 
 protected:
-   USBDM_ErrorCode           resetTarget(TargetMode_t mode);
-   void                      maskInterrupts(bool disableInterrupts);
-   virtual void              continueTarget(void);
-   virtual void              writeReg(unsigned regNo, unsigned long regValue);
+   virtual USBDM_ErrorCode   resetTarget(TargetMode_t mode) override;
+   virtual void              maskInterrupts(bool disableInterrupts) override;
+   virtual void              continueTarget(void) override;
+   virtual void              writeReg(unsigned regNo, unsigned long regValue) override;
 
-   virtual USBDM_ErrorCode   initialise();
-   virtual bool              atMemoryBreakpoint();
-   virtual bool              initRegisterDescription(void);
-   virtual void              reportLocation(char mode, int reason);
-   virtual GdbTargetStatus   pollTarget(void);
+   virtual USBDM_ErrorCode   initialise() override;
+   bool                      atMemoryBreakpoint();
+   virtual bool              initRegisterDescription(void) override;
+   virtual void              reportLocation(char mode, int reason) override;
+   virtual GdbTargetStatus   pollTarget(void) override;
    GdbTargetStatus           handleHalted();
    GdbTargetStatus           handleHostedBreak();
    bool                      checkHostedBreak(uint32_t currentPC);
 
-   virtual uint32_t          getCachedPC();
-   virtual bool              isValidRegister(unsigned regNo);
-   virtual int               readReg(unsigned regNo, char *buffPtr);
+   virtual uint32_t          getCachedPC() override;
+   virtual bool              isValidRegister(unsigned regNo) override;
+   USBDM_ErrorCode           readReg(unsigned regNo, char *&buffPtr);
 
    GdbTargetStatus           getTargetStatus();
 
-   virtual uint16_t          targetToNative16(uint16_t data);
-   virtual uint32_t          targetToNative32(uint32_t data);
-   virtual uint16_t          targetToBE16(uint16_t data);
-   virtual uint32_t          targetToBE32(uint32_t data);
-   virtual uint32_t          getTarget32Bits(uint8_t buff[], int offset);
+   virtual uint16_t          targetToNative16(uint16_t data) override;
+   virtual uint32_t          targetToNative32(uint32_t data) override;
+   virtual uint16_t          targetToBE16(uint16_t data) override;
+   virtual uint32_t          targetToBE32(uint32_t data) override;
+   virtual uint32_t          getTarget32Bits(uint8_t buff[], int offset) override;
 
-   virtual USBDM_ErrorCode   writePC(unsigned long value);
-   virtual USBDM_ErrorCode   readPC(unsigned long *value);
-   virtual USBDM_ErrorCode   writeSP(unsigned long value);
-   virtual USBDM_ErrorCode   updateTarget();
+   virtual USBDM_ErrorCode   writePC(unsigned long value) override;
+   virtual USBDM_ErrorCode   readPC(unsigned long *value) override;
+   virtual USBDM_ErrorCode   writeSP(unsigned long value) override;
+   virtual USBDM_ErrorCode   updateTarget() override;
 };
 
 GdbHandler *createCFVxGdbHandler(GdbInOut *gdbInOut, BdmInterfacePtr bdmInterface, DeviceInterfacePtr deviceInterface, GdbHandler::GdbCallback gdbCallBackPtr, IGdbTty *tty) ;
