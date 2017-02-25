@@ -3,10 +3,10 @@
  *----------------------------------------------------------------------------
  *      Name:    RTX_CM_LIB.H
  *      Purpose: RTX Kernel System Configuration
- *      Rev.:    V4.75
+ *      Rev.:    V4.79
  *----------------------------------------------------------------------------
  *
- * Copyright (c) 1999-2009 KEIL, 2009-2013 ARM Germany GmbH
+ * Copyright (c) 1999-2009 KEIL, 2009-2015 ARM Germany GmbH
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -62,7 +62,7 @@ typedef uint32_t OS_RESULT;
 
 #define runtask_id()    rt_tsk_self()
 #define mutex_init(m)   rt_mut_init(m)
-#define mutex_wait(m)   os_mut_wait(m,0xFFFF)
+#define mutex_wait(m)   os_mut_wait(m,0xFFFFU)
 #define mutex_rel(m)    os_mut_release(m)
 
 extern uint8_t   os_running;
@@ -102,8 +102,12 @@ OS_RESULT _os_mut_wait    (uint32_t p, OS_ID mutex, uint16_t timeout) __svc_indi
 #define OS_STACK_SZ (4*(OS_PRIVSTKSIZE+OS_MAINSTKSIZE))
 #endif
 
+#ifndef OS_STKINIT
+#define OS_STKINIT  0
+#endif
+
 uint16_t const os_maxtaskrun = OS_TASK_CNT;
-uint32_t const os_stackinfo  = (OS_STKCHECK<<24)| (OS_PRIV_CNT<<16) | (OS_STKSIZE*4);
+uint32_t const os_stackinfo  = (OS_STKINIT<<28) | (OS_STKCHECK<<24) | (OS_PRIV_CNT<<16) | (OS_STKSIZE*4);
 uint32_t const os_rrobin     = (OS_ROBIN << 16) | OS_ROBINTOUT;
 uint32_t const os_tickfreq   = OS_CLOCK;
 uint16_t const os_tickus_i   = OS_CLOCK/1000000;
@@ -115,7 +119,7 @@ uint8_t  const os_flags      = OS_RUNPRIV;
 __USED uint32_t const CMSIS_RTOS_API_Version = osCMSIS;
 __USED uint32_t const CMSIS_RTOS_RTX_Version = osCMSIS_RTX;
 __USED uint32_t const os_clockrate = OS_TICK;
-__USED uint32_t const os_timernum  = 0;
+__USED uint32_t const os_timernum  = 0U;
 
 /* Memory pool for TCB allocation    */
 _declare_box  (mp_tcb, OS_TCB_SIZE, OS_TASK_CNT);
@@ -150,14 +154,14 @@ osMessageQId osMessageQId_osTimerMessageQ;
 #else
 osThreadDef_t os_thread_def_osTimerThread = { NULL };
 osThreadId osThreadId_osTimerThread;
-osMessageQDef(osTimerMessageQ, 0, void *);
+osMessageQDef(osTimerMessageQ, 0U, void *);
 osMessageQId osMessageQId_osTimerMessageQ;
 #endif
 
 /* Legacy RTX User Timers not used */
-uint32_t       os_tmr = 0; 
+uint32_t       os_tmr = 0U; 
 uint32_t const *m_tmr = NULL;
-uint16_t const mp_tmr_size = 0;
+uint16_t const mp_tmr_size = 0U;
 
 #if defined (__CC_ARM) && !defined (__MICROLIB)
  /* A memory space for arm standard library. */
@@ -194,8 +198,8 @@ void *__user_perthread_libspace (void) {
   /* Provide a separate libspace for each task. */
   uint32_t idx;
 
-  idx = os_running ? runtask_id () : 0;
-  if (idx == 0) {
+  idx = (os_running != 0U) ? runtask_id () : 0U;
+  if (idx == 0U) {
     /* RTX not running yet. */
     return (&__libspace_start);
   }
@@ -247,7 +251,7 @@ __attribute__((used)) void _mutex_release (OS_ID *mutex) {
 
 /* Main Thread definition */
 extern int main (void);
-osThreadDef_t os_thread_def_main = {(os_pthread)main, osPriorityNormal, 1, 4*OS_MAINSTKSIZE };
+osThreadDef_t os_thread_def_main = {(os_pthread)main, osPriorityNormal, 1U, 4*OS_MAINSTKSIZE };
 
 
 #if defined (__CC_ARM)
@@ -261,19 +265,15 @@ void _main_init (void) {
   for (;;);
 }
 #else
-__asm void __rt_entry (void) {
+__asm void _platform_post_lib_init (void) {
 
-  IMPORT  __user_setup_stackheap
-  IMPORT  __rt_lib_init
   IMPORT  os_thread_def_main
   IMPORT  osKernelInitialize
   IMPORT  osKernelStart
   IMPORT  osThreadCreate
   IMPORT  exit
 
-  BL      __user_setup_stackheap
-  MOV     R1,R2
-  BL      __rt_lib_init
+  ADD     SP,#0x10
   BL      osKernelInitialize
   LDR     R0,=os_thread_def_main
   MOVS    R1,#0
@@ -384,8 +384,6 @@ __noreturn __stackless void __cmain(void) {
 
 #endif
 
-
 /*----------------------------------------------------------------------------
  * end of file
  *---------------------------------------------------------------------------*/
-

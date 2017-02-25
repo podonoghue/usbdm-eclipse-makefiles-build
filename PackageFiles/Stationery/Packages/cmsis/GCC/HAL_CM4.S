@@ -3,12 +3,12 @@
  *----------------------------------------------------------------------------
  *      Name:    HAL_CM4.S
  *      Purpose: Hardware Abstraction Layer for Cortex-M4
- *      Rev.:    V4.70
+ *      Rev.:    V4.79
  *
  *   Modified pgo - added guards around FP code - remove if creating a general purpose library
  *----------------------------------------------------------------------------
  *
- * Copyright (c) 1999-2009 KEIL, 2009-2013 ARM Germany GmbH
+ * Copyright (c) 1999-2009 KEIL, 2009-2015 ARM Germany GmbH
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,7 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *---------------------------------------------------------------------------*/
 
-        .file   "HAL_CM4.S"
+/*        .file   "HAL_CM4.S" */ /* Seems to fix index bug in Eclipse - pgo */
         .syntax unified
 
         .equ    TCB_STACKF, 37
@@ -144,7 +144,7 @@ _alloc_box:
 
 /*--------------------------- _free_box -------------------------------------*/
 
-#       int _free_box (void *box_mem, void *box);
+#       U32 _free_box (void *box_mem, void *box);
         /* Function wrapper for Unprivileged/Privileged mode. */
 
         .thumb_func
@@ -210,16 +210,28 @@ SVC_Handler_Veneer:
         BXEQ    LR                      /* RETI, no task switch */
         .endif
 
-        CBZ     R1,SVC_Next             /* Runtask deleted? */
+        CBNZ    R1,SVC_ContextSave      /* Runtask not deleted? */
+
 #if (defined(__VFP_FP__) && !defined(__SOFTFP__)) /* pgo */
         TST     LR,#0x10                /* is it extended frame? */
+        BNE     SVC_ContextRestore
+        LDR     R1,=0xE000EF34
+        LDR     R0,[R1]                 /* Load FPCCR */
+        BIC     R0,#1                   /* Clear LSPACT (Lazy state) */
+        STR     R0,[R1]                 /* Store FPCCR */
+#endif
+        B       SVC_ContextRestore
+
+SVC_ContextSave:
+        TST     LR,#0x10                /* is it extended frame? */
         ITTE    EQ
+#if (defined(__VFP_FP__) && !defined(__SOFTFP__)) /* pgo */
         VSTMDBEQ R12!,{S16-S31}         /* yes, stack also VFP hi-regs */
+#else
+        NOPNE
+#endif
         MOVEQ   R0,#0x01                /* os_tsk->stack_frame val */
         MOVNE   R0,#0x00
-#else
-        MOV     R0,#0x00
-#endif
         STRB    R0,[R1,#TCB_STACKF]     /* os_tsk.run->stack_frame = val */
         STMDB   R12!,{R4-R11}           /* Save Old context */
         STR     R12,[R1,#TCB_TSTACK]    /* Update os_tsk.run->tsk_stack */
@@ -228,20 +240,20 @@ SVC_Handler_Veneer:
         BL      rt_stk_check            /* Check for Stack overflow */
         POP     {R2,R3}
 
-SVC_Next:
+SVC_ContextRestore:
         STR     R2,[R3]                 /* os_tsk.run = os_tsk.new */
 
         LDR     R12,[R2,#TCB_TSTACK]    /* os_tsk.new->tsk_stack */
         LDMIA   R12!,{R4-R11}           /* Restore New Context */
-#if (defined(__VFP_FP__) && !defined(__SOFTFP__)) /* pgo */
         LDRB    R0,[R2,#TCB_STACKF]     /* Stack Frame */
         CMP     R0,#0                   /* Basic/Extended Stack Frame */
-        ITTE    NE
+        ITEE    EQ
+        MVNEQ   LR,#~0xFFFFFFFD         /* set EXC_RETURN value */
+        MVNNE   LR,#~0xFFFFFFED
+#if (defined(__VFP_FP__) && !defined(__SOFTFP__)) /* pgo */
         VLDMIANE R12!,{S16-S31}         /* restore VFP hi-registers */
-        MVNNE   LR,#~0xFFFFFFED         /* set EXC_RETURN value */
-        MVNEQ   LR,#~0xFFFFFFFD
 #else
-        MVN     LR,#~0xFFFFFFFD         /* set EXC_RETURN value */
+        NOPNE
 #endif
         MSR     PSP,R12                 /* Write PSP */
 
@@ -312,15 +324,15 @@ Sys_Switch:
         .endif
 
         MRS     R12,PSP                 /* Read PSP */
-#if (defined(__VFP_FP__) && !defined(__SOFTFP__)) /* pgo */
         TST     LR,#0x10                /* is it extended frame? */
         ITTE    EQ
+#if (defined(__VFP_FP__) && !defined(__SOFTFP__)) /* pgo */
         VSTMDBEQ R12!,{S16-S31}         /* yes, stack also VFP hi-regs */
+#else
+        NOPNE
+#endif
         MOVEQ   R0,#0x01                /* os_tsk->stack_frame val */
         MOVNE   R0,#0x00
-#else
-        MOV     R0,#0x00
-#endif
         STRB    R0,[R1,#TCB_STACKF]     /* os_tsk.run->stack_frame = val */
         STMDB   R12!,{R4-R11}           /* Save Old context */
         STR     R12,[R1,#TCB_TSTACK]    /* Update os_tsk.run->tsk_stack */
@@ -333,15 +345,15 @@ Sys_Switch:
 
         LDR     R12,[R2,#TCB_TSTACK]    /* os_tsk.new->tsk_stack */
         LDMIA   R12!,{R4-R11}           /* Restore New Context */
-#if (defined(__VFP_FP__) && !defined(__SOFTFP__)) /* pgo */
         LDRB    R0,[R2,#TCB_STACKF]     /* Stack Frame */
         CMP     R0,#0                   /* Basic/Extended Stack Frame */
-        ITTE    NE
+        ITEE    EQ
+        MVNEQ   LR,#~0xFFFFFFFD         /* set EXC_RETURN value */
+        MVNNE   LR,#~0xFFFFFFED
+#if (defined(__VFP_FP__) && !defined(__SOFTFP__)) /* pgo */
         VLDMIANE R12!,{S16-S31}         /* restore VFP hi-registers */
-        MVNNE   LR,#~0xFFFFFFED         /* set EXC_RETURN value */
-        MVNEQ   LR,#~0xFFFFFFFD
 #else
-        MVN     LR,#~0xFFFFFFFD         /* set EXC_RETURN value */
+        NOPNE
 #endif
         MSR     PSP,R12                 /* Write PSP */
 

@@ -1,12 +1,14 @@
 /*----------------------------------------------------------------------------
  *      CMSIS-RTOS  -  RTX
  *----------------------------------------------------------------------------
- *      Name:    HAL_CM0.S
- *      Purpose: Hardware Abstraction Layer for Cortex-M0
- *      Rev.:    V4.70
+ *      Name:    HAL_CM4.S
+ *      Purpose: Hardware Abstraction Layer for Cortex-M4
+ *      Rev.:    V4.79
+ *
+ *   Modified pgo - added guards around FP code - remove if creating a general purpose library
  *----------------------------------------------------------------------------
  *
- * Copyright (c) 1999-2009 KEIL, 2009-2013 ARM Germany GmbH
+ * Copyright (c) 1999-2009 KEIL, 2009-2015 ARM Germany GmbH
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -32,9 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *---------------------------------------------------------------------------*/
 
-/*        .file   "HAL_CM0.S" */ /* Seems to fix index bug in Eclipse - pgo */
+/*        .file   "HAL_CM4.S" */ /* Seems to fix index bug in Eclipse - pgo */
         .syntax unified
 
+        .equ    TCB_STACKF, 37
         .equ    TCB_TSTACK, 40
 
 
@@ -101,12 +104,9 @@ os_set_env:
         LDR     R0,=os_flags
         LDRB    R0,[R0]
         LSLS    R0,#31
-        BNE     PrivilegedE
-        MOVS    R0,#0x03                /* Unprivileged Thread mode, use PSP */
-        MSR     CONTROL,R0
-        BX      LR
-PrivilegedE:
-        MOVS    R0,#0x02                /* Privileged Thread mode, use PSP */
+        ITE     NE
+        MOVNE   R0,#0x02                /* Privileged Thread mode, use PSP */
+        MOVEQ   R0,#0x03                /* Unprivileged Thread mode, use PSP */
         MSR     CONTROL,R0
         BX      LR
 
@@ -126,18 +126,17 @@ _alloc_box:
         .fnstart
         .cantunwind
 
-        LDR     R3,=rt_alloc_box
-        MOV     R12,R3
+        LDR     R12,=rt_alloc_box
         MRS     R3,IPSR
         LSLS    R3,#24
-        BNE     PrivilegedA
+        IT      NE
+        BXNE    R12
         MRS     R3,CONTROL
         LSLS    R3,#31
-        BEQ     PrivilegedA
+        IT      EQ
+        BXEQ    R12
         SVC     0
         BX      LR
-PrivilegedA:
-        BX      R12
 
         .fnend
         .size   _alloc_box, .-_alloc_box
@@ -155,18 +154,17 @@ _free_box:
         .fnstart
         .cantunwind
 
-        LDR     R3,=rt_free_box
-        MOV     R12,R3
+        LDR     R12,=rt_free_box
         MRS     R3,IPSR
         LSLS    R3,#24
-        BNE     PrivilegedF
+        IT      NE
+        BXNE    R12
         MRS     R3,CONTROL
         LSLS    R3,#31
-        BEQ     PrivilegedF
+        IT      EQ
+        BXEQ    R12
         SVC     0
         BX      LR
-PrivilegedF:
-        BX      R12
 
         .fnend
         .size   _free_box, .-_free_box
@@ -180,66 +178,88 @@ PrivilegedF:
         .type   SVC_Handler, %function
         .global SVC_Handler
 SVC_Handler:
+        .ifdef  IFX_XMC4XXX
+        .global SVC_Handler_Veneer
+SVC_Handler_Veneer:
+        .endif
         .fnstart
         .cantunwind
 
         MRS     R0,PSP                  /* Read PSP */
         LDR     R1,[R0,#24]             /* Read Saved PC from Stack */
-        SUBS    R1,R1,#2                /* Point to SVC Instruction */
-        LDRB    R1,[R1]                 /* Load SVC Number */
-        CMP     R1,#0
-        BNE     SVC_User                /* User SVC Number > 0 */
+        LDRB    R1,[R1,#-2]             /* Load SVC Number */
+        CBNZ    R1,SVC_User
 
-        MOV     LR,R4
-        LDMIA   R0,{R0-R3,R4}           /* Read R0-R3,R12 from stack */
-        MOV     R12,R4
-        MOV     R4,LR
+        LDM     R0,{R0-R3,R12}          /* Read R0-R3,R12 from stack */
+        PUSH    {R4,LR}                 /* Save EXC_RETURN */
         BLX     R12                     /* Call SVC Function */
+        POP     {R4,LR}                 /* Restore EXC_RETURN */
 
-        MRS     R3,PSP                  /* Read PSP */
-        STMIA   R3!,{R0-R2}             /* Store return values */
+        MRS     R12,PSP                 /* Read PSP */
+        STM     R12,{R0-R2}             /* Store return values */
 
         LDR     R3,=os_tsk
-        LDMIA   R3!,{R1,R2}             /* os_tsk.run, os_tsk.new */
+        LDM     R3,{R1,R2}              /* os_tsk.run, os_tsk.new */
         CMP     R1,R2
-        BEQ     SVC_Exit                /* no task switch */
+        .ifdef  IFX_XMC4XXX
+        ITT     EQ
+        PUSHEQ  {LR}
+        POPEQ   {PC}
+        .else
+        IT      EQ
+        BXEQ    LR                      /* RETI, no task switch */
+        .endif
 
-        SUBS    R3,#8
-        CMP     R1,#0                   /* Runtask deleted? */
-        BEQ     SVC_Next
+        CBNZ    R1,SVC_ContextSave      /* Runtask not deleted? */
 
-        MRS     R0,PSP                  /* Read PSP */
-        SUBS    R0,R0,#32               /* Adjust Start Address */
-        STR     R0,[R1,#TCB_TSTACK]     /* Update os_tsk.run->tsk_stack */       
-        STMIA   R0!,{R4-R7}             /* Save old context (R4-R7) */
-        MOV     R4,R8
-        MOV     R5,R9
-        MOV     R6,R10
-        MOV     R7,R11
-        STMIA   R0!,{R4-R7}             /* Save old context (R8-R11) */
+#if (defined(__VFP_FP__) && !defined(__SOFTFP__)) /* pgo */
+        TST     LR,#0x10                /* is it extended frame? */
+        BNE     SVC_ContextRestore
+        LDR     R1,=0xE000EF34
+        LDR     R0,[R1]                 /* Load FPCCR */
+        BIC     R0,#1                   /* Clear LSPACT (Lazy state) */
+        STR     R0,[R1]                 /* Store FPCCR */
+#endif
+        B       SVC_ContextRestore
+
+SVC_ContextSave:
+        TST     LR,#0x10                /* is it extended frame? */
+        ITTE    EQ
+#if (defined(__VFP_FP__) && !defined(__SOFTFP__)) /* pgo */
+        VSTMDBEQ R12!,{S16-S31}         /* yes, stack also VFP hi-regs */
+#endif
+        MOVEQ   R0,#0x01                /* os_tsk->stack_frame val */
+        MOVNE   R0,#0x00
+        STRB    R0,[R1,#TCB_STACKF]     /* os_tsk.run->stack_frame = val */
+        STMDB   R12!,{R4-R11}           /* Save Old context */
+        STR     R12,[R1,#TCB_TSTACK]    /* Update os_tsk.run->tsk_stack */
 
         PUSH    {R2,R3}
         BL      rt_stk_check            /* Check for Stack overflow */
         POP     {R2,R3}
 
-SVC_Next:
+SVC_ContextRestore:
         STR     R2,[R3]                 /* os_tsk.run = os_tsk.new */
 
-        LDR     R0,[R2,#TCB_TSTACK]     /* os_tsk.new->tsk_stack */
-        ADDS    R0,R0,#16               /* Adjust Start Address */
-        LDMIA   R0!,{R4-R7}             /* Restore new Context (R8-R11) */
-        MOV     R8,R4
-        MOV     R9,R5
-        MOV     R10,R6
-        MOV     R11,R7
-        MSR     PSP,R0                  /* Write PSP */
-        SUBS    R0,R0,#32               /* Adjust Start Address */
-        LDMIA   R0!,{R4-R7}             /* Restore new Context (R4-R7) */
+        LDR     R12,[R2,#TCB_TSTACK]    /* os_tsk.new->tsk_stack */
+        LDMIA   R12!,{R4-R11}           /* Restore New Context */
+        LDRB    R0,[R2,#TCB_STACKF]     /* Stack Frame */
+        CMP     R0,#0                   /* Basic/Extended Stack Frame */
+        ITEE    EQ
+        MVNEQ   LR,#~0xFFFFFFFD         /* set EXC_RETURN value */
+        MVNNE   LR,#~0xFFFFFFED
+#if (defined(__VFP_FP__) && !defined(__SOFTFP__)) /* pgo */
+        VLDMIANE R12!,{S16-S31}         /* restore VFP hi-registers */
+#endif
+        MSR     PSP,R12                 /* Write PSP */
 
 SVC_Exit:
-        MOVS    R0,#~0xFFFFFFFD         /* Set EXC_RETURN value */
-        MVNS    R0,R0
-        BX      R0                      /* RETI to Thread Mode, use PSP */
+        .ifdef  IFX_XMC4XXX
+        PUSH    {LR}
+        POP     {PC}
+        .else
+        BX      LR
+        .endif
 
         /*------------------- User SVC ------------------------------*/
 
@@ -251,16 +271,13 @@ SVC_User:
         BHI     SVC_Done                /* Overflow */
 
         LDR     R4,=SVC_Table-4
-        LSLS    R1,R1,#2
-        LDR     R4,[R4,R1]              /* Load SVC Function Address */
-        MOV     LR,R4
+        LDR     R4,[R4,R1,LSL #2]       /* Load SVC Function Address */
 
-        LDMIA   R0,{R0-R3,R4}           /* Read R0-R3,R12 from stack */
-        MOV     R12,R4
-        BLX     LR                      /* Call SVC Function */
+        LDM     R0,{R0-R3,R12}          /* Read R0-R3,R12 from stack */
+        BLX     R4                      /* Call SVC Function */
 
-        MRS     R4,PSP                  /* Read PSP */
-        STMIA   R4!,{R0-R3}             /* Function return values */
+        MRS     R12,PSP
+        STM     R12,{R0-R3}             /* Function return values */
 SVC_Done:
         POP     {R4,PC}                 /* RETI */
 
@@ -277,28 +294,42 @@ SVC_Done:
         .global PendSV_Handler
         .global Sys_Switch
 PendSV_Handler:
+        .ifdef  IFX_XMC4XXX
+        .global PendSV_Handler_Veneer
+PendSV_Handler_Veneer:
+        .endif
         .fnstart
         .cantunwind
 
+        PUSH    {R4,LR}                 /* Save EXC_RETURN */
         BL      rt_pop_req
 
 Sys_Switch:
+        POP     {R4,LR}                 /* Restore EXC_RETURN */
+
         LDR     R3,=os_tsk
-        LDMIA   R3!,{R1,R2}             /* os_tsk.run, os_tsk.new */
+        LDM     R3,{R1,R2}              /* os_tsk.run, os_tsk.new */
         CMP     R1,R2
-        BEQ     Sys_Exit                /* no task switch */
+        .ifdef  IFX_XMC4XXX
+        ITT     EQ
+        PUSHEQ  {LR}
+        POPEQ   {PC}
+        .else
+        IT      EQ
+        BXEQ    LR                      /* RETI, no task switch */
+        .endif
 
-        SUBS    R3,#8
-
-        MRS     R0,PSP                  /* Read PSP */
-        SUBS    R0,R0,#32               /* Adjust Start Address */
-        STR     R0,[R1,#TCB_TSTACK]     /* Update os_tsk.run->tsk_stack */
-        STMIA   R0!,{R4-R7}             /* Save old context (R4-R7) */
-        MOV     R4,R8
-        MOV     R5,R9
-        MOV     R6,R10
-        MOV     R7,R11
-        STMIA   R0!,{R4-R7}             /* Save old context (R8-R11) */
+        MRS     R12,PSP                 /* Read PSP */
+        TST     LR,#0x10                /* is it extended frame? */
+        ITTE    EQ
+#if (defined(__VFP_FP__) && !defined(__SOFTFP__)) /* pgo */
+        VSTMDBEQ R12!,{S16-S31}         /* yes, stack also VFP hi-regs */
+#endif
+        MOVEQ   R0,#0x01                /* os_tsk->stack_frame val */
+        MOVNE   R0,#0x00
+        STRB    R0,[R1,#TCB_STACKF]     /* os_tsk.run->stack_frame = val */
+        STMDB   R12!,{R4-R11}           /* Save Old context */
+        STR     R12,[R1,#TCB_TSTACK]    /* Update os_tsk.run->tsk_stack */
 
         PUSH    {R2,R3}
         BL      rt_stk_check            /* Check for Stack overflow */
@@ -306,21 +337,25 @@ Sys_Switch:
 
         STR     R2,[R3]                 /* os_tsk.run = os_tsk.new */
 
-        LDR     R0,[R2,#TCB_TSTACK]     /* os_tsk.new->tsk_stack */
-        ADDS    R0,R0,#16               /* Adjust Start Address */
-        LDMIA   R0!,{R4-R7}             /* Restore new Context (R8-R11) */
-        MOV     R8,R4
-        MOV     R9,R5
-        MOV     R10,R6
-        MOV     R11,R7
-        MSR     PSP,R0                  /* Write PSP */
-        SUBS    R0,R0,#32               /* Adjust Start Address */
-        LDMIA   R0!,{R4-R7}             /* Restore new Context (R4-R7) */
+        LDR     R12,[R2,#TCB_TSTACK]    /* os_tsk.new->tsk_stack */
+        LDMIA   R12!,{R4-R11}           /* Restore New Context */
+        LDRB    R0,[R2,#TCB_STACKF]     /* Stack Frame */
+        CMP     R0,#0                   /* Basic/Extended Stack Frame */
+        ITEE    EQ
+        MVNEQ   LR,#~0xFFFFFFFD         /* set EXC_RETURN value */
+        MVNNE   LR,#~0xFFFFFFED
+#if (defined(__VFP_FP__) && !defined(__SOFTFP__)) /* pgo */
+        VLDMIANE R12!,{S16-S31}         /* restore VFP hi-registers */
+#endif
+        MSR     PSP,R12                 /* Write PSP */
 
 Sys_Exit:
-        MOVS    R0,#~0xFFFFFFFD         /* Set EXC_RETURN value */
-        MVNS    R0,R0
-        BX      R0                      /* RETI to Thread Mode, use PSP */
+        .ifdef  IFX_XMC4XXX
+        PUSH    {LR}
+        POP     {PC}
+        .else
+        BX      LR                      /* Return to Thread Mode */
+        .endif
 
         .fnend
         .size   PendSV_Handler, .-PendSV_Handler
@@ -334,9 +369,14 @@ Sys_Exit:
         .type   SysTick_Handler, %function
         .global SysTick_Handler
 SysTick_Handler:
+        .ifdef  IFX_XMC4XXX
+        .global SysTick_Handler_Veneer
+SysTick_Handler_Veneer:
+        .endif
         .fnstart
         .cantunwind
 
+        PUSH    {R4,LR}                 /* Save EXC_RETURN */
         BL      rt_systick
         B       Sys_Switch
 
@@ -355,6 +395,7 @@ OS_Tick_Handler:
         .fnstart
         .cantunwind
 
+        PUSH    {R4,LR}                 /* Save EXC_RETURN */
         BL      os_tick_irqack
         BL      rt_systick
         B       Sys_Switch

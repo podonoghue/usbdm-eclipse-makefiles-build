@@ -128,20 +128,18 @@ used throughout the whole project.
 */
 
 // This seems to fix a bug in the Eclipse indexer for C++ use
-#ifdef  __cplusplus
-#endif
 
 #ifndef _CMSIS_OS_H
 #define _CMSIS_OS_H
 
 /// \note MUST REMAIN UNCHANGED: \b osCMSIS identifies the CMSIS-RTOS API version.
-#define osCMSIS           0x10002      ///< API version (main [31:16] .sub [15:0])
+#define osCMSIS           0x10002U      ///< API version (main [31:16] .sub [15:0])
 
 /// \note CAN BE CHANGED: \b osCMSIS_KERNEL identifies the underlying RTOS kernel and version number.
-#define osCMSIS_RTX     ((4<<16)|75)   ///< RTOS identification and version (main [31:16] .sub [15:0])
+#define osCMSIS_RTX     ((4<<16)|80)   ///< RTOS identification and version (main [31:16] .sub [15:0])
 
 /// \note MUST REMAIN UNCHANGED: \b osKernelSystemId shall be consistent in every CMSIS-RTOS.
-#define osKernelSystemId "RTX V4.75"   ///< RTOS identification string
+#define osKernelSystemId "RTX V4.80"   ///< RTOS identification string
 
 
 /// \note MUST REMAIN UNCHANGED: \b osFeature_xxx shall be consistent in every CMSIS-RTOS.
@@ -186,7 +184,7 @@ typedef enum  {
 
 /// Timeout value.
 /// \note MUST REMAIN UNCHANGED: \b osWaitForever shall be consistent in every CMSIS-RTOS.
-#define osWaitForever     0xFFFFFFFF     ///< wait forever timeout value
+#define osWaitForever     0xFFFFFFFFU     ///< wait forever timeout value
 
 /// Status code values returned by CMSIS-RTOS functions.
 /// \note MUST REMAIN UNCHANGED: \b osStatus shall be consistent in every CMSIS-RTOS.
@@ -456,7 +454,7 @@ os_InRegs osEvent osWait (uint32_t millisec);
 extern const osTimerDef_t os_timer_def_##name
 #else                            // define the object
 #define osTimerDef(name, function)  \
-uint32_t os_timer_cb_##name[5]; \
+uint32_t os_timer_cb_##name[6]; \
 const osTimerDef_t os_timer_def_##name = \
 { (function), (os_timer_cb_##name) }
 #endif
