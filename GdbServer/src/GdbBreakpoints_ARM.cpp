@@ -165,7 +165,7 @@ void GdbBreakpoints_ARM::checkAndAdjustBreakpointHalt(void) {
 // Initialise Breakpoint before first use
 //
 USBDM_ErrorCode GdbBreakpoints_ARM::initBreakpoints() {
-   LOGGING_Q;
+   LOGGING;
 
    clearAllBreakpoints();
 

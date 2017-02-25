@@ -528,6 +528,8 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
              clientSocket->SetNotify(wxSOCKET_LOST_FLAG);
           }
           if (deferredOpen) {
+             log.print("wxSOCKET_INPUT - Deferred Open\n");
+             statusTextControl->AppendText(_("Deferred Open\n"));
 
              // Open on first access after socket creation
              setDeferredOpen(false);
@@ -536,7 +538,7 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
              if (rc != BDM_RC_OK) {
                 reportError("BDM Open failed, reason: ", GdbHandler::M_FATAL, rc);
                 statusTextControl->AppendText(_("BDM Open failed\n"));
-                log.print("BDM Open failed\n");
+                log.error("BDM Open failed\n");
                 dropConnection();
                 return;
              }
@@ -546,12 +548,13 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
              gdbHandler = GdbHandlerFactory::createGdbHandler(bdmInterface->getBdmOptions().targetType, gdbInOut, bdmInterface, deviceInterface, cb, tty);
              rc = gdbHandler->initialise();
              if (rc != BDM_RC_OK) {
+                // Try again after Reset
                 bdmInterface->reset();
                 rc = gdbHandler->initialise();
              }
              if (rc != BDM_RC_OK) {
                 reportError("GDB Handler initialisation failed, reason: ", GdbHandler::M_FATAL, rc);
-                log.print("GDB Handler initialisation failed\n");
+                log.error("GDB Handler initialisation failed\n");
                 dropConnection();
                 return;
              }
@@ -573,7 +576,7 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
 
           if (deferredFail) {
              // A fatal error was reported - drop connection
-             log.print("DeferredFail\n");
+             log.error("DeferredFail\n");
              dropConnection();
           }
           else {

@@ -35,7 +35,7 @@ public:
 
 protected:
    GdbBreakpoints             *gdbBreakpoints;
-
+   bool                       initBreakpointsDone;
    USBDM_ErrorCode           (*gdbCallBackPtr)(const char *msg, GdbMessageLevel level, USBDM_ErrorCode rc);
 
    TargetType_t                targetType;
@@ -62,9 +62,15 @@ protected:
    bool               atBreakpoint(uint32_t address)       { return gdbBreakpoints->atBreakpoint(address); };
    USBDM_ErrorCode    initBreakpoints();
    int                insertBreakpoint(GdbBreakpoints::BreakType type, uint32_t address, unsigned size) {
+      if (!initBreakpointsDone) {
+         initBreakpoints();
+      }
       return gdbBreakpoints->insertBreakpoint(type, address, size);
    }
    int                removeBreakpoint(GdbBreakpoints::BreakType type, uint32_t address, unsigned size) {
+      if (!initBreakpointsDone) {
+         initBreakpoints();
+      }
       return gdbBreakpoints->removeBreakpoint(type, address, size);
    }
    virtual USBDM_ErrorCode    usbdmResetTarget(bool retry);

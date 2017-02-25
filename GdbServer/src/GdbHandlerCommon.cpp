@@ -37,6 +37,7 @@ GdbHandlerCommon::GdbHandlerCommon(
       IGdbTty *tty) :
          GdbHandler(),
          gdbBreakpoints(gdbBreakpoints),
+         initBreakpointsDone(false),
          targetType(targetType),
          gdbInOut(gdbInOut),
          bdmInterface(bdmInterface),
@@ -72,14 +73,18 @@ GdbHandlerCommon::~GdbHandlerCommon() {
 }
 
 USBDM_ErrorCode GdbHandlerCommon::initialise() {
+   LOGGING;
    USBDM_ErrorCode rc = bdmInterface->connect();
    if (rc != BDM_RC_OK) {
       // Silent retry
       rc = bdmInterface->connect();
    }
+   if (rc != BDM_RC_OK) {
+      log.error("Connect failed, rc = %s\n", bdmInterface->getErrorString(rc));
+   }
+   initBreakpointsDone = false;
    return rc;
 }
-
 
 USBDM_ErrorCode GdbHandlerCommon::dummyCallback(const char *msg, GdbMessageLevel level, USBDM_ErrorCode rc) {
    return BDM_RC_FAIL;
@@ -849,17 +854,26 @@ USBDM_ErrorCode GdbHandlerCommon::readRegs(void) {
          registerBufferSize = 4*(targetLastRegIndex+1);
          return BDM_RC_OK;
       }
-      if (rc == BDM_RC_TARGET_BUSY) {
-         // Target running - dummy response
+      if (rc != BDM_RC_ILLEGAL_COMMAND) {
+         // Failed read - dummy response
+         reportGdbPrintf("Register read failed - ignored, rc = %s\n", bdmInterface->getErrorString(rc));
+         log.error("Register read failed - ignored, rc = %s\n", bdmInterface->getErrorString(rc));
          registerBufferSize = 4*(targetLastRegIndex+1);
          memset(registerBuffer, 0, 4*(targetLastRegIndex+1));
          return BDM_RC_OK;
       }
-      if (rc != BDM_RC_ILLEGAL_COMMAND) {
-         // Unknown failure
-         registerBufferSize = 0;
-         return rc;
-      }
+//
+//      if (rc == BDM_RC_TARGET_BUSY) {
+//         // Target running - dummy response
+//         registerBufferSize = 4*(targetLastRegIndex+1);
+//         memset(registerBuffer, 0, 4*(targetLastRegIndex+1));
+//         return BDM_RC_OK;
+//      }
+//      if (rc != BDM_RC_ILLEGAL_COMMAND) {
+//         // Unknown failure
+//         registerBufferSize = 0;
+//         return rc;
+//      }
       // Try the old method
       useFastRegisterRead = false;
       log.print("Switching to old register read method\n");
@@ -1328,11 +1342,16 @@ USBDM_ErrorCode GdbHandlerCommon::usbdmResetTarget(bool retry) {
 }
 
 USBDM_ErrorCode GdbHandlerCommon::initBreakpoints() {
+   LOGGING;
    USBDM_ErrorCode rc = gdbBreakpoints->initBreakpoints();
    if (rc != BDM_RC_OK) {
-      reportGdbPrintf(M_INFO, "initBreakpoints() failed, rc = \n", bdmInterface->getErrorString(rc));
-      rc = usbdmResetTarget(false);
+      log.error("gdbBreakpoints->initBreakpoints() failed, rc = %s", bdmInterface->getErrorString(rc));
+      reportGdbPrintf(M_INFO, "initBreakpoints() failed, rc = %s\n", bdmInterface->getErrorString(rc));
+      usbdmResetTarget(false);
+      rc = gdbBreakpoints->initBreakpoints();
    }
+   initBreakpointsDone = true;
+   log.print("Number of hardware breakpoints = %d\n", gdbBreakpoints->getNumberOfHardwareBreakpoints());
    reportGdbPrintf("Number of hardware breakpoints = %d\n", gdbBreakpoints->getNumberOfHardwareBreakpoints());
    return rc;
 };

@@ -71,28 +71,26 @@ uint32_t GdbHandler_ARM::targetToBE32(uint32_t data) {
  */
 USBDM_ErrorCode GdbHandler_ARM::configureMDM_AP() {
 
-   LOGGING_E;
+   LOGGING;
    USBDM_ErrorCode rc = BDM_RC_OK;
 
    unsigned long mdm_ap_ident;
    rc = bdmInterface->readCReg(ARM_CRegMDM_AP_Ident, &mdm_ap_ident);
    isKinetisDevice = (rc == BDM_RC_OK) && ((mdm_ap_ident & 0xFFFFFF00)== 0x001C0000);
+   log.print("Kinetis device? %s\n", isKinetisDevice?"true":"false");
    configureKinetisMDM_AP();
 
    return rc;
 }
 
 USBDM_ErrorCode GdbHandler_ARM::initialise() {
+   LOGGING;
 
    USBDM_ErrorCode rc = GdbHandlerCommon::initialise();
    if (rc != BDM_RC_OK) {
       return rc;
    }
-   rc = configureMDM_AP();
-   if (rc != BDM_RC_OK) {
-      return rc;
-   }
-   return initBreakpoints();
+   return configureMDM_AP();
 }
 
 USBDM_ErrorCode GdbHandler_ARM::resetTarget(TargetMode_t mode) {
@@ -298,6 +296,7 @@ USBDM_ErrorCode GdbHandler_ARM::configureKinetisMDM_AP() {
       unsigned long mdm_ap_control;
       rc = bdmInterface->readCReg(ARM_CRegMDM_AP_Control, &mdm_ap_control);
       if (rc != BDM_RC_OK) {
+         log.error("Reading MDM_AP_Control failed, rc=%s", bdmInterface->getErrorString(rc));
          return rc;
       }
       // Clear flags
@@ -308,9 +307,12 @@ USBDM_ErrorCode GdbHandler_ARM::configureKinetisMDM_AP() {
          // VLLSx - flag sets and core halts
          log.print("Activating MDM_AP_Control_VLLDBGREQ\n");
          rc = bdmInterface->writeCReg(ARM_CRegMDM_AP_Control, mdm_ap_control|MDM_AP_Control_VLLDBGREQ);
+         if (rc != BDM_RC_OK) {
+            log.error("Reading MDM_AP_Control failed, rc=%s", bdmInterface->getErrorString(rc));
+            return rc;
+         }
       }
    }
-
    return rc;
 }
 
