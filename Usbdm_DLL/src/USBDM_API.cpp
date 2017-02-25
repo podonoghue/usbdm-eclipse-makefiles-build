@@ -1087,6 +1087,9 @@ USBDM_ErrorCode  USBDM_SetTargetVdd(TargetVddSelect_t targetVdd) {
    usb_data[2] = targetVdd>>8;  // 16-bit big-endian value
    usb_data[3] = targetVdd;
    rc = bdm_usb_transaction(4, 1, usb_data, 1000);
+   if (rc != BDM_RC_VDD_NOT_REMOVED) {
+      // This may occur if external target power is applied.
+   }
    return rc;
 }
 
@@ -1422,9 +1425,13 @@ USBDM_ErrorCode USBDM_SetTargetType(TargetType_t targetType) {
       return rc;
    }
    if (bdmOptions.targetVdd == BDM_TARGET_VDD_OFF) {
-      // Just turn off power
-      return USBDM_SetTargetVdd(BDM_TARGET_VDD_OFF);
+      if (bdmStatus.power_state == BDM_TARGET_VDD_INT) {
+         // Turn off power if controlled
+         return USBDM_SetTargetVdd(BDM_TARGET_VDD_OFF);
+      }
+      return rc;
    }
+   // Check if POR needed
    if ((bdmStatus.power_state == BDM_TARGET_VDD_INT) ||
        ( ((bdmInfo.capabilities & BDM_CAP_VDDSENSE) != 0) && (bdmStatus.power_state == BDM_TARGET_VDD_EXT))) {
       // Target already powered - don't do POR
