@@ -34,7 +34,7 @@
       <Media Id='1' Cabinet="disk1.cab" EmbedCab='yes' DiskPrompt="$(var.ProductCode) Media" />
 
       <MajorUpgrade
-         AllowSameVersionUpgrades="yes"
+         AllowSameVersionUpgrades="no"
          DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit." />
 
       <Property Id='ARPCOMMENTS'>Programmer for Freescale processors</Property>
