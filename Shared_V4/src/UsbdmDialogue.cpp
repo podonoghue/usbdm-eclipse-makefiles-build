@@ -2256,10 +2256,11 @@ USBDM_ErrorCode UsbdmDialogue::massEraseTarget() {
                      this);
          bdmInterface->closeBdm();
          log.print("Failed to connect to target\n");
-         return PROGRAMMING_RC_ERROR_BDM_CONNECT;
+         return flashRc;
       }
    }
    else if (bdmInterface->getBdmOptions().targetType == T_MC56F80xx) {
+      // Mass erase not supported
 //      if (bdmInterface->initBdm() != BDM_RC_OK) {
 //         bdmInterface->closeBdm();
 //         return PROGRAMMING_RC_ERROR_BDM_CONNECT;
@@ -2289,18 +2290,8 @@ USBDM_ErrorCode UsbdmDialogue::massEraseTarget() {
    }
    // Do mass erase
    flashRc = flashprogrammer->massEraseTarget();
-   if (flashRc != PROGRAMMING_RC_OK) {
-      wxMessageBox(_("Unsecuring the device failed.\n"
-            "Reason: ") +
-            wxString(bdmInterface->getErrorString(flashRc), wxConvUTF8),
-            _("Erasing Failed"),
-            wxOK|wxICON_ERROR|wxSTAY_ON_TOP|wxCENTER,
-            this);
-      bdmInterface->closeBdm();
-      return flashRc;
-   }
    bdmInterface->closeBdm();
-   return BDM_RC_OK;
+   return flashRc;
 }
 
 //===================================================================================
@@ -2645,8 +2636,15 @@ void UsbdmDialogue::OnMassEraseButtonClick( wxCommandEvent& event ) {
    if (getOkCancel != wxYES) {
       return;
    }
-   if (massEraseTarget() != BDM_RC_OK) {
-      // Error already reported
+   USBDM_ErrorCode rc = massEraseTarget();
+   if (rc != BDM_RC_OK) {
+      wxMessageBox(_("Mass erase failed.\n"
+            "Reason: ") +
+            wxString(bdmInterface->getErrorString(rc), wxConvUTF8),
+            _("Erasing Failed"),
+            wxOK|wxICON_ERROR|wxSTAY_ON_TOP|wxCENTER,
+            this);
+      bdmInterface->closeBdm();
       return;
    }
    long style2 = wxOK|wxICON_INFORMATION|wxSTAY_ON_TOP|wxCENTER;
