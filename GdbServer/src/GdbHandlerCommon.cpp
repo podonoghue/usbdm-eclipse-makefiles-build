@@ -75,6 +75,10 @@ GdbHandlerCommon::~GdbHandlerCommon() {
 
 USBDM_ErrorCode GdbHandlerCommon::initialise() {
    LOGGING;
+
+   initBreakpointsDone = false;
+   programmingDone     = false;
+
    USBDM_ErrorCode rc = bdmInterface->connect();
    if (rc != BDM_RC_OK) {
       // Silent retry
@@ -83,8 +87,6 @@ USBDM_ErrorCode GdbHandlerCommon::initialise() {
    if (rc != BDM_RC_OK) {
       log.error("Connect failed, rc = %s\n", bdmInterface->getErrorString(rc));
    }
-   initBreakpointsDone = false;
-   programmingDone     = false;
    return rc;
 }
 

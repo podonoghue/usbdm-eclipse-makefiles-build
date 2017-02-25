@@ -87,7 +87,8 @@ USBDM_ErrorCode GdbHandler_ARM::initialise() {
    LOGGING;
 
    USBDM_ErrorCode rc = GdbHandlerCommon::initialise();
-   if (rc != BDM_RC_OK) {
+   // Ignore Secured as may still be able to program device after mass-erase
+   if ((rc != BDM_RC_OK)&&(rc != BDM_RC_SECURED)) {
       return rc;
    }
    return configureMDM_AP();

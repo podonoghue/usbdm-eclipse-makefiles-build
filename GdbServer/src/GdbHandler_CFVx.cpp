@@ -65,7 +65,11 @@ uint32_t GdbHandler_CFVx::targetToBE32(uint32_t data) {
 USBDM_ErrorCode GdbHandler_CFVx::initialise() {
 
    USBDM_ErrorCode rc = GdbHandlerCommon::initialise();
-   return rc;
+   // Ignore Secured as may still be able to program device after mass-erase
+   if ((rc != BDM_RC_OK)&&(rc != BDM_RC_SECURED)) {
+      return rc;
+   }
+   return BDM_RC_OK;
 }
 
 USBDM_ErrorCode GdbHandler_CFVx::resetTarget(TargetMode_t mode) {
