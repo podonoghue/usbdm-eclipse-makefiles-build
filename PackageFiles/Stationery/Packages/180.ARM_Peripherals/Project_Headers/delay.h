@@ -20,6 +20,7 @@
 
 #ifdef __cplusplus
 namespace USBDM {
+
 // Mask for maximum timer value
 static constexpr uint32_t TIMER_MASK = ((1UL<<24)-1UL);
 #else
@@ -76,19 +77,25 @@ static inline void enableTimer() {
 static inline uint32_t getTicks() {
    return SYST->CVR;
 }
-
-/**
- * Simple delay routine
- *
- * @param usToWait How many microseconds to busy-wait
- */
-void waitUS(uint32_t usToWait);
 #endif
 
 /**
  * Simple delay routine
  *
+ * @param usToWait How many microseconds to busy-wait
+ *
+ * @note Limited to 2^32 us (4,294 s)
+ * @note Uses busy-waiting
+ */
+void waitUS(uint32_t usToWait);
+
+/**
+ * Simple delay routine
+ *
  * @param msToWait How many milliseconds to busy-wait
+ *
+ * @note Limited to 2^32 ms (71,582 minutes)
+ * @note Uses busy-waiting
  */
 void waitMS(uint32_t msToWait);
 
@@ -98,48 +105,41 @@ void waitMS(uint32_t msToWait);
  * @param seconds How many seconds to busy-wait
  *
  * @note Limited to 2^32 ms (71,582 minutes)
- * @note Uses busy-waiting based on Systick timer
+ * @note Uses busy-waiting
  */
 void wait(float seconds);
 
 #ifdef __cplusplus
-#ifndef __CMSIS_RTOS
+
 /**
- * Routine to wait for an event with timeout
+ * Routine to wait for a condition with timeout
  *
  * @param usToWait How many microseconds to busy-wait
- * @param testFn   Function indicating if waited for event has occurred
+ * @param testFn   Function indicating if waited for condition has occurred
  *
  * @return Indicate if event occurred. true=>event, false=>no event
- *
- * Note: Accuracy will be poor as affected by execution time of function.
  */
 bool waitUS(uint32_t usToWait, bool testFn(void));
 
 /**
- * Routine to wait for an event with timeout
+ * Routine to wait for a condition with timeout
  *
  * @param msToWait How many milliseconds to busy-wait
- * @param testFn   Function indicating if waited for event has occurred
+ * @param testFn   Function indicating if waited for condition has occurred
  *
  * @return Indicate if event occurred. true=>event, false=>no event
- *
- * Note: Accuracy is affected by execution time of function.
  */
 bool waitMS(uint32_t msToWait, bool testFn(void));
 
 /**
- * Routine to wait for an event with timeout
+ * Routine to wait for a condition with timeout
  *
  * @param seconds  How many seconds to busy-wait
- * @param testFn   Polling function indicating if waited for event has occurred
+ * @param testFn   Polling function indicating if waited for condition has occurred
  *
  * @return Indicate if event occurred: true=>event, false=>no event
- *
- * Note: Accuracy is affected by execution time of function.
  */
 bool wait(float seconds, bool testFn(void));
-#endif /* __CMSIS_RTOS */
 
 } // End namespace USBDM
 #endif /* __cplusplus */
