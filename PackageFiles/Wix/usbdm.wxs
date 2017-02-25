@@ -283,7 +283,7 @@
          <Component Id='C.CommonFiles' Guid='7c988e6d-bf01-439a-9829-43e9cfeff9f9'>
             <File Id='CommonMinGW1'      DiskId='1' Source='$(var.SrcDir)\bin\libgcc_s_dw2-1.dll' />
             <File Id='CommonMinGW2'      DiskId='1' Source='$(var.SrcDir)\bin\libstdc++-6.dll' />
-            <File Id='CommonMinGW3'      DiskId='1' Source='$(var.SrcDir)\bin\pthreadGC2.dll' />
+            <File Id='CommonMinGW3'      DiskId='1' Source='$(var.SrcDir)\bin\pthreadGC-3.dll' />
             <File Id='CommonMinGW4'      DiskId='1' Source='$(var.SrcDir)\bin\libiconv-2.dll' />
             <File Id='CommonMinGW5'      DiskId='1' Source='$(var.SrcDir)\bin\libintl-8.dll' />  
             

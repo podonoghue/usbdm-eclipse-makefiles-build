@@ -5,7 +5,7 @@ set VERSIONn=4.12.1.160
 
 cd
 
-set WXWIDGETS_VERSION=30u
+set WXWIDGETS_VERSION=311u
 
 set WIX_DIR="C:\Program Files (x86)\WiX Toolset v3.9\bin"
 if not exist %WIX_DIR% set WIX_DIR="C:\Program Files\WiX Toolset v3.9\bin"
