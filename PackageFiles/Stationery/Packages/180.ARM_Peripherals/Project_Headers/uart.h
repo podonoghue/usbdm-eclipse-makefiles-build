@@ -18,10 +18,10 @@
  * Any manual changes will be lost.
  */
 #include <stdint.h>
+#include <cstdio>
 #include "derivative.h"
 #include "hardware.h"
 #include "mcg.h"
-#include <cstdio>
 
 namespace USBDM {
 

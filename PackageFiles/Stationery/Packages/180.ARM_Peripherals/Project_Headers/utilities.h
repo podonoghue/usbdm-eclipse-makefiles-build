@@ -1,7 +1,7 @@
 /**
  * @file     utilities.h (derived from utilities.h)
  * @brief    Utility Routines
- * @version  V4.11.1.70
+ * @version  V4.12.1.160
  * @date     13 May 2013
  */
 #ifndef UTILTIES_H_

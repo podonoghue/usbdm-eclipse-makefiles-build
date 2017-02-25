@@ -239,7 +239,7 @@ constexpr uint32_t pack32BE(const uint8_t data[4]) {
 }
 
 /**
- * Pack 4 bytes into a 32-bit value in LITTLE-ENDIAN order
+ * Pack 2 bytes into a 16-bit value in LITTLE-ENDIAN order
  *
  * @param  data Data value in LITTLE-ENDIAN order
  *
@@ -251,7 +251,7 @@ constexpr uint32_t pack16LE(const uint8_t data[2]) {
 }
 
 /**
- * Pack 4 bytes into a 32-bit value in BIG-ENDIAN order
+ * Pack 2 bytes into a 16-bit value in BIG-ENDIAN order
  *
  * @param  data Data value in BIG_ENDIAN order
  *
@@ -298,7 +298,7 @@ void unpack32BE(uint32_t data, uint8_t ar[4]) {
  * Unpack a 32-bit value into 4 bytes in LE order
  *
  * @param  data    Value to unpack
- * @param  ar   Buffer for data value in LITTLE-ENDIAN order
+ * @param  ar      Buffer for data value in LITTLE-ENDIAN order
  *
  * @return Value
  */
