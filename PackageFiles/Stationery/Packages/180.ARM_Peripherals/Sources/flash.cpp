@@ -1,11 +1,9 @@
-/*
- ============================================================================
- * @file    main.cpp (180.ARM_Peripherals)
- * @brief   Basic C++ demo using GPIO class
+/**
+ * @file    flash.cpp
+ * @brief   Flash support code
  *
  *  Created on: 10/1/2016
  *      Author: podonoghue
- ============================================================================
  */
 #include <stdio.h>
 #include <string.h>
@@ -80,12 +78,16 @@ FlashDriverError_t Flash::executeFlashCommand() {
    uint8_t space[50]; // Space for RAM copy of executeFlashCommand_asm()
    FlashDriverError_t (*fp)() = (FlashDriverError_t (*)())((uint32_t)space|1);
 
-   assert(((uint32_t)executeFlashCommand)-((uint32_t)executeFlashCommand_asm)<sizeof(space));
+   volatile uint32_t source     = (uint32_t)executeFlashCommand_asm&~1;
+   volatile uint32_t source_end = (uint32_t)executeFlashCommand&~1;
+   volatile uint32_t size       = source_end-source;
+
+   assert(size<sizeof(space));
 
    // Copy routine to RAM (stack)
-   memcpy(space, (uint8_t*)((uint32_t)executeFlashCommand_asm&~1), ((uint32_t)executeFlashCommand)-((uint32_t)executeFlashCommand_asm));
+   memcpy(space, (uint8_t*)(source), size);
 
-   // Call executeFlashCommand_asm() on the stack
+   // Call executeFlashCommand_asm() on the stack with interrupts disabled
    disableInterrupts();
    (*fp)();
    enableInterrupts();
