@@ -70,7 +70,6 @@
       <device name="MK22FN512M12">     <svdFileName>MK22F51212</svdFileName> </device>
       <device name="MK22FX512M12">     <svdFileName>MK22F12</svdFileName>    </device>
       <device name="MK22FN1M0M12">     <svdFileName>MK22F12</svdFileName>    </device>
-      <device name="MK22FX512M12">     <svdFileName>MK22F12</svdFileName>    </device>
       <device name="MK22FN1M0AM12">    <svdFileName>MK22FA12</svdFileName>    </device>
       <device name="MK22FX512AM12">    <svdFileName>MK22FA12</svdFileName>    </device>
 
@@ -277,6 +276,20 @@
       <device name="MKV31F12810">      <svdFileName>MKV31F12810</svdFileName>  </device>
       <device name="MKV31F25612">      <svdFileName>MKV31F25612</svdFileName>  </device>
       <device name="MKV31F51212">      <svdFileName>MKV31F51212</svdFileName>  </device>
+      
+      <device name="MKV40F64M16">      <svdFileName>MKV40F16</svdFileName>  </device>
+      <device name="MKV40F128M16">     <svdFileName>MKV40F16</svdFileName>  </device>
+      <device name="MKV40F256M16">     <svdFileName>MKV40F16</svdFileName>  </device>
+      <device name="MKV41F64M16">      <svdFileName>MKV41F16</svdFileName>  </device>
+      <device name="MKV41F128M16">     <svdFileName>MKV41F16</svdFileName>  </device>
+      <device name="MKV43F64M16">      <svdFileName>MKV43F16</svdFileName>  </device>
+      <device name="MKV43F128M16">     <svdFileName>MKV43F16</svdFileName>  </device>
+      <device name="MKV44F64M16">      <svdFileName>MKV44F16</svdFileName>  </device>
+      <device name="MKV44F128M16">     <svdFileName>MKV44F16</svdFileName>  </device>
+      <device name="MKV45F128M16">     <svdFileName>MKV45F16</svdFileName>  </device>
+      <device name="MKV45F256M16">     <svdFileName>MKV45F16</svdFileName>  </device>
+      <device name="MKV46F128M16">     <svdFileName>MKV46F16</svdFileName>  </device>
+      <device name="MKV46F256M16">     <svdFileName>MKV46F16</svdFileName>  </device>
       
       <device name="FRDM_K20D50M">     <svdFileName>MK20D5</svdFileName>      </device>
       <device name="FRDM_K22F">        <svdFileName>MK22F51212</svdFileName>  </device>

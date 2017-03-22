@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE device
 [
-<!ENTITY VECTOR_TABLE SYSTEM "vectorTables/MKV44F15_VectorTable.svd.xml">
+<!ENTITY VECTOR_TABLE SYSTEM "vectorTables/MKV43F16_VectorTable.svd.xml">
 <!ENTITY ADC0         SYSTEM "peripherals/ADC0_MKV.svd.xml">
 <!ENTITY AIPS0        SYSTEM "peripherals/AIPS0_3M_A.svd.xml">
 <!ENTITY AOI          SYSTEM "peripherals/AOI_0.svd.xml">
 <!ENTITY CAN0         SYSTEM "peripherals/CAN0_MKV.svd.xml">
 <!ENTITY CMP0         SYSTEM "peripherals/CMP0_MKV.svd.xml">
 <!ENTITY CRC          SYSTEM "peripherals/CRC_0x40032000.svd.xml">
-<!ENTITY DAC0         SYSTEM "peripherals/DAC0_16CH_FIFO16.svd.xml">
 <!ENTITY DMA0         SYSTEM "peripherals/DMA0_16CH_EARS16.svd.xml">
 <!ENTITY DMAMUX0      SYSTEM "peripherals/DMAMUX0_16CH_TRIG.svd.xml">
 <!ENTITY ENC          SYSTEM "peripherals/ENC_0.svd.xml">
@@ -42,9 +41,9 @@
 <!ENTITY XBARB        SYSTEM "peripherals/XBARB_MKV40.svd.xml">
 ]>
 <device schemaVersion="1.1" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
-   <name>MKV44F15</name>
+   <name>MKV43F16</name>
    <version>1.6</version>
-   <description>MKV44F15 Freescale Microcontroller</description>
+   <description>MKV43F16 Freescale Microcontroller</description>
    <cpu>
       <name>CM4</name>
       <revision>r0p1</revision>
@@ -62,12 +61,12 @@
 &AIPS0;
 &AOI;
 &CAN0;
+<peripheral derivedFrom="CAN0"><name>CAN1</name><prependToName>CAN1</prependToName><baseAddress>0x40025000</baseAddress></peripheral>
 &CMP0;
 <peripheral derivedFrom="CMP0"><name>CMP1</name><prependToName>CMP1</prependToName><baseAddress>0x40073008</baseAddress></peripheral>
 <peripheral derivedFrom="CMP0"><name>CMP2</name><prependToName>CMP2</prependToName><baseAddress>0x40073010</baseAddress></peripheral>
 <peripheral derivedFrom="CMP0"><name>CMP3</name><prependToName>CMP3</prependToName><baseAddress>0x40073018</baseAddress></peripheral>
 &CRC;
-&DAC0;
 &DMA0;
 &DMAMUX0;
 &ENC;

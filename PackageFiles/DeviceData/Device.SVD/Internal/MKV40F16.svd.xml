@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE device
 [
-<!ENTITY VECTOR_TABLE SYSTEM "vectorTables/MKV43F15_VectorTable.svd.xml">
+<!ENTITY VECTOR_TABLE SYSTEM "vectorTables/MKV40F16_VectorTable.svd.xml">
 <!ENTITY ADC0         SYSTEM "peripherals/ADC0_MKV.svd.xml">
 <!ENTITY AIPS0        SYSTEM "peripherals/AIPS0_3M_A.svd.xml">
 <!ENTITY AOI          SYSTEM "peripherals/AOI_0.svd.xml">
@@ -14,6 +14,8 @@
 <!ENTITY EWM          SYSTEM "peripherals/EWM_2.svd.xml">
 <!ENTITY FMC          SYSTEM "peripherals/FMC_MKV40F15.svd.xml">
 <!ENTITY FTFA         SYSTEM "peripherals/FTFA_XACCH.svd.xml">
+<!ENTITY FTM0         SYSTEM "peripherals/FTM0_8CH_ICRST.svd.xml">
+<!ENTITY FTM1         SYSTEM "peripherals/FTM1_2CH_ICRST.svd.xml">
 <!ENTITY GPIOA        SYSTEM "peripherals/GPIOA_0x400FF000.svd.xml">
 <!ENTITY I2C0         SYSTEM "peripherals/I2C0_F12.svd.xml">
 <!ENTITY LLWU         SYSTEM "peripherals/LLWU_PE8_2FILT.svd.xml">
@@ -28,7 +30,6 @@
 <!ENTITY PMC          SYSTEM "peripherals/PMC_MKM.svd.xml">
 <!ENTITY PORTA        SYSTEM "peripherals/PORTA.svd.xml">
 <!ENTITY PORTD        SYSTEM "peripherals/PORTD_DFER.svd.xml">
-<!ENTITY PWMA         SYSTEM "peripherals/PWMA_0.svd.xml">
 <!ENTITY RCM          SYSTEM "peripherals/RCM_MKV40F15.svd.xml">
 <!ENTITY SCB          SYSTEM "peripherals/SCB_CM4_CPACR.svd.xml">
 <!ENTITY SIM          SYSTEM "peripherals/SIM_MKV40F15.svd.xml">
@@ -41,9 +42,9 @@
 <!ENTITY XBARB        SYSTEM "peripherals/XBARB_MKV40.svd.xml">
 ]>
 <device schemaVersion="1.1" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
-   <name>MKV43F15</name>
+   <name>MKV40F16</name>
    <version>1.6</version>
-   <description>MKV43F15 Freescale Microcontroller</description>
+   <description>MKV40F16 Freescale Microcontroller</description>
    <cpu>
       <name>CM4</name>
       <revision>r0p1</revision>
@@ -73,6 +74,9 @@
 &EWM;
 &FMC;
 &FTFA;
+&FTM0;
+&FTM1;
+<peripheral derivedFrom="FTM0"><name>FTM3</name><prependToName>FTM3</prependToName><baseAddress>0x40026000</baseAddress></peripheral>
 &GPIOA;
 <peripheral derivedFrom="GPIOA"><name>GPIOB</name><prependToName>GPIOB</prependToName><baseAddress>0x400FF040</baseAddress></peripheral>
 <peripheral derivedFrom="GPIOA"><name>GPIOC</name><prependToName>GPIOC</prependToName><baseAddress>0x400FF080</baseAddress></peripheral>
@@ -95,7 +99,6 @@
 <peripheral derivedFrom="PORTB"><name>PORTC</name><prependToName>PORTC</prependToName><baseAddress>0x4004B000</baseAddress></peripheral>
 &PORTD;
 <peripheral derivedFrom="PORTB"><name>PORTE</name><prependToName>PORTE</prependToName><baseAddress>0x4004D000</baseAddress></peripheral>
-&PWMA;
 &RCM;
 &SCB;
 &SIM;
