@@ -16,8 +16,8 @@ Devices using this peripheral:
       MKV31F12810
       MKV31F25612
       MKV31F51212
-      MKV44F15
-      MKV46F15
+      MKV44F16
+      MKV46F16
 -->
       <peripheral>
          <?sourceFile "DAC0_16CH_FIFO16" ?>

@@ -1,10 +1,10 @@
 <!--
 Devices using this vector table: 
-   MKV46F15
+   MKV40F16
 -->
       <interrupts>
-         <name>MKV46F15_VectorTable</name>
-         <description>MKV46F15 VectorTable</description>
+         <name>MKV40F16_VectorTable</name>
+         <description>MKV40F16 VectorTable</description>
          <interrupt>
             <name>DMA0</name>
             <description>Direct memory access controller</description>
@@ -216,11 +216,6 @@ Devices using this vector table:
             <value>55</value>
          </interrupt>
          <interrupt>
-            <name>DAC</name>
-            <description>Digital to Analogue Converter</description>
-            <value>56</value>
-         </interrupt>
-         <interrupt>
             <name>MCG</name>
             <description>Multipurpose Clock Generator</description>
             <value>57</value>
@@ -319,61 +314,6 @@ Devices using this vector table:
             <name>CAN0_WakeUp</name>
             <description>Flex Controller Area Network module</description>
             <value>80</value>
-         </interrupt>
-         <interrupt>
-            <name>PWMA_CMP0</name>
-            <description>Pulse Width Modulator with nano edge placement</description>
-            <value>81</value>
-         </interrupt>
-         <interrupt>
-            <name>PWMA_RELOAD0</name>
-            <description>Pulse Width Modulator with nano edge placement</description>
-            <value>82</value>
-         </interrupt>
-         <interrupt>
-            <name>PWMA_CMP1</name>
-            <description>Pulse Width Modulator with nano edge placement</description>
-            <value>83</value>
-         </interrupt>
-         <interrupt>
-            <name>PWMA_RELOAD1</name>
-            <description>Pulse Width Modulator with nano edge placement</description>
-            <value>84</value>
-         </interrupt>
-         <interrupt>
-            <name>PWMA_CMP2</name>
-            <description>Pulse Width Modulator with nano edge placement</description>
-            <value>85</value>
-         </interrupt>
-         <interrupt>
-            <name>PWMA_RELOAD2</name>
-            <description>Pulse Width Modulator with nano edge placement</description>
-            <value>86</value>
-         </interrupt>
-         <interrupt>
-            <name>PWMA_CMP3</name>
-            <description>Pulse Width Modulator with nano edge placement</description>
-            <value>87</value>
-         </interrupt>
-         <interrupt>
-            <name>PWMA_RELOAD3</name>
-            <description>Pulse Width Modulator with nano edge placement</description>
-            <value>88</value>
-         </interrupt>
-         <interrupt>
-            <name>PWMA_CAP</name>
-            <description>Pulse Width Modulator with nano edge placement</description>
-            <value>89</value>
-         </interrupt>
-         <interrupt>
-            <name>PWMA_RERR</name>
-            <description>Pulse Width Modulator with nano edge placement</description>
-            <value>90</value>
-         </interrupt>
-         <interrupt>
-            <name>PWMA_FAULT</name>
-            <description>Pulse Width Modulator with nano edge placement</description>
-            <value>91</value>
          </interrupt>
          <interrupt>
             <name>CMP3</name>

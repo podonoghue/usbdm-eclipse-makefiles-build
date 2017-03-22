@@ -1,9 +1,9 @@
 <!--
 Devices using this peripheral: 
-      MKV43F15
-      MKV44F15
-      MKV45F15
-      MKV46F15
+      MKV43F16
+      MKV44F16
+      MKV45F16
+      MKV46F16
 -->
       <peripheral>
          <?sourceFile "PWMA_0" ?>

@@ -1,10 +1,10 @@
 <!--
 Devices using this peripheral: 
-      MKV40F15
-      MKV43F15
-      MKV44F15
-      MKV45F15
-      MKV46F15
+      MKV40F16
+      MKV43F16
+      MKV44F16
+      MKV45F16
+      MKV46F16
 -->
       <peripheral>
          <?sourceFile "PDB0_1CH_4TRIG_1DAC_4PO" ?>

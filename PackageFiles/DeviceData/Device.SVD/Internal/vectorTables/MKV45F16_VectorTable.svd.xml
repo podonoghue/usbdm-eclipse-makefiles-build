@@ -1,10 +1,10 @@
 <!--
 Devices using this vector table: 
-   MKV43F15
+   MKV45F16
 -->
       <interrupts>
-         <name>MKV43F15_VectorTable</name>
-         <description>MKV43F15 VectorTable</description>
+         <name>MKV45F16_VectorTable</name>
+         <description>MKV45F16 VectorTable</description>
          <interrupt>
             <name>DMA0</name>
             <description>Direct memory access controller</description>
@@ -171,6 +171,16 @@ Devices using this vector table:
             <value>41</value>
          </interrupt>
          <interrupt>
+            <name>FTM0</name>
+            <description>FlexTimer Module</description>
+            <value>42</value>
+         </interrupt>
+         <interrupt>
+            <name>FTM1</name>
+            <description>FlexTimer Module</description>
+            <value>43</value>
+         </interrupt>
+         <interrupt>
             <name>PIT0</name>
             <description>Periodic Interrupt Timer</description>
             <value>48</value>
@@ -264,6 +274,11 @@ Devices using this vector table:
             <name>CMP2</name>
             <description>High-Speed Comparator</description>
             <value>70</value>
+         </interrupt>
+         <interrupt>
+            <name>FTM3</name>
+            <description>FlexTimer Module</description>
+            <value>71</value>
          </interrupt>
          <interrupt>
             <name>ADCB</name>

@@ -1,10 +1,10 @@
 <!--
 Devices using this vector table: 
-   MKV45F15
+   MKV46F16
 -->
       <interrupts>
-         <name>MKV45F15_VectorTable</name>
-         <description>MKV45F15 VectorTable</description>
+         <name>MKV46F16_VectorTable</name>
+         <description>MKV46F16 VectorTable</description>
          <interrupt>
             <name>DMA0</name>
             <description>Direct memory access controller</description>
@@ -214,6 +214,11 @@ Devices using this vector table:
             <name>PDB1</name>
             <description>Programmable Delay Block</description>
             <value>55</value>
+         </interrupt>
+         <interrupt>
+            <name>DAC</name>
+            <description>Digital to Analogue Converter</description>
+            <value>56</value>
          </interrupt>
          <interrupt>
             <name>MCG</name>

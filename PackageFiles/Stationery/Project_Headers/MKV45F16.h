@@ -1,16 +1,16 @@
 /****************************************************************************************************//**
- * @file     MKV45F15.h
+ * @file     MKV45F16.h
  *
- * @brief    CMSIS Cortex-M Peripheral Access Layer Header File for MKV45F15.
+ * @brief    CMSIS Cortex-M Peripheral Access Layer Header File for MKV45F16.
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2017/01
+ * @date     2017/03
  *
  *******************************************************************************************************/
 
-#ifndef MCU_MKV45F15
-#define MCU_MKV45F15
+#ifndef MCU_MKV45F16
+#define MCU_MKV45F16
 
 #include <stdint.h>
 #ifdef __cplusplus
@@ -39,7 +39,7 @@ typedef enum {
   DebugMonitor_IRQn             =  -4,   /**<  12 Debug Monitor                                                                    */
   PendSV_IRQn                   =  -2,   /**<  14 Pendable request for system service                                              */
   SysTick_IRQn                  =  -1,   /**<  15 System Tick Timer                                                                */
-/* ----------------------   MKV45F15 VectorTable                     ---------------------- */
+/* ----------------------   MKV45F16 VectorTable                     ---------------------- */
   DMA0_IRQn                     =   0,   /**<  16 Direct memory access controller                                                  */
   DMA1_IRQn                     =   1,   /**<  17 Direct memory access controller                                                  */
   DMA2_IRQn                     =   2,   /**<  18 Direct memory access controller                                                  */
@@ -9883,5 +9883,5 @@ typedef struct {                                /*       XBARB Structure        
 #endif
 
 
-#endif  /* MCU_MKV45F15 */
+#endif  /* MCU_MKV45F16 */
 
