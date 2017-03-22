@@ -29,6 +29,7 @@ namespace USBDM {
 
 //-------- <<< Use Configuration Wizard in Context Menu >>> -----------------  
 
+#ifdef FTM0_BASE_PTR
 // <h> Clock settings for FTM0
 
 // FTM0_SC.CLKS ================================
@@ -54,9 +55,10 @@ namespace USBDM {
 //     <7=> Divide by 128
 //     <0=> Default
 constexpr uint16_t FTM0_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
-
 // </h>
+#endif
 
+#ifdef FTM1_BASE_PTR
 // <h> Clock settings for FTM1
 
 // FTM1_SC.CLKS ================================
@@ -82,9 +84,10 @@ constexpr uint16_t FTM0_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //     <7=> Divide by 128
 //     <0=> Default
 constexpr uint16_t FTM1_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
-
 // </h>
+#endif
 
+#ifdef FTM2_BASE_PTR
 // <h> Clock settings for FTM2
 
 // FTM2_SC.CLKS ================================
@@ -110,9 +113,10 @@ constexpr uint16_t FTM1_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //     <7=> Divide by 128
 //     <0=> Default
 constexpr uint16_t FTM2_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
-
 // </h>
+#endif
 
+#ifdef FTM3_BASE_PTR
 // <h> Clock settings for FTM3
 
 // FTM3_SC.CLKS ================================
@@ -138,7 +142,8 @@ constexpr uint16_t FTM2_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //     <7=> Divide by 128
 //     <0=> Default
 constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
-
+// </h>
+#endif
 
 /*
  * Peripheral Pin Tables
@@ -320,8 +325,5 @@ namespace USBDM {
 extern void mapAllPins();
 
 } // End namespace USBDM
-
-
-// </h>
 
 #endif /* PIN_MAPPING_H_ */
