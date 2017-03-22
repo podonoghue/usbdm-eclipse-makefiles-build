@@ -18,6 +18,16 @@
  */
 class LCD_ST7920 {
 
+public:
+   /** Width of LCD in pixels */
+   static constexpr int LCD_WIDTH  = 128;
+   /** Height of LCD in pixels */
+   static constexpr int LCD_HEIGHT = 64;
+   /** Width of default font in pixels */
+   static constexpr int FONT_WIDTH = 6;
+   /** Height of default font in pixels */
+   static constexpr int FONT_HEIGHT = 8;
+
 protected:
    /** SPI CTAR value */
    uint32_t spiCtarValue = 0;
@@ -39,16 +49,10 @@ protected:
    /** Inverts writes to the LCD screen */
    uint8_t invertMask = 0;
 
-   /** Frame buffer for graphics mode */
-   uint8_t frameBuffer[(128*64)/8];
-
-public:
-   /** Width of LCD in pixels */
-   static constexpr int LCD_WIDTH  = 128;
-   /** Height of LCD in pixels */
-   static constexpr int LCD_HEIGHT = 64;
-
 protected:
+   /** Frame buffer for graphics mode */
+   uint8_t frameBuffer[(LCD_WIDTH*LCD_HEIGHT)/8];
+
    template<typename T> T max(T a, T b) {
       return (a>b)?a:b;
    }
@@ -87,6 +91,8 @@ protected:
       USBDM::waitUS(100);
    }
 
+
+public:
    /**
     * Initialise the LCD
     */
@@ -109,7 +115,6 @@ protected:
       clear();
    }
 
-public:
    /**
     * Constructor
     *
@@ -124,6 +129,7 @@ public:
     * Clear text screen
     */
    void clear() {
+      setTextMode();
       writeCommand(0b00110000); // Basic instruction mode
       writeCommand(0b00000010); // Home
       writeCommand(0b00000001); // Clear
@@ -230,6 +236,22 @@ public:
     * @param height  Height of image
     */
    void writeImage(const uint8_t *dataPtr, int x, int y, int width, int height) {
+      if ((x<0)||(y<0)) {
+         // Doesn't support negative clipping
+         return;
+      }
+      if ((x>=LCD_WIDTH)||(y>=LCD_HEIGHT)) {
+         // Entirely off screen
+         return;
+      }
+      if ((x+width) > LCD_WIDTH) {
+         // Clip on right
+         width = LCD_WIDTH-x;
+      }
+      if ((y+height) > LCD_HEIGHT) {
+         // Clip at bottom
+         height = LCD_HEIGHT-y;
+      }
       int offset          = x&0x07;
       int offsetPlusWidth = ((x+width-1)&0x07)+1;
       int startMask = (uint8_t)(0xFF>>offset);
@@ -310,11 +332,16 @@ public:
       int width  = USBDM::Fonts::FONT6x8[0][0];
       int height = USBDM::Fonts::FONT6x8[0][1];
       if (ch == '\n') {
+         putSpace(LCD_WIDTH-x);
          x  = 0;
          y += fontHeight;
          fontHeight = 0;
       }
       else {
+         if ((x+width)>LCD_WIDTH) {
+            // Don't display partial characters
+            return;
+         }
          writeImage((uint8_t*)(USBDM::Fonts::FONT6x8[ch-0x20+1]), x, y, width, height);
          x += width;
          fontHeight = max(fontHeight, height);
@@ -347,7 +374,7 @@ public:
    }
 
    /**
-    * Write an Down arrow to the LCD in graphics mode at the current x,y location
+    * Write a Down arrow to the LCD in graphics mode at the current x,y location
     */
    void putDownArrow() {
       static const uint8_t downArrow[] = {0x00,0x10,0x10,0x10,0x54,0x38,0x10,0x00,0x00};
@@ -355,7 +382,7 @@ public:
    }
 
    /**
-    * Write an Up arrow to the LCD in graphics mode at the current x,y location
+    * Write a Left arrow to the LCD in graphics mode at the current x,y location
     */
    void putLeftArrow() {
       static const uint8_t leftArrow[]   = {0x00,0x10,0x20,0x7E,0x20,0x10,0x00,0x00,0x00};
@@ -363,7 +390,7 @@ public:
    }
 
    /**
-    * Write an Down arrow to the LCD in graphics mode at the current x,y location
+    * Write an Right arrow to the LCD in graphics mode at the current x,y location
     */
    void putRightArrow() {
       static const uint8_t rightArrow[] = {0x00,0x08,0x04,0x7E,0x04,0x08,0x00,0x00,0x00};
@@ -371,7 +398,7 @@ public:
    }
 
    /**
-    * Write an Down arrow to the LCD in graphics mode at the current x,y location
+    * Write an Enter symbol to the LCD in graphics mode at the current x,y location
     */
    void putEnter() {
       static const uint8_t enter[] = {0x00,0x02,0x12,0x22,0x7E,0x20,0x10,0x00,0x00};
@@ -398,12 +425,26 @@ public:
    }
 
    /**
-    * Change the current X,Y location for graphics mode
+    * Set the current X,Y location for graphics mode
+    *
+    * @param x
+    * @param y
     */
    void gotoXY(int x, int y) {
       this->x = x;
       this->y = y;
       fontHeight = 0;
+   }
+
+   /**
+    * Get the current X,Y location for graphics mode
+    *
+    * @param x
+    * @param y
+    */
+   void getXY(int &x, int &y) {
+      x = this->x;
+      y = this->y;
    }
 
    /**
@@ -430,12 +471,18 @@ public:
    /**
     * Draw vertical line
     *
-    * @param x Horizontal position in pixels
+    * @param x  Horizontal position in pixels
+    * @param y1 Vertical start position in pixels
+    * @param y2 Vertical end position in pixels
     */
-   void drawVerticalLine(int x) {
+   void drawVerticalLine(int x, int y1=0, int y2=LCD_HEIGHT-1) {
+      if ((x<0)||(x>=LCD_WIDTH)) {
+         // Off screen
+         return;
+      }
       uint8_t mask = 0x80>>(x&7);
       int    offset = x>>3;
-      for (int yy=0; yy<LCD_HEIGHT*LCD_WIDTH; yy+=LCD_WIDTH/8) {
+      for (int yy=y1*(LCD_WIDTH/8); yy<=y2*(LCD_WIDTH/8); yy+=(LCD_WIDTH/8)) {
          if (invertMask) {
             frameBuffer[yy+offset] &= ~mask;
          }
@@ -451,13 +498,13 @@ public:
     * @param y Vertical position in pixels
     */
    void drawHorizontalLine(int y) {
+      if ((y<0)||(y>=LCD_HEIGHT)) {
+         // Off screen
+         return;
+      }
+      uint8_t mask = invertMask?0x00:0xFF;
       for (int xx=0; xx<(LCD_WIDTH/8); xx++) {
-         if (invertMask) {
-            frameBuffer[(y*LCD_WIDTH/8)+xx] = 0x00;
-         }
-         else {
-            frameBuffer[(y*LCD_WIDTH/8)+xx] = 0xFF;
-         }
+         frameBuffer[(y*(LCD_WIDTH/8))+xx] = mask;
       }
    }
 
@@ -468,80 +515,43 @@ public:
     * @param y Vertical position in pixel
     */
    void drawPixel(int x, int y) {
+      if ((x<0)||(x>=LCD_WIDTH)) {
+         // Off screen
+         return;
+      }
+      if ((y<0)||(y>=LCD_HEIGHT)) {
+         // Off screen
+         return;
+      }
       uint8_t mask    = 0x80>>(x&7);
-      int    hOffset = x>>3;
+      int     hOffset = x>>3;
       if (invertMask) {
-         frameBuffer[(y*LCD_WIDTH/8)+hOffset] &= ~mask;
+         frameBuffer[(y*(LCD_WIDTH/8))+hOffset] &= ~mask;
       }
       else {
-         frameBuffer[(y*LCD_WIDTH/8)+hOffset] |= mask;
+         frameBuffer[(y*(LCD_WIDTH/8))+hOffset] |= mask;
       }
    }
 
-   static constexpr int xOrigin   = 17; // Pixels from left edge
-   static constexpr int yOrigin   = 10; // Pixels from bottom edge
-   static constexpr int vGridSize = 10; // 10 pixels = 50 degrees
-   static constexpr int hGridSize = 10; // 10 pixels = 1 minute, 1 pixel = 6s
-
-   void drawAxis(const char *name) {
-      setInversion(false);
-      clearFrameBuffer();
-
-      // Vertical axis
-      drawVerticalLine(xOrigin);
-      for (int temp=50; temp<300; temp+=50) {
-         gotoXY(0, LCD_HEIGHT-yOrigin-((temp*vGridSize)/50)-2);
-         if (temp<100) {
-            putSpace(5);
-         }
-         else {
-            putSmallDigit(temp/100);
-         }
-         putSmallDigit((temp/10)%10);
-         putSmallDigit(temp%10);
-      }
-      // Horizontal axis
-      drawHorizontalLine(LCD_HEIGHT-yOrigin);
-      for (int time=1; time<=8; time++) {
-         gotoXY(xOrigin+(time*hGridSize)-2, LCD_HEIGHT-8);
-         putChar('0'+time);
-      }
-      putSpace(4);
-      putString("min");
-      // Grid
-      for (int y=LCD_HEIGHT-yOrigin; y>0; y-=vGridSize) {
-         for (int x=xOrigin; x<LCD_WIDTH-2; x+=hGridSize) {
-            drawPixel(x,y);
-         }
-      }
-      // Menu
-      constexpr int xMenuOffset = xOrigin+90;
-      constexpr int yMenuOffset = 10;
-      gotoXY(xMenuOffset, yMenuOffset);
-      putString("F1"); putRightArrow(); putSpace(2);
-      gotoXY(xMenuOffset, yMenuOffset+8*1);
-      putString("F2"); putLeftArrow(); putSpace(2);
-      gotoXY(xMenuOffset, yMenuOffset+8*2);
-      putString("S "); putEnter(); putSpace(2);
-
-      // Name
-      constexpr int xNameOffset = xOrigin+2;
-      constexpr int yNameOffset = 0;
-      gotoXY(xNameOffset, yNameOffset);
-      putString(name);
+   /**
+    * Printf style formatted print\n
+    * The string is printed to the screen at the current x,y location
+    *
+    * @param format Format control string (as for printf())
+    * @param ...    Arguments to print
+    *
+    * @return numbers of chars printed?
+    *
+    * @note Limited to 21 characters ~ 1 line
+    */
+   int printf(const char *format, ...) __attribute__ ((format (printf, 2, 3))) {
+      static char buff[22];
+      va_list args;
+      va_start(args, format);
+      int rc = vsnprintf(buff, sizeof(buff), format, args);
+      putString(buff);
+      return rc;
    }
-
-   void drawProfile(const SolderProfile *profile) {
-      drawAxis(profile->name);
-      for (unsigned int index=0; index<(sizeof(SolderProfile::temp)/sizeof(SolderProfile::temp[0])); index++) {
-         int x = xOrigin+(index*hGridSize)/6;
-         int y = LCD_HEIGHT-yOrigin-(profile->temp[index]*vGridSize/50);
-         drawPixel(x,y);
-      }
-      refreshImage();
-      setGraphicMode();
-   }
-
 };
 
 #endif /* SOURCES_LCD_ST7920_H_ */
