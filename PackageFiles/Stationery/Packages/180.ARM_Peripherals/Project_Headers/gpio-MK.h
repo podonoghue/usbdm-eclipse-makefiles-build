@@ -295,9 +295,9 @@ public:
 /**
  * Create GPIO from GpioInfo class
  *
- * @tparam Info            Gpio information class
- * @tparam bitNum          Bit number within PORT/GPIO
- * @tparam polarity        either USBDM::ActiveHigh or USBDM::ActiveLow
+ * @tparam Info          Gpio information class
+ * @tparam bitNum        Bit number within PORT/GPIO
+ * @tparam polarity      Either USBDM::ActiveHigh or USBDM::ActiveLow
  */
 template<class Info, const uint32_t bitNum, Polarity polarity=ActiveHigh>
 class  Gpio_T : public GpioBase_T<Info::clockMask, Info::pcrAddress, Info::gpioAddress, bitNum, polarity> {
@@ -307,9 +307,9 @@ class  Gpio_T : public GpioBase_T<Info::clockMask, Info::pcrAddress, Info::gpioA
 /**
  * Create GPIO from Peripheral Info class
  *
- * @tparam Info            Peripheral information class
- * @tparam index           Index of signal within the info table
- * @tparam polarity        either USBDM::ActiveHigh or USBDM::ActiveLow
+ * @tparam Info          Peripheral information class
+ * @tparam index         Index of signal within the info table
+ * @tparam polarity      Either USBDM::ActiveHigh or USBDM::ActiveLow
  */
 template<class Info, const uint32_t index, Polarity polarity=ActiveHigh>
 using  GpioTable_T = GpioBase_T<Info::info[index].clockMask, Info::info[index].pcrAddress, Info::info[index].gpioAddress, Info::info[index].gpioBit, polarity>;
@@ -480,7 +480,7 @@ public:
  * @endcode
  *
  * @tparam bitNum        Bit number in the port
- * @tparam polarity      True => Active high, False => Active low
+ * @tparam polarity      Either USBDM::ActiveHigh or USBDM::ActiveLow
  */
 template<uint8_t bitNum, Polarity polarity=ActiveHigh> class GpioA : public Gpio_T<GpioAInfo, bitNum, polarity> {};
 using PortA = PcrBase_T<USBDM::GpioAInfo::pcrAddress>;
@@ -556,7 +556,7 @@ template<int left, int right> class GpioAField : public Field_T<GpioAInfo, left,
  * @endcode
  *
  * @tparam bitNum        Bit number in the port
- * @tparam polarity      True => Active high, False => Active low
+ * @tparam polarity      Either USBDM::ActiveHigh or USBDM::ActiveLow
  */
 template<uint8_t bitNum, Polarity polarity=ActiveHigh> class GpioB : public Gpio_T<GpioBInfo, bitNum, polarity> {};
 using PortB = PcrBase_T<USBDM::GpioBInfo::pcrAddress>;
@@ -632,7 +632,7 @@ template<int left, int right> class GpioBField : public Field_T<GpioBInfo, left,
  * @endcode
  *
  * @tparam bitNum        Bit number in the port
- * @tparam polarity      True => Active high, False => Active low
+ * @tparam polarity      Either USBDM::ActiveHigh or USBDM::ActiveLow
  */
 template<uint8_t bitNum, Polarity polarity=ActiveHigh> class GpioC : public Gpio_T<GpioCInfo, bitNum, polarity> {};
 using PortC = PcrBase_T<USBDM::GpioCInfo::pcrAddress>;
@@ -708,7 +708,7 @@ template<int left, int right> class GpioCField : public Field_T<GpioCInfo, left,
  * @endcode
  *
  * @tparam bitNum        Bit number in the port
- * @tparam polarity      True => Active high, False => Active low
+ * @tparam polarity      Either USBDM::ActiveHigh or USBDM::ActiveLow
  */
 template<uint8_t bitNum, Polarity polarity=ActiveHigh> class GpioD : public Gpio_T<GpioDInfo, bitNum, polarity> {};
 using PortD = PcrBase_T<USBDM::GpioDInfo::pcrAddress>;
@@ -784,7 +784,7 @@ template<int left, int right> class GpioDField : public Field_T<GpioDInfo, left,
  * @endcode
  *
  * @tparam bitNum        Bit number in the port
- * @tparam polarity      True => Active high, False => Active low
+ * @tparam polarity      Either USBDM::ActiveHigh or USBDM::ActiveLow
  */
 template<uint8_t bitNum, Polarity polarity=ActiveHigh> class GpioE : public Gpio_T<GpioEInfo, bitNum, polarity> {};
 using PortE = PcrBase_T<USBDM::GpioEInfo::pcrAddress>;

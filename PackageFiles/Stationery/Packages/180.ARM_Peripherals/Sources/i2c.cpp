@@ -1,5 +1,6 @@
 /**
  * @file i2c.cpp
+ * @brief I2C Code
  *
  * @version  V4.12.1.80
  * @date     13 April 2016

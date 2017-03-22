@@ -48,7 +48,7 @@ Change History
 namespace USBDM {
 
 /** BDTs organised by endpoint, odd/even, tx/rx */
-EndpointBdtEntry endPointBdts[Usb0::NUMBER_OF_ENDPOINTS] __attribute__ ((aligned (512)));
+EndpointBdtEntry endPointBdts[Usb0::NUMBER_OF_ENDPOINTS] __attribute__((aligned (512)));
 
 #ifdef MS_COMPATIBLE_ID_FEATURE
 

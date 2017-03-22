@@ -151,6 +151,8 @@ public:
    }
    /**
     *   Disable the PIT channel
+    *
+    *   @param channel Channel to disable
     */
    static void finalise(uint8_t channel) {
       *clockReg &= ~Info::clockMask;
@@ -240,6 +242,8 @@ public:
    }
    /**
     *   Disable the PIT channel
+    *
+    *   @param channel Channel to disable
     */
    static void finaliseChannel(uint8_t channel) {
 

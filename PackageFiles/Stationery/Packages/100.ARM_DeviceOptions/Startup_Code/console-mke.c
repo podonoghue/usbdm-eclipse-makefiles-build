@@ -27,7 +27,7 @@ inline static void initDefaultUart()  {
    // Enable clock to UART
    SIM->SCGC |= SIM_SCGC_UART1_MASK;
 }
-#elif defined(MCU_MKE04Z8M4)
+#elif defined(MCU_MKE04Z4)
 //=================================================================================
 // UART to use
 //

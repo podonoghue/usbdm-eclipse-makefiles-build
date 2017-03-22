@@ -1,5 +1,6 @@
-/*
- * flexRam.h
+/**
+ * @file    flash.h
+ * @brief   Flash support
  *
  *  Created on: 21 Sep 2016
  *      Author: podonoghue
@@ -45,7 +46,7 @@ protected:
     * Alternatively, the startup code may call the static methods directly.
     */
    Flash() {
-      static int singletonFlag = false;
+      static int singletonFlag __attribute__((unused)) = false;
       assert (!singletonFlag);
       singletonFlag = true;
    }
@@ -186,17 +187,15 @@ public:
     * @return true => OK, false => timeout
     */
    static bool waitForFlashReady() {
-      static auto func = [] () { return (FTFL->FSTAT&FTFL_FSTAT_CCIF_MASK) != 0; };
-      if (func()) {
-         // Common case - avoid overhead of timeout code
-         return true;
+      for(int timeout=0; timeout<100000; timeout++) {
+         if ((FTFL->FSTAT&FTFL_FSTAT_CCIF_MASK) != 0) {
+            return true;
+         }
       }
-      // Wait for flash ready
-      // Wait for a maximum of 2000 ms
-      return USBDM::waitMS(2000, func);
+      return false;
    }
-
 };
+
 /**
  * Class to wrap a scalar variable allocated within the FlexRam area\n
  * Size is limited to 1, 2 or 4 bytes.
@@ -292,6 +291,7 @@ public:
     * Return the underlying object - read-only!
     */
    operator T() const {
+      Flash::waitForFlashReady();
       return data;
    }
 };
@@ -316,7 +316,7 @@ public:
 template <typename T, int dimension>
 class NonvolatileArray {
 
-   static_assert((sizeof(T) == 1)||(sizeof(T) == 2)||(sizeof(T) == 4), "T must be 1,2 or 4 bytes in size");
+   static_assert((sizeof(T) == 1)||(sizeof(T) == 2)||(sizeof(T) == 4), "T must be 1, 2 or 4 bytes in size");
 
 private:
    using TArray = T[dimension];
@@ -334,6 +334,8 @@ public:
    /**
     * Assign to underlying array
     *
+    * @param other TArray to assign from
+    *
     * This adds a wait for the Flash to be updated after each element is assigned
     */
    void operator=(const TArray &other ) {
@@ -345,6 +347,8 @@ public:
 
    /**
     * Assign to underlying array
+    *
+    * @param other NonvolatileArray to assign from
     *
     * This adds a wait for the Flash to be updated after each element is assigned
     */
@@ -358,6 +362,8 @@ public:
    /**
     * Assign to underlying array
     *
+    * @param other NonvolatileArray to assign to
+    *
     * This adds a wait for the Flash to be updated after each element is assigned
     */
    void copyTo(T *other) const {
@@ -368,9 +374,13 @@ public:
 
    /**
     * Return a reference to the underlying array element - read-only!
+    *
+    * @param index Index of element to return
+    *
+    * @return Reference to underlying array
     */
-   const T operator [](int i) {
-      return data[i];
+   const T operator [](int index) {
+      return data[index];
    }
 
    /**

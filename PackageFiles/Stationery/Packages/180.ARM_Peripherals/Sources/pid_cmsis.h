@@ -10,7 +10,7 @@
 #define PROJECT_HEADERS_PID_H_
 
 #include <time.h>
-#include "pit.h"
+#include "cmsis.h"
 #include "pid.h"
 
 class Pid {
@@ -21,13 +21,13 @@ public:
 
 /**
  * PID Controller
+ * Makes use of CMSIS Timer callback
  *
  * These template parameters connect the PID controller to the input and output functions
  * @tparam inputFn      Input function  - used to obtain value of system state
  * @tparam outputFn     Output function - used to control the output variable
- * @tparam timerChannel The PIT channel to use for timing
  */
-template<Pid::InFunction inputFn, Pid::OutFunction outputFn, unsigned timerChannel>
+template<Pid::InFunction inputFn, Pid::OutFunction outputFn>
 class Pid_T : Pid {
 
 private:
@@ -52,20 +52,16 @@ private:
    unsigned tickCount = 0;    //! Time in ticks since last enabled
 
 private:
-   class FunctionWrapper {
-      static Pid_T *This;
+   /** Used by static callback to locate class */
+   static Pid_T *This;
 
-   public:
-      FunctionWrapper(Pid_T *This) {
-         this->This = This;
-      };
-      static void f(void) {
-         This->update();
-      }
-   };
+   /** Used to wrap the class method for passing to Timer callback */
+   static void callBack(const void *) {
+      This->update();
+   }
 
-   /** Used to wrap the class function for passing to callback */
-   FunctionWrapper *functionWrapper = new FunctionWrapper(this);
+   /** Used to wrap the class function for passing to Timer callback */
+   CMSIS::Timer<osTimerPeriodic> timer{callBack};
 
 public:
    /**
@@ -79,20 +75,16 @@ public:
     * @param outMax      Maximum value of output variable
     */
    Pid_T(double Kp, double Ki, double Kd, double interval, double outMin, double outMax) :
-      interval(interval), outMin(outMin), outMax(outMax), enabled(false)  {
+      interval(interval), outMin(outMin), outMax(outMax), enabled(false) {
       setTunings(Kp, Ki, Kd);
-
-      // Using PIT
-      USBDM::Pit::enable();
-      USBDM::Pit::setCallback(timerChannel, functionWrapper->f);
+      This = this;
    }
 
    ~Pid_T() {
-      delete functionWrapper;
    }
 
    void initialise() {
-      timer = new CMSIS::Timer(functionWrapper->f, osTimerPeriodic);
+//      timer.create();
    }
 
    /**
@@ -108,12 +100,13 @@ public:
             currentInput = inputFn();
             integral     = 0; //currentOutput;
             tickCount    = 0;
+            timer.start(interval);
          }
       }
+      else {
+         timer.stop();
+      }
       enabled = enable;
-      USBDM::Pit::setPeriod(timerChannel, interval);
-      USBDM::Pit::enableChannel(timerChannel, enable);
-      USBDM::Pit::enableInterrupts(timerChannel, enable);
    }
 
    /**
@@ -233,7 +226,7 @@ private:
    /**
     * Main PID calculation
     *
-    * Executed at \ref interval by PIT callback
+    * Executed at \ref interval by Timer callback
     */
    void update() {
       if(!enabled) {
@@ -268,7 +261,7 @@ private:
    }
 
 };
-template<Pid::InFunction inputFn, Pid::OutFunction outputFn, unsigned timerChannel>
-Pid_T<inputFn, outputFn, timerChannel>* Pid_T<inputFn, outputFn, timerChannel>::FunctionWrapper::This = nullptr;
+template<Pid::InFunction inputFn, Pid::OutFunction outputFn>
+Pid_T<inputFn, outputFn>* Pid_T<inputFn, outputFn>::This = nullptr;
 
 #endif // PROJECT_HEADERS_PID_H_

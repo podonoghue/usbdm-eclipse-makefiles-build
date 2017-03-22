@@ -302,6 +302,8 @@ public:
 
    /**
     * Set pull device on pin
+    *
+    *  @param mode Pull selection mode
     */
    static void setPullDevice(PullModes mode) {
       *pcrReg = (*pcrReg&~PORT_PCR_PS_MASK) | mode;

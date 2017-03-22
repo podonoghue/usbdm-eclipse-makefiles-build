@@ -167,18 +167,24 @@ public:
 
    /**
     * Gets pointer to USB data buffer
+    *
+    * @return Pointer to buffer
     */
     uint8_t *getBuffer() {
       return fDataBuffer;
    }
    /**
     * Gets size of last completed transfer
+    *
+    * @return Size of transfer
     */
     uint16_t getDataTransferredSize() {
       return fDataTransferred;
    }
    /**
     * Return end-point state
+    *
+    * @return Endpoint state
     */
     EndpointState getState() {
       return state;
@@ -195,6 +201,8 @@ public:
 
    /**
     * Do callback if set
+    *
+    * @param state State of Endpoint
     */
     void doCallback(EndpointState state) {
       if (fCallback != nullptr) {
@@ -217,7 +225,7 @@ public:
    /**
     * Stall endpoint
     */
-   virtual void stall() {
+   virtual void stall() override {
       state = EPStall;
       usb->ENDPOINT[ENDPOINT_NUM].ENDPT |= USB_ENDPT_EPSTALL_MASK;
    }
@@ -225,7 +233,7 @@ public:
    /**
     * Clear Stall on endpoint
     */
-   virtual void clearStall() {
+   virtual void clearStall() override {
       usb->ENDPOINT[ENDPOINT_NUM].ENDPT &= ~USB_ENDPT_EPSTALL_MASK;
       state               = EPIdle;
       txData1             = DATA0;
@@ -495,15 +503,15 @@ public:
  * Class for CONTROL endpoint
  *
  * @tparam ENDPOINT_NUM Endpoint number
- * @tparam EP_MAXSIZE   Maximum size of packet
+ * @tparam EP0_SIZE   Maximum size of packet
  */
-template<class Info, int EP_MAXSIZE>
-class ControlEndpoint : public Endpoint_T<Info, 0, EP_MAXSIZE> {
+template<class Info, int EP0_SIZE>
+class ControlEndpoint : public Endpoint_T<Info, 0, EP0_SIZE> {
 
 public:
-   using Endpoint_T<Info, 0, EP_MAXSIZE>::txOdd;
-   using Endpoint_T<Info, 0, EP_MAXSIZE>::usb;
-   using Endpoint_T<Info, 0, EP_MAXSIZE>::startTxTransaction;
+   using Endpoint_T<Info, 0, EP0_SIZE>::txOdd;
+   using Endpoint_T<Info, 0, EP0_SIZE>::usb;
+   using Endpoint_T<Info, 0, EP0_SIZE>::startTxTransaction;
 
    /**
     * Constructor
@@ -524,7 +532,7 @@ public:
     *  - usb->ENDPOINT[].ENDPT
     */
     void initialise() {
-      Endpoint_T<Info, 0, EP_MAXSIZE>::initialise();
+      Endpoint_T<Info, 0, EP0_SIZE>::initialise();
       // Receive/Transmit/SETUP
       usb->ENDPOINT[0].ENDPT = USB_ENDPT_EPRXEN_MASK|USB_ENDPT_EPTXEN_MASK|USB_ENDPT_EPHSHK_MASK;
    }
@@ -548,7 +556,7 @@ public:
       // Release BDT as SIE doesn't
       BdtEntry *bdt = txOdd?&endPointBdts[0].txOdd:&endPointBdts[0].txEven;
       bdt->u.bits   = 0;
-      Endpoint_T<Info, 0, EP_MAXSIZE>::clearStall();
+      Endpoint_T<Info, 0, EP0_SIZE>::clearStall();
    }
 
    /**

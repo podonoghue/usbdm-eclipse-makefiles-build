@@ -11,7 +11,7 @@
 #include <string.h>
 
 #include "usb.h"
-#include "usb_cdc_uart.h"
+#include "usb_implementation_cdc.h"
 
 namespace USBDM {
 
@@ -181,12 +181,17 @@ const Usb0::Descriptors Usb0::otherDescriptors = {
        */
 };
 
+/** In end-point for CDC notifications */
+InEndpoint  <Usb0Info, Usb0::CDC_NOTIFICATION_ENDPOINT, CDC_NOTIFICATION_EP_MAXSIZE>  Usb0::epCdcNotification;
+/** Out end-point for CDC data out */
+OutEndpoint <Usb0Info, Usb0::CDC_DATA_OUT_ENDPOINT,     CDC_DATA_OUT_EP_MAXSIZE>      Usb0::epCdcDataOut;
+/** In end-point for CDC data in */
+InEndpoint  <Usb0Info, Usb0::CDC_DATA_IN_ENDPOINT,      CDC_DATA_IN_EP_MAXSIZE>       Usb0::epCdcDataIn;
 /*
  * TODO Add additional end-points here
  */
-InEndpoint  <Usb0Info, Usb0::CDC_NOTIFICATION_ENDPOINT, CDC_NOTIFICATION_EP_MAXSIZE>  Usb0::epCdcNotification;
-OutEndpoint <Usb0Info, Usb0::CDC_DATA_OUT_ENDPOINT,     CDC_DATA_OUT_EP_MAXSIZE>      Usb0::epCdcDataOut;
-InEndpoint  <Usb0Info, Usb0::CDC_DATA_IN_ENDPOINT,      CDC_DATA_IN_EP_MAXSIZE>       Usb0::epCdcDataIn;
+
+SCPI_Interface::Response  *Usb0::response = nullptr;
 
 /**
  * Handler for Start of Frame Token interrupt (~1ms interval)
@@ -232,9 +237,11 @@ void Usb0::sofCallback() {
  */
 void Usb0::epCdcSendNotification() {
    const CDCNotification cdcNotification= {CDC_NOTIFICATION, SERIAL_STATE, 0, RT_INTERFACE, nativeToLe16(2)};
-   uint8_t status = Uart::getSerialState().bits;
+   static uint8_t lastStatus = -1;
+   uint8_t status = cdcInterface::getSerialState().bits;
 
-   if ((status & Uart::CDC_STATE_CHANGE_MASK) == 0) {
+   if (status == lastStatus) {
+      // No change
       return;
    }
    if (epCdcNotification.getState() != EPIdle) {
@@ -243,9 +250,11 @@ void Usb0::epCdcSendNotification() {
    }
    static_assert(epCdcNotification.BUFFER_SIZE>=sizeof(CDCNotification), "Buffer size insufficient");
 
+   lastStatus = status;
+
    // Copy the data to Tx buffer
    (void)memcpy(epCdcNotification.getBuffer(), &cdcNotification, sizeof(cdcNotification));
-   epCdcNotification.getBuffer()[sizeof(cdcNotification)+0] = status&~Uart::CDC_STATE_CHANGE_MASK;
+   epCdcNotification.getBuffer()[sizeof(cdcNotification)+0] = status;
    epCdcNotification.getBuffer()[sizeof(cdcNotification)+1] = 0;
 
    // Set up to Tx packet
@@ -304,71 +313,52 @@ void Usb0::handleTokenComplete() {
 
 /**
  * Call-back handling CDC-OUT transaction complete\n
- * Data received is passed to the UART
+ * Data received is passed to the cdcInterface
  *
  * @param state Current end-point state
  */
 void Usb0::cdcOutTransactionCallback(EndpointState state) {
-//   PRINTF("cdc_out\n");
+   //   PRINTF("cdc_out\n");
    if (state == EPDataOut) {
-      uint8_t *buff = epCdcDataOut.getBuffer();
-      for (int i=epCdcDataOut.getDataTransferredSize(); i>0; i--) {
-         if (!Uart::putChar(*buff++)) {
-            // Discard further data in this transfer
-            break;
-         }
-      }
-      // Set up for next transfer
-      epCdcDataOut.startRxTransaction(EPDataOut, epCdcDataOut.BUFFER_SIZE);
+      cdcInterface::putData(epCdcDataOut.getDataTransferredSize(), epCdcDataOut.getBuffer());
    }
+   // Set up for next transfer
+   epCdcDataOut.startRxTransaction(EPDataOut, epCdcDataOut.BUFFER_SIZE);
 }
-
-static Queue<100> inQueue;
 
 /**
  * Call-back handling CDC-IN transaction complete\n
- * Checks for data from UART and schedules transfer as necessary
+ * Checks for data and schedules transfer as necessary\n
+ * Each transfer will have a ZLP as necessary.
  *
  * @param state Current end-point state
  */
 void Usb0::cdcInTransactionCallback(EndpointState state) {
-   if (state == EPDataIn) {
-      int     charCount = 0;
-      uint8_t *buff     = epCdcDataIn.getBuffer();
-
-      // Copy characters from UART to end-point buffer
-      while(!inQueue.isEmpty()) {
-         if (charCount>=epCdcDataIn.BUFFER_SIZE) {
-            // Buffer full. Leave rest for next transfer.
-            break;
-         }
-         *buff++ = inQueue.deQueue();
-         charCount++;
+   if ((state == EPDataIn)||(state == EPIdle)) {
+      if (response != nullptr) {
+         // Free last buffer as transfer is now complete
+         SCPI_Interface::freeResponseBuffer(response);
       }
-      if (charCount>0) {
-//         PRINTF("Sending %d\n", charCount);
-         // Schedules transfer if data available
-         epCdcDataIn.startTxTransaction(EPDataIn, charCount);
+      // Get up new message
+      response = SCPI_Interface::getResponse();
+      if (response == nullptr) {
+         // No messages waiting
+         return;
       }
+      // Schedules transfer
+      epCdcDataIn.setNeedZLP();
+      epCdcDataIn.startTxTransaction(EPDataIn, response->size, response->data);
    }
 }
 
 /**
- * Add character to CDC OUT buffer.
+ * Notify IN (device->host) endpoint that data is available
  *
- * @param ch Character to send
- *
- * @return true  Character added
- * @return false Overrun, character not added
+ * @return Not used
  */
-bool Usb0::putCdcChar(uint8_t ch) {
-   if (inQueue.isFull()) {
-      return false;
-   }
-   inQueue.enQueue(ch);
+bool Usb0::notify() {
    if (epCdcDataIn.getState() == EPIdle) {
-      IrqProtect ip;
-      // Restart IN transfer
+      // Have to restart IN transactions
       cdcInTransactionCallback(EPDataIn);
    }
    return true;
@@ -386,9 +376,13 @@ void Usb0::initialise() {
    setUnhandledSetupCallback(handleUserEp0SetupRequests);
 
    setSOFCallback(sofCallback);
+
+   cdcInterface::initialise();
+   cdcInterface::setUsbNotifyCallback(notify);
    /*
     * TODO Additional initialisation
     */
+   response = nullptr;
 }
 
 /**
@@ -396,18 +390,19 @@ void Usb0::initialise() {
  */
 void Usb0::handleSetLineCoding() {
 //   PRINTF("handleSetLineCoding()\n");
+   static LineCodingStructure lineCoding;
 
    // Call-back to do after transaction complete
    static auto callback = []() {
       // The controlEndpoint buffer will contain the LineCodingStructure data at call-back time
-      Uart::setLineCoding((LineCodingStructure * const)controlEndpoint.getBuffer());
+      cdcInterface::setLineCoding(&lineCoding);
       setSetupCompleteCallback(nullptr);
    };
    setSetupCompleteCallback(callback);
 
    // Don't use external buffer - this requires response to fit in internal EP buffer
    static_assert(sizeof(LineCodingStructure) < controlEndpoint.BUFFER_SIZE, "Buffer insufficient size");
-   controlEndpoint.startRxTransaction(EPDataOut, sizeof(LineCodingStructure));
+   controlEndpoint.startRxTransaction(EPDataOut, sizeof(LineCodingStructure), (uint8_t*)&lineCoding);
 }
 
 /**
@@ -416,7 +411,7 @@ void Usb0::handleSetLineCoding() {
 void Usb0::handleGetLineCoding() {
 //   PRINTF("handleGetLineCoding()\n");
    // Send packet
-   ep0StartTxTransaction( sizeof(LineCodingStructure), (const uint8_t*)Uart::getLineCoding());
+   ep0StartTxTransaction( sizeof(LineCodingStructure), (const uint8_t*)&cdcInterface::getLineCoding());
 }
 
 /**
@@ -424,7 +419,7 @@ void Usb0::handleGetLineCoding() {
  */
 void Usb0::handleSetControlLineState() {
 //   PRINTF("handleSetControlLineState(%X)\n", ep0SetupBuffer.wValue.lo());
-   Uart::setControlLineState(ep0SetupBuffer.wValue.lo());
+   cdcInterface::setControlLineState(ep0SetupBuffer.wValue.lo());
    // Tx empty Status packet
    ep0StartTxTransaction( 0, nullptr );
 }
@@ -434,7 +429,7 @@ void Usb0::handleSetControlLineState() {
  */
 void Usb0::handleSendBreak() {
 //   PRINTF("handleSendBreak()\n");
-   Uart::sendBreak(ep0SetupBuffer.wValue);
+   cdcInterface::sendBreak(ep0SetupBuffer.wValue);
    // Tx empty Status packet
    ep0StartTxTransaction( 0, nullptr );
 }

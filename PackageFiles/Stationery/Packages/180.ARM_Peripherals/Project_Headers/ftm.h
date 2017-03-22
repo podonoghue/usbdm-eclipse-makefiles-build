@@ -656,6 +656,8 @@ public:
    /**
     * Enable channel (and set mode)\n
     * Doesn't affect shared settings of owning FTM
+    *
+    * @param mode Mode of operation for FTM e.g.ftm_pwmHighTruePulses
     */
    static void enableChannel(Ftm_ChannelMode mode = ftm_pwmHighTruePulses) {
       FtmBase_T<Info>::tmr->CONTROLS[channel].CnSC = mode;

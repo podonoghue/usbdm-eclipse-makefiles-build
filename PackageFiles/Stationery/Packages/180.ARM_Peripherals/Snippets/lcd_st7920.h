@@ -1,5 +1,5 @@
-/*
- * lcd_st7920.h
+/**
+ * @file lcd_st7920.h
  *
  *  Created on: 18 Sep 2016
  *      Author: podonoghue
@@ -8,8 +8,14 @@
 #ifndef SOURCES_LCD_ST7920_H_
 #define SOURCES_LCD_ST7920_H_
 
-#include <hardware.h>
 #include <stdint.h>
+#include <string.h>
+#include <stdarg.h>
+#include <stdio.h>
+#include "fonts.h"
+#include "hardware.h"
+#include "spi.h"
+#include "delay.h"
 
 /**
  * Class representing an LCD connected over SPI
@@ -33,7 +39,7 @@ protected:
    uint32_t spiCtarValue = 0;
 
    /** SPI used for LCD */
-   USBDM::Spi *spi;
+   USBDM::Spi &spi;
 
    const int pinNum;
 
@@ -68,9 +74,12 @@ protected:
             (uint8_t)(value&0xF0),
             (uint8_t)(value<<4),
       };
-      spi->setCTAR0Value(spiCtarValue);
-      spi->setPushrValue(SPI_PUSHR_CTAS(0)|SPI_PUSHR_PCS(1<<pinNum));
-      spi->txRxBytes(sizeof(data), data, nullptr);
+      {
+         IrqProtect protect;
+         spi.setCTAR0Value(spiCtarValue);
+         spi.setPushrValue(SPI_PUSHR_CTAS(0)|SPI_PUSHR_PCS(1<<pinNum));
+         spi.txRxBytes(sizeof(data), data, nullptr);
+      }
       USBDM::waitUS(100);
    }
 
@@ -85,9 +94,12 @@ protected:
             (uint8_t)(value&0xF0),
             (uint8_t)(value<<4),
       };
-      spi->setCTAR0Value(spiCtarValue);
-      spi->setPushrValue(SPI_PUSHR_CTAS(0)|SPI_PUSHR_PCS(1<<pinNum));
-      spi->txRxBytes(sizeof(data), data, nullptr);
+      {
+         IrqProtect protect;
+         spi.setCTAR0Value(spiCtarValue);
+         spi.setPushrValue(SPI_PUSHR_CTAS(0)|SPI_PUSHR_PCS(1<<pinNum));
+         spi.txRxBytes(sizeof(data), data, nullptr);
+      }
       USBDM::waitUS(100);
    }
 
@@ -98,16 +110,17 @@ public:
     */
    void initialise() {
       USBDM::waitMS(200);
+      {
+         IrqProtect protect;
+         spi.setPcsPolarity(pinNum, false);
+         spi.setSpeed(5000000);
+         spi.setMode(USBDM::SPI_MODE3);
+         spi.setDelays(0.5*USBDM::us, 0.5*USBDM::us, 0.5*USBDM::us);
+         spi.setFrameSize(8);
 
-      spi->setPcsPolarity(pinNum, true);
-      spi->setSpeed(1000000);
-      spi->setMode(USBDM::SPI_MODE3);
-      spi->setDelays(0.5*USBDM::us, 0.5*USBDM::us, 0.5*USBDM::us);
-      spi->setFrameSize(8);
-
-      // Record CTAR value in case SPI shared
-      spiCtarValue = spi->getCTAR0Value();
-
+         // Record CTAR value in case SPI shared
+         spiCtarValue = spi.getCTAR0Value();
+      }
       writeCommand(0b00111000); // Function set(DL=1, RE=0)
       writeCommand(0b00001100); // On/Off(D=1 C=0, B=0)
       writeCommand(0b00000110); // EntryMode(I/D=1,S=0)
@@ -121,8 +134,8 @@ public:
     * @param spi     The SPI to use to communicate with LCD
     * @param pinNum  Number of PCS to use
     */
-   LCD_ST7920(USBDM::Spi *spi, int pinNum) : spi(spi), pinNum(pinNum) {
-      initialise();
+   LCD_ST7920(USBDM::Spi &spi, int pinNum) : spi(spi), pinNum(pinNum) {
+//      initialise();
    }
 
    /**
@@ -403,14 +416,6 @@ public:
    void putEnter() {
       static const uint8_t enter[] = {0x00,0x02,0x12,0x22,0x7E,0x20,0x10,0x00,0x00};
       putCustomChar(enter, 7, 8);
-   }
-
-   /**
-    * Write an Degrees symbol to the LCD in graphics mode at the current x,y location
-    */
-   void putDegree() {
-      static const uint8_t enter[] = {0x00,0x18,0x24,0x24,0x18,0x00,0x00,0x00,0x00};
-      putCustomChar(enter, 6, 8);
    }
 
    /**

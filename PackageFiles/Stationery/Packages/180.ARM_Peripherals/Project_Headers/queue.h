@@ -1,5 +1,5 @@
-/*
- * queue.h
+/**
+ * @file queue.h
  *
  *  Created on: 12Nov.,2016
  *      Author: podonoghue

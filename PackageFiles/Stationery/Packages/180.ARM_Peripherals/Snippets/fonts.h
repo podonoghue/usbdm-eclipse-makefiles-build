@@ -1,3 +1,7 @@
+/**
+ * @file    fonts.h
+ * @brief   Fonts for LCD
+ */
 #ifndef INCLUDE_USBDM_FONTS_H
 #define INCLUDE_USBDM_FONTS_H
 

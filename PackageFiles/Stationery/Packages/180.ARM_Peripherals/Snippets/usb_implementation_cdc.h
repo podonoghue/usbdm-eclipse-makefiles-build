@@ -65,14 +65,13 @@ namespace USBDM {
 //======================================================================
 // Maximum packet sizes for each endpoint
 //
-static constexpr uint  CONTROL_EP_MAXSIZE           = 64; //!< Control in/out    64
+static constexpr uint  CONTROL_EP_MAXSIZE           = 64; //!< Control in/out
 /*
  *  TODO Define additional end-point sizes
  */
-
-static constexpr uint  CDC_NOTIFICATION_EP_MAXSIZE  = 16; //!< CDC notification  16
-static constexpr uint  CDC_DATA_OUT_EP_MAXSIZE      = 16; //!< CDC data out      16
-static constexpr uint  CDC_DATA_IN_EP_MAXSIZE       = 16; //!< CDC data in       16
+static constexpr uint  CDC_NOTIFICATION_EP_MAXSIZE  = 16; //!< CDC notification
+static constexpr uint  CDC_DATA_OUT_EP_MAXSIZE      = 16; //!< CDC data out
+static constexpr uint  CDC_DATA_IN_EP_MAXSIZE       = 16; //!< CDC data in
 
 #ifdef USBDM_USB0_IS_DEFINED
 /**
@@ -142,12 +141,12 @@ public:
     * Configuration numbers, consecutive from 1
     */
    enum Configurations {
-     CONFIGURATION_NUM = 1,
-     /*
-      * Assumes single configuration
-      */
-     /** Total number of configurations */
-     NUMBER_OF_CONFIGURATIONS = CONFIGURATION_NUM,
+      CONFIGURATION_NUM = 1,
+      /*
+       * Assumes single configuration
+       */
+      /** Total number of configurations */
+      NUMBER_OF_CONFIGURATIONS = CONFIGURATION_NUM,
    };
 
    /**
@@ -157,20 +156,24 @@ public:
 
 protected:
    /* end-points */
+   /** In end-point for CDC notifications */
    static InEndpoint  <Usb0Info, Usb0::CDC_NOTIFICATION_ENDPOINT, CDC_NOTIFICATION_EP_MAXSIZE>  epCdcNotification;
+   /** Out end-point for CDC data out */
    static OutEndpoint <Usb0Info, Usb0::CDC_DATA_OUT_ENDPOINT,     CDC_DATA_OUT_EP_MAXSIZE>      epCdcDataOut;
+   /** In end-point for CDC data in */
    static InEndpoint  <Usb0Info, Usb0::CDC_DATA_IN_ENDPOINT,      CDC_DATA_IN_EP_MAXSIZE>       epCdcDataIn;
    /*
     * TODO Add additional End-points here
     */
-
-
-   using Uart = CdcUart<Uart0Info>;
+	
+   using cdcInterface = CdcUart<Uart0Info>;
 
 public:
 
    /**
-    * Initialise the USB interface
+    * Initialise the USB0 interface
+    *
+    *  @note Assumes clock set up for USB operation (48MHz)
     */
    static void initialise();
 
@@ -192,7 +195,12 @@ public:
     */
    static int receiveCdcData(uint8_t *data, unsigned maxSize);
 
-   static bool putCdcChar(uint8_t ch);
+   /**
+    * Notify IN (device->host) endpoint that data is available
+    *
+    * @return Not used
+    */
+   static bool notify();
 
    /**
     * Device Descriptor
@@ -221,7 +229,7 @@ public:
    };
 
    /**
-    * Other descriptors
+    * All other descriptors
     */
    static const Descriptors otherDescriptors;
 
@@ -246,9 +254,8 @@ protected:
 
       // Start CDC status transmission
       epCdcSendNotification();
-	  
-      static const uint8_t cdcInBuff[] = "Hello there\n";
-      epCdcDataIn.startTxTransaction(EPDataIn, sizeof(cdcInBuff), cdcInBuff);
+
+      cdcInterface::setUsbNotifyCallback(notify);
       /*
        * TODO Initialise additional End-points here
        */
@@ -260,12 +267,19 @@ protected:
    static void sofCallback();
 
    /**
-    * Call-back handling CDC-INtransaction complete
+    * Call-back handling CDC-IN transaction complete\n
+    * Checks for data and schedules transfer as necessary\n
+    * Each transfer will have a ZLP as necessary.
+    *
+    * @param state Current end-point state
     */
    static void cdcInTransactionCallback(EndpointState state);
 
    /**
-    * Call-back handling CDC-OUT transaction complete
+    * Call-back handling CDC-OUT transaction complete\n
+    * Data received is passed to the cdcInterface
+    *
+    * @param state Current end-point state
     */
    static void cdcOutTransactionCallback(EndpointState state);
 

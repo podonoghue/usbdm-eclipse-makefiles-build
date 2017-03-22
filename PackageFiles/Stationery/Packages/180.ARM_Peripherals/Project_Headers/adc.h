@@ -195,6 +195,11 @@ public:
 
    /**
     * Configure ADC
+    *
+    * @param cfg1 CFG1 register value
+    * @param cfg2 CFG1 register value
+    * @param sc2  SC2 register value
+    *
     */
    static void configure(uint32_t cfg1=Info::cfg1, uint32_t cfg2=Info::cfg2, uint32_t sc2=Info::sc2) {
       // Set mode
