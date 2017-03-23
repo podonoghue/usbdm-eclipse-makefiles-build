@@ -81,18 +81,24 @@ inline static void initDefaultUart()  {
 #endif
 
 /*
- * Initialises the UART
- *
- * @param baudrate - the baud rate to use e.g. 19200
+ * Initialises the Console with default settings
  */
-void console_initialise(int baudrate) {
+void console_initialise() {
    initDefaultUart();
+   console_setBaudRate(DEFAULT_BAUD_RATE);
+}
 
+/**
+ * Set Console baud rate
+ *
+ * @param baudRate - the baud rate to use e.g. 19200
+ */
+void console_setBaudRate(int baudRate) {
    // Disable UART before changing registers
    UART->C2 &= ~(UART_C2_TE_MASK | UART_C2_RE_MASK);
 
    // Calculate UART clock setting (5-bit fraction at right)
-   int scaledBaudValue = (2*UART_CLOCK)/(baudrate);
+   int scaledBaudValue = (2*UART_CLOCK)/(baudRate);
 
 #ifdef UART_C4_BRFA_MASK
    // Set Baud rate register
@@ -101,7 +107,7 @@ void console_initialise(int baudrate) {
    // Fractional divider to get closer to the baud rate
    UART->C4 = (UART->C4&~UART_C4_BRFA_MASK) | UART_C4_BRFA(scaledBaudValue);
 #else
-	scaledBaudValue += 1<<4; // Round value
+   scaledBaudValue += 1<<4; // Round value
    // Set Baud rate register
    UART->BDH = (UART->BDH&~UART_BDH_SBR_MASK) | UART_BDH_SBR((scaledBaudValue>>(8+5)));
    UART->BDL = UART_BDL_SBR(scaledBaudValue>>5);

@@ -25,13 +25,13 @@ uint32_t SystemCoreClock = 4000000;
 extern int const __vector_table[];
 
 #ifndef SCB
-   #define SCB_VTOR                 (*(uint32_t *)0xE000ED08)
-   #define SCB_CCR                  (*(uint32_t *)0xE000ED14)
-   #define SCB_CCR_DIV_0_TRP_MASK   (1<<4)
-   #define SCB_CCR_UNALIGN_TRP_MASK (1<<3)
+#define SCB_VTOR                 (*(uint32_t *)0xE000ED08)
+#define SCB_CCR                  (*(uint32_t *)0xE000ED14)
+#define SCB_CCR_DIV_0_TRP_MASK   (1<<4)
+#define SCB_CCR_UNALIGN_TRP_MASK (1<<3)
 #else
-   #define SCB_VTOR  (SCB->VTOR)
-   #define SCB_CCR   (SCB->CCR)
+#define SCB_VTOR  (SCB->VTOR)
+#define SCB_CCR   (SCB->CCR)
 #endif
 
 #if !defined(WDOG)
@@ -132,6 +132,7 @@ void SystemInit(void) {
 
    /* Use RTC initialisation - if present */
    rtc_initialise();
+
 }
 
 // Code below assumes interrupts start out enabled!
@@ -165,4 +166,5 @@ int enableInterrupts() {
       return 1;
    }
    return 0;
-} 
+}
+
