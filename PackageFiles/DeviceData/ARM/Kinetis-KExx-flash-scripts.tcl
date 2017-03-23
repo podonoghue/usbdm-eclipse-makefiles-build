@@ -20,6 +20,7 @@
 ;#####################################################################################
 ;#  History
 ;#
+;#  V4.12.1.160 - Restored NMI masking to massErase{}
 ;#  V4.12.1.150 - Changed to use more uniform method and re-tested
 ;#  V4.12.1.60  - Added NMI masking to massErase{}
 ;#  V4.10.4.250 - Simplified
@@ -277,6 +278,13 @@ proc massEraseTarget { } {
       after 50
    }
    
+   ;# Disable NMI here so we can still debug target using Erase-All option
+   puts "massEraseTarget{} - Disabling NMI"
+   catch { connect }
+   set soptValue [rb $::SIM_SOPT]
+   wb  $::SIM_SOPT [ expr $soptValue & ~$::SIM_SOPT_NMIE_MASK]
+   rb $::SIM_SOPT
+
    ;# Resetting target using MDM
    puts "massEraseTarget{} - Writing MDM_AP_C_SYSTEM_RESET + MDM_AP_C_CORE_HOLD"
    wcreg $::MDM_AP_Control [expr $::MDM_AP_C_CORE_HOLD | $::MDM_AP_C_SYSTEM_RESET]
