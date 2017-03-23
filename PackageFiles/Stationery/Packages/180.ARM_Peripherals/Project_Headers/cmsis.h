@@ -48,6 +48,9 @@ struct osTimerControlBlock_t {
  *    static CMSIS::Timer<osTimerPeriodic> myTimer1(cb1);
  *    static CMSIS::Timer<osTimerPeriodic> myTimer2(cb2);
  *
+ *    RED_LED::setOutput();
+ *    GREEN_LED::setOutput();
+ * 
  *    myTimer2.start(500);
  *    myTimer1.start(1000);
  *
@@ -363,10 +366,15 @@ public:
  * //
  * void threadExample() {
  *    static auto threadFn = [] (const void *) {
- *       BLUE_LED::toggle();
- *       osDelay(2000);
+ *       for(;;) {
+ *          BLUE_LED::toggle();
+ *          osDelay(2000);
+ *       }
  *    };
  *    static Thread thread(threadFn);
+ *
+ *    BLUE_LED::setOutput();
+ *
  *    thread.run();
  *    printf(" thread::getId() = %p\n\r", thread.getId());
  * }
@@ -565,8 +573,8 @@ public:
  *    Thread sender(messageQueueSender);
  *    Thread receiver(messageQueueReceiver);
  *
- *    receiver.create();
- *    sender.create();
+ *    receiver.run();
+ *    sender.run();
  *
  *    while(!messageQueueTestComplete) {
  *       __asm__("nop");
@@ -764,8 +772,8 @@ public:
  *    Thread sender(mailQueueSender);
  *    Thread receiver(mailQueueReceiver);
  *
- *    receiver.create();
- *    sender.create();
+ *    receiver.run();
+ *    sender.run();
  *
  *    while(!mailQueueTestComplete) {
  *       __asm__("nop");

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0">
+   <projectActionList id="CPP-abstraction-cmsis-wrapper">
+      <applyWhen>
+         <and>
+            <variableRef idRef="outputType" condition="matches"               value=".*ProjectType\.exe$" />
+            <variableRef idRef="hasCCNature" condition="isTrue" />
+         </and>
+      </applyWhen>
+      <projectActionList>
+         <applyWhen>
+            <and>
+               <variableRef idRef="projectOptionValue.CPP-abstraction"                  condition="isTrue" />
+            <!--  <variableRef idRef="projectOptionValue.CMSIS-RTOS"       condition="isTrue"   /> -->
+            </and>
+         </applyWhen>
+         <copy source="Project_Headers/cmsis.h"             target="Project_Headers/cmsis.h" />
+         <copy source="Snippets/cmsis-cpp-mailQueue.cpp"    target="Snippets/cmsis-cpp-mailQueue.cpp" />
+         <copy source="Snippets/cmsis-cpp-memoryPool.cpp"   target="Snippets/cmsis-cpp-memoryPool.cpp" />
+         <copy source="Snippets/cmsis-cpp-messageQueue.cpp" target="Snippets/cmsis-cpp-messageQueue.cpp" />
+         <copy source="Snippets/cmsis-cpp-thread.cpp"       target="Snippets/cmsis-cpp-thread.cpp" />
+         <copy source="Snippets/cmsis-cpp-timer.cpp"        target="Snippets/cmsis-cpp-timer.cpp" />
+      </projectActionList>
+   </projectActionList>
+</root>
