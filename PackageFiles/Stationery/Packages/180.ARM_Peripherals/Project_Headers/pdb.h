@@ -20,8 +20,8 @@
 namespace USBDM {
 
 /**
- * @addtogroup PDB_Group PDB, Programmable Dely Block
- * @brief Pins used for Programmable Delay Block
+ * @addtogroup PDB_Group PDB, Programmable Delay Block
+ * @brief Peripheral information for Programmable Delay Block
  * @{
  */
 /**

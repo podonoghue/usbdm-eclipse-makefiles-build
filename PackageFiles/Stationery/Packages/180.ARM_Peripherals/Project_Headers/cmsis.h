@@ -10,6 +10,9 @@
 #include "cmsis_os.h"
 #include "hardware.h"
 
+/**
+ * Namespace enclosing wrapper classes for CMSIS-RTX
+ */
 namespace CMSIS {
 
 /**
@@ -174,6 +177,10 @@ public:
    }
    /**
     * Release mutex
+    *
+    * @return osOK: the mutex has been correctly released.
+    * @return osErrorResource: the mutex was not obtained before.
+    * @return osErrorISR: osMutexRelease cannot be called from interrupt service routines.
     */
    osStatus release() {
       return osMutexRelease((osMutexId) os_mutex_cb);
