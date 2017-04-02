@@ -48,12 +48,10 @@ Change History
 namespace USBDM {
 
 /** BDTs organised by endpoint, odd/even, tx/rx */
-EndpointBdtEntry endPointBdts[Usb0::NUMBER_OF_ENDPOINTS] __attribute__((aligned (512)));
+EndpointBdtEntry endPointBdts[Usb0::NUMBER_OF_ENDPOINTS] __attribute__ ((aligned (512)));
 
 #ifdef MS_COMPATIBLE_ID_FEATURE
 
-// See https://github.com/pbatard/libwdi/wiki/WCID-Devices
-//
 const MS_CompatibleIdFeatureDescriptor msCompatibleIdFeatureDescriptor = {
       /* lLength;             */  nativeToLe32((uint32_t)sizeof(MS_CompatibleIdFeatureDescriptor)),
       /* wVersion;            */  nativeToLe16(0x0100),
@@ -69,12 +67,12 @@ const MS_CompatibleIdFeatureDescriptor msCompatibleIdFeatureDescriptor = {
 };
 
 const MS_PropertiesFeatureDescriptor msPropertiesFeatureDescriptor = {
-      /* U32 lLength;         */ nativeToLe32((uint32_t)sizeof(MS_PropertiesFeatureDescriptor)),
-      /* U16 wVersion;        */ nativeToLe16(0x0100),
-      /* U16 wIndex;          */ nativeToLe16(5),
-      /* U16 bnumSections;    */ nativeToLe16(2),
+      /* uint32_t lLength;         */ nativeToLe32((uint32_t)sizeof(MS_PropertiesFeatureDescriptor)),
+      /* uint16_t wVersion;        */ nativeToLe16(0x0100),
+      /* uint16_t wIndex;          */ nativeToLe16(5),
+      /* uint16_t bnumSections;    */ nativeToLe16(2),
       /*---------------------- Section 1 -----------------------------*/
-      /* U32 lPropertySize0;  */ nativeToLe32(
+      /* uint32_t lPropertySize0;  */ nativeToLe32(
             sizeof(msPropertiesFeatureDescriptor.lPropertySize0)+
             sizeof(msPropertiesFeatureDescriptor.ldataType0)+
             sizeof(msPropertiesFeatureDescriptor.wNameLength0)+
@@ -82,13 +80,13 @@ const MS_PropertiesFeatureDescriptor msPropertiesFeatureDescriptor = {
             sizeof(msPropertiesFeatureDescriptor.wPropertyLength0)+
             sizeof(msPropertiesFeatureDescriptor.bData0)
       ),
-      /* U32 ldataType0;       */ nativeToLe32(7UL), // 7 == REG_MULTI_SZ
-      /* U16 wNameLength0;     */ nativeToLe16(sizeof(msPropertiesFeatureDescriptor.bName0)),
-      /* U8  bName0[42];       */ MS_DEVICE_INTERFACE_GUIDs,
-      /* U32 wPropertyLength0; */ nativeToLe32(sizeof(msPropertiesFeatureDescriptor.bData0)),
-      /* U8  bData0[78];       */ MS_DEVICE_GUID,
+      /* uint32_t ldataType0;       */ nativeToLe32(1U), // 1 = Unicode string
+      /* uint16_t wNameLength0;     */ nativeToLe16(sizeof(msPropertiesFeatureDescriptor.bName0)),
+      /* char16_t bName0[42];       */ MS_DEVICE_INTERFACE_GUIDs,
+      /* uint32_t wPropertyLength0; */ nativeToLe32(sizeof(msPropertiesFeatureDescriptor.bData0)),
+      /* char16_t bData0[78];       */ MS_DEVICE_GUID,
       /*---------------------- Section 2 -----------------------------*/
-      /* U32 lPropertySize1;   */ nativeToLe32(
+      /* uint32_t lPropertySize1;   */ nativeToLe32(
             sizeof(msPropertiesFeatureDescriptor.lPropertySize1)+
             sizeof(msPropertiesFeatureDescriptor.ldataType1)+
             sizeof(msPropertiesFeatureDescriptor.wNameLength1)+
@@ -96,13 +94,12 @@ const MS_PropertiesFeatureDescriptor msPropertiesFeatureDescriptor = {
             sizeof(msPropertiesFeatureDescriptor.wPropertyLength1)+
             sizeof(msPropertiesFeatureDescriptor.bData1)
       ),
-      /* U32 ldataType1;       */ nativeToLe32(7UL), // 7 == REG_MULTI_SZ
-      /* U16 wNameLength1;     */ nativeToLe16(sizeof(msPropertiesFeatureDescriptor.bName1)),
-      /* U8  bName1[];         */ MS_ICONS,
-      /* U32 wPropertyLength1; */ nativeToLe32(sizeof(msPropertiesFeatureDescriptor.bData1)),
-      /* U8  bData1[];         */ MS_ICON_PATH,
+      /* uint32_t ldataType1;       */ nativeToLe32(2U), // 2 = Unicode string with environment variables
+      /* uint16_t wNameLength1;     */ nativeToLe16(sizeof(msPropertiesFeatureDescriptor.bName1)),
+      /* uint8_t  bName1[];         */ MS_ICONS,
+      /* uint32_t wPropertyLength1; */ nativeToLe32(sizeof(msPropertiesFeatureDescriptor.bData1)),
+      /* uint8_t  bData1[];         */ MS_ICON_PATH,
 };
-
 #endif
 
 /**

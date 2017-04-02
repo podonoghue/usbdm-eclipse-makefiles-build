@@ -13,12 +13,13 @@
 /**
  * Simple queue implementation
  *
+ * @tparam T          Type of queue items
  * @tparam QUEUE_SIZE Size of queue
  */
-template<int QUEUE_SIZE>
+template<class T, int QUEUE_SIZE>
 class Queue {
-   uint8_t fBuff[QUEUE_SIZE];
-   uint8_t *fHead, *fTail;
+   T fBuff[QUEUE_SIZE];
+   T *fHead, *fTail;
    int fNumberOfElements;
 
 public:
@@ -49,7 +50,7 @@ public:
     *
     * @param element Element to add
     */
-   void enQueue(uint8_t element) {
+   void enQueue(T element) {
       assert(!isFull());
       *fTail++ = element;
       fNumberOfElements++;
@@ -62,7 +63,7 @@ public:
     *
     * @param element Element to add
     */
-   uint8_t deQueue() {
+   T deQueue() {
       assert(!isEmpty());
       uint8_t t = *fHead++;
       fNumberOfElements--;

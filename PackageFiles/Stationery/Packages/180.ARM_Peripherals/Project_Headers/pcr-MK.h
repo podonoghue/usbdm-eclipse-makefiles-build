@@ -224,16 +224,13 @@ PinCallbackFunction USBDM::PcrBase_T<pcrAddress>::fCallback = nullptr;
  * Code examples:
  * @code
  * // Create PCR type
- * Pcr_T<PORTC_CLOCK_MASK, PORTC_BasePtr, 3> PortC_3;
+ * using PortC_3 = USBDM::Pcr_T<SIM_SCGC5_PORTC_MASK, PORTC_BasePtr, 3, USBDM::DEFAULT_PCR>;
  *
  * // Configure PCR
- * PortC_3.setPCR(PORT_PCR_DSE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK|PORT_PCR_MUX(3));
+ * PortC_3::setPCR(PORT_PCR_DSE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK|PORT_PCR_MUX(3));
  *
- * // Disable clock to associated PORT
- * pcr.disableClock();
- *
- * // Alternatively the PCR may be manipulated directly
- * Pcr_T<PORTC_CLOCK_MASK, PORTC_BasePtr, 3>.setPCR(PORT_PCR_DSE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK|PORT_PCR_MUX(3));
+ * // Disable Port clock
+ * PortC_3::disableClock();
  * @endcode
  *
  * @tparam clockMask       Mask for SIM clock register associated with this PCR
@@ -242,7 +239,7 @@ PinCallbackFunction USBDM::PcrBase_T<pcrAddress>::fCallback = nullptr;
  * @tparam defPcrValue     Default value for PCR (including MUX value)
  */
 template<uint32_t clockMask, uint32_t pcrAddress, int32_t bitNum, uint32_t defPcrValue>
-class Pcr_T : public PcrBase_T<pcrAddress>{
+class Pcr_T : public PcrBase_T<pcrAddress> {
 
 private:
 
@@ -256,6 +253,20 @@ private:
 
 public:
    using PcrBase = PcrBase_T<pcrAddress>;
+
+   /**
+    * Enable/disable clock associated with PORT
+    *
+    * @param enable true => enable, false => disable
+    */
+   static void enableClock(bool enable=true) {
+      if (enable) {
+         enablePortClocks(clockMask);
+      }
+      else {
+         disablePortClocks(clockMask);
+      }
+   }
 
    /**
     * Set pin PCR value\n
@@ -274,18 +285,15 @@ public:
    /**
     * Set pin PCR.MUX value\n
     * Assumes clock to the port has already been enabled\n
-    * Other PCR bits are taken from default value in template
     *
     * @param muxValue PCR MUX value [0..7]
     */
-   static void setMUX(uint32_t muxValue) {
-      if ((pcrAddress != 0) && (bitNum >= 0)) {
-         // Pointer to PCR register for pin
-         *pcrReg = (defPcrValue&~PORT_PCR_MUX_MASK)|PORT_PCR_MUX(muxValue);
-      }
+   static void setMux(uint32_t muxValue) {
+      *pcrReg = (*pcrReg&~PORT_PCR_MUX_MASK)|PORT_PCR_MUX(muxValue);
    }
    /**
-    * Sets pin interrupt/DMA mode
+    * Sets pin interrupt/DMA mode\n
+    * Assumes clock to the port has already been enabled\n
     *
     * @param mode Interrupt/DMA mode
     */
@@ -294,14 +302,16 @@ public:
    }
 
    /**
-    * Clear interrupt flag
+    * Clear interrupt flag\n
+    * Assumes clock to the port has already been enabled\n
     */
    static void clearIrqFlag() {
       *pcrReg |= PORT_PCR_ISF_MASK;
    }
 
    /**
-    * Set pull device on pin
+    * Set pull device on pin\n
+    * Assumes clock to the port has already been enabled\n
     *
     *  @param mode Pull selection mode
     */
@@ -310,7 +320,8 @@ public:
    }
 
    /**
-    * Locks most of the PCR properties e.g. drive strength, pull-device etc.
+    * Locks most of the PCR properties e.g. drive strength, pull-device etc.\n
+    * Assumes clock to the port has already been enabled\n
     */
    static void lock() {
       *pcrReg |= PORT_PCR_LK_MASK;
@@ -319,13 +330,12 @@ public:
    /**
     * Enable/disable interrupts in NVIC
     *
-    * @param enable True => enable, False => disable
+    * @param enable true => enable, false => disable
     */
    static void enableNvicInterrupts(bool enable=true) {
 
       constexpr IRQn_Type irqNum = (IRQn_Type)(PORTA_IRQn+((pcrAddress-PORTA_BasePtr)/(PORTB_BasePtr-PORTA_BasePtr)));
 
-      //TODO enableNvicInterrupts()
       if (enable) {
          // Enable interrupts
          NVIC_EnableIRQ(irqNum);

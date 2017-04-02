@@ -18,6 +18,9 @@
 #include <stdint.h>
 #include "derivative.h"
 #include "hardware.h"
+#ifdef __CMSIS_RTOS
+#include "cmsis.h"
+#endif
 
 namespace USBDM {
 
@@ -197,6 +200,34 @@ protected:
    }
 
 public:
+
+#ifdef __CMSIS_RTOS
+   /**
+    * Obtain SPI mutex
+    *
+    * @param milliseconds How long to wait in milliseconds. Use osWaitForever for indefinite wait
+    *
+    * @return osOK: The mutex has been obtain.
+    * @return osErrorTimeoutResource: The mutex could not be obtained in the given time.
+    * @return osErrorResource: The mutex could not be obtained when no timeout was specified.
+    * @return osErrorParameter: The parameter mutex_id is incorrect.
+    * @return osErrorISR: osMutexWait cannot be called from interrupt service routines.
+    */
+   virtual osStatus lock(int milliseconds=osWaitForever) = 0;
+
+   /**
+    * Release SPI mutex
+    *
+    * @return osOK: the mutex has been correctly released.
+    * @return osErrorResource: the mutex was not obtained before.
+    * @return osErrorISR: osMutexRelease cannot be called from interrupt service routines.
+    */
+   virtual osStatus unlock() = 0;
+#else
+   int lock(int milliseconds=0) {};
+   int unlock() {};
+#endif
+
    /**
     * Enable pins used by SPI
     */
@@ -349,6 +380,39 @@ public:
 template<class Info>
 class Spi_T : public Spi {
 
+#ifdef __CMSIS_RTOS
+protected:
+   /** Mutex to protect access - static so per SPI */
+   static CMSIS::Mutex mutex;
+
+public:
+   /**
+    * Obtain SPI mutex
+    *
+    * @param milliseconds How long to wait in milliseconds. Use osWaitForever for indefinite wait
+    *
+    * @return osOK: The mutex has been obtain.
+    * @return osErrorTimeoutResource: The mutex could not be obtained in the given time.
+    * @return osErrorResource: The mutex could not be obtained when no timeout was specified.
+    * @return osErrorParameter: The parameter mutex_id is incorrect.
+    * @return osErrorISR: osMutexWait cannot be called from interrupt service routines.
+    */
+   virtual osStatus lock(int milliseconds=osWaitForever) {
+      return mutex.wait(milliseconds);
+   }
+
+   /**
+    * Release SPI mutex
+    *
+    * @return osOK: the mutex has been correctly released.
+    * @return osErrorResource: the mutex was not obtained before.
+    * @return osErrorISR: osMutexRelease cannot be called from interrupt service routines.
+    */
+   virtual osStatus unlock() {
+      return mutex.release();
+   }
+#endif
+
 public:
    virtual ~Spi_T() {}
 
@@ -405,7 +469,7 @@ public:
       __DMB();
 
       spi->MCR = SPI_MCR_HALT_MASK|SPI_MCR_CLR_RXF_MASK|SPI_MCR_ROOE_MASK|SPI_MCR_CLR_TXF_MASK|
-                 SPI_MCR_MSTR_MASK|SPI_MCR_DCONF(0)|SPI_MCR_SMPL_PT(0)|SPI_MCR_PCSIS_MASK;
+            SPI_MCR_MSTR_MASK|SPI_MCR_DCONF(0)|SPI_MCR_SMPL_PT(0)|SPI_MCR_PCSIS_MASK;
 
       setCTAR0Value(0); // Clear
       setCTAR1Value(0); // Clear
@@ -419,6 +483,12 @@ public:
    }
 
 };
+
+#ifdef __CMSIS_RTOS
+/** Mutex to protect access - static so per SPI */
+template<class Info>
+CMSIS::Mutex Spi_T<Info>::mutex;
+#endif
 
 #if defined(USBDM_SPI0_IS_DEFINED)
 /**

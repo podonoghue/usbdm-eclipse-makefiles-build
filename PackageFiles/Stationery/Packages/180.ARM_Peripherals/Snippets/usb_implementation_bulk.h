@@ -1,15 +1,21 @@
 /**
  * @file     usb_implementation_bulk.h
- * @brief    USB Kinetis implementation
+ * @brief    USB Bulk device implementation
  *
- * @version  V4.12.1.150
- * @date     13 Nov 2016
+ * This module provides an implementation of a USB Bulk interface
+ * including the following end points:
+ *  - EP0 Standard control
+ *  - EP1 Bulk OUT
+ *  - EP2 Bulk IN
+ *
+ * @version  V4.12.1.170
+ * @date     2 April 2017
  *
  *  This file provides the implementation specific code for the USB interface.
  *  It will need to be modified to suit an application.
  */
-#ifndef PROJECT_HEADERS_USB_IMPLEMENTATION_H_
-#define PROJECT_HEADERS_USB_IMPLEMENTATION_H_
+#ifndef PROJECT_HEADERS_USB_IMPLEMENTATION_BULK_H_
+#define PROJECT_HEADERS_USB_IMPLEMENTATION_BULK_H_
 
 /*
  * Under Windows 8, or 10 there is no need to install a driver for
@@ -22,8 +28,6 @@
  * Under Linux drivers for bulk and CDC are automatically loaded
  */
 #define MS_COMPATIBLE_ID_FEATURE
-#define UNIQUE_ID
-//#include "configure.h"
 
 namespace USBDM {
 
@@ -42,31 +46,31 @@ namespace USBDM {
 #endif
 #endif
 #ifndef PRODUCT_DESCRIPTION
-#define PRODUCT_DESCRIPTION "USB ARM"
+#define PRODUCT_DESCRIPTION "USB-Test"
 #endif
 #ifndef MANUFACTURER
 #define MANUFACTURER        "pgo"
 #endif
 
 #ifndef VENDOR_ID
-#define VENDOR_ID  (0x16D0)
+#define VENDOR_ID             (0x16D0)    // Vendor (actually MCS)
 #endif
 #ifndef PRODUCT_ID
-#define PRODUCT_ID (0x9999)
+#define PRODUCT_ID            (0x9999)
 #endif
 #ifndef VERSION_ID
-#define VERSION_ID (0x0100)
+#define VERSION_ID            (0x0100)
 #endif
 
 //======================================================================
 // Maximum packet sizes for each endpoint
 //
-static constexpr uint  CONTROL_EP_MAXSIZE           = 64; //!< Control in/out    64
+static constexpr uint  CONTROL_EP_MAXSIZE           = 64; //!< Control in/out
 /*
  *  TODO Define additional end-point sizes
  */
-static constexpr uint  BULK_OUT_EP_MAXSIZE          = 64; //!< Bulk out          64
-static constexpr uint  BULK_IN_EP_MAXSIZE           = 64; //!< Bulk in           64
+static constexpr uint  BULK_OUT_EP_MAXSIZE          = 64; //!< Bulk out
+static constexpr uint  BULK_IN_EP_MAXSIZE           = 64; //!< Bulk in
 
 #ifdef USBDM_USB0_IS_DEFINED
 /**
@@ -132,12 +136,12 @@ public:
     * Configuration numbers, consecutive from 1
     */
    enum Configurations {
-     CONFIGURATION_NUM = 1,
-     /*
-      * Assumes single configuration
-      */
-     /** Total number of configurations */
-     NUMBER_OF_CONFIGURATIONS = CONFIGURATION_NUM,
+      CONFIGURATION_NUM = 1,
+      /*
+       * Assumes single configuration
+       */
+      /** Total number of configurations */
+      NUMBER_OF_CONFIGURATIONS = CONFIGURATION_NUM,
    };
 
    /**
@@ -157,7 +161,9 @@ protected:
 public:
 
    /**
-    * Initialise the USB interface
+    * Initialise the USB0 interface
+    *
+    *  @note Assumes clock set up for USB operation (48MHz)
     */
    static void initialise();
 
@@ -205,7 +211,7 @@ public:
    };
 
    /**
-    * Other descriptors
+    * All other descriptors
     */
    static const Descriptors otherDescriptors;
 
@@ -256,4 +262,4 @@ using UsbImplementation = Usb0;
 
 } // End namespace USBDM
 
-#endif /* PROJECT_HEADERS_USB_IMPLEMENTATION_H_ */
+#endif /* PROJECT_HEADERS_USB_IMPLEMENTATION_BULK_H_ */

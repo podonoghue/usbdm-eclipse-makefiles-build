@@ -11,4 +11,4 @@
  */
 //#include "usb_implementation_cdc.h"
 //#include "usb_implementation_bulk.h"
-#include "usb_implementation_composite.h"
+//#include "usb_implementation_composite.h"

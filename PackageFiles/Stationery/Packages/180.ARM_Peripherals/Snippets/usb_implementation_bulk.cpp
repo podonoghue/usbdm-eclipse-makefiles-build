@@ -1,9 +1,15 @@
 /**
  * @file     usb_implementation_bulk.cpp
- * @brief    USB Kinetis implementation
+ * @brief    USB Bulk device implementation
  *
- * @version  V4.12.1.150
- * @date     13 Nov 2016
+ * This module provides an implementation of a USB Bulk interface
+ * including the following end points:
+ *  - EP0 Standard control
+ *  - EP1 Bulk OUT
+ *  - EP2 Bulk IN
+ *
+ * @version  V4.12.1.170
+ * @date     2 April 2017
  *
  *  This file provides the implementation specific code for the USB interface.
  *  It will need to be modified to suit an application.
@@ -11,6 +17,7 @@
 #include <string.h>
 
 #include "usb.h"
+#include "usb_implementation_bulk.h"
 
 namespace USBDM {
 
@@ -127,11 +134,14 @@ const Usb0::Descriptors Usb0::otherDescriptors = {
        */
 };
 
+/** Out end-point for BULK data out */
+OutEndpoint <Usb0Info, Usb0::BULK_OUT_ENDPOINT, BULK_OUT_EP_MAXSIZE> Usb0::epBulkOut;
+
+/** In end-point for BULK data in */
+InEndpoint  <Usb0Info, Usb0::BULK_IN_ENDPOINT,  BULK_IN_EP_MAXSIZE>  Usb0::epBulkIn;
 /*
  * TODO Add additional end-points here
  */
-OutEndpoint <Usb0Info, Usb0::BULK_OUT_ENDPOINT, BULK_OUT_EP_MAXSIZE> Usb0::epBulkOut;
-InEndpoint  <Usb0Info, Usb0::BULK_IN_ENDPOINT,  BULK_IN_EP_MAXSIZE>  Usb0::epBulkIn;
 
 /**
  * Handler for Start of Frame Token interrupt (~1ms interval)
@@ -191,7 +201,7 @@ void Usb0::handleTokenComplete() {
          epBulkIn.handleInToken();
          return;
       /*
-       * TODO Add additional End-point handling here
+       * TODO Add additional end-point handling here
        */
    }
 }
@@ -276,11 +286,6 @@ void Usb0::sendBulkData(uint8_t size, const uint8_t *buffer) {
    epBulkIn.startTxTransaction(EPDataIn, size, buffer);
 }
 
-void idleLoop() {
-   for(;;) {
-      __asm__("nop");
-   }
-}
 
 } // End namespace USBDM
 

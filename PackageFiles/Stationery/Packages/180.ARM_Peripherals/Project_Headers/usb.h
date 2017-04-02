@@ -50,6 +50,7 @@ public:
       int res1   : 7;   //!< Reserved
       int res2   : 8;   //!< Reserved
    };
+
    /**
     * Type definition for USB SOF call back
     */
@@ -62,6 +63,19 @@ public:
     *  @param setup SETUP packet information
     */
    typedef void (*SetupCallbackFunction)(const SetupPacket &setup);
+
+   enum UserEvents {
+      USER_SUSPEND,  // USB has been suspended
+      USER_RESUME,   // USB has been resumed
+      USER_RESET,    // USB has been reset
+   };
+   /**
+    * Type definition for user call back\n
+    * This function is called whenever the 'user' code needs to be notified of an event
+    *
+    *  @param event Reason for callback
+    */
+   typedef void (*UserCallbackFunction)(const UserEvents event);
 
    /**
     * Get name of USB token
@@ -176,11 +190,22 @@ protected:
    /** SOF callback */
    static SOFCallbackFunction sofCallbackFunction;
 
+   /** Used to record Suspend/Resume events */
+   static int suspendCounter;
+   
    /**
     * Unhandled SETUP callback \n
     * Called for unhandled SETUP transactions
     */
    static SetupCallbackFunction unhandledSetupCallback;
+
+   /**
+    * User event callback \n
+    * This function is called whenever the 'user' code needs to be notified of an event
+    *
+    *  @param event Reason for callback
+    */
+   static UserCallbackFunction userCallbackFunction;
 
    /** Function to call when SETUP transaction is complete */
    static void (*setupCompleteCallback)();
@@ -279,6 +304,16 @@ protected:
    }
 
    /**
+    * Set callback for user callback\n
+    * This function is called whenever the 'user' code needs to be notified of an event
+    *
+    *  @param callback User callback function
+    */
+   static void setUserCallback(UserCallbackFunction callback) {
+      userCallbackFunction = callback;
+   }
+
+   /**
     * Set callback for unhandled SETUP transactions
     *
     * @param callback The call-back function to execute
@@ -348,6 +383,7 @@ protected:
       connectionState      = USBdefault;
       usb->ADDR            = 0;
       deviceConfiguration  = 0;
+      suspendCounter       = 0;
    }
 
    /**
@@ -457,6 +493,18 @@ protected:
    }
 
    /**
+    * Does user event callback \n
+    * This function is called whenever the 'user' code needs to be notified of an event
+    *
+    *  @param event Reason for callback
+    */
+   static void handleUserCallback(UserEvents event) {
+      if (userCallbackFunction != nullptr) {
+         userCallbackFunction(event);
+      }
+   }
+
+   /**
     * Get Status - Device Request 0x00
     */
    static void handleGetStatus();
@@ -480,17 +528,21 @@ protected:
     * Set device Address - Device Request 0x05
     */
    static void handleSetAddress() {
-      //   PUTS("setAddress - ");
+      static uint8_t newAddress;
 
       if (ep0SetupBuffer.bmRequestType != (EP_OUT|RT_DEVICE)) {// Out,Standard,Device
-         controlEndpoint.stall(); // Illegal format - stall controlEndpoint
+         // Illegal format - stall controlEndpoint
+         controlEndpoint.stall();
          return;
       }
 
+      // Record address for callback
+      newAddress = ep0SetupBuffer.wValue.lo();
+
       // Setup callback to update address at end of transaction
-      static uint8_t newAddress  = ep0SetupBuffer.wValue.lo();
       static auto callback = []() {
          setUSBaddressedState(newAddress);
+         //PRINTF("setAddresscb - %d\n", newAddress);
       };
       setSetupCompleteCallback(callback);
 
@@ -542,6 +594,19 @@ public:
 /** SOF callback */
 template<class Info, int EP0_SIZE>
 UsbBase::SOFCallbackFunction UsbBase_T<Info, EP0_SIZE>::sofCallbackFunction = nullptr;
+
+/** Suspend/resume callback */
+template<class Info, int EP0_SIZE>
+int UsbBase_T<Info, EP0_SIZE>::suspendCounter = 0;
+
+/**
+ * User event callback \n
+ * This function is called whenever the 'user' code needs to be notified of an event
+ *
+ *  @param event Reason for callback
+ */
+template<class Info, int EP0_SIZE>
+UsbBase::UserCallbackFunction UsbBase_T<Info, EP0_SIZE>::userCallbackFunction = nullptr;
 
 /**
  * Unhandled SETUP callback \n
@@ -601,31 +666,35 @@ const uint8_t UsbBase_T<Info, EP0_SIZE>::ms_osStringDescriptor[] = {
 };
 
 // UTF16LE strings
-#define MS_DEVICE_INTERFACE_GUIDs u"MS_DEVICE_INTERFACE_GUIDs"
-#define MS_DEVICE_GUID            u"{93FEBD51-6000-4E7E-A20E-A80FC78C7EA1}\0"
-#define MS_ICONS                  u"MS_ICONS"
-#define MS_ICON_PATH              u"\%SystemRoot\%\\system32\\SHELL32.dll,-4\0"
+#define MS_DEVICE_INTERFACE_GUIDs u"DeviceInterfaceGUIDs"
+#define MS_DEVICE_GUID            u"{93FEBD51-6000-4E7E-A20E-A80FC78C7EA1}"
+#define MS_ICONS                  u"Icons"
+#define MS_ICON_PATH              u"%SystemRoot%\\system32\\shell32.dll,-233"
 
+#pragma pack(push, 2)
 struct MS_PropertiesFeatureDescriptor {
+   /*----------------------- Header ------------------------------*/
    uint32_t lLength;                //!< Size of this Descriptor in Bytes
    uint16_t wVersion;               //!< Version
    uint16_t wIndex;                 //!< Index (must be 5)
    uint16_t bnumSections;           //!< Number of property sections
    /*---------------------- Section 1 -----------------------------*/
    uint32_t lPropertySize0;          //!< Size of property section
-   uint32_t ldataType0;              //!< Data type (1 = Unicode REG_SZ etc
+   uint32_t ldataType0;              //!< Data type 1 = Unicode REG_SZ etc
    uint16_t wNameLength0;            //!< Length of property name
    char16_t bName0[sizeof(MS_DEVICE_INTERFACE_GUIDs)/sizeof(MS_DEVICE_INTERFACE_GUIDs[0])];
    uint32_t wPropertyLength0;        //!< Length of property data
    char16_t bData0[sizeof(MS_DEVICE_GUID)/sizeof(MS_DEVICE_GUID[0])];
    /*---------------------- Section 2 -----------------------------*/
    uint32_t lPropertySize1;          //!< Size of property section
-   uint32_t ldataType1;              //!< Data type (1 = Unicode REG_SZ etc
+   uint32_t ldataType1;              //!< Data type 1 = Unicode REG_SZ etc
    uint16_t wNameLength1;            //!< Length of property name
    char16_t bName1[sizeof(MS_ICONS)/sizeof(MS_ICONS[0])];
    uint32_t wPropertyLength1;        //!< Length of property data
    char16_t bData1[sizeof(MS_ICON_PATH)/sizeof(MS_ICON_PATH[0])];
 };
+#pragma pack(pop)
+
 #endif
 
 extern const MS_CompatibleIdFeatureDescriptor msCompatibleIdFeatureDescriptor;
@@ -769,8 +838,7 @@ bool UsbBase_T<Info, EP0_SIZE>::handleTokenComplete() {
  */
 template<class Info, int EP0_SIZE>
 void UsbBase_T<Info, EP0_SIZE>::handleUSBReset() {
-   PUTS("\nReset");
-   //   pushState('R');
+//   PUTS("\nReset");
 
    // Disable all interrupts
    usb->INTEN = 0x00;
@@ -781,7 +849,8 @@ void UsbBase_T<Info, EP0_SIZE>::handleUSBReset() {
 
    // Clear most USB interrupt flags
    usb->ISTAT = (uint8_t)~USB_ISTAT_TOKDNE_MASK;
-
+   
+   // Set initial USB state
    setUSBdefaultState();
 
    // Initialise control end-point
@@ -802,13 +871,15 @@ void UsbBase_T<Info, EP0_SIZE>::handleUSBReset() {
  */
 template<class Info, int EP0_SIZE>
 void UsbBase_T<Info, EP0_SIZE>::handleUSBSuspend() {
-   //   PUTS("Suspend");
+//   PUTS("Suspend");
    if (connectionState != USBconfigured) {
       // Ignore if not configured
       return;
    }
-   // Clear the sleep and resume interrupt flags
-   usb->ISTAT    = USB_ISTAT_SLEEP_MASK;
+   if (++suspendCounter<3) {
+      // ignore
+      return;
+   }
 
    // Asynchronous Resume Interrupt Enable (USB->CPU)
    // Only enable if transceiver is disabled
@@ -818,31 +889,8 @@ void UsbBase_T<Info, EP0_SIZE>::handleUSBSuspend() {
    usb->INTEN   |= (USB_INTEN_RESUMEEN_MASK|USB_INTEN_USBRSTEN_MASK);
    connectionState = USBsuspended;
 
-   // A re-check loop is used here to ensure USB bus noise doesn't wake-up the CPU
-   do {
-      usb->ISTAT = USB_ISTAT_RESUME_MASK;       // Clear resume interrupt flag
-
-      __WFI();  // Processor stop for low power
-
-      // The CPU has woken up!
-
-      if ((usb->ISTAT&(USB_ISTAT_RESUME_MASK|USB_ISTAT_USBRST_MASK)) == 0) {
-         // Ignore if not resume or reset from USB module
-         continue;
-      }
-      usb->ISTAT = USB_ISTAT_RESUME_MASK;  // Clear resume interrupt flag
-
-      // Wait for a second resume (or existing reset) ~5 ms
-      for(int delay=0; delay<24000; delay++) {
-         // We should have another resume interrupt by end of loop
-         if ((usb->ISTAT&(USB_ISTAT_RESUME_MASK|USB_ISTAT_USBRST_MASK)) != 0) {
-            break;
-         }
-      }
-   } while ((usb->ISTAT&(USB_ISTAT_RESUME_MASK|USB_ISTAT_USBRST_MASK)) == 0);
-
-   // Disable resume interrupts
-   usb->INTEN   &= ~USB_INTEN_RESUMEEN_MASK;
+   // Notify user level (to enter Low power later!!!)
+   handleUserCallback(USER_SUSPEND);
    return;
 }
 
@@ -853,7 +901,14 @@ void UsbBase_T<Info, EP0_SIZE>::handleUSBSuspend() {
  */
 template<class Info, int EP0_SIZE>
 void UsbBase_T<Info, EP0_SIZE>::handleUSBResume() {
-   //   PUTS("Resume");
+//   PUTS("Resume");
+
+   if (--suspendCounter>0) {
+      // Ignore as may be noise
+      return;
+   }
+   suspendCounter = 0;
+
    // Mask further resume interrupts
    usb->INTEN   &= ~USB_INTEN_RESUMEEN_MASK;
 
@@ -861,13 +916,11 @@ void UsbBase_T<Info, EP0_SIZE>::handleUSBResume() {
       // Ignore if not suspended
       return;
    }
-   // Mask further resume interrupts
-   //   usb->USBTRC0 &= ~USB_USBTRC0_USBRESMEN_MASK;
-
-   // Clear the sleep and resume interrupt flags
-   usb->ISTAT = USB_ISTAT_SLEEP_MASK|USB_ISTAT_RESUME_MASK;
 
    connectionState = USBconfigured;
+
+   // Notify user
+   handleUserCallback(USER_RESUME);
 
    // Initialise all end-points
    initialiseEndpoints();
@@ -981,9 +1034,6 @@ void UsbBase_T<Info, EP0_SIZE>::initialise() {
    // This bit is undocumented but seems to be necessary
    usb->USBTRC0 = 0x40;
 
-   // Set initial USB state
-   setUSBdefaultState();
-
    // Point USB at BDT array
    usb->BDTPAGE3 = (uint8_t) (((unsigned)endPointBdts)>>24);
    usb->BDTPAGE2 = (uint8_t) (((unsigned)endPointBdts)>>16);
@@ -1004,8 +1054,8 @@ void UsbBase_T<Info, EP0_SIZE>::initialise() {
    // Enable interface
    usb->CTL = USB_CTL_USBENSOFEN_MASK;
 
-   // Clear EP0 BDTs
-   memset((uint8_t*)endPointBdts, 0, sizeof(EndpointBdtEntry[4]));
+   // Set initial USB state
+   setUSBdefaultState();
 
    // Initialise control end-point
    initialiseEndpoints();
@@ -1033,8 +1083,8 @@ void UsbBase_T<Info, EP0_SIZE>::initialiseEndpoints() {
 
    //   PUTS("initialiseEndpoints()");
 
-   // Clear BDTs apart from EP0
-   memset((uint8_t*)(endPointBdts+1), 0, sizeof(EndpointBdtEntry[UsbImplementation::NUMBER_OF_ENDPOINTS-1]));
+   // Clear all BDTs
+   memset((uint8_t*)(endPointBdts), 0, sizeof(EndpointBdtEntry[UsbImplementation::NUMBER_OF_ENDPOINTS]));
 
    // Clear odd/even bits & enable USB device
    usb->CTL = USB_CTL_USBENSOFEN_MASK|USB_CTL_ODDRST_MASK;
@@ -1044,7 +1094,7 @@ void UsbBase_T<Info, EP0_SIZE>::initialiseEndpoints() {
 
    controlEndpoint.setCallback(ep0TransactionCallback);
 
-   // Set up to receive 1st SETUP packet
+   // Set up to receive SETUP packet
    ep0ConfigureSetupTransaction();
 }
 
@@ -1054,7 +1104,7 @@ void UsbBase_T<Info, EP0_SIZE>::initialiseEndpoints() {
 template<class Info, int EP0_SIZE>
 void UsbBase_T<Info, EP0_SIZE>::handleGetStatus() {
 
-   PRINTF("handleGetStatus()\n");
+//   PRINTF("handleGetStatus()\n");
 
    static const uint8_t        zeroReturn[]    = {0,0};
    static const EndpointStatus epStatusStalled = {1,0,0};
@@ -1330,12 +1380,18 @@ void UsbBase_T<Info, EP0_SIZE>::irqHandler() {
 
    do {
       // Get active and enabled flags only
-      uint8_t enabledInterruptFlags = usb->ISTAT & usb->INTEN;
+      uint8_t pendingInterruptFlags = usb->ISTAT & usb->INTEN;
 
-      if (enabledInterruptFlags == 0) {
+      if (pendingInterruptFlags == 0) {
          return;
       }
-      if ((enabledInterruptFlags&USB_ISTAT_TOKDNE_MASK) != 0) {
+      if ((pendingInterruptFlags&USB_ISTAT_USBRST_MASK) != 0) {
+         // Reset signaled on Bus
+         usb->ISTAT = USB_ISTAT_USBRST_MASK; // Clear source
+         handleUSBReset();
+         return;
+      }
+      if ((pendingInterruptFlags&USB_ISTAT_TOKDNE_MASK) != 0) {
          // Token complete interrupt
          if (!handleTokenComplete()) {
             // Pass to extension routine
@@ -1347,37 +1403,31 @@ void UsbBase_T<Info, EP0_SIZE>::irqHandler() {
           */
          usb->ISTAT = USB_ISTAT_TOKDNE_MASK;
       }
-      if ((enabledInterruptFlags&USB_ISTAT_USBRST_MASK) != 0) {
-         // Reset signaled on Bus
-         usb->ISTAT = USB_ISTAT_USBRST_MASK; // Clear source
-         handleUSBReset();
-         return;
-      }
-      if ((enabledInterruptFlags&USB_ISTAT_RESUME_MASK) != 0) {
+      if ((pendingInterruptFlags&USB_ISTAT_RESUME_MASK) != 0) {
          // Resume signaled on Bus
          handleUSBResume();
          // Clear source
          usb->ISTAT = USB_ISTAT_RESUME_MASK;
       }
-      if ((enabledInterruptFlags&USB_ISTAT_STALL_MASK) != 0) {
+      if ((pendingInterruptFlags&USB_ISTAT_STALL_MASK) != 0) {
          // Stall sent
          handleStallComplete();
          // Clear source
          usb->ISTAT = USB_ISTAT_STALL_MASK;
       }
-      if ((enabledInterruptFlags&USB_ISTAT_SOFTOK_MASK) != 0) {
+      if ((pendingInterruptFlags&USB_ISTAT_SOFTOK_MASK) != 0) {
          // SOF Token
          handleSOFToken();
          usb->ISTAT = USB_ISTAT_SOFTOK_MASK; // Clear source
       }
-      if ((enabledInterruptFlags&USB_ISTAT_SLEEP_MASK) != 0) {
+      if ((pendingInterruptFlags&USB_ISTAT_SLEEP_MASK) != 0) {
          // Bus Idle 3ms => sleep
          //      PUTS("Suspend");
          handleUSBSuspend();
          // Clear source
          usb->ISTAT = USB_ISTAT_SLEEP_MASK;
       }
-      if ((enabledInterruptFlags&USB_ISTAT_ERROR_MASK) != 0) {
+      if ((pendingInterruptFlags&USB_ISTAT_ERROR_MASK) != 0) {
          // Any Error
          PRINTF("Error s=0x%02X\n", usb->ERRSTAT);
          usb->ERRSTAT = 0xFF;

@@ -8,14 +8,15 @@
       <copy source="Project_Headers/usb.h"                     target="Project_Headers/usb.h"                     replace="true"  derived="true" />
       <copy source="Project_Headers/usb_defs.h"                target="Project_Headers/usb_defs.h"                replace="true"  derived="true" />
       <copy source="Project_Headers/usb_endpoint.h"            target="Project_Headers/usb_endpoint.h"            replace="true"  derived="true" />
-      <copy source="Snippets/usb.cpp"                          target="Snippets/usb.cpp"                          replace="true"  derived="true" />
-      <copy source="Snippets/usb_implementation.h"             target="Snippets/usb_implementation.h"             replace="true"  derived="true" />
-      <copy source="Snippets/usb_implementation_bulk.h"        target="Snippets/usb_implementation_bulk.h"        replace="true"  derived="true" />
+      <copy source="Snippets/usb_cdc_interface.cpp"            target="Snippets/usb_cdc_interface.cpp"            replace="true"  derived="true" />
+      <copy source="Snippets/usb_cdc_interface.h"              target="Snippets/usb_cdc_interface.h"              replace="true"  derived="true" />
       <copy source="Snippets/usb_implementation_bulk.cpp"      target="Snippets/usb_implementation_bulk.cpp"      replace="true"  derived="true" />
-      <copy source="Snippets/usb_implementation_cdc.h"         target="Snippets/usb_implementation_cdc.h"         replace="true"  derived="true" />
+      <copy source="Snippets/usb_implementation_bulk.h"        target="Snippets/usb_implementation_bulk.h"        replace="true"  derived="true" />
       <copy source="Snippets/usb_implementation_cdc.cpp"       target="Snippets/usb_implementation_cdc.cpp"       replace="true"  derived="true" />
-      <copy source="Snippets/usb_implementation_composite.h"   target="Snippets/usb_implementation_composite.h"   replace="true"  derived="true" />
+      <copy source="Snippets/usb_implementation_cdc.h"         target="Snippets/usb_implementation_cdc.h"         replace="true"  derived="true" />
       <copy source="Snippets/usb_implementation_composite.cpp" target="Snippets/usb_implementation_composite.cpp" replace="true"  derived="true" />
-      <copy source="Snippets/usb_cdc_uart.h"                   target="Snippets/usb_cdc_uart.h"                   replace="true"  derived="true" />
+      <copy source="Snippets/usb_implementation_composite.h"   target="Snippets/usb_implementation_composite.h"   replace="true"  derived="true" />
+      <copy source="Snippets/usb_implementation.h"             target="Snippets/usb_implementation.h"             replace="true"  derived="true" />
+      <copy source="Snippets/usb.cpp"                          target="Snippets/usb.cpp"                          replace="true"  derived="true" />
    </projectActionList>
 </fragment>

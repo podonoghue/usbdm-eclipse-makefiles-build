@@ -21,6 +21,7 @@ public:
 
 /**
  * PID Controller
+ * Makes use of PIT Timer callback
  *
  * These template parameters connect the PID controller to the input and output functions
  * @tparam inputFn      Input function  - used to obtain value of system state
@@ -79,7 +80,7 @@ public:
     * @param outMax      Maximum value of output variable
     */
    Pid_T(double Kp, double Ki, double Kd, double interval, double outMin, double outMax) :
-      interval(interval), outMin(outMin), outMax(outMax), enabled(false)  {
+      interval(interval), outMin(outMin), outMax(outMax), enabled(false) {
       setTunings(Kp, Ki, Kd);
 
       // Using PIT
@@ -92,7 +93,6 @@ public:
    }
 
    void initialise() {
-      timer = new CMSIS::Timer(functionWrapper->f, osTimerPeriodic);
    }
 
    /**
@@ -243,7 +243,7 @@ private:
       tickCount++;
 
       // Update input samples & error
-      lastInput = currentInput;
+      lastInput    = currentInput;
       currentInput = inputFn();
       currentError = setpoint - currentInput;
 

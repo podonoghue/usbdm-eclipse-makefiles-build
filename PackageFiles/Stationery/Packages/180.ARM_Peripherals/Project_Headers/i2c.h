@@ -18,6 +18,9 @@
 #include <stdint.h>
 #include "derivative.h"
 #include "hardware.h"
+#ifdef __CMSIS_RTOS
+#include "cmsis.h"
+#endif
 
 namespace USBDM {
 
@@ -104,6 +107,34 @@ protected:
    }
 
 public:
+
+#ifdef __CMSIS_RTOS
+   /**
+    * Obtain I2C mutex
+    *
+    * @param milliseconds How long to wait in milliseconds. Use osWaitForever for indefinite wait
+    *
+    * @return osOK: The mutex has been obtain.
+    * @return osErrorTimeoutResource: The mutex could not be obtained in the given time.
+    * @return osErrorResource: The mutex could not be obtained when no timeout was specified.
+    * @return osErrorParameter: The parameter mutex_id is incorrect.
+    * @return osErrorISR: osMutexWait cannot be called from interrupt service routines.
+    */
+   virtual osStatus lock(int milliseconds=osWaitForever) = 0;
+
+   /**
+    * Release I2C mutex
+    *
+    * @return osOK: the mutex has been correctly released.
+    * @return osErrorResource: the mutex was not obtained before.
+    * @return osErrorISR: osMutexRelease cannot be called from interrupt service routines.
+    */
+   virtual osStatus unlock() = 0;
+#else
+   int lock(int milliseconds=0) {};
+   int unlock() {};
+#endif
+
    /**
     * Clear bus hang
     *
@@ -221,6 +252,39 @@ public:
    /** Used by ISR to obtain handle of object */
    static I2c *thisPtr;
 
+#ifdef __CMSIS_RTOS
+protected:
+   /** Mutex to protect access - static so per I2C */
+   static CMSIS::Mutex mutex;
+
+public:
+   /**
+    * Obtain I2C mutex
+    *
+    * @param milliseconds How long to wait in milliseconds. Use osWaitForever for indefinite wait
+    *
+    * @return osOK: The mutex has been obtain.
+    * @return osErrorTimeoutResource: The mutex could not be obtained in the given time.
+    * @return osErrorResource: The mutex could not be obtained when no timeout was specified.
+    * @return osErrorParameter: The parameter mutex_id is incorrect.
+    * @return osErrorISR: osMutexWait cannot be called from interrupt service routines.
+    */
+   virtual osStatus lock(int milliseconds=osWaitForever) {
+      return mutex.wait(milliseconds);
+   }
+
+   /**
+    * Release I2C mutex
+    *
+    * @return osOK: the mutex has been correctly released.
+    * @return osErrorResource: the mutex was not obtained before.
+    * @return osErrorISR: osMutexRelease cannot be called from interrupt service routines.
+    */
+   virtual osStatus unlock() {
+      return mutex.release();
+   }
+#endif
+
 public:
    /**
     * Construct I2C interface
@@ -328,6 +392,12 @@ public:
 
 /** Used by ISR to obtain handle of object */
 template<class Info> I2c *I2c_T<Info>::thisPtr = 0;
+
+#ifdef __CMSIS_RTOS
+/** Mutex to protect access - static so per I2C */
+template<class Info>
+CMSIS::Mutex I2c_T<Info>::mutex;
+#endif
 
 #if defined(USBDM_I2C0_IS_DEFINED)
 /**

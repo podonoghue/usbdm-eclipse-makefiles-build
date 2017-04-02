@@ -1,9 +1,16 @@
 /**
  * @file     usb_implementation_cdc.cpp
- * @brief    USB Kinetis implementation
+ * @brief    USB CDC device implementation
  *
- * @version  V4.12.1.150
- * @date     13 Nov 2016
+ * This module provides an implementation of a USB Composite interface
+ * including the following end points:
+ *  - EP0 Standard control
+ *  - EP1 Interrupt CDC notification
+ *  - EP2 CDC data OUT
+ *  - EP3 CDC data IN
+ *
+ * @version  V4.12.1.170
+ * @date     2 April 2017
  *
  *  This file provides the implementation specific code for the USB interface.
  *  It will need to be modified to suit an application.
@@ -183,15 +190,15 @@ const Usb0::Descriptors Usb0::otherDescriptors = {
 
 /** In end-point for CDC notifications */
 InEndpoint  <Usb0Info, Usb0::CDC_NOTIFICATION_ENDPOINT, CDC_NOTIFICATION_EP_MAXSIZE>  Usb0::epCdcNotification;
+
 /** Out end-point for CDC data out */
 OutEndpoint <Usb0Info, Usb0::CDC_DATA_OUT_ENDPOINT,     CDC_DATA_OUT_EP_MAXSIZE>      Usb0::epCdcDataOut;
+
 /** In end-point for CDC data in */
 InEndpoint  <Usb0Info, Usb0::CDC_DATA_IN_ENDPOINT,      CDC_DATA_IN_EP_MAXSIZE>       Usb0::epCdcDataIn;
 /*
  * TODO Add additional end-points here
  */
-
-SCPI_Interface::Response  *Usb0::response = nullptr;
 
 /**
  * Handler for Start of Frame Token interrupt (~1ms interval)
@@ -273,7 +280,6 @@ void Usb0::startCdcIn() {
    if ((epCdcDataIn.getState() == EPIdle) && (cdcOutByteCount>0)) {
       static_assert(epCdcDataIn.BUFFER_SIZE>sizeof(cdcOutBuff), "Buffer too small");
       memcpy(epCdcDataIn.getBuffer(), cdcOutBuff, cdcOutByteCount);
-      //TODO check this
       epCdcDataIn.setNeedZLP();
       epCdcDataIn.startTxTransaction(EPDataIn, cdcOutByteCount);
       cdcOutByteCount = 0;
@@ -334,20 +340,15 @@ void Usb0::cdcOutTransactionCallback(EndpointState state) {
  * @param state Current end-point state
  */
 void Usb0::cdcInTransactionCallback(EndpointState state) {
+   static uint8_t buffer[20];
+
    if ((state == EPDataIn)||(state == EPIdle)) {
-      if (response != nullptr) {
-         // Free last buffer as transfer is now complete
-         SCPI_Interface::freeResponseBuffer(response);
+      int size = cdcInterface::getData(sizeof(buffer), buffer);
+      if (size != 0) {
+         // Schedules transfer
+         epCdcDataIn.setNeedZLP();
+         epCdcDataIn.startTxTransaction(EPDataIn, size, buffer);
       }
-      // Get up new message
-      response = SCPI_Interface::getResponse();
-      if (response == nullptr) {
-         // No messages waiting
-         return;
-      }
-      // Schedules transfer
-      epCdcDataIn.setNeedZLP();
-      epCdcDataIn.startTxTransaction(EPDataIn, response->size, response->data);
    }
 }
 
@@ -378,11 +379,10 @@ void Usb0::initialise() {
    setSOFCallback(sofCallback);
 
    cdcInterface::initialise();
-   cdcInterface::setUsbNotifyCallback(notify);
+   cdcInterface::setUsbInNotifyCallback(notify);
    /*
     * TODO Additional initialisation
     */
-   response = nullptr;
 }
 
 /**
@@ -411,7 +411,7 @@ void Usb0::handleSetLineCoding() {
 void Usb0::handleGetLineCoding() {
 //   PRINTF("handleGetLineCoding()\n");
    // Send packet
-   ep0StartTxTransaction( sizeof(LineCodingStructure), (const uint8_t*)&cdcInterface::getLineCoding());
+   ep0StartTxTransaction( sizeof(LineCodingStructure), (const uint8_t*)cdcInterface::getLineCoding());
 }
 
 /**
@@ -457,12 +457,6 @@ void Usb0::handleUserEp0SetupRequests(const SetupPacket &setup) {
       default:
          controlEndpoint.stall();
          break;
-   }
-}
-
-void idleLoop() {
-   for(;;) {
-      __asm__("nop");
    }
 }
 

@@ -1,15 +1,24 @@
 /**
  * @file     usb_implementation_composite.h
- * @brief    USB Kinetis implementation
+ * @brief    USB Composite device implementation
  *
- * @version  V4.12.1.150
- * @date     13 Nov 2016
+ * This module provides an implementation of a USB Composite interface
+ * including the following end points:
+ *  - EP0 Standard control
+ *  - EP1 Bulk OUT
+ *  - EP2 Bulk IN
+ *  - EP3 Interrupt CDC notification
+ *  - EP4 CDC data OUT
+ *  - EP5 CDC data IN
+ *
+ * @version  V4.12.1.170
+ * @date     2 April 2017
  *
  *  This file provides the implementation specific code for the USB interface.
  *  It will need to be modified to suit an application.
  */
-#ifndef PROJECT_HEADERS_USB_IMPLEMENTATION_H_
-#define PROJECT_HEADERS_USB_IMPLEMENTATION_H_
+#ifndef PROJECT_HEADERS_USB_IMPLEMENTATION_COMPOSITE_H_
+#define PROJECT_HEADERS_USB_IMPLEMENTATION_COMPOSITE_H_
 
 /*
  * Under Windows 8, or 10 there is no need to install a driver for
@@ -22,12 +31,10 @@
  * Under Linux drivers for bulk and CDC are automatically loaded
  */
 #define MS_COMPATIBLE_ID_FEATURE
-#include "usb_cdc_uart.h"
+#include "usb_cdc_interface.h"
 
 #define UNIQUE_ID
 //#include "configure.h"
-
-#include "queue.h"
 
 namespace USBDM {
 
@@ -46,7 +53,7 @@ namespace USBDM {
 #endif
 #endif
 #ifndef PRODUCT_DESCRIPTION
-#define PRODUCT_DESCRIPTION "USB ARM"
+#define PRODUCT_DESCRIPTION "USB-Test"
 #endif
 #ifndef MANUFACTURER
 #define MANUFACTURER        "pgo"
@@ -65,16 +72,16 @@ namespace USBDM {
 //======================================================================
 // Maximum packet sizes for each endpoint
 //
-static constexpr uint  CONTROL_EP_MAXSIZE           = 64; //!< Control in/out    64
+static constexpr uint  CONTROL_EP_MAXSIZE           = 64; //!< Control in/out
 /*
  *  TODO Define additional end-point sizes
  */
-static constexpr uint  BULK_OUT_EP_MAXSIZE          = 64; //!< Bulk out          64
-static constexpr uint  BULK_IN_EP_MAXSIZE           = 64; //!< Bulk in           64
+static constexpr uint  BULK_OUT_EP_MAXSIZE          = 64; //!< Bulk out
+static constexpr uint  BULK_IN_EP_MAXSIZE           = 64; //!< Bulk in
 
-static constexpr uint  CDC_NOTIFICATION_EP_MAXSIZE  = 16; //!< CDC notification  16
-static constexpr uint  CDC_DATA_OUT_EP_MAXSIZE      = 16; //!< CDC data out      16
-static constexpr uint  CDC_DATA_IN_EP_MAXSIZE       = 16; //!< CDC data in       16
+static constexpr uint  CDC_NOTIFICATION_EP_MAXSIZE  = 16; //!< CDC notification
+static constexpr uint  CDC_DATA_OUT_EP_MAXSIZE      = 16; //!< CDC data out
+static constexpr uint  CDC_DATA_IN_EP_MAXSIZE       = 16; //!< CDC data in
 
 #ifdef USBDM_USB0_IS_DEFINED
 /**
@@ -152,12 +159,12 @@ public:
     * Configuration numbers, consecutive from 1
     */
    enum Configurations {
-     CONFIGURATION_NUM = 1,
-     /*
-      * Assumes single configuration
-      */
-     /** Total number of configurations */
-     NUMBER_OF_CONFIGURATIONS = CONFIGURATION_NUM,
+      CONFIGURATION_NUM = 1,
+      /*
+       * Assumes single configuration
+       */
+      /** Total number of configurations */
+      NUMBER_OF_CONFIGURATIONS = CONFIGURATION_NUM,
    };
 
    /**
@@ -167,23 +174,33 @@ public:
 
 protected:
    /* end-points */
+   
+   /** Out end-point for Bulk */
    static OutEndpoint <Usb0Info, Usb0::BULK_OUT_ENDPOINT, BULK_OUT_EP_MAXSIZE> epBulkOut;
+   
+   /** In end-point for Bulk */
    static InEndpoint  <Usb0Info, Usb0::BULK_IN_ENDPOINT,  BULK_IN_EP_MAXSIZE>  epBulkIn;
-
+   
+   /** In end-point for CDC notifications */
    static InEndpoint  <Usb0Info, Usb0::CDC_NOTIFICATION_ENDPOINT, CDC_NOTIFICATION_EP_MAXSIZE>  epCdcNotification;
+   
+   /** Out end-point for CDC data out */
    static OutEndpoint <Usb0Info, Usb0::CDC_DATA_OUT_ENDPOINT,     CDC_DATA_OUT_EP_MAXSIZE>      epCdcDataOut;
+   
+   /** In end-point for CDC data in */
    static InEndpoint  <Usb0Info, Usb0::CDC_DATA_IN_ENDPOINT,      CDC_DATA_IN_EP_MAXSIZE>       epCdcDataIn;
    /*
     * TODO Add additional End-points here
     */
 
-
-   using Uart = CdcUart<Uart0Info>;
+   using cdcInterface = USBDM::CDC_Interface;
 
 public:
 
    /**
-    * Initialise the USB interface
+    * Initialise the USB0 interface
+    *
+    *  @note Assumes clock set up for USB operation (48MHz)
     */
    static void initialise();
 
@@ -228,7 +245,12 @@ public:
     */
    static int receiveCdcData(uint8_t *data, unsigned maxSize);
 
-   static bool putCdcChar(uint8_t ch);
+   /**
+    * Notify IN (device->host) endpoint that data is available
+    *
+    * @return Not used
+    */
+   static bool notify();
 
    /**
     * Device Descriptor
@@ -262,7 +284,7 @@ public:
    };
 
    /**
-    * Other descriptors
+    * All other descriptors
     */
    static const Descriptors otherDescriptors;
 
@@ -295,9 +317,9 @@ protected:
 
       // Start CDC status transmission
       epCdcSendNotification();
-	  
-      static const uint8_t cdcInBuff[] = "Hello there\n";
-      epCdcDataIn.startTxTransaction(EPDataIn, sizeof(cdcInBuff), cdcInBuff);
+
+      // Connect notify callback
+      cdcInterface::setUsbInNotifyCallback(notify);
       /*
        * TODO Initialise additional End-points here
        */
@@ -319,12 +341,19 @@ protected:
    static void bulkInTransactionCallback(EndpointState state);
 
    /**
-    * Call-back handling CDC-INtransaction complete
+    * Call-back handling CDC-IN transaction complete\n
+    * Checks for data and schedules transfer as necessary\n
+    * Each transfer will have a ZLP as necessary.
+    *
+    * @param state Current end-point state
     */
    static void cdcInTransactionCallback(EndpointState state);
 
    /**
-    * Call-back handling CDC-OUT transaction complete
+    * Call-back handling CDC-OUT transaction complete\n
+    * Data received is passed to the cdcInterface
+    *
+    * @param state Current end-point state
     */
    static void cdcOutTransactionCallback(EndpointState state);
 
@@ -382,4 +411,4 @@ using UsbImplementation = Usb0;
 
 } // End namespace USBDM
 
-#endif /* PROJECT_HEADERS_USB_IMPLEMENTATION_H_ */
+#endif /* PROJECT_HEADERS_USB_IMPLEMENTATION_COMPOSITE_H_ */

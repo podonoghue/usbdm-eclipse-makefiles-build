@@ -236,7 +236,7 @@ private:
       tickCount++;
 
       // Update input samples & error
-      lastInput = currentInput;
+      lastInput    = currentInput;
       currentInput = inputFn();
       currentError = setpoint - currentInput;
 
