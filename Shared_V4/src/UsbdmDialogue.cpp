@@ -2444,9 +2444,9 @@ void UsbdmDialogue::OnLoadFileButtonClick( wxCommandEvent& event ) {
    LOGGING;
 
    wxString caption  = _("Select Binary File to Load");
-   wxString wildcard = _("Binary Files(*.s19,*.sx,*.s,*.srec,*.afx,*.axf,*.elf)|*.s19;*.sx;*.s;*.srec;*.afx;*.axf;*.elf|"
+   wxString wildcard = _("Binary Files(*.s19,*.sx,*.s,*.srec,*.afx,*.axf,*.elf,*.abs)|*.s19;*.sx;*.s;*.srec;*.afx;*.axf;*.elf;*.abs|"
                          "SREC Hex files (*.s19,*.sx,*.s,*.srec)|*.s19;*.sx;*.s;*.srec|"
-                         "Elf files (*.afx,*.axf,*.elf)|*.afx;*.axf;*.elf|"
+                         "Elf files (*.afx,*.axf,*.elf,*.abs)|*.afx;*.axf;*.elf;*.abs|"
                          "All Files|*");
    wxString defaultFilename = wxEmptyString;
    wxFileDialog dialog(this, caption, currentDirectory, defaultFilename, wildcard, wxFD_OPEN);
