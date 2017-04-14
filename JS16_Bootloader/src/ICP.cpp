@@ -40,9 +40,9 @@
 #include "hwdesc.h"
 #include "ProgressDialogueFactory.h"
 
-//==================================================================================
-// Common ICP routines
-//==================================================================================
+/*==================================================================================
+ * Common ICP routines
+ *=================================================================================*/
 
 static int lastCommand = 0x00; //! Last command issued - used for error checking
 
@@ -58,15 +58,15 @@ enum {                    // Command       BmRequest bRequest wValue         wIn
    ICP_GET_RESULT = 0x6F, // Get Result    $C0       $6F      $0000          $0000        $0001         Result $01 => success
 };
 
-//====================================================================
-//! ICP mode - reboot
-//!
-//! The BDM does a normal reset
-//!
-//! Used in ICP mode to reset to normal (BDM) mode.
-//! @note Communication is lost.  \n
-//!       The BDM will do the usual flash validity checks before entering BDM mode.
-//!
+/**
+ *  ICP mode - reboot
+ *
+ *  The BDM does a normal reset
+ *
+ *  Used in ICP mode to reset to normal (BDM) mode.
+ *  @note Communication is lost.  \n
+ *        The BDM will do the usual flash validity checks before entering BDM mode.
+ */
 void ICP_Reboot(void) {
    LOGGING_E;
 
@@ -79,21 +79,21 @@ void ICP_Reboot(void) {
    }
 }
 
-//====================================================================
-//! ICP mode - program BDM Flash memory
-//!
-//! @param addr    32-bit memory address
-//! @param count   number of bytes to program
-//! @param data    Pointer to buffer containing data
-//!
-//! @return
-//!      - == BDM_RC_OK => success \n
-//!      - != BDM_RC_OK => fail, see \ref USBDM_ErrorCode
-//!
-USBDM_ErrorCode ICP_Program(unsigned int   addr,
-                          unsigned int   count,
-                          unsigned char *data,
-                          ProgressDialoguePtr progressCallback) {
+/**
+ *  ICP mode - program BDM Flash memory
+ *
+ *  @param addr    32-bit memory address
+ *  @param count   number of bytes to program
+ *  @param data    Pointer to buffer containing data
+ *
+ *  @return
+ *       - == BDM_RC_OK => success \n
+ *       - != BDM_RC_OK => fail, see \ref USBDM_ErrorCode
+ */
+USBDM_ErrorCode ICP_Program(unsigned int         addr,
+                            unsigned int         count,
+                            unsigned char       *data,
+                            ProgressDialoguePtr  progressCallback) {
    LOGGING_Q;
 
    unsigned int dataSize; // Bytes to program this row
@@ -151,19 +151,19 @@ USBDM_ErrorCode ICP_Program(unsigned int   addr,
    return BDM_RC_OK;
 }
 
-//====================================================================
-//! ICP mode - erase BDM Flash memory
-//!
-//! @param addr    32-bit memory address
-//! @param count   number of bytes to erase
-//!
-//! @return
-//!      - == BDM_RC_OK => success \n
-//!      - != BDM_RC_OK => fail, see \ref USBDM_ErrorCode
-//!
-//! @note Flash memory alignment requirements should be taken into account.  The
-//! range erased should be a multiple of the Flash erase block size.
-//!
+/**
+ *  ICP mode - erase BDM Flash memory
+ *
+ *  @param addr    32-bit memory address
+ *  @param count   number of bytes to erase
+ *
+ *  @return
+ *       - == BDM_RC_OK => success \n
+ *       - != BDM_RC_OK => fail, see \ref USBDM_ErrorCode
+ *
+ *  @note Flash memory alignment requirements should be taken into account.  The
+ *  range erased should be a multiple of the Flash erase block size.
+ */
 USBDM_ErrorCode ICP_MassErase(ProgressDialoguePtr progressCallback) {
    LOGGING;
    USBDM_ErrorCode rc;
@@ -187,13 +187,13 @@ USBDM_ErrorCode ICP_MassErase(ProgressDialoguePtr progressCallback) {
    return BDM_RC_OK;
 }
 
-//====================================================================
-//! ICP mode - get result of last ICP command
-//!
-//! @return
-//!      - == BDM_RC_OK => success \n
-//!      - != BDM_RC_OK => fail, see \ref USBDM_ErrorCode
-//!
+/**
+ *  ICP mode - get result of last ICP command
+ *
+ *  @return
+ *       - == BDM_RC_OK => success \n
+ *       - != BDM_RC_OK => fail, see \ref USBDM_ErrorCode
+ */
 static USBDM_ErrorCode getResult(void) {
    LOGGING_Q;
 
@@ -226,21 +226,21 @@ static USBDM_ErrorCode getResult(void) {
    return rc;
 }
 
-//=============================================================================
-//=============================================================================
-//=============================================================================
-
-//! Initialises USB interface
-//!
-//! This must be done before any other operations.
-//!
-//! @return \n
-//!     BDM_RC_OK => OK \n
-//!     other     => USB Error - see \ref USBDM_ErrorCode
-//!
+/* =============================================================================
+ * =============================================================================
+ * ============================================================================*/
 
 bool initialised = false;
 
+/**
+ * Initialises USB interface
+ *
+ *  This must be done before any other operations.
+ *
+ *  @return \n
+ *      BDM_RC_OK => OK \n
+ *      other     => USB Error - see \ref USBDM_ErrorCode
+ */
 USBDM_ErrorCode ICP_Init(void) {
    LOGGING;
 
@@ -251,15 +251,14 @@ USBDM_ErrorCode ICP_Init(void) {
    return rc;
 }
 
-//! Clean up
-//!
-//! This must be called after all USBDM operations are finished
-//!
-//! @return \n
-//!     BDM_RC_OK => OK \n
-//!     other     => USB Error - see \ref USBDM_ErrorCode
-//!
-
+/**  Clean up
+ *
+ *  This must be called after all USBDM operations are finished
+ *
+ *  @return \n
+ *      BDM_RC_OK => OK \n
+ *      other     => USB Error - see \ref USBDM_ErrorCode
+ */
 USBDM_ErrorCode ICP_Exit(void) {
    LOGGING_E;
 
@@ -270,27 +269,27 @@ USBDM_ErrorCode ICP_Exit(void) {
    return rc;
 }
 
-//=============================================================================
-//=============================================================================
-//=============================================================================
-// USBDM Device handling
+/* =============================================================================
+ * USBDM Device handling
+ * ============================================================================*/
 
-//! Find USBDM Devices \n
-//! This function creates an internal list of USBDM devices.  The list is held until
-//! ICP_ReleaseDevices() is called. \n
-//! ICP_FindDevices() must be done before any device may be opened.
-//!
-//! @param deviceCount Number of BDM devices found
-//!
-//! @return \n
-//!     BDM_RC_OK                => OK \n
-//!     BDM_RC_NO_ICP_DEVICE   => No devices found.
-//!     other                    => other Error - see \ref USBDM_ErrorCode
-//!
-//! @note deviceCount == 0 on any error so may be used w/o checking rc
-//! @note The device list is held until ICP_ReleaseDevices() is called
-//!
-
+/**
+ *  Find USBDM Devices
+ *
+ *  This function creates an internal list of USBDM devices.  The list is held until
+ *  ICP_ReleaseDevices() is called. \n
+ *  ICP_FindDevices() must be done before any device may be opened.
+ *
+ *  @param deviceCount Number of BDM devices found
+ *
+ *  @return \n
+ *      BDM_RC_OK                => OK \n
+ *      BDM_RC_NO_ICP_DEVICE   => No devices found.
+ *      other                    => other Error - see \ref USBDM_ErrorCode
+ *
+ *  @note deviceCount == 0 on any error so may be used w/o checking rc
+ *  @note The device list is held until ICP_ReleaseDevices() is called
+ */
 USBDM_ErrorCode ICP_FindDevices(unsigned int *deviceCount) {
    LOGGING_E;
 
@@ -301,17 +300,19 @@ USBDM_ErrorCode ICP_FindDevices(unsigned int *deviceCount) {
          {JS16_BOOT_VID, JS16_BOOT_PID},
          {0,0}
    };
-   rc = bdm_usb_findDevices(deviceCount, usbIds); // look for USBDM devices on all USB busses
+   // look for USBDM devices on all USB busses
+   rc = bdm_usb_findDevices(deviceCount, usbIds);
    log.print("ICP_FindDevices(): USB initialised, found %d device(s)\n", *deviceCount);
    return rc;
 }
 
-//! Release USBDM Device list
-//!
-//! @return \n
-//!     BDM_RC_OK => OK \n
-//!     other     => USB Error - see \ref USBDM_ErrorCode
-//!
+/**
+ *  Release USBDM Device list
+ *
+ *  @return \n
+ *      BDM_RC_OK => OK \n
+ *      other     => USB Error - see \ref USBDM_ErrorCode
+ */
 
 USBDM_ErrorCode ICP_ReleaseDevices(void) {
    LOGGING_E;
@@ -319,19 +320,19 @@ USBDM_ErrorCode ICP_ReleaseDevices(void) {
    return bdm_usb_releaseDevices();
 }
 
-//! Opens a device
-//!
-//! @param deviceNo Number (0..N) of device to open.
-//! A device must be open before any communication with the device can take place.
-//!
-//! @note The range of device numbers must be obtained from ICP_FindDevices() before
-//! calling this function.
-//!
-//! @return \n
-//!     BDM_RC_OK => OK \n
-//!     other     => Error code - see \ref USBDM_ErrorCode
-//!
-
+/**
+ *   Opens a device
+ *
+ *  @param deviceNo Number (0..N) of device to open.
+ *  A device must be open before any communication with the device can take place.
+ *
+ *  @note The range of device numbers must be obtained from ICP_FindDevices() before
+ *  calling this function.
+ *
+ *  @return \n
+ *      BDM_RC_OK => OK \n
+ *      other     => Error code - see \ref USBDM_ErrorCode
+ */
 USBDM_ErrorCode ICP_Open(unsigned char deviceNo) {
    LOGGING_Q;
 
@@ -345,12 +346,12 @@ USBDM_ErrorCode ICP_Open(unsigned char deviceNo) {
    return rc;
 }
 
-//! Closes currently open device
-//!
-//! @return \n
-//!     BDM_RC_OK => OK
-//!
-
+/**
+ *  Closes currently open device
+ *
+ *  @return \n
+ *      BDM_RC_OK => OK
+ */
 USBDM_ErrorCode ICP_Close(void) {
    LOGGING_Q;
 //   uint8_t debugCommand[2] = {sizeof(debugCommand),BDM_DBG_TESTALTSPEED};

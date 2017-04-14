@@ -105,7 +105,7 @@ bool JS16_BootloaderApp::OnInit(void) {
       return false;
    }
 
-   AppSettings settings("JS16_Bootloader.cfg", "JB16 Bootloader");
+   AppSettings settings("JS16_Bootloader.cfg", "JS16 Bootloader");
    settings.load();
 
    // Create the main application window

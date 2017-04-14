@@ -24,6 +24,7 @@
 									<listOptionValue builtIn="false" value="&quot;${WXWIN}/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${WXWIN}/lib/gcc_lib/mswu&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${WXWIN}/lib/gcc_dll/mswu&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:${USBDM_SHARED}}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.814721518" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
@@ -33,6 +34,7 @@
 									<listOptionValue builtIn="false" value="&quot;${WXWIN}/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${WXWIN}/lib/gcc_lib/mswu&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${WXWIN}/lib/gcc_dll/mswu&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:${USBDM_SHARED}}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.110571434" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="TARGET=ARM"/>
@@ -48,6 +50,7 @@
 									<listOptionValue builtIn="false" value="&quot;${WXWIN}/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${WXWIN}/lib/gcc_lib/mswu&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${WXWIN}/lib/gcc_dll/mswu&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:${USBDM_SHARED}}&quot;"/>
 								</option>
 								<option id="gnu.c.compiler.option.preprocessor.def.symbols.1712372288" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="TARGET=ARM"/>

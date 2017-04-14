@@ -146,20 +146,20 @@ static libusb_device_handle *usbDeviceHandle = NULL;
 // Indicates LIBUSB has been initialized
 static bool initialised = FALSE;
 
+// Defaults to 32 bytes unless a larger value can be confirmed
 static int outEndpointMaxPacketSize = 32;
 
 #define SEQUENCE_MASK (0xC0)
 
 libusb_context *context;
 
-//**********************************************************
-//!
-//! Initialisation of low-level USB interface
-//!
-//!  @return\n
-//!       BDM_RC_OK        - success \n
-//!       BDM_RC_USB_ERROR - various errors
-//!
+/**
+ *  Initialisation of low-level USB interface
+ *
+ *   @return\n
+ *        BDM_RC_OK        - success \n
+ *        BDM_RC_USB_ERROR - various errors
+ */
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_init( void ) {
    LOGGING;
@@ -191,14 +191,13 @@ USBDM_ErrorCode bdm_usb_init( void ) {
    return BDM_RC_OK;
 }
 
-//**********************************************************
-//!
-//! De-initialise low-level USB interface
-//!
-//!  @return\n
-//!       BDM_RC_OK        - success \n
-//!       BDM_RC_USB_ERROR - various errors
-//!
+/**
+ *  De-initialise low-level USB interface
+ *
+ *   @return\n
+ *        BDM_RC_OK        - success \n
+ *        BDM_RC_USB_ERROR - various errors
+ */
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_exit( void ) {
    LOGGING_Q;
@@ -211,13 +210,12 @@ USBDM_ErrorCode bdm_usb_exit( void ) {
    return BDM_RC_OK;
 }
 
-//**********************************************************
-//!
-//! Release all devices referenced by bdm_usb_findDevices
-//!
-//!  @return\n
-//!       BDM_RC_OK        - success \n
-//!
+/**
+ *  Release all devices referenced by bdm_usb_findDevices
+ *
+ *   @return\n
+ *        BDM_RC_OK        - success \n
+ */
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_releaseDevices(void) {
    LOGGING_Q;
@@ -238,17 +236,16 @@ USBDM_ErrorCode bdm_usb_releaseDevices(void) {
    return BDM_RC_OK;
 }
 
-//**********************************************************
-//!
-//! Find all USBDM devices attached to the computer
-//!
-//!  @param deviceCount Number of devices found.  This is set
-//!                     to zero on any error.
-//!
-//!  @return\n
-//!       BDM_RC_OK        - success - found at least 1 device \n
-//!       BDM_RC_USB_ERROR - no device found or various errors
-//!
+/**
+ *  Find all USBDM devices attached to the computer
+ *
+ *   @param deviceCount Number of devices found.  This is set
+ *                      to zero on any error.
+ *
+ *   @return\n
+ *        BDM_RC_OK        - success - found at least 1 device \n
+ *        BDM_RC_USB_ERROR - no device found or various errors
+ */
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_findDevices(unsigned *devCount, const UsbId usbIds[]) {
    LOGGING_Q;
@@ -328,17 +325,15 @@ USBDM_ErrorCode bdm_usb_findDevices(unsigned *devCount, const UsbId usbIds[]) {
    }
 }
 
-//**********************************************************
-//!
-//! Walks the device configuration to find the OUT end-point size
-//!
-//! @return BDM_RC_OK => success (ignores errors)
-//!
+/**
+ *  Walks the device configuration to find the OUT end-point size
+ *
+ *  @return BDM_RC_OK => success (ignores errors)
+ */
 DLL_LOCAL
 USBDM_ErrorCode bdm_walkConfig( libusb_device *device ) {
    LOGGING;
    const int BULK_INTF_ID      = 0;
-   const int BULK_OUT_ENDPOINT = EP_OUT|1;
 
    libusb_config_descriptor *config;
    int rc = libusb_get_active_config_descriptor(device, &config);
@@ -367,10 +362,11 @@ USBDM_ErrorCode bdm_walkConfig( libusb_device *device ) {
 //      log.print("config->interface[%d].altsetting[0].endpoint[0].bEndpointAddress = %d\n",
 //            interface,
 //            config->interface[interface].altsetting[0].endpoint[0].bEndpointAddress);
-      if (config->interface[interface].altsetting[0].endpoint[0].bEndpointAddress != BULK_OUT_ENDPOINT) {
-         log.error("Unexpected end-point address 0x%2.2X\n",
-               config->interface[interface].altsetting[0].endpoint[0].bEndpointAddress);
-         return BDM_RC_USB_ERROR;
+      if (config->interface[interface].altsetting[0].endpoint[0].bEndpointAddress != EP_OUT) {
+         continue;
+//         log.error("Unexpected end-point address 0x%2.2X\n",
+//               config->interface[interface].altsetting[0].endpoint[0].bEndpointAddress);
+//         return BDM_RC_USB_ERROR;
       }
       outEndpointMaxPacketSize = config->interface[interface].altsetting[0].endpoint[0].wMaxPacketSize;
       log.print("endpointMaxPacketSize = %d\n", outEndpointMaxPacketSize);
@@ -378,16 +374,15 @@ USBDM_ErrorCode bdm_walkConfig( libusb_device *device ) {
    return (BDM_RC_OK);
 }
 
-//**********************************************************
-//!
-//! Open connection to device enumerated by bdm_usb_find_devices()
-//!
-//! @param device_no Device number to open
-//!
-//! @return \n
-//!    == BDM_RC_OK (0)     => Success\n
-//!    == BDM_RC_USB_ERROR  => USB failure
-//!
+/**
+ *  Open connection to device enumerated by bdm_usb_find_devices()
+ *
+ *  @param device_no Device number to open
+ *
+ *  @return \n
+ *     == BDM_RC_OK (0)     => Success\n
+ *     == BDM_RC_USB_ERROR  => USB failure
+ */
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_open( unsigned int device_no ) {
    LOGGING_Q;
@@ -454,9 +449,9 @@ USBDM_ErrorCode bdm_usb_open( unsigned int device_no ) {
          return BDM_RC_DEVICE_OPEN_FAILED;
       }
    }
-   rc = bdm_walkConfig(bdmDevices[device_no]);
-   if (rc != LIBUSB_SUCCESS) {
-      log.error("bdm_walkConfig(0) failed, rc = (%d):%s\n", rc, libusb_error_name(rc));
+   USBDM_ErrorCode rc2 = bdm_walkConfig(bdmDevices[device_no]);
+   if (rc2 != BDM_RC_OK) {
+      log.error("bdm_walkConfig(0) failed, USBDM rc = (%d)\n", rc2);
       return BDM_RC_USB_ERROR;
    }
 
@@ -476,12 +471,11 @@ USBDM_ErrorCode bdm_usb_open( unsigned int device_no ) {
 }
 
 
-//**********************************************************
-//!
-//! Closes connection to the currently open device
-//!
-//! @return BDM_RC_OK => success (ignores errors)
-//!
+/**
+ *  Closes connection to the currently open device
+ *
+ *  @return BDM_RC_OK => success (ignores errors)
+ */
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_close( void ) {
    int rc;
@@ -516,18 +510,17 @@ USBDM_ErrorCode bdm_usb_close( void ) {
    return BDM_RC_OK;
 }
 
-//**************************************************************************
-//!
-//! Obtain a string descriptor from currently open BDM
-//!
-//! @param index              Index of string to obtain
-//! @param deviceDescription  Ptr to buffer for descriptor
-//! @param maxLength          Size of buffer
-//!
-//! @return \n
-//!    == BDM_RC_OK (0)          => Success\n
-//!    == BDM_RC_USB_ERROR       => USB failure
-//!
+/**
+ *  Obtain a string descriptor from currently open BDM
+ *
+ *  @param index              Index of string to obtain
+ *  @param deviceDescription  Ptr to buffer for descriptor
+ *  @param maxLength          Size of buffer
+ *
+ *  @return \n
+ *     == BDM_RC_OK (0)          => Success\n
+ *     == BDM_RC_USB_ERROR       => USB failure
+ */
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_getStringDescriptor(int index, char *descriptorBuffer, unsigned maxLength) {
    const int DT_STRING = 3;
@@ -569,29 +562,29 @@ USBDM_ErrorCode bdm_usb_getStringDescriptor(int index, char *descriptorBuffer, u
    return BDM_RC_OK;
 }
 
-//*****************************************************************************
-//*****************************************************************************
-//*****************************************************************************
-//*****************************************************************************
+/*
+ * *****************************************************************************
+ * *****************************************************************************
+ * *****************************************************************************
+ */
 
-//*****************************************************************************
-//!
-//! \brief Sends a message+data to the USBDM device over EP0
-//!
-//! No response is expected from device.
-//!
-//! Since the EP0 transfer is unidirectional in this case, data returned by the
-//! device must be read in a separate transfer - this includes any status.
-//!
-//! @param data \n
-//!    data[0]    = N, the number of bytes to send (excluding this byte)\n
-//!    data[1]    = Command byte \n
-//!    data[2..N] = parameter(s) for command \n
-//!
-//! @return \n
-//!    == BDM_RC_OK (0)     => Success\n
-//!    == BDM_RC_USB_ERROR  => USB failure
-//!
+/**
+ *  Sends a message+data to the USBDM device over EP0
+ *
+ *  No response is expected from device.
+ *
+ *  Since the EP0 transfer is unidirectional in this case, data returned by the
+ *  device must be read in a separate transfer - this includes any status.
+ *
+ *  @param data \n
+ *     data[0]    = N, the number of bytes to send (excluding this byte)\n
+ *     data[1]    = Command byte \n
+ *     data[2..N] = parameter(s) for command \n
+ *
+ *  @return \n
+ *     == BDM_RC_OK (0)     => Success\n
+ *     == BDM_RC_USB_ERROR  => USB failure
+ */
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_send_ep0( const unsigned char * data ) {
    unsigned char setupPkt[] = {0,0,0,0,0,0,0};
@@ -633,27 +626,28 @@ USBDM_ErrorCode bdm_usb_send_ep0( const unsigned char * data ) {
    return(BDM_RC_OK);
 }
 
-//! \brief Sends a message of 5 bytes to the USBDM device over EP0.
-//!
-//!  An immediate response is expected
-//!
-//! @param data
-//! - Entry \n
-//!    data[0]    = N, the number of bytes to receive from the device \n
-//!    data[1]    = Command byte \n
-//!    data[2..5] = parameter(s) for OSBDM command \n
-//! - Exit \n
-//!    data[0]      = cmd response from OSBDM\n
-//!    data[1..N-1] = data response from the device (cleared on error)\n
-//! @note data must be an array of at least 5 bytes even if there are no parameters!
-//!
-//! @param actualRxSize - Size of received data (may be NULL if not needed)
-//!
-//! @return \n
-//!    == BDM_RC_OK (0)     => Success, OK response from device\n
-//!    == BDM_RC_USB_ERROR  => USB failure \n
-//!    == else              => Error code from Device
-//!
+/**
+ * Sends a message of 5 bytes to the USBDM device over EP0.
+ *
+ *   An immediate response is expected
+ *
+ *  @param data
+ *  - Entry \n
+ *     data[0]    = N, the number of bytes to receive from the device \n
+ *     data[1]    = Command byte \n
+ *     data[2..5] = parameter(s) for OSBDM command \n
+ *  - Exit \n
+ *     data[0]      = cmd response from OSBDM\n
+ *     data[1..N-1] = data response from the device (cleared on error)\n
+ *  @note data must be an array of at least 5 bytes even if there are no parameters!
+ *
+ *  @param actualRxSize - Size of received data (may be NULL if not needed)
+ *
+ *  @return \n
+ *     == BDM_RC_OK (0)     => Success, OK response from device\n
+ *     == BDM_RC_USB_ERROR  => USB failure \n
+ *     == else              => Error code from Device
+ */
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_recv_ep0(unsigned char *data, unsigned *actualRxSize) {
    unsigned char size = data[0];   // Transfer size is the first byte
@@ -720,12 +714,14 @@ USBDM_ErrorCode bdm_usb_recv_ep0(unsigned char *data, unsigned *actualRxSize) {
    return(BDM_RC_OK);
 }
 
-//*****************************************************************************
-//*****************************************************************************
-//*****************************************************************************
-//*****************************************************************************
+/*
+ * *****************************************************************************
+ * *****************************************************************************
+ * *****************************************************************************
+ */
 
-/*! \brief Sends a message+data to the Device over EP0
+/**
+ *  Sends a message+data to the Device over EP0
  *
  *  No response is expected from device.
  *
@@ -781,7 +777,8 @@ USBDM_ErrorCode bdm_usb_raw_send_ep0(unsigned int         bmRequest,
    return(BDM_RC_OK);
 }
 
-/* \brief Receive data from the Device over EP0 in
+/**
+ *  Receive data from the Device over EP0 in
  *
  *  An immediate response is expected from device.
  *
@@ -836,34 +833,36 @@ USBDM_ErrorCode bdm_usb_raw_recv_ep0(unsigned int   bmRequest,
    return BDM_RC_OK;
 }
 
-//*****************************************************************************
-//*****************************************************************************
-//*****************************************************************************
-//*****************************************************************************
+/*
+ * *****************************************************************************
+ * *****************************************************************************
+ * *****************************************************************************
+ */
 
-//! \brief Sends a command to the USBDM device over the Out Bulk Endpoint
-//!
-//! Since the EP transfer is unidirectional, data returned by the
-//! device must be read in a separate transfer - this includes any status
-//! from extended command execution.
-//!
-//! @param count = # of bytes to Tx (N)
-//!
-//! @param data                                 \n
-//!    OUT                                      \n
-//!    =======================================  \n
-//!    data[0]      = reserved                  \n
-//!    data[1]      = command byte              \n
-//!    data[2..N-1] = parameters                \n
-//!                                             \n
-//!    IN                                       \n
-//!    ======================================== \n
-//!    data[0]      = error code (=rc)
-//!
-//! @return
-//!   BDM_RC_OK        => USB transfer OK \n
-//!   BDM_RC_USB_ERROR => USB transfer Failed
-//!
+/**
+ *  Sends a command to the USBDM device over the Out Bulk Endpoint
+ *
+ *  Since the EP transfer is unidirectional, data returned by the
+ *  device must be read in a separate transfer - this includes any status
+ *  from extended command execution.
+ *
+ *  @param count = # of bytes to Tx (N)
+ *
+ *  @param data                                 \n
+ *     OUT                                      \n
+ *     =======================================  \n
+ *     data[0]      = reserved                  \n
+ *     data[1]      = command byte              \n
+ *     data[2..N-1] = parameters                \n
+ *                                              \n
+ *     IN                                       \n
+ *     ======================================== \n
+ *     data[0]      = error code (=rc)
+ *
+ *  @return
+ *    BDM_RC_OK        => USB transfer OK \n
+ *    BDM_RC_USB_ERROR => USB transfer Failed
+ */
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_send_epOut(unsigned int count, const unsigned char *data) {
    int rc;
@@ -915,28 +914,30 @@ USBDM_ErrorCode bdm_usb_send_epOut(unsigned int count, const unsigned char *data
    return BDM_RC_OK;
 }
 
-//! Temporary buffer for IN transactions
-//!
+/**
+ * Temporary buffer for IN transactions
+ */
 static unsigned char dummyBuffer[512];
 
-//! \brief Receives a response from the USBDM device over the In Bulk Endpoint
-//! Responses are retried to allow for target execution
-//!
-//! @param count = Maximum number of bytes to receive
-//!
-//! @param data
-//!    IN                                       \n
-//!    ======================================== \n
-//!    data[0]      = error code (= rc)         \n
-//!    data[1..N]   = data received             \n
-//!
-//! @param actualCount = Actual number of bytes received
-//!
-//! @return                                                       \n
-//!    == BDM_RC_OK (0)     => Success, OK response from device   \n
-//!    == BDM_RC_USB_ERROR  => USB failure                        \n
-//!    == else              => Error code from Device
-//!
+/**
+ *  Receives a response from the USBDM device over the In Bulk Endpoint\n
+ *  Responses are retried to allow for target execution
+ *
+ *  @param count = Maximum number of bytes to receive
+ *
+ *  @param data
+ *     IN                                       \n
+ *     ======================================== \n
+ *     data[0]      = error code (= rc)         \n
+ *     data[1..N]   = data received             \n
+ *
+ *  @param actualCount = Actual number of bytes received
+ *
+ *  @return                                                       \n
+ *     == BDM_RC_OK (0)     => Success, OK response from device   \n
+ *     == BDM_RC_USB_ERROR  => USB failure                        \n
+ *     == else              => Error code from Device
+ */
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_recv_epIn(unsigned count, unsigned char *data, unsigned *actualCount) {
    int rc;
@@ -994,10 +995,11 @@ USBDM_ErrorCode bdm_usb_recv_epIn(unsigned count, unsigned char *data, unsigned 
    return (USBDM_ErrorCode)(rc);
 }
 
-//! Attempt to reset the USB connection without upsetting target
-//!
-//! @return BDM_RC_OK => USB device re-opened OK
-//!
+/**
+ *  Attempt to reset the USB connection without upsetting target
+ *
+ *  @return BDM_RC_OK => USB device re-opened OK
+ */
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_reset_connection(void) {
    int rc;
@@ -1025,7 +1027,7 @@ USBDM_ErrorCode bdm_usb_reset_connection(void) {
    return BDM_RC_OK;
 }
 
-/*
+/**
  * @param usb_data - response from BDM
  * @param rxSize - size of response (may be NULL)
  *
@@ -1041,10 +1043,12 @@ USBDM_ErrorCode bdm_usb_getversion(uint8_t usb_data[10], unsigned *rxSize) {
 }
 
 #ifdef USBDM_DLL_EXPORTS
-//! \brief Executes an USB transaction.
-//! This consists of a transmission of a command and reception of the response
-//! JB16 Version - see \ref bdm_usb_transaction()
-//!
+/**
+ * Executes an USB transaction.
+ *
+ * This consists of a transmission of a command and reception of the response
+ * JB16 Version - see \ref bdm_usb_transaction()
+ */
 static
 USBDM_ErrorCode bdmJB16_usb_transaction( unsigned int   txSize,
                                          unsigned int   rxSize,
@@ -1075,10 +1079,12 @@ USBDM_ErrorCode bdmJB16_usb_transaction( unsigned int   txSize,
    return rc;
 }
 
-//! \brief Executes an USB transaction.
-//! This consists of a transmission of a command and reception of the response
-//! JMxx Version - see \ref bdm_usb_transaction()
-//!
+/**
+ *  Executes an USB transaction.
+ *
+ *  This consists of a transmission of a command and reception of the response
+ *  JMxx Version - see \ref bdm_usb_transaction()
+ */
 static
 USBDM_ErrorCode bdmJMxx_simple_usb_transaction( bool                 commandToggle,
                                                 unsigned int         txSize,
@@ -1162,12 +1168,14 @@ USBDM_ErrorCode bdmJMxx_simple_usb_transaction( bool                 commandTogg
    return rc;
 }
 
-//! \brief Executes an USB transaction.
-//! This consists of a transmission of a command and reception of the response
-//! JMxx Version - see \ref bdm_usb_transaction()
-//!
-//! @Note includes retries
-//!
+/**
+ *  Executes an USB transaction.
+ *
+ *  This consists of a transmission of a command and reception of the response
+ *  JMxx Version - see \ref bdm_usb_transaction()
+ *
+ *  @Note includes retries
+ */
 static
 USBDM_ErrorCode bdmJMxx_usb_transaction( unsigned int   txSize,
                                          unsigned int   rxSize,
@@ -1194,10 +1202,12 @@ USBDM_ErrorCode bdmJMxx_usb_transaction( unsigned int   txSize,
    return bdmJMxx_simple_usb_transaction(commandToggle, txSize, rxSize, outData, data, actualRxSize);
 }
 
-//! \brief Executes an USB transaction.
-//! This consists of a transmission of a command and reception of the response
-//! JMxx Version - see \ref bdm_usb_transaction()
-//!
+/**
+ *  Executes an USB transaction.
+ *
+ *  This consists of a transmission of a command and reception of the response
+ *  JMxx Version - see \ref bdm_usb_transaction()
+ */
 static
 USBDM_ErrorCode bdmVersion5_simple_usb_transaction(
       unsigned int         txSize,
@@ -1268,12 +1278,14 @@ USBDM_ErrorCode bdmVersion5_simple_usb_transaction(
 
 }
 
-//! \brief Executes an USB transaction.
-//! This consists of a transmission of a command and reception of the response
-//! JMxx Version - see \ref bdm_usb_transaction()
-//!
-//! @Note includes retries
-//!
+/**
+ *  Executes an USB transaction.
+ *
+ *  This consists of a transmission of a command and reception of the response
+ *  JMxx Version - see \ref bdm_usb_transaction()
+ *
+ *  @Note includes retries
+ */
 static
 USBDM_ErrorCode bdmVersion5_usb_transaction(
       unsigned int   txSize,
@@ -1292,33 +1304,35 @@ USBDM_ErrorCode bdmVersion5_usb_transaction(
    return bdmVersion5_simple_usb_transaction(txSize, rxSize, outData, data, actualRxSize);
 }
 
-//! \brief Executes an USB transaction.
-//! This consists of a transmission of a command and reception of the response
-//!
-//! @param txSize = size of transmitted packet
-//!
-//! @param rxSize = maximum size of received packet
-//!
-//! @param data   = IN/OUT buffer for data                           \n
-//!    Transmission                                                  \n
-//!    ===================================                           \n
-//!    data[0]    = reserved for USB layer                           \n
-//!    data[1]    = command                                          \n
-//!    data[2..N] = data                                             \n
-//!                                                                  \n
-//!    Reception                                                     \n
-//!    ============================================================= \n
-//!    data[0]    = response code (error code - see \ref USBDM_ErrorCode) \n
-//!    data[1..N] = command response
-//!
-//! @param timeout      = timeout in ms
-//! @param actualRxSize = number of bytes actually received (may be NULL if not required)
-//!
-//! @return                                                          \n
-//!    == BDM_RC_OK (0)     => Success, OK response from device      \n
-//!    == BDM_RC_USB_ERROR  => USB failure                           \n
-//!    == else              => Error code from BDM
-//!
+/**
+ *  Executes an USB transaction.
+ *
+ *  This consists of a transmission of a command and reception of the response
+ *
+ *  @param txSize = size of transmitted packet
+ *
+ *  @param rxSize = maximum size of received packet
+ *
+ *  @param data   = IN/OUT buffer for data                           \n
+ *     Transmission                                                  \n
+ *     ===================================                           \n
+ *     data[0]    = reserved for USB layer                           \n
+ *     data[1]    = command                                          \n
+ *     data[2..N] = data                                             \n
+ *                                                                   \n
+ *     Reception                                                     \n
+ *     ============================================================= \n
+ *     data[0]    = response code (error code - see \ref USBDM_ErrorCode) \n
+ *     data[1..N] = command response
+ *
+ *  @param timeout      = timeout in ms
+ *  @param actualRxSize = number of bytes actually received (may be NULL if not required)
+ *
+ *  @return                                                          \n
+ *     == BDM_RC_OK (0)     => Success, OK response from device      \n
+ *     == BDM_RC_USB_ERROR  => USB failure                           \n
+ *     == else              => Error code from BDM
+ */
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_transaction( unsigned int   txSize,
                                      unsigned int   rxSize,
