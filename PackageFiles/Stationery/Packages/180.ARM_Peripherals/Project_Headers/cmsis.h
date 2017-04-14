@@ -176,6 +176,29 @@ public:
       return osMutexWait((osMutexId) os_mutex_cb, millisec);
    }
    /**
+    * Obtain mutex
+    *
+    * @param millisec How long to wait in milliseconds. Use osWaitForever for indefinite wait
+    *
+    * @return osOK: The mutex has been obtain.
+    * @return osErrorTimeoutResource: The mutex could not be obtained in the given time.
+    * @return osErrorResource: The mutex could not be obtained when no timeout was specified.
+    * @return osErrorParameter: The parameter mutex_id is incorrect.
+    * @return osErrorISR: osMutexWait cannot be called from interrupt service routines.
+    */
+   osStatus lock(uint32_t millisec=osWaitForever) {
+      return osMutexWait((osMutexId) os_mutex_cb, millisec);
+   }
+   /**
+    * Obtain mutex
+    *
+    * @return osOK: The mutex has been obtain.
+    * @return osErrorTimeoutResource: The mutex could not be obtained in the given time.
+    */
+   osStatus tryLock() {
+      return osMutexWait((osMutexId) os_mutex_cb, 0);
+   }
+   /**
     * Release mutex
     *
     * @return osOK: the mutex has been correctly released.
@@ -183,6 +206,16 @@ public:
     * @return osErrorISR: osMutexRelease cannot be called from interrupt service routines.
     */
    osStatus release() {
+      return osMutexRelease((osMutexId) os_mutex_cb);
+   }
+   /**
+    * Release mutex
+    *
+    * @return osOK: the mutex has been correctly released.
+    * @return osErrorResource: the mutex was not obtained before.
+    * @return osErrorISR: osMutexRelease cannot be called from interrupt service routines.
+    */
+   osStatus unlock() {
       return osMutexRelease((osMutexId) os_mutex_cb);
    }
    /**
@@ -470,7 +503,7 @@ public:
     * @return osErrorISR: Cannot be called from interrupt service routines.
     *
     */
-   osStatus yield() {
+   static osStatus yield() {
       return osThreadYield();
    }
    /**
