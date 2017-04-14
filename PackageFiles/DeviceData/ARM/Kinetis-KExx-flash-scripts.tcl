@@ -278,13 +278,6 @@ proc massEraseTarget { } {
       after 50
    }
    
-   ;# Disable NMI here so we can still debug target using Erase-All option
-   puts "massEraseTarget{} - Disabling NMI"
-   catch { connect }
-   set soptValue [rb $::SIM_SOPT]
-   wb  $::SIM_SOPT [ expr $soptValue & ~$::SIM_SOPT_NMIE_MASK]
-   rb $::SIM_SOPT
-
    ;# Resetting target using MDM
    puts "massEraseTarget{} - Writing MDM_AP_C_SYSTEM_RESET + MDM_AP_C_CORE_HOLD"
    wcreg $::MDM_AP_Control [expr $::MDM_AP_C_CORE_HOLD | $::MDM_AP_C_SYSTEM_RESET]
