@@ -1,6 +1,6 @@
 /**
- * @file    flash.h
- * @brief   Flash support
+ * @file    ftfl.h
+ * @brief   Flash support for FTFL
  *
  *  Created on: 21 Sep 2016
  *      Author: podonoghue
@@ -10,6 +10,7 @@
 #define SOURCES_FLASH_H_
 
 #include <assert.h>
+#include "hardware.h"
 #include "derivative.h"
 #include "delay.h"
 
@@ -35,7 +36,7 @@ typedef enum {
    FLASH_ERR_NEW_EEPROM        = (15), // Indicates EEPROM has just bee partitioned and need initialisation
 } FlashDriverError_t;
 
-class Flash {
+class Flash : public FtflInfo {
 
 protected:
 
@@ -50,53 +51,6 @@ protected:
       assert (!singletonFlag);
       singletonFlag = true;
    }
-
-   /** Selects EEPROM size */
-   enum EepromSel {
-      eeprom32Bytes,
-      eeprom64Bytes,
-      eeprom128Bytes,
-      eeprom256Bytes,
-      eeprom512Bytes,
-      eeprom1KBytes,
-      eeprom2KBytes,
-   };
-
-   //#define KINETIS_32K_FLEXRAM
-#define KINETIS_64K_FLEXRAM
-
-#if defined(KINETIS_32K_FLEXRAM)
-   /** Selects division of FlexNVM between flash and EEPROM backing storage */
-   enum PartitionSel {
-      partition_flash32K_eeprom0K,
-      partition_flash24K_eeprom8K,
-      partition_flash16K_eeprom16K,
-      partition_flash8K_eeprom24K,
-      partition_flash0K_eeprom32K,
-      partition_flash0K_eeprom_all = partition_flash0K_eeprom32K,
-   };
-   /** Selects division two regions of EEPROM (if supported on device) */
-   enum PartitionSplit {
-      partition_default=0x30, //! Single partition
-   };
-#elif defined(KINETIS_64K_FLEXRAM)
-   /** Selects division of FlexNVM between flash and EEPROM backing storage */
-   enum PartitionSel {
-      partition_flash64K_eeprom0K,
-      partition_flash32K_eeprom32K,
-      partition_flash0K_eeprom64K,
-      partition_flash0K_eeprom_all = partition_flash0K_eeprom64K,
-   };
-   /** Selects division two regions of EEPROM (if supported on device) */
-   enum PartitionSplit {
-      partition_A1_B7 = 0x00,             //! A=1/8, B=7/8
-      partition_A2_B6 = 0x10,             //! A=2/8=1/4, B=6/8=3/4
-      partition_A4_B4 = 0x30,             //! A=4/8=1/2, B=4/8=1/2
-      partition_A1_B3 = partition_A2_B6,  //! A=2/8=1/4, B=6/8=3/4
-      partition_A1_B1 = partition_A4_B4,  //! A=2/8=1/4, B=6/8=3/4
-      partition_default=partition_A4_B4,  //! Equal partitions
-   };
-#endif
 
    /**
     * Launch & wait for Flash command to complete
@@ -147,7 +101,10 @@ protected:
     *
     * @note This routine will only partition EEPROM when first executed after the device has been programmed.
     */
-   static FlashDriverError_t initialiseEeprom(EepromSel eeprom, PartitionSel partition=partition_flash0K_eeprom_all, PartitionSplit split=partition_default);
+   static FlashDriverError_t initialiseEeprom(
+         EepromSel        eeprom=eepromSel,
+         PartitionSel     partition=partitionSel,
+         PartitionSplit   split=partitionSplit);
 
 public:
 

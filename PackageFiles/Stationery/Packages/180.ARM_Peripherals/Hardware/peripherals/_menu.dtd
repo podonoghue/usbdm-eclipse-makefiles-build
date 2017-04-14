@@ -198,7 +198,7 @@
    <!ATTLIST constant name         ID           #IMPLIED>
    <!ATTLIST constant id           CDATA        #IMPLIED>
    <!ATTLIST constant key          CDATA        #IMPLIED>
-   <!ATTLIST constant value        CDATA #REQUIRED>
+   <!ATTLIST constant value        CDATA        #REQUIRED>
    <!ATTLIST constant type         (boolean|int|string)  "string" >
    <!ATTLIST constant weak         (true|false)          "false">
    <!ATTLIST constant replace      (true|false)          "false">

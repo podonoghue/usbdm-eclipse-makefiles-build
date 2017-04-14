@@ -127,7 +127,7 @@
          <clock reg="SCGC6"         mask="SIM_SCGC6_FLEXCAN0_MASK" />
       </peripheral>
       <peripheral baseName="FTFL"     instance=""         version="ftfl">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtfl" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_FTFL_MASK" />
       </peripheral>
       <peripheral baseName="FTM"      instance="">

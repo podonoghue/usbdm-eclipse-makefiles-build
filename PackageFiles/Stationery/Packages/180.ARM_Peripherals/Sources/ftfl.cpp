@@ -1,11 +1,10 @@
 /**
- * @file    flash.cpp
+ * @file    ftfl.cpp
  * @brief   Flash support code
  *
  *  Created on: 10/1/2016
  *      Author: podonoghue
  */
-#include <Flash.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -13,6 +12,8 @@
 #include "derivative.h"
 #include "hardware.h"
 #include "delay.h"
+#include "ftfl.h"
+
 
 namespace USBDM {
 
@@ -158,6 +159,9 @@ struct PartitionInformation {
    const uint8_t  value;         //! Partition value
 };
 
+//#define KINETIS_32K_FLEXRAM
+#define KINETIS_64K_FLEXRAM
+
 #if defined(KINETIS_32K_FLEXRAM)
 static const PartitionInformation partitionInformation[] {
       // Flash   Backing   Value
@@ -212,15 +216,19 @@ FlashDriverError_t Flash::partitionFlash(uint8_t eeprom, uint8_t partition) {
  * @param partition  FlexNVM Partition choice (defaults to all EEPROM backing store)
  * @param split      Split between A/B Flash portions (if supported by target)
  *
- * @return
- *       FLASH_ERR_OK         => EEPROM previous configured - no action required\n
- *       FLASH_ERR_NEW_EEPROM => EEPROM has just been partitioned - contents are 0xFF, initialisation required\n
+ * @return FLASH_ERR_OK         => EEPROM previous configured - no action required
+ * @return FLASH_ERR_NEW_EEPROM => EEPROM has just been partitioned - contents are 0xFF, initialisation required
  *
  * @note This routine will only partition EEPROM when first executed after the device has been programmed.
  */
-FlashDriverError_t Flash::initialiseEeprom(EepromSel eeprom, PartitionSel partition, PartitionSplit split) {
+FlashDriverError_t Flash::initialiseEeprom(
+      EepromSel eeprom,
+      PartitionSel partition,
+      PartitionSplit split) {
+
 //   printf("initialiseEeprom(eeprom=%d bytes, eeprom backing=%ldK, residual flash=%ldK)\n",
 //         eepromSizes[eeprom].size, partitionInformation[partition].eeepromSize>>10, partitionInformation[partition].flashSize>>10);
+
    if (isFlexRamConfigured()) {
       return FLASH_ERR_OK;
    }

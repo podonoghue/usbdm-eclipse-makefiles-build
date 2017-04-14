@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"
+?>
+<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!-- ftfl.xml -->
+
+<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flash Memory Module" >
+   <choiceOption name="EepromSize" 
+      description="FlexNVM - EEPROM size"
+      toolTip="Selects EEPROM size">
+      <choice value="eeprom32Bytes"  name="32 bytes" />
+      <choice value="eeprom64Bytes"  name="64 bytes" />
+      <choice value="eeprom128Bytes" name="128 bytes" />
+      <choice value="eeprom256Bytes" name="256 bytes" />
+      <choice value="eeprom512Bytes" name="512 bytes" />
+      <choice value="eeprom1KBytes"  name="1K bytes" />
+      <choice value="eeprom2KBytes"  name="2K bytes" isDefault="true"/>
+   </choiceOption>
+   
+   <choiceOption name="FlashPartition" 
+      description="FlexNVM - Flash EEPROM partition"
+      toolTip="Selects division of FlexNVM between flash and EEPROM backing storage\n
+               The larger the EEPROM backing the better the wear characteristic">
+      <choice value="partition_flash64K_eeprom0K" name="flash=64K eeprom=0K" />
+      <choice value="partition_flash32K_eeprom32K" name="flash=32K eeprom=32K" />
+      <choice value="partition_flash0K_eeprom64K" name="flash=0K eeprom=64K" isDefault="true"/>
+   </choiceOption>
+   
+   <choiceOption name="FlexNVM_Partition" 
+      description="FlexNVM - EEPROM partition"
+      toolTip="Selects division of the two regions of EEPROM (if supported on device)\n
+               This allows A/B regions to have different wear characteristics">
+      <choice value="partition_A1_B7_8ths" name="A=1/8, B=7/8" />
+      <choice value="partition_A2_B6_8ths" name="A=1/4, B=3/4" />
+      <choice value="partition_A4_B4_8ths" name="A=1/2, B=1/2" isDefault="true"/>
+   </choiceOption>
+
+   <projectActionList id = "flash_files" >
+      <copy source="Project_Headers/flash.h" target="Project_Headers/flash.h" replace="true"  derived="true" />
+      <copy source="Project_Headers/ftfl.h"  target="Project_Headers/ftfl.h"  replace="true"  derived="true" />
+      <copy source="Sources/ftfl.cpp"        target="Sources/ftfl.cpp"        replace="true"  derived="true" />
+   </projectActionList>
+
+   <constant name="FlashType" id="/Flash/FlashType" key="/Flash/FlashType" value="ftfl" />
+   
+   <template><![CDATA[
+      \t/** Selects EEPROM size */
+      \tenum EepromSel {
+      \t   eeprom32Bytes,
+      \t   eeprom64Bytes,
+      \t   eeprom128Bytes,
+      \t   eeprom256Bytes,
+      \t   eeprom512Bytes,
+      \t   eeprom1KBytes,
+      \t   eeprom2KBytes,
+      \t};\n\n
+      
+      \t/** Selects division of FlexNVM between flash and EEPROM backing storage */
+      \tenum PartitionSel {
+      \t   partition_flash64K_eeprom0K,
+      \t   partition_flash32K_eeprom32K,
+      \t   partition_flash0K_eeprom64K,
+      \t
+      \t   // All EEPROM
+      \t   partition_flash0K_eeprom_all = partition_flash0K_eeprom64K,
+      \t};\n\n
+      
+      \t/**
+      \t * Selects division of the two regions of EEPROM (if supported on device)
+      \t * This allows A/B regions to have different wear characteristics
+      \t */
+      \tenum PartitionSplit {
+      \t   partition_A1_B7_8ths = 0x00,                 //! A=1/8, B=7/8
+      \t   partition_A2_B6_8ths = 0x10,                 //! A=2/8=1/4, B=6/8=3/4
+      \t   partition_A4_B4_8ths = 0x30,                 //! A=4/8=1/2, B=4/8=1/2
+      \t   partition_A1_B3_8ths = partition_A2_B6_8ths, //! A=2/8=1/4, B=6/8=3/4
+      \t   partition_A1_B1_8ths = partition_A4_B4_8ths, //! A=2/8=1/4, B=6/8=3/4
+      \t
+      \t   // Default - A = B = 1/2
+      \t   partition_default=partition_A4_B4_8ths,      //! Equal partitions
+      \t};\n\n
+   
+      \t//! FlexNVM - EEPROM size
+      \tstatic constexpr EepromSel eepromSel = $(EepromSize);\n\n
+
+      \t//! FlexNVM - Flash EEPROM partition
+      \tstatic constexpr PartitionSel partitionSel = $(FlashPartition);\n\n
+
+      \t//! FlexNVM - EEPROM partition
+      \tstatic constexpr PartitionSplit partitionSplit = $(FlexNVM_Partition);\n\n
+   ]]></template>
+
+</devicePage>

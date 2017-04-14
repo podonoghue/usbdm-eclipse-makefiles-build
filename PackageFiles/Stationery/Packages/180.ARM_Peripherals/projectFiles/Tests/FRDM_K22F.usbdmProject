@@ -70,7 +70,7 @@
    <item key="/ADC0/adc_cfg1_adlpc"                        value="false" />
    <item key="/ADC0/adc_cfg1_adlsmp"                       value="false" />
    <item key="/ADC0/adc_cfg1_mode"                         value="2" />
-   <item key="/ADC0/adc_cfg2_adacken"                      value="false" />
+   <item key="/ADC0/adc_cfg2_adacken"                      value="true" />
    <item key="/ADC0/adc_cfg2_adhsc"                        value="false" />
    <item key="/ADC0/adc_cfg2_adlsts"                       value="0" />
    <item key="/ADC0/adc_sc2_adtrg"                         value="false" />
@@ -145,7 +145,7 @@
    <item key="/DAC0/dac_c1_dacbfwm"                        value="0" />
    <item key="/DAC0/dac_c1_dmaen"                          value="false" />
    <item key="/DAC0/dac_c2_dacbfup"                        value="1" />
-   <item key="/DAC0/irqHandlerInstalled"                   value="false" />
+   <item key="/DAC0/irqHandlerInstalled"                   value="true" />
    <item key="/DAC0/irqLevel"                              value="0" />
    <item key="/DAC1/dac_c0_dacbbien"                       value="false" />
    <item key="/DAC1/dac_c0_dacbtien"                       value="false" />
@@ -210,7 +210,7 @@
    <item key="/FTM3/period"                                value="10000" />
    <item key="/GPIOA/irqHandlerInstalled"                  value="true" />
    <item key="/GPIOA/irqLevel"                             value="0" />
-   <item key="/GPIOB/irqHandlerInstalled"                  value="false" />
+   <item key="/GPIOB/irqHandlerInstalled"                  value="true" />
    <item key="/GPIOB/irqLevel"                             value="0" />
    <item key="/GPIOC/irqHandlerInstalled"                  value="false" />
    <item key="/GPIOC/irqLevel"                             value="0" />
@@ -316,7 +316,7 @@
    <item key="/OSC0/system_oscerclk_undiv_clock"           value="8000000" />
    <item key="/PDB0/irqHandlerInstalled"                   value="false" />
    <item key="/PDB0/irqLevel"                              value="0" />
-   <item key="/PIT/irqHandlerInstalled"                    value="false" />
+   <item key="/PIT/irqHandlerInstalled"                    value="true" />
    <item key="/PIT/irqLevel"                               value="0" />
    <item key="/PIT/pit_ldval"                              value="10000" />
    <item key="/PIT/pit_mcr_frz"                            value="false" />
