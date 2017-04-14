@@ -1265,14 +1265,14 @@ USBDM_ErrorCode FlashImageImp::loadElfBlock(
       //      log.print("[empty]\n");
       return BDM_RC_OK;
    }
-#if defined(TARGET) && (TARGET == MC56F80xx)
-      log.print("[0x%08X..0x%08X]\n", addr, addr+size/2-1);
-#else
-      log.print("[0x%08X..0x%08X]\n", addr, addr+size-1);
-#endif
+//#if defined(TARGET) && (TARGET == MC56F80xx)
+//      log.print("[0x%08X..0x%08X]\n", addr, addr+size/2-1);
+//#else
+//      log.print("[0x%08X..0x%08X]\n", addr, addr+size-1);
+//#endif
    fseek(fp, fOffset, SEEK_SET);
    while (size>0) {
-      uint8_t buff[1000];
+      uint8_t buff[1024];
       Elf32_Word blockSize = size;
       if (blockSize > sizeof(buff)) {
          blockSize = sizeof(buff);
@@ -1283,9 +1283,9 @@ USBDM_ErrorCode FlashImageImp::loadElfBlock(
          return SFILE_RC_ELF_FORMAT_ERROR;
       }
 //      #if defined(TARGET) && (TARGET == MC56F80xx)
-//            printDump(buff, blockSize, addr, WORD_ADDRESS|WORD_DISPLAY);
+//            printDump(buff, blockSize, addr, UsbdmSystem::WORD_ADDRESS|UsbdmSystem::WORD_DISPLAY);
 //      #else
-//            printDump(buff, blockSize, addr, BYTE_ADDRESS);
+//            log.printDump(buff, blockSize, addr, UsbdmSystem::BYTE_ADDRESS);
 //      #endif
       for (unsigned index=0; index<blockSize; ) {
          uint16_t value;
@@ -1363,14 +1363,14 @@ void FlashImageImp::fixElfHeaderSex(Elf32_Ehdr *elfHeader) {
  *
  *  @param programHeader ELF Program header to print
  */
-void FlashImageImp::printElfProgramHeader(Elf32_Phdr *programHeader) {
+void FlashImageImp::printElfProgramHeader(Elf32_Phdr *programHeader, uint32_t loadAddress) {
    if (printHeader) {
       UsbdmSystem::Log::printq("=== Program Header Table (Segments) ===\n"
             "p_type                       p_offset   p_vaddr    p_paddr    p_filesz   p_memsz    p_align    p_flags\n");
       printHeader = false;
    }
    UsbdmSystem::Log::printq(
-         "0x%08X (%-15s) 0x%08X 0x%08X 0x%08X 0x%08X 0x%08X 0x%08X 0x%08X (%-20s)\n",
+         "0x%08X (%-15s) 0x%08X 0x%08X 0x%08X 0x%08X 0x%08X 0x%08X 0x%08X (%-20s)",
          programHeader->p_type  , get_pTypeName(programHeader->p_type),
          programHeader->p_offset,
          programHeader->p_vaddr ,
@@ -1380,6 +1380,12 @@ void FlashImageImp::printElfProgramHeader(Elf32_Phdr *programHeader) {
          programHeader->p_align ,
          programHeader->p_flags , get_pFlagsName(programHeader->p_flags)
    );
+   if (loadAddress != (uint32_t)-1) {
+      UsbdmSystem::Log::printq("@0x%08X\n", loadAddress);
+   }
+   else {
+      UsbdmSystem::Log::printq("\n");
+   }
 }
 
 /**
@@ -1497,7 +1503,7 @@ const char * FlashImageImp::getElfString(unsigned index) {
    return symTable+index;
 }
 
-#define USE_SECTIONS
+//#define USE_SECTIONS
 
 /**
  *  Load a ELF file into the buffer. \n
@@ -1617,12 +1623,10 @@ USBDM_ErrorCode FlashImageImp::loadElfFile(const string &filePath) {
 #else
    // Load image based on suitable segments
    log.print("Loading by Program Headers\n");
+   printHeader = true;
    for(Elf32_Phdr *programHeader=programHeaders;
          programHeader<(programHeaders+elfHeader.e_phnum);
          programHeader++) {
-      if (programHeader->p_filesz>0) {
-         printElfProgramHeader(programHeader);
-      }
       USBDM_ErrorCode rc = loadElfBlockByProgramHeader(programHeader);
       if (rc != BDM_RC_OK) {
          return rc;
@@ -1729,16 +1733,15 @@ USBDM_ErrorCode FlashImageImp::loadElfBlockByProgramHeader(Elf32_Phdr *programHe
 //   printElfProgramHeader(programHeader);
 
    Elf32_Addr loadAddress;
-   if ((programHeader->p_type&PT_LOAD) == 0) {
+   if (programHeader->p_type != PT_LOAD) {
       return BDM_RC_OK;
    }
    if (programHeader->p_filesz == 0) {
       return BDM_RC_OK;
    }
    if ((targetType == T_RS08) || (targetType == T_HCS08) || (targetType == T_HCS12) || (targetType == T_S12Z) || (targetType == T_MC56F80xx)) {
-      // These targets use the virtual address as the load address
+      // These targets use the virtual address as the (segmented) load address
       loadAddress = programHeader->p_vaddr;
-      log.print("Using p_vaddr = 0x%08X\n", loadAddress);
 #if defined(TARGET) && (TARGET == MC56F80xx)
       if ((programHeader->p_flags&PF_X) == 0) {
          // Indicates X:ROM/X:RAM (not executable)
@@ -1748,8 +1751,11 @@ USBDM_ErrorCode FlashImageImp::loadElfBlockByProgramHeader(Elf32_Phdr *programHe
    }
    else {
       // Other targets load at the physical address (VADDR is RAM copy destination)
+      // T_CFV1, T_CFVx, T_ARM
       loadAddress = programHeader->p_paddr;
-      log.print("Using p_paddr = 0x%08X\n", loadAddress);
+   }
+   if (programHeader->p_filesz>0) {
+      printElfProgramHeader(programHeader, loadAddress);
    }
    return loadElfBlock(fp, programHeader->p_offset, programHeader->p_filesz, loadAddress);
 }

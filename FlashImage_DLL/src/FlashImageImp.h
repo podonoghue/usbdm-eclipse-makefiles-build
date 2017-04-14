@@ -147,7 +147,7 @@ protected:
 
    void                    fixElfHeaderSex(Elf32_Ehdr *elfHeader);
    void                    printElfHeader(Elf32_Ehdr *elfHeader);
-   void                    printElfProgramHeader(Elf32_Phdr *programHeader);
+   void                    printElfProgramHeader(Elf32_Phdr *programHeader, uint32_t loadAddress=-1);
    void                    printElfSectionHeader(Elf32_Shdr *programHeader);
    const char *            getElfString(unsigned index);
 
