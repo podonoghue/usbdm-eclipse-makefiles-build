@@ -25,6 +25,7 @@
 +============================================================================================
 | Revision History
 +============================================================================================
+| 14 Apr 17 | Fixed loadTargetProgram() for OpWriteRam                      - pgo 4.12.1.170
 | 4  Mar 16 | Fixed saving/restoring security regions                       - pgo 4.12.1.90
 | 29 Mar 15 | Changed verify code                                           - pgo 4.12.1.50
 | 29 Mar 15 | Refactored                                                    - pgo 4.11.1.10 
@@ -707,10 +708,6 @@ USBDM_ErrorCode FlashProgrammer_HCS12::massEraseTarget(bool resetTarget) {
 USBDM_ErrorCode FlashProgrammer_HCS12::loadTargetProgram(FlashOperation flashOperation) {
    LOGGING;
    FlashProgramConstPtr flashProgram = device->getFlashProgram();
-   if (!flashProgram) {
-      log.error("No flash program found for target\n");
-      return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
-   }
    return loadTargetProgram(flashProgram, flashOperation);
 }
 
@@ -731,10 +728,6 @@ USBDM_ErrorCode FlashProgrammer_HCS12::loadTargetProgram(MemoryRegionConstPtr me
    if (!flashProgram) {
       // Try to get device general routines
       flashProgram = device->getCommonFlashProgram();
-   }
-   if (!flashProgram) {
-      log.error("Failed, no flash program found for target\n");
-      return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
    return loadTargetProgram(flashProgram, flashOperation);
 }
@@ -765,9 +758,15 @@ USBDM_ErrorCode FlashProgrammer_HCS12::loadTargetProgram(FlashProgramConstPtr fl
       case OpTiming:
          break;
       default:
+         // All other operations don't require target Flash code
          currentFlashOperation = OpNone;
          log.print("No target program load needed\n");
          return BDM_RC_OK;
+   }
+   // Check if we have a target flash programming code for this region
+   if (!flashProgram) {
+      log.error("Failed, no flash program found for target memory region\n");
+      return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
    // Reload flash code if
    //  - code changed

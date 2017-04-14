@@ -25,7 +25,8 @@
 +============================================================================================
 | Revision History
 +============================================================================================
-| 29 Mar 15 | Refactored                                                    - pgo 4.10.7.10 
+| 14 Apr 17 | Fixed loadTargetProgram() for OpWriteRam                      - pgo 4.12.1.170
+| 29 Mar 15 | Refactored                                                    - pgo 4.11.1.10 
 +-----------+--------------------------------------------------------------------------------
 | 20 Jan 15 | Cleanup of programming and readback code                      - pgo V4.10.6.250
 | 18 Jan 15 | Addition of DSC mass erase using TCL code                     - pgo V4.10.6.250
@@ -525,10 +526,6 @@ USBDM_ErrorCode FlashProgrammer_DSC::massEraseTarget(bool resetTarget) {
 USBDM_ErrorCode FlashProgrammer_DSC::loadTargetProgram(FlashOperation flashOperation) {
    LOGGING;
    FlashProgramConstPtr flashProgram = device->getFlashProgram();
-   if (!flashProgram) {
-      log.error("No flash program found for target\n");
-      return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
-   }
    return loadTargetProgram(flashProgram, flashOperation);
 }
 
@@ -549,10 +546,6 @@ USBDM_ErrorCode FlashProgrammer_DSC::loadTargetProgram(MemoryRegionConstPtr memo
    if (!flashProgram) {
       // Try to get device general routines
       flashProgram = device->getCommonFlashProgram();
-   }
-   if (!flashProgram) {
-      log.error("Failed, no flash program found for target\n");
-      return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
    return loadTargetProgram(flashProgram, flashOperation);
 }
@@ -583,9 +576,15 @@ USBDM_ErrorCode FlashProgrammer_DSC::loadTargetProgram(FlashProgramConstPtr flas
       case OpTiming:
          break;
       default:
+         // All other operations don't require target Flash code
          currentFlashOperation = OpNone;
          log.print("No target program load needed\n");
          return BDM_RC_OK;
+   }
+   // Check if we have a target flash programming code for this region
+   if (!flashProgram) {
+      log.error("Failed, no flash program found for target memory region\n");
+      return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
    // Reload flash code if
    //  - code changed
