@@ -494,6 +494,7 @@ public:
    osStatus setPriority(osPriority priority) {
       return osThreadSetPriority(thread_id, priority);
    }
+
    /**
     * Pass control to the next thread that is in state READY.
     * If there is no other thread in the state READY, the current
@@ -507,7 +508,7 @@ public:
       return osThreadYield();
    }
    /**
-    * Set the specified Signal Flags
+    * Set the specified Signal Flags on the thread
     *
     * @param signals Specifies the signal flags of the thread that should be set.
     *
@@ -518,7 +519,7 @@ public:
       return osSignalSet(thread_id, signals);
    }
    /**
-    * Clear the specified Signal Flags
+    * Clear the specified Signal Flags on the thread
     *
     * @param signals Specifies the signal flags of the thread that shall be cleared.
     *
@@ -554,6 +555,38 @@ public:
     */
    osStatus terminate() {
       return osThreadTerminate(thread_id);
+   }
+
+#if (osFeature_Wait != 0)
+   /**
+    * Wait for any event of the type Signal, Message, Mail for a specified time peiod.
+    * While the system waits the thread that is calling this function is put into the state WAITING. When millisec is set to osWaitForever the function will wait for an infinite time until a event occurs.
+    *
+    * @param millisec How long to wait in milliseconds. Use osWaitForever for indefinite wait.
+    *
+    * @return Status with:
+    * @return osEventSignal:  Signal event occurred and is returned.
+    * @return osEventMessage: Message event occurred and is returned.
+    * @return osEventMail:    Mail event occurred and is returned.
+    * @return osEventTimeout: Time delay is executed.
+    * @return osErrorISR:     Cannot be called from interrupt service routines.
+    */
+   static osStatus wait(uint32_t millisec) {
+      return osWait(millisec);
+   }
+#endif
+
+   /**
+    * Wait for a specified time period in milliseconds.
+    *
+    * @param millisec How long to wait in milliseconds. Use osWaitForever for indefinite wait.
+    *
+    * @return Status with:
+    * @return osEventTimeout:  The time delay is executed.
+    * @return osErrorISR:      Cannot be called from interrupt service routines.
+    */
+   static osStatus delay(uint32_t millisec) {
+      return osDelay(millisec);
    }
 };
 
@@ -930,7 +963,7 @@ public:
 
    /**
     * Get a mail item from the mail queue.\n
-    * Fir use in ISRs
+    * For use in ISRs
     *
     * @return osOK: no mail is available in the queue
     * @return osEventMail: mail received, value.p contains the pointer to mail content.
