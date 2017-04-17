@@ -131,8 +131,8 @@ public:
     */
    virtual osStatus unlock() = 0;
 #else
-   int lock(int milliseconds=0) {};
-   int unlock() {};
+   int lock(int milliseconds=0) {(void) milliseconds; return 0;}
+   int unlock() {return 0;}
 #endif
 
    /**
