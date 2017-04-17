@@ -20,17 +20,12 @@
                Directory structure
       =======================================================-->
       <DirectoryRef Id='TARGETDIR'>
-         <!-- Eclipse directory structure -->
+         <!-- Apps directory structure-->
          <Directory Id="D.$(var.ECLIPSE_VER)_APPS" Name="Apps">
+            <!-- Eclipse directory structure -->
             <Directory Id="D.$(var.ECLIPSE_VER)_ECLIPSE" Name="eclipse">
                <!-- Eclipse plugins -->
                <Directory Id="D.$(var.ECLIPSE_VER)_Plugins" Name="plugins"/>
-               <!-- PE directory structure -->
-               <Directory Id="D.$(var.ECLIPSE_VER)_ProcessorExpert" Name="ProcessorExpert">
-                  <Directory Id="D.$(var.ECLIPSE_VER)_PE_Config" Name="Config">
-                     <Directory Id="D.$(var.ECLIPSE_VER)_PE_Config_Compiler" Name="Compiler"/>
-                  </Directory>
-               </Directory>
             </Directory>
          </Directory>
       </DirectoryRef>
@@ -39,20 +34,10 @@
                Searches
       =======================================================-->
      
-      <!-- Check for presence of Eclipse -->
-      <!--Property Id="P.$(var.ECLIPSE_VER)_ECLIPSE">
-         <DirectorySearch Id='DirectorySearch1' Path='D.$(var.ECLIPSE_VER)_ECLIPSE' AssignToProperty="yes" />
-      </Property-->
-
-      <Property Id="P.$(var.ECLIPSE_VER)_ECLIPSE">
-         <DirectorySearch Id='DirectorySearch1' Path='Apps\eclipse' AssignToProperty="yes" />
+      <!-- Look in likely locations for MCUExpresso and update directory-->
+      <Property Id="D.$(var.ECLIPSE_VER)_ECLIPSE">
+         <DirectorySearch Id='Ds.$(var.ECLIPSE_VER)_DirectorySearch' Path='Apps\eclipse' AssignToProperty="yes" />
       </Property>
-
-
-      <!-- Modify default install path for Eclipse -->
-      <!--Property Id="D.$(var.ECLIPSE_VER)_ECLIPSE">
-         <RegistrySearchRef Id="Rs.$(var.ECLIPSE_VER)_ECLIPSE" />
-      </Property -->
       
       <!--=================================================================================
            Actions
@@ -98,15 +83,6 @@
          </Component>
       </DirectoryRef>
       
-      <!-- 
-           Processor Expert plugin support 
-      -->
-      <DirectoryRef Id="D.$(var.ECLIPSE_VER)_PE_Config_Compiler">
-         <Component Id='C.$(var.ECLIPSE_VER)_PE_Config' Guid='43413763-3fc8-44c4-9150-db08515bbb95' >
-            <File Id='F.EclipseCompiler_$(var.ECLIPSE_VER)_xlkr' DiskId='1' Source='$(var.SrcDir)\bin\net.sourceforge.usbdm.cdt.arm.toolchain.c.compiler.xlkr' KeyPath='yes' />
-         </Component>
-      </DirectoryRef>
-
       <!--======================================================
             Eclipse feature
       =======================================================-->
@@ -117,11 +93,10 @@
             AllowAdvertise="no"
             Level='100'>
          <Condition Level='1'>
-            <![CDATA[Installed OR P.$(var.ECLIPSE_VER)_ECLIPSE]]>
+            <![CDATA[Installed OR D.$(var.ECLIPSE_VER)_ECLIPSE]]>
          </Condition>
          <ComponentRef Id='C.ProgramMenuFolder' />
          <ComponentRef Id='C.$(var.ECLIPSE_VER)_CDT.Marker' />
-         <ComponentRef Id='C.$(var.ECLIPSE_VER)_PE_Config' />
          <ComponentRef Id='C.CommonFiles' />
          <ComponentRef Id='C.UsbdmGdbServer' />
          <ComponentGroupRef Id='Cg.UpdateSite' />

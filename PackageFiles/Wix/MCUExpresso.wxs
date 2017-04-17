@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='windows-1252'?>
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
-   <?define ECLIPSE_VER="CDT_2" ?> 
+   <?define ECLIPSE_VER="MCU_EXPRESSO" ?> 
 
    <?define Manufacturer="pgo" ?>
    <?define ProductName="USBDM" ?>
@@ -20,12 +20,15 @@
                Directory structure
       =======================================================-->
       <DirectoryRef Id='TARGETDIR'>
-         <!-- Apps directory structure-->
-         <Directory Id="D.$(var.ECLIPSE_VER)_APPS" Name="Apps">
-            <!-- Eclipse directory structure -->
-            <Directory Id="D.$(var.ECLIPSE_VER)_ECLIPSE" Name="eclipse2">
-               <!-- Eclipse plugins -->
-               <Directory Id="D.$(var.ECLIPSE_VER)_Plugins" Name="plugins"/>
+         <!-- NXP directory structure-->
+         <Directory Id="D.$(var.ECLIPSE_VER)_NXP" Name="nxp">
+            <!-- MCUExpresso directory structure-->
+            <Directory Id="D.$(var.ECLIPSE_VER)_MCU_EXPRESSO" Name="MCUExpresso">
+               <!-- Eclipse directory structure (within MCUExpresso) -->
+               <Directory Id="D.$(var.ECLIPSE_VER)_ECLIPSE" Name="ide">
+                  <!-- Eclipse plugins -->
+                  <Directory Id="D.$(var.ECLIPSE_VER)_Plugins" Name="plugins"/>
+               </Directory>
             </Directory>
          </Directory>
       </DirectoryRef>
@@ -35,8 +38,9 @@
       =======================================================-->
      
       <!-- Look in likely locations for MCUExpresso and update directory-->
-      <Property Id="D.$(var.ECLIPSE_VER)_ECLIPSE">
-         <DirectorySearch Id='Ds.$(var.ECLIPSE_VER)_DirectorySearch' Path='Apps\eclipse2' AssignToProperty="yes" />
+      <Property Id="D.$(var.ECLIPSE_VER)_MCU_EXPRESSO">
+         <DirectorySearch Id='Ds.$(var.ECLIPSE_VER)_DirectorySearch'  Path='nxp\MCUXpressoIDE_10.0.0_344' AssignToProperty="yes" />
+         <DirectorySearch Id='Ds.$(var.ECLIPSE_VER)_DirectorySearch2' Path='Apps\nxp\MCUXpressoIDE_10.0.0_344' AssignToProperty="yes" />
       </Property>
       
       <!--=================================================================================
@@ -46,7 +50,7 @@
       <CustomAction
          Id="Ca.CreateInstallPluginsCommand_$(var.ECLIPSE_VER)"
          Property="Ca.InstallPluginsCommand_$(var.ECLIPSE_VER)"
-         Value='&quot;[D.$(var.ECLIPSE_VER)_ECLIPSE]eclipsec&quot; -nosplash -application $(var.P2Application) -repository &quot;file:/[D.UpdateSite]\&quot; -installIU $(var.FeatureGroup)'
+         Value='&quot;[D.$(var.ECLIPSE_VER)_ECLIPSE]mcuxpressoidec&quot; -nosplash -application $(var.P2Application) -repository &quot;file:/[D.UpdateSite]\&quot; -installIU $(var.FeatureGroup)'
          Execute="immediate"/>
       <CustomAction Id="Ca.InstallPluginsCommand_$(var.ECLIPSE_VER)"   BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
          
@@ -54,7 +58,7 @@
       <CustomAction
          Id="Ca.CreateUnInstallPluginsCommand_$(var.ECLIPSE_VER)"
          Property="Ca.UnInstallPluginsCommand_$(var.ECLIPSE_VER)"
-         Value='&quot;[D.$(var.ECLIPSE_VER)_ECLIPSE]eclipsec&quot; -nosplash -application $(var.P2Application) -uninstallIU $(var.FeatureGroup)'
+         Value='&quot;[D.$(var.ECLIPSE_VER)_ECLIPSE]mcuxpressoidec&quot; -nosplash -application $(var.P2Application) -uninstallIU $(var.FeatureGroup)'
          Execute="immediate"/>         
          
       <CustomAction Id="Ca.UnInstallPluginsCommand_$(var.ECLIPSE_VER)" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
@@ -77,8 +81,8 @@
       <!-- 
            USBDM Marker
       -->
-      <DirectoryRef Id="D.$(var.ECLIPSE_VER)_ECLIPSE">
-         <Component Id='C.$(var.ECLIPSE_VER)_CDT.Marker' Guid='b9ce25ad-254b-4c05-bc89-de8afde8745c' >
+      <DirectoryRef Id="D.$(var.ECLIPSE_VER)_MCU_EXPRESSO">
+         <Component Id='C.$(var.ECLIPSE_VER)_CDT.Marker' Guid='412494d8-5387-469b-8366-ea41bc9b1332' >
             <File Id='F.$(var.ECLIPSE_VER)_CDT_Marker' DiskId='1' Source='USBDM_Installed.txt' KeyPath='yes' />
          </Component>
       </DirectoryRef>
@@ -87,13 +91,13 @@
             Eclipse feature
       =======================================================-->
       <Feature Id='F.$(var.ECLIPSE_VER)'
-            Title='Eclipse CDT Plugins #2'
-            Description='Add USBDM support to Eclipse CDT:&#10;  - C/C++ New Project wizards&#10;  - GDB Debug interfaces&#10;  - Device Peripheral Viewer.'
-            ConfigurableDirectory="D.$(var.ECLIPSE_VER)_ECLIPSE"
+            Title='MCUExpresso Plugins'
+            Description='Add USBDM support to MCUExpresso:&#10;  - C/C++ New Project wizards&#10;  - GDB Debug interfaces&#10;  - Device Peripheral Viewer.'
+            ConfigurableDirectory="D.$(var.ECLIPSE_VER)_MCU_EXPRESSO"
             AllowAdvertise="no"
             Level='100'>
          <Condition Level='1'>
-            <![CDATA[Installed OR D.$(var.ECLIPSE_VER)_ECLIPSE]]>
+            <![CDATA[Installed OR D.$(var.ECLIPSE_VER)_MCU_EXPRESSO]]>
          </Condition>
          <ComponentRef Id='C.ProgramMenuFolder' />
          <ComponentRef Id='C.$(var.ECLIPSE_VER)_CDT.Marker' />
