@@ -126,6 +126,9 @@
    <item key="/CMP1/irqLevel"                              value="0" />
    <item key="/Console/console_device"                     value="USBDM::Uart0" />
    <item key="/Console/defaultBaudRate"                    value="115200" />
+   <item key="/FTFL/EepromSize"                            value="eeprom2KBytes" />
+   <item key="/FTFL/FlashPartition"                        value="partition_flash0K_eeprom64K" />
+   <item key="/FTFL/FlexNVM_Partition"                     value="partition_A4_B4_8ths" />
    <item key="/FTM0/clockFrequency"                        value="375000.0" />
    <item key="/FTM0/clockPeriod"                           value="2.666666666666667E-6" />
    <item key="/FTM0/ftmExternalClock"                      value="0" />
@@ -150,6 +153,7 @@
    <item key="/FTM1/maximumPeriod"                         value="0.17476266666666668" />
    <item key="/FTM1/minimumResolution"                     value="100" />
    <item key="/FTM1/period"                                value="10000" />
+   <item key="/Flash/FlashType"                            value="ftfl" />
    <item key="/GPIOA/irqHandlerInstalled"                  value="false" />
    <item key="/GPIOA/irqLevel"                             value="0" />
    <item key="/GPIOB/irqHandlerInstalled"                  value="false" />

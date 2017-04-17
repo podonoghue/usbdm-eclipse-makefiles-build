@@ -89,6 +89,7 @@
    <item key="/FTM1/maximumPeriod"                         value="0.0021845333333333334" />
    <item key="/FTM1/minimumResolution"                     value="100" />
    <item key="/FTM1/period"                                value="10000" />
+   <item key="/Flash/FlashType"                            value="ftfl" />
    <item key="/GPIOA/irqHandlerInstalled"                  value="false" />
    <item key="/GPIOA/irqLevel"                             value="0" />
    <item key="/GPIOB/irqHandlerInstalled"                  value="false" />

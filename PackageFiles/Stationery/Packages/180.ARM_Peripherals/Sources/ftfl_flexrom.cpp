@@ -1,5 +1,5 @@
 /**
- * @file    ftfl.cpp
+ * @file    ftfl.cpp (derived from ftfl_flexrom.cpp)
  * @brief   Flash support code
  *
  *  Created on: 10/1/2016
@@ -14,7 +14,6 @@
 #include "delay.h"
 #include "ftfl.h"
 
-
 namespace USBDM {
 
 // Flash commands
@@ -22,9 +21,9 @@ namespace USBDM {
 //static constexpr uint8_t  F_RD1SEC      =  0x01;
 //static constexpr uint8_t  F_PGMCHK      =  0x02;
 static constexpr uint8_t  F_RDRSRC      =  0x03;
-//static constexpr uint8_t  F_PGM4        =  0x06;
+static constexpr uint8_t  F_PGM4        =  0x06;
 //static constexpr uint8_t  F_ERSBLK      =  0x08;
-//static constexpr uint8_t  F_ERSSCR      =  0x09;
+static constexpr uint8_t  F_ERSSCR      =  0x09;
 //static constexpr uint8_t  F_PGMSEC      =  0x0B;
 //static constexpr uint8_t  F_RD1ALL      =  0x40;
 //static constexpr uint8_t  F_RDONCE      =  0x41;
@@ -38,7 +37,7 @@ static constexpr uint8_t  F_PGMPART     =  0x80;
 //static constexpr uint32_t PROGRAM_ADDRESS_FLAG = (0<<23);
 
 /** A23 == 1 => indicates DATA flash */
-//static constexpr uint32_t DATA_ADDRESS_FLAG    = (1<<23);
+static constexpr uint32_t DATA_ADDRESS_FLAG    = (1<<23);
 
 /**
  * Launch & wait for Flash command to complete
@@ -136,53 +135,6 @@ FlashDriverError_t Flash::readFlashResource(uint8_t resourceSelectCode, uint32_t
    return FLASH_ERR_OK;
 }
 
-struct EepromSizes {
-   const uint16_t size;    // EEPROM size
-   const uint8_t  value;   // Value to select size
-};
-
-static const EepromSizes eepromSizes[] = {
-      // Size  Value
-      {  32,   0x09, },
-      {  64,   0x08, },
-      {  128,  0x07, },
-      {  256,  0x06, },
-      {  512,  0x05, },
-      {  1024, 0x04, },
-      {  2048, 0x03, },
-      {  4096, 0x02, }, // Only for 64K FlexNVM devices
-};
-
-struct PartitionInformation {
-   const uint32_t flashSize;     //! Remaining data flash
-   const uint32_t eeepromSize;   //! Flash allocated to EEPROM backing store
-   const uint8_t  value;         //! Partition value
-};
-
-//#define KINETIS_32K_FLEXRAM
-#define KINETIS_64K_FLEXRAM
-
-#if defined(KINETIS_32K_FLEXRAM)
-static const PartitionInformation partitionInformation[] {
-      // Flash   Backing   Value
-      { 32*1024, 0*1024 ,  0xFF},
-      { 24*1024, 8*1024 ,  0x01},
-      { 16*1024, 16*1024,  0x0A},
-      { 8*1024,  24*1024,  0x09},
-      { 0*1024,  32*1024,  0x08},
-};
-#elif defined(KINETIS_64K_FLEXRAM)
-static const PartitionInformation partitionInformation[] {
-      // Flash   Backing   Value
-      { 64*1024, 0*1024 ,  0xFF},
-      { 32*1024, 32*1024 , 0x09},
-      { 0*1024,  64*1024,  0x08},
-};
-#endif
-
-/** Minimum ratio for EEPROM to Flash backing storage */
-constexpr unsigned MINIMUM_BACKING_RATIO = 16;
-
 /**
  * Program EEPROM Data Size Code and FlexNVM Partition Code
  *
@@ -208,52 +160,108 @@ FlashDriverError_t Flash::partitionFlash(uint8_t eeprom, uint8_t partition) {
 }
 
 /**
- * Initialise the EEPROM
+ * Program 4 bytes to Flash memory
  *
- * This function should be called before the first access to variables located in the eeprom.
+ * @param data       Location of data to program
+ * @param address    Memory address to program - must be phrase boundary
  *
- * @param eeprom     EEPROM Data Size choice
- * @param partition  FlexNVM Partition choice (defaults to all EEPROM backing store)
- * @param split      Split between A/B Flash portions (if supported by target)
- *
- * @return FLASH_ERR_OK         => EEPROM previous configured - no action required
- * @return FLASH_ERR_NEW_EEPROM => EEPROM has just been partitioned - contents are 0xFF, initialisation required
- *
- * @note This routine will only partition EEPROM when first executed after the device has been programmed.
+ * @return Error code
  */
-FlashDriverError_t Flash::initialiseEeprom(
-      EepromSel eeprom,
-      PartitionSel partition,
-      PartitionSplit split) {
+FlashDriverError_t Flash::programPhrase(const uint8_t *data, uint8_t *address) {
+   FTFL->FCCOB0 = F_PGM4;
+   FTFL->FCCOB1 = (uint8_t)(((uint32_t)address)>>16);
+   FTFL->FCCOB2 = (uint8_t)(((uint32_t)address)>>8);
+   FTFL->FCCOB3 = (uint8_t)(((uint32_t)address));
+   FTFL->FCCOB7 = *data++;
+   FTFL->FCCOB6 = *data++;
+   FTFL->FCCOB5 = *data++;
+   FTFL->FCCOB4 = *data++;
+   FlashDriverError_t rc = executeFlashCommand();
+   return rc;
+}
 
-//   printf("initialiseEeprom(eeprom=%d bytes, eeprom backing=%ldK, residual flash=%ldK)\n",
-//         eepromSizes[eeprom].size, partitionInformation[partition].eeepromSize>>10, partitionInformation[partition].flashSize>>10);
+/**
+ * Program a range of bytes to Flash memory
+ *
+ * @param data       Location of data to program
+ * @param address    Memory address to program - must be phrase boundary
+ * @param size       Size of range (in bytes) to program - must be multiple of phrase size
+ *
+ * @return Error code
+ */
+FlashDriverError_t Flash::programRange(const uint8_t *data, uint8_t *address, uint32_t size) {
+   unsigned phraseSize;
+   if ((uint32_t)address >= 0x10000000) {
+      // DFLASH
+      address = (uint8_t*)((uint32_t)address | DATA_ADDRESS_FLAG);
+      phraseSize = dataFlashPhraseSize;
+   }
+   else {
+      // PFLASH
+      phraseSize = programFlashPhraseSize;
+   }
+   assert((((uint32_t)address)&(phraseSize-1)) == 0);
+   assert((size&(phraseSize-1)) == 0);
 
-   if (isFlexRamConfigured()) {
-      return FLASH_ERR_OK;
+   while (size>0) {
+      FlashDriverError_t rc = programPhrase(data, address);
+      if (rc != FLASH_ERR_OK) {
+         return rc;
+      }
+      data    += phraseSize;
+      address += phraseSize;
+      size    -= phraseSize;
    }
-   if ((eepromSizes[eeprom].size*MINIMUM_BACKING_RATIO)>(partitionInformation[partition].eeepromSize)) {
-      printf("Backing ratio (Flash/EEPROM) is too small\n");
-      USBDM::setErrorCode(E_FLASH_INIT_FAILED);
-      return FLASH_ERR_ILLEGAL_PARAMS;
+   return FLASH_ERR_OK;
+}
+
+/**
+ * Erase sector in Flash memory
+ *
+ * @param address    Memory address to erase - must be phrase boundary
+ *
+ * @return Error code
+ */
+FlashDriverError_t Flash::eraseSector(uint8_t *address) {
+   FTFL->FCCOB0 = F_ERSSCR;
+   FTFL->FCCOB1 = (uint8_t)(((uint32_t)address)>>16);
+   FTFL->FCCOB2 = (uint8_t)(((uint32_t)address)>>8);
+   FTFL->FCCOB3 = (uint8_t)(((uint32_t)address));
+   FlashDriverError_t rc = executeFlashCommand();
+   return rc;
+}
+
+/**
+ * Program a range of bytes to Flash memory
+ *
+ * @param address    Memory address to start erasing - must be sector boundary
+ * @param size       Size of range (in bytes) to erase - must be multiple of sector size
+ *
+ * @return Error code
+ */
+FlashDriverError_t Flash::eraseRange(uint8_t *address, uint32_t size) {
+   unsigned sectorSize;
+   if ((uint32_t)address >= 0x10000000) {
+      // DFLASH
+      address = (uint8_t*)((uint32_t)address | DATA_ADDRESS_FLAG);
+      sectorSize = dataFlashSectorSize;
    }
-#if defined(RELEASE_BUILD)
-   // EEPROM only available in release build
-   FlashDriverError_t rc = partitionFlash(eepromSizes[eeprom].value|split, partitionInformation[partition].value);
-   if (rc != 0) {
-      //      printf("Partitioning Flash failed\n");
-      return rc;
+   else {
+      // PFLASH
+      sectorSize = programFlashSectorSize;
    }
-   // Indicate EEPROM needs initialisation - this is not an error
-   return FLASH_ERR_NEW_EEPROM;
-#else
-   // For debug initialise FlexRam every time (no actual writes to flash)
-   (void) eeprom;
-   (void) partition;
-   (void) split;
-   // Indicate pretend EEPROM needs initialisation - this is not an error
-   return FLASH_ERR_NEW_EEPROM;
-#endif
+   assert((((uint32_t)address)&(sectorSize-1)) == 0);
+   assert((size&(sectorSize-1)) == 0);
+
+   while (size>0) {
+      FlashDriverError_t rc = eraseSector(address);
+      if (rc != FLASH_ERR_OK) {
+         return rc;
+      }
+      address += sectorSize;
+      size    -= sectorSize;
+   }
+   return FLASH_ERR_OK;
 }
 
 }

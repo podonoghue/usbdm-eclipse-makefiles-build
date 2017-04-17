@@ -40,6 +40,9 @@ class Flash : public FtflInfo {
 
 protected:
 
+   /** Minimum ratio for EEPROM to Flash backing storage */
+   static constexpr unsigned MINIMUM_BACKING_RATIO = 16;
+
    /**
     * Constructor\n
     * Typically this method would be overridden in a derived class
@@ -50,6 +53,7 @@ protected:
       static int singletonFlag __attribute__((unused)) = false;
       assert (!singletonFlag);
       singletonFlag = true;
+      waitForFlashReady();
    }
 
    /**
@@ -91,20 +95,50 @@ protected:
     *
     * This function should be called before the first access to variables located in the eeprom.
     *
-    * @param eeprom     EEPROM Data Size choice
-    * @param partition  FlexNVM Partition choice (defaults to all EEPROM backing store)
-    * @param split      Split between A/B Flash portions (if supported by target)
+    * @tparam eeprom     EEPROM Data Size choice
+    * @tparam partition  FlexNVM Partition choice (defaults to all EEPROM backing store)
+    * @tparam split      Split between A/B Flash portions (if supported by target)
     *
-    * @return
-    *       FLASH_ERR_OK         => EEPROM previous configured - no action required\n
-    *       FLASH_ERR_NEW_EEPROM => EEPROM has just been partitioned - contents are 0xFF, initialisation required\n
+    * @return FLASH_ERR_OK         => EEPROM previous configured - no action required
+    * @return FLASH_ERR_NEW_EEPROM => EEPROM has just been partitioned - contents are 0xFF, initialisation required
     *
     * @note This routine will only partition EEPROM when first executed after the device has been programmed.
     */
-   static FlashDriverError_t initialiseEeprom(
-         EepromSel        eeprom=eepromSel,
-         PartitionSel     partition=partitionSel,
-         PartitionSplit   split=partitionSplit);
+   template<EepromSel eeprom=eepromSel, PartitionSel partition=partitionSel, PartitionSplit split=partitionSplit>
+   static FlashDriverError_t initialiseEeprom () {
+
+   //   printf("initialiseEeprom(eeprom=%d bytes, eeprom backing=%ldK, residual flash=%ldK)\n",
+   //         eepromSizes[eeprom].size, partitionInformation[partition].eeepromSize>>10, partitionInformation[partition].flashSize>>10);
+
+      if (isFlexRamConfigured()) {
+         return FLASH_ERR_OK;
+      }
+      if ((eepromSizes[eeprom].size*MINIMUM_BACKING_RATIO)>(partitionInformation[partition].eeepromSize)) {
+//         printf("Backing ratio (Flash/EEPROM) is too small\n");
+         USBDM::setErrorCode(E_FLASH_INIT_FAILED);
+         return FLASH_ERR_ILLEGAL_PARAMS;
+      }
+   #if defined(RELEASE_BUILD)
+      // EEPROM only available in release build
+      FlashDriverError_t rc = partitionFlash(eepromSizes[eeprom].value|split, partitionInformation[partition].value);
+      if (rc != 0) {
+         //      printf("Partitioning Flash failed\n");
+         return rc;
+      }
+      // Indicate EEPROM needs initialisation - this is not an error
+      return FLASH_ERR_NEW_EEPROM;
+   #else
+      (void) eeprom;
+      (void) partition;
+      (void) split;
+
+      // For debug, initialise FlexRam every time (no actual writes to flash)
+
+      // Initialisation pretend EEPROM on every reset
+      // This return code is not an error
+      return FLASH_ERR_NEW_EEPROM;
+   #endif
+   }
 
 public:
 
@@ -151,6 +185,49 @@ public:
       }
       return false;
    }
+
+private:
+   /**
+    * Program a phrase to Flash memory
+    *
+    * @param data       Location of data to program
+    * @param address    Memory address to program - must be phrase boundary
+    *
+    * @return Error code
+    */
+   static FlashDriverError_t programPhrase(const uint8_t *data, uint8_t *address);
+
+   /**
+    * Erase sector of Flash memory
+    *
+    * @param address    Memory address to erase - must be sector boundary
+    *
+    * @return Error code
+    */
+   static FlashDriverError_t eraseSector(uint8_t *address);
+
+public:
+   /**
+    * Program a range of bytes to Flash memory
+    *
+    * @param data       Location of data to program
+    * @param address    Memory address to program - must be phrase boundary
+    * @param size       Size of range (in bytes) to program - must be multiple of phrase size
+    *
+    * @return Error code
+    */
+   static FlashDriverError_t programRange(const uint8_t *data, uint8_t *address, uint32_t size);
+
+   /**
+    * Erase a range of Flash memory
+    *
+    * @param address    Memory address to start erasing - must be sector boundary
+    * @param size       Size of range (in bytes) to erase - must be multiple of sector size
+    *
+    * @return Error code
+    */
+   static FlashDriverError_t eraseRange(uint8_t *address, uint32_t size);
+
 };
 
 /**

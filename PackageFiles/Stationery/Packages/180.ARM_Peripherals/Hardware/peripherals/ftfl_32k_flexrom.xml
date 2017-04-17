@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"
+?>
+<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!-- ftfl.xml -->
+
+<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flash Memory Module" >
+   <choiceOption name="EepromSize" 
+      description="FlexNVM - EEPROM size"
+      toolTip="Selects emulated EEPROM size">
+      <choice value="eeprom32Bytes"  name="32 bytes" />
+      <choice value="eeprom64Bytes"  name="64 bytes" />
+      <choice value="eeprom128Bytes" name="128 bytes" />
+      <choice value="eeprom256Bytes" name="256 bytes" />
+      <choice value="eeprom512Bytes" name="512 bytes" />
+      <choice value="eeprom1KBytes"  name="1K bytes" />
+      <choice value="eeprom2KBytes"  name="2K bytes" isDefault="true"/>
+   </choiceOption>
+   
+   <choiceOption name="FlashPartition" 
+      description="FlexNVM - Flash EEPROM partition"
+      toolTip="Selects division of FlexNVM between flash and EEPROM backing storage\n
+               The larger the EEPROM backing the better the wear characteristic">
+      <choice value="partition_flash32K_eeprom0K"  name="flash=32K eeprom backing=0K" />
+      <choice value="partition_flash24K_eeprom8K"  name="flash=24K eeprom backing=8K" />
+      <choice value="partition_flash16K_eeprom16K" name="flash=16K eeprom backing=16K" />
+      <choice value="partition_flash8K_eeprom24K"  name="flash=8K eeprom backing=24K" />
+      <choice value="partition_flash0K_eeprom32K"  name="flash=0K eeprom backing=32K" isDefault="true"/>
+   </choiceOption>
+   
+   <projectActionList id = "flash_files" >
+      <copy source="Project_Headers/flash.h"                 target="Project_Headers/flash.h"                 replace="true"  derived="true" />
+      <copy source="Project_Headers/ftfl.h"                  target="Project_Headers/ftfl.h"                  replace="true"  derived="true" />
+      <copy source="Sources/ftfl_flexrom.cpp"                target="Sources/ftfl.cpp"                        replace="true"  derived="true" />
+      <copy source="Snippets/nonvolatile_example.cpp"        target="Snippets/nonvolatile_example.cpp"        replace="true"  derived="true" />
+      <copy source="Snippets/flash_programming_example.cpp"  target="Snippets/flash_programming_example.cpp"  replace="true"  derived="true" />
+   </projectActionList>
+
+   <constant name="FlashType" id="/Flash/FlashType" key="/Flash/FlashType" value="ftfl" />
+   
+   <template><![CDATA[
+      \t// Sector size for program flash (minimum erase element)
+      \tstatic constexpr unsigned programFlashSectorSize = $(pflash_sector_size);\n\n
+   
+      \t// Phrase size for program flash (minimum programming element)
+      \tstatic constexpr unsigned programFlashPhraseSize = $(pflash_phrase_size);\n\n
+   
+      \t// Sector size for data flash (minimum erase element)
+      \tstatic constexpr unsigned dataFlashSectorSize = $(dflash_sector_size);\n\n
+   
+      \t// Phrase size for data flash (minimum programming element)
+      \tstatic constexpr unsigned dataFlashPhraseSize = $(dflash_phrase_size);\n\n
+   
+      \tstruct EepromSizes {
+      \t   const uint16_t size;    // EEPROM size
+      \t   const uint8_t  value;   // Value to select size
+      \t};\n\n
+
+      \t/** EEPROM Data Set Size Field */
+      \tstatic constexpr EepromSizes eepromSizes[] = {
+      \t      // Size  Value
+      \t      {  32,   0x09, },
+      \t      {  64,   0x08, },
+      \t      {  128,  0x07, },
+      \t      {  256,  0x06, },
+      \t      {  512,  0x05, },
+      \t      {  1024, 0x04, },
+      \t      {  2048, 0x03, },
+      \t};\n\n
+
+      \tstruct PartitionInformation {
+      \t   const uint32_t flashSize;     //! Remaining data flash
+      \t   const uint32_t eeepromSize;   //! Flash allocated to EEPROM backing store
+      \t   const uint8_t  value;         //! Partition value
+      \t};\n\n
+
+      \t/** Flash partition information */
+      \tstatic constexpr PartitionInformation partitionInformation[] {
+      \t      // Flash   Backing   Value
+      \t      { 32*1024, 0*1024 ,  0xFF},
+      \t      { 24*1024, 8*1024 ,  0x01},
+      \t      { 16*1024, 16*1024,  0x0A},
+      \t      { 8*1024,  24*1024,  0x09},
+      \t      { 0*1024,  32*1024,  0x08},
+      \t};\n\n
+
+      \t/** Selects EEPROM size */
+      \tenum EepromSel {
+      \t   eeprom32Bytes,
+      \t   eeprom64Bytes,
+      \t   eeprom128Bytes,
+      \t   eeprom256Bytes,
+      \t   eeprom512Bytes,
+      \t   eeprom1KBytes,
+      \t   eeprom2KBytes,
+      \t};\n\n
+      
+      \t/** Selects division of FlexNVM between flash and EEPROM backing storage */
+      \tenum PartitionSel {
+      \t   partition_flash32K_eeprom0K,
+      \t   partition_flash24K_eeprom8K,
+      \t   partition_flash16K_eeprom16K,
+      \t   partition_flash8K_eeprom24K,
+      \t   partition_flash0K_eeprom32K,
+      \t
+      \t   // All EEPROM
+      \t   partition_flash0K_eeprom_all = partition_flash0K_eeprom32K,
+      \t};\n\n
+      
+      \t/**
+      \t * Selects division of the EEPROM
+      \t * Not supported on this device
+      \t */
+      \tenum PartitionSplit {
+      \t   // Not supported
+      \t   partition_disabled=0x30,
+      \t};\n\n
+   
+      \t//! FlexNVM - EEPROM size
+      \tstatic constexpr EepromSel eepromSel = $(EepromSize);\n\n
+
+      \t//! FlexNVM - Flash EEPROM partition
+      \tstatic constexpr PartitionSel partitionSel = $(FlashPartition);\n\n
+
+      \t//! FlexNVM - EEPROM partition - not available
+      \tstatic constexpr PartitionSplit partitionSplit = partition_disabled;\n\n
+      
+   ]]></template>
+
+</devicePage>
