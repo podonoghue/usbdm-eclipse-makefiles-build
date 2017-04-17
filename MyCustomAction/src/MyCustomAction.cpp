@@ -87,10 +87,16 @@ extern "C" UINT __stdcall CheckInstallPaths(MSIHANDLE hInstall) {
 
          {"D.CFFLASHER_V3_1",                "F.CFFLASHER_V3_1",                "BDM Protocol",           "CF Flasher V3.1"			            },
 
-         {"D.KDS_3_0_0_INSTALL",             "F.KDS_3_0_0",                     "eclipse\\configuration", "Kinetis Design Studio Plugins"	      },
+         {"D.KDS_3_0_0_INSTALL",             "F.KDS_3_0_0",                     "eclipse\\configuration", "Kinetis Design Studio Plugins"       },
+         {"D.KDS_3_2_0_INSTALL",             "F.KDS_3_2_0",                     "eclipse\\configuration", "Kinetis Design Studio Plugins"       },
+
          {"D.S32DS_1_0_0_INSTALL",           "F.S32DS_1_0_0",                   "eclipse\\configuration", "S32 Design Studio Plugins"		      },
+
          {"D.CDT_1_ECLIPSE",                 "F.CDT_1",                         "configuration",          "Eclipse CDT Plugins #1"		         },
          {"D.CDT_2_ECLIPSE",                 "F.CDT_2",                         "configuration",          "Eclipse CDT Plugins #2"		         },
+
+         {"D.MCU_EXPRESS_INSTALL",           "F.MCU_EXPRESS",                   "ide\\configuration",     "MCUExpresso CDT Plugins"             },
+
          {NULL,                              NULL,                              NULL,                     NULL                                  }
    };
    ::hInstall = hInstall;
