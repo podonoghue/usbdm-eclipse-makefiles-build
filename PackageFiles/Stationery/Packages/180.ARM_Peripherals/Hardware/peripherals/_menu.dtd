@@ -81,6 +81,8 @@
 <!ELEMENT aliasOption EMPTY >
    <!ATTLIST aliasOption name        IDREF        #IMPLIED>
    <!ATTLIST aliasOption key         CDATA        #IMPLIED>
+   <!ATTLIST aliasOption description CDATA        #IMPLIED>
+   <!ATTLIST aliasOption toolTip     CDATA        #IMPLIED>
    <!ATTLIST aliasOption constant    (false|true) "true">
    <!ATTLIST aliasOption optional    (false|true) "false">
 

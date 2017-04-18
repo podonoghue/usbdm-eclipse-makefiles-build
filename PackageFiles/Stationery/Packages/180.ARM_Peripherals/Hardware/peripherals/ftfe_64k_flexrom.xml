@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"
 ?>
 <!DOCTYPE devicePage SYSTEM "_menu.dtd" >
-<!-- ftfl_64k_flexrom.xml -->
+<!-- ftfe_64k_flexrom.xml -->
 
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flash Memory Module" >
 
@@ -53,13 +53,13 @@
 
    <projectActionList id = "flash_files" >
       <copy source="Project_Headers/flash.h"                 target="Project_Headers/flash.h"                 replace="true"  derived="true" />
-      <copy source="Project_Headers/ftfl.h"                  target="Project_Headers/ftfl.h"                  replace="true"  derived="true" />
-      <copy source="Sources/ftfl.cpp"                        target="Sources/ftfl.cpp"                        replace="true"  derived="true" />
+      <copy source="Project_Headers/ftfe.h"                  target="Project_Headers/ftfe.h"                  replace="true"  derived="true" />
+      <copy source="Sources/ftfe.cpp"                        target="Sources/ftfe.cpp"                        replace="true"  derived="true" />
       <copy source="Snippets/nonvolatile_example.cpp"        target="Snippets/nonvolatile_example.cpp"        replace="true"  derived="true" />
       <copy source="Snippets/flash_programming_example.cpp"  target="Snippets/flash_programming_example.cpp"  replace="true"  derived="true" />
    </projectActionList>
 
-   <constant name="FlashType" id="/Flash/FlashType" key="/Flash/FlashType" value="ftfl" />
+   <constant name="FlashType" id="/Flash/FlashType" key="/Flash/FlashType" value="ftfe" />
    
    <template><![CDATA[
       \t// Sector size for program flash (minimum erase element)

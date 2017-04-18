@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"
 ?>
 <!DOCTYPE devicePage SYSTEM "_menu.dtd" >
-<!-- ftfl.xml -->
+<!-- ftfl_32k_flexrom.xml -->
 
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flash Memory Module" >
+
+   <!-- Aliases for predefined values -->
+   <aliasOption key="pflash_sector_size" constant="true"
+      description="Sector size for program flash (minimum erase element)"/>
+
+   <aliasOption key="pflash_phrase_size" constant="true"
+      description="Phrase size for program flash (minimum program element)"/>
+
+   <aliasOption key="dflash_sector_size" constant="true"
+      description="Sector size for data flash (minimum erase element)"
+      toolTip="Only for device with FlexNVM" />
+
+   <aliasOption key="dflash_phrase_size" constant="true"
+      description="Phrase size for data flash (minimum program element)"
+      toolTip="Only for device with FlexNVM" />
+      
    <choiceOption name="EepromSize" 
       description="FlexNVM - EEPROM size"
       toolTip="Selects emulated EEPROM size">
@@ -30,7 +46,7 @@
    <projectActionList id = "flash_files" >
       <copy source="Project_Headers/flash.h"                 target="Project_Headers/flash.h"                 replace="true"  derived="true" />
       <copy source="Project_Headers/ftfl.h"                  target="Project_Headers/ftfl.h"                  replace="true"  derived="true" />
-      <copy source="Sources/ftfl_flexrom.cpp"                target="Sources/ftfl.cpp"                        replace="true"  derived="true" />
+      <copy source="Sources/ftfl.cpp"                        target="Sources/ftfl.cpp"                        replace="true"  derived="true" />
       <copy source="Snippets/nonvolatile_example.cpp"        target="Snippets/nonvolatile_example.cpp"        replace="true"  derived="true" />
       <copy source="Snippets/flash_programming_example.cpp"  target="Snippets/flash_programming_example.cpp"  replace="true"  derived="true" />
    </projectActionList>

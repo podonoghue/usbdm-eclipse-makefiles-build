@@ -319,6 +319,7 @@ public:
       *pcrReg = (*pcrReg&~PORT_PCR_PS_MASK) | mode;
    }
 
+#if defined(PORT_PCR_LK_MASK)
    /**
     * Locks most of the PCR properties e.g. drive strength, pull-device etc.\n
     * Assumes clock to the port has already been enabled\n
@@ -326,6 +327,7 @@ public:
    static void lock() {
       *pcrReg |= PORT_PCR_LK_MASK;
    }
+#endif
 
    /**
     * Enable/disable interrupts in NVIC

@@ -3,7 +3,7 @@
  * @file    flash_programming_example.cpp (180.ARM_Peripherals)
  * @brief   Basic C++ demo of Flash programming interface
  *
- * This example erases and then programs a range of flash memory located in the data flash area.
+ * This example erases and then programs a range of flash memory.
  *
  * @note Alignment requirements
  * - The minimum erase element for the flash is a sector (usually 1, 2 or 4 K bytes).\n
@@ -21,12 +21,40 @@
 
 using namespace USBDM;
 
-/** Data to be programmed to flash */
-static uint8_t data[USBDM::Flash::programFlashSectorSize] = {};
+/*
+ * Uncomment to use Data flash rather that Program flash region
+ * Not all devices have Data flash e.g. MKxxFX does, MKxxFN doesn't
+ */
+//#define USE_DATA_FLASH
+
+#if defined(USE_DATA_FLASH) && (defined(USBDM_FTFL_IS_DEFINED) || defined(USBDM_FTFE_IS_DEFINED))
+/**
+ * Data flash example - the array is located in Data Flash (FlexNVM region used as regular flash)
+ */
+/** Size of flash sector being used */
+constexpr int sectorSize = Flash::dataFlashSectorSize;
 
 /** Array located in data flash that will be programmed */
-__attribute__ ((section(".flexNVM"), aligned(USBDM::Flash::programFlashSectorSize)))
-static uint8_t copy[sizeof(data)];
+__attribute__ ((section(".flexNVM"), aligned(sectorSize)))
+static uint8_t copy[sectorSize];
+
+#else
+/**
+ * Program flash example - the array is located in Program Flash (Regular flash region)
+ */
+/** Size of flash sector being used */
+constexpr int sectorSize = Flash::programFlashSectorSize;
+
+/**
+ * Array located in program flash that will be programmed.
+ * Must not be in same sector as code or constant data!
+ */
+__attribute__ ((section(".flash"), aligned(sectorSize)))
+static uint8_t copy[sectorSize];
+#endif
+
+/** Data to be programmed to flash */
+static uint8_t data[sectorSize];
 
 /**
  * Print a range of memory as a hex table
@@ -55,8 +83,8 @@ void printDump(uint8_t *address, uint32_t size) {
  */
 int main(void) {
    printf("Starting\n\r");
-   static_assert(((sizeof(copy)&(Flash::dataFlashSectorSize-1)) == 0), "Data must be correct size");
-   assert((((unsigned)copy&(Flash::dataFlashSectorSize-1)) == 0));
+   static_assert(((sizeof(copy)&(sectorSize-1)) == 0), "Data must be correct size");
+   assert((((unsigned)copy&(sectorSize-1)) == 0));
 
    // Report original flash contents
    printf("Flash before programming\n\r");
@@ -109,7 +137,9 @@ int main(void) {
       }
    }
 
-   for(;;) {
+   printf("Flash programming sequence completed without error\n\r");
 
+   for(;;) {
+      __asm__("bkpt");
    }
 }

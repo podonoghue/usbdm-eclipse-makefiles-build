@@ -95,8 +95,11 @@
          <irq num="UART2_FLEXIO_IRQn" />
       </peripheral>
       <peripheral baseName="FTFA"     instance=""         version="ftfa">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlash" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_FTF_MASK" />
+         <param key="pflash_sector_size" value="1024" />
+         <param key="pflash_phrase_size" value="4" />
+         <param key="peripheral_file" value="ftfa" />
       </peripheral>
       <peripheral baseName="GPIO"     instance="A"        version="gpioa_0x400ff000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />

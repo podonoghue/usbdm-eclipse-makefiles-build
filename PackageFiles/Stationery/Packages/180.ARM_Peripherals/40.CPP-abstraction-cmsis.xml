@@ -12,8 +12,8 @@
       <projectActionList>
          <applyWhen>
             <and>
-               <variableRef idRef="projectOptionValue.CPP-abstraction"                  condition="isTrue" />
-            <!--  <variableRef idRef="projectOptionValue.CMSIS-RTOS"       condition="isTrue"   /> -->
+               <variableRef idRef="projectOptionValue.CPP-abstraction"  condition="isTrue" />
+               <variableRef idRef="projectOptionValue.CMSIS-RTOS"       condition="isTrue"   />
             </and>
          </applyWhen>
          <copy source="Project_Headers/cmsis.h"             target="Project_Headers/cmsis.h" />

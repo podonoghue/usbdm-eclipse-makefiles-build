@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"
 ?>
 <!DOCTYPE devicePage SYSTEM "_menu.dtd" >
-<!-- ftfl_64k_flexrom.xml -->
+<!-- ftfe_128k_flexrom.xml -->
 
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flash Memory Module" >
 
@@ -37,9 +37,11 @@
       description="FlexNVM - Flash EEPROM partition"
       toolTip="Selects division of FlexNVM between flash and EEPROM backing storage\n
                The larger the EEPROM backing the better the wear characteristic">
-      <choice value="partition_flash64K_eeprom0K" name="flash=64K eeprom backing=0K" />
-      <choice value="partition_flash32K_eeprom32K" name="flash=32K eeprom backing=32K" />
-      <choice value="partition_flash0K_eeprom64K" name="flash=0K eeprom backing=64K" isDefault="true"/>
+      <choice value="partition_flash128K_eeprom0K" name="flash=128K eeprom backing=0K" />
+      <choice value="partition_flash96K_eeprom32K" name="flash=96K eeprom backing=32K" />
+      <choice value="partition_flash64K_eeprom64K" name="flash=64K eeprom backing=64K" />
+      <choice value="partition_flash32K_eeprom96K" name="flash=32K eeprom backing=96K" />
+      <choice value="partition_flash0K_eeprom128K" name="flash=0K eeprom backing=128K" isDefault="true" />
    </choiceOption>
    
    <choiceOption name="FlexNVM_Partition" 
@@ -53,13 +55,13 @@
 
    <projectActionList id = "flash_files" >
       <copy source="Project_Headers/flash.h"                 target="Project_Headers/flash.h"                 replace="true"  derived="true" />
-      <copy source="Project_Headers/ftfl.h"                  target="Project_Headers/ftfl.h"                  replace="true"  derived="true" />
-      <copy source="Sources/ftfl.cpp"                        target="Sources/ftfl.cpp"                        replace="true"  derived="true" />
+      <copy source="Project_Headers/ftfe.h"                  target="Project_Headers/ftfe.h"                  replace="true"  derived="true" />
+      <copy source="Sources/ftfe.cpp"                        target="Sources/ftfe.cpp"                        replace="true"  derived="true" />
       <copy source="Snippets/nonvolatile_example.cpp"        target="Snippets/nonvolatile_example.cpp"        replace="true"  derived="true" />
       <copy source="Snippets/flash_programming_example.cpp"  target="Snippets/flash_programming_example.cpp"  replace="true"  derived="true" />
    </projectActionList>
 
-   <constant name="FlashType" id="/Flash/FlashType" key="/Flash/FlashType" value="ftfl" />
+   <constant name="FlashType" id="/Flash/FlashType" key="/Flash/FlashType" value="ftfe" />
    
    <template><![CDATA[
       \t// Sector size for program flash (minimum erase element)
@@ -101,9 +103,11 @@
       \t/** Flash partition information */
       \tstatic constexpr PartitionInformation partitionInformation[] {
       \t      // Flash   Backing   Value
-      \t      { 64*1024, 0*1024 ,  0xFF},
-      \t      { 32*1024, 32*1024 , 0x09},
-      \t      { 0*1024,  64*1024,  0x08},
+      \t      { 128*1024,   0*1024, 0xFF},
+      \t      {  96*1024,  32*1024, 0x03},
+      \t      {  64*1024,  64*1024, 0x04},
+      \t      {  32*1024,  96*1024, 0x0B},
+      \t      {   0*1024, 128*1024, 0x05},
       \t};\n\n
 
       \t/** Selects EEPROM size */
@@ -120,12 +124,14 @@
       
       \t/** Selects division of FlexNVM between flash and EEPROM backing storage */
       \tenum PartitionSel {
-      \t   partition_flash64K_eeprom0K,
-      \t   partition_flash32K_eeprom32K,
-      \t   partition_flash0K_eeprom64K,
+      \t   partition_flash128K_eeprom0K,
+      \t   partition_flash96K_eeprom32K,
+      \t   partition_flash64K_eeprom64K,
+      \t   partition_flash32K_eeprom96K,
+      \t   partition_flash0K_eeprom128K,
       \t
       \t   // All EEPROM
-      \t   partition_flash0K_eeprom_all = partition_flash0K_eeprom64K,
+      \t   partition_flash0K_eeprom_all = partition_flash0K_eeprom128K,
       \t};\n\n
       
       \t/**

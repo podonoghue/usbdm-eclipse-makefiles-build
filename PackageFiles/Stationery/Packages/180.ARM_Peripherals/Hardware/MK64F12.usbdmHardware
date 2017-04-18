@@ -158,8 +158,13 @@
          <clock reg="SCGC7"         mask="SIM_SCGC7_FLEXBUS_MASK" />
       </peripheral>
       <peripheral baseName="FTFE"     instance=""         version="ftfe_feprot_fdprot">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlash" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_FTF_MASK" />
+         <param key="dflash_phrase_size" value="8" />
+         <param key="pflash_sector_size" value="4096" />
+         <param key="dflash_sector_size" value="4096" />
+         <param key="pflash_phrase_size" value="8" />
+         <param key="peripheral_file" value="ftfe_128k_flexrom" />
       </peripheral>
       <peripheral baseName="FTM"      instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForShared" />

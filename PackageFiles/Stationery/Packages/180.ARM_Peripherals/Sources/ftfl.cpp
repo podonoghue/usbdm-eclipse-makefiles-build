@@ -1,5 +1,5 @@
 /**
- * @file    ftfl.cpp (derived from ftfl_flexrom.cpp)
+ * @file    ftfl.cpp
  * @brief   Flash support code
  *
  *  Created on: 10/1/2016
@@ -50,21 +50,24 @@ void Flash::executeFlashCommand_asm() {
          "    .equ   FTFL_FSTAT_ERROR_MASK,0x70   \n" // = FTFL_FSTAT_RDCOLERR_MASK|FTFL_FSTAT_ACCERR_MASK|FTFL_FSTAT_FPVIOL_MASK
          "    .equ   FTFL_FSTAT_CCIF_MASK,0x80    \n"
 
-         "     movw  r1,#FTFL_FSTAT&0xFFFF        \n" // Point R1 @FTFL_FSTAT
-         "     movt  r1,#FTFL_FSTAT/65536         \n"
+         "     ldr   r1,=FTFL_FSTAT               \n" // Point R1 @FTFL_FSTAT
 
-         "     movw  r2,#FTFL_FSTAT_ERROR_MASK    \n" // Clear previous errors
+         "     movs  r2,#FTFL_FSTAT_ERROR_MASK    \n" // Clear previous errors
          "     strb  r2,[r1,#0]                   \n" // FTFL_FSTAT = FTFL_FSTAT_ERROR_MASK
 
-         "     movw  r2,#FTFL_FSTAT_CCIF_MASK     \n" // Start command
+         "     movs  r2,#FTFL_FSTAT_CCIF_MASK     \n" // Start command
          "     strb  r2,[r1,#0]                   \n" // FTFL_FSTAT = FTFL_FSTAT_CCIF_MASK
 
          "loop:                                   \n"
-         "     ldrb  r2,[r1,#0]                   \n" // Wait for completion
-         "     ands  r2,r2,#FTFL_FSTAT_CCIF_MASK  \n" // while ((FTFL->FSTAT & FTFL_FSTAT_CCIF_MASK) == 0) {
+         "     ldrb  r3,[r1,#0]                   \n" // Wait for completion
+#if (__CORTEX_M == 4)
+         "     ands  r3,r2                        \n" // while ((FTFL->FSTAT & FTFL_FSTAT_CCIF_MASK) == 0) {
+#else
+         "     and   r3,r2                        \n" // while ((FTFL->FSTAT & FTFL_FSTAT_CCIF_MASK) == 0) {
+#endif
          "     beq   loop                         \n" // }
 
-         ::: "r1", "r2"
+         ::: "r1", "r2", "r3"
    );
 }
 
@@ -160,7 +163,7 @@ FlashDriverError_t Flash::partitionFlash(uint8_t eeprom, uint8_t partition) {
 }
 
 /**
- * Program 4 bytes to Flash memory
+ * Program phrase to Flash memory
  *
  * @param data       Location of data to program
  * @param address    Memory address to program - must be phrase boundary

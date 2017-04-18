@@ -239,7 +239,7 @@ PinCallbackFunction USBDM::PcrBase_T<pcrAddress>::fCallback = nullptr;
  * @tparam defPcrValue     Default value for PCR (including MUX value)
  */
 template<uint32_t clockMask, uint32_t pcrAddress, int32_t bitNum, uint32_t defPcrValue>
-class Pcr_T : public PcrBase_T<pcrAddress>{
+class Pcr_T : public PcrBase_T<pcrAddress> {
 
 private:
 
@@ -319,6 +319,7 @@ public:
       *pcrReg = (*pcrReg&~PORT_PCR_PS_MASK) | mode;
    }
 
+#if defined(PORT_PCR_LK_MASK)
    /**
     * Locks most of the PCR properties e.g. drive strength, pull-device etc.\n
     * Assumes clock to the port has already been enabled\n
@@ -326,6 +327,7 @@ public:
    static void lock() {
       *pcrReg |= PORT_PCR_LK_MASK;
    }
+#endif
 
    /**
     * Enable/disable interrupts in NVIC
