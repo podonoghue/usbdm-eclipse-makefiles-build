@@ -191,10 +191,17 @@
       <device name="MKE06Z64M4">       <svdFileName>MKE06Z4</svdFileName>    </device>
       <device name="MKE06Z128M4">      <svdFileName>MKE06Z4</svdFileName>    </device>
 
-      <device name="MKE14Z128M7">      <svdFileName>MKE15Z7</svdFileName>    </device>
-      <device name="MKE14Z256M7">      <svdFileName>MKE15Z7</svdFileName>    </device>
+      <device name="MKE14Z128M7">      <svdFileName>MKE14Z7</svdFileName>    </device>
+      <device name="MKE14Z256M7">      <svdFileName>MKE14Z7</svdFileName>    </device>
       <device name="MKE15Z128M7">      <svdFileName>MKE15Z7</svdFileName>    </device>
       <device name="MKE15Z256M7">      <svdFileName>MKE15Z7</svdFileName>    </device>
+
+      <device name="MKE14F256M16">     <svdFileName>MKE14F16</svdFileName>    </device>
+      <device name="MKE14F512M16">     <svdFileName>MKE14F16</svdFileName>    </device>
+      <device name="MKE16F256M16">     <svdFileName>MKE16F16</svdFileName>    </device>
+      <device name="MKE16F512M16">     <svdFileName>MKE16F16</svdFileName>    </device>
+      <device name="MKE18F256M16">     <svdFileName>MKE18F16</svdFileName>    </device>
+      <device name="MKE18F512M16">     <svdFileName>MKE18F16</svdFileName>    </device>
 
       <device name="MKL02Z8M4">        <svdFileName>MKL02Z4</svdFileName>    </device>
       <device name="MKL02Z16M4">       <svdFileName>MKL02Z4</svdFileName>    </device>

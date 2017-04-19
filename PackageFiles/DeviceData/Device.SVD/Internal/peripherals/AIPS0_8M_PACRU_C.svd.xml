@@ -1,8 +1,6 @@
 <!--
 Devices using this peripheral: 
       MK24F25612
-      MKE14D7
-      MKE15D7
 -->
       <peripheral>
          <?sourceFile "AIPS0_8M_PACRU_C" ?>
