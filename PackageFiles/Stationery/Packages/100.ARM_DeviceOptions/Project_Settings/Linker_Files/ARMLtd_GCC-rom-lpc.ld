@@ -34,24 +34,6 @@
  
 OUTPUT_FORMAT ("elf32-littlearm", "elf32-bigarm", "elf32-littlearm")
 SEARCH_DIR(.)
-SEARCH_DIR(../Standard_Peripheral_Library)
-SEARCH_DIR(../Project_Settings)
-
-/* Standard Peripheral Library
- 
-Use the appropriate library file in the GROUP statement according to chip in use 
-
-libstm32_CL.a
-libstm32_HD.a
-libstm32_HD_VL.a
-libstm32_LD.a
-libstm32_LD_VL.a
-libstm32_MD.a
-libstm32_MD_VL.a
-libstm32_XL.a
-
-GROUP(libstm32_MD.a)
-*/
 
 /* Include external memory map defining ram and Flash memory etc */
 INCLUDE "MemoryMap-$(targetDeviceName).ld"
@@ -68,35 +50,47 @@ PROVIDE(_start = main);
 
 SECTIONS
 {
-   .text :
+   .interrupts :
    {
       __flash_start = .;
 
       /* Vector table */
+      __VECTOR_TABLE = .;
       KEEP(*(.interrupt_vectors))
       /* Make sure we pulled in at least a reset vector.  */
-      ASSERT (. != __flash_start, "No interrupt vector");
+      ASSERT (. != __flash_start, "No reset vector found");
+      __VECTOR_TABLE_END = .;
+    } > rom
 
+/* Size of RAM vector table (if needed) */
+M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECTOR_TABLE) : 0x0000;
 
-      *(.text*)
-
+   .text :
+   {
+      *(.text)                 /* .text sections (code) */
+      *(.text*)                /* .text* sections (code) */
+      *(.rodata)               /* .rodata sections (constants, strings, etc.) */
+      *(.rodata*)              /* .rodata* sections (constants, strings, etc.) */
       KEEP(*(.init))
       KEEP(*(.fini))
 
       /* .ctors */
-      *crtbegin.o(.ctors)
-      *crtbegin?.o(.ctors)
-      *(EXCLUDE_FILE(*crtend?.o *crtend.o) .ctors)
-      *(SORT(.ctors.*))
-      *(.ctors)
+      __CTOR_LIST__ = .;
+      KEEP (*crtbegin.o(.ctors))
+      KEEP (*crtbegin?.o(.ctors))
+      KEEP (*(EXCLUDE_FILE(*crtend?.o *crtend.o) .ctors))
+      KEEP (*(SORT(.ctors.*)))
+      KEEP (*(.ctors))
+      __CTOR_END__ = .;
 
       /* .dtors */
-      *crtbegin.o(.dtors)
-      *crtbegin?.o(.dtors)
-      *(EXCLUDE_FILE(*crtend?.o *crtend.o) .dtors)
-      *(SORT(.dtors.*))
-      *(.dtors)
-
+      __DTOR_LIST__ = .;
+      KEEP (*crtbegin.o(.dtors))
+      KEEP (*crtbegin?.o(.dtors))
+      KEEP (*(EXCLUDE_FILE(*crtend?.o *crtend.o) .dtors))
+      KEEP (*(SORT(.dtors.*)))
+      KEEP (*(.dtors))
+      __DTOR_END__ = .;
       . = ALIGN(4);
       /* preinit data */
       PROVIDE_HIDDEN (__preinit_array_start = .);
@@ -139,6 +133,37 @@ SECTIONS
    __etext = .;    /* define a global symbol at end of code */
    __DATA_ROM = .; /* Symbol is used by startup for data initialization */
 
+   /* Flash region for programming */
+   .flash (NOLOAD) : 
+   {
+      . = ALIGN(4);
+      KEEP(*(.flash))
+   } > rom
+
+  /* reserve MTB memory at the beginning of data */
+  .mtb : /* MTB buffer no0load */
+  {
+    . = ALIGN(8);
+    _mtb_start = .;
+    KEEP(*(.mtb_buf)) /* May not referenced by application */
+    . = ALIGN(8);
+    _mtb_end = .;
+  } > ram
+
+  .interrupts_ram :
+  {
+    . = ALIGN(4);
+    __VECTOR_RAM__ = .;
+    __interrupts_ram_start__ = .;
+    *(.m_interrupts_ram)     
+    . += M_VECTOR_RAM_SIZE;
+    . = ALIGN(4);
+    __interrupts_ram_end__ = .; 
+  } > ram
+
+  __VECTOR_RAM = DEFINED(__ram_vector_table__) ? __VECTOR_RAM__ : __VECTOR_TABLE;
+  __RAM_VECTOR_TABLE_SIZE_BYTES = __interrupts_ram_end__ - __interrupts_ram_start__;
+  
    .data : AT (__etext)
    {
       __data_start__ = .;
@@ -150,6 +175,9 @@ SECTIONS
       /* All data end */
       __data_end__ = .;
    } > ram
+   
+  /* KDS defines __DATA_END as the end of DATA in ROM */
+  __DATA_END = __DATA_ROM + SIZEOF(.data);
 
    .bss :
    {
@@ -176,6 +204,7 @@ SECTIONS
       . = . + __heap_size__;
    } > ram
 
+$(linkerExtraRegions:)
    /* STACK space - between HEAP and end of RAM (or bitband_bytes) */
    .stack :
    {
@@ -200,7 +229,13 @@ SECTIONS
 
   /*
    RAM Memory map                                            Example
-  +----------------------+ __data_start__                    0x1FFFFF00
+  +----------------------+                                   0x1FFFFF00
+  | Micro Trace Buffer   |
+  | (if declared)        |
+  +----------------------+ __interrupts_ram_start__          0x1FFFFF00+???
+  | RAM vector table     |
+  | (if declared)        |
+  +----------------------+ __data_start__                    0x1FFFFF00+???
   | DATA                 |
   |                      |
   +----------------------+ __data_end__ = __bss_start__      0x1FFFFF68

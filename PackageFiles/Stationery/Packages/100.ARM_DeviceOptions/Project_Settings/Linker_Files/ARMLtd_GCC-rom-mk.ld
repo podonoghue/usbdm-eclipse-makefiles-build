@@ -126,6 +126,8 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
 
       KEEP(*(.jcr*))
 
+      *(.rodata*)
+
       KEEP(*(.eh_frame*))
     } > rom
 
