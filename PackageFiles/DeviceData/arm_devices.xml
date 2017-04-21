@@ -31,6 +31,7 @@ FTMRH - MKE02
 FTMRE - MKE04, MKE06
  -->
 <!-- 
+      V4.12.1.180  - Fixes for MKE1x etc
       V4.12.1.170  - Added MKE18 family, changed naming convention for flash programs
       V4.12.1.160  - Added MKV4x family
       V4.12.1.150  - Added MK82FN256M15, MKE15Z128M7, MKE15Z256M7, MKL82Z128M7
