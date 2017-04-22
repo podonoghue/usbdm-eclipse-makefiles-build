@@ -55,7 +55,7 @@ ifeq ($(UNAME_S),Windows)
    LIB_PREFIX = 
    LIB_SUFFIX = .dll
    EXE_SUFFIX = .exe
-   MINGWBIN := C:/Apps/mingw-w64/x86_64-5.2.0-posix-seh-rt_v4-rev0/mingw64/bin
+   MINGWBIN := C:/Apps/mingw-w64/mingw64/bin
    MSYSBIN  := C:/Apps/MinGW/msys/1.0/bin
    RM       := $(MSYSBIN)/rm -f
    RMDIR    := $(MSYSBIN)/rm -R -f
@@ -288,8 +288,8 @@ WIN_XML_INSTALLER_LIBS    := -lMsi
 PROGRAM_DIR_JAVA = C:/'Program Files'
 #PROGRAM_DIR_JAVA = C:/'Program Files (x86)'
 ifeq ($(UNAME_S),Windows)
-   JAVA_INC := -I$(PROGRAM_DIR_JAVA)/Java/jdk1.8.0_60/include
-   JAVA_INC += -I$(PROGRAM_DIR_JAVA)/Java/jdk1.8.0_60/include/win32
+   JAVA_INC := -I$(PROGRAM_DIR_JAVA)/Java/jdk1.8.0_131/include
+   JAVA_INC += -I$(PROGRAM_DIR_JAVA)/Java/jdk1.8.0_131/include/win32
 else
    JAVA_INC := -I/usr/lib/jvm/default-java/include $(jvm_includes)
 endif

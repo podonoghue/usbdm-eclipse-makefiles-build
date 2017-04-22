@@ -22,6 +22,7 @@
 <!ENTITY MCG          SYSTEM "peripherals/MCG_MCF51.svd.xml">
 <!ENTITY MTIM0        SYSTEM "peripherals/MTIM0_MCF51.svd.xml">
 <!ENTITY MXC          SYSTEM "peripherals/MXC_MCF51.svd.xml">
+<!ENTITY NV           SYSTEM "peripherals/NV_CFV1_FTFL.svd.xml">
 <!ENTITY OSC1         SYSTEM "peripherals/OSC1_MCF51.svd.xml">
 <!ENTITY PCTLA        SYSTEM "peripherals/PCTLA_MCF51.svd.xml">
 <!ENTITY PDB0         SYSTEM "peripherals/PDB0_MCF51_1CH_2TRIG_1PO.svd.xml">
@@ -86,6 +87,7 @@
 &MCG;
 &MTIM0;
 &MXC;
+&NV;
 &OSC1;
 <peripheral derivedFrom="OSC1"><name>OSC2</name><baseAddress>0xFFFF8120</baseAddress></peripheral>
 &PCTLA;

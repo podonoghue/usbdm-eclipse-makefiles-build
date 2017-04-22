@@ -185,7 +185,7 @@ endif
 #===========================================================
 # WXWIDGETS
 ifeq ($(UNAME_S),Windows)
-   WXWIDGETS_INSTALL_DIR=C:/Apps/wxWidgets-3.1.0
+   WXWIDGETS_INSTALL_DIR=C:/Apps/wxWidgets
    WXWIDGETS_VERSION_NUM=311
    WXWIDGETS_INC     := -I$(WXWIDGETS_INSTALL_DIR)/lib/gcc_lib/mswu -I$(WXWIDGETS_INSTALL_DIR)/include -I$(WXWIDGETS_INSTALL_DIR)/lib/gcc_dll/mswu
    WXWIDGETS_DEFS    := -DuseWxWidgets -D__WXMSW__ -D__GNUWIN32__ -DUNICODE
@@ -293,8 +293,8 @@ WIN_XML_INSTALLER_LIBS    := -lMsi
 PROGRAM_DIR_JAVA = C:/'Program Files'
 #PROGRAM_DIR_JAVA = C:/'Program Files (x86)'
 ifeq ($(UNAME_S),Windows)
-   JAVA_INC := -I$(PROGRAM_DIR_JAVA)/Java/jdk1.8.0_60/include
-   JAVA_INC += -I$(PROGRAM_DIR_JAVA)/Java/jdk1.8.0_60/include/win32
+   JAVA_INC := -I$(PROGRAM_DIR_JAVA)/Java/jdk1.8.0_131/include
+   JAVA_INC += -I$(PROGRAM_DIR_JAVA)/Java/jdk1.8.0_131/include/win32
 else
    JAVA_INC := -I/usr/lib/jvm/default-java/include $(jvm_includes)
 endif
