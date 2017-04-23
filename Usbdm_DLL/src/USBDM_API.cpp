@@ -2660,7 +2660,7 @@ USBDM_ErrorCode USBDM_WriteMemory( unsigned int        memorySpace,
                                    unsigned const char *data) {
    LOGGING_Q;
    if (log.getLoggingLevel()>=0) {
-      // Turn off Logg below this level
+      // Turn off Log below this level
       log.setLoggingLevel(0);
    }
    unsigned blockSize;
