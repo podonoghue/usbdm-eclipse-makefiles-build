@@ -312,11 +312,12 @@ static USBDM_ErrorCode kinetisSoftwareReset(TargetMode_t resetMode) {
 }
 
 /*
- * Request reset of the ARM debug interface
+ * Request reset of the ARM debug interface (CONTROL.CDBGSTREQ)
  */
 DLL_LOCAL
 USBDM_ErrorCode resetDebugInterface(void) {
    USBDM_ErrorCode rc;
+   LOGGING;
 
    rc = USBDM_WriteDReg(ARM_DRegCONTROL, dpControlStatBaseValue|CDBGSTREQ);
    int timeout = 5;
@@ -336,6 +337,109 @@ USBDM_ErrorCode resetDebugInterface(void) {
    return rc;
 }
 
+/**
+ * Hardware target reset for Kinetis devices
+ *
+ * Debug interface remains active even while reset is active
+ *
+ * @param demcrValue
+ * @param dhcsrValue
+ */
+static USBDM_ErrorCode kinetisHardwareReset(unsigned long demcrValue, unsigned long dhcsrValue) {
+   LOGGING_Q;
+
+   USBDM_ErrorCode rc = BDM_RC_OK;
+
+   // Debug interface still operates during hardware reset
+   // So apply reset first
+   USBDM_ControlPins(PIN_RESET_LOW);
+   resetDebugInterface();
+
+   do {
+      // Connect with reset asserted
+      // Reset requires a target connection to write target registers
+      rc = USBDM_Connect();
+      if (rc != BDM_RC_OK) {
+         log.error("Connect failed\n");
+         continue;
+      }
+      // DEMCR
+      rc = armWriteMemoryWord(DEMCR, demcrValue);
+      if (rc != BDM_RC_OK) {
+         log.error("DEMCR write failed\n");
+         continue;
+      }
+      armReadMemoryWord(DEMCR, &demcrValue);
+      // DHCSR
+      rc = armWriteMemoryWord(DHCSR, dhcsrValue);
+      if (rc != BDM_RC_OK) {
+         log.error("DHCSR write failed\n");
+         continue;
+      }
+      UsbdmSystem::milliSleep(bdmOptions.resetDuration);
+   } while (0);
+
+   // Release hardware reset
+   USBDM_ControlPins(PIN_RELEASE);
+
+   UsbdmSystem::milliSleep(bdmOptions.resetRecoveryInterval);
+
+   // Check reset rise
+   rc = USBDM_ControlPins(PIN_RESET_3STATE);
+
+   return rc;
+}
+
+/**
+ * Hardware target reset for non Kinetis devices
+ *
+ * @param demcrValue
+ * @param dhcsrValue
+ */
+static USBDM_ErrorCode hardwareReset(unsigned long demcrValue, unsigned long dhcsrValue) {
+   LOGGING_Q;
+
+   USBDM_ErrorCode rc = BDM_RC_OK;
+
+   // Reset debug interface
+   resetDebugInterface();
+
+   do {
+      // Reset requires a target connection to write target registers
+      rc = USBDM_Connect();
+      if (rc != BDM_RC_OK) {
+         log.error("Connect failed\n");
+         continue;
+      }
+      // DEMCR
+      rc = armWriteMemoryWord(DEMCR, demcrValue);
+      if (rc != BDM_RC_OK) {
+         log.error("DEMCR write failed\n");
+         continue;
+      }
+      armReadMemoryWord(DEMCR, &demcrValue);
+      // DHCSR
+      rc = armWriteMemoryWord(DHCSR, dhcsrValue);
+      if (rc != BDM_RC_OK) {
+         log.error("DHCSR write failed\n");
+         continue;
+      }
+   } while (0);
+
+   // Apply hardware reset
+   USBDM_ControlPins(PIN_RESET_LOW);
+   UsbdmSystem::milliSleep(bdmOptions.resetDuration);
+
+   // Release hardware reset
+   USBDM_ControlPins(PIN_RELEASE);
+   UsbdmSystem::milliSleep(bdmOptions.resetRecoveryInterval);
+
+   // Check reset rise
+   rc = USBDM_ControlPins(PIN_RESET_3STATE);
+
+   return rc;
+}
+
 /*
  *  Reset sequence for ARM-SWD or ARM-JTAG
  *
@@ -347,9 +451,11 @@ DLL_LOCAL
 USBDM_ErrorCode resetARM(TargetMode_t targetMode) {
    LOGGING;
    USBDM_ErrorCode rc = BDM_RC_OK;
+
    TargetMode_t resetMethod = (TargetMode_t)(targetMode&RESET_METHOD_MASK);
    TargetMode_t resetMode   = (TargetMode_t)(targetMode&RESET_MODE_MASK);
    log.print("%s\n", getTargetModeName((TargetMode_t)(resetMethod|resetMode)));
+
    if (resetMethod == RESET_DEFAULT) {
       if (bdmOptions.useResetSignal) {
          resetMethod = RESET_HARDWARE;
@@ -370,7 +476,6 @@ USBDM_ErrorCode resetARM(TargetMode_t targetMode) {
 #endif
 
    unsigned long dhcsrValue = DHCSR_DBGKEY|DHCSR_C_DEBUGEN; //DHCSR_C_HALT
-   unsigned long dbgValue   = (DBGMCU_IWDG_STOP|DBGMCU_WWDG_STOP);
 
    unsigned long demcrValue = 0;
    if (resetMode==RESET_SPECIAL) {
@@ -379,52 +484,20 @@ USBDM_ErrorCode resetARM(TargetMode_t targetMode) {
       demcrValue = DEMCR_VC_CORERESET|DEMCR_TRCENA;
       dhcsrValue |= DHCSR_C_HALT;
    }
+
    switch (resetMethod) {
       case RESET_ALL:
       case RESET_HARDWARE :
          // Force hardware reset
          log.print("Doing Hardware reset\n");
-         USBDM_ControlPins(PIN_RESET_LOW);
-         resetDebugInterface();
-         do {
-            // Connect with reset asserted
-            // Reset requires a target connection to write target registers
-            rc = USBDM_Connect();
-            if (rc != BDM_RC_OK) {
-               log.error("Connect failed\n");
-               continue;
-            }
-// ToDo - add STM code
-//      if (armDebugInformation.subType==TARGET_STM32F10x) {
-//         // Disable watch-dog while Reset is asserted (as per STM recommendation)
-//         log.print("   SWD_TargetReset()- Attempting to disable Watch-dog\n");
-//         armWriteMemoryWord(DBGMCU_CR, &dbgValue);
-//      }
-            // DEMCR
-            rc = armWriteMemoryWord(DEMCR, demcrValue);
-            if (rc != BDM_RC_OK) {
-               log.error("DEMCR write failed\n");
-               continue;
-            }
-            armReadMemoryWord(DEMCR, &demcrValue);
-            // DHCSR
-            rc = armWriteMemoryWord(DHCSR, dhcsrValue);
-            if (rc != BDM_RC_OK) {
-               log.error("DHCSR write failed\n");
-               continue;
-            }
-            UsbdmSystem::milliSleep(bdmOptions.resetDuration);
-            if (!armDebugInformation.MDM_AP_present) {
-               // Not Kinetis
-               log.print("armSoftwareReset()- Attempting to disable ST Watchdog\n");
-               armWriteMemoryWord(DBGMCU_CR, dbgValue);
-            }
-         } while (0);
-         // Release hardware reset
-         USBDM_ControlPins(PIN_RELEASE);
-         UsbdmSystem::milliSleep(bdmOptions.resetRecoveryInterval);
-         // Check reset rise
-         rc = USBDM_ControlPins(PIN_RESET_3STATE);
+
+         if (armDebugInformation.MDM_AP_present) {
+            rc = kinetisHardwareReset(demcrValue, dhcsrValue);
+         }
+         else {
+            // Default ARM software reset code
+            rc = hardwareReset(demcrValue, dhcsrValue);
+         }
          break;
       case RESET_SOFTWARE:
          log.print("Doing Software reset\n");
