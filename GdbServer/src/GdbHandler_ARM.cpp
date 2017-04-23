@@ -342,7 +342,7 @@ void GdbHandler_ARM::writeReg(unsigned regNo, unsigned long regValue) {
 USBDM_ErrorCode GdbHandler_ARM::armReadMemoryWord(unsigned long address, unsigned long *data) {
    LOGGING_Q;
    uint8_t buff[4];
-   USBDM_ErrorCode rc = bdmInterface->writeMemory(4, 4, address, buff);
+   USBDM_ErrorCode rc = bdmInterface->readMemory(4, 4, address, buff);
    *data = (buff[0])+(buff[1]<<8)+(buff[2]<<16)+(buff[3]<<24);
    switch(address) {
    case DEMCR:
