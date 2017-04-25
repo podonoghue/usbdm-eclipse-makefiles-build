@@ -1,21 +1,21 @@
    <!-- NXP LPC Devices -->
-   <device name="LPC1343" family="CortexM3" subfamily="LPC1343">
-      <memory type="flash" registerAddress="0x40022000">
-         <memoryRange size="32K" start="0x00000000" />
+   <device name="LPC11U14" family="CortexM0" subfamily="LPC11U3x_2x_1x">
+      <memory type="flash" registerAddress="0x1FFF1FF0">
+         <memoryRange start="0x00000000" size="32K" sectorSize="4096" alignment="256" />
       </memory>
       <memory type="ram">
-         <memoryRange size="8K" start="0x10000000" />
+         <memoryRange start="0x10000000" size="4K" />
       </memory>
-      <memory type="io">
-         <memoryRange size="1024M" start="0x40000000" />
+      <memory type="ram">
+         <memoryRange start="0x20004000" size="2K" />
       </memory>
-      <memory type="io">
-         <memoryRange size="1024M" start="0x50000000" />
+      <memory type="rom">
+         <memoryRange start="0x1FFF0000" end="0x1FFF4000" />
       </memory>
-      <sdidAddress value="0xE0042000" />
-      <sdidMask value="0x00000FFF" />
-      <sdid value="0x00000420" />
-      <tclScriptRef ref="STM32F100xx-default-Scripts" />
-      <flashProgramRef ref="STM32F100xx-default-FlashProgram" />
-      <registerDescriptionRef ref="CortexM3F-register-description" />
-   </device>
+      <memoryRef ref="LPC11U_IO" />
+      <sdidAddress value="0x400483F4" />
+      <sdid mask="0x0FFFFFFF" value="0x0998802B" />
+      <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
+      <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
+      <registerDescriptionRef ref="CortexM0-register-description" />
+   </device>   

@@ -14,15 +14,20 @@
 <!ENTITY Kinetis-FTMRH-flash-program       SYSTEM "ARM/Kinetis-FTMRH-flash-program-gcc.hex">
 <!ENTITY Kinetis-FTMRH-eeprom-program      SYSTEM "ARM/Kinetis-FTMRH-eeprom-program-gcc.hex">
 <!ENTITY Kinetis-FTMRE-flash-program       SYSTEM "ARM/Kinetis-FTMRE-flash-program-gcc.hex">
+<!ENTITY LPC11U3x_2x_1x-flash-program      SYSTEM "ARM/LPC11U3x_2x_1x-flash-program-gcc.hex">
+
 <!ENTITY Kinetis-Default-flash-scripts     SYSTEM "ARM/Kinetis-Default-flash-scripts.tcl">
 <!ENTITY Kinetis-Kxx-flashScripts          SYSTEM "ARM/Kinetis-Kxx-flash-scripts.tcl">
 <!ENTITY Kinetis-KExx-flashScripts         SYSTEM "ARM/Kinetis-KExx-flash-scripts.tcl">
 <!ENTITY Kinetis-KLxx-flashScripts         SYSTEM "ARM/Kinetis-KLxx-flash-scripts.tcl">
 <!ENTITY Kinetis-KMxx-flashScripts         SYSTEM "ARM/Kinetis-KMxx-flash-scripts.tcl">
+<!ENTITY LPC11U3x_2x_1x-Scripts            SYSTEM "ARM/LPC11U3x_2x_1x-Scripts.tcl">
+
 <!ENTITY Old-Kinetis-Devices               SYSTEM "arm_old_kinetis_devices.xml">
 <!ENTITY STM-Devices                       SYSTEM "arm_stm_devices.xml">
 <!ENTITY NXP-Devices                       SYSTEM "arm_nxp_devices.xml">
 <!ENTITY Custom-Devices                    SYSTEM "Custom/custom-arm.xml">
+
 <!ENTITY CortexM-base-register-description SYSTEM "ARM/CortexM-base-register-description.xml">
 <!ENTITY CortexM-sfpu-register-description SYSTEM "ARM/CortexM-sfpu-register-description.xml">
 ]>
@@ -102,6 +107,7 @@ Kinetis-FTMRE-flash-program         M0    MKE04Z64M4 MKE06Z64M4
       <tclScript    id="Kinetis-KExx-Scripts">              &Kinetis-KExx-flashScripts;         </tclScript>
       <tclScript    id="Kinetis-KLxx-Scripts">              &Kinetis-KLxx-flashScripts;         </tclScript>
       <tclScript    id="Kinetis-KMxx-Scripts">              &Kinetis-KMxx-flashScripts;         </tclScript>
+      <tclScript    id="LPC11U3x_2x_1x-Scripts">            &LPC11U3x_2x_1x-Scripts;            </tclScript>
       <flashProgram id="Kinetis-FTMRH-eeprom-program">      &Kinetis-FTMRH-eeprom-program;      </flashProgram>
       <flashProgram id="Kinetis-FTMRH-flash-program">       &Kinetis-FTMRH-flash-program;       </flashProgram>
       <flashProgram id="Kinetis-FTMRE-flash-program">       &Kinetis-FTMRE-flash-program;       </flashProgram>
@@ -113,6 +119,7 @@ Kinetis-FTMRE-flash-program         M0    MKE04Z64M4 MKE06Z64M4
       <flashProgram id="Kinetis-FTFE-MK-flash-program">     &Kinetis-FTFE-MK-flash-program;     </flashProgram>
       <flashProgram id="Kinetis-FTFE-MKE-flash-program">    &Kinetis-FTFE-MKE-flash-program;    </flashProgram>
       <flashProgram id="Kinetis-FTFE-MKE18-flash-program">  &Kinetis-FTFE-MKE18-flash-program;  </flashProgram>
+      <flashProgram id="LPC11U3x_2x_1x-flash-program">      &LPC11U3x_2x_1x-flash-program;  </flashProgram>
       
       <!-- 
             Security Entries 
@@ -786,6 +793,12 @@ Kinetis-FTMRE-flash-program         M0    MKE04Z64M4 MKE06Z64M4
       <memory id="STM32_IO" type="io">
          <memoryRange start="0x40000000" end="0x43FFFFFF" name="bitband" />  <!-- Bit-band Peripheral -->
          <memoryRange start="0xE0000000" end="0xE03FFFFF" name="private" />  <!-- Private Peripherals -->
+      </memory>
+      <memory id="LPC11U_IO" type="io">
+         <memoryRange start="0x40000000" end="0x4007FFFF" name="apb"  />  <!-- APB peripherals -->
+         <memoryRange start="0x40080000" end="0x40083FFF" name="usb"  />  <!-- USB peripherals -->
+         <memoryRange start="0x50000000" end="0x50003FFF" name="gpio" />  <!-- GPIO peripherals -->
+         <memoryRange start="0xE0000000" end="0xE00FFFFF" name="ppb"  />  <!-- Private peripheral bus -->
       </memory>
            
       <!--  
