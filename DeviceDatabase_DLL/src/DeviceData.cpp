@@ -586,7 +586,7 @@ AddressType MemoryRegion::getAddressType() const {
 }
 
 // Get memory region data alignment (1,2,4 etc)
-uint8_t     MemoryRegion::getAlignment() const {
+uint32_t     MemoryRegion::getAlignment() const {
    return alignment;
 }
 

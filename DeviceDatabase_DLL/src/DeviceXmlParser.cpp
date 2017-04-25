@@ -914,15 +914,15 @@ MemoryRegionPtr DeviceXmlParser::parseFlashMemoryDetails(DOMElement *currentProp
          defaultAddressMode = addressMode;
       }
    }
-   uint8_t alignment = defaultAlignment;
+   uint32_t alignment = defaultAlignment;
    if (currentProperty->hasAttribute(attr_alignment.asXMLString())) {
       DualString sAlignment(currentProperty->getAttribute(attr_alignment.asXMLString()));
       long temp;
       if (!strToULong(sAlignment.asCString(), NULL, &temp) ||
-          ((temp != 1) && (temp != 2) && (temp != 4) && (temp != 8) && (temp != 16) && (temp != 32))) {
+          ((temp != 1) && (temp != 2) && (temp != 4) && (temp != 8) && (temp != 16) && (temp != 32) && (temp != 64) && (temp != 128) && (temp != 256))) {
          throw MyException(string("DeviceXmlParser::parseFlashMemoryDetails() - Illegal alignment ")+sAlignment.asCString());
       }
-      alignment = (uint8_t) temp;
+      alignment = (uint32_t) temp;
       if (isDefault) {
 //         log.print("Setting default %s alignment = %d\n",
 //               MemoryRegion::getMemoryTypeName(memoryType), alignment);

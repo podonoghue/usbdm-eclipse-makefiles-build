@@ -785,7 +785,7 @@ public:
    uint32_t                 pageAddress;            //!< Paging register address
    uint32_t                 securityAddress;        //!< Non-volatile option address
    uint32_t                 sectorSize;             //!< Size of sectors i.e. minimum erasable unit
-   uint8_t                  alignment;              //!< Memory programming alignment requirement (1,2,4 etc)
+   uint32_t                 alignment;              //!< Memory programming alignment requirement (1,2,4 etc)
    mutable uint32_t         lastIndexUsed;          //!< Last used memoryRanges index
    FlashProgramConstPtr     flashProgram;           //!< Region-specific flash algorithm
    SecurityEntryPtr         securityInformation;    //!< Region-specific security data
@@ -819,7 +819,7 @@ public:
                  uint32_t  pageAddress = 0,
                  uint32_t  securityAddress = 0,
                  uint32_t  sectorSize = 0,
-                 uint8_t   alignment = 1) :
+                 uint32_t  alignment = 1) :
       type(type),
       addressType(AddrPaged),
       registerAddress(registerAddress),
@@ -935,7 +935,7 @@ public:
    uint32_t    getSectorSize()     const;
    AddressType getAddressType()    const;
    // Get memory region data alignment (1,2,4 etc)
-   uint8_t     getAlignment()      const;
+   uint32_t    getAlignment()      const;
 
    uint32_t    getFOPTAddress()    const;
    uint32_t    getFLCRAddress()    const;
