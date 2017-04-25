@@ -99,6 +99,7 @@ static const char *const errorMessages[] = {
    /* 54 */ "Memory access failed due to target in stop or wait state",
    /* 55 */ "Selected BDM not found (removed?)",
    /* 56 */ "Interface not initialised before use",
+   /* 57 */ "Operation not supported for this target",
 };
 
 //! Error code returned by the various routines

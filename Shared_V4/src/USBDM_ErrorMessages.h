@@ -101,6 +101,7 @@ typedef enum  {
  BDM_RC_HCS_ACCESS_ERROR                       = 54,    //!< Memory access failed due to target in stop or wait state
  BDM_RC_SELECTED_BDM_NOT_FOUND                 = 55,    //!< Selected BDM not found (removed)
  BDM_RC_NOT_INITIALISED                        = 56,    //!< Interface not initialised before use e.g. failed to call USBDM_Init()
+ BDM_RC_OPERATION_NOT_SUPPORTED                = 57,    //!< Operation not supported for target
 
  // Used by programmer
  PROGRAMMING_RC_OK                             = 0,     //!<  0 Success
