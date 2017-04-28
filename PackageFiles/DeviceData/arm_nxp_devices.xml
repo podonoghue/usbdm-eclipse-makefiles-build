@@ -1,7 +1,7 @@
    <!-- NXP LPC Devices -->
    <device name="LPC11U14" family="CortexM0" subfamily="LPC11U3x_2x_1x">
-      <memory type="flash" registerAddress="0x1FFF1FF0">
-         <memoryRange start="0x00000000" size="32K" sectorSize="4096" alignment="256" />
+      <memory type="flash" registerAddress="0x1FFF1FF0" alignment="256" >
+         <memoryRange start="0x00000000" size="32K" sectorSize="4096" />
       </memory>
       <memory type="ram">
          <memoryRange start="0x10000000" size="4K" />
