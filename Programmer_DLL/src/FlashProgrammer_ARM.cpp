@@ -2491,7 +2491,6 @@ USBDM_ErrorCode FlashProgrammer_ARM::doReadbackVerify(FlashImagePtr flashImage) 
    flashImage->printMemoryMap();
 
    FlashImage::EnumeratorPtr enumerator = flashImage->getEnumerator();
-   //ToDo - handle linear addressing on HCS12
    if (!enumerator->isValid()) {
       log.print("Empty Memory region\n");
       flashImage->printMemoryMap();
@@ -2594,8 +2593,23 @@ USBDM_ErrorCode FlashProgrammer_ARM::doReadbackVerify(FlashImagePtr flashImage) 
                      (uint8_t)(flashImage->getValue(imageAddress+testIndex)),
                      buffer[testIndex]);
                   // Dump region around error
-                  flashImage->dumpRange((imageAddress+testIndex-31)&~0xFUL, (imageAddress+testIndex+31)|0xF);
+                  uint32_t start = 0;
+                  if ((imageAddress+testIndex)>31) {
+                     start = (imageAddress+testIndex-31);
+                  }
+                  uint32_t end = 0xFFFFFFFF;
+                  if ((imageAddress+testIndex)<(end-31)) {
+                     end = imageAddress+testIndex;
+                  }
+                  start &= ~0xFUL;
+                  end   |= 0xFUL;
+                  log.print("[0x%08X..0x%08X]\n", start, end);
+                  flashImage->dumpRange(start, end);
                   reportedError = true;
+                  uint8_t tBuff[end-start+1];
+                  if (bdmInterface->readMemory(memorySpace, (end-start+1), start, (uint8_t *)tBuff) == BDM_RC_OK) {
+                     log.printDump(tBuff, (end-start+1), start);
+                  }
                }
 #endif
             }
