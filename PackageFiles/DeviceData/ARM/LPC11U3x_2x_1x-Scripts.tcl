@@ -32,6 +32,13 @@ proc loadSymbols {} {
 
    set ::NAME  "LPC11U3x_2x_1x-Scripts"
 
+   ;# System Memory Map Register
+   set ::SYSMEMREMAP           0x40048000
+   set ::SYSMEMREMAP_BOOT_ROM  0
+   set ::SYSMEMREMAP_RAM       1
+   set ::SYSMEMREMAP_FLASH     2
+
+
    puts "$::NAME.loadSymbols{}"
    
    set ::PROGRAMMING_RC_OK                         0
@@ -44,7 +51,10 @@ proc loadSymbols {} {
 ;#
 ;#
 proc initTarget { args } {
-   ;# Not used
+
+   ;# Make Flash visible @0x0000 for programming & verification
+   wl $::SYSMEMREMAP $::SYSMEMREMAP_FLASH
+
    return $::PROGRAMMING_RC_OK
 }
 
@@ -70,37 +80,6 @@ proc massEraseTarget { } {
 proc isUnsecure { } {
    ;# Not used
    return $::PROGRAMMING_RC_OK
-}
-
-;# For testing
-proc o { } {
-   settarget arm
-   openbdm 0
-   catch { connect }
-   pinSet rst=0
-   catch { reset ss }
-   isUnsecure
-   catch { connect }
-}
-
-;# For testing
-proc c { } {
-   closebdm
-}
-
-;# For testing
-proc m { } {
-   massEraseTarget
-}
-
-;# For testing
-proc d { } {
-   puts ""
-   puts ""
-   puts ""
-   o
-   m
-   c
 }
 
 ;######################################################################################
