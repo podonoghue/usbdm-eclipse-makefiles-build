@@ -1,31 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<!DOCTYPE DeviceList SYSTEM "usbdmDeviceSchema.dtd"
-[
-<!ENTITY CFV2-default-flashProgram           SYSTEM "CFVx/ColdfireV2-default-flash-program.elf.S19">
-<!ENTITY CFV2-default-flashScripts           SYSTEM "CFVx/ColdfireV2-default-flash-scripts.tcl">
-<!ENTITY Coldfire-base-register-description  SYSTEM "CFV1/Coldfire-base-register-description.xml">
-<!ENTITY Custom-Devices                      SYSTEM "Custom/custom-cfvx.xml">
-]>
+<!DOCTYPE DeviceList SYSTEM "usbdmDeviceSchema.dtd" >
 <!--  Notes
       V4.10.6.240 - Added members to MCF5225x
       V4.10.6.240 - Added GDB register description
       V4.10.6.170 - Added features to support more flexible project creation
       V4.10.6.170 - Split out C project creation
-      V4.10.6.110 - Changed to using <projectActionList> tag & related changes
+      V4.10.6.110 - Changed to using projectActionList tag & related changes
       V4.10.6     - Added GDB register descriptions 
       V4.10.5d    - Changed GNU C information
       V4.10.5     - Added GNU C information
       V4.10.4     - Changed how security information is expressed
       V4.10.4     - Added I/O space 
  -->
-<root version="4.10.6.170">
+<root xmlns:xi="http://www.w3.org/2001/XInclude" version="4.12.1.180">
    <description>Coldfire V2, 3 and 4 Device characteristics</description>
+   
    <sharedInformation>
       <!-- 
-            Flash Programs & TCL Scripts 
+            TCL Scripts 
       -->
-      <flashProgram id="default-CFV2-FlashProgram">    &CFV2-default-flashProgram;    </flashProgram>
-      <tclScript    id="default-CFV2-Scripts">         &CFV2-default-flashScripts;    </tclScript>
+      <tclScript id="default-CFV2-Scripts"> <xi:include parse="text" href="CFVx/ColdfireV2-default-flash-scripts.tcl" /> </tclScript>
+      <!-- 
+            Flash Programs
+      -->
+      <flashProgram id="default-CFV2-FlashProgram">  <xi:include parse="text" href="CFVx/ColdfireV2-default-flash-program.elf.S19" /> </flashProgram>
+
+      <!--  
+            Register sets
+      -->
+      <registerDescription id="Coldfire-register-description"  count="18" >
+          <xi:include parse="text" href="CFV1/Coldfire-base-register-description.xml" />
+      </registerDescription>
 
       <!-- 
             Security Entries 
@@ -86,12 +91,6 @@
       <memory id="coldfire_default_io"  type="io">
          <memoryRange size="1024M" start="0x40000000" />
       </memory>
-      <!--  
-            Register sets 
-      -->
-      <registerDescription id="Coldfire-register-description"  count="18" >
-         &Coldfire-base-register-description;
-      </registerDescription>
 
    </sharedInformation>
 		
@@ -117,7 +116,6 @@
          <registerDescriptionRef ref="Coldfire-register-description" />
          <note>Default CFV1 Device</note>
       </device>
-&Custom-Devices;
       <!--
          =======================================================================
       -->

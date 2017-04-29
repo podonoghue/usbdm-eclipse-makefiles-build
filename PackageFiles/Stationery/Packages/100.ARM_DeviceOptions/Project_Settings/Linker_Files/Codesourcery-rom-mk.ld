@@ -73,22 +73,22 @@ SECTIONS
 
     *(.ARM.extab* .gnu.linkonce.armextab.*)
     *(.gcc_except_table)
-  } >rom
+  } > flash
   .eh_frame_hdr : ALIGN (4)
   {
     KEEP (*(.eh_frame_hdr))
     *(.eh_frame_entry .eh_frame_entry.*)
-  } >rom
+  } > flash
   .eh_frame : ALIGN (4)
   {
     KEEP (*(.eh_frame)) *(.eh_frame.*)
-  } >rom
+  } > flash
   /* .ARM.exidx is sorted, so has to go in its own output section.  */
   PROVIDE_HIDDEN (__exidx_start = .);
   .ARM.exidx :
   {
     *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-  } >rom
+  } > flash
   PROVIDE_HIDDEN (__exidx_end = .);
   .rodata : ALIGN (4)
   {
@@ -141,7 +141,7 @@ SECTIONS
     *(.rom)
     *(.rom.b .bss.rom)
     _etext = .;
-  } >rom
+  } > flash
   __cs3_region_size_rom = LENGTH(rom);
 
   ASSERT (!(__cs3_region_init_ram & 7), "__cs3_region_init_ram not aligned")
@@ -160,7 +160,7 @@ SECTIONS
     *(.ram)
     . = ALIGN (8);
     _edata = .;
-  } >ram AT>rom
+  } >ram AT> flash
   .bss : ALIGN (8)
   {
     *(.shbss)
@@ -171,7 +171,7 @@ SECTIONS
     . = ALIGN (8);
     _end = .;
     __end = .;
-  } >ram AT>rom
+  } >ram AT> flash
   __cs3_region_size_ram = LENGTH(ram);
   __cs3_region_init_ram = LOADADDR (.data);
   __cs3_region_init_size_ram = _edata - ADDR (.data);

@@ -1,4 +1,4 @@
-;#<![CDATA[
+
 ;#
 ;######################################################################################
 ;#  This file defines the following flash functions
@@ -284,4 +284,3 @@ proc rbx { address } {
 ;#
 loadSymbols
 
-;#]]>

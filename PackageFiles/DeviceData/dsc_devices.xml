@@ -1,24 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<!DOCTYPE DeviceList SYSTEM "usbdmDeviceSchema.dtd"
-[
-<!ENTITY DSC-56F8006-flash-program   SYSTEM "DSC/DSC-56F8006-flash-prog.elf.p.S">
-<!ENTITY DSC-56F8014-flash-program   SYSTEM "DSC/DSC-56F8014-flash-prog.elf.p.S">
-<!ENTITY DSC-56F8023-flash-program   SYSTEM "DSC/DSC-56F8023-flash-prog.elf.p.S">
-<!ENTITY DSC-56F825X-flash-program   SYSTEM "DSC/DSC-56F825X-flash-prog.elf.p.S">
-<!ENTITY DSC-56F8323-flash-program   SYSTEM "DSC/DSC-56F8323-flash-prog.elf.p.S">
-<!ENTITY DSC-FTFL-flash-program      SYSTEM "DSC/DSC-FTFL-flash-prog.elf.p.S">
-<!ENTITY DSC-FTFA-flash-program      SYSTEM "DSC/DSC-FTFA-flash-prog.elf.p.S">
-
-<!ENTITY DSC-56F8006-flash-scripts   SYSTEM "DSC/DSC-56F8006-flash-scripts.tcl">
-<!ENTITY DSC-56F8014-flash-scripts   SYSTEM "DSC/DSC-56F8014-flash-scripts.tcl">
-<!ENTITY DSC-56F8023-flash-scripts   SYSTEM "DSC/DSC-56F8023-flash-scripts.tcl">
-<!ENTITY DSC-56F825X-flash-scripts   SYSTEM "DSC/DSC-56F825X-flash-scripts.tcl">
-<!ENTITY DSC-56F8323-flash-scripts   SYSTEM "DSC/DSC-56F8323-flash-scripts.tcl">
-<!ENTITY DSC-FTFL-flash-scripts      SYSTEM "DSC/DSC-FTFL-flash-scripts.tcl">
-<!ENTITY DSC-FTFA-flash-scripts      SYSTEM "DSC/DSC-FTFA-flash-scripts.tcl">
-
-<!ENTITY Custom-devices              SYSTEM "Custom/custom-dsc.xml">
-]>
+<!DOCTYPE DeviceList SYSTEM "usbdmDeviceSchema.dtd" >
 
 <!-- 
     *****************************************************************************************
@@ -37,26 +18,32 @@
                     Changed memory types to pROM etc
                     Changes for MC56F8323 etc.
  -->
-<root version="4.10.4">
+<root xmlns:xi="http://www.w3.org/2001/XInclude" version="4.12.1.180">
    <description>DSC Device characteristics v4.9.5 31/5/2012</description>
    <sharedInformation>
       
-      <flashProgram id="DSC-56F8006-flash-program">  &DSC-56F8006-flash-program;  </flashProgram> <!-- MC56F8002/6 -->
-      <flashProgram id="DSC-56F8014-flash-program">  &DSC-56F8014-flash-program;  </flashProgram> <!-- MC56F8011/13, MC56F8014  -->
-      <flashProgram id="DSC-56F8023-flash-program">  &DSC-56F8023-flash-program;  </flashProgram> <!-- MC56F8023/33, MC56F8036, MC56F8027/37 -->
-      <flashProgram id="DSC-56F825X-flash-program">  &DSC-56F825X-flash-program;  </flashProgram> <!-- MC56F8245/46/47/55/56/57  -->
-      <flashProgram id="DSC-56F8323-flash-program">  &DSC-56F8323-flash-program;  </flashProgram> <!-- MC56F8322, MC56F8323 -->
-      <flashProgram id="DSC-FTFL-flash-program">     &DSC-FTFL-flash-program;     </flashProgram> <!-- FTFL FLash -->
-      <flashProgram id="DSC-FTFA-flash-program">     &DSC-FTFA-flash-program;     </flashProgram> <!-- FTFA FLash -->
-
-      <tclScript id="DSC-56F8006-flash-scripts">     &DSC-56F8006-flash-scripts;   </tclScript> <!-- MC56F8002/6 -->
-      <tclScript id="DSC-56F8014-flash-scripts">     &DSC-56F8014-flash-scripts;   </tclScript> <!-- MC56F8011/13, MC56F8014 -->
-      <tclScript id="DSC-56F8023-flash-scripts">     &DSC-56F8023-flash-scripts;   </tclScript> <!-- MC56F8023/33, MC56F8036, MC56F8027/37 -->
-      <tclScript id="DSC-56F825X-flash-scripts">     &DSC-56F825X-flash-scripts;   </tclScript> <!-- MC56F8245/46/47/55/56/57  -->
-      <tclScript id="DSC-56F8323-flash-scripts">     &DSC-56F8323-flash-scripts;   </tclScript> <!-- MC56F8122/322, MC56F8123/323, MC56F8165/365 -->
-      <tclScript id="DSC-FTFL-flash-scripts">        &DSC-FTFL-flash-scripts;      </tclScript> <!-- FTFL FLash -->
-      <tclScript id="DSC-FTFA-flash-scripts">        &DSC-FTFA-flash-scripts;      </tclScript> <!-- FTFA FLash -->
+      <!-- 
+            TCL Scripts 
+      -->
+      <tclScript id="DSC-56F8006-flash-scripts"> <xi:include parse="text" href="DSC/DSC-56F8006-flash-scripts.tcl" />    </tclScript> <!-- MC56F8002/6 -->
+      <tclScript id="DSC-56F8014-flash-scripts"> <xi:include parse="text" href="DSC/DSC-56F8014-flash-scripts.tcl" />    </tclScript> <!-- MC56F8011/13, MC56F8014 -->
+      <tclScript id="DSC-56F8023-flash-scripts"> <xi:include parse="text" href="DSC/DSC-56F8023-flash-scripts.tcl" />    </tclScript> <!-- MC56F8023/33, MC56F8036, MC56F8027/37 -->
+      <tclScript id="DSC-56F825X-flash-scripts"> <xi:include parse="text" href="DSC/DSC-56F825X-flash-scripts.tcl" />    </tclScript> <!-- MC56F8245/46/47/55/56/57  -->
+      <tclScript id="DSC-56F8323-flash-scripts"> <xi:include parse="text" href="DSC/DSC-56F8323-flash-scripts.tcl" />    </tclScript> <!-- MC56F8122/322, MC56F8123/323, MC56F8165/365 -->
+      <tclScript id="DSC-FTFL-flash-scripts">    <xi:include parse="text" href="DSC/DSC-FTFL-flash-scripts.tcl" />       </tclScript> <!-- FTFL FLash -->
+      <tclScript id="DSC-FTFA-flash-scripts">    <xi:include parse="text" href="DSC/DSC-FTFA-flash-scripts.tcl" />       </tclScript> <!-- FTFA FLash -->
       
+      <!-- 
+            Flash Programs
+      -->
+      <flashProgram id="DSC-56F8006-flash-program">  <xi:include parse="text" href="DSC/DSC-56F8006-flash-prog.elf.p.S" />   </flashProgram> <!-- MC56F8002/6 -->
+      <flashProgram id="DSC-56F8014-flash-program">  <xi:include parse="text" href="DSC/DSC-56F8014-flash-prog.elf.p.S" />   </flashProgram> <!-- MC56F8011/13, MC56F8014  -->
+      <flashProgram id="DSC-56F8023-flash-program">  <xi:include parse="text" href="DSC/DSC-56F8023-flash-prog.elf.p.S" />   </flashProgram> <!-- MC56F8023/33, MC56F8036, MC56F8027/37 -->
+      <flashProgram id="DSC-56F825X-flash-program">  <xi:include parse="text" href="DSC/DSC-56F825X-flash-prog.elf.p.S" />   </flashProgram> <!-- MC56F8245/46/47/55/56/57  -->
+      <flashProgram id="DSC-56F8323-flash-program">  <xi:include parse="text" href="DSC/DSC-56F8323-flash-prog.elf.p.S" />   </flashProgram> <!-- MC56F8322, MC56F8323 -->
+      <flashProgram id="DSC-FTFL-flash-program">     <xi:include parse="text" href="DSC/DSC-FTFL-flash-prog.elf.p.S" />      </flashProgram> <!-- FTFL FLash -->
+      <flashProgram id="DSC-FTFA-flash-program">     <xi:include parse="text" href="DSC/DSC-FTFA-flash-prog.elf.p.S" />      </flashProgram> <!-- FTFA FLash -->
+
       <securityEntry id="DSC-default-security">
          <securityDescription id="DSC-default-security-description">
             SECL\t\t=[RES=%1X, RES=%6b, SEC=%2b]\nSECH\t\t=[KEYEN=%1b, RES=%1X]\nRES\t\t= %2X\nFPROT\t\t= %2X\nRES\t\t= %2X\nBACKDOOR\t= %8X
@@ -683,7 +670,5 @@
       
       <device name="MC56F84786" alias="MC56F84585"></device>
       <device name="MC56F84789" alias="MC56F84585"></device>
-      
-      &Custom-devices;
    </deviceList>
 </root>

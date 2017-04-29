@@ -277,6 +277,8 @@
       <xs:element name="mpuPresent" type="xs:boolean"/>
       <!-- V1.1: fpuPresent specifies whether or not a floating point hardware unit is physically present -->
       <xs:element name="fpuPresent" type="xs:boolean"/>
+      <!-- V1.1: vtorPresent specifies whether or not a Vector Table relocation logic is physically present -->
+      <xs:element name="vtorPresent" type="xs:boolean"/>
       <!-- V1.1: nvicPrioBits specifies the number of bits used by the Nested Vectored Interrupt Controller
                    for defining the priority level = # priority levels -->
       <xs:element name="nvicPrioBits" type="scaledNonNegativeInteger"/>

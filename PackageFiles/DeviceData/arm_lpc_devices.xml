@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "usbdmDeviceSchema.dtd" >
+
+<root xmlns:xi="http://www.w3.org/2001/XInclude" >
+   <sharedInformation>
+      <!-- 
+            TCL Scripts 
+      -->
+      <tclScript id="LPC11U3x_2x_1x-Scripts"> <xi:include parse="text" href="ARM/LPC11U3x_2x_1x-Scripts.tcl" /> </tclScript>
+
+      <!-- 
+            Flash Programs
+      -->
+      <flashProgram id="LPC11U3x_2x_1x-flash-program">  <xi:include parse="text" href="ARM/LPC11U3x_2x_1x-flash-program-gcc.hex" /> </flashProgram>
+
+      <!--  
+            Register sets (dummy sets to pass validation)
+      -->
+      <registerDescription id="CortexM0-register-description"  count="0" />
+      <registerDescription id="CortexM3-register-description"  count="0" />
+      <registerDescription id="CortexM3F-register-description" count="0" />
+      <registerDescription id="CortexM4-register-description"  count="0" />
+      <registerDescription id="CortexM4F-register-description" count="0" />
+
+      <!-- 
+            Memory regions
+       -->
+      <!-- Working RAM  -->
+      <memory id="lpc_2K_Ram" type="ram">
+         <memoryRange start="0x10000000" size="2K" />
+      </memory>
+      <memory id="lpc_4K_Ram" type="ram">
+         <memoryRange start="0x10000000" size="4K" />
+      </memory>
+      <memory id="lpc_6K_Ram" type="ram">
+         <memoryRange start="0x10000000" size="4K" />
+      </memory>
+      <memory id="lpc_8K_Ram" type="ram">
+         <memoryRange start="0x10000000" size="4K" />
+      </memory>
+
+      <!-- Main Flash memory -->
+      <memory id="lpc_16K_Flash" type="flash" registerAddress="0x1FFF1FF0" alignment="256" sectorSize="4096">
+         <memoryRange start="0x00000000" size="16K" />
+      </memory>
+      <memory id="lpc_24K_Flash" type="flash" registerAddress="0x1FFF1FF0" alignment="256" sectorSize="4096">
+         <memoryRange start="0x00000000" size="24K" />
+      </memory>
+      <memory id="lpc_32K_Flash" type="flash" registerAddress="0x1FFF1FF0" alignment="256" sectorSize="4096">
+         <memoryRange start="0x00000000" size="32K" />
+      </memory>
+      <memory id="lpc_40K_Flash" type="flash" registerAddress="0x1FFF1FF0" alignment="256" sectorSize="4096">
+         <memoryRange start="0x00000000" size="40K" />
+      </memory>
+      <memory id="lpc_48K_Flash" type="flash" registerAddress="0x1FFF1FF0" alignment="256" sectorSize="4096">
+         <memoryRange start="0x00000000" size="48K" />
+      </memory>
+      <memory id="lpc_64K_Flash" type="flash" registerAddress="0x1FFF1FF0" alignment="256" sectorSize="4096">
+         <memoryRange start="0x00000000" size="64K" />
+      </memory>
+      <memory id="lpc_96K_Flash" type="flash" registerAddress="0x1FFF1FF0" alignment="256" sectorSize="4096">
+         <memoryRange start="0x00000000" size="96K" />
+      </memory>
+      <memory id="lpc_128K_Flash" type="flash" registerAddress="0x1FFF1FF0" alignment="256" sectorSize="4096">
+         <memoryRange start="0x00000000" size="128K" />
+      </memory>
+
+      <!-- EEPROM memory -->
+      <memory id="lpc_1K_Eeprom" type="eeprom">
+         <memoryRange start="0x10000000" size="1K" />
+      </memory>
+      <memory id="lpc_2K_Eeprom" type="eeprom">
+         <memoryRange start="0x10000000" size="2K" />
+      </memory>
+      <memory id="lpc_4K_Eeprom" type="eeprom">
+         <memoryRange start="0x10000000" size="4K" />
+      </memory>
+
+      <!-- Extra RAM -->      
+      <memory id="lpc_2K_extra_Ram" type="ram">
+         <memoryRange start="0x20000000" size="2K" name="extra_ram" />
+      </memory>
+      
+      <!-- USB RAM -->
+      <memory id="lpc_usb_Ram" type="ram">
+         <memoryRange start="0x20004000" size="2K" name="lpc_usb_ram" />
+      </memory>
+
+      <!-- BOOT ROM -->      
+      <memory id="lpc_boot_Rom" type="rom">
+         <memoryRange start="0x1FFF0000" end="0x1FFF3FFF" name="lpc_boot_rom" />
+      </memory>
+      
+      <!--  IO Regions -->
+      <memory id="LPC11U_IO" type="io">
+         <memoryRange start="0x40000000" end="0x4007FFFF" name="apb" />   <!-- APB peripherals -->
+         <memoryRange start="0x40080000" end="0x40083FFF" name="usb" />   <!-- USB peripherals -->
+         <memoryRange start="0x50000000" end="0x50003FFF" name="gpio" />  <!-- GPIO peripherals -->
+         <memoryRange start="0xE0000000" end="0xE00FFFFF" name="ppb" />   <!-- Private peripheral bus -->
+      </memory>
+      
+   </sharedInformation>
+
+   <deviceList>
+<!-- 
+   NXP LPC11U3x_2x_1x Devices 
+-->
+      <device name="LPC11U12_201" family="CortexM0" subfamily="LPC11U3x_2x_1x">
+         <memoryRef ref="lpc_16K_Flash" />
+         <memoryRef ref="lpc_4K_Ram" />
+         <memoryRef ref="lpc_usb_Ram" />
+         <memoryRef ref="lpc_boot_Rom" />
+         <memoryRef ref="LPC11U_IO" />
+         <sdidAddress value="0x400483F4" />
+         <sdid mask="0xFFFFFFFF" value="0x095C802B" />
+         <sdid mask="0xFFFFFFFF" value="0x295C802B" />
+         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
+         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
+         <registerDescriptionRef ref="CortexM0-register-description" />
+      </device>
+      <device name="LPC11U13_201" family="CortexM0" subfamily="LPC11U3x_2x_1x">
+         <memoryRef ref="lpc_24K_Flash" />
+         <memoryRef ref="lpc_4K_Ram" />
+         <memoryRef ref="lpc_usb_Ram" />
+         <memoryRef ref="lpc_boot_Rom" />
+         <memoryRef ref="LPC11U_IO" />
+         <sdidAddress value="0x400483F4" />
+         <sdid mask="0xFFFFFFFF" value="0x097A802B" />
+         <sdid mask="0xFFFFFFFF" value="0x297A802B" />
+         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
+         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
+         <registerDescriptionRef ref="CortexM0-register-description" />
+      </device>
+      <device name="LPC11U14_201" family="CortexM0" subfamily="LPC11U3x_2x_1x">
+         <memoryRef ref="lpc_32K_Flash" />
+         <memoryRef ref="lpc_4K_Ram" />
+         <memoryRef ref="lpc_usb_Ram" />
+         <memoryRef ref="lpc_boot_Rom" />
+         <memoryRef ref="LPC11U_IO" />
+         <sdidAddress value="0x400483F4" />
+         <sdid mask="0xFFFFFFFF" value="0x0998802B" />
+         <sdid mask="0xFFFFFFFF" value="0x2998802B" />
+         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
+         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
+         <registerDescriptionRef ref="CortexM0-register-description" />
+      </device>
+      <device name="LPC11U22_301" family="CortexM0" subfamily="LPC11U3x_2x_1x">
+         <memoryRef ref="lpc_16K_Flash" />
+         <memoryRef ref="lpc_1K_Eeprom" />
+         <memoryRef ref="lpc_6K_Ram" />
+         <memoryRef ref="lpc_usb_Ram" />
+         <memoryRef ref="lpc_boot_Rom" />
+         <memoryRef ref="LPC11U_IO" />
+         <sdidAddress value="0x400483F4" />
+         <sdid mask="0xFFFFFFFF" value="0x2954402B" />
+         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
+         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
+         <registerDescriptionRef ref="CortexM0-register-description" />
+      </device>
+      <device name="LPC11U23_301" family="CortexM0" subfamily="LPC11U3x_2x_1x">
+         <memoryRef ref="lpc_24K_Flash" />
+         <memoryRef ref="lpc_1K_Eeprom" />
+         <memoryRef ref="lpc_6K_Ram" />
+         <memoryRef ref="lpc_usb_Ram" />
+         <memoryRef ref="lpc_boot_Rom" />
+         <memoryRef ref="LPC11U_IO" />
+         <sdidAddress value="0x400483F4" />
+         <sdid mask="0xFFFFFFFF" value="0x2972402B" />
+         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
+         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
+         <registerDescriptionRef ref="CortexM0-register-description" />
+      </device>
+      <device name="LPC11U24_301" family="CortexM0" subfamily="LPC11U3x_2x_1x">
+         <memoryRef ref="lpc_32K_Flash" />
+         <memoryRef ref="lpc_2K_Eeprom" />
+         <memoryRef ref="lpc_6K_Ram" />
+         <memoryRef ref="lpc_usb_Ram" />
+         <memoryRef ref="lpc_boot_Rom" />
+         <memoryRef ref="LPC11U_IO" />
+         <sdidAddress value="0x400483F4" />
+         <sdid mask="0xFFFFFFFF" value="0x2988402B" />
+         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
+         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
+         <registerDescriptionRef ref="CortexM0-register-description" />
+      </device>
+      <device name="LPC11U24_401" family="CortexM0" subfamily="LPC11U3x_2x_1x">
+         <memoryRef ref="lpc_32K_Flash" />
+         <memoryRef ref="lpc_4K_Eeprom" />
+         <memoryRef ref="lpc_8K_Ram" />
+         <memoryRef ref="lpc_usb_Ram" />
+         <memoryRef ref="lpc_boot_Rom" />
+         <memoryRef ref="LPC11U_IO" />
+         <sdidAddress value="0x400483F4" />
+         <sdid mask="0xFFFFFFFF" value="0x2980002B" />
+         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
+         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
+         <registerDescriptionRef ref="CortexM0-register-description" />
+      </device>
+      <device name="LPC11U34_311" family="CortexM0" subfamily="LPC11U3x_2x_1x">
+         <memoryRef ref="lpc_40K_Flash" />
+         <memoryRef ref="lpc_4K_Eeprom" />
+         <memoryRef ref="lpc_8K_Ram" />
+         <memoryRef ref="lpc_usb_Ram" />
+         <memoryRef ref="lpc_boot_Rom" />
+         <memoryRef ref="LPC11U_IO" />
+         <sdidAddress value="0x400483F4" />
+         <sdid mask="0xFFFFFFFF" value="0x0003D440" />
+         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
+         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
+         <registerDescriptionRef ref="CortexM0-register-description" />
+      </device>
+      <device name="LPC11U34_421" family="CortexM0" subfamily="LPC11U3x_2x_1x">
+         <memoryRef ref="lpc_48K_Flash" />
+         <memoryRef ref="lpc_4K_Eeprom" />
+         <memoryRef ref="lpc_8K_Ram" />
+         <memoryRef ref="lpc_usb_Ram" />
+         <memoryRef ref="lpc_boot_Rom" />
+         <memoryRef ref="LPC11U_IO" />
+         <sdidAddress value="0x400483F4" />
+         <sdid mask="0xFFFFFFFF" value="0x0001CC40" />
+         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
+         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
+         <registerDescriptionRef ref="CortexM0-register-description" />
+      </device>
+      <device name="LPC11U35_401" family="CortexM0" subfamily="LPC11U3x_2x_1x">
+         <memoryRef ref="lpc_64K_Flash" />
+         <memoryRef ref="lpc_4K_Eeprom" />
+         <memoryRef ref="lpc_8K_Ram" />
+         <memoryRef ref="lpc_usb_Ram" />
+         <memoryRef ref="lpc_boot_Rom" />
+         <memoryRef ref="LPC11U_IO" />
+         <sdidAddress value="0x400483F4" />
+         <sdid mask="0xFFFFFFFF" value="0x0001BC40" />
+         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
+         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
+         <registerDescriptionRef ref="CortexM0-register-description" />
+      </device>
+      <device name="LPC11U35_501" family="CortexM0" subfamily="LPC11U3x_2x_1x">
+         <memoryRef ref="lpc_64K_Flash" />
+         <memoryRef ref="lpc_4K_Eeprom" />
+         <memoryRef ref="lpc_8K_Ram" />
+         <memoryRef ref="lpc_2K_extra_Ram" />
+         <memoryRef ref="lpc_usb_Ram" />
+         <memoryRef ref="lpc_boot_Rom" />
+         <memoryRef ref="LPC11U_IO" />
+         <sdidAddress value="0x400483F4" />
+         <sdid mask="0xFFFFFFFF" value="0x0000BC40" />
+         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
+         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
+         <registerDescriptionRef ref="CortexM0-register-description" />
+      </device>
+      <device name="LPC11U36_401" family="CortexM0" subfamily="LPC11U3x_2x_1x">
+         <memoryRef ref="lpc_96K_Flash" />
+         <memoryRef ref="lpc_4K_Eeprom" />
+         <memoryRef ref="lpc_8K_Ram" />
+         <memoryRef ref="lpc_usb_Ram" />
+         <memoryRef ref="lpc_boot_Rom" />
+         <memoryRef ref="LPC11U_IO" />
+         <sdidAddress value="0x400483F4" />
+         <sdid mask="0xFFFFFFFF" value="0x00019C40" />
+         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
+         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
+         <registerDescriptionRef ref="CortexM0-register-description" />
+      </device>
+      <device name="LPC11U37_401" family="CortexM0" subfamily="LPC11U3x_2x_1x">
+         <memoryRef ref="lpc_128K_Flash" />
+         <memoryRef ref="lpc_4K_Eeprom" />
+         <memoryRef ref="lpc_8K_Ram" />
+         <memoryRef ref="lpc_usb_Ram" />
+         <memoryRef ref="lpc_boot_Rom" />
+         <memoryRef ref="LPC11U_IO" />
+         <sdidAddress value="0x400483F4" />
+         <sdid mask="0xFFFFFFFF" value="0x00017C40" />
+         <sdid mask="0xFFFFFFFF" value="0x00007C44" />
+         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
+         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
+         <registerDescriptionRef ref="CortexM0-register-description" />
+      </device>
+      <device name="LPC11U37_501" family="CortexM0" subfamily="LPC11U3x_2x_1x">
+         <memoryRef ref="lpc_128K_Flash" />
+         <memoryRef ref="lpc_4K_Eeprom" />
+         <memoryRef ref="lpc_8K_Ram" />
+         <memoryRef ref="lpc_2K_extra_Ram" />
+         <memoryRef ref="lpc_usb_Ram" />
+         <memoryRef ref="lpc_boot_Rom" />
+         <memoryRef ref="LPC11U_IO" />
+         <sdidAddress value="0x400483F4" />
+         <sdid mask="0xFFFFFFFF" value="0x00007C40" />
+         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
+         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
+         <registerDescriptionRef ref="CortexM0-register-description" />
+      </device>
+   </deviceList>
+</root>
+   

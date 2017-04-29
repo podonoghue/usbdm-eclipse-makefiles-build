@@ -1,35 +1,39 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<!DOCTYPE DeviceList SYSTEM "usbdmDeviceSchema.dtd"
-[
-<!ENTITY S12Z-FTMRZ-flash-scripts   SYSTEM "S12Z/S12Z-FTMRZ-flash-scripts.tcl">
+<!DOCTYPE DeviceList SYSTEM "usbdmDeviceSchema.dtd" >
 
-<!ENTITY S12Z-FTMRZ-flash-program   SYSTEM "S12Z/S12Z-FTMRZ-flash-program.sx">
-
-<!ENTITY S12Z-FTMRZ-eeprom-program  SYSTEM "S12Z/S12Z-FTMRZ-flash-program.sx">
-
-<!ENTITY Custom-Devices             SYSTEM "Custom/custom-s12z.xml">
-]>
 <!-- 
       V4.11.1.150 - Added MC9S12ZVM, MC9S12ZVC, MC9S12ZVCA
       V4.10.6.230 - Added MC9S12ZVL-Family, untested
       V4.10.6.170 - Created
  -->
-<root version="4.10.6.170">
+<root xmlns:xi="http://www.w3.org/2001/XInclude" version="4.12.1.180">
    <description>S12Z Device characteristics v4.10.6.170 18/7/2014 - Place holder</description>
    <sharedInformation>
-<!-- TCL Scripts -->
+      <!-- 
+         TCL Scripts 
+      -->
       <tclScript id="S12Z-FTMRZ-flash-scripts">
-         &S12Z-FTMRZ-flash-scripts;
+         <xi:include href="S12Z/S12Z-FTMRZ-flash-scripts.tcl" parse="text"/>
       </tclScript>
-<!-- Flash programming code -->
+      
+      <!-- 
+         Flash programming code 
+      -->
       <flashProgram id="S12Z-FTMRZ-flash-program">
-         &S12Z-FTMRZ-flash-program;
+         <xi:include href="S12Z/S12Z-FTMRZ-flash-program.sx" parse="text" />
       </flashProgram>
-<!-- EEPROM programming code --> <!--  Not yet implemented -->
+      
+      <!-- 
+         EEPROM programming code 
+      --> 
       <flashProgram id="S12Z-FTMRZ-eeprom-program">
-         &S12Z-FTMRZ-eeprom-program;
+         <!--  Not yet implemented -->
+         <xi:include href="S12Z/S12Z-FTMRZ-flash-program.sx" parse="text" />
       </flashProgram>
-<!-- Security Values for Flash -->
+      
+      <!-- 
+         Security Values for Flash 
+      -->
       <securityEntry id="S12Z-default-security">
          <securityDescription id="S12Z-default-security-description">
             BACKDOOR\t= %8X\nOVRD\t= %2X\nRES\t= %2X\nFPROT\t\t= %1X\nDFPROT\t\t= %1X\nFOPT\t\t= %1X\nFSEC\t\t= [KEYEN=%2b, RNV=%4b, SEC=%2b]
@@ -151,10 +155,6 @@
          <flashProgramRef ref="S12Z-FTMRZ-flash-program" />
          <note>Default HCS12 Device</note>
       </device>
-<!-- 
-===================================================================================
- -->      
-      &Custom-Devices;
 <!-- 
 ===================================================================================
  -->      

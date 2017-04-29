@@ -1,5 +1,4 @@
-;#<![CDATA[
-;#
+
 ;######################################################################################
 ;#  This file defines the following flash functions
 ;#  
@@ -86,5 +85,3 @@ proc isUnsecure { } {
 ;# Actions on initial load
 ;#
 loadSymbols
-
-;#]]>

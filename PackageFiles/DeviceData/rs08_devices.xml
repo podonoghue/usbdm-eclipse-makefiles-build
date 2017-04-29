@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<!DOCTYPE DeviceList SYSTEM "usbdmDeviceSchema.dtd"
-[
-<!ENTITY RS08-default-flashScripts      SYSTEM "RS08/RS08-default-flash-scripts.tcl">
-]>
+<!DOCTYPE DeviceList SYSTEM "usbdmDeviceSchema.dtd" >
+
 <!-- 
       V4.10.4 - Changed how security information is expressed
  -->
-<root version="4.10.4">
+<root xmlns:xi="http://www.w3.org/2001/XInclude" version="4.12.1.180">
    <description>RS08 Device characteristics v4.8.0 5/12/2011</description>
    <sharedInformation>
+   
       <tclScript id="RS08-default-Scripts">
-         &RS08-default-flashScripts;
+         <xi:include href="RS08/RS08-default-flash-scripts.tcl" parse="text"/>
       </tclScript>
-      <!-- Security Values for Flash -->
+   
+      <!-- 
+            Security Values for Flash 
+      -->
       <securityEntry id="HCS12-default-security">
          <securityDescription id="RS08-default-security-description">
             NVOPT = [RES=%7b, SECD=%1b]

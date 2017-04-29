@@ -1,22 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<!DOCTYPE DeviceList SYSTEM "usbdmDeviceSchema.dtd"
-[
-<!ENTITY HCS12-FTS-flash-scripts          SYSTEM "HCS12/HCS12-FTS-flash-scripts.tcl">
-<!ENTITY HCS12-XFTMRK-flash-scripts       SYSTEM "HCS12/HCS12-XFTMRK-flash-scripts.tcl">
-<!ENTITY HCS12-FTMRCK-flash-scripts       SYSTEM "HCS12/HCS12-FTMRCK-flash-scripts.tcl">
-
-<!ENTITY HCS12-MMCV4-FTS-flash-program    SYSTEM "HCS12/HCS12-MMCV4-FTS-flash-program.s19">
-<!ENTITY HCS12-MMCV4-FTS_2-flash-program  SYSTEM "HCS12/HCS12-MMCV4-FTS_2-flash-program.s19">
-<!ENTITY HCS12-MMCV4-FTS_3-flash-program  SYSTEM "HCS12/HCS12-MMCV4-FTS_3-flash-program.s19">
-<!ENTITY HCS12-MMCV4-FTS_T-flash-program  SYSTEM "HCS12/HCS12-MMCV4-FTS_T-flash-program.s19">
-<!ENTITY HCS12-PMMC-FTMRCK-flash-program  SYSTEM "HCS12/HCS12-PMMC-FTMRCK-flash-program.s19">
-<!ENTITY HCS12-GMMC-FTMRG-flash-program   SYSTEM "HCS12/HCS12-GMMC-FTMRG-flash-program.s19">
-<!ENTITY HCS12-GMMC-FTMRG-eeprom-program  SYSTEM "HCS12/HCS12-GMMC-FTMRG-eeprom-program.s19">
-<!ENTITY HCS12-XMMC-XFTMRK-flash-program  SYSTEM "HCS12/HCS12-XMMC-XFTMRK-flash-program.s19">
-<!ENTITY HCS12-XMMC-XFTXK-flash-program   SYSTEM "HCS12/HCS12-XMMC-XFTXK-flash-program.s19">
-
-<!ENTITY Custom-Devices                   SYSTEM "Custom/custom-hcs12.xml">
-]>
+<!DOCTYPE DeviceList SYSTEM "usbdmDeviceSchema.dtd" >
 <!-- 
       V4.12.1.30  - Fixed MC9S12T64
       V4.10.6.230 - Added MC9S12XF512 - untested
@@ -25,47 +8,32 @@
       V4.10.4     - Fixed XEP100 EEPROM
       V4.10.4     - Changed how security information is expressed
  -->
-<root version="4.10.6.210">
+<root xmlns:xi="http://www.w3.org/2001/XInclude" version="4.12.1.180">
+
    <description>HCS12 Device characteristics v4.10.6.210 25/10/2014</description>
+
    <sharedInformation>
-<!-- TCL Scripts -->
-      <tclScript id="HCS12-FTS-flash-scripts">
-         &HCS12-FTS-flash-scripts;
-      </tclScript>
-      <tclScript id="HCS12-XFTMRK-flash-scripts">
-         &HCS12-XFTMRK-flash-scripts;
-      </tclScript>
-      <tclScript id="HCS12-FTMRCK-flash-scripts">
-         &HCS12-FTMRCK-flash-scripts;
-      </tclScript>
-<!-- Flash programming code -->
-      <flashProgram id="HCS12-MMCV4-FTS-flash-program">
-         &HCS12-MMCV4-FTS-flash-program;
-      </flashProgram>
-      <flashProgram id="HCS12-MMCV4-FTS_2-flash-program">
-         &HCS12-MMCV4-FTS_2-flash-program;
-      </flashProgram>
-      <flashProgram id="HCS12-MMCV4-FTS_3-flash-program">
-         &HCS12-MMCV4-FTS_3-flash-program;
-      </flashProgram>
-      <flashProgram id="HCS12-MMCV4-FTS_T-flash-program">
-         &HCS12-MMCV4-FTS_T-flash-program;
-      </flashProgram>
-      <flashProgram id="HCS12-PMMC-FTMRCK-flash-program">
-         &HCS12-PMMC-FTMRCK-flash-program;
-      </flashProgram>
-      <flashProgram id="HCS12-GMMC-FTMRG-flash-program">
-         &HCS12-GMMC-FTMRG-flash-program;
-      </flashProgram>
-      <flashProgram id="HCS12-GMMC-FTMRG-eeprom-program">
-         &HCS12-GMMC-FTMRG-eeprom-program;
-      </flashProgram>
-      <flashProgram id="HCS12-XMMC-XFTMRK-flash-program">
-         &HCS12-XMMC-XFTMRK-flash-program;
-      </flashProgram>
-      <flashProgram id="HCS12-XMMC-XFTXK-flash-program">
-         &HCS12-XMMC-XFTXK-flash-program;
-      </flashProgram>
+
+      <!-- 
+            TCL Scripts 
+      -->
+      <tclScript id="HCS12-FTS-flash-scripts">             <xi:include parse="text" href="HCS12/HCS12-FTS-flash-scripts.tcl" />          </tclScript>
+      <tclScript id="HCS12-XFTMRK-flash-scripts">          <xi:include parse="text" href="HCS12/HCS12-XFTMRK-flash-scripts.tcl" />       </tclScript>
+      <tclScript id="HCS12-FTMRCK-flash-scripts">          <xi:include parse="text" href="HCS12/HCS12-FTMRCK-flash-scripts.tcl" />       </tclScript>
+
+      <!-- 
+            Flash Programs
+      -->
+      <flashProgram id="HCS12-MMCV4-FTS-flash-program">     <xi:include parse="text" href="HCS12/HCS12-MMCV4-FTS-flash-program.s19" />       </flashProgram>
+      <flashProgram id="HCS12-MMCV4-FTS_2-flash-program">   <xi:include parse="text" href="HCS12/HCS12-MMCV4-FTS_2-flash-program.s19" />     </flashProgram>
+      <flashProgram id="HCS12-MMCV4-FTS_3-flash-program">   <xi:include parse="text" href="HCS12/HCS12-MMCV4-FTS_3-flash-program.s19" />     </flashProgram>
+      <flashProgram id="HCS12-MMCV4-FTS_T-flash-program">   <xi:include parse="text" href="HCS12/HCS12-MMCV4-FTS_T-flash-program.s19" />     </flashProgram>
+      <flashProgram id="HCS12-PMMC-FTMRCK-flash-program">   <xi:include parse="text" href="HCS12/HCS12-PMMC-FTMRCK-flash-program.s19" />     </flashProgram>
+      <flashProgram id="HCS12-GMMC-FTMRG-flash-program">    <xi:include parse="text" href="HCS12/HCS12-GMMC-FTMRG-flash-program.s19" />      </flashProgram>
+      <flashProgram id="HCS12-GMMC-FTMRG-eeprom-program">   <xi:include parse="text" href="HCS12/HCS12-GMMC-FTMRG-eeprom-program.s19" />     </flashProgram>
+      <flashProgram id="HCS12-XMMC-XFTMRK-flash-program">   <xi:include parse="text" href="HCS12/HCS12-XMMC-XFTMRK-flash-program.s19" />     </flashProgram>
+      <flashProgram id="HCS12-XMMC-XFTXK-flash-program">    <xi:include parse="text" href="HCS12/HCS12-XMMC-XFTXK-flash-program.s19" />      </flashProgram>
+
       <!-- Security Values for Flash -->
       <securityEntry id="HCS12-default-security">
          <securityDescription id="HCS12-default-security-description">
@@ -119,10 +87,6 @@
          <flashProgramRef ref="HCS12-MMCV4-FTS-flash-program" />
          <note>Default HCS12 Device</note>
       </device>
-<!-- 
-===================================================================================
- -->      
-      &Custom-Devices;
 <!-- 
 ===================================================================================
  -->      

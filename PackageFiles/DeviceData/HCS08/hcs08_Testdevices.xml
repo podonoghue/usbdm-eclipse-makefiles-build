@@ -1,3 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE DeviceList SYSTEM "usbdmDeviceSchema.dtd">
+<root version="4.10.4">
       
       <!--
       =============================================================================================
@@ -103,3 +106,4 @@
          </memory>
          <sdid value="0x01B" />
       </device>
+</root>

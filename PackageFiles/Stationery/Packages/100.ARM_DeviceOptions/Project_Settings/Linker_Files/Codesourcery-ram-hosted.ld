@@ -88,7 +88,7 @@ SECTIONS
   .ARM.exidx :
   {
     *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-  } >rom
+  } > flash
   PROVIDE_HIDDEN (__exidx_end = .);
   .rodata : ALIGN (4)
   {

@@ -7,6 +7,7 @@ Cortex-M0
    MKE
    MKL 
    MKM
+   LPC
  -->    
 
    <!-- Base CortexM0 files -->
@@ -33,7 +34,6 @@ Cortex-M0
 
       <copy source="Project_Settings/Debug.launch"                            target="Project_Settings/$(projectName)-Debug.launch" />
 
-      <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-mk.ld"       target="Project_Settings/Linker_Files/Linker-rom.ld" />
       <copy source="Project_Settings/Linker_Files/MemoryMap.ld"               target="Project_Settings/Linker_Files/MemoryMap-$(targetDeviceName).ld" />
 
       <copy source="Project_Headers/derivative.h"                             target="Project_Headers/derivative.h" />
@@ -92,6 +92,7 @@ Cortex-M0
          <applyWhen>
             <deviceSubfamilyMatches>^MKE\d+.*</deviceSubfamilyMatches>
          </applyWhen>
+         <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-mk.ld"    target="Project_Settings/Linker_Files/Linker-rom.ld" />
          <copy source="Startup_Code/system-mke.c"                             target="Startup_Code/system.c" />
          <copy source="Startup_Code/vectors-mke.c"                            target="Startup_Code/vectors.c" />
       </projectActionList>
@@ -101,6 +102,7 @@ Cortex-M0
          <applyWhen>
             <deviceSubfamilyMatches>^MKL\d+.*</deviceSubfamilyMatches>
          </applyWhen>
+         <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-mk.ld"    target="Project_Settings/Linker_Files/Linker-rom.ld" />
          <copy source="Startup_Code/system-mkl.c"                             target="Startup_Code/system.c" />
          <copy source="Startup_Code/vectors-mkl.c"                            target="Startup_Code/vectors.c" />
       </projectActionList>
@@ -110,6 +112,7 @@ Cortex-M0
          <applyWhen>
             <deviceSubfamilyMatches>^MKM\d+.*</deviceSubfamilyMatches>
          </applyWhen>
+         <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-mk.ld"    target="Project_Settings/Linker_Files/Linker-rom.ld" />
          <copy source="Startup_Code/system-mkm.c"                             target="Startup_Code/system.c" />
          <copy source="Startup_Code/vectors-mkm.c"                            target="Startup_Code/vectors.c" />
       </projectActionList>
@@ -117,11 +120,23 @@ Cortex-M0
       <!-- Base MKV10 files -->
       <projectActionList id="Kinetis-MKV10-files" >
          <applyWhen>
-            <deviceSubfamilyMatches>^MKV10Z7</deviceSubfamilyMatches>
+            <deviceSubfamilyMatches>^MKV.*</deviceSubfamilyMatches>
          </applyWhen>
-         <copy source="Startup_Code/system-mkv10.c"                             target="Startup_Code/system.c" />
-         <copy source="Startup_Code/vectors-mkv10.c"                            target="Startup_Code/vectors.c" />
+         <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-mk.ld"    target="Project_Settings/Linker_Files/Linker-rom.ld" />
+         <copy source="Startup_Code/system-mkv10.c"                           target="Startup_Code/system.c" />
+         <copy source="Startup_Code/vectors-mkv10.c"                          target="Startup_Code/vectors.c" />
       </projectActionList>
+
+      <!-- Base LPC files -->
+      <projectActionList id="Kinetis-LPC-files" >
+         <applyWhen>
+            <deviceSubfamilyMatches>^LPC.*</deviceSubfamilyMatches>
+         </applyWhen>
+         <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-lpc.ld"   target="Project_Settings/Linker_Files/Linker-rom.ld" />
+         <copy source="Startup_Code/system-lpc.c"                             target="Startup_Code/system.c" />
+         <copy source="Startup_Code/vectors-lpc.c"                            target="Startup_Code/vectors.c" />
+      </projectActionList>
+   
    </projectActionList>
 
 </root>

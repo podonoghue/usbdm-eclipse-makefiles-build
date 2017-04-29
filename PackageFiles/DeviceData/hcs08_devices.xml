@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<!DOCTYPE DeviceList SYSTEM "usbdmDeviceSchema.dtd"
-[
-<!ENTITY HCS08-default-flash-scripts      SYSTEM "HCS08/HCS08-default-flash-scripts.tcl">
-<!ENTITY HCS08-PTxx-flash-scripts         SYSTEM "HCS08/HCS08-PTxx-flash-scripts.tcl">
-<!ENTITY Custom-Devices                   SYSTEM "Custom/custom-hcs08.xml">
-<!ENTITY Test-Devices                     SYSTEM "HCS08/hcs08_Testdevices.xml">
-<!ENTITY HCS08-PTxx-flash-program         SYSTEM "HCS08/HCS08-PTxx-flash-program.abs.s19">
-<!ENTITY HCS08-PAxx-small-flash-program   SYSTEM "HCS08/HCS08-PAxx-small-flash-program.abs.s19">
-<!ENTITY HCS08-PAxx-small-eeprom-program  SYSTEM "HCS08/HCS08-PAxx-small-eeprom-program.abs.s19">
-<!ENTITY HCS08-small-flash-program        SYSTEM "HCS08/HCS08-small-0x80-flash-program.abs.s19">
-<!ENTITY HCS08-default-flash-program      SYSTEM "HCS08/HCS08-default-0x80-flash-program.abs.s19">
-<!ENTITY HCS08-alt-load-flash-program     SYSTEM "HCS08/HCS08-default-0xB0-flash-program.abs.s19">
-]>
+<!DOCTYPE DeviceList SYSTEM "usbdmDeviceSchema.dtd" >
+
 <!-- 
       V4.10.6.240    - Added experimental FXTH87xx11
       V4.10.6        - Changed SDIDs for MC9S08PAxx, MC9S08PTxx and MC9S08PLxx 
@@ -19,35 +8,30 @@
       V4.10.6        - Added MC9S08PA4
       V4.10.4        - Changed how security information is expressed
  -->
-<root version="4.10.4">
+<root xmlns:xi="http://www.w3.org/2001/XInclude" version="4.12.1.180">
    <description>HCS08 Device characteristics v4.8.0 25/12/2011</description>
    <sharedInformation>
-<!-- TCL Scripts -->
-      <tclScript id="HCS08-default-flash-scripts">
-         &HCS08-default-flash-scripts;
-      </tclScript>
-      <tclScript id="HCS08-PTxx-flash-scripts">
-         &HCS08-PTxx-flash-scripts;
-      </tclScript>
-<!-- Flash programming code -->
-      <flashProgram id="HCS08-PAxx-small-flash-program">
-         &HCS08-PAxx-small-flash-program;
-      </flashProgram>
-      <flashProgram id="HCS08-PAxx-small-eeprom-program">
-         &HCS08-PAxx-small-eeprom-program;
-      </flashProgram>
-      <flashProgram id="HCS08-PTxx-flash-program">
-         &HCS08-PTxx-flash-program;
-      </flashProgram>
-      <flashProgram id="HCS08-small-flash-program">
-         &HCS08-small-flash-program;
-      </flashProgram>
-      <flashProgram id="HCS08-default-flash-program">
-         &HCS08-default-flash-program;
-      </flashProgram>
-      <flashProgram id="HCS08-alt-load-flash-program">
-         &HCS08-alt-load-flash-program;
-      </flashProgram>
+      <!-- 
+            TCL Scripts 
+      -->
+      <tclScript id="HCS08-default-flash-scripts">     <xi:include parse="text" href="HCS08/HCS08-default-flash-scripts.tcl" />    </tclScript>
+      <tclScript id="HCS08-PTxx-flash-scripts">        <xi:include parse="text" href="HCS08/HCS08-PTxx-flash-scripts.tcl" />       </tclScript>
+
+      <!-- 
+            Flash Programs
+      -->
+      <flashProgram id="HCS08-PAxx-small-flash-program">    <xi:include parse="text" href="HCS08/HCS08-PAxx-small-flash-program.abs.s19" />   </flashProgram>
+      <flashProgram id="HCS08-PAxx-small-eeprom-program">   <xi:include parse="text" href="HCS08/HCS08-PAxx-small-eeprom-program.abs.s19" />  </flashProgram>
+      <flashProgram id="HCS08-PTxx-flash-program">          <xi:include parse="text" href="HCS08/HCS08-PTxx-flash-program.abs.s19" />         </flashProgram>
+      <flashProgram id="HCS08-small-flash-program">         <xi:include parse="text" href="HCS08/HCS08-small-0x80-flash-program.abs.s19" />        </flashProgram>
+      <flashProgram id="HCS08-default-flash-program">       <xi:include parse="text" href="HCS08/HCS08-default-0x80-flash-program.abs.s19" />      </flashProgram>
+      <flashProgram id="HCS08-alt-load-flash-program">      <xi:include parse="text" href="HCS08/HCS08-default-0xB0-flash-program.abs.s19" />     </flashProgram>
+
+      <!--  
+            Register sets (dummy sets to pass validation)
+      -->
+      <registerDescription id="CortexM0-register-description"  count="0" />
+   
       <!-- Security Values for Flash -->
       <securityEntry id="HCS08-default-security">
          <securityDescription>
@@ -110,7 +94,6 @@
          <flashProgramRef ref="HCS08-default-flash-program" />
          <note>Default HCS08 Device</note>
       </device>
-      &Custom-Devices;
       <device family="HCS08" name="MC9S08AC8">
          <clock registerAddress="0x0048" type="S08ICGV4" />
          <memory type="ram">

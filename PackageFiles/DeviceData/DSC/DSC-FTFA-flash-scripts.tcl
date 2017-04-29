@@ -1,5 +1,4 @@
-;#<![CDATA[
-;#
+
 ;######################################################################################
 ;#  This file defines the following flash functions
 ;#  
@@ -173,4 +172,4 @@ proc try {} {
 ;#
 loadSymbols
 
-;#]]>
+

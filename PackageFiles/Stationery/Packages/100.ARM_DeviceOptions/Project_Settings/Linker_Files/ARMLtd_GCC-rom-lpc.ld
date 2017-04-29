@@ -60,7 +60,7 @@ SECTIONS
       /* Make sure we pulled in at least a reset vector.  */
       ASSERT (. != __flash_start, "No reset vector found");
       __VECTOR_TABLE_END = .;
-    } > rom
+    } > flash
 
 /* Size of RAM vector table (if needed) */
 M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECTOR_TABLE) : 0x0000;
@@ -116,18 +116,18 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
       *(.rodata*)
 
       KEEP(*(.eh_frame*))
-    } > rom
+    } > flash
 
    .ARM.extab : 
    {
       *(.ARM.extab* .gnu.linkonce.armextab.*)
-   } > rom
+   } > flash
 
    __exidx_start = .;
    .ARM.exidx :
    {
       *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-   } > rom
+   } > flash
    __exidx_end = .;
 
    __etext = .;    /* define a global symbol at end of code */
@@ -138,7 +138,7 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
    {
       . = ALIGN(4);
       KEEP(*(.flash))
-   } > rom
+   } > flash
 
   /* reserve MTB memory at the beginning of data */
   .mtb : /* MTB buffer no0load */
@@ -176,7 +176,7 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
       __data_end__ = .;
    } > ram
    
-  /* KDS defines __DATA_END as the end of DATA in ROM */
+  /* KDS defines __DATA_END as the end of DATA in Flash */
   __DATA_END = __DATA_ROM + SIZEOF(.data);
 
    .bss :

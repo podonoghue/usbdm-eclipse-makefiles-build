@@ -1,5 +1,4 @@
-;#<![CDATA[
-;#
+
 ;######################################################################################
 ;#  Used for generic Kinetis devices - only used is when trying to autodetect when
 ;# the device is not known
@@ -521,4 +520,3 @@ proc eraseBlock { addr } {
 ;#
 loadSymbols
 
-;#]]>

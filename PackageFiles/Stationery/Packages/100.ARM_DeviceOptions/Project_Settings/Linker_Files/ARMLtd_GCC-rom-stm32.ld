@@ -122,18 +122,18 @@ SECTIONS
       *(.rodata*)
 
       KEEP(*(.eh_frame*))
-    } > rom
+    } > flash
 
    .ARM.extab : 
    {
       *(.ARM.extab* .gnu.linkonce.armextab.*)
-   } > rom
+   } > flash
 
    __exidx_start = .;
    .ARM.exidx :
    {
       *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-   } > rom
+   } > flash
    __exidx_end = .;
 
    __etext = .;    /* define a global symbol at end of code */
