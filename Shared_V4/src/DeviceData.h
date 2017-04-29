@@ -73,6 +73,7 @@
 #include "MyException.h"
 #include "USBDM_API.h"
 #include "TargetDefines.h"
+#include "FlashImage.h"
 
 /**
  * RS08/HCS08/CFV1 clock types
@@ -444,6 +445,79 @@ typedef std::tr1::shared_ptr<const SecurityDescription> SecurityDescriptionConst
  */
 
 /**
+ * Class representing checksum entry in database
+ */
+class DEVICE_DATA_DESCSPEC ChecksumInfo: public SharedInformationItem {
+
+public:
+   //! Type of security value
+   enum ChecksumType {
+      twoComplementByteSum,  // Calculated as 2's complement of a range of bytes
+   };
+
+private:
+   uint32_t      startAddress;    //!< Address of start of checksum range
+   uint32_t      endAddress;      //!< Address of end of checksum range
+   uint32_t      locationAddress; //!< Address of location to store checksum value
+   ChecksumType  type;            //!< Type of checksum
+
+public:
+   /**
+    * Create checksum information
+    *
+    *  @param startAddress Address of start of checksum range
+    *  @param endAddress   Address of end of checksum range
+    *  @param valueAddress Address of location to store checksum value
+    *  @param type         Type of checksum
+    */
+   ChecksumInfo(uint32_t startAddress, uint32_t endAddress, uint32_t locationAddress, ChecksumType type);
+   /**
+    * Copy constructor
+    *
+    * @param other Other to copy
+    */
+   ChecksumInfo(const ChecksumInfo& other);
+   /**
+    * Destructor
+    */
+   ~ChecksumInfo() {}
+   /**
+    * Returns a description as a string
+    *
+    * @return Readable string representing the checksum
+    */
+   const std::string toString() const;
+   /**
+    * Update the checksum within the given image
+    *
+    * @return FlashImage to update
+    */
+   USBDM_ErrorCode updateChecksum(FlashImagePtr flashImage) const;
+   /**
+    * Get location of checksum information
+    *
+    * @return size
+    */
+   unsigned getlocation() const;
+   /**
+    * Get size of security information
+    *
+    * @return size
+    */
+   unsigned getSize() const;
+};
+/**
+ * Smart pointer for ChecksumInfo
+ */
+typedef std::tr1::shared_ptr<ChecksumInfo> ChecksumInfoPtr;
+/**
+ * Smart pointer for ChecksumInfo
+ */
+typedef std::tr1::shared_ptr<const ChecksumInfo> ChecksumInfoConstPtr;
+/*
+ * ============================================================================================
+ */
+/**
  * Class representing security information in the database
  */
 class DEVICE_DATA_DESCSPEC SecurityInfo: public SharedInformationItem {
@@ -451,9 +525,10 @@ class DEVICE_DATA_DESCSPEC SecurityInfo: public SharedInformationItem {
 public:
    //! Type of security value
    enum SecType {
-      unsecure,   //!< Unsecure value
-      secure,     //!< Secure value
-      custom      //!< Custom value
+      unsecure,     //!< Unsecure value
+      secure,       //!< Secure value
+      custom,       //!< Custom value
+      lpcChecksum,  //!< Custom value
    };
 
 private:
@@ -480,6 +555,9 @@ public:
     * @param other Other to copy
     */
    SecurityInfo(const SecurityInfo& other);
+   /**
+    * Destructor
+    */
    ~SecurityInfo() {}
    /**
     * Returns the flash program as a string
@@ -552,6 +630,7 @@ private:
    SecurityInfoPtr         unsecureInformation;       //!< Unsecure information
    SecurityInfoPtr         secureInformation;         //!< Secure information
    SecurityInfoPtr         customSecureInformation;   //!< Custom security information
+   SecurityInfoPtr         checksum;                  //!< Checksum for LPC devices
 
 public:
    /**
@@ -567,6 +646,17 @@ public:
     : securityDescription(securityDesc),
       unsecureInformation(unsecureInfo),
       secureInformation(secureInfo) {}
+   /**
+    * Create security entry
+    *
+    * @param securityDesc  Description of entry
+    * @param unsecureInfo  Unsecure information
+    * @param secureInfo    Secure information
+    */
+   SecurityEntry(SecurityDescriptionPtr securityDesc,
+                 SecurityInfoPtr        lpcChecksum)
+    : securityDescription(securityDesc),
+      checksum(lpcChecksum) {}
    /**
     * Construct emty entry
     */
@@ -789,6 +879,7 @@ public:
    mutable uint32_t         lastIndexUsed;          //!< Last used memoryRanges index
    FlashProgramConstPtr     flashProgram;           //!< Region-specific flash algorithm
    SecurityEntryPtr         securityInformation;    //!< Region-specific security data
+   ChecksumInfoPtr          checksumInfo;           //!< Checksum information
    FlexNVMInfoConstPtr      flexNVMInfo;
 
 private:
@@ -954,10 +1045,12 @@ public:
 
    const FlashProgramConstPtr          getFlashprogram()        const;
    const SecurityDescriptionConstPtr   getSecurityDescription() const;
+   const ChecksumInfoPtr               getChecksumInfo()        const;
    const SecurityInfoConstPtr          getSecureInfo()          const;
    const SecurityInfoConstPtr          getUnsecureInfo()        const;
    const SecurityInfoConstPtr          getCustomSecureInfo()    const;
 
+   void setChecksumInfo(const ChecksumInfoPtr value);
    void setFlashProgram(FlashProgramConstPtr program);
    void setAddressType(AddressType type);
 
@@ -1199,6 +1292,7 @@ public:
    SharedInformationItemPtr    addSharedData(std::string key, SharedInformationItemPtr pSharedData);
    SharedInformationItemPtr    addSharedData(std::string key, SharedInformationItem *sharedData);
    SecurityEntryPtr            getSecurityEntry(std::string key);
+   ChecksumInfoPtr             getChecksumEntry(std::string key);
    SecurityDescriptionPtr      getSecurityDescription(std::string key);
    SecurityInfoConstPtr        getSecurityInfo(std::string key) const;
    MemoryRegionPtr             getMemoryRegion(std::string key);

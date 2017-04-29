@@ -101,6 +101,8 @@ protected:
    USBDM_ErrorCode initialiseTarget();
    USBDM_ErrorCode setFlashSecurity(FlashImagePtr flashImage, MemoryRegionConstPtr flashRegion);
    USBDM_ErrorCode setFlashSecurity(FlashImagePtr flashImage);
+   USBDM_ErrorCode setFlashChecksum(FlashImagePtr flashImage, MemoryRegionConstPtr flashRegion);
+   USBDM_ErrorCode setFlashChecksum(FlashImagePtr flashImage);
    USBDM_ErrorCode trimTargetClock(uint32_t trimAddress, unsigned long  targetBusFrequency, uint16_t *returnTrimValue,
                                    unsigned long *measuredBusFrequency, int do9BitTrim) {
       UsbdmSystem::Log::error("Clock trimming not supported\n");

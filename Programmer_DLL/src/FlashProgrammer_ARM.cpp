@@ -2052,6 +2052,51 @@ USBDM_ErrorCode FlashProgrammer_ARM::setFlashSecurity(FlashImagePtr flashImage, 
 //!
 //! @return error code see \ref USBDM_ErrorCode.
 //!
+USBDM_ErrorCode FlashProgrammer_ARM::setFlashChecksum(FlashImagePtr flashImage) {
+   LOGGING;
+   // Process each flash region
+   USBDM_ErrorCode rc = BDM_RC_OK;
+   securityNeedsSelectiveErase = false; // Assume security areas are valid
+   for (int index=0; ; index++) {
+      MemoryRegionConstPtr memoryRegionPtr = device->getMemoryRegion(index);
+      if (memoryRegionPtr == NULL) {
+         break;
+      }
+      rc = setFlashChecksum(flashImage, memoryRegionPtr);
+      if (rc != BDM_RC_OK) {
+         log.print("Failed to set security for %s\n", memoryRegionPtr->getMemoryTypeName());
+         break;
+      }
+   }
+   return rc;
+}
+
+
+//===========================================================================================================
+//! Modifies the Checksum locations in the flash image as required
+//!
+//! @param flashImage    Flash contents to be modified.
+//! @param flashRegion   The memory region involved (to determine checksum area if any)
+//!
+USBDM_ErrorCode FlashProgrammer_ARM::setFlashChecksum(FlashImagePtr flashImage, MemoryRegionConstPtr flashRegion) {
+   LOGGING;
+   ChecksumInfoPtr checksumInfo = flashRegion->getChecksumInfo();
+
+   if (checksumInfo == 0) {
+      log.print("No checksum area, not modifying flash image\n");
+      return PROGRAMMING_RC_OK;
+   }
+   log.print("Modifying flash image\n");
+   return checksumInfo->updateChecksum(flashImage);
+}
+
+//===============================================================================================
+//! Modifies the Security locations in the flash image according to required security options
+//!
+//! @param flashImage  -  Flash image to be modified
+//!
+//! @return error code see \ref USBDM_ErrorCode.
+//!
 USBDM_ErrorCode FlashProgrammer_ARM::setFlashSecurity(FlashImagePtr flashImage) {
    LOGGING;
    // Process each flash region
@@ -2780,8 +2825,12 @@ USBDM_ErrorCode FlashProgrammer_ARM::verifyFlash(FlashImagePtr flashImage,
    if (rcReset != PROGRAMMING_RC_OK) {
       return rcReset;
    }
-   // Modify flash image according to security options - to be consistent with what is programmed
+   // Modify flash image according to security and checksum options - to be consistent with what is programmed
    do {
+      rc = setFlashChecksum(flashImage);
+      if (rc != PROGRAMMING_RC_OK) {
+         break;
+      }
       rc = setFlashSecurity(flashImage);
       if (rc != PROGRAMMING_RC_OK) {
          break;
@@ -2939,6 +2988,10 @@ USBDM_ErrorCode FlashProgrammer_ARM::programFlash(FlashImagePtr flashImage,
 #endif
    double eraseTime = 0;
    do {
+      rc = setFlashChecksum(flashImage);
+      if (rc != PROGRAMMING_RC_OK) {
+         break;
+      }
       // Modify flash image according to security options
       rc = setFlashSecurity(flashImage);
       if (rc != PROGRAMMING_RC_OK) {

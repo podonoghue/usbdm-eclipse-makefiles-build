@@ -161,6 +161,82 @@ void SecurityDescription::setSecurityDescription(std::string s) {
 /*
  * ============================================================================================
  */
+
+   /**
+    * Create checksum information
+    *
+    *  @param startAddress Address of start of checksum range
+    *  @param endAddress   Address of end of checksum range
+    *  @param valueAddress Address of location to store checksum value
+    *  @param type         Type of checksum
+    */
+ChecksumInfo::ChecksumInfo(uint32_t startAddress, uint32_t endAddress, uint32_t locationAddress, ChecksumType type)
+   : startAddress(startAddress), endAddress(endAddress), locationAddress(locationAddress), type(type) {
+   }
+
+   /**
+    * Copy constructor
+    *
+    * @param other Other to copy
+    */
+ChecksumInfo::ChecksumInfo(const ChecksumInfo& other)
+   : startAddress(other.startAddress), endAddress(other.endAddress), locationAddress(other.locationAddress), type(other.type) {
+}
+/**
+ * Returns a description as a string
+ *
+ * @return Readable string representing the checksum
+ */
+const std::string ChecksumInfo::toString() const {
+   static const char *typeNames[] = {"twoComplementSum"};
+   return std::string("ChecksumInfo - ") + typeNames[type];
+}
+/**
+ * Get security values as array of uint8_t
+ *
+ * @return constant array
+ */
+USBDM_ErrorCode ChecksumInfo::updateChecksum(FlashImagePtr flashImage) const {
+   LOGGING;
+
+   uint32_t checksum = 0;
+   for (uint32_t index=startAddress; index<endAddress; index+=4) {
+      uint32_t value = 0;
+      value    += flashImage->getValue(index+0);
+      value    += flashImage->getValue(index+1)<<8;
+      value    += flashImage->getValue(index+2)<<16;
+      value    += flashImage->getValue(index+3)<<24;
+      checksum += value;
+   }
+   checksum = -checksum;
+   log.print("Setting checksum @0x%08X = 0x%08X\n", locationAddress, checksum);
+   flashImage->setValue(locationAddress+0, checksum);
+   flashImage->setValue(locationAddress+1, checksum>>8);
+   flashImage->setValue(locationAddress+2, checksum>>16);
+   flashImage->setValue(locationAddress+3, checksum>>24);
+
+   return BDM_RC_OK;
+}
+/**
+ * Get location of checksum information
+ *
+ * @return size
+ */
+unsigned ChecksumInfo::getlocation() const {
+   return locationAddress;
+}
+/**
+ * Get size of checksum information
+ *
+ * @return size
+ */
+unsigned ChecksumInfo::getSize() const {
+   return endAddress - startAddress + 1;
+}
+
+/*
+ * ============================================================================================
+ */
 SecurityInfo::SecurityInfo(int size, SecType mode, std::string securityInfo)
 : size(size), mode(mode), securityInfo(securityInfo) {
    //       Logging::print("SecurityInfo(%d, %d, %s)\n", size, mode, (const char *)securityInfo.c_str());
@@ -657,6 +733,14 @@ const FlashProgramConstPtr MemoryRegion::getFlashprogram() const {
 
 const SecurityDescriptionConstPtr MemoryRegion::getSecurityDescription() const {
    return securityInformation->getSecurityDescription();
+}
+
+const ChecksumInfoPtr MemoryRegion::getChecksumInfo() const {
+   return checksumInfo;
+}
+
+void MemoryRegion::setChecksumInfo(const ChecksumInfoPtr value) {
+   checksumInfo = value;
 }
 
 const SecurityInfoConstPtr MemoryRegion::getSecureInfo() const {
@@ -1446,6 +1530,14 @@ SharedInformationItemPtr DeviceDataBase::getSharedData(std::string key) const {
       throw MyException(std::string("DeviceDataBase::getSharedData() - Unable to find reference - ")+key);
    }
    return it->second;
+}
+
+ChecksumInfoPtr DeviceDataBase::getChecksumEntry(std::string key) {
+   ChecksumInfoPtr ptr(std::tr1::dynamic_pointer_cast<ChecksumInfo>(getSharedData(key)));
+   if (ptr == NULL) {
+      throw MyException(std::string("DeviceDataBase::getChecksumEntry() - Reference has wrong type - ")+key);
+   }
+   return ptr;
 }
 
 SecurityEntryPtr DeviceDataBase::getSecurityEntry(std::string key) {

@@ -47,6 +47,8 @@ private:
    DualString   tag_securityDescriptionRef;
    DualString   tag_securityInfo;
    DualString   tag_securityInfoRef;
+   DualString   tag_checksumEntry;
+   DualString   tag_checksumEntryRef;
    DualString   tag_flexNvmInfo;
    DualString   tag_flexNvmInfoRef;
    DualString   tag_eeepromEntry;
@@ -68,6 +70,7 @@ private:
    DualString   attr_start;
    DualString   attr_middle;
    DualString   attr_end;
+   DualString   attr_location;
    DualString   attr_size;
    DualString   attr_pageNo;
    DualString   attr_pageStart;
@@ -114,6 +117,7 @@ private:
    SecurityEntryPtr                   parseSecurityEntry(xercesc::DOMElement *currentProperty);
    SecurityDescriptionPtr             parseSecurityDescription(xercesc::DOMElement *currentProperty);
    SecurityInfoPtr                    parseSecurityInfo(xercesc::DOMElement *currentProperty);
+   ChecksumInfoPtr                    parseChecksumInfo(xercesc::DOMElement *currentProperty);
    //   void  parseActionSequence(xercesc::DOMElement *sharedRoot, std::map<const string, SharedInformationItem> &shareInformation);
    FlexNVMInfoPtr                     parseFlexNVMInfo(xercesc::DOMElement *flexNVMInfoElement);
    FlexNVMInfo::EeepromSizeValue      parseEeepromEntry(xercesc::DOMElement *eeepromElement);

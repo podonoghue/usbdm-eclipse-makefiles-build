@@ -403,6 +403,8 @@ DeviceXmlParser::DeviceXmlParser(TargetType_t targetType, DeviceDataBase *device
    tag_securityDescriptionRef("securityDescriptionRef"),
    tag_securityInfo("securityInfo"),
    tag_securityInfoRef("securityInfoRef"),
+   tag_checksumEntry("checksumEntry"),
+   tag_checksumEntryRef("checksumEntryRef"),
    tag_flexNvmInfo("flexNVMInfo"),
    tag_flexNvmInfoRef("flexNVMInfoRef"),
    tag_eeepromEntry("eeepromEntry"),
@@ -424,6 +426,7 @@ DeviceXmlParser::DeviceXmlParser(TargetType_t targetType, DeviceDataBase *device
    attr_start("start"),
    attr_middle("middle"),
    attr_end("end"),
+   attr_location("location"),
    attr_size("size"),
    attr_pageNo("pageNo"),
    attr_pageStart("pageStart"),
@@ -471,6 +474,24 @@ DeviceXmlParser::~DeviceXmlParser() {
 void DeviceXmlParser::loadFile(const string &xmlFile) {
    LOGGING;
 
+   // Convert simple path to crude URI
+   char fixedName[xmlFile.size()+100] = "file:///";
+   char *cp = fixedName + strlen(fixedName);
+   for (unsigned index=0; index<xmlFile.size(); index++) {
+      if (xmlFile[index] == ' ') {
+         *cp++ = '%';
+         *cp++ = '2';
+         *cp++ = '0';
+      }
+      else if (xmlFile[index] == '\\') {
+         *cp++ = '/';
+      }
+      else {
+         *cp++ = xmlFile[index];
+      }
+   }
+   *cp++ = '\0';
+
    parser = new XercesDOMParser();
    parser->setDoNamespaces( true );
    parser->setDoSchema( false ) ;
@@ -479,34 +500,35 @@ void DeviceXmlParser::loadFile(const string &xmlFile) {
    parser->setValidationSchemaFullChecking(false);
    parser->setDoXInclude(true);
 
+   log.print("Path = \'%s\'\n", fixedName);
    try {
-//      log.print("DeviceXmlParser::loadFile() #1\n");
+//      log.print("#1\n");
       errHandler = new HandlerBase();
-//      log.print("DeviceXmlParser::loadFile() #2\n");
+//      log.print("#2\n");
       parser->setErrorHandler(errHandler);
-//      log.print("DeviceXmlParser::loadFile() #3\n");
-      parser->parse(xmlFile.c_str()); //xx
-//      log.print("DeviceXmlParser::loadFile() #4\n");
+//      log.print("#3\n");
+      parser->parse(fixedName);
+//      log.print("#4\n");
       document = parser->getDocument();
-//      log.print("DeviceXmlParser::loadFile() #5\n");
+//      log.print("#5\n");
    }
    catch (SAXException const &e) {
       DualString s(e.getMessage());
-      log.error("%s\n", s.asCString());
+      log.error("SAXException:%s\n", s.asCString());
    }
    catch (XMLException const &e) {
       DualString s(e.getMessage());
-      log.error("%s\n", s.asCString());
+      log.error("XMLException:%s\n", s.asCString());
    }
    catch (DOMException const &e) {
       DualString s(e.getMessage());
-      log.error("%s\n", s.asCString());
+      log.error("DOMException:%s\n", s.asCString());
    }
    catch (...) {
-      log.error("DeviceXmlParser::loadFile() - Unknown xercesc error");
+      log.error("Unknown XERCES-C error");
    }
    if (document == NULL) {
-      throw MyException("DeviceXmlParser::loadFile() - Unable to create document or load/parse file");
+      throw MyException("- Unable to create document or load/parse file");
    }
 }
 
@@ -516,7 +538,7 @@ TclScriptPtr DeviceXmlParser::parseTCLScript(DOMElement *xmlTclScript) {
    // Type of node (must be a TCL script)
    DualString sTag (xmlTclScript->getTagName());
    if (!XMLString::equals(sTag.asXMLString(), tag_tclScript.asXMLString())) {
-      throw MyException(string("DeviceXmlParser::parseTCLScript() - Unexpected tag = ")+sTag.asCString());
+      throw MyException(string(" Unexpected tag = ")+sTag.asCString());
    }
    DualString text(xmlTclScript->getTextContent());
    TclScriptPtr tclScriptPtr(new TclScript(text.asCString()));
@@ -535,13 +557,13 @@ RegisterDescriptionPtr DeviceXmlParser::parseRegisterDescription(DOMElement *xml
    // Type of node (must be a RegisterDescription node)
    DualString sTag (xmlRegisterDescription->getTagName());
    if (!XMLString::equals(sTag.asXMLString(), tag_registerDescription.asXMLString())) {
-      throw MyException(string("DeviceXmlParser::parseRegisterDescription() - Unexpected tag = ")+sTag.asCString());
+      throw MyException(string("Unexpected tag = ")+sTag.asCString());
    }
 
    long count = 0;
    DualString sCount(xmlRegisterDescription->getAttribute(attr_count.asXMLString()));
    if (!strToULong(sCount.asCString(), NULL, &count)) {
-      throw MyException(string("DeviceXmlParser::parseRegisterDescription() - Illegal register count = ")+sCount.asCString());
+      throw MyException(string("Illegal register count = ")+sCount.asCString());
    }
 
    if (count == 0) {
@@ -568,7 +590,7 @@ FlashProgramPtr DeviceXmlParser::parseFlashProgram(DOMElement *xmlFlashProgram) 
    // Type of node (must be a flashProgram)
    DualString sTag (xmlFlashProgram->getTagName());
    if (!XMLString::equals(sTag.asXMLString(), tag_flashProgram.asXMLString())) {
-      throw MyException(string("DeviceXmlParser::parseFlashProgram() - Unexpected tag = ")+sTag.asCString());
+      throw MyException(string("Unexpected tag = ")+sTag.asCString());
    }
    DualString text(xmlFlashProgram->getTextContent());
    FlashProgramPtr flashProgramPtr(new FlashProgram(text.asCString()));
@@ -578,6 +600,47 @@ FlashProgramPtr DeviceXmlParser::parseFlashProgram(DOMElement *xmlFlashProgram) 
 //      log.print("Inserted shared FlashProgram item ID=%s\n", sId.asCString());
    }
    return flashProgramPtr;
+}
+
+//! Create security information from node
+//!
+ChecksumInfoPtr DeviceXmlParser::parseChecksumInfo(DOMElement *currentProperty) {
+   LOGGING;
+
+   // Type of node (must be a flashProgram)
+   DualString sTag (currentProperty->getTagName());
+   if (!XMLString::equals(sTag.asXMLString(), tag_checksumEntry.asXMLString())) {
+      throw MyException(string("DeviceXmlParser::parseSecurityInfo() - Unexpected tag = ")+sTag.asCString());
+   }
+   ChecksumInfo::ChecksumType type;
+   DualString sType(currentProperty->getAttribute(attr_type.asXMLString()));
+   if (strcmp(sType.asCString(), "twoComplementWordSum")==0) {
+      type = ChecksumInfo::ChecksumType::twoComplementByteSum;
+   }
+   else {
+      throw MyException(string("DeviceXmlParser::parseChecksumInfo() - Illegal type in checksumEntry = ")+sType.asCString());
+   }
+   DualString sStartAddress(currentProperty->getAttribute(attr_start.asXMLString()));
+   DualString sEndAddress(currentProperty->getAttribute(attr_end.asXMLString()));
+   DualString sLocationAddress(currentProperty->getAttribute(attr_location.asXMLString()));
+
+   long startAddress, endAddress, locationAddress;
+
+   if (!strToULong(sStartAddress.asCString(),    NULL, &startAddress) ||
+       !strToULong(sEndAddress.asCString(),      NULL, &endAddress) ||
+       !strToULong(sLocationAddress.asCString(), NULL, &locationAddress)) {
+      throw MyException("DeviceXmlParser::parseFlashMemoryDetails() - Illegal start/end/location field in checksumEntry");
+   }
+
+   ChecksumInfoPtr checksumInfoPtr(new ChecksumInfo(startAddress, endAddress, locationAddress, type));
+   log.print("DeviceXmlParser::parseChecksumInfo(): %s\n", (const char *)checksumInfoPtr->toString().c_str());
+
+   if (currentProperty->hasAttribute(attr_id.asXMLString())) {
+      DualString sId(currentProperty->getAttribute(attr_id.asXMLString()));
+      deviceDataBase->addSharedData(string(sId.asCString()), checksumInfoPtr);
+//      log.print("DeviceXmlParser::parseSecurityInfo(): Inserted shared SecurityInfo item ID=%s\n", sId.asCString());
+   }
+   return checksumInfoPtr;
 }
 
 //! Create security information from node
@@ -774,6 +837,10 @@ void DeviceXmlParser::parseSharedXML(void) {
          else if (XMLString::equals(sTag.asXMLString(), tag_securityInfo.asXMLString())) {
             // Parse <securityInfo>
             parseSecurityInfo(sharedInformationElement);
+         }
+         else if (XMLString::equals(sTag.asXMLString(), tag_checksumEntry.asXMLString())) {
+            // Parse <securityInfo>
+            parseChecksumInfo(sharedInformationElement);
          }
          else if (XMLString::equals(sTag.asXMLString(), tag_flexNvmInfo.asXMLString())) {
             // Parse <flexNVMInfo>
@@ -1062,11 +1129,25 @@ MemoryRegionPtr DeviceXmlParser::parseMemory(DOMElement *currentProperty) {
    if (securityEntryRefIt.getCurrentElement() != NULL) {
       // <securityEntryRef>
       DualString sRef(securityEntryRefIt.getCurrentElement()->getAttribute(attr_ref.asXMLString()));
-//      SharedInformationItemPtr securityEntry(deviceDataBase->getSharedData(sRef.asCString()));
-//      SecurityEntryPtr securityEntryPtr = std::tr1::dynamic_pointer_cast<SecurityEntry>(securityEntry);
       SecurityEntryPtr securityEntryPtr(deviceDataBase->getSecurityEntry(sRef.asCString()));
       memoryRegionPtr->setSecurityEntry(securityEntryPtr);
    }
+
+   DOMChildIterator checksumEntryIt(currentProperty, tag_checksumEntry.asCString());
+   if (checksumEntryIt.getCurrentElement() != NULL) {
+      // <checksumEntry>
+      ChecksumInfoPtr checksumInfoPtr = parseChecksumInfo(checksumEntryIt.getCurrentElement());
+//      log.print("Flash entry description(%s)\n", checksumInfoPtr->toString().c_str());
+      memoryRegionPtr->setChecksumInfo(checksumInfoPtr);
+   }
+   DOMChildIterator checksumEntryRefIt(currentProperty, tag_checksumEntryRef.asCString());
+   if (checksumEntryRefIt.getCurrentElement() != NULL) {
+      // <checksumEntryRef>
+      DualString sRef(checksumEntryRefIt.getCurrentElement()->getAttribute(attr_ref.asXMLString()));
+      ChecksumInfoPtr checksumInfoPtr(deviceDataBase->getChecksumEntry(sRef.asCString()));
+      memoryRegionPtr->setChecksumInfo(checksumInfoPtr);
+   }
+
    DOMChildIterator flexNvmInfoIt(currentProperty, tag_flexNvmInfo.asCString());
    if (flexNvmInfoIt.getCurrentElement() != NULL) {
       // <flexNVMInfo>

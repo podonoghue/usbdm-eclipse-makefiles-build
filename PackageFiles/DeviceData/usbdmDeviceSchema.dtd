@@ -117,6 +117,7 @@
   <!-- List of memory regions in device -->
 <!ELEMENT memory (flashProgramRef?,
      (securityEntry|securityEntryRef)?,
+     (checksumEntry|checksumEntryRef)?,
      (flexNVMInfo|flexNVMInfoRef)?,
      description?,
      (memoryRange+))>
@@ -134,8 +135,20 @@
 <!ELEMENT memoryRef EMPTY>
      <!ATTLIST memoryRef ref IDREF #REQUIRED>
 
+  <!-- Checksum Element -->
+<!ELEMENT checksumEntry EMPTY >
+     <!ATTLIST checksumEntry id           ID                     #IMPLIED>
+     <!ATTLIST checksumEntry start        CDATA                  #REQUIRED>   <!-- Start element address -->
+     <!ATTLIST checksumEntry end          CDATA                  #REQUIRED>   <!-- End element address -->
+     <!ATTLIST checksumEntry location     CDATA                  #REQUIRED>   <!-- Location to write checksum to -->
+     <!ATTLIST checksumEntry type         (twoComplementWordSum) #REQUIRED>   <!-- Type of checksum -->
+
+  <!-- Reference to a security Element -->
+<!ELEMENT checksumEntryRef EMPTY>
+     <!ATTLIST checksumEntryRef ref IDREF #REQUIRED>
+
   <!-- Security Element -->
-<!ELEMENT securityEntry (securityDescription,securityInfo,securityInfo)>
+<!ELEMENT securityEntry (securityDescription,securityInfo+)>
      <!ATTLIST securityEntry flavour    CDATA "common">
      <!ATTLIST securityEntry id         ID #IMPLIED>
 
@@ -147,7 +160,7 @@
 <!ELEMENT securityInfo (#PCDATA)>
      <!ATTLIST securityInfo id      ID #IMPLIED>
      <!ATTLIST securityInfo size    CDATA #REQUIRED>
-     <!ATTLIST securityInfo type    (secure|unsecure|custom) #REQUIRED>
+     <!ATTLIST securityInfo type    (secure|unsecure|custom|lpcChecksum) #REQUIRED>
 
   <!-- Security Description -->
 <!ELEMENT securityDescription (#PCDATA)>
@@ -228,7 +241,7 @@
 
   <!-- Information shared between devices -->
 <!ELEMENT sharedInformation 
-	(memory|tclScript|flashProgram|securityEntry|securityDescription|securityInfo|flexNVMInfo|projectActionList|registerDescription)*>
+	(memory|tclScript|flashProgram|securityEntry|securityDescription|securityInfo|checksumEntry|flexNVMInfo|projectActionList|registerDescription)*>
 
   <!--TCL Script-->
 <!ELEMENT tclScript (xi:include) >

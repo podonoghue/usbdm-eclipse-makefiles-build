@@ -23,6 +23,12 @@
       <registerDescription id="CortexM4F-register-description" count="0" />
 
       <!-- 
+            Checksum Entries 
+      -->
+      <!-- Used to indicate the LPC file image is valid -->
+      <checksumEntry id="lpc-valid-flag" start="0x0000" end="0x001B" location="0x001C" type="twoComplementWordSum" />
+
+      <!-- 
             Memory regions
        -->
       <!-- Working RAM  -->
@@ -41,27 +47,35 @@
 
       <!-- Main Flash memory -->
       <memory id="lpc_16K_Flash" type="flash" registerAddress="0x1FFF1FF0" alignment="256" sectorSize="4096">
+         <checksumEntryRef ref="lpc-valid-flag" />
          <memoryRange start="0x00000000" size="16K" />
       </memory>
       <memory id="lpc_24K_Flash" type="flash" registerAddress="0x1FFF1FF0" alignment="256" sectorSize="4096">
+         <checksumEntryRef ref="lpc-valid-flag" />
          <memoryRange start="0x00000000" size="24K" />
       </memory>
       <memory id="lpc_32K_Flash" type="flash" registerAddress="0x1FFF1FF0" alignment="256" sectorSize="4096">
+         <checksumEntryRef ref="lpc-valid-flag" />
          <memoryRange start="0x00000000" size="32K" />
       </memory>
       <memory id="lpc_40K_Flash" type="flash" registerAddress="0x1FFF1FF0" alignment="256" sectorSize="4096">
+         <checksumEntryRef ref="lpc-valid-flag" />
          <memoryRange start="0x00000000" size="40K" />
       </memory>
       <memory id="lpc_48K_Flash" type="flash" registerAddress="0x1FFF1FF0" alignment="256" sectorSize="4096">
+         <checksumEntryRef ref="lpc-valid-flag" />
          <memoryRange start="0x00000000" size="48K" />
       </memory>
       <memory id="lpc_64K_Flash" type="flash" registerAddress="0x1FFF1FF0" alignment="256" sectorSize="4096">
+         <checksumEntryRef ref="lpc-valid-flag" />
          <memoryRange start="0x00000000" size="64K" />
       </memory>
       <memory id="lpc_96K_Flash" type="flash" registerAddress="0x1FFF1FF0" alignment="256" sectorSize="4096">
+         <checksumEntryRef ref="lpc-valid-flag" />
          <memoryRange start="0x00000000" size="96K" />
       </memory>
       <memory id="lpc_128K_Flash" type="flash" registerAddress="0x1FFF1FF0" alignment="256" sectorSize="4096">
+         <checksumEntryRef ref="lpc-valid-flag" />
          <memoryRange start="0x00000000" size="128K" />
       </memory>
 
