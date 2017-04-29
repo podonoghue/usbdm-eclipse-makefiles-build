@@ -911,7 +911,7 @@ USBDM_ErrorCode GdbHandlerCommon::readRegs(void) {
       registerBufferSize = 0;
       unsigned char *buffPtr = registerBuffer;
       for (regNo = 0; regNo<=targetLastRegIndex; regNo++) {
-         buffPtr += readReg(regNo, buffPtr);
+         readReg(regNo, buffPtr);
       }
       registerBufferSize = buffPtr-registerBuffer;
    }
@@ -1033,11 +1033,6 @@ uint32_t GdbHandlerCommon::getCachedPC() {
 
 USBDM_ErrorCode GdbHandlerCommon::readReg(unsigned regNo, unsigned char *&buffPtr) {
    return BDM_RC_ILLEGAL_COMMAND;
-}
-
-USBDM_ErrorCode GdbHandlerCommon::readReg(unsigned regNo, unsigned char const *buffPtr) {
-   unsigned char const *buffP = buffPtr;
-   return readReg(regNo, buffP);
 }
 
 void GdbHandlerCommon::writeReg(unsigned regNo, unsigned long regValue) {
@@ -1281,13 +1276,16 @@ USBDM_ErrorCode GdbHandlerCommon::doCommand(const GdbPacket *pkt) {
       break;
    case 'p' : // 'p n...' Read register n...
       if (sscanf(pkt->buffer, "p%x", &regNo) != 1) {
-         log.print("Failed to parse register\n");
+         log.error("Failed to parse register\n");
          gdbInOut->sendErrorMessage(0x11);
          break;
       }
+      log.print("Read reg %d\n", regNo);
       {
          unsigned char buff[10];
-         unsigned size = readReg(regNo, buff);
+         unsigned char *tBuff = buff;
+         readReg(regNo, tBuff);
+         int size = tBuff-buff;
          gdbInOut->sendGdbHex(buff, size);
       }
 //      if (isValidRegister(regNo)) {

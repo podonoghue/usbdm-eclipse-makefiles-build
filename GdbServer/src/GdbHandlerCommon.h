@@ -85,7 +85,6 @@ protected:
    virtual const char        *getCachedPcAsString();
    virtual USBDM_ErrorCode    readRegs(void);
    virtual USBDM_ErrorCode    readReg(unsigned regNo, unsigned char *&buffPtr);
-   USBDM_ErrorCode            readReg(unsigned regNo, unsigned char const *buffPtr);
    virtual void               sendRegs(void);
    virtual void               writeReg(unsigned regNo, unsigned long regValue);
    virtual void               writeRegs(const char *ccPtr);

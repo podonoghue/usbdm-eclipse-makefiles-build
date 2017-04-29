@@ -181,11 +181,12 @@ bool GdbHandler_CFVx::isValidRegister(unsigned regNo) {
 //! Read register into string buffer as hex chars
 //!
 //! @param regNo    - number of register to read (GDB numbering)
-//! @param buffPtr  - pointer to buffer
+//! @param buffPtr  - reference to pointer to buffer
 //!
-//! @return number of bytes read
+//! @return Error code
 //!
-//! @note bytes are read in target byte order
+//! @note The pointer is incremented by size of register
+//! @note Bytes are read in target byte order
 //!
 USBDM_ErrorCode GdbHandler_CFVx::readReg(unsigned regNo, char *&buffPtr) {
    LOGGING_Q;
