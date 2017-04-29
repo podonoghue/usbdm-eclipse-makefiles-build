@@ -67,6 +67,7 @@ USBDM_ErrorCode FlashProgrammerCommon::setTargetInterface(BdmInterfacePtr bdmInt
    this->bdmInterface = bdmInterface;
    return BDM_RC_OK;
 }
+
 /**
  * Sets and initialises the TCL interpreter
  */
