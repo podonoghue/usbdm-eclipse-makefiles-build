@@ -477,15 +477,34 @@ void DeviceXmlParser::loadFile(const string &xmlFile) {
    parser->setLoadExternalDTD( false ) ;
    parser->setValidationScheme(XercesDOMParser::Val_Auto);
    parser->setValidationSchemaFullChecking(false);
-//   log.print("DeviceXmlParser::loadFile() #1\n");
-   errHandler = new HandlerBase();
-//   log.print("DeviceXmlParser::loadFile() #2\n");
-   parser->setErrorHandler(errHandler);
-//   log.print("DeviceXmlParser::loadFile() #3\n");
-   parser->parse(xmlFile.c_str()); //xx
-//   log.print("DeviceXmlParser::loadFile() #4\n");
-   document = parser->getDocument();
-//   log.print("DeviceXmlParser::loadFile() #5\n");
+   parser->setDoXInclude(true);
+
+   try {
+//      log.print("DeviceXmlParser::loadFile() #1\n");
+      errHandler = new HandlerBase();
+//      log.print("DeviceXmlParser::loadFile() #2\n");
+      parser->setErrorHandler(errHandler);
+//      log.print("DeviceXmlParser::loadFile() #3\n");
+      parser->parse(xmlFile.c_str()); //xx
+//      log.print("DeviceXmlParser::loadFile() #4\n");
+      document = parser->getDocument();
+//      log.print("DeviceXmlParser::loadFile() #5\n");
+   }
+   catch (SAXException const &e) {
+      DualString s(e.getMessage());
+      log.error("%s\n", s.asCString());
+   }
+   catch (XMLException const &e) {
+      DualString s(e.getMessage());
+      log.error("%s\n", s.asCString());
+   }
+   catch (DOMException const &e) {
+      DualString s(e.getMessage());
+      log.error("%s\n", s.asCString());
+   }
+   catch (...) {
+      log.error("DeviceXmlParser::loadFile() - Unknown xercesc error");
+   }
    if (document == NULL) {
       throw MyException("DeviceXmlParser::loadFile() - Unable to create document or load/parse file");
    }
@@ -525,6 +544,10 @@ RegisterDescriptionPtr DeviceXmlParser::parseRegisterDescription(DOMElement *xml
       throw MyException(string("DeviceXmlParser::parseRegisterDescription() - Illegal register count = ")+sCount.asCString());
    }
 
+   if (count == 0) {
+      // Discard empty set
+      return RegisterDescriptionPtr();
+   }
    DualString text(xmlRegisterDescription->getTextContent());
 
    RegisterDescriptionPtr registerDescriptionPtr(new RegisterDescription(text.asCString(), count-1));
@@ -1502,12 +1525,6 @@ DeviceDataPtr DeviceXmlParser::parseDevice(DOMElement *deviceEl) {
             defaultFlexNVMInfo = itDev->getflexNVMInfo();
          }
       }
-      else if (XMLString::equals(propertyTag.asXMLString(), tag_projectActionList.asXMLString())) {
-         // <projectActionList>
-      }
-      else if (XMLString::equals(propertyTag.asXMLString(), tag_projectActionListRef.asXMLString())) {
-         // <projectActionListRef>
-      }
       else {
          throw MyException(string("DeviceXmlParser::parseDevice() - Unknown tag - ")+propertyTag.asCString());
       }
@@ -1734,8 +1751,8 @@ void DeviceXmlParser::parseDeviceXML(void) {
 //!         != 0 => fail
 //!
 void DeviceXmlParser::loadDeviceData(TargetType_t targetType, const std::string &deviceFilePath, DeviceDataBase *deviceDataBase) {
-   LOGGING_Q;
-   log.setLoggingLevel(0); // Don't log below this leveln
+   LOGGING;
+   log.setLoggingLevel(0); // Don't log below this level
    try {
       xercesc::XMLPlatformUtils::Initialize();
    }
@@ -1746,29 +1763,21 @@ void DeviceXmlParser::loadDeviceData(TargetType_t targetType, const std::string 
    try {
       try {
          // Load the XML
+         log.error("Loading XML file\n");
          deviceXmlParser->loadFile(deviceFilePath);
          // Parse shared information
+         log.error("Parsing Shared XML\n");
          deviceXmlParser->parseSharedXML();
          // Parse device information
+         log.error("Parsing Device XML\n");
          deviceXmlParser->parseDeviceXML();
-      }
-      catch (const xercesc::XMLException& exception) {
-         DualString message(exception.getMessage());
-         throw MyException(string("DeviceXmlParser::loadDeviceData() - XML Exception")+message.asCString());
-      }
-      catch (const xercesc::DOMException& exception) {
-         DualString message(exception.getMessage());
-         throw MyException(string("DeviceXmlParser::loadDeviceData() - DOM Exception")+message.asCString());
-      }
-      catch (MyException &exception) {
-         throw MyException(string(exception.what())+"\n   Current Device = "+deviceXmlParser->currentDeviceName);
       }
       catch (std::runtime_error &exception) {
          throw MyException(string(exception.what())+"\n   Current Device = "+deviceXmlParser->currentDeviceName);
       }
    }
    catch (MyException &exception) {
-      XMLPlatformUtils::Terminate();
+//      XMLPlatformUtils::Terminate();
       throw exception;
    }
    catch (...) {
