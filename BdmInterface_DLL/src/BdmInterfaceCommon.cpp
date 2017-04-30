@@ -303,8 +303,6 @@ BdmInterfaceCommon::BdmInterfaceCommon(TargetType_t targetType) {
 
 BdmInterfaceCommon::~BdmInterfaceCommon() {
    LOGGING_E;
-   closeBdm();
-   USBDM_Exit();
    wxPlugin.reset();
 }
 

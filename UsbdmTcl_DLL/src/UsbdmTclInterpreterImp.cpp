@@ -233,6 +233,8 @@ void UsbdmTclInterpreterImp::redirectStdOut() {
 void UsbdmTclInterpreterImp::setBdmInterface(BdmInterfacePtr bdmInterface, bool doRedirect) {
    LOGGING;
    log.print("doRedirect = %s\n", doRedirect?"TRUE":"FALSE");
+   log.print("::bdmInterface.use_count() = %d, bdmInterface.use_count() = %d\n", ::bdmInterface.use_count(), bdmInterface.use_count());
+   log.print("::bdmInterface.get() = %p,       bdmInterface.get() = %p\n",       ::bdmInterface.get(), bdmInterface.get());
    ::bdmInterface = bdmInterface;
    if (bdmInterface == 0) {
       log.error("createTclInterpreter() bdmInterface == 0x%p\n", bdmInterface.get() );
