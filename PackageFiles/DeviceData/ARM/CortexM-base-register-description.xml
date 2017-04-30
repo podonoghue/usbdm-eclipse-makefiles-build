@@ -1,4 +1,4 @@
-<![CDATA[<?xml version="1.0"?>
+<?xml version="1.0"?>
 <!DOCTYPE feature SYSTEM "gdb-target.dtd">
 <feature name="org.gnu.gdb.arm.m-profile" >
    <struct id="misc.type" >
@@ -39,4 +39,4 @@
    <reg name="msp"   bitsize="32" type="data_ptr"    group="general" />
    <reg name="psp"   bitsize="32" type="data_ptr"    group="general" />
    <reg name="misc"  bitsize="32" type="misc.type"   group="general" />
-</feature>]]>
+</feature>

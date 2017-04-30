@@ -1,4 +1,4 @@
-<![CDATA[<?xml version="1.0"?>
+<?xml version="1.0"?>
 <!DOCTYPE feature SYSTEM "gdb-target.dtd">
 <feature name="org.gnu.gdb.arm.m-profile" >
    <struct id="misc.type" >
@@ -88,4 +88,4 @@
    <reg name="s29"   bitsize="32" type="ieee_single" group="float" />
    <reg name="s30"   bitsize="32" type="ieee_single" group="float" />
    <reg name="s31"   bitsize="32" type="ieee_single" group="float" />
-</feature>]]>
+</feature>
