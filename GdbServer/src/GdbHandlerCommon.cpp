@@ -13,6 +13,7 @@
 
 #include "GdbHandlerCommon.h"
 #include "FlashImageFactory.h"
+#include "UsbdmTclInterpreterFactory.h"
 #include "signals.h"
 #include "Names.h"
 #include "Utils.h"
@@ -71,6 +72,7 @@ GdbHandlerCommon::GdbHandlerCommon(
 }
 
 GdbHandlerCommon::~GdbHandlerCommon() {
+   deviceTclInterface.reset();
 }
 
 USBDM_ErrorCode GdbHandlerCommon::initialise() {
@@ -256,6 +258,34 @@ void GdbHandlerCommon::reportStatusToGdb(const char *s, int size) {
    gdbInOut->sendGdbHexString("O", s, size);
 }
 
+/**
+ * Gets the TCL interface.
+ * The interface will be created if necessary
+ */
+DeviceTclInterfacePtr GdbHandlerCommon::getTclInterface() {
+   if (deviceTclInterface == 0) {
+      deviceTclInterface.reset(new DeviceTclInterface(bdmInterface, deviceData));
+   }
+   return deviceTclInterface;
+}
+
+/**
+ * Executes a TCL command previously loaded in the TCL interpreter
+ *
+ * @param command Command to execute
+ */
+USBDM_ErrorCode GdbHandlerCommon::runTCLCommand(const char *command) {
+   LOGGING;
+   log.print("Command = '%s'\n", command);
+
+   DeviceTclInterfacePtr p = getTclInterface();
+   USBDM_ErrorCode rc = getTclInterface()->runTclCommand(command);
+   if (rc != BDM_RC_OK) {
+      log.error("Failed - rc = %d (%s)\n", rc, bdmInterface->getErrorString(rc));
+   }
+   return rc;
+}
+
 USBDM_ErrorCode GdbHandlerCommon::resetTarget(TargetMode_t mode) {
    LOGGING;
 
@@ -263,7 +293,14 @@ USBDM_ErrorCode GdbHandlerCommon::resetTarget(TargetMode_t mode) {
    if (rc != BDM_RC_OK) {
       return rc;
    }
+   runTCLCommand("initTarget");
    return rc;
+}
+
+USBDM_ErrorCode GdbHandlerCommon::haltTarget() {
+   LOGGING;
+
+   return bdmInterface->halt();
 }
 
 /*!
@@ -287,7 +324,7 @@ USBDM_ErrorCode GdbHandlerCommon::stepTarget(bool disableInterrupts) {
  *    continuing at full execution.
  *    Breakpoints are activated.
  */
-void GdbHandlerCommon::continueTarget(void) {
+USBDM_ErrorCode GdbHandlerCommon::continueTarget(void) {
    LOGGING_Q;
    unsigned long currentPC;
    readPC(&currentPC);
@@ -301,6 +338,7 @@ void GdbHandlerCommon::continueTarget(void) {
    log.print("Continue - executing...\n");
    bdmInterface->go();
    log.print("Continue - Now running\n");
+   return BDM_RC_OK;
 }
 
 //! Send portion of XML to debugger
@@ -661,6 +699,8 @@ USBDM_ErrorCode GdbHandlerCommon::doVCommands(const GdbPacket *pkt) {
             log.print("vFlashDone: Programming complete\n");
          }
          resetTarget();
+         reportGdbPrintf(M_INFO, "Reset target\n");
+         log.print("vFlashDone: Reset target\n");
       }
       else {
          reportGdbPrintf(M_INFO, "Programming Flash Image skipped (empty image)\n");
@@ -694,6 +734,7 @@ USBDM_ErrorCode GdbHandlerCommon::programImage(FlashImagePtr flashImage) {
    }
 
    FlashProgrammerPtr flashProgrammer = FlashProgrammerFactory::createFlashProgrammer(bdmInterface);
+   flashProgrammer->setDeviceData(deviceData, getTclInterface()->getTclInterper());
    USBDM_ErrorCode rc = flashProgrammer->setDeviceData(deviceData);
    if (rc == BDM_RC_OK) {
       rc = flashProgrammer->programFlash(flashImage, 0, true);

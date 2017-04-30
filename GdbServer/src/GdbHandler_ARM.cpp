@@ -87,6 +87,7 @@ USBDM_ErrorCode GdbHandler_ARM::initialise() {
    LOGGING;
 
    USBDM_ErrorCode rc = GdbHandlerCommon::initialise();
+
    // Ignore Secured as may still be able to program device after mass-erase
    if ((rc != BDM_RC_OK)&&(rc != BDM_RC_SECURED)) {
       return rc;
@@ -104,11 +105,12 @@ USBDM_ErrorCode GdbHandler_ARM::resetTarget(TargetMode_t mode) {
    return configureKinetisMDM_AP();
 }
 
-void GdbHandler_ARM::continueTarget(void) {
+USBDM_ErrorCode GdbHandler_ARM::continueTarget(void) {
    LOGGING_Q;
 
    configureKinetisMDM_AP();
-   GdbHandlerCommon::continueTarget();
+
+   return GdbHandlerCommon::continueTarget();
 }
 
 /*! Mask/unmask interrupts (in DHCSR)

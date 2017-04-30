@@ -28,14 +28,15 @@
 #ifndef SRC_USBDM_TCL_INTERPRETER_FACTORY_H_
 #define SRC_USBDM_TCL_INTERPRETER_FACTORY_H_
 
-#include "PluginFactory.h"
+#include "SingletonPluginFactory.h"
 #include "UsbdmTclInterpreter.h"
 
 /**
  * Factory for creating USBDM TCL interpreters
  * This uses a plug-in approach to loading the required module
+ * This is a singleton i.e only one instance of interpreter is created and then shared
  */
-class UsbdmTclInterperFactory : public PluginFactory<UsbdmTclInterpreter> {
+class UsbdmTclInterperFactory : public SingletonPluginFactory<UsbdmTclInterpreter> {
 
 public:
    /**
@@ -47,7 +48,7 @@ public:
     */
    static UsbdmTclInterperPtr createUsbdmTclInterpreter(BdmInterfacePtr bdmInterface) {
       LOGGING;
-      UsbdmTclInterperPtr interpreter = createPlugin(DLL_NAME("usbdm-tcl"), "createPluginInstance");
+      UsbdmTclInterperPtr interpreter = createPlugin(DLL_NAME("usbdm-tcl"));
       interpreter->setBdmInterface(bdmInterface, true);
       return interpreter;
    }
@@ -61,7 +62,7 @@ public:
     */
    static UsbdmTclInterperPtr createInteractiveUsbdmTclInterpreter(BdmInterfacePtr bdmInterface) {
       LOGGING;
-      UsbdmTclInterperPtr interpreter = createPlugin(DLL_NAME("usbdm-tcl"), "createPluginInstance");
+      UsbdmTclInterperPtr interpreter = createPlugin(DLL_NAME("usbdm-tcl"));
       interpreter->setBdmInterface(bdmInterface, false);
       interpreter->setInteractive();
       return interpreter;

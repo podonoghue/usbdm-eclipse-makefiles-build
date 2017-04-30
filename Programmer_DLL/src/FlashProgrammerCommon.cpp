@@ -56,6 +56,7 @@ FlashProgrammerCommon::FlashProgrammerCommon() :
  */
 FlashProgrammerCommon::~FlashProgrammerCommon() {
    LOGGING_E;
+   releaseTCL();
 }
 
 /**

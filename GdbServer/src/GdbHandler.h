@@ -47,8 +47,12 @@ public:
 
    virtual USBDM_ErrorCode      initialise() = 0;
    virtual USBDM_ErrorCode      doCommand(const GdbPacket *pkt) = 0;
-   virtual GdbTargetStatus      pollTarget(void) = 0;
+   virtual GdbTargetStatus      pollTarget() = 0;
    virtual USBDM_ErrorCode      updateTarget() = 0;
+   virtual USBDM_ErrorCode      resetTarget(TargetMode_t mode = (TargetMode_t)(RESET_SPECIAL|RESET_DEFAULT)) = 0;
+   virtual USBDM_ErrorCode      stepTarget(bool disableInterrupts) = 0;
+   virtual USBDM_ErrorCode      continueTarget() = 0;
+   virtual USBDM_ErrorCode      haltTarget() = 0;
    static const char           *getStatusName(GdbTargetStatus status);
 
 protected:

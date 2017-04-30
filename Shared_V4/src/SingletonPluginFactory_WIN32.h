@@ -25,8 +25,8 @@
     \endverbatim
 */
 
-#ifndef SRC_PLUGINFACTORY_WIN32_H_
-#define SRC_PLUGINFACTORY_WIN32_H_
+#ifndef SRC_SINGLETONPLUGINFACTORY_WIN32_H_
+#define SRC_SINGLETONPLUGINFACTORY_WIN32_H_
 
 #ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0600
@@ -43,16 +43,14 @@
  * Factory base class
  */
 template <class T>
-class PluginFactory {
+class SingletonPluginFactory {
 
 protected:
-   static std::string   dllName;
-   static size_t        (*__attribute__((__stdcall__)) newInstance)(T*, ...);
-   static int           instanceCount;
+   static std::tr1::shared_ptr<T> (*__attribute__((__stdcall__)) getSingletonInstance)(...);
    static HINSTANCE     moduleHandle;
 
-   PluginFactory() {};
-   ~PluginFactory() {};
+   SingletonPluginFactory() {};
+   ~SingletonPluginFactory() {};
 
 protected:
    /**
@@ -63,39 +61,17 @@ protected:
     *
     * @return Smart pointer to object implementing the plug-in interface
     */
-   static std::tr1::shared_ptr<T> createPlugin(std::string dllName, std::string entryPoint="createPluginInstance") {
-      LOGGING_Q;
-      if (newInstance == 0) {
+   static std::tr1::shared_ptr<T> createPlugin(std::string dllName, std::string entryPoint="createSingletonPluginInstance") {
+      LOGGING;
+      if (getSingletonInstance == 0) {
          loadClass(dllName.c_str(), entryPoint.c_str());
       }
-//      log.print("Getting size\n");
-      size_t classSize = (*newInstance)(0);
-//      log.print("Calling new\n");
-      T* p = static_cast<T*>(::operator new(classSize));
-//      log.print("Allocated storage @%p, size = %d\n", p, classSize);
-//      log.print("Calling placement constructor\n");
-      (*newInstance)(p);
-      std::tr1::shared_ptr<T> pp(p, deleter);
-      instanceCount++;
-      return pp;
+      std::tr1::shared_ptr<T> ptr = getSingletonInstance(0);
+      log.print("Use count = %ld\n", ptr.use_count());
+      return ptr;
    }
 
 protected:
-   /**
-    * Destructor to delete plug-in interface object
-    *
-    * @param p object to delete
-    */
-   static void deleter(T *p) {
-      LOGGING_Q;
-//      log.print("Calling destructor\n");
-      p->~T();
-      log.print("Deallocating storage @%p\n", p);
-      ::operator delete(p);
-      if (--instanceCount == 0) {
-         unloadClass();
-      }
-   }
    /**
     * Load plugin class
     */
@@ -104,24 +80,25 @@ protected:
     * Unload plug-in class
     */
    static void unloadClass();
+
+public:
+   static void printSystemErrorMessage() {
+      char buffer[200];
+      long dw = (long)GetLastError();
+
+      if (!FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM, 0, dw, 0, buffer, sizeof(buffer)-1, 0 )) {
+          UsbdmSystem::Log::print("Failed to convert system error code %ld\n", dw);
+          return;
+      }
+      UsbdmSystem::Log::print("System Error: %s", buffer);
+   }
 };
 
-template <class T> HINSTANCE PluginFactory<T>::moduleHandle = 0;
-template <class T> size_t (*__attribute__((__stdcall__))PluginFactory<T>::newInstance)(T*, ...) = 0;
-template <class T> int  PluginFactory<T>::instanceCount = 0;
+template <class T> HINSTANCE SingletonPluginFactory<T>::moduleHandle = 0;
+template <class T> std::tr1::shared_ptr<T> (*__attribute__((__stdcall__))SingletonPluginFactory<T>::getSingletonInstance)(...) = 0;
 
 using namespace std;
 
-static void printSystemErrorMessage() {
-   char buffer[200];
-   long dw = (long)GetLastError();
-
-   if (!FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM, 0, dw, 0, buffer, sizeof(buffer)-1, 0 )) {
-       UsbdmSystem::Log::print("Failed to convert system error code %ld\n", dw);
-       return;
-   }
-   UsbdmSystem::Log::print("System Error: %s", buffer);
-}
 
 /**
  * Load an instance of a class from a Library
@@ -132,8 +109,8 @@ static void printSystemErrorMessage() {
  * Note: Searches USBDM Application directory if necessary
  */
 template <class T>
-void PluginFactory<T>::loadClass(const char *moduleName, const char *createInstanceFunctioName) {
-   LOGGING_Q;
+void SingletonPluginFactory<T>::loadClass(const char *moduleName, const char *createInstanceFunctioName) {
+   LOGGING;
 
    if (moduleHandle != NULL) {
       log.print("Module \'%s\' already loaded\n", moduleName);
@@ -144,7 +121,7 @@ void PluginFactory<T>::loadClass(const char *moduleName, const char *createInsta
 
    if (moduleHandle == NULL) {
 //      log.print("Module \'%s\' failed to load\n", moduleName);
-//      printSystemErrorMessage();
+//      SingletonPluginFactory::printSystemErrorMessage();
 
       string extendedPath = UsbdmSystem::getApplicationPath("");
 //      log.print("Trying extended search path \'%s\'\n", extendedPath.c_str());
@@ -155,7 +132,7 @@ void PluginFactory<T>::loadClass(const char *moduleName, const char *createInsta
 
       if (moduleHandle == NULL) {
          log.error("Module \'%s\' failed to load\n", moduleName);
-         printSystemErrorMessage();
+         SingletonPluginFactory::printSystemErrorMessage();
          throw MyException("Module failed to load\n");
       }
    }
@@ -164,29 +141,29 @@ void PluginFactory<T>::loadClass(const char *moduleName, const char *createInsta
    if (GetModuleFileNameA(moduleHandle, executableName, sizeof(executableName)) > 0) {
       log.print("Module path = %s\n", executableName);
    }
-   newInstance = (size_t (__attribute__((__stdcall__)) *)(T*, ...))GetProcAddress(moduleHandle, createInstanceFunctioName);
-   if (newInstance == 0) {
+   getSingletonInstance = (std::tr1::shared_ptr<T> (__attribute__((__stdcall__)) *)(...))GetProcAddress(moduleHandle, createInstanceFunctioName);
+   if (getSingletonInstance == 0) {
       log.print("Entry point \'%s\' not found in module \'%s\'\n", createInstanceFunctioName, moduleName);
       throw MyException("Entry point not found in module");
    }
-//   log.print("Entry point \'%s\' found @0x%p\n", createInstanceFunctioName, newInstance);
+//   log.print("Entry point \'%s\' found @0x%p\n", createInstanceFunctioName, getSingletonInstance);
 }
 
 /**
  * Unload an instance of a class from a Library
  */
 template <class T>
-void PluginFactory<T>::unloadClass() {
+void SingletonPluginFactory<T>::unloadClass() {
    LOGGING_Q;
 //   log.print("Unloading module @0x%p, cached @%p\n", moduleHandle, &moduleHandle);
    if (FreeLibrary(moduleHandle) == 0) {
       log.print("Unloading module at @0x%p failed\n", moduleHandle);
-      printSystemErrorMessage();
+      SingletonPluginFactory::printSystemErrorMessage();
       // Ignore error as can't throw in destructor
    }
    log.print("Unloading module @0x%p done\n", moduleHandle);
    moduleHandle = 0;
-   newInstance = 0;
+   getSingletonInstance = 0;
 }
 
-#endif /* SRC_PLUGINFACTORY_WIN32_H_ */
+#endif /* SRC_SINGLETONPLUGINFACTORY_WIN32_H_ */

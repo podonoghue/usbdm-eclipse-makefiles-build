@@ -9,6 +9,7 @@
 #define SRC_GDBHANDLERCOMMON_H_
 
 #include <stdint.h>
+#include "DeviceTclInterface.h"
 #include "GdbHandler.h"
 #include "FlashProgrammerFactory.h"
 #include "GdbBreakpoints.h"
@@ -34,6 +35,7 @@ public:
    virtual USBDM_ErrorCode      updateTarget() = 0;
 
 protected:
+   DeviceTclInterfacePtr      deviceTclInterface;
    GdbBreakpoints             *gdbBreakpoints;
    bool                       initBreakpointsDone;
    bool                       programmingDone;
@@ -76,40 +78,44 @@ protected:
    }
    virtual USBDM_ErrorCode    usbdmResetTarget(bool retry);
 
-   virtual USBDM_ErrorCode    resetTarget(TargetMode_t mode = (TargetMode_t)(RESET_SPECIAL|RESET_DEFAULT));
-   virtual USBDM_ErrorCode    stepTarget(bool disableInterrupts);
-   virtual void               continueTarget(void);
-   virtual USBDM_ErrorCode    programImage(FlashImagePtr flashImage);
-   virtual void               maskInterrupts(bool disableInterrupts) = 0;
-   virtual uint32_t           getCachedPC();
-   virtual const char        *getCachedPcAsString();
-   virtual USBDM_ErrorCode    readRegs(void);
-   virtual USBDM_ErrorCode    readReg(unsigned regNo, unsigned char *&buffPtr);
-   virtual void               sendRegs(void);
-   virtual void               writeReg(unsigned regNo, unsigned long regValue);
-   virtual void               writeRegs(const char *ccPtr);
-   virtual void               readMemory(uint32_t address, uint32_t numBytes);
-   virtual void               writeMemory(const char *ccPtr, uint32_t address, uint32_t numBytes);
-   bool                       convertFromHex(unsigned numBytes, const char *dataIn, unsigned char *dataOut);
-   virtual bool               isValidRegister(unsigned regNo) = 0;
+   virtual DeviceTclInterfacePtr getTclInterface();
+   virtual USBDM_ErrorCode       runTCLCommand(const char *command);
+   virtual USBDM_ErrorCode       resetTarget(TargetMode_t mode = (TargetMode_t)(RESET_SPECIAL|RESET_DEFAULT));
+   virtual USBDM_ErrorCode       stepTarget(bool disableInterrupts);
+   virtual USBDM_ErrorCode       continueTarget(void);
+   virtual USBDM_ErrorCode       haltTarget();
 
-   virtual bool               initRegisterDescription(void);
-   virtual void               reportLocation(char mode, int reason);
-   virtual bool               checkHostedBreak(uint32_t currentPC) = 0;
-           unsigned           getConnectionTimeout();
-   virtual USBDM_ErrorCode    writePC(unsigned long value) = 0;
-   virtual USBDM_ErrorCode    readPC(unsigned long *value) = 0;
-   virtual USBDM_ErrorCode    writeSP(unsigned long value) = 0;
+   virtual USBDM_ErrorCode       programImage(FlashImagePtr flashImage);
+   virtual void                  maskInterrupts(bool disableInterrupts) = 0;
+   virtual uint32_t              getCachedPC();
+   virtual const char           *getCachedPcAsString();
+   virtual USBDM_ErrorCode       readRegs(void);
+   virtual USBDM_ErrorCode       readReg(unsigned regNo, unsigned char *&buffPtr);
+   virtual void                  sendRegs(void);
+   virtual void                  writeReg(unsigned regNo, unsigned long regValue);
+   virtual void                  writeRegs(const char *ccPtr);
+   virtual void                  readMemory(uint32_t address, uint32_t numBytes);
+   virtual void                  writeMemory(const char *ccPtr, uint32_t address, uint32_t numBytes);
+   bool                          convertFromHex(unsigned numBytes, const char *dataIn, unsigned char *dataOut);
+   virtual bool                  isValidRegister(unsigned regNo) = 0;
 
-   USBDM_ErrorCode            doReadCommand(char *command);
-   USBDM_ErrorCode            doMonitorCommand(const char *cmd);
-   USBDM_ErrorCode            doQCommands(const GdbPacket *pkt);
-   USBDM_ErrorCode            doVCommands(const GdbPacket *pkt);
-   USBDM_ErrorCode            doVContCommands(const GdbPacket *pkt);
+   virtual bool                  initRegisterDescription(void);
+   virtual void                  reportLocation(char mode, int reason);
+   virtual bool                  checkHostedBreak(uint32_t currentPC) = 0;
+           unsigned              getConnectionTimeout();
+   virtual USBDM_ErrorCode       writePC(unsigned long value) = 0;
+   virtual USBDM_ErrorCode       readPC(unsigned long *value) = 0;
+   virtual USBDM_ErrorCode       writeSP(unsigned long value) = 0;
 
-   USBDM_ErrorCode            reportGdbPrintf(GdbMessageLevel level, USBDM_ErrorCode rc, const char *format, ...);
-   USBDM_ErrorCode            reportGdbPrintf(const char *format, ...);
-   USBDM_ErrorCode            reportGdbPrintf(GdbMessageLevel level, const char *format, ...);
+   USBDM_ErrorCode               doReadCommand(char *command);
+   USBDM_ErrorCode               doMonitorCommand(const char *cmd);
+   USBDM_ErrorCode               doQCommands(const GdbPacket *pkt);
+   USBDM_ErrorCode               doVCommands(const GdbPacket *pkt);
+   USBDM_ErrorCode               doVContCommands(const GdbPacket *pkt);
+
+   USBDM_ErrorCode               reportGdbPrintf(GdbMessageLevel level, USBDM_ErrorCode rc, const char *format, ...);
+   USBDM_ErrorCode               reportGdbPrintf(const char *format, ...);
+   USBDM_ErrorCode               reportGdbPrintf(GdbMessageLevel level, const char *format, ...);
 
    void createMemoryMapXML(const char **buffer, unsigned *bufferSize);
 

@@ -24,7 +24,7 @@ public:
 protected:
    virtual USBDM_ErrorCode   resetTarget(TargetMode_t mode) override;
    virtual void              maskInterrupts(bool disableInterrupts) override;
-   virtual void              continueTarget(void) override;
+   virtual USBDM_ErrorCode   continueTarget(void) override;
    virtual void              writeReg(unsigned regNo, unsigned long regValue) override;
 
    virtual USBDM_ErrorCode   initialise() override;

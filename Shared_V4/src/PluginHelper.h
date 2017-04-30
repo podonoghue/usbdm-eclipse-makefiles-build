@@ -87,4 +87,25 @@ size_t TcreatePluginInstance(T *pp, A arg) {
    return sizeof(T);
 }
 
+/**
+ * Helper function for doing new
+ *
+ * @tparam T      Type of object being allocated
+ * @tparam A      Type of argument to constructor
+ * @param  arg    Argument to constructor
+ *
+ * @return Size of object
+ */
+template<typename T, typename A>
+T *TcreatePluginInstance(A arg) {
+   LOGGING_Q;
+
+   T *ptr = new T(arg);
+
+   if (ptr != NULL) {
+      log.print("Created instance, version %s, size = %ld\n", __DATE__ ", " __TIME__, (long)sizeof(T));
+   }
+   return ptr;
+}
+
 #endif /* SOURCE_PLUGINHELPER_H_ */

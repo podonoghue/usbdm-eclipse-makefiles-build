@@ -264,8 +264,8 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
     setLoggingLevel(GdbHandler::M_ERROR);
  }
 
- /*!   Verbose log check-box menu item
-  *
+ /*!
+  *    Verbose log check-box menu item
   */
  void GdbServerWindow::OnModerateLog(wxCommandEvent& event) {
     setLoggingLevel(GdbHandler::M_INFO);
@@ -278,11 +278,11 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
     setLoggingLevel(GdbHandler::M_BORINGINFO);
  }
 
- /*!  Handler for Halt Target menu item
-  *
+ /*!
+  * Handler for Halt Target menu item
   */
  void GdbServerWindow::OnHaltTarget(wxCommandEvent& event) {
-    bdmInterface->halt();
+    gdbHandler->haltTarget();
     statusTextControl->AppendText(_("User halt of target - step GDB to synchronise\n"));
  }
 
@@ -290,7 +290,7 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
   *
   */
  void GdbServerWindow::OnResetTarget(wxCommandEvent& event) {
-    bdmInterface->reset((TargetMode_t)(RESET_SPECIAL|RESET_DEFAULT));
+    gdbHandler->resetTarget();
     statusTextControl->AppendText(_("User reset of target - step GDB to synchronise\n"));
  }
 

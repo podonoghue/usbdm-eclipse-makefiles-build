@@ -78,10 +78,10 @@ USBDM_ErrorCode GdbHandler_CFVx::resetTarget(TargetMode_t mode) {
    return GdbHandlerCommon::resetTarget(mode);
 }
 
-void GdbHandler_CFVx::continueTarget(void) {
+USBDM_ErrorCode GdbHandler_CFVx::continueTarget(void) {
    LOGGING_Q;
 
-   GdbHandlerCommon::continueTarget();
+   return GdbHandlerCommon::continueTarget();
 }
 
 /*! Mask/unmask interrupts (in SR)

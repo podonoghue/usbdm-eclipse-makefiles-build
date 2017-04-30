@@ -56,12 +56,38 @@ static void printChannel(int ch, const char *format, ...) __attribute__ ((format
 #define PRINT(format, ...)       printChannel(TCL_STDOUT, format, ##__VA_ARGS__)
 #define PRINT_ERROR(format, ...) printChannel(TCL_STDERR, format, ##__VA_ARGS__)
 
+static UsbdmTclInterperPtr     sharedPtrCache;
+static UsbdmTclInterpreterImp *ppCache;
+static size_t size;
+
+/**
+ * Create singleton plug-in instance
+ */
+extern "C"
+UsbdmTclInterperPtr CPP_DLL_EXPORT createSingletonPluginInstance() {
+   if (sharedPtrCache == 0) {
+      if (ppCache == 0) {
+         ppCache = TcreatePluginInstance<UsbdmTclInterpreterImp>(true);
+      }
+      sharedPtrCache.reset(ppCache);
+   }
+   return sharedPtrCache;
+}
+
 /**
  * Create the plug-in instance
  */
 extern "C"
 size_t CPP_DLL_EXPORT createPluginInstance(UsbdmTclInterpreterImp *pp) {
-   return TcreatePluginInstance<UsbdmTclInterpreterImp>(pp, true);
+   if (ppCache != 0) {
+      if (pp != 0) {
+         pp = ppCache;
+      }
+      return size;
+   }
+   size = TcreatePluginInstance<UsbdmTclInterpreterImp>(pp, true);
+   ppCache = pp;
+   return size;
 }
 
 /**
@@ -69,7 +95,15 @@ size_t CPP_DLL_EXPORT createPluginInstance(UsbdmTclInterpreterImp *pp) {
  */
 extern "C"
 size_t CPP_DLL_EXPORT createInteractivePluginInstance(UsbdmTclInterpreterImp *pp) {
-   return TcreatePluginInstance<UsbdmTclInterpreterImp>(pp, false);
+   if (ppCache != 0) {
+      if (pp != 0) {
+         pp = ppCache;
+      }
+      return size;
+   }
+   size = TcreatePluginInstance<UsbdmTclInterpreterImp>(pp, false);
+   ppCache = pp;
+   return size;
 }
 
 UsbdmTclInterperPtr UsbdmTclInterpreterImp::interactiveInterpreter;
