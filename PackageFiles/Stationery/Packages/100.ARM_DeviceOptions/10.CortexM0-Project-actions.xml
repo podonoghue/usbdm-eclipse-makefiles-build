@@ -11,7 +11,7 @@ Cortex-M0
  -->    
 
    <!-- Base CortexM0 files -->
-   <projectActionList id="Kinetis-Cortex-m0-exe-files" >
+   <projectActionList id="Cortex-m0-exe-files" >
       <applyWhen>
          <and>
             <or>
@@ -37,7 +37,7 @@ Cortex-M0
       <copy source="Project_Settings/Linker_Files/MemoryMap.ld"               target="Project_Settings/Linker_Files/MemoryMap-$(targetDeviceName).ld" />
 
       <copy source="Project_Headers/derivative.h"                             target="Project_Headers/derivative.h" />
-      <copy source="Project_Headers/TargetDevice.h"                           target="Project_Headers/$(targetDeviceSubFamily).h" />
+      <copy source="Project_Headers/TargetDevice.h"                           target="Project_Headers/$(targetDevice).h" />
       <copy source="Project_Headers/system.h"                                 target="Project_Headers/system.h" />
       <copy source="Project_Headers/core_cm0plus.h"                           target="Project_Headers/core_cm0plus.h" />
       <copy source="Project_Headers/core_cmFunc.h"                            target="Project_Headers/core_cmFunc.h" />
@@ -45,7 +45,7 @@ Cortex-M0
       <copy source="Project_Headers/utilities-mke.h"                          target="Project_Headers/utilities.h" />
 
       <copy source="$(externalVectorTable)"                                   target="Startup_Code/vectors.c" replace="true" />
-      <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(targetDeviceSubFamily).h" replace="true" />
+      <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(targetDevice).h" replace="true" />
 
       <projectActionList>
          <applyWhen>
