@@ -10,7 +10,7 @@
 <!ELEMENT deviceList (device*)>
 
 <!-- A mapping from a device name to SVD description -->
-<!ELEMENT device (svdFileName)>
-     <!ATTLIST device name ID #REQUIRED>
-
-<!ELEMENT svdFileName (#PCDATA)>
+<!ELEMENT device EMPTY>
+     <!ATTLIST device name        ID    #REQUIRED>
+     <!ATTLIST device svdFileName CDATA #REQUIRED>
+     <!ATTLIST device pattern     CDATA #IMPLIED>

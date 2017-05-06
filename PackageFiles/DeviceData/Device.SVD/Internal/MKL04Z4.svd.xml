@@ -1,42 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE device
-[
-<!ENTITY VECTOR_TABLE SYSTEM "vectorTables/MKL04Z4_VectorTable.svd.xml">
-<!ENTITY ADC0         SYSTEM "peripherals/ADC0_MKL_DMA.svd.xml">
-<!ENTITY BP           SYSTEM "peripherals/BP_CM0.svd.xml">
-<!ENTITY CMP0         SYSTEM "peripherals/CMP0_PSTM_TRIGM.svd.xml">
-<!ENTITY CoreDebug    SYSTEM "peripherals/CoreDebug.svd.xml">
-<!ENTITY DMA0         SYSTEM "peripherals/DMA0_MKL.svd.xml">
-<!ENTITY DMAMUX0      SYSTEM "peripherals/DMAMUX0_4CH.svd.xml">
-<!ENTITY DWT          SYSTEM "peripherals/DWT_CM0Plus.svd.xml">
-<!ENTITY FGPIOA       SYSTEM "peripherals/FGPIOA_0xF80FF000.svd.xml">
-<!ENTITY FTFA         SYSTEM "peripherals/FTFA.svd.xml">
-<!ENTITY I2C0         SYSTEM "peripherals/I2C0_MKL04Z4.svd.xml">
-<!ENTITY LLWU         SYSTEM "peripherals/LLWU_PE2_FILT2.svd.xml">
-<!ENTITY LPTMR0       SYSTEM "peripherals/LPTMR0_0.svd.xml">
-<!ENTITY MCG          SYSTEM "peripherals/MCG_MKL04Z4.svd.xml">
-<!ENTITY MCM          SYSTEM "peripherals/MCM_MKL02Z4.svd.xml">
-<!ENTITY MTB          SYSTEM "peripherals/MTB.svd.xml">
-<!ENTITY MTBDWT       SYSTEM "peripherals/MTBDWT_MKL.svd.xml">
-<!ENTITY NV           SYSTEM "peripherals/NV_FTFA.svd.xml">
-<!ENTITY NVIC         SYSTEM "peripherals/NVIC_CM0.svd.xml">
-<!ENTITY OSC0         SYSTEM "peripherals/OSC0_MK.svd.xml">
-<!ENTITY PIT          SYSTEM "peripherals/PIT_2CH_CHAIN_LTMR.svd.xml">
-<!ENTITY PMC          SYSTEM "peripherals/PMC_MK.svd.xml">
-<!ENTITY PORTA        SYSTEM "peripherals/PORTA_MKL04Z4.svd.xml">
-<!ENTITY RCM          SYSTEM "peripherals/RCM_MKL02Z4.svd.xml">
-<!ENTITY ROM          SYSTEM "peripherals/ROM_MKL.svd.xml">
-<!ENTITY RTC          SYSTEM "peripherals/RTC_MKL04Z4.svd.xml">
-<!ENTITY SCB          SYSTEM "peripherals/SCB_CM0.svd.xml">
-<!ENTITY SIM          SYSTEM "peripherals/SIM_MKL04Z4.svd.xml">
-<!ENTITY SMC          SYSTEM "peripherals/SMC_MKL04Z4.svd.xml">
-<!ENTITY SPI0         SYSTEM "peripherals/SPI0_MKL04Z4_DMA.svd.xml">
-<!ENTITY SYST         SYSTEM "peripherals/SYST.svd.xml">
-<!ENTITY TPM0         SYSTEM "peripherals/TPM0_6CH.svd.xml">
-<!ENTITY TPM1         SYSTEM "peripherals/TPM1_6CH.svd.xml">
-<!ENTITY UART0        SYSTEM "peripherals/UART0_MKL04Z4.svd.xml">
-]>
-<device schemaVersion="1.1" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
+<!DOCTYPE device>
+<device
+   schemaVersion="1.1"
+   xmlns:xi="http://www.w3.org/2001/XInclude"
+   xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd"
+>
    <name>MKL04Z4</name>
    <version>1.6</version>
    <description>Freescale Kinetis MKL04Z4</description>
@@ -53,45 +21,45 @@
    <addressUnitBits>8</addressUnitBits>
    <width>32</width>
    <peripherals>
-&ADC0;
-&BP;
-&CMP0;
-&CoreDebug;
-&DMA0;
-&DMAMUX0;
-&DWT;
-&FGPIOA;
-<peripheral derivedFrom="FGPIOA"><name>FGPIOB</name><prependToName>FGPIOB</prependToName><baseAddress>0xF80FF040</baseAddress></peripheral>
-&FTFA;
-<peripheral derivedFrom="FGPIOA"><name>GPIOA</name><groupName>GPIO</groupName><prependToName>GPIOA</prependToName><baseAddress>0x400FF000</baseAddress></peripheral>
-<peripheral derivedFrom="FGPIOA"><name>GPIOB</name><groupName>GPIO</groupName><prependToName>GPIOB</prependToName><baseAddress>0x400FF040</baseAddress></peripheral>
-&I2C0;
-&LLWU;
-&LPTMR0;
-&MCG;
-&MCM;
-&MTB;
-&MTBDWT;
-&NV;
-&NVIC;
-&OSC0;
-&PIT;
-&PMC;
-&PORTA;
-<peripheral derivedFrom="PORTA"><name>PORTB</name><groupName>PORT</groupName><prependToName>PORTB</prependToName><baseAddress>0x4004A000</baseAddress></peripheral>
-&RCM;
-&ROM;
-&RTC;
-&SCB;
-&SIM;
-&SMC;
-&SPI0;
-&SYST;
-&TPM0;
-&TPM1;
-&UART0;
+      <xi:include href="peripherals/ADC0_MKL_DMA.svd.xml"/>
+      <xi:include href="peripherals/BP_CM0.svd.xml"/>
+      <xi:include href="peripherals/CMP0_PSTM_TRIGM.svd.xml"/>
+      <xi:include href="peripherals/CoreDebug.svd.xml"/>
+      <xi:include href="peripherals/DMA0_MKL.svd.xml"/>
+      <xi:include href="peripherals/DMAMUX0_4CH.svd.xml"/>
+      <xi:include href="peripherals/DWT_CM0Plus.svd.xml"/>
+      <xi:include href="peripherals/FGPIOA_0xF80FF000.svd.xml"/>
+      <peripheral derivedFrom="FGPIOA"><name>FGPIOB</name>      <prependToName>FGPIOB</prependToName><baseAddress>0xF80FF040</baseAddress></peripheral>
+      <xi:include href="peripherals/FTFA.svd.xml"/>
+      <peripheral derivedFrom="FGPIOA"><name>GPIOA</name>      <groupName>GPIO</groupName>      <prependToName>GPIOA</prependToName><baseAddress>0x400FF000</baseAddress></peripheral>
+      <peripheral derivedFrom="FGPIOA"><name>GPIOB</name>      <groupName>GPIO</groupName>      <prependToName>GPIOB</prependToName><baseAddress>0x400FF040</baseAddress></peripheral>
+      <xi:include href="peripherals/I2C0_MKL04Z4.svd.xml"/>
+      <xi:include href="peripherals/LLWU_PE2_FILT2.svd.xml"/>
+      <xi:include href="peripherals/LPTMR0_0.svd.xml"/>
+      <xi:include href="peripherals/MCG_MKL04Z4.svd.xml"/>
+      <xi:include href="peripherals/MCM_MKL02Z4.svd.xml"/>
+      <xi:include href="peripherals/MTB.svd.xml"/>
+      <xi:include href="peripherals/MTBDWT_MKL.svd.xml"/>
+      <xi:include href="peripherals/NV_FTFA.svd.xml"/>
+      <xi:include href="peripherals/NVIC_CM0.svd.xml"/>
+      <xi:include href="peripherals/OSC0_MK.svd.xml"/>
+      <xi:include href="peripherals/PIT_2CH_CHAIN_LTMR.svd.xml"/>
+      <xi:include href="peripherals/PMC_MK.svd.xml"/>
+      <xi:include href="peripherals/PORTA_MKL04Z4.svd.xml"/>
+      <peripheral derivedFrom="PORTA"><name>PORTB</name>      <groupName>PORT</groupName>      <prependToName>PORTB</prependToName><baseAddress>0x4004A000</baseAddress></peripheral>
+      <xi:include href="peripherals/RCM_MKL02Z4.svd.xml"/>
+      <xi:include href="peripherals/ROM_MKL.svd.xml"/>
+      <xi:include href="peripherals/RTC_MKL04Z4.svd.xml"/>
+      <xi:include href="peripherals/SCB_CM0.svd.xml"/>
+      <xi:include href="peripherals/SIM_MKL04Z4.svd.xml"/>
+      <xi:include href="peripherals/SMC_MKL04Z4.svd.xml"/>
+      <xi:include href="peripherals/SPI0_MKL04Z4_DMA.svd.xml"/>
+      <xi:include href="peripherals/SYST.svd.xml"/>
+      <xi:include href="peripherals/TPM0_6CH.svd.xml"/>
+      <xi:include href="peripherals/TPM1_6CH.svd.xml"/>
+      <xi:include href="peripherals/UART0_MKL04Z4.svd.xml"/>
    </peripherals>
    <vendorExtensions>
-&VECTOR_TABLE;
+   <xi:include href="vectorTables/MKL04Z4_VectorTable.svd.xml"/>
    </vendorExtensions>
 </device>

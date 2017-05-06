@@ -1,47 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE device
-[
-<!ENTITY VECTOR_TABLE SYSTEM "vectorTables/MCF1JF_VectorTable.svd.xml">
-<!ENTITY ADC0         SYSTEM "peripherals/ADC0_MCF51.svd.xml">
-<!ENTITY CMP0         SYSTEM "peripherals/CMP0_MCF51.svd.xml">
-<!ENTITY CMT          SYSTEM "peripherals/CMT_MCF51.svd.xml">
-<!ENTITY CRC0         SYSTEM "peripherals/CRC_MCF51.svd.xml">
-<!ENTITY DAC0         SYSTEM "peripherals/DAC0_MCF51.svd.xml">
-<!ENTITY DMA0         SYSTEM "peripherals/DMA0_MCF51.svd.xml">
-<!ENTITY FB           SYSTEM "peripherals/FB_MCF51.svd.xml">
-<!ENTITY FTFL         SYSTEM "peripherals/FTFL_MCF51.svd.xml">
-<!ENTITY FTM0         SYSTEM "peripherals/FTM0_2CH_MCF51.svd.xml">
-<!ENTITY FTM1         SYSTEM "peripherals/FTM1_6CH_MCF51.svd.xml">
-<!ENTITY GPIOA        SYSTEM "peripherals/PTA_MCF51.svd.xml">
-<!ENTITY I2C0         SYSTEM "peripherals/I2C0_MCF51.svd.xml">
-<!ENTITY I2S0         SYSTEM "peripherals/I2S0_MCF51.svd.xml">
-<!ENTITY INTC0        SYSTEM "peripherals/INTC0_MCF51.svd.xml">
-<!ENTITY IRQ          SYSTEM "peripherals/IRQ_MCF51.svd.xml">
-<!ENTITY LLWU         SYSTEM "peripherals/LLWU_MCF51.svd.xml">
-<!ENTITY LPTMR0       SYSTEM "peripherals/LPTMR0_MCF51.svd.xml">
-<!ENTITY MCG          SYSTEM "peripherals/MCG_MCF51.svd.xml">
-<!ENTITY MTIM0        SYSTEM "peripherals/MTIM0_MCF51.svd.xml">
-<!ENTITY MXC          SYSTEM "peripherals/MXC_MCF51.svd.xml">
-<!ENTITY NV           SYSTEM "peripherals/NV_CFV1_FTFL.svd.xml">
-<!ENTITY OSC1         SYSTEM "peripherals/OSC1_MCF51.svd.xml">
-<!ENTITY PCTLA        SYSTEM "peripherals/PCTLA_MCF51.svd.xml">
-<!ENTITY PDB0         SYSTEM "peripherals/PDB0_MCF51_1CH_2TRIG_1PO.svd.xml">
-<!ENTITY PMC          SYSTEM "peripherals/PMC_MCF51.svd.xml">
-<!ENTITY RCM          SYSTEM "peripherals/RCM_MCF51.svd.xml">
-<!ENTITY RFSYS        SYSTEM "peripherals/RFSYS_MCF51.svd.xml">
-<!ENTITY RGPIO        SYSTEM "peripherals/RGPIO_MCF51.svd.xml">
-<!ENTITY RNG          SYSTEM "peripherals/RNG_MCF51.svd.xml">
-<!ENTITY SIM          SYSTEM "peripherals/SIM_MCF51JM.svd.xml">
-<!ENTITY SMC          SYSTEM "peripherals/SMC_MCF51.svd.xml">
-<!ENTITY SPI0         SYSTEM "peripherals/SPI0_MCF51_FIFO.svd.xml">
-<!ENTITY SPI1         SYSTEM "peripherals/SPI1_MCF51_DMA.svd.xml">
-<!ENTITY TSI0         SYSTEM "peripherals/TSI0_MCF51.svd.xml">
-<!ENTITY UART0        SYSTEM "peripherals/UART0_MCF51_C7816.svd.xml">
-<!ENTITY USB0         SYSTEM "peripherals/USB0_MCF51.svd.xml">
-<!ENTITY USBDCD       SYSTEM "peripherals/USBDCD_MCF51_V1.1.svd.xml">
-<!ENTITY VREF         SYSTEM "peripherals/VREF_MCF51.svd.xml">
-]>
-<device schemaVersion="1.1" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
+<!DOCTYPE device>
+<device
+   schemaVersion="1.1"
+   xmlns:xi="http://www.w3.org/2001/XInclude"
+   xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd"
+>
    <name>MCF51JF</name>
    <version>0.0</version>
    <description>Freescale Coldfire MCF51JF Family</description>
@@ -58,62 +21,62 @@
    <addressUnitBits>8</addressUnitBits>
    <width>32</width>
    <peripherals>
-&ADC0;
-&CMP0;
-&CMT;
-&CRC0;
-&DAC0;
-&DMA0;
-&FB;
-&FTFL;
-&FTM0;
-&FTM1;
-&GPIOA;
-<peripheral derivedFrom="GPIOA"><name>GPIOB</name><baseAddress>0xFFFF8010</baseAddress></peripheral>
-<peripheral derivedFrom="GPIOA"><name>GPIOC</name><baseAddress>0xFFFF8020</baseAddress></peripheral>
-<peripheral derivedFrom="GPIOA"><name>GPIOD</name><baseAddress>0xFFFF8030</baseAddress></peripheral>
-<peripheral derivedFrom="GPIOA"><name>GPIOE</name><baseAddress>0xFFFF8040</baseAddress></peripheral>
-<peripheral derivedFrom="GPIOA"><name>GPIOF</name><baseAddress>0xFFFF8050</baseAddress></peripheral>
-&I2C0;
-<peripheral derivedFrom="I2C0"><name>I2C1</name><prependToName>I2C1</prependToName><baseAddress>0xFFFF81D0</baseAddress></peripheral>
-<peripheral derivedFrom="I2C0"><name>I2C2</name><prependToName>I2C2</prependToName><baseAddress>0xFFFF81E0</baseAddress></peripheral>
-<peripheral derivedFrom="I2C0"><name>I2C3</name><prependToName>I2C3</prependToName><baseAddress>0xFFFF81F0</baseAddress></peripheral>
-&I2S0;
-&INTC0;
-&IRQ;
-&LLWU;
-&LPTMR0;
-<peripheral derivedFrom="LPTMR0"><name>LPTMR1</name><prependToName>LPTMR1</prependToName><baseAddress>0xFFFF84D0</baseAddress></peripheral>
-&MCG;
-&MTIM0;
-&MXC;
-&NV;
-&OSC1;
-<peripheral derivedFrom="OSC1"><name>OSC2</name><baseAddress>0xFFFF8120</baseAddress></peripheral>
-&PCTLA;
-<peripheral derivedFrom="PCTLA"><name>PCTLB</name><prependToName>PCTLB</prependToName><baseAddress>0xFFFF9210</baseAddress></peripheral>
-<peripheral derivedFrom="PCTLA"><name>PCTLC</name><prependToName>PCTLC</prependToName><baseAddress>0xFFFF9220</baseAddress></peripheral>
-<peripheral derivedFrom="PCTLA"><name>PCTLD</name><prependToName>PCTLD</prependToName><baseAddress>0xFFFF9230</baseAddress></peripheral>
-<peripheral derivedFrom="PCTLA"><name>PCTLE</name><prependToName>PCTLE</prependToName><baseAddress>0xFFFF9240</baseAddress></peripheral>
-<peripheral derivedFrom="PCTLA"><name>PCTLF</name><prependToName>PCTLF</prependToName><baseAddress>0xFFFF9250</baseAddress></peripheral>
-&PDB0;
-&PMC;
-&RCM;
-&RFSYS;
-&RGPIO;
-&RNG;
-&SIM;
-&SMC;
-&SPI0;
-&SPI1;
-&TSI0;
-&UART0;
-<peripheral derivedFrom="UART0"><name>UART1</name><prependToName>UART1</prependToName><baseAddress>0xFFFF8160</baseAddress></peripheral>
-&USB0;
-&USBDCD;
-&VREF;
+      <xi:include href="peripherals/ADC0_MCF51.svd.xml"/>
+      <xi:include href="peripherals/CMP0_MCF51.svd.xml"/>
+      <xi:include href="peripherals/CMT_MCF51.svd.xml"/>
+      <xi:include href="peripherals/CRC_MCF51.svd.xml"/>
+      <xi:include href="peripherals/DAC0_MCF51.svd.xml"/>
+      <xi:include href="peripherals/DMA0_MCF51.svd.xml"/>
+      <xi:include href="peripherals/FB_MCF51.svd.xml"/>
+      <xi:include href="peripherals/FTFL_MCF51.svd.xml"/>
+      <xi:include href="peripherals/FTM0_2CH_MCF51.svd.xml"/>
+      <xi:include href="peripherals/FTM1_6CH_MCF51.svd.xml"/>
+      <xi:include href="peripherals/PTA_MCF51.svd.xml"/>
+      <peripheral derivedFrom="GPIOA"><name>GPIOB</name><baseAddress>0xFFFF8010</baseAddress></peripheral>
+      <peripheral derivedFrom="GPIOA"><name>GPIOC</name><baseAddress>0xFFFF8020</baseAddress></peripheral>
+      <peripheral derivedFrom="GPIOA"><name>GPIOD</name><baseAddress>0xFFFF8030</baseAddress></peripheral>
+      <peripheral derivedFrom="GPIOA"><name>GPIOE</name><baseAddress>0xFFFF8040</baseAddress></peripheral>
+      <peripheral derivedFrom="GPIOA"><name>GPIOF</name><baseAddress>0xFFFF8050</baseAddress></peripheral>
+      <xi:include href="peripherals/I2C0_MCF51.svd.xml"/>
+      <peripheral derivedFrom="I2C0"><name>I2C1</name>      <prependToName>I2C1</prependToName><baseAddress>0xFFFF81D0</baseAddress></peripheral>
+      <peripheral derivedFrom="I2C0"><name>I2C2</name>      <prependToName>I2C2</prependToName><baseAddress>0xFFFF81E0</baseAddress></peripheral>
+      <peripheral derivedFrom="I2C0"><name>I2C3</name>      <prependToName>I2C3</prependToName><baseAddress>0xFFFF81F0</baseAddress></peripheral>
+      <xi:include href="peripherals/I2S0_MCF51.svd.xml"/>
+      <xi:include href="peripherals/INTC0_MCF51.svd.xml"/>
+      <xi:include href="peripherals/IRQ_MCF51.svd.xml"/>
+      <xi:include href="peripherals/LLWU_MCF51.svd.xml"/>
+      <xi:include href="peripherals/LPTMR0_MCF51.svd.xml"/>
+      <peripheral derivedFrom="LPTMR0"><name>LPTMR1</name>      <prependToName>LPTMR1</prependToName><baseAddress>0xFFFF84D0</baseAddress></peripheral>
+      <xi:include href="peripherals/MCG_MCF51.svd.xml"/>
+      <xi:include href="peripherals/MTIM0_MCF51.svd.xml"/>
+      <xi:include href="peripherals/MXC_MCF51.svd.xml"/>
+      <xi:include href="peripherals/NV_FTFL.svd.xml"/>
+      <xi:include href="peripherals/OSC1_MCF51.svd.xml"/>
+      <peripheral derivedFrom="OSC1"><name>OSC2</name><baseAddress>0xFFFF8120</baseAddress></peripheral>
+      <xi:include href="peripherals/PCTLA_MCF51.svd.xml"/>
+      <peripheral derivedFrom="PCTLA"><name>PCTLB</name>      <prependToName>PCTLB</prependToName><baseAddress>0xFFFF9210</baseAddress></peripheral>
+      <peripheral derivedFrom="PCTLA"><name>PCTLC</name>      <prependToName>PCTLC</prependToName><baseAddress>0xFFFF9220</baseAddress></peripheral>
+      <peripheral derivedFrom="PCTLA"><name>PCTLD</name>      <prependToName>PCTLD</prependToName><baseAddress>0xFFFF9230</baseAddress></peripheral>
+      <peripheral derivedFrom="PCTLA"><name>PCTLE</name>      <prependToName>PCTLE</prependToName><baseAddress>0xFFFF9240</baseAddress></peripheral>
+      <peripheral derivedFrom="PCTLA"><name>PCTLF</name>      <prependToName>PCTLF</prependToName><baseAddress>0xFFFF9250</baseAddress></peripheral>
+      <xi:include href="peripherals/PDB0_MCF51_1CH_2TRIG_1PO.svd.xml"/>
+      <xi:include href="peripherals/PMC_MCF51.svd.xml"/>
+      <xi:include href="peripherals/RCM_MCF51.svd.xml"/>
+      <xi:include href="peripherals/RFSYS_MCF51.svd.xml"/>
+      <xi:include href="peripherals/RGPIO_MCF51.svd.xml"/>
+      <xi:include href="peripherals/RNG_MCF51.svd.xml"/>
+      <xi:include href="peripherals/SIM_MCF51JM.svd.xml"/>
+      <xi:include href="peripherals/SMC_MCF51.svd.xml"/>
+      <xi:include href="peripherals/SPI0_MCF51_FIFO.svd.xml"/>
+      <xi:include href="peripherals/SPI1_MCF51_DMA.svd.xml"/>
+      <xi:include href="peripherals/TSI0_MCF51.svd.xml"/>
+      <xi:include href="peripherals/UART0_MCF51_C7816.svd.xml"/>
+      <peripheral derivedFrom="UART0"><name>UART1</name>      <prependToName>UART1</prependToName><baseAddress>0xFFFF8160</baseAddress></peripheral>
+      <xi:include href="peripherals/USB0_MCF51.svd.xml"/>
+      <xi:include href="peripherals/USBDCD_MCF51_V1.1.svd.xml"/>
+      <xi:include href="peripherals/VREF_MCF51.svd.xml"/>
    </peripherals>
    <vendorExtensions>
-&VECTOR_TABLE;
+   <xi:include href="vectorTables/MCF1JF_VectorTable.svd.xml"/>
    </vendorExtensions>
 </device>

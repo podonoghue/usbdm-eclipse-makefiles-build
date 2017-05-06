@@ -1,0 +1,362 @@
+<!--
+Devices using this peripheral: 
+      LPC11Uxx
+-->
+      <peripheral>
+         <?sourceFile "I2C_LPC11Uxx" ?>
+         <name>I2C</name>
+         <description>I2C-bus controller</description>
+         <groupName>I2C</groupName>
+         <headerStructName>I2C</headerStructName>
+         <baseAddress>0x40000000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x18</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x18</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x1C</offset>
+            <size>0x24</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>CONSET</name>
+               <description>I2C Control Set Register. When a one is written to a bit of this register, the corresponding bit in the I2C control register is set. Writing a zero has no effect on the corresponding bit in the I2C control register</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>AA</name>
+                     <description>Assert acknowledge flag</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SI</name>
+                     <description>I2C interrupt flag</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>STO</name>
+                     <description>STOP flag</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>STA</name>
+                     <description>START flag</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>I2EN</name>
+                     <description>I2C interface enable</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>STAT</name>
+               <description>I2C Status Register. During I2C operation, this register provides detailed status codes that allow software to determine the next action needed</description>
+               <addressOffset>0x4</addressOffset>
+               <access>read-only</access>
+               <resetValue>0xF8</resetValue>
+               <fields>
+                  <field>
+                     <name>Status</name>
+                     <description>These bits give the actual status information about the I2C interface</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DAT</name>
+               <description>I2C Data Register. During master or slave transmit mode, data to be transmitted is written to this register. During master or slave receive mode, data that has been received may be read from this register</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>Data</name>
+                     <description>This register holds data values that have been received or are to be transmitted</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ADR0</name>
+               <description>I2C Slave Address Register 0. Contains the 7-bit slave address for operation of the I2C interface in slave mode, and is not used in master mode. The least significant bit determines whether a slave responds to the General Call address</description>
+               <addressOffset>0xC</addressOffset>
+               <fields>
+                  <field>
+                     <name>GC</name>
+                     <description>General Call enable bit</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>Address</name>
+                     <description>The I2C device address for slave mode</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SCLH</name>
+               <description>SCH Duty Cycle Register High Half Word. Determines the high time of the I2C clock</description>
+               <addressOffset>0x10</addressOffset>
+               <resetValue>0x4</resetValue>
+               <fields>
+                  <field>
+                     <name>SCLH</name>
+                     <description>Count for SCL HIGH time period selection</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SCLL</name>
+               <description>SCL Duty Cycle Register Low Half Word. Determines the low time of the I2C clock. I2nSCLL and I2nSCLH together determine the clock frequency generated by an I2C master and certain times used in slave mode</description>
+               <addressOffset>0x14</addressOffset>
+               <resetValue>0x4</resetValue>
+               <fields>
+                  <field>
+                     <name>SCLL</name>
+                     <description>Count for SCL low time period selection</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CONCLR</name>
+               <description>I2C Control Clear Register. When a one is written to a bit of this register, the corresponding bit in the I2C control register is cleared. Writing a zero has no effect on the corresponding bit in the I2C control register</description>
+               <addressOffset>0x18</addressOffset>
+               <access>write-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>AAC</name>
+                     <description>Assert acknowledge Clear bit</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SIC</name>
+                     <description>I2C interrupt Clear bit</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>STAC</name>
+                     <description>START flag Clear bit</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>I2ENC</name>
+                     <description>I2C interface Disable bit</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MMCTRL</name>
+               <description>Monitor mode control register</description>
+               <addressOffset>0x1C</addressOffset>
+               <fields>
+                  <field>
+                     <name>MM_ENA</name>
+                     <description>Monitor mode enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>MONITOR_MODE_DISABLE</name>
+                           <description>Monitor mode disabled</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>THE_I2C_MODULE_WILL_</name>
+                           <description>The I2C module will enter monitor mode. In this mode the SDA output will be forced high. This will prevent the I2C module from outputting data of any kind (including ACK) onto the I 2C data bus. Depending on the state of the ENA_SCL bit, the output may be also forced high, preventing the module from having control over the I2C clock line</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ENA_SCL</name>
+                     <description>SCL output enable</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>HIGH</name>
+                           <description>When this bit is cleared to 0, the SCL output will be forced high when the module is in monitor mode. As described above, this will prevent the module from having any control over the I2C clock line</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>NORMAL</name>
+                           <description>When this bit is set, the I2C module may exercise the same control over the clock line that it would in normal operation. This means that, acting as a slave peripheral, the I2C module can stretch the clock line (hold it low) until it has had time to respond to an I2C interrupt.[1]</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MATCH_ALL</name>
+                     <description>Select interrupt register match</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>MATCH</name>
+                           <description>When this bit is cleared, an interrupt will only be generated when a match occurs to one of the (up-to) four address registers described above.   That is, the module will respond as a normal slave as far as address-recognition is concerned</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ANYADDRESS</name>
+                           <description>When this bit is set to 1 and the I2C is in monitor mode, an interrupt will be generated on ANY address received. This will enable the part to monitor all traffic on the bus</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ADR1</name>
+               <description>I2C Slave Address Register. Contains the 7-bit slave address for operation of the I2C interface in slave mode, and is not used in master mode. The least significant bit determines whether a slave responds to the General Call address</description>
+               <addressOffset>0x20</addressOffset>
+               <fields>
+                  <field>
+                     <name>GC</name>
+                     <description>General Call enable bit</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>Address</name>
+                     <description>The I2C device address for slave mode</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ADR2</name>
+               <description>I2C Slave Address Register. Contains the 7-bit slave address for operation of the I2C interface in slave mode, and is not used in master mode. The least significant bit determines whether a slave responds to the General Call address</description>
+               <addressOffset>0x24</addressOffset>
+               <fields>
+                  <field>
+                     <name>GC</name>
+                     <description>General Call enable bit</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>Address</name>
+                     <description>The I2C device address for slave mode</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ADR3</name>
+               <description>I2C Slave Address Register. Contains the 7-bit slave address for operation of the I2C interface in slave mode, and is not used in master mode. The least significant bit determines whether a slave responds to the General Call address</description>
+               <addressOffset>0x28</addressOffset>
+               <fields>
+                  <field>
+                     <name>GC</name>
+                     <description>General Call enable bit</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>Address</name>
+                     <description>The I2C device address for slave mode</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DATA_BUFFER</name>
+               <description>Data buffer register. The contents of the 8 MSBs of the I2DAT shift register will be transferred to the DATA_BUFFER automatically after every nine bits (8 bits of data plus ACK or NACK) has been received on the bus</description>
+               <addressOffset>0x2C</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>Data</name>
+                     <description>This register holds contents of the 8 MSBs of the DAT shift register</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MASK0</name>
+               <description>I2C Slave address mask register. This mask register is associated with I2ADR0 to determine an address match. The mask register has no effect when comparing to the General Call address (zero)</description>
+               <addressOffset>0x30</addressOffset>
+               <fields>
+                  <field>
+                     <name>MASK</name>
+                     <description>Mask bits</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MASK1</name>
+               <description>I2C Slave address mask register. This mask register is associated with I2ADR0 to determine an address match. The mask register has no effect when comparing to the General Call address (zero)</description>
+               <addressOffset>0x34</addressOffset>
+               <fields>
+                  <field>
+                     <name>MASK</name>
+                     <description>Mask bits</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MASK2</name>
+               <description>I2C Slave address mask register. This mask register is associated with I2ADR0 to determine an address match. The mask register has no effect when comparing to the General Call address (zero)</description>
+               <addressOffset>0x38</addressOffset>
+               <fields>
+                  <field>
+                     <name>MASK</name>
+                     <description>Mask bits</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MASK3</name>
+               <description>I2C Slave address mask register. This mask register is associated with I2ADR0 to determine an address match. The mask register has no effect when comparing to the General Call address (zero)</description>
+               <addressOffset>0x3C</addressOffset>
+               <fields>
+                  <field>
+                     <name>MASK</name>
+                     <description>Mask bits</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

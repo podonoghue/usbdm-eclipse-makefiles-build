@@ -1,0 +1,214 @@
+<!--
+Devices using this peripheral: 
+      LPC11Uxx
+-->
+      <peripheral>
+         <?sourceFile "WWDT_LPC11Uxx" ?>
+         <name>WWDT</name>
+         <description>Windowed Watchdog Timer</description>
+         <groupName>WWDT</groupName>
+         <headerStructName>WWDT</headerStructName>
+         <baseAddress>0x40004000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x8</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xC</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>MOD</name>
+               <description>Watchdog mode register. This register contains the basic mode and status of the Watchdog Timer</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>WDEN</name>
+                     <description>Watchdog enable bit. Once this bit has been written with a 1 it cannot be rewritten with a 0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>STOPPED</name>
+                           <description>The watchdog timer is stopped</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>RUNNING</name>
+                           <description>The watchdog timer is running</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WDRESET</name>
+                     <description>Watchdog reset enable bit. Once this bit has been written with a 1 it cannot be rewritten with a 0</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>INTERRUPT</name>
+                           <description>A watchdog timeout will not cause a chip reset</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>RESET</name>
+                           <description>A watchdog timeout will cause a chip reset</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WDTOF</name>
+                     <description>Watchdog time-out flag. Set when the watchdog timer times out, by a feed error, or by events associated with WDPROTECT. Cleared by software. Causes a chip reset if WDRESET = 1</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>WDINT</name>
+                     <description>Warning interrupt flag. Set when the timer reaches the value in WDWARNINT. Cleared by software</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>WDPROTECT</name>
+                     <description>Watchdog update mode. This bit can be set once by software and is only cleared by a reset</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NOT_LOCKED</name>
+                           <description>The watchdog time-out value (TC) can be changed at any time</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>LOCKED</name>
+                           <description>The watchdog time-out value (TC) can be changed only after the counter is below the value of WDWARNINT and WDWINDOW</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LOCK</name>
+                     <description>A 1 in this bit prevents disabling or powering down the clock source selected by bit 0 of the WDCLKSRC register and also prevents switching to a clock source that is disabled or powered down. This bit can be set once by software and is only cleared by any reset. If this bit is one and the WWDT clock source is the IRC when Deep-sleep or Power-down modes are entered, the IRC remains running thereby increasing power consumption in Deep-sleep mode and potentially preventing the part of entering Power-down mode correctly (see Section 15.7)</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TC</name>
+               <description>Watchdog timer constant register. This 24-bit register determines the time-out value</description>
+               <addressOffset>0x4</addressOffset>
+               <resetValue>0xFF</resetValue>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Watchdog time-out value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FEED</name>
+               <description>Watchdog feed sequence register. Writing 0xAA followed by 0x55 to this register reloads the Watchdog timer with the value contained in WDTC</description>
+               <addressOffset>0x8</addressOffset>
+               <access>write-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>FEED</name>
+                     <description>Feed value should be 0xAA followed by 0x55</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TV</name>
+               <description>Watchdog timer value register. This 24-bit register reads out the current value of the Watchdog timer</description>
+               <addressOffset>0xC</addressOffset>
+               <access>read-only</access>
+               <resetValue>0xFF</resetValue>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Counter timer value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CLKSEL</name>
+               <description>Watchdog clock select register</description>
+               <addressOffset>0x10</addressOffset>
+               <fields>
+                  <field>
+                     <name>CLKSEL</name>
+                     <description>Selects source of WDT clock</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>IRC</name>
+                           <description>IRC</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>WATCHDOG_OSCILLATOR_</name>
+                           <description>Watchdog oscillator (WDOSC)</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LOCK</name>
+                     <description>If this bit is set to one writing to this register does not affect bit 0. The clock source can only be changed by first clearing this bit, then writing the new value of bit 0</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>WARNINT</name>
+               <description>Watchdog Warning Interrupt compare value</description>
+               <addressOffset>0x14</addressOffset>
+               <fields>
+                  <field>
+                     <name>WARNINT</name>
+                     <description>Watchdog warning interrupt compare value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>WINDOW</name>
+               <description>Watchdog Window compare value</description>
+               <addressOffset>0x18</addressOffset>
+               <resetValue>0xFFFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>WINDOW</name>
+                     <description>Watchdog window value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

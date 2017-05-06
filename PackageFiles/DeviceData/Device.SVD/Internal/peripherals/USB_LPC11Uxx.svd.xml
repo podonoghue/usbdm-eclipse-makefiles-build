@@ -1,0 +1,518 @@
+<!--
+Devices using this peripheral: 
+      LPC11Uxx
+-->
+      <peripheral>
+         <?sourceFile "USB_LPC11Uxx" ?>
+         <name>USB</name>
+         <description>USB2.0 device controller</description>
+         <groupName>USB</groupName>
+         <headerStructName>USB</headerStructName>
+         <baseAddress>0x40080000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x30</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x34</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>DEVCMDSTAT</name>
+               <description>USB Device Command/Status register</description>
+               <addressOffset>0x0</addressOffset>
+               <resetValue>0x800</resetValue>
+               <fields>
+                  <field>
+                     <name>DEV_ADDR</name>
+                     <description>USB device address. After bus reset, the address is reset to 0x00. If the enable bit is set, the device will respond on packets for function address DEV_ADDR. When receiving a SetAddress Control Request from the USB host, software must program the new address before completing the status phase of the SetAddress Control Request</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>DEV_EN</name>
+                     <description>USB device enable. If this bit is set, the HW will start responding on packets for function address DEV_ADDR</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SETUP</name>
+                     <description>SETUP token received. If a SETUP token is received and acknowledged by the device, this bit is set. As long as this bit is set all received IN and OUT tokens will be NAKed by HW. SW must clear this bit by writing a one. If this bit is zero, HW will handle the tokens to the CTRL EP0 as indicated by the CTRL EP0 IN and OUT data information programmed by SW</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PLL_ON</name>
+                     <description>Always PLL Clock on:</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>USB_NEEDCLK_FUNCTION</name>
+                           <description>USB_NeedClk functional</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>USB_NEEDCLK_ALWAYS_1</name>
+                           <description>USB_NeedClk always 1. Clock will not be stopped in case of suspend</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LPM_SUP</name>
+                     <description>LPM Supported:</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>LPM_NOT_SUPPORTED_</name>
+                           <description>LPM not supported</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>LPM_SUPPORTED_</name>
+                           <description>LPM supported</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>INTONNAK_AO</name>
+                     <description>Interrupt on NAK for interrupt and bulk OUT EP</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>ACKNOW</name>
+                           <description>Only acknowledged packets generate an interrupt</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ACKNOW_NAK</name>
+                           <description>Both acknowledged and NAKed packets generate interrupts</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="INTONNAK_AO" > <name>INTONNAK_AI</name> <description>Interrupt on NAK for interrupt and bulk IN EP</description> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="INTONNAK_AO" > <name>INTONNAK_CO</name> <description>Interrupt on NAK for control OUT EP</description> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="INTONNAK_AO" > <name>INTONNAK_CI</name> <description>Interrupt on NAK for control IN EP</description> <bitOffset>15</bitOffset> </field>
+                  <field>
+                     <name>DCON</name>
+                     <description>Device status - connect.  The connect bit must be set by SW to indicate that the device must signal a connect. The pull-up resistor on USB_DP will be enabled when this bit is set and the VbusDebounced bit is one</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DSUS</name>
+                     <description>Device status - suspend.  The suspend bit indicates the current suspend state. It is set to 1 when the device hasn&apos;t seen any activity on its upstream port for more than 3 milliseconds. It is reset to 0 on any activity. When the device is suspended (Suspend bit DSUS = 1) and the software writes a 0 to it, the device will generate a remote wake-up. This will only happen when the device is connected (Connect bit = 1). When the device is not connected or not suspended, a writing a 0 has no effect. Writing a 1 never has an effect</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>LPM_SUS</name>
+                     <description>Device status - LPM Suspend.  This bit represents the current LPM suspend state. It is set to 1 by HW when the device has acknowledged the LPM request from the USB host and the Token Retry Time of 10us has elapsed. When the device is in the LPM suspended state (LPM suspend bit = 1) and the software writes a zero to this bit, the device will generate a remote walk-up. Software can only write a zero to this bit when the LPM_REWP bit is set to 1. HW resets this bit when it receives a host initiated resume. HW only updates the LPM_SUS bit when the LPM_SUPP bit is equal to one</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>LPM_REWP</name>
+                     <description>LPM Remote Wake-up Enabled by USB host.  HW sets this bit to one when the bRemoteWake bit in the LPM extended token is set to 1. HW will reset this bit to 0 when it receives the host initiated LPM resume, when a remote wake-up is sent by the device or when a USB bus reset is received. Software can use this bit to check if the remote wake-up feature is enabled by the host for the LPM transaction</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCON_C</name>
+                     <description>Device status - connect change.  The Connect Change bit is set when the device&apos;s pull-up resistor is disconnected because VBus disappeared. The bit is reset by writing a one to it</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DSUS_C</name>
+                     <description>Device status - suspend change.  The suspend change bit is set to 1 when the suspend bit toggles. The suspend bit can toggle because: - The device goes in the suspended state  - The device is disconnected - The device receives resume signaling on its upstream port.  The bit is reset by writing a one to it</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DRES_C</name>
+                     <description>Device status - reset change.  This bit is set when the device received a bus reset. On a bus reset the device will automatically go to the default state (unconfigured and responding to address 0). The bit is reset by writing a one to it</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>VBUSDEBOUNCED</name>
+                     <description>This bit indicates if Vbus is detected or not. The bit raises immediately when Vbus becomes high. It drops to zero if Vbus is low for at least 3 ms. If this bit is high and the DCon bit is set, the HW will enable the pull-up resistor to signal a connect</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>INFO</name>
+               <description>USB Info register</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>FRAME_NR</name>
+                     <description>Frame number. This contains the frame number of the last successfully received SOF. In case no SOF was received by the device at the beginning of a frame, the frame number returned is that of the last successfully received SOF. In case the SOF frame number contained a CRC error, the frame number returned will be the corrupted frame number as received by the device</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>11</bitWidth>
+                  </field>
+                  <field>
+                     <name>ERR_CODE</name>
+                     <description>The error code which last occurred:</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_ERROR</name>
+                           <description>No error</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>PID_ENCODING_ERROR</name>
+                           <description>PID encoding error</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>PID_UNKNOWN</name>
+                           <description>PID unknown</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>PACKET_UNEXPECTED</name>
+                           <description>Packet unexpected</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TOKEN_CRC_ERROR</name>
+                           <description>Token CRC error</description>
+                           <value>0x4</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>DATA_CRC_ERROR</name>
+                           <description>Data CRC error</description>
+                           <value>0x5</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TIME_OUT</name>
+                           <description>Time out</description>
+                           <value>0x6</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>BABBLE</name>
+                           <description>Babble</description>
+                           <value>0x7</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TRUNCATED_EOP</name>
+                           <description>Truncated EOP</description>
+                           <value>0x8</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SENTRECEIVED_NAK</name>
+                           <description>Sent/Received NAK</description>
+                           <value>0x9</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SENT_STALL</name>
+                           <description>Sent Stall</description>
+                           <value>0xA</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>OVERRUN</name>
+                           <description>Overrun</description>
+                           <value>0xB</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SENT_EMPTY_PACKET</name>
+                           <description>Sent empty packet</description>
+                           <value>0xC</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>BITSTUFF_ERROR</name>
+                           <description>Bitstuff error</description>
+                           <value>0xD</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SYNC_ERROR</name>
+                           <description>Sync error</description>
+                           <value>0xE</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>WRONG_DATA_TOGGLE</name>
+                           <description>Wrong data toggle</description>
+                           <value>0xF</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EPLISTSTART</name>
+               <description>USB EP Command/Status List start address</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>EP_LIST</name>
+                     <description>Start address of the USB EP Command/Status List</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DATABUFSTART</name>
+               <description>USB Data buffer start address</description>
+               <addressOffset>0xC</addressOffset>
+               <fields>
+                  <field>
+                     <name>DA_BUF</name>
+                     <description>Start address of the buffer pointer page where all endpoint data buffers are located</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LPM</name>
+               <description>Link Power Management register</description>
+               <addressOffset>0x10</addressOffset>
+               <fields>
+                  <field>
+                     <name>HIRD_HW</name>
+                     <description>Host Initiated Resume Duration - HW. This is the HIRD value from the last received LPM token</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>HIRD_SW</name>
+                     <description>Host Initiated Resume Duration - SW. This is the time duration required by the USB device system to come out of LPM initiated suspend after receiving the host initiated LPM resume</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>DATA_PENDING</name>
+                     <description>As long as this bit is set to one and LPM supported bit is set to one, HW will return a NYET handshake on every LPM token it receives. If LPM supported bit is set to one and this bit is zero, HW will return an ACK handshake on every LPM token it receives. If SW has still data pending and LPM is supported, it must set this bit to 1</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EPSKIP</name>
+               <description>USB Endpoint skip</description>
+               <addressOffset>0x14</addressOffset>
+               <fields>
+                  <field>
+                     <name>SKIP</name>
+                     <description>Endpoint skip: Writing 1 to one of these bits, will indicate to HW that it must deactivate the buffer assigned to this endpoint and return control back to software. When HW has deactivated the endpoint, it will clear this bit, but it will not modify the EPINUSE bit.  An interrupt will be generated when the Active bit goes from 1 to 0.  Note: In case of double-buffering, HW will only clear the Active bit of the buffer indicated by the EPINUSE bit</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>30</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EPINUSE</name>
+               <description>USB Endpoint Buffer in use</description>
+               <addressOffset>0x18</addressOffset>
+               <fields>
+                  <field>
+                     <name>BUF</name>
+                     <description>Buffer in use: This register has one bit per physical endpoint.  0: HW is accessing buffer 0.  1: HW is accessing buffer 1</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EPBUFCFG</name>
+               <description>USB Endpoint Buffer Configuration register</description>
+               <addressOffset>0x1C</addressOffset>
+               <fields>
+                  <field>
+                     <name>BUF_SB</name>
+                     <description>Buffer usage: This register has one bit per physical endpoint. 0: Single-buffer.  1: Double-buffer. If the bit is set to single-buffer (0), it will not toggle the corresponding EPINUSE bit when it clears the active bit. If the bit is set to double-buffer (1), HW will toggle the EPINUSE bit when it clears the Active bit for the buffer</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>INTSTAT</name>
+               <description>USB interrupt status register</description>
+               <addressOffset>0x20</addressOffset>
+               <fields>
+                  <field>
+                     <name>EP0OUT</name>
+                     <description>Interrupt status register bit for the Control EP0 OUT direction.  This bit will be set if NBytes transitions to zero or the skip bit is set by software or a SETUP packet is successfully received for the control EP0. If the IntOnNAK_CO is set, this bit will also be set when a NAK is transmitted for the Control EP0 OUT direction.  Software can clear this bit by writing a one to it</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP0IN</name>
+                     <description>Interrupt status register bit for the Control EP0 IN direction.  This bit will be set if NBytes transitions to zero or the skip bit is set by software.  If the IntOnNAK_CI is set, this bit will also be set when a NAK is transmitted for the Control EP0 IN direction.  Software can clear this bit by writing a one to it</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP1OUT</name>
+                     <description>Interrupt status register bit for the EP1 OUT direction. This bit will be set if the corresponding Active bit is cleared by HW. This is done in case the programmed NBytes transitions to zero or the skip bit is set by software.  If the IntOnNAK_AO is set, this bit will also be set when a NAK is transmitted for the EP1 OUT direction.  Software can clear this bit by writing a one to it</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP1IN</name>
+                     <description>Interrupt status register bit for the EP1 IN direction.  This bit will be set if the corresponding Active bit is cleared by HW. This is done in case the programmed NBytes transitions to zero or the skip bit is set by software.  If the IntOnNAK_AI is set, this bit will also be set when a NAK is transmitted for the EP1 IN direction.  Software can clear this bit by writing a one to it</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP2OUT</name>
+                     <description>Interrupt status register bit for the EP2 OUT direction.  This bit will be set if the corresponding Active bit is cleared by HW. This is done in case the programmed NBytes transitions to zero or the skip bit is set by software.  If the IntOnNAK_AO is set, this bit will also be set when a NAK is transmitted for the EP2 OUT direction.  Software can clear this bit by writing a one to it</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP2IN</name>
+                     <description>Interrupt status register bit for the EP2 IN direction.  This bit will be set if the corresponding Active bit is cleared by HW. This is done in case the programmed NBytes transitions to zero or the skip bit is set by software.  If the IntOnNAK_AI is set, this bit will also be set when a NAK is transmitted for the EP2 IN direction.  Software can clear this bit by writing a one to it</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP3OUT</name>
+                     <description>Interrupt status register bit for the EP3 OUT direction.  This bit will be set if the corresponding Active bit is cleared by HW. This is done in case the programmed NBytes transitions to zero or the skip bit is set by software.  If the IntOnNAK_AO is set, this bit will also be set when a NAK is transmitted for the EP3 OUT direction.  Software can clear this bit by writing a one to it</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP3IN</name>
+                     <description>Interrupt status register bit for the EP3 IN direction.  This bit will be set if the corresponding Active bit is cleared by HW. This is done in case the programmed NBytes transitions to zero or the skip bit is set by software.  If the IntOnNAK_AI is set, this bit will also be set when a NAK is transmitted for the EP3 IN direction.  Software can clear this bit by writing a one to it</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP4OUT</name>
+                     <description>Interrupt status register bit for the EP4 OUT direction.  This bit will be set if the corresponding Active bit is cleared by HW. This is done in case the programmed NBytes transitions to zero or the skip bit is set by software.  If the IntOnNAK_AO is set, this bit will also be set when a NAK is transmitted for the EP4 OUT direction.  Software can clear this bit by writing a one to it</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP4IN</name>
+                     <description>Interrupt status register bit for the EP4 IN direction.  This bit will be set if the corresponding Active bit is cleared by HW. This is done in case the programmed NBytes transitions to zero or the skip bit is set by software.  If the IntOnNAK_AI is set, this bit will also be set when a NAK is transmitted for the EP4 IN direction.  Software can clear this bit by writing a one to it</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>FRAME_INT</name>
+                     <description>Frame interrupt.  This bit is set to one every millisecond when the VbusDebounced bit and the DCON bit are set. This bit can be used by software when handling isochronous endpoints.  Software can clear this bit by writing a one to it</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DEV_INT</name>
+                     <description>Device status interrupt. This bit is set by HW when one of the bits in the Device Status Change register are set. Software can clear this bit by writing a one to it</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>INTEN</name>
+               <description>USB interrupt enable register</description>
+               <addressOffset>0x24</addressOffset>
+               <fields>
+                  <field>
+                     <name>EP_INT_EN</name>
+                     <description>If this bit is set and the corresponding USB interrupt status bit is set, a HW interrupt is generated on the interrupt line indicated by the corresponding USB interrupt routing bit</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+                  <field>
+                     <name>FRAME_INT_EN</name>
+                     <description>If this bit is set and the corresponding USB interrupt status bit is set, a HW interrupt is generated on the interrupt line indicated by the corresponding USB interrupt routing bit</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DEV_INT_EN</name>
+                     <description>If this bit is set and the corresponding USB interrupt status bit is set, a HW interrupt is generated on the interrupt line indicated by the corresponding USB interrupt routing bit</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>INTSETSTAT</name>
+               <description>USB set interrupt status register</description>
+               <addressOffset>0x28</addressOffset>
+               <fields>
+                  <field>
+                     <name>EP_SET_INT</name>
+                     <description>If software writes a one to one of these bits, the corresponding USB interrupt status bit is set.  When this register is read, the same value as the USB interrupt status register is returned</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+                  <field>
+                     <name>FRAME_SET_INT</name>
+                     <description>If software writes a one to one of these bits, the corresponding USB interrupt status bit is set.  When this register is read, the same value as the USB interrupt status register is returned</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DEV_SET_INT</name>
+                     <description>If software writes a one to one of these bits, the corresponding USB interrupt status bit is set.  When this register is read, the same value as the USB interrupt status register is returned</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>INTROUTING</name>
+               <description>USB interrupt routing register</description>
+               <addressOffset>0x2C</addressOffset>
+               <fields>
+                  <field>
+                     <name>ROUTE_INT9_0</name>
+                     <description>This bit can control on which hardware interrupt line the interrupt will be generated:  0: IRQ interrupt line is selected for this interrupt bit 1: FIQ interrupt line is selected for this interrupt bit</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+                  <field>
+                     <name>ROUTE_INT30</name>
+                     <description>This bit can control on which hardware interrupt line the interrupt will be generated:  0: IRQ interrupt line is selected for this interrupt bit 1: FIQ interrupt line is selected for this interrupt bit</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ROUTE_INT31</name>
+                     <description>This bit can control on which hardware interrupt line the interrupt will be generated:  0: IRQ interrupt line is selected for this interrupt bit 1: FIQ interrupt line is selected for this interrupt bit</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EPTOGGLE</name>
+               <description>USB Endpoint toggle register</description>
+               <addressOffset>0x34</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>TOGGLE</name>
+                     <description>Endpoint data toggle: This field indicates the current value of the data toggle for the corresponding endpoint</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>
