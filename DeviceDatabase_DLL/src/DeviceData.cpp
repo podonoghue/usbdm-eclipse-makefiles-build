@@ -965,6 +965,10 @@ void  DeviceData::addSDID(uint32_t mask, uint32_t value) {
    targetSDIDs.push_back(TargetSDID(mask, value));
 }
 
+void  DeviceData::addEraseMethod(EraseOptions method) {
+   eraseOptions.push_back(method);
+}
+
 void DeviceData::addMemoryRegion(MemoryRegionPtr pMemoryRegion) {
    memoryRegions.push_back(pMemoryRegion);
    if (((pMemoryRegion->getMemoryType() == MemRAM)||

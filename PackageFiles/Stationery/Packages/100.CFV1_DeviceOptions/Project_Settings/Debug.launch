@@ -5,7 +5,7 @@
 <booleanAttribute key="net.sourceforge.usbdm.gdb.bdmSerialNumberMatchRequired" value="false"/>
 <stringAttribute key="net.sourceforge.usbdm.gdb.buildToolId" value="$(buildToolsId)"/>
 <booleanAttribute key="net.sourceforge.usbdm.gdb.catchVLLSxEvents" value="false"/>
-<intAttribute key="net.sourceforge.usbdm.gdb.clockTrimFrequency" value="$(clockTrimFrequency:0)"/>
+<stringAttribute key="net.sourceforge.usbdm.gdb.clockTrimFrequency" value="$(clockTrimFrequency:0)"/>
 <intAttribute key="net.sourceforge.usbdm.gdb.connectionTimeout" value="10"/>
 <stringAttribute key="net.sourceforge.usbdm.gdb.deviceName" value="$(targetDevice)"/>
 <booleanAttribute key="net.sourceforge.usbdm.gdb.driveReset" value="false"/>
@@ -16,7 +16,7 @@
 <intAttribute key="net.sourceforge.usbdm.gdb.interfaceFrequency" value="2000000"/>
 <stringAttribute key="net.sourceforge.usbdm.gdb.interfaceType" value="$(interfaceType)"/>
 <booleanAttribute key="net.sourceforge.usbdm.gdb.maskInterrupts" value="false"/>
-<intAttribute key="net.sourceforge.usbdm.gdb.nvmClockTrimLocation" value="$(nvmClockTrimLocation:0)"/>
+<stringAttribute key="net.sourceforge.usbdm.gdb.nvmClockTrimLocation" value="$(nvmClockTrimLocation:0)"/>
 <intAttribute key="net.sourceforge.usbdm.gdb.port" value="1234"/>
 <stringAttribute key="net.sourceforge.usbdm.gdb.restartPC" value="__HardReset"/>
 <booleanAttribute key="net.sourceforge.usbdm.gdb.restartSetPC" value="false"/>

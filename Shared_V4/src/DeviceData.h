@@ -1135,6 +1135,7 @@ private:
    std::vector<TargetSDID>       targetSDIDs;            //!< System Device Identification Register values (0=> don't know/care)
    RegisterDescriptionConstPtr   registerDescription;    //!< Register description
    uint32_t                      hcs08sbdfrAddress;      //!< HCS08 SBDFR register address
+   std::vector<EraseOptions>     eraseOptions;           //!< Possible erase methods
 
 public:
    static const DeviceData       defaultDevice;
@@ -1189,6 +1190,7 @@ public:
    uint16_t                       getPageNo(uint32_t address);
 
    void                           addSDID(uint32_t mask, uint32_t value);
+   void                           addEraseMethod(EraseOptions method);
 
    void                           addMemoryRegion(MemoryRegionPtr pMemoryRegion);
    void                           setTargetName(const std::string &name);

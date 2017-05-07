@@ -377,6 +377,7 @@ DeviceXmlParser::DeviceXmlParser(TargetType_t targetType, DeviceDataBase *device
    targetType(targetType),
    tag_deviceList("deviceList"),
    tag_device("device"),
+   tag_eraseMethod("eraseMethod"),
    tag_clock("clock"),
    tag_memory("memory"),
    tag_memoryRef("memoryRef"),
@@ -1329,13 +1330,15 @@ MemoryRegionPtr DeviceXmlParser::parseMemory(DOMElement *currentProperty) {
 /*!
  *    Create device description from node
  *
- *   !ELEMENT device ((sdid*|
+ *  <!ELEMENT device ((sdid*|
  *                     (clock?,
  *                      (memory|memoryRef)+,
  *                      (soptAddress|copctlAddress)?,
  *                      sdidAddress?,
  *                      sdidMask?,
  *                      sdid+,
+ *                      sbdfrAddress?,
+ *                      (eraseMethod+)?,
  *                      flashScripts?,
  *                      (tclScript|tclScriptRef)?,
  *                      (flashProgram|flashProgramRef)?,
@@ -1428,7 +1431,7 @@ DeviceDataPtr DeviceXmlParser::parseDevice(DOMElement *deviceEl) {
       DualString propertyTag(currentProperty->getTagName());
       if (XMLString::equals(propertyTag.asXMLString(), tag_note.asXMLString())) {
          // <note>
-//            DualString sNoteText(currentProperty->getTextContent());
+         //            DualString sNoteText(currentProperty->getTextContent());
       }
       else if (XMLString::equals(propertyTag.asXMLString(), tag_clock.asXMLString())) {
          // <clock>
@@ -1477,7 +1480,7 @@ DeviceDataPtr DeviceXmlParser::parseDevice(DOMElement *deviceEl) {
          }
          itDev->setSDIDAddress(sdidAddress);
          if (isDefault) {
-//            log.warning("Setting default SDID Address 0x%08lX \n", sdidAddress);
+            //            log.warning("Setting default SDID Address 0x%08lX \n", sdidAddress);
             defSDIDAddress = sdidAddress;
          }
       }
@@ -1490,7 +1493,7 @@ DeviceDataPtr DeviceXmlParser::parseDevice(DOMElement *deviceEl) {
          }
          itDev->setHCS08sbdfrAddress(sbdfrAddress);
          if (isDefault) {
-//            log.warning("Setting default SDID mask 0x%08lX \n", sdidMask);
+            //            log.warning("Setting default SDID mask 0x%08lX \n", sdidMask);
             defSbdfrAddress = sbdfrAddress;
          }
       }
@@ -1503,7 +1506,7 @@ DeviceDataPtr DeviceXmlParser::parseDevice(DOMElement *deviceEl) {
          }
          currentSDIDMask = sdidMask;
          if (isDefault) {
-//            log.warning("Setting default SDID mask 0x%08lX \n", sdidMask);
+            //            log.warning("Setting default SDID mask 0x%08lX \n", sdidMask);
             defSDIDMask = sdidMask;
          }
       }
@@ -1516,7 +1519,7 @@ DeviceDataPtr DeviceXmlParser::parseDevice(DOMElement *deviceEl) {
          }
          itDev->setWatchdogAddress(copctlAddress);
          if (isDefault)
-//            log.warning("Setting default WatchdogAddress Address 0x%06lX \n", copctlAddress);
+            //            log.warning("Setting default WatchdogAddress Address 0x%06lX \n", copctlAddress);
             defWatchdogAddress = copctlAddress;
       }
       else if (XMLString::equals(propertyTag.asXMLString(), tag_soptAddress.asXMLString())) {
@@ -1528,7 +1531,7 @@ DeviceDataPtr DeviceXmlParser::parseDevice(DOMElement *deviceEl) {
          }
          itDev->setWatchdogAddress(soptAddress);
          if (isDefault) {
-//            log.warning("Setting default WatchdogAddress Address 0x%08lX \n", soptAddress);
+            //            log.warning("Setting default WatchdogAddress Address 0x%08lX \n", soptAddress);
             defWatchdogAddress = soptAddress;
          }
       }
@@ -1544,7 +1547,7 @@ DeviceDataPtr DeviceXmlParser::parseDevice(DOMElement *deviceEl) {
          DualString sRef(currentProperty->getAttribute(attr_ref.asXMLString()));
          itDev->setFlashScripts(deviceDataBase->getTclScript(sRef.asCString()));
          if (isDefault) {
-//            log.print("Setting default flash script \"%s\" \n", sRef.asCString());
+            //            log.print("Setting default flash script \"%s\" \n", sRef.asCString());
             defaultTCLScript = itDev->getFlashScripts();
          }
       }
@@ -1560,7 +1563,7 @@ DeviceDataPtr DeviceXmlParser::parseDevice(DOMElement *deviceEl) {
          DualString sRef(currentProperty->getAttribute(attr_ref.asXMLString()));
          itDev->setRegisterDescription(deviceDataBase->getRegisterDescription(sRef.asCString()));
          if (isDefault) {
-//            log.print("Setting default register description \"%s\" \n", sRef.asCString());
+            //            log.print("Setting default register description \"%s\" \n", sRef.asCString());
             defaultRegisterDescription = itDev->getRegisterDescription();
          }
       }
@@ -1568,7 +1571,7 @@ DeviceDataPtr DeviceXmlParser::parseDevice(DOMElement *deviceEl) {
          // <flashScripts>
          itDev->setFlashScripts(parseSequence(currentProperty));
          if (isDefault) {
-//            log.print("Setting default flash script (non-shared)\n");
+            //            log.print("Setting default flash script (non-shared)\n");
             defaultTCLScript = itDev->getFlashScripts();
          }
       }
@@ -1576,7 +1579,7 @@ DeviceDataPtr DeviceXmlParser::parseDevice(DOMElement *deviceEl) {
          // <flashProgram>
          itDev->setCommonFlashProgram(parseFlashProgram(currentProperty));
          if (isDefault) {
-//            log.print("Setting default flash program (non-shared)\n");
+            //            log.print("Setting default flash program (non-shared)\n");
             defFlashProgram = itDev->getCommonFlashProgram();
          }
       }
@@ -1585,7 +1588,7 @@ DeviceDataPtr DeviceXmlParser::parseDevice(DOMElement *deviceEl) {
          DualString sRef(currentProperty->getAttribute(attr_ref.asXMLString()));
          itDev->setCommonFlashProgram(deviceDataBase->getFlashProgram(sRef.asCString()));
          if (isDefault) {
-//            log.print("Setting default flash program: \"%s\" \n", sRef.asCString());
+            //            log.print("Setting default flash program: \"%s\" \n", sRef.asCString());
             defFlashProgram = itDev->getCommonFlashProgram();
          }
       }
@@ -1593,7 +1596,7 @@ DeviceDataPtr DeviceXmlParser::parseDevice(DOMElement *deviceEl) {
          // <flexNVMInfo>
          itDev->setflexNVMInfo(parseFlexNVMInfo(currentProperty));
          if (isDefault) {
-//            log.print("Setting default flexNVMInfo (non-shared)\n");
+            //            log.print("Setting default flexNVMInfo (non-shared)\n");
             defaultFlexNVMInfo = itDev->getflexNVMInfo();
          }
       }
@@ -1602,9 +1605,34 @@ DeviceDataPtr DeviceXmlParser::parseDevice(DOMElement *deviceEl) {
          DualString sRef(currentProperty->getAttribute(attr_ref.asXMLString()));
          itDev->setflexNVMInfo(deviceDataBase->getFlexNVMInfo(sRef.asCString()));
          if (isDefault) {
-//            log.print("Setting default flexNVMInfo (non-shared)\n");
+            //            log.print("Setting default flexNVMInfo (non-shared)\n");
             defaultFlexNVMInfo = itDev->getflexNVMInfo();
          }
+      }
+      else if (XMLString::equals(propertyTag.asXMLString(), tag_eraseMethod.asXMLString())) {
+         // <eraseMethod type="Selective">
+         DeviceData::EraseOptions option = DeviceData::EraseOptions::eraseNone;
+         if (currentProperty->hasAttribute(attr_type.asXMLString())) {
+            DualString sType(currentProperty->getAttribute(attr_type.asXMLString()));
+            struct {
+               const char               *name;
+               DeviceData::EraseOptions  type;
+            } names[] = {
+                  { "Selective", DeviceData::EraseOptions::eraseSelective, },
+                  { "All",       DeviceData::EraseOptions::eraseAll, },
+                  { "Mass",      DeviceData::EraseOptions::eraseMass, },
+                  { "None",      DeviceData::EraseOptions::eraseNone, },
+            };
+            for (unsigned index=0; index<(sizeof(names)/sizeof(names)); index++) {
+               if (strcmp(names[index].name, sType.asCString()) == 0) {
+                  option = names[index].type;
+               }
+            }
+         }
+         if (option == DeviceData::EraseOptions::eraseNone) {
+            throw MyException(string("DeviceXmlParser::parseDevice() - <eraseMethod> Missing/invalid type attribute "));
+         }
+         itDev->addEraseMethod(option);
       }
       else {
          throw MyException(string("DeviceXmlParser::parseDevice() - Unknown tag - ")+propertyTag.asCString());
@@ -1612,7 +1640,7 @@ DeviceDataPtr DeviceXmlParser::parseDevice(DOMElement *deviceEl) {
    }
    if (!itDev->getFlashProgram()) {
       // Set default flash program if none available from device
-//      log.error("WARNING: Setting default programming code for %s\n", currentDeviceName);
+      //      log.error("WARNING: Setting default programming code for %s\n", currentDeviceName);
       itDev->setCommonFlashProgram(defFlashProgram);
    }
    return itDev;

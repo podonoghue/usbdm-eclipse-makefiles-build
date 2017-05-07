@@ -25,6 +25,7 @@
                     sdidMask?,
                     sdid+,
                     sbdfrAddress?,
+                    (eraseMethod+)?,
                     flashScripts?,
                     (tclScript|tclScriptRef)?,
                     (flashProgram|flashProgramRef)?,
@@ -120,7 +121,7 @@
      (checksumEntry|checksumEntryRef)?,
      (flexNVMInfo|flexNVMInfoRef)?,
      description?,
-     (memoryRange+))>
+     memoryRange+)>
      <!ATTLIST memory id               ID #IMPLIED>
      <!ATTLIST memory type             (ram|rom|flash|pFlash|dFlash|eeprom|flexNVM|flexRAM|io|pRAM|pROM|xRAM|xROM|bitband) #REQUIRED>
      <!ATTLIST memory subType          CDATA "1">
@@ -130,6 +131,9 @@
      <!ATTLIST memory alignment        CDATA #IMPLIED >
      <!ATTLIST memory sectorSize       CDATA #IMPLIED >
 	  <!ATTLIST memory addressMode      (linear|paged) #IMPLIED>
+
+<!ELEMENT eraseMethod EMPTY>
+     <!ATTLIST eraseMethod type (None|Mass|All|Selective) #REQUIRED>
 	  
   <!-- Reference to a list of memory regions in device -->
 <!ELEMENT memoryRef EMPTY>

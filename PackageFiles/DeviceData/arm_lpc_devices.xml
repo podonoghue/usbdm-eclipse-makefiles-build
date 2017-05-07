@@ -128,6 +128,7 @@
          <sdidAddress value="0x400483F4" />
          <sdid mask="0xFFFFFFFF" value="0x095C802B" />
          <sdid mask="0xFFFFFFFF" value="0x295C802B" />
+         <eraseMethod type="Selective" />
          <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
          <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
@@ -141,6 +142,7 @@
          <sdidAddress value="0x400483F4" />
          <sdid mask="0xFFFFFFFF" value="0x097A802B" />
          <sdid mask="0xFFFFFFFF" value="0x297A802B" />
+         <eraseMethod type="Selective" />
          <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
          <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
@@ -154,6 +156,7 @@
          <sdidAddress value="0x400483F4" />
          <sdid mask="0xFFFFFFFF" value="0x0998802B" />
          <sdid mask="0xFFFFFFFF" value="0x2998802B" />
+         <eraseMethod type="Selective" />
          <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
          <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
@@ -167,6 +170,7 @@
          <memoryRef ref="LPC11U_IO" />
          <sdidAddress value="0x400483F4" />
          <sdid mask="0xFFFFFFFF" value="0x2954402B" />
+         <eraseMethod type="Selective" />
          <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
          <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
@@ -193,6 +197,7 @@
          <memoryRef ref="LPC11U_IO" />
          <sdidAddress value="0x400483F4" />
          <sdid mask="0xFFFFFFFF" value="0x2988402B" />
+         <eraseMethod type="Selective" />
          <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
          <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
@@ -206,6 +211,7 @@
          <memoryRef ref="LPC11U_IO" />
          <sdidAddress value="0x400483F4" />
          <sdid mask="0xFFFFFFFF" value="0x2980002B" />
+         <eraseMethod type="Selective" />
          <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
          <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
@@ -219,6 +225,7 @@
          <memoryRef ref="LPC11U_IO" />
          <sdidAddress value="0x400483F4" />
          <sdid mask="0xFFFFFFFF" value="0x0003D440" />
+         <eraseMethod type="Selective" />
          <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
          <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
@@ -232,6 +239,7 @@
          <memoryRef ref="LPC11U_IO" />
          <sdidAddress value="0x400483F4" />
          <sdid mask="0xFFFFFFFF" value="0x0001CC40" />
+         <eraseMethod type="Selective" />
          <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
          <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
@@ -245,6 +253,7 @@
          <memoryRef ref="LPC11U_IO" />
          <sdidAddress value="0x400483F4" />
          <sdid mask="0xFFFFFFFF" value="0x0001BC40" />
+         <eraseMethod type="Selective" />
          <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
          <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
@@ -259,6 +268,7 @@
          <memoryRef ref="LPC11U_IO" />
          <sdidAddress value="0x400483F4" />
          <sdid mask="0xFFFFFFFF" value="0x0000BC40" />
+         <eraseMethod type="Selective" />
          <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
          <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
@@ -272,6 +282,7 @@
          <memoryRef ref="LPC11U_IO" />
          <sdidAddress value="0x400483F4" />
          <sdid mask="0xFFFFFFFF" value="0x00019C40" />
+         <eraseMethod type="Selective" />
          <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
          <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
@@ -286,6 +297,7 @@
          <sdidAddress value="0x400483F4" />
          <sdid mask="0xFFFFFFFF" value="0x00017C40" />
          <sdid mask="0xFFFFFFFF" value="0x00007C44" />
+         <eraseMethod type="Selective" />
          <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
          <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
@@ -300,6 +312,7 @@
          <memoryRef ref="LPC11U_IO" />
          <sdidAddress value="0x400483F4" />
          <sdid mask="0xFFFFFFFF" value="0x00007C40" />
+         <eraseMethod type="Selective" />
          <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
          <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />

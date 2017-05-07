@@ -2,12 +2,13 @@
 <launchConfiguration type="net.sourceforge.usbdm.gdb.launchConfigurationType">
 <booleanAttribute key="net.sourceforge.usbdm.gdb.bdmSerialNumberMatchRequired" value="false"/>
 <stringAttribute key="net.sourceforge.usbdm.gdb.buildToolId" value="$(buildToolsId)"/>
-<intAttribute key="net.sourceforge.usbdm.gdb.clockTrimFrequency" value="$(clockTrimFrequency:0)"/>
+<stringAttribute key="net.sourceforge.usbdm.gdb.clockTrimFrequency" value="$(clockTrimFrequency:0)"/>
+<stringAttribute key="net.sourceforge.usbdm.gdb.eraseMethod" value="$(eraseMethod:ERASE_MASS)"/>
 <stringAttribute key="net.sourceforge.usbdm.gdb.deviceName" value="$(targetDevice)"/>
 <stringAttribute key="net.sourceforge.usbdm.gdb.gdbBinPath" value="$(buildToolsBinPath)"/>
 <stringAttribute key="net.sourceforge.usbdm.gdb.gdbCommand" value="$(gdbCommand:gdb)"/>
 <stringAttribute key="net.sourceforge.usbdm.gdb.interfaceType" value="$(interfaceType)"/>
-<intAttribute key="net.sourceforge.usbdm.gdb.nvmClockTrimLocation" value="$(nvmClockTrimLocation:0)"/>
+<stringAttribute key="net.sourceforge.usbdm.gdb.nvmClockTrimLocation" value="$(nvmClockTrimLocation:0)"/>
 <stringAttribute key="net.sourceforge.usbdm.gdb.targetVdd" value="$(bdmTargetVdd:0)"/>
 <booleanAttribute key="net.sourceforge.usbdm.gdb.useSemiHosting" value="$(semiHosting:false)"/>
 <stringAttribute key="org.eclipse.cdt.dsf.gdb.DEBUG_NAME" value="$(buildToolsBinPath)/$(gdbCommand)"/>

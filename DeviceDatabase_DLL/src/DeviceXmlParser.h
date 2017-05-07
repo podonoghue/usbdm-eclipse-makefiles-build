@@ -21,6 +21,7 @@ private:
 
    DualString   tag_deviceList;
    DualString   tag_device;
+   DualString   tag_eraseMethod;
    DualString   tag_clock;
    DualString   tag_memory;
    DualString   tag_memoryRef;
