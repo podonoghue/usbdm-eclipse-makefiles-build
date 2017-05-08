@@ -20,7 +20,7 @@
       <projectActionList>
          <applyWhen>
             <and>
-               <variableRef idRef="projectOptionValue.CMSIS-RTOS" defaultValue="false" />
+               <variableRef      idRef="projectOptionValue.CMSIS-RTOS"       defaultValue="false" />
                <not><variableRef idRef="projectOptionValue.CPP-abstraction"  defaultValue="false" /></not>
                <not><variableRef idRef="projectOptionValue.FRDM-Blinky"      defaultValue="false" /></not>
             </and>
@@ -44,9 +44,9 @@
       <projectActionList>
          <applyWhen>
             <and>
-               <variableRef idRef="projectOptionValue.CMSIS-RTOS" />
+               <variableRef      idRef="projectOptionValue.CMSIS-RTOS" />
                <not><variableRef idRef="projectOptionValue.CPP-abstraction"  defaultValue="false" /></not>
-               <variableRef idRef="projectOptionValue.FRDM-Blinky"      defaultValue="false" />
+               <variableRef      idRef="projectOptionValue.FRDM-Blinky"      defaultValue="false" />
             </and>
          </applyWhen>
          <!-- Blinky RTX C main -->
