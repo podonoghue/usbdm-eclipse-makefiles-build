@@ -1359,7 +1359,7 @@ typedef std::tr1::shared_ptr<DeviceDataBase> DeviceDataBasePtr;
  */
 
 /**
- * Class representing erase methods in the database
+ * Class representing available erase methods in the database
  */
 class DEVICE_DATA_DESCSPEC EraseMethods : public SharedInformationItem {
    unsigned                 fMethod;
@@ -1378,7 +1378,7 @@ public:
     * Add default erase method
     */
    void addDefaultMethod(DeviceData::EraseOptions method) {
-      fMethod       |= (1<<((int)method));
+      addMethod(method);
       fDefaultMethod = method;
    }
    /**
@@ -1388,9 +1388,9 @@ public:
       fMethod &= ~(1<<((int)method));
    }
    /**
-    * Checks if a method is included
+    * Checks if a method is available
     */
-   bool includesMethod(DeviceData::EraseOptions method) const {
+   bool isAvailableMethod(DeviceData::EraseOptions method) const {
       return (fMethod & (1<<((int)method))) != 0;
    }
    /**
@@ -1406,7 +1406,7 @@ public:
  */
 
 /**
- * Class Representing Reset methods in the database
+ * Class Representing available Reset methods in the database
  */
 class DEVICE_DATA_DESCSPEC ResetMethods : public SharedInformationItem {
    unsigned                 fMethod;
@@ -1428,7 +1428,7 @@ public:
     * Add default erase method
     */
    void addDefaultMethod(DeviceData::ResetOptions method) {
-      fMethod |= (1<<((int)method));
+      addMethod(method);
       fDefaultMethod = method;
    }
    /**
@@ -1438,15 +1438,15 @@ public:
       fMethod &= ~(1<<((int)method));
    }
    /**
-    * Checks if a method is included
+    * Checks if a method is available
     */
-   bool isIncludedMethod(DeviceData::ResetOptions method) {
+   bool isAvailableMethod(DeviceData::ResetOptions method) const {
       return (fMethod & (1<<((int)method))) != 0;
    }
    /**
     * Get default method
     */
-   bool getDefaultMethod(DeviceData::ResetOptions method) {
+   DeviceData::ResetOptions getDefaultMethod(DeviceData::ResetOptions method) const {
       return fDefaultMethod;
    }
 };

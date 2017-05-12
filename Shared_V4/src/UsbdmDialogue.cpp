@@ -1,4 +1,4 @@
-/*! \file
+/** \file
     \brief Implements USBDM Flash Programmer dialogue
 
     ProgrammerDialogue.cpp
@@ -72,7 +72,7 @@ const uint32_t UsbdmDialogue::targetPropertyFlags[] = {
 /* 11 S12Z      */  HAS_MASS_ERASE|HAS_SELECTIVE_ERASE,
 };
 
-/*!
+/**
  * Get properties of target type
  *
  * @return Bit-mask describing properties
@@ -491,13 +491,6 @@ std::string UsbdmDialogue::update() {
       case SEC_CUSTOM:    break;
    }
 
-   if (!eraseChoiceControl->SetStringSelection(wxString(DeviceData::getEraseOptionName(deviceInterface->getCurrentDevice()->getEraseOption()),wxConvUTF7))) {
-      // Current erase option not supported - default to 1st item
-      eraseChoiceControl->SetSelection(0);
-      DeviceData::EraseOptions eraseOption = (DeviceData::EraseOptions)(int)(intptr_t)eraseChoiceControl->GetClientData(0);
-      deviceInterface->getCurrentDevice()->setEraseOption(eraseOption);
-   }
-
    enableSoundsCheckBoxControl->SetValue(sound);
 
    if (targetProperties & HAS_VLLS_RESET_CAPTURE) {
@@ -559,22 +552,28 @@ void UsbdmDialogue::populateEraseControl() {
    else {
       // Get features from  device description
       log.print("Using device features\n");
-      if (eraseMethods->includesMethod(DeviceData::eraseSelective)) {
-          log.print("Adding eraseSelective");
+      if (eraseMethods->isAvailableMethod(DeviceData::eraseSelective)) {
+         log.print("Adding eraseSelective\n");
          eraseChoiceControl->Append(wxString(DeviceData::getEraseOptionName(DeviceData::eraseSelective),wxConvUTF7), (void*)DeviceData::eraseSelective);
       }
-      if (eraseMethods->includesMethod(DeviceData::eraseAll)) {
-          log.print("Adding eraseAll");
+      if (eraseMethods->isAvailableMethod(DeviceData::eraseAll)) {
+         log.print("Adding eraseAll\n");
          eraseChoiceControl->Append(wxString(DeviceData::getEraseOptionName(DeviceData::eraseAll),wxConvUTF7),       (void*)DeviceData::eraseAll);
       }
-      if (eraseMethods->includesMethod(DeviceData::eraseMass)) {
-          log.print("Adding eraseMass");
+      if (eraseMethods->isAvailableMethod(DeviceData::eraseMass)) {
+         log.print("Adding eraseMass\n");
          eraseChoiceControl->Append(wxString(DeviceData::getEraseOptionName(DeviceData::eraseMass),wxConvUTF7),      (void*)DeviceData::eraseMass);
       }
    }
+   if (!eraseChoiceControl->SetStringSelection(wxString(DeviceData::getEraseOptionName(device->getEraseOption()),wxConvUTF7))) {
+      // Current erase option not supported - default to 1st item
+      eraseChoiceControl->SetSelection(0);
+      DeviceData::EraseOptions eraseOption = (DeviceData::EraseOptions)(int)(intptr_t)eraseChoiceControl->GetClientData(0);
+      deviceInterface->getCurrentDevice()->setEraseOption(eraseOption);
+   }
 }
 
-/*! Load settings from a settings object
+/** Load settings from a settings object
  *
  *  @param appSettings - Object containing settings
  */
@@ -592,7 +591,7 @@ void UsbdmDialogue::loadSettings(const AppSettings &appSettings) {
    currentDirectory = appSettings.getValue(settingsKey+".currentDirectory", "");
 }
 
-/*! Load settings from a settings object
+/** Load settings from a settings object
  *
  *  @param appSettings - Object containing settings
  */
@@ -607,7 +606,7 @@ void UsbdmDialogue::saveSettings(AppSettings &appSettings) {
    appSettings.addValue(settingsKey+".currentDirectory", currentDirectory);
 }
 
-/*!
+/**
  * Hide unused controls
  *
  * @param flags Flags controlling which controls are present
@@ -877,7 +876,7 @@ bool UsbdmDialogue::setDialogueValuesToDefault() {
 }
 
 //===================================================================
-/*!
+/**
  * Update the dialogue from internal state
  */
 bool UsbdmDialogue::TransferDataToWindow() {
@@ -965,7 +964,7 @@ void UsbdmDialogue::findBDMs(void) {
    }
 }
 
-/*!
+/**
  *  Populate the BDM Choice box
  */
 void UsbdmDialogue::populateBDMChoices(void) {
@@ -2320,7 +2319,7 @@ USBDM_ErrorCode UsbdmDialogue::massEraseTarget() {
 // Event handlers
 //===================================================================================
 
-/*! Handler for OnBDMSelectCombo
+/** Handler for OnBDMSelectCombo
  *
  *  @param event The event to handle
  */
@@ -2332,7 +2331,7 @@ void UsbdmDialogue::OnBdmSelectComboSelected( wxCommandEvent& event ) {
    update();
 }
 
-/*! Handler for OnRefreshBDM
+/** Handler for OnRefreshBDM
  *
  *  @param event The event to handle
  */
@@ -2342,7 +2341,7 @@ void UsbdmDialogue::OnRefreshBDMClick( wxCommandEvent& event ) {
    update();
 }
 
-/*! Handler for OnVddSelectBox
+/** Handler for OnVddSelectBox
  *
  *  @param event The event to handle
  */
@@ -2356,7 +2355,7 @@ void UsbdmDialogue::OnVddSelectBoxSelected( wxCommandEvent& event ) {
    update();
 }
 
-/*! Handler for cycleVddOnConnect
+/** Handler for cycleVddOnConnect
  *
  *  @param event The event to handle
  */
@@ -2364,7 +2363,7 @@ void UsbdmDialogue::OnCycleTargetVddOnConnectionCheckboxClick( wxCommandEvent& e
    bdmInterface->getBdmOptions().cycleVddOnConnect = event.IsChecked();
 }
 
-/*! Handler for OnCycleVddOnResetCheckbox
+/** Handler for OnCycleVddOnResetCheckbox
  *
  *  @param event The event to handle
  */
@@ -2372,7 +2371,7 @@ void UsbdmDialogue::OnCycleVddOnResetCheckboxClick( wxCommandEvent& event ) {
    bdmInterface->getBdmOptions().cycleVddOnReset = event.IsChecked();
 }
 
-/*! Handler for OnLeaveTargetOnCheckbox
+/** Handler for OnLeaveTargetOnCheckbox
  */
 void UsbdmDialogue::OnLeaveTargetOnCheckboxClick( wxCommandEvent& event ) {
    LOGGING;
@@ -2388,7 +2387,7 @@ void UsbdmDialogue::OnReconnectCheckboxClick( wxCommandEvent& event ) {
    bdmInterface->getBdmOptions().autoReconnect = event.IsChecked()?AUTOCONNECT_STATUS:AUTOCONNECT_NEVER;
 }
 
-/*! Handler for OnUseResetCheckbox
+/** Handler for OnUseResetCheckbox
  *
  *  @param event The event to handle
  */
@@ -2396,7 +2395,7 @@ void UsbdmDialogue::OnUseResetCheckboxClick( wxCommandEvent& event ) {
    bdmInterface->getBdmOptions().useResetSignal = event.IsChecked();
 }
 
-/*! Handler for OnUseUsePstSignalCheckbox
+/** Handler for OnUseUsePstSignalCheckbox
  *
  *  @param event The event to handle
  */
@@ -2404,7 +2403,7 @@ void UsbdmDialogue::OnUseUsePstSignalCheckboxClick( wxCommandEvent& event ) {
    bdmInterface->getBdmOptions().usePSTSignals = event.IsChecked();
 }
 
-/*! Handler for OnGuessSpeedCheckbox
+/** Handler for OnGuessSpeedCheckbox
  *
  *  @param event The event to handle
  */
@@ -2412,7 +2411,7 @@ void UsbdmDialogue::OnGuessSpeedCheckboxClick( wxCommandEvent& event ) {
    bdmInterface->getBdmOptions().guessSpeed = event.IsChecked();
 }
 
-/*! Handler for OnMaskInterruptsWhenSteppingCheckbox
+/** Handler for OnMaskInterruptsWhenSteppingCheckbox
  *
  *  @param event The event to handle
  */
@@ -2420,7 +2419,7 @@ void UsbdmDialogue::OnMaskInterruptsWhenSteppingCheckboxClick( wxCommandEvent& e
    bdmInterface->getBdmOptions().maskInterrupts = event.IsChecked();
 }
 
-/*! Handler for OnCatchVllsResetCheckbox
+/** Handler for OnCatchVllsResetCheckbox
  *
  *  @param event The event to handle
  */
@@ -2428,7 +2427,7 @@ void UsbdmDialogue::OnCatchVllsResetCheckboxClick( wxCommandEvent& event ) {
    bdmInterface->setCatchVLLSx(event.IsChecked());
 }
 
-/*! Handler for OnConnectionTimeoutTextTextUpdated
+/** Handler for OnConnectionTimeoutTextTextUpdated
  *
  *  @param event The event to handle
  */
@@ -2436,7 +2435,7 @@ void UsbdmDialogue::OnConnectionTimeoutTextTextUpdated( wxCommandEvent& event ) 
    bdmInterface->setConnectionTimeout(connectionTimeoutTextControl->GetDecimalValue());
 }
 
-/*! Handler for OnSpeedSelectCombo
+/** Handler for OnSpeedSelectCombo
  *
  *  @param event The event to handle
  */
@@ -2445,7 +2444,7 @@ void UsbdmDialogue::OnInterfaceSpeedSelectComboSelected( wxCommandEvent& event )
 //   log.print("sel = %d, f = %d\n", event.GetSelection(), bdmInterface->getBdmOptions().interfaceSpeed);
 }
 
-/*! Handler for OnBdmClockSelectRadiobox
+/** Handler for OnBdmClockSelectRadiobox
  *
  *  @param event The event to handle
  */
@@ -2458,7 +2457,7 @@ void UsbdmDialogue::OnBdmClockSelectRadioboxSelected( wxCommandEvent& event ) {
    }
 }
 
-/*! Handler for OnLoadFileButton
+/** Handler for OnLoadFileButton
  *
  *  @param event The event to handle
  */
@@ -2481,7 +2480,7 @@ void UsbdmDialogue::OnLoadFileButtonClick( wxCommandEvent& event ) {
    update();
 }
 
-/*! Handler for OnIncrementalFileLoadCheckbox
+/** Handler for OnIncrementalFileLoadCheckbox
  *
  *  @param event The event to handle
  */
@@ -2489,7 +2488,7 @@ void UsbdmDialogue::OnIncrementalFileLoadCheckboxClick( wxCommandEvent& event ) 
    incrementalLoad = event.IsChecked();
 }
 
-/*! Handler for OnAutoFileReloadCheckbox
+/** Handler for OnAutoFileReloadCheckbox
  *
  *  @param event The event to handle
  */
@@ -2497,7 +2496,7 @@ void UsbdmDialogue::OnAutoFileReloadCheckboxClick( wxCommandEvent& event ) {
    autoFileLoad = event.IsChecked();
 }
 
-/*! Handler for OnDeviceTypeChoice
+/** Handler for OnDeviceTypeChoice
  *
  *  @param event The event to handle
  */
@@ -2511,7 +2510,7 @@ void UsbdmDialogue::OnDeviceTypeChoiceSelected( wxCommandEvent& event ) {
    update();
 }
 
-/*! Handler for OnFilterByChipIdCheckbox
+/** Handler for OnFilterByChipIdCheckbox
  *
  *  @param event The event to handle
  */
@@ -2526,7 +2525,7 @@ void UsbdmDialogue::OnFilterByChipIdCheckboxClick( wxCommandEvent& event ) {
    update();
 }
 
-/*! Handler for OnDetectChipButton
+/** Handler for OnDetectChipButton
  *
  *  @param event The event to handle
  */
@@ -2557,7 +2556,7 @@ void UsbdmDialogue::OnDetectChipButtonClick( wxCommandEvent& event ) {
    update();
 }
 
-/*! Handler for OnNonvolatileAddressText
+/** Handler for OnNonvolatileAddressText
  *
  *  @param event The event to handle
  */
@@ -2567,7 +2566,7 @@ void UsbdmDialogue::OnNonvolatileAddressTextTextUpdated( wxCommandEvent& event )
    log.print("- Trim NV Address = 0x%08X\n", deviceInterface->getCurrentDevice()->getClockTrimNVAddress());
 }
 
-/*! Handler for OnTrimFrequencyText
+/** Handler for OnTrimFrequencyText
  *
  *  @param event The event to handle
  */
@@ -2577,7 +2576,7 @@ void UsbdmDialogue::OnTrimFrequencyTextTextUpdated( wxCommandEvent& event ) {
    log.print("- Trim Frequency = %f kHz\n", deviceInterface->getCurrentDevice()->getClockTrimFreq()/1000.0);
 }
 
-/*! Handler for OnTrimFrequencyCheckbox
+/** Handler for OnTrimFrequencyCheckbox
  *
  *  @param event The event to handle
  */
@@ -2600,7 +2599,7 @@ void UsbdmDialogue::OnTrimFrequencyCheckboxClick( wxCommandEvent& event ) {
    update();
 }
 
-/*! Handler for busFrequencyText
+/** Handler for busFrequencyText
  *
  *  @param event The event to handle
  */
@@ -2608,7 +2607,7 @@ void UsbdmDialogue::OnBusFrequencyTextTextUpdated( wxCommandEvent& event ) {
    bdmInterface->setGdbServerPort(1000*busFrequencyTextControl->GetDecimalValue());
 }
 
-/*! Handler for OnSecurityRadiobox
+/** Handler for OnSecurityRadiobox
  *
  *  @param event The event to handle
  */
@@ -2632,7 +2631,7 @@ void UsbdmDialogue::OnSecurityRadioboxSelected( wxCommandEvent& event ) {
    updateSecurityDescription();
 }
 
-/*! Handler for OnEraseChoice
+/** Handler for OnEraseChoice
  *
  *  @param event The event to handle
  */
@@ -2643,7 +2642,7 @@ void UsbdmDialogue::OnEraseChoiceSelect( wxCommandEvent& event ) {
 //      log.print("ProgrammerDialogue::OnEraseChoiceSelect(%s)\n", DeviceData::getEraseOptionName(eraseOption));
 }
 
-/*! Handler for OnMassEraseButton
+/** Handler for OnMassEraseButton
  *
  *  @param event The event to handle
  */
@@ -2677,7 +2676,7 @@ void UsbdmDialogue::OnMassEraseButtonClick( wxCommandEvent& event ) {
          this);
 }
 
-/*! Handler for OnMassEraseButton
+/** Handler for OnMassEraseButton
  *
  *  @param event The event to handle
  */
@@ -2728,7 +2727,7 @@ void UsbdmDialogue::OnUnlockButtonClick( wxCommandEvent& event ) {
    bdmInterface->closeBdm();
 }
 
-/*! Handler for OnSoundCheckbox
+/** Handler for OnSoundCheckbox
  *
  *  @param event The event to handle
  */
@@ -2736,7 +2735,7 @@ void UsbdmDialogue::OnSoundCheckboxClick( wxCommandEvent& event ) {
    sound = event.IsChecked();
 }
 
-/*! Handler for OnGdbServerPortNumber
+/** Handler for OnGdbServerPortNumber
  *
  *  @param event The event to handle
  */
@@ -2744,7 +2743,7 @@ void UsbdmDialogue::OnGdbServerPortNumberTextUpdated( wxCommandEvent& event ) {
    bdmInterface->setGdbServerPort(gdbServerPortNumberTextControl->GetDecimalValue());
 }
 
-/*! Handler for OnGdbTtyPortNumberTextUpdated
+/** Handler for OnGdbTtyPortNumberTextUpdated
  *
  *  @param event The event to handle
  */
@@ -2752,7 +2751,7 @@ void UsbdmDialogue::OnGdbTtyPortNumberTextUpdated( wxCommandEvent& event ) {
    bdmInterface->setGdbTtyPort(gdbTtyPortNumberTextControl->GetDecimalValue());
 }
 
-/*! Handler for OnProgramFlashButton
+/** Handler for OnProgramFlashButton
  *
  *  @param event The event to handle
  */
@@ -2781,7 +2780,7 @@ void UsbdmDialogue::OnProgramFlashButtonClick( wxCommandEvent& event ) {
    } while (getYesNo == wxYES);
 }
 
-/*! Handler for OnVerifyFlashButton
+/** Handler for OnVerifyFlashButton
  *
  *  @param event The event to handle
  */
@@ -2809,7 +2808,7 @@ void UsbdmDialogue::OnVerifyFlashButtonClick( wxCommandEvent& event ) {
    } while (getYesNo == wxYES);
 }
 
-/*! Handler for OnLoadAndGoButton
+/** Handler for OnLoadAndGoButton
  *
  *  @param event The event to handle
  */
@@ -2918,35 +2917,35 @@ void UsbdmDialogue::OnSecurityEditUpdate(wxCommandEvent& event) {
    updateSecurityDescription();
 }
 
-/*! Handler for OnPowerOffDurationText
+/** Handler for OnPowerOffDurationText
  *
  *  @param event The event to handle
  */
 void UsbdmDialogue::OnPowerOffDurationText( wxCommandEvent& event ) {
    bdmInterface->getBdmOptions().powerOffDuration = powerOffDurationTextControl->GetDecimalValue();
 }
-/*! Handler for OnPowerOnDurationText
+/** Handler for OnPowerOnDurationText
  *
  *  @param event The event to handle
  */
 void UsbdmDialogue::OnPowerOnDurationText( wxCommandEvent& event ) {
    bdmInterface->getBdmOptions().powerOnRecoveryInterval = powerOnRecoveryIntervalTextControl->GetDecimalValue();
 }
-/*! Handler for OnResetDurationText
+/** Handler for OnResetDurationText
  *
  *  @param event The event to handle
  */
 void UsbdmDialogue::OnResetDurationText( wxCommandEvent& event ) {
    bdmInterface->getBdmOptions().resetDuration = resetDurationTextControl->GetDecimalValue();
 }
-/*! Handler for OnResetReleaseIntervalText
+/** Handler for OnResetReleaseIntervalText
  *
  *  @param event The event to handle
  */
 void UsbdmDialogue::OnResetReleaseIntervalText( wxCommandEvent& event ) {
    bdmInterface->getBdmOptions().resetReleaseInterval = resetReleaseIntervalTextControl->GetDecimalValue();
 }
-/*! Handler for OnResetRecoveryIntervalText
+/** Handler for OnResetRecoveryIntervalText
  *
  *  @param event The event to handle
  */
