@@ -19,13 +19,14 @@
   <!-- Device characteristics -->
 <!ELEMENT device ((sdid*|
                    (clock?,
+                    (resetMethods|resetMethodsRef)?,
+                    (eraseMethods|eraseMethodsRef)?,
                     (memory|memoryRef)+,
                     (soptAddress|copctlAddress)?,
                     sdidAddress?,
                     sdidMask?,
                     sdid+,
                     sbdfrAddress?,
-                    (eraseMethod+)?,
                     flashScripts?,
                     (tclScript|tclScriptRef)?,
                     (flashProgram|flashProgramRef)?,
@@ -36,19 +37,33 @@
                     )
                    ),
                   note*)>
-     <!ATTLIST device name ID #REQUIRED>
-     <!ATTLIST device alias IDREF #IMPLIED>
-     <!ATTLIST device family (RS08|HCS08|HCS08Plus|HCS12|S12Z|CFV1|CFV1Plus|CFV2|CFV3|CFV4|ARM|DSC|CortexM0|CortexM0plus|CortexM3|CortexM3F|CortexM4|CortexM4F) #IMPLIED>
-     <!ATTLIST device isDefault (true) #IMPLIED>
-     <!ATTLIST device speed CDATA #IMPLIED>
-     <!ATTLIST device subfamily CDATA #IMPLIED>
-     <!ATTLIST device hidden (true) #IMPLIED>
-     <!ATTLIST device hardware CDATA #IMPLIED>
+     <!ATTLIST device name       ID       #REQUIRED>
+     <!ATTLIST device alias      IDREF    #IMPLIED>
+     <!ATTLIST device family     (RS08|HCS08|HCS08Plus|HCS12|S12Z|CFV1|CFV1Plus|CFV2|CFV3|CFV4|ARM|DSC|CortexM0|CortexM0plus|CortexM3|CortexM3F|CortexM4|CortexM4F) #IMPLIED>
+     <!ATTLIST device isDefault  (true)   #IMPLIED>
+     <!ATTLIST device speed      CDATA    #IMPLIED>
+     <!ATTLIST device subfamily  CDATA    #IMPLIED>
+     <!ATTLIST device hidden     (true)   #IMPLIED>
+     <!ATTLIST device hardware   CDATA    #IMPLIED>
+
+<!-- List of possible reset modes -->
+<!ELEMENT resetMethods (resetMethod*) >
+     <!ATTLIST resetMethods id     ID                         #IMPLIED>
+
+<!-- Reference to list of possible reset modes -->
+<!ELEMENT resetMethodsRef EMPTY>
+     <!ATTLIST resetMethodsRef ref IDREF #REQUIRED>
+     
+<!-- Available reset modes -->
+<!ELEMENT resetMethod EMPTY >
+     <!ATTLIST resetMethod method (hardware|software|custom) #REQUIRED>
+     <!ATTLIST resetMethod isDefault  (true)                 #IMPLIED>
 
   <!-- List of actions to be applied to a project -->
 <!ELEMENT projectActionList (projectActionListRef|projectActionList|variable|condition|excludeSourceFile|excludeSourceFolder|createFolder|copy|projectOption|customAction)*>
      <!ATTLIST projectActionList id    ID     #IMPLIED>
      <!ATTLIST projectActionList root  CDATA  #IMPLIED>
+     <!ATTLIST isdefault replace           (true|false) #IMPLIED>
      
 <!ELEMENT projectActionListRef EMPTY>
      <!ATTLIST projectActionListRef ref IDREF #REQUIRED>
@@ -132,9 +147,19 @@
      <!ATTLIST memory sectorSize       CDATA #IMPLIED >
 	  <!ATTLIST memory addressMode      (linear|paged) #IMPLIED>
 
+<!-- List of possible erase methods -->
+<!ELEMENT eraseMethods (eraseMethod)+ >
+     <!ATTLIST eraseMethods id     ID   #IMPLIED>
+     
+<!-- Reference to list of possible erase methods -->
+<!ELEMENT eraseMethodsRef EMPTY>
+     <!ATTLIST eraseMethodsRef ref IDREF #REQUIRED>
+     
+<!-- Possible erase methods -->
 <!ELEMENT eraseMethod EMPTY>
-     <!ATTLIST eraseMethod type (None|Mass|All|Selective) #REQUIRED>
-	  
+     <!ATTLIST eraseMethod method (Mass|All|Selective) #REQUIRED>
+     <!ATTLIST eraseMethod isDefault  (true)           #IMPLIED> 
+     
   <!-- Reference to a list of memory regions in device -->
 <!ELEMENT memoryRef EMPTY>
      <!ATTLIST memoryRef ref IDREF #REQUIRED>
@@ -245,7 +270,7 @@
 
   <!-- Information shared between devices -->
 <!ELEMENT sharedInformation 
-	(memory|tclScript|flashProgram|securityEntry|securityDescription|securityInfo|checksumEntry|flexNVMInfo|projectActionList|registerDescription)*>
+	(resetMethods|eraseMethods|memory|tclScript|flashProgram|securityEntry|securityDescription|securityInfo|checksumEntry|flexNVMInfo|projectActionList|registerDescription)*>
 
   <!--TCL Script-->
 <!ELEMENT tclScript (xi:include) >

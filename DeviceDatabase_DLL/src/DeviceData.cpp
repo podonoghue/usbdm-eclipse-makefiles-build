@@ -965,8 +965,20 @@ void  DeviceData::addSDID(uint32_t mask, uint32_t value) {
    targetSDIDs.push_back(TargetSDID(mask, value));
 }
 
-void  DeviceData::addEraseMethod(EraseOptions method) {
-   eraseOptions.push_back(method);
+void  DeviceData::setEraseMethods(EraseMethodsConstPtr methods) {
+   eraseMethods = methods;
+}
+
+EraseMethodsConstPtr  DeviceData::getEraseMethods() const {
+   return eraseMethods;
+}
+
+void  DeviceData::setResetMethods(ResetMethodsConstPtr methods) {
+   resetMethods = methods;
+}
+
+ResetMethodsConstPtr  DeviceData::getResetMethods() const {
+   return resetMethods;
 }
 
 void DeviceData::addMemoryRegion(MemoryRegionPtr pMemoryRegion) {
@@ -1501,16 +1513,17 @@ std::vector<DeviceDataPtr>::const_iterator DeviceDataBase::end() const {
 }
 
 DeviceDataPtr DeviceDataBase::getDefaultDevice() {
-   return defaultDevice;
+   return deviceData.front();
+//   return defaultDevice;
 }
 
 unsigned DeviceDataBase::getNumDevice() const {
    return this->deviceData.size();
 }
 
-void DeviceDataBase::setDefaultDevice(DeviceDataPtr defaultDevice) {
-   this->defaultDevice = defaultDevice;
-}
+//void DeviceDataBase::setDefaultDevice(DeviceDataPtr defaultDevice) {
+//   this->defaultDevice = defaultDevice;
+//}
 
 DeviceDataPtr DeviceDataBase::addDevice(DeviceDataPtr device) {
    std::vector<DeviceDataPtr>::iterator itDev = deviceData.insert(deviceData.end(), device);
@@ -1604,6 +1617,22 @@ FlexNVMInfoConstPtr DeviceDataBase::getFlexNVMInfo(std::string key) const {
    FlexNVMInfoPtr ptr(std::tr1::dynamic_pointer_cast<FlexNVMInfo>(getSharedData(key)));
    if (ptr == NULL) {
       throw MyException(std::string("DeviceDataBase::getSecurityEntry() - Reference has wrong type - ")+key);
+   }
+   return ptr;
+}
+
+ResetMethodsConstPtr DeviceDataBase::getResetMethods(std::string key) const {
+   ResetMethodsPtr ptr(std::tr1::dynamic_pointer_cast<ResetMethods>(getSharedData(key)));
+   if (ptr == NULL) {
+      throw MyException(std::string("DeviceDataBase::getResetMethods() - Reference has wrong type - ")+key);
+   }
+   return ptr;
+}
+
+EraseMethodsConstPtr DeviceDataBase::getEraseMethods(std::string key) const {
+   EraseMethodsPtr ptr(std::tr1::dynamic_pointer_cast<EraseMethods>(getSharedData(key)));
+   if (ptr == NULL) {
+      throw MyException(std::string("DeviceDataBase::getEraseMethods() - Reference has wrong type - ")+key);
    }
    return ptr;
 }
@@ -1708,8 +1737,7 @@ void DeviceDataBase::loadDeviceData() {
    }
    if ((getDefaultDevice() == NULL) || (deviceData.size() == 0)) {
       // Create dummy default device
-      setDefaultDevice(DeviceDataPtr(new DeviceData(targetType, "Database Error")));
-      addDevice(getDefaultDevice());
+      addDevice(DeviceDataPtr(new DeviceData(targetType, "Database Error")));
    }
 #if defined(LOG) && 0
    listDevices();

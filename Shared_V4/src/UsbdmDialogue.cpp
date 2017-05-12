@@ -517,6 +517,8 @@ std::string UsbdmDialogue::update() {
    verifyFlashButtonControl->Enable(enableProgramming);
    loadAndGoButtonControl->Enable(enableProgramming);
 
+   populateEraseControl();
+
    /*
     * ===========================================================================
     * Advanced
@@ -531,24 +533,44 @@ std::string UsbdmDialogue::update() {
    resetReleaseIntervalTextControl->SetDecimalValue(bdmInterface->getBdmOptions().resetReleaseInterval);
    resetRecoveryIntervalTextControl->SetDecimalValue(bdmInterface->getBdmOptions().resetRecoveryInterval);
 
-//#ifdef LOG
-//   StatusText->SetLabel("No status");
-//#else
-//   StatusText->SetLabel(wxEmptyString);
-//#endif
-
    return "";
 }
 
 void UsbdmDialogue::populateEraseControl() {
+   LOGGING_Q;
+   EraseMethodsConstPtr eraseMethods;
+   DeviceDataConstPtr device = deviceInterface->getCurrentDevice();
+   if (device != 0) {
+      eraseMethods = device->getEraseMethods();
+   }
    eraseChoiceControl->Clear();
    eraseChoiceControl->Append(wxString(DeviceData::getEraseOptionName(DeviceData::eraseNone),wxConvUTF7),      (void*)DeviceData::eraseNone);
-   if (targetProperties&HAS_SELECTIVE_ERASE) {
-      eraseChoiceControl->Append(wxString(DeviceData::getEraseOptionName(DeviceData::eraseSelective),wxConvUTF7), (void*)DeviceData::eraseSelective);
-      eraseChoiceControl->Append(wxString(DeviceData::getEraseOptionName(DeviceData::eraseAll),wxConvUTF7),       (void*)DeviceData::eraseAll);
+   if (eraseMethods == 0) {
+      // Use older methods
+      log.print("Using legacy method\n");
+      if (targetProperties&HAS_SELECTIVE_ERASE) {
+         eraseChoiceControl->Append(wxString(DeviceData::getEraseOptionName(DeviceData::eraseSelective),wxConvUTF7), (void*)DeviceData::eraseSelective);
+         eraseChoiceControl->Append(wxString(DeviceData::getEraseOptionName(DeviceData::eraseAll),wxConvUTF7),       (void*)DeviceData::eraseAll);
+      }
+      if (targetProperties&HAS_MASS_ERASE) {
+         eraseChoiceControl->Append(wxString(DeviceData::getEraseOptionName(DeviceData::eraseMass),wxConvUTF7),      (void*)DeviceData::eraseMass);
+      }
    }
-   if (targetProperties&HAS_MASS_ERASE) {
-      eraseChoiceControl->Append(wxString(DeviceData::getEraseOptionName(DeviceData::eraseMass),wxConvUTF7),      (void*)DeviceData::eraseMass);
+   else {
+      // Get features from  device description
+      log.print("Using device features\n");
+      if (eraseMethods->includesMethod(DeviceData::eraseSelective)) {
+          log.print("Adding eraseSelective");
+         eraseChoiceControl->Append(wxString(DeviceData::getEraseOptionName(DeviceData::eraseSelective),wxConvUTF7), (void*)DeviceData::eraseSelective);
+      }
+      if (eraseMethods->includesMethod(DeviceData::eraseAll)) {
+          log.print("Adding eraseAll");
+         eraseChoiceControl->Append(wxString(DeviceData::getEraseOptionName(DeviceData::eraseAll),wxConvUTF7),       (void*)DeviceData::eraseAll);
+      }
+      if (eraseMethods->includesMethod(DeviceData::eraseMass)) {
+          log.print("Adding eraseMass");
+         eraseChoiceControl->Append(wxString(DeviceData::getEraseOptionName(DeviceData::eraseMass),wxConvUTF7),      (void*)DeviceData::eraseMass);
+      }
    }
 }
 

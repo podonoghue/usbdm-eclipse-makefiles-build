@@ -22,6 +22,9 @@ private:
    DualString   tag_deviceList;
    DualString   tag_device;
    DualString   tag_eraseMethod;
+   DualString   tag_eraseMethodRef;
+   DualString   tag_eraseMethods;
+   DualString   tag_eraseMethodsRef;
    DualString   tag_clock;
    DualString   tag_memory;
    DualString   tag_memoryRef;
@@ -58,6 +61,10 @@ private:
    DualString   tag_projectActionListRef;
    DualString   tag_registerDescription;
    DualString   tag_registerDescriptionRef;
+   DualString   tag_resetMethod;
+   DualString   tag_resetMethodRef;
+   DualString   tag_resetMethods;
+   DualString   tag_resetMethodsRef;
 
    DualString   attr_name;
    DualString   attr_isDefault;
@@ -93,6 +100,7 @@ private:
    DualString   attr_path;
    DualString   attr_count;
    DualString   attr_mask;
+   DualString   attr_method;
 
    static char  currentDeviceName[100];
 
@@ -112,6 +120,8 @@ private:
    void                               parseDeviceXML(void);
    DeviceDataPtr                      parseDevice(xercesc::DOMElement *deviceEl);
    DeviceDataPtr                      parseAlias(xercesc::DOMElement *deviceEl);
+   EraseMethodsPtr                    parseEraseMethods(xercesc::DOMElement *element);
+   ResetMethodsPtr                    parseResetMethods(xercesc::DOMElement *element);
    TclScriptConstPtr                  parseSequence(xercesc::DOMElement *sequence);
    MemoryRegionPtr                    parseMemory(xercesc::DOMElement *currentProperty);
    MemoryRegionPtr                    parseFlashMemoryDetails(xercesc::DOMElement *currentProperty, MemType_t memoryType, uint32_t &defaultSectorSize, uint8_t &defaultAlignment);

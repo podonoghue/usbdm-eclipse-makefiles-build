@@ -2034,7 +2034,7 @@ static USBDM_ErrorCode resetOther(TargetMode_t targetMode) {
 /**
  *  Resets the target to normal or special mode
  *
- *  @param target_mode see
+ *  @param target_mode see TargetMode_t
  *
  *  @return \n
  *      BDM_RC_OK   => OK \n

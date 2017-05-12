@@ -18,6 +18,7 @@
       <nvicPrioBits>2</nvicPrioBits>
       <vendorSystickConfig>false</vendorSystickConfig>
    </cpu>
+   <headerDefinitionsPrefix>LPC_</headerDefinitionsPrefix>
    <addressUnitBits>8</addressUnitBits>
    <width>32</width>
    <peripherals>

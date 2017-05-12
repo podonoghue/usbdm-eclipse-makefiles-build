@@ -309,18 +309,27 @@ private:
    DOMElement  *currentElement;
 
 public:
+   /**
+    * Iterator for child nodes of document having the given tag name
+    */
    DOMChildIterator(DOMDocument *document, const char *tagName) {
       elementList    = document->getElementsByTagName(DualString(tagName).asXMLString());
       index          = 0;
       findElement(0);
    };
 
+   /**
+    * Iterator for child nodes of element
+    */
    DOMChildIterator(DOMElement *element) {
       elementList    = element->getChildNodes();
       index          = 0;
       findElement(0);
    };
 
+   /**
+    * Iterator for child nodes of element having the given tag name
+    */
    DOMChildIterator(DOMElement *element, const char *tagName) {
       elementList    = element->getElementsByTagName(DualString(tagName).asXMLString());
       index          = 0;
@@ -378,6 +387,9 @@ DeviceXmlParser::DeviceXmlParser(TargetType_t targetType, DeviceDataBase *device
    tag_deviceList("deviceList"),
    tag_device("device"),
    tag_eraseMethod("eraseMethod"),
+   tag_eraseMethodRef("eraseMethodRef"),
+   tag_eraseMethods("eraseMethods"),
+   tag_eraseMethodsRef("eraseMethodsRef"),
    tag_clock("clock"),
    tag_memory("memory"),
    tag_memoryRef("memoryRef"),
@@ -414,6 +426,10 @@ DeviceXmlParser::DeviceXmlParser(TargetType_t targetType, DeviceDataBase *device
    tag_projectActionListRef("projectActionListRef"),
    tag_registerDescription("registerDescription"),
    tag_registerDescriptionRef("registerDescriptionRef"),
+   tag_resetMethod("resetMethod"),
+   tag_resetMethodRef("resetMethodRef"),
+   tag_resetMethods("resetMethods"),
+   tag_resetMethodsRef("resetMethodsRef"),
 
    attr_name("name"),
    attr_isDefault("isDefault"),
@@ -449,6 +465,7 @@ DeviceXmlParser::DeviceXmlParser(TargetType_t targetType, DeviceDataBase *device
    attr_path("path"),
    attr_count("count"),
    attr_mask("mask"),
+   attr_method("method"),
 
    isDefault(false),
    deviceDataBase(deviceDataBase),
@@ -739,7 +756,7 @@ SecurityEntryPtr DeviceXmlParser::parseSecurityEntry(DOMElement *currentProperty
          }
       }
       else {
-         throw MyException(string("DeviceXmlParser::parseSharedXML() - Unexpected Tag = ")+sTag.asCString());
+         throw MyException(string("DeviceXmlParser::parseSecurityEntry() - Unexpected Tag = ")+sTag.asCString());
       }
    }
    SecurityEntryPtr securityEntryPtr(new SecurityEntry(securityDescriptionPtr,unsecureInfoPtr,secureInfoPtr));
@@ -851,6 +868,14 @@ void DeviceXmlParser::parseSharedXML(void) {
             // Parse <memory>
             deviceDataBase->addSharedData(string(sId.asCString()), parseMemory(sharedInformationElement));
          }
+         else if (XMLString::equals(sTag.asXMLString(), tag_resetMethods.asXMLString())) {
+            // Parse <resetMethods>
+            deviceDataBase->addSharedData(string(sId.asCString()), parseResetMethods(sharedInformationElement));
+         }
+         else if (XMLString::equals(sTag.asXMLString(), tag_eraseMethods.asXMLString())) {
+            // Parse <eraseMethods>
+            deviceDataBase->addSharedData(string(sId.asCString()), parseEraseMethods(sharedInformationElement));
+         }
          else if (XMLString::equals(sTag.asXMLString(), tag_projectActionList.asXMLString())) {
             // Parse <projectActionList>
          }
@@ -859,6 +884,133 @@ void DeviceXmlParser::parseSharedXML(void) {
          }
       }
    }
+}
+
+//! Create list of reset methods from node
+//!
+//! @param element - Present position in XML parse
+//!
+//! @return == 0 - success\n
+//!         != 0 - fail
+//!
+EraseMethodsPtr DeviceXmlParser::parseEraseMethods(DOMElement *element) {
+   LOGGING;
+
+   EraseMethods *methods = new EraseMethods;
+
+   // Iterator for <resetMethod method=... /> children
+   DOMChildIterator resetMethodIt(element);
+   DOMElement *sequenceElement = resetMethodIt.getCurrentElement();
+   if (sequenceElement == NULL) {
+      // No <resetMethod> children
+      throw MyException(string("DeviceXmlParser::parseEraseMethods() - expected <eraseMethod>"));
+   }
+   else {
+      for (;
+            resetMethodIt.getCurrentElement() != NULL;
+            resetMethodIt.advanceElement()) {
+
+         // <resetMethod>
+         DeviceData::EraseOptions option = DeviceData::EraseOptions::eraseNone;
+
+         DOMElement *eraseElement = resetMethodIt.getCurrentElement();
+
+         DualString value1(eraseElement->getTagName());
+         log.print("DeviceXmlParser::parseEraseMethods getTagName=\'%s\'\n", (const char *)value1.asCString());
+
+         if (eraseElement->hasAttribute(attr_method.asXMLString())) {
+            DualString sType(eraseElement->getAttribute(attr_method.asXMLString()));
+            struct {
+               const char               *name;
+               DeviceData::EraseOptions  type;
+            } names[] = {
+                  { "Selective", DeviceData::EraseOptions::eraseSelective, },
+                  { "All",       DeviceData::EraseOptions::eraseAll, },
+                  { "Mass",      DeviceData::EraseOptions::eraseMass, },
+                  { "None",      DeviceData::EraseOptions::eraseNone, },
+            };
+            for (unsigned index=0; index<(sizeof(names)/sizeof(names[0])); index++) {
+               if (strcmp(names[index].name, sType.asCString()) == 0) {
+                  option = names[index].type;
+               }
+            }
+         }
+         if (option == DeviceData::EraseOptions::eraseNone) {
+            throw MyException(string("DeviceXmlParser::parseEraseMethods() - <eraseMethod> Missing/invalid method attribute "));
+         }
+         DualString value(eraseElement->getAttribute(attr_isDefault.asXMLString()));
+         if (XMLString::equals(value.asCString(), "true")) {
+            methods->addDefaultMethod(option);
+         }
+         else {
+            methods->addMethod(option);
+         }
+         methods->addMethod(option);
+      }
+   }
+   return EraseMethodsPtr(methods);
+}
+
+//! Create list of reset methods from node <resetMethod>
+//!
+//! @param element - Present position in XML parse
+//!
+//! @return == 0 - success\n
+//!         != 0 - fail
+//!
+ResetMethodsPtr DeviceXmlParser::parseResetMethods(DOMElement *element) {
+   LOGGING;
+
+   ResetMethods methods();
+
+   // Iterator for <resetMethod method=... /> children
+   DOMChildIterator sequenceElementIt(element);
+   DOMElement *sequenceElement = sequenceElementIt.getCurrentElement();
+
+   ResetMethods *options = new ResetMethods;
+
+   if (sequenceElement == NULL) {
+      // No <resetMethod> children
+      throw MyException(string("DeviceXmlParser::parseResetMethods() - expected <resetMethod>"));
+   }
+   else {
+      DOMChildIterator resetMethodIt(element, tag_resetMethod.asCString());
+      for (;
+            resetMethodIt.getCurrentElement() != NULL;
+            resetMethodIt.advanceElement()) {
+
+         DOMElement *resetElement = resetMethodIt.getCurrentElement();
+         DeviceData::ResetOptions option = DeviceData::ResetOptions::resetNone;
+
+         if (resetElement->hasAttribute(attr_method.asXMLString())) {
+            DualString sType(resetElement->getAttribute(attr_method.asXMLString()));
+            struct {
+               const char               *name;
+               DeviceData::ResetOptions  type;
+            } names[] = {
+                  { "hardware",  DeviceData::ResetOptions::resetHardware, },
+                  { "software",  DeviceData::ResetOptions::resetSoftware, },
+                  { "custom",    DeviceData::ResetOptions::defaultCustom, },
+            };
+            for (unsigned index=0; index<(sizeof(names)/sizeof(names[0])); index++) {
+               if (strcmp(names[index].name, sType.asCString()) == 0) {
+                  option = names[index].type;
+               }
+            }
+         }
+         if (option == DeviceData::ResetOptions::resetNone) {
+            throw MyException(string("DeviceXmlParser::parseResetMethods() - <resetMethod> Missing/invalid method attribute "));
+         }
+         DualString value(resetElement->getAttribute(attr_isDefault.asXMLString()));
+         if (XMLString::equals(value.asCString(), "true")) {
+            options->addDefaultMethod(option);
+         }
+         else {
+            options->addMethod(option);
+         }
+      }
+   }
+   return ResetMethodsPtr(options);
 }
 
 TclScriptConstPtr DeviceXmlParser::parseSequence(DOMElement *sequence) {
@@ -1370,6 +1522,9 @@ DeviceDataPtr DeviceXmlParser::parseDevice(DOMElement *deviceEl) {
    static uint32_t defSbdfrAddress    = DeviceData::getDefaultHCS08sbdfrAddress();
    static bool     initDone = false;
 
+   static ResetMethodsConstPtr defaultResetMethods;
+   static EraseMethodsConstPtr defaultEraseMethods;
+
    if (!initDone) {
       initDone = true;
       if (targetType == T_HCS08) {
@@ -1421,6 +1576,9 @@ DeviceDataPtr DeviceXmlParser::parseDevice(DOMElement *deviceEl) {
    itDev->setRegisterDescription(defaultRegisterDescription);
    itDev->setSDIDAddress(defSDIDAddress);
    itDev->setHCS08sbdfrAddress(defSbdfrAddress);
+
+   itDev->setEraseMethods(defaultEraseMethods);
+   itDev->setResetMethods(defaultResetMethods);
 
    DOMChildIterator propertyIt(deviceEl);
    for (;
@@ -1609,30 +1767,39 @@ DeviceDataPtr DeviceXmlParser::parseDevice(DOMElement *deviceEl) {
             defaultFlexNVMInfo = itDev->getflexNVMInfo();
          }
       }
-      else if (XMLString::equals(propertyTag.asXMLString(), tag_eraseMethod.asXMLString())) {
-         // <eraseMethod type="Selective">
-         DeviceData::EraseOptions option = DeviceData::EraseOptions::eraseNone;
-         if (currentProperty->hasAttribute(attr_type.asXMLString())) {
-            DualString sType(currentProperty->getAttribute(attr_type.asXMLString()));
-            struct {
-               const char               *name;
-               DeviceData::EraseOptions  type;
-            } names[] = {
-                  { "Selective", DeviceData::EraseOptions::eraseSelective, },
-                  { "All",       DeviceData::EraseOptions::eraseAll, },
-                  { "Mass",      DeviceData::EraseOptions::eraseMass, },
-                  { "None",      DeviceData::EraseOptions::eraseNone, },
-            };
-            for (unsigned index=0; index<(sizeof(names)/sizeof(names)); index++) {
-               if (strcmp(names[index].name, sType.asCString()) == 0) {
-                  option = names[index].type;
-               }
-            }
+      else if (XMLString::equals(propertyTag.asXMLString(), tag_resetMethods.asXMLString())) {
+         // <flashProgram>
+         itDev->setResetMethods(parseResetMethods(currentProperty));
+         if (isDefault) {
+            //            log.print("Setting default resetMethods (non-shared)\n");
+            defaultResetMethods = itDev->getResetMethods();
          }
-         if (option == DeviceData::EraseOptions::eraseNone) {
-            throw MyException(string("DeviceXmlParser::parseDevice() - <eraseMethod> Missing/invalid type attribute "));
+      }
+      else if (XMLString::equals(propertyTag.asXMLString(), tag_resetMethodsRef.asXMLString())) {
+         // <flashProgramRef>
+         DualString sRef(currentProperty->getAttribute(attr_ref.asXMLString()));
+         itDev->setResetMethods(deviceDataBase->getResetMethods(sRef.asCString()));
+         if (isDefault) {
+            //            log.print("Setting default resetMethods (non-shared)\n");
+            defaultResetMethods = itDev->getResetMethods();
          }
-         itDev->addEraseMethod(option);
+      }
+      else if (XMLString::equals(propertyTag.asXMLString(), tag_eraseMethods.asXMLString())) {
+         // <flashProgram>
+         itDev->setEraseMethods(parseEraseMethods(currentProperty));
+         if (isDefault) {
+            //            log.print("Setting default eraseMethods (non-shared)\n");
+            defaultEraseMethods = itDev->getEraseMethods();
+         }
+      }
+      else if (XMLString::equals(propertyTag.asXMLString(), tag_eraseMethodsRef.asXMLString())) {
+         // <flashProgramRef>
+         DualString sRef(currentProperty->getAttribute(attr_ref.asXMLString()));
+         itDev->setEraseMethods(deviceDataBase->getEraseMethods(sRef.asCString()));
+         if (isDefault) {
+            //            log.print("Setting default eraseMethods (non-shared)\n");
+            defaultEraseMethods = itDev->getEraseMethods();
+         }
       }
       else {
          throw MyException(string("DeviceXmlParser::parseDevice() - Unknown tag - ")+propertyTag.asCString());
@@ -1788,12 +1955,12 @@ void DeviceXmlParser::parseDeviceXML(void) {
       // Get device name. Note - Assumes ASCII string
       DualString targetName(deviceEl->getAttribute(attr_name.asXMLString()));
       setCurrentName(targetName.asCString());
+      // Alias device
       if (strlen(currentDeviceName) == 0) {
          throw MyException(string("DeviceXmlParser::parseDeviceXML() - Device name missing or invalid"));
       }
 //      log.print("Parsing Device %s\n", targetName.asCString());
       if (deviceEl->hasAttribute(attr_alias.asXMLString())) {
-         // Alias device
 
          // Get real device name. Note - Assumes ASCII string
          DualString aliasValue(deviceEl->getAttribute(attr_alias.asXMLString()));
@@ -1837,10 +2004,10 @@ void DeviceXmlParser::parseDeviceXML(void) {
          if (deviceEl->hasAttribute(attr_hidden.asXMLString())) {
             itDev->setHidden();
          }
+         // Allow default devices without name - they are discarded
          if (isDefault) {
-            // Add device as default
-            log.print("Setting default device %s\n", targetName.asCString());
-            deviceDataBase->setDefaultDevice(itDev);
+            // Discard default devices
+            log.print("Discarding Device %s\n", targetName.asCString());
          }
          else {
             // Add general device

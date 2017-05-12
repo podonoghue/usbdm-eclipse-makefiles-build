@@ -254,6 +254,7 @@ typedef std::tr1::shared_ptr<TclScript>         TclScriptPtr;
  */
 typedef std::tr1::shared_ptr<const TclScript>   TclScriptConstPtr;
 
+
 /*
  * ============================================================================================
  */
@@ -1076,6 +1077,39 @@ public:
    TargetSDID(uint32_t mask, uint32_t value) : mask(mask), value(value) {}
 };
 
+/*
+ * ============================================================================================
+ */
+class EraseMethods;
+
+/**
+ * Smart pointer for EraseMethods
+ */
+typedef std::tr1::shared_ptr<EraseMethods>         EraseMethodsPtr;
+/**
+ * Smart pointer for EraseMethods
+ */
+typedef std::tr1::shared_ptr<const EraseMethods>   EraseMethodsConstPtr;
+
+
+/*
+ * ============================================================================================
+ */
+class ResetMethods;
+
+/**
+ * Smart pointer for ResetMethods
+ */
+typedef std::tr1::shared_ptr<ResetMethods>         ResetMethodsPtr;
+/**
+ * Smart pointer for ResetMethods
+ */
+typedef std::tr1::shared_ptr<const ResetMethods>   ResetMethodsConstPtr;
+
+/*
+ * ============================================================================================
+ */
+
 class DeviceData;
 
 typedef std::tr1::shared_ptr<DeviceData> DeviceDataPtr;
@@ -1093,6 +1127,14 @@ public:
       eraseAll,         //! Erase all flash arrays
       eraseSelective,   //! Erase flash block selectively
    } EraseOptions;
+
+   //! How to reset target
+   typedef enum  {
+      resetHardware,    //! Use hardware reset
+      resetSoftware,    //! Use software reset
+      defaultCustom,    //! Use device default reset method
+      resetNone,        //! Use hardware reset
+   } ResetOptions;
 
    //! Get readable names for erase options
    static const char *getEraseOptionName(EraseOptions option);
@@ -1135,7 +1177,8 @@ private:
    std::vector<TargetSDID>       targetSDIDs;            //!< System Device Identification Register values (0=> don't know/care)
    RegisterDescriptionConstPtr   registerDescription;    //!< Register description
    uint32_t                      hcs08sbdfrAddress;      //!< HCS08 SBDFR register address
-   std::vector<EraseOptions>     eraseOptions;           //!< Possible erase methods
+   EraseMethodsConstPtr          eraseMethods;           //!< Possible erase methods
+   ResetMethodsConstPtr          resetMethods;           //!< Possible reset methods
 
 public:
    static const DeviceData       defaultDevice;
@@ -1190,7 +1233,10 @@ public:
    uint16_t                       getPageNo(uint32_t address);
 
    void                           addSDID(uint32_t mask, uint32_t value);
-   void                           addEraseMethod(EraseOptions method);
+   void                           setEraseMethods(EraseMethodsConstPtr methods);
+   EraseMethodsConstPtr           getEraseMethods() const;
+   void                           setResetMethods(ResetMethodsConstPtr methods);
+   ResetMethodsConstPtr           getResetMethods() const;
 
    void                           addMemoryRegion(MemoryRegionPtr pMemoryRegion);
    void                           setTargetName(const std::string &name);
@@ -1235,7 +1281,7 @@ class DEVICE_DATA_DESCSPEC DeviceDataBase {
 private:
    std::vector<DeviceDataPtr>                            deviceData;         //!< List of devices
    std::map<const std::string, SharedInformationItemPtr> sharedInformation;  //!< Shared information referenced by devices
-   DeviceDataPtr                                         defaultDevice;      //!< Generic 'default' device
+//   DeviceDataPtr                                         defaultDevice;      //!< Generic 'default' device
    TargetType_t                                          targetType;         //!< Target type
 
    DeviceDataBase (DeviceDataBase &);                                        //!< No copying
@@ -1302,8 +1348,107 @@ public:
    RegisterDescriptionConstPtr getRegisterDescription(std::string key) const;
    FlashProgramConstPtr        getFlashProgram(std::string key) const;
    FlexNVMInfoConstPtr         getFlexNVMInfo(std::string key) const;
+   ResetMethodsConstPtr        getResetMethods(std::string key) const;
+   EraseMethodsConstPtr        getEraseMethods(std::string key) const;
 };
 
 typedef std::tr1::shared_ptr<DeviceDataBase> DeviceDataBasePtr;
+
+/*
+ * ============================================================================================
+ */
+
+/**
+ * Class representing erase methods in the database
+ */
+class DEVICE_DATA_DESCSPEC EraseMethods : public SharedInformationItem {
+   unsigned                 fMethod;
+   DeviceData::EraseOptions fDefaultMethod;
+
+public:
+   EraseMethods() : fMethod(0), fDefaultMethod(DeviceData::EraseOptions::eraseNone) {
+   }
+   /**
+    * Add erase method
+    */
+   void addMethod(DeviceData::EraseOptions method) {
+      fMethod |= (1<<((int)method));
+   }
+   /**
+    * Add default erase method
+    */
+   void addDefaultMethod(DeviceData::EraseOptions method) {
+      fMethod       |= (1<<((int)method));
+      fDefaultMethod = method;
+   }
+   /**
+    * Remove erase method
+    */
+   void removeMethod(DeviceData::EraseOptions method) {
+      fMethod &= ~(1<<((int)method));
+   }
+   /**
+    * Checks if a method is included
+    */
+   bool includesMethod(DeviceData::EraseOptions method) const {
+      return (fMethod & (1<<((int)method))) != 0;
+   }
+   /**
+    * Get default method
+    */
+   DeviceData::EraseOptions getDefaultMethod(DeviceData::ResetOptions method) const {
+      return fDefaultMethod;
+   }
+};
+
+/*
+ * ============================================================================================
+ */
+
+/**
+ * Class Representing Reset methods in the database
+ */
+class DEVICE_DATA_DESCSPEC ResetMethods : public SharedInformationItem {
+   unsigned                 fMethod;
+   DeviceData::ResetOptions fDefaultMethod;
+
+public:
+   /**
+    * Create default empty
+    */
+   ResetMethods() : fMethod(0), fDefaultMethod(DeviceData::ResetOptions::defaultCustom) {
+   }
+   /**
+    * Add method
+    */
+   void addMethod(DeviceData::ResetOptions method) {
+      fMethod |= (1<<((int)method));
+   }
+   /**
+    * Add default erase method
+    */
+   void addDefaultMethod(DeviceData::ResetOptions method) {
+      fMethod |= (1<<((int)method));
+      fDefaultMethod = method;
+   }
+   /**
+    * Remove erase method
+    */
+   void removeMethod(DeviceData::ResetOptions method) {
+      fMethod &= ~(1<<((int)method));
+   }
+   /**
+    * Checks if a method is included
+    */
+   bool isIncludedMethod(DeviceData::ResetOptions method) {
+      return (fMethod & (1<<((int)method))) != 0;
+   }
+   /**
+    * Get default method
+    */
+   bool getDefaultMethod(DeviceData::ResetOptions method) {
+      return fDefaultMethod;
+   }
+};
 
 #endif /* DEVICEDATA_HPP_ */

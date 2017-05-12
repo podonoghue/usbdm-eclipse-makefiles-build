@@ -302,7 +302,8 @@ typedef enum { /* type of reset action required */
    RESET_HARDWARE    = (1<<2), //!< Use hardware RESET pin reset
    RESET_SOFTWARE    = (2<<2), //!< Use software (BDM commands) reset
    RESET_POWER       = (3<<2), //!< Cycle power
-   RESET_DEFAULT     = (7<<2), //!< Use target specific default method
+   RESET_DEFAULT     = (7<<2), /**< Use target specific default method
+                                   of limited use for ARM targets as there is no sensible default */
 } TargetMode_t;
 
 //=======================================================================

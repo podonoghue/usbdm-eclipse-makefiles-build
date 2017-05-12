@@ -1,24 +1,27 @@
-<?xml version="1.0" encoding="utf-8"?> 
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE device>
+<device
+   schemaVersion="1.1"
+   xmlns:xi="http://www.w3.org/2001/XInclude"
+   xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd"
+>
+   <name>LPC13xx</name>
+   <version>1</version>
+   <description>LPC13xx</description>
+   <cpu>
+      <name>CM3</name>
+      <revision>r1p0</revision>
+      <endian>little</endian>
+      <mpuPresent>false</mpuPresent>
+      <fpuPresent>false</fpuPresent>
+      <vtorPresent>true</vtorPresent>
+      <nvicPrioBits>4</nvicPrioBits>
+      <vendorSystickConfig>false</vendorSystickConfig>
+   </cpu>
+   <headerDefinitionsPrefix>LPC_</headerDefinitionsPrefix>
+   <addressUnitBits>8</addressUnitBits>
+   <width>32</width>
 
-<device schemaVersion="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance"
-	xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_0.xsd">
-	<name>LPC13xx</name>
-	<version>1</version>
-	<description>LPC13xx</description>
-	<addressUnitBits>8</addressUnitBits>
-	<width>32</width>
-	<size>32</size>
-
-	<!--
-<headerFile>
-    <vendor>NXP</vendor>
-    <core>CM3</core>
- 
-    <prefixes>
-      <peripheral>LPC_</peripheral>
-    </prefixes>
-</headerFile>
--->
 <!-- version 0.1 = initial version
      version 0.2 = internal version with prefixes removed in register names for correct naming in future header files
      version 1 = updates from UM10375 v5

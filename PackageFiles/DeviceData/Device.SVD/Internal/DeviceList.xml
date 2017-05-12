@@ -5,6 +5,8 @@
    <description>Lookup table for mapping complete device name to the SVD file that describes the device</description>
    <deviceList>
       <device name="LPC11Uxx"         svdFileName="LPC11Uxx"   pattern="LPC11U.*" />
+      <device name="LPC13Uxx"         svdFileName="LPC13Uxx"   pattern="LPC13U.*" />
+      <device name="LPC13xx"          svdFileName="LPC13xx"    pattern="LPC13.*" />
    
       <device name="MK10DxxxM5"       svdFileName="MK10D5"     pattern="MK10D.*M5" />
       <device name="MK10DxxxM7"       svdFileName="MK10D7"     pattern="MK10D.*M7" />

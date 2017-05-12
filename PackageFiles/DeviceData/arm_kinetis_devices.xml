@@ -741,29 +741,20 @@ Test Devices:
          <memoryRange start="0xE0000000" end="0xE00FFFFF" name="peripherals"  />  <!-- Private Peripherals -->
       </memory>         
            
+      <resetMethods id="kinetisResetModes" >
+         <resetMethod method="hardware" isDefault="true" />
+         <resetMethod method="software" />
+      </resetMethods>
+      
+      <eraseMethods id="kinetisEraseMethods" >
+         <eraseMethod method="Mass" isDefault="true"  />
+         <eraseMethod method="All" />
+         <eraseMethod method="Selective" />
+      </eraseMethods>
+
    </sharedInformation>
    
-   <deviceList>
-<!-- ===================================================================================== -->
-<!-- Default -->
-      <device name="_Default" family="CortexM4" isDefault="true">
-         <!-- Regular flash or pFlash memory -->
-         <memory type="flash" registerAddress="0x40020000" securityAddress="0x0400" sectorSize="1024" alignment="4">
-            <securityEntryRef ref="Kinetis-K-security" />
-            <memoryRange start="0x00000000" size="256K" />
-         </memory>
-         <!-- flexNVM memory that may be used as EEEPROM backing store or dFlash -->
-         <memory registerAddress="0xFF9820" type="flexNVM" sectorSize="1024" alignment="4">
-            <memoryRange start="0x10000000" size="256K" />
-         </memory>
-         <memory registerAddress="0xFF9820" type="dFlash" sectorSize="1024" alignment="4">
-            <memoryRange start="0x10000000" size="256K" />
-         </memory>
-         <memory type="ram">
-            <memoryRange start="0x1FFFC000" end="0x20003FFF" />
-         </memory>
-         <sdidAddress value="0x40048024" />
-         <!-- 
+            <!-- 
          // KE series
          SDID[15..0]  = Other uses
          SDID[6..4]   = "000"
@@ -845,11 +836,18 @@ Test Devices:
                
          mask 0xFFFF0F80
          -->
-         <sdidMask value="0xFFFF0FF0" />
+   
+   <deviceList>
+<!-- ===================================================================================== -->
+<!-- Default -->
+      <device name="kinetisDefault" family="CortexM4" isDefault="true">
+         <resetMethodsRef ref="kinetisResetModes" />
+         <eraseMethodsRef ref="kinetisEraseMethods"/>
+         <memory type="flash" >
+            <memoryRange start="0x00000000" size="0x1000" />
+         </memory>
+         <sdidAddress value="0x40048024" />
          <sdid value="0x00000000" mask="0x00000000" />
-         <tclScriptRef ref="Kinetis-Default-flash-scripts" />
-         <flashProgramRef ref="Kinetis-FTFL-MK-flash-program" />
-         <registerDescriptionRef ref="CortexM4-register-description" />
          <note>Default ARM Device</note>
       </device>
 	  
