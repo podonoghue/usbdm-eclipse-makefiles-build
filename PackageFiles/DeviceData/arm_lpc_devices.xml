@@ -130,15 +130,15 @@
       </resetMethods>
       
       <eraseMethods id="lpcEraseMethods" >
-         <eraseMethod method="Selective" />
+         <eraseMethod method="Selective" isDefault="true"  />
       </eraseMethods>
    </sharedInformation>
 
    <deviceList>
 <!-- 
-   NXP LPC Default Devices 
+   NXP LPC Defaults
 -->
-      <device name="lpcDefaultDevice" family="CortexM0" subfamily="LPC11U3x_2x_1x">
+      <device name="lpcDefaultDevice" family="CortexM0" subfamily="LPC11U3x_2x_1x"  isDefault="true">
          <resetMethodsRef ref="lpcResetModes" />
          <eraseMethodsRef ref="lpcEraseMethods" />
          <memory type="flash" >

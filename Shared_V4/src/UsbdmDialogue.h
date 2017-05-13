@@ -146,6 +146,8 @@ protected:
 
    std::string          update();
 
+   DeviceData::EraseOptions getCurrentEraseSelection();
+
    // Interface
    void                 populateBDMChoices(void);
    void                 populateInterfaceSpeeds();

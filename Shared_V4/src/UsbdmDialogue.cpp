@@ -283,6 +283,19 @@ void UsbdmDialogue::Init() {
    updateSecurity();
 }
 
+/**
+ * Get current erase method selection
+ */
+DeviceData::EraseOptions UsbdmDialogue::getCurrentEraseSelection() {
+   // Get current erase method selection
+   DeviceData::EraseOptions currentEraseMethod = DeviceData::eraseTargetDefault;
+   int index = eraseChoiceControl->GetSelection();
+   if (index>0) {
+      currentEraseMethod = (DeviceData::EraseOptions)(int)(intptr_t)eraseChoiceControl->GetClientData(index);
+   }
+   return currentEraseMethod;
+}
+
 std::string UsbdmDialogue::update() {
    LOGGING;
 
@@ -503,9 +516,10 @@ std::string UsbdmDialogue::update() {
       gdbServerPortNumberTextControl->SetDecimalValue(bdmInterface->getGdbServerPort());
       gdbTtyPortNumberTextControl->SetDecimalValue(bdmInterface->getGdbTtyPort());
    }
-
+   // Get current erase method selection
+   DeviceData::EraseOptions currentEraseMethod = getCurrentEraseSelection();
    bool enableProgramming = ((deviceInterface->getCurrentDeviceIndex() >= 0) &&
-         (fileLoaded || (doTrim && (deviceInterface->getCurrentDevice()->getEraseOption() != DeviceData::eraseMass))));
+         (fileLoaded || (doTrim && (currentEraseMethod == DeviceData::eraseSelective))));
    programFlashButtonControl->Enable(enableProgramming);
    verifyFlashButtonControl->Enable(enableProgramming);
    loadAndGoButtonControl->Enable(enableProgramming);
@@ -531,15 +545,18 @@ std::string UsbdmDialogue::update() {
 
 void UsbdmDialogue::populateEraseControl() {
    LOGGING_Q;
-   EraseMethodsConstPtr eraseMethods;
-   DeviceDataConstPtr device = deviceInterface->getCurrentDevice();
-   if (device != 0) {
-      eraseMethods = device->getEraseMethods();
-   }
+   DeviceDataConstPtr   device       = deviceInterface->getCurrentDevice();
+   EraseMethodsConstPtr eraseMethods = device->getEraseMethods();
+
+   // Save current selection
+   DeviceData::EraseOptions currentEraseMethod = getCurrentEraseSelection();
+
+   // Update control
    eraseChoiceControl->Clear();
-   eraseChoiceControl->Append(wxString(DeviceData::getEraseOptionName(DeviceData::eraseNone),wxConvUTF7),      (void*)DeviceData::eraseNone);
+   eraseChoiceControl->Append(wxString(DeviceData::getEraseOptionName(DeviceData::eraseTargetDefault),wxConvUTF7),  (void*)DeviceData::eraseTargetDefault);
+   eraseChoiceControl->Append(wxString(DeviceData::getEraseOptionName(DeviceData::eraseNone),wxConvUTF7),           (void*)DeviceData::eraseNone);
    if (eraseMethods == 0) {
-      // Use older methods
+      // Use older method
       log.print("Using legacy method\n");
       if (targetProperties&HAS_SELECTIVE_ERASE) {
          eraseChoiceControl->Append(wxString(DeviceData::getEraseOptionName(DeviceData::eraseSelective),wxConvUTF7), (void*)DeviceData::eraseSelective);
@@ -565,12 +582,13 @@ void UsbdmDialogue::populateEraseControl() {
          eraseChoiceControl->Append(wxString(DeviceData::getEraseOptionName(DeviceData::eraseMass),wxConvUTF7),      (void*)DeviceData::eraseMass);
       }
    }
-   if (!eraseChoiceControl->SetStringSelection(wxString(DeviceData::getEraseOptionName(device->getEraseOption()),wxConvUTF7))) {
-      // Current erase option not supported - default to 1st item
-      eraseChoiceControl->SetSelection(0);
-      DeviceData::EraseOptions eraseOption = (DeviceData::EraseOptions)(int)(intptr_t)eraseChoiceControl->GetClientData(0);
-      deviceInterface->getCurrentDevice()->setEraseOption(eraseOption);
+   // Try to restore previous option
+   if (!eraseChoiceControl->SetStringSelection(wxString(DeviceData::getEraseOptionName(currentEraseMethod),wxConvUTF7))) {
+      // Current erase method not supported - change to target preferred method
+      log.print("Using default %s\n", DeviceData::getEraseOptionName(DeviceData::eraseTargetDefault));
+      currentEraseMethod = DeviceData::eraseTargetDefault;
    }
+   eraseChoiceControl->SetStringSelection(wxString(DeviceData::getEraseOptionName(currentEraseMethod),wxConvUTF7));
 }
 
 /** Load settings from a settings object
@@ -853,7 +871,6 @@ void UsbdmDialogue::setDeviceIndex(int newDeviceIndex) {
 
    // Restore non-device-specific settings.
    deviceInterface->getCurrentDevice()->setSecurity(savedDevice.getSecurity());
-   deviceInterface->getCurrentDevice()->setEraseOption(savedDevice.getEraseOption());
    deviceInterface->getCurrentDevice()->setConnectionFreq(savedDevice.getConnectionFreq());
    if (!doTrim) {
       deviceInterface->getCurrentDevice()->setClockTrimFreq(0);
@@ -1474,6 +1491,14 @@ USBDM_ErrorCode UsbdmDialogue::programFlash(bool loadAndGo) {
       flashprogrammer = FlashProgrammerFactory::createFlashProgrammer(bdmInterface);
    }
    do {
+      DeviceDataPtr device = deviceInterface->getCurrentDevice();
+
+      // Update device from current erase method selection
+      DeviceData::EraseOptions currentEraseMethod = getCurrentEraseSelection();
+      if (currentEraseMethod == DeviceData::eraseTargetDefault) {
+         currentEraseMethod = device->getEraseMethods()->getDefaultMethod();
+         device->setEraseOption(currentEraseMethod);
+      }
       // Temporarily change power options for "load & Go"
       bool leaveTargetPowered = bdmInterface->getBdmOptions().leaveTargetPowered;
       bdmInterface->getBdmOptions().leaveTargetPowered = loadAndGo||leaveTargetPowered;
@@ -1494,7 +1519,7 @@ USBDM_ErrorCode UsbdmDialogue::programFlash(bool loadAndGo) {
             continue;
          }
       }
-      rc = flashprogrammer->setDeviceData(deviceInterface->getCurrentDevice());
+      rc = flashprogrammer->setDeviceData(device);
       if (rc != BDM_RC_OK) {
          continue;
       }
@@ -2636,10 +2661,13 @@ void UsbdmDialogue::OnSecurityRadioboxSelected( wxCommandEvent& event ) {
  *  @param event The event to handle
  */
 void UsbdmDialogue::OnEraseChoiceSelect( wxCommandEvent& event ) {
-   int selIndex = event.GetSelection();
-   DeviceData::EraseOptions eraseOption = (DeviceData::EraseOptions)(int)(intptr_t)eraseChoiceControl->GetClientData(selIndex);
-   deviceInterface->getCurrentDevice()->setEraseOption(eraseOption);
-//      log.print("ProgrammerDialogue::OnEraseChoiceSelect(%s)\n", DeviceData::getEraseOptionName(eraseOption));
+   // The control is polled when needed
+
+//   int selIndex = event.GetSelection();
+//
+//   DeviceData::EraseOptions eraseOption = (DeviceData::EraseOptions)(int)(intptr_t)eraseChoiceControl->GetClientData(selIndex);
+//   deviceInterface->getCurrentDevice()->setEraseOption(eraseOption);
+////      log.print("ProgrammerDialogue::OnEraseChoiceSelect(%s)\n", DeviceData::getEraseOptionName(eraseOption));
 }
 
 /** Handler for OnMassEraseButton

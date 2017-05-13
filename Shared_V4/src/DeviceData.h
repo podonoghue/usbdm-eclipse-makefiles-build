@@ -1122,10 +1122,11 @@ class DEVICE_DATA_DESCSPEC DeviceData {
 public:
    //! How to handle erasing of flash before programming
    typedef enum  {
-      eraseNone,        //! Don't erase
-      eraseMass,        //! Mass erase / unsecure
-      eraseAll,         //! Erase all flash arrays
-      eraseSelective,   //! Erase flash block selectively
+      eraseTargetDefault,  //! Use target default
+      eraseNone,           //! Don't erase
+      eraseMass,           //! Mass erase / unsecure
+      eraseAll,            //! Erase all flash arrays
+      eraseSelective,      //! Erase flash block selectively
    } EraseOptions;
 
    //! How to reset target
@@ -1396,7 +1397,7 @@ public:
    /**
     * Get default method
     */
-   DeviceData::EraseOptions getDefaultMethod(DeviceData::ResetOptions method) const {
+   DeviceData::EraseOptions getDefaultMethod() const {
       return fDefaultMethod;
    }
 };
@@ -1446,7 +1447,7 @@ public:
    /**
     * Get default method
     */
-   DeviceData::ResetOptions getDefaultMethod(DeviceData::ResetOptions method) const {
+   DeviceData::ResetOptions getDefaultMethod() const {
       return fDefaultMethod;
    }
 };

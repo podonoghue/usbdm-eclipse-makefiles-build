@@ -789,11 +789,12 @@ FlexNVMInfoConstPtr     MemoryRegion::getflexNVMInfo() const {
 //! Get readable names for erase options
 const char *DeviceData::getEraseOptionName(EraseOptions option) {
    switch (option) {
-   case eraseNone      : return "EraseNone";
-   case eraseMass      : return "EraseMass";
-   case eraseAll       : return "EraseAll";
-   case eraseSelective : return "EraseSelective";
-   default :             return "Illegal erase option";
+   case eraseTargetDefault : return "TargetDefault";
+   case eraseNone          : return "EraseNone";
+   case eraseMass          : return "EraseMass";
+   case eraseAll           : return "EraseAll";
+   case eraseSelective     : return "EraseSelective";
+   default                 : return "Illegal erase option";
    }
 }
 
