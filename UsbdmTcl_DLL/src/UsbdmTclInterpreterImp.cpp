@@ -233,8 +233,8 @@ void UsbdmTclInterpreterImp::redirectStdOut() {
 void UsbdmTclInterpreterImp::setBdmInterface(BdmInterfacePtr bdmInterface, bool doRedirect) {
    LOGGING;
    log.print("doRedirect = %s\n", doRedirect?"TRUE":"FALSE");
-   log.print("::bdmInterface.use_count() = %d, bdmInterface.use_count() = %d\n", ::bdmInterface.use_count(), bdmInterface.use_count());
-   log.print("::bdmInterface.get() = %p,       bdmInterface.get() = %p\n",       ::bdmInterface.get(), bdmInterface.get());
+   log.print("::bdmInterface.use_count() = %ld, bdmInterface.use_count() = %ld\n", ::bdmInterface.use_count(), bdmInterface.use_count());
+   log.print("::bdmInterface.get() = %p,        bdmInterface.get() = %p\n",        ::bdmInterface.get(), bdmInterface.get());
    ::bdmInterface = bdmInterface;
    if (bdmInterface == 0) {
       log.error("createTclInterpreter() bdmInterface == 0x%p\n", bdmInterface.get() );
@@ -690,6 +690,27 @@ static int cmd_setTarget(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
    return TCL_OK;
 }
 
+static int cmd_useReset(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
+   // useReset T|F
+   if (argc > 2) {
+      Tcl_WrongNumArgs(interp, 2, argv, "<T|F>");
+      return TCL_ERROR;
+   }
+   bool useReset = false;
+   if (argc == 2) {
+      const char *arg = Tcl_GetString(argv[1]);
+      if (strncasecmp(arg, "1", 1) == 0) {
+         useReset = true;
+      }
+      if (strncasecmp(arg, "T", 1) == 0) {
+         useReset = true;
+      }
+   }
+   bdmInterface->getBdmOptions().useResetSignal = useReset;
+   PRINT(":useReset %c\n", (useReset?'T':'F'));
+   return TCL_OK;
+}
+
 //! Set target Vpp - This has no affect until target is set
 static int cmd_setVpp(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    // setTargetVpp <standby|on|off>
@@ -776,6 +797,11 @@ static int cmd_reset(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *a
          case 'P' :
             targetMode = (TargetMode_t)(targetMode & ~RESET_METHOD_MASK);
             targetMode = (TargetMode_t)(targetMode | RESET_POWER);
+            break;
+         case 'v':
+         case 'V' :
+            targetMode = (TargetMode_t)(targetMode & ~RESET_METHOD_MASK);
+            targetMode = (TargetMode_t)(targetMode | RESET_VENDOR);
             break;
          }
       }
@@ -3312,66 +3338,67 @@ static int cmd_exit(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *ar
 
 //! Usage message
 static const char usageText[] =
-   "connect                      - Connect to target\n"
-   "closeBDM                     - Close BDM connection\n"
-   "debug <value>                - Debug commands\n"
-   "dialogue <title> <body> yes_no|cancel|ok|i_exclaim|i_question|i_info|i_err\n"
-   "       returns 0=>cancel, 1=yes, 2=no, 3=ok\n"
-   "                             - display dialogue\n"
-   "exit                         - Exit program\n"
-   "getErrorMessage <rc>         - Get given USBDM rc as String\n"
-   "getLastError                 - Get last USBDM rc as number\n"
-   "getLastErrorMessage          - Get last USBDM rc as string\n"
-   "go                           - Start from current PC\n"
-   "getcap                       - Get BDM Capabilities\n"
-   "gs                           - Read status register\n"
-   "halt                         - Halt the target\n"
-   "help                         - Display help\n"
-   "jtag-reset                   - Take JTAG TAP to TEST-LOGIC-RESET state\n"
-   "jtag-shift <S|R|D|I><#bits><values>  - Shift given values into current chain\n"
-   "                               S=stay, R=exit Run-test/Idle, D=shift-DR, I=shiftIR\n"
-   "jtag-shift-dr                - Set up for DR chain shift\n"
-   "jtag-shift-ir                - Set up for IR chain shift\n"
-   "jtag-idcode                  - Read IDCODE from JTAG\n"
-   "load <filename>              - Load file image into buffer\n"
-   "log 0|1                      - setting ARM loggin OFF/ON\n"
-   "memorySpace [<N|X|P>]        - set memory space (DSC)\n"
-   "openbdm [<bdmNumber>]        - Open given BDM\n"
-   "pinSet <pin=level>           - Control pins, pin=RST|BKGD|TRST|BKPT|TA|SWD,\n"
-   "                                level=H|L|3|-\n"
-   "program                      - Program image to target\n"
-   "regs                         - PRINT out registers\n"
-   "reset <N|S><H|S|P|A>         - Reset to bdm mode\n"
-   "rblock <addr> <size>         - Read block\n"
-   "rb <addr> <count>            - Read byte\n"
-   "rw <addr> <count>            - Read word\n"
-   "rl <addr> <count>            - Read longword (CFV1 only)\n"
-   "rreg <regNo>                 - Read core register\n"
-   "rdreg <regNo>                - Read debug register\n"
-   "rcreg <regNo>                - Read control register\n"
-   "setboot                      - Set USBDM module to ICP mode\n"
-   "setdevice <deviceName|-list> - Set targetdevice (e.g. MK20DX128M5)\n"
-   "setbytesex <big|little>      - Set big/little endian target\n"
-   "settarget <target>           - HCS12/HCS08/RS08/CFV1/DSC/JTAG/ARM\n"
-   "settargetvdd <0|3|5|on|off>  - Set target Vdd (only has effect if target set)\n"
-   "settargetvpp <standby|on|off>- Set target Vpp\n"
-   "speed ?Hz?                   - Set/Get speed \n"
-   "step                         - Execute a single instruction\n"
-   "sync                         - Execute a low level sync\n"
-   "tblock <start> <end> <count> - Random RAM write/read block test\n"
-   "testcreg                     - Test control register\n"
-   "testStatus                   - Read target status in an infinite loop\n"
-   "verify                       - Verify image against target\n"
-   "wc <value>                   - Write control register\n"
-   "wpc <value>                  - Write to PC\n"
-   "wblock <addr> <size> <data>  - Write block\n"
-   "wb <addr> <data>             - Write byte\n"
-   "ww <addr><value>             - Write word\n"
-   "wl <addr><value>             - Write longword (CFV1 only)\n"
-   "wreg <regNo><value>          - Write core register\n"
-   "wdreg <regNo><value>         - Write debug register\n"
-   "wcreg <regNo><value>         - Write control register\n"
-   ;
+      "connect                      - Connect to target\n"
+      "closeBDM                     - Close BDM connection\n"
+      "debug <value>                - Debug commands\n"
+      "dialogue <title> <body> yes_no|cancel|ok|i_exclaim|i_question|i_info|i_err\n"
+      "       returns 0=>cancel, 1=yes, 2=no, 3=ok\n"
+      "                             - display dialogue\n"
+      "exit                         - Exit program\n"
+      "getErrorMessage <rc>         - Get given USBDM rc as String\n"
+      "getLastError                 - Get last USBDM rc as number\n"
+      "getLastErrorMessage          - Get last USBDM rc as string\n"
+      "go                           - Start from current PC\n"
+      "getcap                       - Get BDM Capabilities\n"
+      "gs                           - Read status register\n"
+      "halt                         - Halt the target\n"
+      "help                         - Display help\n"
+      "jtag-reset                   - Take JTAG TAP to TEST-LOGIC-RESET state\n"
+      "jtag-shift <S|R|D|I><#bits><values>  - Shift given values into current chain\n"
+      "                               S=stay, R=exit Run-test/Idle, D=shift-DR, I=shiftIR\n"
+      "jtag-shift-dr                - Set up for DR chain shift\n"
+      "jtag-shift-ir                - Set up for IR chain shift\n"
+      "jtag-idcode                  - Read IDCODE from JTAG\n"
+      "load <filename>              - Load file image into buffer\n"
+      "log 0|1                      - setting ARM loggin OFF/ON\n"
+      "memorySpace [<N|X|P>]        - set memory space (DSC)\n"
+      "openbdm [<bdmNumber>]        - Open given BDM\n"
+      "pinSet <pin=level>           - Control pins, pin=RST|BKGD|TRST|BKPT|TA|SWD,\n"
+      "                                level=H|L|3|-\n"
+      "program                      - Program image to target\n"
+      "regs                         - PRINT out registers\n"
+      "reset <N|S><H|S|P|V|A>       - Reset (N=normal,S=Special), (H=Hardware,S=Software,P=Power,V=Vendor,A=All\n"
+      "rblock <addr> <size>         - Read block\n"
+      "rb <addr> <count>            - Read byte\n"
+      "rw <addr> <count>            - Read word\n"
+      "rl <addr> <count>            - Read longword (CFV1 only)\n"
+      "rreg <regNo>                 - Read core register\n"
+      "rdreg <regNo>                - Read debug register\n"
+      "rcreg <regNo>                - Read control register\n"
+      "setboot                      - Set USBDM module to ICP mode\n"
+      "setdevice <deviceName|-list> - Set targetdevice (e.g. MK20DX128M5)\n"
+      "setbytesex <big|little>      - Set big/little endian target\n"
+      "settarget <target>           - HCS12/HCS08/RS08/CFV1/DSC/JTAG/ARM\n"
+      "settargetvdd <0|3|5|on|off>  - Set target Vdd (only has effect if target set)\n"
+      "settargetvpp <standby|on|off>- Set target Vpp\n"
+      "speed ?Hz?                   - Set/Get speed \n"
+      "step                         - Execute a single instruction\n"
+      "sync                         - Execute a low level sync\n"
+      "tblock <start> <end> <count> - Random RAM write/read block test\n"
+      "testcreg                     - Test control register\n"
+      "testStatus                   - Read target status in an infinite loop\n"
+      "usereset <T|F|0|1>           - Apply reset signal when using S/W reset methods\n"
+      "verify                       - Verify image against target\n"
+      "wc <value>                   - Write control register\n"
+      "wpc <value>                  - Write to PC\n"
+      "wblock <addr> <size> <data>  - Write block\n"
+      "wb <addr> <data>             - Write byte\n"
+      "ww <addr><value>             - Write word\n"
+      "wl <addr><value>             - Write longword (CFV1 only)\n"
+      "wreg <regNo><value>          - Write core register\n"
+      "wdreg <regNo><value>         - Write debug register\n"
+      "wcreg <regNo><value>         - Write control register\n"
+      ;
 
 //! Help command
 static int cmd_help(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
@@ -3474,6 +3501,7 @@ const char *name;
       { cmd_loadFile,             "load"},
       { cmd_program,              "program"},
       { cmd_verify,               "verify"},
+      { cmd_useReset,             "usereset"},
 //      { cmd_testCReg,           "testcreg"},
       { NULL, NULL }
 };
