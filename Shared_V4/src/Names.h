@@ -46,6 +46,7 @@ char const *getPinLevelName(PinLevelMasks_t level);
 char const *getExitAction(int action);
 char const *getDHCSRName(uint32_t dhcsrValue);
 char const *getDEMCRName(uint32_t demcrValue);
+char const *getAIRCRName(uint32_t aicrValue);
 char const *getMDM_APControlName(uint32_t mdmApValue);
 char const *getMDM_APStatusName(uint32_t mdmApValue);
 char const *getARM_CTRL_STATUSRName(uint32_t value);
@@ -95,6 +96,7 @@ static inline char const *getMemSpaceName(MemorySpace_t memSpace)               
 static inline const char *getMemSpaceAbbreviatedName(MemorySpace_t memSpace)            { (void) memSpace; return ""; }
 static inline const char *getDHCSRName(uint32_t dhcsrValue)                             { (void) dhcsrValue; return ""; }
 static inline const char *getDEMCRName(uint32_t demcrValue)                             { (void) demcrValue; return ""; }
+static inline const char *getAIRCRName(uint32_t aicrValue)                              { (void) aicrValue; return ""; }
 static inline char const *getMDM_APControlName(uint32_t mdmApValue)                     { (void) mdmApValue; return ""; }
 static inline char const *getMDM_APStatusName(uint32_t mdmApValue)                      { (void) mdmApValue; return ""; }
 static inline char const *getARM_CTRL_STATUSRName(uint32_t demcrValue)                  { (void) demcrValue; return ""; }

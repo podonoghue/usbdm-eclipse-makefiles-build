@@ -207,7 +207,7 @@ static const wxCmdLineEntryDesc g_cmdLineDesc[] = {
       { wxCMD_LINE_OPTION, _("requiredBdm"),   NULL, _("Serial number of required BDM to use"),                           wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_SWITCH, _("catchvlls"),     NULL, _("Catch VLLSx resets"),                                             wxCMD_LINE_VAL_NONE   },
       { wxCMD_LINE_OPTION, _("device"),        NULL, _("Target device e.g. MCF51CN128"),                                  wxCMD_LINE_VAL_STRING },
-      { wxCMD_LINE_OPTION, _("erase"),         NULL, _("Erase method (Mass, All, Selective, None)"),                      wxCMD_LINE_VAL_STRING },
+      { wxCMD_LINE_OPTION, _("erase"),         NULL, _("Erase method (Default, Mass, All, Selective, None)"),             wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_SWITCH, _("exitOnClose"),   NULL, _("Exit Server when connection closed"),                             wxCMD_LINE_VAL_NONE   },
       { wxCMD_LINE_OPTION, _("flexNVM"),       NULL, _("FlexNVM parameters (eeprom,partition hex values)"),               wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_SWITCH, _("masserase"),     NULL, _("Equivalent to erase=Mass") },
@@ -217,6 +217,7 @@ static const wxCmdLineEntryDesc g_cmdLineDesc[] = {
       { wxCMD_LINE_OPTION, _("power"),         NULL, _("Power timing (off,recovery) 100-10000 ms"),                       wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_OPTION, _("port"),          NULL, _("Server port # to use for GDB e.g. 1234"),                         wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_OPTION, _("reset"),         NULL, _("Reset timing (active,release,recovery) 100-10000 ms"),            wxCMD_LINE_VAL_STRING },
+      { wxCMD_LINE_OPTION, _("resetMethod"),   NULL, _("Reset method (hardware, software, vendor, default)"),             wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_OPTION, _("security"),      NULL, _("Device security (unsecured, image, smart)"),                      wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_OPTION, _("securityValue"), NULL, _("Explicit security value to use (as hex string)"),                 wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_SWITCH, _("secure"),        NULL, _("Leave device secure after programming") },
@@ -366,17 +367,17 @@ USBDM_ErrorCode GdbServerApp::parseCommandLine(wxCmdLineParser& parser) {
    deviceData->setClockTrimFreq(0);
 
    if ((targetType==T_HCS08) || (targetType==T_RS08) || (targetType==T_ARM)) {
-      deviceData->setEraseOption(DeviceData::eraseMass);
+      deviceData->setEraseMethod(DeviceData::eraseMass);
    }
    else if ((targetType==T_HCS12) || (targetType==T_S12Z) || (targetType==T_CFV1) || (targetType==T_CFVx) || (targetType==T_MC56F80xx)) {
-      deviceData->setEraseOption(DeviceData::eraseAll);
+      deviceData->setEraseMethod(DeviceData::eraseAll);
    }
    bdmInterface->setMaskISR(parser.Found(_("maskInterrupts")));
    if (parser.Found(_("masserase"))) {
-      deviceData->setEraseOption(DeviceData::eraseMass);
+      deviceData->setEraseMethod(DeviceData::eraseMass);
    }
    if (parser.Found(_("noerase"))) {
-      deviceData->setEraseOption(DeviceData::eraseNone);
+      deviceData->setEraseMethod(DeviceData::eraseNone);
    }
    if (parser.Found(_("secure"))) {
       deviceData->setSecurity(SEC_SECURED);
@@ -442,16 +443,37 @@ USBDM_ErrorCode GdbServerApp::parseCommandLine(wxCmdLineParser& parser) {
    }
    if (parser.Found(_("erase"), &sValue)) {
       if (sValue.CmpNoCase(_("Mass")) == 0) {
-         deviceData->setEraseOption(DeviceData::eraseMass);
+         deviceData->setEraseMethod(DeviceData::eraseMass);
       }
       else if (sValue.CmpNoCase(_("All")) == 0) {
-         deviceData->setEraseOption(DeviceData::eraseAll);
+         deviceData->setEraseMethod(DeviceData::eraseAll);
       }
       else if (sValue.CmpNoCase(_("Selective")) == 0) {
-         deviceData->setEraseOption(DeviceData::eraseSelective);
+         deviceData->setEraseMethod(DeviceData::eraseSelective);
+      }
+      else if (sValue.CmpNoCase(_("Vendor")) == 0) {
+         deviceData->setEraseMethod(DeviceData::eraseTargetDefault);
       }
       else if (sValue.CmpNoCase(_("None")) == 0) {
-         deviceData->setEraseOption(DeviceData::eraseNone);
+         deviceData->setEraseMethod(DeviceData::eraseNone);
+      }
+      else {
+         logUsageError(parser, _("***** Error: Illegal erase value.\n"));
+         return BDM_RC_ILLEGAL_PARAMS;
+      }
+   }
+   if (parser.Found(_("resetMethod"), &sValue)) {
+      if (sValue.CmpNoCase(_("Hardware")) == 0) {
+         deviceData->setResetMethod(DeviceData::resetHardware);
+      }
+      else if (sValue.CmpNoCase(_("Software")) == 0) {
+         deviceData->setResetMethod(DeviceData::resetSoftware);
+      }
+      else if (sValue.CmpNoCase(_("Vendor")) == 0) {
+         deviceData->setResetMethod(DeviceData::resetVendor);
+      }
+      else if (sValue.CmpNoCase(_("Default")) == 0) {
+         deviceData->setResetMethod(DeviceData::resetTargetDefault);
       }
       else {
          logUsageError(parser, _("***** Error: Illegal erase value.\n"));

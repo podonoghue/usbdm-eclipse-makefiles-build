@@ -405,7 +405,7 @@ USBDM_ErrorCode getDeviceData(TargetType_t targetType, DeviceDataPtr &deviceData
    }
    int eraseOptions;
    getAttribute(KeyEraseMethod, eraseOptions, (int)DeviceData::eraseAll);
-   deviceData->setEraseOption((DeviceData::EraseOptions)eraseOptions);
+   deviceData->setEraseMethod((DeviceData::EraseMethods)eraseOptions);
 
    int securityOption;
    getAttribute(KeySecurity, securityOption, (int)SEC_SMART);
@@ -452,7 +452,7 @@ USBDM_ErrorCode loadSettings(BdmInterfacePtr bdmInterface) {
    getAttribute(KeyUseAltBDMClock,           bdmOptions.bdmClockSource,       bdmOptions.bdmClockSource);
    getAttribute(KeyConnectionSpeed,          bdmOptions.interfaceFrequency,   bdmOptions.interfaceFrequency);
    bdmOptions.interfaceFrequency /= 1000; // Convert to kHz
-   
+
    getAttribute(KeyPowerOffDuration,         bdmOptions.powerOffDuration,       bdmOptions.powerOffDuration);
    getAttribute(KeyPowerOnRecoveryInterval,  bdmOptions.powerOnRecoveryInterval,bdmOptions.powerOnRecoveryInterval);
    getAttribute(KeyResetDuration,            bdmOptions.resetDuration,          bdmOptions.resetDuration);

@@ -95,7 +95,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	
 	useResetSignalControl = new wxCheckBox( sbSizer6->GetStaticBox(), wxID_ANY, wxT("Use hardware RESET"), wxDefaultPosition, wxDefaultSize, 0 );
 	useResetSignalControl->SetValue(true); 
-	useResetSignalControl->SetToolTip( wxT("Drive RESET signal when resetting target\nThis may be applied with another reset method.") );
+	useResetSignalControl->SetToolTip( wxT("Drive RESET signal when resetting target") );
 	
 	sbSizer6->Add( useResetSignalControl, 0, wxALL, 5 );
 	
@@ -338,7 +338,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	wxArrayString eraseChoiceControlChoices;
 	eraseChoiceControl = new wxChoice( sbSizer131->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, eraseChoiceControlChoices, 0 );
 	eraseChoiceControl->SetSelection( 0 );
-	eraseChoiceControl->SetToolTip( wxT("TargetDefault - Use target dependent default\nNone\t      - Don't erase before programming\nSelective\t      - Erase only sectors being programmed\nAll\t      - Erase entire chip\nMass\t      - Use device specific mass erase method") );
+	eraseChoiceControl->SetToolTip( wxT("None\t      - Don't erase before programming\nTargetDefault - Use target dependent default\nSelective\t      - Erase only sectors being programmed\nAll\t      - Erase entire chip\nMass\t      - Use device specific mass erase method") );
 	
 	sbSizer131->Add( eraseChoiceControl, 1, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -373,12 +373,12 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	wxArrayString resetChoiceControlChoices;
 	resetChoiceControl = new wxChoice( sbSizer16->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, resetChoiceControlChoices, 0 );
 	resetChoiceControl->SetSelection( 0 );
-	resetChoiceControl->SetToolTip( wxT("TargetDefault\tTarget dependent default\nHardware \tHardware - reset pin\nSoftware\t\tSoftware method\nVendor\t\tVendor method (e.g. Kinetis MDM-AP)") );
+	resetChoiceControl->SetToolTip( wxT("TargetDefault\tTarget dependent default\nHardware\t\tHardware - reset pin\nSoftware\t\tSoftware method\nVendor\t\tVendor method (e.g. Kinetis MDM-AP)") );
 	
 	sbSizer16->Add( resetChoiceControl, 0, wxALL|wxEXPAND, 5 );
 	
 	
-	bSizer14->Add( sbSizer16, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizer14->Add( sbSizer16, 1, wxEXPAND|wxALL, 5 );
 	
 	wxStaticBoxSizer* sbSizer141;
 	sbSizer141 = new wxStaticBoxSizer( new wxStaticBox( fTargetPanel, wxID_ANY, wxT("Options") ), wxHORIZONTAL );

@@ -1127,18 +1127,22 @@ public:
       eraseMass,           //! Mass erase / unsecure
       eraseAll,            //! Erase all flash arrays
       eraseSelective,      //! Erase flash block selectively
-   } EraseOptions;
+   } EraseMethods;
 
    //! How to reset target
    typedef enum  {
-      resetHardware,    //! Use hardware reset
-      resetSoftware,    //! Use software reset
-      defaultCustom,    //! Use device default reset method
-      resetNone,        //! Use hardware reset
-   } ResetOptions;
+      resetTargetDefault,  //! Use target default
+      resetHardware,       //! Use hardware reset
+      resetSoftware,       //! Use software reset
+      resetVendor,         //! Use device default reset method
+      resetNone,           //! Use hardware reset
+   } ResetMethods;
 
-   //! Get readable names for erase options
-   static const char *getEraseOptionName(EraseOptions option);
+   /** Get readable names for erase options */
+   static const char *getEraseMethodName(EraseMethods option);
+
+   /** Get readable names for reset options */
+   static const char *getResetMethodName(ResetMethods option);
 
    //! Structure to hold FlexNVM information
    class FlexNVMParameters {
@@ -1168,7 +1172,6 @@ private:
    uint32_t                      watchdogAddress;        //!< Address of watchdog (COPCTL, WDOG etc) register
    uint32_t                      SDIDAddress;            //!< Address of SDID register
    SecurityOptions_t             security;               //!< Determines security options of programmed target (modifies NVFOPT value)
-   EraseOptions                  eraseOption;            //!< How to handle erasing of flash before programming
    std::vector<MemoryRegionPtr>  memoryRegions;          //!< Different memory regions e.g. EEPROM, RAM etc.
    mutable MemoryRegionConstPtr  lastMemoryRegionUsed;   //!< To improve memory searches
    TclScriptConstPtr             flashScripts;           //!< Flash script
@@ -1178,8 +1181,10 @@ private:
    std::vector<TargetSDID>       targetSDIDs;            //!< System Device Identification Register values (0=> don't know/care)
    RegisterDescriptionConstPtr   registerDescription;    //!< Register description
    uint32_t                      hcs08sbdfrAddress;      //!< HCS08 SBDFR register address
-   EraseMethodsConstPtr          eraseMethods;           //!< Possible erase methods
    ResetMethodsConstPtr          resetMethods;           //!< Possible reset methods
+   EraseMethodsConstPtr          eraseMethods;           //!< Possible erase methods
+   ResetMethods                  resetMethod;            //!< Reset method to use e.g. hardware, software
+   EraseMethods                  eraseMethod;            //!< How to handle erasing of flash before programming
 
 public:
    static const DeviceData       defaultDevice;
@@ -1202,7 +1207,6 @@ public:
    unsigned long                  getClockTrimFreq() const;  /*Hz*/
    unsigned long                  getConnectionFreq() const; /*Hz*/
    SecurityOptions_t              getSecurity() const;
-   EraseOptions                   getEraseOption() const;
    uint32_t                       getWatchdogAddress() const;
    uint32_t                       getSDIDAddress() const;
    unsigned int                   getBDMtoBUSFactor() const;
@@ -1238,6 +1242,10 @@ public:
    EraseMethodsConstPtr           getEraseMethods() const;
    void                           setResetMethods(ResetMethodsConstPtr methods);
    ResetMethodsConstPtr           getResetMethods() const;
+   void                           setResetMethod(ResetMethods method);
+   ResetMethods                   getResetMethod() const;
+   void                           setEraseMethod(EraseMethods method);
+   EraseMethods                   getEraseMethod() const;
 
    void                           addMemoryRegion(MemoryRegionPtr pMemoryRegion);
    void                           setTargetName(const std::string &name);
@@ -1252,7 +1260,6 @@ public:
    void                           setConnectionFreq(unsigned long hertz /*Hz*/);
    void                           setSecurity(SecurityOptions_t option);
    void                           setCustomSecurity(const std::string &securityValue);
-   void                           setEraseOption(EraseOptions option);
    void                           setWatchdogAddress(uint32_t addr);
    void                           setSDIDAddress(uint32_t addr);
    void                           setFlashScripts(TclScriptConstPtr script);
@@ -1364,40 +1371,40 @@ typedef std::tr1::shared_ptr<DeviceDataBase> DeviceDataBasePtr;
  */
 class DEVICE_DATA_DESCSPEC EraseMethods : public SharedInformationItem {
    unsigned                 fMethod;
-   DeviceData::EraseOptions fDefaultMethod;
+   DeviceData::EraseMethods fDefaultMethod;
 
 public:
-   EraseMethods() : fMethod(0), fDefaultMethod(DeviceData::EraseOptions::eraseNone) {
+   EraseMethods() : fMethod(0), fDefaultMethod(DeviceData::EraseMethods::eraseNone) {
    }
    /**
     * Add erase method
     */
-   void addMethod(DeviceData::EraseOptions method) {
+   void addMethod(DeviceData::EraseMethods method) {
       fMethod |= (1<<((int)method));
    }
    /**
     * Add default erase method
     */
-   void addDefaultMethod(DeviceData::EraseOptions method) {
+   void addDefaultMethod(DeviceData::EraseMethods method) {
       addMethod(method);
       fDefaultMethod = method;
    }
    /**
     * Remove erase method
     */
-   void removeMethod(DeviceData::EraseOptions method) {
+   void removeMethod(DeviceData::EraseMethods method) {
       fMethod &= ~(1<<((int)method));
    }
    /**
     * Checks if a method is available
     */
-   bool isAvailableMethod(DeviceData::EraseOptions method) const {
+   bool isAvailableMethod(DeviceData::EraseMethods method) const {
       return (fMethod & (1<<((int)method))) != 0;
    }
    /**
     * Get default method
     */
-   DeviceData::EraseOptions getDefaultMethod() const {
+   DeviceData::EraseMethods getDefaultMethod() const {
       return fDefaultMethod;
    }
 };
@@ -1411,43 +1418,43 @@ public:
  */
 class DEVICE_DATA_DESCSPEC ResetMethods : public SharedInformationItem {
    unsigned                 fMethod;
-   DeviceData::ResetOptions fDefaultMethod;
+   DeviceData::ResetMethods fDefaultMethod;
 
 public:
    /**
     * Create default empty
     */
-   ResetMethods() : fMethod(0), fDefaultMethod(DeviceData::ResetOptions::defaultCustom) {
+   ResetMethods() : fMethod(0), fDefaultMethod(DeviceData::ResetMethods::resetTargetDefault) {
    }
    /**
     * Add method
     */
-   void addMethod(DeviceData::ResetOptions method) {
+   void addMethod(DeviceData::ResetMethods method) {
       fMethod |= (1<<((int)method));
    }
    /**
     * Add default erase method
     */
-   void addDefaultMethod(DeviceData::ResetOptions method) {
+   void addDefaultMethod(DeviceData::ResetMethods method) {
       addMethod(method);
       fDefaultMethod = method;
    }
    /**
     * Remove erase method
     */
-   void removeMethod(DeviceData::ResetOptions method) {
+   void removeMethod(DeviceData::ResetMethods method) {
       fMethod &= ~(1<<((int)method));
    }
    /**
     * Checks if a method is available
     */
-   bool isAvailableMethod(DeviceData::ResetOptions method) const {
+   bool isAvailableMethod(DeviceData::ResetMethods method) const {
       return (fMethod & (1<<((int)method))) != 0;
    }
    /**
     * Get default method
     */
-   DeviceData::ResetOptions getDefaultMethod() const {
+   DeviceData::ResetMethods getDefaultMethod() const {
       return fDefaultMethod;
    }
 };

@@ -108,7 +108,7 @@ uint32_t GdbHandlerCommon::get32bitLE(uint8_t buff[]) {
    return (buff[0])+(buff[1]<<8)+(buff[2]<<16)+(buff[3]<<24);
 }
 
-/*!  Writes status message in 'printf' manner
+/**  Writes status message in 'printf' manner
  *
  *   @param level  - Debug level
  *   @param rc     - Error code associated with message
@@ -131,7 +131,7 @@ USBDM_ErrorCode GdbHandlerCommon::reportGdbPrintf(GdbMessageLevel level, USBDM_E
    return BDM_RC_OK;
 }
 
-/*!  Writes status message in 'printf' manner
+/**  Writes status message in 'printf' manner
  *
  *   @param level  - Debug level
  *   @param format - Print control string
@@ -152,7 +152,7 @@ USBDM_ErrorCode GdbHandlerCommon::reportGdbPrintf(GdbMessageLevel level, const c
    return BDM_RC_OK;
 }
 
-/*!  Writes status message in 'printf' manner
+/**  Writes status message in 'printf' manner
  *
  *   @param format - Print control string
  *   @param ...    - Argument list
@@ -227,7 +227,7 @@ long GdbHandlerCommon::hexToInt8(const char *ch, unsigned long *value) {
    return true;
 }
 
-/*! Checks if two string are equal
+/** Checks if two string are equal
  *  @param s1 first string
  *  @paran s2 second string
  *
@@ -237,7 +237,7 @@ bool GdbHandlerCommon::streq(const char *s1, const char *s2) {
    return strcmp(s1,s2) == 0;
 }
 
-/*! Checks if two string are equal
+/** Checks if two string are equal
  *
  *  @param s1 first string
  *  @paran s2 second string
@@ -303,7 +303,7 @@ USBDM_ErrorCode GdbHandlerCommon::haltTarget() {
    return bdmInterface->halt();
 }
 
-/*!
+/**
  *    Single step target
  *
  * @param disableInterrupts - true/false -> disable/enable interrupts on step
@@ -317,7 +317,7 @@ USBDM_ErrorCode GdbHandlerCommon::stepTarget(bool disableInterrupts) {
    return bdmInterface->step();
 }
 
-/*!
+/**
  *    Continue target
  *
  *    If at a breakpoint then a single step is done (with interrupts masked) before
@@ -341,9 +341,9 @@ USBDM_ErrorCode GdbHandlerCommon::continueTarget(void) {
    return BDM_RC_OK;
 }
 
-//! Send portion of XML to debugger
-//!
-//!
+/**
+ * Send portion of XML to debugger
+ */
 void GdbHandlerCommon::sendXML(unsigned size, unsigned offset, const char *buffer, unsigned bufferSize) {
    LOGGING;
    gdbInOut->putGdbPreamble();
@@ -404,8 +404,8 @@ USBDM_ErrorCode GdbHandlerCommon::doReadCommand(char *command) {
    return rc;
 }
 
-/* Do monitor commands
- *
+/*
+ * Do monitor commands
  */
 USBDM_ErrorCode GdbHandlerCommon::doMonitorCommand(const char *cmd) {
    LOGGING_Q;
@@ -631,8 +631,9 @@ USBDM_ErrorCode GdbHandlerCommon::doQCommands(const GdbPacket *pkt) {
    return BDM_RC_OK;
 }
 
-//! Handle 'v...' commands
-//!
+/**
+ * Handle 'v...' commands
+ */
 USBDM_ErrorCode GdbHandlerCommon::doVCommands(const GdbPacket *pkt) {
    LOGGING;
    int address, length;
@@ -726,7 +727,7 @@ USBDM_ErrorCode GdbHandlerCommon::doVCommands(const GdbPacket *pkt) {
 USBDM_ErrorCode GdbHandlerCommon::programImage(FlashImagePtr flashImage) {
    LOGGING;
 
-   if (deviceData->getEraseOption() == DeviceData::eraseNone) {
+   if (deviceData->getEraseMethod() == DeviceData::eraseNone) {
       return BDM_RC_ILLEGAL_PARAMS;
    }
    if (deviceData->getSecurity() == SEC_SECURED) {
@@ -747,12 +748,12 @@ USBDM_ErrorCode GdbHandlerCommon::programImage(FlashImagePtr flashImage) {
    return BDM_RC_OK;
 }
 
-//!
-//! Create XML description of current device memory map in GDB expected format
-//!
-//! @param buffer     - location to return address of static buffer initialised.
-//! @param bufferSize - size of buffer data
-//!
+/**
+ * Create XML description of current device memory map in GDB expected format
+ *
+ * @param buffer     - location to return address of static buffer initialised.
+ * @param bufferSize - size of buffer data
+ */
 void GdbHandlerCommon::createMemoryMapXML(const char **buffer, unsigned *bufferSize) {
    LOGGING_Q;
    // Prefix for memory map XML
@@ -846,8 +847,8 @@ static inline std::string &ltrim(std::string &s) {
      return s;
 }
 
-/*!  Sets up the register description from device XML
- *
+/**
+ * Sets up the register description from device XML
  */
 bool GdbHandlerCommon::initRegisterDescription(void) {
    LOGGING_E;

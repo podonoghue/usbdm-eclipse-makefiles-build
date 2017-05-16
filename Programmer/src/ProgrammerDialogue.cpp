@@ -30,6 +30,7 @@ uint32_t ProgrammerDialogue::getTargetProperties(TargetType_t targetType) {
 
    // This is a programmer
    flags |= IS_PROGRAMMER;
+   flags |= HAS_SOUNDS;
 
    // These options don't apply to programmer
    flags &= ~HAS_CLK_SW;

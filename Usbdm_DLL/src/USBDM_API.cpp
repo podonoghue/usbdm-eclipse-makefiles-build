@@ -564,6 +564,7 @@ static USBDM_ErrorCode updateBdmInfo(void) {
 
    rc = USBDM_GetVersion(&USBDMVersion);
    if (rc != BDM_RC_OK) {
+      log.print("USBDM_GetVersion() - Failed!\n");
       return rc;
    }
    bdmInfo.BDMsoftwareVersion = ((USBDMVersion.bdmSoftwareVersion&0xF0)<<12)+((USBDMVersion.bdmSoftwareVersion&0x0F)<<8);
@@ -590,7 +591,7 @@ static USBDM_ErrorCode updateBdmInfo(void) {
    usb_data[1] = CMD_USBDM_GET_CAPABILITIES;
    rc = bdm_usb_transaction(2, &rxSize, usb_data);
    if (rc != BDM_RC_OK) {
-      log.print("Failed!\n");
+      log.print("CMD_USBDM_GET_CAPABILITIES - Failed!\n");
       return rc;
    }
 //   log.print("updateBdmInfo() raw=>0x%2.2X-0x%2.2X%2.2X\n",
@@ -1550,6 +1551,24 @@ USBDM_ErrorCode USBDM_GetCommandStatus(void) {
 }
 
 /**
+ * Does basic connect to target
+ */
+CPP_DLL_LOCAL
+USBDM_ErrorCode USBDM_BasicConnect(void) {
+   USBDM_ErrorCode rc;
+   LOGGING;
+
+   usb_data[0] = 0;
+   usb_data[1] = CMD_USBDM_CONNECT;
+   rc = bdm_usb_transaction(2, 1, usb_data, 100);
+   if (rc != BDM_RC_OK) {
+      log.print("Basic connect failed, rc = %d\n", rc);
+      return rc;
+   }
+   return rc;
+}
+
+/**
  *  Connects to Target.
  *
  *   This will cause the BDM module to attempt to connect to the Target.
@@ -1567,13 +1586,8 @@ USBDM_ErrorCode rc;
    LOGGING;
    log.setLoggingLevel(10); // Always log connect sequence
    bdmState.activityFlag = BDM_ACTIVE;
-   usb_data[0] = 0;
-   usb_data[1] = CMD_USBDM_CONNECT;
-   rc = bdm_usb_transaction(2, 1, usb_data, 100);
-   if (rc != BDM_RC_OK) {
-      log.print("Basic connect failed, rc = %d\n", rc);
-      return rc;
-   }
+
+
    if ((bdmOptions.targetType == T_ARM_SWD) || (bdmOptions.targetType == T_ARM_JTAG)) {
       rc = armConnect(bdmOptions.targetType);
       // Don't retry if secured as it will upset detection
@@ -1582,6 +1596,12 @@ USBDM_ErrorCode rc;
       }
       if (rc != BDM_RC_OK) {
          log.print("ARM connect, rc = %d\n", rc);
+      }
+   }
+   else {
+      rc = USBDM_BasicConnect();
+      if (rc != BDM_RC_OK) {
+         return rc;
       }
    }
    if (pendingResetRelease) {
@@ -2568,14 +2588,14 @@ USBDM_ErrorCode USBDM_ReadDReg(unsigned int regNo, unsigned long *regValue) {
       case T_ARM_SWD :
       case T_ARM_JTAG :
          if (regNo == ARM_DRegCONTROL) {
-            log.print("reg=%s(0x%X) => %s)\n", getSWDDebugRegName(regNo), regNo, getARM_CTRL_STATUSRName(*regValue));
+            log.print("reg=%s(0x%X) => (0x%lX)%s)\n", getSWDDebugRegName(regNo), regNo, *regValue, getARM_CTRL_STATUSRName(*regValue));
          }
          else {
             log.print("%s(0x%X) => 0x%lX\n", getSWDDebugRegName(regNo), regNo, *regValue);
          }
          break;
       default :
-         log.print("Failed - Unknown mode, register(0x%4X) => 0x%lX\n",
+         log.print("Failed - Unknown target, register(0x%4X) => 0x%lX\n",
                regNo, *regValue);
          break;
    };

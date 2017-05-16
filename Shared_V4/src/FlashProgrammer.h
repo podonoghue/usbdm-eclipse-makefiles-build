@@ -126,19 +126,19 @@ public:
     */
    virtual USBDM_ErrorCode    massEraseTarget() = 0;
    /**
-    * Mass erase target
+    * Program target
     *
     * @return error code
     */
    virtual USBDM_ErrorCode    programFlash(FlashImagePtr flashImage, CallBackT progressCallBack=NULL, bool doRamWrites=false) = 0;
    /**
-    * Mass erase target
+    * Verify target flash
     *
     * @return error code
     */
    virtual USBDM_ErrorCode    verifyFlash(FlashImagePtr flashImage, CallBackT progressCallBack=NULL) = 0;
    /**
-    * Mass erase target
+    * Read target ID
     *
     * @return error code
     */

@@ -293,17 +293,17 @@ typedef enum {
 //!  Reset mode as used by CMD_USBDM_TARGET_RESET
 //!
 typedef enum { /* type of reset action required */
-   RESET_MODE_MASK   = (3<<0), //!< Mask for reset mode (SPECIAL/NORMAL)
-   RESET_SPECIAL     = (0<<0), //!< Special mode [BDM active, Target halted]
-   RESET_NORMAL      = (1<<0), //!< Normal mode [usual reset, Target executes]
+   RESET_MODE_MASK       = (3<<0),  //!< Mask for reset mode (SPECIAL/NORMAL)
+   RESET_SPECIAL         = (0<<0),  //!< Special mode [BDM active, Target halted]
+   RESET_NORMAL          = (1<<0),  //!< Normal mode [usual reset, Target executes]
 
-   RESET_METHOD_MASK = (7<<2), //!< Mask for reset type (Hardware/Software/Power)
-   RESET_ALL         = (0<<2), //!< Use all reset strategies as appropriate
-   RESET_HARDWARE    = (1<<2), //!< Use hardware RESET pin reset
-   RESET_SOFTWARE    = (2<<2), //!< Use software (BDM commands) reset
-   RESET_POWER       = (3<<2), //!< Cycle power
-   RESET_DEFAULT     = (7<<2), /**< Use target specific default method
-                                   of limited use for ARM targets as there is no sensible default */
+   RESET_METHOD_MASK     = (7<<2),  //!< Mask for reset type (Hardware/Software/Power)
+   RESET_ALL             = (0<<2),  //!< Use all reset strategies as appropriate
+   RESET_HARDWARE        = (1<<2),  //!< Use hardware RESET pin reset
+   RESET_SOFTWARE        = (2<<2),  //!< Use software (BDM commands) reset
+   RESET_POWER           = (3<<2),  //!< Cycle power
+   RESET_VENDOR          = (4<<2),  //!< Vendor special method e.g. using MDM-AP for Kinetis
+   RESET_DEFAULT         = (7<<2),  //!< Use target specific default method
 } TargetMode_t;
 
 //=======================================================================
@@ -591,9 +591,9 @@ typedef enum {
 
 //! regNo Parameter for USBDM_ReadCReg() with SWD-ARM target
 //!
-//! The regNo is actually a AP bus address as follows: 
-//!   -  A[31:24]  => DP-AP-SELECT[31:24] (AP # Select)       
-//!   -  A[23:8]   => unused (0)                                
+//! The regNo is actually a AP bus address as follows:
+//!   -  A[31:24]  => DP-AP-SELECT[31:24] (AP # Select)
+//!   -  A[23:8]   => unused (0)
 //!   -  A[7:4]    => DP-AP-SELECT[7:4]   (Bank select within AP)
 //!   -  A[3:2]    => APACC[3:2]          (Register select within AP bank)
 //!   -  A[1:0]    => unused (0)

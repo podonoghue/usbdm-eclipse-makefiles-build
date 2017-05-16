@@ -18,7 +18,7 @@ class ProgressTimer;
 class FlashProgrammerCommon : public FlashProgrammer {
 
 public:
-   FlashProgrammerCommon();
+   FlashProgrammerCommon(DeviceData::EraseMethods defaultEraseMethod, DeviceData::ResetMethods defaultResetMethod);
    virtual ~FlashProgrammerCommon();
 
    virtual USBDM_ErrorCode    setDeviceData(const DeviceDataConstPtr device);
@@ -123,19 +123,37 @@ protected:
     */
    void            restoreSecurityAreas(FlashImagePtr flashImage);
 
-   bool                    flashReady;               //!< Safety check - only TRUE when flash is ready for programming
-   DeviceDataConstPtr      device;                   //!< Parameters describing the current device
-   UsbdmTclInterperPtr     tclInterpreter;           //!< TCL interpreter
-   BdmInterfacePtr         bdmInterface;             //!< Target specific BDM interface
-   FlashProgramConstPtr    currentFlashProgram;      //!< Current program for flash operation
-   ProgressTimerPtr        progressTimer;            //!< Progress timer
-   uint16_t                calculatedClockTrimValue; //!< Clock trim value determined from programmed device
-   unsigned                securityAreaCount;
-   SecurityDataCache       securityData[2];
+   bool                       flashReady;               //!< Safety check - only TRUE when flash is ready for programming
+   DeviceDataConstPtr         device;                   //!< Parameters describing the current device
+   UsbdmTclInterperPtr        tclInterpreter;           //!< TCL interpreter
+   BdmInterfacePtr            bdmInterface;             //!< Target specific BDM interface
+   FlashProgramConstPtr       currentFlashProgram;      //!< Current program for flash operation
+   ProgressTimerPtr           progressTimer;            //!< Progress timer
+   uint16_t                   calculatedClockTrimValue; //!< Clock trim value determined from programmed device
+   unsigned                   securityAreaCount;
+   SecurityDataCache          securityData[2];
+
+   const DeviceData::EraseMethods   defaultEraseMethod;
+   const DeviceData::ResetMethods   defaultResetMethod;
+
 
    static const char *getFlashOperationName(FlashOperation flashOperation);
 
    virtual USBDM_ErrorCode massEraseTarget(bool resetTarget) = 0;
+
+   /**
+    * Get erase method to use
+    *
+    * @return erase method
+    */
+   DeviceData::EraseMethods getEraseMethod();
+
+   /**
+    * Get reset method to use
+    *
+    * @return reset method
+    */
+   DeviceData::ResetMethods getresetMethod();
 
    //=======================================================================
    // Initialises TCL support for current target

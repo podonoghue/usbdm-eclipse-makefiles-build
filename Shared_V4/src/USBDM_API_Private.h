@@ -128,7 +128,7 @@ enum DebugSubCommands {
 //! Commands for BDM when in ICP mode
 //!
 enum ICPCommandCodes {
-   ICP_GET_RESULT    =  1,            //!< Get result of last command 
+   ICP_GET_RESULT    =  1,            //!< Get result of last command
                                       //!< @return [0] 8-bit Error code, see ICP_ErrorCode_t
    ICP_ERASE_PAGE    =  2,            //!< Erase page (must be within a single Flash memory page)
                                       //!<   @param 16-bit Address within Flash page to erase
@@ -197,6 +197,12 @@ struct BDMState_t {
 extern BDMState_t bdmState;
 
 extern USBDM_bdmInformation_t bdmInfo;
+
+/**
+ * Does basic connect to target
+ */
+CPP_DLL_LOCAL
+USBDM_ErrorCode USBDM_BasicConnect(void);
 
 #if defined __cplusplus
     }

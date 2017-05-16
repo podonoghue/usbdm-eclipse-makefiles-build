@@ -32,8 +32,9 @@ const string deviceNameKey(              settingsKey ".deviceName");
 const string setClockTrimFreqKey(        settingsKey ".clockTrimFrequency");
 const string clockTrimNVAddressKey(      settingsKey ".clockTrimNVAddress");
 const string securityKey(                settingsKey ".security");
-const string eraseOptionKey(             settingsKey ".eraseOption");
 const string targetBusFrequencyKey(      settingsKey ".targetBusFrequency");
+const string eraseMethodKey(             settingsKey ".eraseMethod");
+const string resetMethodKey(             settingsKey ".resetMethod");
 
 /*!  Select current device by device index
  *
@@ -126,8 +127,10 @@ void DeviceInterface::loadSettings(const AppSettings &settings) {
       securityOption = SEC_UNSECURED;
    }
    currentDevice->setSecurity(securityOption);
-   currentDevice->setEraseOption( (DeviceData::EraseOptions) settings.getValue(eraseOptionKey,    (int)currentDevice->getEraseOption()));
    currentDevice->setConnectionFreq(                         settings.getValue(targetBusFrequencyKey,  0));
+
+   currentDevice->setEraseMethod( (DeviceData::EraseMethods) settings.getValue(eraseMethodKey, currentDevice->getEraseMethod()));
+   currentDevice->setResetMethod( (DeviceData::ResetMethods) settings.getValue(resetMethodKey, currentDevice->getResetMethod()));
 }
 
 /*!  Save settings to object
@@ -150,6 +153,9 @@ void DeviceInterface::saveSettings(AppSettings &settings) {
       securityOption = SEC_UNSECURED;
    }
    settings.addValue(securityKey,                  securityOption);
-   settings.addValue(eraseOptionKey,          (int)currentDevice->getEraseOption());
    settings.addValue(targetBusFrequencyKey,        currentDevice->getConnectionFreq());
+
+   settings.addValue(eraseMethodKey,          (int)currentDevice->getEraseMethod());
+   settings.addValue(resetMethodKey,          (int)currentDevice->getResetMethod());
+
 }

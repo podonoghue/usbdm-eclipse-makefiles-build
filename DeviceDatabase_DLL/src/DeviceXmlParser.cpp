@@ -911,7 +911,7 @@ EraseMethodsPtr DeviceXmlParser::parseEraseMethods(DOMElement *element) {
             resetMethodIt.advanceElement()) {
 
          // <resetMethod>
-         DeviceData::EraseOptions option = DeviceData::EraseOptions::eraseNone;
+         DeviceData::EraseMethods option = DeviceData::EraseMethods::eraseNone;
 
          DOMElement *eraseElement = resetMethodIt.getCurrentElement();
 
@@ -922,20 +922,20 @@ EraseMethodsPtr DeviceXmlParser::parseEraseMethods(DOMElement *element) {
             DualString sType(eraseElement->getAttribute(attr_method.asXMLString()));
             struct {
                const char               *name;
-               DeviceData::EraseOptions  type;
+               DeviceData::EraseMethods  type;
             } names[] = {
-                  { "Selective", DeviceData::EraseOptions::eraseSelective, },
-                  { "All",       DeviceData::EraseOptions::eraseAll, },
-                  { "Mass",      DeviceData::EraseOptions::eraseMass, },
-                  { "None",      DeviceData::EraseOptions::eraseNone, },
+                  { "Selective", DeviceData::EraseMethods::eraseSelective, },
+                  { "All",       DeviceData::EraseMethods::eraseAll, },
+                  { "Mass",      DeviceData::EraseMethods::eraseMass, },
+                  { "None",      DeviceData::EraseMethods::eraseNone, },
             };
             for (unsigned index=0; index<(sizeof(names)/sizeof(names[0])); index++) {
-               if (strcmp(names[index].name, sType.asCString()) == 0) {
+               if (stricmp(names[index].name, sType.asCString()) == 0) {
                   option = names[index].type;
                }
             }
          }
-         if (option == DeviceData::EraseOptions::eraseNone) {
+         if (option == DeviceData::EraseMethods::eraseNone) {
             throw MyException(string("DeviceXmlParser::parseEraseMethods() - <eraseMethod> Missing/invalid method attribute "));
          }
          DualString value(eraseElement->getAttribute(attr_isDefault.asXMLString()));
@@ -980,25 +980,25 @@ ResetMethodsPtr DeviceXmlParser::parseResetMethods(DOMElement *element) {
             resetMethodIt.advanceElement()) {
 
          DOMElement *resetElement = resetMethodIt.getCurrentElement();
-         DeviceData::ResetOptions option = DeviceData::ResetOptions::resetNone;
+         DeviceData::ResetMethods option = DeviceData::ResetMethods::resetNone;
 
          if (resetElement->hasAttribute(attr_method.asXMLString())) {
             DualString sType(resetElement->getAttribute(attr_method.asXMLString()));
             struct {
                const char               *name;
-               DeviceData::ResetOptions  type;
+               DeviceData::ResetMethods  type;
             } names[] = {
-                  { "hardware",  DeviceData::ResetOptions::resetHardware, },
-                  { "software",  DeviceData::ResetOptions::resetSoftware, },
-                  { "custom",    DeviceData::ResetOptions::defaultCustom, },
+                  { "hardware",  DeviceData::ResetMethods::resetHardware, },
+                  { "software",  DeviceData::ResetMethods::resetSoftware, },
+                  { "vendor",    DeviceData::ResetMethods::resetVendor, },
             };
             for (unsigned index=0; index<(sizeof(names)/sizeof(names[0])); index++) {
-               if (strcmp(names[index].name, sType.asCString()) == 0) {
+               if (stricmp(names[index].name, sType.asCString()) == 0) {
                   option = names[index].type;
                }
             }
          }
-         if (option == DeviceData::ResetOptions::resetNone) {
+         if (option == DeviceData::ResetMethods::resetNone) {
             throw MyException(string("DeviceXmlParser::parseResetMethods() - <resetMethod> Missing/invalid method attribute "));
          }
          DualString value(resetElement->getAttribute(attr_isDefault.asXMLString()));

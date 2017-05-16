@@ -338,10 +338,10 @@ static USBDM_ErrorCode initialiseBDMInterface(void) {
       return rc;
    }
    if (targetType == T_RS08) {
-      DeviceData::EraseOptions eraseOptions = deviceData->getEraseOption();
+      DeviceData::EraseMethods eraseOptions = deviceData->getEraseMethod();
       if ((eraseOptions == DeviceData::eraseSelective) || (eraseOptions == DeviceData::eraseAll)) {
          // These targets only support mass erase
-         deviceData->setEraseOption(DeviceData::eraseMass);
+         deviceData->setEraseMethod(DeviceData::eraseMass);
       }
    }
    if (deviceData->getSecurity() == SEC_SECURED) {
@@ -537,7 +537,7 @@ USBDM_ErrorCode initialConnect(void) {
 #endif
 
    if (rc == BDM_RC_SECURED) {
-      if (flashProgrammer->getDeviceData()->getEraseOption() == DeviceData::eraseMass) {
+      if (flashProgrammer->getDeviceData()->getEraseMethod() == DeviceData::eraseMass) {
          // Mass erase already selected so security isn't a problem
          forceMassErase = true; // So ignore error before mass erase
          // Ignore secured error

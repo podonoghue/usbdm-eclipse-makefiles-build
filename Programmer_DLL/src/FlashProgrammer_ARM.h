@@ -72,7 +72,7 @@ protected:
       ADDRESS_EEPROM = 1UL<<30,  //!< EEPROM
       ADDRESS_A23    = 1UL<<23,  //!< A23 bit for Flex/DataFlash on ARM/CFV1+
    };
-   
+
    //! Structure for MCGCG parameters
    struct MK_MCG_ClockParameters_t {
       uint8_t  mcgC1;
@@ -85,7 +85,7 @@ protected:
    union ClockParameters {
       MK_MCG_ClockParameters_t mcg;
    } ;
-   
+
    bool                    flashReady;                   //!< Safety check - only TRUE when flash is ready for programming
    bool                    initTargetDone;               //!< Indicates initTarget() has been done.
    TargetProgramInfo       targetProgramInfo;            //!< Describes loaded flash code

@@ -56,7 +56,7 @@
      
 <!-- Available reset modes -->
 <!ELEMENT resetMethod EMPTY >
-     <!ATTLIST resetMethod method (hardware|software|custom) #REQUIRED>
+     <!ATTLIST resetMethod method (hardware|software|vendor) #REQUIRED>
      <!ATTLIST resetMethod isDefault  (true)                 #IMPLIED>
 
   <!-- List of actions to be applied to a project -->

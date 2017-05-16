@@ -741,9 +741,10 @@ Test Devices:
          <memoryRange start="0xE0000000" end="0xE00FFFFF" name="peripherals"  />  <!-- Private Peripherals -->
       </memory>         
            
-      <resetMethods id="kinetisResetModes" >
-         <resetMethod method="hardware" isDefault="true" />
+      <resetMethods id="kinetisResetMethods" >
+         <resetMethod method="hardware" />
          <resetMethod method="software" />
+         <resetMethod method="vendor" isDefault="true" />
       </resetMethods>
       
       <eraseMethods id="kinetisEraseMethods" >
@@ -841,7 +842,7 @@ Test Devices:
 <!-- ===================================================================================== -->
 <!-- Default -->
       <device name="kinetisDefault" family="CortexM4" isDefault="true">
-         <resetMethodsRef ref="kinetisResetModes" />
+         <resetMethodsRef ref="kinetisResetMethods" />
          <eraseMethodsRef ref="kinetisEraseMethods"/>
          <memory type="flash" >
             <memoryRange start="0x00000000" size="0x1000" />

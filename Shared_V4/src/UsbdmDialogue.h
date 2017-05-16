@@ -47,7 +47,7 @@ protected:
       HAS_NONE                = 0,
 
       // Interface
-      HAS_OPTIONAL_RESET      = 1<<1,  // Hardware reset may be used optionally
+      HAS_OPTIONAL_RESET      = 1<<1,  // Hardware reset may be used optionally (e.g. HCS08)
       HAS_USE_PST             = 1<<2,  // PST signal may be used optionally (only CFVx)
       HAS_GUESS_SPEED         = 1<<3,  // Connection speed may need to be optionally 'guessed'
       HAS_CLK_SW              = 1<<4,  // ALT & BUS clock options are available
@@ -62,6 +62,8 @@ protected:
       HAS_PROBE_SECURED       = 1<<13, // Device ID may be read from secured device
       HAS_NVM_EEEPROM         = 1<<14, // Device has EEEPROM through NV
       HAS_SECURITY_FILE       = 1<<15, // Security options
+      HAS_RESET_CHOICES       = 1<<16, // Reset has multiple methods (e.g. kinetis)
+      HAS_SOUNDS              = 1<<17, // Sounds option
 
       // Mode of dialogue
       IS_GDB_SERVER           = 1<<29, // GDB Server dialogue (GDB Port options)
@@ -103,7 +105,6 @@ protected:
    virtual void OnTrimFrequencyCheckboxClick( wxCommandEvent& event );
    virtual void OnBusFrequencyTextTextUpdated( wxCommandEvent& event );
    virtual void OnSecurityRadioboxSelected( wxCommandEvent& event );
-   virtual void OnEraseChoiceSelect( wxCommandEvent& event );
    virtual void OnMassEraseButtonClick( wxCommandEvent& event );
    virtual void OnUnlockButtonClick( wxCommandEvent& event );
    virtual void OnSoundCheckboxClick( wxCommandEvent& event );
@@ -146,7 +147,10 @@ protected:
 
    std::string          update();
 
-   DeviceData::EraseOptions getCurrentEraseSelection();
+   DeviceData::EraseMethods getCurrentEraseSelection();
+   void                     setCurrentEraseSelection(DeviceData::EraseMethods eraseMethod);
+   DeviceData::ResetMethods getCurrentResetSelection();
+   void                     setCurrentResetSelection(DeviceData::ResetMethods eraseMethod);
 
    // Interface
    void                 populateBDMChoices(void);
@@ -159,6 +163,7 @@ protected:
    // Target
    void                 populateDeviceDropDown();
    void                 populateEraseControl();
+   void                 populateResetControl();
    const wxString       makeDeviceName(const wxString& targetName);
    USBDM_ErrorCode      massEraseTarget();
    void                 reportError(USBDM_ErrorCode rc);
@@ -195,6 +200,8 @@ protected:
    std::map<uint32_t,uint32_t>   filterChipIds;                      //!< The SDIDs being filtered by
    bool                          incrementalLoad;                    //!< Don't clear buffer when loading a file
    bool                          autoFileLoad;                       //!< Auto load changed files before programming
+   DeviceData::EraseMethods      initialEraseMethod;                 //!< Initial erase setting loaded
+   DeviceData::ResetMethods      initialResetMethod;                 //!< Initial reset setting loaded
    bool                          fileLoaded;                         //!< Flag indicating Hex file loaded
    bool                          doTrim;                             //!< Trim target clock (if possible)
    bool                          needManualFrequencySet;             //!< Connection speed has been manually set

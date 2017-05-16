@@ -53,8 +53,8 @@
 #define CSYSPWRUPREQ       (1UL<<30)
 #define CDBGPWRUPACK       (1UL<<29)
 #define CDBGPWRUPREQ       (1UL<<28)
-#define CDBGSTACK          (1UL<<27)
-#define CDBGSTREQ          (1UL<<26)
+#define CDBGRSTACK         (1UL<<27)
+#define CDBGRSTREQ         (1UL<<26)
 #define TRNCNT_OFF         (12)
 #define TRNCNT(N)          (((N)&0x7FFUL)<<TRNCNT_OFF)
 #define MASKLANE_OFF       (8)
@@ -183,9 +183,15 @@
 #define DFSR_BKPT      (1<<1)
 #define DFSR_HALTED    (1<<0)
 
-#define AIRCR_VECTKEY      (0x05FA<<16)   // Key value
-#define AIRCR_SYSRESETREQ  (1<<2)         // System Reset Request
-#define AIRCR_VECTRESET    (1<<0)         // Local system reset (only in debug state!)
+#define AIRCR_VECTKEY_OFF   (16)                         // Key value offset
+#define AIRCR_VECTKEY_MASK  (0xFFFF<<AIRCR_VECTKEY_OFF)  // Key value mask
+#define AIRCR_VECTKEY       (0x05FA<<AIRCR_VECTKEY_OFF)  // Required key value
+#define AIRCR_ENDIANNESS    (1<<15)                      // Endianess
+#define AIRCR_PRIGROUP_OFF  (8)                          // Priority group offset
+#define AIRCR_PRIGROUP_MASK (0x7<<AIRCR_PRIGROUP_OFF)    // Priority group mask
+#define AIRCR_SYSRESETREQ   (1<<2)                       // System Reset Request
+#define AIRCR_VECTCLRACTIVE (1<<1)                       // Clear exception state
+#define AIRCR_VECTRESET     (1<<0)                       // Local system reset (only in debug state!)
 
 #define FP_CTRL   (0xE0002000) // See Flash Patch Control Register on page 11-8
 #define FP_REMAP  (0xE0002004) // See Flash Patch Remap Register on page 11-9

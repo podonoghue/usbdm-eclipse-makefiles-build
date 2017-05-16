@@ -787,13 +787,25 @@ FlexNVMInfoConstPtr     MemoryRegion::getflexNVMInfo() const {
  */
 
 //! Get readable names for erase options
-const char *DeviceData::getEraseOptionName(EraseOptions option) {
+const char *DeviceData::getEraseMethodName(EraseMethods option) {
    switch (option) {
    case eraseTargetDefault : return "TargetDefault";
    case eraseNone          : return "EraseNone";
    case eraseMass          : return "EraseMass";
    case eraseAll           : return "EraseAll";
    case eraseSelective     : return "EraseSelective";
+   default                 : return "Illegal erase option";
+   }
+}
+
+//! Get readable names for erase options
+const char *DeviceData::getResetMethodName(ResetMethods option) {
+   switch (option) {
+   case resetTargetDefault : return "TargetDefault";
+   case resetHardware      : return "ResetHardware";
+   case resetSoftware      : return "ResetSoftware";
+   case resetVendor        : return "ResetVendor";
+   case resetNone          : return "ResetNone";
    default                 : return "Illegal erase option";
    }
 }
@@ -851,10 +863,6 @@ unsigned long DeviceData::getConnectionFreq() /*Hz*/ const {
 
 SecurityOptions_t DeviceData::getSecurity() const {
    return security;
-}
-
-DeviceData::EraseOptions DeviceData::getEraseOption() const {
-   return eraseOption;
 }
 
 uint32_t DeviceData::getWatchdogAddress() const {
@@ -1042,10 +1050,6 @@ void DeviceData::setConnectionFreq(unsigned long hertz /*Hz*/)  {
 
 void DeviceData::setSecurity(SecurityOptions_t option)  {
    security = option;
-}
-
-void DeviceData::setEraseOption(EraseOptions option) {
-   eraseOption = option;
 }
 
 void DeviceData::setWatchdogAddress(uint32_t addr)   {
@@ -1866,8 +1870,9 @@ DeviceData::DeviceData(
                watchdogAddress(0),
                SDIDAddress(0),
                security(SEC_DEFAULT),
-               eraseOption(eraseAll),
-               hcs08sbdfrAddress(HCS08_SBDFR_DEFAULT) {
+               hcs08sbdfrAddress(HCS08_SBDFR_DEFAULT),
+               resetMethod(resetTargetDefault),
+               eraseMethod(eraseTargetDefault) {
 
    flexNVMParameters.eeepromSize  = 0xFF;
    flexNVMParameters.partionValue = 0xFF;
@@ -1889,7 +1894,7 @@ const string DeviceData::toString() const {
    stream << "connectionFreq        = " << (snprintf(buff, sizeof(buff), "0x%ld",      this->connectionFreq),            buff) << endl;
    stream << "security              = " << getSecurityName(this->security)                                                     << endl;
    stream << "clockType             = " << this->clockType                                                                     << endl;
-   stream << "eraseOption           = " << this->eraseOption                                                                   << endl;
+   stream << "eraseMethod           = " << this->eraseMethod                                                                   << endl;
 
    for(int index = 0;;index++) {
       MemoryRegionConstPtr memoryRegionPtr = getMemoryRegion(index);
@@ -1905,3 +1910,40 @@ const string DeviceData::toString() const {
    }
    return stream.str();
 }
+
+/**
+ * Set reset method
+ *
+ * @param method Method to use
+ */
+void DeviceData::setResetMethod(ResetMethods method) {
+   resetMethod = method;
+}
+
+/**
+ * Get reset method
+ *
+ * @return Method to use
+ */
+DeviceData::ResetMethods DeviceData::getResetMethod() const {
+   return resetMethod;
+}
+
+/**
+ * Set erase method
+ *
+ * @param method Method to use
+ */
+void DeviceData::setEraseMethod(EraseMethods method) {
+   eraseMethod = method;
+}
+
+/**
+ * Get erase method
+ *
+ * @return Method to use
+ */
+DeviceData::EraseMethods DeviceData::getEraseMethod() const {
+   return eraseMethod;
+}
+

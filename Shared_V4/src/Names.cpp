@@ -240,7 +240,7 @@ char const *getTargetModeName(TargetMode_t type) {
          "HARDWARE",
          "SOFTWARE",
          "POWER",
-         "Illegal",
+         "VENDOR",
          "Illegal",
          "Illegal",
          "DEFAULT",
@@ -1357,6 +1357,40 @@ bitInfo *bitPtr = bitNames;
    return buffer;
 }
 
+char const *getAIRCRName(uint32_t aicrValue) {
+   typedef struct {
+      const char *bitName;
+      const uint32_t   bitMask;
+   } bitInfo;
+   bitInfo bitNames[] = {
+         {"BIG_ENDIAN|",    AIRCR_ENDIANNESS},
+         {"SYSRESETREQ|",   AIRCR_SYSRESETREQ},
+         {"VECTCLRACTIVE|", AIRCR_VECTCLRACTIVE},
+         {"VECTRESET|",     AIRCR_VECTRESET},
+         {NULL, 0},
+   };
+   static char buffer[200];
+   buffer[0] = '\0';
+
+   if ((aicrValue&AIRCR_VECTKEY_MASK) == AIRCR_VECTKEY) {
+      snprintf(buffer, sizeof(buffer), "AIRCR_VECTKEY|pri=%d|",
+            (aicrValue&AIRCR_PRIGROUP_MASK)>>AIRCR_PRIGROUP_OFF);
+   }
+   else {
+      snprintf(buffer, sizeof(buffer), "key=0x%4X?|pri=%d|",
+            (aicrValue&AIRCR_VECTKEY)>>AIRCR_VECTKEY_OFF,
+            (aicrValue&AIRCR_PRIGROUP_MASK)>>AIRCR_PRIGROUP_OFF);
+   }
+   aicrValue &= ~(AIRCR_VECTKEY_MASK|AIRCR_PRIGROUP_MASK);
+   bitInfo *bitPtr = bitNames;
+   while (bitPtr->bitMask != 0) {
+      if ((aicrValue & bitPtr->bitMask) != 0) {
+         strcat(buffer, bitPtr->bitName);
+      }
+      bitPtr++;
+   }
+   return buffer;
+}
 const char *getDEMCRName(uint32_t demcrValue) {
 typedef struct {
    const char *bitName;
@@ -1400,8 +1434,8 @@ bitInfo bitNames[] = {
       {"CSYSPWRUPREQ|",   CSYSPWRUPREQ},
       {"CDBGPWRUPACK|",   CDBGPWRUPACK},
       {"CDBGPWRUPREQ|",   CDBGPWRUPREQ},
-      {"CDBGSTACK|",      CDBGSTACK},
-      {"CDBGSTREQ|",      CDBGSTREQ},
+      {"CDBGRSTACK|",     CDBGRSTACK},
+      {"CDBGRSTREQ|",     CDBGRSTREQ},
       {"STICKYERR|",      STICKYERR},
       {"STICKYCMP|",      STICKYCMP},
       {"STICKYORUN|",     STICKYORUN},

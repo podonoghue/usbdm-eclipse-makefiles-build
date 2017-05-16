@@ -25,9 +25,9 @@
 +============================================================================================
 | Revision History
 +============================================================================================
-| 29 Mar 15 | Refactored mostly from Clocktrimming.cpp                        - pgo 4.10.7.10 
+| 29 Mar 15 | Refactored mostly from Clocktrimming.cpp                        - pgo 4.10.7.10
 +-----------+--------------------------------------------------------------------------------
-| 04 Nov 12 | Added writeClockRegister()                                      - pgo 4.10.4 
+| 04 Nov 12 | Added writeClockRegister()                                      - pgo 4.10.4
 +============================================================================================
 \endverbatim
 */
@@ -43,11 +43,13 @@
 /**
  * Constructor
  */
-FlashProgrammerCommon::FlashProgrammerCommon() :
+FlashProgrammerCommon::FlashProgrammerCommon(DeviceData::EraseMethods defaultEraseMethod, DeviceData::ResetMethods defaultResetMethod) :
    flashReady(false),
    progressTimer(new ProgressTimer()),
    calculatedClockTrimValue(0),
-   securityAreaCount(0)  {
+   securityAreaCount(0),
+   defaultEraseMethod(defaultEraseMethod),
+   defaultResetMethod(defaultResetMethod) {
    LOGGING_E;
 }
 
@@ -1340,4 +1342,30 @@ void FlashProgrammerCommon::restoreSecurityAreas(FlashImagePtr flashImage) {
       flashImage->dumpRange(securityData[index].address, securityData[index].address+securityData[index].size-1);
    }
    securityAreaCount = 0;
+}
+
+/**
+ * Get erase method to use
+ *
+ * @return erase method
+ */
+DeviceData::EraseMethods FlashProgrammerCommon::getEraseMethod() {
+   DeviceData::EraseMethods eraseMethod = device->getEraseMethod();
+   if (eraseMethod == DeviceData::eraseTargetDefault) {
+      return defaultEraseMethod;
+   }
+   return eraseMethod;
+}
+
+/**
+ * Get reset method to use
+ *
+ * @return reset method
+ */
+DeviceData::ResetMethods FlashProgrammerCommon::getresetMethod() {
+   DeviceData::ResetMethods resetMethod = device->getResetMethod();
+   if (resetMethod == DeviceData::resetTargetDefault) {
+      return defaultResetMethod;
+   }
+   return resetMethod;
 }
