@@ -19,6 +19,7 @@
 ;#####################################################################################
 ;#  History
 ;#
+;#  V4.12.1.180 - Changed to reset special vendor
 ;#  V4.12.1.160 - Restored NMI masking to massErase{}
 ;#  V4.12.1.150 - Changed to use more uniform method and re-tested
 ;#  V4.12.1.60  - Added NMI masking to massErase{}
@@ -243,10 +244,14 @@ proc massEraseTarget { } {
    catch { connect }
    rcreg $::MDM_AP_Status
 
-   puts "massEraseTarget{} - reset s s (Ignoring errors)"
-   catch { reset s s }
+   puts "massEraseTarget{} - reset s v (Ignoring errors)"
+   catch { reset s v }
    rcreg $::MDM_AP_Status
 
+   ;# release target reset
+   puts "massEraseTarget{} - releasing reset pin"
+   pinSet
+   
    ;# Wait for Flash Ready
    for {set retry 0} {$retry < 20} {incr retry} {
       puts "massEraseTarget{} - Waiting for Flash ready"
@@ -258,11 +263,11 @@ proc massEraseTarget { } {
       after 20
    }
 
-   puts "massEraseTarget{} - Asserting \$::MDM_AP_C_DEBUG_REQUEST"
+   puts "massEraseTarget{} - Asserting $::MDM_AP_C_DEBUG_REQUEST"
    wcreg $::MDM_AP_Control $::MDM_AP_C_DEBUG_REQUEST
    rcreg $::MDM_AP_Control
    
-   puts "massEraseTarget{} - Asserting \$::MDM_AP_C_DEBUG_REQUEST|\$::MDM_AP_C_MASS_ERASE"
+   puts "massEraseTarget{} - Asserting $::MDM_AP_C_DEBUG_REQUEST|\$::MDM_AP_C_MASS_ERASE"
    wcreg $::MDM_AP_Control [expr $::MDM_AP_C_DEBUG_REQUEST|$::MDM_AP_C_MASS_ERASE]
    rcreg $::MDM_AP_Control
 
@@ -320,7 +325,7 @@ proc o { } {
    openbdm 0
    catch { connect }
    pinSet rst=0
-   catch { reset ss }
+   catch { reset s v }
    isUnsecure
    catch { connect }
 }

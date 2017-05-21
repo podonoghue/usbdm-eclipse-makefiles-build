@@ -18,7 +18,7 @@ class ProgressTimer;
 class FlashProgrammerCommon : public FlashProgrammer {
 
 public:
-   FlashProgrammerCommon(DeviceData::EraseMethods defaultEraseMethod, DeviceData::ResetMethods defaultResetMethod);
+   FlashProgrammerCommon(DeviceData::EraseMethod defaultEraseMethod, DeviceData::ResetMethod defaultResetMethod);
    virtual ~FlashProgrammerCommon();
 
    virtual USBDM_ErrorCode    setDeviceData(const DeviceDataConstPtr device);
@@ -133,8 +133,8 @@ protected:
    unsigned                   securityAreaCount;
    SecurityDataCache          securityData[2];
 
-   const DeviceData::EraseMethods   defaultEraseMethod;
-   const DeviceData::ResetMethods   defaultResetMethod;
+   const DeviceData::EraseMethod   defaultEraseMethod;
+   const DeviceData::ResetMethod   defaultResetMethod;
 
 
    static const char *getFlashOperationName(FlashOperation flashOperation);
@@ -146,14 +146,14 @@ protected:
     *
     * @return erase method
     */
-   DeviceData::EraseMethods getEraseMethod();
+   DeviceData::EraseMethod getEraseMethod();
 
    /**
     * Get reset method to use
     *
     * @return reset method
     */
-   DeviceData::ResetMethods getresetMethod();
+   DeviceData::ResetMethod getresetMethod();
 
    //=======================================================================
    // Initialises TCL support for current target

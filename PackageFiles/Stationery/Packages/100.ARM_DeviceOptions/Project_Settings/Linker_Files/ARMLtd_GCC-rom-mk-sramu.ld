@@ -1,4 +1,4 @@
-/* ARMLtd_GCC-rom-mk.ld 
+/* ARMLtd_GCC-rom-mk-sramu.ld
  *
  * Kinetis version with optional SRAM_U allocation and bitband
  *
@@ -125,6 +125,8 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
       PROVIDE_HIDDEN (__fini_array_end = .);
 
       KEEP(*(.jcr*))
+
+      *(.rodata*)
 
       KEEP(*(.eh_frame*))
     } > flash

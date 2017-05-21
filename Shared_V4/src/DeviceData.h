@@ -66,6 +66,7 @@
 #include <iomanip>
 #include <stdio.h>
 #include <tr1/memory>
+#include <string.h>
 
 #include "UsbdmSystem.h"
 
@@ -1127,7 +1128,7 @@ public:
       eraseMass,           //! Mass erase / unsecure
       eraseAll,            //! Erase all flash arrays
       eraseSelective,      //! Erase flash block selectively
-   } EraseMethods;
+   } EraseMethod;
 
    //! How to reset target
    typedef enum  {
@@ -1136,13 +1137,27 @@ public:
       resetSoftware,       //! Use software reset
       resetVendor,         //! Use device default reset method
       resetNone,           //! Use hardware reset
-   } ResetMethods;
+   } ResetMethod;
 
    /** Get readable names for erase options */
-   static const char *getEraseMethodName(EraseMethods option);
+   static const char *getEraseMethodName(EraseMethod option);
 
    /** Get readable names for reset options */
-   static const char *getResetMethodName(ResetMethods option);
+   static const char *getResetMethodName(ResetMethod option);
+
+   /**
+    * Get erase method from name as string
+    *
+    * @return Erase method
+    */
+   static EraseMethod getEraseMethod(const char *name);
+   /**
+    * Get reset method from name as string
+    *
+    * @return Reset method
+    */
+   static ResetMethod getResetMethod(const char *name);
+
 
    //! Structure to hold FlexNVM information
    class FlexNVMParameters {
@@ -1156,10 +1171,30 @@ public:
       FlexNVMParameters() : eeepromSize(0xFF), partionValue(0xFF) {}
    };
 
+   /**
+    * This function finds a base device.
+    *
+    * @return Base device if an alias or this if not an alias
+    */
+   static DeviceDataPtr getBaseDevice(DeviceDataPtr device) {
+      while (device->baseDevice != nullptr) {
+         device = device->baseDevice;
+      }
+      return device;
+   }
+
+   /**
+    * This function set a base device.
+    *
+    * @param baseDevice Device to set as base device
+    */
+   void setBaseDevice(DeviceDataPtr baseDevice) {
+      this->baseDevice = baseDevice;
+   }
+
 private:
    TargetType_t                  targetType;             //!< Type of target
    std::string                   targetName;             //!< Name of target
-   std::string                   aliasName;              //!< Name of real target if alias
    bool                          hidden;                 //!< Device is hidden in programmer
    uint32_t                      ramStart;               //!< Start of internal RAM
    uint32_t                      ramEnd;                 //!< End of internal RAM
@@ -1179,12 +1214,14 @@ private:
    FlexNVMParameters             flexNVMParameters;      //!< FlexNVM partitioning values
    FlexNVMInfoConstPtr           flexNVMInfo;            //!< Table describing FlexNVM partitioning
    std::vector<TargetSDID>       targetSDIDs;            //!< System Device Identification Register values (0=> don't know/care)
+   std::vector<TargetSDID>       aliasSDIDs;             //!< System Device Identification Register values (0=> don't know/care)
    RegisterDescriptionConstPtr   registerDescription;    //!< Register description
    uint32_t                      hcs08sbdfrAddress;      //!< HCS08 SBDFR register address
    ResetMethodsConstPtr          resetMethods;           //!< Possible reset methods
    EraseMethodsConstPtr          eraseMethods;           //!< Possible erase methods
-   ResetMethods                  resetMethod;            //!< Reset method to use e.g. hardware, software
-   EraseMethods                  eraseMethod;            //!< How to handle erasing of flash before programming
+   ResetMethod                   resetMethod;            //!< Reset method to use e.g. hardware, software
+   EraseMethod                   eraseMethod;            //!< How to handle erasing of flash before programming
+   DeviceDataPtr                 baseDevice;             //!< Base device if alias
 
 public:
    static const DeviceData       defaultDevice;
@@ -1196,7 +1233,6 @@ public:
    void                           setHCS08sbdfrAddress(uint32_t address);
 
    const std::string              getTargetName() const;
-   const std::string              getAliasName() const;
    TargetType_t                   getTargetType() const;
    bool                           isHidden() const;
    uint32_t                       getRamStart() const;
@@ -1232,24 +1268,25 @@ public:
    uint32_t                       getDefaultClockAddress() const;
 
    bool                           isThisDevice(std::map<uint32_t,uint32_t> targetSDIDs, bool acceptZero=true) const ;
-   bool                           isThisDevice(uint32_t targetSDID, bool acceptZero=true) const ;
+   bool                           isThisDevice(uint32_t desiredSDID, bool acceptZero=true) const ;
+   bool                           isThisDeviceOrAlias(uint32_t  desiredSDID, bool acceptZero=true) const;
 
    MemType_t                      getMemoryType(uint32_t address, MemorySpace_t memorySpace=MS_None);
    uint16_t                       getPageNo(uint32_t address);
 
    void                           addSDID(uint32_t mask, uint32_t value);
+   void                           addAliasSDID(uint32_t mask, uint32_t value);
    void                           setEraseMethods(EraseMethodsConstPtr methods);
    EraseMethodsConstPtr           getEraseMethods() const;
    void                           setResetMethods(ResetMethodsConstPtr methods);
    ResetMethodsConstPtr           getResetMethods() const;
-   void                           setResetMethod(ResetMethods method);
-   ResetMethods                   getResetMethod() const;
-   void                           setEraseMethod(EraseMethods method);
-   EraseMethods                   getEraseMethod() const;
+   void                           setResetMethod(ResetMethod method);
+   ResetMethod                    getResetMethod() const;
+   void                           setEraseMethod(EraseMethod method);
+   EraseMethod                    getEraseMethod() const;
 
    void                           addMemoryRegion(MemoryRegionPtr pMemoryRegion);
    void                           setTargetName(const std::string &name);
-   void                           setAliasName(const std::string &name);
    void                           setHidden(bool value = true);
    void                           setRamStart(uint32_t addr);
    void                           setRamEnd(uint32_t addr);
@@ -1289,7 +1326,6 @@ class DEVICE_DATA_DESCSPEC DeviceDataBase {
 private:
    std::vector<DeviceDataPtr>                            deviceData;         //!< List of devices
    std::map<const std::string, SharedInformationItemPtr> sharedInformation;  //!< Shared information referenced by devices
-//   DeviceDataPtr                                         defaultDevice;      //!< Generic 'default' device
    TargetType_t                                          targetType;         //!< Target type
 
    DeviceDataBase (DeviceDataBase &);                                        //!< No copying
@@ -1332,6 +1368,8 @@ public:
     * @note - If the device is an alias then it will return the true device
     */
    DeviceDataConstPtr          findDeviceFromName(const std::string &targetName) const;
+   DeviceDataPtr               findMutableDeviceFromName(const std::string &targetName) const;
+
    /** Searches the known devices for a device with given name
     *
     * @param targetName - Name of device
@@ -1371,40 +1409,40 @@ typedef std::tr1::shared_ptr<DeviceDataBase> DeviceDataBasePtr;
  */
 class DEVICE_DATA_DESCSPEC EraseMethods : public SharedInformationItem {
    unsigned                 fMethod;
-   DeviceData::EraseMethods fDefaultMethod;
+   DeviceData::EraseMethod fDefaultMethod;
 
 public:
-   EraseMethods() : fMethod(0), fDefaultMethod(DeviceData::EraseMethods::eraseNone) {
+   EraseMethods() : fMethod(0), fDefaultMethod(DeviceData::EraseMethod::eraseNone) {
    }
    /**
     * Add erase method
     */
-   void addMethod(DeviceData::EraseMethods method) {
+   void addMethod(DeviceData::EraseMethod method) {
       fMethod |= (1<<((int)method));
    }
    /**
     * Add default erase method
     */
-   void addDefaultMethod(DeviceData::EraseMethods method) {
+   void addDefaultMethod(DeviceData::EraseMethod method) {
       addMethod(method);
       fDefaultMethod = method;
    }
    /**
     * Remove erase method
     */
-   void removeMethod(DeviceData::EraseMethods method) {
+   void removeMethod(DeviceData::EraseMethod method) {
       fMethod &= ~(1<<((int)method));
    }
    /**
     * Checks if a method is available
     */
-   bool isAvailableMethod(DeviceData::EraseMethods method) const {
+   bool isAvailableMethod(DeviceData::EraseMethod method) const {
       return (fMethod & (1<<((int)method))) != 0;
    }
    /**
     * Get default method
     */
-   DeviceData::EraseMethods getDefaultMethod() const {
+   DeviceData::EraseMethod getDefaultMethod() const {
       return fDefaultMethod;
    }
 };
@@ -1418,43 +1456,43 @@ public:
  */
 class DEVICE_DATA_DESCSPEC ResetMethods : public SharedInformationItem {
    unsigned                 fMethod;
-   DeviceData::ResetMethods fDefaultMethod;
+   DeviceData::ResetMethod fDefaultMethod;
 
 public:
    /**
     * Create default empty
     */
-   ResetMethods() : fMethod(0), fDefaultMethod(DeviceData::ResetMethods::resetTargetDefault) {
+   ResetMethods() : fMethod(0), fDefaultMethod(DeviceData::ResetMethod::resetTargetDefault) {
    }
    /**
     * Add method
     */
-   void addMethod(DeviceData::ResetMethods method) {
+   void addMethod(DeviceData::ResetMethod method) {
       fMethod |= (1<<((int)method));
    }
    /**
     * Add default erase method
     */
-   void addDefaultMethod(DeviceData::ResetMethods method) {
+   void addDefaultMethod(DeviceData::ResetMethod method) {
       addMethod(method);
       fDefaultMethod = method;
    }
    /**
     * Remove erase method
     */
-   void removeMethod(DeviceData::ResetMethods method) {
+   void removeMethod(DeviceData::ResetMethod method) {
       fMethod &= ~(1<<((int)method));
    }
    /**
     * Checks if a method is available
     */
-   bool isAvailableMethod(DeviceData::ResetMethods method) const {
+   bool isAvailableMethod(DeviceData::ResetMethod method) const {
       return (fMethod & (1<<((int)method))) != 0;
    }
    /**
     * Get default method
     */
-   DeviceData::ResetMethods getDefaultMethod() const {
+   DeviceData::ResetMethod getDefaultMethod() const {
       return fDefaultMethod;
    }
 };

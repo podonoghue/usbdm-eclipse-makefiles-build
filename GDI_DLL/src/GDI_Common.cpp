@@ -338,7 +338,7 @@ static USBDM_ErrorCode initialiseBDMInterface(void) {
       return rc;
    }
    if (targetType == T_RS08) {
-      DeviceData::EraseMethods eraseOptions = deviceData->getEraseMethod();
+      DeviceData::EraseMethod eraseOptions = deviceData->getEraseMethod();
       if ((eraseOptions == DeviceData::eraseSelective) || (eraseOptions == DeviceData::eraseAll)) {
          // These targets only support mass erase
          deviceData->setEraseMethod(DeviceData::eraseMass);

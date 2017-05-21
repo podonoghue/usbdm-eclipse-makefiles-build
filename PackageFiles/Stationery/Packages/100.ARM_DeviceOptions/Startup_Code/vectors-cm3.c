@@ -1,8 +1,9 @@
 /*
- *  @file vectors.c
- *  Derived from vectors-lpc.c
+ *  @file Vectors.c
  *
- *  Generic vectors and security for LPC devices
+ *  Generated from vectors-cm3.c
+ *
+ *  Generic vectors for Cortex-M3
  *
  *  Created on: 07/12/2012
  *      Author: podonoghue
@@ -28,6 +29,7 @@ typedef void( *const intfunc )( void );
  * Most of the vector table is initialised to point at this handler.
  *
  * If you end up here it probably means:
+ *   - Failed to enable the interrupt handler in the USBDM device configuration
  *   - You have accidently enabled an interrupt source in a peripheral
  *   - Enabled the wrong interrupt source
  *   - Failed to install or create a handler for an interrupt you intended using e.g. mis-spelled the name.
@@ -38,8 +40,8 @@ typedef void( *const intfunc )( void );
 __attribute__((__interrupt__))
 void Default_Handler(void) {
 
-//   __attribute__((unused))
-//   volatile uint32_t vectorNum = (SCB_ICSR&SCB_ICSR_VECTACTIVE_Msk)>>SCB_ICSR_VECTACTIVE_Pos;
+   __attribute__((unused))
+   volatile uint32_t vectorNum = (SCB_ICSR&SCB_ICSR_VECTACTIVE_Msk)>>SCB_ICSR_VECTACTIVE_Pos;
 
    while (1) {
       __asm__("bkpt");
@@ -72,21 +74,11 @@ void HardFault_Handler(void) {
     * and allows access to the saved processor state.
     * Other registers are unchanged and available in the usual register view
     */
-   __asm__ volatile (
-          "       mov r0,lr                                     \n"
-          "       mov r1,#4                                     \n"
-          "       and r0,r1                                     \n"
-          "       bne skip1                                     \n"
-          "       mrs r0,msp                                    \n"
-          "       b   skip2                                     \n"
-          "skip1:                                               \n"
-          "       mrs r0,psp                                    \n"
-          "skip2:                                               \n"
-          "       nop                                           \n"
-          "       ldr r2, handler_addr_const                    \n"
-          "       bx r2                                         \n"
-          "       handler_addr_const: .word _HardFault_Handler  \n"
-      );
+     __asm__ volatile ( "  tst   lr, #4              \n");  // Check mode
+     __asm__ volatile ( "  ite   eq                  \n");  // Get active SP in r0
+     __asm__ volatile ( "  mrseq r0, msp             \n");
+     __asm__ volatile ( "  mrsne r0, psp             \n");
+     __asm__ volatile ( "  b     _HardFault_Handler  \n");  // Go to C handler
 }
 
 /******************************************************************************/
@@ -117,7 +109,7 @@ extern uint32_t __StackTop;
 /*
  * Each vector is assigned an unique name.  This is then 'weakly' assigned to the
  * default handler.
- * To install a handler, create a function with the name shown and it will override
+ * To install a handler, create a C linkage function with the name shown and it will override
  * the weak default.
  */
 $(cVectorTable)

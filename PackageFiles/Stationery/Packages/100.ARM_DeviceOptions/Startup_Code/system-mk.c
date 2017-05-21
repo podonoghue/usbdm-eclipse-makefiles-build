@@ -1,10 +1,11 @@
 /*
- * sysinit-mk.c
+ *  @file system.c
+ *  Derived from  system-mk.c
  *
  * Generic system initialization for Kinetis MKxx family
  *
- *  Created on: 07/12/2012
- *      Author: podonoghue
+ *  Created on: 25/5/2017
+ *  Devices: MKxx
  */
 
 #include <stdint.h>
@@ -87,12 +88,9 @@ void SystemInitLowLevel(void) {
    /* This is generic initialization code */
    /* It may not be correct for a specific target */
 
+#ifdef __VTOR_PRESENT
    /* Set the interrupt vector table position */
    SCB_VTOR = (uint32_t)__vector_table;
-
-#ifdef RCM_MR_BOOTROM
-   // Set boot from Flash
-   RCM->MR = RCM_MR_BOOTROM(3);
 #endif
 
    // Disable watch-dog

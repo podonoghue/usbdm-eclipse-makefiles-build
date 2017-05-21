@@ -147,10 +147,10 @@ protected:
 
    std::string          update();
 
-   DeviceData::EraseMethods getCurrentEraseSelection();
-   void                     setCurrentEraseSelection(DeviceData::EraseMethods eraseMethod);
-   DeviceData::ResetMethods getCurrentResetSelection();
-   void                     setCurrentResetSelection(DeviceData::ResetMethods eraseMethod);
+   DeviceData::EraseMethod getCurrentEraseSelection();
+   void                     setCurrentEraseSelection(DeviceData::EraseMethod eraseMethod);
+   DeviceData::ResetMethod getCurrentResetSelection();
+   void                     setCurrentResetSelection(DeviceData::ResetMethod eraseMethod);
 
    // Interface
    void                 populateBDMChoices(void);
@@ -200,8 +200,8 @@ protected:
    std::map<uint32_t,uint32_t>   filterChipIds;                      //!< The SDIDs being filtered by
    bool                          incrementalLoad;                    //!< Don't clear buffer when loading a file
    bool                          autoFileLoad;                       //!< Auto load changed files before programming
-   DeviceData::EraseMethods      initialEraseMethod;                 //!< Initial erase setting loaded
-   DeviceData::ResetMethods      initialResetMethod;                 //!< Initial reset setting loaded
+   DeviceData::EraseMethod      initialEraseMethod;                 //!< Initial erase setting loaded
+   DeviceData::ResetMethod      initialResetMethod;                 //!< Initial reset setting loaded
    bool                          fileLoaded;                         //!< Flag indicating Hex file loaded
    bool                          doTrim;                             //!< Trim target clock (if possible)
    bool                          needManualFrequencySet;             //!< Connection speed has been manually set

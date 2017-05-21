@@ -43,7 +43,7 @@
 /**
  * Constructor
  */
-FlashProgrammerCommon::FlashProgrammerCommon(DeviceData::EraseMethods defaultEraseMethod, DeviceData::ResetMethods defaultResetMethod) :
+FlashProgrammerCommon::FlashProgrammerCommon(DeviceData::EraseMethod defaultEraseMethod, DeviceData::ResetMethod defaultResetMethod) :
    flashReady(false),
    progressTimer(new ProgressTimer()),
    calculatedClockTrimValue(0),
@@ -1349,8 +1349,8 @@ void FlashProgrammerCommon::restoreSecurityAreas(FlashImagePtr flashImage) {
  *
  * @return erase method
  */
-DeviceData::EraseMethods FlashProgrammerCommon::getEraseMethod() {
-   DeviceData::EraseMethods eraseMethod = device->getEraseMethod();
+DeviceData::EraseMethod FlashProgrammerCommon::getEraseMethod() {
+   DeviceData::EraseMethod eraseMethod = device->getEraseMethod();
    if (eraseMethod == DeviceData::eraseTargetDefault) {
       return defaultEraseMethod;
    }
@@ -1362,8 +1362,8 @@ DeviceData::EraseMethods FlashProgrammerCommon::getEraseMethod() {
  *
  * @return reset method
  */
-DeviceData::ResetMethods FlashProgrammerCommon::getresetMethod() {
-   DeviceData::ResetMethods resetMethod = device->getResetMethod();
+DeviceData::ResetMethod FlashProgrammerCommon::getresetMethod() {
+   DeviceData::ResetMethod resetMethod = device->getResetMethod();
    if (resetMethod == DeviceData::resetTargetDefault) {
       return defaultResetMethod;
    }

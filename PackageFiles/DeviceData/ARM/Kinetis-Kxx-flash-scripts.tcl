@@ -19,6 +19,7 @@
 ;#####################################################################################
 ;#  History
 ;#
+;#  V4.12.1.180 - Changed to reset special vendor
 ;#  V4.12.1.150 - Changed to use more uniform method and re-tested
 ;#  V4.19.4.250 - Simplified
 ;#  V4.19.4.240 - Added return error codes
@@ -237,8 +238,8 @@ proc massEraseTarget { } {
    catch { connect }
    rcreg $::MDM_AP_Status
 
-   puts "massEraseTarget{} - reset s s (Ignoring errors)"
-   catch { reset s s }
+   puts "massEraseTarget{} - reset s v (Ignoring errors)"
+   catch { reset s v }
    rcreg $::MDM_AP_Status
 
    ;# Wait for Flash Ready
@@ -305,7 +306,7 @@ proc o { } {
    openbdm 0
    catch { connect }
    pinSet rst=0
-   catch { reset ss }
+   catch { reset s v }
    isUnsecure
    catch { connect }
 }

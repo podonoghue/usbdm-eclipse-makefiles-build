@@ -36,7 +36,6 @@
 				<applySetting id="net.sourceforge.usbdm.connections.usbdm.leaveTargetPowered"	value="0" type="string" />
 				<applySetting id="net.sourceforge.usbdm.connections.usbdm.setTargetVdd"		value="0" type="string" />
 				<applySetting id="net.sourceforge.usbdm.connections.usbdm.useDebugBuild" value="false"	type="boolean" />
-            <applySetting id="net.sourceforge.usbdm.connections.usbdm.eraseMethod" value="2" type="string" />
 
 			</settingsGroup>
 		</launchSettings>

@@ -6,11 +6,12 @@
    <projectActionList id="Options-file-list-MKV10M7">
       <applyWhen>
          <and>
-            <or>
-               <deviceSubfamilyIs>MKV10Z7</deviceSubfamilyIs>
-            </or>
+            <deviceSubfamilyIs>MKV10Z7</deviceSubfamilyIs>
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>
+      <copy source="Startup_Code/system-mkv10.c"        target="Startup_Code/system.c"   replace="true" />
+      <copy source="Startup_Code/vectors-cm0.c"         target="Startup_Code/vectors.c"  replace="true" />
+      <copy source="Startup_Code/security-mkv.c"        target="Startup_Code/security.c" />
    </projectActionList>
 </root>

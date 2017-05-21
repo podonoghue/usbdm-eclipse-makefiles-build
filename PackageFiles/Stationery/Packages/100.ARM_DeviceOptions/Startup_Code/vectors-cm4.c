@@ -1,7 +1,9 @@
 /*
- *  Vectors-stm32.c
+ *  @file Vectors.c
  *
- *  Generic vectors and security for STM32Fxxx
+ *  Generated from vectors-cm4.c
+ *
+ *  Generic vectors for Cortex-M4
  *
  *  Created on: 07/12/2012
  *      Author: podonoghue
@@ -27,6 +29,7 @@ typedef void( *const intfunc )( void );
  * Most of the vector table is initialised to point at this handler.
  *
  * If you end up here it probably means:
+ *   - Failed to enable the interrupt handler in the USBDM device configuration
  *   - You have accidently enabled an interrupt source in a peripheral
  *   - Enabled the wrong interrupt source
  *   - Failed to install or create a handler for an interrupt you intended using e.g. mis-spelled the name.
@@ -41,7 +44,7 @@ void Default_Handler(void) {
    volatile uint32_t vectorNum = (SCB_ICSR&SCB_ICSR_VECTACTIVE_Msk)>>SCB_ICSR_VECTACTIVE_Pos;
 
    while (1) {
-      __BKPT(0);
+      __asm__("bkpt");
    }
 }
 
@@ -95,17 +98,18 @@ __attribute__((__naked__))
 void _HardFault_Handler(volatile ExceptionFrame *exceptionFrame __attribute__((__unused__))) {
    while (1) {
       // Stop here for debugger
-      __BKPT(0);
+      __asm__("bkpt");
    }
 }
 
 void __HardReset(void) __attribute__((__interrupt__));
+
 extern uint32_t __StackTop;
 
 /*
  * Each vector is assigned an unique name.  This is then 'weakly' assigned to the
  * default handler.
- * To install a handler, create a function with the name shown and it will override
+ * To install a handler, create a C linkage function with the name shown and it will override
  * the weak default.
  */
 $(cVectorTable)

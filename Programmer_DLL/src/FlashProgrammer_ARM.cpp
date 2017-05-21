@@ -375,7 +375,7 @@ USBDM_ErrorCode FlashProgrammer_ARM::resetAndConnectTarget(void) {
 
    TargetMode_t targetMode;
 
-   DeviceData::ResetMethods resetMethod = getresetMethod();
+   DeviceData::ResetMethod resetMethod = getresetMethod();
    log.print("Setting reset method to %s\n", DeviceData::getResetMethodName(resetMethod));
    switch (resetMethod) {
       default:
@@ -517,7 +517,7 @@ USBDM_ErrorCode FlashProgrammer_ARM::confirmSDID() {
       // Return this error even though the cause may be different
       return PROGRAMMING_RC_ERROR_WRONG_SDID;
    }
-   if (!device->isThisDevice(targetSDID)) {
+   if (!device->isThisDeviceOrAlias(targetSDID)) {
       log.error("M=0x%8.8X, V=0x%8.8X => Failed (Target SDID=0x%8.8X)\n",
             device->getSDID().mask,
             device->getSDID().value,

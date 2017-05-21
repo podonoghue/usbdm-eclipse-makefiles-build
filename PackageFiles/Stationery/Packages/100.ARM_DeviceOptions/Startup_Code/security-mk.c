@@ -1,18 +1,19 @@
 /*
- *  @file vectors.c
- *  Derived from  vectors-mk.c
+ *  @file Security.c
+ *  Derived from security-mk.c
  *
- *  Vectors and security for Kinetis MKxxx
- *
- *  Created on: 07/12/2012
- *      Author: podonoghue
+ *  Security and NV options for flash
+ *  Reference K20P64M50SF0RM, K20P100M72SF1RM, K20P144M100SF2V2RM, K20P144M120SF3RM(no NMI_DIS),
+ *            K22P121M120SF7RM(FAST_INIT)
+ *  Created on: 20/5/2017
+ *  Devices: Most original MK devices
  */
 #include <stdint.h>
 #include <string.h>
 #include "derivative.h"
 
 /*
- * Security information
+ * Security information structure in flash memory
  */
 typedef struct {
     uint8_t  backdoorKey[8];
@@ -28,25 +29,13 @@ typedef struct {
   <h> Flash Configuration
   <i> 16-byte flash configuration field that stores default protection settings (loaded on reset)
   <i> and security information that allows the MCU to restrict access to the FTFL module.
-  
-  <h> Backdoor Comparison Key
-  <i> The Verify Backdoor Access Key command releases security if user-supplied keys
-  <i> matches the Backdoor Comparison Key bytes
-    <o0>  Backdoor Comparison Key 0.  <0x0-0xFF>
-    <o1>  Backdoor Comparison Key 1.  <0x0-0xFF>
-    <o2>  Backdoor Comparison Key 2.  <0x0-0xFF>
-    <o3>  Backdoor Comparison Key 3.  <0x0-0xFF>
-    <o4>  Backdoor Comparison Key 4.  <0x0-0xFF>
-    <o5>  Backdoor Comparison Key 5.  <0x0-0xFF>
-    <o6>  Backdoor Comparison Key 6.  <0x0-0xFF>
-    <o7>  Backdoor Comparison Key 7.  <0x0-0xFF>
   </h>
- */
-#define BACKDOOR_VALUE {0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, }
+*/
 /*
-   <h> Program Flash Region Protect (NV_FPROT0-3)
+   <h> Program Flash Region Protect
       <i> Each program flash region can be protected from program and erase operation by clearing the associated PROT bit.
       <i> Each bit protects a 1/32 region of the program flash memory.
+      <info>NV_FPROT0-3
       <q.31>   FPROT0.0 <0=>protected  <1=>unprotected   <info>lowest 1/32 block
       <q.30>   FPROT0.1 <0=>protected  <1=>unprotected
       <q.29>   FPROT0.2 <0=>protected  <1=>unprotected
@@ -83,9 +72,11 @@ typedef struct {
 */
 #define FPROT_VALUE 0xFFFFFFFF
 /*
-   <h> EEPROM Region Protect (NV_FEPROT)
+   <h> EEPROM Region Protect
       <i> Each bit protects a 1/8 region of the EEPROM memory.
       <i> (FlexNVM devices only)
+	  <i> Only available on devices with FlexNVM
+      <info>NV_FEPROT
       <q.0>   FEPROT.0	<0=>protected  <1=>unprotected   <info> lowest 1/8 block
       <q.1>   FEPROT.1  <0=>protected  <1=>unprotected
       <q.2>   FEPROT.2  <0=>protected  <1=>unprotected
@@ -98,9 +89,11 @@ typedef struct {
 */
 #define FEPROT_VALUE 0xFF
 /*
-   <h> Data Flash Region Protect (NV_FDPROT)
+   <h> Data Flash Region Protect
       <i> Each bit protects a 1/8 region of the flash memory.
       <i> (Device with Data flash only)
+	  <i> Only available on devices with FlexNVM
+      <info>NV_FDPROT
       <q.0>   FDPROT.0	<0=>protected  <1=>unprotected   <info> lowest 1/8 block
       <q.1>   FDPROT.1  <0=>protected  <1=>unprotected
       <q.2>   FDPROT.2  <0=>protected  <1=>unprotected
@@ -114,26 +107,27 @@ typedef struct {
 #define FDPROT_VALUE 0xFF
 
 /*
-<h> Flash security value (NV_FSEC)
-   <o0> Backdoor Key Security Access Enable (FSEC.KEYEN)
+<h> Flash security value
+   <info>NV_FSEC
+   <o0> Backdoor Key Security Access Enable
       <i> Controls use of Backdoor Key access to unsecure device
       <info>KEYEN
       <2=> 2: Access enabled
       <3=> 3: Access disabled
-   <o1> Mass Erase Enable Bits (FSEC.MEEN)
+   <o1> Mass Erase Enable Bits
       <i> Controls mass erase capability of the flash memory module.
       <i> Only relevant when FSEC.SEC is set to secure.
       <info>MEEN
       <2=> 2: Mass erase disabled
       <3=> 3: Mass erase enabled
-   <o2> Freescale Failure Analysis Access (FSEC.FSLACC)
+   <o2> Freescale Failure Analysis Access
       <i> Controls access to the flash memory contents during returned part failure analysis
       <info>FSLACC
       <2=> 2: Factory access denied
       <3=> 3: Factory access granted
-   <o3> Flash Security (FSEC.SEC)
-      <i> Defines the security state of the MCU. 
-      <i> In the secure state, the MCU limits access to flash memory module resources. 
+   <o3> Flash Security
+      <i> Defines the security state of the MCU.
+      <i> In the secure state, the MCU limits access to flash memory module resources.
       <i> If the flash memory module is unsecured using backdoor key access, SEC is forced to 10b.
       <info>SEC
       <2=> 2: Unsecured
@@ -149,28 +143,58 @@ typedef struct {
 
 /*
 Control extended Boot features on these devices
-<h> Flash boot options (NV_FOPT)
-   <q0.2> NMI pin control (FOPT.NMI_DIS)
+<h> Flash boot options
+   <info>NV_FOPT
+   <q2.5> Fast initialisation control
+      <i> Selects initialization speed on POR, VLLSx, and system reset.
+	  <i> Not all devices have this feature
+	  <info>FAST_INIT
+      <0=> Slow - Slower initialization and reduced average current.
+      <1=> Fast - Faster initialization and higher average current.
+   <q2.2> NMI pin control
       <i> Enables or disables the NMI function
+	  <i> Not all devices have this feature
       <info>NMI_DIS
       <0=> NMI interrupts are always blocked.
       <1=> NMI interrupts default to enabled
-   <q0.1> EZPORT pin control (FOPT.EZPORT_DIS)
+   <q2.1> EZPORT pin control
       <i> Enables or disables EzPort function
       <i> Disabling EZPORT function avoids inadvertent resets into EzPort mode 
       <i> if the EZP_CS/NMI pin is used for its NMI function 
       <info>EZPORT_DIS
       <0=> EZP_CSn pin is disabled on reset
       <1=> EZP_CSn pin is enabled on reset
-   <q0.0> Low power boot control (FOPT.LPBOOT)
+   <q2.0> Low power boot control
       <i> Controls the reset value of SIM_CLKDIV1.OUTDIVx (clock dividers)
       <i> Allows power consumption during reset to be reduced
       <info>LPBOOT
-      <0=> Low Power - CLKDIV1,2 = /8, CLKDIV3,4 = /16
-      <1=> Normal - CLKDIV1,2 = /1, CLKDIV3,4 = /2
+      <0=> Low Power
+      <1=> Normal
 </h>
  */
-#define FOPT_VALUE (0x7|0xF8)
+#define RESERVED1      (0)      // -0
+#define RESERVED2      (0)      // -1
+#define FOPT_MISC      (0x27)   // q2
+#define FOPT_RESERVED  (0xD8)   // Bits not controlled by above
+
+#define FOPT_VALUE (FOPT_RESERVED|FOPT_MISC)
+
+/*  
+  <h> Backdoor Comparison Key
+  <i> The Verify Backdoor Access Key command releases security if user-supplied keys
+  <i> matches the Backdoor Comparison Key bytes
+  <info>NV_BACKDOOR
+    <o0>  Backdoor Comparison Key 0.  <0x0-0xFF>
+    <o1>  Backdoor Comparison Key 1.  <0x0-0xFF>
+    <o2>  Backdoor Comparison Key 2.  <0x0-0xFF>
+    <o3>  Backdoor Comparison Key 3.  <0x0-0xFF>
+    <o4>  Backdoor Comparison Key 4.  <0x0-0xFF>
+    <o5>  Backdoor Comparison Key 5.  <0x0-0xFF>
+    <o6>  Backdoor Comparison Key 6.  <0x0-0xFF>
+    <o7>  Backdoor Comparison Key 7.  <0x0-0xFF>
+  </h>
+ */
+#define BACKDOOR_VALUE { 0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, }
 
 __attribute__ ((section(".security_information")))
 const SecurityInfo securityInfo = {
@@ -181,106 +205,4 @@ const SecurityInfo securityInfo = {
     /* feprot   */ FEPROT_VALUE,
     /* fdprot   */ FDPROT_VALUE,
 };
-
-/*
- * Vector table related
- */
-typedef void( *const intfunc )( void );
-
-#define WEAK_DEFAULT_HANDLER __attribute__ ((__weak__, alias("Default_Handler")))
-
-#ifndef SCB_ICSR
-#define SCB_ICSR (*(volatile uint32_t*)(0xE000ED04))
-#endif
-
-/**
- * Default handler for interrupts
- *
- * Most of the vector table is initialised to point at this handler.
- *
- * If you end up here it probably means:
- *   - Failed to enable the interrupt handler in the USBDM device configuration
- *   - You have accidently enabled an interrupt source in a peripheral
- *   - Enabled the wrong interrupt source
- *   - Failed to install or create a handler for an interrupt you intended using e.g. mis-spelled the name.
- *     Compare your handler (C function) name to that used in the vector table.
- *
- * You can check 'vectorNum' below to determine the interrupt source.  Look this up in the vector table below.
- */
-__attribute__((__interrupt__))
-void Default_Handler(void) {
-
-   __attribute__((unused))
-   volatile uint32_t vectorNum = (SCB_ICSR&SCB_ICSR_VECTACTIVE_Msk)>>SCB_ICSR_VECTACTIVE_Pos;
-
-   while (1) {
-      __BKPT(0);
-   }
-}
-
-typedef struct {
-   unsigned int r0;
-   unsigned int r1;
-   unsigned int r2;
-   unsigned int r3;
-   unsigned int r12;
-   void       (*lr)();
-   void       (*pc)();
-   unsigned int psr;
-} ExceptionFrame;
-
-/*  Low-level exception handler
- *
- *  Interface from asm to C.
- *  Passes address of exception handler to C-level handler
- *
- *  See http://www.freertos.org/Debugging-Hard-Faults-On-Cortex-M-Microcontrollers.html
- */
-__attribute__((__naked__, __weak__, __interrupt__))
-void HardFault_Handler(void) {
-   /*
-    * Determines the active stack pointer and loads it into r0
-    * This is used as the 1st argument to _HardFault_Handler(volatile ExceptionFrame *exceptionFrame)
-    * and allows access to the saved processor state.
-    * Other registers are unchanged and available in the usual register view
-    */
-     __asm__ volatile ( "  tst   lr, #4              \n");  // Check mode
-     __asm__ volatile ( "  ite   eq                  \n");  // Get active SP in r0
-     __asm__ volatile ( "  mrseq r0, msp             \n");
-     __asm__ volatile ( "  mrsne r0, psp             \n");
-     __asm__ volatile ( "  b     _HardFault_Handler  \n");  // Go to C handler
-}
-
-/******************************************************************************/
-/* Hard fault handler in C with stack frame location as input parameter
- *
- * Assumed exception frame without floating-point storage
- *
- * @param exceptionFrame address of exception frame
- *
- * If you end up here you have probably done one of the following:
- *   - Accessed illegal/unimplemented memory e.g. gone off the end of an array
- *   - Accessed a disabled peripheral - Check you have enabled the clock
- *   - Accessed unaligned memory - unlikely I guess
- *
- */
-__attribute__((__naked__))
-void _HardFault_Handler(volatile ExceptionFrame *exceptionFrame __attribute__((__unused__))) {
-   while (1) {
-      // Stop here for debugger
-      __BKPT(0);
-   }
-}
-
-void __HardReset(void) __attribute__((__interrupt__));
-
-extern uint32_t __StackTop;
-
-/*
- * Each vector is assigned an unique name.  This is then 'weakly' assigned to the
- * default handler.
- * To install a handler, create a function with the name shown and it will override
- * the weak default.
- */
-$(cVectorTable)
 

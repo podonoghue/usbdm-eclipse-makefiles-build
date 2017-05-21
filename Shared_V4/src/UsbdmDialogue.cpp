@@ -296,11 +296,11 @@ void UsbdmDialogue::Init() {
 /**
  * Get current erase method selection
  */
-DeviceData::EraseMethods UsbdmDialogue::getCurrentEraseSelection() {
-   DeviceData::EraseMethods currentEraseMethod = DeviceData::eraseTargetDefault;
+DeviceData::EraseMethod UsbdmDialogue::getCurrentEraseSelection() {
+   DeviceData::EraseMethod currentEraseMethod = DeviceData::eraseTargetDefault;
    int index = eraseChoiceControl->GetSelection();
    if (index>0) {
-      currentEraseMethod = (DeviceData::EraseMethods)(int)(intptr_t)eraseChoiceControl->GetClientData(index);
+      currentEraseMethod = (DeviceData::EraseMethod)(int)(intptr_t)eraseChoiceControl->GetClientData(index);
    }
    return currentEraseMethod;
 }
@@ -308,7 +308,7 @@ DeviceData::EraseMethods UsbdmDialogue::getCurrentEraseSelection() {
 /**
  * Set current erase method selection
  */
-void UsbdmDialogue::setCurrentEraseSelection(DeviceData::EraseMethods eraseMethod) {
+void UsbdmDialogue::setCurrentEraseSelection(DeviceData::EraseMethod eraseMethod) {
    LOGGING_Q;
    log.print("setting %s\n", DeviceData::getEraseMethodName(eraseMethod));
    // Try to restore previous option
@@ -322,14 +322,14 @@ void UsbdmDialogue::setCurrentEraseSelection(DeviceData::EraseMethods eraseMetho
 /**
  * Get current reset method selection
  */
-DeviceData::ResetMethods UsbdmDialogue::getCurrentResetSelection() {
+DeviceData::ResetMethod UsbdmDialogue::getCurrentResetSelection() {
    if ((targetProperties & HAS_RESET_CHOICES) == 0) {
       return DeviceData::resetTargetDefault;
    }
-   DeviceData::ResetMethods currentResetMethod = DeviceData::resetTargetDefault;
+   DeviceData::ResetMethod currentResetMethod = DeviceData::resetTargetDefault;
    int index = resetChoiceControl->GetSelection();
    if (index>0) {
-      currentResetMethod = (DeviceData::ResetMethods)(int)(intptr_t)resetChoiceControl->GetClientData(index);
+      currentResetMethod = (DeviceData::ResetMethod)(int)(intptr_t)resetChoiceControl->GetClientData(index);
    }
    return currentResetMethod;
 }
@@ -337,7 +337,7 @@ DeviceData::ResetMethods UsbdmDialogue::getCurrentResetSelection() {
 /**
  * Set current reset method selection
  */
-void UsbdmDialogue::setCurrentResetSelection(DeviceData::ResetMethods resetMethod) {
+void UsbdmDialogue::setCurrentResetSelection(DeviceData::ResetMethod resetMethod) {
    LOGGING_Q;
    if (!resetChoiceControl->SetStringSelection(wxString(DeviceData::getResetMethodName(resetMethod),wxConvUTF7))) {
       // Current erase method not supported - change to target preferred method
@@ -567,7 +567,7 @@ std::string UsbdmDialogue::update() {
       gdbTtyPortNumberTextControl->SetDecimalValue(bdmInterface->getGdbTtyPort());
    }
    // Get current erase method selection
-   DeviceData::EraseMethods currentEraseMethod = getCurrentEraseSelection();
+   DeviceData::EraseMethod currentEraseMethod = getCurrentEraseSelection();
    bool enableProgramming = ((deviceInterface->getCurrentDeviceIndex() >= 0) &&
          (fileLoaded || (doTrim && (currentEraseMethod == DeviceData::eraseSelective))));
    programFlashButtonControl->Enable(enableProgramming);
@@ -603,7 +603,7 @@ void UsbdmDialogue::populateEraseControl() {
    EraseMethodsConstPtr eraseMethods = device->getEraseMethods();
 
    // Save current selection
-   DeviceData::EraseMethods currentEraseMethod = getCurrentEraseSelection();
+   DeviceData::EraseMethod currentEraseMethod = getCurrentEraseSelection();
 
    // Update control
    eraseChoiceControl->Clear();
@@ -651,7 +651,7 @@ void UsbdmDialogue::populateResetControl() {
    ResetMethodsConstPtr resetMethods = device->getResetMethods();
 
    // Save current selection
-   DeviceData::ResetMethods currentResetMethod = getCurrentResetSelection();
+   DeviceData::ResetMethod currentResetMethod = getCurrentResetSelection();
 
    // Update control
    resetChoiceControl->Clear();
@@ -1157,6 +1157,8 @@ void UsbdmDialogue::populateDeviceDropDown() {
    vector<DeviceDataPtr>::const_iterator it;
    for ( it=deviceInterface->getDeviceDatabase()->begin(), deviceIndex=0;
          it < deviceInterface->getDeviceDatabase()->end(); it++, deviceIndex++ ) {
+      log.print("%s\n", (*it)->getTargetName().c_str());
+
       if (((*it)->getTargetName().length() != 0) &&
             !((*it)->isHidden()) &&
             (!doFilterByChipId || (*it)->isThisDevice(filterChipIds, false))) {
@@ -1613,12 +1615,12 @@ USBDM_ErrorCode UsbdmDialogue::programFlash(bool loadAndGo) {
       DeviceDataPtr device = deviceInterface->getCurrentDevice();
 
       // Update device from current erase method selection
-      DeviceData::EraseMethods currentEraseMethod = getCurrentEraseSelection();
+      DeviceData::EraseMethod currentEraseMethod = getCurrentEraseSelection();
       log.print("Setting erase method to %s\n", DeviceData::getEraseMethodName(currentEraseMethod));
       device->setEraseMethod(currentEraseMethod);
 
       // Update device from current erase method selection
-      DeviceData::ResetMethods currentResetMethod = getCurrentResetSelection();
+      DeviceData::ResetMethod currentResetMethod = getCurrentResetSelection();
       log.print("Setting reset method to %s\n", DeviceData::getResetMethodName(currentResetMethod));
       device->setResetMethod(currentResetMethod);
 

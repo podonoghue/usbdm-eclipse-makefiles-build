@@ -787,7 +787,7 @@ FlexNVMInfoConstPtr     MemoryRegion::getflexNVMInfo() const {
  */
 
 //! Get readable names for erase options
-const char *DeviceData::getEraseMethodName(EraseMethods option) {
+const char *DeviceData::getEraseMethodName(EraseMethod option) {
    switch (option) {
    case eraseTargetDefault : return "TargetDefault";
    case eraseNone          : return "EraseNone";
@@ -799,7 +799,7 @@ const char *DeviceData::getEraseMethodName(EraseMethods option) {
 }
 
 //! Get readable names for erase options
-const char *DeviceData::getResetMethodName(ResetMethods option) {
+const char *DeviceData::getResetMethodName(ResetMethod option) {
    switch (option) {
    case resetTargetDefault : return "TargetDefault";
    case resetHardware      : return "ResetHardware";
@@ -808,6 +808,51 @@ const char *DeviceData::getResetMethodName(ResetMethods option) {
    case resetNone          : return "ResetNone";
    default                 : return "Illegal erase option";
    }
+}
+
+/**
+ * Get erase method from name as string
+ *
+ * @return Erase method
+ */
+DeviceData::EraseMethod DeviceData::getEraseMethod(const char *name) {
+   static struct {
+      const char               *name;
+      DeviceData::EraseMethod  type;
+   } names[] = {
+         { "Selective", DeviceData::EraseMethod::eraseSelective, },
+         { "All",       DeviceData::EraseMethod::eraseAll, },
+         { "Mass",      DeviceData::EraseMethod::eraseMass, },
+         { "None",      DeviceData::EraseMethod::eraseNone, },
+   };
+   for (unsigned index=0; index<(sizeof(names)/sizeof(names[0])); index++) {
+      if (stricmp(names[index].name, name) == 0) {
+         return names[index].type;
+      }
+   }
+   return DeviceData::EraseMethod::eraseTargetDefault;
+}
+
+/**
+ * Get reset method from name as string
+ *
+ * @return Reset method
+ */
+DeviceData::ResetMethod DeviceData::getResetMethod(const char *name) {
+   struct {
+      const char               *name;
+      DeviceData::ResetMethod  type;
+   } names[] = {
+         { "hardware",  DeviceData::ResetMethod::resetHardware, },
+         { "software",  DeviceData::ResetMethod::resetSoftware, },
+         { "vendor",    DeviceData::ResetMethod::resetVendor, },
+   };
+   for (unsigned index=0; index<(sizeof(names)/sizeof(names[0])); index++) {
+      if (stricmp(names[index].name, name) == 0) {
+         return names[index].type;
+      }
+   }
+   return DeviceData::ResetMethod::resetTargetDefault;
 }
 
 //! Structure to hold FlexNVM information
@@ -823,10 +868,6 @@ public:
 
 const std::string DeviceData::getTargetName() const {
    return targetName;
-}
-
-const std::string DeviceData::getAliasName() const {
-   return aliasName;
 }
 
 bool DeviceData::isHidden() const {
@@ -898,7 +939,7 @@ const std::vector<TargetSDID>& DeviceData::getTargetSDIDs() const {
 }
 
 bool DeviceData::isAlias(void) const {
-   return !aliasName.empty();
+   return baseDevice != nullptr;
 }
 
 RegisterDescriptionConstPtr DeviceData::getRegisterDescription() const {
@@ -974,6 +1015,10 @@ void  DeviceData::addSDID(uint32_t mask, uint32_t value) {
    targetSDIDs.push_back(TargetSDID(mask, value));
 }
 
+void  DeviceData::addAliasSDID(uint32_t mask, uint32_t value) {
+   targetSDIDs.push_back(TargetSDID(mask, value));
+}
+
 void  DeviceData::setEraseMethods(EraseMethodsConstPtr methods) {
    eraseMethods = methods;
 }
@@ -1010,10 +1055,6 @@ void DeviceData::addMemoryRegion(MemoryRegionPtr pMemoryRegion) {
 
 void DeviceData::setTargetName(const std::string &name) {
    targetName = name;
-}
-
-void DeviceData::setAliasName(const std::string &name) {
-   aliasName = name;
 }
 
 void DeviceData::setHidden(bool value) {
@@ -1373,13 +1414,13 @@ const string ClockTypes::getClockName(ClockTypes_t clockType) {
  *
  * @return true/false result of check
  */
-bool DeviceData::isThisDevice(uint32_t  desiredSDID, bool acceptZero) const {
+bool DeviceData::isThisDevice(uint32_t desiredSDID, bool acceptZero) const {
    LOGGING_Q;
    unsigned int index;
 
    if (targetType == T_ARM) {
       // Some Kinetis devices don't have the SDID programmed correctly
-      if ((acceptZero) && (desiredSDID == 0x000000FF)) {
+      if (acceptZero && (desiredSDID == 0x000000FF)) {
          log.print("Matching %10s as blank SDID\n", getTargetName().c_str());
          return true;
       }
@@ -1394,11 +1435,35 @@ bool DeviceData::isThisDevice(uint32_t  desiredSDID, bool acceptZero) const {
       return acceptZero;
    }
    for (index=0; index<targetSDIDs.size(); index++) {
-//      log.print("Comparing 0x%08X with (V=0x%08X, M=0x%08X)\n",
-//                     desiredSDID, targetSDIDs[index].value, targetSDIDs[index].mask);
       if (((targetSDIDs[index].value^desiredSDID)&targetSDIDs[index].mask) == 0x0000) {
          log.print("Matched %10s 0x%08X with (V=0x%08X, M=0x%08X)\n",
                         getTargetName().c_str(), desiredSDID, targetSDIDs[index].value, targetSDIDs[index].mask);
+         return true;
+      }
+   }
+   return false;
+}
+
+/**
+ *  Checks if the SDID is used by the device or an alias
+ *
+ * @param desiredSDID  The SDID to check against
+ * @param acceptZero   Accept a zero SDID
+ *
+ * @return true/false result of check
+ */
+bool DeviceData::isThisDeviceOrAlias(uint32_t desiredSDID, bool acceptZero) const {
+   LOGGING_Q;
+   unsigned int index;
+
+   if (isThisDevice(desiredSDID, acceptZero)) {
+      return true;
+   }
+   // Check aliases
+   for (index=0; index<aliasSDIDs.size(); index++) {
+      if (((aliasSDIDs[index].value^desiredSDID)&aliasSDIDs[index].mask) == 0x0000) {
+         log.print("Matched alias %10s 0x%08X with (V=0x%08X, M=0x%08X)\n",
+                        getTargetName().c_str(), desiredSDID, aliasSDIDs[index].value, aliasSDIDs[index].mask);
          return true;
       }
    }
@@ -1652,34 +1717,42 @@ EraseMethodsConstPtr DeviceDataBase::getEraseMethods(std::string key) const {
  */
 DeviceDataConstPtr DeviceDataBase::findDeviceFromName(const string &targetName) const {
    LOGGING_Q;
-   static int recursionCheck = 0;
-//   log.print("findDeviceFromName(%s)\n", (const char *)targetName.c_str());
-
-   if (recursionCheck++>5) {
-      throw MyException("Recursion limit in DeviceDataBase::findDeviceFromName");
-   }
-//   // Note - Assumes ASCII string
-//   char buff[50];
-//   strncpy(buff, targetName.c_str(), sizeof(buff));
-//   buff[sizeof(buff)-1] = '\0';
-//   strUpper(buff);
 
    DeviceDataConstPtr theDevice;
    vector<DeviceDataPtr>::const_iterator it;
    for (it = deviceData.begin(); it != deviceData.end(); it++) {
       if (strcasecmp((*it)->getTargetName().c_str(), targetName.c_str()) == 0) {
-         theDevice = static_cast<DeviceDataConstPtr>(*it);
-//         log.print("findDeviceFromName(%s) found %s%s\n",
-//                        (const char *)targetName.c_str(), (const char *)(theDevice->getTargetName().c_str()), theDevice->isAlias()?"(alias)":"");
-         if (theDevice->isAlias()) {
-            theDevice = findDeviceFromName(theDevice->getAliasName());
-         }
+         theDevice = DeviceData::getBaseDevice(*it);
          break;
       }
    }
-   recursionCheck--;
-   if (theDevice == NULL) {
+   if (theDevice == nullptr) {
       log.print("findDeviceFromName(%s) => Device not found\n", (const char *)targetName.c_str());
+   }
+   return theDevice;
+}
+
+/** Searches the known devices for a device with given name
+ *
+ * @param targetName - Name of device
+ *
+ * @returns entry found or NULL if no suitable device found
+ *
+ * @note - If the device is an alias then it will return the true device
+ */
+DeviceDataPtr DeviceDataBase::findMutableDeviceFromName(const string &targetName) const {
+   LOGGING_Q;
+
+   DeviceDataPtr theDevice;
+   vector<DeviceDataPtr>::const_iterator it;
+   for (it = deviceData.begin(); it != deviceData.end(); it++) {
+      if (strcasecmp((*it)->getTargetName().c_str(), targetName.c_str()) == 0) {
+         theDevice = DeviceData::getBaseDevice(*it);
+         break;
+      }
+   }
+   if (theDevice == nullptr) {
+      log.print("findMutableDeviceFromName(%s) => Device not found\n", (const char *)targetName.c_str());
    }
    return theDevice;
 }
@@ -1698,6 +1771,7 @@ int DeviceDataBase::findDeviceIndexFromName(const string &targetName) const {
       if (strcasecmp((*it)->getTargetName().c_str(), targetName.c_str()) == 0) {
          return it - deviceData.begin();
       }
+
    }
    log.print("findDeviceIndexFromName(%s) => Device not found\n", targetName.c_str());
    return -1;
@@ -1857,7 +1931,6 @@ DeviceData::DeviceData(
          const std::string   &targetName
            ) : targetType(targetType),
                targetName(targetName),
-               aliasName(""),
                hidden(false),
                ramStart(0),
                ramEnd(0),
@@ -1916,7 +1989,7 @@ const string DeviceData::toString() const {
  *
  * @param method Method to use
  */
-void DeviceData::setResetMethod(ResetMethods method) {
+void DeviceData::setResetMethod(ResetMethod method) {
    resetMethod = method;
 }
 
@@ -1925,7 +1998,7 @@ void DeviceData::setResetMethod(ResetMethods method) {
  *
  * @return Method to use
  */
-DeviceData::ResetMethods DeviceData::getResetMethod() const {
+DeviceData::ResetMethod DeviceData::getResetMethod() const {
    return resetMethod;
 }
 
@@ -1934,7 +2007,7 @@ DeviceData::ResetMethods DeviceData::getResetMethod() const {
  *
  * @param method Method to use
  */
-void DeviceData::setEraseMethod(EraseMethods method) {
+void DeviceData::setEraseMethod(EraseMethod method) {
    eraseMethod = method;
 }
 
@@ -1943,7 +2016,7 @@ void DeviceData::setEraseMethod(EraseMethods method) {
  *
  * @return Method to use
  */
-DeviceData::EraseMethods DeviceData::getEraseMethod() const {
+DeviceData::EraseMethod DeviceData::getEraseMethod() const {
    return eraseMethod;
 }
 

@@ -23,12 +23,14 @@ Cortex-M0
       </applyWhen>
       
       <!--  Common Cortex-M0/+ files -->
+
       <createFolder target="Sources"                                        />
       <createFolder target="Startup_Code"                                   />
       <createFolder target="Project_Headers"                 type="include" />
       <createFolder target="Project_Settings/Linker_Files"                  />
    
       <copy source="Startup_Code/newlib_stubs.c"                              target="Startup_Code/newlib_stubs.c" />
+      <copy source="Startup_Code/vectors-cm0.c"                               target="Startup_Code/vectors.c" />
 
       <copy source="Startup_Code/startup_ARMLtdGCC_CortexM0.S"                target="Startup_Code/startup_ARMLtdGCC.S" />
 
@@ -46,7 +48,6 @@ Cortex-M0
       <copy source="Project_Headers/core_cmInstr.h"                           target="Project_Headers/core_cmInstr.h" />
       <copy source="Project_Headers/utilities-mke.h"                          target="Project_Headers/utilities.h" />
 
-      <copy source="$(externalVectorTable)"                                   target="Startup_Code/vectors.c" replace="true" />
       <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(targetDevice).h" replace="true" />
 
       <projectActionList>
@@ -96,7 +97,7 @@ Cortex-M0
          </applyWhen>
          <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-mk.ld"    target="Project_Settings/Linker_Files/Linker-rom.ld" />
          <copy source="Startup_Code/system-mke.c"                             target="Startup_Code/system.c" />
-         <copy source="Startup_Code/vectors-mke.c"                            target="Startup_Code/vectors.c" />
+         <copy source="Startup_Code/security-mke.c"                           target="Startup_Code/security.c" />
       </projectActionList>
    
       <!-- Base MKL files -->
@@ -106,7 +107,7 @@ Cortex-M0
          </applyWhen>
          <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-mk.ld"    target="Project_Settings/Linker_Files/Linker-rom.ld" />
          <copy source="Startup_Code/system-mkl.c"                             target="Startup_Code/system.c" />
-         <copy source="Startup_Code/vectors-mkl.c"                            target="Startup_Code/vectors.c" />
+         <copy source="Startup_Code/security-mkl.c"                           target="Startup_Code/security.c" />
       </projectActionList>
    
       <!-- Base MKM files -->
@@ -116,7 +117,7 @@ Cortex-M0
          </applyWhen>
          <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-mk.ld"    target="Project_Settings/Linker_Files/Linker-rom.ld" />
          <copy source="Startup_Code/system-mkm.c"                             target="Startup_Code/system.c" />
-         <copy source="Startup_Code/vectors-mkm.c"                            target="Startup_Code/vectors.c" />
+         <copy source="Startup_Code/security-mkm.c"                           target="Startup_Code/security.c" />
       </projectActionList>
 
       <!-- Base MKV10 files -->
@@ -126,7 +127,7 @@ Cortex-M0
          </applyWhen>
          <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-mk.ld"    target="Project_Settings/Linker_Files/Linker-rom.ld" />
          <copy source="Startup_Code/system-mkv10.c"                           target="Startup_Code/system.c" />
-         <copy source="Startup_Code/vectors-mkv10.c"                          target="Startup_Code/vectors.c" />
+         <copy source="Startup_Code/security-mkv.c"                           target="Startup_Code/security.c" />
       </projectActionList>
 
       <!-- Base LPC files -->
@@ -136,7 +137,7 @@ Cortex-M0
          </applyWhen>
          <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-lpc.ld"   target="Project_Settings/Linker_Files/Linker-rom.ld" />
          <copy source="Startup_Code/system-lpc.c"                             target="Startup_Code/system.c" />
-         <copy source="Startup_Code/vectors-lpc.c"                            target="Startup_Code/vectors.c" />
+         <copy source="Startup_Code/security-lpc.c"                           target="Startup_Code/security.c" />
       </projectActionList>
    
    </projectActionList>

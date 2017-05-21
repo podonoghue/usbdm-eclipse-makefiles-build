@@ -26,8 +26,9 @@ Cortex-M4
       <createFolder target="Project_Settings/Linker_Files"                  />
    
       <copy source="Startup_Code/system-mk.c"                                 target="Startup_Code/system.c" />
-      <copy source="Startup_Code/vectors-mk.c"                                target="Startup_Code/vectors.c" />
+      <copy source="Startup_Code/vectors-cm4.c"                               target="Startup_Code/vectors.c" />
       <copy source="Startup_Code/newlib_stubs.c"                              target="Startup_Code/newlib_stubs.c" />
+      <copy source="Startup_Code/security-mk.c"                               target="Startup_Code/security.c" />
 
       <copy source="Startup_Code/startup_ARMLtdGCC_CortexM4.S"                target="Startup_Code/startup_ARMLtdGCC.S" />
 
@@ -46,7 +47,6 @@ Cortex-M4
       <copy source="Project_Headers/core_cmInstr.h"                           target="Project_Headers/core_cmInstr.h" />
       <copy source="Project_Headers/utilities-mk.h"                           target="Project_Headers/utilities.h" />
 
-      <copy source="$(externalVectorTable)"                                   target="Startup_Code/vectors.c" replace="true" />
       <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(targetDevice).h" replace="true" />
 
       <projectActionList>

@@ -20,13 +20,14 @@ class GdbHandlerCommon: public GdbHandler {
 
 public:
    GdbHandlerCommon(
-         TargetType_t         targetType,
-         GdbInOut            *gdbInOut,
-         BdmInterfacePtr      bdmInterface,
-         DeviceInterfacePtr   deviceInterface,
-         GdbBreakpoints      *gdbBreakpoints,
-         GdbCallback          gdbCallBackPtr,
-         IGdbTty              *tty);
+         TargetType_t              targetType,
+         GdbInOut                 *gdbInOut,
+         BdmInterfacePtr           bdmInterface,
+         DeviceInterfacePtr        deviceInterface,
+         GdbBreakpoints           *gdbBreakpoints,
+         GdbCallback               gdbCallBackPtr,
+         IGdbTty                  *tty,
+         DeviceData::ResetMethod   defaultResetMethod);
    virtual ~GdbHandlerCommon();
 
    virtual USBDM_ErrorCode      initialise();
@@ -35,27 +36,28 @@ public:
    virtual USBDM_ErrorCode      updateTarget() = 0;
 
 protected:
-   DeviceTclInterfacePtr      deviceTclInterface;
-   GdbBreakpoints             *gdbBreakpoints;
-   bool                       initBreakpointsDone;
-   bool                       programmingDone;
-   USBDM_ErrorCode           (*gdbCallBackPtr)(const char *msg, GdbMessageLevel level, USBDM_ErrorCode rc);
+   DeviceTclInterfacePtr          deviceTclInterface;
+   GdbBreakpoints                 *gdbBreakpoints;
+   bool                           initBreakpointsDone;
+   bool                           programmingDone;
+   USBDM_ErrorCode               (*gdbCallBackPtr)(const char *msg, GdbMessageLevel level, USBDM_ErrorCode rc);
 
-   TargetType_t                targetType;
-   GdbInOut                   *gdbInOut;
-   BdmInterfacePtr             bdmInterface;
-   DeviceInterfacePtr          deviceInterface;
-   DeviceDataPtr        const &deviceData;
-   IGdbTty                     *tty;
-   bool                        useFastRegisterRead;
-   RunState                    runState;
-   DeviceData                  deviceOptions;          //!< Description of currently selected device
-   FlashImagePtr               flashImage;             //!< Flash image for programming
-   unsigned                    unsuccessfulPollCount;  //!< Count of unsuccessful polls of target
-   bool                        targetBreakPending;
-   uint32_t                    lastStoppedPC;
-   static GdbHandlerCommon    *This;
-   static void                errorLogger(const char *msg);
+   TargetType_t                    targetType;
+   GdbInOut                       *gdbInOut;
+   BdmInterfacePtr                 bdmInterface;
+   DeviceInterfacePtr              deviceInterface;
+   DeviceDataPtr            const &deviceData;
+   IGdbTty                         *tty;
+   bool                            useFastRegisterRead;
+   RunState                        runState;
+   DeviceData                      deviceOptions;          //!< Description of currently selected device
+   FlashImagePtr                   flashImage;             //!< Flash image for programming
+   unsigned                        unsuccessfulPollCount;  //!< Count of unsuccessful polls of target
+   bool                            targetBreakPending;
+   uint32_t                        lastStoppedPC;
+   static GdbHandlerCommon         *This;
+   static void                     errorLogger(const char *msg);
+   const DeviceData::ResetMethod   defaultResetMethod;
 
    void               clearAllBreakpoints(void)            { gdbBreakpoints->clearAllBreakpoints(); };
    void               checkAndAdjustBreakpointHalt(void)   { gdbBreakpoints->checkAndAdjustBreakpointHalt(); };
@@ -80,10 +82,10 @@ protected:
 
    virtual DeviceTclInterfacePtr getTclInterface();
    virtual USBDM_ErrorCode       runTCLCommand(const char *command);
-   virtual USBDM_ErrorCode       resetTarget(TargetMode_t mode = (TargetMode_t)(RESET_SPECIAL|RESET_DEFAULT));
-   virtual USBDM_ErrorCode       stepTarget(bool disableInterrupts);
-   virtual USBDM_ErrorCode       continueTarget(void);
-   virtual USBDM_ErrorCode       haltTarget();
+   virtual USBDM_ErrorCode       resetTarget() override;
+   virtual USBDM_ErrorCode       stepTarget(bool disableInterrupts) override;
+   virtual USBDM_ErrorCode       continueTarget(void) override;
+   virtual USBDM_ErrorCode       haltTarget() override;
 
    virtual USBDM_ErrorCode       programImage(FlashImagePtr flashImage);
    virtual void                  maskInterrupts(bool disableInterrupts) = 0;
@@ -116,6 +118,13 @@ protected:
    USBDM_ErrorCode               reportGdbPrintf(GdbMessageLevel level, USBDM_ErrorCode rc, const char *format, ...);
    USBDM_ErrorCode               reportGdbPrintf(const char *format, ...);
    USBDM_ErrorCode               reportGdbPrintf(GdbMessageLevel level, const char *format, ...);
+
+   /**
+    * Get reset method to use
+    *
+    * @return reset method
+    */
+   DeviceData::ResetMethod getresetMethod();
 
    void createMemoryMapXML(const char **buffer, unsigned *bufferSize);
 

@@ -911,7 +911,7 @@ EraseMethodsPtr DeviceXmlParser::parseEraseMethods(DOMElement *element) {
             resetMethodIt.advanceElement()) {
 
          // <resetMethod>
-         DeviceData::EraseMethods option = DeviceData::EraseMethods::eraseNone;
+         DeviceData::EraseMethod option = DeviceData::EraseMethod::eraseNone;
 
          DOMElement *eraseElement = resetMethodIt.getCurrentElement();
 
@@ -922,12 +922,12 @@ EraseMethodsPtr DeviceXmlParser::parseEraseMethods(DOMElement *element) {
             DualString sType(eraseElement->getAttribute(attr_method.asXMLString()));
             struct {
                const char               *name;
-               DeviceData::EraseMethods  type;
+               DeviceData::EraseMethod  type;
             } names[] = {
-                  { "Selective", DeviceData::EraseMethods::eraseSelective, },
-                  { "All",       DeviceData::EraseMethods::eraseAll, },
-                  { "Mass",      DeviceData::EraseMethods::eraseMass, },
-                  { "None",      DeviceData::EraseMethods::eraseNone, },
+                  { "Selective", DeviceData::EraseMethod::eraseSelective, },
+                  { "All",       DeviceData::EraseMethod::eraseAll, },
+                  { "Mass",      DeviceData::EraseMethod::eraseMass, },
+                  { "None",      DeviceData::EraseMethod::eraseNone, },
             };
             for (unsigned index=0; index<(sizeof(names)/sizeof(names[0])); index++) {
                if (stricmp(names[index].name, sType.asCString()) == 0) {
@@ -935,7 +935,7 @@ EraseMethodsPtr DeviceXmlParser::parseEraseMethods(DOMElement *element) {
                }
             }
          }
-         if (option == DeviceData::EraseMethods::eraseNone) {
+         if (option == DeviceData::EraseMethod::eraseNone) {
             throw MyException(string("DeviceXmlParser::parseEraseMethods() - <eraseMethod> Missing/invalid method attribute "));
          }
          DualString value(eraseElement->getAttribute(attr_isDefault.asXMLString()));
@@ -980,17 +980,17 @@ ResetMethodsPtr DeviceXmlParser::parseResetMethods(DOMElement *element) {
             resetMethodIt.advanceElement()) {
 
          DOMElement *resetElement = resetMethodIt.getCurrentElement();
-         DeviceData::ResetMethods option = DeviceData::ResetMethods::resetNone;
+         DeviceData::ResetMethod option = DeviceData::ResetMethod::resetNone;
 
          if (resetElement->hasAttribute(attr_method.asXMLString())) {
             DualString sType(resetElement->getAttribute(attr_method.asXMLString()));
             struct {
                const char               *name;
-               DeviceData::ResetMethods  type;
+               DeviceData::ResetMethod  type;
             } names[] = {
-                  { "hardware",  DeviceData::ResetMethods::resetHardware, },
-                  { "software",  DeviceData::ResetMethods::resetSoftware, },
-                  { "vendor",    DeviceData::ResetMethods::resetVendor, },
+                  { "hardware",  DeviceData::ResetMethod::resetHardware, },
+                  { "software",  DeviceData::ResetMethod::resetSoftware, },
+                  { "vendor",    DeviceData::ResetMethod::resetVendor, },
             };
             for (unsigned index=0; index<(sizeof(names)/sizeof(names[0])); index++) {
                if (stricmp(names[index].name, sType.asCString()) == 0) {
@@ -998,7 +998,7 @@ ResetMethodsPtr DeviceXmlParser::parseResetMethods(DOMElement *element) {
                }
             }
          }
-         if (option == DeviceData::ResetMethods::resetNone) {
+         if (option == DeviceData::ResetMethod::resetNone) {
             throw MyException(string("DeviceXmlParser::parseResetMethods() - <resetMethod> Missing/invalid method attribute "));
          }
          DualString value(resetElement->getAttribute(attr_isDefault.asXMLString()));
@@ -1814,24 +1814,9 @@ DeviceDataPtr DeviceXmlParser::parseDevice(DOMElement *deviceEl) {
 }
 
 /*!
- *    Create device description from node
+ *    Create device description from alias node
  *
- *   !ELEMENT device ((sdid*|
- *                     (clock?,
- *                      (memory|memoryRef)+,
- *                      (soptAddress|copctlAddress)?,
- *                      sdidAddress?,
- *                      sdidMask?,
- *                      sdid+,
- *                      flashScripts?,
- *                      (tclScript|tclScriptRef)?,
- *                      (flashProgram|flashProgramRef)?,
- *                      flashProgramData?,
- *                      (flexNVMInfo|flexNVMInfoRef)?,
- *                      (projectActionList|projectActionListRef)*,
- *                      (registerDescription|registerDescriptionRef)?
- *                      )
- *                     ),
+ *   !ELEMENT device ((sdid*),
  *                    note*)>
  *
  *  @param deviceEl - Present position in XML parse
@@ -1842,7 +1827,22 @@ DeviceDataPtr DeviceXmlParser::parseAlias(DOMElement *deviceEl) {
    LOGGING;
 
    // Create new device
-   DeviceDataPtr itDev = DeviceDataPtr(new DeviceData(targetType));
+   DeviceDataPtr device(new DeviceData(targetType));
+
+   // Get real device name. Note - Assumes ASCII string
+   DualString aliasValue(deviceEl->getAttribute(attr_alias.asXMLString()));
+   char buff[50];
+   strncpy(buff, aliasValue.asCString(), sizeof(buff));
+   buff[sizeof(buff)-1] = '\0';
+   strUpper(buff);
+   if (strlen(buff) == 0) {
+      throw MyException(string("DeviceXmlParser::parseAlias() - Alias name missing or invalid"));
+   }
+
+   DeviceDataPtr baseDevice = deviceDataBase->findMutableDeviceFromName(buff);
+   if (baseDevice == nullptr) {
+      throw MyException(string("DeviceXmlParser::parseAlias() - Alias refers to non-existent device"));
+   }
 
    long currentSDIDMask = 0;
 
@@ -1853,7 +1853,11 @@ DeviceDataPtr DeviceXmlParser::parseAlias(DOMElement *deviceEl) {
 
       DOMElement *currentProperty = propertyIt.getCurrentElement();
       DualString propertyTag(currentProperty->getTagName());
-      if (XMLString::equals(propertyTag.asXMLString(), tag_sdidMask.asXMLString())) {
+      if (XMLString::equals(propertyTag.asXMLString(), tag_note.asXMLString())) {
+         // <note>
+         //            DualString sNoteText(currentProperty->getTextContent());
+      }
+      else if (XMLString::equals(propertyTag.asXMLString(), tag_sdidMask.asXMLString())) {
          // <sdidMask value="vvv">
          DualString sSdidMask(currentProperty->getAttribute(attr_value.asXMLString()));
          long sdidMask;
@@ -1876,22 +1880,37 @@ DeviceDataPtr DeviceXmlParser::parseAlias(DOMElement *deviceEl) {
          if (!strToULong(sSdidValue.asCString(), NULL, &sdidValue)) {
             throw MyException(string("DeviceXmlParser::parseDevice() - Illegal SDID address ")+sSdidValue.asCString());
          }
-         itDev->addSDID(sdidMask, sdidValue);
+         device->addSDID(sdidMask, sdidValue);
+         // Add to base device so it is accepted by programmer etc
+         baseDevice->addAliasSDID(sdidMask, sdidValue);
       }
-      else if (XMLString::equals(propertyTag.asXMLString(), tag_sdidAddress.asXMLString())) {
-         // <sdidAddress>
-         DualString sSdidAddress(currentProperty->getAttribute(attr_value.asXMLString()));
-         long sdidAddress;
-         if (!strToULong(sSdidAddress.asCString(), NULL, &sdidAddress)) {
-            throw MyException(string("DeviceXmlParser::parseAlias() - Illegal Clock SDID value ")+sSdidAddress.asCString());
-         }
-         itDev->setSDIDAddress(sdidAddress);
-      }
+//      else if (XMLString::equals(propertyTag.asXMLString(), tag_sdidAddress.asXMLString())) {
+//         // <sdidAddress>
+//         DualString sSdidAddress(currentProperty->getAttribute(attr_value.asXMLString()));
+//         long sdidAddress;
+//         if (!strToULong(sSdidAddress.asCString(), NULL, &sdidAddress)) {
+//            throw MyException(string("DeviceXmlParser::parseAlias() - Illegal Clock SDID value ")+sSdidAddress.asCString());
+//         }
+//         device->setSDIDAddress(sdidAddress);
+//      }
       else {
          throw MyException(string("DeviceXmlParser::parseAlias() - Unknown tag - ")+propertyTag.asCString());
       }
    }
-   return itDev;
+   device->setBaseDevice(baseDevice);
+
+   // Note is OK to share data from base device as alias has a smart pointer to base device
+   if (deviceEl->hasAttribute(attr_hidden.asXMLString())) {
+      device->setHidden();
+   }
+   // Inherit SDID information from base device if none given
+   if (device->getSDIDs().empty()) {
+      device->setTargetSDIDs(baseDevice->getSDIDs());
+   }
+   if (device->getSDIDAddress() == 0x0) {
+      device->setSDIDAddress(baseDevice->getSDIDAddress());
+   }
+   return device;
 }
 
 //! Create device list from device nodes
@@ -1955,41 +1974,16 @@ void DeviceXmlParser::parseDeviceXML(void) {
       // Get device name. Note - Assumes ASCII string
       DualString targetName(deviceEl->getAttribute(attr_name.asXMLString()));
       setCurrentName(targetName.asCString());
-      // Alias device
       if (strlen(currentDeviceName) == 0) {
          throw MyException(string("DeviceXmlParser::parseDeviceXML() - Device name missing or invalid"));
       }
 //      log.print("Parsing Device %s\n", targetName.asCString());
       if (deviceEl->hasAttribute(attr_alias.asXMLString())) {
-
-         // Get real device name. Note - Assumes ASCII string
-         DualString aliasValue(deviceEl->getAttribute(attr_alias.asXMLString()));
-         char buff[50];
-         strncpy(buff, aliasValue.asCString(), sizeof(buff));
-         buff[sizeof(buff)-1] = '\0';
-         strUpper(buff);
-         if (strlen(buff) == 0) {
-            throw MyException(string("DeviceXmlParser::parseDeviceXML() - Alias name missing or invalid"));
-         }
-         DeviceDataPtr itDev = parseAlias(deviceEl);
-         itDev->setTargetName(currentDeviceName);
-         itDev->setAliasName(buff);
-         if (deviceEl->hasAttribute(attr_hidden.asXMLString())) {
-            itDev->setHidden();
-         }
-
-         DeviceDataConstPtr aliasedDevice = deviceDataBase->findDeviceFromName(itDev->getAliasName());
-         if (aliasedDevice == NULL) {
-            throw MyException(string("DeviceXmlParser::parseDeviceXML() - Alias refers to non-existent device"));
-         }
-         if (itDev->getSDIDs().empty()) {
-            itDev->setTargetSDIDs(aliasedDevice->getSDIDs());
-         }
-         if (itDev->getSDIDAddress() == 0x0) {
-            itDev->setSDIDAddress(aliasedDevice->getSDIDAddress());
-         }
+         // Alias device
+         DeviceDataPtr device = parseAlias(deviceEl);
+         device->setTargetName(currentDeviceName);
          log.print("Adding Alias Device %s\n", targetName.asCString());
-         deviceDataBase->addDevice(itDev);
+         deviceDataBase->addDevice(device);
       }
       else {
          // Real device
@@ -1999,10 +1993,10 @@ void DeviceXmlParser::parseDeviceXML(void) {
          }
          DualString subFamilyValue(deviceEl->getAttribute(attr_subFamily.asXMLString()));
          DualString speedValue(deviceEl->getAttribute(attr_speed.asXMLString()));
-         DeviceDataPtr itDev = parseDevice(deviceEl);
-         itDev->setTargetName(currentDeviceName);
+         DeviceDataPtr device = parseDevice(deviceEl);
+         device->setTargetName(currentDeviceName);
          if (deviceEl->hasAttribute(attr_hidden.asXMLString())) {
-            itDev->setHidden();
+            device->setHidden();
          }
          // Allow default devices without name - they are discarded
          if (isDefault) {
@@ -2012,7 +2006,7 @@ void DeviceXmlParser::parseDeviceXML(void) {
          else {
             // Add general device
             log.print("Adding Device %s\n", targetName.asCString());
-            deviceDataBase->addDevice(itDev);
+            deviceDataBase->addDevice(device);
          }
       }
    }

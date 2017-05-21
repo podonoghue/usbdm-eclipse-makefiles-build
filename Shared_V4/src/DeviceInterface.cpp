@@ -129,8 +129,8 @@ void DeviceInterface::loadSettings(const AppSettings &settings) {
    currentDevice->setSecurity(securityOption);
    currentDevice->setConnectionFreq(                         settings.getValue(targetBusFrequencyKey,  0));
 
-   currentDevice->setEraseMethod( (DeviceData::EraseMethods) settings.getValue(eraseMethodKey, currentDevice->getEraseMethod()));
-   currentDevice->setResetMethod( (DeviceData::ResetMethods) settings.getValue(resetMethodKey, currentDevice->getResetMethod()));
+   currentDevice->setEraseMethod( (DeviceData::EraseMethod) settings.getValue(eraseMethodKey, currentDevice->getEraseMethod()));
+   currentDevice->setResetMethod( (DeviceData::ResetMethod) settings.getValue(resetMethodKey, currentDevice->getResetMethod()));
 }
 
 /*!  Save settings to object

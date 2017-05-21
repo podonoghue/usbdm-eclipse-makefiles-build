@@ -706,17 +706,17 @@ Test Devices:
          <memoryRange start="0x40000000" end="0x4007FFFF" name="aips"         />  <!-- AIPS Peripherals -->
          <memoryRange start="0x400FF000" end="0x400FFFFF" name="gpio"         />  <!-- General purpose input/output (GPIO) -->
          <memoryRange start="0x44000000" end="0x5FFFFFFF" name="bme"          />  <!-- Bit Manipulation Engine (BME) -->
-         <memoryRange start="0xE0000000" end="0xE00FFFFF" name="peripheral"   />  <!-- Private Peripherals -->
+         <memoryRange start="0xE0000000" end="0xE00FFFFF" name="peripherals"  />  <!-- Private Peripherals -->
          <memoryRange start="0xF0002000" end="0xF0002FFF" name="romTable"     />  <!-- ROM table -->
          <memoryRange start="0xF0003000" end="0xF0003FFF" name="mcm"          />  <!-- Miscellaneous Control Module (MCM) -->
          <memoryRange start="0xF8000000" end="0xFFFFFFFF" name="fgpio"        />  <!-- IOPORT: GPIO (single cycle) -->
       </memory>         
       <memory id="kinetisIO_MKE" type="io">
-         <memoryRange start="0x22000000" end="0x2205FFFF" name="bitband"      />  <!-- SRAM_U bitband region -->
+         <memoryRange start="0x22000000" end="0x23FFFFFF" name="bitband"      />  <!-- Aliased to SRAM_U bit-band -->
          <memoryRange start="0x40000000" end="0x4007FFFF" name="aips"         />  <!-- AIPS Peripherals -->
          <memoryRange start="0x400FF000" end="0x400FFFFF" name="gpio"         />  <!-- General purpose input/output (GPIO) -->
          <memoryRange start="0x44000000" end="0x5FFFFFFF" name="bme"          />  <!-- Bit Manipulation Engine (BME) -->
-         <memoryRange start="0xE0000000" end="0xE00FFFFF" name="peripheral"   />  <!-- Private Peripherals -->
+         <memoryRange start="0xE0000000" end="0xE00FFFFF" name="peripherals"  />  <!-- Private Peripherals -->
          <memoryRange start="0xF0002000" end="0xF0002FFF" name="romTable"     />  <!-- ROM table -->
          <memoryRange start="0xF0003000" end="0xF0003FFF" name="mcm"          />  <!-- Miscellaneous Control Module (MCM) -->
          <memoryRange start="0xF8000000" end="0xFFFFFFFF" name="fgpio"        />  <!-- IOPORT: GPIO (single cycle) -->
@@ -725,7 +725,7 @@ Test Devices:
          <memoryRange start="0x40000000" end="0x4007FFFF" name="aips"         />  <!-- AIPS Peripherals -->
          <memoryRange start="0x400FF000" end="0x400FFFFF" name="gpio"         />  <!-- General purpose input/output (GPIO) -->
          <memoryRange start="0x44000000" end="0x5FFFFFFF" name="bme"          />  <!-- Bit Manipulation Engine (BME) -->
-         <memoryRange start="0xE0000000" end="0xE00FFFFF" name="peripheral"   />  <!-- Private Peripherals -->
+         <memoryRange start="0xE0000000" end="0xE00FFFFF" name="peripherals"  />  <!-- Private Peripherals -->
          <memoryRange start="0xF0000000" end="0xF0000FFF" name="mtb"          />  <!-- Micro Trace Buffer (MTB) registers -->
          <memoryRange start="0xF0001000" end="0xF0001FFF" name="mtbdwt"       />  <!-- MTB Data Watchpoint and Trace (MTBDWT) registers -->
          <memoryRange start="0xF0002000" end="0xF0002FFF" name="romTable"     />  <!-- ROM table -->
@@ -739,6 +739,19 @@ Test Devices:
          <memoryRange start="0x400FF000" end="0x400FFFFF" name="gpio"         />  <!-- General purpose input/output (GPIO) -->
          <memoryRange start="0x42000000" end="0x43FFFFFF" name="gpioBitband"  />  <!-- Bit-band GPIO -->  
          <memoryRange start="0xE0000000" end="0xE00FFFFF" name="peripherals"  />  <!-- Private Peripherals -->
+      </memory>         
+      <memory id="kinetisIO_MKE1xF" type="io">
+         <memoryRange start="0x22000000" end="0x23FFFFFF" name="bitband"      />  <!-- Aliased to SRAM_U bit-band -->
+         <memoryRange start="0x40000000" end="0x4007FFFF" name="aips"         />  <!-- AIPS Peripherals -->
+         <memoryRange start="0x400FF000" end="0x400FFFFF" name="gpio"         />  <!-- General purpose input/output (GPIO) -->
+         <memoryRange start="0x42000000" end="0x43FFFFFF" name="gpioBitband"  />  <!-- Bit-band GPIO -->  
+         <memoryRange start="0xE0000000" end="0xE00FFFFF" name="peripherals"  />  <!-- Private Peripherals -->
+      </memory>         
+      <memory id="kinetisBootROM_16K" type="rom">
+         <memoryRange start="0x1C000000" size="16K" name="bootROM"      />  <!-- Kinetis Boot ROM on some devices -->
+      </memory>         
+      <memory id="kinetisBootROM_32K" type="rom">
+         <memoryRange start="0x1C000000" size="32K" name="bootROM"      />  <!-- Kinetis Boot ROM on some devices -->
       </memory>         
            
       <resetMethods id="kinetisResetMethods" >
@@ -980,6 +993,7 @@ Test Devices:
          <memoryRef ref="FTFE_PFlash0_SEC_128K_2KS" />
          <memoryRef ref="FTFE_DFlash0_32K_2KS" />
          <memoryRef ref="kinetisIO_MKE" />
+         <memoryRef ref="kinetisBootROM_16K" />
          <sdid value="0x1425110A" mask="0xFFFF0000" />
          <tclScriptRef ref="Kinetis-KExx-Scripts" />
          <flashProgramRef ref="Kinetis-FTFE-MKE-flash-program" />
@@ -992,6 +1006,7 @@ Test Devices:
          <memoryRef ref="FTFE_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFE_DFlash0_32K_2KS" />
          <memoryRef ref="kinetisIO_MKE" />
+         <memoryRef ref="kinetisBootROM_16K" />
          <sdid value="0x1426110A" mask="0xFFFF0000" />
          <tclScriptRef ref="Kinetis-KExx-Scripts" />
          <flashProgramRef ref="Kinetis-FTFE-MKE-flash-program" />
@@ -1012,7 +1027,8 @@ Test Devices:
          <memoryRef ref="kinetis4K_FlexRam" />
          <memoryRef ref="FTFE_PFlash0_SEC_256K_4KS" />
          <memoryRef ref="FTFE_DFlash0_64K_2KS" />
-         <memoryRef ref="kinetisIO_MKE" />
+         <memoryRef ref="kinetisIO_MKE1xF" />
+         <memoryRef ref="kinetisBootROM_16K" />
          <sdid value="0x14250087" mask="0xFFFF0000" />
          <tclScriptRef ref="Kinetis-KExx-Scripts" />
          <flashProgramRef ref="Kinetis-FTFE-MKE18-flash-program" />
@@ -1025,7 +1041,8 @@ Test Devices:
          <memoryRef ref="FTFE_PFlash0_SEC_256K_4KS" />
          <memoryRef ref="FTFE_PFlash1_256K_4KS" />
          <memoryRef ref="FTFE_DFlash0_64K_2KS" />
-         <memoryRef ref="kinetisIO_MKE" />
+         <memoryRef ref="kinetisIO_MKE1xF" />
+         <memoryRef ref="kinetisBootROM_16K" />
          <sdid value="0x14270087" mask="0xFFFF0000" />
          <tclScriptRef ref="Kinetis-KExx-Scripts" />
          <flashProgramRef ref="Kinetis-FTFE-MKE18-flash-program" />
@@ -1082,6 +1099,7 @@ Test Devices:
          <memoryRef ref="kinetis512b_1536b_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_8K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
+         <memoryRef ref="kinetisBootROM_16K" />
          <sdid value="0x03120680" mask="0xFFFF0FF0"/>
          <tclScriptRef ref="Kinetis-KLxx-Scripts" />
          <flashProgramRef ref="Kinetis-FTFA-MKL-flash-program" />
@@ -1091,6 +1109,7 @@ Test Devices:
          <memoryRef ref="kinetis512b_1536b_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_16K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
+         <memoryRef ref="kinetisBootROM_16K" />
          <sdid value="0x03120680" mask="0xFFFF0FF0"/>
          <tclScriptRef ref="Kinetis-KLxx-Scripts" />
          <flashProgramRef ref="Kinetis-FTFA-MKL-flash-program" />
@@ -1100,6 +1119,7 @@ Test Devices:
          <memoryRef ref="kinetis512b_1536b_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_32K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
+         <memoryRef ref="kinetisBootROM_16K" />
          <sdid value="0x03121681" mask="0xFFFF0FF0"/>
          <tclScriptRef ref="Kinetis-KLxx-Scripts" />
          <flashProgramRef ref="Kinetis-FTFA-MKL-flash-program" />
@@ -1251,6 +1271,7 @@ Test Devices:
          <memoryRef ref="kinetis2K_6K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_32K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
+         <memoryRef ref="kinetisBootROM_16K" />
          <sdid value="0x17141C84" mask="0xFFFF0FF0"/>
          <tclScriptRef ref="Kinetis-KLxx-Scripts" />
          <flashProgramRef ref="Kinetis-FTFA-MKL-flash-program" />
@@ -1273,6 +1294,7 @@ Test Devices:
          <memoryRef ref="FTFA_PFlash0_SEC_64K_1KS" />
          <memoryRef ref="FTFA_PFlash1_64K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
+         <memoryRef ref="kinetisBootROM_16K" />
          <sdid value="0x13160D80" mask="0xFFFF0FF0"/>
          <tclScriptRef ref="Kinetis-KLxx-Scripts" />
          <flashProgramRef ref="Kinetis-FTFA-MKL-flash-program" />
@@ -1284,6 +1306,7 @@ Test Devices:
          <memoryRef ref="FTFA_PFlash0_SEC_128K_1KS" />
          <memoryRef ref="FTFA_PFlash1_128K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
+         <memoryRef ref="kinetisBootROM_16K" />
          <sdid value="0x13160D80" mask="0xFFFF0FF0"/>
          <tclScriptRef ref="Kinetis-KLxx-Scripts" />
          <flashProgramRef ref="Kinetis-FTFA-MKL-flash-program" />
@@ -1381,6 +1404,7 @@ Test Devices:
          <memoryRef ref="kinetis2K_6K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_32K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
+         <memoryRef ref="kinetisBootROM_16K" />
          <sdid value="0x27140C80" mask="0xFFFF0FF0"/>
          <tclScriptRef ref="Kinetis-KLxx-Scripts" />
          <flashProgramRef ref="Kinetis-FTFA-MKL-flash-program" />
@@ -1391,6 +1415,7 @@ Test Devices:
          <memoryRef ref="kinetis4K_12K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_64K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
+         <memoryRef ref="kinetisBootROM_16K" />
          <sdid value="0x27151C85" mask="0xFFFF0FF0"/>
          <tclScriptRef ref="Kinetis-KLxx-Scripts" />
          <flashProgramRef ref="Kinetis-FTFA-MKL-flash-program" />
@@ -1404,6 +1429,7 @@ Test Devices:
          <memoryRef ref="FTFA_PFlash0_SEC_64K_1KS" />
          <memoryRef ref="FTFA_PFlash1_64K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
+         <memoryRef ref="kinetisBootROM_16K" />
          <sdid value="0x23160D80" mask="0xFFFF0FF0"/>
          <tclScriptRef ref="Kinetis-KLxx-Scripts" />
          <flashProgramRef ref="Kinetis-FTFA-MKL-flash-program" />
@@ -1415,6 +1441,7 @@ Test Devices:
          <memoryRef ref="FTFA_PFlash0_SEC_128K_1KS" />
          <memoryRef ref="FTFA_PFlash1_128K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
+         <memoryRef ref="kinetisBootROM_16K" />
          <sdid value="0x23160D80" mask="0xFFFF0FF0"/>
          <tclScriptRef ref="Kinetis-KLxx-Scripts" />
          <flashProgramRef ref="Kinetis-FTFA-MKL-flash-program" />
@@ -1466,6 +1493,7 @@ Test Devices:
          <memoryRef ref="kinetis4K_12K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_128K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
+         <memoryRef ref="kinetisBootROM_16K" />
          <sdid value="0x43150588" mask="0xFFFF0000"/>
          <tclScriptRef ref="Kinetis-KLxx-Scripts" />
          <flashProgramRef ref="Kinetis-FTFA-MKL-flash-program" />
@@ -1475,6 +1503,7 @@ Test Devices:
          <memoryRef ref="kinetis8K_24K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_256K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
+         <memoryRef ref="kinetisBootROM_16K" />
          <sdid value="0x43160588" mask="0xFFFF0000"/>
          <tclScriptRef ref="Kinetis-KLxx-Scripts" />
          <flashProgramRef ref="Kinetis-FTFA-MKL-flash-program" />
@@ -1505,6 +1534,7 @@ Test Devices:
          <memoryRef ref="kinetis24K_72K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_128K_2KS" />
          <memoryRef ref="kinetisIO_MKL" />
+         <memoryRef ref="kinetisBootROM_32K" />
          <sdid value="0x92000BF6" mask="0xFF000000"/>
          <tclScriptRef ref="Kinetis-KLxx-Scripts" />
          <flashProgramRef ref="Kinetis-FTFA-MKV10-flash-program" />

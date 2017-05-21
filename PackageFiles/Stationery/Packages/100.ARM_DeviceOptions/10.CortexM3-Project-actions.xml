@@ -20,33 +20,42 @@
          </and>
       </applyWhen>
 
+      <!--  Common Cortex-M3 files -->
+
+      <createFolder target="Sources"                                        />
+      <createFolder target="Startup_Code"                                   />
+      <createFolder target="Project_Headers"                 type="include" />
+      <createFolder target="Project_Settings/Linker_Files"                  />
+   
+      <copy source="Startup_Code/newlib_stubs.c"                              target="Startup_Code/newlib_stubs.c" />
+      <copy source="Startup_Code/vectors-cm3.c"                               target="Startup_Code/vectors.c" />
+      <copy source="Startup_Code/startup_ARMLtdGCC_CortexM3.S"                target="Startup_Code/startup_ARMLtdGCC.S" />
+
+      <copy source="Project_Settings/Debug.launch"                            target="Project_Settings/$(projectName)-Debug.launch" />
+
+      <copy source="Project_Settings/Linker_Files/MemoryMap.ld"               target="Project_Settings/Linker_Files/MemoryMap-$(targetDeviceName).ld" />
+
+      <copy source="Project_Headers/derivative.h"                             target="Project_Headers/derivative.h" />
+      <copy source="Project_Headers/TargetDevice.h"                           target="Project_Headers/$(targetDevice).h" />
+      <copy source="Project_Headers/core_cm3.h"                               target="Project_Headers/core_cm3.h" />
+      <copy source="Project_Headers/core_cmFunc.h"                            target="Project_Headers/core_cmFunc.h" />
+      <copy source="Project_Headers/core_cmInstr.h"                           target="Project_Headers/core_cmInstr.h" />
+      <copy source="Project_Headers/core_cmFunc.h"                            target="Project_Headers/core_cmFunc.h" />
+      <copy source="Project_Headers/core_cmInstr.h"                           target="Project_Headers/core_cmInstr.h" />
+      <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(targetDevice).h" replace="true" />
+
+
       <!-- Base STM32 files -->
       <projectActionList id="STM32F10xx-files" >
          <applyWhen>
             <deviceSubfamilyMatches>^STM32.*</deviceSubfamilyMatches>
          </applyWhen>
-         <createFolder target="Sources"                         />
-         <createFolder target="Startup_Code"                    />
-         <createFolder target="Project_Headers"                 type="include" />
-         <createFolder target="Project_Settings/Linker_Files"   />
       
          <copy source="Startup_Code/system-stm32f10x.c"                          target="Startup_Code/system.c" />
-         <copy source="Startup_Code/vectors-stm32.c"                             target="Startup_Code/vectors.c" />
-         <copy source="Startup_Code/newlib_stubs.c"                              target="Startup_Code/newlib_stubs.c" />
-         <copy source="Startup_Code/startup_ARMLtdGCC_CortexM3.S"                target="Startup_Code/startup_ARMLtdGCC.S" />
-         <copy source="Project_Settings/Debug.launch"                            target="Project_Settings/$(projectName)-Debug.launch" />
-         <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-stm32.ld"    target="Project_Settings/Linker_Files/Linker-rom.ld" />
-         <copy source="Project_Settings/Linker_Files/MemoryMap.ld"               target="Project_Settings/Linker_Files/MemoryMap-$(targetDeviceName).ld" />
          <copy source="Project_Headers/derivative-STM32xx.h"                     target="Project_Headers/derivative.h" />
          <copy source="Project_Headers/stm32f10x.h"                              target="Project_Headers/stm32f10x.h" />
          <copy source="Project_Headers/system_stm32f10x.h"                       target="Project_Headers/system_stm32f10x.h" />
-         <copy source="Project_Headers/core_cm3.h"                               target="Project_Headers/core_cm3.h" />
-         <copy source="Project_Headers/core_cmFunc.h"                            target="Project_Headers/core_cmFunc.h" />
-         <copy source="Project_Headers/core_cmInstr.h"                           target="Project_Headers/core_cmInstr.h" />
          <copy source="Project_Headers/utilities-stm32.h"                        target="Project_Headers/utilities.h" />
-      
-         <copy source="$(externalVectorTable)"                                   target="Startup_Code/vectors.c"                     replace="true" />
-         <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(targetDevice).h" replace="true" />
 
          <projectActionList>
             <applyWhen>
@@ -62,7 +71,6 @@
             <copy source="Sources/main-stm32.cpp"                               target="Sources/main.cpp" />
          </projectActionList>
 
-      <!-- No Start up files for devices with very limited RAM -->
          <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols" >
             <value>STM32F10X_LD</value>
          </projectOption>            
@@ -76,23 +84,9 @@
          <applyWhen>
             <deviceSubfamilyMatches>^LPC\d+.*</deviceSubfamilyMatches>
          </applyWhen>
-         <createFolder target="Sources"                         />
-         <createFolder target="Startup_Code"                    />
-         <createFolder target="Project_Headers"                 type="include" />
-         <createFolder target="Project_Settings/Linker_Files"   />
       
          <copy source="Startup_Code/system-lpc.c"                                target="Startup_Code/system.c" />
-         <copy source="Startup_Code/vectors-lpc.c"                               target="Startup_Code/vectors.c" />
-         <copy source="Startup_Code/newlib_stubs.c"                              target="Startup_Code/newlib_stubs.c" />
-         <copy source="Startup_Code/startup_ARMLtdGCC_CortexM3.S"                target="Startup_Code/startup_ARMLtdGCC.S" />
-         <copy source="Project_Settings/Debug.launch"                            target="Project_Settings/$(projectName)-Debug.launch" />
          <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-lpc.ld"      target="Project_Settings/Linker_Files/ARMLtd_GCC-rom.ld" />
-         <copy source="Project_Settings/Linker_Files/MemoryMap.ld"               target="Project_Settings/Linker_Files/MemoryMap-$(targetDeviceName).ld" />
-         <copy source="Project_Headers/derivative.h"                             target="Project_Headers/derivative.h" />
-         <copy source="Project_Headers/TargetDevice.h"                           target="Project_Headers/$(targetDevice).h" />
-         <copy source="Project_Headers/core_cm3.h"                               target="Project_Headers/core_cm3.h" />
-         <copy source="Project_Headers/core_cmFunc.h"                            target="Project_Headers/core_cmFunc.h" />
-         <copy source="Project_Headers/core_cmInstr.h"                           target="Project_Headers/core_cmInstr.h" />
       
          <projectActionList>
             <applyWhen>
@@ -108,8 +102,6 @@
             <copy source="Sources/main.cpp"                                target="Sources/main.cpp" />
          </projectActionList>
 
-         <copy source="$(externalVectorTable)"                                   target="Startup_Code/vectors.c"                     replace="true" />
-         <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(targetDevice).h" replace="true" />
       </projectActionList>
    </projectActionList>
 

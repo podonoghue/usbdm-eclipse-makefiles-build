@@ -18,7 +18,15 @@ GdbHandler *createCFVxGdbHandler(GdbInOut *gdbInOut, BdmInterfacePtr bdmInterfac
 }
 
 GdbHandler_CFVx::GdbHandler_CFVx(GdbInOut *gdbInOut, BdmInterfacePtr bdmInterface, DeviceInterfacePtr deviceInterface, GdbCallback gdbCallBackPtr, IGdbTty *tty) :
-   GdbHandlerCommon(T_CFVx, gdbInOut, bdmInterface, deviceInterface, new GdbBreakpoints_CFV1(bdmInterface), gdbCallBackPtr, tty) {
+   GdbHandlerCommon(
+         T_CFVx,
+         gdbInOut,
+         bdmInterface,
+         deviceInterface,
+         new GdbBreakpoints_CFV1(bdmInterface),
+         gdbCallBackPtr,
+         tty,
+         DeviceData::resetHardware) {
 }
 
 GdbHandler_CFVx::~GdbHandler_CFVx() {
@@ -72,10 +80,10 @@ USBDM_ErrorCode GdbHandler_CFVx::initialise() {
    return BDM_RC_OK;
 }
 
-USBDM_ErrorCode GdbHandler_CFVx::resetTarget(TargetMode_t mode) {
+USBDM_ErrorCode GdbHandler_CFVx::resetTarget() {
    LOGGING;
 
-   return GdbHandlerCommon::resetTarget(mode);
+   return GdbHandlerCommon::resetTarget();
 }
 
 USBDM_ErrorCode GdbHandler_CFVx::continueTarget(void) {
@@ -293,7 +301,7 @@ GdbHandler::GdbTargetStatus GdbHandler_CFVx::getTargetStatus(void) {
       status = T_RUNNING;
       break;
    } while (0);
-   
+
    if (status != lastStatus) {
       log.print("Status changed => %s\n", getStatusName(status));
       lastStatus = status;

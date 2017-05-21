@@ -29,13 +29,14 @@ static const char targetXML[] =
       ;
 
 GdbHandlerCommon::GdbHandlerCommon(
-      TargetType_t         targetType,
-      GdbInOut            *gdbInOut,
-      BdmInterfacePtr      bdmInterface,
-      DeviceInterfacePtr   deviceInterface,
-      GdbBreakpoints      *gdbBreakpoints,
-      GdbCallback          gdbCallBackPtr,
-      IGdbTty *tty) :
+      TargetType_t              targetType,
+      GdbInOut                 *gdbInOut,
+      BdmInterfacePtr           bdmInterface,
+      DeviceInterfacePtr        deviceInterface,
+      GdbBreakpoints           *gdbBreakpoints,
+      GdbCallback               gdbCallBackPtr,
+      IGdbTty                  *tty,
+      DeviceData::ResetMethod   defaultResetMethod) :
          GdbHandler(),
          gdbBreakpoints(gdbBreakpoints),
          initBreakpointsDone(false),
@@ -45,7 +46,9 @@ GdbHandlerCommon::GdbHandlerCommon(
          bdmInterface(bdmInterface),
          deviceInterface(deviceInterface),
          deviceData(deviceInterface->getCurrentDevice()),
-         tty(tty) {
+         tty(tty),
+         defaultResetMethod(defaultResetMethod)
+         {
    LOGGING;
 
    if (gdbCallBackPtr == 0) {
@@ -286,10 +289,43 @@ USBDM_ErrorCode GdbHandlerCommon::runTCLCommand(const char *command) {
    return rc;
 }
 
-USBDM_ErrorCode GdbHandlerCommon::resetTarget(TargetMode_t mode) {
+/**
+ * Get reset method to use
+ *
+ * @return reset method
+ */
+DeviceData::ResetMethod GdbHandlerCommon::getresetMethod() {
+   DeviceData::ResetMethod resetMethod = deviceData->getResetMethod();
+   if (resetMethod == DeviceData::resetTargetDefault) {
+      return defaultResetMethod;
+   }
+   return resetMethod;
+}
+
+USBDM_ErrorCode GdbHandlerCommon::resetTarget() {
    LOGGING;
 
-   USBDM_ErrorCode rc = bdmInterface->reset(mode);
+   TargetMode_t targetMode;
+
+   DeviceData::ResetMethod resetMethod = deviceData->getResetMethod();
+   log.print("Setting reset method to %s\n", DeviceData::getResetMethodName(resetMethod));
+   switch (resetMethod) {
+      default:
+      case DeviceData::resetTargetDefault:
+         log.error("Unexpected reset method %s, defaulting to hardware\n", DeviceData::getResetMethodName(resetMethod));
+         // no break
+      case DeviceData::resetHardware:
+         targetMode = (TargetMode_t)(RESET_SPECIAL|RESET_HARDWARE);
+         break;
+      case DeviceData::resetSoftware:
+         targetMode = (TargetMode_t)(RESET_SPECIAL|RESET_SOFTWARE);
+         break;
+      case DeviceData::resetVendor:
+         targetMode = (TargetMode_t)(RESET_SPECIAL|RESET_VENDOR);
+         break;
+   }
+
+   USBDM_ErrorCode rc = bdmInterface->reset(targetMode);
    if (rc != BDM_RC_OK) {
       return rc;
    }
@@ -425,7 +461,7 @@ USBDM_ErrorCode GdbHandlerCommon::doMonitorCommand(const char *cmd) {
    else if (strneq(command, "reset", sizeof("reset")-1)) {
       //TODO Handle parameters
       reportGdbPrintf(M_INFO, "User reset of target\n");
-      resetTarget((TargetMode_t)(RESET_DEFAULT|RESET_SPECIAL));
+      resetTarget();
       gdbInOut->sendGdbHexString("O", "User reset of target\n", -1);
       gdbInOut->sendGdbString("OK");
       registerBufferSize = 0;

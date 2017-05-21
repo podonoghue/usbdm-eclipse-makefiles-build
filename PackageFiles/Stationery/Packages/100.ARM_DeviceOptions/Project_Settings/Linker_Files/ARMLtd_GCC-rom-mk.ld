@@ -1,7 +1,5 @@
 /* ARMLtd_GCC-rom-mk.ld 
  *
- * Kinetis version with optional SRAM_U allocation and bitband
- *
  * Linker script based on example scripts provided with ARM Ltd GCC
  *
  * It references the following symbols, which must be defined in code:

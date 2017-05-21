@@ -19,7 +19,15 @@ GdbHandler *createARMGdbHandler(GdbInOut *gdbInOut, BdmInterfacePtr bdmInterface
 }
 
 GdbHandler_ARM::GdbHandler_ARM(GdbInOut *gdbInOut, BdmInterfacePtr bdmInterface, DeviceInterfacePtr deviceInterface, GdbCallback gdbCallBackPtr, IGdbTty *tty) :
-   GdbHandlerCommon(T_ARM, gdbInOut, bdmInterface, deviceInterface, new GdbBreakpoints_ARM(bdmInterface), gdbCallBackPtr, tty) {
+   GdbHandlerCommon(
+         T_ARM,
+         gdbInOut,
+         bdmInterface,
+         deviceInterface,
+         new GdbBreakpoints_ARM(bdmInterface),
+         gdbCallBackPtr,
+         tty,
+         DeviceData::resetHardware) {
    isKinetisDevice = false;
 }
 
@@ -95,10 +103,10 @@ USBDM_ErrorCode GdbHandler_ARM::initialise() {
    return configureMDM_AP();
 }
 
-USBDM_ErrorCode GdbHandler_ARM::resetTarget(TargetMode_t mode) {
+USBDM_ErrorCode GdbHandler_ARM::resetTarget() {
    LOGGING;
 
-   USBDM_ErrorCode rc = GdbHandlerCommon::resetTarget(mode);
+   USBDM_ErrorCode rc = GdbHandlerCommon::resetTarget();
    if (rc != BDM_RC_OK) {
       return rc;
    }
@@ -462,7 +470,7 @@ GdbHandler::GdbTargetStatus GdbHandler_ARM::getTargetStatus() {
       status = T_RUNNING;
       break;
    } while (0);
-   
+
    if (status != lastStatus) {
       log.print("Status changed => %s\n", getStatusName(status));
       lastStatus = status;

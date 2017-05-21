@@ -108,6 +108,7 @@ static const string KeyUseAltBDMClock            = "useAltBDMClock";
 //static const string KeyGuessSpeedIfNoSYNC        = "guessSpeedIfNoSYNC";
 static const string KeyMaskInterrupt             = "maskInterrupt";
 static const string KeyEraseMethod               = "eraseMethod";
+static const string KeyResetMethod               = "resetMethod";
 static const string KeySecurity                  = "securityOption";
 
 static const string KeyPowerOffDuration          = "powerOffDuration";
@@ -145,7 +146,8 @@ void setCallback( DiCallbackT dcCallbackType, CallbackF   Callback ) {
 #define MAX_MTWKS_DISPLAY_STRING_LENGTH (2000)
 static char mtwksDisplayLineBuffer[MAX_MTWKS_DISPLAY_STRING_LENGTH];
 
-/*! \brief Informs Codewarrior of MEE ID
+/*!
+ * Informs Codewarrior of MEE ID
  *
  *  @param dnExecId ID to use
  */
@@ -164,7 +166,8 @@ DiReturnT mtwksSetMEE(DiUInt32T dnExecId) {
   return DI_OK;
 }
 
- /*! \brief Writes a value to the Metrowerks status line
+ /**
+  * Writes a value to the Metrowerks status line
   *
   *  @param format Format and parameters as for printf()
   */
@@ -200,7 +203,13 @@ DiReturnT mtwksDisplayLine(const char *format, ...) {
 }
 
 #if !defined(LEGACY)
-static DiReturnT mtwksGetStringValue( const string &entry, string &value) {
+/**
+ * Get string value from Codewarrior
+ *
+ * @param entry Key for entry
+ * @param value Value obtained
+ */
+static DiReturnT mtwksGetStringValue(const string &entry, string &value) {
    LOGGING_Q;
 
 char             buffer[300];
@@ -245,10 +254,11 @@ DiReturnT rc;
    return setErrorState(rc);
 }
 
-//!  Loads int target option from Codewarrior
-//!
-//!  @return error code, see \ref USBDM_ErrorCode
-//!
+/**
+ *  Loads int target option from Codewarrior
+ *
+ *  @return error code, see \ref USBDM_ErrorCode
+ */
 static USBDM_ErrorCode getAttribute(const string &key, int &value, int defaultValue) {
    LOGGING_Q;
 
@@ -263,22 +273,17 @@ static USBDM_ErrorCode getAttribute(const string &key, int &value, int defaultVa
 		return BDM_RC_ILLEGAL_PARAMS;
 	}
 	if (sValue != emptyString) {
-		long int temp = strtol(sValue.c_str(), NULL, 10);
-//ToDo some kind of error checking on conversion
-//		if () {
-//		   log.print("(%s) => %s, Failed int conversion\n", (const char *)key.ToAscii(), (const char *)sValue.ToAscii());
-//			return BDM_RC_ILLEGAL_PARAMS;
-//		}
-		value = (int)temp;
+	   value = (int)strtol(sValue.c_str(), NULL, 10);
 	}
    log.print("(%s) => %d\n", keyBuffer.c_str(), value);
 	return BDM_RC_OK;
 }
 
-//!  Loads TargetVddSelect_t target option from Codewarrior
-//!
-//!  @return error code, see \ref USBDM_ErrorCode
-//!
+/**
+ *  Loads TargetVddSelect_t target option from Codewarrior
+ *
+ *  @return error code, see \ref USBDM_ErrorCode
+ */
 static USBDM_ErrorCode getAttribute(const string &key, TargetVddSelect_t &value, TargetVddSelect_t defaultValue) {
    int iValue;
    USBDM_ErrorCode rc = getAttribute(key, iValue, (int)defaultValue);
@@ -286,10 +291,11 @@ static USBDM_ErrorCode getAttribute(const string &key, TargetVddSelect_t &value,
    return rc;
 }
 
-//!  Loads ClkSwValues_t target option from Codewarrior
-//!
-//!  @return error code, see \ref USBDM_ErrorCode
-//!
+/**
+ *  Loads ClkSwValues_t target option from Codewarrior
+ *
+ *  @return error code, see \ref USBDM_ErrorCode
+ */
 static USBDM_ErrorCode getAttribute(const string &key, ClkSwValues_t &value, ClkSwValues_t defaultValue) {
    int iValue;
    USBDM_ErrorCode rc = getAttribute(key, iValue, (int)defaultValue);
@@ -297,10 +303,11 @@ static USBDM_ErrorCode getAttribute(const string &key, ClkSwValues_t &value, Clk
    return rc;
 }
 
-//!  Loads AutoConnect_t target option from Codewarrior
-//!
-//!  @return error code, see \ref USBDM_ErrorCode
-//!
+/**
+ *  Loads AutoConnect_t target option from Codewarrior
+ *
+ *  @return error code, see \ref USBDM_ErrorCode
+ */
 static USBDM_ErrorCode getAttribute(const string &key, AutoConnect_t &value, AutoConnect_t defaultValue) {
    int iValue;
    USBDM_ErrorCode rc = getAttribute(key, iValue, (int)defaultValue);
@@ -308,10 +315,11 @@ static USBDM_ErrorCode getAttribute(const string &key, AutoConnect_t &value, Aut
    return rc;
 }
 
-//!  Loads bool target option from Codewarrior
-//!
-//!  @return error code, see \ref USBDM_ErrorCode
-//!
+/**
+ *  Loads bool target option from Codewarrior
+ *
+ *  @return error code, see \ref USBDM_ErrorCode
+ */
 static USBDM_ErrorCode getAttribute(const string &key, bool &value, bool defaultValue) {
    int iValue;
    USBDM_ErrorCode rc = getAttribute(key, iValue, (int)defaultValue);
@@ -319,10 +327,11 @@ static USBDM_ErrorCode getAttribute(const string &key, bool &value, bool default
    return rc;
 }
 
-//!  Loads unsigned target option from Codewarrior
-//!
-//!  @return error code, see \ref USBDM_ErrorCode
-//!
+/**
+ *  Loads unsigned target option from Codewarrior
+ *
+ *  @return error code, see \ref USBDM_ErrorCode
+ */
 static USBDM_ErrorCode getAttribute(const string &key, unsigned &value, unsigned defaultValue) {
    int iValue;
    USBDM_ErrorCode rc = getAttribute(key, iValue, (int)defaultValue);
@@ -330,10 +339,11 @@ static USBDM_ErrorCode getAttribute(const string &key, unsigned &value, unsigned
    return rc;
 }
 
-//!  Loads string target options from Codewarrior
-//!
-//!  @return error code, see \ref USBDM_ErrorCode
-//!
+/**
+ *  Loads string target options from Codewarrior
+ *
+ *  @return error code, see \ref USBDM_ErrorCode
+ */
 static USBDM_ErrorCode getAttribute(const string &key, string &value, const string &defaultValue) {
    LOGGING_Q;
 
@@ -343,22 +353,23 @@ static USBDM_ErrorCode getAttribute(const string &key, string &value, const stri
 
 	value = defaultValue;
 	if (mtwksGetStringValue(keyBuffer, sValue) != DI_OK) {
-	   log.print("(%s) => Failed\n", (const char *)key.c_str());
+	   log.print("(%s) => Failed\n", (const char *)keyBuffer.c_str());
 		return BDM_RC_ILLEGAL_PARAMS;
 	}
 	if (sValue != emptyString)
 		value = sValue;
 
-   log.print("(%s) => %s\n", (const char *)key.c_str(), (const char *)value.c_str());
+   log.print("(%s) => %s\n", (const char *)keyBuffer.c_str(), (const char *)value.c_str());
 	return BDM_RC_OK;
 }
 
-//!  Does the following:
-//!   - Loads device name from Codewarrior
-//!   - Loads corresponding device data from database
-//!
-//!  @return error code, see \ref USBDM_ErrorCode
-//!
+/**
+ *  Does the following:
+ *   - Loads device name from Codewarrior
+ *   - Loads corresponding device data from database
+ *
+ *  @return error code, see \ref USBDM_ErrorCode
+ */
 USBDM_ErrorCode getDeviceData(TargetType_t targetType, DeviceDataPtr &deviceData) {
    LOGGING;
    DeviceDataBase deviceDataBase(targetType);
@@ -403,9 +414,22 @@ USBDM_ErrorCode getDeviceData(TargetType_t targetType, DeviceDataPtr &deviceData
    else {
       deviceData->setClockTrimFreq(0);
    }
-   int eraseOptions;
-   getAttribute(KeyEraseMethod, eraseOptions, (int)DeviceData::eraseAll);
-   deviceData->setEraseMethod((DeviceData::EraseMethods)eraseOptions);
+
+   DeviceData::EraseMethod eraseMethod = DeviceData::eraseTargetDefault;
+   string sEraseMethod;
+   getAttribute(KeyEraseMethod, sEraseMethod, "");
+   if (sEraseMethod != emptyString) {
+      eraseMethod = DeviceData::getEraseMethod(sEraseMethod.c_str());
+   }
+   deviceData->setEraseMethod(eraseMethod);
+
+   DeviceData::ResetMethod resetMethod = DeviceData::resetTargetDefault;
+   string sResetMethod;
+   getAttribute(KeyResetMethod, sResetMethod, "");
+   if (sResetMethod != emptyString) {
+      resetMethod = DeviceData::getResetMethod(sResetMethod.c_str());
+   }
+   deviceData->setResetMethod(resetMethod);
 
    int securityOption;
    getAttribute(KeySecurity, securityOption, (int)SEC_SMART);
@@ -414,10 +438,11 @@ USBDM_ErrorCode getDeviceData(TargetType_t targetType, DeviceDataPtr &deviceData
    return BDM_RC_OK;
 }
 
-//!  Loads general settings from Codewarrior Eclipse environment
-//!
-//!  @return error code, see \ref USBDM_ErrorCode
-//!
+/**
+ *  Loads general settings from Codewarrior Eclipse environment
+ *
+ *  @return error code, see \ref USBDM_ErrorCode
+ */
 USBDM_ErrorCode loadSettings(BdmInterfacePtr bdmInterface) {
    LOGGING;
    log.print("- %s\n", getTargetTypeName(bdmInterface->getBdmOptions().targetType));
@@ -470,6 +495,9 @@ USBDM_ErrorCode loadSettings(BdmInterfacePtr bdmInterface) {
 #endif
 
 #ifdef LEGACY
+/**
+ *
+ */
 USBDM_ErrorCode loadNames(string &deviceName, string &projectPath) {
    DiReturnT rc;
    LOGGING_E;
