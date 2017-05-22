@@ -322,7 +322,7 @@
       <device name="FRDM_KE06Z"       svdFileName="MKE06Z4"     />
       <device name="FRDM_KE15Z"       svdFileName="MKE15Z7"     />
 
-      <device name="FRDM_KEAZ128Q80"  svdFileName="MKE06Z4"     />
+      <device name="FRDM_KEAZ128"     svdFileName="MKE06Z4"     />
       
       <device name="FRDM_KL02Z"       svdFileName="MKL02Z4"     />
       <device name="FRDM_KL03Z"       svdFileName="MKL03Z4"     />
