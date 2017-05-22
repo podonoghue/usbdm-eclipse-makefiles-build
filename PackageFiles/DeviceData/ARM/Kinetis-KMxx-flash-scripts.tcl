@@ -276,8 +276,8 @@ proc massEraseTarget { } {
    wcreg $::MDM_AP_Control 0
    rcreg $::MDM_AP_Control
 
-   puts "massEraseTarget{} - reset s v (Ignoring errors)"
-   catch {reset s v}
+   puts "massEraseTarget{} - reset sh (Ignoring errors)"
+   catch {reset s h}
    rcreg $::MDM_AP_Status
 
    return [ isUnsecure ] 
