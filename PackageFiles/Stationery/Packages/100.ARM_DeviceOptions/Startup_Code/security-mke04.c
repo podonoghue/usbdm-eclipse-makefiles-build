@@ -16,8 +16,8 @@
  */
 typedef struct {
     uint8_t  backdoorKey[8];
-    uint32_t reserved;
-    uint8_t  eeprot;
+    uint32_t reserved1;
+    uint8_t  reserved2;
     uint8_t  fprot;
     uint8_t  fsec;
     uint8_t  fopt;
@@ -104,7 +104,7 @@ typedef struct {
    <i> This byte is copied to the FOPT register in  the flash controller during reset
    <info>FOPT
  */
-#define FOPT_VALUE (0x16)
+#define FOPT_VALUE (0xFF)
 
 /*
   <h> Backdoor Comparison Key

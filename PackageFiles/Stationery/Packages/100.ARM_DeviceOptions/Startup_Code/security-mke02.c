@@ -124,7 +124,7 @@ typedef struct {
    <i> This byte is copied to the FOPT register in  the flash controller during reset
    <info>FOPT
  */
-#define FOPT_VALUE (0x16)
+#define FOPT_VALUE (0xFF)
 
 /*
   <h> Backdoor Comparison Key
