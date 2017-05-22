@@ -26,7 +26,7 @@
       <xi:include href="peripherals/AXBS_6M_5S.svd.xml"/>
       <xi:include href="peripherals/CMP0_MK22F.svd.xml"/>
       <xi:include href="peripherals/CMP1_MK22F.svd.xml"/>
-      <xi:include href="peripherals/CRC_0x40032000.svd.xml"/>
+      <xi:include href="peripherals/CRC0_0x40032000.svd.xml"/>
       <xi:include href="peripherals/CoreDebug.svd.xml"/>
       <xi:include href="peripherals/DAC0_16CH_FIFO16.svd.xml"/>
       <peripheral derivedFrom="DAC0"><name>DAC1</name>      <prependToName>DAC1</prependToName><baseAddress>0x40028000</baseAddress></peripheral>

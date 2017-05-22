@@ -26,7 +26,7 @@
       <xi:include href="peripherals/AIPS0_MKM.svd.xml"/>
       <xi:include href="peripherals/CMP0_0x40072000.svd.xml"/>
       <peripheral derivedFrom="CMP0"><name>CMP1</name>      <prependToName>CMP1</prependToName><baseAddress>0x40072008</baseAddress></peripheral>
-      <xi:include href="peripherals/CRC_0x40034000.svd.xml"/>
+      <xi:include href="peripherals/CRC0_0x40034000.svd.xml"/>
       <xi:include href="peripherals/CoreDebug.svd.xml"/>
       <xi:include href="peripherals/DMA0_MKM.svd.xml"/>
       <xi:include href="peripherals/DMAMUX0_1CH_TRIG.svd.xml"/>

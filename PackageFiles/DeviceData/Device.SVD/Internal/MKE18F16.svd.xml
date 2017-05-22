@@ -42,7 +42,7 @@
             <value>70</value>
          </interrupt>
       </peripheral>
-      <xi:include href="peripherals/CRC_MKE16F16.svd.xml"/>
+      <xi:include href="peripherals/CRC0_0x40032000.svd.xml"/>
       <xi:include href="peripherals/DAC0_MKE16F16.svd.xml"/>
       <xi:include href="peripherals/DMA_MKE16F16.svd.xml"/>
       <xi:include href="peripherals/DMAMUX_MKE16F16.svd.xml"/>

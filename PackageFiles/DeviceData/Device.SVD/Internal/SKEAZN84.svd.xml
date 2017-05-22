@@ -25,7 +25,7 @@
       <peripheral derivedFrom="ACMP0"><name>ACMP1</name>      <prependToName>ACMP1</prependToName><baseAddress>0x40074000</baseAddress></peripheral>
       <xi:include href="peripherals/ADC0_MKE04.svd.xml"/>
       <xi:include href="peripherals/BP_CM0.svd.xml"/>
-      <xi:include href="peripherals/CRC_0x40032000.svd.xml"/>
+      <xi:include href="peripherals/CRC0_0x40032000.svd.xml"/>
       <xi:include href="peripherals/CoreDebug.svd.xml"/>
       <xi:include href="peripherals/DWT_CM0Plus.svd.xml"/>
       <xi:include href="peripherals/FGPIOA_MKE.svd.xml"/>

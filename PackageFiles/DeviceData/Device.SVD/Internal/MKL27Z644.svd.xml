@@ -24,7 +24,7 @@
       <xi:include href="peripherals/ADC0_DIFF_A.svd.xml"/>
       <xi:include href="peripherals/BP_CM0.svd.xml"/>
       <xi:include href="peripherals/CMP0_PSTM_TRIGM.svd.xml"/>
-      <xi:include href="peripherals/CRC_0x40032000.svd.xml"/>
+      <xi:include href="peripherals/CRC0_0x40032000.svd.xml"/>
       <xi:include href="peripherals/CoreDebug.svd.xml"/>
       <xi:include href="peripherals/DMA0_MKL.svd.xml"/>
       <xi:include href="peripherals/DMAMUX0_4CH.svd.xml"/>

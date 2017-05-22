@@ -37,7 +37,7 @@
             <value>21</value>
          </interrupt>
       </peripheral>
-      <xi:include href="peripherals/CRC_0x40032000.svd.xml"/>
+      <xi:include href="peripherals/CRC0_0x40032000.svd.xml"/>
       <xi:include href="peripherals/DMA_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/DMAMUX_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/EWM_MKE16F16.svd.xml"/>
@@ -138,7 +138,7 @@
       <xi:include href="peripherals/SYST.svd.xml"/>
       <xi:include href="peripherals/TRGMUX0_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/TRGMUX1_MKE15Z7.svd.xml"/>
-      <xi:include href="peripherals/WDOG_MKE15Z7.svd.xml"/>
+      <xi:include href="peripherals/WDOG_MKE16F16.svd.xml"/>
    </peripherals>
    <vendorExtensions>
    <xi:include href="vectorTables/MKE14Z7_VectorTable.svd.xml"/>

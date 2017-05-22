@@ -824,11 +824,11 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="LPTMR0" > <name>PTA</name> <description>PTA Clock Gate Control</description> <bitOffset>9</bitOffset> </field>
-                  <field derivedFrom="LPTMR0" > <name>PTB</name> <description>PTB Clock Gate Control</description> <bitOffset>10</bitOffset> </field>
-                  <field derivedFrom="LPTMR0" > <name>PTC</name> <description>PTC Clock Gate Control</description> <bitOffset>11</bitOffset> </field>
-                  <field derivedFrom="LPTMR0" > <name>PTD</name> <description>PTD Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
-                  <field derivedFrom="LPTMR0" > <name>PTE</name> <description>PTE Clock Gate Control</description> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="LPTMR0" > <name>PORTA</name> <description>PORTA Clock Gate Control</description> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="LPTMR0" > <name>PORTB</name> <description>PORTB Clock Gate Control</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="LPTMR0" > <name>PORTC</name> <description>PORTC Clock Gate Control</description> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="LPTMR0" > <name>PORTD</name> <description>PORTD Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="LPTMR0" > <name>PORTE</name> <description>PORTE Clock Gate Control</description> <bitOffset>13</bitOffset> </field>
                   <field derivedFrom="LPTMR0" > <name>EMVSIM0</name> <description>EMVSIM0 Clock Gate Control</description> <bitOffset>14</bitOffset> </field>
                   <field derivedFrom="LPTMR0" > <name>EMVSIM1</name> <description>EMVSIM1 Clock Gate Control</description> <bitOffset>15</bitOffset> </field>
                   <field derivedFrom="LPTMR0" > <name>LTC</name> <description>LTC Clock Gate Control</description> <bitOffset>17</bitOffset> </field>

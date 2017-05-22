@@ -25,7 +25,7 @@
       <peripheral derivedFrom="ADC0"><name>ADC1</name>      <prependToName>ADC1</prependToName><baseAddress>0x40027000</baseAddress></peripheral>
       <xi:include href="peripherals/CMP0_MKV.svd.xml"/>
       <peripheral derivedFrom="CMP0"><name>CMP1</name>      <prependToName>CMP1</prependToName><baseAddress>0x40073008</baseAddress></peripheral>
-      <xi:include href="peripherals/CRC_0x40032000.svd.xml"/>
+      <xi:include href="peripherals/CRC0_0x40032000.svd.xml"/>
       <xi:include href="peripherals/DAC0_16CH_FIFO16.svd.xml"/>
       <xi:include href="peripherals/DMA0_4CH_EARS.svd.xml"/>
       <xi:include href="peripherals/DMAMUX0_4CH_TRIG.svd.xml"/>

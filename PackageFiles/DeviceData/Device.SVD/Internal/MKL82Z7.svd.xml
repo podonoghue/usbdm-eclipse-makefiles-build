@@ -24,7 +24,7 @@
       <xi:include href="peripherals/ADC0_MK82F25615.svd.xml"/>
       <xi:include href="peripherals/AIPS_MKL82Z7.svd.xml"/>
       <xi:include href="peripherals/CMP0_MKL82Z7.svd.xml"/>
-      <xi:include href="peripherals/CRC_0x40032000.svd.xml"/>
+      <xi:include href="peripherals/CRC0_0x40032000.svd.xml"/>
       <xi:include href="peripherals/DAC0_MKL82Z7.svd.xml"/>
       <xi:include href="peripherals/DMA_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/DMAMUX_MKL82Z7.svd.xml"/>
@@ -37,7 +37,7 @@
          </interrupt>
       </peripheral>
       <xi:include href="peripherals/EWM_MKE16F16.svd.xml"/>
-      <xi:include href="peripherals/FGPIOA_MKL82Z7.svd.xml"/>
+      <xi:include href="peripherals/FGPIOA_0xF8000000.svd.xml"/>
       <peripheral derivedFrom="FGPIOA"><name>FGPIOB</name>      <prependToName>FGPIOB_</prependToName><baseAddress>0xF8000040</baseAddress></peripheral>
       <peripheral derivedFrom="FGPIOA"><name>FGPIOC</name>      <prependToName>FGPIOC_</prependToName><baseAddress>0xF8000080</baseAddress></peripheral>
       <peripheral derivedFrom="FGPIOA"><name>FGPIOD</name>      <prependToName>FGPIOD_</prependToName><baseAddress>0xF80000C0</baseAddress></peripheral>

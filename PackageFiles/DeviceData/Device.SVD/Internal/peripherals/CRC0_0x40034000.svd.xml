@@ -5,8 +5,8 @@ Devices using this peripheral:
       MKM34Z5
 -->
       <peripheral>
-         <?sourceFile "CRC_0x40034000" ?>
-         <name>CRC</name>
+         <?sourceFile "CRC0_0x40034000" ?>
+         <name>CRC0</name>
          <description>Cyclic Redundancy Check</description>
          <groupName>CRC</groupName>
          <prependToName>CRC</prependToName>

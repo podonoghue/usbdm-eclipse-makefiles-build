@@ -29,7 +29,7 @@
       <peripheral derivedFrom="CMP0"><name>CMP1</name>      <prependToName>CMP1</prependToName><baseAddress>0x40073008</baseAddress></peripheral>
       <peripheral derivedFrom="CMP0"><name>CMP2</name>      <prependToName>CMP2</prependToName><baseAddress>0x40073010</baseAddress></peripheral>
       <xi:include href="peripherals/CMT_0.svd.xml"/>
-      <xi:include href="peripherals/CRC_0x40032000.svd.xml"/>
+      <xi:include href="peripherals/CRC0_0x40032000.svd.xml"/>
       <xi:include href="peripherals/CoreDebug.svd.xml"/>
       <xi:include href="peripherals/DAC0_16CH_0x400CC000.svd.xml"/>
       <peripheral derivedFrom="DAC0"><name>DAC1</name>      <prependToName>DAC1</prependToName><baseAddress>0x400CD000</baseAddress></peripheral>

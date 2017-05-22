@@ -1,15 +1,98 @@
 <!--
 Devices using this peripheral: 
+      MK02F12810
+      MK10D5
+      MK10D7
+      MK10D10
+      MK10DZ10
+      MK10F12
+      MK11D5
+      MK11DA5
+      MK11D5WS
+      MK12D5
+      MK20D5
+      MK20D7
+      MK20D10
+      MK20DZ10
+      MK20F12
+      MK21D5
+      MK21DA5
+      MK21D5WS
+      MK21F12
+      MK21FA12
+      MK22D5
+      MK22F12
+      MK22F12810
+      MK22F25612
+      MK22F51212
+      MK22FA12
+      MK24F12
+      MK24F25612
+      MK30D7
+      MK30D10
+      MK30DZ10
+      MK40D7
+      MK40D10
+      MK40DZ10
+      MK50D7
+      MK50D10
+      MK50DZ10
+      MK51D7
+      MK51D10
+      MK51DZ10
+      MK52D10
+      MK52DZ10
+      MK53D10
+      MK53DZ10
+      MK60D10
+      MK60DZ10
+      MK60F12
+      MK60F15
+      MK61F15
+      MK61F15WS
+      MK63F12
+      MK64F12
+      MK65F18
+      MK66F18
+      MK70F15
+      MK70F15WS
+      MK82F25615
+      MKE02Z2
+      MKE02Z4
+      MKE04Z4
+      MKE04Z1284
+      MKE06Z4
       MKE14F16
+      MKE14Z7
+      MKE15Z7
       MKE16F16
       MKE18F16
+      MKL27Z644
+      MKL82Z7
+      MKV10Z7
+      MKV11Z7
+      MKV30F12810
+      MKV31F12810
+      MKV31F25612
+      MKV31F51212
+      MKV40F16
+      MKV43F16
+      MKV44F16
+      MKV45F16
+      MKV46F16
+      MKW21D5
+      MKW22D5
+      MKW24D5
+      SKEAZ1284
+      SKEAZN84
+      SKEAZN642
 -->
       <peripheral>
-         <?sourceFile "CRC_MKE16F16" ?>
-         <name>CRC</name>
+         <?sourceFile "CRC0_0x40032000" ?>
+         <name>CRC0</name>
          <description>Cyclic Redundancy Check</description>
          <groupName>CRC</groupName>
-         <prependToName>CRC_</prependToName>
+         <prependToName>CRC</prependToName>
          <headerStructName>CRC</headerStructName>
          <baseAddress>0x40032000</baseAddress>
          <size>32</size>
@@ -24,31 +107,31 @@ Devices using this peripheral:
          <registers>
             <register>
                <name>DATA</name>
-               <description>CRC Data register</description>
+               <description>Data register</description>
                <addressOffset>0x0</addressOffset>
                <resetValue>0xFFFFFFFF</resetValue>
                <fields>
                   <field>
                      <name>LL</name>
-                     <description>CRC Low Lower Byte</description>
+                     <description>Low Lower Byte</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>8</bitWidth>
                   </field>
                   <field>
                      <name>LU</name>
-                     <description>CRC Low Upper Byte</description>
+                     <description>Low Upper Byte</description>
                      <bitOffset>8</bitOffset>
                      <bitWidth>8</bitWidth>
                   </field>
                   <field>
                      <name>HL</name>
-                     <description>CRC High Lower Byte</description>
+                     <description>High Lower Byte</description>
                      <bitOffset>16</bitOffset>
                      <bitWidth>8</bitWidth>
                   </field>
                   <field>
                      <name>HU</name>
-                     <description>CRC High Upper Byte</description>
+                     <description>High Upper Byte</description>
                      <bitOffset>24</bitOffset>
                      <bitWidth>8</bitWidth>
                   </field>
@@ -56,7 +139,8 @@ Devices using this peripheral:
             </register>
             <register>
                <name>DATAL</name>
-               <description>CRC_DATAL register</description>
+               <?hide?>
+               <description>DATAL register</description>
                <addressOffset>0x0</addressOffset>
                <size>16</size>
                <resetValue>0xFFFF</resetValue>
@@ -71,7 +155,8 @@ Devices using this peripheral:
             </register>
             <register>
                <name>DATALL</name>
-               <description>CRC_DATALL register</description>
+               <?hide?>
+               <description>DATALL register</description>
                <addressOffset>0x0</addressOffset>
                <size>8</size>
                <resetValue>0xFF</resetValue>
@@ -79,14 +164,15 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>DATALL</name>
-                     <description>CRCLL stores the first 8 bits of the 32 bit DATA</description>
+                     <description>DATALL stores the first 8 bits of the 32 bit CRC</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
             </register>
             <register>
                <name>DATALU</name>
-               <description>CRC_DATALU register</description>
+               <?hide?>
+               <description>DATALU register</description>
                <addressOffset>0x1</addressOffset>
                <size>8</size>
                <resetValue>0xFF</resetValue>
@@ -101,7 +187,8 @@ Devices using this peripheral:
             </register>
             <register>
                <name>DATAH</name>
-               <description>CRC_DATAH register</description>
+               <?hide?>
+               <description>DATAH register</description>
                <addressOffset>0x2</addressOffset>
                <size>16</size>
                <resetValue>0xFFFF</resetValue>
@@ -116,7 +203,8 @@ Devices using this peripheral:
             </register>
             <register>
                <name>DATAHL</name>
-               <description>CRC_DATAHL register</description>
+               <?hide?>
+               <description>DATAHL register</description>
                <addressOffset>0x2</addressOffset>
                <size>8</size>
                <resetValue>0xFF</resetValue>
@@ -131,7 +219,8 @@ Devices using this peripheral:
             </register>
             <register>
                <name>DATAHU</name>
-               <description>CRC_DATAHU register</description>
+               <?hide?>
+               <description>DATAHU register</description>
                <addressOffset>0x3</addressOffset>
                <size>8</size>
                <resetValue>0xFF</resetValue>
@@ -146,7 +235,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>GPOLY</name>
-               <description>CRC Polynomial register</description>
+               <description>Polynomial register</description>
                <addressOffset>0x4</addressOffset>
                <resetValue>0x1021</resetValue>
                <fields>
@@ -166,7 +255,8 @@ Devices using this peripheral:
             </register>
             <register>
                <name>GPOLYL</name>
-               <description>CRC_GPOLYL register</description>
+               <?hide?>
+               <description>GPOLYL register</description>
                <addressOffset>0x4</addressOffset>
                <size>16</size>
                <resetValue>0xFFFF</resetValue>
@@ -181,7 +271,8 @@ Devices using this peripheral:
             </register>
             <register>
                <name>GPOLYLL</name>
-               <description>CRC_GPOLYLL register</description>
+               <?hide?>
+               <description>GPOLYLL register</description>
                <addressOffset>0x4</addressOffset>
                <size>8</size>
                <resetValue>0xFF</resetValue>
@@ -196,7 +287,8 @@ Devices using this peripheral:
             </register>
             <register>
                <name>GPOLYLU</name>
-               <description>CRC_GPOLYLU register</description>
+               <?hide?>
+               <description>GPOLYLU register</description>
                <addressOffset>0x5</addressOffset>
                <size>8</size>
                <resetValue>0xFF</resetValue>
@@ -211,7 +303,8 @@ Devices using this peripheral:
             </register>
             <register>
                <name>GPOLYH</name>
-               <description>CRC_GPOLYH register</description>
+               <?hide?>
+               <description>GPOLYH register</description>
                <addressOffset>0x6</addressOffset>
                <size>16</size>
                <resetValue>0xFFFF</resetValue>
@@ -226,7 +319,8 @@ Devices using this peripheral:
             </register>
             <register>
                <name>GPOLYHL</name>
-               <description>CRC_GPOLYHL register</description>
+               <?hide?>
+               <description>GPOLYHL register</description>
                <addressOffset>0x6</addressOffset>
                <size>8</size>
                <resetValue>0xFF</resetValue>
@@ -241,7 +335,8 @@ Devices using this peripheral:
             </register>
             <register>
                <name>GPOLYHU</name>
-               <description>CRC_GPOLYHU register</description>
+               <?hide?>
+               <description>GPOLYHU register</description>
                <addressOffset>0x7</addressOffset>
                <size>8</size>
                <resetValue>0xFF</resetValue>
@@ -256,7 +351,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>CTRL</name>
-               <description>CRC Control register</description>
+               <description>Control register</description>
                <addressOffset>0x8</addressOffset>
                <fields>
                   <field>
@@ -266,174 +361,191 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>16-bit CRC protocol</description>
+                           <name>0b0</name>
+                           <description>16-bit CRC</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>32-bit CRC protocol</description>
+                           <name>0b1</name>
+                           <description>32-bit CRC</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>WAS</name>
-                     <description>Write CRC Data Register As Seed</description>
+                     <description>Write CRC Data Register As Seed\n
+When asserted, a value written to the CRC data register is considered a seed value.\n
+When negated, a value written to the CRC data register is taken as data for CRC computation</description>
                      <bitOffset>25</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Writes to the CRC data register are data values</description>
+                           <name>0b0</name>
+                           <description>Writes are data values</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Writes to the CRC data register are seed values</description>
+                           <name>0b1</name>
+                           <description>Writes are seed values</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>FXOR</name>
-                     <description>Complement Read Of CRC Data Register</description>
+                     <description>Complement Read Of CRC Data Register\n
+Some CRC protocols require the final checksum to be XORed with 0xFFFFFFFF or 0xFFFF.\n
+Asserting this bit enables on the fly complementing of read data</description>
                      <bitOffset>26</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>No XOR on reading</description>
+                           <name>0b0</name>
+                           <description>No inversion</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Invert or complement the read value of the CRC Data register</description>
+                           <name>0b1</name>
+                           <description>Invert read of data register</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>TOTR</name>
-                     <description>Type Of Transpose For Read</description>
+                     <description>Type of Transpose For Read\n
+Identify the transpose configuration of values read from the CRC Data register.\n
+Controls transposition of bits within the bytes and bytes within the whole value</description>
                      <bitOffset>28</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>No transposition</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
-                           <description>Bits in bytes are transposed; bytes are not transposed</description>
+                           <name>0b01</name>
+                           <description>Bits transposed</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
-                           <description>Both bits in bytes and bytes are transposed</description>
+                           <name>0b10</name>
+                           <description>Bits and bytes transposed</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
-                           <description>Only bytes are transposed; no bits in a byte are transposed</description>
+                           <name>0b11</name>
+                           <description>Bytes transposed</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="TOTR" > <name>TOT</name> <description>Type Of Transpose For Writes</description> <bitOffset>30</bitOffset> </field>
+                  <field derivedFrom="TOTR" > <name>TOT</name> <description>Type of Transpose For Writes\n
+Define the transpose configuration for values written to the CRC data register\n
+Controls transposition of bits within the bytes and bytes within the whole value</description> <bitOffset>30</bitOffset> </field>
                </fields>
             </register>
             <register>
                <name>CTRLHU</name>
-               <description>CRC_CTRLHU register</description>
+               <?hide?>
+               <description>Control register (byte access)</description>
                <addressOffset>0xB</addressOffset>
                <size>8</size>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
                      <name>TCRC</name>
-                     <description>no description available</description>
+                     <description>Width of CRC protocol</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>16-bit CRC protocol</description>
+                           <name>0b0</name>
+                           <description>16-bit CRC</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>32-bit CRC protocol</description>
+                           <name>0b1</name>
+                           <description>32-bit CRC</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>WAS</name>
-                     <description>no description available</description>
+                     <description>Write CRC Data Register As Seed\n
+When asserted, a value written to the CRC data register is considered a seed value.\n
+When negated, a value written to the CRC data register is taken as data for CRC computation</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Writes to CRC data register are data values</description>
+                           <name>0b0</name>
+                           <description>Writes are data values</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Writes to CRC data reguster are seed values</description>
+                           <name>0b1</name>
+                           <description>Writes are seed values</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>FXOR</name>
-                     <description>no description available</description>
+                     <description>Complement Read of CRC Data Register\n
+Some CRC protocols require the final checksum to be XORed with 0xFFFFFFFF or 0xFFFF.\n
+Asserting this bit enables on the fly complementing of read data</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>No XOR on reading</description>
+                           <name>0b0</name>
+                           <description>No inversion</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Invert or complement the read value of CRC data register</description>
+                           <name>0b1</name>
+                           <description>Invert read of data register</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>TOTR</name>
-                     <description>no description available</description>
+                     <description>Type of Transpose For Reads\n
+Identify the transpose configuration of values read from the CRC Data register.\n
+Controls transposition of bits within the bytes and bytes within the whole value</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
-                           <description>No Transposition</description>
+                           <name>0b00</name>
+                           <description>No transposition</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
-                           <description>Bits in bytes are transposed, bytes are not transposed</description>
+                           <name>0b01</name>
+                           <description>Bits transposed</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
-                           <description>Both bits in bytes and bytes are transposed</description>
+                           <name>0b10</name>
+                           <description>Bits and bytes transposed</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
-                           <description>Only bytes are transposed; no bits in a byte are transposed</description>
+                           <name>0b11</name>
+                           <description>Bytes transposed</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="TOTR" > <name>TOT</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="TOTR" > <name>TOT</name> <description>Type of Transpose For Writes\n
+Define the transpose configuration for values written to the CRC data register\n
+Controls transposition of bits within the bytes and bytes within the whole value</description> <bitOffset>6</bitOffset> </field>
                </fields>
             </register>
          </registers>

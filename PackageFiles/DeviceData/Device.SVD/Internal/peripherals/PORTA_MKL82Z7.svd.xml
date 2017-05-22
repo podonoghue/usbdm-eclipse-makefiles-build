@@ -320,13 +320,13 @@ Interrupts remain set until a logic one is written to the flag</description>
                   <field>
                      <name>GPWD</name>
                      <description>Global Pin Write Data\n
-This is the data to update bits(15..0) of selected PCRs[15..0]</description>
+This is the data to update PCR[15..0]</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>16</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0bX</name>
-                           <description>Value to update PCR bits(15..0)</description>
+                           <description>Value to update PCR</description>
                            <isDefault>true</isDefault>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -340,7 +340,7 @@ Each bit selects if the corresponding PCR[15..0] is updated</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0bX</name>
-                           <description>Write 1 to update PCR[15..0]</description>
+                           <description>Write 1 to update PCR</description>
                            <isDefault>true</isDefault>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -356,13 +356,13 @@ Each bit selects if the corresponding PCR[15..0] is updated</description>
                   <field>
                      <name>GPWD</name>
                      <description>Global Pin Write Data\n
-This is the data to update bits(15..0) of selected PCRs[31..16]</description>
+This is the data to update PCR[15..0]</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>16</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0bX</name>
-                           <description>Value to update PCR bits(15..0)</description>
+                           <description>Value to update PCR</description>
                            <isDefault>true</isDefault>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -376,7 +376,7 @@ Each bit selects if the corresponding PCR[31..16] is updated</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0bX</name>
-                           <description>Write 1 to update PCR[31..16]</description>
+                           <description>Write 1 to update PCR</description>
                            <isDefault>true</isDefault>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -448,7 +448,7 @@ This is the data to update bits(31..16) of selected PCRs[31..16]</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0bX</name>
-                           <description>Value to update PCR bits(31..16)</description>
+                           <description>Write 1 to update PCR</description>
                            <isDefault>true</isDefault>
                         </enumeratedValue>
                      </enumeratedValues>
