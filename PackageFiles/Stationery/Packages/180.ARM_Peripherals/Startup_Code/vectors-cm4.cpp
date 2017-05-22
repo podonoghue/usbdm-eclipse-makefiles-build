@@ -1,9 +1,9 @@
 /*
- *  @file vectors.c
+ *  @file vectors.cpp 
  *
- *  Generated from vectors-cm0.c
+ *  Generated from  vectors-cm4.cpp
  *
- *  Generic vectors for Cortex-M0
+ *  Generic vectors Kinetis Cortex-M4 devices
  *
  *  Created on: 22/05/2017
  *      Author: podonoghue
@@ -11,6 +11,10 @@
 #include <stdint.h>
 #include <string.h>
 #include "derivative.h"
+#include "hardware.h"
+
+/*********** $start(VectorsIncludeFiles) *** Do not edit after this comment ****************/
+/*********** $end(VectorsIncludeFiles)   *** Do not edit above this comment ***************/
 
 /*
  * Vector table related
@@ -37,6 +41,7 @@ typedef void( *const intfunc )( void );
  *
  * You can check 'vectorNum' below to determine the interrupt source.  Look this up in the vector table below.
  */
+extern "C" {
 __attribute__((__interrupt__))
 void Default_Handler(void) {
 
@@ -46,6 +51,7 @@ void Default_Handler(void) {
    while (1) {
       __asm__("bkpt");
    }
+}
 }
 
 typedef struct {
@@ -74,19 +80,11 @@ void HardFault_Handler(void) {
     * and allows access to the saved processor state.
     * Other registers are unchanged and available in the usual register view
     */
-   __asm__ volatile ("       mov r0,lr                                     \n"); // Check mode
-   __asm__ volatile ("       mov r1,#4                                     \n");
-   __asm__ volatile ("       and r0,r1                                     \n");
-   __asm__ volatile ("       bne skip1                                     \n");
-   __asm__ volatile ("       mrs r0,msp                                    \n"); // Get active SP in r0
-   __asm__ volatile ("       b   skip2                                     \n");
-   __asm__ volatile ("skip1:                                               \n");
-   __asm__ volatile ("       mrs r0,psp                                    \n");
-   __asm__ volatile ("skip2:                                               \n");
-   __asm__ volatile ("       nop                                           \n");
-   __asm__ volatile ("       ldr r2, handler_addr_const                    \n"); // Go to C handler
-   __asm__ volatile ("       bx r2                                         \n");
-   __asm__ volatile ("       handler_addr_const: .word _HardFault_Handler  \n");
+     __asm__ volatile ( "  tst   lr, #4              \n");  // Check mode
+     __asm__ volatile ( "  ite   eq                  \n");  // Get active SP in r0
+     __asm__ volatile ( "  mrseq r0, msp             \n");
+     __asm__ volatile ( "  mrsne r0, psp             \n");
+     __asm__ volatile ( "  b     _HardFault_Handler  \n");  // Go to C handler
 }
 
 /******************************************************************************/
@@ -102,6 +100,7 @@ void HardFault_Handler(void) {
  *   - Accessed unaligned memory - unlikely I guess
  *
  */
+extern "C" {
 __attribute__((__naked__))
 void _HardFault_Handler(volatile ExceptionFrame *exceptionFrame __attribute__((__unused__))) {
    while (1) {
@@ -113,6 +112,7 @@ void _HardFault_Handler(volatile ExceptionFrame *exceptionFrame __attribute__((_
 void __HardReset(void) __attribute__((__interrupt__));
 
 extern uint32_t __StackTop;
+}
 
 /*
  * Each vector is assigned an unique name.  This is then 'weakly' assigned to the
@@ -120,5 +120,7 @@ extern uint32_t __StackTop;
  * To install a handler, create a C linkage function with the name shown and it will override
  * the weak default.
  */
-$(cVectorTable)
+/*********** $start(cVectorTable) *** Do not edit after this comment ****************/
+/*********** $end(cVectorTable)   *** Do not edit above this comment ***************/
+
 

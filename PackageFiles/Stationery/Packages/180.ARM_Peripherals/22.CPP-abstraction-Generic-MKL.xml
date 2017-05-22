@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE root SYSTEM "../package.dtd"
 [
-<!ENTITY DEVICE_SUB_FAMILY  "MK">
-<!ENTITY DEVICE_FAMILY      "MK">
-<!ENTITY FILE_NAME          "Generic-MK">
+<!ENTITY DEVICE_SUB_FAMILY  "MKL">
+<!ENTITY DEVICE_FAMILY      "MKL">
+<!ENTITY FILE_NAME          "Generic-MKL">
 ]>
 
 <root version="1.0" >
    <projectActionList id="CPP-abstraction-&DEVICE_SUB_FAMILY;">
       <applyWhen>
          <and>
-            <deviceSubfamilyMatches>&DEVICE_SUB_FAMILY;\d*.*</deviceSubfamilyMatches>
+            <deviceSubfamilyMatches>&DEVICE_SUB_FAMILY;\d+.*</deviceSubfamilyMatches>
             <variableRef idRef="hasCCNature" condition="isTrue" />
             <not><variableRef idRef="cpp.peripheral.subfamily" condition="isDefined" /></not>
          </and>

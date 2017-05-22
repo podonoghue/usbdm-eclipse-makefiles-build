@@ -25,9 +25,9 @@ typedef struct {
 
 //-------- <<< Use Configuration Wizard in Context Menu >>> -----------------
 /*
-  <h> Flash Configuration
-  <i> 16-byte flash configuration field that stores default protection settings (loaded on reset)
-  <i> and security information that allows the MCU to restrict access to the FTFL module.
+  <h> Flash Configuration - Security and Protection
+     <i> 16-byte flash configuration field that stores default protection settings (loaded on reset)
+     <i> and security information that allows the MCU to restrict access to the Flash module.
   </h>
 */
 /*
@@ -35,38 +35,38 @@ typedef struct {
       <i> Each program flash region can be protected from program and erase operation by clearing the associated PROT bit.
       <i> Each bit protects a 1/32 region of the program flash memory.
       <info>NV_FPROT0-3
-      <q.31>   FPROT0.0 <0=>protected  <1=>unprotected   <info>lowest 1/32 block
-      <q.30>   FPROT0.1 <0=>protected  <1=>unprotected
-      <q.29>   FPROT0.2 <0=>protected  <1=>unprotected
-      <q.28>   FPROT0.3 <0=>protected  <1=>unprotected
-      <q.27>   FPROT0.4 <0=>protected  <1=>unprotected
-      <q.26>   FPROT0.5 <0=>protected  <1=>unprotected
-      <q.25>   FPROT0.6 <0=>protected  <1=>unprotected
-      <q.24>   FPROT0.7 <0=>protected  <1=>unprotected
-      <q.23>   FPROT1.0 <0=>protected  <1=>unprotected
-      <q.22>   FPROT1.1 <0=>protected  <1=>unprotected
-      <q.21>   FPROT1.2 <0=>protected  <1=>unprotected
-      <q.20>   FPROT1.3 <0=>protected  <1=>unprotected
-      <q.19>   FPROT1.4 <0=>protected  <1=>unprotected
-      <q.18>   FPROT1.5 <0=>protected  <1=>unprotected
-      <q.17>   FPROT1.6 <0=>protected  <1=>unprotected
-      <q.16>   FPROT1.7 <0=>protected  <1=>unprotected
-      <q.15>   FPROT2.0 <0=>protected  <1=>unprotected
-      <q.14>   FPROT2.1 <0=>protected  <1=>unprotected
-      <q.13>   FPROT2.2 <0=>protected  <1=>unprotected
-      <q.12>   FPROT2.3 <0=>protected  <1=>unprotected
-      <q.11>   FPROT2.4 <0=>protected  <1=>unprotected
-      <q.10>   FPROT2.5 <0=>protected  <1=>unprotected
-      <q.9>    FPROT2.6 <0=>protected  <1=>unprotected
-      <q.8>    FPROT2.7 <0=>protected  <1=>unprotected
-      <q.7>    FPROT3.0 <0=>protected  <1=>unprotected
-      <q.6>    FPROT3.1 <0=>protected  <1=>unprotected
-      <q.5>    FPROT3.2 <0=>protected  <1=>unprotected
-      <q.4>    FPROT3.3 <0=>protected  <1=>unprotected
-      <q.3>    FPROT3.4 <0=>protected  <1=>unprotected
-      <q.2>    FPROT3.5 <0=>protected  <1=>unprotected
-      <q.1>    FPROT3.6 <0=>protected  <1=>unprotected
-      <q.0>    FPROT3.7 <0=>protected  <1=>unprotected   <info> highest 1/32 block
+      <q.0>   FPROT3.0 <0=>protected  <1=>unprotected   <info>lowest 1/32 block or 1K min
+      <q.1>   FPROT3.1 <0=>protected  <1=>unprotected
+      <q.2>   FPROT3.2 <0=>protected  <1=>unprotected
+      <q.3>   FPROT3.3 <0=>protected  <1=>unprotected
+      <q.4>   FPROT3.4 <0=>protected  <1=>unprotected
+      <q.5>   FPROT3.5 <0=>protected  <1=>unprotected
+      <q.6>   FPROT3.6 <0=>protected  <1=>unprotected
+      <q.7>   FPROT3.7 <0=>protected  <1=>unprotected
+      <q.8>   FPROT2.0 <0=>protected  <1=>unprotected
+      <q.9>   FPROT2.1 <0=>protected  <1=>unprotected
+      <q.10>  FPROT2.2 <0=>protected  <1=>unprotected
+      <q.11>  FPROT2.3 <0=>protected  <1=>unprotected
+      <q.12>  FPROT2.4 <0=>protected  <1=>unprotected
+      <q.13>  FPROT2.5 <0=>protected  <1=>unprotected
+      <q.14>  FPROT2.6 <0=>protected  <1=>unprotected
+      <q.15>  FPROT2.7 <0=>protected  <1=>unprotected
+      <q.16>  FPROT1.0 <0=>protected  <1=>unprotected
+      <q.17>  FPROT1.1 <0=>protected  <1=>unprotected
+      <q.18>  FPROT1.2 <0=>protected  <1=>unprotected
+      <q.19>  FPROT1.3 <0=>protected  <1=>unprotected
+      <q.20>  FPROT1.4 <0=>protected  <1=>unprotected
+      <q.21>  FPROT1.5 <0=>protected  <1=>unprotected
+      <q.22>  FPROT1.6 <0=>protected  <1=>unprotected
+      <q.23>  FPROT1.7 <0=>protected  <1=>unprotected
+      <q.24>  FPROT0.0 <0=>protected  <1=>unprotected
+      <q.25>  FPROT0.1 <0=>protected  <1=>unprotected
+      <q.26>  FPROT0.2 <0=>protected  <1=>unprotected
+      <q.27>  FPROT0.3 <0=>protected  <1=>unprotected
+      <q.28>  FPROT0.4 <0=>protected  <1=>unprotected
+      <q.29>  FPROT0.5 <0=>protected  <1=>unprotected
+      <q.30>  FPROT0.6 <0=>protected  <1=>unprotected
+      <q.31>  FPROT0.7 <0=>protected  <1=>unprotected   <info> highest 1/32 block or 1K min
    </h>
 */
 #define FPROT_VALUE 0xFFFFFFFF

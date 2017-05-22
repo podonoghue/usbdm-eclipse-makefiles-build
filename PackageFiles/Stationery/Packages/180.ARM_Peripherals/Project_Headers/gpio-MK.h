@@ -483,7 +483,7 @@ public:
  * @tparam polarity      Either USBDM::ActiveHigh or USBDM::ActiveLow
  */
 template<uint8_t bitNum, Polarity polarity=ActiveHigh> class GpioA : public Gpio_T<GpioAInfo, bitNum, polarity> {};
-using PortA = PcrBase_T<USBDM::GpioAInfo::pcrAddress>;
+using PortA = PcrBase_T<GpioAInfo::pcrAddress>;
 
 /**
  * @brief Convenience template for GpioA fields. See @ref Field_T
@@ -559,7 +559,7 @@ template<int left, int right> class GpioAField : public Field_T<GpioAInfo, left,
  * @tparam polarity      Either USBDM::ActiveHigh or USBDM::ActiveLow
  */
 template<uint8_t bitNum, Polarity polarity=ActiveHigh> class GpioB : public Gpio_T<GpioBInfo, bitNum, polarity> {};
-using PortB = PcrBase_T<USBDM::GpioBInfo::pcrAddress>;
+using PortB = PcrBase_T<GpioBInfo::pcrAddress>;
 
 /**
  * @brief Convenience template for GpioB fields. See @ref Field_T
@@ -635,7 +635,7 @@ template<int left, int right> class GpioBField : public Field_T<GpioBInfo, left,
  * @tparam polarity      Either USBDM::ActiveHigh or USBDM::ActiveLow
  */
 template<uint8_t bitNum, Polarity polarity=ActiveHigh> class GpioC : public Gpio_T<GpioCInfo, bitNum, polarity> {};
-using PortC = PcrBase_T<USBDM::GpioCInfo::pcrAddress>;
+using PortC = PcrBase_T<GpioCInfo::pcrAddress>;
 
 /**
  * @brief Convenience template for GpioC fields. See @ref Field_T
@@ -711,7 +711,7 @@ template<int left, int right> class GpioCField : public Field_T<GpioCInfo, left,
  * @tparam polarity      Either USBDM::ActiveHigh or USBDM::ActiveLow
  */
 template<uint8_t bitNum, Polarity polarity=ActiveHigh> class GpioD : public Gpio_T<GpioDInfo, bitNum, polarity> {};
-using PortD = PcrBase_T<USBDM::GpioDInfo::pcrAddress>;
+using PortD = PcrBase_T<GpioDInfo::pcrAddress>;
 
 /**
  * @brief Convenience template for GpioD fields. See @ref Field_T
@@ -787,7 +787,7 @@ template<int left, int right> class GpioDField : public Field_T<GpioDInfo, left,
  * @tparam polarity      Either USBDM::ActiveHigh or USBDM::ActiveLow
  */
 template<uint8_t bitNum, Polarity polarity=ActiveHigh> class GpioE : public Gpio_T<GpioEInfo, bitNum, polarity> {};
-using PortE = PcrBase_T<USBDM::GpioEInfo::pcrAddress>;
+using PortE = PcrBase_T<GpioEInfo::pcrAddress>;
 
 /**
  * @brief Convenience template for GpioE fields. See @ref Field_T

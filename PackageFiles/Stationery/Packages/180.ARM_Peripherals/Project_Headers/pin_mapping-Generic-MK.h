@@ -27,7 +27,7 @@
 
 namespace USBDM {
 
-//-------- <<< Use Configuration Wizard in Context Menu >>> -----------------  
+//-------- <<< Use Configuration Wizard in Context Menu >>> -----------------
 
 #ifdef FTM0_BASE_PTR
 // <h> Clock settings for FTM0
@@ -142,19 +142,21 @@ constexpr uint16_t FTM2_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
 //     <7=> Divide by 128
 //     <0=> Default
 constexpr uint16_t FTM3_SC              = (FTM_SC_CLKS(0x1)|FTM_SC_PS(0x0));
-// </h>
 #endif
+} // End namespace USDBM
+
+namespace USBDM {
 
 /*
  * Peripheral Pin Tables
  */
 /**
- * @addtogroup GPIO_Group GPIO, Digital Input/Output
- * @brief Pins used for Digital Input/Output
+ * @addtogroup PeripheralPinTables Peripheral Information Classes
+ * @brief Provides instance specific information about a peripheral
  * @{
  */
 #ifdef SIM_SCGC5_PORTA_MASK
-#define USBDM_GPIOA_IS_DEFINED 
+#define USBDM_GPIOA_IS_DEFINED
 /**
  * Peripheral information for GPIO, Digital Input/Output
  */
@@ -185,7 +187,7 @@ public:
 #endif // SIM_SCGC5_PORTA_MASK
 
 #ifdef SIM_SCGC5_PORTB_MASK
-#define USBDM_GPIOB_IS_DEFINED 
+#define USBDM_GPIOB_IS_DEFINED
 /**
  * Peripheral information for GPIO, Digital Input/Output
  */
@@ -216,7 +218,7 @@ public:
 #endif // SIM_SCGC5_PORTB_MASK
 
 #ifdef SIM_SCGC5_PORTC_MASK
-#define USBDM_GPIOC_IS_DEFINED 
+#define USBDM_GPIOC_IS_DEFINED
 /**
  * Peripheral information for GPIO, Digital Input/Output
  */
@@ -247,7 +249,7 @@ public:
 #endif // SIM_SCGC5_PORTC_MASK
 
 #ifdef SIM_SCGC5_PORTD_MASK
-#define USBDM_GPIOD_IS_DEFINED 
+#define USBDM_GPIOD_IS_DEFINED
 /**
  * Peripheral information for GPIO, Digital Input/Output
  */
@@ -278,7 +280,7 @@ public:
 #endif // SIM_SCGC5_PORTD_MASK
 
 #ifdef SIM_SCGC5_PORTE_MASK
-#define USBDM_GPIOE_IS_DEFINED 
+#define USBDM_GPIOE_IS_DEFINED
 /**
  * Peripheral information for GPIO, Digital Input/Output
  */
@@ -308,12 +310,12 @@ public:
 };
 #endif // SIM_SCGC5_PORTE_MASK
 
-/** 
+/**
  * End GPIO_Group
  * @}
  */
 
-} // end namespace USBDM
+} // End namespace USBDM
 
 #include "gpio.h"
 

@@ -123,11 +123,11 @@ Cortex-M0
       <!-- Base MKV10 files -->
       <projectActionList id="Kinetis-MKV10-files" >
          <applyWhen>
-            <deviceSubfamilyMatches>^MKV.*</deviceSubfamilyMatches>
+            <deviceSubfamilyMatches>^MKV1.*</deviceSubfamilyMatches>
          </applyWhen>
          <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-mk.ld"    target="Project_Settings/Linker_Files/Linker-rom.ld" />
          <copy source="Startup_Code/system-mkv10.c"                           target="Startup_Code/system.c" />
-         <copy source="Startup_Code/security-mkv.c"                           target="Startup_Code/security.c" />
+         <copy source="Startup_Code/security-mkv10.c"                           target="Startup_Code/security.c" />
       </projectActionList>
 
       <!-- Base LPC files -->

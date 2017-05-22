@@ -120,6 +120,10 @@ static constexpr uint8_t    FIXED_ADC_FN       = 0;
  * Default PCR setting for pins (excluding multiplexor value)
  * High drive strength + Pull-up
  */
+#ifndef PORT_PCR_DSE_MASK
+// Some device don't have DSE
+#define PORT_PCR_DSE_MASK (0)
+#endif
 static constexpr uint32_t    DEFAULT_PCR      = (PORT_PCR_DSE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
 
 /**

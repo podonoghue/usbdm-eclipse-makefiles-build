@@ -1,5 +1,5 @@
 /*
- *  @file Security.c
+ *  @file security.c
  *  Derived from security-mkl.c
  *
  *  Security and NV options for flash
@@ -25,9 +25,9 @@ typedef struct {
 
 //-------- <<< Use Configuration Wizard in Context Menu >>> -----------------
 /*
-  <h> Flash Configuration
-  <i> 16-byte flash configuration field that stores default protection settings (loaded on reset)
-  <i> and security information that allows the MCU to restrict access to the flash module.
+  <h> Flash Configuration - Security and Protection
+     <i> 16-byte flash configuration field that stores default protection settings (loaded on reset)
+     <i> and security information that allows the MCU to restrict access to the Flash module.
   </h>
 */
 /*
@@ -35,7 +35,7 @@ typedef struct {
       <i> Each program flash region can be protected from program and erase operation by clearing the associated PROT bit.
       <i> Each bit protects a 1/32 region of the program flash memory.
       <info>NV_FPROT0-3
-      <q.0>   FPROT3.0 <0=>protected  <1=>unprotected   <info>lowest 1/32 block
+      <q.0>   FPROT3.0 <0=>protected  <1=>unprotected   <info>lowest 1/32 block or 1K min
       <q.1>   FPROT3.1 <0=>protected  <1=>unprotected
       <q.2>   FPROT3.2 <0=>protected  <1=>unprotected
       <q.3>   FPROT3.3 <0=>protected  <1=>unprotected
@@ -66,7 +66,7 @@ typedef struct {
       <q.28>  FPROT0.4 <0=>protected  <1=>unprotected
       <q.29>  FPROT0.5 <0=>protected  <1=>unprotected
       <q.30>  FPROT0.6 <0=>protected  <1=>unprotected
-      <q.31>  FPROT0.7 <0=>protected  <1=>unprotected   <info> highest 1/32 block
+      <q.31>  FPROT0.7 <0=>protected  <1=>unprotected   <info> highest 1/32 block or 1K min
    </h>
 */
 #define FPROT_VALUE 0xFFFFFFFF
@@ -147,7 +147,7 @@ Control extended Boot features on these devices
 
 #define FOPT_VALUE (FOPT_RESERVED|FOPT_MISC|FOPT_LPBOOT)
 
-/*  
+/*
   <h> Backdoor Comparison Key
   <i> The Verify Backdoor Access Key command releases security if user-supplied keys
   <i> matches the Backdoor Comparison Key bytes

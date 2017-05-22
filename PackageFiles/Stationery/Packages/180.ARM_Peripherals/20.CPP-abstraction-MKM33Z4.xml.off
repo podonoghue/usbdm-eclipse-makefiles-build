@@ -57,7 +57,7 @@
          <deleteResource target="Sources/leds.cpp" />
          <deleteResource target="Startup_Code/vectors.c" />
          <createFolder   target="Snippets" />
-         <copy source="Startup_Code/vectors-mkm.cpp"                       target="Startup_Code/vectors.cpp" macroReplacement="false" />
+         <copy source="Startup_Code/vectors-cm0.cpp"                       target="Startup_Code/vectors.cpp" macroReplacement="false" />
          <copy source="Snippets/analogue-joystick-example.cpp"             target="Snippets/analogue-joystick-example.cpp"/>
          <copy source="Snippets/digital-example1.cpp"                      target="Snippets/digital-example1.cpp" />
          <copy source="Snippets/digital-example2.cpp"                      target="Snippets/digital-example2.cpp" />

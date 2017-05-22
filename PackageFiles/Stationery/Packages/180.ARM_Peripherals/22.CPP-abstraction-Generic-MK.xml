@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd"
+[
+<!ENTITY DEVICE_SUB_FAMILY  "MK">
+<!ENTITY DEVICE_FAMILY      "MK">
+<!ENTITY FILE_NAME          "Generic-MK">
+]>
+
+<root version="1.0" >
+   <projectActionList id="CPP-abstraction-&DEVICE_SUB_FAMILY;">
+      <applyWhen>
+         <and>
+            <deviceSubfamilyMatches>&DEVICE_SUB_FAMILY;\d+.*</deviceSubfamilyMatches>
+            <variableRef idRef="hasCCNature" condition="isTrue" />
+            <not><variableRef idRef="cpp.peripheral.subfamily" condition="isDefined" /></not>
+         </and>
+      </applyWhen>
+
+      <variable id="projectOptionValue.CPP-abstraction" 
+         name="Base CPP Hardware abstraction (&DEVICE_SUB_FAMILY; family)" 
+         description="Adds a CPP abstraction layer for hardware\n(GPIO) - &DEVICE_SUB_FAMILY;"
+         checkGroup="group-additional-options" />
+      <projectActionList>
+         <applyWhen >
+            <variableRef idRef="projectOptionValue.CPP-abstraction" />
+         </applyWhen>
+
+<!--
+         <projectOption id="net.sourceforge.usbdm.cdt.toolchain.optimization.level" config="debug">
+            <value>net.sourceforge.usbdm.gnu.c.optimization.level.optimize</value>
+         </projectOption>
+-->
+
+         <deleteResource target="Project_Headers/Board_LEDs.h" />
+         <deleteResource target="Project_Headers/leds.h" />
+         <deleteResource target="Sources/leds.cpp" />
+         <createFolder   target="Snippets" />
+         <copy source="Snippets/digital-example1.cpp"                         target="Snippets/digital-example1.cpp" />
+         <copy source="Snippets/digital-example2.cpp"                         target="Snippets/digital-example2.cpp" />
+         <excludeSourceFolder target="Snippets" />
+         <copy source="Project_Headers/hardware.h"                            target="Project_Headers/hardware.h" />
+         <copy source="Project_Headers/pcr-&DEVICE_FAMILY;.h"                 target="Project_Headers/pcr.h" />
+         <copy source="Project_Headers/gpio-&DEVICE_FAMILY;.h"                target="Project_Headers/gpio.h" />
+         <copy source="Project_Headers/pin_mapping-Generic-&DEVICE_FAMILY;.h" target="Project_Headers/pin_mapping.h" />
+         <copy source="Sources/main.cpp"                                      target="Sources/main.cpp" replace="true" />
+      </projectActionList>
+   </projectActionList>
+</root>

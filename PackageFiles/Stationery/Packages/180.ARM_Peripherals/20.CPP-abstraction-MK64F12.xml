@@ -54,7 +54,7 @@
          <copy source="Snippets/digital-example2.cpp"                      target="Snippets/digital-example2.cpp" />
          <excludeSourceFolder target="Snippets" />
 	 
-         <copy source="Startup_Code/vectors-&DEVICE_FAMILY;.cpp"           target="Startup_Code/vectors.cpp" macroReplacement="false" />
+         <copy source="Startup_Code/vectors-cm4.cpp"                       target="Startup_Code/vectors.cpp" macroReplacement="false" />
          <copy source="Startup_Code/console.cpp"                           target="Startup_Code/console.cpp" />
 
          <copy source="Project_Headers/system.h"                           target="Project_Headers/system.h" replace="true" derived="true" />

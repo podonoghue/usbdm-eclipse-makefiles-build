@@ -334,7 +334,7 @@
    <item key="/SPI0/speed"                                 value="100000" />
    <item key="/SPI0/spi_lsbfe"                             value="false" />
    <item key="/SPI0/spi_mode"                              value="0" />
-   <item key="/TSI0/irqHandlerInstalled"                   value="true" />
+   <item key="/TSI0/irqHandlerInstalled"                   value="false" />
    <item key="/TSI0/irqLevel"                              value="0" />
    <item key="/TSI0/tsi_gencs_erie"                        value="false" />
    <item key="/TSI0/tsi_gencs_esor"                        value="false" />

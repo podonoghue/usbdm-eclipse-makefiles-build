@@ -1,73 +1,14 @@
 /*
- *  Vectors.c
+ *  @file vectors.c
  *
  *  Generic vectors and security for Kinetis
  *
- *  Created on: 07/12/2012
+ *  Created on: 22/05/2017
  *      Author: podonoghue
  */
 #include <stdint.h>
 #include <string.h>
 #include "derivative.h"
-
-/*
- * Security information
- */
-typedef struct {
-    uint8_t  backdoorKey[8];
-    uint32_t fprot;
-    uint8_t  fsec;
-    uint8_t  fopt;
-    uint8_t  feprot;
-    uint8_t  fdprot;
-} SecurityInfo;
-
-
-
-//#define NV_FOPT_LPBOOT(x) ((((x)<<(NV_FOPT_LPBOOT1_SHIFT-1))|((x)<<NV_FOPT_LPBOOT_SHIFT)) & (NV_FOPT_LPBOOT1_MASK|NV_FOPT_LPBOOT_MASK))
-
-__attribute__ ((section(".security_information")))
-const SecurityInfo securityInfo = {
-    /* backdoor */ {0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF},
-    /* fprot    */ 0xFFFFFFFF,
-    /* fsec     */ 0xFE, // NV_FSEC_KEYEN(3)|NV_FSEC_MEEN(3)|NV_FSEC_FSLACC(3)|NV_FSEC_SEC(2),
-    /* fopt     */ 0xFF, // NV_FOPT_BOOTSRC_SEL(0)|NV_FOPT_FAST_INIT_MASK|NV_FOPT_RESET_PIN_CFG_MASK|NV_FOPT_NMI_DIS_MASK|NV_FOPT_LPBOOT(3),
-    /* feprot   */ 0xFF,
-    /* fdprot   */ 0xFF,
-};
-
-
-#ifdef NV_FOPT_BOOTPIN_OPT_MASK
-/*
- * Security information
- */
-typedef struct {
-    char     magic[4];           // Magic number indicating valid configuration - 'kcfg'
-    uint8_t  reserved[12];       // Reserved
-    uint8_t  enabledPeripherals; // 0:LPUART, 1:I2C, 2:SPI, 4:USB
-    uint8_t  i2cAddress;         // If not 0xFF, used as the 7-bit I2C slave address.
-    uint16_t peripheralTimeout;  // Timeout in milliseconds for active peripheral detection
-    uint16_t usbVid;             // Sets the USB Vendor ID reported by the device during enumeration.
-    uint16_t usbPid;             // Sets the USB Product ID reported by the device during enumeration.
-    uint32_t usbStringsPointer;  // Sets the USB Strings reported by the device during enumeration.
-    uint8_t  clockFlags;         // See Table 13-4, clockFlags Configuration Field
-    uint8_t  clockDivider;       // Divider to use for core and bus clocks when in high speed mode
-} BootloaderConfiguration;
-
-__attribute__ ((section(".bootloader_configuration")))
-const BootloaderConfiguration bootloaderConfiguration = {
-    /* magic               */ "kcfg",
-    /* reserved            */ {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF },
-    /* enabledPeripherals  */ 0xFF, /* all peripherals */
-    /* i2cAddress          */ 0x11,
-    /* peripheralTimeout   */ 1000, /* ms */
-    /* usbVid              */ 0,
-    /* usbPid              */ 0,
-    /* usbStringsPointer   */ 0,
-    /* clockFlags          */ 0,
-    /* clockDivider        */ 0,    /* 0 => high-speed 48MHz */
-};
-#endif
 
 /*
  * Vector table related
@@ -86,6 +27,7 @@ typedef void( *const intfunc )( void );
  * Most of the vector table is initialised to point at this handler.
  *
  * If you end up here it probably means:
+ *   - Failed to enable the interrupt handler in the USBDM device configuration
  *   - You have accidently enabled an interrupt source in a peripheral
  *   - Enabled the wrong interrupt source
  *   - Failed to install or create a handler for an interrupt you intended using e.g. mis-spelled the name.
@@ -100,7 +42,7 @@ void Default_Handler(void) {
    volatile uint32_t vectorNum = (SCB_ICSR&SCB_ICSR_VECTACTIVE_Msk)>>SCB_ICSR_VECTACTIVE_Pos;
 
    while (1) {
-      __BKPT(0);
+      __asm__("bkpt");
    }
 }
 
@@ -191,17 +133,18 @@ __attribute__((__naked__))
 void _HardFault_Handler(volatile ExceptionFrame *exceptionFrame __attribute__((__unused__))) {
    while (1) {
       // Stop here for debugger
-      __BKPT(0);
+      __asm__("bkpt");
    }
 }
 
 void __HardReset(void) __attribute__((__interrupt__));
+
 extern uint32_t __StackTop;
 
 /*
  * Each vector is assigned an unique name.  This is then 'weakly' assigned to the
  * default handler.
- * To install a handler, create a function with the name shown and it will override
+ * To install a handler, create a C linkage function with the name shown and it will override
  * the weak default.
  */
 void NMI_Handler(void)                        WEAK_DEFAULT_HANDLER;

@@ -25,11 +25,12 @@ typedef struct {
 
 //-------- <<< Use Configuration Wizard in Context Menu >>> -----------------
 /*
-  <!h> Flash Configuration - Security and Protection
-  <i> 16-byte flash configuration field that stores default protection settings (loaded on reset)
-  <i> and security information that allows the MCU to restrict access to the Flash module.
+  <h> Flash Configuration - Security and Protection
+     <i> 16-byte flash configuration field that stores default protection settings (loaded on reset)
+     <i> and security information that allows the MCU to restrict access to the Flash module.
   </h>
 */
+
 /*
    <h> Program Flash Region Protect
       <i>Allows ranges of the flash to be protected
