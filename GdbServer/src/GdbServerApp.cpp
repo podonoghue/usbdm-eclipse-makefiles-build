@@ -153,6 +153,11 @@ bool GdbServerApp::OnInit() {
       log.error("Failed OnInit()\n");
       return true; // Return true here as we want OnRun() to execute
    }
+
+#if TARGET == MC56F80xx
+   DSC_SetLogFile(0);
+#endif
+
    // Create empty app settings
    appSettings.reset(new AppSettings(CONFIG_FILE_NAME, targetType, "GDB Server settings"));
    if (useGUI) {
@@ -207,7 +212,7 @@ static const wxCmdLineEntryDesc g_cmdLineDesc[] = {
       { wxCMD_LINE_OPTION, _("requiredBdm"),   NULL, _("Serial number of required BDM to use"),                           wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_SWITCH, _("catchvlls"),     NULL, _("Catch VLLSx resets"),                                             wxCMD_LINE_VAL_NONE   },
       { wxCMD_LINE_OPTION, _("device"),        NULL, _("Target device e.g. MCF51CN128"),                                  wxCMD_LINE_VAL_STRING },
-      { wxCMD_LINE_OPTION, _("erase"),         NULL, _("Erase method (Default, Mass, All, Selective, None)"),             wxCMD_LINE_VAL_STRING },
+      { wxCMD_LINE_OPTION, _("erase"),         NULL, _("Erase method (Mass, All, Selective, Vendor, None)"),     wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_SWITCH, _("exitOnClose"),   NULL, _("Exit Server when connection closed"),                             wxCMD_LINE_VAL_NONE   },
       { wxCMD_LINE_OPTION, _("flexNVM"),       NULL, _("FlexNVM parameters (eeprom,partition hex values)"),               wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_SWITCH, _("masserase"),     NULL, _("Equivalent to erase=Mass") },
@@ -217,7 +222,7 @@ static const wxCmdLineEntryDesc g_cmdLineDesc[] = {
       { wxCMD_LINE_OPTION, _("power"),         NULL, _("Power timing (off,recovery) 100-10000 ms"),                       wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_OPTION, _("port"),          NULL, _("Server port # to use for GDB e.g. 1234"),                         wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_OPTION, _("reset"),         NULL, _("Reset timing (active,release,recovery) 100-10000 ms"),            wxCMD_LINE_VAL_STRING },
-      { wxCMD_LINE_OPTION, _("resetMethod"),   NULL, _("Reset method (hardware, software, vendor, default)"),             wxCMD_LINE_VAL_STRING },
+      { wxCMD_LINE_OPTION, _("resetMethod"),   NULL, _("Reset method (hardware, software, vendor)"),                      wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_OPTION, _("security"),      NULL, _("Device security (unsecured, image, smart)"),                      wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_OPTION, _("securityValue"), NULL, _("Explicit security value to use (as hex string)"),                 wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_SWITCH, _("secure"),        NULL, _("Leave device secure after programming") },
@@ -353,9 +358,9 @@ USBDM_ErrorCode GdbServerApp::parseCommandLine(wxCmdLineParser& parser) {
 #endif
 
    // Command line requires at least a device name
-   USBDM_ErrorCode rc = deviceInterface->setCurrentDeviceByName((const char *)sValue.ToAscii());
+   USBDM_ErrorCode rc = deviceInterface->setCurrentDeviceByName((const char *)sValue.c_str());
    if (rc != BDM_RC_OK) {
-      log.error("Failed to set device to \'%s\'\n", (const char *)sValue.ToAscii());
+      log.error("Failed to set device to \'%s\'\n", (const char *)sValue.c_str());
       logUsageError(parser, _("***** Error: Failed to find device.\n"));
       return rc;
    }
@@ -366,12 +371,6 @@ USBDM_ErrorCode GdbServerApp::parseCommandLine(wxCmdLineParser& parser) {
    // Disable clock trim by default
    deviceData->setClockTrimFreq(0);
 
-   if ((targetType==T_HCS08) || (targetType==T_RS08) || (targetType==T_ARM)) {
-      deviceData->setEraseMethod(DeviceData::eraseMass);
-   }
-   else if ((targetType==T_HCS12) || (targetType==T_S12Z) || (targetType==T_CFV1) || (targetType==T_CFVx) || (targetType==T_MC56F80xx)) {
-      deviceData->setEraseMethod(DeviceData::eraseAll);
-   }
    bdmInterface->setMaskISR(parser.Found(_("maskInterrupts")));
    if (parser.Found(_("masserase"))) {
       deviceData->setEraseMethod(DeviceData::eraseMass);
@@ -411,7 +410,7 @@ USBDM_ErrorCode GdbServerApp::parseCommandLine(wxCmdLineParser& parser) {
       }
       else {
          deviceData->setSecurity(SEC_CUSTOM);
-         customSecurityValue = std::string(sValue.ToAscii());
+         customSecurityValue = std::string(sValue.c_str());
       }
    }
 
@@ -472,9 +471,6 @@ USBDM_ErrorCode GdbServerApp::parseCommandLine(wxCmdLineParser& parser) {
       else if (sValue.CmpNoCase(_("Vendor")) == 0) {
          deviceData->setResetMethod(DeviceData::resetVendor);
       }
-      else if (sValue.CmpNoCase(_("Default")) == 0) {
-         deviceData->setResetMethod(DeviceData::resetTargetDefault);
-      }
       else {
          logUsageError(parser, _("***** Error: Illegal erase value.\n"));
          return BDM_RC_ILLEGAL_PARAMS;
@@ -493,7 +489,7 @@ USBDM_ErrorCode GdbServerApp::parseCommandLine(wxCmdLineParser& parser) {
       }
    }
    if (parser.Found(_("bdm"), &sValue)) {
-      bdmInterface->setBdmSerialNumber((const char *)sValue.ToAscii(), false);
+      bdmInterface->setBdmSerialNumber((const char *)sValue.c_str(), false);
    }
    if (parser.Found(_("requiredBdm"), &sValue)) {
       bdmInterface->setBdmSerialNumber(sValue.ToStdString(), true);

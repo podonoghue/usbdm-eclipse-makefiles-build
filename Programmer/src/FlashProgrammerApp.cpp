@@ -288,7 +288,7 @@ static const wxCmdLineEntryDesc g_cmdLineDesc[] = {
       { wxCMD_LINE_OPTION, _("bdm"),           NULL, _("Serial number of preferred BDM to use"),                          wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_OPTION, _("requiredBdm"),   NULL, _("Serial number of required BDM to use"),                           wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_OPTION, _("device"),        NULL, _("Target device e.g. MCF51CN128"),                                  wxCMD_LINE_VAL_STRING },
-      { wxCMD_LINE_OPTION, _("erase"),         NULL, _("Erase method (Mass, All, Selective, Default, Vendor, None)"),     wxCMD_LINE_VAL_STRING },
+      { wxCMD_LINE_OPTION, _("erase"),         NULL, _("Erase method (Mass, All, Selective, Vendor, None)"),     wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_SWITCH, _("execute"),       NULL, _("Leave target power on & reset to normal mode at completion"), },
       { wxCMD_LINE_OPTION, _("flexNVM"),       NULL, _("FlexNVM parameters (eeprom,partition hex values)"),               wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_SWITCH, _("masserase"),     NULL, _("Equivalent to erase=Mass") },
@@ -297,7 +297,7 @@ static const wxCmdLineEntryDesc g_cmdLineDesc[] = {
       { wxCMD_LINE_OPTION, _("power"),         NULL, _("Power timing (off,recovery) 100-10000 ms"),                       wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_SWITCH, _("program"),       NULL, _("Program and verify flash contents"), },
       { wxCMD_LINE_OPTION, _("reset"),         NULL, _("Reset timing (active,release,recovery) 100-10000 ms"),            wxCMD_LINE_VAL_STRING },
-      { wxCMD_LINE_OPTION, _("resetMethod"),   NULL, _("Reset method (hardware, software, vendor, default)"),             wxCMD_LINE_VAL_STRING },
+      { wxCMD_LINE_OPTION, _("resetMethod"),   NULL, _("Reset method (hardware, software, vendor)"),                      wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_OPTION, _("security"),      NULL, _("Device security (unsecured, image, smart)"),                      wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_OPTION, _("securityValue"), NULL, _("Explicit security value to use (as hex string)"),                 wxCMD_LINE_VAL_STRING },
       { wxCMD_LINE_SWITCH, _("secure"),        NULL, _("Leave device secure after programming") },
@@ -517,12 +517,6 @@ USBDM_ErrorCode FlashProgrammerApp::parseCommandLine(wxCmdLineParser& parser) {
    // Disable clock trim by default
    deviceData->setClockTrimFreq(0);
 
-   if ((targetType==T_HCS08) || (targetType==T_RS08) || (targetType==T_ARM)) {
-      deviceData->setEraseMethod(DeviceData::eraseMass);
-   }
-   else if ((targetType==T_HCS12) || (targetType==T_S12Z) || (targetType==T_CFV1) || (targetType==T_CFVx) || (targetType==T_MC56F80xx)) {
-      deviceData->setEraseMethod(DeviceData::eraseAll);
-   }
    if (parser.Found(_("masserase"))) {
       deviceData->setEraseMethod(DeviceData::eraseMass);
    }
@@ -588,11 +582,11 @@ USBDM_ErrorCode FlashProgrammerApp::parseCommandLine(wxCmdLineParser& parser) {
       else if (sValue.CmpNoCase(_("Selective")) == 0) {
          deviceData->setEraseMethod(DeviceData::eraseSelective);
       }
+      else if (sValue.CmpNoCase(_("Vendor")) == 0) {
+         deviceData->setEraseMethod(DeviceData::eraseTargetDefault);
+      }
       else if (sValue.CmpNoCase(_("None")) == 0) {
          deviceData->setEraseMethod(DeviceData::eraseNone);
-      }
-      else if (sValue.CmpNoCase(_("Default")) == 0) {
-         deviceData->setEraseMethod(DeviceData::eraseTargetDefault);
       }
       else {
          logUsageError(parser, _("***** Error: Illegal erase value.\n"));
@@ -608,9 +602,6 @@ USBDM_ErrorCode FlashProgrammerApp::parseCommandLine(wxCmdLineParser& parser) {
       }
       else if (sValue.CmpNoCase(_("Vendor")) == 0) {
          deviceData->setResetMethod(DeviceData::resetVendor);
-      }
-      else if (sValue.CmpNoCase(_("Default")) == 0) {
-         deviceData->setResetMethod(DeviceData::resetTargetDefault);
       }
       else {
          logUsageError(parser, _("***** Error: Illegal erase value.\n"));
