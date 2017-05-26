@@ -1785,7 +1785,7 @@ DeviceDataPtr DeviceXmlParser::parseDevice(DOMElement *deviceEl) {
          }
       }
       else if (XMLString::equals(propertyTag.asXMLString(), tag_eraseMethods.asXMLString())) {
-         // <flashProgram>
+         // <eraseMethods>
          itDev->setEraseMethods(parseEraseMethods(currentProperty));
          if (isDefault) {
             //            log.print("Setting default eraseMethods (non-shared)\n");
@@ -1793,7 +1793,7 @@ DeviceDataPtr DeviceXmlParser::parseDevice(DOMElement *deviceEl) {
          }
       }
       else if (XMLString::equals(propertyTag.asXMLString(), tag_eraseMethodsRef.asXMLString())) {
-         // <flashProgramRef>
+         // <eraseMethodsRef>
          DualString sRef(currentProperty->getAttribute(attr_ref.asXMLString()));
          itDev->setEraseMethods(deviceDataBase->getEraseMethods(sRef.asCString()));
          if (isDefault) {
