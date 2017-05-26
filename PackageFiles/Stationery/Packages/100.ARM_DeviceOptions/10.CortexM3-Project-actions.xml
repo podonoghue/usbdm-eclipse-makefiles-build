@@ -27,8 +27,8 @@
       <createFolder target="Project_Headers"                 type="include" />
       <createFolder target="Project_Settings/Linker_Files"                  />
    
-      <copy source="Startup_Code/newlib_stubs.c"                              target="Startup_Code/newlib_stubs.c" />
       <copy source="Startup_Code/vectors-cm3.c"                               target="Startup_Code/vectors.c" />
+      <copy source="Startup_Code/newlib_stubs.c"                              target="Startup_Code/newlib_stubs.c" />
       <copy source="Startup_Code/startup_ARMLtdGCC_CortexM3.S"                target="Startup_Code/startup_ARMLtdGCC.S" />
 
       <copy source="Project_Settings/Debug.launch"                            target="Project_Settings/$(projectName)-Debug.launch" />
@@ -39,7 +39,7 @@
       <copy source="Project_Headers/TargetDevice.h"                           target="Project_Headers/$(targetDevice).h" />
       <copy source="Project_Headers/core_cm3.h"                               target="Project_Headers/core_cm3.h" />
       <copy source="Project_Headers/core_cmFunc.h"                            target="Project_Headers/core_cmFunc.h" />
-      <copy source="Project_Headers/core_cmInstr.h"                           target="Project_Headers/core_cmInstr.h" />
+      <copy source="Project_Headers/cmsis_gcc.h"                              target="Project_Headers/cmsis_gcc.h" />
       <copy source="Project_Headers/core_cmFunc.h"                            target="Project_Headers/core_cmFunc.h" />
       <copy source="Project_Headers/core_cmInstr.h"                           target="Project_Headers/core_cmInstr.h" />
       <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(targetDevice).h" replace="true" />
@@ -86,7 +86,9 @@
          </applyWhen>
       
          <copy source="Startup_Code/system-lpc.c"                                target="Startup_Code/system.c" />
-         <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-lpc.ld"      target="Project_Settings/Linker_Files/ARMLtd_GCC-rom.ld" />
+         <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-lpc.ld"      target="Project_Settings/Linker_Files/Linker-rom.ld" />
+         <copy source="Project_Headers/system-lpc.h"                             target="Project_Headers/system.h" />
+         <copy source="Project_Headers/utilities-lpc.h"                          target="Project_Headers/utilities.h" />
       
          <projectActionList>
             <applyWhen>
@@ -101,7 +103,6 @@
             </applyWhen>
             <copy source="Sources/main.cpp"                                target="Sources/main.cpp" />
          </projectActionList>
-
       </projectActionList>
    </projectActionList>
 

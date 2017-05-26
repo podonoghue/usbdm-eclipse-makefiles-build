@@ -19,10 +19,6 @@ typedef void( *const intfunc )( void );
 
 #define WEAK_DEFAULT_HANDLER __attribute__ ((__weak__, alias("Default_Handler")))
 
-#ifndef SCB_ICSR
-#define SCB_ICSR (*(volatile uint32_t*)(0xE000ED04))
-#endif
-
 /**
  * Default handler for interrupts
  *
@@ -40,8 +36,10 @@ typedef void( *const intfunc )( void );
 __attribute__((__interrupt__))
 void Default_Handler(void) {
 
+#ifdef SCB
    __attribute__((unused))
-   volatile uint32_t vectorNum = (SCB_ICSR&SCB_ICSR_VECTACTIVE_Msk)>>SCB_ICSR_VECTACTIVE_Pos;
+   volatile uint32_t vectorNum = (SCB->ICSR&SCB_ICSR_VECTACTIVE_Msk)>>SCB_ICSR_VECTACTIVE_Pos;
+#endif
 
    while (1) {
       __asm__("bkpt");

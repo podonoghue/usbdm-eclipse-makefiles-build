@@ -19,6 +19,8 @@ typedef void( *const intfunc )( void );
 
 #ifndef SCB_ICSR
 #define SCB_ICSR (*(volatile uint32_t*)(0xE000ED04))
+#define SCB_ICSR_VECTACTIVE_Pos   0U
+#define SCB_ICSR_VECTACTIVE_Msk   (0x1FFUL)
 #endif
 
 /**
@@ -73,21 +75,19 @@ void HardFault_Handler(void) {
        * and allows access to the saved processor state.
        * Other registers are unchanged and available in the usual register view
        */
-   __asm__ volatile (
-          "       mov r0,lr                                     \n"
-          "       mov r1,#4                                     \n"
-          "       and r0,r1                                     \n"
-          "       bne skip1                                     \n"
-          "       mrs r0,msp                                    \n"
-          "       b   skip2                                     \n"
-          "skip1:                                               \n"
-          "       mrs r0,psp                                    \n"
-          "skip2:                                               \n"
-          "       nop                                           \n"
-          "       ldr r2, handler_addr_const                    \n"
-          "       bx r2                                         \n"
-          "       handler_addr_const: .word _HardFault_Handler  \n"
-      );
+   __asm__ volatile ("       mov r0,lr                                     \n"); // Check mode
+   __asm__ volatile ("       mov r1,#4                                     \n");
+   __asm__ volatile ("       and r0,r1                                     \n");
+   __asm__ volatile ("       bne skip1                                     \n");
+   __asm__ volatile ("       mrs r0,msp                                    \n"); // Get active SP in r0
+   __asm__ volatile ("       b   skip2                                     \n");
+   __asm__ volatile ("skip1:                                               \n");
+   __asm__ volatile ("       mrs r0,psp                                    \n");
+   __asm__ volatile ("skip2:                                               \n");
+   __asm__ volatile ("       nop                                           \n");
+   __asm__ volatile ("       ldr r2, handler_addr_const                    \n"); // Go to C handler
+   __asm__ volatile ("       bx r2                                         \n");
+   __asm__ volatile ("       handler_addr_const: .word _HardFault_Handler  \n");
 }
 #endif
 #if defined(DEVICE_SUBFAMILY_CortexM3) || defined(DEVICE_SUBFAMILY_CortexM3F) || \

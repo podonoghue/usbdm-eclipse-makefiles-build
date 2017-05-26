@@ -39,7 +39,64 @@ typedef enum {
   DebugMonitor_IRQn             =  -4,   /**<  12 Debug Monitor                                                                    */
   PendSV_IRQn                   =  -2,   /**<  14 Pendable request for system service                                              */
   SysTick_IRQn                  =  -1,   /**<  15 System Tick Timer                                                                */
-/* ----------------------                                            ---------------------- */
+/* ----------------------   LPC13xx VectorTable                      ---------------------- */
+  PIO0_0_IRQn                   =   0,   /**<  16 System configuration                                                             */
+  PIO0_1_IRQn                   =   1,   /**<  17 System configuration                                                             */
+  PIO0_2_IRQn                   =   2,   /**<  18 System configuration                                                             */
+  PIO0_3_IRQn                   =   3,   /**<  19 System configuration                                                             */
+  PIO0_4_IRQn                   =   4,   /**<  20 System configuration                                                             */
+  PIO0_5_IRQn                   =   5,   /**<  21 System configuration                                                             */
+  PIO0_6_IRQn                   =   6,   /**<  22 System configuration                                                             */
+  PIO0_7_IRQn                   =   7,   /**<  23 System configuration                                                             */
+  PIO0_8_IRQn                   =   8,   /**<  24 System configuration                                                             */
+  PIO0_9_IRQn                   =   9,   /**<  25 System configuration                                                             */
+  PIO0_10_IRQn                  =  10,   /**<  26 System configuration                                                             */
+  PIO0_11_IRQn                  =  11,   /**<  27 System configuration                                                             */
+  PIO1_0_IRQn                   =  12,   /**<  28 System configuration                                                             */
+  PIO1_1_IRQn                   =  13,   /**<  29 System configuration                                                             */
+  PIO1_2_IRQn                   =  14,   /**<  30 System configuration                                                             */
+  PIO1_3_IRQn                   =  15,   /**<  31 System configuration                                                             */
+  PIO1_4_IRQn                   =  16,   /**<  32 System configuration                                                             */
+  PIO1_5_IRQn                   =  17,   /**<  33 System configuration                                                             */
+  PIO1_6_IRQn                   =  18,   /**<  34 System configuration                                                             */
+  PIO1_7_IRQn                   =  19,   /**<  35 System configuration                                                             */
+  PIO1_8_IRQn                   =  20,   /**<  36 System configuration                                                             */
+  PIO1_9_IRQn                   =  21,   /**<  37 System configuration                                                             */
+  PIO1_10_IRQn                  =  22,   /**<  38 System configuration                                                             */
+  PIO1_11_IRQn                  =  23,   /**<  39 System configuration                                                             */
+  PIO2_0_IRQn                   =  24,   /**<  40 System configuration                                                             */
+  PIO2_1_IRQn                   =  25,   /**<  41 System configuration                                                             */
+  PIO2_2_IRQn                   =  26,   /**<  42 System configuration                                                             */
+  PIO2_3_IRQn                   =  27,   /**<  43 System configuration                                                             */
+  PIO2_4_IRQn                   =  28,   /**<  44 System configuration                                                             */
+  PIO2_5_IRQn                   =  29,   /**<  45 System configuration                                                             */
+  PIO2_6_IRQn                   =  30,   /**<  46 System configuration                                                             */
+  PIO2_7_IRQn                   =  31,   /**<  47 System configuration                                                             */
+  PIO2_8_IRQn                   =  32,   /**<  48 System configuration                                                             */
+  PIO2_9_IRQn                   =  33,   /**<  49 System configuration                                                             */
+  PIO2_10_IRQn                  =  34,   /**<  50 System configuration                                                             */
+  PIO2_11_IRQn                  =  35,   /**<  51 System configuration                                                             */
+  PIO3_0_IRQn                   =  36,   /**<  52 System configuration                                                             */
+  PIO3_1_IRQn                   =  37,   /**<  53 System configuration                                                             */
+  PIO3_2_IRQn                   =  38,   /**<  54 System configuration                                                             */
+  PIO3_3_IRQn                   =  39,   /**<  55 System configuration                                                             */
+  I2C0_IRQn                     =  40,   /**<  56 I2C-bus controller                                                               */
+  CT16B0_IRQn                   =  41,   /**<  57 16-bit timer/counters (CT16B0/1)                                                 */
+  CT16B1_IRQn                   =  42,   /**<  58 16-bit timer/counters (CT16B0/1)                                                 */
+  CT32B0_IRQn                   =  43,   /**<  59 32-bit timer/counters (CT32B0/1)                                                 */
+  CT32B1_IRQn                   =  44,   /**<  60 32-bit timer/counters (CT32B0/1)                                                 */
+  SSP0_IRQn                     =  45,   /**<  61 SSP0/1                                                                           */
+  UART_IRQn                     =  46,   /**<  62 UART                                                                             */
+  USBIRQ_IRQn                   =  47,   /**<  63 USB device controller                                                            */
+  USBFIQ_IRQn                   =  48,   /**<  64 USB device controller                                                            */
+  ADC_IRQn                      =  49,   /**<  65 Analog-to-Digital Converter                                                      */
+  WDT_IRQn                      =  50,   /**<  66 Windowed WatchDog Timer                                                          */
+  BOD_IRQn                      =  51,   /**<  67 System configuration                                                             */
+  PIO_3_IRQn                    =  53,   /**<  69 General Purpose I/O                                                              */
+  PIO_2_IRQn                    =  54,   /**<  70 General Purpose I/O                                                              */
+  PIO_1_IRQn                    =  55,   /**<  71 General Purpose I/O                                                              */
+  PIO_0_IRQn                    =  56,   /**<  72 General Purpose I/O                                                              */
+  SSP1_IRQn                     =  57,   /**<  73 SSP0/1                                                                           */
 } IRQn_Type;
 
 /**
@@ -60,6 +117,63 @@ extern void SVC_Handler(void);                 /**< System Service Call via SVC 
 extern void DebugMon_Handler(void);            /**< Debug Monitor                                                                    */
 extern void PendSV_Handler(void);              /**< Pendable request for system service                                              */
 extern void SysTick_Handler(void);             /**< System Tick Timer                                                                */
+extern void PIO0_0_IRQHandler(void);           /**< System configuration                                                             */
+extern void PIO0_1_IRQHandler(void);           /**< System configuration                                                             */
+extern void PIO0_2_IRQHandler(void);           /**< System configuration                                                             */
+extern void PIO0_3_IRQHandler(void);           /**< System configuration                                                             */
+extern void PIO0_4_IRQHandler(void);           /**< System configuration                                                             */
+extern void PIO0_5_IRQHandler(void);           /**< System configuration                                                             */
+extern void PIO0_6_IRQHandler(void);           /**< System configuration                                                             */
+extern void PIO0_7_IRQHandler(void);           /**< System configuration                                                             */
+extern void PIO0_8_IRQHandler(void);           /**< System configuration                                                             */
+extern void PIO0_9_IRQHandler(void);           /**< System configuration                                                             */
+extern void PIO0_10_IRQHandler(void);          /**< System configuration                                                             */
+extern void PIO0_11_IRQHandler(void);          /**< System configuration                                                             */
+extern void PIO1_0_IRQHandler(void);           /**< System configuration                                                             */
+extern void PIO1_1_IRQHandler(void);           /**< System configuration                                                             */
+extern void PIO1_2_IRQHandler(void);           /**< System configuration                                                             */
+extern void PIO1_3_IRQHandler(void);           /**< System configuration                                                             */
+extern void PIO1_4_IRQHandler(void);           /**< System configuration                                                             */
+extern void PIO1_5_IRQHandler(void);           /**< System configuration                                                             */
+extern void PIO1_6_IRQHandler(void);           /**< System configuration                                                             */
+extern void PIO1_7_IRQHandler(void);           /**< System configuration                                                             */
+extern void PIO1_8_IRQHandler(void);           /**< System configuration                                                             */
+extern void PIO1_9_IRQHandler(void);           /**< System configuration                                                             */
+extern void PIO1_10_IRQHandler(void);          /**< System configuration                                                             */
+extern void PIO1_11_IRQHandler(void);          /**< System configuration                                                             */
+extern void PIO2_0_IRQHandler(void);           /**< System configuration                                                             */
+extern void PIO2_1_IRQHandler(void);           /**< System configuration                                                             */
+extern void PIO2_2_IRQHandler(void);           /**< System configuration                                                             */
+extern void PIO2_3_IRQHandler(void);           /**< System configuration                                                             */
+extern void PIO2_4_IRQHandler(void);           /**< System configuration                                                             */
+extern void PIO2_5_IRQHandler(void);           /**< System configuration                                                             */
+extern void PIO2_6_IRQHandler(void);           /**< System configuration                                                             */
+extern void PIO2_7_IRQHandler(void);           /**< System configuration                                                             */
+extern void PIO2_8_IRQHandler(void);           /**< System configuration                                                             */
+extern void PIO2_9_IRQHandler(void);           /**< System configuration                                                             */
+extern void PIO2_10_IRQHandler(void);          /**< System configuration                                                             */
+extern void PIO2_11_IRQHandler(void);          /**< System configuration                                                             */
+extern void PIO3_0_IRQHandler(void);           /**< System configuration                                                             */
+extern void PIO3_1_IRQHandler(void);           /**< System configuration                                                             */
+extern void PIO3_2_IRQHandler(void);           /**< System configuration                                                             */
+extern void PIO3_3_IRQHandler(void);           /**< System configuration                                                             */
+extern void I2C0_IRQHandler(void);             /**< I2C-bus controller                                                               */
+extern void CT16B0_IRQHandler(void);           /**< 16-bit timer/counters (CT16B0/1)                                                 */
+extern void CT16B1_IRQHandler(void);           /**< 16-bit timer/counters (CT16B0/1)                                                 */
+extern void CT32B0_IRQHandler(void);           /**< 32-bit timer/counters (CT32B0/1)                                                 */
+extern void CT32B1_IRQHandler(void);           /**< 32-bit timer/counters (CT32B0/1)                                                 */
+extern void SSP0_IRQHandler(void);             /**< SSP0/1                                                                           */
+extern void UART_IRQHandler(void);             /**< UART                                                                             */
+extern void USBIRQ_IRQHandler(void);           /**< USB device controller                                                            */
+extern void USBFIQ_IRQHandler(void);           /**< USB device controller                                                            */
+extern void ADC_IRQHandler(void);              /**< Analog-to-Digital Converter                                                      */
+extern void WDT_IRQHandler(void);              /**< Windowed WatchDog Timer                                                          */
+extern void BOD_IRQHandler(void);              /**< System configuration                                                             */
+extern void PIO_3_IRQHandler(void);            /**< General Purpose I/O                                                              */
+extern void PIO_2_IRQHandler(void);            /**< General Purpose I/O                                                              */
+extern void PIO_1_IRQHandler(void);            /**< General Purpose I/O                                                              */
+extern void PIO_0_IRQHandler(void);            /**< General Purpose I/O                                                              */
+extern void SSP1_IRQHandler(void);             /**< SSP0/1                                                                           */
 
 /**
  * @} */ /* End group Interrupt_handler_prototypes_GROUP 
@@ -132,7 +246,7 @@ extern void SysTick_Handler(void);             /**< System Tick Timer           
 */
 
 /* ================================================================================ */
-/* ================           LPC_ADC                              ================ */
+/* ================           LPC_ADC (file:ADC_LPC13xx)           ================ */
 /* ================================================================================ */
 
 /**
@@ -305,7 +419,7 @@ typedef struct {                                /*       LPC_ADC Structure      
 */
 
 /* ================================================================================ */
-/* ================           LPC_CT16B0                           ================ */
+/* ================           LPC_CT16B0 (file:CT16B0_LPC13xx)       ================ */
 /* ================================================================================ */
 
 /**
@@ -323,7 +437,10 @@ typedef struct {                                /*       LPC_CT16B0 Structure   
    __IO uint32_t  BPR;                          /**< 000C: Prescale Register (PR). When the Prescale Counter (below) is equal to this value, the next clock increments the TC and clears the PC */
    __IO uint32_t  BPC;                          /**< 0010: Prescale Counter (PC). The 16-bit PC is a counter which is incremented to the value stored in PR. When the value in PR is reached, the TC is incremented and the PC is cleared. The PC is observable and controllable through the bus interface */
    __IO uint32_t  BMCR;                         /**< 0014: Match Control Register (MCR). The MCR is used to control if an interrupt is generated and if the TC is reset when a Match occurs */
-   __IO uint32_t  BMR[4];                       /**< 0018: Match Register 0 (MR0). MR0 can be enabled through the MCR   */
+   __IO uint32_t  BMR0;                         /**< 0018: Match Register 0 (MR0). MR0 can be enabled through the MCR   */
+   __IO uint32_t  BMR1;                         /**< 001C: Match Register 0 (MR0). MR0 can be enabled through the MCR   */
+   __IO uint32_t  BMR2;                         /**< 0020: Match Register 0 (MR0). MR0 can be enabled through the MCR   */
+   __IO uint32_t  BMR3;                         /**< 0024: Match Register 0 (MR0). MR0 can be enabled through the MCR   */
    __IO uint32_t  BCCR;                         /**< 0028: Capture Control Register (CCR). The CCR controls which edges of the capture inputs are used to load the Capture Registers and whether or not an interrupt is generated when a capture takes place */
    __I  uint32_t  BCR0;                         /**< 002C: Capture Register 0 (CR0). CR0 is loaded with the value of TC when there is an event on the CT16B0_CAP0 input */
         uint8_t   RESERVED_0[12];              
@@ -418,6 +535,10 @@ typedef struct {                                /*       LPC_CT16B0 Structure   
 #define LPC_CT16B0_BMCR_MR3S_MASK                (0x800U)                                            /*!< LPC_CT16B0_BMCR: MR3S Mask              */
 #define LPC_CT16B0_BMCR_MR3S_SHIFT               (11U)                                               /*!< LPC_CT16B0_BMCR: MR3S Position          */
 #define LPC_CT16B0_BMCR_MR3S(x)                  (((uint32_t)(((uint32_t)(x))<<LPC_CT16B0_BMCR_MR3S_SHIFT))&LPC_CT16B0_BMCR_MR3S_MASK) /*!< LPC_CT16B0_BMCR                         */
+/* ------- BMR0 Bit Fields                          ------ */
+#define LPC_CT16B0_BMR0_MATCH_MASK               (0xFFFFU)                                           /*!< LPC_CT16B0_BMR0: MATCH Mask             */
+#define LPC_CT16B0_BMR0_MATCH_SHIFT              (0U)                                                /*!< LPC_CT16B0_BMR0: MATCH Position         */
+#define LPC_CT16B0_BMR0_MATCH(x)                 (((uint32_t)(((uint32_t)(x))<<LPC_CT16B0_BMR0_MATCH_SHIFT))&LPC_CT16B0_BMR0_MATCH_MASK) /*!< LPC_CT16B0_BMR0                         */
 /* ------- BMR Bit Fields                           ------ */
 #define LPC_CT16B0_BMR_MATCH_MASK                (0xFFFFU)                                           /*!< LPC_CT16B0_BMR: MATCH Mask              */
 #define LPC_CT16B0_BMR_MATCH_SHIFT               (0U)                                                /*!< LPC_CT16B0_BMR: MATCH Position          */
@@ -520,7 +641,7 @@ typedef struct {                                /*       LPC_CT16B0 Structure   
 */
 
 /* ================================================================================ */
-/* ================           LPC_CT32B0                           ================ */
+/* ================           LPC_CT32B0 (file:CT32B0_LPC13xx)       ================ */
 /* ================================================================================ */
 
 /**
@@ -538,7 +659,10 @@ typedef struct {                                /*       LPC_CT32B0 Structure   
    __IO uint32_t  BPR;                          /**< 000C: Prescale Register (PR). When the Prescale Counter (below) is equal to this value, the next clock increments the TC and clears the PC */
    __IO uint32_t  BPC;                          /**< 0010: Prescale Counter (PC). The 32-bit PC is a counter which is incremented to the value stored in PR. When the value in PR is reached, the TC is incremented and the PC is cleared. The PC is observable and controllable through the bus interface */
    __IO uint32_t  BMCR;                         /**< 0014: Match Control Register (MCR). The MCR is used to control if an interrupt is generated and if the TC is reset when a Match occurs */
-   __IO uint32_t  BMR[4];                       /**< 0018: Match Register. MR can be enabled through the MCR            */
+   __IO uint32_t  BMR0;                         /**< 0018: Match Register. MR can be enabled through the MCR            */
+   __IO uint32_t  BMR1;                         /**< 001C: Match Register. MR can be enabled through the MCR            */
+   __IO uint32_t  BMR2;                         /**< 0020: Match Register. MR can be enabled through the MCR            */
+   __IO uint32_t  BMR3;                         /**< 0024: Match Register. MR can be enabled through the MCR            */
    __IO uint32_t  BCCR;                         /**< 0028: Capture Control Register (CCR). The CCR controls which edges of the capture inputs are used to load the Capture Registers and whether or not an interrupt is generated when a capture takes place */
    __I  uint32_t  BCR0;                         /**< 002C: Capture Register 0 (CR0). CR0 is loaded with the value of TC when there is an event on the CT32B0_CAP0 input */
         uint8_t   RESERVED_0[12];              
@@ -633,6 +757,10 @@ typedef struct {                                /*       LPC_CT32B0 Structure   
 #define LPC_CT32B0_BMCR_MR3S_MASK                (0x800U)                                            /*!< LPC_CT32B0_BMCR: MR3S Mask              */
 #define LPC_CT32B0_BMCR_MR3S_SHIFT               (11U)                                               /*!< LPC_CT32B0_BMCR: MR3S Position          */
 #define LPC_CT32B0_BMCR_MR3S(x)                  (((uint32_t)(((uint32_t)(x))<<LPC_CT32B0_BMCR_MR3S_SHIFT))&LPC_CT32B0_BMCR_MR3S_MASK) /*!< LPC_CT32B0_BMCR                         */
+/* ------- BMR0 Bit Fields                          ------ */
+#define LPC_CT32B0_BMR0_MATCH_MASK               (0xFFFFFFFFU)                                       /*!< LPC_CT32B0_BMR0: MATCH Mask             */
+#define LPC_CT32B0_BMR0_MATCH_SHIFT              (0U)                                                /*!< LPC_CT32B0_BMR0: MATCH Position         */
+#define LPC_CT32B0_BMR0_MATCH(x)                 (((uint32_t)(((uint32_t)(x))<<LPC_CT32B0_BMR0_MATCH_SHIFT))&LPC_CT32B0_BMR0_MATCH_MASK) /*!< LPC_CT32B0_BMR0                         */
 /* ------- BMR Bit Fields                           ------ */
 #define LPC_CT32B0_BMR_MATCH_MASK                (0xFFFFFFFFU)                                       /*!< LPC_CT32B0_BMR: MATCH Mask              */
 #define LPC_CT32B0_BMR_MATCH_SHIFT               (0U)                                                /*!< LPC_CT32B0_BMR: MATCH Position          */
@@ -735,7 +863,7 @@ typedef struct {                                /*       LPC_CT32B0 Structure   
 */
 
 /* ================================================================================ */
-/* ================           LPC_FMC                              ================ */
+/* ================           LPC_FMC (file:FMC_LPC13xx)           ================ */
 /* ================================================================================ */
 
 /**
@@ -833,7 +961,7 @@ typedef struct {                                /*       LPC_FMC Structure      
 */
 
 /* ================================================================================ */
-/* ================           LPC_GPIO0                            ================ */
+/* ================           LPC_GPIO0 (file:GPIO0_LPC13xx)       ================ */
 /* ================================================================================ */
 
 /**
@@ -1285,7 +1413,7 @@ typedef struct {                                /*       LPC_GPIO0 Structure    
 */
 
 /* ================================================================================ */
-/* ================           LPC_I2C                              ================ */
+/* ================           LPC_I2C (file:I2C_LPC13xx)           ================ */
 /* ================================================================================ */
 
 /**
@@ -1309,7 +1437,10 @@ typedef struct {                                /*       LPC_I2C Structure      
    __IO uint32_t  ADR2;                         /**< 0024: I2C                                                          */
    __IO uint32_t  ADR3;                         /**< 0028: I2C                                                          */
    __I  uint32_t  DATA_BUFFER;                  /**< 002C: Data buffer register. The contents of the 8 MSBs of the I2DAT shift register will be transferred to the DATA_BUFFER automatically after every nine bits (8 bits of data plus ACK or NACK) has been received on the bus */
-   __IO uint32_t  MASK[4];                      /**< 0030: I2C Slave address mask register n. This mask register is associated with I2ADRn to determine an address match. The mask register has no effect when comparing to the General Call address (0000000) */
+   __IO uint32_t  MASK0;                        /**< 0030: I2C Slave address mask register n. This mask register is associated with I2ADRn to determine an address match. The mask register has no effect when comparing to the General Call address (0000000) */
+   __IO uint32_t  MASK1;                        /**< 0034: I2C Slave address mask register n. This mask register is associated with I2ADRn to determine an address match. The mask register has no effect when comparing to the General Call address (0000000) */
+   __IO uint32_t  MASK2;                        /**< 0038: I2C Slave address mask register n. This mask register is associated with I2ADRn to determine an address match. The mask register has no effect when comparing to the General Call address (0000000) */
+   __IO uint32_t  MASK3;                        /**< 003C: I2C Slave address mask register n. This mask register is associated with I2ADRn to determine an address match. The mask register has no effect when comparing to the General Call address (0000000) */
 } LPC_I2C_Type;
 
 /**
@@ -1387,21 +1518,47 @@ typedef struct {                                /*       LPC_I2C Structure      
 #define LPC_I2C_MMCTRL_MATCH_ALL_MASK            (0x4U)                                              /*!< LPC_I2C_MMCTRL: MATCH_ALL Mask          */
 #define LPC_I2C_MMCTRL_MATCH_ALL_SHIFT           (2U)                                                /*!< LPC_I2C_MMCTRL: MATCH_ALL Position      */
 #define LPC_I2C_MMCTRL_MATCH_ALL(x)              (((uint32_t)(((uint32_t)(x))<<LPC_I2C_MMCTRL_MATCH_ALL_SHIFT))&LPC_I2C_MMCTRL_MATCH_ALL_MASK) /*!< LPC_I2C_MMCTRL                          */
-/* ------- ADR Bit Fields                           ------ */
-#define LPC_I2C_ADR_GC_MASK                      (0x1U)                                              /*!< LPC_I2C_ADR: GC Mask                    */
-#define LPC_I2C_ADR_GC_SHIFT                     (0U)                                                /*!< LPC_I2C_ADR: GC Position                */
-#define LPC_I2C_ADR_GC(x)                        (((uint32_t)(((uint32_t)(x))<<LPC_I2C_ADR_GC_SHIFT))&LPC_I2C_ADR_GC_MASK) /*!< LPC_I2C_ADR                             */
-#define LPC_I2C_ADR_Address_MASK                 (0xFEU)                                             /*!< LPC_I2C_ADR: Address Mask               */
-#define LPC_I2C_ADR_Address_SHIFT                (1U)                                                /*!< LPC_I2C_ADR: Address Position           */
-#define LPC_I2C_ADR_Address(x)                   (((uint32_t)(((uint32_t)(x))<<LPC_I2C_ADR_Address_SHIFT))&LPC_I2C_ADR_Address_MASK) /*!< LPC_I2C_ADR                             */
+/* ------- ADR1 Bit Fields                          ------ */
+#define LPC_I2C_ADR1_GC_MASK                     (0x1U)                                              /*!< LPC_I2C_ADR1: GC Mask                   */
+#define LPC_I2C_ADR1_GC_SHIFT                    (0U)                                                /*!< LPC_I2C_ADR1: GC Position               */
+#define LPC_I2C_ADR1_GC(x)                       (((uint32_t)(((uint32_t)(x))<<LPC_I2C_ADR1_GC_SHIFT))&LPC_I2C_ADR1_GC_MASK) /*!< LPC_I2C_ADR1                            */
+#define LPC_I2C_ADR1_Address_MASK                (0xFEU)                                             /*!< LPC_I2C_ADR1: Address Mask              */
+#define LPC_I2C_ADR1_Address_SHIFT               (1U)                                                /*!< LPC_I2C_ADR1: Address Position          */
+#define LPC_I2C_ADR1_Address(x)                  (((uint32_t)(((uint32_t)(x))<<LPC_I2C_ADR1_Address_SHIFT))&LPC_I2C_ADR1_Address_MASK) /*!< LPC_I2C_ADR1                            */
+/* ------- ADR2 Bit Fields                          ------ */
+#define LPC_I2C_ADR2_GC_MASK                     (0x1U)                                              /*!< LPC_I2C_ADR2: GC Mask                   */
+#define LPC_I2C_ADR2_GC_SHIFT                    (0U)                                                /*!< LPC_I2C_ADR2: GC Position               */
+#define LPC_I2C_ADR2_GC(x)                       (((uint32_t)(((uint32_t)(x))<<LPC_I2C_ADR2_GC_SHIFT))&LPC_I2C_ADR2_GC_MASK) /*!< LPC_I2C_ADR2                            */
+#define LPC_I2C_ADR2_Address_MASK                (0xFEU)                                             /*!< LPC_I2C_ADR2: Address Mask              */
+#define LPC_I2C_ADR2_Address_SHIFT               (1U)                                                /*!< LPC_I2C_ADR2: Address Position          */
+#define LPC_I2C_ADR2_Address(x)                  (((uint32_t)(((uint32_t)(x))<<LPC_I2C_ADR2_Address_SHIFT))&LPC_I2C_ADR2_Address_MASK) /*!< LPC_I2C_ADR2                            */
+/* ------- ADR3 Bit Fields                          ------ */
+#define LPC_I2C_ADR3_GC_MASK                     (0x1U)                                              /*!< LPC_I2C_ADR3: GC Mask                   */
+#define LPC_I2C_ADR3_GC_SHIFT                    (0U)                                                /*!< LPC_I2C_ADR3: GC Position               */
+#define LPC_I2C_ADR3_GC(x)                       (((uint32_t)(((uint32_t)(x))<<LPC_I2C_ADR3_GC_SHIFT))&LPC_I2C_ADR3_GC_MASK) /*!< LPC_I2C_ADR3                            */
+#define LPC_I2C_ADR3_Address_MASK                (0xFEU)                                             /*!< LPC_I2C_ADR3: Address Mask              */
+#define LPC_I2C_ADR3_Address_SHIFT               (1U)                                                /*!< LPC_I2C_ADR3: Address Position          */
+#define LPC_I2C_ADR3_Address(x)                  (((uint32_t)(((uint32_t)(x))<<LPC_I2C_ADR3_Address_SHIFT))&LPC_I2C_ADR3_Address_MASK) /*!< LPC_I2C_ADR3                            */
 /* ------- DATA_BUFFER Bit Fields                   ------ */
 #define LPC_I2C_DATA_BUFFER_Data_MASK            (0xFFU)                                             /*!< LPC_I2C_DATA_BUFFER: Data Mask          */
 #define LPC_I2C_DATA_BUFFER_Data_SHIFT           (0U)                                                /*!< LPC_I2C_DATA_BUFFER: Data Position      */
 #define LPC_I2C_DATA_BUFFER_Data(x)              (((uint32_t)(((uint32_t)(x))<<LPC_I2C_DATA_BUFFER_Data_SHIFT))&LPC_I2C_DATA_BUFFER_Data_MASK) /*!< LPC_I2C_DATA_BUFFER                     */
-/* ------- MASK Bit Fields                          ------ */
-#define LPC_I2C_MASK_MASK_MASK                   (0xFEU)                                             /*!< LPC_I2C_MASK: MASK Mask                 */
-#define LPC_I2C_MASK_MASK_SHIFT                  (1U)                                                /*!< LPC_I2C_MASK: MASK Position             */
-#define LPC_I2C_MASK_MASK(x)                     (((uint32_t)(((uint32_t)(x))<<LPC_I2C_MASK_MASK_SHIFT))&LPC_I2C_MASK_MASK_MASK) /*!< LPC_I2C_MASK                            */
+/* ------- MASK0 Bit Fields                         ------ */
+#define LPC_I2C_MASK0_MASK_MASK                  (0xFEU)                                             /*!< LPC_I2C_MASK0: MASK Mask                */
+#define LPC_I2C_MASK0_MASK_SHIFT                 (1U)                                                /*!< LPC_I2C_MASK0: MASK Position            */
+#define LPC_I2C_MASK0_MASK(x)                    (((uint32_t)(((uint32_t)(x))<<LPC_I2C_MASK0_MASK_SHIFT))&LPC_I2C_MASK0_MASK_MASK) /*!< LPC_I2C_MASK0                           */
+/* ------- MASK1 Bit Fields                         ------ */
+#define LPC_I2C_MASK1_MASK_MASK                  (0xFEU)                                             /*!< LPC_I2C_MASK1: MASK Mask                */
+#define LPC_I2C_MASK1_MASK_SHIFT                 (1U)                                                /*!< LPC_I2C_MASK1: MASK Position            */
+#define LPC_I2C_MASK1_MASK(x)                    (((uint32_t)(((uint32_t)(x))<<LPC_I2C_MASK1_MASK_SHIFT))&LPC_I2C_MASK1_MASK_MASK) /*!< LPC_I2C_MASK1                           */
+/* ------- MASK2 Bit Fields                         ------ */
+#define LPC_I2C_MASK2_MASK_MASK                  (0xFEU)                                             /*!< LPC_I2C_MASK2: MASK Mask                */
+#define LPC_I2C_MASK2_MASK_SHIFT                 (1U)                                                /*!< LPC_I2C_MASK2: MASK Position            */
+#define LPC_I2C_MASK2_MASK(x)                    (((uint32_t)(((uint32_t)(x))<<LPC_I2C_MASK2_MASK_SHIFT))&LPC_I2C_MASK2_MASK_MASK) /*!< LPC_I2C_MASK2                           */
+/* ------- MASK3 Bit Fields                         ------ */
+#define LPC_I2C_MASK3_MASK_MASK                  (0xFEU)                                             /*!< LPC_I2C_MASK3: MASK Mask                */
+#define LPC_I2C_MASK3_MASK_SHIFT                 (1U)                                                /*!< LPC_I2C_MASK3: MASK Position            */
+#define LPC_I2C_MASK3_MASK(x)                    (((uint32_t)(((uint32_t)(x))<<LPC_I2C_MASK3_MASK_SHIFT))&LPC_I2C_MASK3_MASK_MASK) /*!< LPC_I2C_MASK3                           */
 /**
  * @} */ /* End group I2C_Register_Masks_GROUP 
  */
@@ -1420,7 +1577,7 @@ typedef struct {                                /*       LPC_I2C Structure      
 */
 
 /* ================================================================================ */
-/* ================           LPC_IOCON                            ================ */
+/* ================           LPC_IOCON (file:IOCON_LPC13xx)       ================ */
 /* ================================================================================ */
 
 /**
@@ -1441,7 +1598,7 @@ typedef struct {                                /*       LPC_IOCON Structure    
         uint8_t   RESERVED_1[4];               
    __IO uint32_t  PIO0_2;                       /**< 001C: I/O configuration for pin PIO0_2/SSEL0/ CT16B0_CAP0          */
    __IO uint32_t  PIO2_7;                       /**< 0020: I/O configuration for pin PIO2_7                             */
-   __IO uint32_t  PIO2_8;                       /**< 0024: I/O configuration for pin PIO2_8                             */
+   __IO uint32_t  PIO2_8;                       /**< 0024: I/O configuration for pin PIO2_7                             */
    __IO uint32_t  PIO2_1;                       /**< 0028: I/O configuration for pin PIO2_1/DSR/SCK1                    */
    __IO uint32_t  PIO0_3;                       /**< 002C: I/O configuration for pin PIO0_3/USB_VBUS                    */
    __IO uint32_t  PIO0_4;                       /**< 0030: I/O configuration for pin PIO0_4/SCL                         */
@@ -1449,12 +1606,12 @@ typedef struct {                                /*       LPC_IOCON Structure    
    __IO uint32_t  PIO1_9;                       /**< 0038: I/O configuration for pin PIO1_9/CT16B1_MAT0                 */
    __IO uint32_t  PIO3_4;                       /**< 003C: I/O configuration for pin PIO3_4                             */
    __IO uint32_t  PIO2_4;                       /**< 0040: I/O configuration for pin PIO2_4                             */
-   __IO uint32_t  PIO2_5;                       /**< 0044: I/O configuration for pin PIO2_5                             */
+   __IO uint32_t  PIO2_5;                       /**< 0044: I/O configuration for pin PIO2_4                             */
    __IO uint32_t  PIO3_5;                       /**< 0048: I/O configuration for pin PIO3_5                             */
    __IO uint32_t  PIO0_6;                       /**< 004C: I/O configuration for pin PIO0_6/USB_CONNECT/SCK             */
    __IO uint32_t  PIO0_7;                       /**< 0050: I/O configuration for pin PIO0_7/CTS                         */
    __IO uint32_t  PIO2_9;                       /**< 0054: I/O configuration for pin PIO2_9                             */
-   __IO uint32_t  PIO2_10;                      /**< 0058: I/O configuration for pin PIO2_10                            */
+   __IO uint32_t  PIO2_10;                      /**< 0058: I/O configuration for pin PIO2_9                             */
    __IO uint32_t  PIO2_2;                       /**< 005C: I/O configuration for pin PIO2_2/DCD/MISO1                   */
    __IO uint32_t  PIO0_8;                       /**< 0060: I/O configuration for pin PIO0_8/MISO0/CT16B0_MAT0           */
    __IO uint32_t  PIO0_9;                       /**< 0064: I/O configuration for pin PIO0_9/MOSI0/ CT16B0_MAT1/SWO      */
@@ -2087,7 +2244,7 @@ typedef struct {                                /*       LPC_IOCON Structure    
 */
 
 /* ================================================================================ */
-/* ================           LPC_PMU                              ================ */
+/* ================           LPC_PMU (file:PMU_LPC13xx)           ================ */
 /* ================================================================================ */
 
 /**
@@ -2156,7 +2313,7 @@ typedef struct {                                /*       LPC_PMU Structure      
 */
 
 /* ================================================================================ */
-/* ================           LPC_SSP0                             ================ */
+/* ================           LPC_SSP0 (file:SSP0_LPC13xx)         ================ */
 /* ================================================================================ */
 
 /**
@@ -2330,7 +2487,7 @@ typedef struct {                                /*       LPC_SSP0 Structure     
 */
 
 /* ================================================================================ */
-/* ================           LPC_SYSCON                           ================ */
+/* ================           LPC_SYSCON (file:SYSCON_LPC13xx)       ================ */
 /* ================================================================================ */
 
 /**
@@ -3377,7 +3534,7 @@ typedef struct {                                /*       LPC_SYSCON Structure   
 */
 
 /* ================================================================================ */
-/* ================           LPC_UART                             ================ */
+/* ================           LPC_UART (file:UART_LPC13xx)         ================ */
 /* ================================================================================ */
 
 /**
@@ -3653,7 +3810,7 @@ typedef struct {                                /*       LPC_UART Structure     
 */
 
 /* ================================================================================ */
-/* ================           LPC_USB                              ================ */
+/* ================           LPC_USB (file:USB_LPC13xx)           ================ */
 /* ================================================================================ */
 
 /**
@@ -3932,7 +4089,7 @@ typedef struct {                                /*       LPC_USB Structure      
 */
 
 /* ================================================================================ */
-/* ================           LPC_WWDT                             ================ */
+/* ================           LPC_WWDT (file:WWDT_LPC13xx)         ================ */
 /* ================================================================================ */
 
 /**

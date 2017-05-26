@@ -3,7 +3,6 @@
 <booleanAttribute key="net.sourceforge.usbdm.gdb.bdmSerialNumberMatchRequired" value="false"/>
 <stringAttribute key="net.sourceforge.usbdm.gdb.buildToolId" value="$(buildToolsId)"/>
 <stringAttribute key="net.sourceforge.usbdm.gdb.clockTrimFrequency" value="$(clockTrimFrequency:0)"/>
-<stringAttribute key="net.sourceforge.usbdm.gdb.eraseMethod" value="$(eraseMethod:ERASE_MASS)"/>
 <stringAttribute key="net.sourceforge.usbdm.gdb.deviceName" value="$(targetDevice)"/>
 <stringAttribute key="net.sourceforge.usbdm.gdb.gdbBinPath" value="$(buildToolsBinPath)"/>
 <stringAttribute key="net.sourceforge.usbdm.gdb.gdbCommand" value="$(gdbCommand:gdb)"/>
