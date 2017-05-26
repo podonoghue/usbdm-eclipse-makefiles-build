@@ -395,6 +395,9 @@ USBDM_ErrorCode FlashProgrammer_HCS08::resetAndConnectTarget(void) {
    LOGGING;
    USBDM_ErrorCode rc;
 
+   if (device == nullptr) {
+      return PROGRAMMING_RC_ERROR_ILLEGAL_PARAMS;
+   }
    if (device->getTargetName().empty()) {
       return PROGRAMMING_RC_ERROR_ILLEGAL_PARAMS;
    }

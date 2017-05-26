@@ -51,6 +51,9 @@ FlashProgrammerCommon::FlashProgrammerCommon(DeviceData::EraseMethod defaultEras
    defaultEraseMethod(defaultEraseMethod),
    defaultResetMethod(defaultResetMethod) {
    LOGGING_E;
+
+   log.print("defaultResetMethod = %s\n", DeviceData::getResetMethodName(defaultResetMethod));
+   log.print("defaultEraseMethod = %s\n", DeviceData::getEraseMethodName(defaultEraseMethod));
 }
 
 /**
@@ -1350,9 +1353,20 @@ void FlashProgrammerCommon::restoreSecurityAreas(FlashImagePtr flashImage) {
  * @return erase method
  */
 DeviceData::EraseMethod FlashProgrammerCommon::getEraseMethod() {
-   DeviceData::EraseMethod eraseMethod = device->getEraseMethod();
-   if (eraseMethod == DeviceData::eraseTargetDefault) {
+   LOGGING_Q;
+   if (device == nullptr) {
+      log.print("Device not set!\n");
       return defaultEraseMethod;
+   }
+   DeviceData::EraseMethod eraseMethod = device->getEraseMethod();
+
+   if ((eraseMethod == DeviceData::eraseTargetDefault)) {
+      EraseMethodsConstPtr eraseMethods = device->getEraseMethods();
+      if (eraseMethods == nullptr) {
+         log.print("eraseMethods not set!\n");
+         return defaultEraseMethod;
+      }
+      return eraseMethods->getDefaultMethod();
    }
    return eraseMethod;
 }
@@ -1363,9 +1377,20 @@ DeviceData::EraseMethod FlashProgrammerCommon::getEraseMethod() {
  * @return reset method
  */
 DeviceData::ResetMethod FlashProgrammerCommon::getresetMethod() {
-   DeviceData::ResetMethod resetMethod = device->getResetMethod();
-   if (resetMethod == DeviceData::resetTargetDefault) {
+   LOGGING_Q;
+   if (device == nullptr) {
+      log.print("Device not set!\n");
       return defaultResetMethod;
+   }
+   DeviceData::ResetMethod resetMethod = device->getResetMethod();
+
+   if ((resetMethod == DeviceData::resetTargetDefault)) {
+      ResetMethodsConstPtr resetMethods = device->getResetMethods();
+      if (resetMethods == nullptr) {
+         log.print("resetMethods not set!\n");
+         return defaultResetMethod;
+      }
+      return resetMethods->getDefaultMethod();
    }
    return resetMethod;
 }
