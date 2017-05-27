@@ -135,7 +135,7 @@ extern void GPIO0_IRQHandler(void);            /**< GPIO0                       
 /**
  * @} */ /* End group Cortex_Core_Configuration_GROUP 
  */
-#include "core_cm0plus.h"       /* Processor and core peripherals     */
+#include "core_cm0.h"           /* Processor and core peripherals     */
 #include "system.h"             /* Device specific configuration file */
 
 #ifndef __IO

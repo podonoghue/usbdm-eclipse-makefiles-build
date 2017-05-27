@@ -122,12 +122,12 @@ extern void USBWAKEUP_IRQHandler(void);        /**< USB2.0 device controller    
 #define __NVIC_PRIO_BITS          2          /**< Number of implemented bits in NVIC PRIO register    */
 #define __Vendor_SysTickConfig    0          /**< Whether Vendor implemented SYSTICK timer is present */
 #define __FPU_PRESENT             0          /**< Whether FPU is present                              */
-#define __VTOR_PRESENT            1          /**< Whether VTOR register is present                    */
+#define __VTOR_PRESENT            0          /**< Whether VTOR register is present                    */
 
 /**
  * @} */ /* End group Cortex_Core_Configuration_GROUP 
  */
-#include "core_cm0plus.h"       /* Processor and core peripherals     */
+#include "core_cm0.h"           /* Processor and core peripherals     */
 #include "system.h"             /* Device specific configuration file */
 
 #ifndef __IO
