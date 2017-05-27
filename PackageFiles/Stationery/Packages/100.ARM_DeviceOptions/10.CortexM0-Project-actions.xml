@@ -41,14 +41,26 @@ Cortex-M0
       <copy source="Project_Headers/derivative.h"                             target="Project_Headers/derivative.h" />
       <copy source="Project_Headers/TargetDevice.h"                           target="Project_Headers/$(targetDevice).h" />
       <copy source="Project_Headers/system.h"                                 target="Project_Headers/system.h" />
-      <copy source="Project_Headers/core_cm0.h"                               target="Project_Headers/core_cm0.h" />
-      <copy source="Project_Headers/core_cm0plus.h"                           target="Project_Headers/core_cm0plus.h" />
       <copy source="Project_Headers/cmsis_gcc.h"                              target="Project_Headers/cmsis_gcc.h" />
       <copy source="Project_Headers/core_cmFunc.h"                            target="Project_Headers/core_cmFunc.h" />
       <copy source="Project_Headers/core_cmInstr.h"                           target="Project_Headers/core_cmInstr.h" />
       <copy source="Project_Headers/utilities-mke.h"                          target="Project_Headers/utilities.h" />
 
       <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(targetDevice).h" replace="true" />
+
+      <projectActionList>
+         <applyWhen>
+            <deviceFamilyMatches>CortexM0</deviceFamilyMatches>
+         </applyWhen>
+         <copy source="Project_Headers/core_cm0.h"                         target="Project_Headers/core_cm0.h" />
+      </projectActionList>
+
+      <projectActionList>
+         <applyWhen>
+            <deviceFamilyMatches>CortexM0plus</deviceFamilyMatches>
+         </applyWhen>
+         <copy source="Project_Headers/core_cm0plus.h"                     target="Project_Headers/core_cm0plus.h" />
+      </projectActionList>
 
       <projectActionList>
          <applyWhen>
@@ -96,7 +108,7 @@ Cortex-M0
             <deviceSubfamilyMatches>^MKE\d+.*</deviceSubfamilyMatches>
          </applyWhen>
          <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-mk.ld"    target="Project_Settings/Linker_Files/Linker-rom.ld" />
-         <copy source="Startup_Code/system-mke.c"                             target="Startup_Code/system.c" />
+         <copy source="Startup_Code/system-kinetis.c"                         target="Startup_Code/system.c" />
          <copy source="Startup_Code/security-mke.c"                           target="Startup_Code/security.c" />
       </projectActionList>
    
@@ -106,7 +118,7 @@ Cortex-M0
             <deviceSubfamilyMatches>^MKL\d+.*</deviceSubfamilyMatches>
          </applyWhen>
          <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-mk.ld"    target="Project_Settings/Linker_Files/Linker-rom.ld" />
-         <copy source="Startup_Code/system-mkl.c"                             target="Startup_Code/system.c" />
+         <copy source="Startup_Code/system-kinetis.c"                         target="Startup_Code/system.c" />
          <copy source="Startup_Code/security-mkl.c"                           target="Startup_Code/security.c" />
       </projectActionList>
    
@@ -116,7 +128,7 @@ Cortex-M0
             <deviceSubfamilyMatches>^MKM\d+.*</deviceSubfamilyMatches>
          </applyWhen>
          <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-mk.ld"    target="Project_Settings/Linker_Files/Linker-rom.ld" />
-         <copy source="Startup_Code/system-mkm.c"                             target="Startup_Code/system.c" />
+         <copy source="Startup_Code/system-kinetis.c"                         target="Startup_Code/system.c" />
          <copy source="Startup_Code/security-mkm.c"                           target="Startup_Code/security.c" />
       </projectActionList>
 
@@ -126,7 +138,7 @@ Cortex-M0
             <deviceSubfamilyMatches>^MKV1.*</deviceSubfamilyMatches>
          </applyWhen>
          <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-mk.ld"    target="Project_Settings/Linker_Files/Linker-rom.ld" />
-         <copy source="Startup_Code/system-mkv10.c"                           target="Startup_Code/system.c" />
+         <copy source="Startup_Code/system-kinetis.c"                         target="Startup_Code/system.c" />
          <copy source="Startup_Code/security-mkv10.c"                           target="Startup_Code/security.c" />
       </projectActionList>
 

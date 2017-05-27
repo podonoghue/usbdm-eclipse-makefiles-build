@@ -1,12 +1,11 @@
 /*
- * system.c
+ *  @file system.c
  *
  * Derived from system-lpc.c
  *
  * Generic system initialization for LPC
  *
- *  Created on: 07/12/2012
- *      Author: podonoghue
+ *  Created on: 25/5/2017
  */
 
 #include <stdint.h>
@@ -17,12 +16,12 @@ __attribute__((__weak__))
 void SystemCoreClockUpdate(void) {
 }
 
-/* This is overridden if actual clock code is provided */
+/* These are overridden if actual clock code is provided */
 __attribute__((__weak__))
-uint32_t SystemBusClock = 8000000;
+uint32_t SystemCoreClock = 12000000;
 
 /* Actual Vector table */
-//extern int const __vector_table[];
+extern int const __vector_table[];
 
 /* This definition is overridden if Clock initialisation is provided */
 __attribute__((__weak__))
@@ -48,7 +47,7 @@ void software_init_hook (void) {
 #warning Due to limited RAM the C library standard initialisation is not called - BSS and DATA are still initialised
 #endif
 
-/*!
+/**
  *  @brief Low-level initialize the system
  *
  *  Low level setup of the microcontroller system. \n
@@ -56,8 +55,16 @@ void software_init_hook (void) {
  *  May NOT use globals etc (as will be overwritten by BSS initialization)
  */
 void SystemInitLowLevel(void) {
-   /* This is generic initialization code */
-   /* It may not be correct for a specific target */
+   /*
+    * This is generic initialization code
+    * It may not be correct for a specific target
+    */
+
+#ifdef __VTOR_PRESENT
+   /* Set the interrupt vector table position */
+   SCB->VTOR = (uint32_t)__vector_table;
+#endif
+
 }
 
 /**
@@ -67,8 +74,10 @@ void SystemInitLowLevel(void) {
  */
 __attribute__ ((constructor))
 void SystemInit(void) {
-   /* This is generic initialization code */
-   /* It may not be correct for a specific target */
+   /*
+    * This is generic initialization code
+    * It may not be correct for a specific target
+    */
 
    /* Use Clock initialisation - if present */
    clock_initialise();
@@ -78,12 +87,35 @@ void SystemInit(void) {
 
    /* Use RTC initialisation - if present */
    rtc_initialise();
+
+#if defined (__VFP_FP__) && !defined(__SOFTFP__)
+   /* Initialise FPU if present & in use */
+   __asm__ (
+         "  .equ CPACR, 0xE000ED88     \n"
+         "                             \n"
+         "  LDR.W R0, =CPACR           \n"  // CPACR address
+         "  LDR R1, [R0]               \n"  // Read CPACR
+         "  ORR R1, R1, #(0xF << 20)   \n"  // Enable CP10 and CP11 coprocessors
+         "  STR R1, [R0]               \n"  // Write back the modified value to the CPACR
+         "  DSB                        \n"  // Wait for store to complete"
+         "  ISB                        \n"  // Reset pipeline now the FPU is enabled
+   );
+#endif
 }
 
-// Code below assumes interrupts start oiut enabled!
+// Code below assumes interrupts start out enabled!
 
 /** Nesting count for interrupt disable */
 static int disableInterruptCount = 0;
+
+/**
+ * Check interrupt status
+ *
+ * @return true if interrupts are enabled
+ */
+int areInterruptsEnabled() {
+   return disableInterruptCount == 0;
+}
 
 /**
  * Disable interrupts
@@ -108,7 +140,8 @@ int enableInterrupts() {
    }
    if (disableInterruptCount == 0) {
       __enable_irq();
+      return 1;
    }
-   return disableInterruptCount>0;
+   return 0;
 }
 

@@ -1,7 +1,7 @@
 /*
- * sysinit.c
+ * system.c
  *
- * Generic system initialization for Kinetis
+ * Generic system initialization
  *
  *  Created on: 07/12/2012
  *      Author: podonoghue
@@ -14,6 +14,10 @@
 __attribute__((__weak__))
 void SystemCoreClockUpdate(void) {
 }
+
+/* This is overridden if actual clock code is provided */
+__attribute__((__weak__))
+uint32_t SystemCoreClock = 12000000;
 
 /* Actual Vector table */
 extern int const __vector_table[];

@@ -25,7 +25,7 @@ Cortex-M4
       <createFolder target="Project_Headers"                 type="include" />
       <createFolder target="Project_Settings/Linker_Files"                  />
    
-      <copy source="Startup_Code/system-mk.c"                                 target="Startup_Code/system.c" />
+      <copy source="Startup_Code/system-kinetis.c"                            target="Startup_Code/system.c" />
       <copy source="Startup_Code/vectors-cm4.c"                               target="Startup_Code/vectors.c" />
       <copy source="Startup_Code/newlib_stubs.c"                              target="Startup_Code/newlib_stubs.c" />
       <copy source="Startup_Code/security-mk.c"                               target="Startup_Code/security.c" />

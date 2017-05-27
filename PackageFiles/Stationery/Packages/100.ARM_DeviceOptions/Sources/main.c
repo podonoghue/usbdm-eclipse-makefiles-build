@@ -34,7 +34,7 @@ int main(void) {
    volatile int count = 0;
 
    // 1 ms tick
-//   SysTick_Config(SystemBusClock/1000);
+//   SysTick_Config(SystemCoreClock/1000);
 
 //   printf("SystemBusClock  = %ld\n", SystemBusClock);
 //   printf("SystemCoreClock = %ld\n", SystemCoreClock);

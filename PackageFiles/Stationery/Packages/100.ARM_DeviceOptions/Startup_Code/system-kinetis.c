@@ -1,11 +1,11 @@
 /*
  *  @file system.c
- *  Derived from  system-mke.c
  *
- * Generic system initialization for Kinetis MKExx family
+ *  Derived from  system-kinetis.c
+ *
+ * Generic system initialization for Kinetis family
  *
  *  Created on: 25/5/2017
- *  Devices: MKE02, MKE04, MKE06
  */
 
 #include <stdint.h>
@@ -16,11 +16,11 @@ __attribute__((__weak__))
 void SystemCoreClockUpdate(void) {
 }
 
-/* This is overridden if actual clock code is provided */
-__attribute__((__weak__))
-uint32_t SystemBusClock = 8000000;
+/* These are overridden if actual clock code is provided */
 __attribute__((__weak__))
 uint32_t SystemCoreClock = 4000000;
+__attribute__((__weak__))
+uint32_t SystemBusClock = 8000000;
 
 /* Actual Vector table */
 extern int const __vector_table[];
@@ -57,8 +57,10 @@ void software_init_hook (void) {
  *  May NOT use globals etc (as will be overwritten by BSS initialization)
  */
 void SystemInitLowLevel(void) {
-   /* This is generic initialization code */
-   /* It may not be correct for a specific target */
+   /*
+    * This is generic initialization code
+    * It may not be correct for a specific target
+    */
 
 #ifdef __VTOR_PRESENT
    /* Set the interrupt vector table position */
@@ -66,8 +68,18 @@ void SystemInitLowLevel(void) {
 #endif
 
 #ifdef SCB_CCR_DIV_0_TRP_Msk
-   // Enable trapping of divide by zero
+   /* Enable trapping of divide by zero */
    SCB->CCR |= SCB_CCR_DIV_0_TRP_Msk;
+#endif
+
+#ifdef RCM_MR_BOOTROM
+   // Clear Boot ROM flag
+   RCM->MR = RCM_MR_BOOTROM(3);
+#endif
+
+#if defined(SIM_COPC_COPT_MASK)
+   // Disable watch-dog
+   SIM->COPC = SIM_COPC_COPT(0);
 #endif
 
 #ifdef WDOG_CS_UPDATE
@@ -83,16 +95,31 @@ void SystemInitLowLevel(void) {
 #endif
 
 #ifdef WDOG_CS1_UPDATE_MASK
-/* Unlocking Watchdog word */
+   /* Unlocking Watchdog sequence words*/
 #define WDOG_KEY1    (0x20C5)
 #define WDOG_KEY2    (0x28D9)
 
-   // Disable watch-dog
+   /* Disable watch-dog */
    WDOG->CNT    = WDOG_KEY1;               // Write the 1st unlock word
    WDOG->CNT    = WDOG_KEY2;               // Write the 2nd unlock word
    WDOG->TOVAL  = -1;                      // Setting time-out value
    WDOG->CS2    = WDOG_CS2_CLK(1);         // Setting 1-kHz clock source
-   WDOG->CS1    = WDOG_CS1_UPDATE_MASK;    // Disable watchdog
+   WDOG->CS1    = WDOG_CS1_UPDATE(1);      // Disable watchdog and allow future changes
+#endif
+
+#ifdef WDOG_UNLOCK_WDOGUNLOCK_MASK
+   /* Unlocking Watchdog sequence words*/
+   #define WDOG_KEY1   (0xC520)
+   #define WDOG_KEY2   (0xD928)
+
+   /* Disable watch-dog */
+   WDOG->UNLOCK  = WDOG_UNLOCK_WDOGUNLOCK(WDOG_KEY1);
+   WDOG->UNLOCK  = WDOG_UNLOCK_WDOGUNLOCK(WDOG_KEY2);
+   __DSB();
+   WDOG->STCTRLH =
+         WDOG_STCTRLH_WDOGEN(0)|          // Disable WDOG
+         WDOG_STCTRLH_ALLOWUPDATE(1)|     // Allow future updates
+         WDOG_STCTRLH_CLKSRC(0);          // WDOG clk=LPO
 #endif
 }
 
@@ -103,8 +130,10 @@ void SystemInitLowLevel(void) {
  */
 __attribute__ ((constructor))
 void SystemInit(void) {
-   /* This is generic initialization code */
-   /* It may not be correct for a specific target */
+   /*
+    * This is generic initialization code
+    * It may not be correct for a specific target
+    */
 
    /* Use Clock initialisation - if present */
    clock_initialise();

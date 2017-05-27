@@ -60,6 +60,11 @@ SECTIONS
       /* Make sure we pulled in at least a reset vector.  */
       ASSERT (. != __flash_start, "No reset vector found");
       __VECTOR_TABLE_END = .;
+
+      /* Emit a Security field */
+      . = __flash_start + 0x2FC;
+      KEEP(*(.security_information))/* LPC Code Read Protection (CRP) */
+      ASSERT (. == __flash_start + 0x300, "No LPC CRP security information");
     } > flash
 
 /* Size of RAM vector table (if needed) */
