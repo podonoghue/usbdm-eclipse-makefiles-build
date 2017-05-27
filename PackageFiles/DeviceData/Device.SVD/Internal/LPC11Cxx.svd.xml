@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE device>
+<device
+   schemaVersion="1.1"
+   xmlns:xi="http://www.w3.org/2001/XInclude"
+   xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd"
+>
+   <name>LPC11Cxx</name>
+   <version>10</version>
+   <description>LPC11Cxx</description>
+   <cpu>
+      <name>CM0</name>
+      <revision>r0p0</revision>
+      <endian>little</endian>
+      <mpuPresent>false</mpuPresent>
+      <fpuPresent>false</fpuPresent>
+      <vtorPresent>false</vtorPresent>
+      <nvicPrioBits>2</nvicPrioBits>
+      <vendorSystickConfig>false</vendorSystickConfig>
+   </cpu>
+   <addressUnitBits>8</addressUnitBits>
+   <width>32</width>
+   <peripherals>
+      <xi:include href="peripherals/ADC_LPC11Cxx.svd.xml"/>
+      <xi:include href="peripherals/CT16B0_LPC11Cxx.svd.xml"/>
+      <peripheral derivedFrom="CT16B0"><name>CT16B1</name><baseAddress>0x40010000</baseAddress></peripheral>
+      <xi:include href="peripherals/CT32B0_LPC11Cxx.svd.xml"/>
+      <peripheral derivedFrom="CT32B0"><name>CT32B1</name><baseAddress>0x40018000</baseAddress></peripheral>
+      <xi:include href="peripherals/C_CAN_LPC11Cxx.svd.xml"/>
+      <xi:include href="peripherals/FLASHCTRL_LPC11Cxx.svd.xml"/>
+      <xi:include href="peripherals/GPIO0_LPC11Cxx.svd.xml"/>
+      <peripheral derivedFrom="GPIO0"><name>GPIO1</name><baseAddress>0x50010000</baseAddress></peripheral>
+      <peripheral derivedFrom="GPIO0"><name>GPIO2</name><baseAddress>0x50020000</baseAddress></peripheral>
+      <peripheral derivedFrom="GPIO0"><name>GPIO3</name><baseAddress>0x50030000</baseAddress></peripheral>
+      <xi:include href="peripherals/I2C_LPC11Cxx.svd.xml"/>
+      <xi:include href="peripherals/IOCON_LPC11Cxx.svd.xml"/>
+      <xi:include href="peripherals/PMU_LPC11Cxx.svd.xml"/>
+      <xi:include href="peripherals/SPI0_LPC11Cxx.svd.xml"/>
+      <peripheral derivedFrom="SPI0"><name>SPI1</name><baseAddress>0x40058000</baseAddress></peripheral>
+      <xi:include href="peripherals/SYSCON_LPC11Cxx.svd.xml"/>
+      <xi:include href="peripherals/UART_LPC11Cxx.svd.xml"/>
+      <xi:include href="peripherals/WWDT_LPC11Cxx.svd.xml"/>
+   </peripherals>
+   <vendorExtensions>
+   <xi:include href="vectorTables/LPC11Cxx_VectorTable.svd.xml"/>
+   </vendorExtensions>
+</device>

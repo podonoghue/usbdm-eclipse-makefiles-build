@@ -1,0 +1,2643 @@
+<!--
+Devices using this peripheral: 
+      LPC82x
+-->
+      <peripheral>
+         <?sourceFile "SCT_LPC82x" ?>
+         <name>SCT</name>
+         <description>State Configurable Timer</description>
+         <groupName>SCT</groupName>
+         <headerStructName>SCT</headerStructName>
+         <baseAddress>0x50004000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x18</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x40</offset>
+            <size>0x24</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xF0</offset>
+            <size>0x30</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x200</offset>
+            <size>0x20</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x300</offset>
+            <size>0x40</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x500</offset>
+            <size>0x30</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>CONFIG</name>
+               <description>SCT configuration register</description>
+               <addressOffset>0x0</addressOffset>
+               <resetValue>0x7E00</resetValue>
+               <fields>
+                  <field>
+                     <name>UNIFY</name>
+                     <description>SCT operation</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>LHCOUNTER</name>
+                           <description>The SCT operates as two 16-bit counters named L and H</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>UNIFIEDCOUNTER</name>
+                           <description>The SCT operates as a unified 32-bit counter</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CLKMODE</name>
+                     <description>SCT clock mode</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>THE_BUS_CLOCK_CLOCKS</name>
+                           <description>The bus clock clocks the SCT and prescalers</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>THE_SCT_CLOCK_IS_THE</name>
+                           <description>The SCT clock is the bus clock, but the prescalers are  enabled to count only when sampling of the input selected by  the CKSEL field finds the selected edge. The minimum pulse  width on the clock input is 1 bus clock period. This mode is the high-performance  sampled-clock mode</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>THE_INPUT_SELECTED_B</name>
+                           <description>The input selected by  CKSEL clocks the SCT and prescalers. The input is synchronized to the bus clock and possibly inverted.  The minimum pulse width on the clock input is 1 bus clock  period. This mode is the low-power sampled-clock mode</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>PRESCALED_SCT_INPUT</name>
+                           <description>Prescaled SCT input. The SCT and prescalers are clocked by the input edge  selected by the CKSEL field. In this mode, most of the SCT is clocked by the (selected polarity of the)  input. The outputs are switched synchronously to the input clock. The input clock rate must be at least half the system clock rate and  can the same or faster than the system clock</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CKSEL</name>
+                     <description>SCT clock select</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>RISING_EDGES_ON_INPU</name>
+                           <description>Rising edges on input 0</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>FALLING_EDGES_ON_INP</name>
+                           <description>Falling edges on input 0</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>RISING_EDGES_ON_INPU</name>
+                           <description>Rising edges on input 1</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>FALLING_EDGES_ON_INP</name>
+                           <description>Falling edges on input 1</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>RISING_EDGES_ON_INPU</name>
+                           <description>Rising edges on input 2</description>
+                           <value>0x4</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>FALLING_EDGES_ON_INP</name>
+                           <description>Falling edges on input 2</description>
+                           <value>0x5</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>RISING_EDGES_ON_INPU</name>
+                           <description>Rising edges on input 3</description>
+                           <value>0x6</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>FALLING_EDGES_ON_INP</name>
+                           <description>Falling edges on input 3</description>
+                           <value>0x7</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>NORELAOD_L</name>
+                     <description>A 1 in this bit prevents the lower match registers from being  reloaded from their respective reload registers. Software can  write to set or clear this bit at any time. This bit applies to both the  higher and lower registers when the UNIFY bit is set</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>NORELOAD_H</name>
+                     <description>A 1 in this bit prevents the higher match registers from being  reloaded from their respective reload registers. Software can  write to set or clear this bit at any time. This bit is not used when  the UNIFY bit is set</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>INSYNC</name>
+                     <description>Synchronization for input N (bit 9 = input 0, bit 10 = input 1,..., bit 12 = input 3); all other bits are reserved. A 1 in one of these bits subjects the corresponding input to  synchronization to the SCT clock, before it is used to create an  event. If an input is synchronous to the SCT clock, keep its bit 0 for  faster response. When the CKMODE field is 1x, the bit in this field, corresponding  to the input selected by the CKSEL field, is not used</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>AUTOLIMIT_L</name>
+                     <description>A one in this bit causes a match on match register 0 to be treated  as a de-facto LIMIT condition without the need to define an  associated event. As with any LIMIT event, this automatic limit causes the  counter to be cleared to zero in uni-directional mode or to change  the direction of count in bi-directional mode. Software can write to set or clear this bit at any time. This bit  applies to both the higher and lower registers when the UNIFY bit  is set</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AUTOLIMIT_H</name>
+                     <description>A one in this bit will cause a match on match register 0 to be treated  as a de-facto LIMIT condition without the need to define an  associated event. As with any LIMIT event, this automatic limit causes the  counter to be cleared to zero in uni-directional mode or to change  the direction of count in bi-directional mode. Software can write to set or clear this bit at any time. This bit is  not used when the UNIFY bit is set</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CTRL</name>
+               <description>SCT control register</description>
+               <addressOffset>0x4</addressOffset>
+               <resetValue>0x40004</resetValue>
+               <fields>
+                  <field>
+                     <name>DOWN_L</name>
+                     <description>This bit is 1 when the L or unified counter is counting down. Hardware sets this bit   when the counter limit is reached and BIDIR is 1. Hardware clears this bit when the counter is counting down and a limit condition occurs or when the counter reaches 0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>STOP_L</name>
+                     <description>When this bit is 1 and HALT is 0, the L or unified counter does not run, but I/O  events related to the counter can occur. If such an event matches  the mask in the Start register, this bit is cleared and counting  resumes</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>HALT_L</name>
+                     <description>When this bit is 1, the L or unified counter does not run and no events can occur.  A reset sets this bit. When the HALT_L bit is one, the STOP_L bit is cleared. If you want to remove the halt condition and keep the SCT in the stop condition (not running), then you can change the halt and stop condition with one single write to this register. Once set, only software can clear this bit to restore counter operation</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CLRCTR_L</name>
+                     <description>Writing a 1 to this bit clears the L or unified counter. This bit always reads as 0</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BIDIR_L</name>
+                     <description>L or unified counter direction select</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>UP</name>
+                           <description>The counter counts up to its limit condition, then is cleared to zero</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>UPDOWN</name>
+                           <description>The counter counts up to its limit, then counts down to a limit condition or to 0</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PRE_L</name>
+                     <description>Specifies the factor by which the SCT clock is prescaled to produce the  L or unified counter clock. The counter clock is clocked at the rate of the SCT  clock divided by PRE_L+1. Clear the counter (by writing a 1  to the CLRCTR bit) whenever changing the PRE value</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>DOWN_H</name>
+                     <description>This bit is 1 when the H counter is counting down. Hardware sets this bit   when the counter limit is reached and BIDIR is 1. Hardware clears this bit when the counter is counting down and a limit condition occurs or when the counter reaches 0</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>STOP_H</name>
+                     <description>When this bit is 1 and HALT is 0, the H counter does not, run but I/O  events related to the counter can occur. If such an event matches  the mask in the Start register, this bit is cleared and counting  resumes</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>HALT_H</name>
+                     <description>When this bit is 1, the H counter does not run and no events can occur.  A reset sets this bit. When the HALT_H bit is one, the STOP_H bit is cleared. If you want to remove the halt condition and keep the SCT in the stop condition (not running), then you can change the halt and stop condition with one single write to this register. Once set, this bit can only be cleared by software to restore counter operation</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CLRCTR_H</name>
+                     <description>Writing a 1 to this bit clears the H counter. This bit always reads as 0</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BIDIR_H</name>
+                     <description>Direction select</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>UP</name>
+                           <description>The H counter counts up to its limit condition, then is cleared to zero</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>UPDOWN</name>
+                           <description>The H counter counts up to its limit, then counts down to a limit condition or to 0</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PRE_H</name>
+                     <description>Specifies the factor by which the SCT clock is prescaled to produce the  H counter clock. The counter clock is clocked at the rate of the SCT  clock divided by PRELH+1. Clear the counter (by writing a 1  to the CLRCTR bit) whenever changing the PRE value</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LIMIT</name>
+               <description>SCT limit register</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>LIMMSK_L</name>
+                     <description>If bit n is one, event n is used as a counter limit for the L or unified counter (event 0 = bit 0, event 1 = bit 1, event 7 = bit 7)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>LIMMSK_H</name>
+                     <description>If bit n is one, event n is used as a counter limit for the H counter (event 0 = bit 16, event 1 = bit 17, event 7 = bit 23)</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>HALT</name>
+               <description>SCT halt condition register</description>
+               <addressOffset>0xC</addressOffset>
+               <fields>
+                  <field>
+                     <name>HALTMSK_L</name>
+                     <description>If bit n is one, event n sets the HALT_L bit in the CTRL register (event 0 = bit 0, event 1 = bit 1, event 7 = bit 7)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>HALTMSK_H</name>
+                     <description>If bit n is one, event n sets the HALT_H bit in the CTRL register (event 0 = bit 16, event 1 = bit 17, event 7 = bit 23)</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>STOP</name>
+               <description>SCT stop condition register</description>
+               <addressOffset>0x10</addressOffset>
+               <fields>
+                  <field>
+                     <name>STOPMSK_L</name>
+                     <description>If bit n is one, event n sets the STOP_L bit in the CTRL register (event 0 = bit 0, event 1 = bit 1, event 7 = bit 7)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>STOPMSK_H</name>
+                     <description>If bit n is one, event n sets the STOP_H bit in the CTRL register (event 0 = bit 16, event 1 = bit 17, event 7= bit 23)</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>START</name>
+               <description>SCT start condition register</description>
+               <addressOffset>0x14</addressOffset>
+               <fields>
+                  <field>
+                     <name>STARTMSK_L</name>
+                     <description>If bit n is one, event n clears the STOP_L bit in the CTRL register (event 0 = bit 0, event 1 = bit 1, event 7 = bit 7)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>STARTMSK_H</name>
+                     <description>If bit n is one, event n clears the STOP_H bit in the CTRL register (event 0 = bit 16, event 1 = bit 17, event 7 = bit 23)</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>COUNT</name>
+               <description>SCT counter register</description>
+               <addressOffset>0x40</addressOffset>
+               <fields>
+                  <field>
+                     <name>CTR_L</name>
+                     <description>When UNIFY = 0, read or write the 16-bit L counter value. When UNIFY = 1, read or write the lower 16 bits of the 32-bit unified counter</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>CTR_H</name>
+                     <description>When UNIFY = 0, read or write the 16-bit H counter value. When UNIFY = 1, read or write the upper 16 bits of the 32-bit unified counter</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>STATE</name>
+               <description>SCT state register</description>
+               <addressOffset>0x44</addressOffset>
+               <fields>
+                  <field>
+                     <name>STATE_L</name>
+                     <description>State variable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>STATE_H</name>
+                     <description>State variable</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>INPUT</name>
+               <description>SCT input register</description>
+               <addressOffset>0x48</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>AIN0</name>
+                     <description>. Input 0 state.Direct read</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AIN1</name>
+                     <description>Input 1 state. Direct read</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AIN2</name>
+                     <description>Input 2 state. Direct read</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AIN3</name>
+                     <description>Input 3 state. Direct read</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SIN0</name>
+                     <description>Input 0 state</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SIN1</name>
+                     <description>Input 1 state</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SIN2</name>
+                     <description>Input 2 state</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SIN3</name>
+                     <description>Input 3 state</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>REGMODE</name>
+               <description>SCT match/capture registers mode register</description>
+               <addressOffset>0x4C</addressOffset>
+               <fields>
+                  <field>
+                     <name>REGMOD_L</name>
+                     <description>Each bit controls one pair of match/capture registers (register pair 0 = bit 0, register pair 1 = bit 1,..., register pair 7 = bit 7).  0 = registers operate as match registers. 1 = registers operate as capture</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>REGMOD_H</name>
+                     <description>Each bit controls one pair of match/capture registers (register 0 = bit 16, register 1 = bit 17,..., register 7 = bit 23). 0 = registers operate as match registers. 1 = registers operate as capture</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>OUTPUT</name>
+               <description>SCT output register</description>
+               <addressOffset>0x50</addressOffset>
+               <fields>
+                  <field>
+                     <name>OUT</name>
+                     <description>Writing a 1 to bit n makes the corresponding output HIGH. 0 makes the corresponding output LOW (output 0 = bit 0, output 1 = bit 1,..., output 5 = bit 5)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>OUTPUTDIRCTRL</name>
+               <description>SCT output counter direction control register</description>
+               <addressOffset>0x54</addressOffset>
+               <fields>
+                  <field>
+                     <name>SETCLR0</name>
+                     <description>Set/clear operation on output 0. Value 0x3 is reserved. Do not program this value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>INDEPENDENT</name>
+                           <description>Set and clear do not depend on any counter</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>REVERSED</name>
+                           <description>Set and clear are reversed when counter L or the unified counter is counting down</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>REVERSED_H</name>
+                           <description>Set and clear are reversed when counter H is counting down. Do not use if UNIFY = 1</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="SETCLR0" > <name>SETCLR1</name> <description>Set/clear operation on output 1. Value 0x3 is reserved. Do not program this value</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="SETCLR0" > <name>SETCLR2</name> <description>Set/clear operation on output 2. Value 0x3 is reserved. Do not program this value</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="SETCLR0" > <name>SETCLR3</name> <description>Set/clear operation on output 3. Value 0x3 is reserved. Do not program this value</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="SETCLR0" > <name>SETCLR4</name> <description>Set/clear operation on output 4. Value 0x3 is reserved. Do not program this value</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="SETCLR0" > <name>SETCLR5</name> <description>Set/clear operation on output 5. Value 0x3 is reserved. Do not program this value</description> <bitOffset>10</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>RES</name>
+               <description>SCT conflict resolution register</description>
+               <addressOffset>0x58</addressOffset>
+               <fields>
+                  <field>
+                     <name>O0RES</name>
+                     <description>Effect of simultaneous set and clear on output 0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_CHANGE</name>
+                           <description>No change</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SET_OUTPUT_OR_CLEAR</name>
+                           <description>Set output (or clear based on the SETCLR0 field)</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>CLEAR_OUTPUT_OR_SET</name>
+                           <description>Clear output (or set based on the SETCLR0 field)</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TOGGLE_OUTPUT</name>
+                           <description>Toggle output</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>O1RES</name>
+                     <description>Effect of simultaneous set and clear on output 1</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_CHANGE</name>
+                           <description>No change</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SET_OUTPUT_OR_CLEAR</name>
+                           <description>Set output (or clear based on the SETCLR1 field)</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>CLEAR_OUTPUT_OR_SET</name>
+                           <description>Clear output (or set based on the SETCLR1 field)</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TOGGLE_OUTPUT</name>
+                           <description>Toggle output</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>O2RES</name>
+                     <description>Effect of simultaneous set and clear on output 2</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_CHANGE</name>
+                           <description>No change</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SET_OUTPUT_OR_CLEAR</name>
+                           <description>Set output (or clear based on the SETCLR2 field)</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>CLEAR_OUTPUT_N_OR_S</name>
+                           <description>Clear output n (or set based on the SETCLR2 field)</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TOGGLE_OUTPUT</name>
+                           <description>Toggle output</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>O3RES</name>
+                     <description>Effect of simultaneous set and clear on output 3</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_CHANGE</name>
+                           <description>No change</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SET_OUTPUT_OR_CLEAR</name>
+                           <description>Set output (or clear based on the SETCLR3 field)</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>CLEAR_OUTPUT_OR_SET</name>
+                           <description>Clear output (or set based on the SETCLR3 field)</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TOGGLE_OUTPUT</name>
+                           <description>Toggle output</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>O4RES</name>
+                     <description>Effect of simultaneous set and clear on output 4</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_CHANGE</name>
+                           <description>No change</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SET_OUTPUT_OR_CLEAR</name>
+                           <description>Set output (or clear based on the SETCLR4 field)</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>CLEAR_OUTPUT_OR_SET</name>
+                           <description>Clear output (or set based on the SETCLR4 field)</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TOGGLE_OUTPUT</name>
+                           <description>Toggle output</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>O5RES</name>
+                     <description>Effect of simultaneous set and clear on output 5</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_CHANGE</name>
+                           <description>No change</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SET_OUTPUT_OR_CLEAR</name>
+                           <description>Set output (or clear based on the SETCLR5 field)</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>CLEAR_OUTPUT_OR_SET</name>
+                           <description>Clear output (or set based on the SETCLR5 field)</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TOGGLE_OUTPUT</name>
+                           <description>Toggle output</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>2</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1</dimIndex>
+               <name>DMAREQ%s</name>
+               <description>SCT DMA request %s register</description>
+               <addressOffset>0x5C</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>DEV_0</name>
+                     <description>If bit n is one, event n sets DMA request 0 (event 0 = bit 0, event 1 = bit 1,..., event 5 = bit 5)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>DRL0</name>
+                     <description>A 1 in this bit makes the SCT set DMA request 0 when it loads the  Match_L/Unified registers from the Reload_L/Unified</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DRQ0</name>
+                     <description>This read-only bit indicates the state of DMA Request 0</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EVEN</name>
+               <description>SCT event enable register</description>
+               <addressOffset>0xF0</addressOffset>
+               <fields>
+                  <field>
+                     <name>IEN</name>
+                     <description>The SCT requests an interrupt when bit n of this register and the event flag register are both one (event 0 = bit 0, event 1 = bit 1,..., event 7 = bit 7)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EVFLAG</name>
+               <description>SCT event flag register</description>
+               <addressOffset>0xF4</addressOffset>
+               <fields>
+                  <field>
+                     <name>FLAG</name>
+                     <description>Bit n is one if event n has occurred since reset or a 1 was last written to this bit (event 0 = bit 0, event 1 = bit 1,..., event 7 = bit 7)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CONEN</name>
+               <description>SCT conflict enable register</description>
+               <addressOffset>0xF8</addressOffset>
+               <fields>
+                  <field>
+                     <name>NCEN</name>
+                     <description>The SCT requests interrupt when bit n of this register and the SCT conflict flag register are both one (output 0 = bit 0, output 1 = bit 1,..., output 5 = bit 5)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CONFLAG</name>
+               <description>SCT conflict flag register</description>
+               <addressOffset>0xFC</addressOffset>
+               <fields>
+                  <field>
+                     <name>NCFLAG</name>
+                     <description>Bit n is one if a no-change conflict event occurred on output n since  reset or a 1 was last written to this bit (output 0 = bit 0, output 1 = bit 1,..., output 5 = bit 5)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>BUSERRL</name>
+                     <description>The most recent bus error from this SCT involved writing CTR  L/Unified, STATE L/Unified, MATCH L/Unified, or the Output register when the  L/U counter was not halted. A word write to certain L  and H registers can be half successful and half unsuccessful</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BUSERRH</name>
+                     <description>The most recent bus error from this SCT involved writing CTR H,  STATE H, MATCH H, or the Output register when the H  counter was not halted</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CAP0</name>
+               <description>SCT capture register of capture channel 0 to 7; REGMOD0 to REGMODE7 = 1</description>
+               <addressOffset>0x100</addressOffset>
+               <fields>
+                  <field>
+                     <name>CAPn_L</name>
+                     <description>When UNIFY = 0, read the 16-bit counter value at which this register was last captured. When UNIFY = 1, read the lower 16 bits of the 32-bit value at which this register was last captured</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>CAPn_H</name>
+                     <description>When UNIFY = 0, read the 16-bit counter value at which this register was last captured. When UNIFY = 1, read the upper 16 bits of the 32-bit value at which this register was last captured</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MATCH0</name>
+               <description>SCT match value register of match channels 0 to 7; REGMOD0 to REGMODE7 = 0</description>
+               <addressOffset>0x100</addressOffset>
+               <fields>
+                  <field>
+                     <name>MATCHn_L</name>
+                     <description>When UNIFY = 0, read or write the 16-bit value to be  compared to the L counter. When UNIFY = 1, read or write the lower 16 bits of the 32-bit value to be compared to the unified counter</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>MATCHn_H</name>
+                     <description>When UNIFY = 0, read or write the 16-bit value to be  compared to the H counter. When UNIFY = 1, read or write the upper 16 bits of the 32-bit value to be compared to the unified counter</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>6</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>1,2,3,4,5,6</dimIndex>
+               <name>MATCH%s</name>
+               <description>SCT match value register of match channels 0 to 7; REGMOD0 to REGMODE7 = 0</description>
+               <addressOffset>0x104</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>MATCHn_L</name>
+                     <description>When UNIFY = 0, read or write the 16-bit value to be  compared to the L counter. When UNIFY = 1, read or write the lower 16 bits of the 32-bit value to be compared to the unified counter</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>MATCHn_H</name>
+                     <description>When UNIFY = 0, read or write the 16-bit value to be  compared to the H counter. When UNIFY = 1, read or write the upper 16 bits of the 32-bit value to be compared to the unified counter</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CAP1</name>
+               <description>SCT capture register of capture channel 0 to 7; REGMOD0 to REGMODE7 = 1</description>
+               <addressOffset>0x104</addressOffset>
+               <fields>
+                  <field>
+                     <name>CAPn_L</name>
+                     <description>When UNIFY = 0, read the 16-bit counter value at which this register was last captured. When UNIFY = 1, read the lower 16 bits of the 32-bit value at which this register was last captured</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>CAPn_H</name>
+                     <description>When UNIFY = 0, read the 16-bit counter value at which this register was last captured. When UNIFY = 1, read the upper 16 bits of the 32-bit value at which this register was last captured</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>5</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>2,3,4,5,6</dimIndex>
+               <name>CAP%s</name>
+               <description>SCT capture register of capture channel 0 to 7; REGMOD0 to REGMODE7 = 1</description>
+               <addressOffset>0x108</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>CAPn_L</name>
+                     <description>When UNIFY = 0, read the 16-bit counter value at which this register was last captured. When UNIFY = 1, read the lower 16 bits of the 32-bit value at which this register was last captured</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>CAPn_H</name>
+                     <description>When UNIFY = 0, read the 16-bit counter value at which this register was last captured. When UNIFY = 1, read the upper 16 bits of the 32-bit value at which this register was last captured</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CAP7</name>
+               <description>SCT capture register of capture channel 0 to 7; REGMOD0 to REGMODE7 = 1</description>
+               <addressOffset>0x11C</addressOffset>
+               <fields>
+                  <field>
+                     <name>CAPn_L</name>
+                     <description>When UNIFY = 0, read the 16-bit counter value at which this register was last captured. When UNIFY = 1, read the lower 16 bits of the 32-bit value at which this register was last captured</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>CAPn_H</name>
+                     <description>When UNIFY = 0, read the 16-bit counter value at which this register was last captured. When UNIFY = 1, read the upper 16 bits of the 32-bit value at which this register was last captured</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MATCH7</name>
+               <description>SCT match value register of match channels 0 to 7; REGMOD0 to REGMODE7 = 0</description>
+               <addressOffset>0x11C</addressOffset>
+               <fields>
+                  <field>
+                     <name>MATCHn_L</name>
+                     <description>When UNIFY = 0, read or write the 16-bit value to be  compared to the L counter. When UNIFY = 1, read or write the lower 16 bits of the 32-bit value to be compared to the unified counter</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>MATCHn_H</name>
+                     <description>When UNIFY = 0, read or write the 16-bit value to be  compared to the H counter. When UNIFY = 1, read or write the upper 16 bits of the 32-bit value to be compared to the unified counter</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CAPCTRL0</name>
+               <description>SCT capture control register 0 to 7; REGMOD0 = 1 to REGMODE7 = 1</description>
+               <addressOffset>0x200</addressOffset>
+               <fields>
+                  <field>
+                     <name>CAPCONn_L</name>
+                     <description>If bit m is one, event m causes the CAPn_L (UNIFY = 0) or the CAPn (UNIFY = 1) register to be loaded (event 0 = bit 0, event 1 = bit 1,..., event 7 = bit 7)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>CAPCONn_H</name>
+                     <description>If bit m is one, event m causes the CAPn_H (UNIFY = 0) register to be loaded (event 0 = bit 16, event 1 = bit 17,..., event 7 = bit 23)</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MATCHREL0</name>
+               <description>SCT match reload value register 0 to 7; REGMOD0 = 0 to REGMODE7 = 0</description>
+               <addressOffset>0x200</addressOffset>
+               <fields>
+                  <field>
+                     <name>RELOADn_L</name>
+                     <description>When UNIFY = 0, read or write the 16-bit value to be loaded into the SCTMATCHn_L register. When UNIFY = 1, read or write the lower 16 bits of the 32-bit value to be loaded into the MATCHn register</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>RELOADn_H</name>
+                     <description>When UNIFY = 0, read or write the 16-bit to be loaded into the MATCHn_H register. When UNIFY = 1, read or write the upper 16 bits of the 32-bit value to be loaded into the MATCHn register</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>6</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>1,2,3,4,5,6</dimIndex>
+               <name>MATCHREL%s</name>
+               <description>SCT match reload value register 0 to 7; REGMOD0 = 0 to REGMODE7 = 0</description>
+               <addressOffset>0x204</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>RELOADn_L</name>
+                     <description>When UNIFY = 0, read or write the 16-bit value to be loaded into the SCTMATCHn_L register. When UNIFY = 1, read or write the lower 16 bits of the 32-bit value to be loaded into the MATCHn register</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>RELOADn_H</name>
+                     <description>When UNIFY = 0, read or write the 16-bit to be loaded into the MATCHn_H register. When UNIFY = 1, read or write the upper 16 bits of the 32-bit value to be loaded into the MATCHn register</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CAPCTRL1</name>
+               <description>SCT capture control register 0 to 7; REGMOD0 = 1 to REGMODE7 = 1</description>
+               <addressOffset>0x204</addressOffset>
+               <fields>
+                  <field>
+                     <name>CAPCONn_L</name>
+                     <description>If bit m is one, event m causes the CAPn_L (UNIFY = 0) or the CAPn (UNIFY = 1) register to be loaded (event 0 = bit 0, event 1 = bit 1,..., event 7 = bit 7)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>CAPCONn_H</name>
+                     <description>If bit m is one, event m causes the CAPn_H (UNIFY = 0) register to be loaded (event 0 = bit 16, event 1 = bit 17,..., event 7 = bit 23)</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>5</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>2,3,4,5,6</dimIndex>
+               <name>CAPCTRL%s</name>
+               <description>SCT capture control register 0 to 7; REGMOD0 = 1 to REGMODE7 = 1</description>
+               <addressOffset>0x208</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>CAPCONn_L</name>
+                     <description>If bit m is one, event m causes the CAPn_L (UNIFY = 0) or the CAPn (UNIFY = 1) register to be loaded (event 0 = bit 0, event 1 = bit 1,..., event 7 = bit 7)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>CAPCONn_H</name>
+                     <description>If bit m is one, event m causes the CAPn_H (UNIFY = 0) register to be loaded (event 0 = bit 16, event 1 = bit 17,..., event 7 = bit 23)</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CAPCTRL7</name>
+               <description>SCT capture control register 0 to 7; REGMOD0 = 1 to REGMODE7 = 1</description>
+               <addressOffset>0x21C</addressOffset>
+               <fields>
+                  <field>
+                     <name>CAPCONn_L</name>
+                     <description>If bit m is one, event m causes the CAPn_L (UNIFY = 0) or the CAPn (UNIFY = 1) register to be loaded (event 0 = bit 0, event 1 = bit 1,..., event 7 = bit 7)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>CAPCONn_H</name>
+                     <description>If bit m is one, event m causes the CAPn_H (UNIFY = 0) register to be loaded (event 0 = bit 16, event 1 = bit 17,..., event 7 = bit 23)</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MATCHREL7</name>
+               <description>SCT match reload value register 0 to 7; REGMOD0 = 0 to REGMODE7 = 0</description>
+               <addressOffset>0x21C</addressOffset>
+               <fields>
+                  <field>
+                     <name>RELOADn_L</name>
+                     <description>When UNIFY = 0, read or write the 16-bit value to be loaded into the SCTMATCHn_L register. When UNIFY = 1, read or write the lower 16 bits of the 32-bit value to be loaded into the MATCHn register</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>RELOADn_H</name>
+                     <description>When UNIFY = 0, read or write the 16-bit to be loaded into the MATCHn_H register. When UNIFY = 1, read or write the upper 16 bits of the 32-bit value to be loaded into the MATCHn register</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EV0_STATE</name>
+               <description>SCT event state register 0</description>
+               <addressOffset>0x300</addressOffset>
+               <fields>
+                  <field>
+                     <name>STATEMSKn</name>
+                     <description>If bit m is one, event n (n= 0 to 7) happens in state m of the counter selected by the HEVENT bit (m = state number; state 0 = bit 0, state 1= bit 1,..., state 7 = bit 7)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EV0_CTRL</name>
+               <description>SCT event control register 0</description>
+               <addressOffset>0x304</addressOffset>
+               <fields>
+                  <field>
+                     <name>MATCHSEL</name>
+                     <description>Selects the Match register associated with this event (if any). A  match can occur only when the counter selected by the HEVENT  bit is running</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>HEVENT</name>
+                     <description>Select L/H counter. Do not set this bit if UNIFY = 1</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>SELECTS_THE_L_STATE</name>
+                           <description>Selects the L state and the L match register selected by MATCHSEL</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SELECTS_THE_H_STATE</name>
+                           <description>Selects the H state and the H match register selected by MATCHSEL</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>OUTSEL</name>
+                     <description>Input/output select</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>SELECTS_THE_INPUTS_E</name>
+                           <description>Selects the inputs elected by IOSEL</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SELECTS_THE_OUTPUTS</name>
+                           <description>Selects the outputs selected by IOSEL</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>IOSEL</name>
+                     <description>Selects the input or output signal number (0 to 3 for inputs or 0 to 5 for outputs) associated with this event (if  any). Do not select an input in this register, if CKMODE is 1x. In this case the clock input is an implicit ingredient of  every event</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>IOCOND</name>
+                     <description>Selects the I/O condition for event n. (The detection of edges on outputs lag the conditions that switch the outputs by one SCT clock). In order to guarantee proper edge/state detection, an input must have a minimum pulse width of at least one SCT  clock period</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>LOW</name>
+                           <description>LOW</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>RISE</name>
+                           <description>Rise</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>FALL</name>
+                           <description>Fall</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>HIGH</name>
+                           <description>HIGH</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>COMBMODE</name>
+                     <description>Selects how the specified match and I/O condition are used and combined</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>OR</name>
+                           <description>OR. The event occurs when either the specified match or I/O condition occurs</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>MATCH</name>
+                           <description>MATCH. Uses the specified match only</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>IO</name>
+                           <description>IO. Uses the specified I/O condition only</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>AND</name>
+                           <description>AND. The event occurs when the specified match and I/O condition occur simultaneously</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>STATELD</name>
+                     <description>This bit controls how the STATEV value modifies the state  selected by HEVENT when this event is the highest-numbered  event occurring for that state</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>STATEV_VALUE_IS_ADDE</name>
+                           <description>STATEV value is added into STATE (the carry-out is ignored)</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>STATEV_VALUE_IS_LOAD</name>
+                           <description>STATEV value is loaded into STATE</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>STATEV</name>
+                     <description>This value is loaded into or added to the state selected by  HEVENT, depending on STATELD, when this event is the  highest-numbered event occurring for that state. If STATELD and  STATEV are both zero, there is no change to the STATE value</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>MATCHMEM</name>
+                     <description>If this bit is one and the COMBMODE field specifies a match  component to the triggering of this event, then a match is considered to be active whenever the counter value is  GREATER THAN OR EQUAL TO the value specified in the  match register when counting up, LESS THEN OR EQUAL TO  the match value when counting down. If this bit is zero, a match is only be active during the cycle  when the counter is equal to the match value</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DIRECTION</name>
+                     <description>Direction qualifier for event generation. This field only applies when the counters are operating in BIDIR  mode. If BIDIR = 0, the SCT ignores this field. Value 0x3 is reserved</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DIRECTION_INDEPENDEN</name>
+                           <description>Direction independent. This event is triggered regardless of the count direction</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>COUNTING_UP</name>
+                           <description>Counting up. This event is triggered only during up-counting when BIDIR = 1</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>COUNTING_DOWN</name>
+                           <description>Counting down. This event is triggered only during down-counting when BIDIR = 1</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EV1_STATE</name>
+               <description>SCT event state register 0</description>
+               <addressOffset>0x308</addressOffset>
+               <fields>
+                  <field>
+                     <name>STATEMSKn</name>
+                     <description>If bit m is one, event n (n= 0 to 7) happens in state m of the counter selected by the HEVENT bit (m = state number; state 0 = bit 0, state 1= bit 1,..., state 7 = bit 7)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EV1_CTRL</name>
+               <description>SCT event control register 0</description>
+               <addressOffset>0x30C</addressOffset>
+               <fields>
+                  <field>
+                     <name>MATCHSEL</name>
+                     <description>Selects the Match register associated with this event (if any). A  match can occur only when the counter selected by the HEVENT  bit is running</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>HEVENT</name>
+                     <description>Select L/H counter. Do not set this bit if UNIFY = 1</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>SELECTS_THE_L_STATE</name>
+                           <description>Selects the L state and the L match register selected by MATCHSEL</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SELECTS_THE_H_STATE</name>
+                           <description>Selects the H state and the H match register selected by MATCHSEL</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>OUTSEL</name>
+                     <description>Input/output select</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>SELECTS_THE_INPUTS_E</name>
+                           <description>Selects the inputs elected by IOSEL</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SELECTS_THE_OUTPUTS</name>
+                           <description>Selects the outputs selected by IOSEL</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>IOSEL</name>
+                     <description>Selects the input or output signal number (0 to 3 for inputs or 0 to 5 for outputs) associated with this event (if  any). Do not select an input in this register, if CKMODE is 1x. In this case the clock input is an implicit ingredient of  every event</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>IOCOND</name>
+                     <description>Selects the I/O condition for event n. (The detection of edges on outputs lag the conditions that switch the outputs by one SCT clock). In order to guarantee proper edge/state detection, an input must have a minimum pulse width of at least one SCT  clock period</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>LOW</name>
+                           <description>LOW</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>RISE</name>
+                           <description>Rise</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>FALL</name>
+                           <description>Fall</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>HIGH</name>
+                           <description>HIGH</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>COMBMODE</name>
+                     <description>Selects how the specified match and I/O condition are used and combined</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>OR</name>
+                           <description>OR. The event occurs when either the specified match or I/O condition occurs</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>MATCH</name>
+                           <description>MATCH. Uses the specified match only</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>IO</name>
+                           <description>IO. Uses the specified I/O condition only</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>AND</name>
+                           <description>AND. The event occurs when the specified match and I/O condition occur simultaneously</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>STATELD</name>
+                     <description>This bit controls how the STATEV value modifies the state  selected by HEVENT when this event is the highest-numbered  event occurring for that state</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>STATEV_VALUE_IS_ADDE</name>
+                           <description>STATEV value is added into STATE (the carry-out is ignored)</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>STATEV_VALUE_IS_LOAD</name>
+                           <description>STATEV value is loaded into STATE</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>STATEV</name>
+                     <description>This value is loaded into or added to the state selected by  HEVENT, depending on STATELD, when this event is the  highest-numbered event occurring for that state. If STATELD and  STATEV are both zero, there is no change to the STATE value</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>MATCHMEM</name>
+                     <description>If this bit is one and the COMBMODE field specifies a match  component to the triggering of this event, then a match is considered to be active whenever the counter value is  GREATER THAN OR EQUAL TO the value specified in the  match register when counting up, LESS THEN OR EQUAL TO  the match value when counting down. If this bit is zero, a match is only be active during the cycle  when the counter is equal to the match value</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DIRECTION</name>
+                     <description>Direction qualifier for event generation. This field only applies when the counters are operating in BIDIR  mode. If BIDIR = 0, the SCT ignores this field. Value 0x3 is reserved</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DIRECTION_INDEPENDEN</name>
+                           <description>Direction independent. This event is triggered regardless of the count direction</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>COUNTING_UP</name>
+                           <description>Counting up. This event is triggered only during up-counting when BIDIR = 1</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>COUNTING_DOWN</name>
+                           <description>Counting down. This event is triggered only during down-counting when BIDIR = 1</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EV2_STATE</name>
+               <description>SCT event state register 0</description>
+               <addressOffset>0x310</addressOffset>
+               <fields>
+                  <field>
+                     <name>STATEMSKn</name>
+                     <description>If bit m is one, event n (n= 0 to 7) happens in state m of the counter selected by the HEVENT bit (m = state number; state 0 = bit 0, state 1= bit 1,..., state 7 = bit 7)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EV2_CTRL</name>
+               <description>SCT event control register 0</description>
+               <addressOffset>0x314</addressOffset>
+               <fields>
+                  <field>
+                     <name>MATCHSEL</name>
+                     <description>Selects the Match register associated with this event (if any). A  match can occur only when the counter selected by the HEVENT  bit is running</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>HEVENT</name>
+                     <description>Select L/H counter. Do not set this bit if UNIFY = 1</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>SELECTS_THE_L_STATE</name>
+                           <description>Selects the L state and the L match register selected by MATCHSEL</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SELECTS_THE_H_STATE</name>
+                           <description>Selects the H state and the H match register selected by MATCHSEL</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>OUTSEL</name>
+                     <description>Input/output select</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>SELECTS_THE_INPUTS_E</name>
+                           <description>Selects the inputs elected by IOSEL</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SELECTS_THE_OUTPUTS</name>
+                           <description>Selects the outputs selected by IOSEL</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>IOSEL</name>
+                     <description>Selects the input or output signal number (0 to 3 for inputs or 0 to 5 for outputs) associated with this event (if  any). Do not select an input in this register, if CKMODE is 1x. In this case the clock input is an implicit ingredient of  every event</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>IOCOND</name>
+                     <description>Selects the I/O condition for event n. (The detection of edges on outputs lag the conditions that switch the outputs by one SCT clock). In order to guarantee proper edge/state detection, an input must have a minimum pulse width of at least one SCT  clock period</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>LOW</name>
+                           <description>LOW</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>RISE</name>
+                           <description>Rise</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>FALL</name>
+                           <description>Fall</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>HIGH</name>
+                           <description>HIGH</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>COMBMODE</name>
+                     <description>Selects how the specified match and I/O condition are used and combined</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>OR</name>
+                           <description>OR. The event occurs when either the specified match or I/O condition occurs</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>MATCH</name>
+                           <description>MATCH. Uses the specified match only</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>IO</name>
+                           <description>IO. Uses the specified I/O condition only</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>AND</name>
+                           <description>AND. The event occurs when the specified match and I/O condition occur simultaneously</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>STATELD</name>
+                     <description>This bit controls how the STATEV value modifies the state  selected by HEVENT when this event is the highest-numbered  event occurring for that state</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>STATEV_VALUE_IS_ADDE</name>
+                           <description>STATEV value is added into STATE (the carry-out is ignored)</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>STATEV_VALUE_IS_LOAD</name>
+                           <description>STATEV value is loaded into STATE</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>STATEV</name>
+                     <description>This value is loaded into or added to the state selected by  HEVENT, depending on STATELD, when this event is the  highest-numbered event occurring for that state. If STATELD and  STATEV are both zero, there is no change to the STATE value</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>MATCHMEM</name>
+                     <description>If this bit is one and the COMBMODE field specifies a match  component to the triggering of this event, then a match is considered to be active whenever the counter value is  GREATER THAN OR EQUAL TO the value specified in the  match register when counting up, LESS THEN OR EQUAL TO  the match value when counting down. If this bit is zero, a match is only be active during the cycle  when the counter is equal to the match value</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DIRECTION</name>
+                     <description>Direction qualifier for event generation. This field only applies when the counters are operating in BIDIR  mode. If BIDIR = 0, the SCT ignores this field. Value 0x3 is reserved</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DIRECTION_INDEPENDEN</name>
+                           <description>Direction independent. This event is triggered regardless of the count direction</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>COUNTING_UP</name>
+                           <description>Counting up. This event is triggered only during up-counting when BIDIR = 1</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>COUNTING_DOWN</name>
+                           <description>Counting down. This event is triggered only during down-counting when BIDIR = 1</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EV3_STATE</name>
+               <description>SCT event state register 0</description>
+               <addressOffset>0x318</addressOffset>
+               <fields>
+                  <field>
+                     <name>STATEMSKn</name>
+                     <description>If bit m is one, event n (n= 0 to 7) happens in state m of the counter selected by the HEVENT bit (m = state number; state 0 = bit 0, state 1= bit 1,..., state 7 = bit 7)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EV3_CTRL</name>
+               <description>SCT event control register 0</description>
+               <addressOffset>0x31C</addressOffset>
+               <fields>
+                  <field>
+                     <name>MATCHSEL</name>
+                     <description>Selects the Match register associated with this event (if any). A  match can occur only when the counter selected by the HEVENT  bit is running</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>HEVENT</name>
+                     <description>Select L/H counter. Do not set this bit if UNIFY = 1</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>SELECTS_THE_L_STATE</name>
+                           <description>Selects the L state and the L match register selected by MATCHSEL</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SELECTS_THE_H_STATE</name>
+                           <description>Selects the H state and the H match register selected by MATCHSEL</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>OUTSEL</name>
+                     <description>Input/output select</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>SELECTS_THE_INPUTS_E</name>
+                           <description>Selects the inputs elected by IOSEL</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SELECTS_THE_OUTPUTS</name>
+                           <description>Selects the outputs selected by IOSEL</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>IOSEL</name>
+                     <description>Selects the input or output signal number (0 to 3 for inputs or 0 to 5 for outputs) associated with this event (if  any). Do not select an input in this register, if CKMODE is 1x. In this case the clock input is an implicit ingredient of  every event</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>IOCOND</name>
+                     <description>Selects the I/O condition for event n. (The detection of edges on outputs lag the conditions that switch the outputs by one SCT clock). In order to guarantee proper edge/state detection, an input must have a minimum pulse width of at least one SCT  clock period</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>LOW</name>
+                           <description>LOW</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>RISE</name>
+                           <description>Rise</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>FALL</name>
+                           <description>Fall</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>HIGH</name>
+                           <description>HIGH</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>COMBMODE</name>
+                     <description>Selects how the specified match and I/O condition are used and combined</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>OR</name>
+                           <description>OR. The event occurs when either the specified match or I/O condition occurs</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>MATCH</name>
+                           <description>MATCH. Uses the specified match only</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>IO</name>
+                           <description>IO. Uses the specified I/O condition only</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>AND</name>
+                           <description>AND. The event occurs when the specified match and I/O condition occur simultaneously</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>STATELD</name>
+                     <description>This bit controls how the STATEV value modifies the state  selected by HEVENT when this event is the highest-numbered  event occurring for that state</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>STATEV_VALUE_IS_ADDE</name>
+                           <description>STATEV value is added into STATE (the carry-out is ignored)</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>STATEV_VALUE_IS_LOAD</name>
+                           <description>STATEV value is loaded into STATE</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>STATEV</name>
+                     <description>This value is loaded into or added to the state selected by  HEVENT, depending on STATELD, when this event is the  highest-numbered event occurring for that state. If STATELD and  STATEV are both zero, there is no change to the STATE value</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>MATCHMEM</name>
+                     <description>If this bit is one and the COMBMODE field specifies a match  component to the triggering of this event, then a match is considered to be active whenever the counter value is  GREATER THAN OR EQUAL TO the value specified in the  match register when counting up, LESS THEN OR EQUAL TO  the match value when counting down. If this bit is zero, a match is only be active during the cycle  when the counter is equal to the match value</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DIRECTION</name>
+                     <description>Direction qualifier for event generation. This field only applies when the counters are operating in BIDIR  mode. If BIDIR = 0, the SCT ignores this field. Value 0x3 is reserved</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DIRECTION_INDEPENDEN</name>
+                           <description>Direction independent. This event is triggered regardless of the count direction</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>COUNTING_UP</name>
+                           <description>Counting up. This event is triggered only during up-counting when BIDIR = 1</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>COUNTING_DOWN</name>
+                           <description>Counting down. This event is triggered only during down-counting when BIDIR = 1</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EV4_STATE</name>
+               <description>SCT event state register 0</description>
+               <addressOffset>0x320</addressOffset>
+               <fields>
+                  <field>
+                     <name>STATEMSKn</name>
+                     <description>If bit m is one, event n (n= 0 to 7) happens in state m of the counter selected by the HEVENT bit (m = state number; state 0 = bit 0, state 1= bit 1,..., state 7 = bit 7)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EV4_CTRL</name>
+               <description>SCT event control register 0</description>
+               <addressOffset>0x324</addressOffset>
+               <fields>
+                  <field>
+                     <name>MATCHSEL</name>
+                     <description>Selects the Match register associated with this event (if any). A  match can occur only when the counter selected by the HEVENT  bit is running</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>HEVENT</name>
+                     <description>Select L/H counter. Do not set this bit if UNIFY = 1</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>SELECTS_THE_L_STATE</name>
+                           <description>Selects the L state and the L match register selected by MATCHSEL</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SELECTS_THE_H_STATE</name>
+                           <description>Selects the H state and the H match register selected by MATCHSEL</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>OUTSEL</name>
+                     <description>Input/output select</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>SELECTS_THE_INPUTS_E</name>
+                           <description>Selects the inputs elected by IOSEL</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SELECTS_THE_OUTPUTS</name>
+                           <description>Selects the outputs selected by IOSEL</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>IOSEL</name>
+                     <description>Selects the input or output signal number (0 to 3 for inputs or 0 to 5 for outputs) associated with this event (if  any). Do not select an input in this register, if CKMODE is 1x. In this case the clock input is an implicit ingredient of  every event</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>IOCOND</name>
+                     <description>Selects the I/O condition for event n. (The detection of edges on outputs lag the conditions that switch the outputs by one SCT clock). In order to guarantee proper edge/state detection, an input must have a minimum pulse width of at least one SCT  clock period</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>LOW</name>
+                           <description>LOW</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>RISE</name>
+                           <description>Rise</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>FALL</name>
+                           <description>Fall</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>HIGH</name>
+                           <description>HIGH</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>COMBMODE</name>
+                     <description>Selects how the specified match and I/O condition are used and combined</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>OR</name>
+                           <description>OR. The event occurs when either the specified match or I/O condition occurs</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>MATCH</name>
+                           <description>MATCH. Uses the specified match only</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>IO</name>
+                           <description>IO. Uses the specified I/O condition only</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>AND</name>
+                           <description>AND. The event occurs when the specified match and I/O condition occur simultaneously</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>STATELD</name>
+                     <description>This bit controls how the STATEV value modifies the state  selected by HEVENT when this event is the highest-numbered  event occurring for that state</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>STATEV_VALUE_IS_ADDE</name>
+                           <description>STATEV value is added into STATE (the carry-out is ignored)</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>STATEV_VALUE_IS_LOAD</name>
+                           <description>STATEV value is loaded into STATE</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>STATEV</name>
+                     <description>This value is loaded into or added to the state selected by  HEVENT, depending on STATELD, when this event is the  highest-numbered event occurring for that state. If STATELD and  STATEV are both zero, there is no change to the STATE value</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>MATCHMEM</name>
+                     <description>If this bit is one and the COMBMODE field specifies a match  component to the triggering of this event, then a match is considered to be active whenever the counter value is  GREATER THAN OR EQUAL TO the value specified in the  match register when counting up, LESS THEN OR EQUAL TO  the match value when counting down. If this bit is zero, a match is only be active during the cycle  when the counter is equal to the match value</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DIRECTION</name>
+                     <description>Direction qualifier for event generation. This field only applies when the counters are operating in BIDIR  mode. If BIDIR = 0, the SCT ignores this field. Value 0x3 is reserved</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DIRECTION_INDEPENDEN</name>
+                           <description>Direction independent. This event is triggered regardless of the count direction</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>COUNTING_UP</name>
+                           <description>Counting up. This event is triggered only during up-counting when BIDIR = 1</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>COUNTING_DOWN</name>
+                           <description>Counting down. This event is triggered only during down-counting when BIDIR = 1</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EV5_STATE</name>
+               <description>SCT event state register 0</description>
+               <addressOffset>0x328</addressOffset>
+               <fields>
+                  <field>
+                     <name>STATEMSKn</name>
+                     <description>If bit m is one, event n (n= 0 to 7) happens in state m of the counter selected by the HEVENT bit (m = state number; state 0 = bit 0, state 1= bit 1,..., state 7 = bit 7)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EV5_CTRL</name>
+               <description>SCT event control register 0</description>
+               <addressOffset>0x32C</addressOffset>
+               <fields>
+                  <field>
+                     <name>MATCHSEL</name>
+                     <description>Selects the Match register associated with this event (if any). A  match can occur only when the counter selected by the HEVENT  bit is running</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>HEVENT</name>
+                     <description>Select L/H counter. Do not set this bit if UNIFY = 1</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>SELECTS_THE_L_STATE</name>
+                           <description>Selects the L state and the L match register selected by MATCHSEL</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SELECTS_THE_H_STATE</name>
+                           <description>Selects the H state and the H match register selected by MATCHSEL</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>OUTSEL</name>
+                     <description>Input/output select</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>SELECTS_THE_INPUTS_E</name>
+                           <description>Selects the inputs elected by IOSEL</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SELECTS_THE_OUTPUTS</name>
+                           <description>Selects the outputs selected by IOSEL</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>IOSEL</name>
+                     <description>Selects the input or output signal number (0 to 3 for inputs or 0 to 5 for outputs) associated with this event (if  any). Do not select an input in this register, if CKMODE is 1x. In this case the clock input is an implicit ingredient of  every event</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>IOCOND</name>
+                     <description>Selects the I/O condition for event n. (The detection of edges on outputs lag the conditions that switch the outputs by one SCT clock). In order to guarantee proper edge/state detection, an input must have a minimum pulse width of at least one SCT  clock period</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>LOW</name>
+                           <description>LOW</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>RISE</name>
+                           <description>Rise</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>FALL</name>
+                           <description>Fall</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>HIGH</name>
+                           <description>HIGH</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>COMBMODE</name>
+                     <description>Selects how the specified match and I/O condition are used and combined</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>OR</name>
+                           <description>OR. The event occurs when either the specified match or I/O condition occurs</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>MATCH</name>
+                           <description>MATCH. Uses the specified match only</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>IO</name>
+                           <description>IO. Uses the specified I/O condition only</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>AND</name>
+                           <description>AND. The event occurs when the specified match and I/O condition occur simultaneously</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>STATELD</name>
+                     <description>This bit controls how the STATEV value modifies the state  selected by HEVENT when this event is the highest-numbered  event occurring for that state</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>STATEV_VALUE_IS_ADDE</name>
+                           <description>STATEV value is added into STATE (the carry-out is ignored)</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>STATEV_VALUE_IS_LOAD</name>
+                           <description>STATEV value is loaded into STATE</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>STATEV</name>
+                     <description>This value is loaded into or added to the state selected by  HEVENT, depending on STATELD, when this event is the  highest-numbered event occurring for that state. If STATELD and  STATEV are both zero, there is no change to the STATE value</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>MATCHMEM</name>
+                     <description>If this bit is one and the COMBMODE field specifies a match  component to the triggering of this event, then a match is considered to be active whenever the counter value is  GREATER THAN OR EQUAL TO the value specified in the  match register when counting up, LESS THEN OR EQUAL TO  the match value when counting down. If this bit is zero, a match is only be active during the cycle  when the counter is equal to the match value</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DIRECTION</name>
+                     <description>Direction qualifier for event generation. This field only applies when the counters are operating in BIDIR  mode. If BIDIR = 0, the SCT ignores this field. Value 0x3 is reserved</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DIRECTION_INDEPENDEN</name>
+                           <description>Direction independent. This event is triggered regardless of the count direction</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>COUNTING_UP</name>
+                           <description>Counting up. This event is triggered only during up-counting when BIDIR = 1</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>COUNTING_DOWN</name>
+                           <description>Counting down. This event is triggered only during down-counting when BIDIR = 1</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EV6_STATE</name>
+               <description>SCT event state register 0</description>
+               <addressOffset>0x330</addressOffset>
+               <fields>
+                  <field>
+                     <name>STATEMSKn</name>
+                     <description>If bit m is one, event n (n= 0 to 7) happens in state m of the counter selected by the HEVENT bit (m = state number; state 0 = bit 0, state 1= bit 1,..., state 7 = bit 7)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EV6_CTRL</name>
+               <description>SCT event control register 0</description>
+               <addressOffset>0x334</addressOffset>
+               <fields>
+                  <field>
+                     <name>MATCHSEL</name>
+                     <description>Selects the Match register associated with this event (if any). A  match can occur only when the counter selected by the HEVENT  bit is running</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>HEVENT</name>
+                     <description>Select L/H counter. Do not set this bit if UNIFY = 1</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>SELECTS_THE_L_STATE</name>
+                           <description>Selects the L state and the L match register selected by MATCHSEL</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SELECTS_THE_H_STATE</name>
+                           <description>Selects the H state and the H match register selected by MATCHSEL</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>OUTSEL</name>
+                     <description>Input/output select</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>SELECTS_THE_INPUTS_E</name>
+                           <description>Selects the inputs elected by IOSEL</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SELECTS_THE_OUTPUTS</name>
+                           <description>Selects the outputs selected by IOSEL</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>IOSEL</name>
+                     <description>Selects the input or output signal number (0 to 3 for inputs or 0 to 5 for outputs) associated with this event (if  any). Do not select an input in this register, if CKMODE is 1x. In this case the clock input is an implicit ingredient of  every event</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>IOCOND</name>
+                     <description>Selects the I/O condition for event n. (The detection of edges on outputs lag the conditions that switch the outputs by one SCT clock). In order to guarantee proper edge/state detection, an input must have a minimum pulse width of at least one SCT  clock period</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>LOW</name>
+                           <description>LOW</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>RISE</name>
+                           <description>Rise</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>FALL</name>
+                           <description>Fall</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>HIGH</name>
+                           <description>HIGH</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>COMBMODE</name>
+                     <description>Selects how the specified match and I/O condition are used and combined</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>OR</name>
+                           <description>OR. The event occurs when either the specified match or I/O condition occurs</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>MATCH</name>
+                           <description>MATCH. Uses the specified match only</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>IO</name>
+                           <description>IO. Uses the specified I/O condition only</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>AND</name>
+                           <description>AND. The event occurs when the specified match and I/O condition occur simultaneously</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>STATELD</name>
+                     <description>This bit controls how the STATEV value modifies the state  selected by HEVENT when this event is the highest-numbered  event occurring for that state</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>STATEV_VALUE_IS_ADDE</name>
+                           <description>STATEV value is added into STATE (the carry-out is ignored)</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>STATEV_VALUE_IS_LOAD</name>
+                           <description>STATEV value is loaded into STATE</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>STATEV</name>
+                     <description>This value is loaded into or added to the state selected by  HEVENT, depending on STATELD, when this event is the  highest-numbered event occurring for that state. If STATELD and  STATEV are both zero, there is no change to the STATE value</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>MATCHMEM</name>
+                     <description>If this bit is one and the COMBMODE field specifies a match  component to the triggering of this event, then a match is considered to be active whenever the counter value is  GREATER THAN OR EQUAL TO the value specified in the  match register when counting up, LESS THEN OR EQUAL TO  the match value when counting down. If this bit is zero, a match is only be active during the cycle  when the counter is equal to the match value</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DIRECTION</name>
+                     <description>Direction qualifier for event generation. This field only applies when the counters are operating in BIDIR  mode. If BIDIR = 0, the SCT ignores this field. Value 0x3 is reserved</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DIRECTION_INDEPENDEN</name>
+                           <description>Direction independent. This event is triggered regardless of the count direction</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>COUNTING_UP</name>
+                           <description>Counting up. This event is triggered only during up-counting when BIDIR = 1</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>COUNTING_DOWN</name>
+                           <description>Counting down. This event is triggered only during down-counting when BIDIR = 1</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EV7_STATE</name>
+               <description>SCT event state register 0</description>
+               <addressOffset>0x338</addressOffset>
+               <fields>
+                  <field>
+                     <name>STATEMSKn</name>
+                     <description>If bit m is one, event n (n= 0 to 7) happens in state m of the counter selected by the HEVENT bit (m = state number; state 0 = bit 0, state 1= bit 1,..., state 7 = bit 7)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EV7_CTRL</name>
+               <description>SCT event control register 0</description>
+               <addressOffset>0x33C</addressOffset>
+               <fields>
+                  <field>
+                     <name>MATCHSEL</name>
+                     <description>Selects the Match register associated with this event (if any). A  match can occur only when the counter selected by the HEVENT  bit is running</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>HEVENT</name>
+                     <description>Select L/H counter. Do not set this bit if UNIFY = 1</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>SELECTS_THE_L_STATE</name>
+                           <description>Selects the L state and the L match register selected by MATCHSEL</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SELECTS_THE_H_STATE</name>
+                           <description>Selects the H state and the H match register selected by MATCHSEL</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>OUTSEL</name>
+                     <description>Input/output select</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>SELECTS_THE_INPUTS_E</name>
+                           <description>Selects the inputs elected by IOSEL</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SELECTS_THE_OUTPUTS</name>
+                           <description>Selects the outputs selected by IOSEL</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>IOSEL</name>
+                     <description>Selects the input or output signal number (0 to 3 for inputs or 0 to 5 for outputs) associated with this event (if  any). Do not select an input in this register, if CKMODE is 1x. In this case the clock input is an implicit ingredient of  every event</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>IOCOND</name>
+                     <description>Selects the I/O condition for event n. (The detection of edges on outputs lag the conditions that switch the outputs by one SCT clock). In order to guarantee proper edge/state detection, an input must have a minimum pulse width of at least one SCT  clock period</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>LOW</name>
+                           <description>LOW</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>RISE</name>
+                           <description>Rise</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>FALL</name>
+                           <description>Fall</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>HIGH</name>
+                           <description>HIGH</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>COMBMODE</name>
+                     <description>Selects how the specified match and I/O condition are used and combined</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>OR</name>
+                           <description>OR. The event occurs when either the specified match or I/O condition occurs</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>MATCH</name>
+                           <description>MATCH. Uses the specified match only</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>IO</name>
+                           <description>IO. Uses the specified I/O condition only</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>AND</name>
+                           <description>AND. The event occurs when the specified match and I/O condition occur simultaneously</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>STATELD</name>
+                     <description>This bit controls how the STATEV value modifies the state  selected by HEVENT when this event is the highest-numbered  event occurring for that state</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>STATEV_VALUE_IS_ADDE</name>
+                           <description>STATEV value is added into STATE (the carry-out is ignored)</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>STATEV_VALUE_IS_LOAD</name>
+                           <description>STATEV value is loaded into STATE</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>STATEV</name>
+                     <description>This value is loaded into or added to the state selected by  HEVENT, depending on STATELD, when this event is the  highest-numbered event occurring for that state. If STATELD and  STATEV are both zero, there is no change to the STATE value</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>MATCHMEM</name>
+                     <description>If this bit is one and the COMBMODE field specifies a match  component to the triggering of this event, then a match is considered to be active whenever the counter value is  GREATER THAN OR EQUAL TO the value specified in the  match register when counting up, LESS THEN OR EQUAL TO  the match value when counting down. If this bit is zero, a match is only be active during the cycle  when the counter is equal to the match value</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DIRECTION</name>
+                     <description>Direction qualifier for event generation. This field only applies when the counters are operating in BIDIR  mode. If BIDIR = 0, the SCT ignores this field. Value 0x3 is reserved</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DIRECTION_INDEPENDEN</name>
+                           <description>Direction independent. This event is triggered regardless of the count direction</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>COUNTING_UP</name>
+                           <description>Counting up. This event is triggered only during up-counting when BIDIR = 1</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>COUNTING_DOWN</name>
+                           <description>Counting down. This event is triggered only during down-counting when BIDIR = 1</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>OUT0_SET</name>
+               <description>SCT output 0 set register</description>
+               <addressOffset>0x500</addressOffset>
+               <fields>
+                  <field>
+                     <name>SET</name>
+                     <description>A 1 in bit m selects event m to set output n (or clear it if SETCLRn = 0x1 or 0x2) event 0 = bit 0, event 1 = bit 1,..., event 7 = bit 7</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>OUT0_CLR</name>
+               <description>SCT output 0 clear register</description>
+               <addressOffset>0x504</addressOffset>
+               <fields>
+                  <field>
+                     <name>CLR</name>
+                     <description>A 1 in bit m selects event m to clear output n (or set it if SETCLRn = 0x1 or 0x2) event 0 = bit 0, event 1 = bit 1,..., event 7 = bit 7</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>OUT1_SET</name>
+               <description>SCT output 0 set register</description>
+               <addressOffset>0x508</addressOffset>
+               <fields>
+                  <field>
+                     <name>SET</name>
+                     <description>A 1 in bit m selects event m to set output n (or clear it if SETCLRn = 0x1 or 0x2) event 0 = bit 0, event 1 = bit 1,..., event 7 = bit 7</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>OUT1_CLR</name>
+               <description>SCT output 0 clear register</description>
+               <addressOffset>0x50C</addressOffset>
+               <fields>
+                  <field>
+                     <name>CLR</name>
+                     <description>A 1 in bit m selects event m to clear output n (or set it if SETCLRn = 0x1 or 0x2) event 0 = bit 0, event 1 = bit 1,..., event 7 = bit 7</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>OUT2_SET</name>
+               <description>SCT output 0 set register</description>
+               <addressOffset>0x510</addressOffset>
+               <fields>
+                  <field>
+                     <name>SET</name>
+                     <description>A 1 in bit m selects event m to set output n (or clear it if SETCLRn = 0x1 or 0x2) event 0 = bit 0, event 1 = bit 1,..., event 7 = bit 7</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>OUT2_CLR</name>
+               <description>SCT output 0 clear register</description>
+               <addressOffset>0x514</addressOffset>
+               <fields>
+                  <field>
+                     <name>CLR</name>
+                     <description>A 1 in bit m selects event m to clear output n (or set it if SETCLRn = 0x1 or 0x2) event 0 = bit 0, event 1 = bit 1,..., event 7 = bit 7</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>OUT3_SET</name>
+               <description>SCT output 0 set register</description>
+               <addressOffset>0x518</addressOffset>
+               <fields>
+                  <field>
+                     <name>SET</name>
+                     <description>A 1 in bit m selects event m to set output n (or clear it if SETCLRn = 0x1 or 0x2) event 0 = bit 0, event 1 = bit 1,..., event 7 = bit 7</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>OUT3_CLR</name>
+               <description>SCT output 0 clear register</description>
+               <addressOffset>0x51C</addressOffset>
+               <fields>
+                  <field>
+                     <name>CLR</name>
+                     <description>A 1 in bit m selects event m to clear output n (or set it if SETCLRn = 0x1 or 0x2) event 0 = bit 0, event 1 = bit 1,..., event 7 = bit 7</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>OUT4_SET</name>
+               <description>SCT output 0 set register</description>
+               <addressOffset>0x520</addressOffset>
+               <fields>
+                  <field>
+                     <name>SET</name>
+                     <description>A 1 in bit m selects event m to set output n (or clear it if SETCLRn = 0x1 or 0x2) event 0 = bit 0, event 1 = bit 1,..., event 7 = bit 7</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>OUT4_CLR</name>
+               <description>SCT output 0 clear register</description>
+               <addressOffset>0x524</addressOffset>
+               <fields>
+                  <field>
+                     <name>CLR</name>
+                     <description>A 1 in bit m selects event m to clear output n (or set it if SETCLRn = 0x1 or 0x2) event 0 = bit 0, event 1 = bit 1,..., event 7 = bit 7</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>OUT5_SET</name>
+               <description>SCT output 0 set register</description>
+               <addressOffset>0x528</addressOffset>
+               <fields>
+                  <field>
+                     <name>SET</name>
+                     <description>A 1 in bit m selects event m to set output n (or clear it if SETCLRn = 0x1 or 0x2) event 0 = bit 0, event 1 = bit 1,..., event 7 = bit 7</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>OUT5_CLR</name>
+               <description>SCT output 0 clear register</description>
+               <addressOffset>0x52C</addressOffset>
+               <fields>
+                  <field>
+                     <name>CLR</name>
+                     <description>A 1 in bit m selects event m to clear output n (or set it if SETCLRn = 0x1 or 0x2) event 0 = bit 0, event 1 = bit 1,..., event 7 = bit 7</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

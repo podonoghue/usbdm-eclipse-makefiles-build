@@ -1,0 +1,102 @@
+<!--
+Devices using this peripheral: 
+      LPC82x
+-->
+      <peripheral>
+         <?sourceFile "WKT_LPC82x" ?>
+         <name>WKT</name>
+         <description>Self wake-up timer</description>
+         <groupName>WKT</groupName>
+         <headerStructName>WKT</headerStructName>
+         <baseAddress>0x40008000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xC</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>CTRL</name>
+               <description>Self wake-up timer control register</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>CLKSEL</name>
+                     <description>Select the self wake-up timer clock source</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DIVIDED_IRC_CLOCK_T</name>
+                           <description>Divided IRC clock. This clock runs at 750 kHz and provides time-out periods of up to approximately 95 minutes in 1.33 us increments. This clock is not available in most low-power modes and must not be selected if the timer is to be used to wake up from one of these modes</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>LOW_POWER_CLOCK_THI</name>
+                           <description>Low power clock. This is the (nominally) 10 kHz clock and provides time-out periods of up to approximately 119 hours in 100 CTS can be from the input pin, or fs increments. The accuracy of this clock is limited to +/- 45 % over temperature and processing. This clock is available in all power modes. Prior to use, the low-power oscillator must be enabled. The oscillator must also be set to remain active in Deep power-down if needed</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ALARMFLAG</name>
+                     <description>Wake-up or alarm timer flag</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_TIME_OUT_THE_SEL</name>
+                           <description>No time-out. The self wake-up timer has not timed out. Writing a 0 to has no effect</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TIME_OUT_THE_SELF_W</name>
+                           <description>Time-out. The self wake-up timer has timed out. This flag generates an interrupt request which can wake up the part from any low power mode not deep power-down. Writing a 1 clears this status bit and the interrupt too?</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CLEARCTR</name>
+                     <description>Clears the self wake-up timer</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_EFFECT_READING_T</name>
+                           <description>No effect. Reading this bit always returns 0</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>CLEAR_THE_COUNTER_C</name>
+                           <description>Clear the counter. Counting is halted until a new count value is loaded</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>COUNT</name>
+               <description>Counter register</description>
+               <addressOffset>0xC</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>VALUE</name>
+                     <description>A write to this register pre-loads start count value into the timer and starts the count-down sequence. A read reflects the current value of the timer</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

@@ -1,0 +1,208 @@
+<!--
+Devices using this peripheral: 
+      LPC82x
+-->
+      <peripheral>
+         <?sourceFile "CMP_LPC82x" ?>
+         <name>CMP</name>
+         <description>Analog comparator</description>
+         <groupName>CMP</groupName>
+         <headerStructName>CMP</headerStructName>
+         <baseAddress>0x40024000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>CTRL</name>
+               <description>Comparator control register</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>EDGESEL</name>
+                     <description>This field controls which edges on the comparator output set the COMPEDGE bit (bit 23 below):</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>FALLING_EDGES</name>
+                           <description>Falling edges</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>RISING_EDGES</name>
+                           <description>Rising edges</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>BOTH_EDGES</name>
+                           <description>Both edges</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>BOTH_EDGES</name>
+                           <description>Both edges</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>COMPSA</name>
+                     <description>Comparator output control</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>COMPARATOR_OUTPUT_IS</name>
+                           <description>Comparator output is used directly</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>COMPARATOR_OUTPUT_IS</name>
+                           <description>Comparator output is synchronized to the bus clock for output to other modules</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>COMP_VP_SEL</name>
+                     <description>Selects positive voltage input</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>VOLTAGE_LADDER_OUTPU</name>
+                           <description>Voltage ladder output</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ACMP_I1</name>
+                           <description>ACMP_I1</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ACMP_I2</name>
+                           <description>ACMP_I2</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ACMP_I3</name>
+                           <description>ACMP_I3</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ACMP_I4</name>
+                           <description>ACMP_I4</description>
+                           <value>0x4</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>BAND_GAP</name>
+                           <description>Band gap. Internal reference voltage</description>
+                           <value>0x5</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ADC_0</name>
+                           <description>ADC_0. ADC channel 0 input</description>
+                           <value>0x6</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>RESERVED</name>
+                           <description>Reserved</description>
+                           <value>0x7</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="COMP_VP_SEL" > <name>COMP_VM_SEL</name> <description>Selects negative voltage input</description> <bitOffset>11</bitOffset> </field>
+                  <field>
+                     <name>EDGECLR</name>
+                     <description>Interrupt clear bit. To clear the COMPEDGE bit and thus negate the interrupt request, toggle the EDGECLR bit by first writing a 1 and then a 0</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>COMPSTAT</name>
+                     <description>Comparator status. This bit reflects the state of the comparator output</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>COMPEDGE</name>
+                     <description>Comparator edge-detect status</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>HYS</name>
+                     <description>Controls the hysteresis of the comparator. When the comparator is outputting a certain state, this is the difference between the selected signals, in the opposite direction from the state being output, that will switch the output</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NONE_THE_OUTPUT_WIL</name>
+                           <description>None (the output will switch as the voltages cross)</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>5_MV</name>
+                           <description>5 mV</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10_MV</name>
+                           <description>10 mV</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>20_MV</name>
+                           <description>20  mV</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LAD</name>
+               <description>Voltage ladder register</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>LADEN</name>
+                     <description>Voltage ladder enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>LADSEL</name>
+                     <description>Voltage ladder value. The reference voltage Vref depends on the LADREF bit below. 00000 = VSS 00001 = 1 x Vref/31 00010 = 2 x Vref/31 ... 11111 = Vref</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>LADREF</name>
+                     <description>Selects the reference voltage Vref for the voltage ladder:</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>SUPPLY_PIN_VDD</name>
+                           <description>Supply pin VDD</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>VDDCMP_PIN</name>
+                           <description>VDDCMP pin</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

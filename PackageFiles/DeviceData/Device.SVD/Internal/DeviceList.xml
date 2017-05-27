@@ -4,85 +4,32 @@
 <root version="4.12.1.80" >
    <description>Lookup table for mapping complete device name to the SVD file that describes the device</description>
    <deviceList>
+      <device name="LPC11xx"          svdFileName="LPC11xx"    pattern="LPC11[^C].*" />
+      <device name="LPC11Cxx"         svdFileName="LPC11Cxx"   pattern="LPC11C.*" />
       <device name="LPC11Uxx"         svdFileName="LPC11Uxx"   pattern="LPC11U.*" />
       <device name="LPC13Uxx"         svdFileName="LPC13Uxx"   pattern="LPC13U.*" />
-      <device name="LPC13xx"          svdFileName="LPC13xx"    pattern="LPC13.*" />
-   
+      <device name="LPC13xx"          svdFileName="LPC13xx"    pattern="LPC(11|13|42|43).*" />
+      <device name="LPC82x"           svdFileName="LPC82x"     pattern="LPC82.*" />
+      
       <device name="MK10DxxxM5"       svdFileName="MK10D5"     pattern="MK10D.*M5" />
       <device name="MK10DxxxM7"       svdFileName="MK10D7"     pattern="MK10D.*M7" />
       <device name="MK10DxxxZM10"     svdFileName="MK10DZ10"   pattern="MK10D.*ZM10" />
       <device name="MK10DxxxM10"      svdFileName="MK10D10"    pattern="MK10D.*M10" />
       <device name="MK10FxxxM12"      svdFileName="MK10F12"    pattern="MK10F.*M12" />
-
-<!--
-      <device name="MK10DN32M5"       svdFileName="MK10D5"     />
-      <device name="MK10DN64M5"       svdFileName="MK10D5"     />
-      <device name="MK10DN128M5"      svdFileName="MK10D5"     />
-      <device name="MK10DX32M5"       svdFileName="MK10D5"     />
-      <device name="MK10DX64M5"       svdFileName="MK10D5"     />
-      <device name="MK10DX128M5"      svdFileName="MK10D5"     />
-      <device name="MK10DX64M7"       svdFileName="MK10D7"     />
-      <device name="MK10DX128M7"      svdFileName="MK10D7"     />
-      <device name="MK10DX256M7"      svdFileName="MK10D7"     />
-
-      <device name="MK10DN512M10"     svdFileName="MK10D10"    />
-      <device name="MK10DX128M10"     svdFileName="MK10D10"    />
-      <device name="MK10DX256M10"     svdFileName="MK10D10"    />
-      <device name="MK10DN512ZM10"    svdFileName="MK10DZ10"   />
-      <device name="MK10DX128ZM10"    svdFileName="MK10DZ10"   />
-      <device name="MK10DX256ZM10"    svdFileName="MK10DZ10"   />
-
-      <device name="MK10FN1M0M12"     svdFileName="MK10F12"    />
-      <device name="MK10FX512M12"     svdFileName="MK10F12"    />
--->
-
-      <device name="MK11DN512M5"      svdFileName="MK11D5"     />
-      <device name="MK11DX128M5"      svdFileName="MK11D5"     />
-      <device name="MK11DX256M5"      svdFileName="MK11D5"     />
-
-      <device name="MK12DN512M5"      svdFileName="MK12D5"     />
-      <device name="MK12DX128M5"      svdFileName="MK12D5"     />
-      <device name="MK12DX256M5"      svdFileName="MK12D5"     />
-
-      <device name="MK20DN32M5"       svdFileName="MK20D5"     />
-      <device name="MK20DN64M5"       svdFileName="MK20D5"     />
-      <device name="MK20DN128M5"      svdFileName="MK20D5"     />
-      <device name="MK20DX32M5"       svdFileName="MK20D5"     />
-      <device name="MK20DX64M5"       svdFileName="MK20D5"     />
-      <device name="MK20DX128M5"      svdFileName="MK20D5"     />
-
-      <device name="MK20DX64M7"       svdFileName="MK20D7"     />
-      <device name="MK20DX128M7"      svdFileName="MK20D7"     />
-      <device name="MK20DX256M7"      svdFileName="MK20D7"     />
-
-      <device name="MK20DN512M10"     svdFileName="MK20D10"    />
-      <device name="MK20DX128M10"     svdFileName="MK20D10"    />
-      <device name="MK20DX256M10"     svdFileName="MK20D10"    />
-      <device name="MK20DN512ZM10"    svdFileName="MK20DZ10"   />
-      <device name="MK20DX128ZM10"    svdFileName="MK20DZ10"   />
-      <device name="MK20DX256ZM10"    svdFileName="MK20DZ10"   />
-
-      <device name="MK20FN1M0M12"     svdFileName="MK20F12"    />
-      <device name="MK20FX512M12"     svdFileName="MK20F12"    />
-
-      <device name="MK21DN512M5"      svdFileName="MK21D5"     />
-      <device name="MK21DX128M5"      svdFileName="MK21D5"     />
-      <device name="MK21DX256M5"      svdFileName="MK21D5"     />
-
-      <device name="MK21FN1M0M12"     svdFileName="MK21F12"    />
-      <device name="MK21FX512M12"     svdFileName="MK21F12"    />
-
+      <device name="MK11DxxxM5"       svdFileName="MK11D5"     pattern="MK11D.*M5" />
+      <device name="MK12DxxxM5"       svdFileName="MK12D5"     pattern="MK12D.*M5" />
+      <device name="MK20DxxxM5"       svdFileName="MK20D5"     pattern="MK20D.*M5" />
+      <device name="MK20DxxxM7"       svdFileName="MK20D7"     pattern="MK20D.*M7" />
+      <device name="MK20DxxxM10"      svdFileName="MK20D10"    pattern="MK20D.*M10" />
+      <device name="MK20FxxxM12"      svdFileName="MK20F12"    pattern="MK20F.*M12" />
+      <device name="MK21DN512M5"      svdFileName="MK21D5"     pattern="MK21D.*M5" />
+      <device name="MK21FN1M0M12"     svdFileName="MK21F12"    pattern="MK21F.*M12" />
       <device name="MK22DN512M5"      svdFileName="MK22D5"     />
-      <device name="MK22DX128M5"      svdFileName="MK22D5"     />
-      <device name="MK22DX256M5"      svdFileName="MK22D5"     />
-
       <device name="MK22FN128M10"     svdFileName="MK22F12810" />
       <device name="MK22FN256M12"     svdFileName="MK22F25612" />
       <device name="MK22FN512M12"     svdFileName="MK22F51212" />
-      <device name="MK22FX512M12"     svdFileName="MK22F12"    />
-      <device name="MK22FN1M0M12"     svdFileName="MK22F12"    />
-      <device name="MK22FN1M0AM12"    svdFileName="MK22FA12"    />
-      <device name="MK22FX512AM12"    svdFileName="MK22FA12"    />
+      <device name="MK22FxxxAM12"     svdFileName="MK22FA12"   pattern="MK22F.*AM12" />
+      <device name="MK22FxxxM12 "     svdFileName="MK22F12"    pattern="MK22F.*M12" />
 
       <device name="MK24FN256M12"     svdFileName="MK24F25612" />
       <device name="MK24FN1M0M12"     svdFileName="MK24F12"    />

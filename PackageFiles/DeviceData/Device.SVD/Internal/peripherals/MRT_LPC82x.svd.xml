@@ -1,0 +1,689 @@
+<!--
+Devices using this peripheral: 
+      LPC82x
+-->
+      <peripheral>
+         <?sourceFile "MRT_LPC82x" ?>
+         <name>MRT</name>
+         <description>Multi-Rate Timer</description>
+         <groupName>MRT</groupName>
+         <headerStructName>MRT</headerStructName>
+         <baseAddress>0x40004000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x40</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xF4</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>INTVAL0</name>
+               <description>MRT0 Time interval value register. This value is loaded into the TIMER0 register</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>IVALUE</name>
+                     <description>Time interval load value. This value is loaded into the TIMERn register and the MRTn starts counting down from IVALUE -1. If the timer is idle, writing a non-zero value to this bit field starts the timer immediately.  If the timer is running, writing a zero to this bit field does the following: If LOAD = 1, the timer stops immediately. If LOAD = 0, the timer stops at the end of the time interval</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+                  <field>
+                     <name>LOAD</name>
+                     <description>Determines how the timer interval value IVALUE is loaded into the TIMERn register. This bit is write-only. Reading this bit always returns 0</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_FORCE_LOAD_THE_L</name>
+                           <description>No force load. The load from the INTVALn register to the TIMERn register is processed at the end of the time interval if the repeat mode is selected</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>FORCE_LOAD_THE_INTV</name>
+                           <description>Force load. The INTVALn interval value IVALUE is immediately loaded into the TIMERn register while TIMERn is running</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TIMER0</name>
+               <description>MRT0 Timer register. This register reads the value of the down-counter</description>
+               <addressOffset>0x4</addressOffset>
+               <access>read-only</access>
+               <resetValue>0xFFFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>VALUE</name>
+                     <description>Holds the current timer value of the down-counter. The initial value is loaded as IVALUE - 1 from the TIME_INTVALn register either at the end of the time interval if the LOAD bit in TIME_INTVALn is 0 and the timer is in repeat mode or immediately if LOAD = 1. When the timer is in idle state, reading this bit fields returns -1 (0x7FFF FFFF)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CTRL0</name>
+               <description>MRT0 Control register. This register controls the MRT0 modes</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>INTEN</name>
+                     <description>Enable the TIMERn interrupt</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DISABLE_</name>
+                           <description>Disable</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ENABLE_</name>
+                           <description>Enable</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MODE</name>
+                     <description>Selects timer mode</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>REPEAT_INTERRUPT_MOD</name>
+                           <description>Repeat interrupt mode</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ONE_SHOT_INTERRUPT_M</name>
+                           <description>One-shot interrupt mode</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ONE_SHOT_BUS_STALL_M</name>
+                           <description>One-shot bus stall mode</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>RESERVED_</name>
+                           <description>Reserved</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>STAT0</name>
+               <description>MRT0 Status register</description>
+               <addressOffset>0xC</addressOffset>
+               <fields>
+                  <field>
+                     <name>INTFLAG</name>
+                     <description>Monitors the interrupt flag</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_PENDING_INTERRUPT</name>
+                           <description>No pending interrupt. Writing a zero is equivalent to no operation</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>PENDING_INTERRUPT_T</name>
+                           <description>Pending interrupt. The interrupt is pending because TIMERn has reached the end of the time interval. If the INTEN bit in the CONTROLn is also set to 1, the interrupt for timer channel n and the global interrupt are raised.  Writing a 1 to this bit clears the interrupt request</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RUN</name>
+                     <description>Indicates the state of TIMERn. This bit is read-only</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>IDLE_STATE_TIMERN_I</name>
+                           <description>Idle state. TIMERn is stopped</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>RUNNING_TIMERN_IS_R</name>
+                           <description>Running. TIMERn is running</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>INTVAL1</name>
+               <description>MRT0 Time interval value register. This value is loaded into the TIMER0 register</description>
+               <addressOffset>0x10</addressOffset>
+               <fields>
+                  <field>
+                     <name>IVALUE</name>
+                     <description>Time interval load value. This value is loaded into the TIMERn register and the MRTn starts counting down from IVALUE -1. If the timer is idle, writing a non-zero value to this bit field starts the timer immediately.  If the timer is running, writing a zero to this bit field does the following: If LOAD = 1, the timer stops immediately. If LOAD = 0, the timer stops at the end of the time interval</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+                  <field>
+                     <name>LOAD</name>
+                     <description>Determines how the timer interval value IVALUE is loaded into the TIMERn register. This bit is write-only. Reading this bit always returns 0</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_FORCE_LOAD_THE_L</name>
+                           <description>No force load. The load from the INTVALn register to the TIMERn register is processed at the end of the time interval if the repeat mode is selected</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>FORCE_LOAD_THE_INTV</name>
+                           <description>Force load. The INTVALn interval value IVALUE is immediately loaded into the TIMERn register while TIMERn is running</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TIMER1</name>
+               <description>MRT0 Timer register. This register reads the value of the down-counter</description>
+               <addressOffset>0x14</addressOffset>
+               <access>read-only</access>
+               <resetValue>0xFFFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>VALUE</name>
+                     <description>Holds the current timer value of the down-counter. The initial value is loaded as IVALUE - 1 from the TIME_INTVALn register either at the end of the time interval if the LOAD bit in TIME_INTVALn is 0 and the timer is in repeat mode or immediately if LOAD = 1. When the timer is in idle state, reading this bit fields returns -1 (0x7FFF FFFF)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CTRL1</name>
+               <description>MRT0 Control register. This register controls the MRT0 modes</description>
+               <addressOffset>0x18</addressOffset>
+               <fields>
+                  <field>
+                     <name>INTEN</name>
+                     <description>Enable the TIMERn interrupt</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DISABLE_</name>
+                           <description>Disable</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ENABLE_</name>
+                           <description>Enable</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MODE</name>
+                     <description>Selects timer mode</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>REPEAT_INTERRUPT_MOD</name>
+                           <description>Repeat interrupt mode</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ONE_SHOT_INTERRUPT_M</name>
+                           <description>One-shot interrupt mode</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ONE_SHOT_BUS_STALL_M</name>
+                           <description>One-shot bus stall mode</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>RESERVED_</name>
+                           <description>Reserved</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>STAT1</name>
+               <description>MRT0 Status register</description>
+               <addressOffset>0x1C</addressOffset>
+               <fields>
+                  <field>
+                     <name>INTFLAG</name>
+                     <description>Monitors the interrupt flag</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_PENDING_INTERRUPT</name>
+                           <description>No pending interrupt. Writing a zero is equivalent to no operation</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>PENDING_INTERRUPT_T</name>
+                           <description>Pending interrupt. The interrupt is pending because TIMERn has reached the end of the time interval. If the INTEN bit in the CONTROLn is also set to 1, the interrupt for timer channel n and the global interrupt are raised.  Writing a 1 to this bit clears the interrupt request</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RUN</name>
+                     <description>Indicates the state of TIMERn. This bit is read-only</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>IDLE_STATE_TIMERN_I</name>
+                           <description>Idle state. TIMERn is stopped</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>RUNNING_TIMERN_IS_R</name>
+                           <description>Running. TIMERn is running</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>INTVAL2</name>
+               <description>MRT0 Time interval value register. This value is loaded into the TIMER0 register</description>
+               <addressOffset>0x20</addressOffset>
+               <fields>
+                  <field>
+                     <name>IVALUE</name>
+                     <description>Time interval load value. This value is loaded into the TIMERn register and the MRTn starts counting down from IVALUE -1. If the timer is idle, writing a non-zero value to this bit field starts the timer immediately.  If the timer is running, writing a zero to this bit field does the following: If LOAD = 1, the timer stops immediately. If LOAD = 0, the timer stops at the end of the time interval</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+                  <field>
+                     <name>LOAD</name>
+                     <description>Determines how the timer interval value IVALUE is loaded into the TIMERn register. This bit is write-only. Reading this bit always returns 0</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_FORCE_LOAD_THE_L</name>
+                           <description>No force load. The load from the INTVALn register to the TIMERn register is processed at the end of the time interval if the repeat mode is selected</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>FORCE_LOAD_THE_INTV</name>
+                           <description>Force load. The INTVALn interval value IVALUE is immediately loaded into the TIMERn register while TIMERn is running</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TIMER2</name>
+               <description>MRT0 Timer register. This register reads the value of the down-counter</description>
+               <addressOffset>0x24</addressOffset>
+               <access>read-only</access>
+               <resetValue>0xFFFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>VALUE</name>
+                     <description>Holds the current timer value of the down-counter. The initial value is loaded as IVALUE - 1 from the TIME_INTVALn register either at the end of the time interval if the LOAD bit in TIME_INTVALn is 0 and the timer is in repeat mode or immediately if LOAD = 1. When the timer is in idle state, reading this bit fields returns -1 (0x7FFF FFFF)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CTRL2</name>
+               <description>MRT0 Control register. This register controls the MRT0 modes</description>
+               <addressOffset>0x28</addressOffset>
+               <fields>
+                  <field>
+                     <name>INTEN</name>
+                     <description>Enable the TIMERn interrupt</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DISABLE_</name>
+                           <description>Disable</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ENABLE_</name>
+                           <description>Enable</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MODE</name>
+                     <description>Selects timer mode</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>REPEAT_INTERRUPT_MOD</name>
+                           <description>Repeat interrupt mode</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ONE_SHOT_INTERRUPT_M</name>
+                           <description>One-shot interrupt mode</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ONE_SHOT_BUS_STALL_M</name>
+                           <description>One-shot bus stall mode</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>RESERVED_</name>
+                           <description>Reserved</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>STAT2</name>
+               <description>MRT0 Status register</description>
+               <addressOffset>0x2C</addressOffset>
+               <fields>
+                  <field>
+                     <name>INTFLAG</name>
+                     <description>Monitors the interrupt flag</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_PENDING_INTERRUPT</name>
+                           <description>No pending interrupt. Writing a zero is equivalent to no operation</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>PENDING_INTERRUPT_T</name>
+                           <description>Pending interrupt. The interrupt is pending because TIMERn has reached the end of the time interval. If the INTEN bit in the CONTROLn is also set to 1, the interrupt for timer channel n and the global interrupt are raised.  Writing a 1 to this bit clears the interrupt request</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RUN</name>
+                     <description>Indicates the state of TIMERn. This bit is read-only</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>IDLE_STATE_TIMERN_I</name>
+                           <description>Idle state. TIMERn is stopped</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>RUNNING_TIMERN_IS_R</name>
+                           <description>Running. TIMERn is running</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>INTVAL3</name>
+               <description>MRT0 Time interval value register. This value is loaded into the TIMER0 register</description>
+               <addressOffset>0x30</addressOffset>
+               <fields>
+                  <field>
+                     <name>IVALUE</name>
+                     <description>Time interval load value. This value is loaded into the TIMERn register and the MRTn starts counting down from IVALUE -1. If the timer is idle, writing a non-zero value to this bit field starts the timer immediately.  If the timer is running, writing a zero to this bit field does the following: If LOAD = 1, the timer stops immediately. If LOAD = 0, the timer stops at the end of the time interval</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+                  <field>
+                     <name>LOAD</name>
+                     <description>Determines how the timer interval value IVALUE is loaded into the TIMERn register. This bit is write-only. Reading this bit always returns 0</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_FORCE_LOAD_THE_L</name>
+                           <description>No force load. The load from the INTVALn register to the TIMERn register is processed at the end of the time interval if the repeat mode is selected</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>FORCE_LOAD_THE_INTV</name>
+                           <description>Force load. The INTVALn interval value IVALUE is immediately loaded into the TIMERn register while TIMERn is running</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TIMER3</name>
+               <description>MRT0 Timer register. This register reads the value of the down-counter</description>
+               <addressOffset>0x34</addressOffset>
+               <access>read-only</access>
+               <resetValue>0xFFFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>VALUE</name>
+                     <description>Holds the current timer value of the down-counter. The initial value is loaded as IVALUE - 1 from the TIME_INTVALn register either at the end of the time interval if the LOAD bit in TIME_INTVALn is 0 and the timer is in repeat mode or immediately if LOAD = 1. When the timer is in idle state, reading this bit fields returns -1 (0x7FFF FFFF)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CTRL3</name>
+               <description>MRT0 Control register. This register controls the MRT0 modes</description>
+               <addressOffset>0x38</addressOffset>
+               <fields>
+                  <field>
+                     <name>INTEN</name>
+                     <description>Enable the TIMERn interrupt</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DISABLE_</name>
+                           <description>Disable</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ENABLE_</name>
+                           <description>Enable</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MODE</name>
+                     <description>Selects timer mode</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>REPEAT_INTERRUPT_MOD</name>
+                           <description>Repeat interrupt mode</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ONE_SHOT_INTERRUPT_M</name>
+                           <description>One-shot interrupt mode</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ONE_SHOT_BUS_STALL_M</name>
+                           <description>One-shot bus stall mode</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>RESERVED_</name>
+                           <description>Reserved</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>STAT3</name>
+               <description>MRT0 Status register</description>
+               <addressOffset>0x3C</addressOffset>
+               <fields>
+                  <field>
+                     <name>INTFLAG</name>
+                     <description>Monitors the interrupt flag</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_PENDING_INTERRUPT</name>
+                           <description>No pending interrupt. Writing a zero is equivalent to no operation</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>PENDING_INTERRUPT_T</name>
+                           <description>Pending interrupt. The interrupt is pending because TIMERn has reached the end of the time interval. If the INTEN bit in the CONTROLn is also set to 1, the interrupt for timer channel n and the global interrupt are raised.  Writing a 1 to this bit clears the interrupt request</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RUN</name>
+                     <description>Indicates the state of TIMERn. This bit is read-only</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>IDLE_STATE_TIMERN_I</name>
+                           <description>Idle state. TIMERn is stopped</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>RUNNING_TIMERN_IS_R</name>
+                           <description>Running. TIMERn is running</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>IDLE_CH</name>
+               <description>Idle channel register. This register returns the number of the first idle channel</description>
+               <addressOffset>0xF4</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>CHAN</name>
+                     <description>Idle channel. Reading the CHAN bits, returns the lowest idle timer channel. If all timer channels are running, CHAN =</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>IRQ_FLAG</name>
+               <description>Global interrupt flag register</description>
+               <addressOffset>0xF8</addressOffset>
+               <fields>
+                  <field>
+                     <name>GFLAG0</name>
+                     <description>Monitors the interrupt flag of TIMER0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_PENDING_INTERRUPT</name>
+                           <description>No pending interrupt. Writing a zero is equivalent to no operation</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>PENDING_INTERRUPT_T</name>
+                           <description>Pending interrupt. The interrupt is pending because TIMER0 has reached the end of the time interval. If the INTEN bit in the CONTROL0 register is also set to 1, the interrupt for timer channel 0 and the global interrupt are raised.  Writing a 1 to this bit clears the interrupt request</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>GFLAG1</name>
+                     <description>Monitors the interrupt flag of TIMER1</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_PENDING_INTERRUPT</name>
+                           <description>No pending interrupt. Writing a zero is equivalent to no operation</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>PENDING_INTERRUPT_T</name>
+                           <description>Pending interrupt. The interrupt is pending because TIMER1 has reached the end of the time interval. If the INTEN bit in the CONTROL1 register is also set to 1, the interrupt for timer channel 1 and the global interrupt are raised.  Writing a 1 to this bit clears the interrupt request</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>GFLAG2</name>
+                     <description>Monitors the interrupt flag of TIMER2</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_PENDING_INTERRUPT</name>
+                           <description>No pending interrupt. Writing a zero is equivalent to no operation</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>PENDING_INTERRUPT_T</name>
+                           <description>Pending interrupt. The interrupt is pending because TIMER2 has reached the end of the time interval. If the INTEN bit in the CONTROL2 register is also set to 1, the interrupt for timer channel 2 and the global interrupt are raised.  Writing a 1 to this bit clears the interrupt request</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>GFLAG3</name>
+                     <description>Monitors the interrupt flag of TIMER3</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_PENDING_INTERRUPT</name>
+                           <description>No pending interrupt. Writing a zero is equivalent to no operation</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>PENDING_INTERRUPT_T</name>
+                           <description>Pending interrupt. The interrupt is pending because TIMER3 has reached the end of the time interval. If the INTEN bit in the CONTROL3 register is also set to 1, the interrupt for timer channel 3 and the global interrupt are raised.  Writing a 1 to this bit clears the interrupt request</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

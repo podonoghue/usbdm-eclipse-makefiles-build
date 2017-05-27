@@ -1,0 +1,789 @@
+<!--
+Devices using this peripheral: 
+      LPC82x
+-->
+      <peripheral>
+         <?sourceFile "SPI0_LPC82x" ?>
+         <name>SPI0</name>
+         <description>SPI0</description>
+         <groupName>SPI</groupName>
+         <headerStructName>SPI0</headerStructName>
+         <baseAddress>0x40058000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x10</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x14</offset>
+            <size>0x18</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>CFG</name>
+               <description>SPI Configuration register</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>ENABLE</name>
+                     <description>SPI enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DISABLED</name>
+                           <description>Disabled. The SPI is disabled and the internal state machine and counters are reset</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ENABLED</name>
+                           <description>Enabled. The SPI is enabled for operation</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MASTER</name>
+                     <description>Master mode select</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>SLAVE_MODE</name>
+                           <description>Slave mode. The SPI will operate in slave mode. SCK, MOSI, and the SSEL signals are inputs, MISO is an output</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>MASTER_MODE</name>
+                           <description>Master mode. The SPI will operate in master mode. SCK, MOSI, and the SSEL signals are outputs, MISO is an input</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LSBF</name>
+                     <description>LSB First mode enable</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>STANDARD</name>
+                           <description>Standard. Data is transmitted and received in standard MSB first order</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>REVERSE</name>
+                           <description>Reverse. Data is transmitted and received in reverse order (LSB first)</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CPHA</name>
+                     <description>Clock Phase select</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>CHANGE</name>
+                           <description>Change. The SPI captures serial data on the first clock transition of the transfer (when the clock changes away from the rest state). Data is changed on the following edge</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>CAPTURE</name>
+                           <description>Capture. The SPI changes serial data on the first clock transition of the transfer (when the clock changes away from the rest state). Data is captured on the following edge</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CPOL</name>
+                     <description>Clock Polarity select</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>LOW</name>
+                           <description>Low. The rest state of the clock (between transfers) is low</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>HIGH</name>
+                           <description>High. The rest state of the clock (between transfers) is high</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LOOP</name>
+                     <description>Loopback mode enable. Loopback mode applies only to Master mode, and connects transmit and receive data connected together to allow simple software testing</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DISABLED</name>
+                           <description>Disabled</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ENABLED</name>
+                           <description>Enabled</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SPOL0</name>
+                     <description>SSEL0 Polarity select</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>LOW</name>
+                           <description>Low. The SSEL0 pin is active low. The value in the SSEL0 fields of the RXDAT, TXDATCTL, and TXCTL registers related to SSEL0 is not inverted relative to the pins</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>HIGH</name>
+                           <description>High. The SSEL0 pin is active high. The value in the SSEL0 fields of the RXDAT, TXDATCTL, and TXCTL registers related to SSEL0 is inverted relative to the pins</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SPOL1</name>
+                     <description>SSEL1 Polarity select</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>LOW</name>
+                           <description>Low. The SSEL1 pin is active low. The value in the SSEL1 fields of the RXDAT, TXDATCTL, and TXCTL registers related to SSEL1 is not inverted relative to the pins</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>HIGH</name>
+                           <description>High. The SSEL1 pin is active high. The value in the SSEL1 fields of the RXDAT, TXDATCTL, and TXCTL registers related to SSEL1 is inverted relative to the pins</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SPOL2</name>
+                     <description>SSEL2 Polarity select</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>LOW</name>
+                           <description>Low. The SSEL2 pin is active low. The value in the SSEL2 fields of the RXDAT, TXDATCTL, and TXCTL registers related to SSEL2 is not inverted relative to the pins</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>HIGH</name>
+                           <description>High. The SSEL2 pin is active high. The value in the SSEL2 fields of the RXDAT, TXDATCTL, and TXCTL registers related to SSEL2 is inverted relative to the pins</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SPOL3</name>
+                     <description>SSEL3 Polarity select</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>LOW</name>
+                           <description>Low. The SSEL3 pin is active low. The value in the SSEL3 fields of the RXDAT, TXDATCTL, and TXCTL registers related to SSEL3 is not inverted relative to the pins</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>HIGH</name>
+                           <description>High. The SSEL3 pin is active high. The value in the SSEL3 fields of the RXDAT, TXDATCTL, and TXCTL registers related to SSEL3 is inverted relative to the pins</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DLY</name>
+               <description>SPI Delay register</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>PRE_DELAY</name>
+                     <description>Controls the amount of time between SSEL assertion and the beginning of a data transfer.  There is always one SPI clock time between SSEL assertion and the first clock edge. This is not considered part of the pre-delay. 0x0 = No additional time is inserted. 0x1 = 1 SPI clock time is inserted. 0x2 = 2 SPI clock times are inserted. ... 0xF = 15 SPI clock times are inserted</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>POST_DELAY</name>
+                     <description>Controls the amount of time between the end of a data transfer and SSEL deassertion.  0x0 = No additional time is inserted. 0x1 = 1 SPI clock time is inserted. 0x2 = 2 SPI clock times are inserted. ... 0xF = 15 SPI clock times are inserted</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>FRAME_DELAY</name>
+                     <description>If the EOF flag is set, controls the minimum amount of time between the current frame and the next frame (or SSEL deassertion if EOT).  0x0 = No additional time is inserted. 0x1 = 1 SPI clock time is inserted. 0x2 = 2 SPI clock times are inserted. ... 0xF = 15 SPI clock times are inserted</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>TRANSFER_DELAY</name>
+                     <description>Controls the minimum amount of time that the SSEL is deasserted between transfers.  0x0 = The minimum time that SSEL is deasserted is 1 SPI clock time. (Zero added time.) 0x1 = The minimum time that SSEL is deasserted is 2 SPI clock times. 0x2 = The minimum time that SSEL is deasserted is 3 SPI clock times. ... 0xF = The minimum time that SSEL is deasserted is 16 SPI clock times</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>STAT</name>
+               <description>SPI Status. Some status flags can be cleared by writing a 1 to that bit position</description>
+               <addressOffset>0x8</addressOffset>
+               <resetValue>0x102</resetValue>
+               <fields>
+                  <field>
+                     <name>RXRDY</name>
+                     <description>Receiver Ready flag. When 1, indicates that data is available to be read from the receiver buffer. Cleared after a read of the RXDAT register</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TXRDY</name>
+                     <description>Transmitter Ready flag. When 1, this bit indicates that data may be written to the transmit buffer. Previous data may still be in the process of being transmitted. Cleared when data is written to TXDAT or TXDATCTL until the data is moved to the transmit shift register</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RXOV</name>
+                     <description>Receiver Overrun interrupt flag. This flag applies only to slave mode (Master = 0). This flag is set when the beginning of a received character is detected while the receiver buffer is still in use. If this occurs, the receiver buffer contents are preserved, and the incoming data is lost. Data received by the SPI should be considered undefined if RxOv is set</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TXUR</name>
+                     <description>Transmitter Underrun interrupt flag. This flag applies only to slave mode (Master = 0). In this case, the transmitter must begin sending new data on the next input clock if the transmitter is idle. If that data is not available in the transmitter holding register at that point, there is no data to transmit and the TXUR flag is set. Data transmitted by the SPI should be considered undefined if TXUR is set</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SSA</name>
+                     <description>Slave Select Assert. This flag is set whenever any slave select transitions from deasserted to asserted, in both master and slave modes. This allows determining when the SPI transmit/receive functions become busy, and allows waking up the device from reduced power modes when a slave mode access begins. This flag is cleared by software</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SSD</name>
+                     <description>Slave Select Deassert. This flag is set whenever any asserted slave selects transition to deasserted, in both master and slave modes. This allows determining when the SPI transmit/receive functions become idle. This flag is cleared by software</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>STALLED</name>
+                     <description>Stalled status flag. This indicates whether the SPI is currently in a stall condition</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ENDTRANSFER</name>
+                     <description>End Transfer control bit. Software can set this bit to force an end to the current transfer when the transmitter finishes any activity already in progress, as if the EOT flag had been set prior to the last transmission. This capability is included to support cases where it is not known when transmit data is written that it will be the end of a transfer. The bit is cleared when the transmitter becomes idle as the transfer comes to an end. Forcing an end of transfer in this manner causes any specified FRAME_DELAY and TRANSFER_DELAY to be inserted</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>MSTIDLE</name>
+                     <description>Master idle status flag. This bit is 1 whenever the SPI master function is fully idle. This means that the transmit holding register is empty and the transmitter is not in the process of sending data</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>INTENSET</name>
+               <description>SPI Interrupt Enable read and Set. A complete value may be read from this register. Writing a 1 to any implemented bit position causes that bit to be set</description>
+               <addressOffset>0xC</addressOffset>
+               <fields>
+                  <field>
+                     <name>RXRDYEN</name>
+                     <description>Determines whether an interrupt occurs when receiver data is available</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_INTERRUPT</name>
+                           <description>No interrupt will be generated when receiver data is available</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INTERRUPT</name>
+                           <description>An interrupt will be generated when receiver data is available in the RXDAT register</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXRDYEN</name>
+                     <description>Determines whether an interrupt occurs when the transmitter holding register is available</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_INTERRUPT</name>
+                           <description>No interrupt will be generated when the transmitter holding register is available</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INTERRUPT</name>
+                           <description>An interrupt will be generated when data may be written to TXDAT</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXOVEN</name>
+                     <description>Determines whether an interrupt occurs when a receiver overrun occurs. This happens in slave mode when there is a need for the receiver to move newly received data to the RXDAT register when it is already in use. The interface prevents receiver overrun in Master mode by not allowing a new transmission to begin when a receiver overrun would otherwise occur</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_INTERRUPT</name>
+                           <description>No interrupt will be generated when a receiver overrun occurs</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INTERRUPT</name>
+                           <description>An interrupt will be generated if a receiver overrun occurs</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXUREN</name>
+                     <description>Determines whether an interrupt occurs when a transmitter underrun occurs. This happens in slave mode when there is a need to transmit data when none is available</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_INTERRUPT</name>
+                           <description>No interrupt will be generated when the transmitter underruns</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INTERRUPT</name>
+                           <description>An interrupt will be generated if the transmitter underruns</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SSAEN</name>
+                     <description>Determines whether an interrupt occurs when the Slave Select is asserted</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_INTERRUPT</name>
+                           <description>No interrupt will be generated when any Slave Select transitions from deasserted to asserted</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INTERRUPT</name>
+                           <description>An interrupt will be generated when any Slave Select transitions from deasserted to asserted</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SSDEN</name>
+                     <description>Determines whether an interrupt occurs when the Slave Select is deasserted</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_INTERRUPT</name>
+                           <description>No interrupt will be generated when all asserted Slave Selects transition to deasserted</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INTERRUPT</name>
+                           <description>An interrupt will be generated when all asserted Slave Selects transition to deasserted</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>INTENCLR</name>
+               <description>SPI Interrupt Enable Clear. Writing a 1 to any implemented bit position causes the corresponding bit in INTENSET to be cleared</description>
+               <addressOffset>0x10</addressOffset>
+               <access>write-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>RXRDYEN</name>
+                     <description>Writing 1 clears the corresponding bits in the INTENSET register</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TXRDYEN</name>
+                     <description>Writing 1 clears the corresponding bits in the INTENSET register</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RXOVEN</name>
+                     <description>Writing 1 clears the corresponding bits in the INTENSET register</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TXUREN</name>
+                     <description>Writing 1 clears the corresponding bits in the INTENSET register</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SSAEN</name>
+                     <description>Writing 1 clears the corresponding bits in the INTENSET register</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SSDEN</name>
+                     <description>Writing 1 clears the corresponding bits in the INTENSET register</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RXDAT</name>
+               <description>SPI Receive Data</description>
+               <addressOffset>0x14</addressOffset>
+               <access>read-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>RXDAT</name>
+                     <description>Receiver Data. This contains the next piece of received data. The number of bits that are used depends on the LEN setting in TXCTL / TXDATCTL</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>RXSSEL0_N</name>
+                     <description>Slave Select for receive. This field allows the state of the SSEL0 pin to be saved along with received data. The value will reflect the SSEL0 pin for both master and slave operation. A zero indicates that a slave select is active. The actual polarity of each slave select pin is configured by the related SPOL bit in CFG</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RXSSEL1_N</name>
+                     <description>Slave Select for receive. This field allows the state of the SSEL1 pin to be saved along with received data. The value will reflect the SSEL1 pin for both master and slave operation. A zero indicates that a slave select is active. The actual polarity of each slave select pin is configured by the related SPOL bit in CFG</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RXSSEL2_N</name>
+                     <description>Slave Select for receive. This field allows the state of the SSEL2 pin to be saved along with received data. The value will reflect the SSEL2 pin for both master and slave operation. A zero indicates that a slave select is active. The actual polarity of each slave select pin is configured by the related SPOL bit in CFG</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RXSSEL3_N</name>
+                     <description>Slave Select for receive. This field allows the state of the SSEL3 pin to be saved along with received data. The value will reflect the SSEL3 pin for both master and slave operation. A zero indicates that a slave select is active. The actual polarity of each slave select pin is configured by the related SPOL bit in CFG</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SOT</name>
+                     <description>Start of Transfer flag. This flag will be 1 if this is the first data after the SSELs went from deasserted to asserted (i.e., any previous transfer has ended). This information can be used to identify the first piece of data in cases where the transfer length is greater than 16 bit</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TXDATCTL</name>
+               <description>SPI Transmit Data with Control</description>
+               <addressOffset>0x18</addressOffset>
+               <fields>
+                  <field>
+                     <name>TXDAT</name>
+                     <description>Transmit Data. This field provides from 1 to 16 bits of data to be transmitted</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>TXSSEL0_N</name>
+                     <description>Transmit Slave Select. This field asserts SSEL0 in master mode. The output on the pin is active LOW by default.  The active state of the SSEL0 pin is configured by bits in the CFG register</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>SSEL0_ASSERTED</name>
+                           <description>SSEL0 asserted</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SSEL0_NOT_ASSERTED</name>
+                           <description>SSEL0 not asserted</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXSSEL1_N</name>
+                     <description>Transmit Slave Select. This field asserts SSEL1 in master mode. The output on the pin is active LOW by default.  The active state of the SSEL1 pin is configured by bits in the CFG register</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>SSEL1_ASSERTED</name>
+                           <description>SSEL1 asserted</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SSEL1_NOT_ASSERTED</name>
+                           <description>SSEL1 not asserted</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXSSEL2_N</name>
+                     <description>Transmit Slave Select. This field asserts SSEL2 in master mode. The output on the pin is active LOW by default.  The active state of the SSEL2 pin is configured by bits in the CFG register</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>SSEL2_ASSERTED</name>
+                           <description>SSEL2 asserted</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SSEL2_NOT_ASSERTED</name>
+                           <description>SSEL2 not asserted</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXSSEL3_N</name>
+                     <description>Transmit Slave Select. This field asserts SSEL3 in master mode. The output on the pin is active LOW by default.  The active state of the SSEL3 pin is configured by bits in the CFG register</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>SSEL3_ASSERTED</name>
+                           <description>SSEL3 asserted</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SSEL3_NOT_ASSERTED</name>
+                           <description>SSEL3 not asserted</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>EOT</name>
+                     <description>End of Transfer. The asserted SSEL will be deasserted at the end of a transfer, and remain so for at least the time specified by the Transfer_delay value in the DLY register</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>SSEL_NOT_DEASSERTED</name>
+                           <description>SSEL not deasserted. This piece of data is not treated as the end of a transfer. SSEL will not be deasserted at the end of this data</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SSEL_DEASSERTED</name>
+                           <description>SSEL deasserted. This piece of data is treated as the end of a transfer. SSEL will be deasserted at the end of this piece of data</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>EOF</name>
+                     <description>End of Frame. Between frames, a delay may be inserted, as defined by the FRAME_DELAY value in the DLY register. The end of a frame may not be particularly meaningful if the FRAME_DELAY value = 0. This control can be used as part of the support for frame lengths greater than 16 bits</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DATA_NOT_EOF</name>
+                           <description>Data not EOF. This piece of data transmitted is not treated as the end of a frame</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>DATA_EOF</name>
+                           <description>Data EOF. This piece of data is treated as the end of a frame, causing the FRAME_DELAY time to be inserted before subsequent data is transmitted</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXIGNORE</name>
+                     <description>Receive Ignore. This allows data to be transmitted using the SPI without the need to read unneeded data from the receiver.Setting this bit simplifies the transmit process and can be used with the DMA</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>READ_RECEIVED_DATA</name>
+                           <description>Read received data. Received data must be read in order to allow transmission to progress. In slave mode, an overrun error will occur if received data is not read before new data is received</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>IGNORE_RECEIVED_DATA</name>
+                           <description>Ignore received data. Received data is ignored, allowing transmission without reading unneeded received data. No receiver flags are generated</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LEN</name>
+                     <description>Data Length. Specifies the data length from 1 to 16 bits. Note that transfer lengths greater than 16 bits are supported by implementing multiple sequential transmits. 0x0 = Data transfer is 1 bit in length. 0x1 = Data transfer is 2 bits in length. 0x2 = Data transfer is 3 bits in length. ... 0xF = Data transfer is 16 bits in length</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TXDAT</name>
+               <description>SPI Transmit Data</description>
+               <addressOffset>0x1C</addressOffset>
+               <fields>
+                  <field>
+                     <name>DATA</name>
+                     <description>Transmit Data. This field provides from 4 to 16 bits of data to be transmitted</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TXCTL</name>
+               <description>SPI Transmit Control</description>
+               <addressOffset>0x20</addressOffset>
+               <fields>
+                  <field>
+                     <name>TXSSEL0_N</name>
+                     <description>Transmit Slave Select 0</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TXSSEL1_N</name>
+                     <description>Transmit Slave Select 1</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TXSSEL2_N</name>
+                     <description>Transmit Slave Select 2</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TXSSEL3_n</name>
+                     <description>Transmit Slave Select 3</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EOT</name>
+                     <description>End of Transfer</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EOF</name>
+                     <description>End of Frame</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RXIGNORE</name>
+                     <description>Receive Ignore</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>LEN</name>
+                     <description>Data transfer Length</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DIV</name>
+               <description>SPI clock Divider</description>
+               <addressOffset>0x24</addressOffset>
+               <fields>
+                  <field>
+                     <name>DIVVAL</name>
+                     <description>Rate divider value. Specifies how the PCLK for the SPI is divided to produce the SPI clock rate in master mode.  DIVVAL is -1 encoded such that the value 0 results in PCLK/1, the value 1 results in PCLK/2, up to the maximum possible divide value of 0xFFFF, which results in PCLK/65536</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>INTSTAT</name>
+               <description>SPI Interrupt Status</description>
+               <addressOffset>0x28</addressOffset>
+               <access>read-only</access>
+               <resetValue>0x2</resetValue>
+               <fields>
+                  <field>
+                     <name>RXRDY</name>
+                     <description>Receiver Ready flag</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TXRDY</name>
+                     <description>Transmitter Ready flag</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RXOV</name>
+                     <description>Receiver Overrun interrupt flag</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TXUR</name>
+                     <description>Transmitter Underrun interrupt flag</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SSA</name>
+                     <description>Slave Select Assert</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SSD</name>
+                     <description>Slave Select Deassert</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

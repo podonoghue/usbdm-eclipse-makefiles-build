@@ -3,163 +3,163 @@ Devices using this vector table:
    MKM33Z5
    MKM34Z5
 -->
-      <interrupts>
-         <name>MKM33Z5_VectorTable</name>
-         <description>MKM33Z5 VectorTable</description>
-         <interrupt>
-            <name>DMA0</name>
-            <description>DMA Controller</description>
-            <value>0</value>
-         </interrupt>
-         <interrupt>
-            <name>DMA1</name>
-            <description>DMA Controller</description>
-            <value>1</value>
-         </interrupt>
-         <interrupt>
-            <name>DMA2</name>
-            <description>DMA Controller</description>
-            <value>2</value>
-         </interrupt>
-         <interrupt>
-            <name>DMA3</name>
-            <description>DMA Controller</description>
-            <value>3</value>
-         </interrupt>
-         <interrupt>
-            <name>SPI0</name>
-            <description>Serial Peripheral Interface</description>
-            <value>4</value>
-         </interrupt>
-         <interrupt>
-            <name>SPI1</name>
-            <description>Serial Peripheral Interface</description>
-            <value>5</value>
-         </interrupt>
-         <interrupt>
-            <name>PMC</name>
-            <description>Power Management Controller</description>
-            <value>6</value>
-         </interrupt>
-         <interrupt>
-            <name>TMR0</name>
-            <description>Quad Timer</description>
-            <value>7</value>
-         </interrupt>
-         <interrupt>
-            <name>TMR1</name>
-            <description>Quad Timer</description>
-            <value>8</value>
-         </interrupt>
-         <interrupt>
-            <name>TMR2</name>
-            <description>Quad Timer</description>
-            <value>9</value>
-         </interrupt>
-         <interrupt>
-            <name>TMR3</name>
-            <description>Quad Timer</description>
-            <value>10</value>
-         </interrupt>
-         <interrupt>
-            <name>PIT0_PIT1</name>
-            <description>Periodic Interrupt Timer</description>
-            <value>11</value>
-         </interrupt>
-         <interrupt>
-            <name>LLWU</name>
-            <description>Low Leakage Wakeup</description>
-            <value>12</value>
-         </interrupt>
-         <interrupt>
-            <name>FTF_Command</name>
-            <description>Flash Memory Interface</description>
-            <value>13</value>
-         </interrupt>
-         <interrupt>
-            <name>CMP0_CMP1</name>
-            <description>High-Speed Comparator</description>
-            <value>14</value>
-         </interrupt>
-         <interrupt>
-            <name>LCD</name>
-            <description>Segment Liquid Crystal Display</description>
-            <value>15</value>
-         </interrupt>
-         <interrupt>
-            <name>ADC</name>
-            <description>Analogue to Digital Converter</description>
-            <value>16</value>
-         </interrupt>
-         <interrupt>
-            <name>PTx</name>
-            <description>General Purpose Input/Output</description>
-            <value>17</value>
-         </interrupt>
-         <interrupt>
-            <name>UART0_UART1</name>
-            <description>Serial Communication Interface</description>
-            <value>19</value>
-         </interrupt>
-         <interrupt>
-            <name>UART2_UART3</name>
-            <description>Serial Communication Interface</description>
-            <value>20</value>
-         </interrupt>
-         <interrupt>
-            <name>AFE_CH0</name>
-            <description>This section describes the ADC registers</description>
-            <value>21</value>
-         </interrupt>
-         <interrupt>
-            <name>AFE_CH1</name>
-            <description>This section describes the ADC registers</description>
-            <value>22</value>
-         </interrupt>
-         <interrupt>
-            <name>AFE_CH2</name>
-            <description>This section describes the ADC registers</description>
-            <value>23</value>
-         </interrupt>
-         <interrupt>
-            <name>AFE_CH3</name>
-            <description>This section describes the ADC registers</description>
-            <value>24</value>
-         </interrupt>
-         <interrupt>
-            <name>RTC_Alarm</name>
-            <description>Real Time Clock</description>
-            <value>25</value>
-         </interrupt>
-         <interrupt>
-            <name>I2C0_I2C1</name>
-            <description>Inter-Integrated Circuit</description>
-            <value>26</value>
-         </interrupt>
-         <interrupt>
-            <name>EWM</name>
-            <description>External Watchdog Monitor</description>
-            <value>27</value>
-         </interrupt>
-         <interrupt>
-            <name>MCG</name>
-            <description>Multipurpose Clock Generator</description>
-            <value>28</value>
-         </interrupt>
-         <interrupt>
-            <name>WDOG</name>
-            <description>External Watchdog Monitor</description>
-            <value>29</value>
-         </interrupt>
-         <interrupt>
-            <name>LPTMR</name>
-            <description>Low Power Timer</description>
-            <value>30</value>
-         </interrupt>
-         <interrupt>
-            <name>XBAR</name>
-            <description>Crossbar Switch</description>
-            <value>31</value>
-         </interrupt>
-      </interrupts>
+<interrupts>
+   <name>MKM33Z5_VectorTable</name>
+   <description>MKM33Z5 VectorTable</description>
+   <interrupt>
+      <name>DMA0</name>
+      <value>0</value>
+      <description>DMA Controller</description>
+   </interrupt>
+   <interrupt>
+      <name>DMA1</name>
+      <value>1</value>
+      <description>DMA Controller</description>
+   </interrupt>
+   <interrupt>
+      <name>DMA2</name>
+      <value>2</value>
+      <description>DMA Controller</description>
+   </interrupt>
+   <interrupt>
+      <name>DMA3</name>
+      <value>3</value>
+      <description>DMA Controller</description>
+   </interrupt>
+   <interrupt>
+      <name>SPI0</name>
+      <value>4</value>
+      <description>Serial Peripheral Interface</description>
+   </interrupt>
+   <interrupt>
+      <name>SPI1</name>
+      <value>5</value>
+      <description>Serial Peripheral Interface</description>
+   </interrupt>
+   <interrupt>
+      <name>PMC</name>
+      <value>6</value>
+      <description>Power Management Controller</description>
+   </interrupt>
+   <interrupt>
+      <name>TMR0</name>
+      <value>7</value>
+      <description>Quad Timer</description>
+   </interrupt>
+   <interrupt>
+      <name>TMR1</name>
+      <value>8</value>
+      <description>Quad Timer</description>
+   </interrupt>
+   <interrupt>
+      <name>TMR2</name>
+      <value>9</value>
+      <description>Quad Timer</description>
+   </interrupt>
+   <interrupt>
+      <name>TMR3</name>
+      <value>10</value>
+      <description>Quad Timer</description>
+   </interrupt>
+   <interrupt>
+      <name>PIT0_PIT1</name>
+      <value>11</value>
+      <description>Periodic Interrupt Timer</description>
+   </interrupt>
+   <interrupt>
+      <name>LLWU</name>
+      <value>12</value>
+      <description>Low Leakage Wakeup</description>
+   </interrupt>
+   <interrupt>
+      <name>FTF_Command</name>
+      <value>13</value>
+      <description>Flash Memory Interface</description>
+   </interrupt>
+   <interrupt>
+      <name>CMP0_CMP1</name>
+      <value>14</value>
+      <description>High-Speed Comparator</description>
+   </interrupt>
+   <interrupt>
+      <name>LCD</name>
+      <value>15</value>
+      <description>Segment Liquid Crystal Display</description>
+   </interrupt>
+   <interrupt>
+      <name>ADC</name>
+      <value>16</value>
+      <description>Analogue to Digital Converter</description>
+   </interrupt>
+   <interrupt>
+      <name>PTx</name>
+      <value>17</value>
+      <description>General Purpose Input/Output</description>
+   </interrupt>
+   <interrupt>
+      <name>UART0_UART1</name>
+      <value>19</value>
+      <description>Serial Communication Interface</description>
+   </interrupt>
+   <interrupt>
+      <name>UART2_UART3</name>
+      <value>20</value>
+      <description>Serial Communication Interface</description>
+   </interrupt>
+   <interrupt>
+      <name>AFE_CH0</name>
+      <value>21</value>
+      <description>This section describes the ADC registers</description>
+   </interrupt>
+   <interrupt>
+      <name>AFE_CH1</name>
+      <value>22</value>
+      <description>This section describes the ADC registers</description>
+   </interrupt>
+   <interrupt>
+      <name>AFE_CH2</name>
+      <value>23</value>
+      <description>This section describes the ADC registers</description>
+   </interrupt>
+   <interrupt>
+      <name>AFE_CH3</name>
+      <value>24</value>
+      <description>This section describes the ADC registers</description>
+   </interrupt>
+   <interrupt>
+      <name>RTC_Alarm</name>
+      <value>25</value>
+      <description>Real Time Clock</description>
+   </interrupt>
+   <interrupt>
+      <name>I2C0_I2C1</name>
+      <value>26</value>
+      <description>Inter-Integrated Circuit</description>
+   </interrupt>
+   <interrupt>
+      <name>EWM</name>
+      <value>27</value>
+      <description>External Watchdog Monitor</description>
+   </interrupt>
+   <interrupt>
+      <name>MCG</name>
+      <value>28</value>
+      <description>Multipurpose Clock Generator</description>
+   </interrupt>
+   <interrupt>
+      <name>WDOG</name>
+      <value>29</value>
+      <description>External Watchdog Monitor</description>
+   </interrupt>
+   <interrupt>
+      <name>LPTMR</name>
+      <value>30</value>
+      <description>Low Power Timer</description>
+   </interrupt>
+   <interrupt>
+      <name>XBAR</name>
+      <value>31</value>
+      <description>Crossbar Switch</description>
+   </interrupt>
+</interrupts>
 

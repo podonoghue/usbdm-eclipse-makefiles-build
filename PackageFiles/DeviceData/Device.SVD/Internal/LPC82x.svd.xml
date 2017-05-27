@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE device>
+<device
+   schemaVersion="1.1"
+   xmlns:xi="http://www.w3.org/2001/XInclude"
+   xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd"
+>
+   <name>LPC82x</name>
+   <version>0.4</version>
+   <description>LPC82x</description>
+   <cpu>
+      <name>CM0PLUS</name>
+      <revision>r0p1</revision>
+      <endian>little</endian>
+      <mpuPresent>false</mpuPresent>
+      <fpuPresent>false</fpuPresent>
+      <vtorPresent>true</vtorPresent>
+      <nvicPrioBits>2</nvicPrioBits>
+      <vendorSystickConfig>false</vendorSystickConfig>
+   </cpu>
+   <headerDefinitionsPrefix>LPC_</headerDefinitionsPrefix>
+   <addressUnitBits>8</addressUnitBits>
+   <width>32</width>
+   <peripherals>
+      <xi:include href="peripherals/ADC_LPC82x.svd.xml"/>
+      <xi:include href="peripherals/CMP_LPC82x.svd.xml"/>
+      <xi:include href="peripherals/CRC_LPC82x.svd.xml"/>
+      <xi:include href="peripherals/DMA_LPC82x.svd.xml"/>
+      <xi:include href="peripherals/DMATRIGMUX_LPC82x.svd.xml"/>
+      <xi:include href="peripherals/FLASHCTRL_LPC82x.svd.xml"/>
+      <xi:include href="peripherals/GPIO_PORT_LPC82x.svd.xml"/>
+      <xi:include href="peripherals/I2C0_LPC82x.svd.xml"/>
+      <peripheral derivedFrom="I2C0"><name>I2C1</name><baseAddress>0x40054000</baseAddress></peripheral>
+      <peripheral derivedFrom="I2C0"><name>I2C2</name><baseAddress>0x40070000</baseAddress></peripheral>
+      <peripheral derivedFrom="I2C0"><name>I2C3</name><baseAddress>0x40074000</baseAddress></peripheral>
+      <xi:include href="peripherals/INPUTMUX_LPC82x.svd.xml"/>
+      <xi:include href="peripherals/IOCON_LPC82x.svd.xml"/>
+      <xi:include href="peripherals/MRT_LPC82x.svd.xml"/>
+      <xi:include href="peripherals/PIN_INT_LPC82x.svd.xml"/>
+      <xi:include href="peripherals/PMU_LPC82x.svd.xml"/>
+      <xi:include href="peripherals/SCT_LPC82x.svd.xml"/>
+      <xi:include href="peripherals/SPI0_LPC82x.svd.xml"/>
+      <peripheral derivedFrom="SPI0"><name>SPI1</name><baseAddress>0x4005C000</baseAddress></peripheral>
+      <xi:include href="peripherals/SWM_LPC82x.svd.xml"/>
+      <xi:include href="peripherals/SYSCON_LPC82x.svd.xml"/>
+      <xi:include href="peripherals/USART0_LPC82x.svd.xml"/>
+      <peripheral derivedFrom="USART0"><name>USART1</name><baseAddress>0x40068000</baseAddress></peripheral>
+      <peripheral derivedFrom="USART0"><name>USART2</name><baseAddress>0x4006C000</baseAddress></peripheral>
+      <xi:include href="peripherals/WKT_LPC82x.svd.xml"/>
+      <xi:include href="peripherals/WWDT_LPC82x.svd.xml"/>
+   </peripherals>
+   <vendorExtensions>
+   <xi:include href="vectorTables/LPC82x_VectorTable.svd.xml"/>
+   </vendorExtensions>
+</device>

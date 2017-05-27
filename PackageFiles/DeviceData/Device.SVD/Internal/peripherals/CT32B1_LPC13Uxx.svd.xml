@@ -1,0 +1,584 @@
+<!--
+Devices using this peripheral: 
+      LPC13Uxx
+-->
+      <peripheral>
+         <?sourceFile "CT32B1_LPC13Uxx" ?>
+         <name>CT32B1</name>
+         <description>32-bit counter/timers CT32B1</description>
+         <groupName>CT32B</groupName>
+         <headerStructName>CT32B1</headerStructName>
+         <baseAddress>0x40018000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x34</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x3C</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x70</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>IR</name>
+               <description>Interrupt Register. The IR can be written to clear interrupts. The IR can be read to identify which of eight possible interrupt sources are pending</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>MR0INT</name>
+                     <description>Interrupt flag for match channel 0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>MR1INT</name>
+                     <description>Interrupt flag for match channel 1</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>MR2INT</name>
+                     <description>Interrupt flag for match channel 2</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>MR3INT</name>
+                     <description>Interrupt flag for match channel 3</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CR0INT</name>
+                     <description>Interrupt flag for capture channel 0 event</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CR1INT</name>
+                     <description>Interrupt flag for capture channel 1 event</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TCR</name>
+               <description>Timer Control Register. The TCR is used to control the Timer Counter functions. The Timer Counter can be disabled or reset through the TCR</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>CEN</name>
+                     <description>Counter enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>THE_COUNTERS_ARE_DIS</name>
+                           <description>The counters are disabled</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>THE_TIMER_COUNTER_AN</name>
+                           <description>The Timer Counter and Prescale Counter are enabled for counting</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CRST</name>
+                     <description>Counter reset</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DO_NOTHING_</name>
+                           <description>Do nothing</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>THE_TIMER_COUNTER_AN</name>
+                           <description>The Timer Counter and the Prescale Counter are synchronously reset on the next positive edge of PCLK. The counters remain reset until TCR[1] is returned to zero</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TC</name>
+               <description>Timer Counter. The 32-bit TC is incremented every PR+1 cycles of PCLK. The TC is controlled through the TCR</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>TC</name>
+                     <description>Timer counter value</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PR</name>
+               <description>Prescale Register. When the Prescale Counter (below) is equal to this value, the next clock increments the TC and clears the PC</description>
+               <addressOffset>0xC</addressOffset>
+               <fields>
+                  <field>
+                     <name>PCVAL</name>
+                     <description>Prescaler value</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PC</name>
+               <description>Prescale Counter. The 32-bit PC is a counter which is incremented to the value stored in PR. When the value in PR is reached, the TC is incremented and the PC is cleared. The PC is observable and controllable through the bus interface</description>
+               <addressOffset>0x10</addressOffset>
+               <fields>
+                  <field>
+                     <name>PC</name>
+                     <description>Prescale counter value</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MCR</name>
+               <description>Match Control Register. The MCR is used to control if an interrupt is generated and if the TC is reset when a Match occurs</description>
+               <addressOffset>0x14</addressOffset>
+               <fields>
+                  <field>
+                     <name>MR0I</name>
+                     <description>Interrupt on MR0: an interrupt is generated when MR0 matches the value in the TC</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>ENABLED</name>
+                           <description>Enabled</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>DISABLED</name>
+                           <description>Disabled</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="MR0I" > <name>MR0R</name> <description>Reset on MR0: the TC will be reset if MR0 matches it</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="MR0I" > <name>MR0S</name> <description>Stop on MR0: the TC and PC will be stopped and TCR[0] will be set to 0 if MR0 matches the TC</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="MR0I" > <name>MR1I</name> <description>Interrupt on MR1: an interrupt is generated when MR1 matches the value in the TC</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="MR0I" > <name>MR1R</name> <description>Reset on MR1: the TC will be reset if MR1 matches it</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="MR0I" > <name>MR1S</name> <description>Stop on MR1: the TC and PC will be stopped and TCR[0] will be set to 0 if MR1 matches the TC</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="MR0I" > <name>MR2I</name> <description>Interrupt on MR2: an interrupt is generated when MR2 matches the value in the TC</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="MR0I" > <name>MR2R</name> <description>Reset on MR2: the TC will be reset if MR2 matches it</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="MR0I" > <name>MR2S</name> <description>Stop on MR2: the TC and PC will be stopped and TCR[0] will be set to 0 if MR2 matches the TC</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="MR0I" > <name>MR3I</name> <description>Interrupt on MR3: an interrupt is generated when MR3 matches the value in the TC</description> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="MR0I" > <name>MR3R</name> <description>Reset on MR3: the TC will be reset if MR3 matches it</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="MR0I" > <name>MR3S</name> <description>Stop on MR3: the TC and PC will be stopped and TCR[0] will be set to 0 if MR3 matches the TC</description> <bitOffset>11</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>MR0</name>
+               <description>Match Register 0. MR0 can be enabled through the MCR to reset the TC, stop both the TC and PC, and/or generate an interrupt every time MR0 matches the TC</description>
+               <addressOffset>0x18</addressOffset>
+               <fields>
+                  <field>
+                     <name>MATCH</name>
+                     <description>Timer counter match value</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>3</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>1,2,3</dimIndex>
+               <name>MR%s</name>
+               <description>Match Register 0. MR0 can be enabled through the MCR to reset the TC, stop both the TC and PC, and/or generate an interrupt every time MR0 matches the TC</description>
+               <addressOffset>0x1C</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>MATCH</name>
+                     <description>Timer counter match value</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CCR</name>
+               <description>Capture Control Register. The CCR controls which edges of the capture inputs are used to load the Capture Registers and whether or not an interrupt is generated when a capture takes place</description>
+               <addressOffset>0x28</addressOffset>
+               <fields>
+                  <field>
+                     <name>CAP0RE</name>
+                     <description>Capture on CT32B1_CAP0 rising edge: a sequence of 0 then 1 on CT32B1_CAP0 will cause CR0 to be loaded with the contents of TC</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>ENABLED_</name>
+                           <description>Enabled</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>DISABLED_</name>
+                           <description>Disabled</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="CAP0RE" > <name>CAP0FE</name> <description>Capture on CT32B1_CAP0 falling edge: a sequence of 1 then 0 on CT32B1_CAP0 will cause CR0 to be loaded with the contents of TC</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="CAP0RE" > <name>CAP0I</name> <description>Interrupt on CT32B1_CAP0 event: a CR0 load due to a CT32B1_CAP0 event will generate an interrupt</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="CAP0RE" > <name>CAP1RE</name> <description>Capture on CT32B1_CAP1 rising edge: a sequence of 0 then 1 on CT32B1_CAP1 will cause CR1 to be loaded with the contents of TC</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="CAP0RE" > <name>CAP1FE</name> <description>Capture on CT32B1_CAP1 falling edge: a sequence of 1 then 0 on CT32B1_CAP1 will cause CR1 to be loaded with the contents of TC</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="CAP0RE" > <name>CAP1I</name> <description>Interrupt on CT32B1_CAP1 event: a CR1 load due to a CT32B1_CAP1 event will generate an interrupt</description> <bitOffset>5</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR0</name>
+               <description>Capture Register 0. CR0 is loaded with the value of TC when there is an event on the CT32B0_CAP0 input</description>
+               <addressOffset>0x2C</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>CAP</name>
+                     <description>Timer counter capture value</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR1</name>
+               <description>Capture Register 1. CR1 is loaded with the value of TC when there is an event on the CT32B1_CAP1 input</description>
+               <addressOffset>0x30</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>CAP</name>
+                     <description>Timer counter capture value</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EMR</name>
+               <description>External Match Register. The EMR controls the match function and the external match pins CT32Bn_MAT[3:0]</description>
+               <addressOffset>0x3C</addressOffset>
+               <fields>
+                  <field>
+                     <name>EM0</name>
+                     <description>External Match 0. This bit reflects the state of output CT32Bn_MAT0, whether or not this output is connected to its pin. When a match occurs between the TC and MR0, this bit can either toggle, go LOW, go HIGH, or do nothing. Bits EMR[5:4] control the functionality of this output. This bit is driven to the CT32B0_MAT0/CT32B1_MAT0 pins if the match function is selected in the IOCON registers (0 = LOW, 1 = HIGH)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EM1</name>
+                     <description>External Match 1. This bit reflects the state of output CT32Bn_MAT1, whether or not this output is connected to its pin. When a match occurs between the TC and MR1, this bit can either toggle, go LOW, go HIGH, or do nothing. Bits EMR[7:6] control the functionality of this output. This bit is driven to the CT32B0_MAT1/CT32B1_MAT1 pins if the match function is selected in the IOCON registers (0 = LOW, 1 = HIGH)</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EM2</name>
+                     <description>External Match 2. This bit reflects the state of output CT32Bn_MAT2, whether or not this output is connected to its pin. When a match occurs between the TC and MR2, this bit can either toggle, go LOW, go HIGH, or do nothing. Bits EMR[9:8] control the functionality of this output. This bit is driven to the CT32B0_MAT2/CT32B1_MAT2 pins if the match function is selected in the IOCON registers (0 = LOW, 1 = HIGH)</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EM3</name>
+                     <description>External Match 3. This bit reflects the state of output CT32Bn_MAT3, whether or not this output is connected to its pin. When a match occurs between the TC and MR3, this bit can either toggle, go LOW, go HIGH, or do nothing. Bits EMR[11:10] control the functionality of this output. This bit is driven to the CT32B3_MAT0/CT32B1_MAT3 pins if the match function is selected in the IOCON registers (0 = LOW, 1 = HIGH)</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EMC0</name>
+                     <description>External Match Control 0. Determines the functionality of External Match 0</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DO_NOTHING_</name>
+                           <description>Do Nothing</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>CLEAR_THE_CORRESPOND</name>
+                           <description>Clear the corresponding External Match bit/output to 0 (CT32Bi_MAT0 pin is LOW if pinned out)</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SET_THE_CORRESPONDIN</name>
+                           <description>Set the corresponding External Match bit/output to 1 (CT32Bi_MAT0 pin is HIGH if pinned out)</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TOGGLE_THE_CORRESPON</name>
+                           <description>Toggle the corresponding External Match bit/output</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>EMC1</name>
+                     <description>External Match Control 1. Determines the functionality of External Match 1</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DO_NOTHING_</name>
+                           <description>Do Nothing</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>CLEAR_THE_CORRESPOND</name>
+                           <description>Clear the corresponding External Match bit/output to 0 (CT32Bi_MAT1 pin is LOW if pinned out)</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SET_THE_CORRESPONDIN</name>
+                           <description>Set the corresponding External Match bit/output to 1 (CT32Bi_MAT1 pin is HIGH if pinned out)</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TOGGLE_THE_CORRESPON</name>
+                           <description>Toggle the corresponding External Match bit/output</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>EMC2</name>
+                     <description>External Match Control 2. Determines the functionality of External Match 2</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DO_NOTHING_</name>
+                           <description>Do Nothing</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>CLEAR_THE_CORRESPOND</name>
+                           <description>Clear the corresponding External Match bit/output to 0 (CT32Bi_MAT2 pin is LOW if pinned out)</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SET_THE_CORRESPONDIN</name>
+                           <description>Set the corresponding External Match bit/output to 1 (CT32Bi_MAT2 pin is HIGH if pinned out)</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TOGGLE_THE_CORRESPON</name>
+                           <description>Toggle the corresponding External Match bit/output</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>EMC3</name>
+                     <description>External Match Control 3. Determines the functionality of External Match 3</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DO_NOTHING_</name>
+                           <description>Do Nothing</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>CLEAR_THE_CORRESPOND</name>
+                           <description>Clear the corresponding External Match bit/output to 0 (CT32Bi_MAT3 pin is LOW if pinned out)</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SET_THE_CORRESPONDIN</name>
+                           <description>Set the corresponding External Match bit/output to 1 (CT32Bi_MAT3 pin is HIGH if pinned out)</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TOGGLE_THE_CORRESPON</name>
+                           <description>Toggle the corresponding External Match bit/output</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CTCR</name>
+               <description>Count Control Register. The CTCR selects between Timer and Counter mode, and in Counter mode selects the signal and edge(s) for counting</description>
+               <addressOffset>0x70</addressOffset>
+               <fields>
+                  <field>
+                     <name>CTM</name>
+                     <description>Counter/Timer Mode. This field selects which rising PCLK edges can increment Timer&apos;s Prescale Counter (PC), or clear PC and increment Timer Counter (TC). If Counter mode is selected in the CTCR, bits 2:0 in the Capture Control Register (CCR) must be programmed as 000</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>TIMER_MODE_EVERY_RI</name>
+                           <description>Timer Mode: every rising PCLK edge</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>COUNTER_MODE_TC_IS_</name>
+                           <description>Counter Mode: TC is incremented on rising edges on the CAP input selected by bits 3:2</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>COUNTER_MODE_TC_IS_</name>
+                           <description>Counter Mode: TC is incremented on falling edges on the CAP input selected by bits 3:2</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>COUNTER_MODE_TC_IS_</name>
+                           <description>Counter Mode: TC is incremented on both edges on the CAP input selected by bits 3:2</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CIS</name>
+                     <description>Count Input Select. In counter mode (when bits 1:0 in this register are not 00), these bits select which CAP pin or comparator output is sampled for clocking.  If Counter mode is selected in the CTCR, the 3 bits for that input in the Capture Control Register (CCR) must be programmed as 000. Values 0x2 to 0x3 are reserved</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>CT32B1_CAP0</name>
+                           <description>CT32B1_CAP0</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>CT32B1_CAP1</name>
+                           <description>CT32B1_CAP1</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ENCC</name>
+                     <description>Setting this bit to 1 enables clearing of the timer and the prescaler when the capture-edge event specified in bits 7:5 occurs</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SElCC</name>
+                     <description>When bit 4 is a 1, these bits select which capture input edge will cause the timer and prescaler to be cleared. These bits have no effect when bit 4 is low. Values 0x3 to 0x7 are reserved</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>RISING_EDGE_OF_CT32B</name>
+                           <description>Rising Edge of CT32B1_CAP0 clears the timer (if bit 4 is set)</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>FALLING_EDGE_OF_CT32</name>
+                           <description>Falling Edge of CT32B1_CAP0 clears the timer (if bit 4 is set)</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>RISING_EDGE_OF_CT32B</name>
+                           <description>Rising Edge of CT32B1_CAP1 clears the timer (if bit 4 is set)</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>FALLING_EDGE_OF_CT32</name>
+                           <description>Falling Edge of CT32B1_CAP1 clears the timer (if bit 4 is set)</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PWMC</name>
+               <description>PWM Control Register. The PWMCON enables PWM mode for the external match pins CT32Bn_MAT[3:0]</description>
+               <addressOffset>0x74</addressOffset>
+               <fields>
+                  <field>
+                     <name>PWMEN0</name>
+                     <description>PWM mode enable for channel0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>CT32BN_MAT0_IS_CONTR</name>
+                           <description>CT32Bn_MAT0 is controlled by EM0</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>PWM_MODE_IS_ENABLED_</name>
+                           <description>PWM mode is enabled for CT32Bn_MAT0</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PWMEN1</name>
+                     <description>PWM mode enable for channel1</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>CT32BN_MAT01_IS_CONT</name>
+                           <description>CT32Bn_MAT01 is controlled by EM1</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>PWM_MODE_IS_ENABLED_</name>
+                           <description>PWM mode is enabled for CT32Bn_MAT1</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PWMEN2</name>
+                     <description>PWM mode enable for channel2</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>CT32BN_MAT2_IS_CONTR</name>
+                           <description>CT32Bn_MAT2 is controlled by EM2</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>PWM_MODE_IS_ENABLED_</name>
+                           <description>PWM mode is enabled for CT32Bn_MAT2</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PWMEN3</name>
+                     <description>PWM mode enable for channel3. Note: It is recommended to use match channel 3 to set the PWM cycle</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>CT32BN_MAT3_IS_CONTR</name>
+                           <description>CT32Bn_MAT3 is controlled by EM3</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>PWM_MODE_IS_ENABLED_</name>
+                           <description>PWM mode is enabled for CT132Bn_MAT3</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

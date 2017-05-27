@@ -1,0 +1,414 @@
+<!--
+Devices using this peripheral: 
+      LPC13xx
+-->
+      <peripheral>
+         <?sourceFile "ADC_LPC13xx" ?>
+         <name>ADC</name>
+         <description>Analog-to-Digital Converter</description>
+         <groupName>ADC</groupName>
+         <headerStructName>ADC</headerStructName>
+         <baseAddress>0x4001C000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xC</offset>
+            <size>0x28</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>CR</name>
+               <description>A/D Control Register. The AD0CR register must be written to select the operating mode before A/D conversion can occur</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>SEL</name>
+                     <description>Selects which of the AD7:0 pins is (are) to be sampled and converted. Bit 0 selects Pin AD0, bit 1 selects pin AD1,..., and bit 7 selects pin AD7.  In software-controlled mode (BURST = 0), only one channel can be selected, i.e. only one of these bits should be 1.  In hardware scan mode (BURST = 1), any numbers of channels can be selected, i.e any or all bits can be set to 1. If all bits are set to 0, channel 0 is selected automatically (SEL = 0x01)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>CLKDIV</name>
+                     <description>The APB clock (PCLK) is divided by CLKDIV +1 to produce the clock for the ADC, which should be less than or equal to 4.5 MHz. Typically, software should program the smallest value in this field that yields a clock of 4.5 MHz or slightly less, but in certain cases (such as a high-impedance analog source) a slower clock may be desirable</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>BURST</name>
+                     <description>Burst select</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>SOFTWARE_CONTROLLED_</name>
+                           <description>Software-controlled mode: Conversions are software-controlled and require 11 clocks</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>HARDWARE_SCAN_MODE_</name>
+                           <description>Hardware scan mode: The AD converter does repeated conversions at the rate selected by the CLKS field, scanning (if necessary) through the pins selected by 1s in the SEL field. The first conversion after the start corresponds to the least-significant bit set to 1 in the SEL field, then the next higher  bits (pins) set to 1 are scanned if applicable. Repeated conversions can be terminated by clearing this bit, but the conversion in progress when this bit is cleared will be completed. Important: START bits must be 000 when BURST = 1 or conversions will not start</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CLKS</name>
+                     <description>This field selects the number of clocks used for each conversion in Burst mode, and the number of bits of accuracy of the result in the LS bits of ADDR, between 11 clocks (10 bits) and 4 clocks (3 bits)</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>11_CLOCKS_/_10_BITS</name>
+                           <description>11 clocks / 10 bits</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10_CLOCKS_/_9_BITS</name>
+                           <description>10 clocks / 9 bits</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>9_CLOCKS_/_8_BITS</name>
+                           <description>9 clocks / 8 bits</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>8_CLOCKS_/_7_BITS</name>
+                           <description>8 clocks / 7 bits</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>7_CLOCKS_/_6_BITS</name>
+                           <description>7 clocks / 6 bits</description>
+                           <value>0x4</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>6_CLOCKS_/_5_BITS</name>
+                           <description>6 clocks / 5 bits</description>
+                           <value>0x5</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>5_CLOCKS_/_4_BITS</name>
+                           <description>5 clocks / 4 bits</description>
+                           <value>0x6</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>4_CLOCKS_/_3_BITS</name>
+                           <description>4 clocks / 3 bits</description>
+                           <value>0x7</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>START</name>
+                     <description>When the BURST bit is 0, these bits control whether and when an A/D conversion is started:</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_START_THIS_VALUE</name>
+                           <description>No start (this value should be used when clearing PDN to 0)</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>NOW</name>
+                           <description>Start conversion now</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>EDGEPIO0_2</name>
+                           <description>Start conversion when the edge selected by bit 27 occurs on PIO0_2/SSEL/CT16B0_CAP0</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>EDGEPIO1_5</name>
+                           <description>Start conversion when the edge selected by bit 27 occurs on PIO1_5/DIR/CT32B0_CAP0</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>EDGE CT32B0_MAT0</name>
+                           <description>Start conversion when the edge selected by bit 27 occurs on CT32B0_MAT0. Timer match function does not need to be selected on the device pin</description>
+                           <value>0x4</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>EDGE CT32B1_MAT0</name>
+                           <description>Start conversion when the edge selected by bit 27 occurs on CT32B0_MAT1. Timer match function does not need to be selected on the device pin</description>
+                           <value>0x5</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>EDGE CT16B0_MAT0</name>
+                           <description>Start conversion when the edge selected by bit 27 occurs on CT16B0_MAT0. Timer match function does not need to be selected on the device pin</description>
+                           <value>0x6</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>EDGE CT16B0_MAT0</name>
+                           <description>Start conversion when the edge selected by bit 27 occurs on CT16B0_MAT1. Timer match function does not need to be selected on the device pin</description>
+                           <value>0x7</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>EDGE</name>
+                     <description>This bit is significant only when the START field contains 010-111. In these cases:</description>
+                     <bitOffset>27</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>RISING</name>
+                           <description>Start conversion on a rising edge on the selected CAP/MAT signal</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>FALLING</name>
+                           <description>Start conversion on a falling edge on the selected CAP/MAT signal</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>GDR</name>
+               <description>A/D Global Data Register. Contains the result of the most recent A/D conversion</description>
+               <addressOffset>0x4</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>V_VREF</name>
+                     <description>When DONE is 1, this field contains a binary fraction representing the voltage on the ADn pin selected by the SEL field, divided by the voltage on the VDD pin. Zero in the field indicates that the voltage on the ADn pin was less than, equal to, or close to that on VSS, while 0x3FF indicates that the voltage on ADn was close to, equal to, or greater than that on VREF</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+                  <field>
+                     <name>CHN</name>
+                     <description>These bits contain the channel from which the V_VREF bits were converted</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>OVERRUN</name>
+                     <description>This bit is 1 in burst mode if the results of one or more conversions was (were) lost and overwritten before the conversion that produced the result in the V_VREF bits</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DONE</name>
+                     <description>This bit is set to 1 when an A/D conversion completes. It is cleared when this register is read and when the ADCR is written. If the ADCR is written while a conversion is still in progress, this bit is set and a new conversion is started</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>INTEN</name>
+               <description>A/D Interrupt Enable Register. This register contains enable bits that allow the DONE flag of each A/D channel to be included or excluded from contributing to the generation of an A/D interrupt</description>
+               <addressOffset>0xC</addressOffset>
+               <resetValue>0x100</resetValue>
+               <fields>
+                  <field>
+                     <name>ADINTEN0</name>
+                     <description>These bits allow control over which A/D channels generate interrupts for conversion completion. When bit 0 is one, completion of a conversion on A/D channel 0 will generate an interrupt, when bit 1 is one, completion of a conversion on A/D channel 1 will generate an interrupt, etc</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ADINTEN1</name>
+                     <description>These bits allow control over which A/D channels generate interrupts for conversion completion. When bit 0 is one, completion of a conversion on A/D channel 0 will generate an interrupt, when bit 1 is one, completion of a conversion on A/D channel 1 will generate an interrupt, etc</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ADINTEN2</name>
+                     <description>These bits allow control over which A/D channels generate interrupts for conversion completion. When bit 0 is one, completion of a conversion on A/D channel 0 will generate an interrupt, when bit 1 is one, completion of a conversion on A/D channel 1 will generate an interrupt, etc</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ADINTEN3</name>
+                     <description>These bits allow control over which A/D channels generate interrupts for conversion completion. When bit 0 is one, completion of a conversion on A/D channel 0 will generate an interrupt, when bit 1 is one, completion of a conversion on A/D channel 1 will generate an interrupt, etc</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ADINTEN4</name>
+                     <description>These bits allow control over which A/D channels generate interrupts for conversion completion. When bit 0 is one, completion of a conversion on A/D channel 0 will generate an interrupt, when bit 1 is one, completion of a conversion on A/D channel 1 will generate an interrupt, etc</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ADINTEN5</name>
+                     <description>These bits allow control over which A/D channels generate interrupts for conversion completion. When bit 0 is one, completion of a conversion on A/D channel 0 will generate an interrupt, when bit 1 is one, completion of a conversion on A/D channel 1 will generate an interrupt, etc</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ADINTEN6</name>
+                     <description>These bits allow control over which A/D channels generate interrupts for conversion completion. When bit 0 is one, completion of a conversion on A/D channel 0 will generate an interrupt, when bit 1 is one, completion of a conversion on A/D channel 1 will generate an interrupt, etc</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ADINTEN7</name>
+                     <description>These bits allow control over which A/D channels generate interrupts for conversion completion. When bit 0 is one, completion of a conversion on A/D channel 0 will generate an interrupt, when bit 1 is one, completion of a conversion on A/D channel 1 will generate an interrupt, etc</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ADGINTEN</name>
+                     <description>When 1, enables the global DONE flag in ADDR to generate an interrupt. When 0, only the individual A/D channels enabled by ADINTEN 7:0 will generate interrupts</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>8</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
+               <name>DR%s</name>
+               <description>A/D Channel n Data
+Register. This register contains the result of the most recent conversion
+completed on channel n</description>
+               <addressOffset>0x10</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>V_VREF</name>
+                     <description>When DONE is 1, this field contains a binary fraction representing the voltage on the ADn pin, divided by the voltage on the VREF pin. Zero in the field indicates that the voltage on the ADn pin was less than, equal to, or close to that on VREF, while 0x3FF indicates that the voltage on AD input was close to, equal to, or greater than that on VREF</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+                  <field>
+                     <name>OVERRUN</name>
+                     <description>This bit is 1 in burst mode if the results of one or more conversions was (were) lost and overwritten before the conversion that produced the result in the V_VREF bits.This bit is cleared by reading this register</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DONE</name>
+                     <description>This bit is set to 1 when an A/D conversion completes. It is cleared when this register is read</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>STAT</name>
+               <description>A/D Status Register. This register contains DONE and OVERRUN flags for all of the A/D channels, as well as the A/D interrupt flag</description>
+               <addressOffset>0x30</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>DONE0</name>
+                     <description>These bits mirror the DONE status flags that appear in the result register for each A/D channel</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DONE1</name>
+                     <description>These bits mirror the DONE status flags that appear in the result register for each A/D channel</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DONE2</name>
+                     <description>These bits mirror the DONE status flags that appear in the result register for each A/D channel</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DONE3</name>
+                     <description>These bits mirror the DONE status flags that appear in the result register for each A/D channel</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DONE4</name>
+                     <description>These bits mirror the DONE status flags that appear in the result register for each A/D channel</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DONE5</name>
+                     <description>These bits mirror the DONE status flags that appear in the result register for each A/D channel</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DONE6</name>
+                     <description>These bits mirror the DONE status flags that appear in the result register for each A/D channel</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DONE7</name>
+                     <description>These bits mirror the DONE status flags that appear in the result register for each A/D channel</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>OVERRUN0</name>
+                     <description>These bits mirror the OVERRRUN status flags that appear in the result register for each A/D channel. Reading ADSTAT allows checking the status of all A/D channels simultaneously</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>OVERRUN1</name>
+                     <description>These bits mirror the OVERRRUN status flags that appear in the result register for each A/D channel. Reading ADSTAT allows checking the status of all A/D channels simultaneously</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>OVERRUN2</name>
+                     <description>These bits mirror the OVERRRUN status flags that appear in the result register for each A/D channel. Reading ADSTAT allows checking the status of all A/D channels simultaneously</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>OVERRUN3</name>
+                     <description>These bits mirror the OVERRRUN status flags that appear in the result register for each A/D channel. Reading ADSTAT allows checking the status of all A/D channels simultaneously</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>OVERRUN4</name>
+                     <description>These bits mirror the OVERRRUN status flags that appear in the result register for each A/D channel. Reading ADSTAT allows checking the status of all A/D channels simultaneously</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>OVERRUN5</name>
+                     <description>These bits mirror the OVERRRUN status flags that appear in the result register for each A/D channel. Reading ADSTAT allows checking the status of all A/D channels simultaneously</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>OVERRUN6</name>
+                     <description>These bits mirror the OVERRRUN status flags that appear in the result register for each A/D channel. Reading ADSTAT allows checking the status of all A/D channels simultaneously</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>OVERRUN7</name>
+                     <description>These bits mirror the OVERRRUN status flags that appear in the result register for each A/D channel. Reading ADSTAT allows checking the status of all A/D channels simultaneously</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ADINT</name>
+                     <description>This bit is the A/D interrupt flag. It is one when any of the individual A/D channel Done flags is asserted and enabled to contribute to the A/D interrupt via the ADINTEN register</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

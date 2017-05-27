@@ -14,7 +14,7 @@
       <endian>little</endian>
       <mpuPresent>false</mpuPresent>
       <fpuPresent>false</fpuPresent>
-      <vtorPresent>true</vtorPresent>
+      <vtorPresent>false</vtorPresent>
       <nvicPrioBits>2</nvicPrioBits>
       <vendorSystickConfig>false</vendorSystickConfig>
    </cpu>
@@ -29,26 +29,14 @@
       <xi:include href="peripherals/CT32B1_LPC11Uxx.svd.xml"/>
       <xi:include href="peripherals/FLASHCTRL_LPC11Uxx.svd.xml"/>
       <xi:include href="peripherals/GPIO_GROUP_INT0_LPC11Uxx.svd.xml"/>
-      <peripheral derivedFrom="GPIO_GROUP_INT0"><name>GPIO_GROUP_INT1</name><baseAddress>0x40060000</baseAddress>
-         <interrupt>
-            <name>GINT1</name>
-            <description>GPIO group interrupt</description>
-            <value>9</value>
-         </interrupt>
-      </peripheral>
+      <peripheral derivedFrom="GPIO_GROUP_INT0"><name>GPIO_GROUP_INT1</name><baseAddress>0x40060000</baseAddress></peripheral>
       <xi:include href="peripherals/GPIO_PIN_INT_LPC11Uxx.svd.xml"/>
       <xi:include href="peripherals/GPIO_PORT_LPC11Uxx.svd.xml"/>
       <xi:include href="peripherals/I2C_LPC11Uxx.svd.xml"/>
       <xi:include href="peripherals/IOCON_LPC11Uxx.svd.xml"/>
       <xi:include href="peripherals/PMU_LPC11Uxx.svd.xml"/>
       <xi:include href="peripherals/SSP0_LPC11Uxx.svd.xml"/>
-      <peripheral derivedFrom="SSP0"><name>SSP1</name><baseAddress>0x40058000</baseAddress>
-         <interrupt>
-            <name>SSP1</name>
-            <description>SSP/SPI</description>
-            <value>14</value>
-         </interrupt>
-      </peripheral>
+      <peripheral derivedFrom="SSP0"><name>SSP1</name><baseAddress>0x40058000</baseAddress></peripheral>
       <xi:include href="peripherals/SYSCON_LPC11Uxx.svd.xml"/>
       <xi:include href="peripherals/USART_LPC11Uxx.svd.xml"/>
       <xi:include href="peripherals/USB_LPC11Uxx.svd.xml"/>

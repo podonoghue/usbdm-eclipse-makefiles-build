@@ -1,0 +1,428 @@
+<!--
+Devices using this peripheral: 
+      LPC11Cxx
+      LPC11xx
+-->
+      <peripheral>
+         <?sourceFile "SPI0_LPC11Cxx" ?>
+         <name>SPI0</name>
+         <description>SPI0</description>
+         <groupName>SPI</groupName>
+         <headerStructName>SPI0</headerStructName>
+         <baseAddress>0x40040000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x20</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x20</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>CR0</name>
+               <description>Control Register 0. Selects the serial clock rate, bus type, and data size</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>DSS</name>
+                     <description>Data Size Select. This field controls the number of bits transferred in each frame. Values 0000-0010 are not supported and should not be used</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>4_BIT_TRANSFER</name>
+                           <description>4-bit transfer</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>5_BIT_TRANSFER</name>
+                           <description>5-bit transfer</description>
+                           <value>0x4</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>6_BIT_TRANSFER</name>
+                           <description>6-bit transfer</description>
+                           <value>0x5</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>7_BIT_TRANSFER</name>
+                           <description>7-bit transfer</description>
+                           <value>0x6</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>8_BIT_TRANSFER</name>
+                           <description>8-bit transfer</description>
+                           <value>0x7</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>9_BIT_TRANSFER</name>
+                           <description>9-bit transfer</description>
+                           <value>0x8</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10_BIT_TRANSFER</name>
+                           <description>10-bit transfer</description>
+                           <value>0x9</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>11_BIT_TRANSFER</name>
+                           <description>11-bit transfer</description>
+                           <value>0xA</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>12_BIT_TRANSFER</name>
+                           <description>12-bit transfer</description>
+                           <value>0xB</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>13_BIT_TRANSFER</name>
+                           <description>13-bit transfer</description>
+                           <value>0xC</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>14_BIT_TRANSFER</name>
+                           <description>14-bit transfer</description>
+                           <value>0xD</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>15_BIT_TRANSFER</name>
+                           <description>15-bit transfer</description>
+                           <value>0xE</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>16_BIT_TRANSFER</name>
+                           <description>16-bit transfer</description>
+                           <value>0xF</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FRF</name>
+                     <description>Frame Format</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>SPI</name>
+                           <description>SPI</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TI</name>
+                           <description>TI</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>MICROWIRE</name>
+                           <description>Microwire</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>RESERVED</name>
+                           <description>This combination is not supported and should not be used</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CPOL</name>
+                     <description>Clock Out Polarity. This bit is only used in SPI mode</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>LOW</name>
+                           <description>SPI controller maintains the bus clock low between frames</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>HIGH</name>
+                           <description>SPI controller maintains the bus clock high between frames</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CPHA</name>
+                     <description>Clock Out Phase. This bit is only used in SPI mode</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>FIRSTCLOCK</name>
+                           <description>SPI controller captures serial data on the first clock transition of the frame, that is, the transition away from the inter-frame state of the clock line</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SECONDCLOCK</name>
+                           <description>SPI controller captures serial data on the second clock transition of the frame, that is, the transition back to the inter-frame state of the clock line</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SCR</name>
+                     <description>Serial Clock Rate. The number of prescaler output clocks per bit on the bus, minus one. Given that CPSDVSR is the prescale divider, and the APB clock PCLK clocks the prescaler, the bit frequency is PCLK / (CPSDVSR X [SCR+1])</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CR1</name>
+               <description>Control Register 1. Selects master/slave and other modes</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>LBM</name>
+                     <description>Loop Back Mode</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NORMAL</name>
+                           <description>During normal operation</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>LOOPBACK</name>
+                           <description>Serial input is taken from the serial output (MOSI or MISO) rather than the serial input pin (MISO or MOSI respectively)</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SSE</name>
+                     <description>SPI Enable</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DISABLE</name>
+                           <description>The SPI controller is disabled</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ENABLE</name>
+                           <description>The SPI controller will interact with other devices on the serial bus. Software should write the appropriate control information to the other SPI/SSP registers and interrupt controller registers, before setting this bit</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MS</name>
+                     <description>Master/Slave Mode.This bit can only be written when the SSE bit is 0</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>MASTER</name>
+                           <description>The SPI controller acts as a master on the bus, driving the SCLK, MOSI, and SSEL lines and receiving the MISO line</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SLAVE</name>
+                           <description>The SPI controller acts as a slave on the bus, driving MISO line and receiving SCLK, MOSI, and SSEL lines</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SOD</name>
+                     <description>Slave Output Disable. This bit is relevant only in slave mode (MS = 1). If it is 1, this blocks this SPI controller from driving the transmit data line (MISO)</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DR</name>
+               <description>Data Register. Writes fill the transmit FIFO, and reads empty the receive FIFO</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>DATA</name>
+                     <description>Write: software can write data to be sent in a future frame to this register whenever the TNF bit in the Status register is 1, indicating that the Tx FIFO is not full. If the Tx FIFO was previously empty and the SPI controller is not busy on the bus, transmission of the data will begin immediately. Otherwise the data written to this register will be sent as soon as all previous data has been sent (and received). If the data length is less than 16 bit, software must right-justify the data written to this register. Read: software can read data from this register whenever the RNE bit in the Status register is 1, indicating that the Rx FIFO is not empty. When software reads this register, the SPI controller returns data from the least recent frame in the Rx FIFO. If the data length is less than 16 bit, the data is right-justified in this field with higher order bits filled with 0s</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SR</name>
+               <description>Status Register</description>
+               <addressOffset>0xC</addressOffset>
+               <access>read-only</access>
+               <resetValue>0x3</resetValue>
+               <fields>
+                  <field>
+                     <name>TFE</name>
+                     <description>Transmit FIFO Empty. This bit is 1 is the Transmit FIFO is empty, 0 if not</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TNF</name>
+                     <description>Transmit FIFO Not Full. This bit is 0 if the Tx FIFO is full, 1 if not</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RNE</name>
+                     <description>Receive FIFO Not Empty. This bit is 0 if the Receive FIFO is empty, 1 if not</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RFF</name>
+                     <description>Receive FIFO Full. This bit is 1 if the Receive FIFO is full, 0 if not</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BSY</name>
+                     <description>Busy. This bit is 0 if the SPI controller is idle, 1 if it is currently sending/receiving a frame and/or the Tx FIFO is not empty</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CPSR</name>
+               <description>Clock Prescale Register</description>
+               <addressOffset>0x10</addressOffset>
+               <fields>
+                  <field>
+                     <name>CPSDVSR</name>
+                     <description>This even value between 2 and 254, by which SPI_PCLK is divided to yield the prescaler output clock. Bit 0 always reads as 0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>IMSC</name>
+               <description>Interrupt Mask Set and Clear Register</description>
+               <addressOffset>0x14</addressOffset>
+               <fields>
+                  <field>
+                     <name>RORIM</name>
+                     <description>Software should set this bit to enable interrupt when a Receive Overrun occurs, that is, when the Rx FIFO is full and another frame is completely received. The ARM spec implies that the preceding frame data is overwritten by the new frame data when this occurs</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RTIM</name>
+                     <description>Software should set this bit to enable interrupt when a Receive Time-out condition occurs. A Receive Time-out occurs when the Rx FIFO is not empty, and no has not been read for a time-out period. The time-out period is the same for master and slave modes and is determined by the SSP bit rate: 32 bits at PCLK / (CPSDVSR x [SCR+1])</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RXIM</name>
+                     <description>Software should set this bit to enable interrupt when the Rx FIFO is at least half full</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TXIM</name>
+                     <description>Software should set this bit to enable interrupt when the Tx FIFO is at least half empty</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RIS</name>
+               <description>Raw Interrupt Status Register</description>
+               <addressOffset>0x18</addressOffset>
+               <access>read-only</access>
+               <resetValue>0x8</resetValue>
+               <fields>
+                  <field>
+                     <name>RORRIS</name>
+                     <description>This bit is 1 if another frame was completely received while the RxFIFO was full. The ARM spec implies that the preceding frame data is overwritten by the new frame data when this occurs</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RTRIS</name>
+                     <description>This bit is 1 if the Rx FIFO is not empty, and has not been read for a time-out period. The time-out period is the same for master and slave modes and is determined by the SSP bit rate: 32 bits at PCLK / (CPSDVSR x [SCR+1])</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RXRIS</name>
+                     <description>This bit is 1 if the Rx FIFO is at least half full</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TXRIS</name>
+                     <description>This bit is 1 if the Tx FIFO is at least half empty</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MIS</name>
+               <description>Masked Interrupt Status Register</description>
+               <addressOffset>0x1C</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>RORMIS</name>
+                     <description>This bit is 1 if another frame was completely received while the RxFIFO was full, and this interrupt is enabled</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RTMIS</name>
+                     <description>This bit is 1 if the Rx FIFO is not empty, has not been read for a time-out period, and this interrupt is enabled. The time-out period is the same for master and slave modes and is determined by the SSP bit rate: 32 bits at PCLK / (CPSDVSR x [SCR+1])</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RXMIS</name>
+                     <description>This bit is 1 if the Rx FIFO is at least half full, and this interrupt is enabled</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TXMIS</name>
+                     <description>This bit is 1 if the Tx FIFO is at least half empty, and this interrupt is enabled</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ICR</name>
+               <description>SSPICR Interrupt Clear Register</description>
+               <addressOffset>0x20</addressOffset>
+               <access>write-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>RORIC</name>
+                     <description>Writing a 1 to this bit clears the frame was received when RxFIFO was full interrupt</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RTIC</name>
+                     <description>Writing a 1 to this bit clears the Rx FIFO was not empty and has not been read for a timeout period interrupt. The timeout period is the same for master and slave modes and is determined by the SSP bit rate: 32 bits at PCLK / (CPSDVSR x [SCR+1])</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

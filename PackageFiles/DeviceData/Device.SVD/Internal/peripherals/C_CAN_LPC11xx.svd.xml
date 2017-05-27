@@ -1,0 +1,2103 @@
+<!--
+Devices using this peripheral: 
+      LPC11xx
+-->
+      <peripheral>
+         <?sourceFile "C_CAN_LPC11xx" ?>
+         <name>C_CAN</name>
+         <description>/LPC11Cxx C_CAN controller</description>
+         <groupName>C_CAN</groupName>
+         <headerStructName>C_CAN</headerStructName>
+         <baseAddress>0x40050000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x1C</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x20</offset>
+            <size>0x2C</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x80</offset>
+            <size>0x2C</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x100</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x120</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x140</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x160</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x180</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>CANCNTL</name>
+               <description>CAN control</description>
+               <addressOffset>0x0</addressOffset>
+               <resetValue>0x1</resetValue>
+               <fields>
+                  <field>
+                     <name>INIT</name>
+                     <description>Initialization</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NORMAL_OPERATION_</name>
+                           <description>Normal operation</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INITIALIZATION</name>
+                           <description>Initialization is started. On reset, software needs to initialize the CAN controller</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>IE</name>
+                     <description>Module interrupt enable</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DISABLE_CAN_INTERRUP</name>
+                           <description>Disable CAN interrupts. The interrupt line is always HIGH</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ENABLE_CAN_INTERRUPT</name>
+                           <description>Enable CAN interrupts. The interrupt line is set to LOW and remains LOW until all pending interrupts are cleared</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SIE</name>
+                     <description>Status change interrupt enable</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DISABLE_STATUS_CHANG</name>
+                           <description>Disable status change interrupts. No status change interrupt will be generated</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ENABLE_STATUS_CHANGE</name>
+                           <description>Enable status change interrupts. A status change interrupt will be generated when a message transfer is successfully completed or a CAN bus error is detected</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>EIE</name>
+                     <description>Error interrupt enable</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DISABLE_ERROR_INTERR</name>
+                           <description>Disable error interrupt. No error status interrupt will be generated</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ENABLE_ERROR_INTERRU</name>
+                           <description>Enable error interrupt. A change in the bits BOFF or EWARN in the CANSTAT registers will generate an interrupt</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DAR</name>
+                     <description>Disable automatic retransmission</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>ENABLED</name>
+                           <description>Automatic retransmission of disturbed messages enabled</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>DISABLED</name>
+                           <description>Automatic retransmission disabled</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CCE</name>
+                     <description>Configuration change enable</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NOACCESS</name>
+                           <description>The CPU has no write access to the bit timing register</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ACCESS</name>
+                           <description>The CPU has write access to the CANBT register while the INIT bit is one</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TEST</name>
+                     <description>Test mode enable</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NORMAL_OPERATION_</name>
+                           <description>Normal operation</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TEST_MODE_</name>
+                           <description>Test mode</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANSTAT</name>
+               <description>Status register</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>LEC</name>
+                     <description>Last error code Type of the last error to occur on the CAN bus.The LEC field holds a code which indicates the type of the last error to occur on the CAN bus. This field will be cleared to 0 when a message has been transferred (reception or transmission) without error. The unused code 111 may be written by the CPU to check for updates</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_ERROR_</name>
+                           <description>No error</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>STUFF_ERROR</name>
+                           <description>Stuff error: More than 5 equal bits in a sequence have occurred in a part of a received message where this is not allowed</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>FORM_ERROR</name>
+                           <description>Form error: A fixed format part of a received frame has the wrong format</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ACKERROR</name>
+                           <description>AckError: The message this CAN core transmitted was not acknowledged</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>BIT1ERROR</name>
+                           <description>Bit1Error: During the transmission of a message (with the exception of the arbitration field), the device wanted to send a HIGH/recessive level (bit of logical value 1), but the monitored bus value was LOW/dominant</description>
+                           <value>0x4</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>BIT0ERROR</name>
+                           <description>Bit0Error: During the transmission of a message (or acknowledge bit, or active error flag, or overload flag), the device wanted to send a LOW/dominant level (data or identifier bit logical value 0), but the monitored Bus value was HIGH/recessive. During busoff recovery this status is set each time a sequence of 11 HIGH/recessive bits has been monitored. This enables the CPU to monitor the proceeding of the busoff recovery sequence (indicating the bus is not stuck at LOW/dominant or continuously disturbed)</description>
+                           <value>0x5</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>CRCERROR</name>
+                           <description>CRCError: The CRC checksum was incorrect in the message received</description>
+                           <value>0x6</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>UNUSED</name>
+                           <description>Unused: No CAN bus event was detected (written by the CPU)</description>
+                           <value>0x7</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXOK</name>
+                     <description>Transmitted a message successfully This bit is reset by the CPU. It is never reset by the CAN controller</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NOTRANSMIT</name>
+                           <description>Since this bit was reset by the CPU, no message has been successfully transmitted</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TRANSMIT</name>
+                           <description>Since this bit was last reset by the CPU, a message has been successfully transmitted (error free and acknowledged by at least one other node)</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXOK</name>
+                     <description>Received a message successfully This bit is reset by the CPU. It is never reset by the CAN controller</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NOTRANSMIT</name>
+                           <description>Since this bit was last reset by the CPU, no message has been successfully transmitted</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TRANSMIT</name>
+                           <description>Since this bit was last set to zero by the CPU, a message has been successfully received independent of the result of acceptance filtering</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>EPASS</name>
+                     <description>Error passive</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>ACTIVE</name>
+                           <description>The CAN controller is in the error active state</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>PASSIVE</name>
+                           <description>The CAN controller is in the error passive state as defined in the CAN 2.0 specification</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>EWARN</name>
+                     <description>Warning status</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>BELOWWARNINGLIM</name>
+                           <description>Both error counters are below the error warning limit of 96</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>WARNINGLIM</name>
+                           <description>At least one of the error counters in the EML has reached the error warning limit of 96</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BOFF</name>
+                     <description>Busoff status</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NOTBUSOFF</name>
+                           <description>The CAN module is not in busoff</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>BUSOFF</name>
+                           <description>The CAN controller is in busoff state</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANEC</name>
+               <description>Error counter</description>
+               <addressOffset>0x8</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>TEC_7_0</name>
+                     <description>Transmit error counter Current value of the transmit error counter (maximum value 255)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>REC_6_0</name>
+                     <description>Receive error counter Current value of the receive error counter (maximum value 127)</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>RP</name>
+                     <description>Receive error passive</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>BELOWERRORPASSIVE</name>
+                           <description>The receive counter is below the error passive level</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ERRORPASSIVE</name>
+                           <description>The receive counter has reached the error passive level as defined in the  CAN2.0 specification</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANBT</name>
+               <description>Bit timing register</description>
+               <addressOffset>0xC</addressOffset>
+               <resetValue>0x2301</resetValue>
+               <fields>
+                  <field>
+                     <name>BRP</name>
+                     <description>Baud rate prescaler The value by which the oscillator frequency is divided for generating the bit time quanta. The bit time is built up from a multiple of this quanta. Valid values for the Baud Rate Prescaler are 0 to 63.[1]</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>SJW</name>
+                     <description>(Re)synchronization jump width Valid programmed values are 0 to 3.[1]</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>TSEG1</name>
+                     <description>Time segment before the sample point Valid values are 1 to 15.[1]</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>TSEG2</name>
+                     <description>Time segment after the sample point Valid values are 0 to 7.[1]</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANINT</name>
+               <description>Interrupt register</description>
+               <addressOffset>0x10</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>INTID</name>
+                     <description>0x0000 = No interrupt is pending. 0x0001 - 0x0020 = Number of message object which caused the interrupt. 0x0021 - 0x7FFF = Unused 0x8000 = Status interrupt 0x8001 - 0xFFFF = Unused</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANTEST</name>
+               <description>Test register</description>
+               <addressOffset>0x14</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>BASIC</name>
+                     <description>Basic mode</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>BASIC_MODE_DISABLED_</name>
+                           <description>Basic mode disabled</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TXRX</name>
+                           <description>IF1 registers used as TX buffer, IF2 registers used as RX buffer</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SILENT</name>
+                     <description>Silent mode</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NORMAL_OPERATION_</name>
+                           <description>Normal operation</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SILENT</name>
+                           <description>The module is in silent mode</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LBACK</name>
+                     <description>Loop back mode</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DISABLED</name>
+                           <description>Loop back mode is disabled</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ENABLED</name>
+                           <description>Loop back mode is enabled</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TX</name>
+                     <description>Control of CAN_TXD pins</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>LEVEL</name>
+                           <description>Level at the CAN_TXD pin is controlled by the CAN controller. This is the value at reset</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TXD</name>
+                           <description>The sample point can be monitored at the CAN_TXD pin</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>LOW</name>
+                           <description>CAN_TXD pin is driven LOW/dominant</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>HIGH</name>
+                           <description>CAN_TXD pin is driven HIGH/recessive</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RX</name>
+                     <description>Monitors the actual value of the CAN_RXD pin</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>RECESSIVE</name>
+                           <description>The CAN bus is recessive (CAN_RXD = 1)</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>DORMANT</name>
+                           <description>The CAN bus is dominant (CAN_RXD = 0)</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANBRPE</name>
+               <description>Baud rate prescaler extension register</description>
+               <addressOffset>0x18</addressOffset>
+               <fields>
+                  <field>
+                     <name>BRPE</name>
+                     <description>Baud rate prescaler extension By programming BRPE the Baud Rate Prescaler can be extended to values up to 1023. Hardware interprets the value as the value of BRPE (MSBs) and BRP (LSBs) plus one. Allowed values are 0 to 15</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANIF1_CMDREQ</name>
+               <description>Message interface  command request</description>
+               <addressOffset>0x20</addressOffset>
+               <resetValue>0x1</resetValue>
+               <fields>
+                  <field>
+                     <name>MN</name>
+                     <description>Message number 0x01 - 0x20 = Valid message numbers. The message object in the message RAM is selected for data transfer. 0x00 = Not a valid message number. This value is interpreted as 0x20.[1] 0x21 - 0x3F = Not a valid message number. This value is interpreted as 0x01 - 0x1F.[1]</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>BUSY</name>
+                     <description>BUSY flag</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>ZERO</name>
+                           <description>Set to zero by hardware when read/write action to this Command request register has finished</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ONE</name>
+                           <description>Set to one by hardware when writing to this Command request register</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANIF1_CMDMSK_R</name>
+               <description>Message interface  command mask - read direction</description>
+               <addressOffset>0x24</addressOffset>
+               <fields>
+                  <field>
+                     <name>DATA_B</name>
+                     <description>Access data bytes 4-7</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>UNCHANGED</name>
+                           <description>Data bytes 4-7 unchanged</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TRANSFER_DATA_BYTES_</name>
+                           <description>Transfer data bytes 4-7 to IFx message buffer register</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DATA_A</name>
+                     <description>Access data bytes 0-3</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>UNCHANGED</name>
+                           <description>Data bytes 0-3 unchanged</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TRANSFER_DATA_BYTES_</name>
+                           <description>Transfer data bytes 0-3 to IFx message buffer</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>NEWDAT</name>
+                     <description>Access new data bit</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>UNCHANGED</name>
+                           <description>NEWDAT bit remains unchanged. A read access to a message object can be combined with the reset of the control bits INTPND and NEWDAT in IF1/2_MCTRL. The values of these bits transferred to the IFx Message Control Register always reflect the status before resetting these bits</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>CLEAR_NEWDAT_BIT_IN_</name>
+                           <description>Clear NEWDAT bit in the message object</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CLRINTPND</name>
+                     <description>Clear interrupt pending bit</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>UNCHANGED</name>
+                           <description>INTPND bit remains unchanged</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>CLEAR_INTPND_BIT_IN_</name>
+                           <description>Clear INTPND bit in the message object</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CTRL</name>
+                     <description>Access control bits</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>UNCHANGED</name>
+                           <description>Control bits unchanged</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TRANSFER_CONTROL_BIT</name>
+                           <description>Transfer control bits to IFx message buffer</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ARB</name>
+                     <description>Access arbitration bits</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>UNCHANGED</name>
+                           <description>Arbitration bits unchanged</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TRANSFER_IDENTIFIER</name>
+                           <description>Transfer Identifier, DIR, XTD, and MSGVAL bits to IFx message buffer register</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MASK</name>
+                     <description>Access mask bits</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>UNCHANGED</name>
+                           <description>Mask bits unchanged</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TRANSFER_IDENTIFIER_</name>
+                           <description>Transfer Identifier MASK + MDIR + MXTD to IFx message buffer register</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WR_RD</name>
+                     <description>Read transfer Transfer data from the message object addressed by the command request register to the selected message buffer registers CANIFn_CMDREQ</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANIF1_CMDMSK_W</name>
+               <description>Message interface 
+command mask - write direction</description>
+               <addressOffset>0x24</addressOffset>
+               <fields>
+                  <field>
+                     <name>DATA_B</name>
+                     <description>Access data bytes 4-7</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DATA_BYTES_4_7_UNCHA</name>
+                           <description>Data bytes 4-7 unchanged</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TRANSFER_DATA_BYTES_</name>
+                           <description>Transfer data bytes 4-7 to message object</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DATA_A</name>
+                     <description>Access data bytes 0-3</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DATA_BYTES_0_3_UNCHA</name>
+                           <description>Data bytes 0-3 unchanged</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TRANSFER_DATA_BYTES_</name>
+                           <description>Transfer data bytes 0-3 to message object</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXRQST</name>
+                     <description>Access transmission request bit</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_TRANSMISSION_REQU</name>
+                           <description>No transmission request. TXRQSRT bit unchanged in IF1/2_MCTRL. If a transmission is requested by programming this bit, the TXRQST bit in the CANIFn_MCTRL register is ignored</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>REQUEST_A_TRANSMISSI</name>
+                           <description>Request a transmission. Set the TXRQST bit IF1/2_MCTRL</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CLRINTPND</name>
+                     <description>This bit is ignored in the write direction</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CTRL</name>
+                     <description>Access control bits</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>UNCHANGED</name>
+                           <description>Control bits unchanged</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TRANSFER_CONTROL_BIT</name>
+                           <description>Transfer control bits to message object</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ARB</name>
+                     <description>Access arbitration bits</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>UNCHANGED</name>
+                           <description>Arbitration bits unchanged</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TRANSFER_IDENTIFIER</name>
+                           <description>Transfer Identifier, DIR, XTD, and MSGVAL bits to message object</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MASK</name>
+                     <description>Access mask bits</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>UNCHANGED</name>
+                           <description>Mask bits unchanged</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TRANSFER_IDENTIFIER_</name>
+                           <description>Transfer Identifier MASK + MDIR + MXTD to message object</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WR_RD</name>
+                     <description>Write transfer Transfer data from the selected message buffer registers to the message object addressed by the command request register CANIFn_CMDREQ</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANIF1_MSK1</name>
+               <description>Message interface 1 mask 1</description>
+               <addressOffset>0x28</addressOffset>
+               <resetValue>0xFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>MSK_15_0</name>
+                     <description>Identifier mask</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NOINHIBIT</name>
+                           <description>The corresponding bit in the identifier of the message can not inhibit the match in the acceptance filtering</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ACCEPTANCEFILTERING</name>
+                           <description>The corresponding identifier bit is used for acceptance filtering</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANIF1_MSK2</name>
+               <description>Message interface 1 mask 2</description>
+               <addressOffset>0x2C</addressOffset>
+               <resetValue>0xFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>MSK_28_16</name>
+                     <description>Identifier mask</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>13</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NOINHIBIT</name>
+                           <description>The corresponding bit in the identifier of the message can not inhibit the match in the acceptance filtering</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ACCEPTANCEFILTERING</name>
+                           <description>The corresponding identifier bit is used for acceptance filtering</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MDIR</name>
+                     <description>Mask message direction</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NOEFFECT</name>
+                           <description>The message direction bit (DIR) has no effect on acceptance filtering</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ACCEPTANCEFILTERING</name>
+                           <description>The message direction bit (DIR) is used for acceptance filtering</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MXTD</name>
+                     <description>Mask extend identifier</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NOEFFECT</name>
+                           <description>The extended identifier bit (XTD) has no effect on acceptance filtering</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ACCEPTANCEFILTERING</name>
+                           <description>The extended identifier bit (XTD) is used for acceptance filtering</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANIF1_ARB1</name>
+               <description>Message interface 1 arbitration 1</description>
+               <addressOffset>0x30</addressOffset>
+               <fields>
+                  <field>
+                     <name>ID_15_0</name>
+                     <description>Message identifier  29-bit identifier (extended frame) 11-bit identifier (standard frame)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANIF1_ARB2</name>
+               <description>Message interface 1 arbitration 2</description>
+               <addressOffset>0x34</addressOffset>
+               <fields>
+                  <field>
+                     <name>ID_28_16</name>
+                     <description>Message identifier  29-bit identifier (extended frame) 11-bit identifier (standard frame)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>13</bitWidth>
+                  </field>
+                  <field>
+                     <name>DIR</name>
+                     <description>Message direction</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>RECEIVE</name>
+                           <description>Direction = receive. On TXRQST, a Remote Frame with the identifier of this Message Object is transmitted. On reception of a Data Frame with matching identifier, that message is stored in this Message Object</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TRANSMIT</name>
+                           <description>Direction = transmit. On TXRQST, the respective Message Object is transmitted as a Data Frame. On reception of a Remote Frame with matching identifier, the TXRQST bit of this Message Object is set (if RMTEN = one)</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>XTD</name>
+                     <description>Extend identifier</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>11_BIT_STANDARD_</name>
+                           <description>The 11-bit standard identifier will be used for this message object</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>29_BIT_EXTENDED_</name>
+                           <description>The 29-bit extended identifier will be used for this message object</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MSGVAL</name>
+                     <description>Message valid The CPU must reset the MSGVAL bit of all unused Messages Objects during the initialization before it resets bit INIT in the CAN Control Register. This bit must also be reset before the identifier ID28:0, the control bits XTD, DIR, or the Data Length Code DLC3:0 are modified, or if the Messages Object is no longer required</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>IGNORE</name>
+                           <description>The message object is ignored by the message handler</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>CONFIGURED</name>
+                           <description>The message object is configured and should be considered by the message handler</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANIF1_MCTRL</name>
+               <description>Message interface 1 message control</description>
+               <addressOffset>0x38</addressOffset>
+               <fields>
+                  <field>
+                     <name>DLC_3_0</name>
+                     <description>Data length code The Data Length Code of a Message Object must be defined the same as in all the corresponding objects with the same identifier at other nodes. When the Message Handler stores a data frame, it will write the DLC to the value given by the received message. 0000 - 1000 = Data frame has 0 - 8 data bytes. 1001 - 1111 = Data frame has 8 data bytes</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>EOB</name>
+                     <description>End of buffer</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>FIFO</name>
+                           <description>Message object belongs to a FIFO buffer and is not the last message object of that FIFO buffer</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SINGELAST</name>
+                           <description>Single message object or last message object of a FIFO buffer</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXRQST</name>
+                     <description>Transmit request</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NOWAIT</name>
+                           <description>This message object is not waiting for transmission</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>WAIT</name>
+                           <description>The transmission of this message object is requested and is not yet done</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RMTEN</name>
+                     <description>Remote enable</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NOCHANGE</name>
+                           <description>At the reception of a remote frame, TXRQST is left unchanged</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SET</name>
+                           <description>At the reception of a remote frame, TXRQST is set</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXIE</name>
+                     <description>Receive interrupt enable</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NOCHANGE</name>
+                           <description>INTPND will be left unchanged after successful reception of a frame</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SET</name>
+                           <description>INTPND will be set after successful reception of a frame</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXIE</name>
+                     <description>Transmit interrupt enable</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NOCHANGE</name>
+                           <description>The INTPND bit will be left unchanged after a successful transmission of a frame</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SET</name>
+                           <description>INTPND will be set after a successful transmission of a frame</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>UMASK</name>
+                     <description>Use acceptance mask If UMASK is set to 1, the message object&apos;s mask bits have to be programmed during initialization of the message object before MAGVAL is set to 1</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>IGNORE</name>
+                           <description>Mask ignored</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>USEMASK</name>
+                           <description>Use mask (MSK[28:0], MXTD, and MDIR) for acceptance filtering</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>INTPND</name>
+                     <description>Interrupt pending</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NOINTSOURCE</name>
+                           <description>This message object is not the source of an interrupt</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INTSOURCE</name>
+                           <description>This message object is the source of an interrupt. The Interrupt Identifier in the Interrupt Register will point to this message object if there is no other interrupt source with higher priority</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MSGLST</name>
+                     <description>Message lost (only valid for message objects in the direction receive)</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NOLOST</name>
+                           <description>No message lost since this bit was reset last by the CPU</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>NEWMESSAGE</name>
+                           <description>The Message Handler stored a new message into this object when NEWDAT was still set, the CPU has lost a message</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>NEWDAT</name>
+                     <description>New data</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NONEWDATA</name>
+                           <description>No new data has been written into the data portion of this message object by the message handler since this flag was cleared last by the CPU</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>NEWDATA</name>
+                           <description>The message handler or the CPU has written new data into the data portion of this message object</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANIF1_DA1</name>
+               <description>Message interface 1 data A1</description>
+               <addressOffset>0x3C</addressOffset>
+               <fields>
+                  <field>
+                     <name>DATA0</name>
+                     <description>Data byte 0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>DATA1</name>
+                     <description>Data byte 1</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANIF1_DA2</name>
+               <description>Message interface 1 data A2</description>
+               <addressOffset>0x40</addressOffset>
+               <fields>
+                  <field>
+                     <name>DATA2</name>
+                     <description>Data byte 2</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>DATA3</name>
+                     <description>Data byte 3</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANIF1_DB1</name>
+               <description>Message interface 1 data B1</description>
+               <addressOffset>0x44</addressOffset>
+               <fields>
+                  <field>
+                     <name>DATA4</name>
+                     <description>Data byte 4</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>DATA5</name>
+                     <description>Data byte 5</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANIF1_DB2</name>
+               <description>Message interface 1 data B2</description>
+               <addressOffset>0x48</addressOffset>
+               <fields>
+                  <field>
+                     <name>DATA6</name>
+                     <description>Data byte 6</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>DATA7</name>
+                     <description>Data byte 7</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANIF2_CMDREQ</name>
+               <description>Message interface  command request</description>
+               <addressOffset>0x80</addressOffset>
+               <resetValue>0x1</resetValue>
+               <fields>
+                  <field>
+                     <name>MN</name>
+                     <description>Message number 0x01 - 0x20 = Valid message numbers. The message object in the message RAM is selected for data transfer. 0x00 = Not a valid message number. This value is interpreted as 0x20.[1] 0x21 - 0x3F = Not a valid message number. This value is interpreted as 0x01 - 0x1F.[1]</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>BUSY</name>
+                     <description>BUSY flag</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>ZERO</name>
+                           <description>Set to zero by hardware when read/write action to this Command request register has finished</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ONE</name>
+                           <description>Set to one by hardware when writing to this Command request register</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANIF2_CMDMSK_R</name>
+               <description>Message interface  command mask - read direction</description>
+               <addressOffset>0x84</addressOffset>
+               <fields>
+                  <field>
+                     <name>DATA_B</name>
+                     <description>Access data bytes 4-7</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>UNCHANGED</name>
+                           <description>Data bytes 4-7 unchanged</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TRANSFER_DATA_BYTES_</name>
+                           <description>Transfer data bytes 4-7 to IFx message buffer register</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DATA_A</name>
+                     <description>Access data bytes 0-3</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>UNCHANGED</name>
+                           <description>Data bytes 0-3 unchanged</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TRANSFER_DATA_BYTES_</name>
+                           <description>Transfer data bytes 0-3 to IFx message buffer</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>NEWDAT</name>
+                     <description>Access new data bit</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>UNCHANGED</name>
+                           <description>NEWDAT bit remains unchanged. A read access to a message object can be combined with the reset of the control bits INTPND and NEWDAT in IF1/2_MCTRL. The values of these bits transferred to the IFx Message Control Register always reflect the status before resetting these bits</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>CLEAR_NEWDAT_BIT_IN_</name>
+                           <description>Clear NEWDAT bit in the message object</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CLRINTPND</name>
+                     <description>Clear interrupt pending bit</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>UNCHANGED</name>
+                           <description>INTPND bit remains unchanged</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>CLEAR_INTPND_BIT_IN_</name>
+                           <description>Clear INTPND bit in the message object</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CTRL</name>
+                     <description>Access control bits</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>UNCHANGED</name>
+                           <description>Control bits unchanged</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TRANSFER_CONTROL_BIT</name>
+                           <description>Transfer control bits to IFx message buffer</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ARB</name>
+                     <description>Access arbitration bits</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>UNCHANGED</name>
+                           <description>Arbitration bits unchanged</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TRANSFER_IDENTIFIER</name>
+                           <description>Transfer Identifier, DIR, XTD, and MSGVAL bits to IFx message buffer register</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MASK</name>
+                     <description>Access mask bits</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>UNCHANGED</name>
+                           <description>Mask bits unchanged</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TRANSFER_IDENTIFIER_</name>
+                           <description>Transfer Identifier MASK + MDIR + MXTD to IFx message buffer register</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WR_RD</name>
+                     <description>Read transfer Transfer data from the message object addressed by the command request register to the selected message buffer registers CANIFn_CMDREQ</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANIF2_CMDMSK_W</name>
+               <description>Message interface 
+command mask - write direction</description>
+               <addressOffset>0x84</addressOffset>
+               <fields>
+                  <field>
+                     <name>DATA_B</name>
+                     <description>Access data bytes 4-7</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DATA_BYTES_4_7_UNCHA</name>
+                           <description>Data bytes 4-7 unchanged</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TRANSFER_DATA_BYTES_</name>
+                           <description>Transfer data bytes 4-7 to message object</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DATA_A</name>
+                     <description>Access data bytes 0-3</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DATA_BYTES_0_3_UNCHA</name>
+                           <description>Data bytes 0-3 unchanged</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TRANSFER_DATA_BYTES_</name>
+                           <description>Transfer data bytes 0-3 to message object</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXRQST</name>
+                     <description>Access transmission request bit</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_TRANSMISSION_REQU</name>
+                           <description>No transmission request. TXRQSRT bit unchanged in IF1/2_MCTRL. If a transmission is requested by programming this bit, the TXRQST bit in the CANIFn_MCTRL register is ignored</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>REQUEST_A_TRANSMISSI</name>
+                           <description>Request a transmission. Set the TXRQST bit IF1/2_MCTRL</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CLRINTPND</name>
+                     <description>This bit is ignored in the write direction</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CTRL</name>
+                     <description>Access control bits</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>UNCHANGED</name>
+                           <description>Control bits unchanged</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TRANSFER_CONTROL_BIT</name>
+                           <description>Transfer control bits to message object</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ARB</name>
+                     <description>Access arbitration bits</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>UNCHANGED</name>
+                           <description>Arbitration bits unchanged</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TRANSFER_IDENTIFIER</name>
+                           <description>Transfer Identifier, DIR, XTD, and MSGVAL bits to message object</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MASK</name>
+                     <description>Access mask bits</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>UNCHANGED</name>
+                           <description>Mask bits unchanged</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TRANSFER_IDENTIFIER_</name>
+                           <description>Transfer Identifier MASK + MDIR + MXTD to message object</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WR_RD</name>
+                     <description>Write transfer Transfer data from the selected message buffer registers to the message object addressed by the command request register CANIFn_CMDREQ</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANIF2_MSK1</name>
+               <description>Message interface 1 mask 1</description>
+               <addressOffset>0x88</addressOffset>
+               <resetValue>0xFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>MSK_15_0</name>
+                     <description>Identifier mask</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NOINHIBIT</name>
+                           <description>The corresponding bit in the identifier of the message can not inhibit the match in the acceptance filtering</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ACCEPTANCEFILTERING</name>
+                           <description>The corresponding identifier bit is used for acceptance filtering</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANIF2_MSK2</name>
+               <description>Message interface 1 mask 2</description>
+               <addressOffset>0x8C</addressOffset>
+               <resetValue>0xFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>MSK_28_16</name>
+                     <description>Identifier mask</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>13</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NOINHIBIT</name>
+                           <description>The corresponding bit in the identifier of the message can not inhibit the match in the acceptance filtering</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ACCEPTANCEFILTERING</name>
+                           <description>The corresponding identifier bit is used for acceptance filtering</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MDIR</name>
+                     <description>Mask message direction</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NOEFFECT</name>
+                           <description>The message direction bit (DIR) has no effect on acceptance filtering</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ACCEPTANCEFILTERING</name>
+                           <description>The message direction bit (DIR) is used for acceptance filtering</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MXTD</name>
+                     <description>Mask extend identifier</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NOEFFECT</name>
+                           <description>The extended identifier bit (XTD) has no effect on acceptance filtering</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ACCEPTANCEFILTERING</name>
+                           <description>The extended identifier bit (XTD) is used for acceptance filtering</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANIF2_ARB1</name>
+               <description>Message interface 1 arbitration 1</description>
+               <addressOffset>0x90</addressOffset>
+               <fields>
+                  <field>
+                     <name>ID_15_0</name>
+                     <description>Message identifier  29-bit identifier (extended frame) 11-bit identifier (standard frame)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANIF2_ARB2</name>
+               <description>Message interface 1 arbitration 2</description>
+               <addressOffset>0x94</addressOffset>
+               <fields>
+                  <field>
+                     <name>ID_28_16</name>
+                     <description>Message identifier  29-bit identifier (extended frame) 11-bit identifier (standard frame)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>13</bitWidth>
+                  </field>
+                  <field>
+                     <name>DIR</name>
+                     <description>Message direction</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>RECEIVE</name>
+                           <description>Direction = receive. On TXRQST, a Remote Frame with the identifier of this Message Object is transmitted. On reception of a Data Frame with matching identifier, that message is stored in this Message Object</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TRANSMIT</name>
+                           <description>Direction = transmit. On TXRQST, the respective Message Object is transmitted as a Data Frame. On reception of a Remote Frame with matching identifier, the TXRQST bit of this Message Object is set (if RMTEN = one)</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>XTD</name>
+                     <description>Extend identifier</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>11_BIT_STANDARD_</name>
+                           <description>The 11-bit standard identifier will be used for this message object</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>29_BIT_EXTENDED_</name>
+                           <description>The 29-bit extended identifier will be used for this message object</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MSGVAL</name>
+                     <description>Message valid The CPU must reset the MSGVAL bit of all unused Messages Objects during the initialization before it resets bit INIT in the CAN Control Register. This bit must also be reset before the identifier ID28:0, the control bits XTD, DIR, or the Data Length Code DLC3:0 are modified, or if the Messages Object is no longer required</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>IGNORE</name>
+                           <description>The message object is ignored by the message handler</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>CONFIGURED</name>
+                           <description>The message object is configured and should be considered by the message handler</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANIF2_MCTRL</name>
+               <description>Message interface 1 message control</description>
+               <addressOffset>0x98</addressOffset>
+               <fields>
+                  <field>
+                     <name>DLC_3_0</name>
+                     <description>Data length code The Data Length Code of a Message Object must be defined the same as in all the corresponding objects with the same identifier at other nodes. When the Message Handler stores a data frame, it will write the DLC to the value given by the received message. 0000 - 1000 = Data frame has 0 - 8 data bytes. 1001 - 1111 = Data frame has 8 data bytes</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>EOB</name>
+                     <description>End of buffer</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>FIFO</name>
+                           <description>Message object belongs to a FIFO buffer and is not the last message object of that FIFO buffer</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SINGELAST</name>
+                           <description>Single message object or last message object of a FIFO buffer</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXRQST</name>
+                     <description>Transmit request</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NOWAIT</name>
+                           <description>This message object is not waiting for transmission</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>WAIT</name>
+                           <description>The transmission of this message object is requested and is not yet done</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RMTEN</name>
+                     <description>Remote enable</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NOCHANGE</name>
+                           <description>At the reception of a remote frame, TXRQST is left unchanged</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SET</name>
+                           <description>At the reception of a remote frame, TXRQST is set</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXIE</name>
+                     <description>Receive interrupt enable</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NOCHANGE</name>
+                           <description>INTPND will be left unchanged after successful reception of a frame</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SET</name>
+                           <description>INTPND will be set after successful reception of a frame</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXIE</name>
+                     <description>Transmit interrupt enable</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NOCHANGE</name>
+                           <description>The INTPND bit will be left unchanged after a successful transmission of a frame</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SET</name>
+                           <description>INTPND will be set after a successful transmission of a frame</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>UMASK</name>
+                     <description>Use acceptance mask If UMASK is set to 1, the message object&apos;s mask bits have to be programmed during initialization of the message object before MAGVAL is set to 1</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>IGNORE</name>
+                           <description>Mask ignored</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>USEMASK</name>
+                           <description>Use mask (MSK[28:0], MXTD, and MDIR) for acceptance filtering</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>INTPND</name>
+                     <description>Interrupt pending</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NOINTSOURCE</name>
+                           <description>This message object is not the source of an interrupt</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INTSOURCE</name>
+                           <description>This message object is the source of an interrupt. The Interrupt Identifier in the Interrupt Register will point to this message object if there is no other interrupt source with higher priority</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MSGLST</name>
+                     <description>Message lost (only valid for message objects in the direction receive)</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NOLOST</name>
+                           <description>No message lost since this bit was reset last by the CPU</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>NEWMESSAGE</name>
+                           <description>The Message Handler stored a new message into this object when NEWDAT was still set, the CPU has lost a message</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>NEWDAT</name>
+                     <description>New data</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NONEWDATA</name>
+                           <description>No new data has been written into the data portion of this message object by the message handler since this flag was cleared last by the CPU</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>NEWDATA</name>
+                           <description>The message handler or the CPU has written new data into the data portion of this message object</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANIF2_DA1</name>
+               <description>Message interface 1 data A1</description>
+               <addressOffset>0x9C</addressOffset>
+               <fields>
+                  <field>
+                     <name>DATA0</name>
+                     <description>Data byte 0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>DATA1</name>
+                     <description>Data byte 1</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANIF2_DA2</name>
+               <description>Message interface 1 data A2</description>
+               <addressOffset>0xA0</addressOffset>
+               <fields>
+                  <field>
+                     <name>DATA2</name>
+                     <description>Data byte 2</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>DATA3</name>
+                     <description>Data byte 3</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANIF2_DB1</name>
+               <description>Message interface 1 data B1</description>
+               <addressOffset>0xA4</addressOffset>
+               <fields>
+                  <field>
+                     <name>DATA4</name>
+                     <description>Data byte 4</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>DATA5</name>
+                     <description>Data byte 5</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANIF2_DB2</name>
+               <description>Message interface 1 data B2</description>
+               <addressOffset>0xA8</addressOffset>
+               <fields>
+                  <field>
+                     <name>DATA6</name>
+                     <description>Data byte 6</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>DATA7</name>
+                     <description>Data byte 7</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANTXREQ1</name>
+               <description>Transmission request 1</description>
+               <addressOffset>0x100</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>TXRQST_16_1</name>
+                     <description>Transmission request bit of message objects 16 to 1. 0 = This message object is not waiting for transmission. 1 = The transmission of this message object is requested and not yet done</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANTXREQ2</name>
+               <description>Transmission request 2</description>
+               <addressOffset>0x104</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>TXRQST_32_17</name>
+                     <description>Transmission request bit of message objects 32 to 17. 0 = This message object is not waiting for transmission. 1 = The transmission of this message object is requested and not yet done</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANND1</name>
+               <description>New data 1</description>
+               <addressOffset>0x120</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>NEWDAT_16_1</name>
+                     <description>New data bits of message objects 16 to 1. 0 = No new data has been written into the data portion of this Message Object by the Message Handler since last time this flag was cleared by the CPU. 1 = The Message Handler or the CPU has written new data into the data portion of this Message Object</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANND2</name>
+               <description>New data 2</description>
+               <addressOffset>0x124</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>NEWDAT_32_17</name>
+                     <description>New data bits of message objects 32 to 17. 0 = No new data has been written into the data portion of this Message Object by the Message Handler since last time this flag was cleared by the CPU. 1 = The Message Handler or the CPU has written new data into the data portion of this Message Object</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANIR1</name>
+               <description>Interrupt pending 1</description>
+               <addressOffset>0x140</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>INTPND_16_1</name>
+                     <description>Interrupt pending bits of message objects 16 to 1. 0 = This message object is ignored by the message handler. 1 = This message object is the source of an interrupt</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANIR2</name>
+               <description>Interrupt pending 2</description>
+               <addressOffset>0x144</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>INTPND_32_17</name>
+                     <description>Interrupt pending bits of message objects 32 to 17. 0 = This message object is ignored by the message handler. 1 = This message object is the source of an interrupt</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANMSGV1</name>
+               <description>Message valid 1</description>
+               <addressOffset>0x160</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>MSGVAL_16_1</name>
+                     <description>Message valid bits of message objects 16 to 1. 0 = This message object is ignored by the message handler. 1 = This message object is configured and should be considered by the message handler</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANMSGV2</name>
+               <description>Message valid 2</description>
+               <addressOffset>0x164</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>MSGVAL_32_17</name>
+                     <description>Message valid bits of message objects 32 to 17. 0 = This message object is ignored by the message handler. 1 = This message object is configured and should be considered by the message handler</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CANCLKDIV</name>
+               <description>Can clock divider register</description>
+               <addressOffset>0x180</addressOffset>
+               <fields>
+                  <field>
+                     <name>CLKDIVVAL</name>
+                     <description>Clock divider value. CAN_CLK = PCLK/(CLKDIVVAL +1) 0000: CAN_CLK = PCLK divided by 1. 0001: CAN_CLK = PCLK divided by 2. 0010: CAN_CLK = PCLK divided by 3 0010: CAN_CLK = PCLK divided by 4. ... 1111: CAN_CLK = PCLK divided by 16</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

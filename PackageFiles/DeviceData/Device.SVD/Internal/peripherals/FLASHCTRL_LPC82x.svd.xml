@@ -1,0 +1,115 @@
+<!--
+Devices using this peripheral: 
+      LPC82x
+-->
+      <peripheral>
+         <?sourceFile "FLASHCTRL_LPC82x" ?>
+         <name>FLASHCTRL</name>
+         <description>Flash controller</description>
+         <groupName>FLASHCTRL</groupName>
+         <headerStructName>FLASHCTRL</headerStructName>
+         <baseAddress>0x40040000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x10</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x20</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x2C</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>FLASHCFG</name>
+               <description>Flash configuration register</description>
+               <addressOffset>0x10</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>FLASHTIM</name>
+                     <description>Flash memory access time. FLASHTIM +1 is equal to the number of system clocks used for flash access</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>1_SYSTEM_CLOCK_FLASH</name>
+                           <description>1 system clock flash access time (for system clock frequencies of up to 20 MHz)</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>2_SYSTEM_CLOCKS_FLAS</name>
+                           <description>2 system clocks flash access time (for system clock frequencies of up to 30 MHz)</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>RESERVED_</name>
+                           <description>Reserved</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>RESERVED_</name>
+                           <description>Reserved</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FMSSTART</name>
+               <description>Signature start address register</description>
+               <addressOffset>0x20</addressOffset>
+               <fields>
+                  <field>
+                     <name>START</name>
+                     <description>Signature generation start address (corresponds to AHB byte address bits[20:4])</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>17</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FMSSTOP</name>
+               <description>Signature stop-address register</description>
+               <addressOffset>0x24</addressOffset>
+               <fields>
+                  <field>
+                     <name>STOPA</name>
+                     <description>Stop address for signature generation (the word specified by STOPA is included in the address range). The address is in units of memory words, not bytes.  If the option bistprotection=1, bits 2:0 cannot be written and are forced to 111</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>17</bitWidth>
+                  </field>
+                  <field>
+                     <name>STRTBIST</name>
+                     <description>When this bit is written to 1, signature generation starts. At the end of signature generation, this bit is automatically cleared</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FMSW0</name>
+               <description>Signature Word</description>
+               <addressOffset>0x2C</addressOffset>
+               <access>read-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>SIG</name>
+                     <description>32-bit signature</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

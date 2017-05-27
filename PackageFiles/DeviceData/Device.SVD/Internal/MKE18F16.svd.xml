@@ -29,18 +29,10 @@
       <peripheral derivedFrom="CAN0"><name>CAN1</name>      <prependToName>CAN1_</prependToName><baseAddress>0x40025000</baseAddress></peripheral>
       <xi:include href="peripherals/CMP0_MKE16F16.svd.xml"/>
       <peripheral derivedFrom="CMP0"><name>CMP1</name>      <prependToName>CMP1_</prependToName><baseAddress>0x40074000</baseAddress>
-         <interrupt>
-            <name>CMP1</name>
-            <description>High-Speed Comparator (CMP), Voltage Reference (VREF) Digital-to-Analog Converter (DAC), and Analog Mux</description>
-            <value>41</value>
-         </interrupt>
+         <interrupt><name>CMP1</name><value>41</value><peripheral>CMP1</peripheral><description>High-Speed Comparator (CMP), Voltage Reference (VREF) Digital-to-Analog Converter (DAC), and Analog Mux</description></interrupt>
       </peripheral>
       <peripheral derivedFrom="CMP0"><name>CMP2</name>      <prependToName>CMP2_</prependToName><baseAddress>0x40075000</baseAddress>
-         <interrupt>
-            <name>CMP2</name>
-            <description>High-Speed Comparator (CMP), Voltage Reference (VREF) Digital-to-Analog Converter (DAC), and Analog Mux</description>
-            <value>70</value>
-         </interrupt>
+         <interrupt><name>CMP2</name><value>70</value><peripheral>CMP2</peripheral><description>High-Speed Comparator (CMP), Voltage Reference (VREF) Digital-to-Analog Converter (DAC), and Analog Mux</description></interrupt>
       </peripheral>
       <xi:include href="peripherals/CRC0_0x40032000.svd.xml"/>
       <xi:include href="peripherals/DAC0_MKE16F16.svd.xml"/>

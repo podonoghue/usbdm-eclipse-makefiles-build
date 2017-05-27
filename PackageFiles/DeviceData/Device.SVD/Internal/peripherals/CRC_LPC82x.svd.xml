@@ -1,0 +1,107 @@
+<!--
+Devices using this peripheral: 
+      LPC82x
+-->
+      <peripheral>
+         <?sourceFile "CRC_LPC82x" ?>
+         <name>CRC</name>
+         <description>Cyclic Redundancy Check (CRC) engine</description>
+         <groupName>CRC</groupName>
+         <headerStructName>CRC</headerStructName>
+         <baseAddress>0x50000000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0xC</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>MODE</name>
+               <description>CRC mode register</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>CRC_POLY</name>
+                     <description>CRC polynom: 1X= CRC-32 polynomial 01= CRC-16 polynomial 00= CRC-CCITT polynomial</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>BIT_RVS_WR</name>
+                     <description>Data bit order: 1= Bit order reverse for CRC_WR_DATA (per byte) 0= No bit order reverse for CRC_WR_DATA (per byte)</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CMPL_WR</name>
+                     <description>Data complement: 1= 1&apos;s complement for CRC_WR_DATA 0= No 1&apos;s complement for CRC_WR_DATA</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BIT_RVS_SUM</name>
+                     <description>CRC sum bit order: 1= Bit order reverse for CRC_SUM 0= No bit order reverse for CRC_SUM</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CMPL_SUM</name>
+                     <description>CRC sum complement: 1= 1&apos;s complement for CRC_SUM 0=No 1&apos;s complement for CRC_SUM</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>Reserved</name>
+                     <description>Always 0 when read</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>26</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SEED</name>
+               <description>CRC seed register</description>
+               <addressOffset>0x4</addressOffset>
+               <resetValue>0xFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>CRC_SEED</name>
+                     <description>A write access to this register will load CRC seed value to CRC_SUM register with selected bit order and 1&apos;s complement pre-processes. A write access to this register will overrule the CRC calculation in progresses</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SUM</name>
+               <description>CRC checksum register</description>
+               <addressOffset>0x8</addressOffset>
+               <access>read-only</access>
+               <resetValue>0xFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>CRC_SUM</name>
+                     <description>The most recent CRC sum can be read through this register with selected bit order and 1&apos;s complement post-processes</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>WR_DATA</name>
+               <description>CRC data register</description>
+               <addressOffset>0x8</addressOffset>
+               <access>write-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>CRC_WR_DATA</name>
+                     <description>Data written to this register will be taken to perform CRC calculation with selected bit order and 1&apos;s complement pre-process. Any write size 8, 16 or 32-bit are allowed and accept back-to-back transactions</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

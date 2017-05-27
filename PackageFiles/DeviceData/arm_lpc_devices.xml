@@ -6,12 +6,13 @@
       <!-- 
             TCL Scripts 
       -->
-      <tclScript id="LPC11U3x_2x_1x-Scripts"> <xi:include parse="text" href="ARM/LPC11U3x_2x_1x-Scripts.tcl" /> </tclScript>
+      <tclScript id="LPC-Scripts"> <xi:include parse="text" href="ARM/LPC-Scripts.tcl" /> </tclScript>
 
       <!-- 
             Flash Programs
       -->
-      <flashProgram id="LPC11U3x_2x_1x-flash-program">  <xi:include parse="text" href="ARM/LPC11U3x_2x_1x-flash-program-gcc.hex" /> </flashProgram>
+      <flashProgram id="LPC-CM0-flash-program">  <xi:include parse="text" href="ARM/LPC-CM0-flash-program-gcc.hex" /> </flashProgram>
+      <flashProgram id="LPC-CM3-flash-program">  <xi:include parse="text" href="ARM/LPC-CM3-flash-program-gcc.hex" /> </flashProgram>
 
       <!--  
             Register sets (dummy sets to pass validation)
@@ -163,6 +164,77 @@
          <sdid mask="0xFFFFFFFF" value="0x295C802B" />
          <note>NXP LPC Default device</note>
       </device>
+<!--
+	LPC1111
+-->
+      <device name="LPC1111FDH20-002" family="CortexM0" subfamily="LPC1111">
+         <memoryRef ref="lpc_8K_Flash" />
+         <memoryRef ref="lpc_2K_Ram" />
+         <memoryRef ref="lpc_boot_Rom" />
+         <memoryRef ref="LPC11_IO" />
+         <sdidAddress value="0x400483F4" />
+         <sdid mask="0xFFFFFFFF" value="0x1A16D02B" />
+         <tclScriptRef ref="LPC-Scripts" />
+         <flashProgramRef ref="LPC-CM0-flash-program" />
+         <registerDescriptionRef ref="CortexM0-register-description" />
+         <note>LPC1110-11-12-13-14-15 Product Data Sheet (LPC111X), 26 March 2014</note>
+         <note>LPC111x-LPC11Cxx User manual (UM10398), 22 December 2016</note>
+      </device>
+<!--
+	LPC11Cx2_Cx4
+-->
+      <device name="LPC11C12FBD48_301" family="CortexM0" subfamily="LPC11Cx2_Cx4">
+         <memoryRef ref="lpc_16K_Flash" />
+         <memoryRef ref="lpc_8K_Ram" />
+         <memoryRef ref="lpc_boot_Rom" />
+         <memoryRef ref="LPC11_IO" />
+         <sdidAddress value="0x400483F4" />
+         <sdid mask="0xFFFFFFFF" value="0x1441102B" />
+         <tclScriptRef ref="LPC-Scripts" />
+         <flashProgramRef ref="LPC-CM0-flash-program" />
+         <registerDescriptionRef ref="CortexM0-register-description" />
+         <note>LPC11Cx2/Cx4 Product data sheet (LPC11CX2_CX4), 4 January 2016</note>
+         <note>LPC111x-LPC11Cxx User manual (UM10398), 22 December 2016</note>
+      </device>
+      <device name="LPC11C14FBD48_301" family="CortexM0" subfamily="LPC11Cx2_Cx4">
+         <memoryRef ref="lpc_32K_Flash" />
+         <memoryRef ref="lpc_8K_Ram" />
+         <memoryRef ref="lpc_boot_Rom" />
+         <memoryRef ref="LPC11_IO" />
+         <sdidAddress value="0x400483F4" />
+         <sdid mask="0xFFFFFFFF" value="0x1440102B" />
+         <tclScriptRef ref="LPC-Scripts" />
+         <flashProgramRef ref="LPC-CM0-flash-program" />
+         <registerDescriptionRef ref="CortexM0-register-description" />
+         <note>LPC11Cx2/Cx4 Product data sheet (LPC11CX2_CX4), 4 January 2016</note>
+         <note>LPC111x-LPC11Cxx User manual (UM10398), 22 December 2016</note>
+      </device>
+      <device name="LPC11C22FBD48_301" family="CortexM0" subfamily="LPC11Cx2_Cx4">
+         <memoryRef ref="lpc_16K_Flash" />
+         <memoryRef ref="lpc_8K_Ram" />
+         <memoryRef ref="lpc_boot_Rom" />
+         <memoryRef ref="LPC11_IO" />
+         <sdidAddress value="0x400483F4" />
+         <sdid mask="0xFFFFFFFF" value="0x1431102B" />
+         <tclScriptRef ref="LPC-Scripts" />
+         <flashProgramRef ref="LPC-CM0-flash-program" />
+         <registerDescriptionRef ref="CortexM0-register-description" />
+         <note>LPC11Cx2/Cx4 Product data sheet (LPC11CX2_CX4), 4 January 2016</note>
+         <note>LPC111x-LPC11Cxx User manual (UM10398), 22 December 2016</note>
+      </device>
+      <device name="LPC11C24FBD48_301" family="CortexM0" subfamily="LPC11Cx2_Cx4">
+         <memoryRef ref="lpc_32K_Flash" />
+         <memoryRef ref="lpc_8K_Ram" />
+         <memoryRef ref="lpc_boot_Rom" />
+         <memoryRef ref="LPC11_IO" />
+         <sdidAddress value="0x1430102B" />
+         <sdid mask="0xFFFFFFFF" value="0x1440102B" />
+         <tclScriptRef ref="LPC-Scripts" />
+         <flashProgramRef ref="LPC-CM0-flash-program" />
+         <registerDescriptionRef ref="CortexM0-register-description" />
+         <note>LPC11Cx2/Cx4 Product data sheet (LPC11CX2_CX4), 4 January 2016</note>
+         <note>LPC111x-LPC11Cxx User manual (UM10398), 22 December 2016</note>
+      </device>
 <!-- 
    NXP LPC11U3x_2x_1x Devices 
 -->
@@ -175,8 +247,8 @@
          <sdidAddress value="0x400483F4" />
          <sdid mask="0xFFFFFFFF" value="0x095C802B" />
          <sdid mask="0xFFFFFFFF" value="0x295C802B" />
-         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
-         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
+         <tclScriptRef ref="LPC-Scripts" />
+         <flashProgramRef ref="LPC-CM0-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
          <note>LPC11U1x Product data sheet (LPC11U1X)), 11 March 2014  </note>
          <note>LPC11U3x/2x/1x User Manual (UM10462), 6 June 2016  </note>
@@ -190,8 +262,8 @@
          <sdidAddress value="0x400483F4" />
          <sdid mask="0xFFFFFFFF" value="0x097A802B" />
          <sdid mask="0xFFFFFFFF" value="0x297A802B" />
-         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
-         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
+         <tclScriptRef ref="LPC-Scripts" />
+         <flashProgramRef ref="LPC-CM0-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
          <note>LPC11U1x Product data sheet (LPC11U1X)), 11 March 2014  </note>
          <note>LPC11U3x/2x/1x User Manual (UM10462), 6 June 2016  </note>
@@ -205,8 +277,8 @@
          <sdidAddress value="0x400483F4" />
          <sdid mask="0xFFFFFFFF" value="0x0998802B" />
          <sdid mask="0xFFFFFFFF" value="0x2998802B" />
-         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
-         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
+         <tclScriptRef ref="LPC-Scripts" />
+         <flashProgramRef ref="LPC-CM0-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
          <note>LPC11U1x Product data sheet (LPC11U1X)), 11 March 2014  </note>
          <note>LPC11U3x/2x/1x User Manual (UM10462), 6 June 2016  </note>
@@ -220,8 +292,8 @@
          <memoryRef ref="LPC11U_IO" />
          <sdidAddress value="0x400483F4" />
          <sdid mask="0xFFFFFFFF" value="0x2954402B" />
-         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
-         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
+         <tclScriptRef ref="LPC-Scripts" />
+         <flashProgramRef ref="LPC-CM0-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
          <note>LPC11U1x Product data sheet (LPC11U1X)), 11 March 2014  </note>
          <note>LPC11U3x/2x/1x User Manual (UM10462), 6 June 2016  </note>
@@ -235,8 +307,8 @@
          <memoryRef ref="LPC11U_IO" />
          <sdidAddress value="0x400483F4" />
          <sdid mask="0xFFFFFFFF" value="0x2972402B" />
-         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
-         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
+         <tclScriptRef ref="LPC-Scripts" />
+         <flashProgramRef ref="LPC-CM0-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
          <note>LPC11U1x Product data sheet (LPC11U1X)), 11 March 2014  </note>
          <note>LPC11U3x/2x/1x User Manual (UM10462), 6 June 2016  </note>
@@ -250,8 +322,8 @@
          <memoryRef ref="LPC11U_IO" />
          <sdidAddress value="0x400483F4" />
          <sdid mask="0xFFFFFFFF" value="0x2988402B" />
-         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
-         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
+         <tclScriptRef ref="LPC-Scripts" />
+         <flashProgramRef ref="LPC-CM0-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
          <note>LPC11U1x Product data sheet (LPC11U1X)), 11 March 2014  </note>
          <note>LPC11U3x/2x/1x User Manual (UM10462), 6 June 2016  </note>
@@ -265,8 +337,8 @@
          <memoryRef ref="LPC11U_IO" />
          <sdidAddress value="0x400483F4" />
          <sdid mask="0xFFFFFFFF" value="0x2980002B" />
-         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
-         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
+         <tclScriptRef ref="LPC-Scripts" />
+         <flashProgramRef ref="LPC-CM0-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
          <note>LPC11U1x Product data sheet (LPC11U1X)), 11 March 2014  </note>
          <note>LPC11U3x/2x/1x User Manual (UM10462), 6 June 2016  </note>
@@ -280,8 +352,8 @@
          <memoryRef ref="LPC11U_IO" />
          <sdidAddress value="0x400483F4" />
          <sdid mask="0xFFFFFFFF" value="0x0003D440" />
-         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
-         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
+         <tclScriptRef ref="LPC-Scripts" />
+         <flashProgramRef ref="LPC-CM0-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
          <note>LPC11U1x Product data sheet (LPC11U1X)), 11 March 2014  </note>
          <note>LPC11U3x/2x/1x User Manual (UM10462), 6 June 2016  </note>
@@ -295,8 +367,8 @@
          <memoryRef ref="LPC11U_IO" />
          <sdidAddress value="0x400483F4" />
          <sdid mask="0xFFFFFFFF" value="0x0001CC40" />
-         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
-         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
+         <tclScriptRef ref="LPC-Scripts" />
+         <flashProgramRef ref="LPC-CM0-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
          <note>LPC11U1x Product data sheet (LPC11U1X)), 11 March 2014  </note>
          <note>LPC11U3x/2x/1x User Manual (UM10462), 6 June 2016  </note>
@@ -310,8 +382,8 @@
          <memoryRef ref="LPC11U_IO" />
          <sdidAddress value="0x400483F4" />
          <sdid mask="0xFFFFFFFF" value="0x0001BC40" />
-         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
-         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
+         <tclScriptRef ref="LPC-Scripts" />
+         <flashProgramRef ref="LPC-CM0-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
          <note>LPC11U1x Product data sheet (LPC11U1X)), 11 March 2014  </note>
          <note>LPC11U3x/2x/1x User Manual (UM10462), 6 June 2016  </note>
@@ -326,8 +398,8 @@
          <memoryRef ref="LPC11U_IO" />
          <sdidAddress value="0x400483F4" />
          <sdid mask="0xFFFFFFFF" value="0x0000BC40" />
-         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
-         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
+         <tclScriptRef ref="LPC-Scripts" />
+         <flashProgramRef ref="LPC-CM0-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
          <note>LPC11U1x Product data sheet (LPC11U1X)), 11 March 2014  </note>
          <note>LPC11U3x/2x/1x User Manual (UM10462), 6 June 2016  </note>
@@ -341,8 +413,8 @@
          <memoryRef ref="LPC11U_IO" />
          <sdidAddress value="0x400483F4" />
          <sdid mask="0xFFFFFFFF" value="0x00019C40" />
-         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
-         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
+         <tclScriptRef ref="LPC-Scripts" />
+         <flashProgramRef ref="LPC-CM0-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
          <note>LPC11U1x Product data sheet (LPC11U1X)), 11 March 2014  </note>
          <note>LPC11U3x/2x/1x User Manual (UM10462), 6 June 2016  </note>
@@ -357,8 +429,8 @@
          <sdidAddress value="0x400483F4" />
          <sdid mask="0xFFFFFFFF" value="0x00017C40" />
          <sdid mask="0xFFFFFFFF" value="0x00007C44" />
-         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
-         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
+         <tclScriptRef ref="LPC-Scripts" />
+         <flashProgramRef ref="LPC-CM0-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
          <note>LPC11U1x Product data sheet (LPC11U1X)), 11 March 2014  </note>
          <note>LPC11U3x/2x/1x User Manual (UM10462), 6 June 2016  </note>
@@ -373,8 +445,8 @@
          <memoryRef ref="LPC11U_IO" />
          <sdidAddress value="0x400483F4" />
          <sdid mask="0xFFFFFFFF" value="0x00007C40" />
-         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
-         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
+         <tclScriptRef ref="LPC-Scripts" />
+         <flashProgramRef ref="LPC-CM0-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
          <note>LPC11U1x Product data sheet (LPC11U1X)), 11 March 2014  </note>
          <note>LPC11U3x/2x/1x User Manual (UM10462), 6 June 2016  </note>
@@ -390,8 +462,8 @@
          <memoryRef ref="LPC13_IO" />
          <sdidAddress value="0x400483F4" />
          <sdid mask="0x00FFFFFF" value="0x2C42502B" />
-         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
-         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
+         <tclScriptRef ref="LPC-Scripts" />
+         <flashProgramRef ref="LPC-CM3-flash-program" />
          <registerDescriptionRef ref="CortexM3-register-description" />
          <note>LPC1311/13/42/43 Product Data Sheet (LPC1311_13_42_43), 6 June 2012</note>
          <note>LPC1311/13/42/43 User manual (UM10375), 21 June 2012</note>
@@ -407,8 +479,8 @@
          <sdid mask="0xFFFFFFFF" value="0x2C40102B" />
          <sdid mask="0xFFFFFFFF" value="0x1830102B" />
          <sdid mask="0xFFFFFFFF" value="0x1830102B" />
-         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
-         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
+         <tclScriptRef ref="LPC-Scripts" />
+         <flashProgramRef ref="LPC-CM3-flash-program" />
          <registerDescriptionRef ref="CortexM3-register-description" />
          <note>LPC1311/13/42/43 Product Data Sheet (LPC1311_13_42_43), 6 June 2012</note>
          <note>LPC1311/13/42/43 User manual (UM10375), 21 June 2012</note>
@@ -422,8 +494,8 @@
          <sdidAddress value="0x400483F4" />
          <sdid mask="0x00FFFFFF" value="0x3D01402B" />
          <sdid mask="0x00FFFFFF" value="0x3D01402B" />
-         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
-         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
+         <tclScriptRef ref="LPC-Scripts" />
+         <flashProgramRef ref="LPC-CM3-flash-program" />
          <registerDescriptionRef ref="CortexM3-register-description" />
          <note>LPC1311/13/42/43 Product Data Sheet (LPC1311_13_42_43), 6 June 2012</note>
          <note>LPC1311/13/42/43 User manual (UM10375), 21 June 2012</note>
@@ -437,8 +509,8 @@
          <sdidAddress value="0x400483F4" />
          <sdid mask="0x00FFFFFF" value="0x3D00002B" />
          <sdid mask="0x00FFFFFF" value="0x3D00002B" />
-         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
-         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
+         <tclScriptRef ref="LPC-Scripts" />
+         <flashProgramRef ref="LPC-CM3-flash-program" />
          <registerDescriptionRef ref="CortexM3-register-description" />
          <note>LPC1311/13/42/43 Product Data Sheet (LPC1311_13_42_43), 6 June 2012</note>
          <note>LPC1311/13/42/43 User manual (UM10375), 21 June 2012</note>
@@ -446,7 +518,6 @@
 <!--
 	LPC82x 
 -->
-<!-- 
       <device name="LPC824M201JHI33" family="CortexM0plus" subfamily="LPC82x">
          <memoryRef ref="lpc_16K_Flash" />
          <memoryRef ref="lpc_4K_Ram" />
@@ -454,9 +525,9 @@
          <memoryRef ref="LPC82_IO" />
          <sdidAddress value="0x400483F8" />
          <sdid mask="0x00FFFFFF" value="0x00008241" />
-         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
-         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
-         <registerDescriptionRef ref="CortexM3-register-description" />
+         <tclScriptRef ref="LPC-Scripts" />
+         <flashProgramRef ref="LPC-CM0-flash-program" />
+         <registerDescriptionRef ref="CortexM0-register-description" />
          <note>LPC82x Product data sheet (LPC82x), 11 October 2016</note>
          <note>LPC82x User manual (UM10800), 5 October 2016</note>
       </device>
@@ -467,9 +538,9 @@
          <memoryRef ref="LPC82_IO" />
          <sdidAddress value="0x400483F8" />
          <sdid mask="0x00FFFFFF" value="0x00008221" />
-         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
-         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
-         <registerDescriptionRef ref="CortexM3-register-description" />
+         <tclScriptRef ref="LPC-Scripts" />
+         <flashProgramRef ref="LPC-CM0-flash-program" />
+         <registerDescriptionRef ref="CortexM0-register-description" />
          <note>LPC82x Product data sheet (LPC82x), 11 October 2016</note>
          <note>LPC82x User manual (UM10800), 5 October 2016</note>
       </device>
@@ -480,9 +551,9 @@
          <memoryRef ref="LPC82_IO" />
          <sdidAddress value="0x400483F8" />
          <sdid mask="0x00FFFFFF" value="0x00008242" />
-         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
-         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
-         <registerDescriptionRef ref="CortexM3-register-description" />
+         <tclScriptRef ref="LPC-Scripts" />
+         <flashProgramRef ref="LPC-CM0-flash-program" />
+         <registerDescriptionRef ref="CortexM0-register-description" />
          <note>LPC82x Product data sheet (LPC82x), 11 October 2016</note>
          <note>LPC82x User manual (UM10800), 5 October 2016</note>
       </device>
@@ -493,87 +564,13 @@
          <memoryRef ref="LPC82_IO" />
          <sdidAddress value="0x400483F8" />
          <sdid mask="0x00FFFFFF" value="0x00008222" />
-         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
-         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
-         <registerDescriptionRef ref="CortexM3-register-description" />
+         <tclScriptRef ref="LPC-Scripts" />
+         <flashProgramRef ref="LPC-CM0-flash-program" />
+         <registerDescriptionRef ref="CortexM0-register-description" />
          <note>LPC82x Product data sheet (LPC82x), 11 October 2016</note>
          <note>LPC82x User manual (UM10800), 5 October 2016</note>
       </device>
- -->
-<!--
-	LPC11Cx2_Cx4
--->
-      <device name="LPC11C12FBD48_301" family="CortexM0" subfamily="LPC11Cx2_Cx4">
-         <memoryRef ref="lpc_16K_Flash" />
-         <memoryRef ref="lpc_8K_Ram" />
-         <memoryRef ref="lpc_boot_Rom" />
-         <memoryRef ref="LPC11_IO" />
-         <sdidAddress value="0x400483F4" />
-         <sdid mask="0xFFFFFFFF" value="0x1441102B" />
-         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
-         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
-         <registerDescriptionRef ref="CortexM3-register-description" />
-         <note>LPC11Cx2/Cx4 Product data sheet (LPC11CX2_CX4), 4 January 2016</note>
-         <note>LPC111x-LPC11Cxx User manual (UM10398), 22 December 2016</note>
-      </device>
-      <device name="LPC11C14FBD48_301" family="CortexM0" subfamily="LPC11Cx2_Cx4">
-         <memoryRef ref="lpc_32K_Flash" />
-         <memoryRef ref="lpc_8K_Ram" />
-         <memoryRef ref="lpc_boot_Rom" />
-         <memoryRef ref="LPC11_IO" />
-         <sdidAddress value="0x400483F4" />
-         <sdid mask="0xFFFFFFFF" value="0x1440102B" />
-         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
-         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
-         <registerDescriptionRef ref="CortexM3-register-description" />
-         <note>LPC11Cx2/Cx4 Product data sheet (LPC11CX2_CX4), 4 January 2016</note>
-         <note>LPC111x-LPC11Cxx User manual (UM10398), 22 December 2016</note>
-      </device>
-      <device name="LPC11C22FBD48_301" family="CortexM0" subfamily="LPC11Cx2_Cx4">
-         <memoryRef ref="lpc_16K_Flash" />
-         <memoryRef ref="lpc_8K_Ram" />
-         <memoryRef ref="lpc_boot_Rom" />
-         <memoryRef ref="LPC11_IO" />
-         <sdidAddress value="0x400483F4" />
-         <sdid mask="0xFFFFFFFF" value="0x1431102B" />
-         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
-         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
-         <registerDescriptionRef ref="CortexM3-register-description" />
-         <note>LPC11Cx2/Cx4 Product data sheet (LPC11CX2_CX4), 4 January 2016</note>
-         <note>LPC111x-LPC11Cxx User manual (UM10398), 22 December 2016</note>
-      </device>
-      <device name="LPC11C24FBD48_301" family="CortexM0" subfamily="LPC11Cx2_Cx4">
-         <memoryRef ref="lpc_32K_Flash" />
-         <memoryRef ref="lpc_8K_Ram" />
-         <memoryRef ref="lpc_boot_Rom" />
-         <memoryRef ref="LPC11_IO" />
-         <sdidAddress value="0x1430102B" />
-         <sdid mask="0xFFFFFFFF" value="0x1440102B" />
-         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
-         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
-         <registerDescriptionRef ref="CortexM3-register-description" />
-         <note>LPC11Cx2/Cx4 Product data sheet (LPC11CX2_CX4), 4 January 2016</note>
-         <note>LPC111x-LPC11Cxx User manual (UM10398), 22 December 2016</note>
-      </device>
-<!--
-	LPC1111
--->
-<!-- 
-      <device name="LPC1111FDH20-002" family="CortexM0" subfamily="LPC1111">
-         <memoryRef ref="lpc_8K_Flash" />
-         <memoryRef ref="lpc_2K_Ram" />
-         <memoryRef ref="lpc_boot_Rom" />
-         <memoryRef ref="LPC11_IO" />
-         <sdidAddress value="0x400483F4" />
-         <sdid mask="0xFFFFFFFF" value="0x1A16D02B" />
-         <tclScriptRef ref="LPC11U3x_2x_1x-Scripts" />
-         <flashProgramRef ref="LPC11U3x_2x_1x-flash-program" />
-         <registerDescriptionRef ref="CortexM3-register-description" />
-         <note>LPC1110-11-12-13-14-15 Product Data Sheet (LPC111X), 26 March 2014</note>
-         <note>LPC111x-LPC11Cxx User manual (UM10398), 22 December 2016</note>
-      </device>
- -->
-      
+
    </deviceList>
 </root>
    

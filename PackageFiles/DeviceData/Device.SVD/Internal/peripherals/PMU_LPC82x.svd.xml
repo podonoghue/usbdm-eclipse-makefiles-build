@@ -1,0 +1,226 @@
+<!--
+Devices using this peripheral: 
+      LPC82x
+-->
+      <peripheral>
+         <?sourceFile "PMU_LPC82x" ?>
+         <name>PMU</name>
+         <description>Power Management Unit</description>
+         <groupName>PMU</groupName>
+         <headerStructName>PMU</headerStructName>
+         <baseAddress>0x40020000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x18</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>PCON</name>
+               <description>Power control register</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>PM</name>
+                     <description>Power mode</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DEFAULT</name>
+                           <description>Default. The part is in active or sleep mode</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>DEEP_SLEEP_MODE</name>
+                           <description>Deep-sleep mode. ARM WFI will enter Deep-sleep mode</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>POWER_DOWN_MODE</name>
+                           <description>Power-down mode. ARM WFI will enter Power-down mode</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>DEEP_POWER_DOWN_MODE</name>
+                           <description>Deep power-down mode. ARM WFI will enter Deep-power down mode (ARM Cortex-M0+ core powered-down)</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>NODPD</name>
+                     <description>A 1 in this bit prevents entry to Deep power-down mode when 0x3 is written to the PM field above, the SLEEPDEEP bit is set, and a WFI is executed.   This bit is cleared only by power-on reset, so writing a one to this bit locks the part in a mode in which Deep power-down mode is blocked</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SLEEPFLAG</name>
+                     <description>Sleep mode flag</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>ACTIVE_MODE</name>
+                           <description>Active mode. Read: No power-down mode entered. Part is in Active mode. Write: No effect</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>LOW_POWER_MODE</name>
+                           <description>Low power mode. Read: Sleep, Deep-sleep or Power-down mode entered. Write: Writing a 1 clears the SLEEPFLAG bit to 0</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DPDFLAG</name>
+                     <description>Deep power-down flag</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NOT_DEEP_POWER_DOWN</name>
+                           <description>Not Deep power-down. Read: Deep power-down mode not entered. Write: No effect</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>DEEP_POWER_DOWN</name>
+                           <description>Deep power-down. Read: Deep power-down mode entered. Write: Clear the Deep power-down flag</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>GPREG0</name>
+               <description>General purpose register 0</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>GPDATA</name>
+                     <description>Data retained during Deep power-down mode</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>3</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>1,2,3</dimIndex>
+               <name>GPREG%s</name>
+               <description>General purpose register 0</description>
+               <addressOffset>0x8</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>GPDATA</name>
+                     <description>Data retained during Deep power-down mode</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DPDCTRL</name>
+               <description>Deep power-down control register. Also includes bits for general purpose storage</description>
+               <addressOffset>0x14</addressOffset>
+               <fields>
+                  <field>
+                     <name>WAKEUPHYS</name>
+                     <description>WAKEUP pin hysteresis enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DISABLED</name>
+                           <description>Disabled. Hysteresis for WAKEUP pin disabled</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ENABLED</name>
+                           <description>Enabled. Hysteresis for WAKEUP pin enabled</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WAKEPAD_DISABLE</name>
+                     <description>WAKEUP pin disable. Setting this bit disables the wake-up pin, so it can be used for other purposes. Never set this bit if you intend to use a pin to wake up the part from Deep power-down mode. You can only disable the wake-up pin if the self wake-up timer is enabled and configured. Setting this bit is not necessary if Deep power-down mode is not used</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>ENABLED</name>
+                           <description>Enabled. The wake-up function is enabled on pin PIO0_4</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>DISABLED</name>
+                           <description>Disabled. Setting this bit disables the wake-up function on pin PIO0_4</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LPOSCEN</name>
+                     <description>Enable the low-power oscillator for use with the 10 kHz self wake-up timer clock. You must set this bit if the CLKSEL bit in the self wake-up timer CTRL bit is set.  Do not enable the low-power oscillator if the self wake-up timer is clocked by the divided IRC or the external clock input</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DISABLED</name>
+                           <description>Disabled</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ENABLED</name>
+                           <description>Enabled</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="LPOSCEN" > <name>LPOSCDPDEN</name> <description>Enable the low-power oscillator in Deep power-down mode. Setting this bit causes the low-power oscillator to remain running during Deep power-down mode provided that bit 2 in this register is set as well.  You must set this bit for the self wake-up timer to be able to wake up the part from Deep power-down mode. Do not set this bit unless you use the self wake-up timer with the low-power oscillator clock source to wake up from Deep power-down mode</description> <bitOffset>3</bitOffset> </field>
+                  <field>
+                     <name>WAKEUPCLKHYS</name>
+                     <description>External clock input for the self wake-up timer WKTCLKIN hysteresis enable</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DISABLED</name>
+                           <description>Disabled. Hysteresis for WAKEUP clock pin disabled</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ENABLED</name>
+                           <description>Enabled. Hysteresis for WAKEUP clock pin enabled</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WAKECLKPAD_DISABLE</name>
+                     <description>Disable the external clock input for the self wake-up timer. Setting this bit enables the self wake-up timer clock pin WKTCLKLIN. To minimize power consumption, especially in deep power-down mode, disable this clock input when not using the external clock option for the self wake-up timer</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DISABLED</name>
+                           <description>Disabled. Setting this bit disables external clock input on pin PIO0_28</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ENABLED</name>
+                           <description>Enabled. The external clock input for the self wake-up timer is enabled on pin PIO0_28</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

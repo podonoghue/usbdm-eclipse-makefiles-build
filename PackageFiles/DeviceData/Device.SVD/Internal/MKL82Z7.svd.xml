@@ -30,11 +30,7 @@
       <xi:include href="peripherals/DMAMUX_MKL82Z7.svd.xml"/>
       <xi:include href="peripherals/EMVSIM0_MKL82Z7.svd.xml"/>
       <peripheral derivedFrom="EMVSIM0"><name>EMVSIM1</name>      <prependToName>EMVSIM1_</prependToName><baseAddress>0x4004F000</baseAddress>
-         <interrupt>
-            <name>EMVSIM1</name>
-            <description>EMVSIM</description>
-            <value>38</value>
-         </interrupt>
+         <interrupt><name>EMVSIM1</name><value>38</value><peripheral>EMVSIM1</peripheral><description>EMVSIM</description></interrupt>
       </peripheral>
       <xi:include href="peripherals/EWM_MKE16F16.svd.xml"/>
       <xi:include href="peripherals/FGPIOA_0xF8000000.svd.xml"/>
@@ -45,72 +41,36 @@
       <xi:include href="peripherals/FLEXIO0_MKL82Z7.svd.xml"/>
       <xi:include href="peripherals/FTFA_MKL82Z7.svd.xml"/>
       <peripheral derivedFrom="FGPIOA"><name>GPIOA</name>      <groupName>GPIO</groupName>      <prependToName>GPIOA_</prependToName><baseAddress>0x400FF000</baseAddress>
-         <interrupt>
-            <name>PORTA</name>
-            <description>General Purpose Input/Output</description>
-            <value>17</value>
-         </interrupt>
+         <interrupt><name>PORTA</name><value>17</value><peripheral>GPIOA</peripheral><description>General Purpose Input/Output</description></interrupt>
       </peripheral>
       <peripheral derivedFrom="FGPIOA"><name>GPIOB</name>      <groupName>GPIO</groupName>      <prependToName>GPIOB_</prependToName><baseAddress>0x400FF040</baseAddress>
-         <interrupt>
-            <name>PORTB</name>
-            <description>General Purpose Input/Output</description>
-            <value>18</value>
-         </interrupt>
+         <interrupt><name>PORTB</name><value>18</value><peripheral>GPIOB</peripheral><description>General Purpose Input/Output</description></interrupt>
       </peripheral>
       <peripheral derivedFrom="FGPIOA"><name>GPIOC</name>      <groupName>GPIO</groupName>      <prependToName>GPIOC_</prependToName><baseAddress>0x400FF080</baseAddress>
-         <interrupt>
-            <name>PORTC</name>
-            <description>General Purpose Input/Output</description>
-            <value>19</value>
-         </interrupt>
+         <interrupt><name>PORTC</name><value>19</value><peripheral>GPIOC</peripheral><description>General Purpose Input/Output</description></interrupt>
       </peripheral>
       <peripheral derivedFrom="FGPIOA"><name>GPIOD</name>      <groupName>GPIO</groupName>      <prependToName>GPIOD_</prependToName><baseAddress>0x400FF0C0</baseAddress>
-         <interrupt>
-            <name>PORTD</name>
-            <description>General Purpose Input/Output</description>
-            <value>20</value>
-         </interrupt>
+         <interrupt><name>PORTD</name><value>20</value><peripheral>GPIOD</peripheral><description>General Purpose Input/Output</description></interrupt>
       </peripheral>
       <peripheral derivedFrom="FGPIOA"><name>GPIOE</name>      <groupName>GPIO</groupName>      <prependToName>GPIOE_</prependToName><baseAddress>0x400FF100</baseAddress>
-         <interrupt>
-            <name>PORTE</name>
-            <description>General Purpose Input/Output</description>
-            <value>21</value>
-         </interrupt>
+         <interrupt><name>PORTE</name><value>21</value><peripheral>GPIOE</peripheral><description>General Purpose Input/Output</description></interrupt>
       </peripheral>
       <xi:include href="peripherals/I2C0_MKL82Z7.svd.xml"/>
       <peripheral derivedFrom="I2C0"><name>I2C1</name>      <prependToName>I2C1_</prependToName><baseAddress>0x40067000</baseAddress>
-         <interrupt>
-            <name>I2C1</name>
-            <description>Inter-Integrated Circuit</description>
-            <value>39</value>
-         </interrupt>
+         <interrupt><name>I2C1</name><value>39</value><peripheral>I2C1</peripheral><description>Inter-Integrated Circuit</description></interrupt>
       </peripheral>
       <xi:include href="peripherals/INTMUX0_MKL82Z7.svd.xml"/>
       <xi:include href="peripherals/LLWU_MKL82Z7.svd.xml"/>
       <xi:include href="peripherals/LPTMR0_MKL82Z7.svd.xml"/>
       <peripheral derivedFrom="LPTMR0"><name>LPTMR1</name>      <prependToName>LPTMR1_</prependToName><baseAddress>0x40044000</baseAddress>
-         <interrupt>
-            <name>LPTMR1</name>
-            <description>Low Power Timer</description>
-            <value>32</value>
-         </interrupt>
+         <interrupt><name>LPTMR1</name><value>32</value><peripheral>LPTMR1</peripheral><description>Low Power Timer</description></interrupt>
       </peripheral>
       <xi:include href="peripherals/LPUART0_MKL82Z7.svd.xml"/>
       <peripheral derivedFrom="LPUART0"><name>LPUART1</name>      <prependToName>LPUART1_</prependToName><baseAddress>0x40055000</baseAddress>
-         <interrupt>
-            <name>LPUART1</name>
-            <description>Universal Asynchronous Receiver/Transmitter</description>
-            <value>13</value>
-         </interrupt>
+         <interrupt><name>LPUART1</name><value>13</value><peripheral>LPUART1</peripheral><description>Universal Asynchronous Receiver/Transmitter</description></interrupt>
       </peripheral>
       <peripheral derivedFrom="LPUART0"><name>LPUART2</name>      <prependToName>LPUART2_</prependToName><baseAddress>0x40056000</baseAddress>
-         <interrupt>
-            <name>LPUART2</name>
-            <description>Universal Asynchronous Receiver/Transmitter</description>
-            <value>37</value>
-         </interrupt>
+         <interrupt><name>LPUART2</name><value>37</value><peripheral>LPUART2</peripheral><description>Universal Asynchronous Receiver/Transmitter</description></interrupt>
       </peripheral>
       <xi:include href="peripherals/LTC0_MKL82Z7.svd.xml"/>
       <xi:include href="peripherals/MCG_MKL82Z7.svd.xml"/>
@@ -137,21 +97,13 @@
       <xi:include href="peripherals/SMC_MKL82Z7.svd.xml"/>
       <xi:include href="peripherals/SPI0_MKL82Z7.svd.xml"/>
       <peripheral derivedFrom="SPI0"><name>SPI1</name>      <prependToName>SPI1_</prependToName><baseAddress>0x4002D000</baseAddress>
-         <interrupt>
-            <name>SPI1</name>
-            <description>Serial Peripheral Interface</description>
-            <value>36</value>
-         </interrupt>
+         <interrupt><name>SPI1</name><value>36</value><peripheral>SPI1</peripheral><description>Serial Peripheral Interface</description></interrupt>
       </peripheral>
       <xi:include href="peripherals/SYST.svd.xml"/>
       <xi:include href="peripherals/TPM0_MKL82Z7.svd.xml"/>
       <xi:include href="peripherals/TPM1_MKL82Z7.svd.xml"/>
       <peripheral derivedFrom="TPM1"><name>TPM2</name>      <prependToName>TPM2_</prependToName><baseAddress>0x4003A000</baseAddress>
-         <interrupt>
-            <name>TPM2</name>
-            <description>Timer/PWM Module</description>
-            <value>8</value>
-         </interrupt>
+         <interrupt><name>TPM2</name><value>8</value><peripheral>TPM2</peripheral><description>Timer/PWM Module</description></interrupt>
       </peripheral>
       <xi:include href="peripherals/TRNG0_0x40025000.svd.xml"/>
       <xi:include href="peripherals/TSI0_MK65.svd.xml"/>

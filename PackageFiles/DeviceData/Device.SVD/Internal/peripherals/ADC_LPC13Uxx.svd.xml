@@ -1,0 +1,489 @@
+<!--
+Devices using this peripheral: 
+      LPC13Uxx
+-->
+      <peripheral>
+         <?sourceFile "ADC_LPC13Uxx" ?>
+         <name>ADC</name>
+         <description>ADC</description>
+         <groupName>ADC</groupName>
+         <headerStructName>ADC</headerStructName>
+         <baseAddress>0x4001C000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xC</offset>
+            <size>0x2C</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>CR</name>
+               <description>A/D Control Register. The CR register must be written to select the operating mode before A/D conversion can occur</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>SEL</name>
+                     <description>Selects which of the AD7:0 pins is (are) to be sampled and converted. Bit 0 selects Pin AD0, bit 1 selects pin AD1,..., and bit 7 selects pin AD7.  In software-controlled mode (BURST = 0), only one channel can be selected, i.e. only one of these bits should be 1.  In hardware scan mode (BURST = 1), any numbers of channels can be selected, i.e any or all bits can be set to 1. If all bits are set to 0, channel 0 is selected automatically (SEL = 0x01)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>CLKDIV</name>
+                     <description>The main clock (PCLK_ADC) is divided by (this value plus one) to produce the clock for  the A/D converter. The clock should be less than or equal to 15.5 MHz(12-bit mode) or 31 MHz (10-bit mode) in software-controlled mode (BURST bit = 0).. Typically, software should program the smallest value in this field that yields a clock of 15.5 MHz or slightly less, but in certain cases (such as a high-impedance analog  source) a slower clock may be desirable</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>BURST</name>
+                     <description>Burst mode If BURST is set to 1, the ADGINTEN bit in the INTEN register (Table 327) must be set to 0</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>SOFTWARE_CONTROLLED_</name>
+                           <description>Software-controlled mode: Conversions are software-controlled and require 31 clocks</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>HARDWARE_SCAN_MODE_</name>
+                           <description>Hardware scan mode: The AD converter does repeated conversions at the rate selected by the CLKS field, scanning (if necessary) through the pins selected by ones in the SEL field. The first conversion after the start corresponds to the least-significant bit set to 1 in the SEL field, then the next higher  bits (pins) set to one are scanned if applicable. Repeated conversions can be terminated by clearing this bit, but the conversion in progress when this bit is cleared will be completed. Important: START bits must be 000 when BURST = 1, or conversions will not start</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LPWRMODE</name>
+                     <description>Low-power mode</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DISABLE_THE_LOW_POWE</name>
+                           <description>Disable the low-power ADC mode. The analog circuitry remains activated when no conversions are requested</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ENABLE_THE_LOW_POWER</name>
+                           <description>Enable the low-power ADC mode.  The analog circuitry is automatically powered-down when no conversions are taking  place. When any (hardware or software) triggering event is detected, the analog circuitry  is enabled. After the required start-up time, the requested conversion will be launched.  Once the conversion completes, the analog-circuitry will again be powered-down provided  no further conversions are pending.  This mode will NOT power-up the A/D if the ADC is powered down (ADC_PD bit in the PDRUNCFG register is HIGH) or if the part is in Deep-sleep, Power-down, or Deep power-down mode</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MODE10BIT</name>
+                     <description>10-bit conversion rate mode</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DISABLE_THE_10_BIT_C</name>
+                           <description>Disable the 10-bit conversion rate mode</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ENABLE_THE_10_BIT_CO</name>
+                           <description>Enable the 10-bit conversion rate mode with high conversion rate.The A/D resolution is reduced to 10 bits (the two LSB of the conversion result will be forced  to 0). The clock rate (set via the CLKDIV field) can be doubled to up to 31 MHz to  achieve a conversion rate of up to one million samples per second</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>START</name>
+                     <description>When the BURST bit is 0, these bits control whether and when an A/D conversion is started:</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_START_THIS_VALUE</name>
+                           <description>No start (this value should be used when clearing PDN to 0)</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>START_CONVERSION_NOW</name>
+                           <description>Start conversion now</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>PIO0_2</name>
+                           <description>Start conversion when the edge selected by bit 27 occurs on PIO0_2/SSEL/CT16B0_CAP0</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>PIO1_5</name>
+                           <description>Start conversion when the edge selected by bit 27 occurs on PIO1_5/DIR/CT32B0_CAP0</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>CT32B0_MAT0</name>
+                           <description>Start conversion when the edge selected by bit 27 occurs on CT32B0_MAT0[1]</description>
+                           <value>0x4</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>CT32B0_MAT1</name>
+                           <description>Start conversion when the edge selected by bit 27 occurs on CT32B0_MAT1[1]</description>
+                           <value>0x5</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>CT16B0_MAT0</name>
+                           <description>Start conversion when the edge selected by bit 27 occurs on CT16B0_MAT0[1]</description>
+                           <value>0x6</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>CT16B0_MAT1</name>
+                           <description>Start conversion when the edge selected by bit 27 occurs on CT16B0_MAT1[1]</description>
+                           <value>0x7</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>EDGE</name>
+                     <description>Edge control. This bit is significant only when the START field contains 010-111</description>
+                     <bitOffset>27</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>RISING</name>
+                           <description>Start conversion on a rising edge on the selected CAP/MAT signal</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>FALLING</name>
+                           <description>Start conversion on a falling edge on the selected CAP/MAT signal</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>GDR</name>
+               <description>A/D Global Data Register. Contains the result of the most recent A/D conversion</description>
+               <addressOffset>0x4</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>V_VREF</name>
+                     <description>When DONE is 1, this field contains a binary fraction representing the voltage on the ADn pin selected by the SEL field, divided by the voltage on the VDD pin or as it falls within the range of VREFP to  VREFN. Zero in the field indicates that the voltage on the ADn pin was less than, equal to, or close to that on VSS/VREFN, while 0xFFF indicates that the voltage on ADn was close to, equal to, or greater than that on VDD/VREFP</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+                  <field>
+                     <name>CHN</name>
+                     <description>These bits contain the channel from which the result bits V_VREF were converted</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>OVERRUN</name>
+                     <description>This bit is 1 in burst mode if the results of one or more conversions was (were) lost and overwritten before the conversion that produced the result in the V_VREF bits</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DONE</name>
+                     <description>This bit is set to 1 when an A/D conversion completes. It is cleared when this register is read and when the ADCR is written. If the ADCR is written while a conversion is still in progress, this bit is set and a new conversion is started</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>INTEN</name>
+               <description>A/D Interrupt Enable Register. This register contains enable bits that allow the DONE flag of each A/D channel to be included or excluded from contributing to the generation of an A/D interrupt</description>
+               <addressOffset>0xC</addressOffset>
+               <resetValue>0x100</resetValue>
+               <fields>
+                  <field>
+                     <name>ADINTEN</name>
+                     <description>These bits allow control over which A/D channels generate interrupts for conversion completion. When bit 0 is one, completion of a conversion on A/D channel 0 will generate an interrupt, when bit 1 is one, completion of a conversion on A/D channel 1 will generate an interrupt, etc</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>ADGINTEN</name>
+                     <description>When 1, enables the global DONE flag in ADDR to generate an interrupt. When 0, only the individual A/D channels enabled by ADINTEN 7:0 will generate interrupts. This bit must be set to 0 in burst mode (BURST = 1 in the CR register)</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DR[0]</name>
+               <description>A/D Channel N Data
+Register. This register contains the result of the most recent conversion
+completed on channel n</description>
+               <addressOffset>0x10</addressOffset>
+               <resetValue>0x100</resetValue>
+               <fields>
+                  <field>
+                     <name>V_VREF</name>
+                     <description>When DONE is 1, this field contains a binary fraction representing the voltage on the ADn pin as it falls within the range of VREFP to VREFN. Zero in the field indicates that the voltage on the ADn pin was less than, equal to, or close to that on VREFN/VSS, while 0xFFF indicates that the voltage on AD input was close to, equal to, or greater than that on VREFP/VDD</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+                  <field>
+                     <name>OVERRUN</name>
+                     <description>This bit is 1 in burst mode if the results of one or more conversions was (were) lost and overwritten before the conversion that produced the result in the V_VREF bits.This bit is cleared by reading this register</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DONE</name>
+                     <description>This bit is set to 1 when an A/D conversion completes. It is cleared when this register is read</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DR[1]</name>
+               <description>A/D Channel N Data
+Register. This register contains the result of the most recent conversion
+completed on channel n</description>
+               <addressOffset>0x14</addressOffset>
+               <resetValue>0x100</resetValue>
+               <fields>
+                  <field>
+                     <name>V_VREF</name>
+                     <description>When DONE is 1, this field contains a binary fraction representing the voltage on the ADn pin as it falls within the range of VREFP to VREFN. Zero in the field indicates that the voltage on the ADn pin was less than, equal to, or close to that on VREFN/VSS, while 0xFFF indicates that the voltage on AD input was close to, equal to, or greater than that on VREFP/VDD</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+                  <field>
+                     <name>OVERRUN</name>
+                     <description>This bit is 1 in burst mode if the results of one or more conversions was (were) lost and overwritten before the conversion that produced the result in the V_VREF bits.This bit is cleared by reading this register</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DONE</name>
+                     <description>This bit is set to 1 when an A/D conversion completes. It is cleared when this register is read</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DR[2]</name>
+               <description>A/D Channel N Data
+Register. This register contains the result of the most recent conversion
+completed on channel n</description>
+               <addressOffset>0x18</addressOffset>
+               <resetValue>0x100</resetValue>
+               <fields>
+                  <field>
+                     <name>V_VREF</name>
+                     <description>When DONE is 1, this field contains a binary fraction representing the voltage on the ADn pin as it falls within the range of VREFP to VREFN. Zero in the field indicates that the voltage on the ADn pin was less than, equal to, or close to that on VREFN/VSS, while 0xFFF indicates that the voltage on AD input was close to, equal to, or greater than that on VREFP/VDD</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+                  <field>
+                     <name>OVERRUN</name>
+                     <description>This bit is 1 in burst mode if the results of one or more conversions was (were) lost and overwritten before the conversion that produced the result in the V_VREF bits.This bit is cleared by reading this register</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DONE</name>
+                     <description>This bit is set to 1 when an A/D conversion completes. It is cleared when this register is read</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DR[3]</name>
+               <description>A/D Channel N Data
+Register. This register contains the result of the most recent conversion
+completed on channel n</description>
+               <addressOffset>0x1C</addressOffset>
+               <resetValue>0x100</resetValue>
+               <fields>
+                  <field>
+                     <name>V_VREF</name>
+                     <description>When DONE is 1, this field contains a binary fraction representing the voltage on the ADn pin as it falls within the range of VREFP to VREFN. Zero in the field indicates that the voltage on the ADn pin was less than, equal to, or close to that on VREFN/VSS, while 0xFFF indicates that the voltage on AD input was close to, equal to, or greater than that on VREFP/VDD</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+                  <field>
+                     <name>OVERRUN</name>
+                     <description>This bit is 1 in burst mode if the results of one or more conversions was (were) lost and overwritten before the conversion that produced the result in the V_VREF bits.This bit is cleared by reading this register</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DONE</name>
+                     <description>This bit is set to 1 when an A/D conversion completes. It is cleared when this register is read</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DR[4]</name>
+               <description>A/D Channel N Data
+Register. This register contains the result of the most recent conversion
+completed on channel n</description>
+               <addressOffset>0x20</addressOffset>
+               <resetValue>0x100</resetValue>
+               <fields>
+                  <field>
+                     <name>V_VREF</name>
+                     <description>When DONE is 1, this field contains a binary fraction representing the voltage on the ADn pin as it falls within the range of VREFP to VREFN. Zero in the field indicates that the voltage on the ADn pin was less than, equal to, or close to that on VREFN/VSS, while 0xFFF indicates that the voltage on AD input was close to, equal to, or greater than that on VREFP/VDD</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+                  <field>
+                     <name>OVERRUN</name>
+                     <description>This bit is 1 in burst mode if the results of one or more conversions was (were) lost and overwritten before the conversion that produced the result in the V_VREF bits.This bit is cleared by reading this register</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DONE</name>
+                     <description>This bit is set to 1 when an A/D conversion completes. It is cleared when this register is read</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DR[5]</name>
+               <description>A/D Channel N Data
+Register. This register contains the result of the most recent conversion
+completed on channel n</description>
+               <addressOffset>0x24</addressOffset>
+               <resetValue>0x100</resetValue>
+               <fields>
+                  <field>
+                     <name>V_VREF</name>
+                     <description>When DONE is 1, this field contains a binary fraction representing the voltage on the ADn pin as it falls within the range of VREFP to VREFN. Zero in the field indicates that the voltage on the ADn pin was less than, equal to, or close to that on VREFN/VSS, while 0xFFF indicates that the voltage on AD input was close to, equal to, or greater than that on VREFP/VDD</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+                  <field>
+                     <name>OVERRUN</name>
+                     <description>This bit is 1 in burst mode if the results of one or more conversions was (were) lost and overwritten before the conversion that produced the result in the V_VREF bits.This bit is cleared by reading this register</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DONE</name>
+                     <description>This bit is set to 1 when an A/D conversion completes. It is cleared when this register is read</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DR[6]</name>
+               <description>A/D Channel N Data
+Register. This register contains the result of the most recent conversion
+completed on channel n</description>
+               <addressOffset>0x28</addressOffset>
+               <resetValue>0x100</resetValue>
+               <fields>
+                  <field>
+                     <name>V_VREF</name>
+                     <description>When DONE is 1, this field contains a binary fraction representing the voltage on the ADn pin as it falls within the range of VREFP to VREFN. Zero in the field indicates that the voltage on the ADn pin was less than, equal to, or close to that on VREFN/VSS, while 0xFFF indicates that the voltage on AD input was close to, equal to, or greater than that on VREFP/VDD</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+                  <field>
+                     <name>OVERRUN</name>
+                     <description>This bit is 1 in burst mode if the results of one or more conversions was (were) lost and overwritten before the conversion that produced the result in the V_VREF bits.This bit is cleared by reading this register</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DONE</name>
+                     <description>This bit is set to 1 when an A/D conversion completes. It is cleared when this register is read</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DR[7]</name>
+               <description>A/D Channel N Data
+Register. This register contains the result of the most recent conversion
+completed on channel n</description>
+               <addressOffset>0x2C</addressOffset>
+               <resetValue>0x100</resetValue>
+               <fields>
+                  <field>
+                     <name>V_VREF</name>
+                     <description>When DONE is 1, this field contains a binary fraction representing the voltage on the ADn pin as it falls within the range of VREFP to VREFN. Zero in the field indicates that the voltage on the ADn pin was less than, equal to, or close to that on VREFN/VSS, while 0xFFF indicates that the voltage on AD input was close to, equal to, or greater than that on VREFP/VDD</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+                  <field>
+                     <name>OVERRUN</name>
+                     <description>This bit is 1 in burst mode if the results of one or more conversions was (were) lost and overwritten before the conversion that produced the result in the V_VREF bits.This bit is cleared by reading this register</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DONE</name>
+                     <description>This bit is set to 1 when an A/D conversion completes. It is cleared when this register is read</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>STAT</name>
+               <description>A/D Status Register. This register contains DONE and OVERRUN flags for all of the A/D channels, as well as the A/D interrupt flag</description>
+               <addressOffset>0x30</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>DONE</name>
+                     <description>These bits mirror the DONE status flags that appear in the result register for each A/D channel n</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>OVERRUN</name>
+                     <description>These bits mirror the OVERRRUN status flags that appear in the result register for each A/D channel n. Reading ADSTAT allows checking the status of all A/D channels simultaneously</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>ADINT</name>
+                     <description>This bit is the A/D interrupt flag. It is one when any of the individual A/D channel Done flags is asserted and enabled to contribute to the A/D interrupt via the ADINTEN register</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TRM</name>
+               <description>A/D trim register</description>
+               <addressOffset>0x34</addressOffset>
+               <resetValue>0xF00</resetValue>
+               <fields>
+                  <field>
+                     <name>ADCOFFS</name>
+                     <description>Offset trim bits for ADC operation. Initialized by the boot code. Can be overwritten by the user</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>TRIM</name>
+                     <description>Written-to by boot code. Can not be overwritten by the user. These bits are locked after boot code write</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

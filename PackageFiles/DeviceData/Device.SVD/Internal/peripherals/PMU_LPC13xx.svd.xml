@@ -1,0 +1,131 @@
+<!--
+Devices using this peripheral: 
+      LPC13xx
+-->
+      <peripheral>
+         <?sourceFile "PMU_LPC13xx" ?>
+         <name>PMU</name>
+         <description>Power Management Unit</description>
+         <groupName>PMU</groupName>
+         <headerStructName>PMU</headerStructName>
+         <baseAddress>0x40038000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x18</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>PCON</name>
+               <description>Power control register</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>DPDEN</name>
+                     <description>Deep power-down mode enable</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>SLEEP_DEEPSLEEP</name>
+                           <description>ARM WFI will enter Sleep or Deep-sleep mode (clock to ARM Cortex-M3 core turned off)</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>DEEPPOWERDOWN</name>
+                           <description>ARM WFI will enter Deep-power down mode (ARM Cortex-M3 core powered-down)</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SLEEPFLAG</name>
+                     <description>Sleep mode flag</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_POWER_DOWN_</name>
+                           <description>Read: No power-down mode entered. LPC13xx is in Run mode. Write: No effect</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>POWERDOWN</name>
+                           <description>Read: Sleep/Deep-sleep or Deep power-down mode entered. Write: Writing a 1 clears the SLEEPFLAG bit to 0</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DPDFLAG</name>
+                     <description>Deep power-down flag</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_DEEPPOWERDOWN</name>
+                           <description>Read: Deep power-down mode  not entered. Write: No effect</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>DEEPPOWERDOWN</name>
+                           <description>Read: Deep power-down mode entered. Write: Clear the Deep power-down flag</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>4</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3</dimIndex>
+               <name>GPREG%s</name>
+               <description>General purpose register</description>
+               <addressOffset>0x4</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>GPDATA</name>
+                     <description>Data retained during Deep power-down mode</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>GPREG4</name>
+               <description>General purpose register 4</description>
+               <addressOffset>0x14</addressOffset>
+               <fields>
+                  <field>
+                     <name>WAKEUPHYS</name>
+                     <description>WAKEUP pin hysteresis enable</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DISABLED</name>
+                           <description>Hysteresis for WAKUP pin disabled</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ENABLED</name>
+                           <description>Hysteresis for WAKEUP pin enabled</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>GPDATA</name>
+                     <description>Data retained during Deep power-down mode</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>21</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

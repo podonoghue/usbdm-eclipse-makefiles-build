@@ -28,11 +28,7 @@
       <xi:include href="peripherals/CAU_MK82F25615.svd.xml"/>
       <xi:include href="peripherals/CMP0_MKV.svd.xml"/>
       <peripheral derivedFrom="CMP0"><name>CMP1</name>      <prependToName>CMP1_</prependToName><baseAddress>0x40073008</baseAddress>
-         <interrupt>
-            <name>CMP1</name>
-            <description>High-Speed Comparator (CMP), Voltage Reference (VREF) Digital-to-Analog Converter (DAC), and Analog Mux</description>
-            <value>41</value>
-         </interrupt>
+         <interrupt><name>CMP1</name><value>41</value><peripheral>CMP1</peripheral><description>High-Speed Comparator (CMP), Voltage Reference (VREF) Digital-to-Analog Converter (DAC), and Analog Mux</description></interrupt>
       </peripheral>
       <xi:include href="peripherals/CMT_0.svd.xml"/>
       <xi:include href="peripherals/CRC0_0x40032000.svd.xml"/>
@@ -41,11 +37,7 @@
       <xi:include href="peripherals/DMAMUX_MK82F25615.svd.xml"/>
       <xi:include href="peripherals/EMVSIM0_MK82F25615.svd.xml"/>
       <peripheral derivedFrom="EMVSIM0"><name>EMVSIM1</name>      <prependToName>EMVSIM1_</prependToName><baseAddress>0x400D5000</baseAddress>
-         <interrupt>
-            <name>EMVSIM1</name>
-            <description>EMVSIM</description>
-            <value>38</value>
-         </interrupt>
+         <interrupt><name>EMVSIM1</name><value>38</value><peripheral>EMVSIM1</peripheral><description>EMVSIM</description></interrupt>
       </peripheral>
       <xi:include href="peripherals/EWM_MK82F25615.svd.xml"/>
       <xi:include href="peripherals/FB_MK82F25615.svd.xml"/>
@@ -55,109 +47,53 @@
       <xi:include href="peripherals/FTM0_8CH_ICRST.svd.xml"/>
       <xi:include href="peripherals/FTM1_MK82F25615.svd.xml"/>
       <peripheral derivedFrom="FTM1"><name>FTM2</name>      <prependToName>FTM2_</prependToName><baseAddress>0x4003A000</baseAddress>
-         <interrupt>
-            <name>FTM2</name>
-            <description>FlexTimer Module</description>
-            <value>44</value>
-         </interrupt>
+         <interrupt><name>FTM2</name><value>44</value><peripheral>FTM2</peripheral><description>FlexTimer Module</description></interrupt>
       </peripheral>
       <peripheral derivedFrom="FTM0"><name>FTM3</name>      <prependToName>FTM3_</prependToName><baseAddress>0x400B9000</baseAddress>
-         <interrupt>
-            <name>FTM3</name>
-            <description>FlexTimer Module</description>
-            <value>71</value>
-         </interrupt>
+         <interrupt><name>FTM3</name><value>71</value><peripheral>FTM3</peripheral><description>FlexTimer Module</description></interrupt>
       </peripheral>
       <xi:include href="peripherals/GPIOA_0x400FF000.svd.xml"/>
       <peripheral derivedFrom="GPIOA"><name>GPIOB</name>      <prependToName>GPIOB_</prependToName><baseAddress>0x400FF040</baseAddress>
-         <interrupt>
-            <name>PORTB</name>
-            <description>General Purpose Input/Output</description>
-            <value>60</value>
-         </interrupt>
+         <interrupt><name>PORTB</name><value>60</value><peripheral>GPIOB</peripheral><description>General Purpose Input/Output</description></interrupt>
       </peripheral>
       <peripheral derivedFrom="GPIOA"><name>GPIOC</name>      <prependToName>GPIOC_</prependToName><baseAddress>0x400FF080</baseAddress>
-         <interrupt>
-            <name>PORTC</name>
-            <description>General Purpose Input/Output</description>
-            <value>61</value>
-         </interrupt>
+         <interrupt><name>PORTC</name><value>61</value><peripheral>GPIOC</peripheral><description>General Purpose Input/Output</description></interrupt>
       </peripheral>
       <peripheral derivedFrom="GPIOA"><name>GPIOD</name>      <prependToName>GPIOD_</prependToName><baseAddress>0x400FF0C0</baseAddress>
-         <interrupt>
-            <name>PORTD</name>
-            <description>General Purpose Input/Output</description>
-            <value>62</value>
-         </interrupt>
+         <interrupt><name>PORTD</name><value>62</value><peripheral>GPIOD</peripheral><description>General Purpose Input/Output</description></interrupt>
       </peripheral>
       <peripheral derivedFrom="GPIOA"><name>GPIOE</name>      <prependToName>GPIOE_</prependToName><baseAddress>0x400FF100</baseAddress>
-         <interrupt>
-            <name>PORTE</name>
-            <description>General Purpose Input/Output</description>
-            <value>63</value>
-         </interrupt>
+         <interrupt><name>PORTE</name><value>63</value><peripheral>GPIOE</peripheral><description>General Purpose Input/Output</description></interrupt>
       </peripheral>
       <xi:include href="peripherals/I2C0_MK82F25615.svd.xml"/>
       <peripheral derivedFrom="I2C0"><name>I2C1</name>      <prependToName>I2C1_</prependToName><baseAddress>0x40067000</baseAddress>
-         <interrupt>
-            <name>I2C1</name>
-            <description>Inter-Integrated Circuit</description>
-            <value>25</value>
-         </interrupt>
+         <interrupt><name>I2C1</name><value>25</value><peripheral>I2C1</peripheral><description>Inter-Integrated Circuit</description></interrupt>
       </peripheral>
       <peripheral derivedFrom="I2C0"><name>I2C2</name>      <prependToName>I2C2_</prependToName><baseAddress>0x400E6000</baseAddress>
-         <interrupt>
-            <name>I2C2</name>
-            <description>Inter-Integrated Circuit</description>
-            <value>74</value>
-         </interrupt>
+         <interrupt><name>I2C2</name><value>74</value><peripheral>I2C2</peripheral><description>Inter-Integrated Circuit</description></interrupt>
       </peripheral>
       <peripheral derivedFrom="I2C0"><name>I2C3</name>      <prependToName>I2C3_</prependToName><baseAddress>0x400E7000</baseAddress>
-         <interrupt>
-            <name>I2C3</name>
-            <description>Inter-Integrated Circuit</description>
-            <value>91</value>
-         </interrupt>
+         <interrupt><name>I2C3</name><value>91</value><peripheral>I2C3</peripheral><description>Inter-Integrated Circuit</description></interrupt>
       </peripheral>
       <xi:include href="peripherals/I2S0_MK82F25615.svd.xml"/>
       <xi:include href="peripherals/LLWU_MK82F25615.svd.xml"/>
       <xi:include href="peripherals/LMEM_MK82F25615.svd.xml"/>
       <xi:include href="peripherals/LPTMR0_0.svd.xml"/>
       <peripheral derivedFrom="LPTMR0"><name>LPTMR1</name>      <prependToName>LPTMR1_</prependToName><baseAddress>0x40044000</baseAddress>
-         <interrupt>
-            <name>LPTMR0_LPTMR1</name>
-            <description>Low Power Timer</description>
-            <value>58</value>
-         </interrupt>
+         <interrupt><name>LPTMR0_LPTMR1</name><value>58</value><peripheral>LPTMR1</peripheral><description>Low Power Timer</description></interrupt>
       </peripheral>
       <xi:include href="peripherals/LPUART0_MK82F25615.svd.xml"/>
       <peripheral derivedFrom="LPUART0"><name>LPUART1</name>      <prependToName>LPUART1_</prependToName><baseAddress>0x400C5000</baseAddress>
-         <interrupt>
-            <name>LPUART1</name>
-            <description>Universal Asynchronous Receiver/Transmitter</description>
-            <value>31</value>
-         </interrupt>
+         <interrupt><name>LPUART1</name><value>31</value><peripheral>LPUART1</peripheral><description>Universal Asynchronous Receiver/Transmitter</description></interrupt>
       </peripheral>
       <peripheral derivedFrom="LPUART0"><name>LPUART2</name>      <prependToName>LPUART2_</prependToName><baseAddress>0x400C6000</baseAddress>
-         <interrupt>
-            <name>LPUART2</name>
-            <description>Universal Asynchronous Receiver/Transmitter</description>
-            <value>32</value>
-         </interrupt>
+         <interrupt><name>LPUART2</name><value>32</value><peripheral>LPUART2</peripheral><description>Universal Asynchronous Receiver/Transmitter</description></interrupt>
       </peripheral>
       <peripheral derivedFrom="LPUART0"><name>LPUART3</name>      <prependToName>LPUART3_</prependToName><baseAddress>0x400C7000</baseAddress>
-         <interrupt>
-            <name>LPUART3</name>
-            <description>Universal Asynchronous Receiver/Transmitter</description>
-            <value>33</value>
-         </interrupt>
+         <interrupt><name>LPUART3</name><value>33</value><peripheral>LPUART3</peripheral><description>Universal Asynchronous Receiver/Transmitter</description></interrupt>
       </peripheral>
       <peripheral derivedFrom="LPUART0"><name>LPUART4</name>      <prependToName>LPUART4_</prependToName><baseAddress>0x400D6000</baseAddress>
-         <interrupt>
-            <name>LPUART4</name>
-            <description>Universal Asynchronous Receiver/Transmitter</description>
-            <value>34</value>
-         </interrupt>
+         <interrupt><name>LPUART4</name><value>34</value><peripheral>LPUART4</peripheral><description>Universal Asynchronous Receiver/Transmitter</description></interrupt>
       </peripheral>
       <xi:include href="peripherals/LTC0_MK82F25615.svd.xml"/>
       <xi:include href="peripherals/MCG_MK82F25615.svd.xml"/>
@@ -171,26 +107,14 @@
       <xi:include href="peripherals/PMC_MK82F25615.svd.xml"/>
       <xi:include href="peripherals/PORTA.svd.xml"/>
       <peripheral derivedFrom="PORTA"><name>PORTB</name>      <prependToName>PORTB_</prependToName><baseAddress>0x4004A000</baseAddress>
-         <interrupt>
-            <name>PORTB</name>
-            <description>Pin Control and Interrupts</description>
-            <value>60</value>
-         </interrupt>
+         <interrupt><name>PORTB</name><value>60</value><peripheral>PORTB</peripheral><description>Pin Control and Interrupts</description></interrupt>
       </peripheral>
       <peripheral derivedFrom="PORTA"><name>PORTC</name>      <prependToName>PORTC_</prependToName><baseAddress>0x4004B000</baseAddress>
-         <interrupt>
-            <name>PORTC</name>
-            <description>Pin Control and Interrupts</description>
-            <value>61</value>
-         </interrupt>
+         <interrupt><name>PORTC</name><value>61</value><peripheral>PORTC</peripheral><description>Pin Control and Interrupts</description></interrupt>
       </peripheral>
       <xi:include href="peripherals/PORTD_DFER.svd.xml"/>
       <peripheral derivedFrom="PORTA"><name>PORTE</name>      <prependToName>PORTE_</prependToName><baseAddress>0x4004D000</baseAddress>
-         <interrupt>
-            <name>PORTE</name>
-            <description>Pin Control and Interrupts</description>
-            <value>63</value>
-         </interrupt>
+         <interrupt><name>PORTE</name><value>63</value><peripheral>PORTE</peripheral><description>Pin Control and Interrupts</description></interrupt>
       </peripheral>
       <xi:include href="peripherals/QSPI0_0x400DA000.svd.xml"/>
       <xi:include href="peripherals/RCM_MK82F25615.svd.xml"/>
@@ -203,27 +127,15 @@
       <xi:include href="peripherals/SMC_MK82F25615.svd.xml"/>
       <xi:include href="peripherals/SPI0_MK_PCSIS6_PCSSE.svd.xml"/>
       <peripheral derivedFrom="SPI0"><name>SPI1</name>      <prependToName>SPI1_</prependToName><baseAddress>0x4002D000</baseAddress>
-         <interrupt>
-            <name>SPI1</name>
-            <description>Serial Peripheral Interface</description>
-            <value>27</value>
-         </interrupt>
+         <interrupt><name>SPI1</name><value>27</value><peripheral>SPI1</peripheral><description>Serial Peripheral Interface</description></interrupt>
       </peripheral>
       <peripheral derivedFrom="SPI0"><name>SPI2</name>      <prependToName>SPI2_</prependToName><baseAddress>0x400AC000</baseAddress>
-         <interrupt>
-            <name>SPI2</name>
-            <description>Serial Peripheral Interface</description>
-            <value>65</value>
-         </interrupt>
+         <interrupt><name>SPI2</name><value>65</value><peripheral>SPI2</peripheral><description>Serial Peripheral Interface</description></interrupt>
       </peripheral>
       <xi:include href="peripherals/SYST.svd.xml"/>
       <xi:include href="peripherals/TPM1_MK82F25615.svd.xml"/>
       <peripheral derivedFrom="TPM1"><name>TPM2</name>      <prependToName>TPM2_</prependToName><baseAddress>0x400CA000</baseAddress>
-         <interrupt>
-            <name>TPM2</name>
-            <description>Timer/PWM Module</description>
-            <value>89</value>
-         </interrupt>
+         <interrupt><name>TPM2</name><value>89</value><peripheral>TPM2</peripheral><description>Timer/PWM Module</description></interrupt>
       </peripheral>
       <xi:include href="peripherals/TRNG0_0x400A0000.svd.xml"/>
       <xi:include href="peripherals/TSI0_MK65.svd.xml"/>

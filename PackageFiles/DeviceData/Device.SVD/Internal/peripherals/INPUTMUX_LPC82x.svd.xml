@@ -1,0 +1,171 @@
+<!--
+Devices using this peripheral: 
+      LPC82x
+-->
+      <peripheral>
+         <?sourceFile "INPUTMUX_LPC82x" ?>
+         <name>INPUTMUX</name>
+         <description>Input multiplexing</description>
+         <groupName>INPUTMUX</groupName>
+         <headerStructName>INPUTMUX</headerStructName>
+         <baseAddress>0x4002C000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x20</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>DMA_INMUX_INMUX0</name>
+               <description>Input mux register for DMA trigger input 20. Selects from 18 DMA trigger outputs</description>
+               <addressOffset>0x0</addressOffset>
+               <resetValue>0x1F</resetValue>
+               <fields>
+                  <field>
+                     <name>INP</name>
+                     <description>DMA trigger output number (decimal value) for DMA channel n (n = 0 to 17)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DMA_INMUX_INMUX1</name>
+               <description>Input mux register for DMA trigger input 20. Selects from 18 DMA trigger outputs</description>
+               <addressOffset>0x4</addressOffset>
+               <resetValue>0x1F</resetValue>
+               <fields>
+                  <field>
+                     <name>INP</name>
+                     <description>DMA trigger output number (decimal value) for DMA channel n (n = 0 to 17)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SCT0_INMUX0</name>
+               <description>Input mux register for SCT input 0</description>
+               <addressOffset>0x20</addressOffset>
+               <resetValue>0xF</resetValue>
+               <fields>
+                  <field>
+                     <name>INP_N</name>
+                     <description>Input number (decimal value) to SCT0 inputs 0 to 3</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>SCT_IN0_CHANGE_THE</name>
+                           <description>SCT_IN0  change the name since this is not the function sct_in0 but the first selection for sct input in the mux.in fact it could be functionally sct_in3 (input 3 of the sct). Assign to pin using the switch matrix</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SCT_IN1</name>
+                           <description>SCT_IN1. Assign to pin using the switch matrix</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SCT_IN2</name>
+                           <description>SCT_IN2. Assign to pin using the switch matrix</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SCT_IN3</name>
+                           <description>SCT_IN3. Assign to pin using the switch matrix</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ADC_THCMP_IRQ</name>
+                           <description>ADC_THCMP_IRQ</description>
+                           <value>0x4</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ACMP_O</name>
+                           <description>ACMP_O</description>
+                           <value>0x5</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ARM_TXEV</name>
+                           <description>ARM_TXEV</description>
+                           <value>0x6</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>DEBUG_HALTED</name>
+                           <description>DEBUG_HALTED</description>
+                           <value>0x7</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>3</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>1,2,3</dimIndex>
+               <name>SCT0_INMUX%s</name>
+               <description>Input mux register for SCT input 0</description>
+               <addressOffset>0x24</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>INP_N</name>
+                     <description>Input number (decimal value) to SCT0 inputs 0 to 3</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>SCT_IN0_CHANGE_THE</name>
+                           <description>SCT_IN0  change the name since this is not the function sct_in0 but the first selection for sct input in the mux.in fact it could be functionally sct_in3 (input 3 of the sct). Assign to pin using the switch matrix</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SCT_IN1</name>
+                           <description>SCT_IN1. Assign to pin using the switch matrix</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SCT_IN2</name>
+                           <description>SCT_IN2. Assign to pin using the switch matrix</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SCT_IN3</name>
+                           <description>SCT_IN3. Assign to pin using the switch matrix</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ADC_THCMP_IRQ</name>
+                           <description>ADC_THCMP_IRQ</description>
+                           <value>0x4</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ACMP_O</name>
+                           <description>ACMP_O</description>
+                           <value>0x5</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ARM_TXEV</name>
+                           <description>ARM_TXEV</description>
+                           <value>0x6</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>DEBUG_HALTED</name>
+                           <description>DEBUG_HALTED</description>
+                           <value>0x7</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

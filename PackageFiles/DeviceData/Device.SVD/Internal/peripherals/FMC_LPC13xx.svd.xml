@@ -1,0 +1,208 @@
+<!--
+Devices using this peripheral: 
+      LPC13xx
+-->
+      <peripheral>
+         <?sourceFile "FMC_LPC13xx" ?>
+         <name>FMC</name>
+         <description>Flash memory 				programming firmware</description>
+         <groupName>FMC</groupName>
+         <headerStructName>FMC</headerStructName>
+         <baseAddress>0x4003C000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x10</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x20</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x2C</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xFE0</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xFE8</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>FLASHCFG</name>
+               <description>Flash configuration register</description>
+               <addressOffset>0x10</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>FLASHTIM</name>
+                     <description>Flash memory access time. FLASHTIM +1 is equal to the number of system clocks used for flash access</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>1_SYSTEM_CLOCK_FLASH</name>
+                           <description>1 system clock flash access time (for system clock frequencies of up to 20 MHz)</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>2_SYSTEM_CLOCKS_FLAS</name>
+                           <description>2 system clocks flash access time (for system clock frequencies of up to 40 MHz)</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>3_SYSTEM_CLOCKS_FLAS</name>
+                           <description>3 system clocks flash access time (for system clock frequencies of up to 72 MHz)</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>RESERVED_</name>
+                           <description>Reserved</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FMSSTART</name>
+               <description>Signature start address register</description>
+               <addressOffset>0x20</addressOffset>
+               <fields>
+                  <field>
+                     <name>START</name>
+                     <description>Signature generation start address (corresponds to AHB byte address bits[20:4])</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>17</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FMSSTOP</name>
+               <description>Signature stop-address register</description>
+               <addressOffset>0x24</addressOffset>
+               <fields>
+                  <field>
+                     <name>STOP</name>
+                     <description>BIST stop address divided by 16 (corresponds to AHB byte address [20:4])</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>17</bitWidth>
+                  </field>
+                  <field>
+                     <name>SIG_START</name>
+                     <description>Start control bit for signature generation</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>SIGNATURE_GENERATION</name>
+                           <description>Signature generation is stopped</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INITIATE_SIGNATURE_G</name>
+                           <description>Initiate signature generation</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FMSW0</name>
+               <description>Word 0 [31:0]</description>
+               <addressOffset>0x2C</addressOffset>
+               <access>read-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>SW0_31_0</name>
+                     <description>Word 0 of 128-bit signature (bits 31 to 0)</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FMSW1</name>
+               <description>Word 1 [63:32]</description>
+               <addressOffset>0x30</addressOffset>
+               <access>read-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>SW1_63_32</name>
+                     <description>Word 1 of 128-bit signature (bits 63 to 32)</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FMSW2</name>
+               <description>Word 2 [95:64]</description>
+               <addressOffset>0x34</addressOffset>
+               <access>read-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>SW2_95_64</name>
+                     <description>Word 2 of 128-bit signature (bits 95 to 64)</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FMSW3</name>
+               <description>Word 3 [127:96]</description>
+               <addressOffset>0x38</addressOffset>
+               <access>read-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>SW3_127_96</name>
+                     <description>Word 3 of 128-bit signature (bits 127 to 96)</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FMSTAT</name>
+               <description>Signature generation status register</description>
+               <addressOffset>0xFE0</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>SIG_DONE</name>
+                     <description>When 1, a previously started signature generation has completed. See FMSTATCLR register description for clearing this flag</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FMSTATCLR</name>
+               <description>Signature generation status clear register</description>
+               <addressOffset>0xFE8</addressOffset>
+               <access>write-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>SIG_DONE_CLR</name>
+                     <description>Writing a 1 to this bits clears the signature generation completion flag (SIG_DONE) in the FMSTAT register</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

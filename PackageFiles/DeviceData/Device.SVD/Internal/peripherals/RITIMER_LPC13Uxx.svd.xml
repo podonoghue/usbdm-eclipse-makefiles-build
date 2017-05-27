@@ -1,0 +1,180 @@
+<!--
+Devices using this peripheral: 
+      LPC13Uxx
+-->
+      <peripheral>
+         <?sourceFile "RITIMER_LPC13Uxx" ?>
+         <name>RITIMER</name>
+         <description>Repetitive Interrupt Timer (RI timer)</description>
+         <groupName>RITIMER</groupName>
+         <headerStructName>RITIMER</headerStructName>
+         <baseAddress>0x40064000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x1C</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>COMPVAL</name>
+               <description>Compare value LSB register. Holds the 32 LSBs of the compare value</description>
+               <addressOffset>0x0</addressOffset>
+               <resetValue>0xFFFFFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>RICOMP</name>
+                     <description>Compare register. Holds the 32 LSBs of the compare value which is compared to the counter</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MASK</name>
+               <description>Mask LSB register. This register holds the 32 LSB s of the mask value. A one  written to any bit will force a compare on the corresponding bit of the counter and compare register</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>RIMASK</name>
+                     <description>Mask register. This register holds the 32 LSBs of the mask value. A one written to any bit overrides the result of the comparison for the corresponding bit of the counter and compare register (causes the comparison of the register bits to be always true)</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CTRL</name>
+               <description>Control register</description>
+               <addressOffset>0x8</addressOffset>
+               <resetValue>0xC</resetValue>
+               <fields>
+                  <field>
+                     <name>RITINT</name>
+                     <description>Interrupt flag</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>MASK</name>
+                           <description>This bit is set to 1 by hardware whenever the counter value equals the masked compare value specified by the contents of RICOMPVAL and RIMASK registers. Writing a 1 to this bit will clear it to 0. Writing a 0 has no effect</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>NO_MASK</name>
+                           <description>The counter value does not equal the masked compare value</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RITENCLR</name>
+                     <description>Timer enable clear</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>CLEAR_ON_O</name>
+                           <description>The timer will be cleared to 0 whenever the counter value equals the masked compare value specified by the contents of COMPVAL/COMPVAL_H and MASK/MASK_H registers. This will occur on the same clock that sets the interrupt flag</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>NOT_CLEAR_ON_0</name>
+                           <description>The timer will not be cleared to 0</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RITENBR</name>
+                     <description>Timer enable for debug</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>HALT_ON_DEBUG</name>
+                           <description>The timer is halted when the processor is halted for debugging</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>NO_EFFECT_ON_DEBUG</name>
+                           <description>Debug has no effect on the timer operation</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RITEN</name>
+                     <description>Timer enable</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>TIMER_ENABLED</name>
+                           <description>Timer enabled. This can be overruled by a debug halt if enabled in bit 2</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>TIMER_DISABLED_</name>
+                           <description>Timer disabled</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>COUNTER</name>
+               <description>Counter LSB register. 32 LSBs of the counter</description>
+               <addressOffset>0xC</addressOffset>
+               <fields>
+                  <field>
+                     <name>RICOUNTER</name>
+                     <description>32 LSBs of the up counter. Counts continuously unless RITEN bit in CTRL register is cleared or debug mode is entered (if enabled by the RITNEBR bit in RICTRL). Can be loaded to any value in software</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>COMPVAL_H</name>
+               <description>Compare value MSB register. Holds the 16 MSBs of the compare value</description>
+               <addressOffset>0x10</addressOffset>
+               <resetValue>0xFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>RICOMP</name>
+                     <description>Compare value MSB register. Holds the 16 MSBs of the compare value which is compared to the counter</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MASK_H</name>
+               <description>Mask MSB register. This register holds the 16 MSBs of the mask value. A one written to any bit will force a compare on the corresponding bit of the counter and compare register</description>
+               <addressOffset>0x14</addressOffset>
+               <fields>
+                  <field>
+                     <name>RIMASK</name>
+                     <description>Mask register. This register holds the 16 MSBs of the mask value. A one written to any bit overrides the result of the comparison for the corresponding bit of the counter and compare register (causes the comparison of the register bits to be always true)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>COUNTER_H</name>
+               <description>Counter MSB register. 16 MSBs of the counter</description>
+               <addressOffset>0x18</addressOffset>
+               <fields>
+                  <field>
+                     <name>RICOUNTER</name>
+                     <description>16 LSBs of the up counter. Counts continuously unless RITEN bit in RICTRL register is cleared or debug mode is entered (if enabled by the RITNEBR bit in RICTRL). Can be loaded to any value in software</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

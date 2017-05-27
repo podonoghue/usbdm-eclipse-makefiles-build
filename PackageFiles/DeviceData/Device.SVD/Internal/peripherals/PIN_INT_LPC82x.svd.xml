@@ -1,0 +1,701 @@
+<!--
+Devices using this peripheral: 
+      LPC82x
+-->
+      <peripheral>
+         <?sourceFile "PIN_INT_LPC82x" ?>
+         <name>PIN_INT</name>
+         <description>Pin interrupt and  pattern match engine</description>
+         <groupName>GPIO_PIN_INT</groupName>
+         <headerStructName>PIN_INT</headerStructName>
+         <baseAddress>0xA0004000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x8</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x10</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x14</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x1C</offset>
+            <size>0x18</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>ISEL</name>
+               <description>Pin Interrupt Mode register</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>PMODE</name>
+                     <description>Selects the interrupt mode for each pin interrupt. Bit n configures the pin interrupt selected in PINTSELn. 0 = Edge sensitive 1 = Level sensitive</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>IENR</name>
+               <description>Pin interrupt level or rising edge interrupt enable register</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>ENRL</name>
+                     <description>Enables the rising edge or level interrupt for each pin interrupt. Bit n configures the pin interrupt selected in PINTSELn. 0 = Disable rising edge or level interrupt. 1 = Enable rising edge or level interrupt</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SIENR</name>
+               <description>Pin interrupt level (rising edge) interrupt set register</description>
+               <addressOffset>0x8</addressOffset>
+               <access>write-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>SETENRL</name>
+                     <description>Ones written to this address set bits in the IENR, thus enabling interrupts. Bit n sets bit n in the IENR register. 0 = No operation. 1 = Enable rising edge or level interrupt</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CIENR</name>
+               <description>Pin interrupt level  or rising edge interrupt clear register</description>
+               <addressOffset>0xC</addressOffset>
+               <access>write-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>CENRL</name>
+                     <description>Ones written to this address clear bits in the IENR, thus disabling the interrupts. Bit n clears bit n in the IENR register. 0 = No operation. 1 = Disable rising edge or level interrupt</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>IENF</name>
+               <description>Pin interrupt active level or falling edge interrupt enable register</description>
+               <addressOffset>0x10</addressOffset>
+               <fields>
+                  <field>
+                     <name>ENAF</name>
+                     <description>Enables the falling edge or configures the active level interrupt for each pin interrupt. Bit n configures the pin interrupt selected in PINTSELn. 0 = Disable falling edge interrupt or set active interrupt level LOW. 1 = Enable falling edge interrupt enabled or set active interrupt level HIGH</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SIENF</name>
+               <description>Pin interrupt active level or falling edge interrupt set register</description>
+               <addressOffset>0x14</addressOffset>
+               <access>write-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>SETENAF</name>
+                     <description>Ones written to this address set bits in the IENF, thus enabling interrupts. Bit n sets bit n in the IENF register. 0 = No operation. 1 = Select HIGH-active interrupt or enable falling edge interrupt</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CIENF</name>
+               <description>Pin interrupt active level (falling edge) interrupt clear register</description>
+               <addressOffset>0x18</addressOffset>
+               <access>write-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>CENAF</name>
+                     <description>Ones written to this address clears bits in the IENF, thus disabling interrupts. Bit n clears bit n in the IENF register. 0 = No operation. 1 = LOW-active interrupt selected or falling edge interrupt disabled</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RISE</name>
+               <description>Pin interrupt rising edge register</description>
+               <addressOffset>0x1C</addressOffset>
+               <fields>
+                  <field>
+                     <name>RDET</name>
+                     <description>Rising edge detect. Bit n detects the rising edge of the pin selected in PINTSELn. Read 0: No rising edge has been detected on this pin since Reset or the last time a one was written to this bit. Write 0: no operation. Read 1: a rising edge has been detected since Reset or the last time a one was written to this bit. Write 1: clear rising edge detection for this pin</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FALL</name>
+               <description>Pin interrupt falling edge register</description>
+               <addressOffset>0x20</addressOffset>
+               <fields>
+                  <field>
+                     <name>FDET</name>
+                     <description>Falling edge detect. Bit n detects the falling edge of the pin selected in PINTSELn. Read 0: No falling edge has been detected on this pin since Reset or the last time a one was written to this bit. Write 0: no operation. Read 1: a falling edge has been detected since Reset or the last time a one was written to this bit. Write 1: clear falling edge detection for this pin</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>IST</name>
+               <description>Pin interrupt status register</description>
+               <addressOffset>0x24</addressOffset>
+               <fields>
+                  <field>
+                     <name>PSTAT</name>
+                     <description>Pin interrupt status. Bit n returns the status, clears the edge interrupt, or inverts the active level of the pin selected in PINTSELn. Read 0: interrupt is not being requested for this interrupt pin.  Write 0: no operation. Read 1: interrupt is being requested for this interrupt pin. Write 1 (edge-sensitive): clear rising- and falling-edge detection for this pin. Write 1 (level-sensitive): switch the active level for this pin (in the IENF register)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PMCTRL</name>
+               <description>GPIO pattern match interrupt control register</description>
+               <addressOffset>0x28</addressOffset>
+               <fields>
+                  <field>
+                     <name>SEL_PMATCH</name>
+                     <description>Specifies whether the 8 pin interrupts are controlled by the pin interrupt function or by the pattern match function</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>PIN_INTERRUPT_INTER</name>
+                           <description>Pin interrupt. Interrupts are driven in response to the standard pin interrupt function</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>PATTERN_MATCH_INTER</name>
+                           <description>Pattern match. Interrupts are driven in response to pattern matches</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ENA_RXEV</name>
+                     <description>Enables the RxEv output to the ARM cpu and/or to a GPIO output when the specified boolean expression evaluates to true</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DISABLED_RXEV_OUTPU</name>
+                           <description>Disabled. RxEv output to the cpu is disabled</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ENABLED_RXEV_OUTPUT</name>
+                           <description>Enabled. RxEv output to the cpu is enabled</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PMAT</name>
+                     <description>This field displays the current state of pattern matches. A 1 in any bit of this field indicates that the corresponding product term is matched by the current state of the appropriate inputs</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PMSRC</name>
+               <description>GPIO pattern match interrupt bit-slice source register</description>
+               <addressOffset>0x2C</addressOffset>
+               <fields>
+                  <field>
+                     <name>Reserved</name>
+                     <description>Software should not write 1s to unused bits</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>SRC0</name>
+                     <description>Selects the input source for bit slice 0</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>INPUT_0_SELECTS_PIN</name>
+                           <description>Input 0. Selects pin interrupt input 0 as the source to bit slice 0</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_1_SELECTS_PIN</name>
+                           <description>Input 1. Selects pin interrupt input 1 as the source to bit slice 0</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_2_SELECTS_PIN</name>
+                           <description>Input 2. Selects pin interrupt input 2 as the source to bit slice 0</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_3_SELECTS_PIN</name>
+                           <description>Input 3. Selects pin interrupt input 3 as the source to bit slice 0</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_4_SELECTS_PIN</name>
+                           <description>Input 4. Selects pin interrupt input 4 as the source to bit slice 0</description>
+                           <value>0x4</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_5_SELECTS_PIN</name>
+                           <description>Input 5. Selects pin interrupt input 5 as the source to bit slice 0</description>
+                           <value>0x5</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_6_SELECTS_PIN</name>
+                           <description>Input 6. Selects pin interrupt input 6 as the source to bit slice 0</description>
+                           <value>0x6</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_7_SELECTS_PIN</name>
+                           <description>Input 7. Selects pin interrupt input 7 as the source to bit slice 0</description>
+                           <value>0x7</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SRC1</name>
+                     <description>Selects the input source for bit slice 1</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>INPUT_0_SELECTS_PIN</name>
+                           <description>Input 0. Selects pin interrupt input 0 as the source to bit slice 1</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_1_SELECTS_PIN</name>
+                           <description>Input 1. Selects pin interrupt input 1 as the source to bit slice 1</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_2_SELECTS_PIN</name>
+                           <description>Input 2. Selects pin interrupt input 2 as the source to bit slice 1</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_3_SELECTS_PIN</name>
+                           <description>Input 3. Selects pin interrupt input 3 as the source to bit slice 1</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_4_SELECTS_PIN</name>
+                           <description>Input 4. Selects pin interrupt input 4 as the source to bit slice 1</description>
+                           <value>0x4</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_5_SELECTS_PIN</name>
+                           <description>Input 5. Selects pin interrupt input 5 as the source to bit slice 1</description>
+                           <value>0x5</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_6_SELECTS_PIN</name>
+                           <description>Input 6. Selects pin interrupt input 6 as the source to bit slice 1</description>
+                           <value>0x6</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_7_SELECTS_PIN</name>
+                           <description>Input 7. Selects pin interrupt input 7 as the source to bit slice 1</description>
+                           <value>0x7</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SRC2</name>
+                     <description>Selects the input source for bit slice 2</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>INPUT_0_SELECTS_PIN</name>
+                           <description>Input 0. Selects pin interrupt input 0 as the source to bit slice 2</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_1_SELECTS_PIN</name>
+                           <description>Input 1. Selects pin interrupt input 1 as the source to bit slice 2</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_2_SELECTS_PIN</name>
+                           <description>Input 2. Selects pin interrupt input 2 as the source to bit slice 2</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_3_SELECTS_PIN</name>
+                           <description>Input 3. Selects pin interrupt input 3 as the source to bit slice 2</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_4_SELECTS_PIN</name>
+                           <description>Input 4. Selects pin interrupt input 4 as the source to bit slice 2</description>
+                           <value>0x4</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_5_SELECTS_PIN</name>
+                           <description>Input 5. Selects pin interrupt input 5 as the source to bit slice 2</description>
+                           <value>0x5</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_6_SELECTS_PIN</name>
+                           <description>Input 6. Selects pin interrupt input 6 as the source to bit slice 2</description>
+                           <value>0x6</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_7_SELECTS_PIN</name>
+                           <description>Input 7. Selects pin interrupt input 7 as the source to bit slice 2</description>
+                           <value>0x7</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SRC3</name>
+                     <description>Selects the input source for bit slice 3</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>INPUT_0_SELECTS_PIN</name>
+                           <description>Input 0. Selects pin interrupt input 0 as the source to bit slice 3</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_1_SELECTS_PIN</name>
+                           <description>Input 1. Selects pin interrupt input 1 as the source to bit slice 3</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_2_SELECTS_PIN</name>
+                           <description>Input 2. Selects pin interrupt input 2 as the source to bit slice 3</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_3_SELECTS_PIN</name>
+                           <description>Input 3. Selects pin interrupt input 3 as the source to bit slice 3</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_4_SELECTS_PIN</name>
+                           <description>Input 4. Selects pin interrupt input 4 as the source to bit slice 3</description>
+                           <value>0x4</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_5_SELECTS_PIN</name>
+                           <description>Input 5. Selects pin interrupt input 5 as the source to bit slice 3</description>
+                           <value>0x5</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_6_SELECTS_PIN</name>
+                           <description>Input 6. Selects pin interrupt input 6 as the source to bit slice 3</description>
+                           <value>0x6</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_7_SELECTS_PIN</name>
+                           <description>Input 7. Selects pin interrupt input 7 as the source to bit slice 3</description>
+                           <value>0x7</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SRC4</name>
+                     <description>Selects the input source for bit slice 4</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>INPUT_0_SELECTS_PIN</name>
+                           <description>Input 0. Selects pin interrupt input 0 as the source to bit slice 4</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_1_SELECTS_PIN</name>
+                           <description>Input 1. Selects pin interrupt input 1 as the source to bit slice 4</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_2_SELECTS_PIN</name>
+                           <description>Input 2. Selects pin interrupt input 2 as the source to bit slice 4</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_3_SELECTS_PIN</name>
+                           <description>Input 3. Selects pin interrupt input 3 as the source to bit slice 4</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_4_SELECTS_PIN</name>
+                           <description>Input 4. Selects pin interrupt input 4 as the source to bit slice 4</description>
+                           <value>0x4</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_5_SELECTS_PIN</name>
+                           <description>Input 5. Selects pin interrupt input 5 as the source to bit slice 4</description>
+                           <value>0x5</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_6_SELECTS_PIN</name>
+                           <description>Input 6. Selects pin interrupt input 6 as the source to bit slice 4</description>
+                           <value>0x6</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_7_SELECTS_PIN</name>
+                           <description>Input 7. Selects pin interrupt input 7 as the source to bit slice 4</description>
+                           <value>0x7</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SRC5</name>
+                     <description>Selects the input source for bit slice 5</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>INPUT_0_SELECTS_PIN</name>
+                           <description>Input 0. Selects pin interrupt input 0 as the source to bit slice 5</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_1_SELECTS_PIN</name>
+                           <description>Input 1. Selects pin interrupt input 1 as the source to bit slice 5</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_2_SELECTS_PIN</name>
+                           <description>Input 2. Selects pin interrupt input 2 as the source to bit slice 5</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_3_SELECTS_PIN</name>
+                           <description>Input 3. Selects pin interrupt input 3 as the source to bit slice 5</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_4_SELECTS_PIN</name>
+                           <description>Input 4. Selects pin interrupt input 4 as the source to bit slice 5</description>
+                           <value>0x4</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_5_SELECTS_PIN</name>
+                           <description>Input 5. Selects pin interrupt input 5 as the source to bit slice 5</description>
+                           <value>0x5</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_6_SELECTS_PIN</name>
+                           <description>Input 6. Selects pin interrupt input 6 as the source to bit slice 5</description>
+                           <value>0x6</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_7_SELECTS_PIN</name>
+                           <description>Input 7. Selects pin interrupt input 7 as the source to bit slice 5</description>
+                           <value>0x7</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SRC6</name>
+                     <description>Selects the input source for bit slice 6</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>INPUT_0_SELECTS_PIN</name>
+                           <description>Input 0. Selects pin interrupt input 0 as the source to bit slice 6</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_1_SELECTS_PIN</name>
+                           <description>Input 1. Selects pin interrupt input 1 as the source to bit slice 6</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_2_SELECTS_PIN</name>
+                           <description>Input 2. Selects pin interrupt input 2 as the source to bit slice 6</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_3_SELECTS_PIN</name>
+                           <description>Input 3. Selects pin interrupt input 3 as the source to bit slice 6</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_4_SELECTS_PIN</name>
+                           <description>Input 4. Selects pin interrupt input 4 as the source to bit slice 6</description>
+                           <value>0x4</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_5_SELECTS_PIN</name>
+                           <description>Input 5. Selects pin interrupt input 5 as the source to bit slice 6</description>
+                           <value>0x5</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_6_SELECTS_PIN</name>
+                           <description>Input 6. Selects pin interrupt input 6 as the source to bit slice 6</description>
+                           <value>0x6</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_7_SELECTS_PIN</name>
+                           <description>Input 7. Selects pin interrupt input 7 as the source to bit slice 6</description>
+                           <value>0x7</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SRC7</name>
+                     <description>Selects the input source for bit slice 7</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>INPUT_0_SELECTS_PIN</name>
+                           <description>Input 0. Selects pin interrupt input 0 as the source to bit slice 7</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_1_SELECTS_PIN</name>
+                           <description>Input 1. Selects pin interrupt input 1 as the source to bit slice 7</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_2_SELECTS_PIN</name>
+                           <description>Input 2. Selects pin interrupt input 2 as the source to bit slice 7</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_3_SELECTS_PIN</name>
+                           <description>Input 3. Selects pin interrupt input 3 as the source to bit slice 7</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_4_SELECTS_PIN</name>
+                           <description>Input 4. Selects pin interrupt input 4 as the source to bit slice 7</description>
+                           <value>0x4</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_5_SELECTS_PIN</name>
+                           <description>Input 5. Selects pin interrupt input 5 as the source to bit slice 7</description>
+                           <value>0x5</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_6_SELECTS_PIN</name>
+                           <description>Input 6. Selects pin interrupt input 6 as the source to bit slice 7</description>
+                           <value>0x6</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_7_SELECTS_PIN</name>
+                           <description>Input 7. Selects pin interrupt input 7 as the source to bit slice 7</description>
+                           <value>0x7</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PMCFG</name>
+               <description>GPIO pattern match interrupt bit slice configuration register</description>
+               <addressOffset>0x30</addressOffset>
+               <fields>
+                  <field>
+                     <name>PROD_ENDPTS</name>
+                     <description>A 1 in any bit of this field causes the corresponding bit slice to be the final component of a product term in the boolean expression.  This has two effects: 1. The interrupt request associated with this bit-slice will be asserted whenever a match to that product term is detected. 2. The next bit slice will start a new, independent product term in the boolean expression (i.e. an OR will be inserted in the boolean expression following the element controlled by this bit slice)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>Reserved</name>
+                     <description>(Bit slice 7 is automatically considered a product end point)  Software should not write 1s to unused bits</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CFG0</name>
+                     <description>Specifies the match-contribution condition for bit slice 0</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>CONSTANT_1_THIS_BIT</name>
+                           <description>Constant 1. This bit slice always contributes to a product term match</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>RISING_EDGE_MATCH_O</name>
+                           <description>Rising edge. Match occurs if a rising edge on the specified input has occurred since the last time the edge detection for this bit slice was cleared</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>FALLING_EDGE_MATCH_</name>
+                           <description>Falling edge. Match occurs if a falling edge on the specified input has occurred since the last time the edge detection for this bit slice was cleared</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>RISING_OR_FALLING_ED</name>
+                           <description>Rising or falling edge. Match occurs if either a rising or falling edge on the specified input has occurred since the last time the edge detection for this bit slice was cleared</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>HIGH_LEVEL_MATCH_F</name>
+                           <description>High level. Match (for this bit slice) occurs when there is a high level on the input specified for this bit slice in the PMSRC register</description>
+                           <value>0x4</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>LOW_LEVEL_MATCH_OCC</name>
+                           <description>Low level. Match occurs when there is a low level on the specified input</description>
+                           <value>0x5</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>CONSTANT_0_THIS_BIT</name>
+                           <description>Constant 0. This bit slice never contributes to a match (should be used to disable any unused bit slices)</description>
+                           <value>0x6</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>EVENT_MATCH_OCCURS_</name>
+                           <description>Event. Match occurs on an event - i.e. when either a rising or falling edge is first detected on the specified input (this is a non-sticky version of option 3)</description>
+                           <value>0x7</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="CFG0" > <name>CFG1</name> <description>Specifies the match-contribution condition for bit slice 1</description> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="CFG0" > <name>CFG2</name> <description>Specifies the match-contribution condition for bit slice 2</description> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="CFG0" > <name>CFG3</name> <description>Specifies the match-contribution condition for bit slice 3</description> <bitOffset>17</bitOffset> </field>
+                  <field derivedFrom="CFG0" > <name>CFG4</name> <description>Specifies the match-contribution condition for bit slice 4</description> <bitOffset>20</bitOffset> </field>
+                  <field derivedFrom="CFG0" > <name>CFG5</name> <description>Specifies the match-contribution condition for bit slice 5</description> <bitOffset>23</bitOffset> </field>
+                  <field derivedFrom="CFG0" > <name>CFG6</name> <description>Specifies the match-contribution condition for bit slice 6</description> <bitOffset>26</bitOffset> </field>
+                  <field derivedFrom="CFG0" > <name>CFG7</name> <description>Specifies the match-contribution condition for bit slice 7</description> <bitOffset>29</bitOffset> </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

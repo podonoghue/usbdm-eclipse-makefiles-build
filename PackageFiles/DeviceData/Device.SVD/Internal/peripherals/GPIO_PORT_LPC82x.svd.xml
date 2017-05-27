@@ -1,0 +1,353 @@
+<!--
+Devices using this peripheral: 
+      LPC82x
+-->
+      <peripheral>
+         <?sourceFile "GPIO_PORT_LPC82x" ?>
+         <name>GPIO_PORT</name>
+         <description>General Purpose I/O port</description>
+         <groupName>GPIO_PORT</groupName>
+         <headerStructName>GPIO_PORT</headerStructName>
+         <baseAddress>0xA0000000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x0</offset>
+            <size>0x1D</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x1000</offset>
+            <size>0x74</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x2000</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x2080</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x2100</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x2180</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x2200</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x2280</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x2300</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x2380</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x2400</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x2480</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>B0</name>
+               <description>Byte pin registers port 0; pins PIO0_0 to PIO0_28</description>
+               <addressOffset>0x0</addressOffset>
+               <size>1</size>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>PBYTE</name>
+                     <description>Read: state of the pin PIO0_n, regardless of direction, masking, or alternate function, except that pins configured as analog I/O always read as 0. One register for each port pin: n = pin 0 to 28. Write: loads the pin&apos;s output bit</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>B1</name>
+               <description>Byte pin registers port 0; pins PIO0_0 to PIO0_28</description>
+               <addressOffset>0x1</addressOffset>
+               <size>1</size>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>PBYTE</name>
+                     <description>Read: state of the pin PIO0_n, regardless of direction, masking, or alternate function, except that pins configured as analog I/O always read as 0. One register for each port pin: n = pin 0 to 28. Write: loads the pin&apos;s output bit</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>B2</name>
+               <description>Byte pin registers port 0; pins PIO0_0 to PIO0_28</description>
+               <addressOffset>0x2</addressOffset>
+               <size>1</size>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>PBYTE</name>
+                     <description>Read: state of the pin PIO0_n, regardless of direction, masking, or alternate function, except that pins configured as analog I/O always read as 0. One register for each port pin: n = pin 0 to 28. Write: loads the pin&apos;s output bit</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>5</dim>
+               <dimIncrement>1</dimIncrement>
+               <dimIndex>3,4,5,6,7</dimIndex>
+               <name>B%s</name>
+               <description>Byte pin registers port 0; pins PIO0_0 to PIO0_28</description>
+               <addressOffset>0x3</addressOffset>
+               <size>1</size>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>PBYTE</name>
+                     <description>Read: state of the pin PIO0_n, regardless of direction, masking, or alternate function, except that pins configured as analog I/O always read as 0. One register for each port pin: n = pin 0 to 28. Write: loads the pin&apos;s output bit</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>B8</name>
+               <description>Byte pin registers port 0; pins PIO0_0 to PIO0_28</description>
+               <addressOffset>0x8</addressOffset>
+               <size>1</size>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>PBYTE</name>
+                     <description>Read: state of the pin PIO0_n, regardless of direction, masking, or alternate function, except that pins configured as analog I/O always read as 0. One register for each port pin: n = pin 0 to 28. Write: loads the pin&apos;s output bit</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>19</dim>
+               <dimIncrement>1</dimIncrement>
+               <dimIndex>9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27</dimIndex>
+               <name>B%s</name>
+               <description>Byte pin registers port 0; pins PIO0_0 to PIO0_28</description>
+               <addressOffset>0x9</addressOffset>
+               <size>1</size>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>PBYTE</name>
+                     <description>Read: state of the pin PIO0_n, regardless of direction, masking, or alternate function, except that pins configured as analog I/O always read as 0. One register for each port pin: n = pin 0 to 28. Write: loads the pin&apos;s output bit</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>B28</name>
+               <description>Byte pin registers port 0; pins PIO0_0 to PIO0_28</description>
+               <addressOffset>0x1C</addressOffset>
+               <size>1</size>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>PBYTE</name>
+                     <description>Read: state of the pin PIO0_n, regardless of direction, masking, or alternate function, except that pins configured as analog I/O always read as 0. One register for each port pin: n = pin 0 to 28. Write: loads the pin&apos;s output bit</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>W0</name>
+               <description>Word pin registers port 0</description>
+               <addressOffset>0x1000</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>PWORD</name>
+                     <description>Read 0: pin PIOm_n is LOW.  Write 0: clear output bit. Read 0xFFFF FFFF: pin PIOm_n is HIGH.  Write any value 0x0000 0001 to 0xFFFF FFFF: set output bit. Only 0 or 0xFFFF FFFF can be read. Writing any value other than 0 will set the output bit. One register for each port pin: n = pin 0 to 28</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>28</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28</dimIndex>
+               <name>W%s</name>
+               <description>Word pin registers port 0</description>
+               <addressOffset>0x1004</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>PWORD</name>
+                     <description>Read 0: pin PIOm_n is LOW.  Write 0: clear output bit. Read 0xFFFF FFFF: pin PIOm_n is HIGH.  Write any value 0x0000 0001 to 0xFFFF FFFF: set output bit. Only 0 or 0xFFFF FFFF can be read. Writing any value other than 0 will set the output bit. One register for each port pin: n = pin 0 to 28</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DIR0</name>
+               <description>Direction registers port 0</description>
+               <addressOffset>0x2000</addressOffset>
+               <fields>
+                  <field>
+                     <name>DIRP</name>
+                     <description>Selects pin direction for pin PIO0_n (bit 0 = PIO0_0, bit 1 = PIO0_1, ..., bit 28 = PIO0_28).  0 = input. 1 = output</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>29</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MASK0</name>
+               <description>Mask register port 0</description>
+               <addressOffset>0x2080</addressOffset>
+               <fields>
+                  <field>
+                     <name>MASKP</name>
+                     <description>Controls which bits corresponding to PIO0_n are active in the MPORT register (bit 0 = PIO0_0, bit 1 = PIO0_1, ..., bit 28 = PIO0_28).  0 = Read MPORT: pin state; write MPORT: load output bit. 1 = Read MPORT: 0; write MPORT: output bit not affected</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>29</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PIN0</name>
+               <description>Port pin register port 0</description>
+               <addressOffset>0x2100</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>PORT</name>
+                     <description>Reads pin states or loads output bits (bit 0 = PIO0_0, bit 1 = PIO0_1, ..., bit 38 = PIO0_28). 0 = Read: pin is low; write: clear output bit. 1 = Read: pin is high; write: set output bit</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>29</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MPIN0</name>
+               <description>Masked port register port 0</description>
+               <addressOffset>0x2180</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>MPORTP</name>
+                     <description>Masked port register (bit 0 = PIO0_0, bit 1 =PIO0_1, ..., bit 28 = PIO0_28).  0 = Read: pin is LOW and/or the corresponding bit in the MASK register is 1; write: clear output bit if the corresponding bit in the MASK register is 0. 1 = Read: pin is HIGH and the corresponding bit in the MASK register is 0; write: set output bit if the corresponding bit in the MASK register is 0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>29</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SET0</name>
+               <description>Write: Set register for port 0 Read: output bits for port 0</description>
+               <addressOffset>0x2200</addressOffset>
+               <fields>
+                  <field>
+                     <name>SETP</name>
+                     <description>Read or set output bits (bit 0 = PIO0_0, bit 1 =PIO0_1, ..., bit 28 = PIO0_28).  0 = Read: output bit: write: no operation. 1 = Read: output bit; write: set output bit</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>29</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CLR0</name>
+               <description>Clear port 0</description>
+               <addressOffset>0x2280</addressOffset>
+               <access>write-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>CLRP</name>
+                     <description>Clear output bits (bit 0 = PIO0_0, bit 1 =PIO0_1, ..., bit 28 = PIO0_28).  0 = No operation. 1 = Clear output bit</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>29</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>NOT0</name>
+               <description>Toggle port 0</description>
+               <addressOffset>0x2300</addressOffset>
+               <access>write-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>NOTP</name>
+                     <description>Toggle output bits (bit 0 = PIO0_0, bit 1 =PIO0_1, ..., bit 28 = PIO0_28).  0 = no operation. 1 = Toggle output bit</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>29</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DIRSET0</name>
+               <description>Set pin direction bits for port 0</description>
+               <addressOffset>0x2380</addressOffset>
+               <access>write-only</access>
+               <fields>
+                  <field>
+                     <name>DIRSETP</name>
+                     <description>Set direction bits (bit 0 = PIO0_0, bit 1 = PIO0_1, ..., bit 28 = PIO0_28).  0 = No operation. 1 = Set direction bit</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>29</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DIRCLR0</name>
+               <description>Clear pin direction bits for port 0</description>
+               <addressOffset>0x2400</addressOffset>
+               <access>write-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>DIRCLRP</name>
+                     <description>Clear direction bits (bit 0 = PIO0_0, bit 1 =PIO0_1, ..., bit 28 = PIO0_28).  0 = No operation. 1 = Clear direction bit</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>29</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DIRNOT0</name>
+               <description>Toggle pin direction bits for port 0</description>
+               <addressOffset>0x2480</addressOffset>
+               <access>write-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>DIRNOTP</name>
+                     <description>Toggle direction bits (bit 0 = PIO0_0, bit 1 =PIO0_1, ..., bit 28 = PIO0_28).  0 = no operation. 1 = Toggle direction bit</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>29</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

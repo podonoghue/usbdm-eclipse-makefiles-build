@@ -1,0 +1,660 @@
+<!--
+Devices using this peripheral: 
+      LPC13xx
+-->
+      <peripheral>
+         <?sourceFile "USB_LPC13xx" ?>
+         <name>USB</name>
+         <description>USB device controller</description>
+         <groupName>USB</groupName>
+         <headerStructName>USB</headerStructName>
+         <baseAddress>0x40020000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x8</offset>
+            <size>0xC</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x14</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x1C</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x20</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x24</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x28</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x2C</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>DEVINTST</name>
+               <description>USB Device Interrupt Status</description>
+               <addressOffset>0x0</addressOffset>
+               <access>read-only</access>
+               <resetValue>0x10</resetValue>
+               <fields>
+                  <field>
+                     <name>FRAME</name>
+                     <description>The frame interrupt occurs every 1 ms. This is used in isochronous packet transfers. 0 = no interrupt. 1 = interrupt pending</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP0</name>
+                     <description>USB core interrupt for physical endpoint 0. 0 = no interrupt. 1 = interrupt pending</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP1</name>
+                     <description>USB core interrupt for physical endpoint 1. 0 = no interrupt. 1 = interrupt pending</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP2</name>
+                     <description>USB core interrupt for physical endpoint 2. 0 = no interrupt. 1 = interrupt pending</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP3</name>
+                     <description>USB core interrupt for physical endpoint 3. 0 = no interrupt. 1 = interrupt pending</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP4</name>
+                     <description>USB core interrupt for physical endpoint 4. 0 = no interrupt. 1 = interrupt pending</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP5</name>
+                     <description>USB core interrupt for physical endpoint 5. 0 = no interrupt. 1 = interrupt pending</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP6</name>
+                     <description>USB core interrupt for physical endpoint 6. 0 = no interrupt. 1 = interrupt pending</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP7</name>
+                     <description>USB core interrupt for physical endpoint 7. 0 = no interrupt. 1 = interrupt pending</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DEV_STAT</name>
+                     <description>Set when USB Bus reset, USB suspend change, or Connect change event occurs. Refer to Section 10.11.7. 0 = no interrupt. 1 = interrupt pending</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CC_EMPTY</name>
+                     <description>The command code register (USBCmdCode) is empty (New command can be written). 0 = no interrupt. 1 = interrupt pending</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CD_FULL</name>
+                     <description>Command data register (USBCmdData) is full (Data can be read now). 0 = no interrupt. 1 = interrupt pending</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RxENDPKT</name>
+                     <description>The current packet in the endpoint buffer is transferred to the CPU. 0 = no interrupt. 1 = interrupt pending</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TxENDPKT</name>
+                     <description>The number of data bytes transferred to the endpoint buffer equals the number of bytes programmed in the TxPacket length register (USBTxPLen). 0 = no interrupt. 1 = interrupt pending</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DEVINTEN</name>
+               <description>USB Device Interrupt Enable</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>FRAME_EN</name>
+                     <description>Frame interrupt . For isochronous packet transfers. 0 = no interrupt generated. 1 = interrupt generated when the corresponding bit in USBDevIntSt is set</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP0_EN</name>
+                     <description>USB core interrupt for physical endpoint 0. 0 = no interrupt generated. 1 = interrupt generated when the corresponding bit in USBDevIntSt is set</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP1_EN</name>
+                     <description>USB core interrupt for physical endpoint 1. 0 = no interrupt generated. 1 = interrupt generated when the corresponding bit in USBDevIntSt is set</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP2_EN</name>
+                     <description>USB core interrupt for physical endpoint 2. 0 = no interrupt generated. 1 = interrupt generated when the corresponding bit in USBDevIntSt is set</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP3_EN</name>
+                     <description>USB core interrupt for physical endpoint 3. 0 = no interrupt generated. 1 = interrupt generated when the corresponding bit in USBDevIntSt is set</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP4_EN</name>
+                     <description>USB core interrupt for physical endpoint 4. 0 = no interrupt generated. 1 = interrupt generated when the corresponding bit in USBDevIntSt is set</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP5_EN</name>
+                     <description>USB core interrupt for physical endpoint 5. 0 = no interrupt. 1 = interrupt pending</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP6_EN</name>
+                     <description>USB core interrupt for physical endpoint 6. 0 = no interrupt generated. 1 = interrupt generated when the corresponding bit in USBDevIntSt is set</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP7_EN</name>
+                     <description>USB core interrupt for physical endpoint 7. 0 = no interrupt generated. 1 = interrupt generated when the corresponding bit in USBDevIntSt is set</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DEV_STAT_EN</name>
+                     <description>Set when USB Bus reset, USB suspend change, or Connect change event occurs.  0 = no interrupt generated. 1 = interrupt generated when the corresponding bit in USBDevIntSt is set</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CC_EMPTY_EN</name>
+                     <description>The command code register (USBCmdCode) is empty (New command can be written). 0 = no interrupt generated. 1 = interrupt generated when the corresponding bit in USBDevIntSt is set</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CD_FULL_EN</name>
+                     <description>Command data register (USBCmdData) is full (Data can be read now). 0 = no interrupt generated. 1 = interrupt generated when the corresponding bit in USBDevIntSt is set</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RXENDPKT_EN</name>
+                     <description>The current packet in the endpoint buffer is transferred to the CPU. 0 = no interrupt generated. 1 = interrupt generated when the corresponding bit in USBDevIntSt is set</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TXENDPKT_EN</name>
+                     <description>The number of data bytes transferred to the endpoint buffer equals the number of bytes programmed in the TxPacket length register (USBTxPLen). 0 = no interrupt generated. 1 = interrupt generated when the corresponding bit in USBDevIntSt is set</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DEVINTCTRL</name>
+               <description>USB Device Interrupt Clear</description>
+               <addressOffset>0x8</addressOffset>
+               <access>write-only</access>
+               <fields>
+                  <field>
+                     <name>FRAME_CLR</name>
+                     <description>Frame interrupt . For isochronous packet transfers. 0 = no effect. 1 = the corresponding bit in USBDevIntSt is cleared</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP0_CLR</name>
+                     <description>USB core interrupt for physical endpoint 0. 0 = no effect. 1 = the corresponding bit in USBDevIntSt is cleared</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP1_CLR</name>
+                     <description>USB core interrupt for physical endpoint 1. 0 = no effect. 1 = the corresponding bit in USBDevIntSt is cleared</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP2_CLR</name>
+                     <description>USB core interrupt for physical endpoint 2. 0 = no effect. 1 = the corresponding bit in USBDevIntSt is cleared</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP3_CLR</name>
+                     <description>USB core interrupt for physical endpoint 3. 0 = no effect. 1 = the corresponding bit in USBDevIntSt is cleared</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP4_CLR</name>
+                     <description>USB core interrupt for physical endpoint 4. 0 = no effect. 1 = the corresponding bit in USBDevIntSt is cleared</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP5_CLR</name>
+                     <description>USB core interrupt for physical endpoint 5. 0 = no effect. 1 = the corresponding bit in USBDevIntSt is cleared</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP6_CLR</name>
+                     <description>USB core interrupt for physical endpoint 6. 0 = no effect. 1 = the corresponding bit in USBDevIntSt is cleared</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP7_CLR</name>
+                     <description>USB core interrupt for physical endpoint 7. 0 = no effect. 1 = the corresponding bit in USBDevIntSt is cleared</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DEV_STAT_CLR</name>
+                     <description>Set when USB Bus reset, USB suspend change, or Connect change event occurs.  0 = no effect. 1 = the corresponding bit in USBDevIntSt is cleared</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CC_EMPTY_CLR</name>
+                     <description>The command code register (USBCmdCode) is empty (New command can be written). 0 = no effect. 1 = the corresponding bit in USBDevIntSt is cleared</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CD_FULL_CLR</name>
+                     <description>Command data register (USBCmdData) is full (Data can be read now). 0 = no effect. 1 = the corresponding bit in USBDevIntSt is cleared</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RXENDPKT_CLR</name>
+                     <description>The current packet in the endpoint buffer is transferred to the CPU. 0 = no effect. 1 = the corresponding bit in USBDevIntSt is cleared</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TXENDPKT_CLR</name>
+                     <description>The number of data bytes transferred to the endpoint buffer equals the number of bytes programmed in the TxPacket length register (USBTxPLen). 0 = no effect. 1 = the corresponding bit in USBDevIntSt is cleared</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DEVINTSET</name>
+               <description>USB Device Interrupt Set</description>
+               <addressOffset>0xC</addressOffset>
+               <access>write-only</access>
+               <fields>
+                  <field>
+                     <name>FRAME_SET</name>
+                     <description>Frame interrupt . For isochronous packet transfers. 0 = no effect. 1 = the corresponding bit in USBDevIntSt is set</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP0_SET</name>
+                     <description>USB core interrupt for physical endpoint 0. 0 = no effect. 1 = the corresponding bit in USBDevIntSt is set</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP1_SET</name>
+                     <description>USB core interrupt for physical endpoint 1. 0 = no effect. 1 = the corresponding bit in USBDevIntSt is set</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP2_SET</name>
+                     <description>USB core interrupt for physical endpoint 2. 0 = no effect. 1 = the corresponding bit in USBDevIntSt is set</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP3_SET</name>
+                     <description>USB core interrupt for physical endpoint 3. 0 = no effect. 1 = the corresponding bit in USBDevIntSt is set</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP4_SET</name>
+                     <description>USB core interrupt for physical endpoint 4. 0 = no effect. 1 = the corresponding bit in USBDevIntSt is set</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP5_SET</name>
+                     <description>USB core interrupt for physical endpoint 5. 0 = no effect. 1 = the corresponding bit in USBDevIntSt is set</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP6_SET</name>
+                     <description>USB core interrupt for physical endpoint 6. 0 = no effect. 1 = the corresponding bit in USBDevIntSt is set</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EP7_SET</name>
+                     <description>USB core interrupt for physical endpoint 7. 0 = no effect. 1 = the corresponding bit in USBDevIntSt is set</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DEV_STAT_SET</name>
+                     <description>Set when USB Bus reset, USB suspend change, or Connect change event occurs.  0 = no effect. 1 = the corresponding bit in USBDevIntSt is set</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CC_EMPTY_SET</name>
+                     <description>The command code register (USBCmdCode) is empty (New command can be written). 0 = no effect. 1 = the corresponding bit in USBDevIntSt is set</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CD_FULL_SET</name>
+                     <description>Command data register (USBCmdData) is full (Data can be read now). 0 = no effect. 1 = the corresponding bit in USBDevIntSt is set</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RXENDPKT_SET</name>
+                     <description>The current packet in the endpoint buffer is transferred to the CPU. 0 = no effect. 1 = the corresponding bit in USBDevIntSt is set</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TXENDPKT_SET</name>
+                     <description>The number of data bytes transferred to the endpoint buffer equals the number of bytes programmed in the TxPacket length register (USBTxPLen). 0 = no effect. 1 = the corresponding bit in USBDevIntSt is set</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CMDCODE</name>
+               <description>USB Command Code</description>
+               <addressOffset>0x10</addressOffset>
+               <access>write-only</access>
+               <fields>
+                  <field>
+                     <name>CMD_PHASE</name>
+                     <description>Command phase action</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>WRITE</name>
+                           <description>Write</description>
+                           <value>0x01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>READ</name>
+                           <description>Read</description>
+                           <value>0x02</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>COMMAND</name>
+                           <description>Command</description>
+                           <value>0x05</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CODE_WDATA</name>
+                     <description>This is a multi-purpose field. When CMD_PHASE is Command or Read, this field contains the code for the command (CMD_CODE). When CMD_PHASE is Write, this field contains the command write data (CMD_WDATA)</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CMDDATA</name>
+               <description>USB Command Data</description>
+               <addressOffset>0x14</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>CMD_RDATA</name>
+                     <description>Command Read Data</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RXDATA</name>
+               <description>USB Receive Data</description>
+               <addressOffset>0x18</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>RX_DATA</name>
+                     <description>Data received</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TXDATA</name>
+               <description>USB Transmit Data</description>
+               <addressOffset>0x1C</addressOffset>
+               <access>write-only</access>
+               <fields>
+                  <field>
+                     <name>TX_DATA</name>
+                     <description>Transmit Data</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RXPLEN</name>
+               <description>USB Receive Packet Length</description>
+               <addressOffset>0x20</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>PKT_LNGTH</name>
+                     <description>The remaining number of bytes to be read from the currently selected endpoint&apos;s buffer. When this field decrements to 0, the RxENDPKT bit will be set in USBDevIntSt</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+                  <field>
+                     <name>DV</name>
+                     <description>Data valid. This bit is useful for isochronous endpoints. Non-isochronous endpoints do not raise an interrupt when an erroneous data packet is received. But invalid data packet can be produced with a bus reset. For isochronous endpoints, data transfer will happen even if an erroneous packet is received. In this case DV bit will not be set for the packet</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DATA_IS_INVALID_</name>
+                           <description>Data is invalid</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>DATA_IS_VALID_</name>
+                           <description>Data is valid</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TXPLENn</name>
+               <description>USB Transmit Packet Length</description>
+               <addressOffset>0x24</addressOffset>
+               <access>write-only</access>
+               <fields>
+                  <field>
+                     <name>PKT_LNGTH</name>
+                     <description>The remaining number of bytes to be written to the selected endpoint buffer. This field is decremented by 4 by hardware after each write to USBTxData. When this field decrements to 0, the TxENDPKT bit will be set in USBDevIntSt</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CTRL</name>
+               <description>USB Control</description>
+               <addressOffset>0x28</addressOffset>
+               <fields>
+                  <field>
+                     <name>RD_EN</name>
+                     <description>Read mode control. Enables reading data from the OUT endpoint buffer for the endpoint specified in the LOG_ENDPOINT field using the USBRxData register. This bit is cleared by hardware when the last word of the current packet is read from USBRxData</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>READ_MODE_IS_DISABLE</name>
+                           <description>Read mode is disabled</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>READ_MODE_IS_ENABLED</name>
+                           <description>Read mode is enabled</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WR_EN</name>
+                     <description>Write mode control. Enables writing data to the IN endpoint buffer for the endpoint specified in the LOG_ENDPOINT field using the USBTxData register. This bit is cleared by hardware when the number of bytes in USBTxLen have been sent</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>WRITE_MODE_IS_DISABL</name>
+                           <description>Write mode is disabled</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>WRITE_MODE_IS_ENABLE</name>
+                           <description>Write mode is enabled</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LOG_ENDPOINT</name>
+                     <description>Logical Endpoint number</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DEVFIQSEL</name>
+               <description>USB Device FIQ select</description>
+               <addressOffset>0x2C</addressOffset>
+               <access>write-only</access>
+               <fields>
+                  <field>
+                     <name>FRAME</name>
+                     <description>This interrupt comes from a 1 KHz free running clock resynchronized on the incoming SoF tokens. This is to be used for isochronous packet transfer</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>LOWPRIORITY</name>
+                           <description>FRAME interrupt will be routed to the low-priority interrupt line IRQ</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>HIGHPRIORITY</name>
+                           <description>FRAME interrupt will be routed to the high-priority interrupt line FIQ</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BULKOUT</name>
+                     <description>Interrupt routing for bulk out endpoints  For logical endpoint 3 (physical endpoints 6 and 7) only</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>LOWPRIORITY</name>
+                           <description>BULKOUT interrupt will be routed to the low-priority interrupt line IRQ</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>HIGHPRIORITY</name>
+                           <description>BULKOUT interrupt will be routed to the high-priority interrupt line FIQ</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BULKIN</name>
+                     <description>Interrupt routing for bulk in endpoints  For logical endpoint 3 (physical endpoints 6 and 7) only</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>LOWPRIORITY</name>
+                           <description>BULKIN interrupt will be routed to the low-priority interrupt line IRQ</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>HIGHPRIORITY</name>
+                           <description>BULKIN interrupt will be routed to the high-priority interrupt line FIQ</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

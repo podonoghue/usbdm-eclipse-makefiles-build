@@ -1,0 +1,1691 @@
+<!--
+Devices using this peripheral: 
+      LPC11Cxx
+-->
+      <peripheral>
+         <?sourceFile "SYSCON_LPC11Cxx" ?>
+         <name>SYSCON</name>
+         <description>System configuration</description>
+         <groupName>SYSCON</groupName>
+         <headerStructName>SYSCON</headerStructName>
+         <baseAddress>0x40048000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x20</offset>
+            <size>0xC</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x30</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x40</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x70</offset>
+            <size>0xC</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x80</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x94</offset>
+            <size>0xC</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xD0</offset>
+            <size>0xC</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xE0</offset>
+            <size>0xC</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x100</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x150</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x174</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x200</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x208</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x20C</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x230</offset>
+            <size>0xC</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x3F4</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>SYSMEMREMAP</name>
+               <description>System memory remap</description>
+               <addressOffset>0x0</addressOffset>
+               <resetValue>0x2</resetValue>
+               <fields>
+                  <field>
+                     <name>MAP</name>
+                     <description>System memory remap</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>BOOT_LOADER_MODE_IN</name>
+                           <description>Boot Loader Mode. Interrupt vectors are re-mapped to Boot ROM</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>USER_RAM_MODE_INTER</name>
+                           <description>User RAM Mode. Interrupt vectors are re-mapped to Static RAM</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>USER_FLASH_MODE_INT</name>
+                           <description>User Flash Mode. Interrupt vectors are not re-mapped and reside in Flash</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PRESETCTRL</name>
+               <description>Peripheral reset control</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>SSP0_RST_N</name>
+                     <description>SPI0 reset control</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>SPIO0RESET</name>
+                           <description>Resets the SPI0 peripheral</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SPIO0NORESET</name>
+                           <description>SPI0 reset de-asserted</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>I2C_RST_N</name>
+                     <description>I2C reset control</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>I2CRESET</name>
+                           <description>Resets the I2C peripheral</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>I2CNORESET</name>
+                           <description>I2C reset de-asserted</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SSP1_RST_N</name>
+                     <description>SPI1 reset control</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>SPI1RESET</name>
+                           <description>Resets the SPI1 peripheral</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SPI2NORESET</name>
+                           <description>SPI1 reset de-asserted</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CAN_RST_N</name>
+                     <description>C_CAN reset control. See Section 3.1 for part specific details</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>CANRESET</name>
+                           <description>Resets the C_CAN peripheral</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>CANNORESET</name>
+                           <description>C_CAN reset de-asserted</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SYSPLLCTRL</name>
+               <description>System PLL control</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>MSEL</name>
+                     <description>Feedback divider value. The division value M is the programmed MSEL value + 1. 00000: Division ratio M = 1 to 11111: Division ratio M = 32</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>PSEL</name>
+                     <description>Post divider ratio P. The division ratio is 2 x P</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>P_EQ_1</name>
+                           <description>P = 1</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>P_EQ_2</name>
+                           <description>P = 2</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>P_EQ_4</name>
+                           <description>P = 4</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>P_EQ_8</name>
+                           <description>P = 8</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SYSPLLSTAT</name>
+               <description>System PLL status</description>
+               <addressOffset>0xC</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>LOCK</name>
+                     <description>PLL lock status</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>PLL_NOT_LOCKED</name>
+                           <description>PLL not locked</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>PLL_LOCKED</name>
+                           <description>PLL locked</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SYSOSCCTRL</name>
+               <description>System oscillator control</description>
+               <addressOffset>0x20</addressOffset>
+               <fields>
+                  <field>
+                     <name>BYPASS</name>
+                     <description>Bypass system oscillator</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NOBYPASS</name>
+                           <description>Oscillator is not bypassed</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>BYPASS_ENABLED_PLL_</name>
+                           <description>Bypass enabled. PLL input (sys_osc_clk) is fed directly from the XTALIN and XTALOUT pins</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FREQRANGE</name>
+                     <description>Determines frequency range for Low-power oscillator</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>LOW</name>
+                           <description>1 - 20 MHz frequency range</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>HIGH</name>
+                           <description>15 - 25 MHz frequency range</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>WDTOSCCTRL</name>
+               <description>Watchdog oscillator control</description>
+               <addressOffset>0x24</addressOffset>
+               <fields>
+                  <field>
+                     <name>DIVSEL</name>
+                     <description>Select divider for Fclkana.  wdt_osc_clk = Fclkana/ (2 x (1 + DIVSEL)) 00000: 2 x (1 + DIVSEL) = 2 00001: 2 x (1 + DIVSEL) = 4 to 11111: 2 x (1 + DIVSEL) = 64</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>FREQSEL</name>
+                     <description>Select watchdog oscillator analog output frequency (Fclkana)</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0_6_MHZ</name>
+                           <description>0.6 MHz</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1_05_MHZ</name>
+                           <description>1.05 MHz</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1_4_MHZ</name>
+                           <description>1.4 MHz</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1_75_MHZ</name>
+                           <description>1.75 MHz</description>
+                           <value>0x4</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>2_1_MHZ</name>
+                           <description>2.1 MHz</description>
+                           <value>0x5</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>2_4_MHZ</name>
+                           <description>2.4 MHz</description>
+                           <value>0x6</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>2_7_MHZ</name>
+                           <description>2.7 MHz</description>
+                           <value>0x7</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>3_0_MHZ</name>
+                           <description>3.0 MHz</description>
+                           <value>0x8</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>3_25_MHZ</name>
+                           <description>3.25 MHz</description>
+                           <value>0x9</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>3_5_MHZ</name>
+                           <description>3.5 MHz</description>
+                           <value>0xA</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>3_75_MHZ</name>
+                           <description>3.75 MHz</description>
+                           <value>0xB</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>4_0_MHZ</name>
+                           <description>4.0 MHz</description>
+                           <value>0xC</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>4_2_MHZ</name>
+                           <description>4.2 MHz</description>
+                           <value>0xD</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>4_4_MHZ</name>
+                           <description>4.4 MHz</description>
+                           <value>0xE</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>4_6_MHZ</name>
+                           <description>4.6 MHz</description>
+                           <value>0xF</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>IRCCTRL</name>
+               <description>IRC control</description>
+               <addressOffset>0x28</addressOffset>
+               <resetValue>0x80</resetValue>
+               <fields>
+                  <field>
+                     <name>TRIM</name>
+                     <description>Trim value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SYSRSTSTAT</name>
+               <description>System reset status register</description>
+               <addressOffset>0x30</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>POR</name>
+                     <description>POR reset status</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_POR_DETECTED_</name>
+                           <description>No POR detected</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>POR_DETECTED_WRITIN</name>
+                           <description>POR detected. Writing a one clears this reset</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>EXTRST</name>
+                     <description>Status of the external RESET pin</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_RESET_EVENT_DETEC</name>
+                           <description>No RESET event detected</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>RESET_DETECTED_WRIT</name>
+                           <description>RESET detected. Writing a one clears this reset</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WDT</name>
+                     <description>Status of the Watchdog reset</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_WDT_RESET_DETECTE</name>
+                           <description>No WDT reset detected</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>WDT_RESET_DETECTED_</name>
+                           <description>WDT reset detected. Writing a one clears this reset</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BOD</name>
+                     <description>Status of the Brown-out detect reset</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_BOD_RESET_DETECTE</name>
+                           <description>No BOD reset detected</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>BOD_RESET_DETECTED_</name>
+                           <description>BOD reset detected. Writing a one clears this reset</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SYSRST</name>
+                     <description>Status of the software system reset</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_SYSTEM_RESET_DETE</name>
+                           <description>No System reset detected</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SYSTEM_RESET_DETECTE</name>
+                           <description>System reset detected. Writing a one clears this reset</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SYSPLLCLKSEL</name>
+               <description>System PLL clock source select</description>
+               <addressOffset>0x40</addressOffset>
+               <fields>
+                  <field>
+                     <name>SEL</name>
+                     <description>System PLL clock source</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>IRC_OSCILLATOR</name>
+                           <description>IRC oscillator</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SYSTEM_OSCILLATOR</name>
+                           <description>System oscillator</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>RESERVED</name>
+                           <description>Reserved</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>RESERVED</name>
+                           <description>Reserved</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SYSPLLCLKUEN</name>
+               <description>System PLL clock source update enable</description>
+               <addressOffset>0x44</addressOffset>
+               <fields>
+                  <field>
+                     <name>ENA</name>
+                     <description>Enable system PLL clock source update</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_CHANGE</name>
+                           <description>No change</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>UPDATE_CLOCK_SOURCE</name>
+                           <description>Update clock source</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MAINCLKSEL</name>
+               <description>Main clock source select</description>
+               <addressOffset>0x70</addressOffset>
+               <fields>
+                  <field>
+                     <name>SEL</name>
+                     <description>Clock source for main clock</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>IRC_OSCILLATOR</name>
+                           <description>IRC oscillator</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>INPUT_CLOCK_TO_SYSTE</name>
+                           <description>Input clock to system PLL</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>WDT_OSCILLATOR</name>
+                           <description>WDT oscillator</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SYSTEM_PLL_CLOCK_OUT</name>
+                           <description>System PLL clock out</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MAINCLKUEN</name>
+               <description>Main clock source update enable</description>
+               <addressOffset>0x74</addressOffset>
+               <fields>
+                  <field>
+                     <name>ENA</name>
+                     <description>Enable main clock source update</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_CHANGE</name>
+                           <description>No change</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>UPDATE_CLOCK_SOURCE</name>
+                           <description>Update clock source</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SYSAHBCLKDIV</name>
+               <description>System AHB clock divider</description>
+               <addressOffset>0x78</addressOffset>
+               <resetValue>0x1</resetValue>
+               <fields>
+                  <field>
+                     <name>DIV</name>
+                     <description>System AHB clock divider values 0: System clock disabled.  1: Divide by 1. to 255: Divide by 255</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SYSAHBCLKCTRL</name>
+               <description>System AHB clock control</description>
+               <addressOffset>0x80</addressOffset>
+               <resetValue>0x85F</resetValue>
+               <fields>
+                  <field>
+                     <name>SYS</name>
+                     <description>Enables clock for AHB to APB bridge, to the AHB matrix, to the Cortex-M0 FCLK and HCLK, to the SysCon, and to the PMU. This bit is read only</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>RESERVED</name>
+                           <description>Reserved</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ENABLE</name>
+                           <description>Enable</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ROM</name>
+                     <description>Enables clock for ROM</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DISABLE</name>
+                           <description>Disable</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ENABLE</name>
+                           <description>Enable</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="ROM" > <name>RAM</name> <description>Enables clock for RAM</description> <bitOffset>2</bitOffset> </field>
+                  <field>
+                     <name>FLASHREG</name>
+                     <description>Enables clock for flash register interface</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DISABLED</name>
+                           <description>Disabled</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ENABLED</name>
+                           <description>Enabled</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="FLASHREG" > <name>FLASHARRAY</name> <description>Enables clock for flash array access</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="ROM" > <name>I2C</name> <description>Enables clock for I2C</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="ROM" > <name>GPIO</name> <description>Enables clock for GPIO</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="ROM" > <name>CT16B0</name> <description>Enables clock for 16-bit counter/timer 0</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="ROM" > <name>CT16B1</name> <description>Enables clock for 16-bit counter/timer 1</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="ROM" > <name>CT32B0</name> <description>Enables clock for 32-bit counter/timer 0</description> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="ROM" > <name>CT32B1</name> <description>Enables clock for 32-bit counter/timer 1</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="ROM" > <name>SSP0</name> <description>Enables clock for SPI0</description> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="ROM" > <name>UART</name> <description>Enables clock for UART. See Section 3.1 for part specific details</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="ROM" > <name>ADC</name> <description>Enables clock for ADC</description> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="ROM" > <name>WDT</name> <description>Enables clock for WDT</description> <bitOffset>15</bitOffset> </field>
+                  <field derivedFrom="ROM" > <name>IOCON</name> <description>Enables clock for I/O configuration block</description> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="ROM" > <name>CAN</name> <description>Enables clock for C_CAN. See Section 3.1 for part specific details</description> <bitOffset>17</bitOffset> </field>
+                  <field derivedFrom="ROM" > <name>SSP1</name> <description>Enables clock for SPI1</description> <bitOffset>18</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>SSP0CLKDIV</name>
+               <description>SPI0 clock divider</description>
+               <addressOffset>0x94</addressOffset>
+               <fields>
+                  <field>
+                     <name>DIV</name>
+                     <description>SPI0_PCLK clock divider values 0: Disable SPI0_PCLK.  1: Divide by 1. to 255: Divide by 255</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>UARTCLKDIV</name>
+               <description>UART clock divder</description>
+               <addressOffset>0x98</addressOffset>
+               <fields>
+                  <field>
+                     <name>DIV</name>
+                     <description>UART_PCLK clock divider values 0: Disable UART_PCLK.  1: Divide by 1. to 255: Divide by 255</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SSP1CLKDIV</name>
+               <description>SPI1 clock divder</description>
+               <addressOffset>0x9C</addressOffset>
+               <fields>
+                  <field>
+                     <name>DIV</name>
+                     <description>SPI1_PCLK clock divider values 0: Disable SPI1_PCLK.  1: Divide by 1. to 255: Divide by 255</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>WDTCLKSEL</name>
+               <description>WDT clock source select</description>
+               <addressOffset>0xD0</addressOffset>
+               <fields>
+                  <field>
+                     <name>SEL</name>
+                     <description>WDT clock source</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>IRC_OSCILLATOR</name>
+                           <description>IRC oscillator</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>MAIN_CLOCK</name>
+                           <description>Main clock</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>WATCHDOG_OSCILLATOR</name>
+                           <description>Watchdog oscillator</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>RESERVED</name>
+                           <description>Reserved</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>WDTCLKUEN</name>
+               <description>WDT clock source update enable</description>
+               <addressOffset>0xD4</addressOffset>
+               <fields>
+                  <field>
+                     <name>ENA</name>
+                     <description>Enable WDT clock source update</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_CHANGE</name>
+                           <description>No change</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>UPDATE_CLOCK_SOURCE</name>
+                           <description>Update clock source</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>WDTCLKDIV</name>
+               <description>WDT clock divider</description>
+               <addressOffset>0xD8</addressOffset>
+               <fields>
+                  <field>
+                     <name>DIV</name>
+                     <description>WDT clock divider values 0: Disable WDCLK.  1: Divide by 1. to 255: Divide by 255</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CLKOUTCLKSEL</name>
+               <description>CLKOUT clock source select</description>
+               <addressOffset>0xE0</addressOffset>
+               <fields>
+                  <field>
+                     <name>SEL</name>
+                     <description>CLKOUT clock source</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>IRC_OSCILLATOR</name>
+                           <description>IRC oscillator</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SYSTEM_OSCILLATOR</name>
+                           <description>System oscillator</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>WATCHDOG_OSCILLATOR</name>
+                           <description>Watchdog oscillator</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>MAIN_CLOCK</name>
+                           <description>Main clock</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CLKOUTUEN</name>
+               <description>CLKOUT clock source update enable</description>
+               <addressOffset>0xE4</addressOffset>
+               <fields>
+                  <field>
+                     <name>ENA</name>
+                     <description>Enable CLKOUT clock source update</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>NO_CHANGE</name>
+                           <description>No change</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>UPDATE_CLOCK_SOURCE</name>
+                           <description>Update clock source</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CLKOUTCLKDIV</name>
+               <description>CLKOUT clock divider</description>
+               <addressOffset>0xE8</addressOffset>
+               <fields>
+                  <field>
+                     <name>DIV</name>
+                     <description>Clock output divider values 0: Disable CLKOUT.  1: Divide by 1. to 255: Divide by 255</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PIOPORCAP0</name>
+               <description>POR captured PIO status 0</description>
+               <addressOffset>0x100</addressOffset>
+               <access>read-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>CAPPIO0_n</name>
+                     <description>Raw reset status input PIO0_n: PIO0_11 to PIO0_0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+                  <field>
+                     <name>CAPPIO1_n</name>
+                     <description>Raw reset status input PIO1_n: PIO1_11 to PIO1_0</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+                  <field>
+                     <name>CAPPIO2_n</name>
+                     <description>Raw reset status input PIO2_n: PIO2_7 to PIO2_0</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PIOPORCAP1</name>
+               <description>POR captured PIO status 1</description>
+               <addressOffset>0x104</addressOffset>
+               <access>read-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>CAPPIO2_8</name>
+                     <description>Raw reset status input PIO2_8</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CAPPIO2_9</name>
+                     <description>Raw reset status input PIO2_9</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CAPPIO2_10</name>
+                     <description>Raw reset status input PIO2_10</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CAPPIO2_11</name>
+                     <description>Raw reset status input PIO2_11</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CAPPIO3_0</name>
+                     <description>Raw reset status input PIO3_0</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CAPPIO3_1</name>
+                     <description>Raw reset status input PIO3_1</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CAPPIO3_2</name>
+                     <description>Raw reset status input PIO3_2</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CAPPIO3_3</name>
+                     <description>Raw reset status input PIO3_3</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CAPPIO3_4</name>
+                     <description>Raw reset status input PIO3_4</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CAPPIO3_5</name>
+                     <description>Raw reset status input PIO3_5</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>BODCTRL</name>
+               <description>BOD control</description>
+               <addressOffset>0x150</addressOffset>
+               <fields>
+                  <field>
+                     <name>BODRSTLEV</name>
+                     <description>BOD reset level</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>LEVEL_0_THE_RESET_A</name>
+                           <description>Level 0: The reset assertion threshold voltage is 1.46 V; the reset de-assertion threshold voltage is 1.63 V</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>LEVEL_1_THE_RESET_A</name>
+                           <description>Level 1: The reset assertion threshold voltage is 2.06 V; the reset de-assertion threshold voltage is 2.15 V</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>LEVEL_2_THE_RESET_A</name>
+                           <description>Level 2: The reset assertion threshold voltage is 2.35 V; the reset de-assertion threshold voltage is 2.43 V</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>LEVEL_3_THE_RESET_A</name>
+                           <description>Level 3: The reset assertion threshold voltage is 2.63 V; the reset de-assertion threshold voltage is 2.71 V</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BODINTVAL</name>
+                     <description>BOD interrupt level</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>LEVEL_0_THE_INTERRU</name>
+                           <description>Level 0: The interrupt assertion threshold voltage is 1.65 V; the interrupt de-assertion threshold voltage is 1.80 V</description>
+                           <value>0x0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>LEVEL_1THE_INTERRUP</name>
+                           <description>Level 1:The interrupt assertion threshold voltage is 2.22 V; the interrupt de-assertion threshold voltage is 2.35 V</description>
+                           <value>0x1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>LEVEL_2_THE_INTERRU</name>
+                           <description>Level 2: The interrupt assertion threshold voltage is 2.52 V; the interrupt de-assertion threshold voltage is 2.66 V</description>
+                           <value>0x2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>LEVEL_3_THE_INTERRU</name>
+                           <description>Level 3: The interrupt assertion threshold voltage is 2.80 V; the interrupt de-assertion threshold voltage is 2.90 V</description>
+                           <value>0x3</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BODRSTENA</name>
+                     <description>BOD reset enable</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>DISABLE_RESET_FUNCTI</name>
+                           <description>Disable reset function</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ENABLE_RESET_FUNCTIO</name>
+                           <description>Enable reset function</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SYSTCKCAL</name>
+               <description>System tick counter calibration</description>
+               <addressOffset>0x154</addressOffset>
+               <resetValue>0x4</resetValue>
+               <fields>
+                  <field>
+                     <name>CAL</name>
+                     <description>System tick timer calibration value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>26</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>NMISRC</name>
+               <description>NMI source selection</description>
+               <addressOffset>0x174</addressOffset>
+               <fields>
+                  <field>
+                     <name>IRQNO</name>
+                     <description>The IRQ number of the interrupt that acts as the Non-Maskable Interrupt (NMI) if bit 31 in this register is 1. See Table 54 for the list of interrupt sources and their IRQ numbers</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>NMIEN</name>
+                     <description>Write a 1 to this bit to enable the Non-Maskable Interrupt (NMI) source selected by bits 4:0</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>STARTAPRP0</name>
+               <description>Start logic edge control register 0</description>
+               <addressOffset>0x200</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>APRPIO0_0</name>
+                     <description>Edge select for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = Falling edge 1 = Rising edge</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>APRPIO0_1</name>
+                     <description>Edge select for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = Falling edge 1 = Rising edge</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>APRPIO0_2</name>
+                     <description>Edge select for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = Falling edge 1 = Rising edge</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>APRPIO0_3</name>
+                     <description>Edge select for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = Falling edge 1 = Rising edge</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>APRPIO0_4</name>
+                     <description>Edge select for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = Falling edge 1 = Rising edge</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>APRPIO0_5</name>
+                     <description>Edge select for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = Falling edge 1 = Rising edge</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>APRPIO0_6</name>
+                     <description>Edge select for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = Falling edge 1 = Rising edge</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>APRPIO0_7</name>
+                     <description>Edge select for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = Falling edge 1 = Rising edge</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>APRPIO0_8</name>
+                     <description>Edge select for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = Falling edge 1 = Rising edge</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>APRPIO0_9</name>
+                     <description>Edge select for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = Falling edge 1 = Rising edge</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>APRPIO0_10</name>
+                     <description>Edge select for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = Falling edge 1 = Rising edge</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>APRPIO0_11</name>
+                     <description>Edge select for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = Falling edge 1 = Rising edge</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>APRPIO1_0</name>
+                     <description>Edge select for start logic input PIO1_0 0 = Falling edge 1 = Rising edge</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>STARTERP0</name>
+               <description>Start logic signal enable register 0</description>
+               <addressOffset>0x204</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>ERPIO0_0</name>
+                     <description>Enable start signal for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = Disabled 1 = Enabled</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ERPIO0_1</name>
+                     <description>Enable start signal for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = Disabled 1 = Enabled</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ERPIO0_2</name>
+                     <description>Enable start signal for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = Disabled 1 = Enabled</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ERPIO0_3</name>
+                     <description>Enable start signal for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = Disabled 1 = Enabled</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ERPIO0_4</name>
+                     <description>Enable start signal for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = Disabled 1 = Enabled</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ERPIO0_5</name>
+                     <description>Enable start signal for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = Disabled 1 = Enabled</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ERPIO0_6</name>
+                     <description>Enable start signal for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = Disabled 1 = Enabled</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ERPIO0_7</name>
+                     <description>Enable start signal for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = Disabled 1 = Enabled</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ERPIO0_8</name>
+                     <description>Enable start signal for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = Disabled 1 = Enabled</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ERPIO0_9</name>
+                     <description>Enable start signal for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = Disabled 1 = Enabled</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ERPIO0_10</name>
+                     <description>Enable start signal for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = Disabled 1 = Enabled</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ERPIO0_11</name>
+                     <description>Enable start signal for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = Disabled 1 = Enabled</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ERPIO1_0</name>
+                     <description>Enable start signal for start logic input PIO1_0 0 = Disabled 1 = Enabled</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>STARTRSRP0CLR</name>
+               <description>Start logic reset register 0</description>
+               <addressOffset>0x208</addressOffset>
+               <access>write-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>RSRPIO0_0</name>
+                     <description>Start signal reset for start logic input PIO0_n:PIO0_11 to PIO0_0 0 = Do nothing. 1 = Writing 1 resets the start signal</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RSRPIO0_1</name>
+                     <description>Start signal reset for start logic input PIO0_n:PIO0_11 to PIO0_0 0 = Do nothing. 1 = Writing 1 resets the start signal</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RSRPIO0_2</name>
+                     <description>Start signal reset for start logic input PIO0_n:PIO0_11 to PIO0_0 0 = Do nothing. 1 = Writing 1 resets the start signal</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RSRPIO0_3</name>
+                     <description>Start signal reset for start logic input PIO0_n:PIO0_11 to PIO0_0 0 = Do nothing. 1 = Writing 1 resets the start signal</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RSRPIO0_4</name>
+                     <description>Start signal reset for start logic input PIO0_n:PIO0_11 to PIO0_0 0 = Do nothing. 1 = Writing 1 resets the start signal</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RSRPIO0_5</name>
+                     <description>Start signal reset for start logic input PIO0_n:PIO0_11 to PIO0_0 0 = Do nothing. 1 = Writing 1 resets the start signal</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RSRPIO0_6</name>
+                     <description>Start signal reset for start logic input PIO0_n:PIO0_11 to PIO0_0 0 = Do nothing. 1 = Writing 1 resets the start signal</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RSRPIO0_7</name>
+                     <description>Start signal reset for start logic input PIO0_n:PIO0_11 to PIO0_0 0 = Do nothing. 1 = Writing 1 resets the start signal</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RSRPIO0_8</name>
+                     <description>Start signal reset for start logic input PIO0_n:PIO0_11 to PIO0_0 0 = Do nothing. 1 = Writing 1 resets the start signal</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RSRPIO0_9</name>
+                     <description>Start signal reset for start logic input PIO0_n:PIO0_11 to PIO0_0 0 = Do nothing. 1 = Writing 1 resets the start signal</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RSRPIO0_10</name>
+                     <description>Start signal reset for start logic input PIO0_n:PIO0_11 to PIO0_0 0 = Do nothing. 1 = Writing 1 resets the start signal</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RSRPIO0_11</name>
+                     <description>Start signal reset for start logic input PIO0_n:PIO0_11 to PIO0_0 0 = Do nothing. 1 = Writing 1 resets the start signal</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RSRPIO1_0</name>
+                     <description>Start signal reset for start logic input PIO1_0 0 = Do nothing. 1 = Writing 1 resets the start signal</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>STARTSRP0</name>
+               <description>Start logic status register 0</description>
+               <addressOffset>0x20C</addressOffset>
+               <access>read-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>SRPIO0_0</name>
+                     <description>Start signal status for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = No start signal received. 1 = Start signal pending</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SRPIO0_1</name>
+                     <description>Start signal status for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = No start signal received. 1 = Start signal pending</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SRPIO0_2</name>
+                     <description>Start signal status for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = No start signal received. 1 = Start signal pending</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SRPIO0_3</name>
+                     <description>Start signal status for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = No start signal received. 1 = Start signal pending</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SRPIO0_4</name>
+                     <description>Start signal status for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = No start signal received. 1 = Start signal pending</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SRPIO0_5</name>
+                     <description>Start signal status for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = No start signal received. 1 = Start signal pending</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SRPIO0_6</name>
+                     <description>Start signal status for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = No start signal received. 1 = Start signal pending</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SRPIO0_7</name>
+                     <description>Start signal status for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = No start signal received. 1 = Start signal pending</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SRPIO0_8</name>
+                     <description>Start signal status for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = No start signal received. 1 = Start signal pending</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SRPIO0_9</name>
+                     <description>Start signal status for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = No start signal received. 1 = Start signal pending</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SRPIO0_10</name>
+                     <description>Start signal status for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = No start signal received. 1 = Start signal pending</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SRPIO0_11</name>
+                     <description>Start signal status for start logic input PIO0_n: PIO0_11 to PIO0_0 0 = No start signal received. 1 = Start signal pending</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SRPIO1_0</name>
+                     <description>Start signal status for start logic input PIO1_0 0 = No start signal received. 1 = Start signal pending</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PDSLEEPCFG</name>
+               <description>Power-down states in Deep-sleep mode</description>
+               <addressOffset>0x230</addressOffset>
+               <fields>
+                  <field>
+                     <name>NOTUSED0</name>
+                     <description>Reserved. Always write these bits as 111</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>BOD_PD</name>
+                     <description>BOD power-down control in Deep-sleep mode, see Table 40</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>POWERED</name>
+                           <description>Powered</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>POWERED_DOWN</name>
+                           <description>Powered down</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>NOTUSED1</name>
+                     <description>Reserved. Always write these bits as 11</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field derivedFrom="BOD_PD" > <name>WDTOSC_PD</name> <description>Watchdog oscillator power control in Deep-sleep mode, see Table 40</description> <bitOffset>6</bitOffset> </field>
+                  <field>
+                     <name>NOTUSED2</name>
+                     <description>Reserved. Always write this bit as 1</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>NOTUSED3</name>
+                     <description>Reserved. Always write these bits as 000</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>NOTUSED4</name>
+                     <description>Reserved. Always write these bits as 11</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PDAWAKECFG</name>
+               <description>Power-down states after wake-up from Deep-sleep mode</description>
+               <addressOffset>0x234</addressOffset>
+               <resetValue>0xEDF0</resetValue>
+               <fields>
+                  <field>
+                     <name>IRCOUT_PD</name>
+                     <description>IRC oscillator output wake-up configuration</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>POWERED</name>
+                           <description>Powered</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>POWERED_DOWN</name>
+                           <description>Powered down</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="IRCOUT_PD" > <name>IRC_PD</name> <description>IRC oscillator power-down wake-up configuration</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="IRCOUT_PD" > <name>FLASH_PD</name> <description>Flash wake-up configuration</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="IRCOUT_PD" > <name>BOD_PD</name> <description>BOD wake-up configuration</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="IRCOUT_PD" > <name>ADC_PD</name> <description>ADC wake-up configuration</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="IRCOUT_PD" > <name>SYSOSC_PD</name> <description>System oscillator wake-up configuration</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="IRCOUT_PD" > <name>WDTOSC_PD</name> <description>Watchdog oscillator wake-up configuration</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="IRCOUT_PD" > <name>SYSPLL_PD</name> <description>System PLL wake-up configuration</description> <bitOffset>7</bitOffset> </field>
+                  <field>
+                     <name>NOTUSED0</name>
+                     <description>Reserved. Always write this bit as 1</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>NOTUSED1</name>
+                     <description>Reserved. Always write this bit as 0</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>NOTUSED2</name>
+                     <description>Reserved. Always write this bit as 1</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>NOTUSED3</name>
+                     <description>Reserved. Always write this bit as 1</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>NOTUSED4</name>
+                     <description>Reserved. Always write this bit as 0</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>NOTUSED5</name>
+                     <description>Reserved. Always write these bits as 111</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PDRUNCFG</name>
+               <description>Power-down configuration register</description>
+               <addressOffset>0x238</addressOffset>
+               <resetValue>0xEDF0</resetValue>
+               <fields>
+                  <field>
+                     <name>IRCOUT_PD</name>
+                     <description>IRC oscillator output power-down</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>POWERED</name>
+                           <description>Powered</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>POWERED_DOWN</name>
+                           <description>Powered down</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="IRCOUT_PD" > <name>IRC_PD</name> <description>IRC oscillator power-down</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="IRCOUT_PD" > <name>FLASH_PD</name> <description>Flash power-down</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="IRCOUT_PD" > <name>BOD_PD</name> <description>BOD power-down</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="IRCOUT_PD" > <name>ADC_PD</name> <description>ADC power-down</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="IRCOUT_PD" > <name>SYSOSC_PD</name> <description>System oscillator power-down</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="IRCOUT_PD" > <name>WDTOSC_PD</name> <description>Watchdog oscillator power-down</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="IRCOUT_PD" > <name>SYSPLL_PD</name> <description>System PLL power-down</description> <bitOffset>7</bitOffset> </field>
+                  <field>
+                     <name>NOTUSED0</name>
+                     <description>Reserved. Always write this bit as 1</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>NOTUSED1</name>
+                     <description>Reserved. Always write this bit as 0</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>NOTUSED2</name>
+                     <description>Reserved. Always write this bit as 1</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>NOTUSED3</name>
+                     <description>Reserved. Always write this bit as 1</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>NOTUSED4</name>
+                     <description>Reserved.  Always write this bit as 0</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>NOTUSED5</name>
+                     <description>Reserved. Always write these bits as 111</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DEVICE_ID</name>
+               <description>Device ID register 0 for parts  LPC1100C</description>
+               <addressOffset>0x3F4</addressOffset>
+               <access>read-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>DEVICEID</name>
+                     <description>Part ID numbers  0x1421 102B = LPC11C12/FBD48/301 0x1440 102B = LPC11C14/FBD48/301 0x1431 102B = LPC11C22/FBD48/301 0X1430 102B = LPC11C24/FBD48/301</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

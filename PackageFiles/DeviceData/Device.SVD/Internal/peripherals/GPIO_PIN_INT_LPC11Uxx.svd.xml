@@ -1,6 +1,7 @@
 <!--
 Devices using this peripheral: 
       LPC11Uxx
+      LPC13Uxx
 -->
       <peripheral>
          <?sourceFile "GPIO_PIN_INT_LPC11Uxx" ?>

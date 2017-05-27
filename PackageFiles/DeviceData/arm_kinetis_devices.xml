@@ -987,7 +987,7 @@ Test Devices:
          <note>MKE06P80M48SF0RM</note>
       </device>
 <!-- MKE1xZ7 -->
-      <device name="MKE14Z128M7" family="CortexM0" subfamily="MKE1xZ7">
+      <device name="MKE14Z128M7" family="CortexM0plus" subfamily="MKE1xZ7">
          <memoryRef ref="kinetis4K_12K_Ram" />
          <memoryRef ref="kinetis2K_FlexRam" />
          <memoryRef ref="FTFE_PFlash0_SEC_128K_2KS" />
@@ -1000,7 +1000,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM0-register-description" />
          <note>KE1xZP100M72SF0RM</note>
       </device>
-      <device name="MKE14Z256M7" family="CortexM0" subfamily="MKE1xZ7">
+      <device name="MKE14Z256M7" family="CortexM0plus" subfamily="MKE1xZ7">
          <memoryRef ref="kinetis8K_24K_Ram" />
          <memoryRef ref="kinetis2K_FlexRam" />
          <memoryRef ref="FTFE_PFlash0_SEC_256K_2KS" />
