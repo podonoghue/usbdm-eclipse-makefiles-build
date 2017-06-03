@@ -53,6 +53,16 @@ public:
       // Configure pins
       Info::initPCRs();
 
+      // Enable to debug RTX startup
+#if defined(DEBUG_BUILD) && 0
+      // Software reset RTC - trigger cold start
+      rtc->CR  = RTC_CR_SWR_MASK;
+      rtc->CR  = 0;
+
+      // Disable interrupts
+      rtc->IER  = 0;
+#endif
+
       if ((rtc->SR&RTC_SR_TIF_MASK) != 0) {
          // RTC not running yet or invalid - re-initialise
 
@@ -70,15 +80,24 @@ public:
          }
 
          // Set current time
-         rtc->TSR = 1379453899;  // A bit closer to today!
+         rtc->TSR = Info::coldStartTime;
          rtc->SR  = RTC_SR_TCE_MASK;
+
+         // Time compensation values
+         rtc->TCR = RtcInfo::tcr;
+
+         // Lock registers
+         rtc->LR  = RtcInfo::lr;
+
+         // Write access
+         rtc->WAR = RtcInfo::war;
+
+         // Read access
+         rtc->RAR = RtcInfo::rar;
       }
 
       // Update settings
       rtc->CR   = Info::cr;
-      rtc->IER  = 0;
-
-      enableNvicInterrupts();
    }
 
    /**
