@@ -26,10 +26,6 @@
 #define FIXED_PORT_CLOCK_REG SCGC5
 #endif
 
-#ifndef FIXED_ADC_FN
-#define FIXED_ADC_FN    (0)
-#endif
-
 #ifndef ADC0_CLOCK_MASK
 #ifdef SIM_SCGC6_ADC0_MASK
 #define ADC0_CLOCK_MASK SIM_SCGC6_ADC0_MASK
@@ -57,37 +53,33 @@ namespace USBDM {
  */
 
 /**
- * PCR multiplexor value for analogue function
- */
-static constexpr uint32_t    ADC_PORT_FN = PORT_PCR_MUX(FIXED_ADC_FN);
-/**
  * Default PCR value for pins used as GPIO (including multiplexor value)
  */
-static constexpr uint32_t    ADC_DEFAULT_PCR = ADC_PORT_FN;
+static constexpr PcrValue ADC_DEFAULT_PCR = pcrValue(PullNone, DriveLow, PushPull, PinIrqNone, PinMuxAnalogue);
 
 /**
  * ADC Resolutions for use with AnalogueIO::setMode()
  */
 enum Adc_Resolution {
-   resolution_8bit_se    = ADC_CFG1_MODE(0),
-   resolution_10bit_se   = ADC_CFG1_MODE(2),
-   resolution_12bit_se   = ADC_CFG1_MODE(1),
-   resolution_16bit_se   = ADC_CFG1_MODE(3),
-   resolution_9bit_diff  = ADC_CFG1_MODE(0),
-   resolution_11bit_diff = ADC_CFG1_MODE(2),
-   resolution_12bit_diff = ADC_CFG1_MODE(1),
-   resolution_16bit_diff = ADC_CFG1_MODE(3),
+   resolution_8bit_se    = ADC_CFG1_MODE(0),  //!<  8-bit unsigned for use with single-ended mode
+   resolution_10bit_se   = ADC_CFG1_MODE(2),  //!< 10-bit unsigned for use with single-ended mode
+   resolution_12bit_se   = ADC_CFG1_MODE(1),  //!< 12-bit unsigned for use with single-ended mode
+   resolution_16bit_se   = ADC_CFG1_MODE(3),  //!< 16-bit unsigned for use with single-ended mode
+   resolution_9bit_diff  = ADC_CFG1_MODE(0),  //!<  9-bit signed for use with differential mode
+   resolution_11bit_diff = ADC_CFG1_MODE(2),  //!< 11-bit signed for use with differential mode
+   resolution_12bit_diff = ADC_CFG1_MODE(1),  //!< 12-bit signed for use with differential mode
+   resolution_16bit_diff = ADC_CFG1_MODE(3),  //!< 16-bit signed for use with differential mode
 };
 
 /**
  * ADC Resolutions for use with AnalogueIO::setMode()
  */
 enum Adc_Averaging {
-	   averaging_off = 0,
-	   averaging_4   = ADC_SC3_AVGE_MASK|ADC_SC3_AVGS(0),
-	   averaging_8   = ADC_SC3_AVGE_MASK|ADC_SC3_AVGS(1),
-	   averaging_16  = ADC_SC3_AVGE_MASK|ADC_SC3_AVGS(2),
-	   averaging_32  = ADC_SC3_AVGE_MASK|ADC_SC3_AVGS(3),
+	   averaging_off = 0,                                 //!< No averaging - single conversion
+	   averaging_4   = ADC_SC3_AVGE_MASK|ADC_SC3_AVGS(0), //!< Average across 4 conversions
+	   averaging_8   = ADC_SC3_AVGE_MASK|ADC_SC3_AVGS(1), //!< Average across 8 conversions
+	   averaging_16  = ADC_SC3_AVGE_MASK|ADC_SC3_AVGS(2), //!< Average across 16 conversions
+	   averaging_32  = ADC_SC3_AVGE_MASK|ADC_SC3_AVGS(3), //!< Average across 32 conversions
 };
 
 /**
@@ -315,7 +307,7 @@ public:
     *
     * @return - the result of the conversion
     */
-   static int readAnalogue() {
+   static uint32_t readAnalogue() {
       return AdcBase_T::readAnalogue(ADC_SC1_ADCH(channel)&~ADC_SC1_DIFF_MASK);
    };
 };
@@ -330,7 +322,7 @@ public:
  * using Adc0_diff0 = USBDM::Adc0DiffChannel<0>;
  *
  * // Set ADC resolution
- * Adc0_diff0.setMode(resolution_16bit_se);
+ * Adc0_diff0.setMode(resolution_11bit_diff );
  *
  * // Read ADC value
  * uint32_t value = Adc0_diff0.readAnalogue();
@@ -354,7 +346,7 @@ public:
     *
     * @return - the result of the conversion
     */
-   static int readAnalogue() {
+   static int32_t readAnalogue() {
       return AdcBase_T::readAnalogue(ADC_SC1_ADCH(channel)|ADC_SC1_DIFF_MASK);
    };
 };
