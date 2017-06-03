@@ -58,6 +58,7 @@
 
          <copy source="Project_Headers/system.h"                           target="Project_Headers/system.h" replace="true" derived="true" />
 
+         <copy source="Project_Headers/USBDM_Documentation.h"              target="Project_Headers/USBDM_Documentation.h" />
          <copy source="Project_Headers/hardware.h"                         target="Project_Headers/hardware.h" />
          <copy source="Project_Headers/pcr-&DEVICE_FAMILY;.h"              target="Project_Headers/pcr.h" />
          <copy source="Project_Headers/gpio-&DEVICE_FAMILY;.h"             target="Project_Headers/gpio.h" />

@@ -62,6 +62,7 @@
          <copy source="Snippets/digital-example1.cpp"                      target="Snippets/digital-example1.cpp" />
          <copy source="Snippets/digital-example2.cpp"                      target="Snippets/digital-example2.cpp" />
          <copy source="Snippets/pwm-example.cpp"                           target="Snippets/pwm-example.cpp" />
+         <copy source="Project_Headers/USBDM_Documentation.h"              target="Project_Headers/USBDM_Documentation.h" />
          <copy source="Project_Headers/hardware.h"                         target="Project_Headers/hardware.h" />
          <copy source="Project_Headers/gpio-&DEVICE_FAMILY;.h"             target="Project_Headers/gpio.h" />
          <copy source="Sources/main.cpp"                                   target="Sources/main.cpp" replace="true" />

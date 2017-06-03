@@ -31,6 +31,11 @@
                <applyWhen >
                   <variableRef idRef="projectOptionValue.CPP-abstraction-LCD" />
                </applyWhen>
+               <copy source="Snippets/lcd.h"                       target="Sources/lcd.h"                        replace="true"/>
+               <copy source="Snippets/lcd_private.h"               target="Sources/lcd_private.h"                replace="true"/>
+               <copy source="Snippets/fonts.h"                     target="Sources/fonts.h"                      replace="true"/>
+               <copy source="Snippets/lcd.cpp"                     target="Sources/lcd.cpp"                      replace="true"/>
+               <copy source="Snippets/fonts.cpp"                   target="Sources/fonts.cpp"                    replace="true"/>
                <copy source="Snippets/elecfreaks-lcd-example.cpp"  target="Snippets/elecfreaks-lcd-example.cpp"  replace="true" />
                <copy source="Snippets/lcd.h"                       target="Snippets/lcd.h"                       replace="true"/>
                <copy source="Snippets/lcd_private.h"               target="Snippets/lcd_private.h"               replace="true"/>
