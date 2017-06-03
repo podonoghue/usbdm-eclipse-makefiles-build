@@ -14,13 +14,17 @@
  * Any manual changes will be lost.
  */
 
-#ifndef UART_H_
-#define UART_H_
+#ifndef CONSOLE_H_
+#define CONSOLE_H_
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+/**
+ * The following functions are a C-wrapper used by the C library
+ * low-level stdio support.
+ */
 /**
  * Initialises the Console
  */
@@ -47,4 +51,4 @@ int  console_rxChar(void);
 #ifdef __cplusplus
 }
 #endif
-#endif /* UART_H_ */
+#endif /* CONSOLE_H_ */
