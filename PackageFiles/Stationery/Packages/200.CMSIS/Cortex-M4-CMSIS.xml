@@ -17,7 +17,7 @@
          description="Adds CMSIS-RTOS framework for Cortex M4" 
          checkGroup="group-additional-options" />
       
-      <projectActionList>
+      <projectActionList id="CMSIS-noCpp-noBlinky">
          <applyWhen>
             <and>
                <variableRef      idRef="projectOptionValue.CMSIS-RTOS"       defaultValue="false" />
@@ -41,7 +41,7 @@
          </projectActionList>
       </projectActionList>
       
-      <projectActionList>
+      <projectActionList id="CMSIS-noCpp-blinky">
          <applyWhen>
             <and>
                <variableRef      idRef="projectOptionValue.CMSIS-RTOS" />
@@ -66,7 +66,7 @@
       </projectActionList>
 
       <!-- CPP-abstraction RTX files -->
-      <projectActionList>
+      <projectActionList id="CMSIS-Cpp">
          <applyWhen>
             <and>
                <variableRef idRef="projectOptionValue.CMSIS-RTOS" />
@@ -83,8 +83,8 @@
          <copy source="Snippets/cmsis-thread.cpp"     target="Snippets/cmsis-thread.cpp"     replace="true" />
          <copy source="Snippets/cmsis-timer.cpp"      target="Snippets/cmsis-timer.cpp"      replace="true" />
       </projectActionList>
-
-      <projectActionList>
+      
+      <projectActionList id="CMSIS-base">
          <applyWhen>
             <variableRef idRef="projectOptionValue.CMSIS-RTOS" />
          </applyWhen>
@@ -96,6 +96,7 @@
          <copy source="../cmsis/GCC/SVC_Table.S" target="cmsis/GCC/SVC_Table.S" />
          <copy source="../cmsis/GCC/HAL_CM4.S"   target="cmsis/GCC/HAL_CM4.S" />
          <copy source="../cmsis/License.txt"     target="cmsis/License.txt" />
+         <copy source="Sources/RTX_Conf_CM.cfg"  target="Sources/RTX_Conf_CM.cfg" />
          <copy source="Sources/RTX_Conf_CM.c"    target="Sources/RTX_Conf_CM.c" />
          <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
             <value>&quot;${ProjDirPath}/cmsis/INC&quot;</value>

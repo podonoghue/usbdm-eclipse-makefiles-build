@@ -1,150 +1,97 @@
 /*----------------------------------------------------------------------------
- * @file main.cpp (derived from main-RTX-CPP.c) 
+ * @file main.cpp
  *  
+ * Generated from main-RTX-CPP.cpp
+ *
  * RTX example program
  *----------------------------------------------------------------------------
  */
-#include "cmsis_os.h"                   // CMSIS RTX
+#include <stdio.h>
+#include "cmsis.h"                      // CMSIS RTX
 #include "hardware.h"                   // Hardware interface
-
-osThreadId tid_redThread;               // Thread id of redThread
-osThreadId tid_blueThread;              // Thread id of blueThread
-osThreadId tid_clockThread;             // Thread id of clockThread
-osThreadId tid_lcdThread;               // Thread id of lcdThread
-
-#define MAIN_SIGNAL  (1<<1)
-#define CLOCK_SIGNAL (1<<8)
+#include "RTX_Conf_CM.cfg"
 
 using RED_LED   = USBDM::$(demo.cpp.red.led:GpioB<3>);
 using GREEN_LED = USBDM::$(demo.cpp.green.led:GpioB<4>);
 using BLUE_LED  = USBDM::$(demo.cpp.blue.led:GpioB<5>);
 
-/*----------------------------------------------------------------------------
-     Function that turns on Red LED
- *----------------------------------------------------------------------------*/
-void LEDRed_On (void) {
-   RED_LED::clear();
-   GREEN_LED::set();
-   BLUE_LED::set();
-}
-
-/*----------------------------------------------------------------------------
-     Function that turns on Green LED
- *----------------------------------------------------------------------------*/
-void LEDGreen_On (void) {
-   RED_LED::set();
-   GREEN_LED::clear();
-   BLUE_LED::set();
-}
-
-/*----------------------------------------------------------------------------
-     Function that turns on Blue LED
- *----------------------------------------------------------------------------*/
-void LEDBlue_On (void) {
-   RED_LED::set();
-   GREEN_LED::set();
-   BLUE_LED::clear();
-}
-
-/*----------------------------------------------------------------------------
- *   Clock thread
- *---------------------------------------------------------------------------*/
-void threadClock (void const *argument __attribute__((unused))) {
-   for (;;) {
-      osSignalWait(CLOCK_SIGNAL, osWaitForever);   // Wait until signalled
-      LEDGreen_On();
-   }
-}
-
-/*----------------------------------------------------------------------------
- *    Function thread
- *---------------------------------------------------------------------------*/
-void signal_func (osThreadId tid)  {
-   osDelay(1000);                                  // delay 1000ms
-   osSignalSet(tid_clockThread, CLOCK_SIGNAL);     // set signal to clock thread
-   osDelay(1000);                                  // delay 50ms
-   osSignalSet(tid, MAIN_SIGNAL);                  // set signal to thread 'tid'
-}
-
-/*----------------------------------------------------------------------------
- *    Read thread
- *---------------------------------------------------------------------------*/
-void redThread (void const *argument __attribute__((unused))) {
-   for (;;) {
-      osSignalWait(MAIN_SIGNAL, osWaitForever);    // Wait for event
-      LEDRed_On();                                 // Turn on LED
-      signal_func(tid_blueThread);                 // Call common signal function
-   }
-}
-
-/*----------------------------------------------------------------------------
- *    Blue thread
- *---------------------------------------------------------------------------*/
-void blueThread (void const *argument __attribute__((unused))) {
-   for (;;) {
-      osSignalWait(MAIN_SIGNAL, osWaitForever);    // Wait for event
-      LEDBlue_On();                                // Turn on LED
-      signal_func(tid_redThread);                  // Call common signal function
-   }
-}
-
-/*----------------------------------------------------------------------------
- *    LCD thread
- *---------------------------------------------------------------------------*/
-#ifdef LCD_AVAILABLE
-#include "LCD.h"
-#include "SPI.h"
-
-void lcdThread (void const *argument __attribute__((unused))) {
-   // Instantiate interface
-   SPI *spi = new $(demo.cpp.lcd.spi)();
-   spi->setSpeed(1000000);
-   LCD *lcd = new LCD(spi);
-
-   for (;;) {
-      lcd->clear(RED);
-      lcd->drawCircle(65, 65, 20, WHITE);
-      lcd->drawCircle(65, 65, 30, WHITE);
-      lcd->drawCircle(65, 65, 40, WHITE);
-      lcd->putStr("Some Circles", 30, 10, Fonts::FontSmall, WHITE, RED);
+// Thread to toggle first LED
+static void threadLed1Toggle(const void *) {
+   for(;;) {
+      RED_LED::toggle();
       osDelay(1000);
    }
-}
-#endif
+};
 
-void led_initialise(void) {
-   RED_LED::setOutput();
+// Thread to toggle second LED
+static void threadLed2Toggle(const void *) {
+   for(;;) {
+      GREEN_LED::toggle();
+      osDelay(2000);
+   }
+};
+
+// Callback to toggle third LED
+static void callbackLed3Toggle(const void *) {
+   BLUE_LED::toggle();
+};
+
+// Callback to print "Tick"
+static void callbackTick(const void *) {
+   static int i = 0;
+   (void)i;
+#if (OS_TIMERSTKSZ<(800/4))
+#warning "Requires RTX Timer Thread stack size to be increased to about 800 bytes for printf()"
+#else
+   // Report the callback
+   printf("Callback - %d\n\r", i++);
+#endif
+};
+
+/**
+ * Timer example
+ */
+void timerExample() {
+
+   // Set the LEDs as outputs
    GREEN_LED::setOutput();
+   RED_LED::setOutput();
    BLUE_LED::setOutput();
-   RED_LED::set();
-   GREEN_LED::set();
-   BLUE_LED::set();
-}
 
-osThreadDef(redThread,     osPriorityNormal, 1, 0);
-osThreadDef(blueThread,    osPriorityNormal, 1, 0);
-osThreadDef(threadClock,   osPriorityNormal, 1, 0);
-#ifdef LCD_AVAILABLE
-osThreadDef(lcdThread,     osPriorityNormal, 1, 0);
+   // Create two timers
+   static CMSIS::Timer<osTimerPeriodic> timer1(callbackLed3Toggle);
+   static CMSIS::Timer<osTimerPeriodic> timer2(callbackTick);
+
+   // Create two threads
+   static CMSIS::Thread thread1(threadLed1Toggle);
+   static CMSIS::Thread thread2(threadLed2Toggle);
+
+#if (OS_MAINSTKSIZE<(800/4))
+#warning "Requires RTX Main Thread stack size to be increased to about 800 bytes for printf()"
+#else
+   // Report the IDs
+   printf(" timer1::getId()   = %p\n\r", timer1.getId());
+   printf(" timer2::getId()   = %p\n\r", timer2.getId());
+
+   printf(" thread1::getId()  = %p\n\r", thread1.getId());
+   printf(" thread2::getId()  = %p\n\r", thread2.getId());
 #endif
 
-/*----------------------------------------------------------------------------
- *      Main: Initialise and start RTX Kernel
- *---------------------------------------------------------------------------*/
-int main (void) {
+   // Start the 2 timers with different periods
+   timer1.start(500);
+   timer2.start(1000);
 
-   led_initialise();
+   // Start the two threads
+   thread1.run();
+   thread2.run();
 
-   tid_redThread     = osThreadCreate(osThread(redThread),   NULL);
-   tid_blueThread    = osThreadCreate(osThread(blueThread),  NULL);
-   tid_clockThread   = osThreadCreate(osThread(threadClock), NULL);
-#ifdef LCD_AVAILABLE
-   tid_lcdThread     = osThreadCreate(osThread(lcdThread),   NULL);
-#endif
-
-   osSignalSet(tid_redThread, MAIN_SIGNAL);          // set signal to phaseA thread
-
-   osDelay(osWaitForever);
-
-   while(1);
 }
+
+int main() {
+   timerExample();
+
+   for(;;) {
+   }
+   return 0;
+}
+

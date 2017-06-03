@@ -1,6 +1,8 @@
 /*----------------------------------------------------------------------------
- * @file main.c (derived from main-RTX.c) 
+ * @file main.c
  *  
+ * Generated from main-RTX.c
+ *
  * RTX example program
  *----------------------------------------------------------------------------
  */
@@ -9,6 +11,7 @@
 #include "cmsis_os.h"                   // CMSIS RTX
 #include "derivative.h"                 // Device header
 #include "utilities.h"
+#include "RTX_Conf_CM.cfg"
 //#include "leds.h"
 
 // Forward references

@@ -250,9 +250,11 @@ __attribute__((used)) void _mutex_release (OS_ID *mutex) {
  *---------------------------------------------------------------------------*/
 
 /* Main Thread definition */
+#if 0
+// Removed - pgo
 extern int main (void);
 osThreadDef_t os_thread_def_main = {(os_pthread)main, osPriorityNormal, 1U, 4*OS_MAINSTKSIZE };
-
+#endif
 
 #if defined (__CC_ARM)
 
@@ -339,8 +341,9 @@ __attribute ((noreturn)) void __cs3_start_c (void){
 }
 
 #else
-
-__attribute__((naked)) void software_init_hook (void) {
+#if 0
+// Removed pgo
+__attribute__((naked, weak)) void software_init_hook (void) {
   __asm (
     ".syntax unified\n"
     ".thumb\n"
@@ -360,6 +363,61 @@ __attribute__((naked)) void software_init_hook (void) {
     "bl   osKernelStart\n"
     "bl   exit\n"
   );
+}
+#endif
+extern int main (void);
+
+/**
+ * Main CMSIS thread
+ * - Executes __libc_init_array(), This allows static object to use CMSIS functions.
+ * - Executes main()
+ *
+ * Modified by pgo
+ */
+__attribute__((naked))
+static void os_main(void) {
+   __asm__(".syntax unified\n"                    );
+   __asm__(".thumb\n"                             );
+   __asm__("movs r0,#0\n"                         );
+   __asm__("movs r1,#0\n"                         );
+   __asm__("mov  r4,r0\n"                         );
+   __asm__("mov  r5,r1\n"                         );
+   __asm__("bl   __libc_init_array\n"             );
+   __asm__("bl   main\n"                          );
+   __asm__("bl   exit\n"                          );
+}
+
+/* Main Thread definition - starts os_main() */
+__attribute__((used))
+static osThreadDef_t os_thread_main = {(os_pthread)os_main, osPriorityNormal, 1U, 4*OS_MAINSTKSIZE};
+
+/**
+ * CMSIS hook
+ * - Sets up __libc_fini_array() to execute on exit
+ * - Initialises RTOS kernel using osKernelInitialize()
+ * - Creates main CMSIS thread (see above) using osThreadCreate()
+ * - Starts RTOS kernel using osKernelStart()
+ *
+ * Modified by pgo
+ */
+__attribute__((naked))
+void software_init_hook(void) {
+   __asm__(".syntax unified\n"                    );
+   __asm__(".thumb\n"                             );
+   __asm__("movs r0,#0\n"                         );
+   __asm__("movs r1,#0\n"                         );
+   __asm__("mov  r4,r0\n"                         );
+   __asm__("mov  r5,r1\n"                         );
+   __asm__("ldr  r0,= __libc_fini_array\n"        );
+   __asm__("bl   atexit\n"                        );
+   __asm__("mov  r0,r4\n"                         );
+   __asm__("mov  r1,r5\n"                         );
+   __asm__("bl   osKernelInitialize\n"            );
+   __asm__("ldr  r0,=os_thread_main\n"            );
+   __asm__("movs r1,#0\n"                         );
+   __asm__("bl   osThreadCreate\n"                );
+   __asm__("bl   osKernelStart\n"                 );
+   __asm__("bl   exit\n"                          );
 }
 
 #endif

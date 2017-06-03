@@ -1,11 +1,14 @@
 /*----------------------------------------------------------------------------
- * @file main.c (derived from main-RTX-Blinky.c) 
- *  
+ * @file main.c
+ * 
+ * Generated from main-RTX-Blinky.c
+ *
  * RTX example program
  *----------------------------------------------------------------------------
  */
 #include "cmsis_os.h"                   // CMSIS RTX
 #include "derivative.h"                 // Device header
+#include "RTX_Conf_CM.cfg"
 #include "leds.h"
 
 osThreadId tid_redThread;               // Thread id of redThread
