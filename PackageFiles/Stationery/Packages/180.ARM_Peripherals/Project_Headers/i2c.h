@@ -110,7 +110,7 @@ public:
 
 #ifdef __CMSIS_RTOS
    /**
-    * Obtain I2C mutex
+    * Obtain I2C MUTEX
     *
     * @param milliseconds How long to wait in milliseconds. Use osWaitForever for indefinite wait
     *
@@ -120,19 +120,25 @@ public:
     * @return osErrorParameter: The parameter mutex_id is incorrect.
     * @return osErrorISR: osMutexWait cannot be called from interrupt service routines.
     */
-   virtual osStatus lock(int milliseconds=osWaitForever) = 0;
+   virtual osStatus startTransaction(int milliseconds=osWaitForever) = 0;
 
    /**
-    * Release I2C mutex
+    * Release I2C MUTEX
     *
     * @return osOK: the mutex has been correctly released.
     * @return osErrorResource: the mutex was not obtained before.
     * @return osErrorISR: osMutexRelease cannot be called from interrupt service routines.
     */
-   virtual osStatus unlock() = 0;
+   virtual osStatus endTransaction() = 0;
 #else
-   int lock(int milliseconds=0) {(void) milliseconds; return 0;}
-   int unlock() {return 0;}
+   /**
+    * Obtain I2C MUTEX - dummy
+    */
+   virtual int startTransaction(int =0) {return 0;};
+   /**
+    * Release I2C MUTEX - dummy
+    */
+   virtual int endTransaction() {return 0;};
 #endif
 
    /**
@@ -254,7 +260,7 @@ public:
 
 #ifdef __CMSIS_RTOS
 protected:
-   /** Mutex to protect access - static so per I2C */
+   /** Mutex to protect access - static so per I2C template instantiation */
    static CMSIS::Mutex mutex;
 
 public:
@@ -269,7 +275,7 @@ public:
     * @return osErrorParameter: The parameter mutex_id is incorrect.
     * @return osErrorISR: osMutexWait cannot be called from interrupt service routines.
     */
-   virtual osStatus lock(int milliseconds=osWaitForever) {
+   virtual osStatus startTransaction(int milliseconds=osWaitForever) override {
       return mutex.wait(milliseconds);
    }
 
@@ -280,7 +286,7 @@ public:
     * @return osErrorResource: the mutex was not obtained before.
     * @return osErrorISR: osMutexRelease cannot be called from interrupt service routines.
     */
-   virtual osStatus unlock() {
+   virtual osStatus endTransaction() override {
       return mutex.release();
    }
 #endif
@@ -356,20 +362,19 @@ public:
     * This is useful if a slave is part-way through a transaction when the master goes away!
     */
    virtual void busHangReset() {
+
       // GPIOs used for bit-banging
-      GpioTable_T<Info, 0> sclGpio;
-      GpioTable_T<Info, 1> sdaGpio;
+      GpioTable_T<Info, 0, USBDM::ActiveLow>  sclGpio; // Inactive is high
+      GpioTable_T<Info, 1, USBDM::ActiveHigh> sdaGpio;
+
       sclGpio.setOutput(Info::defaultPcrValue);
       sdaGpio.setInput(Info::defaultPcrValue);
       /*
        * Set SCL initially high before enabling to minimise disturbance to bus
        */
-      sclGpio.setInput();
-      sclGpio.set();
-      sclGpio.setOutput();
       for (int i=0; i<9; i++) {
-         // Set clock high (3-state)
-         sclGpio.set();
+         // Set clock high (ideally 3-state)
+         sclGpio.high();
          for(int j=0; j<20; j++) {
             __asm__("nop");
          }
@@ -378,7 +383,7 @@ public:
             break;
          }
          // Set clock low
-         sclGpio.clear();
+         sclGpio.low();
          for(int j=0; j<20; j++) {
             __asm__("nop");
          }

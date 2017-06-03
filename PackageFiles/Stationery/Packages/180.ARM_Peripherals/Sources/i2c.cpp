@@ -206,6 +206,10 @@ void I2c::poll(void) {
  * @return E_NO_ERROR on success
  */
 int I2c::transmit(uint8_t address, uint16_t size, const uint8_t data[]) {
+#ifdef __CMSIS_RTOS
+   startTransaction();
+#endif
+
    errorCode = 0;
 
    rxBytesRemaining = 0;
@@ -220,7 +224,13 @@ int I2c::transmit(uint8_t address, uint16_t size, const uint8_t data[]) {
    sendAddress(address);
    waitWhileBusy();
 
-   return errorCode;
+   uint8_t tErrorCode = errorCode;
+
+#ifdef __CMSIS_RTOS
+   endTransaction();
+#endif
+
+   return tErrorCode;
 }
 
 /**
@@ -233,6 +243,9 @@ int I2c::transmit(uint8_t address, uint16_t size, const uint8_t data[]) {
  * @return E_NO_ERROR on success
  */
 int I2c::receive(uint8_t address, uint16_t size,  uint8_t data[]) {
+#ifdef __CMSIS_RTOS
+   startTransaction();
+#endif
    errorCode = 0;
 
    txBytesRemaining = 0;
@@ -247,7 +260,13 @@ int I2c::receive(uint8_t address, uint16_t size,  uint8_t data[]) {
    sendAddress(address|1);
    waitWhileBusy();
 
-   return errorCode;
+   uint8_t tErrorCode = errorCode;
+
+#ifdef __CMSIS_RTOS
+   endTransaction();
+#endif
+
+   return tErrorCode;
 }
 
 /**
@@ -263,6 +282,9 @@ int I2c::receive(uint8_t address, uint16_t size,  uint8_t data[]) {
  * @return E_NO_ERROR on success
  */
 int I2c::txRx(uint8_t address, uint16_t txSize, const uint8_t txData[], uint16_t rxSize, uint8_t rxData[] ) {
+#ifdef __CMSIS_RTOS
+   startTransaction();
+#endif
    errorCode = 0;
 
    // Send address byte at start and move to data transmission
@@ -276,7 +298,14 @@ int I2c::txRx(uint8_t address, uint16_t txSize, const uint8_t txData[], uint16_t
 
    sendAddress(address);
    waitWhileBusy();
-   return errorCode;
+
+   uint8_t tErrorCode = errorCode;
+
+#ifdef __CMSIS_RTOS
+   endTransaction();
+#endif
+
+   return tErrorCode;
 }
 
 /**

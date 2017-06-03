@@ -48,6 +48,30 @@ extern "C" void SPI2_IRQHandler(void);
  * @{
  */
 
+enum SpiMode {
+   SpiMode0 = SPI_CTAR_CPOL(0)|SPI_CTAR_CPHA(0), // Active-high clock (idles low), Data is captured on leading edge of SCK and changes on the following edge.
+   SpiMode1 = SPI_CTAR_CPOL(0)|SPI_CTAR_CPHA(1), // Active-high clock (idles low), Data is changes on leading edge of SCK and captured on the following edge.
+   SpiMode2 = SPI_CTAR_CPOL(1)|SPI_CTAR_CPHA(0), // Active-low clock (idles high), Data is captured on leading edge of SCK and changes on the following edge.
+   SpiMode3 = SPI_CTAR_CPOL(1)|SPI_CTAR_CPHA(1), // Active-low clock (idles high), Data is changes on leading edge of SCK and captured on the following edge.
+};
+
+enum SpiOrder {
+   SpiMsbFirst = SPI_CTAR_LSBFE(0),
+   SpiLsbFirst = SPI_CTAR_LSBFE(1),
+};
+
+using SpiModeValue = uint32_t;
+
+/**
+ * Calculate SPI mode value from components
+ *
+ * @param spiMode  SPI Mode e.g. SpiMode0
+ * @param spiOrder Bit order e.g. SpiMsbFirst
+ */
+static constexpr SpiModeValue spiModeValue(SpiMode spiMode=SpiMode0, SpiOrder spiOrder=SpiMsbFirst) {
+   return spiMode|spiOrder;
+}
+
 /**
  * @brief Base class for representing an SPI interface
  */

@@ -24,25 +24,41 @@
 
 namespace USBDM {
 
-static constexpr uint32_t SPI_CPHA = SPI_CTAR_CPHA_MASK;     // Clock phase    - First edge on SPSCK occurs at the start of the first cycle of a data transfer
-static constexpr uint32_t SPI_CPOL = SPI_CTAR_CPOL_MASK;     // Clock polarity - Active-low SPI clock (idles high)
-static constexpr uint32_t SPI_LSBF = SPI_CTAR_LSBFE_MASK;    // LSB transmitted  first
-
-static constexpr uint32_t SPI_MODE0 (0       |0);
-static constexpr uint32_t SPI_MODE1 (0       |SPI_CPHA);
-static constexpr uint32_t SPI_MODE2 (SPI_CPOL|0);
-static constexpr uint32_t SPI_MODE3 (SPI_CPOL|SPI_CPHA);
-
 /**
  * @addtogroup SPI_Group SPI, Serial Peripheral Interface
  * @brief C++ Class allowing access to SPI interface
  * @{
  */
 
+enum SpiMode {
+   SpiMode0 = SPI_CTAR_CPOL(0)|SPI_CTAR_CPHA(0), // Active-high clock (idles low), Data is captured on leading edge of SCK and changes on the following edge.
+   SpiMode1 = SPI_CTAR_CPOL(0)|SPI_CTAR_CPHA(1), // Active-high clock (idles low), Data is changes on leading edge of SCK and captured on the following edge.
+   SpiMode2 = SPI_CTAR_CPOL(1)|SPI_CTAR_CPHA(0), // Active-low clock (idles high), Data is captured on leading edge of SCK and changes on the following edge.
+   SpiMode3 = SPI_CTAR_CPOL(1)|SPI_CTAR_CPHA(1), // Active-low clock (idles high), Data is changes on leading edge of SCK and captured on the following edge.
+};
+
+enum SpiOrder {
+   SpiMsbFirst = SPI_CTAR_LSBFE(0),
+   SpiLsbFirst = SPI_CTAR_LSBFE(1),
+};
+
+using SpiModeValue = uint32_t;
+
+/**
+ * Calculate SPI mode value from components
+ *
+ * @param spiMode  SPI Mode e.g. SpiMode0
+ * @param spiOrder Bit order e.g. SpiMsbFirst
+ */
+static constexpr SpiModeValue spiModeValue(SpiMode spiMode=SpiMode0, SpiOrder spiOrder=SpiMsbFirst) {
+   return spiMode|spiOrder;
+}
+
 /**
  * @brief Base class for representing an SPI interface
  */
 class Spi {
+
 protected:
    ~Spi() {}
 
@@ -178,7 +194,7 @@ protected:
     */
    void setSpeed(uint32_t clockFrequency, uint32_t frequency, int ctarNum) {
       spi->CTAR[ctarNum] = (spi->CTAR[ctarNum] & ~(SPI_CTAR_BR_MASK|SPI_CTAR_PBR_MASK)) |
-            (calculateDividers(clockFrequency, frequency) & (SPI_CTAR_BR_MASK|SPI_CTAR_PBR_MASK));
+            calculateDividers(clockFrequency, frequency);
    }
 
    /**
@@ -205,6 +221,7 @@ public:
    /**
     * Obtain SPI mutex
     *
+    * @param ctarValue The CTAR value to set for the transaction
     * @param milliseconds How long to wait in milliseconds. Use osWaitForever for indefinite wait
     *
     * @return osOK: The mutex has been obtain.
@@ -213,7 +230,7 @@ public:
     * @return osErrorParameter: The parameter mutex_id is incorrect.
     * @return osErrorISR: osMutexWait cannot be called from interrupt service routines.
     */
-   virtual osStatus lock(int milliseconds=osWaitForever) = 0;
+   virtual osStatus startTransaction(uint32_t ctarValue=0, int milliseconds=osWaitForever) = 0;
 
    /**
     * Release SPI mutex
@@ -222,10 +239,10 @@ public:
     * @return osErrorResource: the mutex was not obtained before.
     * @return osErrorISR: osMutexRelease cannot be called from interrupt service routines.
     */
-   virtual osStatus unlock() = 0;
+   virtual osStatus endTransaction() = 0;
 #else
-   int lock(int milliseconds=0) {(void) milliseconds; return 0; }
-   int unlock() { return 0; }
+   int startTransaction(uint32_t =0, int =0) {return 0;}
+   int endTransaction() { return 0; }
 #endif
 
    /**
@@ -264,13 +281,13 @@ public:
    /**
     * Sets Communication mode for SPI
     *
-    * @param mode    => Mode to set. Combination of SPI_CPHA, SPI_CPOL and SPI_LSBFE
+    * @param mode    => SpiModeValue to set. May be calculated using spiModeValue()
     * @param ctarNum => Index of CTAR register to modify
     */
-   void setMode(uint32_t mode, int ctarNum=0) {
+   void setMode(SpiModeValue mode, int ctarNum=0) {
       // Sets the default CTAR value with 8 bits
-      spi->CTAR[ctarNum] = (spi->CTAR[ctarNum]&~(SPI_CPHA|SPI_CPOL|SPI_LSBF)) |
-            (mode & (SPI_CPHA|SPI_CPOL|SPI_LSBF));
+      spi->CTAR[ctarNum] = (spi->CTAR[ctarNum]&~(SPI_CTAR_CPHA_MASK|SPI_CTAR_CPOL_MASK|SPI_CTAR_LSBFE_MASK)) |
+            (mode & (SPI_CTAR_CPHA_MASK|SPI_CTAR_CPOL_MASK|SPI_CTAR_LSBFE_MASK));
    }
 
    /**
@@ -359,11 +376,11 @@ public:
    /**
     * Set polarity of hardware PCS signals
     *
-    * @param signal     Signal number
-    * @param activeHigh Bit-mask for polarity of PCSn true=>active high, false=>active low
+    * @param signal    Signal number
+    * @param polarity  Polarity of PCSn, ActiveHigh or ActiveLow
     */
-   void setPcsPolarity(int signal, bool activeHigh=true) {
-      if (activeHigh) {
+   void setPcsPolarity(int signal, Polarity polarity=ActiveHigh) {
+      if (polarity==ActiveHigh) {
          spi->MCR &= ~SPI_MCR_PCSIS(1<<signal);
       }
       else {
@@ -389,6 +406,7 @@ public:
    /**
     * Obtain SPI mutex
     *
+    * @param ctarValue The CTAR value to set for the transaction
     * @param milliseconds How long to wait in milliseconds. Use osWaitForever for indefinite wait
     *
     * @return osOK: The mutex has been obtain.
@@ -397,7 +415,10 @@ public:
     * @return osErrorParameter: The parameter mutex_id is incorrect.
     * @return osErrorISR: osMutexWait cannot be called from interrupt service routines.
     */
-   virtual osStatus lock(int milliseconds=osWaitForever) {
+   virtual osStatus startTransaction(uint32_t ctarValue=0, int milliseconds=osWaitForever) override {
+      if (ctarValue != 0) {
+         spi->CTAR[0] = ctarValue;
+      }
       return mutex.wait(milliseconds);
    }
 
@@ -408,7 +429,7 @@ public:
     * @return osErrorResource: the mutex was not obtained before.
     * @return osErrorISR: osMutexRelease cannot be called from interrupt service routines.
     */
-   virtual osStatus unlock() {
+   virtual osStatus endTransaction() override {
       return mutex.release();
    }
 #endif
@@ -418,7 +439,7 @@ public:
 
    virtual void enablePins() {
       // Configure SPI pins
-      Info::initPCRs(PORT_PCR_DSE(1)|PORT_PCR_SRE(1)|PORT_PCR_PE(1)|PORT_PCR_PS(1));
+      Spi0Info::initPCRs(pcrValue(PullUp, DriveHigh));
    }
 
    virtual void disablePins() {
@@ -471,12 +492,12 @@ public:
       spi->MCR = SPI_MCR_HALT_MASK|SPI_MCR_CLR_RXF_MASK|SPI_MCR_ROOE_MASK|SPI_MCR_CLR_TXF_MASK|
             SPI_MCR_MSTR_MASK|SPI_MCR_DCONF(0)|SPI_MCR_SMPL_PT(0)|SPI_MCR_PCSIS_MASK;
 
-      setCTAR0Value(0); // Clear
-      setCTAR1Value(0); // Clear
+      setCTAR0Value(0);         // Clear
+      setCTAR1Value(0);         // Clear
       setFrameSize(8);          // Default 8-bit transfers
       setSpeed(Info::speed);    // Use default speed
       setMode(Info::modeValue); // Use default mode
-      setDelays();      // Defaults
+      setDelays();              // Defaults
 
       // Configure SPI pins
       enablePins();
