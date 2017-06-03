@@ -63,16 +63,16 @@
       description="Update Mode"
       toolTip="Allows the SR[TCE] to be written even when the Status Register is locked.\n
          When set, the SR[TCE] can always be written if the SR[TIF] or SR[TOF] are set or if the SR[TCE] is clear" >
-      <choice value="0" name="Registers cannot be written when locked" />
-      <choice value="1" name="Registers can be written when locked under limited conditions" />
+      <choice value="0" name="SR[TCE] cannot be written when locked" />
+      <choice value="1" name="SR[TCE] can be written when locked under limited conditions" />
    </binaryOption>
 
    <binaryOption name="rtc_cr_sup" 
       description="Supervisor access"
       toolTip="Determines if the RTC register access is available in non-supervisor mode\n
          Non supported write accesses generate a bus error" >
-      <choice value="0" name="Non-supervisor mode write accesses are not supported" />
-      <choice value="1" name="Non-supervisor mode write accesses are supported" />
+      <choice value="0" name="Non-supervisor write accesses not supported" />
+      <choice value="1" name="Non-supervisor write accesses supported" />
    </binaryOption>
 
    <binaryOption name="rtc_cr_wpe" 
@@ -83,6 +83,222 @@
       <choice value="1" name="Wakeup pin is enabled" />
    </binaryOption>
    
+   <template><![CDATA[
+      \t//! Frequency of RTC External Clock or Crystal\n
+      \tstatic constexpr uint32_t rtcclk_clock = $(rtcclk_clock)UL;\n\n
+      
+      \t//! Oscillator control register\n
+      \tstatic constexpr uint32_t cr =
+      \t   RTC_CR_OSCE($(rtc_cr_osce)) | // Enables 32kHz oscillator [RTC_32K]
+      \t   RTC_CR_CLKO($(rtc_cr_clko)) | // Disables RTC 32kHz Clock Output
+      \t   RTC_CR_UM($(rtc_cr_um))   | // Update Mode
+      \t   RTC_CR_SUP($(rtc_cr_sup))  | // Supervisor access
+      \t   RTC_CR_WPE($(rtc_cr_wpe))  | // Wakeup Pin Enable
+      \t   RTC_CR_SCP($(rtc_cr_scp));   // RTC Oscillator load capacitance\n\n
+   ]]></template>
+
+   <intOption name="rtc_tcr_cir"
+      description="Compensation Interval Register"
+      toolTip="Configures the compensation interval in seconds from 1 to 256 to control how frequently the TCR should\n
+		adjust the number of 32.768 kHz cycles in each second. The value written should be one less than the\n
+		number of seconds (for example, write zero to configure for a compensation interval of one second). This\n
+		register is double buffered and writes do not take affect until the end of the current compensation interval."
+      value="0" />
+
+   <intOption name="rtc_tcr_tcr" min="-128" max="127"
+      description="Time Compensation Register"
+      toolTip="Adjusts the number of 32.768 kHz clock cycles in each second.\n
+         This value+32768 determines the number of clock cycles this makes up a second"
+      value="0" />
+
+   <template><![CDATA[
+      \t//! RTC Time Compensation Register\n
+      \tstatic constexpr uint32_t tcr =
+      \t   RTC_TCR_CIR($(rtc_tcr_cir)) | // Compensation Interval Register
+      \t   RTC_TCR_TCR($(rtc_tcr_tcr));  // Time Compensation Register\n\n
+    ]]></template>     
+   
+   <category name="Register Locks" description="Locks RTC Registers">
+	   <binaryOption name="rtc_lr_lrl" 
+	      description="Lock Register Lock"
+	      toolTip="Once cleared, this bit can only be set by VBAT POR or software reset." >
+	      <choice value="0" name="Locked" />
+	      <choice value="1" name="Unlocked"  isDefault="true" />
+	   </binaryOption>
+	   
+	   <binaryOption name="rtc_lr_srl" 
+	      description="Status Register Lock"
+	      toolTip="Once cleared, this bit can only be set by VBAT POR or software reset." >
+	      <choice value="0" name="Locked" />
+	      <choice value="1" name="Unlocked"  isDefault="true" />
+	   </binaryOption>
+	   
+	   <binaryOption name="rtc_lr_crl" 
+	      description="Control Register Lock"
+	      toolTip="Once cleared, this bit can only be set by VBAT POR or software reset." >
+	      <choice value="0" name="Locked" />
+	      <choice value="1" name="Unlocked"  isDefault="true" />
+	   </binaryOption>
+	   
+	   <binaryOption name="rtc_lr_tcl" 
+	      description="Time Compensation Lock"
+	      toolTip="Once cleared, this bit can only be set by VBAT POR or software reset." >
+	      <choice value="0" name="Locked" />
+	      <choice value="1" name="Unlocked"  isDefault="true" />
+	   </binaryOption>
+   </category>
+   
+   <template><![CDATA[
+      \t//! RTC Lock Register\n
+      \tstatic constexpr uint32_t lr =
+      \t   RTC_LR_LRL($(rtc_lr_lrl)) | // Lock Register Lock
+      \t   RTC_LR_SRL($(rtc_lr_srl)) | // Status Register Lock 
+      \t   RTC_LR_CRL($(rtc_lr_crl)) | // Control Register Lock
+      \t   RTC_LR_TCL($(rtc_lr_tcl));  // Time Compensation Lock\n\n
+    ]]></template>     
+
+   <category name="Write Access" description="Controls write access to RTC Registers">
+	   <binaryOption name="rtc_war_ierw" 
+	      description="Interrupt Enable Register Write"
+	      toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset." >
+	      <choice value="0" name="Writes are ignored" />
+	      <choice value="1" name="Writes allowed"  isDefault="true" />
+	   </binaryOption>
+	   
+	   <binaryOption name="rtc_war_lrw" 
+	      description="Lock Register Write"
+	      toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset." >
+	      <choice value="0" name="Writes are ignored" />
+	      <choice value="1" name="Writes allowed"  isDefault="true" />
+	   </binaryOption>
+	   
+	   <binaryOption name="rtc_war_srw" 
+	      description="Status Register Write"
+	      toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset." >
+	      <choice value="0" name="Writes are ignored" />
+	      <choice value="1" name="Writes allowed"  isDefault="true" />
+	   </binaryOption>
+	   
+	   <binaryOption name="rtc_war_crw" 
+	      description="Control Register Write"
+	      toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset." >
+	      <choice value="0" name="Writes are ignored" />
+	      <choice value="1" name="Writes allowed"  isDefault="true" />
+	   </binaryOption>
+	   
+	   <binaryOption name="rtc_war_tcrw" 
+	      description="Time Compensation Register Write"
+	      toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset." >
+	      <choice value="0" name="Writes are ignored" />
+	      <choice value="1" name="Writes allowed"  isDefault="true" />
+	   </binaryOption>
+	   
+	   <binaryOption name="rtc_war_tarw" 
+	      description="Time Alarm Register Write"
+	      toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset." >
+	      <choice value="0" name="Writes are ignored" />
+	      <choice value="1" name="Writes allowed"  isDefault="true" />
+	   </binaryOption>
+	   
+	   <binaryOption name="rtc_war_tprw" 
+	      description="Time Prescaler Register Write"
+	      toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset." >
+	      <choice value="0" name="Writes are ignored" />
+	      <choice value="1" name="Writes allowed"  isDefault="true" />
+	   </binaryOption>
+	   
+	   <binaryOption name="rtc_war_tsrw" 
+	      description="Time Seconds Register Write"
+	      toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset." >
+	      <choice value="0" name="Writes are ignored" />
+	      <choice value="1" name="Writes allowed"  isDefault="true" />
+	   </binaryOption>
+   </category>   
+   
+   <template><![CDATA[
+      \t//! RTC Write Access Register\n
+      \tstatic constexpr uint32_t war =
+      \t   RTC_WAR_IERW($(rtc_war_ierw)) | // Interrupt Enable Register Write
+      \t   RTC_WAR_LRW($(rtc_war_lrw))  | // Lock Register Write
+      \t   RTC_WAR_SRW($(rtc_war_srw))  | // Status Register Write
+      \t   RTC_WAR_CRW($(rtc_war_crw))  | // Control Register Write
+      \t   RTC_WAR_TCRW($(rtc_war_tcrw)) | // Time Compensation Register Write
+      \t   RTC_WAR_TARW($(rtc_war_tarw)) | // Time Alarm Register Write
+      \t   RTC_WAR_TPRW($(rtc_war_tprw)) | // Time Prescaler Register Write
+      \t   RTC_WAR_TSRW($(rtc_war_tsrw));  // Time Seconds Register Write\n\n
+    ]]></template>     
+
+   <category name="Read Access" description="Controls read access to RTC Registers">
+	   <binaryOption name="rtc_rar_ierr" 
+	      description="Interrupt Enable Register Read"
+	      toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset." >
+	      <choice value="0" name="Reads are ignored" />
+	      <choice value="1" name="Reads allowed"  isDefault="true" />
+	   </binaryOption>
+	   
+	   <binaryOption name="rtc_rar_lrr" 
+	      description="Lock Register Read"
+	      toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset." >
+	      <choice value="0" name="Reads are ignored" />
+	      <choice value="1" name="Reads allowed"  isDefault="true" />
+	   </binaryOption>
+	   
+	   <binaryOption name="rtc_rar_srr" 
+	      description="Status Register Read"
+	      toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset." >
+	      <choice value="0" name="Reads are ignored" />
+	      <choice value="1" name="Reads allowed"  isDefault="true" />
+	   </binaryOption>
+	   
+	   <binaryOption name="rtc_rar_crr" 
+	      description="Control Register Read"
+	      toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset." >
+	      <choice value="0" name="Reads are ignored" />
+	      <choice value="1" name="Reads allowed"  isDefault="true" />
+	   </binaryOption>
+	   
+	   <binaryOption name="rtc_rar_tcrr" 
+	      description="Time Compensation Register Read"
+	      toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset." >
+	      <choice value="0" name="Reads are ignored" />
+	      <choice value="1" name="Reads allowed"  isDefault="true" />
+	   </binaryOption>
+	   
+	   <binaryOption name="rtc_rar_tarr" 
+	      description="Time Alarm Register Read"
+	      toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset." >
+	      <choice value="0" name="Reads are ignored" />
+	      <choice value="1" name="Reads allowed"  isDefault="true" />
+	   </binaryOption>
+	   
+	   <binaryOption name="rtc_rar_tprr" 
+	      description="Time Prescaler Register Read"
+	      toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset." >
+	      <choice value="0" name="Reads are ignored" />
+	      <choice value="1" name="Reads allowed"  isDefault="true" />
+	   </binaryOption>
+	   
+	   <binaryOption name="rtc_rar_tsrr" 
+	      description="Time Seconds Register Read"
+	      toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset." >
+	      <choice value="0" name="Reads are ignored" />
+	      <choice value="1" name="Reads allowed"  isDefault="true" />
+	   </binaryOption>
+   </category>
+   
+   <template><![CDATA[
+      \t//! RTC Read Access Register\n
+      \tstatic constexpr uint32_t rar =
+      \t   RTC_RAR_IERR($(rtc_rar_ierr)) | // Interrupt Enable Register Read  
+      \t   RTC_RAR_LRR($(rtc_rar_lrr))  | // Lock Register Read              
+      \t   RTC_RAR_SRR($(rtc_rar_srr))  | // Status Register Read            
+      \t   RTC_RAR_CRR($(rtc_rar_crr))  | // Control Register Read           
+      \t   RTC_RAR_TCRR($(rtc_rar_tcrr)) | // Time Compensation Register Read 
+      \t   RTC_RAR_TARR($(rtc_rar_tarr)) | // Time Alarm Register Read        
+      \t   RTC_RAR_TPRR($(rtc_rar_tprr)) | // Time Prescaler Register Read    
+      \t   RTC_RAR_TSRR($(rtc_rar_tsrr));  // Time Seconds Register Read\n\n  
+    ]]></template>     
+
    <aliasOption key="/SIM/sim_sopt2_rtcclkoutsel" constant="false" />
    
    <intOption name="rtc_clkout"
@@ -93,9 +309,86 @@
 
    <xi:include href="_irqOption.xml"/>
 
-   <category name="Device Parameters" description="Register values">
-      <category name="RTC CR" description="Real Time Clock">
+   <choiceOption name="rtc_year"
+      description="Initial Year" 
+      toolTip="Used for coldstart" >
+      <choice value="2017"  name="2017" isDefault="true" />
+      <choice value="2018"  name="2018" />
+      <choice value="2019"  name="2019" />
+      <choice value="2020"  name="2020" />
+   </choiceOption>
+
+   <choiceOption name="rtc_month"
+      description="Initial Month" 
+      toolTip="Used for coldstart" >
+      <choice value="0"    name="Jan" />
+      <choice value="31"   name="Feb" />
+      <choice value="59"   name="March" />
+      <choice value="90"   name="April" />
+      <choice value="120"  name="May" />
+      <choice value="151"  name="June" />
+      <choice value="181"  name="July" isDefault="true" />
+      <choice value="212"  name="August" />
+      <choice value="243"  name="September" />
+      <choice value="273"  name="October" />
+      <choice value="304"  name="November" />
+      <choice value="335"  name="December" />
+   </choiceOption>
+
+   <intOption name="rtc_day" min="1" max="31" value="1"
+      description="Initial Day of Month" 
+      toolTip="Used for coldstart" />
+   
+   <intOption name="rtc_hour" min="0" max="23" value="12"
+      description="Initial Hour of Day" 
+      toolTip="Used for coldstart" />
+   
+   <intOption name="rtc_minute" min="0" max="59" value="0"
+      description="Initial Minute of Hour" 
+      toolTip="Used for coldstart" />
+   
+   <template><![CDATA[
+      \t//! Time for cold start (corrected for 12 leap years since 1970)
+      \tstatic constexpr uint32_t coldStartTime = 
+      \t         (((($(rtc_year)-1970)*365UL +
+      \t            ($(rtc_month)) +
+      \t            ($(rtc_day)+12-1))*24 +
+      \t           ($(rtc_hour)))*60 +
+      \t          ($(rtc_minute)))*60;
+    ]]></template>     
+
+   <category name="Device Registers (view only)" description="RTC Register values">
+      <category name="RTC CR" description="RTC Control Register">
+         <aliasOption name="rtc_cr_scp" />
+         <aliasOption name="rtc_cr_clko" />
          <aliasOption name="rtc_cr_osce" />
+         <aliasOption name="rtc_cr_um" />
+         <aliasOption name="rtc_cr_sup" />
+         <aliasOption name="rtc_cr_wpe" />
+      </category>   
+      <category name="RTC TCR" description="RTC Time Compensation Register">
+         <aliasOption name="rtc_tcr_cir" />
+         <aliasOption name="rtc_tcr_tcr" />
+      </category>   
+      <category name="RTC WAR" description="RTC Write Access Register">
+         <aliasOption name="rtc_war_ierw" />
+         <aliasOption name="rtc_war_lrw" />
+         <aliasOption name="rtc_war_srw" />
+         <aliasOption name="rtc_war_crw" />
+         <aliasOption name="rtc_war_tcrw" />
+         <aliasOption name="rtc_war_tarw" />
+         <aliasOption name="rtc_war_tprw" />
+         <aliasOption name="rtc_war_tsrw" />
+      </category>   
+      <category name="RTC RAR" description="RTC Read Access Register">
+         <aliasOption name="rtc_rar_ierr" />
+         <aliasOption name="rtc_rar_lrr" />
+         <aliasOption name="rtc_rar_srr" />
+         <aliasOption name="rtc_rar_crr" />
+         <aliasOption name="rtc_rar_tcrr" />
+         <aliasOption name="rtc_rar_tarr" />
+         <aliasOption name="rtc_rar_tprr" />
+         <aliasOption name="rtc_rar_tsrr" />
       </category>   
    </category>
 
@@ -110,22 +403,10 @@
       <copy source="Startup_Code/rtc.cpp"        target="Startup_Code/rtc.cpp"       replace="true"  derived="true" />
       <copy source="Snippets/rtc-example.cpp"    target="Snippets/rtc-example.cpp"   replace="true"  derived="true" />
    </projectActionList>
-         
+
    <template><![CDATA[
-      \t//! Frequency of RTC External Clock or Crystal\n
-      \tstatic constexpr uint32_t rtcclk_clock = $(rtcclk_clock)UL;\n\n
-      
-      \t//! Oscillator control register\n
-      \tstatic constexpr uint32_t cr =
-      \t   RTC_CR_OSCE($(rtc_cr_osce)) | // Enables 32kHz oscillator [RTC_32K]
-      \t   RTC_CR_CLKO($(rtc_cr_clko)) | // Disables RTC 32kHz Clock Output
-      \t   RTC_CR_UM($(rtc_cr_um))   | // Update Mode
-      \t   RTC_CR_SUP($(rtc_cr_sup))  | // Supervisor access
-      \t   RTC_CR_WPE($(rtc_cr_wpe))  | // Wakeup Pin Enable
-      \t   RTC_CR_SCP($(rtc_cr_scp));   // RTC Oscillator load capacitance\n\n
-      
       \t/**
-      \t * Get RTC clock (internal, not masked by RTC_CR_CLKO)
+      \t * Get RTC clock frequency (internal, not masked by RTC_CR_CLKO)
       \t *
       \t * @return Clock frequency as uint32_t
       \t */
@@ -134,7 +415,7 @@
       \t}\n\n
       
       \t/**
-      \t * Get RTC clock (external, masked by RTC_CR_CLKO)
+      \t * Get RTC clock frequency (external, masked by RTC_CR_CLKO)
       \t *
       \t * @return Clock frequency as uint32_t
       \t */
@@ -142,4 +423,5 @@
       \t   return (rtc->CR&RTC_CR_CLKO_MASK)?0:getInternalClock();
       \t}\n\n
    ]]></template>
+
 </devicePage>

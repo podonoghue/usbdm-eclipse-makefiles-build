@@ -41,7 +41,7 @@ void rtc_initialise(void) {
 }
 
 // Dummy hook routine for when CMSIS is not used.
-__attribute__((weak))
+__attribute__((__weak__))
 void software_init_hook (void) {
 }
 
@@ -83,7 +83,7 @@ void SystemInitLowLevel(void) {
 #endif
 
 #ifdef WDOG_CS_UPDATE
-/* Unlocking Watchdog word */
+   /* Unlocking Watchdog word */
 #define WDOG_UPDATE_KEY  (0xD928C520U)
 
    // Disable watch-dog
@@ -108,9 +108,9 @@ void SystemInitLowLevel(void) {
 #endif
 
 #ifdef WDOG_UNLOCK_WDOGUNLOCK_MASK
-   /* Unlocking Watchdog sequence words*/
-   #define WDOG_KEY1   (0xC520)
-   #define WDOG_KEY2   (0xD928)
+/* Unlocking Watchdog sequence words*/
+#define WDOG_KEY1   (0xC520)
+#define WDOG_KEY2   (0xD928)
 
    /* Disable watch-dog */
    WDOG->UNLOCK  = WDOG_UNLOCK_WDOGUNLOCK(WDOG_KEY1);

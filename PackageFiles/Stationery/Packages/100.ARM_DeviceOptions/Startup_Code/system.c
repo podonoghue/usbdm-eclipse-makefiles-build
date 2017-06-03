@@ -48,7 +48,7 @@ void rtc_initialise(void) {
 }
 
 // Dummy hook routine for when CMSIS is not used.
-__attribute__((weak))
+__attribute__((__weak__))
 void software_init_hook (void) {
 }
 
@@ -56,7 +56,7 @@ void software_init_hook (void) {
 #warning Due to limited RAM the C library standard initialisation is not called - BSS and DATA are still initialised
 #endif
 
-/*!
+/**
  *  @brief Low-level initialize the system
  *
  *  Low level setup of the microcontroller system. \n
@@ -64,8 +64,10 @@ void software_init_hook (void) {
  *  May NOT use globals etc (as will be overwritten by BSS initialization)
  */
 void SystemInitLowLevel(void) {
-   /* This is generic initialization code */
-   /* It may not be correct for a specific target */
+   /*
+    * This is generic initialization code
+    * It may not be correct for a specific target
+    */
 
    /* Set the interrupt vector table position */
    SCB_VTOR = (uint32_t)__vector_table;
@@ -81,8 +83,10 @@ void SystemInitLowLevel(void) {
  */
 __attribute__ ((constructor))
 void SystemInit(void) {
-   /* This is generic initialization code */
-   /* It may not be correct for a specific target */
+   /*
+    * This is generic initialization code
+    * It may not be correct for a specific target
+    */
 
    /* Use Clock initialisation - if present */
    clock_initialise();
