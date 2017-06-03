@@ -10,11 +10,16 @@
 #define SOURCES_FLASH_H_
 
 #include <assert.h>
-#include "hardware.h"
 #include "derivative.h"
+#include "hardware.h"
 #include "delay.h"
 
 namespace USBDM {
+/**
+ * @addtogroup FLASH_Group FTFL, Flash interface
+ * @brief Flash interface
+ * @{
+ */
 
 // Error codes
 typedef enum {
@@ -36,6 +41,9 @@ typedef enum {
    FLASH_ERR_NEW_EEPROM        = (15), // Indicates EEPROM has just bee partitioned and need initialisation
 } FlashDriverError_t;
 
+/**
+ * Class representing Flash interface
+ */
 class Flash : public FtflInfo {
 
 protected:
@@ -446,6 +454,10 @@ public:
       }
    }
 };
+
+/**
+ * @}
+ */
 
 } // namespace USBDM
 

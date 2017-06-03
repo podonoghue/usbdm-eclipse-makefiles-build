@@ -6,6 +6,11 @@
 
    <xi:include href="_irqOption.xml"/>
    
+   <projectActionList id = "gpio_def" >
+      <copy source="Snippets/digital-example1.cpp"  target="Snippets/digital-example1.cpp" />
+      <copy source="Snippets/digital-example2.cpp"  target="Snippets/digital-example2.cpp" />
+   </projectActionList>
+
    <!--
    <choiceOption name="port_pcr_irqc" 
          description="Interrupt Configuration"
