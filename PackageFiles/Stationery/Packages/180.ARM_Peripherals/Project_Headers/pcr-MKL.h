@@ -110,70 +110,146 @@ struct PcrInfo {
 /**
  * Assumes all PORT function are mapped to MUX=1
  */
-static constexpr uint8_t    FIXED_GPIO_FN      = 1;
+//static constexpr uint8_t    FIXED_GPIO_FN = 1;
 /**
  * Assumes all ADC function are mapped to MUX=0
  */
-static constexpr uint8_t    FIXED_ADC_FN       = 0;
+//static constexpr uint8_t    FIXED_ADC_FN  = 0;
 
-/**
- * Default PCR setting for pins (excluding multiplexor value)
- * High drive strength + Pull-up
- */
-#ifndef PORT_PCR_DSE_MASK
+#ifndef PORT_PCR_DSE
 // Some device don't have DSE
-#define PORT_PCR_DSE_MASK (0)
+#define PORT_PCR_DSE(x) (0)
 #endif
-static constexpr uint32_t    DEFAULT_PCR      = (PORT_PCR_DSE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
 
-/**
- * Default PCR value for pins used as GPIO (including multiplexor value)
- */
-static constexpr uint32_t    GPIO_DEFAULT_PCR = DEFAULT_PCR|PORT_PCR_MUX(FIXED_GPIO_FN);
-
-#ifndef PORT_PCR_ODE_MASK
+#ifndef PORT_PCR_ODE
 /**
  * Some devices don't have ODE function on pin
  * The open-drain mode is automatically selected when I2C function is selected for the pin
  */
-#define PORT_PCR_ODE_MASK 0
+#define PORT_PCR_ODE(x) 0
 #endif
-/**
- * Default PCR setting for I2C pins (excluding multiplexor value)
- * High drive strength + Pull-up + Open-drain (if available)
- */
-static constexpr uint32_t  I2C_DEFAULT_PCR = DEFAULT_PCR|PORT_PCR_ODE_MASK;
-
-/**
- * Default PCR setting for (E)XTAL pins (excluding multiplexor value)
- */
-static constexpr uint32_t  XTAL_DEFAULT_PCR = 0;
 
 /**
  * Pull device modes
  */
-enum PullModes {
-   PullNone = PORT_PCR_PE(0),
-   PullUp   = PORT_PCR_PE(1)|PORT_PCR_PS(1),
-   PullDown = PORT_PCR_PE(1)|PORT_PCR_PS(0),
+enum PullMode {
+   PullNone = PORT_PCR_PE(0),                //!< No pull device
+   PullUp   = PORT_PCR_PE(1)|PORT_PCR_PS(1), //!< Weak pull-up
+   PullDown = PORT_PCR_PE(1)|PORT_PCR_PS(0), //!< Weak pull-down
+};
+
+/**
+ * Pin drive strengths
+ */
+enum DriveStrength {
+   DriveLow  = PORT_PCR_DSE(0), //!< Low drive strength
+   DriveHigh = PORT_PCR_DSE(1), //!< High drive strength
+};
+
+/**
+ * Pin drive mode
+ */
+enum DriveMode {
+   PushPull      = PORT_PCR_ODE(0), //!< Push-pull output
+   OpenDrain     = PORT_PCR_ODE(1), //!< Open-drain output
+   OpenCollector = OpenDrain,       //!< For oldies like me
 };
 
 /**
  * Pin interrupt/DMA modes
  */
 enum InterruptMode {
-   PinIrqNone     = PORT_PCR_IRQC(0),
+   PinIrqNone     = PORT_PCR_IRQC(0),   //!< No interrupt or DMA function
 
-   PinDmaRising   = PORT_PCR_IRQC(1),
-   PinDmaFalling  = PORT_PCR_IRQC(2),
-   PinDmaEither   = PORT_PCR_IRQC(3),
+   PinDmaRising   = PORT_PCR_IRQC(1),   //!< Generate DMA request on rising edge
+   PinDmaFalling  = PORT_PCR_IRQC(2),   //!< Generate DMA request on falling edge
+   PinDmaEither   = PORT_PCR_IRQC(3),   //!< Generate DMA request on either edge
 
-   PinIrqLow      = PORT_PCR_IRQC(8),
-   PinIrqRising   = PORT_PCR_IRQC(9),
-   PinIrqFalling  = PORT_PCR_IRQC(10),
-   PinIrqEither   = PORT_PCR_IRQC(11),
-   PinIrqHigh     = PORT_PCR_IRQC(12),
+   PinIrqLow      = PORT_PCR_IRQC(8),   //!< Generate IRQ request when low
+   PinIrqRising   = PORT_PCR_IRQC(9),   //!< Generate IRQ request on rising edge
+   PinIrqFalling  = PORT_PCR_IRQC(10),  //!< Generate IRQ request on falling edge
+   PinIrqEither   = PORT_PCR_IRQC(11),  //!< Generate IRQ request on either edge
+   PinIrqHigh     = PORT_PCR_IRQC(12),  //!< Generate IRQ request when high
 };
+
+/**
+ * Pin Multiplexor setting
+ */
+enum PinMux {
+   PinMuxNone      = (0),   //!< Used for default/no mapping
+   PinMuxAnalogue  = (0),   //!< Analogue function
+   PinMuxAnalog    = PinMuxAnalogue,
+   PinMuxTsi       = PinMuxAnalogue,    //!< Touch Sense function is analogue
+   PinMuxGpio      = (1),   //!< Gpio function
+   PinMux2         = (2),   //!< Mux 2
+   PinMux3         = (3),   //!< Mux 3
+   PinMux4         = (4),   //!< Mux 4
+   PinMux5         = (5),   //!< Mux 5
+   PinMux6         = (6),   //!< Mux 6
+   PinMux7         = (7),   //!< Mux 7
+};
+
+using PcrValue = uint32_t;
+
+/**
+ * Construct PCR value from individual bit masks
+ *
+ * @param pullMode      One of PullNone, PullUp, PullDown, (defaults to PullNone)
+ * @param driveStrength One of DriveLow, DriveHigh, (defaults to DriveLow)
+ * @param driveMode     One of PushPull, OpenDrain, OpenCollector, (defaults to PushPull)
+ * @param interruptMode One of PinIrqNone, etc (defaults to PinIrqNone)
+ * @param muxValue      Multiplexor setting (defaults to 0)
+ */
+constexpr PcrValue pcrValue(
+      PullMode       pullMode       = PullNone,
+      DriveStrength  driveStrength  = DriveLow,
+      DriveMode      driveMode      = PushPull,
+      InterruptMode  interruptMode  = PinIrqNone,
+      PinMux         muxValue       = PinMuxNone) {
+   return pullMode|driveStrength|driveMode|interruptMode|((muxValue<<8)&0x700);
+}
+
+/**
+ * Construct PCR value from existing PcrValue and extra flags
+ *
+ * @param original      Original value
+ * @param extraFlags    Extra flags
+ */
+constexpr PcrValue pcrValue(PcrValue original, uint32_t extraFlags) {
+   return original|extraFlags;
+}
+
+/**
+ * Construct PCR value from flags
+ *
+ * @param flags Extra flags
+ */
+constexpr PcrValue pcrValue(uint32_t flags) {
+   return flags;
+}
+
+/**
+ * Default PCR setting for pins (excluding multiplexor value)
+ * High drive strength + Pull-up
+ */
+static constexpr PcrValue DEFAULT_PCR = pcrValue(PullUp, DriveHigh);
+
+/**
+ * Default PCR value for pins used as GPIO (including multiplexor value)
+ * High drive strength + Pull-up + GPIO_MUX value
+ */
+static constexpr PcrValue GPIO_DEFAULT_PCR = pcrValue(PullUp, DriveHigh, PushPull, PinIrqNone, PinMuxGpio);
+
+/**
+ * Default PCR setting for I2C pins (excluding multiplexor value)
+ * High drive strength + Pull-up + Open-drain (if available)
+ */
+static constexpr PcrValue I2C_DEFAULT_PCR =  pcrValue(PullUp, DriveHigh, OpenDrain, PinIrqNone);
+
+/**
+ * Default PCR setting for (E)XTAL pins (excluding multiplexor value)
+ */
+static constexpr PcrValue XTAL_DEFAULT_PCR = pcrValue(PullNone, DriveLow, PushPull, PinIrqNone);
 
 /**
  * Type definition for PIT interrupt call back
@@ -242,7 +318,7 @@ PinCallbackFunction USBDM::PcrBase_T<pcrAddress>::fCallback = nullptr;
  * @tparam bitNum          Bit number e.g. 3
  * @tparam defPcrValue     Default value for PCR (including MUX value)
  */
-template<uint32_t clockMask, uint32_t pcrAddress, int32_t bitNum, uint32_t defPcrValue>
+template<uint32_t clockMask, uint32_t pcrAddress, int32_t bitNum, PcrValue defPcrValue>
 class Pcr_T : public PcrBase_T<pcrAddress> {
 
 private:
@@ -276,9 +352,9 @@ public:
     * Set pin PCR value\n
     * The clock to the port will be enabled before changing the PCR
     *
-    * @param pcrValue PCR value made up of PORT_PCR_x masks including MUX value
+    * @param pcrValue PCR value constructed using pcrValue() including MUX value. See See \ref pcrValue()
     */
-   static void setPCR(uint32_t pcrValue=defPcrValue) {
+   static void setPCR(PcrValue pcrValue=defPcrValue) {
       if ((pcrAddress != 0) && (bitNum >= 0)) {
          enablePortClocks(clockMask);
 
@@ -319,17 +395,42 @@ public:
     *
     *  @param mode Pull selection mode
     */
-   static void setPullDevice(PullModes mode) {
+   static void setPullDevice(PullMode mode) {
       *pcrReg = (*pcrReg&~PORT_PCR_PS_MASK) | mode;
+   }
+
+   /**
+    * Set drive mode on pin\n
+    * Assumes clock to the port has already been enabled\n
+    *
+    *  @param mode Drive mode
+    */
+   static void setDriveMode(DriveMode mode) {
+      *pcrReg = (*pcrReg&~PORT_PCR_ODE_MASK) | mode;
+   }
+
+   /**
+    * Set drive strength on pin\n
+    * Assumes clock to the port has already been enabled\n
+    *
+    *  @param strength Drive strength to set
+    */
+   static void setDriveStrength(DriveStrength strength) {
+      *pcrReg = (*pcrReg&~PORT_PCR_DSE_MASK) | strength;
    }
 
 #if defined(PORT_PCR_LK_MASK)
    /**
     * Locks most of the PCR properties e.g. drive strength, pull-device etc.\n
     * Assumes clock to the port has already been enabled\n
+    * The pin properties remains locked until the next reset\n
+    * Not supported on all devices
     */
    static void lock() {
       *pcrReg |= PORT_PCR_LK_MASK;
+   }
+#else
+   static void lock() {
    }
 #endif
 
