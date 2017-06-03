@@ -103,7 +103,7 @@ namespace USBDM {
 class MMA845x {
 
 private:
-   USBDM::I2c *i2c;
+   USBDM::I2c &i2c;
    static const uint8_t DEVICE_ADDRESS = 0x1D<<1;  // SA0 pin : 0=>1C, 1=>1D
    static const uint8_t WHO_AM_I_VALUE = 0x1A;
 
@@ -143,7 +143,7 @@ public:
     * @param i2c  - The I2C interface to use
     * @param mode - Mode of operation (gain and filtering)
     */
-   MMA845x(USBDM::I2c *i2c, AccelerometerMode mode);
+   MMA845x(USBDM::I2c &i2c, AccelerometerMode mode);
    /**
     * Put accelerometer into Standby mode
     */

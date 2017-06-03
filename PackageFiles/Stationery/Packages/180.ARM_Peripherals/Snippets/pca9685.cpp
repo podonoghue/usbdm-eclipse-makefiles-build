@@ -81,10 +81,8 @@ inline constexpr bool constexpr_assert( bool test ) {
  * @param mode2Value       Mode Register 2 value
  *
  */
-PCA9685::PCA9685(I2c *i2cInterface, uint8_t deviceAddress, uint8_t prescaleValue, uint8_t mode1Value, uint8_t mode2Value) {
-   slaveAddress = deviceAddress;
-
-   this->i2cInterface = i2cInterface;
+PCA9685::PCA9685(I2c &i2c, uint8_t deviceAddress, uint8_t prescaleValue, uint8_t mode1Value, uint8_t mode2Value)
+  : i2c(i2c), slaveAddress(deviceAddress) {
 
    assert((PCA9685_DEFAULT_OSC_PRESCALE & ~0xFFU) == 0); // Check if OSC_PRESCALE is too large
 
@@ -100,13 +98,13 @@ PCA9685::PCA9685(I2c *i2cInterface, uint8_t deviceAddress, uint8_t prescaleValue
        /* subaddr3         */   0,
        /* all call address */   ALL_CALL_ADDDRESS
    };
-   i2cInterface->transmit(slaveAddress, sizeof(mode1data), mode1data);
+   i2c.transmit(slaveAddress, sizeof(mode1data), mode1data);
    //
    const uint8_t prescaleData[] = {
       PCA9685_PRE_SCALE,
       prescaleValue   // Prescale value for clock
    };
-   i2cInterface->transmit(slaveAddress, sizeof(prescaleData), prescaleData);
+   i2c.transmit(slaveAddress, sizeof(prescaleData), prescaleData);
    // All outputs off
    allHigh();
 }
@@ -122,7 +120,7 @@ void PCA9685::allHigh(void) {
       /* offLow   */ (uint8_t) 0,
       /* offHigh  */ (uint8_t) OUTx_OFF_H_FULL_MASK,
    };
-   i2cInterface->transmit(ALL_CALL_ADDDRESS, sizeof(data), data);
+   i2c.transmit(ALL_CALL_ADDDRESS, sizeof(data), data);
 }
 
 /**
@@ -136,7 +134,7 @@ void PCA9685::allLow(void) {
       /* offLow   */ (uint8_t) 0,
       /* offHigh  */ (uint8_t) 0,
    };
-   i2cInterface->transmit(ALL_CALL_ADDDRESS, sizeof(data), data);
+   i2c.transmit(ALL_CALL_ADDDRESS, sizeof(data), data);
 }
 
 /**
@@ -159,7 +157,7 @@ void PCA9685::set_pin_pwm(unsigned pinNum, unsigned dutyCycle) {
       /* offLow   */ (uint8_t) offCount,
       /* offHigh  */ (uint8_t) ((offCount>>8)&OUTx_OFF_H_COUNT_MASK),
    };
-   i2cInterface->transmit(slaveAddress, sizeof(data), data);
+   i2c.transmit(slaveAddress, sizeof(data), data);
 }
 
 /**
@@ -175,7 +173,7 @@ void PCA9685::set_pin_low(unsigned pinNum) {
       /* offLow   */ (uint8_t) 0,
       /* offHigh  */ (uint8_t) 0,
    };
-   i2cInterface->transmit(slaveAddress, sizeof(data), data);
+   i2c.transmit(slaveAddress, sizeof(data), data);
 }
 
 /**
@@ -191,7 +189,7 @@ void PCA9685::set_pin_high(unsigned pinNum) {
       /* offLow   */ (uint8_t) 0,
       /* offHigh  */ (uint8_t) OUTx_OFF_H_FULL_MASK,
    };
-   i2cInterface->transmit(slaveAddress, sizeof(data), data);
+   i2c.transmit(slaveAddress, sizeof(data), data);
 }
 
 } // End namespace USBDM

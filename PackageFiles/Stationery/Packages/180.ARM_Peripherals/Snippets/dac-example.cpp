@@ -1,4 +1,4 @@
-/*
+/**
  ============================================================================
  * @file    dac-example.cpp
  * @brief   Basic C++ demo using DAC class

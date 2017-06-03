@@ -1,8 +1,11 @@
 /**
- * @file mag3310.cpp
- *
- *  Created on: 22/11/2013
- *      Author: podonoghue
+ ============================================================================
+ * @file     mag3310.cpp
+ * @brief    Interface for MAG3310 3-axis magnetometer
+ * @version  V4.11.1.70
+ * @date     18 June 2015
+ * @author   podonoghue
+ ============================================================================
  */
 #include "mag3310.h"
 #include "delay.h"
@@ -45,7 +48,7 @@ enum {
  * @param i2c  - The I2C interface to use
  * @param mode - Mode of operation (gain and filtering)
  */
-MAG3310::MAG3310(USBDM::I2c *i2c) : i2c(i2c) {
+MAG3310::MAG3310(USBDM::I2c &i2c) : i2c(i2c) {
    failedInit = false;
    if (readReg(WHO_AM_I) != WHO_AM_I_VALUE) {
       failedInit = true;
@@ -69,7 +72,7 @@ MAG3310::MAG3310(USBDM::I2c *i2c) : i2c(i2c) {
 uint8_t MAG3310::readReg(uint8_t regNum) {
    uint8_t command[] = {regNum};
 
-   i2c->txRx(DEVICE_ADDRESS, 1, sizeof(command), command);
+   i2c.txRx(DEVICE_ADDRESS, 1, sizeof(command), command);
    return command[0];
 }
 
@@ -82,7 +85,7 @@ uint8_t MAG3310::readReg(uint8_t regNum) {
 void MAG3310::writeReg(uint8_t regNum, uint8_t value) {
    uint8_t command[] = {regNum, value};
 
-   i2c->transmit(DEVICE_ADDRESS, sizeof(command), command);
+   i2c.transmit(DEVICE_ADDRESS, sizeof(command), command);
 }
 
 /**
@@ -113,7 +116,7 @@ void MAG3310::readMagnetometerXYZ(int *status, int16_t *x, int16_t *y, int16_t *
    uint8_t dataXYZ[7] = {M_DR_STATUS};
 
    // Receive 7 registers (status, X-high, X-low, Y-high, Y-low, Z-high & Z-low)
-   i2c->txRx(DEVICE_ADDRESS, 1, sizeof(dataXYZ), dataXYZ);
+   i2c.txRx(DEVICE_ADDRESS, 1, sizeof(dataXYZ), dataXYZ);
 
    // Unpack data and return
    *status = dataXYZ[0];
@@ -129,7 +132,7 @@ void MAG3310::readMagnetometerXYZ(int *status, int16_t *x, int16_t *y, int16_t *
  */
 uint32_t MAG3310::readID(void) {
    uint8_t values[] = {WHO_AM_I};
-   i2c->txRx(DEVICE_ADDRESS, 1, sizeof(values), values);
+   i2c.txRx(DEVICE_ADDRESS, 1, sizeof(values), values);
    return values[0];
 }
 

@@ -1,22 +1,35 @@
-/*----------------------------------------------------------------------------
+/**
+ ============================================================================
  * @file cmsis-cpp-mailQueue.cpp
+ * @brief RTX Mail Queue example program
  *
- * RTX example program
- *----------------------------------------------------------------------------
+ *  Created on: 10/6/2016
+ *      Author: podonoghue
+ ============================================================================
  */
 #include <stdio.h>
 #include "cmsis.h"                      // CMSIS RTX
 #include "hardware.h"                   // Hardware interface
 
+/**
+ * Mail item
+ */
 struct MailData {
    int a;
    int b;
 };
 
+/* Indicates the test is complete */
 static bool mailQueueTestComplete = false;
 
+/**
+ * Mail queue
+ */
 static CMSIS::MailQueue<MailData, 10> mailQueue;
 
+/**
+ *  Thread for sending to the mail queue
+ */
 void mailQueueSender(const void *) {
    for (unsigned i=0; i<20; i++) {
       MailData *data = mailQueue.alloc(0);
@@ -36,6 +49,9 @@ void mailQueueSender(const void *) {
    }
 }
 
+/**
+ *  Thread for receiving from the mail queue
+ */
 void mailQueueReceiver(const void *) {
    for(unsigned i=0; ; i++) {
       osEvent event = mailQueue.get(5000);
@@ -50,9 +66,9 @@ void mailQueueReceiver(const void *) {
    printf("=== Receiver complete ====\n\r");
 }
 
-//
-// Mail queue example
-//
+/**
+ *  Mail queue example
+ */
 void mailQueueExample() {
 
    printf(" mail mailQueue.getId() = %p\n\r", mailQueue.getId());

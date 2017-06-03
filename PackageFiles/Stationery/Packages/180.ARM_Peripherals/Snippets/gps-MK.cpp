@@ -1,10 +1,12 @@
-/*
- *  gps.c (derived from gps-mk.cpp)
+/**
+ ============================================================================
+ * @file   gps.cpp (derived from gps-MK.cpp)
+ * @brief  GPS interface code
  *
  *  Created on: 29/11/2015
  *      Author: pgo
+ ============================================================================
  */
-
 #include <string.h>
 #include <stdio.h>
 

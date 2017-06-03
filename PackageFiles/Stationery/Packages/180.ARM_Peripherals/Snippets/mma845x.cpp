@@ -77,7 +77,7 @@ enum {
  * @param i2c  - The I2C interface to use
  * @param mode - Mode of operation (gain and filtering)
  */
-MMA845x::MMA845x(USBDM::I2c *i2c, AccelerometerMode mode) : i2c(i2c) {
+MMA845x::MMA845x(USBDM::I2c &i2c, AccelerometerMode mode) : i2c(i2c) {
    if (readReg(WHO_AM_I) != WHO_AM_I_VALUE) {
       failedInit = true;
       return;
@@ -94,7 +94,7 @@ MMA845x::MMA845x(USBDM::I2c *i2c, AccelerometerMode mode) : i2c(i2c) {
  */
 uint8_t MMA845x::readReg(uint8_t regNum) {
    uint8_t command[1];
-   i2c->txRx(DEVICE_ADDRESS, 1, &regNum, sizeof(command), command);
+   i2c.txRx(DEVICE_ADDRESS, 1, &regNum, sizeof(command), command);
    return command[0];
 }
 
@@ -107,7 +107,7 @@ uint8_t MMA845x::readReg(uint8_t regNum) {
 void MMA845x::writeReg(uint8_t regNum, uint8_t value) {
    uint8_t command[] = {regNum, value};
 
-   i2c->transmit(DEVICE_ADDRESS, sizeof(command), command);
+   i2c.transmit(DEVICE_ADDRESS, sizeof(command), command);
 }
 
 /**
@@ -150,7 +150,7 @@ void MMA845x::readAccelerometerXYZ(int *status, int16_t *x, int16_t *y, int16_t 
    uint8_t dataXYZ[7] = {STATUS};
 
    // Receive 7 registers (status, X-high, X-low, Y-high, Y-low, Z-high & Z-low)
-   i2c->txRx(DEVICE_ADDRESS, 1, sizeof(dataXYZ), dataXYZ);
+   i2c.txRx(DEVICE_ADDRESS, 1, sizeof(dataXYZ), dataXYZ);
 
    // Unpack data and return
    *status = dataXYZ[0];
@@ -182,13 +182,14 @@ void MMA845x::setAccelerometerMode(AccelerometerMode mode) {
  */
 uint32_t MMA845x::readID(void) {
    uint8_t values[] = {WHO_AM_I};
-   i2c->txRx(DEVICE_ADDRESS, 1, sizeof(values), values);
+   i2c.txRx(DEVICE_ADDRESS, 1, sizeof(values), values);
    return values[0];
 }
 
 /**
- * Calibrate accelerometer
- * (2g mode)
+ * Calibrate accelerometer (2g mode)
+ *
+ * This assumes the accelerometer is level and stationary.
  */
 void MMA845x::calibrateAccelerometer() {
 

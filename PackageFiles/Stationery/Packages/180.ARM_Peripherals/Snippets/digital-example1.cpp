@@ -1,11 +1,16 @@
 /**
+ ============================================================================
  * @file digital-example1.cpp
+ * @brief Basic digital output example
+ *
+ *  Created on: 10/1/2016
+ *      Author: podonoghue
+ ============================================================================
  */
 #include <stdio.h>
 #include "system.h"
 #include "derivative.h"
 #include "hardware.h"
-#include "delay.h"
 
 using namespace USBDM;
 

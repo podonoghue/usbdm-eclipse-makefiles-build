@@ -1,7 +1,7 @@
 /*
  ============================================================================
- * @file    main.c (derived from main-basic.cpp)
- * @brief   Basic C++ demo using GPIO class
+ * @file    rtc-example.cpp
+ * @brief   Basic C++ demo using USBDM::Rtc class
  *
  *  Created on: 10/1/2016
  *      Author: podonoghue
@@ -18,16 +18,15 @@
 /**
  * Real Time Clock Example
  */
-
 // LED connection - change as required
-using Led    =   $(demo.cpp.led:USBDM::GpioB<1>);
+using Led = $(demo.cpp.led:USBDM::GpioA<2,USBDM::ActiveLow>);
 
 /**
  * Callback handler from RTC Alarm
  */
 void handler(uint32_t timeSinceEpoch) {
    // Set repeat callback for 5 seconds from now
-   USBDM::Rtc::setCallback(handler, timeSinceEpoch+4);
+   USBDM::Rtc::setAlarm(timeSinceEpoch+4);
    Led::toggle();
 }
 
@@ -38,10 +37,12 @@ int main() {
    printf("SystemCoreClock = %lu\n", SystemCoreClock);
 
    // Enable RTC - done by startup code
-   // USBDM::Rtc::enable();
+//   USBDM::Rtc::initialise();
 
    // Set initial callback
-   USBDM::Rtc::setCallback(handler, USBDM::Rtc::getTime()+5);
+   USBDM::Rtc::setCallback(handler);
+   USBDM::Rtc::setAlarm(USBDM::Rtc::getTime()+5);
+   USBDM::Rtc::enableAlarmInterrupts();
 
    Led::setOutput();
    for(;;) {

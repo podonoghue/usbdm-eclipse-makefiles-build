@@ -1,11 +1,12 @@
 /**
+ ============================================================================
  * @file     hmc5883l.h
  * @brief    Interface for HMC5883L 3-axis magnetometer
- *
  * @version  V4.11.1.70
  * @date     18 June 2015
+ * @author   podonoghue
+ ============================================================================
  */
-
 #ifndef INCLUDE_USBDM_HMC5883L_H_
 #define INCLUDE_USBDM_HMC5883L_H_
  /*
@@ -71,7 +72,7 @@ class HMC5883L {
    //                               // after one or more of the data output registers are written to.
 
 private:
-   USBDM::I2c *i2c;
+   USBDM::I2c &i2c;
    static const uint8_t deviceAddress = 0x3C;
 
 public:
@@ -80,7 +81,7 @@ public:
     *
     * @param i2c - I2C interface to use
     */
-   HMC5883L(USBDM::I2c *i2c);
+   HMC5883L(USBDM::I2c &i2c);
 
    /**
     * Read ID from compass

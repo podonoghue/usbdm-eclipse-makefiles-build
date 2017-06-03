@@ -1,5 +1,11 @@
 /**
- * @file analogue-example.cpp
+ ============================================================================
+ * @file analogue-joystick-example.cpp
+ * @brief Example showing use of a use of 2 ADC channels with a 2-pot joystick
+ *
+ *  Created on: 10/6/2016
+ *      Author: podonoghue
+ ============================================================================
  */
 #include <stdio.h>
 #include "system.h"

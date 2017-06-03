@@ -1,5 +1,11 @@
 /**
- * @file mma845x-example.cpp
+ ============================================================================
+ * @file  mma845x-example.cpp
+ * @brief Demonstrates use of MMA845x Accelerometer over I2C
+ * @version  V4.11.1.90
+ * @author   podonoghue
+ * @note You may need to change the pin-mapping of the I2C interface
+============================================================================
  */
 #include <stdio.h>
 #include <math.h>
@@ -10,32 +16,42 @@
 #include "mma845x.h"
 #include "delay.h"
 
+// Allows access to USBDM library name-space
 using namespace USBDM;
 
+/*************************************************
+ * Global objects representing hardware
+ **************************************************/
+
+// I2C interface
+I2c0     i2c0;
+
+// Accelerometer via I2C
+MMA845x  accelerometer(i2c0, MMA845x::ACCEL_2Gmode);
+
+/**************************************************/
+
 /**
- * Demonstrates use of MMA845x Accelerometer over I2C
+ * Report accelerometer values
  *
- * You may need to change the pin-mapping of the I2C interface
+ * @param accelerometer Accelerometer to use
  */
-void report(MMA845x *accelerometer) {
+void report(MMA845x &accelerometer) {
    int accelStatus;
    int16_t accelX,accelY,accelZ;
 
-   accelerometer->readAccelerometerXYZ(&accelStatus, &accelX, &accelY, &accelZ);
+   accelerometer.readAccelerometerXYZ(&accelStatus, &accelX, &accelY, &accelZ);
    printf("s=0x%02X, aX=%10d, aY=%10d, aZ=%10d\n", accelStatus, accelX, accelY, accelZ);
 }
 
 int main() {
    printf("Starting\n");
 
-   // Instantiate interface
-   I2c *i2c = new $(demo.cpp.mma845x.i2c:I2c0)();
-   MMA845x *accelerometer = new MMA845x(i2c, MMA845x::ACCEL_2Gmode);
-
-   uint8_t id = accelerometer->readID();
+   uint8_t id = accelerometer.readID();
    printf("Device ID = 0x%02X (should be 0x1A)\n", id);
 
-   printf("Before simple calibration (make sure the device is level!)\n");
+   printf("Doing simple calibration\n"
+          "Make sure the device is level!\n");
    report(accelerometer);
    waitMS(400);
    report(accelerometer);
@@ -43,7 +59,7 @@ int main() {
    report(accelerometer);
    waitMS(400);
 
-   accelerometer->calibrateAccelerometer();
+   accelerometer.calibrateAccelerometer();
 
    // Make sure we have new values
    waitMS(100);
@@ -51,7 +67,7 @@ int main() {
    printf("After calibration\n");
    for(;;) {
       report(accelerometer);
-      waitMS(400);
+//      waitMS(400);
    }
 }
 

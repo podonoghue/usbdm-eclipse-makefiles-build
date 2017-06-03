@@ -1,5 +1,11 @@
 /**
- * @file analogue-example.cpp
+ ============================================================================
+ * @file analogue-diff-example.cpp
+ * @brief Example showing use of a differential ADC channel
+ *
+ *  Created on: 10/6/2016
+ *      Author: podonoghue
+ ============================================================================
  */
 #include <stdio.h>
 #include "system.h"

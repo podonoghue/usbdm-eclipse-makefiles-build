@@ -2,8 +2,8 @@
  * @file    fonts.h
  * @brief   Fonts for LCD
  */
-#ifndef INCLUDE_USBDM_FONTS_H
-#define INCLUDE_USBDM_FONTS_H
+#ifndef SOURCES_FONTS_H_
+#define SOURCES_FONTS_H_
 
 #include <stdint.h>
  /*
@@ -16,18 +16,27 @@
  */
 namespace USBDM {
 
-struct Fonts {
-public:
-   /**
-    * Font sizes
-    */
-   typedef enum {FontSmall, FontMedium, FontLarge} FontSize;
+/**
+ * Represents a simple font
+ */
+class Font {
 
-   static const uint8_t FONT6x8[97][8];
-   static const uint8_t FONT8x8[97][8];
-   static const uint8_t FONT8x16[97][16];
+public:
+   const uint8_t width;          // Width of the character in pixels
+   const uint8_t height;         // Height of the character in pixels
+   const uint8_t bytesPerChar;   // Bytes used for each character in data table
+
+   const uint8_t *const data;    // Data describing the character pixels
 };
 
-} // End namespace USBDM
+/** Small 6x8 font */
+extern Font smallFont;
+/** Medium 8x8 font */
+extern Font mediumFont;
+/** Large 8x16 font */
+extern Font largeFont;
 
-#endif /* INCLUDE_USBDM_FONTS_H */
+}; // end namespace USBDM
+
+#endif /* SOURCES_FONTS_H_ */
+

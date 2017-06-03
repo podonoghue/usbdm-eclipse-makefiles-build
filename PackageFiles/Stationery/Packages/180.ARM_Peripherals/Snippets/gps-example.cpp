@@ -1,5 +1,10 @@
 /**
- * \mainpage GPS shield demonstration
+ ============================================================================
+ * @file   gps-example.cpp
+ * @brief  GPS shield demonstration
+ *
+ *  Created on: 29/11/2015
+ *      Author: pgo
  *
  * \section introSection Introduction
  * This is a simple example of the use of the C++ library routines for the Global Positing System shield.\n
@@ -25,6 +30,7 @@
  * \subsection QuickLinks Quick Links
  *
  *   - @htmlonly <a href="https://www.itead.cc/itead-gps-shield.html"><b>ITEAD REB-4216 GPS Shield </b></a> @endhtmlonly
+ ============================================================================
  */
 #include <stdio.h>
 #include <string.h>

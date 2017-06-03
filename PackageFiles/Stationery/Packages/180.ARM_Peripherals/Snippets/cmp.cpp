@@ -1,4 +1,4 @@
-/*
+/**
  ============================================================================
  * @file    cmp.cpp (180.ARM_Peripherals)
  * @brief   Basic C++ demo using CMP class

@@ -1,9 +1,11 @@
 /**
+ ============================================================================
  * @file     mag3310.h
  * @brief    Interface for MAG3310 3-axis magnetometer
- *
  * @version  V4.11.1.70
  * @date     18 June 2015
+ * @author   podonoghue
+ ============================================================================
  */
 
 #ifndef INCLUDE_USBDM_MAG3310_H_
@@ -84,7 +86,7 @@ namespace USBDM {
 class MAG3310 {
 
 private:
-   USBDM::I2c *i2c;
+   USBDM::I2c &i2c;
    static const uint8_t  DEVICE_ADDRESS = 0x0E<<1;
    static const uint8_t  WHO_AM_I_VALUE = 0xC4;
 
@@ -121,7 +123,7 @@ public:
     *
     * @param i2c  - The I2C interface to use
     */
-   MAG3310(USBDM::I2c *i2c);
+   MAG3310(USBDM::I2c &i2c);
    /**
     * Put accelerometer into Standby mode
     */

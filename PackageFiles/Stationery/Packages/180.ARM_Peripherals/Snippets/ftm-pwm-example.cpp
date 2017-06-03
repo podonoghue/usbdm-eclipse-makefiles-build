@@ -1,5 +1,11 @@
 /**
- * @file pwm-example.cpp
+ ============================================================================
+ * @file    ftm-pwm-example.cpp
+ * @brief   Demo using Ftm class to implement a basic PWM output
+ *
+ *  Created on: 10/6/2016
+ *      Author: podonoghue
+ ============================================================================
  */
 #include <stdio.h>
 #include "system.h"
@@ -11,8 +17,7 @@ using namespace USBDM;
 /**
  * Demonstrates use of the PWM outputs
  *
- * Uses PWM to change the brightness of 2 LEDs
- *
+ * Uses PWM to change the brightness of an LED
  */
 
 // Simple delay - not for real programs!

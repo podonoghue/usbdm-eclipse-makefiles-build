@@ -29,14 +29,14 @@ namespace USBDM {
 
 // Lcd Options ==============================
 //
-//   <o> Lcd PWM Backlight support
-//   <i> Enables the use of PWM to adjust the Lcd backlight
+//   <o> Lcd PWM back-light support
+//   <i> Enables the use of PWM to adjust the Lcd back-light
 //   <i> This ties up one of the FTMs so is rather expensive to provide.
-//     <0=> Backlight on/off only
-//     <1=> Backlight adjustable
+//     <0=> Back-light on/off only
+//     <1=> Back-light adjustable
 //     <0=> Default
 /**
- * Controls if PWM feature is available for backlight
+ * Controls if PWM feature is available for back-light
  */
 #define LCD_BACKLIGHT_PWM_FEATURE 0
 
@@ -58,48 +58,60 @@ namespace USBDM {
 //   Lcd Dimension Definitions
 //
 //********************************************************************
-constexpr int ROW_LENGTH   = 132;
-constexpr int COL_HEIGHT   = 132;
-constexpr int ENDPAGE      = 132;
-constexpr int ENDCOL       = 130;
+constexpr int ROW_LENGTH       = 132;
+constexpr int COL_HEIGHT       = 132;
+constexpr int ENDPAGE          = 132;
+constexpr int ENDCOL           = 130;
 
 // Usable area
-constexpr int LCD_X_MIN    = 1;
-constexpr int LCD_X_MAX    = 130;
-constexpr int LCD_Y_MIN    = 1;
-constexpr int LCD_Y_MAX    = 130;
+constexpr int LCD_X_MIN        = 1;
+constexpr int LCD_X_MAX        = 130;
+constexpr int LCD_Y_MIN        = 1;
+constexpr int LCD_Y_MAX        = 130;
+
+/**
+ * Calculates colour as 16-bit value in 4:4:4 format
+ *
+ * @param r Red
+ * @param g Green
+ * @param b Blue
+ */
+constexpr uint16_t colour444(uint8_t r, uint8_t g, uint8_t b) {
+   return ((r&0xF)<<8)|((g&0xF)<<4)|(b&0xF);
+}
+using Colour = uint16_t;
 
 //*******************************************************
-//   12-Bit Color Definitions
+//   12-Bit Colour Definitions
 //*******************************************************
-constexpr int BLACK        = 0x000;
-constexpr int NAVY         = 0x008;
-constexpr int BLUE         = 0x00F;
-constexpr int TEAL         = 0x088;
-constexpr int EMERALD      = 0x0C5;
-constexpr int GREEN        = 0x0F0;
-constexpr int CYAN         = 0x0FF;
-constexpr int SLATE        = 0x244;
-constexpr int INDIGO       = 0x408;
-constexpr int TURQUOISE    = 0x4ED;
-constexpr int OLIVE        = 0x682;
-constexpr int MAROON       = 0x800;
-constexpr int PURPLE       = 0x808;
-constexpr int GRAY         = 0x888;
-constexpr int SKYBLUE      = 0x8CE;
-constexpr int BROWN        = 0xB22;
-constexpr int CRIMSON      = 0xD13;
-constexpr int ORCHID       = 0xD7D;
-constexpr int RED          = 0xF00;
-constexpr int MAGENTA      = 0xF0F;
-//constexpr int ORANGE  =  0xF40
-constexpr int PINK         = 0xF6A;
-constexpr int CORAL        = 0xF75;
-constexpr int SALMON       = 0xF87;
-constexpr int ORANGE       = 0xFA0;
-constexpr int GOLD         = 0xFD0;
-constexpr int YELLOW       = 0xFF0;
-constexpr int WHITE        = 0xFFF;
+constexpr Colour BLACK            = 0x000;
+constexpr Colour NAVY             = 0x008;
+constexpr Colour BLUE             = 0x00F;
+constexpr Colour TEAL             = 0x088;
+constexpr Colour EMERALD          = 0x0C5;
+constexpr Colour GREEN            = 0x0F0;
+constexpr Colour CYAN             = 0x0FF;
+constexpr Colour SLATE            = 0x244;
+constexpr Colour INDIGO           = 0x408;
+constexpr Colour TURQUOISE        = 0x4ED;
+constexpr Colour OLIVE            = 0x682;
+constexpr Colour MAROON           = 0x800;
+constexpr Colour PURPLE           = 0x808;
+constexpr Colour GRAY             = 0x888;
+constexpr Colour SKYBLUE          = 0x8CE;
+constexpr Colour BROWN            = 0xB22;
+constexpr Colour CRIMSON          = 0xD13;
+constexpr Colour ORCHID           = 0xD7D;
+constexpr Colour RED              = 0xF00;
+constexpr Colour MAGENTA          = 0xF0F;
+//constexpr Colour ORANGE           = 0xF40;
+constexpr Colour PINK             = 0xF6A;
+constexpr Colour CORAL            = 0xF75;
+constexpr Colour SALMON           = 0xF87;
+constexpr Colour ORANGE           = 0xFA0;
+constexpr Colour GOLD             = 0xFD0;
+constexpr Colour YELLOW           = 0xFF0;
+constexpr Colour WHITE            = 0xFFF;
 
 //*******************************************************
 //       Circle Definitions
@@ -141,17 +153,19 @@ constexpr int DEFAULT_LCD_CONTRAST = 65;
  * // Instantiate interface
  *	Lcd *lcd = new Lcd(new SPI_0());
  *
- * lcd->clear(RED);
- * lcd->drawCircle(65, 65, 20, WHITE);
- * lcd->drawCircle(65, 65, 30, WHITE);
- * lcd->drawCircle(65, 65, 40, WHITE);
- * lcd->putStr("Some Circles", 30, 10, Fonts::FontSmall, WHITE, RED);
+ * lcd.clear(RED);
+ * lcd.drawCircle(65, 65, 20, WHITE);
+ * lcd.drawCircle(65, 65, 30, WHITE);
+ * lcd.drawCircle(65, 65, 40, WHITE);
+ * lcd.putStr("Some Circles", 30, 10, Fonts::FontSmall, WHITE, RED);
  *
  *  @endcode
  */
 class LcdBase {
+
 protected:
-   Spi *spi;   //!< SPI interface used to communicate with LCD
+   Spi      &spi;        //!< SPI interface used to communicate with LCD
+   uint32_t  spiConfig;  //!< SPI communication configuration
 
    /**
     * Reset LCD
@@ -160,20 +174,37 @@ protected:
 
    /**
     * Send a single command byte to the display
+    *
+    * @param command Command byte to send
     */
    virtual void txCommand(uint8_t command) = 0;
 
    /**
     * Send a single data byte to the display
+    *
+    * @param data Data byte to send
     */
    virtual void txData(uint8_t data) = 0;
 
+   /**
+    * Send two pixels of a single colour to the display
+    *
+    * @param colour Colour to send
+    */
+   virtual void txTwoPixels(Colour colour) = 0;
+
+   /**
+    * Send a single colour block to the display
+    *
+    * @param colour Colour to send
+    * @param size   Size of colour block
+    */
+   virtual void txColourBlock(Colour colour, int size) = 0;
+
    /** Sets the Row and Column addresses
     *
-    * @param x = row address (0 .. 131)
-    * @param y = column address (0 .. 131)
-    *
-    * @author James P Lynch July 7, 2007
+    * @param x Row address (0 .. 131)
+    * @param y Column address (0 .. 131)
     */
    void setXY(int x, int y);
 
@@ -186,111 +217,86 @@ public:
    /**
     *  Constructor
     *
-    *  @param spi The SPI interface to use to communicate with LCD
+    *  @param spi   SPI interface to use to communicate with LCD
     */
-   LcdBase(Spi *spi) : spi(spi) {
+   LcdBase(Spi &spi) : spi(spi) {
    }
 
 #ifdef ELEC_FREAKS
    /**
     * Set backlight level
     *
-    * @param level back-light level as percentage
-    * @note  Requires @ref LCD_BACKLIGHT_PWM_FEATURE to be fully implemented.\n
+    * @param  level  Level back-light level as percentage
+    *
+    * @note     Requires @ref LCD_BACKLIGHT_PWM_FEATURE to be fully implemented.\n
     * Otherwise it falls back to basic on/off
     *
     * Note : Only of elecfreaks version of shield
     */
    virtual void backlightSetLevel(int level) = 0;
    /**
-    * Turn LCD backlight on
+    * Turn LCD back-light on
     */
    void backlightOn(void) { backlightSetLevel(100); }
    /**
-    * Turn LCD backlight off
+    * Turn LCD back-light off
     */
    void backLightOff(void) { backlightSetLevel(0); }
 #endif
 
    /** Set LCD contrast - range varies with device
     *
-    *  @param setting contrast level (0..127) ?
+    *  @param setting Contrast level (0..127) ?
     */
    virtual void setContrast(uint8_t setting);
 
-   /** This function will clear the screen to the given color.
+   /** This function will clear the screen to the given colour.
     *
-    * @param color   12-bit color value rrrrggggbbbb
-    *
-    * @author James P Lynch July 7, 2007
+    * @param colour   12-bit colour value rrrrggggbbbb
     */
-   void clear(int color=DEFAULT_BACKGROUND);
+   void clear(Colour colour=DEFAULT_BACKGROUND);
 
-   /** Lights a single pixel in the specified color at the specified x and y addresses
+   /** Lights a single pixel in the specified colour at the specified x and y addresses
     *
-    * @param  x     row address (0 .. 131)
-    * @param  y     column address (0 .. 131)
-    * @param  color 12-bit color value rrrrggggbbbb
+    * @param  x      Row address (0 .. 131)
+    * @param  y      Column address (0 .. 131)
+    * @param  colour 12-bit colour value rrrrggggbbbb
     *
-    * @note See lcd.h for some sample color settings
-    *
-    * @author James P Lynch July 7, 2007
+    * @note See lcd.h for some sample colour settings
     */
-   void drawPixel(int x, int y, int color=DEFAULT_FOREGROUND);
+   void drawPixel(int x, int y, Colour colour=DEFAULT_FOREGROUND);
 
-   /** Draws a line in the specified color from (x0,y0) to (x1,y1)
+   /** Draws a line in the specified colour from (x0,y0) to (x1,y1)
     *
-    * @param  x0     row address (0 .. 131)
-    * @param  y0     column address (0 .. 131)
-    * @param  x1     row address (0 .. 131)
-    * @param  y1     column address (0 .. 131)
-    * @param  color  12-bit color value rrrrggggbbbb
-    *
-    * @author James P Lynch July 7, 2007
-    *
-    * @note See lcd.h for some sample color settings
-    *
-    * @note Good write-up on this algorithm in Wikipedia (search for Bresenham's line algorithm)\n
-    * Authors: \n
-    *   - Dr. Leonard McMillan, Associate Professor UNC \n
-    *   - Jack Bresenham IBM, Winthrop University (Father of this algorithm, 1962)
-    *
-    * @note Taken verbatim from Professor McMillan's presentation: \n
-    *       http://www.cs.unc.edu/~mcmillan/comp136/Lecture6/Lines.html
+    * @param  x0      Row address (0 .. 131)
+    * @param  y0      Column address (0 .. 131)
+    * @param  x1      Row address (0 .. 131)
+    * @param  y1      Column address (0 .. 131)
+    * @param  colour  12-bit colour value rrrrggggbbbb
     */
-   void drawLine(int x0, int y0, int x1, int y1, int color=DEFAULT_FOREGROUND);
+   void drawLine(int x0, int y0, int x1, int y1, Colour colour=DEFAULT_FOREGROUND);
 
-   /** Draws a rectangle in the specified color from (x1,y1) to (x2,y2)\n
-    *  Rectangle can be filled with a color if desired
+   /** Draws a rectangle in the specified colour from (x1,y1) to (x2,y2)\n
+    *  Rectangle can be filled with a colour if desired
     *
-    * @param  x0     row address (0 .. 131)
-    * @param  y0     column address (0 .. 131)
-    * @param  x1     row address (0 .. 131)
-    * @param  y1     column address (0 .. 131)
-    * @param  fill   indicates if the rectangle will be filled
-    * @param  color  12-bit color value rrrrggggbbbb
-    *
-    * @note See lcd.h for some sample color settings
-    *
-    * @author James P Lynch July 7, 2007
-    *
+    * @param  x0      Row address (0 .. 131)
+    * @param  y0      Column address (0 .. 131)
+    * @param  x1      Row address (0 .. 131)
+    * @param  y1      Column address (0 .. 131)
+    * @param  fill    Indicates if the rectangle will be filled
+    * @param  colour  12-bit colour value rrrrggggbbbb
     */
-   void drawRect(int x0, int y0, int x1, int y1, int fill, int color=DEFAULT_FOREGROUND);
+   void drawRect(int x0, int y0, int x1, int y1, int fill, Colour colour=DEFAULT_FOREGROUND);
 
    /** Draws a line circle in the specified colour at center (x0,y0) with radius
     *
-    * @param centreX = row address (0 .. 131)
-    * @param centreY = column address (0 .. 131)
-    * @param radius = radius in pixels
-    * @param color = 12-bit colour value rrrrggggbbbb
-    * @param circleType = controls which segments of the circle are drawn
-    *
-    * @author Jack Bresenham IBM, Winthrop University (Father of this algorithm, 1962)
-    *
-    * @note Taken verbatim Wikipedia article on Bresenham's line algorithm \n
-    *        http://www.wikipedia.org
+    * @param centreX    Row address (0 .. 131)
+    * @param centreY    Column address (0 .. 131)
+    * @param radius     Radius in pixels
+    * @param colour     12-bit colour value rrrrggggbbbb
+    * @param circleType Controls which segments of the circle are drawn
     */
-   void drawCircle(int centreX, int centreY, int radius, int color, int circleType=FULLCIRCLE);
+   void drawCircle(int centreX, int centreY, int radius, Colour colour, int circleType=FULLCIRCLE);
    /** Writes the entire LCD screen from a bmp file
     *
     * @param bmp - bitmap to display
@@ -300,52 +306,25 @@ public:
     * @note Use Olimex BmpToArray.exe utility to create bitmap
     */
    void drawBitmap(uint8_t bmp[131*131]);
-   /** Draws an ASCII character at the specified (x,y) address and color
+   /** Draws an ASCII character at the specified (x,y) address and colour
     *
-    * @param c          character to be displayed
-    * @param x          row address (0 .. 131)
-    * @param y          column address (0 .. 131)
-    * @param fontSize   font pitch (SMALL, MEDIUM, LARGE)
-    * @param fColor     12-bit foreground color value
-    * @param bColor     12-bit background color value
-    *
-    * @code{.c}
-    *   Notes: Here's an example to display "E" at address (20,20)
-    *
-    *   LCDPutChar('E', 20, 20, Lcd::FontMedium, WHITE, BLACK);
-    *
-    *                (27,20)       (27,27)
-    *                   |             |
-    *                   |             |
-    *                 ^ V             V
-    *                 | _ # # # # # # #   0x7F
-    *                 | _ _ # # _ _ _ #   0x31
-    *                 | _ _ # # _ # _ _   0x34
-    *                 x _ _ # # # # _ _   0x3C
-    *                 | _ _ # # _ # _ _   0x34
-    *                 | _ _ # # _ _ _ #   0x31
-    *                 | _ # # # # # # #   0x7F
-    *                 | _ _ _ _ _ _ _ _   0x00
-    *
-    *                   ------y------->
-    *                   ^             ^
-    *                   |             |
-    *                   |             |
-    *                (20,20)       (20,27)
-    * @endcode
-    *
-    *  @author James P Lynch July 7, 2007
+    * @param c         Character to be displayed
+    * @param x         Row address (0 .. 131)
+    * @param y         Column address (0 .. 131)
+    * @param font      Font to use
+    * @param fColour   12-bit foreground colour value
+    * @param bColour   12-bit background colour value
     */
-   void putChar(char c, int x, int y, Fonts::FontSize fontSize=Fonts::FontSmall, int fColor=DEFAULT_FOREGROUND, int bColor=DEFAULT_BACKGROUND);
+   void putChar(char c, int x, int y, Font &font=smallFont, Colour fColour=DEFAULT_FOREGROUND, Colour bColour=DEFAULT_BACKGROUND);
 
-   /** Draws a null-terminated character string at the specified (x,y) address and color
+   /** Draws a null-terminated character string at the specified (x,y) address and colour
     *
-    * @param pString = pointer to character string to be displayed
-    * @param x = row address (0 .. 131)
-    * @param y = column address (0 .. 131)
-    * @param fontSize = font pitch (Lcd::FontSmall, Lcd::FontMedium, Lcd::FontLarge)
-    * @param fColor = 12-bit foreground colour value rrrrggggbbbb
-    * @param bColor = 12-bit background colour value rrrrggggbbbb
+    * @param str      Pointer to character string to be displayed
+    * @param x        Row address (0 .. 131)
+    * @param y        Column address (0 .. 131)
+    * @param font     Font pitch (Lcd::FontSmall, Lcd::FontMedium, Lcd::FontLarge)
+    * @param fColour  12-bit foreground colour value rrrrggggbbbb
+    * @param bColour  12-bit background colour value rrrrggggbbbb
     *
     * @code{.c}
     *       // Here's an example to display "Hello World!" at address (20,20)
@@ -359,7 +338,7 @@ public:
     * @note For more information on how this code does it's thing look at this \n
     *       "http://www.sparkfun.com/tutorial/Nokia%206100%20LCD%20Display%20Driver.pdf"
     */
-   void putStr(const char *pString, int x, int y, Fonts::FontSize fontSize=Fonts::FontSmall, int fColor=DEFAULT_FOREGROUND, int bColor=DEFAULT_BACKGROUND);
+   void putStr(const char *str, int x, int y, Font &font=smallFont, Colour fColour=DEFAULT_FOREGROUND, Colour bColour=DEFAULT_BACKGROUND);
 
 };
 
@@ -372,6 +351,7 @@ public:
  */
 template<typename SpiCS_n, typename Reset_n, typename BackLight>
 class Lcd_T : public LcdBase {
+
 public:
    /**
     *  Constructor
@@ -380,42 +360,97 @@ public:
     *
     *  @param spi The SPI interface to use to communicate with LCD
     */
-   Lcd_T(Spi *spi) : LcdBase(spi) {
+   Lcd_T(Spi &spi) : LcdBase(spi) {
       // Chip select pin
-      SpiCS_n::setOutput();
-      SpiCS_n::set();         // Set idle high
+      SpiCS_n::setOutput(pcrValue(PullNone, DriveHigh));
+      SpiCS_n::high();         // Set idle high
 
       // LCD Reset pin
-      Reset_n::setOutput();
+      Reset_n::setOutput(pcrValue(PullNone, DriveHigh));
+      Reset_n::high();
+
       init();
    }
 
    /**
     * Reset LCD
     */
-   virtual void reset() {
+   virtual void reset()override  {
       // Reset display
-      Reset_n::clear();
+//      SpiCS_n::low();
+      Reset_n::low();
       waitMS(2);
-      Reset_n::set();
-      waitMS(10);
+      Reset_n::high();
+      SpiCS_n::high();
+      waitMS(20);
    }
    /**
     * Send a single command byte to the display
+    *
+    * @param command Command byte to send
     */
-   virtual void txCommand(uint8_t command) {
-      SpiCS_n::clear();
-      spi->txRx(command);
-      SpiCS_n::set();
+   virtual void txCommand(uint8_t command) override {
+      spi.startTransaction(spiConfig);
+      SpiCS_n::low();
+      spi.txRx(command);
+      SpiCS_n::high();
+      spi.endTransaction();
    }
 
    /**
     * Send a single data byte to the display
+    *
+    * @param data Data byte to send
     */
-   virtual void txData(uint8_t data) {
-      SpiCS_n::clear();
-      spi->txRx(0x100|data);
-      SpiCS_n::set();
+   virtual void txData(uint8_t data) override {
+      spi.startTransaction(spiConfig);
+      SpiCS_n::low();
+      spi.txRx(0x100|data);
+      SpiCS_n::high();
+      spi.endTransaction();
+   }
+
+   /**
+    * Send two pixels of a single colour to the display
+    *
+    * @param colour Colour to send
+    */
+   virtual void txTwoPixels(Colour colour) override {
+      // Construct RRRRGGGG|GGGGRRRR|GGGGBBBB in 3 bytes = 2 pixels
+      uint8_t data1 = (colour >> 4);
+      uint8_t data2 = ((colour & 0xF) << 4) | ((colour >> 8) & 0xF);
+      uint8_t data3 = colour & 0xFF;;
+
+      spi.startTransaction(spiConfig);
+      SpiCS_n::low();
+      spi.txRx(0x100|data1);
+      spi.txRx(0x100|data2);
+      spi.txRx(0x100|data3);
+      SpiCS_n::high();
+      spi.endTransaction();
+   }
+
+   /**
+    * Send a single colour multiple times to the display (2 pixels)
+    *
+    * @param colour Colour to send
+    * @param size   Size of colour block
+    */
+   virtual void txColourBlock(Colour colour, int size) override {
+      // Construct RRRRGGGG|GGGGRRRR|GGGGBBBB in 3 bytes = 2 pixels
+      uint8_t data1 = (colour >> 4);
+      uint8_t data2 = ((colour & 0xF) << 4) | ((colour >> 8) & 0xF);
+      uint8_t data3 = colour & 0xFF;;
+      spi.startTransaction(spiConfig);
+      SpiCS_n::low();
+      size = (size+1)/2;
+      while(size-->0) {
+         spi.txRx(0x100|data1);
+         spi.txRx(0x100|data2);
+         spi.txRx(0x100|data3);
+      }
+      SpiCS_n::high();
+      spi.endTransaction();
    }
 
 #ifdef ELEC_FREAKS
@@ -435,7 +470,7 @@ public:
       }
       BackLight::setDutyCycle(level);
 #else
-      BackLight::setOutput(USBDM::GPIO_DEFAULT_PCR|PORT_PCR_DSE_MASK);
+      BackLight::setOutput(pcrValue(PullNone, DriveHigh));
       BackLight::write(level>0);
 #endif
    }
@@ -452,11 +487,11 @@ public:
  * // Instantiate interface
  * Lcd *lcd = new Lcd(new SPI_0());
  *
- * lcd->clear(RED);
- * lcd->drawCircle(65, 65, 20, WHITE);
- * lcd->drawCircle(65, 65, 30, WHITE);
- * lcd->drawCircle(65, 65, 40, WHITE);
- * lcd->putStr("Some Circles", 30, 10, Fonts::FontSmall, WHITE, RED);
+ * lcd.clear(RED);
+ * lcd.drawCircle(65, 65, 20, WHITE);
+ * lcd.drawCircle(65, 65, 30, WHITE);
+ * lcd.drawCircle(65, 65, 40, WHITE);
+ * lcd.putStr("Some Circles", 30, 10, Fonts::FontSmall, WHITE, RED);
  *
  *  @endcode
  */

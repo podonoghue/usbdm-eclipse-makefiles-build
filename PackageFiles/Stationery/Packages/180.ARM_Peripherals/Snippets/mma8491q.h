@@ -33,21 +33,21 @@ namespace USBDM {
  * <b>Example</b>
  * @code
  *  // Instantiate interface
- *  I2c *i2c = new I2C_0();
- *  MMA8491Q *accelerometer = new MMA8491Q(i2c, MMA8491Q::ACCEL_2Gmode);
+ *  I2c0    i2c0;
+ *  MMA8491Q_T<USBDM::GpioA<13>> accelerometer(i2c0);
  *
- *  uint8_t id = accelerometer->readID();
+ *  uint8_t id = accelerometer.readID();
  *  printf("Device ID = 0x%02X\n", id);
  *
  *  printf("Before simple calibration (make sure the device is level!)\n");
- *  accelerometer->calibrateAccelerometer();
+ *  accelerometer.calibrateAccelerometer();
  *
  *  printf("After calibration\n");
  *  for(;;) {
  *     int accelStatus;
  *     int16_t accelX,accelY,accelZ;
  *
- *     accelerometer->readAccelerometerXYZ(&accelStatus, &accelX, &accelY, &accelZ);
+ *     accelerometer.readAccelerometerXYZ(&accelStatus, &accelX, &accelY, &accelZ);
  *     printf("s=0x%02X, aX=%10d, aY=%10d, aZ=%10d\n", accelStatus, accelX, accelY, accelZ);
  *     waitMS(400);
  *  }
@@ -69,7 +69,7 @@ protected:
 
    static const uint8_t DEVICE_ADDRESS = 0x55<<1;
 
-   USBDM::I2c *i2c;
+   USBDM::I2c &i2c;
 
    int16_t offsetX;
    int16_t offsetY;
@@ -82,7 +82,7 @@ protected:
     */
    uint8_t readReg(uint8_t regNum) {
       uint8_t command[1];
-      i2c->txRx(DEVICE_ADDRESS, 1, &regNum, sizeof(command), command);
+      i2c.txRx(DEVICE_ADDRESS, 1, &regNum, sizeof(command), command);
       return command[0];
    }
    /**
@@ -93,7 +93,7 @@ protected:
     */
    void writeReg(uint8_t regNum, uint8_t value) {
       uint8_t command[] = {regNum, value};
-      i2c->transmit(DEVICE_ADDRESS, sizeof(command), command);
+      i2c.transmit(DEVICE_ADDRESS, sizeof(command), command);
    }
    /**
     * Reset Accelerometer
@@ -105,9 +105,9 @@ public:
    /**
     * Constructor
     *
-    * @param i2c    - The I2C interface to use
+    * @param i2c - The I2C interface to use
     */
-   MMA8491Q(USBDM::I2c *i2c) : i2c(i2c), offsetX(0), offsetY(0), offsetZ(0) {
+   MMA8491Q(USBDM::I2c &i2c) : i2c(i2c), offsetX(0), offsetY(0), offsetZ(0) {
    }
 
    /**
@@ -133,7 +133,7 @@ public:
    void calibrateAccelerometer();
 };
 
-template<class EnableGpio> class MMA8491QT : public MMA8491Q {
+template<class EnableGpio> class MMA8491Q_T : public MMA8491Q {
 private:
    // Accelerometer registers
    enum {
@@ -154,7 +154,7 @@ public:
     *
     * @param i2c    - The I2C interface to use
     */
-   MMA8491QT(USBDM::I2c *i2c) : MMA8491Q(i2c) {
+   MMA8491Q_T(USBDM::I2c &i2c) : MMA8491Q(i2c) {
       enableGpio.setOutput();
    }
 

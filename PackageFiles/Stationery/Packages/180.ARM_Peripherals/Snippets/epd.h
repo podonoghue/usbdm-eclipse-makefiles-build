@@ -1,6 +1,7 @@
-/* @file epd.h
- *
- * @brief Low-level driver for ePaper display
+/**
+ ============================================================================
+ * @file     epd.h
+ * @brief    Low-level driver for ePaper display
  *
  * Display type: Vizplex (V110) (G1 COG driver)
  *
@@ -10,7 +11,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at:
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -18,11 +19,9 @@
  * express or implied.  See the License for the specific language
  * governing permissions and limitations under the License.
  *
- *
  * Modified for Kinetis FRDM boards by Peter O'Donoghue
  * 2014
- *
- *
+ ============================================================================
  */
 #ifndef EPD_H
 #define EPD_H

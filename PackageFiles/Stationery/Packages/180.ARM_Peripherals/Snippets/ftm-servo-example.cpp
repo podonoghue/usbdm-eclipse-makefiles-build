@@ -1,7 +1,7 @@
-/*
+/**
  ============================================================================
  * @file    ftm-servo-example.cpp (180.ARM_Peripherals)
- * @brief   Demo using Ftm class to implement a SERVO controller
+ * @brief   Demo using Ftm class to implement a servo-motor controller
  *
  *  Created on: 10/6/2016
  *      Author: podonoghue
@@ -11,12 +11,14 @@
 #include "system.h"
 #include "derivative.h"
 #include "hardware.h"
-#include "delay.h"
 
 using namespace USBDM;
 
 /**
- * @tparam FtmChannel Class representing a FTM channel
+ * Class representing a servo motor connected to a FTM channel
+ * Note that all FTM channels will be set to same period
+ *
+ * @tparam FtmChannel Class representing a FTM channel e.g. Ftm0Channel<3>
  */
 template <class FtmChannel>
 class Servo {
@@ -34,6 +36,7 @@ public:
     */
    static void enable() {
       FtmChannel::enable();
+      FtmChannel::setPCR(pcrValue(PullNone, DriveHigh));
       FtmChannel::setPeriod(SERVO_PERIOD);
       FtmChannel::setHighTime((SERVO_MIN+SERVO_MAX)/2);
    }
@@ -51,7 +54,7 @@ public:
    }
 };
 
-// Instantiate SERVO on pin
+// Instantiate servo on pin
 // It will be necessary to map the pin to a FTM channel in Configure.usbdmProject
 //using servo = Servo<ftm_D2>;
 using servo = Servo<Ftm0Channel<3>>;
@@ -70,7 +73,7 @@ int main() {
       for(int i=0;i<=180;i++) {
          servo::setPosition(i);
          waitMS(50);
-         printf("Tick\n");
+         printf("Position = %d\n", i);
       }
    }
    return 0;

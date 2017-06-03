@@ -1,22 +1,35 @@
-/*----------------------------------------------------------------------------
+/**
+ ============================================================================
  * @file cmsis-cpp-messageQueue.cpp
+ * @brief RTX Message Queue example program
  *
- * RTX example program
- *----------------------------------------------------------------------------
+ *  Created on: 10/6/2016
+ *      Author: podonoghue
+ ============================================================================
  */
 #include <stdio.h>
 #include "cmsis.h"                      // CMSIS RTX
 #include "hardware.h"                   // Hardware interface
 
+/**
+ * Message item
+ */
 struct MessageData {
    int a;
    int b;
 };
 
+/* Indicates the test is complete */
 static bool messageQueueTestComplete = false;
 
+/**
+ * Message queue
+ */
 static CMSIS::MessageQueue<MessageData*, 10> messageQueue;
 
+/**
+ *  Thread for sending to the message queue
+ */
 void messageQueueSender(const void *) {
    MessageData ar[30];
    for (unsigned i=0; i<(sizeof(ar)/sizeof(ar[0])); i++) {
@@ -32,6 +45,9 @@ void messageQueueSender(const void *) {
    printf("=== Sender complete ====\n\r");
 }
 
+/**
+ *  Thread for receiving from the message queue
+ */
 void messageQueueReceiver(const void *) {
    for(unsigned i=0; ; i++) {
       osEvent event = messageQueue.get(10000);

@@ -1,10 +1,12 @@
 /**
- * @file FXOS8700CQ.cpp
+ ============================================================================
+ * @file   fxos8700cq.cpp
+ * @brief  FXOS8700 Accelerometer/Magnetometer interface
  *
- *  Created on: 22/11/2013
+ *  Created on: 10/6/2016
  *      Author: podonoghue
+ ============================================================================
  */
-//#include <stdio.h>
 #include "fxos8700cq.h"
 #include "delay.h"
  /*
@@ -152,7 +154,7 @@ enum {
  * @param i2c  - The I2C interface to use
  * @param mode - Mode of operation (gain and filtering)
  */
-FXOS8700CQ::FXOS8700CQ(USBDM::I2c *i2c, AccelerometerMode mode) : i2c(i2c) {
+FXOS8700CQ::FXOS8700CQ(USBDM::I2c &i2c, AccelerometerMode mode) : i2c(i2c) {
    failedInit = false;
    if (readReg(WHO_AM_I) != WHO_AM_I_VALUE) {
       failedInit = true;
@@ -169,7 +171,7 @@ FXOS8700CQ::FXOS8700CQ(USBDM::I2c *i2c, AccelerometerMode mode) : i2c(i2c) {
    setAccelerometerMode(mode);
 
 //   uint8_t buff[5] = {CTRL_REG1};
-//   i2c->txRx(DEVICE_ADDRESS, buff, 1, sizeof(buff));
+//   i2c.txRx(DEVICE_ADDRESS, buff, 1, sizeof(buff));
 //   printf("FXOS8700CQ, ctrl = 0x%x,0x%x,0x%x,0x%x,0x%x\n", buff[0], buff[1], buff[2], buff[3], buff[4] );
 }
 
@@ -190,7 +192,7 @@ void FXOS8700CQ::enable(Mode mode) {
 uint8_t FXOS8700CQ::readReg(uint8_t regNum) {
    uint8_t command[] = {regNum};
 
-   i2c->txRx(DEVICE_ADDRESS, 1, sizeof(command), command);
+   i2c.txRx(DEVICE_ADDRESS, 1, sizeof(command), command);
    return command[0];
 }
 
@@ -203,7 +205,7 @@ uint8_t FXOS8700CQ::readReg(uint8_t regNum) {
 void FXOS8700CQ::writeReg(uint8_t regNum, uint8_t value) {
    uint8_t command[] = {regNum, value};
 
-   i2c->transmit(DEVICE_ADDRESS, sizeof(command), command);
+   i2c.transmit(DEVICE_ADDRESS, sizeof(command), command);
 }
 
 /**
@@ -245,7 +247,7 @@ void FXOS8700CQ::readAccelerometerXYZ(int *status, int16_t *x, int16_t *y, int16
    uint8_t dataXYZ[7] = {STATUS};
 
    // Receive 7 registers (status, X-high, X-low, Y-high, Y-low, Z-high & Z-low)
-   i2c->txRx(DEVICE_ADDRESS, 1, sizeof(dataXYZ), dataXYZ);
+   i2c.txRx(DEVICE_ADDRESS, 1, sizeof(dataXYZ), dataXYZ);
 
    // Unpack data and return
    *status = dataXYZ[0];
@@ -285,7 +287,7 @@ void FXOS8700CQ::readMagnetometerXYZ(int *status, int16_t *x, int16_t *y, int16_
    uint8_t dataXYZ[7] = {M_DR_STATUS};
 
    // Receive 7 registers (status, X-high, X-low, Y-high, Y-low, Z-high & Z-low)
-   i2c->txRx(DEVICE_ADDRESS, 1, sizeof(dataXYZ), dataXYZ);
+   i2c.txRx(DEVICE_ADDRESS, 1, sizeof(dataXYZ), dataXYZ);
 
    // Unpack data and return (data is sign extended)
    *status = dataXYZ[0];
@@ -313,7 +315,7 @@ void FXOS8700CQ::readAll(Data &data) {
 
    // Receive 14 registers (accelerometerStatus, X-high/low, Y-high/low, Z-high/low,
    //                       magnetometerStatus, X-high/low, Y-high/low, Z-high/low)
-   i2c->txRx(DEVICE_ADDRESS, 1, sizeof(dataXYZ), dataXYZ);
+   i2c.txRx(DEVICE_ADDRESS, 1, sizeof(dataXYZ), dataXYZ);
    data.accelerometerStatus = dataXYZ[0];
    data.accelerometer_X     = ((dataXYZ[1]<<8)+dataXYZ[2]);
    data.accelerometer_Y     = ((dataXYZ[3]<<8)+dataXYZ[4]);
@@ -331,7 +333,7 @@ void FXOS8700CQ::readAll(Data &data) {
  */
 uint32_t FXOS8700CQ::readID(void) {
    uint8_t values[] = {WHO_AM_I};
-   i2c->txRx(DEVICE_ADDRESS, 1, sizeof(values), values);
+   i2c.txRx(DEVICE_ADDRESS, 1, sizeof(values), values);
    return values[0];
 }
 
@@ -405,7 +407,7 @@ void FXOS8700CQ::calibrateMagnetometer(int time) {
    uint8_t originalControlReg1Value  = readReg(CTRL_REG1);
 
 //   uint8_t buff[6] = {M_OFF_X_MSB};
-//   i2c->txRx(DEVICE_ADDRESS, buff, 1, sizeof(buff));
+//   i2c.txRx(DEVICE_ADDRESS, buff, 1, sizeof(buff));
 //   printf("FXOS8700CQ, m_offset = 0x%02x%02x, 0x%02x%02x, 0x%02x%02x,\n", buff[0], buff[1], buff[2], buff[3], buff[4], buff[5] );
 
    // Make inactive so setting can be changed
@@ -423,7 +425,7 @@ void FXOS8700CQ::calibrateMagnetometer(int time) {
    waitMS(time*1000);
 
 //   buff[0] = M_OFF_X_MSB;
-//   i2c->txRx(DEVICE_ADDRESS, buff, 1, sizeof(buff));
+//   i2c.txRx(DEVICE_ADDRESS, buff, 1, sizeof(buff));
 //   printf("FXOS8700CQ, m_offset = 0x%02x%02x, 0x%02x%02x, 0x%02x%02x,\n", buff[0], buff[1], buff[2], buff[3], buff[4], buff[5] );
 
    // Make inactive so setting can be changed

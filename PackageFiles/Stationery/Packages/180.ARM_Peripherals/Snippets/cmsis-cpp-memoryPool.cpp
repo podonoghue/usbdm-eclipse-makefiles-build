@@ -1,8 +1,11 @@
-/*----------------------------------------------------------------------------
+/**
+ ============================================================================
  * @file cmsis-cpp-memoryPool.cpp
+ * @brief RTX Memory Pool example program
  *
- * RTX example program
- *----------------------------------------------------------------------------
+ *  Created on: 10/6/2016
+ *      Author: podonoghue
+ ============================================================================
  */
 #include <stdio.h>
 #include "cmsis.h"                      // CMSIS RTX
@@ -10,6 +13,8 @@
 
 /*
  * Memory pools example
+ *
+ * Allocates a frees items in a memory pool
  */
 void memoryPoolExample() {
    struct Data {

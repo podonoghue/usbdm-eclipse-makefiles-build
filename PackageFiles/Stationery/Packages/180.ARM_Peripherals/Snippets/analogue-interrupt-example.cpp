@@ -1,5 +1,11 @@
 /**
- * @file analogue-example.cpp
+ ============================================================================
+ * @file analogue-interrupt-example.cpp
+ * @brief Example showing use of a interrupts with an ADC channel
+ *
+ *  Created on: 10/6/2016
+ *      Author: podonoghue
+ ============================================================================
  */
 #include <stdio.h>
 #include "system.h"

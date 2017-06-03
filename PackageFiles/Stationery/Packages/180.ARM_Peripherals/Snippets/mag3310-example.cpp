@@ -1,46 +1,61 @@
 /**
- * @file mag3310-example.cpp
+ ============================================================================
+ * @file     mag3310-example.cpp
+ * @brief    Demonstrates use of MAG3310 Magnetometer over I2C
+ * @version  V4.11.1.90
+ * @author   podonoghue
+ * @note You may need to change the pin-mapping of the I2C interface
+============================================================================
  */
-#include <math.h>
 #include <stdio.h>
+#include <math.h>
 #include "system.h"
 #include "derivative.h"
 #include "hardware.h"
 #include "i2c.h"
 #include "mag3310.h"
-#include "delay.h"
 
+// Allows access to USBDM library name-space
 using namespace USBDM;
 
-/**
- * Demonstrates use of MAG3310 Magnetometer over I2C
- *
- * You may need to change the pin-mapping of the I2C interface
- */
+/*************************************************
+ * Global objects representing hardware
+ **************************************************/
 
-#define M_PI      3.14159265358979323846
+// I2C interface
+I2c0     i2c0;
+
+// Magnetometer via I2C
+MAG3310  magnetometer(i2c0);
+
+/**************************************************/
+
+/**
+ * Report magnetometer values
+ *
+ * @param magnetometer Magnetometer to use
+ */
+void report(MAG3310 &magnetometer) {
+      int magStatus;
+      int16_t magX,magY,magZ;
+      magnetometer.readMagnetometerXYZ(&magStatus, &magX, &magY, &magZ);
+      printf("s=0x%02X, mX=%10d, mY=%10d, mZ=%10d, ", magStatus,   magX,   magY,   magZ);
+      // Assumes the sensor is level
+      printf("a=%d\n", (int)(180*atan2(magX, magY)/M_PI));
+}
 
 int main() {
    printf("Starting\n");
 
-   // Instantiate interface
-   I2c *i2c = new $(demo.cpp.mag3110.i2c:I2c0)();
-   MAG3310 *magnetometer = new MAG3310(i2c);
-
-   uint8_t id = magnetometer->readID();
+   uint8_t id = magnetometer.readID();
    printf("Device ID = 0x%02X (should be 0xC4)\n", id);
 
    printf("Calibrating magnetometer\n"
           "Please rotate the board in all dimensions until complete (~20 s)\n");
-   magnetometer->calibrateMagnetometer();
+   magnetometer.calibrateMagnetometer();
 
    for(;;) {
+      report(magnetometer);
       waitMS(120);
-      int magStatus;
-      int16_t magX,magY,magZ;
-      magnetometer->readMagnetometerXYZ(&magStatus, &magX, &magY, &magZ);
-      printf("s=0x%02X, mX=%10d, mY=%10d, mZ=%10d, ", magStatus,   magX,   magY,   magZ);
-      // Assumes the sensor is level
-      printf("a=%d\n", (int)(180*atan2(magX, magY)/M_PI));
    }
 }

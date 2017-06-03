@@ -81,8 +81,8 @@ class PCA9685 {
 private:
    static const int MAX_PWM = 4095;
 
+   I2c     &i2c;
    uint8_t  slaveAddress;
-   I2c     *i2cInterface;
 
 public:
    /**
@@ -94,13 +94,13 @@ public:
     *  USBDM::PCA9685 *pca9685= new USBDM::PCA9685(i2c);
     * @endcode
     *
-    * @param i2cInterface  - The I2C interface to use
+    * @param i2c           - The I2C interface to use
     * @param deviceAddress - Slave device address (PCA9685_DEFAULT_SLAVE_BASE_ADDRESS+0,1,2,3)
     * @param prescaleValue - Clock pre-scaler
     * @param mode1Value    - Mode 1 value (use PCA9685_MODE1_x macros)
     * @param mode2Value    - Mode 2 value (use PCA9685_MODE2_x macros)
     */
-   PCA9685(I2c *i2cInterface,
+   PCA9685(I2c &i2c,
          uint8_t  deviceAddress = PCA9685_DEFAULT_SLAVE_BASE_ADDRESS,
          uint8_t  prescaleValue = PCA9685_DEFAULT_OSC_PRESCALE,
          uint8_t  mode1Value    = PCA9685_MODE1_AI_MASK,

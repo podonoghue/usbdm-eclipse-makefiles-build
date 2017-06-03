@@ -1,50 +1,66 @@
 /**
+ ============================================================================
  * @file mma8491q-example.cpp
+ * @brief Demonstrates use of MMA8491q Accelerometer over I2C
+ * @version  V4.11.1.90
+ * @author   podonoghue
+ * @note You may need to change the pin-mapping of the I2C interface
+============================================================================
  */
 #include <stdio.h>
 #include <math.h>
 #include "system.h"
 #include "derivative.h"
 #include "hardware.h"
-#include "i2c.h"
 #include "mma8491q.h"
-#include "delay.h"
 
+// Allows access to USBDM library name-space
 using namespace USBDM;
 
+/*************************************************
+ * Global objects representing hardware
+ **************************************************/
+
+// I2C interface
+I2c0     i2c0;
+
+// Accelerometer via I2C
+// Enable pin will need adjustment e.g.
+// D8 => USBDM::GpioA<13> on FRDM-KL25
+// D8 => USBDM::GpioA<12> on FRDM-MK20D50
+MMA8491Q_T<USBDM::GpioA<13>> accelerometer(i2c0);
+
+/**************************************************/
+
 /**
- * Demonstrates use of MMA8491Q Accelerometer over I2C
+ * Report accelerometer values
  *
- * You may need to change the pin-mapping of the I2C interface
+ * @param accelerometer Accelerometer to use
  */
-void report(MMA8491Q *accelerometer) {
+void report(MMA8491Q &accelerometer) {
    int accelStatus;
    int16_t accelX,accelY,accelZ;
 
-   accelerometer->active();
+   accelerometer.active();
    waitMS(1000);
-   accelerometer->readAccelerometerXYZ(&accelStatus, &accelX, &accelY, &accelZ);
-   accelerometer->standby();
+   accelerometer.readAccelerometerXYZ(&accelStatus, &accelX, &accelY, &accelZ);
+   accelerometer.standby();
    printf("s=0x%02X, aX=%10d, aY=%10d, aZ=%10d\n", accelStatus, accelX, accelY, accelZ);
 }
 
 int main() {
    printf("Starting\n");
 
-   // Instantiate interface
-   I2c *i2c = new USBDM::$(demo.cpp.external.i2c:I2c0)();
-
-   // Enable pin will need adjustment e.g.
-   // D8 => USBDM::GpioA<13> on FRDM-KL25
-   // D8 => USBDM::GpioA<12> on FRDM-MK20D50
-   MMA8491Q *accelerometer = new MMA8491QT<USBDM::GpioA<13>>(i2c);
-
-   printf("Before simple calibration (make sure the device is level!)\n");
+   printf("Doing simple calibration\n"
+          "Make sure the device is level!\n");
    report(accelerometer);
+   waitMS(400);
    report(accelerometer);
+   waitMS(400);
    report(accelerometer);
+   waitMS(400);
 
-   accelerometer->calibrateAccelerometer();
+   accelerometer.calibrateAccelerometer();
 
    // Make sure we have new values
    waitMS(100);
@@ -52,6 +68,7 @@ int main() {
    printf("After calibration\n");
    for(;;) {
       report(accelerometer);
+//      waitMS(400);
    }
 }
 
