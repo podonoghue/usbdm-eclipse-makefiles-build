@@ -53,7 +53,10 @@ struct osTimerControlBlock_t {
  *
  *    RED_LED::setOutput();
  *    GREEN_LED::setOutput();
- * 
+ *
+ *    myTimer2.create();
+ *    myTimer1.create();
+ *
  *    myTimer2.start(500);
  *    myTimer1.start(1000);
  *
@@ -219,6 +222,8 @@ public:
    using Timer<timerType>::destroy;
 
    TimerClass() : Timer<timerType>(shim) {
+   }
+   virtual ~TimerClass() {
    }
 
    void create() {
@@ -765,6 +770,8 @@ public:
 #endif
 
    ThreadClass() : Thread(shim) {
+   }
+   virtual ~ThreadClass() {
    }
 
    void run() {

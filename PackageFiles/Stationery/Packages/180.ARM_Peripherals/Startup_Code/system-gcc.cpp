@@ -1,0 +1,23 @@
+/*
+ *  @file system.cpp
+ *
+ *  Derived from  system-kinetis.cpp
+ *
+ * Generic system initialization for Kinetis family
+ *
+ *  Created on: 25/5/2017
+ */
+
+#include <stdlib.h>
+#include "hardware.h"
+
+/* Prevents the exception handling name demangling code getting pulled in */
+namespace __gnu_cxx {
+    void __verbose_terminate_handler() {
+        USBDM::setAndCheckErrorCode(USBDM::E_TERMINATED);
+    }
+}
+extern "C" __attribute__((__weak__)) void __cxa_pure_virtual(void);
+extern "C" __attribute__((__weak__)) void __cxa_pure_virtual(void) {
+    exit(1);
+}

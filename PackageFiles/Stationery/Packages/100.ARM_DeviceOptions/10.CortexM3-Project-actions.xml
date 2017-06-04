@@ -21,7 +21,6 @@
       </applyWhen>
 
       <!--  Common Cortex-M3 files -->
-
       <createFolder target="Sources"                                        />
       <createFolder target="Startup_Code"                                   />
       <createFolder target="Project_Headers"                 type="include" />
@@ -102,6 +101,7 @@
             <applyWhen>
                <variableRef idRef="hasCCNature" condition="isTrue" />
             </applyWhen>
+            <copy source="Startup_Code/system-gcc.cpp"                     target="Startup_Code/system-gcc.cpp" />
             <copy source="Sources/main.cpp"                                target="Sources/main.cpp" />
          </projectActionList>
       </projectActionList>

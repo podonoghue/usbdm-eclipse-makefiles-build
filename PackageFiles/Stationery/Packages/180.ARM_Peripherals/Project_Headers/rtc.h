@@ -89,11 +89,14 @@ public:
          // Lock registers
          rtc->LR  = RtcInfo::lr;
 
+#ifdef RTC_WAR_IERW_MASK
          // Write access
          rtc->WAR = RtcInfo::war;
-
+#endif
+#ifdef RTC_RAR_IERR_MASK
          // Read access
          rtc->RAR = RtcInfo::rar;
+#endif
       }
 
       // Update settings

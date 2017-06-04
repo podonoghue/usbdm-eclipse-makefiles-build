@@ -1,6 +1,6 @@
 /**
  * @file    pid.h
- * @brief   PID Controller
+ * @brief   PID Controller using CMSIS TimerClass
  *
  *  Created on: 10 Jul 2016
  *      Author: podonoghue
@@ -21,14 +21,14 @@ public:
 
 /**
  * PID Controller
- * Makes use of CMSIS Timer callback
+ * Makes use of CMSIS TimerClass
  *
  * These template parameters connect the PID controller to the input and output functions
  * @tparam inputFn      Input function  - used to obtain value of system state
  * @tparam outputFn     Output function - used to control the output variable
  */
 template<Pid::InFunction inputFn, Pid::OutFunction outputFn>
-class Pid_T : Pid {
+class Pid_T : private Pid, private CMSIS::TimerClass<osTimerPeriodic> {
 
 private:
    const double interval;     //! Interval for sampling
@@ -51,47 +51,34 @@ private:
 
    unsigned tickCount = 0;    //! Time in ticks since last enabled
 
-private:
-   /** Used by static callback to locate class */
-   static Pid_T *This;
-
-   /** Used to wrap the class method for passing to Timer callback */
-   static void callBack(const void *) {
-      This->update();
-   }
-
-   /** Used to wrap the class function for passing to Timer callback */
-   CMSIS::Timer<osTimerPeriodic> timer{callBack};
-
 public:
    /**
     * Constructor
     *
-    * @param Kp          Initial proportional constant
-    * @param Ki          Initial integral constant
-    * @param Kd          Initial differential constant
-    * @param interval    Sample interval for controller
-    * @param outMin      Minimum value of output variable
-    * @param outMax      Maximum value of output variable
+    * @param[in] Kp          Initial proportional constant
+    * @param[in] Ki          Initial integral constant
+    * @param[in] Kd          Initial differential constant
+    * @param[in] interval    Sample interval for controller
+    * @param[in] outMin      Minimum value of output variable
+    * @param[in] outMax      Maximum value of output variable
     */
    Pid_T(double Kp, double Ki, double Kd, double interval, double outMin, double outMax) :
       interval(interval), outMin(outMin), outMax(outMax), enabled(false) {
       setTunings(Kp, Ki, Kd);
-      This = this;
+      create();
    }
 
-   ~Pid_T() {
-   }
-
-   void initialise() {
-//      timer.create();
+   /**
+   * Destructor
+   */
+   virtual ~Pid_T() {
    }
 
    /**
     * Enable controller\n
     * Note: Controller is re-initialised when enabled
     *
-    * @param enable True to enable
+    * @param[in] enable True to enable
     */
    void enable(bool enable = true) {
       if (enable) {
@@ -100,11 +87,11 @@ public:
             currentInput = inputFn();
             integral     = 0; //currentOutput;
             tickCount    = 0;
-            timer.start(interval);
+            start(interval);
          }
       }
       else {
-         timer.stop();
+         stop();
       }
       enabled = enable;
    }
@@ -139,12 +126,12 @@ public:
    /**
     * Change controller tuning
     *
-    * @param Kp Proportional constant
-    * @param Ki Integral constant
-    * @param Kd Differential constant
+    * @param[in] Kp Proportional constant
+    * @param[in] Ki Integral constant
+    * @param[in] Kd Differential constant
     */
    void setTunings(double Kp, double Ki, double Kd) {
-      if (Kp<0 || Ki<0 || Kd<0) {
+      if ((Kp<0) || (Ki<0) || (Kd<0)) {
          USBDM::setAndCheckErrorCode(USBDM::E_ILLEGAL_PARAM);
       }
       kp = Kp;
@@ -155,7 +142,7 @@ public:
    /**
     * Change set-point of controller
     *
-    * @param value Value to set
+    * @param[in] value Value to set
     */
    void setSetpoint(double value) {
       setpoint = value;
@@ -228,7 +215,7 @@ private:
     *
     * Executed at \ref interval by Timer callback
     */
-   void update() {
+   void callback() override {
       if(!enabled) {
          return;
       }
@@ -261,7 +248,5 @@ private:
    }
 
 };
-template<Pid::InFunction inputFn, Pid::OutFunction outputFn>
-Pid_T<inputFn, outputFn>* Pid_T<inputFn, outputFn>::This = nullptr;
 
 #endif // PROJECT_HEADERS_PID_H_

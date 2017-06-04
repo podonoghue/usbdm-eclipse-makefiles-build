@@ -1,6 +1,6 @@
 /*----------------------------------------------------------------------------
  * @file main.cpp
- *  
+ *
  * Generated from main-RTX-CPP.cpp
  *
  * RTX example program
@@ -66,6 +66,18 @@ void timerExample() {
    static CMSIS::Thread thread1(threadLed1Toggle);
    static CMSIS::Thread thread2(threadLed2Toggle);
 
+   // Create timers
+   timer1.create();
+   timer2.create();
+
+   // Start the 2 timers with different periods
+   timer1.start(500);
+   timer2.start(1000);
+
+   // Start the two threads
+   thread1.run();
+   thread2.run();
+
 #if (OS_MAINSTKSIZE<(800/4))
 #warning "Requires RTX Main Thread stack size to be increased to about 800 bytes for printf()"
 #else
@@ -77,20 +89,13 @@ void timerExample() {
    printf(" thread2::getId()  = %p\n\r", thread2.getId());
 #endif
 
-   // Start the 2 timers with different periods
-   timer1.start(500);
-   timer2.start(1000);
-
-   // Start the two threads
-   thread1.run();
-   thread2.run();
-
 }
 
 int main() {
    timerExample();
 
    for(;;) {
+      CMSIS::Thread::delay(osWaitForever);
    }
    return 0;
 }

@@ -18,7 +18,7 @@
       <!-- Affects later CPP peripheral options -->
       <constant id="cpp.peripheral.subfamily"       value="&DEVICE_SUB_FAMILY;" />
       
-      <!-- These constants enable internal peripheral features -->
+      <!-- These constants enable peripheral features -->
       <constant id="cpp.peripheral.internal.adc"    value="true" />
       <constant id="cpp.peripheral.internal.ftm"    value="true" />
       <constant id="cpp.peripheral.internal.tpm"    value="true" />
@@ -36,35 +36,6 @@
             <variableRef idRef="projectOptionValue.CPP-abstraction" />
          </applyWhen>
 
-<!--
-         <projectOption id="net.sourceforge.usbdm.cdt.toolchain.optimization.level" config="debug">
-            <value>net.sourceforge.usbdm.gnu.c.optimization.level.optimize</value>
-         </projectOption>
--->
-
-         <deleteResource target="Project_Headers/Board_LEDs.h" />
-         <deleteResource target="Project_Headers/leds.h" />
-         <deleteResource target="Sources/leds.cpp" />
-         <deleteResource target="Startup_Code/vectors.c" />
-         <deleteResource target="Startup_Code/clock.c" />
-         <deleteResource target="Startup_Code/console.c" />
-
-         <createFolder   target="Snippets" />
-         <excludeSourceFolder target="Snippets" />
-	 
-         <copy source="Startup_Code/vectors-cm4.cpp"                       target="Startup_Code/vectors.cpp" macroReplacement="false" />
-         <copy source="Startup_Code/console.cpp"                           target="Startup_Code/console.cpp" />
-
-         <copy source="Project_Headers/system.h"                           target="Project_Headers/system.h" replace="true" derived="true" />
-
-         <copy source="Project_Headers/USBDM_Documentation.h"              target="Project_Headers/USBDM_Documentation.h" />
-         <copy source="Project_Headers/hardware.h"                         target="Project_Headers/hardware.h" />
-         <copy source="Project_Headers/pcr-&DEVICE_FAMILY;.h"              target="Project_Headers/pcr.h" />
-         <copy source="Project_Headers/gpio-&DEVICE_FAMILY;.h"             target="Project_Headers/gpio.h" />
-
-         <copy source="Sources/main.cpp"                                   target="Sources/main.cpp" replace="true" />
-
-         <copy source="projectFiles/Configure.usbdmProject"                target="Configure.usbdmProject" />
       </projectActionList>
    </projectActionList>
 </root>

@@ -1104,7 +1104,6 @@ __attribute__((weak))
 void software_init_hook (void) {
 }
 
-
 /**
   * @}
   */

@@ -74,6 +74,7 @@ Cortex-M0
          <applyWhen>
             <variableRef idRef="hasCCNature" condition="isTrue" />
          </applyWhen>
+         <copy source="Startup_Code/system-gcc.cpp"                   target="Startup_Code/system-gcc.cpp" />
          <copy source="Project_Headers/bme-cpp.h"                     target="Project_Headers/bme.h" />
          <copy source="Sources/main.cpp"                              target="Sources/main.cpp" />
       </projectActionList>

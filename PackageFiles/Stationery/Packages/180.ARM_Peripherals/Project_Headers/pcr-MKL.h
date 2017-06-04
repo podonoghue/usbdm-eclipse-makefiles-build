@@ -107,15 +107,6 @@ struct PcrInfo {
    uint32_t pcrValue;    //!< PCR value including MUX value to select this function
 };
 
-/**
- * Assumes all PORT function are mapped to MUX=1
- */
-//static constexpr uint8_t    FIXED_GPIO_FN = 1;
-/**
- * Assumes all ADC function are mapped to MUX=0
- */
-//static constexpr uint8_t    FIXED_ADC_FN  = 0;
-
 #ifndef PORT_PCR_DSE
 // Some device don't have DSE
 #define PORT_PCR_DSE(x) (0)
@@ -389,6 +380,7 @@ public:
       *pcrReg |= PORT_PCR_ISF_MASK;
    }
 
+#ifdef PORT_PCR_ODE_MASK
    /**
     * Set pull device on pin\n
     * Assumes clock to the port has already been enabled\n
@@ -408,6 +400,19 @@ public:
    static void setDriveMode(DriveMode mode) {
       *pcrReg = (*pcrReg&~PORT_PCR_ODE_MASK) | mode;
    }
+#else
+   /**
+    * Not supported
+    */
+   static void setPullDevice(PullMode) {
+   }
+
+   /**
+    * Not supported
+    */
+   static void setDriveMode(DriveMode) {
+   }
+#endif
 
    /**
     * Set drive strength on pin\n

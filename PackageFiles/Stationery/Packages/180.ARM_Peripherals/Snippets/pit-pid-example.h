@@ -61,7 +61,7 @@ private:
          this->This = This;
       };
       static void f(void) {
-         This->update();
+         This->callback();
       }
    };
 
@@ -72,12 +72,12 @@ public:
    /**
     * Constructor
     *
-    * @param Kp          Initial proportional constant
-    * @param Ki          Initial integral constant
-    * @param Kd          Initial differential constant
-    * @param interval    Sample interval for controller
-    * @param outMin      Minimum value of output variable
-    * @param outMax      Maximum value of output variable
+    * @param[in] Kp          Initial proportional constant
+    * @param[in] Ki          Initial integral constant
+    * @param[in] Kd          Initial differential constant
+    * @param[in] interval    Sample interval for controller
+    * @param[in] outMin      Minimum value of output variable
+    * @param[in] outMax      Maximum value of output variable
     */
    Pid_T(double Kp, double Ki, double Kd, double interval, double outMin, double outMax) :
       interval(interval), outMin(outMin), outMax(outMax), enabled(false) {
@@ -92,14 +92,11 @@ public:
       delete functionWrapper;
    }
 
-   void initialise() {
-   }
-
    /**
     * Enable controller\n
     * Note: Controller is re-initialised when enabled
     *
-    * @param enable True to enable
+    * @param[in] enable True to enable
     */
    void enable(bool enable = true) {
       if (enable) {
@@ -146,9 +143,9 @@ public:
    /**
     * Change controller tuning
     *
-    * @param Kp Proportional constant
-    * @param Ki Integral constant
-    * @param Kd Differential constant
+    * @param[in] Kp Proportional constant
+    * @param[in] Ki Integral constant
+    * @param[in] Kd Differential constant
     */
    void setTunings(double Kp, double Ki, double Kd) {
       if (Kp<0 || Ki<0 || Kd<0) {
@@ -162,7 +159,7 @@ public:
    /**
     * Change set-point of controller
     *
-    * @param value Value to set
+    * @param[in] value Value to set
     */
    void setSetpoint(double value) {
       setpoint = value;
@@ -233,9 +230,9 @@ private:
    /**
     * Main PID calculation
     *
-    * Executed at \ref interval by PIT callback
+    * Executed at \ref interval by Timer callback
     */
-   void update() {
+   void callback() {
       if(!enabled) {
          return;
       }

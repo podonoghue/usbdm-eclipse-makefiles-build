@@ -193,8 +193,7 @@ protected:
     * Note: Chooses the highest speed that is not greater than frequency.
     */
    void setSpeed(uint32_t clockFrequency, uint32_t frequency, int ctarNum) {
-      spi->CTAR[ctarNum] = (spi->CTAR[ctarNum] & ~(SPI_CTAR_BR_MASK|SPI_CTAR_PBR_MASK)) |
-            calculateDividers(clockFrequency, frequency);
+      spi->CTAR[ctarNum] = (spi->CTAR[ctarNum] & ~(SPI_CTAR_BR_MASK|SPI_CTAR_PBR_MASK)) | calculateDividers(clockFrequency, frequency);
    }
 
    /**
@@ -312,24 +311,26 @@ public:
       this->pushrMask = pushrMask;
    }
    /**
-    *  Transmit and receive a series of bytes
+    *  Transmit and receive a series of 4 to 8-bit values
     *
-    *  @param dataSize  Number of bytes to transfer
-    *  @param dataOut   Transmit bytes (may be NULL for Rx only)
-    *  @param dataIn    Receive byte buffer (may be NULL for Tx only)
+    *  @param[in]  dataSize  Number of values to transfer
+    *  @param[in]  txData    Transmit bytes (may be NULL for Rx only)
+    *  @param[out] rxData    Receive byte buffer (may be NULL for Tx only)
     *
-    *  Note: dataIn may use same buffer as dataOut
+    *  Note: rxData may use same buffer as txData
     */
-   void txRxBytes(uint32_t dataSize, const uint8_t *dataOut, uint8_t *dataIn=0);
+   void txRxBytes(uint32_t dataSize, const uint8_t *txData, uint8_t *rxData=0);
 
    /**
-    *  Transmit and receive a series of 16-bit values
+    *  Transmit and receive a series of 9 to 16-bit values
     *
-    *  @param dataSize  Number of values to transfer
-    *  @param dataOut   Transmit values (may be NULL for Rx only)
-    *  @param dataIn    Receive buffer (may be NULL for Tx only)
+    *  @param[in]  dataSize  Number of values to transfer
+    *  @param[in]  txData    Transmit values (may be NULL for Rx only)
+    *  @param[out] rxData    Receive buffer (may be NULL for Tx only)
+    *
+    *  Note: rxData may use same buffer as txData
     */
-   void txRxWords(uint32_t dataSize, const uint16_t *dataOut, uint16_t *dataIn=0);
+   void txRxWords(uint32_t dataSize, const uint16_t *txData, uint16_t *rxData=0);
 
    /**
     * Transmit and receive a value over SPI
@@ -437,12 +438,12 @@ public:
 public:
    virtual ~Spi_T() {}
 
-   virtual void enablePins() {
+   virtual void enablePins() override {
       // Configure SPI pins
       Spi0Info::initPCRs(pcrValue(PullUp, DriveHigh));
    }
 
-   virtual void disablePins() {
+   virtual void disablePins() override {
       // Configure SPI pins to mux=0
       Info::clearPCRs();
    }
@@ -455,7 +456,7 @@ public:
     *
     * Note: Chooses the highest speed that is not greater than frequency.
     */
-   virtual void setSpeed(uint32_t frequency, int ctarNum=0) {
+   virtual void setSpeed(uint32_t frequency, int ctarNum=0) override {
       Spi::setSpeed(Info::getClockFrequency(), frequency, ctarNum);
    }
 
@@ -469,7 +470,7 @@ public:
     *
     * Note: Determines values for the smallest delay that is not less than specified delays.
     */
-   void setDelays(float cssck=10*USBDM::us, float asc=10*USBDM::us, float dt=10*USBDM::us, int ctarNum=0) {
+   void setDelays(float cssck=10*USBDM::us, float asc=10*USBDM::us, float dt=10*USBDM::us, int ctarNum=0) override {
       Spi::setDelays(Info::getClockFrequency(), cssck, asc, dt, ctarNum);
    }
 

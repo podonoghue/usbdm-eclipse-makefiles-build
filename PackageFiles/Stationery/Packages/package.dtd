@@ -95,12 +95,13 @@
 
 <!-- File to be copied to a project -->
 <!ELEMENT copy EMPTY >
-   <!ATTLIST copy source  					CDATA #REQUIRED>
-   <!ATTLIST copy target  					CDATA #REQUIRED>
-   <!ATTLIST copy type    					CDATA #IMPLIED>
-   <!ATTLIST copy sourcePathType       (absolute|relative|unknown) #IMPLIED>
-   <!ATTLIST copy macroReplacement  	(true|false) "true">
-   <!ATTLIST copy replace           	(true|false) "false">
+   <!ATTLIST copy source                CDATA #REQUIRED>
+   <!ATTLIST copy target                CDATA #REQUIRED>
+   <!ATTLIST copy type                  CDATA #IMPLIED>
+   <!ATTLIST copy sourcePathType        (absolute|relative|unknown) #IMPLIED>
+   <!ATTLIST copy macroReplacement      (true|false) "true">
+   <!ATTLIST copy replace               (true|false) "false">
+   <!ATTLIST copy derived               (true|false) "false">
    
 <!-- Eclipse project options (for gcc, gdb etc) -->
 <!ELEMENT projectOption (value*)>

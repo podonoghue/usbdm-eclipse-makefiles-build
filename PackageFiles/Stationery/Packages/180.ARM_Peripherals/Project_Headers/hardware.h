@@ -29,6 +29,7 @@ enum ErrorCode {
    E_ILLEGAL_PARAM,     // Parameter has illegal value
    E_NO_HANDLER,        // No handler installed
    E_FLASH_INIT_FAILED, // Flash initialisation failed
+   E_TERMINATED,        // The program has terminated
 
    E_CMSIS_ERR_OFFSET = 1<<20,
 };

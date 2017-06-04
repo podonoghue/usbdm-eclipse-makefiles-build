@@ -31,7 +31,7 @@ static const uint16_t sprFactors[]  = {2,4,8,16,32,64,128,256,512};
  *
  * Note: Chooses the highest speed that is not greater than frequency.
  */
-void Spi::setSpeed(uint32_t targetFrequency) {
+void Spi::setSpeed(uint32_t targetFrequency=Spi0Info::speed) {
 
    int bestSPPR = 0;
    int bestSPR  = 0;
@@ -77,40 +77,40 @@ uint32_t Spi::txRx(uint32_t data) {
  *  Transmit and receive a series of bytes
  *
  *  @param dataSize  Number of bytes to transfer
- *  @param dataOut   Transmit bytes (may be NULL for Rx only)
- *  @param dataIn    Receive byte buffer (may be NULL for Tx only)
+ *  @param txData   Transmit bytes (may be NULL for Rx only)
+ *  @param rxData    Receive byte buffer (may be NULL for Tx only)
  *
- *  Note: dataIn may use same buffer as dataOut
+ *  Note: rxData may use same buffer as txData
  */
-void Spi::txRxBytes(uint32_t dataSize, const uint8_t *dataOut, uint8_t *dataIn) {
+void Spi::txRxBytes(uint32_t dataSize, const uint8_t *txData, uint8_t *rxData) {
    uint8_t dummy = 0xFF;
-   uint32_t dataInInc  = DMA_DCR_DINC_MASK|DMA_DCR_ERQ_MASK|DMA_DCR_CS_MASK|DMA_DCR_SSIZE(1)|DMA_DCR_DSIZE(1)|DMA_DCR_D_REQ_MASK;
-   uint32_t dataOutInc = DMA_DCR_SINC_MASK|DMA_DCR_ERQ_MASK|DMA_DCR_CS_MASK|DMA_DCR_SSIZE(1)|DMA_DCR_DSIZE(1)|DMA_DCR_D_REQ_MASK;
+   uint32_t rxDataInc  = DMA_DCR_DINC_MASK|DMA_DCR_ERQ_MASK|DMA_DCR_CS_MASK|DMA_DCR_SSIZE(1)|DMA_DCR_DSIZE(1)|DMA_DCR_D_REQ_MASK;
+   uint32_t txDataInc = DMA_DCR_SINC_MASK|DMA_DCR_ERQ_MASK|DMA_DCR_CS_MASK|DMA_DCR_SSIZE(1)|DMA_DCR_DSIZE(1)|DMA_DCR_D_REQ_MASK;
 
-   if (dataIn == 0) {
-      dataIn = &dummy;
-      dataInInc &= ~DMA_DCR_DINC_MASK;
+   if (rxData == 0) {
+      rxData = &dummy;
+      rxDataInc &= ~DMA_DCR_DINC_MASK;
    }
-   if (dataOut == 0) {
-      dataOut = &dummy;
-      dataOutInc &= ~DMA_DCR_SINC_MASK;
+   if (txData == 0) {
+      txData = &dummy;
+      txDataInc &= ~DMA_DCR_SINC_MASK;
    }
    // Optional Rx channel
    DmaChannel::DMAInformation dmaRxInformation = {
       (uint32_t)&spi->D,
-      (uint32_t)dataIn,
+      (uint32_t)rxData,
       dataSize,
-      dataInInc,
+      rxDataInc,
       (uint8_t)dmaSpiRxSlot,
    };
    dmacRxChannel->configure(&dmaRxInformation);
 
    // Must have Tx channel
    DmaChannel::DMAInformation dmaTxInformation = {
-      (uint32_t)dataOut,
+      (uint32_t)txData,
       (uint32_t)&spi->D,
       dataSize,
-      dataOutInc,
+      txDataInc,
       (uint8_t)(dmaSpiRxSlot+1),
    };
    dmacTxChannel->configure(&dmaTxInformation);

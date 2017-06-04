@@ -13,8 +13,6 @@
 
 /**
  * Class representing an MAX31855 connected over SPI
- *
- * @tparam pinNum Pin number for PCSn signal
  */
 class Max31855 {
 public:
@@ -29,8 +27,8 @@ public:
 
 protected:
 
-   /** SPI CTAR value */
-   uint32_t spiCtarValue = 0;
+   /** SPI configuration value */
+   uint32_t spiConfig = 0;
 
    /** SPI used for LCD */
    USBDM::Spi &spi;
@@ -38,40 +36,39 @@ protected:
    /** Number of PCS signal to use */
    const int pinNum;
 
+   /** Offset to add to reading from probe */
+   int   offset;
+
    /** Used to disable sensor */
    bool  enabled;
-
-   /**
-    * Initialise the LCD
-    */
-   void initialise() {
-      spi.setPcsPolarity(pinNum, false);
-
-      IrqProtect protect;
-      spi.setSpeed(2500000);
-      spi.setMode(USBDM::SPI_MODE0);
-      spi.setDelays(0.1*USBDM::us, 0.1*USBDM::us, 0.1*USBDM::us);
-      spi.setFrameSize(8);
-
-      // Record CTAR value in case SPI shared
-      spiCtarValue = spi.getCTAR0Value();
-   }
 
 public:
    /**
     * Constructor
     *
-    * @param spi     The SPI to use to communicate with MAX31855
-    * @param pinNum  Number of PCS to use
+    * @param[in] spi     The SPI to use to communicate with MAX31855
+    * @param[in] pinNum  Number of PCS to use
     */
-   Max31855(USBDM::Spi *spi, int pinNum) : spi(spi), pinNum(pinNum) {
-      initialise();
-   }
+   Max31855(USBDM::Spi &spi, int pinNum) : spi(spi), pinNum(pinNum) {
+      spi.setPcsPolarity(pinNum, USBDM::ActiveLow);
+
+      spi.startTransaction();
+
+      // Configure SPI
+      spi.setSpeed(2500000);
+      spi.setMode(USBDM::SpiMode0);
+      spi.setDelays(0.1*USBDM::us, 0.1*USBDM::us, 0.1*USBDM::us);
+      spi.setFrameSize(8);
+
+      // Record configuration in case SPI is shared
+      spiConfig = spi.getCTAR0Value();
+      spi.endTransaction();
+      }
 
    /**
     * Convert status to string
     *
-    * @param status 3-bit status value from thermocouple
+    * @param[in] status 3-bit status value from thermocouple
     *
     * @return Short string representing status
     */
@@ -89,7 +86,9 @@ public:
    /**
     * Enables/disables the sensor
     *
-    * @param enable True to enable sensor
+    * @param[in] enable True to enable sensor
+    *
+    * @note This is a non-volatile setting
     */
    void enable(bool enable=true) {
       enabled = enable;
@@ -113,22 +112,27 @@ public:
    /**
     * Read thermocouple
     *
-    * @param temperature   Temperature reading of external probe (.25 degree resolution)
-    * @param coldReference Temperature reading of internal cold-junction reference (.0625 degree resolution)
+    * @param[out] temperature   Temperature reading of external probe (.25 degree resolution)
+    * @param[out] coldReference Temperature reading of internal cold-junction reference (.0625 degree resolution)
     *
     * @return status flag
+    *
     * @note Temperature and cold-junction may be valid even if the thermocouple is disabled (TH_DISABLED).
     */
    ThermocoupleStatus getReading(float &temperature, float &coldReference) {
       uint8_t data[] = {
             0xFF, 0xFF, 0xFF, 0xFF,
       };
-      spi.setCTAR0Value(spiCtarValue);
+      spi.startTransaction(spiConfig);
       spi.setPushrValue(SPI_PUSHR_CTAS(0)|SPI_PUSHR_PCS(1<<pinNum));
       spi.txRxBytes(sizeof(data), nullptr, data);
+      spi.endTransaction();
 
       // Temperature = sign-extended 14-bit value
       temperature = (((int16_t)((data[0]<<8)|data[1]))>>2)/4.0;
+
+      // Add manual offset
+      temperature += offset;
 
       // Cold junction = sign-extended 12-bit value
       coldReference = (((int16_t)((data[2]<<8)|data[3]))>>4)/16.0;
@@ -170,11 +174,12 @@ public:
       // Return error flag
       return status;
    }
+
    /**
     * Read enabled thermocouple
     *
-    * @param temperature   Temperature reading of external probe (.25 degree resolution)
-    * @param coldReference Temperature reading of internal cold-junction reference (.0625 degree resolution)
+    * @param[out] temperature   Temperature reading of external probe (.25 degree resolution)
+    * @param[out] coldReference Temperature reading of internal cold-junction reference (.0625 degree resolution)
     *
     * @return Status of sensor
     * @note Temperature will be zero if the thermocouple is disabled or unusable.
@@ -191,7 +196,7 @@ public:
    /**
     * Set offset added to temperature reading
     *
-    * @param off Offset to set
+    * @param[in] off offset to set
     *
     * @note This is a non-volatile setting
     */
@@ -202,7 +207,7 @@ public:
    /**
     * Get offset that is added to temperature reading
     *
-    * @note Offset as an integer
+    * @return Offset as an integer
     */
    int getOffset() {
       return offset;

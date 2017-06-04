@@ -61,7 +61,11 @@ const char *getErrorMessage(ErrorCode err) {
 ErrorCode checkError() {
    while (errorCode != E_NO_ERROR) {
       const char *msg = getErrorMessage();
+      __attribute__((unused))
+      int cmsisErrorCode = errorCode & ~E_CMSIS_ERR_OFFSET;
       puts(msg);
+      // If you arrive here then an error has been detected.
+      // If a CMSIS error, check the 'cmsisErrorCode' above and refer to the CMSIS error codes
       __BKPT();
    }
    return errorCode;

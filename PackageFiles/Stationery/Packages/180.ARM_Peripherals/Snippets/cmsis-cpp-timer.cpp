@@ -36,6 +36,10 @@ void timerExample() {
    static CMSIS::Timer<osTimerPeriodic> myTimer1(cb1);
    static CMSIS::Timer<osTimerPeriodic> myTimer2(cb2);
 
+   // Create the timers
+   myTimer2.create();
+   myTimer1.create();
+
    // Start the timers
    myTimer2.start(500);
    myTimer1.start(1000);

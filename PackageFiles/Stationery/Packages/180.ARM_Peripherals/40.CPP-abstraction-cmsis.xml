@@ -18,13 +18,14 @@
          </applyWhen>
          <copy source="Project_Headers/cmsis.h"                     target="Project_Headers/cmsis.h" />
          <copy source="Project_Headers/USBDM_CMSIS_Documentation.h" target="Project_Headers/USBDM_CMSIS_Documentation.h" />
+         <copy source="Snippets/cmsis-cpp-pid.h"                    target="Snippets/cmsis-cpp-pid.h" />
          <copy source="Snippets/cmsis-cpp-mailQueue.cpp"            target="Snippets/cmsis-cpp-mailQueue.cpp" />
          <copy source="Snippets/cmsis-cpp-memoryPool.cpp"           target="Snippets/cmsis-cpp-memoryPool.cpp" />
          <copy source="Snippets/cmsis-cpp-messageQueue.cpp"         target="Snippets/cmsis-cpp-messageQueue.cpp" />
          <copy source="Snippets/cmsis-cpp-thread.cpp"               target="Snippets/cmsis-cpp-thread.cpp" />
          <copy source="Snippets/cmsis-cpp-thread-mma845x.cpp"       target="Snippets/cmsis-cpp-thread-mma845x.cpp" />
          <copy source="Snippets/cmsis-cpp-timer.cpp"                target="Snippets/cmsis-cpp-timer.cpp" />
-         <copy source="Snippets/cmsis-cpp-timer-mma845x"            target="Snippets/cmsis-cpp-timer-mma845x" />
+         <copy source="Snippets/cmsis-cpp-timer-mma845x.cpp"        target="Snippets/cmsis-cpp-timer-mma845x.cpp" />
       </projectActionList>
    </projectActionList>
 </root>

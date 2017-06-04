@@ -366,6 +366,12 @@
          <aliasOption name="rtc_cr_sup" />
          <aliasOption name="rtc_cr_wpe" />
       </category>   
+      <category name="RTC LR" description="RTC Lock Register">
+         <aliasOption name="rtc_lr_lrl" />
+         <aliasOption name="rtc_lr_srl" />
+         <aliasOption name="rtc_lr_crl" />
+         <aliasOption name="rtc_lr_tcl" />
+      </category>   
       <category name="RTC TCR" description="RTC Time Compensation Register">
          <aliasOption name="rtc_tcr_cir" />
          <aliasOption name="rtc_tcr_tcr" />

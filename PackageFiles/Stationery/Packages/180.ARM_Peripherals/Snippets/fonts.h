@@ -2,8 +2,8 @@
  * @file    fonts.h
  * @brief   Fonts for LCD
  */
-#ifndef SOURCES_FONTS_H_
-#define SOURCES_FONTS_H_
+#ifndef INCLUDE_USBDM_FONTS_H
+#define INCLUDE_USBDM_FONTS_H
 
 #include <stdint.h>
  /*
@@ -22,11 +22,13 @@ namespace USBDM {
 class Font {
 
 public:
+   static constexpr uint8_t BASE_CHAR = ' '; // First character in character set
+
    const uint8_t width;          // Width of the character in pixels
    const uint8_t height;         // Height of the character in pixels
    const uint8_t bytesPerChar;   // Bytes used for each character in data table
 
-   const uint8_t *const data;    // Data describing the character pixels
+   const uint8_t *const data;    // Data describing the character pixels (index starts at BASE_CHAR)
 };
 
 /** Small 6x8 font */
@@ -38,5 +40,4 @@ extern Font largeFont;
 
 }; // end namespace USBDM
 
-#endif /* SOURCES_FONTS_H_ */
-
+#endif /* INCLUDE_USBDM_FONTS_H */
