@@ -406,7 +406,7 @@ USBDM_ErrorCode FlashProgrammer_HCS08::resetAndConnectTarget(void) {
 
    TargetMode_t targetMode;
 
-   DeviceData::ResetMethod resetMethod = getresetMethod();
+   DeviceData::ResetMethod resetMethod = getResetMethod();
    log.print("Setting reset method to %s\n", DeviceData::getResetMethodName(resetMethod));
    switch (resetMethod) {
       default:

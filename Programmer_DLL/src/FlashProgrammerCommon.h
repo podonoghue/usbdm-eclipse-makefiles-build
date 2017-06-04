@@ -153,7 +153,7 @@ protected:
     *
     * @return reset method
     */
-   DeviceData::ResetMethod getresetMethod();
+   DeviceData::ResetMethod getResetMethod();
 
    //=======================================================================
    // Initialises TCL support for current target

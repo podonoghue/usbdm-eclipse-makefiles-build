@@ -124,7 +124,7 @@ protected:
     *
     * @return reset method
     */
-   DeviceData::ResetMethod getresetMethod();
+   DeviceData::ResetMethod getResetMethod();
 
    void createMemoryMapXML(const char **buffer, unsigned *bufferSize);
 

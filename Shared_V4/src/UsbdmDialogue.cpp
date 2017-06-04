@@ -1157,7 +1157,7 @@ void UsbdmDialogue::populateDeviceDropDown() {
    vector<DeviceDataPtr>::const_iterator it;
    for ( it=deviceInterface->getDeviceDatabase()->begin(), deviceIndex=0;
          it < deviceInterface->getDeviceDatabase()->end(); it++, deviceIndex++ ) {
-      log.print("%s\n", (*it)->getTargetName().c_str());
+//      log.print("%s\n", (*it)->getTargetName().c_str());
 
       if (((*it)->getTargetName().length() != 0) &&
             !((*it)->isHidden()) &&

@@ -375,8 +375,7 @@ USBDM_ErrorCode FlashProgrammer_ARM::resetAndConnectTarget(void) {
 
    TargetMode_t targetMode;
 
-   DeviceData::ResetMethod resetMethod = getresetMethod();
-   log.print("Setting reset method to %s\n", DeviceData::getResetMethodName(resetMethod));
+   DeviceData::ResetMethod resetMethod = getResetMethod();
    switch (resetMethod) {
       default:
       case DeviceData::resetTargetDefault:

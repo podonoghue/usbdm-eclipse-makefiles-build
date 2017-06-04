@@ -294,11 +294,25 @@ USBDM_ErrorCode GdbHandlerCommon::runTCLCommand(const char *command) {
  *
  * @return reset method
  */
-DeviceData::ResetMethod GdbHandlerCommon::getresetMethod() {
-   DeviceData::ResetMethod resetMethod = deviceData->getResetMethod();
-   if (resetMethod == DeviceData::resetTargetDefault) {
-      return defaultResetMethod;
+DeviceData::ResetMethod GdbHandlerCommon::getResetMethod() {
+   LOGGING_Q;
+
+   DeviceData::ResetMethod resetMethod = defaultResetMethod;
+   if (deviceData == nullptr) {
+      log.print("Device not set!\n");
    }
+   else {
+      resetMethod = deviceData->getResetMethod();
+      if ((resetMethod == DeviceData::resetTargetDefault)) {
+         ResetMethodsConstPtr resetMethods = deviceData->getResetMethods();
+         if (resetMethods == nullptr) {
+            log.print("resetMethods not set!\n");
+            resetMethod = defaultResetMethod;
+         }
+         resetMethod = resetMethods->getDefaultMethod();
+      }
+   }
+   log.print("Reset method = %s\n", DeviceData::getResetMethodName(resetMethod));
    return resetMethod;
 }
 
@@ -307,8 +321,7 @@ USBDM_ErrorCode GdbHandlerCommon::resetTarget() {
 
    TargetMode_t targetMode;
 
-   DeviceData::ResetMethod resetMethod = deviceData->getResetMethod();
-   log.print("Setting reset method to %s\n", DeviceData::getResetMethodName(resetMethod));
+   DeviceData::ResetMethod resetMethod = getResetMethod();
    switch (resetMethod) {
       default:
       case DeviceData::resetTargetDefault:

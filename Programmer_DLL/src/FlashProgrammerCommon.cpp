@@ -1354,20 +1354,25 @@ void FlashProgrammerCommon::restoreSecurityAreas(FlashImagePtr flashImage) {
  */
 DeviceData::EraseMethod FlashProgrammerCommon::getEraseMethod() {
    LOGGING_Q;
+
+   DeviceData::EraseMethod eraseMethod = defaultEraseMethod;
    if (device == nullptr) {
       log.print("Device not set!\n");
-      return defaultEraseMethod;
    }
-   DeviceData::EraseMethod eraseMethod = device->getEraseMethod();
-
-   if ((eraseMethod == DeviceData::eraseTargetDefault)) {
-      EraseMethodsConstPtr eraseMethods = device->getEraseMethods();
-      if (eraseMethods == nullptr) {
-         log.print("eraseMethods not set!\n");
-         return defaultEraseMethod;
+   else {
+      eraseMethod = device->getEraseMethod();
+      if ((eraseMethod == DeviceData::eraseTargetDefault)) {
+         EraseMethodsConstPtr eraseMethods = device->getEraseMethods();
+         if (eraseMethods == nullptr) {
+            log.print("eraseMethods not set!\n");
+            eraseMethod = defaultEraseMethod;
+         }
+         else {
+            eraseMethod = eraseMethods->getDefaultMethod();
+         }
       }
-      return eraseMethods->getDefaultMethod();
    }
+   log.print("Erase method = %s\n", DeviceData::getEraseMethodName(eraseMethod));
    return eraseMethod;
 }
 
@@ -1376,21 +1381,24 @@ DeviceData::EraseMethod FlashProgrammerCommon::getEraseMethod() {
  *
  * @return reset method
  */
-DeviceData::ResetMethod FlashProgrammerCommon::getresetMethod() {
+DeviceData::ResetMethod FlashProgrammerCommon::getResetMethod() {
    LOGGING_Q;
+
+   DeviceData::ResetMethod resetMethod = defaultResetMethod;
    if (device == nullptr) {
       log.print("Device not set!\n");
-      return defaultResetMethod;
    }
-   DeviceData::ResetMethod resetMethod = device->getResetMethod();
-
-   if ((resetMethod == DeviceData::resetTargetDefault)) {
-      ResetMethodsConstPtr resetMethods = device->getResetMethods();
-      if (resetMethods == nullptr) {
-         log.print("resetMethods not set!\n");
-         return defaultResetMethod;
+   else {
+      resetMethod = device->getResetMethod();
+      if ((resetMethod == DeviceData::resetTargetDefault)) {
+         ResetMethodsConstPtr resetMethods = device->getResetMethods();
+         if (resetMethods == nullptr) {
+            log.print("resetMethods not set!\n");
+            resetMethod = defaultResetMethod;
+         }
+         resetMethod = resetMethods->getDefaultMethod();
       }
-      return resetMethods->getDefaultMethod();
    }
+   log.print("Reset method = %s\n", DeviceData::getResetMethodName(resetMethod));
    return resetMethod;
 }
