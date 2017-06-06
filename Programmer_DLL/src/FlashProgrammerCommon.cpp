@@ -71,6 +71,7 @@ FlashProgrammerCommon::~FlashProgrammerCommon() {
  */
 USBDM_ErrorCode FlashProgrammerCommon::setTargetInterface(BdmInterfacePtr bdmInterface) {
    this->bdmInterface = bdmInterface;
+   initTCL();
    return BDM_RC_OK;
 }
 
@@ -84,23 +85,9 @@ USBDM_ErrorCode FlashProgrammerCommon::setTCLInterpreter(UsbdmTclInterperPtr ti)
 
    tclInterpreter = ti;
 
-   if (tclInterpreter == NULL) {
+   if (tclInterpreter == nullptr) {
       log.error("No TCL interpreter\n");
       return PROGRAMMING_RC_ERROR_TCL_SCRIPT;
-   }
-   // Run initial TCL script (loads routines)
-   TclScriptConstPtr script = device->getFlashScripts();
-   if (!script) {
-      log.error("No TCL script found\n");
-      return PROGRAMMING_RC_ERROR_TCL_SCRIPT;
-   }
-#if defined(LOG) && 0
-   log.print(script->toString().c_str());
-#endif
-   USBDM_ErrorCode rc = runTCLScript(script);
-   if (rc != PROGRAMMING_RC_OK) {
-      log.error("runTCLScript() failed\n");
-      return rc;
    }
    return PROGRAMMING_RC_OK;
 }
@@ -108,14 +95,21 @@ USBDM_ErrorCode FlashProgrammerCommon::setTCLInterpreter(UsbdmTclInterperPtr ti)
 /**
  * Initialises TCL support for current target
  */
-USBDM_ErrorCode FlashProgrammerCommon::initTCL(void) {
+USBDM_ErrorCode FlashProgrammerCommon::initTCL() {
    LOGGING;
 
+   USBDM_ErrorCode rc = BDM_RC_OK;
+
    // Set up TCL interpreter only once
-   if (tclInterpreter != NULL) {
-      return PROGRAMMING_RC_OK;
+   if (tclInterpreter == NULL) {
+      rc = setTCLInterpreter(UsbdmTclInterperFactory::createUsbdmTclInterpreter(bdmInterface));
    }
-   return setTCLInterpreter(UsbdmTclInterperFactory::createUsbdmTclInterpreter(bdmInterface));
+   if (rc != BDM_RC_OK) {
+      return rc;
+   }
+   // Set device settings
+   rc = tclInterpreter->setDeviceParameters(device);
+   return rc;
 }
 /**
  *  Release the current TCL interpreter
@@ -126,32 +120,32 @@ USBDM_ErrorCode FlashProgrammerCommon::releaseTCL(void) {
    return PROGRAMMING_RC_OK;
 }
 
-/**
- * Executes a TCL script in the current TCL interpreter
- *
- * @param script Script to run
- */
-USBDM_ErrorCode FlashProgrammerCommon::runTCLScript(TclScriptConstPtr script) {
-   LOGGING;
-   if (tclInterpreter == NULL) {
-      log.error("No TCL Interpreter\n");
-      return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
-   }
-   int rc = tclInterpreter->evalTclScript(script->getScript().c_str());
-   const char *result = tclInterpreter->getTclResult();
-   if ((result != NULL) && (*result != '\0')) {
-      // Error return
-      log.error("Result = \'%s\'\n", result);
-      return PROGRAMMING_RC_ERROR_TCL_SCRIPT;
-   }
-   if (rc != 0) {
-      // Unexpected failure!
-      log.error("Failed\n");
-      log.error("%s", script->toString().c_str());
-      return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
-   }
-   return PROGRAMMING_RC_OK;
-}
+///**
+// * Executes a TCL script in the current TCL interpreter
+// *
+// * @param script Script to run
+// */
+//USBDM_ErrorCode FlashProgrammerCommon::runTCLScript(TclScriptConstPtr script) {
+//   LOGGING;
+//   if (tclInterpreter == NULL) {
+//      log.error("No TCL Interpreter\n");
+//      return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
+//   }
+//   int rc = tclInterpreter->evalTclScript(script->getScript().c_str());
+//   const char *result = tclInterpreter->getTclResult();
+//   if ((result != NULL) && (*result != '\0')) {
+//      // Error return
+//      log.error("Result = \'%s\'\n", result);
+//      return PROGRAMMING_RC_ERROR_TCL_SCRIPT;
+//   }
+//   if (rc != 0) {
+//      // Unexpected failure!
+//      log.error("Failed\n");
+//      log.error("%s", script->toString().c_str());
+//      return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
+//   }
+//   return PROGRAMMING_RC_OK;
+//}
 /**
  * Executes a TCL command previously loaded in the TCL interpreter
  *
@@ -180,9 +174,11 @@ USBDM_ErrorCode FlashProgrammerCommon::runTCLCommand(const char *command) {
  */
 USBDM_ErrorCode FlashProgrammerCommon::setDeviceData(const DeviceDataConstPtr device) {
    LOGGING_Q;
+
+   log.print("Target=%s\n", device->getTargetName().c_str());
+
    currentFlashProgram.reset();
    this->device = device;
-   log.print("Target=%s\n", device->getTargetName().c_str());
    releaseTCL();
    initTCL();
    return PROGRAMMING_RC_OK;
@@ -198,10 +194,13 @@ USBDM_ErrorCode FlashProgrammerCommon::setDeviceData(const DeviceDataConstPtr de
  */
 USBDM_ErrorCode FlashProgrammerCommon::setDeviceData(const DeviceDataConstPtr device, UsbdmTclInterperPtr tclInterpreter) {
    LOGGING_Q;
+
+   log.print("Target=%s\n", device->getTargetName().c_str());
+
    currentFlashProgram.reset();
    this->device = device;
-   log.print("Target=%s\n", device->getTargetName().c_str());
    setTCLInterpreter(tclInterpreter);
+   initTCL();
    return PROGRAMMING_RC_OK;
 }
 

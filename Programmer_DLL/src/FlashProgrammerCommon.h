@@ -94,7 +94,8 @@ protected:
    USBDM_ErrorCode configureICG_Clock(unsigned long *busFrequency, ICG_ClockParameters_t *clockParameters);
    USBDM_ErrorCode configureMCG_Clock(unsigned long *busFrequency, MCG_ClockParameters_t *clockParameters);
    USBDM_ErrorCode configureExternal_Clock(unsigned long  *busFrequency);
-   USBDM_ErrorCode trimTargetClock(uint32_t trimAddress, unsigned long targetBusFrequency, uint16_t *returnTrimValue,
+   USBDM_ErrorCode trimTargetClock(
+         uint32_t trimAddress, unsigned long targetBusFrequency, uint16_t *returnTrimValue,
          unsigned long *measuredBusFrequency, int do9BitTrim);
    USBDM_ErrorCode trimICS_Clock(ICS_ClockParameters_t *clockParameters);
    USBDM_ErrorCode trimMCG_Clock(MCG_ClockParameters_t *clockParameters);
@@ -136,7 +137,6 @@ protected:
    const DeviceData::EraseMethod   defaultEraseMethod;
    const DeviceData::ResetMethod   defaultResetMethod;
 
-
    static const char *getFlashOperationName(FlashOperation flashOperation);
 
    virtual USBDM_ErrorCode massEraseTarget(bool resetTarget) = 0;
@@ -155,27 +155,30 @@ protected:
     */
    DeviceData::ResetMethod getResetMethod();
 
-   //=======================================================================
-   // Initialises TCL support for current target
-   //
-   USBDM_ErrorCode initTCL(void);
-   //=======================================================================
-   // Sets and initialises the TCL interpreter
-   //
+   /*
+    * Initialises TCL support for current target
+    */
+   USBDM_ErrorCode initTCL();
+   /*
+    * Sets and initialises the TCL interpreter
+    */
    USBDM_ErrorCode setTCLInterpreter(UsbdmTclInterperPtr ti);
-   //=======================================================================
-   //  Release the current TCL interpreter
-   //
+   /*
+    * Release the current TCL interpreter
+    */
    USBDM_ErrorCode releaseTCL(void);
-   //=======================================================================
-   // Executes a TCL script in the current TCL interpreter
-   //
-   USBDM_ErrorCode runTCLScript(TclScriptConstPtr script);
-   //=======================================================================
-   // Executes a TCL command previously loaded in the TCL interpreter
-   //
+//   /*
+//    * Executes a TCL script in the current TCL interpreter
+//    */
+//   USBDM_ErrorCode runTCLScript(TclScriptConstPtr script);
+   /*
+    * Executes a TCL command previously loaded in the TCL interpreter
+    */
    USBDM_ErrorCode runTCLCommand(const char *command);
 
+   /*
+    * Probe memory location to check if RAM
+    */
    USBDM_ErrorCode probeMemory(MemorySpace_t memorySpace, uint32_t address);
 };
 
