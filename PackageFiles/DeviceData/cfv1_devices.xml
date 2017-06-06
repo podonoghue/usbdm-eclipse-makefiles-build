@@ -150,12 +150,27 @@ Coldfire+
          <memoryRange start="0xFFFF8000" size="32K"/> <!-- Peripherals -->
       </memory>         
       
+      <resetMethods id="cfv1ResetMethods" >
+         <resetMethod method="hardware" />
+         <resetMethod method="software" isDefault="true" />
+      </resetMethods>
+      
+      <eraseMethods id="cfv1EraseMethods" >
+         <eraseMethod method="Mass" isDefault="true"  />
+         <eraseMethod method="All" />
+         <eraseMethod method="Selective" />
+      </eraseMethods>
    </sharedInformation>
-		
+
    <deviceList>
-   <!-- Default -->
-      <device family="CFV1" name="_Default" isDefault="true">
+<!-- ===================================================================================== -->
+<!-- 
+   CFV Defaults
+-->
+      <device name="cfv1DefaultDevice" family="CFV1" isDefault="true">
          <clock type="External" />
+         <resetMethodsRef ref="cfv1ResetMethods" />
+         <eraseMethodsRef ref="cfv1EraseMethods" />
          <memoryRef ref="coldfire16K_Ram" />
          <!-- Regular flash or pFlash memory -->
          <memory registerAddress="0xFF9820" type="flash" securityAddress="0x0400" sectorSize="1024" alignment="4" >
@@ -174,7 +189,7 @@ Coldfire+
          <soptAddress value="0xFF9802" />
          <sdidAddress value="0xFF9806" />
          <sdidMask value="0x0FFF" />
-         <sdid value="0x0000" mask="0x0000"/>
+         <sdid value="0x0000" mask="0x0FFF"/>
          <tclScriptRef ref="CFV1-default-Scripts" />
          <registerDescriptionRef ref="Coldfire-register-description" />
          <note>Default CFV1 Device</note>

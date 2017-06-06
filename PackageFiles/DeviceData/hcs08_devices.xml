@@ -72,10 +72,28 @@
             FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD
          </securityInfo>
       </securityEntry>
+      
+      <resetMethods id="hcs08ResetMethods" >
+         <resetMethod method="hardware" />
+         <resetMethod method="software" isDefault="true" />
+      </resetMethods>
+      
+      <eraseMethods id="hcs08EraseMethods" >
+         <eraseMethod method="Mass" isDefault="true"  />
+         <eraseMethod method="All" />
+         <eraseMethod method="Selective" />
+      </eraseMethods>
    </sharedInformation>
+
    <deviceList>
-      <device family="HCS08" name="_Default" isDefault="true">
+<!-- ===================================================================================== -->
+<!-- 
+   HCS08 Defaults
+-->
+      <device name="hcs08DefaultDevice" family="HCS08" isDefault="true">
          <clock type="External" />
+         <resetMethodsRef ref="hcs08ResetMethods" />
+         <eraseMethodsRef ref="hcs08EraseMethods" />
          <memory type="ram">
             <memoryRange start="0x000080"  end="0x00036F"/>
          </memory>

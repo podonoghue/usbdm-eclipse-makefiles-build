@@ -65,10 +65,10 @@ Test Devices:
       <!--  
             Register sets (dummy sets to pass validation)
       -->
-      <registerDescription id="CortexM0-register-description" count="0" />
-      <registerDescription id="CortexM3-register-description" count="0" />
+      <registerDescription id="CortexM0-register-description"  count="0" />
+      <registerDescription id="CortexM3-register-description"  count="0" />
       <registerDescription id="CortexM3F-register-description" count="0" />
-      <registerDescription id="CortexM4-register-description" count="0" />
+      <registerDescription id="CortexM4-register-description"  count="0" />
       <registerDescription id="CortexM4F-register-description" count="0" />
 
       <!-- 
@@ -853,8 +853,10 @@ Test Devices:
    
    <deviceList>
 <!-- ===================================================================================== -->
-<!-- Default -->
-      <device name="kinetisDefault" family="CortexM4" isDefault="true">
+<!-- 
+   Kinetis Defaults
+-->
+      <device name="kinetisDefaultDevice" family="CortexM4" isDefault="true">
          <resetMethodsRef ref="kinetisResetMethods" />
          <eraseMethodsRef ref="kinetisEraseMethods"/>
          <memory type="flash" >

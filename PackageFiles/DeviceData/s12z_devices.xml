@@ -137,18 +137,35 @@
          <securityEntryRef ref="S12Z-default-security" />
          <memoryRange size="192K" end="0xFFFFFF" />
       </memory>
+      
+      <resetMethods id="s12zResetMethods" >
+         <resetMethod method="hardware" />
+         <resetMethod method="software" isDefault="true" />
+      </resetMethods>
+      
+      <eraseMethods id="s12zEraseMethods" >
+         <eraseMethod method="Mass" isDefault="true"  />
+         <eraseMethod method="All" />
+         <eraseMethod method="Selective" />
+      </eraseMethods>
    </sharedInformation>
-   
+
    <deviceList>
-      <device family="S12Z" name="_Default" isDefault="true">
+<!-- ===================================================================================== -->
+<!-- 
+   S12Z Defaults
+-->
+      <device name="s12zDefaultDevice" family="S12Z" isDefault="true">
          <clock type="External" />
+         <resetMethodsRef ref="s12zResetMethods" />
+         <eraseMethodsRef ref="s12zEraseMethods" />
          <memoryRef ref="s12z2K_Ram" />
          <memoryRef ref="FTMRZ_EEPROM_256b_4bS" />
          <memoryRef ref="FTMRZ_PFlash0_SEC_128K_512bS" />
          <copctlAddress value="0x000C" />
          <sdidAddress value="0x0000" />
          <sdidMask value="0xFFFFFFFF" />
-         <sdid value="0x00000000" mask="0x00000000"/>
+         <sdid value="0x00000" />
          <flashScripts>
             <tclScriptRef ref="S12Z-FTMRZ-flash-scripts" />
          </flashScripts>

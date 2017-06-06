@@ -151,19 +151,22 @@
    </sharedInformation>
 
    <deviceList>
+<!-- ===================================================================================== -->
 <!-- 
    NXP LPC Defaults
 -->
-      <device name="lpcDefaultDevice" family="CortexM0" subfamily="LPC11U3x_2x_1x"  isDefault="true">
+      <device name="lpcDefaultDevice" family="CortexM0" isDefault="true">
          <resetMethodsRef ref="lpcResetMethods" />
          <eraseMethodsRef ref="lpcEraseMethods" />
          <memory type="flash" >
             <memoryRange start="0x00000000" size="0x1000" />
          </memory>
          <sdidAddress value="0x400483F4" />
-         <sdid mask="0xFFFFFFFF" value="0x295C802B" />
+         <sdid value="0x00000000" mask="0x00000000" />
          <note>NXP LPC Default device</note>
       </device>
+	  
+<!-- ===================================================================================== -->
 <!--
 	LPC1111
 -->

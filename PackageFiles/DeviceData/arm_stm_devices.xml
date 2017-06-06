@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<!DOCTYPE root SYSTEM "usbdmDeviceSchema.dtd" 
-[
-<!ENTITY STM32F100xx-default-flashProgram  SYSTEM "ARM/STM32F100xx-default-flash-program.hex">
-<!ENTITY STM32F100xx-default-flashScripts  SYSTEM "ARM/STM32F100xx-default-flash-scripts.tcl">
-]>
+<!DOCTYPE root SYSTEM "usbdmDeviceSchema.dtd" >
 
 <root xmlns:xi="http://www.w3.org/2001/XInclude" >
    <sharedInformation>
@@ -11,6 +7,7 @@
             TCL Scripts 
       -->
       <tclScript id="STM32F100xx-default-Scripts"> <xi:include parse="text" href="ARM/STM32F100xx-default-flash-scripts.tcl" /> </tclScript>
+      
       <!-- 
             Flash Programs
       -->
@@ -19,10 +16,10 @@
       <!--  
             Register sets (dummy sets to pass validation)
       -->
-      <registerDescription id="CortexM0-register-description" count="0" />
-      <registerDescription id="CortexM3-register-description" count="0" />
+      <registerDescription id="CortexM0-register-description"  count="0" />
+      <registerDescription id="CortexM3-register-description"  count="0" />
       <registerDescription id="CortexM3F-register-description" count="0" />
-      <registerDescription id="CortexM4-register-description" count="0" />
+      <registerDescription id="CortexM4-register-description"  count="0" />
       <registerDescription id="CortexM4F-register-description" count="0" />
 
       <!-- 
@@ -33,9 +30,35 @@
          <memoryRange start="0xE0000000" end="0xE03FFFFF" name="private" />  <!-- Private Peripherals -->
       </memory>
       
+      <resetMethods id="stmResetMethods" >
+         <resetMethod method="hardware" isDefault="true" />
+         <resetMethod method="software" />
+      </resetMethods>
+      
+      <eraseMethods id="stmEraseMethods" >
+         <eraseMethod method="Mass" isDefault="true"  />
+         <eraseMethod method="All" />
+         <eraseMethod method="Selective" />
+      </eraseMethods>
+
    </sharedInformation>
 
    <deviceList>
+<!-- ===================================================================================== -->
+<!-- 
+      STM Devices 
+-->
+      <device name="stmDefaultDevice" family="CortexM3"  isDefault="true">
+         <resetMethodsRef ref="stmResetMethods" />
+         <eraseMethodsRef ref="stmEraseMethods" />
+         <memory type="flash" >
+            <memoryRange start="0x00000000" size="0x1000" />
+         </memory>
+         <sdidAddress value="0xE0042000" />
+         <sdid value="0x00000000" mask="0x00000000" />
+         <note>STM 32 Default device</note>
+      </device>
+<!-- ===================================================================================== -->
    <!-- 
       STM Devices 
    -->
@@ -54,8 +77,7 @@
          </memory>
          <memoryRef ref="STM32_IO" />
          <sdidAddress value="0xE0042000" />
-         <sdidMask value="0x00000FFF" />
-         <sdid value="0x00000420" />
+         <sdid mask="0x00000FFF" value="0x00000420" />
          <tclScriptRef ref="STM32F100xx-default-Scripts" />
          <flashProgramRef ref="STM32F100xx-default-FlashProgram" />
          <registerDescriptionRef ref="CortexM3-register-description" />
@@ -69,8 +91,7 @@
          </memory>
          <memoryRef ref="STM32_IO" />
          <sdidAddress value="0xE0042000" />
-         <sdidMask value="0x00000FFF" />
-         <sdid value="0x00000420" />
+         <sdid mask="0x00000FFF" value="0x00000420" />
          <tclScriptRef ref="STM32F100xx-default-Scripts" />
          <flashProgramRef ref="STM32F100xx-default-FlashProgram" />
          <registerDescriptionRef ref="CortexM3-register-description" />
@@ -84,8 +105,7 @@
          </memory>
          <memoryRef ref="STM32_IO" />
          <sdidAddress value="0xE0042000" />
-         <sdidMask value="0x00000FFF" />
-         <sdid value="0x00000428" />
+         <sdid mask="0x00000FFF" value="0x00000428" />
          <tclScriptRef ref="STM32F100xx-default-Scripts" />
          <flashProgramRef ref="STM32F100xx-default-FlashProgram" />
          <registerDescriptionRef ref="CortexM3-register-description" />
@@ -99,8 +119,7 @@
          </memory>
          <memoryRef ref="STM32_IO" />
          <sdidAddress value="0xE0042000" />
-         <sdidMask value="0x00000FFF" />
-         <sdid value="0x00000412" />
+         <sdid mask="0x00000FFF" value="0x00000412" />
          <tclScriptRef ref="STM32F100xx-default-Scripts" />
          <flashProgramRef ref="STM32F100xx-default-FlashProgram" />
          <registerDescriptionRef ref="CortexM3-register-description" />
@@ -114,8 +133,7 @@
          </memory>
          <memoryRef ref="STM32_IO" />
          <sdidAddress value="0xE0042000" />
-         <sdidMask value="0x00000FFF" />
-         <sdid value="0x00000410" />
+         <sdid mask="0x00000FFF" value="0x00000410" />
          <tclScriptRef ref="STM32F100xx-default-Scripts" />
          <flashProgramRef ref="STM32F100xx-default-FlashProgram" />
          <registerDescriptionRef ref="CortexM3-register-description" />
@@ -129,8 +147,7 @@
          </memory>
          <memoryRef ref="STM32_IO" />
          <sdidAddress value="0xE0042000" />
-         <sdidMask value="0x00000FFF" />
-         <sdid value="0x00000414" />
+         <sdid mask="0x00000FFF" value="0x00000414" />
          <tclScriptRef ref="STM32F100xx-default-Scripts" />
          <flashProgramRef ref="STM32F100xx-default-FlashProgram" />
          <registerDescriptionRef ref="CortexM3-register-description" />
@@ -144,8 +161,7 @@
          </memory>
          <memoryRef ref="STM32_IO" />
          <sdidAddress value="0xE0042000" />
-         <sdidMask value="0x00000FFF" />
-         <sdid value="0x00000430" />
+         <sdid mask="0x00000FFF" value="0x00000430" />
          <tclScriptRef ref="STM32F100xx-default-Scripts" />
          <flashProgramRef ref="STM32F100xx-default-FlashProgram" />
          <registerDescriptionRef ref="CortexM3-register-description" />
@@ -159,8 +175,7 @@
          </memory>
          <memoryRef ref="STM32_IO" />
          <sdidAddress value="0xE0042000" />
-         <sdidMask value="0x00000FFF" />
-         <sdid value="0x00000430" />
+         <sdid mask="0x00000FFF" value="0x00000430" />
          <tclScriptRef ref="STM32F100xx-default-Scripts" />
          <flashProgramRef ref="STM32F100xx-default-FlashProgram" />
          <registerDescriptionRef ref="CortexM3-register-description" />
@@ -174,8 +189,7 @@
          </memory>
          <memoryRef ref="STM32_IO" />
          <sdidAddress value="0xE0042000" />
-         <sdidMask value="0x00000FFF" />
-         <sdid value="0x00000410" />
+         <sdid mask="0x00000FFF" value="0x00000410" />
          <tclScriptRef ref="STM32F100xx-default-Scripts" />
          <flashProgramRef ref="STM32F100xx-default-FlashProgram" />
          <registerDescriptionRef ref="CortexM3-register-description" />
