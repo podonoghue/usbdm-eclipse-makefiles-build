@@ -1218,9 +1218,9 @@ private:
    RegisterDescriptionConstPtr   registerDescription;    //!< Register description
    uint32_t                      hcs08sbdfrAddress;      //!< HCS08 SBDFR register address
    ResetMethodsConstPtr          resetMethods;           //!< Possible reset methods
+   ResetMethod                   resetMethod;            //!< Reset method to use e.g. hardware, software, targetdefault
    EraseMethodsConstPtr          eraseMethods;           //!< Possible erase methods
-   ResetMethod                   resetMethod;            //!< Reset method to use e.g. hardware, software
-   EraseMethod                   eraseMethod;            //!< How to handle erasing of flash before programming
+   EraseMethod                   eraseMethod;            //!< Erase method to use e.g. mass, selective, targetdefault
    DeviceDataPtr                 baseDevice;             //!< Base device if alias
 
 public:
@@ -1276,14 +1276,18 @@ public:
 
    void                           addSDID(uint32_t mask, uint32_t value);
    void                           addAliasSDID(uint32_t mask, uint32_t value);
+
    void                           setEraseMethods(EraseMethodsConstPtr methods);
    EraseMethodsConstPtr           getEraseMethods() const;
+   void                           setEraseMethod(EraseMethod method);
+   EraseMethod                    getEraseMethod() const;
+   EraseMethod                    getActiveEraseMethod() const;
+
    void                           setResetMethods(ResetMethodsConstPtr methods);
    ResetMethodsConstPtr           getResetMethods() const;
    void                           setResetMethod(ResetMethod method);
    ResetMethod                    getResetMethod() const;
-   void                           setEraseMethod(EraseMethod method);
-   EraseMethod                    getEraseMethod() const;
+   ResetMethod                    getActiveResetMethod() const;
 
    void                           addMemoryRegion(MemoryRegionPtr pMemoryRegion);
    void                           setTargetName(const std::string &name);
