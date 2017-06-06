@@ -9,7 +9,8 @@
 #define SRC_GDBHANDLERCOMMON_H_
 
 #include <stdint.h>
-#include "DeviceTclInterface.h"
+//#include "DeviceTclInterface.h"
+#include "UsbdmTclInterpreterFactory.h"
 #include "GdbHandler.h"
 #include "FlashProgrammerFactory.h"
 #include "GdbBreakpoints.h"
@@ -36,8 +37,8 @@ public:
    virtual USBDM_ErrorCode      updateTarget() = 0;
 
 protected:
-   DeviceTclInterfacePtr          deviceTclInterface;
-   GdbBreakpoints                 *gdbBreakpoints;
+   UsbdmTclInterperPtr            tclInterpreter;           //!< TCL interpreter
+   GdbBreakpoints                *gdbBreakpoints;
    bool                           initBreakpointsDone;
    bool                           programmingDone;
    USBDM_ErrorCode               (*gdbCallBackPtr)(const char *msg, GdbMessageLevel level, USBDM_ErrorCode rc);
@@ -80,7 +81,7 @@ protected:
    }
    virtual USBDM_ErrorCode    usbdmResetTarget(bool retry);
 
-   virtual DeviceTclInterfacePtr getTclInterface();
+   virtual UsbdmTclInterperPtr   getTclInterface();
    virtual USBDM_ErrorCode       runTCLCommand(const char *command);
    virtual USBDM_ErrorCode       resetTarget() override;
    virtual USBDM_ErrorCode       stepTarget(bool disableInterrupts) override;

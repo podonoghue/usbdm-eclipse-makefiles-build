@@ -75,7 +75,7 @@ GdbHandlerCommon::GdbHandlerCommon(
 }
 
 GdbHandlerCommon::~GdbHandlerCommon() {
-   deviceTclInterface.reset();
+   tclInterpreter.reset();
 }
 
 USBDM_ErrorCode GdbHandlerCommon::initialise() {
@@ -265,11 +265,12 @@ void GdbHandlerCommon::reportStatusToGdb(const char *s, int size) {
  * Gets the TCL interface.
  * The interface will be created if necessary
  */
-DeviceTclInterfacePtr GdbHandlerCommon::getTclInterface() {
-   if (deviceTclInterface == 0) {
-      deviceTclInterface.reset(new DeviceTclInterface(bdmInterface, deviceData));
+UsbdmTclInterperPtr GdbHandlerCommon::getTclInterface() {
+   if (tclInterpreter == nullptr) {
+      tclInterpreter = UsbdmTclInterperFactory::createUsbdmTclInterpreter(bdmInterface);
+      tclInterpreter->setDeviceParameters(deviceData);
    }
-   return deviceTclInterface;
+   return tclInterpreter;
 }
 
 /**
@@ -281,8 +282,7 @@ USBDM_ErrorCode GdbHandlerCommon::runTCLCommand(const char *command) {
    LOGGING;
    log.print("Command = '%s'\n", command);
 
-   DeviceTclInterfacePtr p = getTclInterface();
-   USBDM_ErrorCode rc = getTclInterface()->runTclCommand(command);
+   USBDM_ErrorCode rc = getTclInterface()->evalTclScript(command);
    if (rc != BDM_RC_OK) {
       log.error("Failed - rc = %d (%s)\n", rc, bdmInterface->getErrorString(rc));
    }
@@ -784,7 +784,7 @@ USBDM_ErrorCode GdbHandlerCommon::programImage(FlashImagePtr flashImage) {
    }
 
    FlashProgrammerPtr flashProgrammer = FlashProgrammerFactory::createFlashProgrammer(bdmInterface);
-   flashProgrammer->setDeviceData(deviceData, getTclInterface()->getTclInterper());
+   flashProgrammer->setDeviceData(deviceData, getTclInterface());
    USBDM_ErrorCode rc = flashProgrammer->setDeviceData(deviceData);
    if (rc == BDM_RC_OK) {
       rc = flashProgrammer->programFlash(flashImage, 0, true);
