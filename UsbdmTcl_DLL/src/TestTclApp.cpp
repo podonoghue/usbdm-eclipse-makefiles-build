@@ -106,14 +106,30 @@ int main(void) {
 
    log.print("Creating UsbdmTclInterperPtr\n");
    UsbdmTclInterperPtr p = UsbdmTclInterperFactory::createUsbdmTclInterpreter(bdmInterface);
-   log.print("evalTclScript - \n[puts \"hello\"\n]\n");
-   p->evalTclScript("puts \"hello\"\n");
+
+   int yy = 23;
+   p->setVariable("USBDM::RESET_DURATION", bdmInterface->getBdmOptions().resetDuration);
+   p->evalTclScript("puts \"USBDM::RESET_DURATION= $USBDM::RESET_DURATION\"\n");
+   p->evalTclScript("puts \"USBDM::RESET_DURATION= $::USBDM::RESET_DURATION\"\n");
+
+
+
+   p->evalTclScript("namespace eval USBDM {}\n");
+   p->linkVariable("YY", &yy, UsbdmTclInterpreter::TclLinkVar_int, true);
+   p->setVariable("ZZ", "123", UsbdmTclInterpreter::TclSetVar_global);
+   p->evalTclScript("puts \"YY= $::YY\"\n");
+   p->evalTclScript("puts \"ZZ= $::ZZ\"\n");
+
+   p->setVariable("USBDM::AA", "456", UsbdmTclInterpreter::TclSetVar_global);
+   p->evalTclScript("puts \"USBDM::AA= $::USBDM::AA\"\n");
+
    log.print("getTclResult - \n[%s]\n", p->getTclResult());
    log.print("Deleting p\n");
    p.reset();
 
    log.print("Creating UsbdmTclInterperPtr\n");
    p = UsbdmTclInterperFactory::createUsbdmTclInterpreter(bdmInterface);
+   p->evalTclScript("puts \"USBDM::AA= $::USBDM::AA\"\n");
    log.print("evalTclScript - \n[puts \"hello\"\n]\n");
    p->evalTclScript("puts \"hello\"\n");
    log.print("getTclResult - \n[%s]\n", p->getTclResult());

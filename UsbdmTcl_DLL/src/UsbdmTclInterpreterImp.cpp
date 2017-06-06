@@ -230,18 +230,61 @@ void UsbdmTclInterpreterImp::redirectStdOut() {
  * @param bdmInterface The interface
  * @param doRedirect   Redirect stdout to log file or nul if no log file open
  */
-void UsbdmTclInterpreterImp::setBdmInterface(BdmInterfacePtr bdmInterface, bool doRedirect) {
+USBDM_ErrorCode UsbdmTclInterpreterImp::setBdmInterface(BdmInterfacePtr bdmInterface, bool doRedirect) {
    LOGGING;
    log.print("doRedirect = %s\n", doRedirect?"TRUE":"FALSE");
    log.print("::bdmInterface.use_count() = %ld, bdmInterface.use_count() = %ld\n", ::bdmInterface.use_count(), bdmInterface.use_count());
    log.print("::bdmInterface.get() = %p,        bdmInterface.get() = %p\n",        ::bdmInterface.get(), bdmInterface.get());
-   ::bdmInterface = bdmInterface;
-   if (bdmInterface == 0) {
-      log.error("createTclInterpreter() bdmInterface == 0x%p\n", bdmInterface.get() );
-   }
    if (doRedirect) {
       redirectStdOut();
    }
+   ::bdmInterface = bdmInterface;
+   if (bdmInterface == 0) {
+      log.error("createTclInterpreter() bdmInterface == 0x%p\n", bdmInterface.get() );
+      return BDM_RC_ILLEGAL_PARAMS;
+   }
+   USBDM_ExtendedOptions_t options = bdmInterface->getBdmOptions();
+   setVariable("RESET_DURATION",      options.resetDuration);
+   setVariable("RESET_RECOVERY",      options.resetRecoveryInterval);
+   setVariable("RESET_RELEASE",       options.resetReleaseInterval);
+   setVariable("POWER_OFF_DURATION",  options.powerOffDuration);
+   setVariable("POWER_ON_RECOVERY",   options.powerOnRecoveryInterval);
+   return BDM_RC_OK;
+}
+
+/**
+ * Add device parameters to TCL interpreter\n
+ * This includes running the flash script associated with the device
+ *
+ * @param device  Device to use to obtain settings
+ *
+ * @return BDM_RC_OK  on success
+ * @return Error code on failure
+ */
+USBDM_ErrorCode UsbdmTclInterpreterImp::setDeviceParameters(DeviceDataConstPtr device) {
+   LOGGING;
+   if (device == nullptr) {
+      log.error("Device must not be null\n");
+      return BDM_RC_ILLEGAL_PARAMS;
+   }
+   setVariable("RESET_METHOD",  DeviceData::getResetMethodName(device->getActiveResetMethod()));
+   setVariable("ERASE_METHOD",  DeviceData::getEraseMethodName(device->getActiveEraseMethod()));
+
+   // Run initial TCL script (loads routines)
+   TclScriptConstPtr script = device->getFlashScripts();
+   if (!script) {
+      log.error("No TCL script found\n");
+      return PROGRAMMING_RC_ERROR_TCL_SCRIPT;
+   }
+#if defined(LOG) && 0
+   log.print(script->toString().c_str());
+#endif
+   USBDM_ErrorCode rc = evalTclScript(script->getScript().c_str());
+   if (rc != PROGRAMMING_RC_OK) {
+      log.error("evalTclScript() failed\n");
+      return rc;
+   }
+   return rc;
 }
 
 /**
@@ -263,6 +306,62 @@ UsbdmTclInterpreterImp::~UsbdmTclInterpreterImp() {
 #if defined(__linux__)
 #include <unistd.h>
 #endif
+
+/**
+ * Link C variable to TCL variable
+ *
+ * @param varName    // TCL Name of variable
+ * @param addr       // Address of global C variable
+ * @param type       // Type of C variable
+ * @param readOnly   // True => readonly
+ */
+void UsbdmTclInterpreterImp::linkVariable(const char *varName, void *addr, TclLinkVarType type, bool readOnly) {
+   Tcl_LinkVar(interp.get(), varName, (char*)addr, (int)(type|(readOnly?TCL_LINK_READ_ONLY:0)));
+}
+
+/**
+ * Unlink C variable from TCL variable
+ *
+ * @param varName    // TCL Name of variable
+ */
+void UsbdmTclInterpreterImp::unLinkVariable(const char *varName) {
+   Tcl_UnlinkVar(interp.get(), varName);
+
+}
+
+/**
+ * Set TCL variable
+ *
+ * @param varName    // TCL Name of variable
+ * @param value      // Value to set
+ * @param flags      // Flags affect namespace of variable
+ */
+void UsbdmTclInterpreterImp::setVariable(const char *varName, const char *value, TclSetVarFlag flags) {
+   Tcl_SetVar(interp.get(), varName, value, flags);
+}
+
+/**
+ * Set TCL variable
+ *
+ * @param varName    // TCL Name of variable
+ * @param value      // Value to set
+ * @param flags      // Flags affect namespace of variable
+ */
+void UsbdmTclInterpreterImp::setVariable(const char *varName, int value, TclSetVarFlag flags) {
+   char buff[100];
+   snprintf(buff, sizeof(buff), "%d", value);
+   Tcl_SetVar(interp.get(), varName, buff, flags);
+}
+
+/**
+ * Unset TCL variable
+ *
+ * @param varName    // TCL Name of variable
+ */
+void UsbdmTclInterpreterImp::unSetVariable(const char *varName, TclSetVarFlag flags) {
+   Tcl_UnsetVar(interp.get(), varName, flags);
+}
+
 
 /**
  * Does setup for TCL interpreter
@@ -2287,6 +2386,8 @@ static int cmd_setDevice(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
 
       PRINT("Selecting device \'%s\'\n", deviceName);
       checkRC(deviceInterface->setCurrentDeviceByName(deviceName));
+
+      sharedPtrCache->setDeviceParameters(deviceInterface->getCurrentDevice());
 
    } catch(MyException &e) {
       PRINT("Failed, rc = %s\n", e.what());
