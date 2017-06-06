@@ -31,6 +31,7 @@
 #include <stdbool.h>
 #include "USBDM_API.h"
 #include "BdmInterface.h"
+#include "DeviceData.h"
 
 /**
  * Class representing the USBDM TCL interpreter
@@ -38,22 +39,23 @@
 class UsbdmTclInterpreter {
 
 public:
+   enum TclLinkVarType {
+      TclLinkVar_int       = 1,    // TCL_LINK_INT,
+      TclLinkVar_double    = 2,    // TCL_LINK_DOUBLE,
+      TclLinkVar_boolean   = 3,    // TCL_LINK_BOOLEAN,
+      TclLinkVar_string    = 4,    // TCL_LINK_STRING,
+      TclLinkVar_wideInt   = 5,    // TCL_LINK_WIDE_INT,
+   };
+
+   enum TclSetVarFlag {
+      TclSetVar_global       = 1, // TCL_GLOBAL_ONLY,
+      TclSetVar_namespace    = 2, // TCL_NAMESPACE_ONLY,
+   };
+
    /**
-    * Evaluate a TCL script
-    *
-    * @param script Script to evaluate
-    *
-    *  @return
-    *      BDM_RC_OK    => OK \n
-    *      other        => Error code - see \ref USBDM_ErrorCode
+    * Destructor
     */
-   virtual USBDM_ErrorCode evalTclScript(const char *script) = 0;
-   /**
-    * Get result from last evaluation of a TCL script
-    *
-    *  @return string representing the result
-    */
-   virtual const char *getTclResult() = 0;
+   virtual ~UsbdmTclInterpreter() {};
    /**
     * TCL mainline for stand-alone interpreter
     *
@@ -65,6 +67,24 @@ public:
    virtual int main(int argc, char *argv[]) = 0;
 
    /**
+    * Evaluate a TCL script
+    *
+    * @param script Script to evaluate
+    *
+    *  @return
+    *      BDM_RC_OK    => OK \n
+    *      other        => Error code - see \ref USBDM_ErrorCode
+    */
+   virtual USBDM_ErrorCode evalTclScript(const char *script) = 0;
+
+   /**
+    * Get result from last evaluation of a TCL script
+    *
+    *  @return string representing the result
+    */
+   virtual const char *getTclResult() = 0;
+
+   /**
     * Set BDM interface to use
     *
     *  @param bdmInterface    BDM Interface to use
@@ -74,9 +94,17 @@ public:
     *      BDM_RC_OK    => OK \n
     *      other        => Error code - see \ref USBDM_ErrorCode
     */
-   virtual void setBdmInterface(BdmInterfacePtr bdmInterface, bool redirectStdOut) = 0;
+   virtual USBDM_ErrorCode setBdmInterface(BdmInterfacePtr bdmInterface, bool redirectStdOut) = 0;
 
-   virtual ~UsbdmTclInterpreter() {};
+   /**
+    * Add device parameters to TCL interpreter
+    *
+    * @param device       Device to use to obtain settings
+    *
+    * @return BDM_RC_OK  on success
+    * @return Error code on failure
+    */
+   virtual USBDM_ErrorCode setDeviceParameters(DeviceDataConstPtr device) = 0;
 
    /**
     * Indicates if this is the single interactive interpreter
@@ -89,6 +117,49 @@ public:
     * Sets this interpreter as the single interactive interpreter
     */
    virtual void setInteractive(bool isInteractive = true) = 0;
+
+   /**
+    * Link C variable to TCL variable
+    *
+    * @param varName    // TCL Name of variable
+    * @param addr       // Address of global C variable
+    * @param type       // Type of C variable
+    * @param readOnly   // True => readonly
+    */
+   virtual void linkVariable(const char *varName, void *addr, TclLinkVarType type, bool readOnly=true) = 0;
+
+   /**
+    * Unlink C variable from TCL variable
+    *
+    * @param varName    // TCL Name of variable
+    */
+   virtual void unLinkVariable(const char *varName) = 0;
+
+   /**
+    * Set TCL variable
+    *
+    * @param varName    // TCL Name of variable
+    * @param value      // Value to set
+    * @param flags      // Flags affect namespace of variable
+    */
+   virtual void setVariable(const char *varName, const char *value, TclSetVarFlag flags = TclSetVar_global) = 0;
+
+   /**
+    * Set TCL variable
+    *
+    * @param varName    // TCL Name of variable
+    * @param value      // Value to set
+    * @param flags      // Flags affect namespace of variable
+    */
+   virtual void setVariable(const char *varName, int value, TclSetVarFlag flags = TclSetVar_global) = 0;
+
+   /**
+    * Unset TCL variable
+    *
+    * @param varName    // TCL Name of variable
+    * @param flags      // Flags affect namespace of variable
+    */
+   virtual void unSetVariable(const char *varName, TclSetVarFlag flags=TclSetVar_global) = 0;
 
 protected:
    UsbdmTclInterpreter(bool doInit=false) {(void)doInit; };
