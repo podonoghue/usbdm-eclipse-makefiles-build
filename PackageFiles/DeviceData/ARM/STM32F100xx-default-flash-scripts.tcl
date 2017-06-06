@@ -1,32 +1,49 @@
 
-;######################################################################################
-;#  This file defines the following flash functions
-;#  
-;#  massEraseTarget - Entirely erases the target.
-;#                    The target should be left in an unsecured state.
-;#
-;#  isUnsecure - indicates if the target is secured in some fashion (read/write protected)
-;#               Returns TCL_OK if NOT secured
-;#
-;#  initFlash - initialises the target for flash programing (if needed)
-;#
-;#  initTarget - initialises the target for general use
-;#
-;#  In addition the script may do any once-only initialisation such as setting global symbols
-;#  when initially loaded into the TCL environment.
-;#
+######################################################################################
+#  This file defines the following flash functions
+#  
+#  massEraseTarget - Entirely erases the target.
+#                    The target should be left in an unsecured state.
+#
+#  isUnsecure - indicates if the target is secured in some fashion (read/write protected)
+#               Returns 0 if NOT secured
+#
+#  initFlash - initialises the target for flash programing (if needed)
+#
+#  initTarget - initialises the target for general use
+#
+#  In addition the script may do any once-only initialisation such as setting global symbols
+#  when initially loaded into the TCL environment.
+#
 
-;###################################################################
-;#  Increased reset recover time
-;#  Increased polling time (added delay)
-;#
+#####################################################################################
+#  History
+#
+#  V4.12.1.180 - Removed unnecessary semi-colons
+#  V4.12.1.180 - Messages directed to stderr
+#  Increased reset recover time
+#  Increased polling time (added delay)
+#
 
-;######################################################################################
-;#
-;#
+######################################################################################
+#
+#
 proc loadSymbols {} {
    # LittleEndian format for writing numbers to memory
    setbytesex littleEndian
+
+   set ::NAME  "STM32F100xx-default-flash-scripts"
+
+   puts stderr "$::NAME.loadSymbols{} - V4.12.1.180"
+   
+   # These variables are available from driver
+   #::RESET_DURATION
+   #::RESET_RECOVERY
+   #::RESET_RELEASE
+   #::POWER_OFF_DURATION
+   #::POWER_ON_RECOVERY
+   #::RESET_METHOD
+   #::ERASE_METHOD
    
    # Common symbols for STM32F100xx devices
    # Flash registers
@@ -81,15 +98,27 @@ proc loadSymbols {} {
    return
 }
 
-;######################################################################################
-;#
+######################################################################################
+#
 proc unlockFlash {} {
-   ;#puts "Unlocking Flash"
-   ;# Disable watchdog with external reset active
+   puts stderr "$::NAME.unlockFlash{}"
+   
+   puts stderr "unlockFlash{} - Disable watchdog with external reset active"
+
+   # apply target reset
+   puts stderr "unlockFlash{} - Applying reset"
    pinSet rst=0
+   
+   puts stderr "unlockFlash{} - wl DBGMCU_CR 0xFFFFFFFF"
    wl $::DBGMCU_CR 0xFFFFFFFF
-   pinSet  ;# release reset
-   after 300
+   
+   # release target reset
+   puts stderr "unlockFlash{} - Releasing reset pin"
+   pinSet
+   
+   # Reset recovery
+   puts stderr "unlockFlash{} - Wait reset recovery time ($::RESET_RECOVERY)"
+   after $::RESET_RECOVERY
    
    rl $::FLASH_CR
 
@@ -110,8 +139,8 @@ proc unlockFlash {} {
    return
 }
 
-;######################################################################################
-;#
+######################################################################################
+#
 proc checkFlashError {} {
    set flashBusy $::FLASH_SR_BSY
    set retry 0
@@ -137,10 +166,10 @@ proc checkFlashError {} {
    return
 }
 
-;######################################################################################
-;#
+######################################################################################
+#
 proc programWordLocation { addr value } {
-;#   puts { addr "=" value }
+#   puts { addr "=" value }
    wl $::FLASH_SR [ expr ($::FLASH_SR_EOP|$::FLASH_SR_PGERR|$::FLASH_SR_WRPRTERR) ]
    ww $addr $value
    checkFlashError
@@ -152,7 +181,7 @@ proc unsecureFlash {} {
 
    unlockFlash
   
-;#   puts "Erasing Flash option area"
+#   puts "Erasing Flash option area"
    wl $::FLASH_SR [ expr ($::FLASH_SR_EOP|$::FLASH_SR_PGERR|$::FLASH_SR_WRPRTERR) ]
    wl $::FLASH_CR [ expr ($::FLASH_CR_OPTER|$::FLASH_CR_OPTWRE) ]
    wl $::FLASH_AR $::OPT_RDP
@@ -160,16 +189,16 @@ proc unsecureFlash {} {
    checkFlashError
    wl $::FLASH_CR $::FLASH_CR_OPTWRE
 
-;#   puts "Programming Option flash"
+#   puts "Programming Option flash"
    wl $::FLASH_CR [ expr ($::FLASH_CR_OPTPG|$::FLASH_CR_OPTWRE) ]
    programWordLocation $::OPT_RDP $::RDPRT_KEY
    programWordLocation $::OPT_USER [expr $::nRST_STDBY|$::nRST_STOP|$::WDG_SW]
    wl $::FLASH_CR 0
 
-   ;# Reset so changes have effect
+   # Reset so changes have effect
    pinSet rst=0
    after 100
-   pinSet  ;# release reset
+   pinSet  # release reset
    after 300
    
    set flashOBR [ rl $::FLASH_OBR ]
@@ -180,41 +209,41 @@ proc unsecureFlash {} {
    return
 }
 
-;######################################################################################
-;#
-;#
+######################################################################################
+#
+#
 proc initTarget { args } {
- ;#set DBGMCU_CR 0xE0042004
- ;# pinSet rst=0
-  # Disable watchdog timers etc in debug mode
- ;#  wl $DBGMCU_CR 0x00000300 
- ;#  rl $DBGMCU_CR
- ;# pinSet
- ;#  connect
+ #set DBGMCU_CR 0xE0042004
+ # pinSet rst=0
+ # Disable watchdog timers etc in debug mode
+ #  wl $DBGMCU_CR 0x00000300 
+ #  rl $DBGMCU_CR
+ # pinSet
+ #  connect
    
    return
 }
 
-;######################################################################################
-;#
-;#  frequency - Target bus frequency in kHz
-;#
+######################################################################################
+#
+#  frequency - Target bus frequency in kHz
+#
 proc initFlash { busFrequency } {
-;# Not used
+# Not used
    
    return
 }
 
-;######################################################################################
-;#
-;#
+######################################################################################
+#
+#
 proc massEraseTarget { } {
 
    unsecureFlash
    
    unlockFlash
    
-;#   puts "Mass Erasing flash"
+#   puts "Mass Erasing flash"
    wl $::FLASH_CR $::FLASH_CR_MER
    wl $::FLASH_CR [ expr ($::FLASH_CR_MER|$::FLASH_CR_STRT) ]
    checkFlashError
@@ -225,9 +254,9 @@ proc massEraseTarget { } {
    return
 }
 
-;######################################################################################
-;#
-;#
+######################################################################################
+#
+#
 proc isUnsecure { } {
    set flashOBR [ rl $::FLASH_OBR ]
    if [ expr ( $flashOBR & $::FLASH_OBR_RDPRT ) != 0 ] {
@@ -237,8 +266,8 @@ proc isUnsecure { } {
    return
 }
 
-;######################################################################################
-;#
-;#
+######################################################################################
+# Actions on initial load
+#
 loadSymbols
 
