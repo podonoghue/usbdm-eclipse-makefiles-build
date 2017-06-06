@@ -2003,6 +2003,29 @@ DeviceData::ResetMethod DeviceData::getResetMethod() const {
 }
 
 /**
+ * Get reset method to use after considering defaults etc.
+ *
+ * @return reset method
+ */
+DeviceData::ResetMethod DeviceData::getActiveResetMethod() const {
+   LOGGING_Q;
+
+   DeviceData::ResetMethod resetMethod = getResetMethod();
+   if ((resetMethod == DeviceData::resetTargetDefault)) {
+      ResetMethodsConstPtr resetMethods = getResetMethods();
+      if (resetMethods == nullptr) {
+         log.print("resetMethods not set!\n");
+         resetMethod = ResetMethod::resetHardware;
+      }
+      else {
+         resetMethod = resetMethods->getDefaultMethod();
+      }
+   }
+   log.print("Reset method = %s\n", DeviceData::getResetMethodName(resetMethod));
+   return resetMethod;
+}
+
+/**
  * Set erase method
  *
  * @param method Method to use
@@ -2017,6 +2040,29 @@ void DeviceData::setEraseMethod(EraseMethod method) {
  * @return Method to use
  */
 DeviceData::EraseMethod DeviceData::getEraseMethod() const {
+   return eraseMethod;
+}
+
+/**
+ * Get erase method to use after considering defaults etc
+ *
+ * @return erase method
+ */
+DeviceData::EraseMethod DeviceData::getActiveEraseMethod() const {
+   LOGGING_Q;
+
+   DeviceData::EraseMethod eraseMethod = getEraseMethod();
+   if ((eraseMethod == DeviceData::eraseTargetDefault)) {
+      EraseMethodsConstPtr eraseMethods = getEraseMethods();
+      if (eraseMethods == nullptr) {
+         log.print("eraseMethods not set!\n");
+         eraseMethod = EraseMethod::eraseMass;
+      }
+      else {
+         eraseMethod = eraseMethods->getDefaultMethod();
+      }
+   }
+   log.print("Erase method = %s\n", DeviceData::getEraseMethodName(eraseMethod));
    return eraseMethod;
 }
 
