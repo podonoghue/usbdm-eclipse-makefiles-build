@@ -184,6 +184,10 @@ public:
  *    MyTimer myTimer1("Timer 1");
  *    MyTimer myTimer2("Timer 2");
  *
+ *    // Create timers
+ *    myTimer1.create();
+ *    myTimer2.create();
+ *
  *    // Start timers
  *    myTimer1.start(1000);
  *    myTimer2.start(500);

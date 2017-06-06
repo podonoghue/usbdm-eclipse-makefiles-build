@@ -1,13 +1,10 @@
 /*
- *  @file system.cpp
+ *  @file system-gcc.cpp
  *
- *  Derived from  system-kinetis.cpp
- *
- * Generic system initialization for Kinetis family
+ *  GCC specific code
  *
  *  Created on: 25/5/2017
  */
-
 #include <stdlib.h>
 #include "hardware.h"
 

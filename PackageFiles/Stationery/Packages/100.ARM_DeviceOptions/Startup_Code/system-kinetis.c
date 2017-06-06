@@ -108,7 +108,7 @@ void SystemInitLowLevel(void) {
 #endif
 
 #ifdef WDOG_UNLOCK_WDOGUNLOCK_MASK
-/* Unlocking Watchdog sequence words*/
+   /* Unlocking Watchdog sequence words*/
 #define WDOG_KEY1   (0xC520)
 #define WDOG_KEY2   (0xD928)
 

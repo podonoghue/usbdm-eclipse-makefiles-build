@@ -16,12 +16,17 @@ Table of Contents
  - \ref CMSIS::Pool \n
  - \ref CMSIS::Semaphore \n
  - \ref CMSIS::Thread \n
+ - \ref CMSIS::ThreadClass \n
  - \ref CMSIS::Timer \n
+ - \ref CMSIS::TimerClass \n
  
 @example cmsis-cpp-mailQueue.cpp
 @example cmsis-cpp-memoryPool.cpp
 @example cmsis-cpp-messageQueue.cpp
 @example cmsis-cpp-thread.cpp
+@example cmsis-cpp-thread-mma845x.cpp
 @example cmsis-cpp-timer.cpp
+@example cmsis-cpp-timer-mma845x.cpp
+@example cmsis-cpp-pid.h
 
  */
