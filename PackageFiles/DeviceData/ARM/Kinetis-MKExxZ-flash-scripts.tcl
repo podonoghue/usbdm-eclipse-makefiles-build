@@ -22,12 +22,20 @@
 #  V4.12.1.180 - Removed unnecessary semi-colons
 #  V4.12.1.180 - Messages directed to stderr
 #  V4.12.1.180 - Changed to reset special vendor
+#  V4.12.1.160 - Restored NMI masking to massErase{}
 #  V4.12.1.150 - Changed to use more uniform method and re-tested
-#  V4.19.4.250 - Simplified
-#  V4.19.4.240 - Added return error codes
-#  V4.10.4.190 - Simplified Mass erase sequence according to App note AN4835
-#  V4.10.4.190 - Created
+#  V4.12.1.60  - Added NMI masking to massErase{}
+#  V4.10.4.250 - Simplified
+#  V4.10.4.240 - Added return error codes
+#  V4.10.4.140 - Changed Mass erase sequence (added retry etc.)
+#  V4.10.4     - Changed return code handling
+#              - Changed Mass erase reset to special-software (FDPROT etc wasn't unprotected)
 # 
+# Notes on MKExxZ
+# - Cortex-M0+
+# - Support connection, mass-erase etc. with Reset pin held low BUT MDM-AP.Status signals are disabled
+# - MDM-AP.System_Reset_Request is supported when secure
+# - NMI can be disabled through SIM_SOPT register
 
 ######################################################################################
 #
@@ -36,7 +44,7 @@ proc loadSymbols {} {
    # LittleEndian format for writing numbers to memory
    setbytesex littleEndian
 
-   set ::NAME  "Kinetis-KMxx-flash-scripts"
+   set ::NAME  "Kinetis-MKExxZ-flash-scripts"
 
    puts stderr "$::NAME.loadSymbols{} - V4.12.1.180"
    
@@ -202,6 +210,9 @@ proc loadSymbols {} {
    set ::PROGRAMMING_RC_ERROR_FAILED_FLASH_COMMAND 115
    set ::PROGRAMMING_RC_ERROR_NO_VALID_FCDIV_VALUE 116
 
+   set ::SIM_SOPT                       0x40048004
+   set ::SIM_SOPT_NMIE_MASK             0x02                 
+ 
    return
 }
 
@@ -261,6 +272,9 @@ proc massEraseTarget { } {
    # Reset recovery
    puts stderr "massEraseTarget{} - wait reset recovery time ($::RESET_RECOVERY)"
    after $::RESET_RECOVERY
+
+   rcreg $::MDM_AP_Control
+   rcreg $::MDM_AP_Status
    
    # Wait for Flash Ready
    for {set retry 0} {$retry < 20} {incr retry} {
@@ -281,6 +295,17 @@ proc massEraseTarget { } {
    wcreg $::MDM_AP_Control [expr $::MDM_AP_C_DEBUG_REQUEST|$::MDM_AP_C_MASS_ERASE]
    rcreg $::MDM_AP_Control
 
+   # Wait for Flash Mass Erase ACK
+   for {set retry 0} {$retry < 20} {incr retry} {
+      puts stderr "massEraseTarget{} - Waiting for Flash Erase ACK"
+      set mdmApStatus [rcreg $::MDM_AP_Status]
+      if [expr (($mdmApStatus & $::MDM_AP_ST_MASS_ERASE_ACK) != 0)] {
+         puts stderr "massEraseTarget{} - MDM_AP_ST_MASS_ERASE_ACK asserted OK"
+         break;
+      }
+      after 20
+   }
+
    # Wait for Flash Mass Erase to complete
    for {set retry 0} {$retry < 20} {incr retry} {
       puts stderr "massEraseTarget{} - Waiting for Flash Mass Erase to complete"
@@ -294,14 +319,23 @@ proc massEraseTarget { } {
 
    rcreg $::MDM_AP_Control
    rcreg $::MDM_AP_Status
+   
+   # Resetting target using MDM
+   puts stderr "massEraseTarget{} - Writing MDM_AP_C_SYSTEM_RESET|MDM_AP_C_CORE_HOLD"
+   wcreg $::MDM_AP_Control [expr $::MDM_AP_C_CORE_HOLD | $::MDM_AP_C_SYSTEM_RESET]
 
-   puts stderr "massEraseTarget{} - Releasing MDM_AP_C_DEBUG_REQUEST|MDM_AP_C_MASS_ERASE"
+   # Disable NMI here so we can still debug target using Erase-All option
+   puts stderr "massEraseTarget{} - Disabling NMI"
+   catch { connect }
+   set soptValue [rb $::SIM_SOPT]
+   wb  $::SIM_SOPT [ expr $soptValue & ~$::SIM_SOPT_NMIE_MASK]
+   rb $::SIM_SOPT
+
+   puts stderr "massEraseTarget{} - Clearing MDM_AP_C_SYSTEM_RESET"
+   wcreg $::MDM_AP_Control [expr $::MDM_AP_C_CORE_HOLD]
+
+   puts stderr "massEraseTarget{} - Releasing MDM_AP_C_CORE_HOLD"
    wcreg $::MDM_AP_Control 0
-   rcreg $::MDM_AP_Control
-
-   puts stderr "massEraseTarget{} - reset s v (Ignoring errors)"
-   catch {reset s v}
-   rcreg $::MDM_AP_Status
 
    set rc [ isUnsecure ]
    
@@ -354,6 +388,7 @@ proc d { } {
    puts stderr ""
    puts stderr ""
    puts stderr ""
+   set ::RESET_RECOVERY  100
    o
    m
    rb 0x400 16

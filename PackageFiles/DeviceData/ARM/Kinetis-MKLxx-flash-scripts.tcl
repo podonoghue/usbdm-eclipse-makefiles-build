@@ -28,6 +28,11 @@
 #  V4.10.4.190 - Simplified Mass erase sequence according to App note AN4835
 #  V4.10.4.190 - Created
 # 
+# Notes on MKL, MKV1x, MKM
+# - Cortex-M0+
+# - Supports connection, mass-erase etc. with Reset pin held low
+# - MDM-AP.System_Reset_Request is supported when secure
+# - MDM-AP.Status.Mass_Erase_ACK appears to be always set on MKMxx
 
 ######################################################################################
 #
@@ -36,7 +41,7 @@ proc loadSymbols {} {
    # LittleEndian format for writing numbers to memory
    setbytesex littleEndian
 
-   set ::NAME  "Kinetis-Kxx-flash-scripts"
+   set ::NAME  "Kinetis-MKLxx-flash-scripts"
 
    puts stderr "$::NAME.loadSymbols{} - V4.12.1.180"
    
@@ -302,12 +307,6 @@ proc massEraseTarget { } {
    wcreg $::MDM_AP_Control 0
    rcreg $::MDM_AP_Control
 
-   puts stderr "massEraseTarget{} - reset s v (Ignoring errors)"
-   catch {reset s v}
-   rcreg $::MDM_AP_Status
-
-   set rc [ isUnsecure ]
-   
    # Release target reset
    puts stderr "massEraseTarget{} - Releasing reset pin"
    pinSet
@@ -315,6 +314,18 @@ proc massEraseTarget { } {
    # Reset recovery
    puts stderr "massEraseTarget{} - Waiting reset recovery time ($::RESET_RECOVERY)"
    after $::RESET_RECOVERY
+
+   rcreg $::MDM_AP_Control
+   rcreg $::MDM_AP_Status
+
+   puts stderr "massEraseTarget{} - reset s v (Ignoring errors)"
+   catch {reset s v}
+   rcreg $::MDM_AP_Status
+  
+   rcreg $::MDM_AP_Control
+   rcreg $::MDM_AP_Status
+
+   set rc [ isUnsecure ]
    
    rcreg $::MDM_AP_Status
    rcreg $::MDM_AP_Control
@@ -365,6 +376,7 @@ proc d { } {
    puts stderr ""
    puts stderr ""
    puts stderr ""
+   set ::RESET_RECOVERY  100
    o
    m
    rb 0x400 16
