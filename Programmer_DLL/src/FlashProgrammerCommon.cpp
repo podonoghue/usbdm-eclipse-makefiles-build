@@ -62,6 +62,9 @@ FlashProgrammerCommon::FlashProgrammerCommon(DeviceData::EraseMethod defaultEras
 FlashProgrammerCommon::~FlashProgrammerCommon() {
    LOGGING_E;
    releaseTCL();
+   device.reset();
+   bdmInterface.reset();
+   currentFlashProgram.reset();
 }
 
 /**
@@ -116,7 +119,11 @@ USBDM_ErrorCode FlashProgrammerCommon::initTCL() {
  */
 USBDM_ErrorCode FlashProgrammerCommon::releaseTCL(void) {
    LOGGING_E;
-   tclInterpreter.reset();
+   if (tclInterpreter != nullptr) {
+      // Release BDM interface
+      tclInterpreter->setBdmInterface(nullptr, false);
+      tclInterpreter.reset();
+   }
    return PROGRAMMING_RC_OK;
 }
 
