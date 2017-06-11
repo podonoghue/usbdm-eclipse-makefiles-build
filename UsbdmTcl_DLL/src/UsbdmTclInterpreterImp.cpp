@@ -57,16 +57,20 @@ static void printChannel(int ch, const char *format, ...) __attribute__ ((format
 #define PRINT_ERROR(format, ...) printChannel(TCL_STDERR, format, ##__VA_ARGS__)
 
 static UsbdmTclInterperPtr     sharedPtrCache;
-static UsbdmTclInterpreterImp *ppCache;
+static UsbdmTclInterpreterImp *ppCache = nullptr;
 static size_t size;
+static DeviceInterfacePtr      deviceInterface;
+static FlashImagePtr           flashImage;
 
 /**
  * Create singleton plug-in instance
  */
 extern "C"
 UsbdmTclInterperPtr CPP_DLL_EXPORT createSingletonPluginInstance() {
-   if (sharedPtrCache == 0) {
-      if (ppCache == 0) {
+   UsbdmSystem::Log::print("sharedPtrCache = %p\n", sharedPtrCache.get());
+   UsbdmSystem::Log::print("ppCache        = %p\n", ppCache);
+   if (sharedPtrCache == nullptr) {
+      if (ppCache == nullptr) {
          ppCache = TcreatePluginInstance<UsbdmTclInterpreterImp>(true);
       }
       sharedPtrCache.reset(ppCache);
@@ -79,6 +83,8 @@ UsbdmTclInterperPtr CPP_DLL_EXPORT createSingletonPluginInstance() {
  */
 extern "C"
 size_t CPP_DLL_EXPORT createPluginInstance(UsbdmTclInterpreterImp *pp) {
+   UsbdmSystem::Log::print("sharedPtrCache = %p\n", sharedPtrCache.get());
+   UsbdmSystem::Log::print("ppCache        = %p\n", ppCache);
    if (ppCache != 0) {
       if (pp != 0) {
          pp = ppCache;
@@ -95,6 +101,8 @@ size_t CPP_DLL_EXPORT createPluginInstance(UsbdmTclInterpreterImp *pp) {
  */
 extern "C"
 size_t CPP_DLL_EXPORT createInteractivePluginInstance(UsbdmTclInterpreterImp *pp) {
+   UsbdmSystem::Log::print("sharedPtrCache = %p\n", sharedPtrCache.get());
+   UsbdmSystem::Log::print("ppCache        = %p\n", ppCache);
    if (ppCache != 0) {
       if (pp != 0) {
          pp = ppCache;
@@ -156,7 +164,7 @@ void UsbdmTclInterpreterImp::deleteInterpreter(Tcl_Interp *interp) {
  *                 UsbdmTclInterpreterImp::main() for shell as it does its own initialisation
  */
 UsbdmTclInterpreterImp::UsbdmTclInterpreterImp(bool doInit) {
-   LOGGING_E;
+   LOGGING;
 
    tclChannel   = 0;
 
@@ -175,10 +183,18 @@ UsbdmTclInterpreterImp::UsbdmTclInterpreterImp(bool doInit) {
 }
 
 /**
- * Redirect stdout to log file or nul if no log file open
+ * Redirect stdout to log file or null if no log file open
  */
 void UsbdmTclInterpreterImp::redirectStdOut() {
-   LOGGING_E;
+   LOGGING;
+
+   if (tclChannel != nullptr) {
+      // Already redirected
+      log.print("Already redirected\n");
+      return;
+   }
+   log.print("Doing redirection\n");
+
    FILE *fp = UsbdmSystem::Log::getLogFileHandle();
 
 #ifdef WIN32
@@ -188,14 +204,15 @@ void UsbdmTclInterpreterImp::redirectStdOut() {
    }
    if (fp == NULL) {
       log.print("(fp == NULL)\n");
+      return;
    }
    int fileNo = dup(fileno(fp));
 
-//   log.print("createTclInterpreter() fileNo == %d\n", fileNo );
+   log.print("fileNo == %d\n", fileNo );
    HANDLE fileHandle = (HANDLE)_get_osfhandle(fileNo);
-//   log.print("createTclInterpreter() fileHandle == %p\n", fileHandle );
+   log.print("fileHandle == %p\n", fileHandle );
    tclChannel = Tcl_MakeFileChannel(fileHandle, TCL_WRITABLE);
-//   log.print("createTclInterpreter() tclChannel == %p\n", tclChannel );
+   log.print("tclChannel == %p\n", tclChannel );
 #else
    if (fp == NULL) {
       // Create sink
@@ -212,13 +229,13 @@ void UsbdmTclInterpreterImp::redirectStdOut() {
 
    // Register channel
    Tcl_RegisterChannel(interp.get(), tclChannel);
-//   log.print("createTclInterpreter() Registered channel = %p\n", tclChannel);
+   log.print("Registered channel = %p\n", tclChannel);
 
    // Redirect stdout/stderr
-//   log.print("createTclInterpreter() Redirecting stdout\n");
+   log.print("Redirecting stdout\n");
    Tcl_SetStdChannel(tclChannel, TCL_STDOUT);
 
-//   log.print("createTclInterpreter() Redirecting stderr\n");
+   log.print("Redirecting stderr\n");
    Tcl_SetStdChannel(tclChannel, TCL_STDERR);
 
    Tcl_Flush(tclChannel);
@@ -238,12 +255,20 @@ USBDM_ErrorCode UsbdmTclInterpreterImp::setBdmInterface(BdmInterfacePtr bdmInter
    if (doRedirect) {
       redirectStdOut();
    }
+   log.print("redirectStdOut(), complete\n");
+   ::bdmInterface.reset();
+   log.print("::bdmInterface.reset(), complete\n");
    ::bdmInterface = bdmInterface;
-   if (bdmInterface == 0) {
+   log.print("::bdmInterface = bdmInterface, complete\n");
+   if (bdmInterface == nullptr) {
       log.error("createTclInterpreter() bdmInterface == 0x%p\n", bdmInterface.get() );
-      return BDM_RC_ILLEGAL_PARAMS;
+      return BDM_RC_OK;
    }
-   USBDM_ExtendedOptions_t options = bdmInterface->getBdmOptions();
+
+   log.print("Getting bdm options\n");
+   USBDM_ExtendedOptions_t &options = bdmInterface->getBdmOptions();
+
+   log.error("Setting variables\n");
    setVariable("RESET_DURATION",      options.resetDuration);
    setVariable("RESET_RECOVERY",      options.resetRecoveryInterval);
    setVariable("RESET_RELEASE",       options.resetReleaseInterval);
@@ -264,7 +289,7 @@ USBDM_ErrorCode UsbdmTclInterpreterImp::setBdmInterface(BdmInterfacePtr bdmInter
 USBDM_ErrorCode UsbdmTclInterpreterImp::setDeviceParameters(DeviceDataConstPtr device) {
    LOGGING;
    if (device == nullptr) {
-      log.error("Device must not be null\n");
+      log.error("Device is null\n");
       return BDM_RC_ILLEGAL_PARAMS;
    }
    setVariable("RESET_METHOD",  DeviceData::getResetMethodName(device->getActiveResetMethod()));
@@ -294,6 +319,7 @@ UsbdmTclInterpreterImp::~UsbdmTclInterpreterImp() {
    LOGGING_E;
    wxPlugin.reset();
    bdmInterface.reset();
+   deviceInterface.reset();
 
    // Following crashes on unload???
    Tcl_SetStdChannel(0, TCL_STDOUT);
@@ -2340,12 +2366,6 @@ static int listDevices() {
    PRINT("\n");
    return TCL_OK;
 }
-
-//DeviceInterfacePtr deviceInterface(new DeviceInterface(bdmOptions.targetType));
-//FlashProgrammerPtr flashProgrammer(FlashProgrammerFactory::createFlashProgrammer(bdmInterface));
-
-DeviceInterfacePtr deviceInterface;
-FlashImagePtr flashImage;
 
 //! Set a device to me manipulated
 static int cmd_setDevice(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {

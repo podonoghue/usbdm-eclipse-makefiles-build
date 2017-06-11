@@ -165,6 +165,6 @@ protected:
    UsbdmTclInterpreter(bool doInit=false) {(void)doInit; };
 };
 
-typedef std::tr1::shared_ptr<UsbdmTclInterpreter> UsbdmTclInterperPtr;
+typedef std::shared_ptr<UsbdmTclInterpreter> UsbdmTclInterperPtr;
 
 #endif /* USBDM_TCL_INTERPRETER_H_ */

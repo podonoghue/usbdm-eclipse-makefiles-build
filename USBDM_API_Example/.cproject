@@ -59,4 +59,5 @@
 			<resource resourceType="PROJECT" workspacePath="/USBDM_API_Example"/>
 		</configuration>
 	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
 </cproject>

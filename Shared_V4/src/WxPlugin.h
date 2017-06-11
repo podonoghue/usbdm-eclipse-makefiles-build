@@ -46,7 +46,7 @@
    #endif
 #endif
 
-#include <tr1/memory>
+#include <memory>
 #include <string>
 
 #include "UsbdmWxConstants.h"
@@ -61,6 +61,6 @@ protected:
    WxPlugin() {};
 };
 
-typedef std::tr1::shared_ptr<WxPlugin> WxPluginPtr;
+typedef std::shared_ptr<WxPlugin> WxPluginPtr;
 
 #endif /* SRC_WXPLUGIN_H_ */

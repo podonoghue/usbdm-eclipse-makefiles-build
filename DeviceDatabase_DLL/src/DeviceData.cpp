@@ -33,7 +33,7 @@
    | 12 Jul 2014 | Added getCommonFlashProgram(), changed getFlashProgram()            - pgo V4.10.6.170
    | 12 Jul 2014 | Added extra SDID handling getSDIDs()                                - pgo V4.10.6.170
    | 12 Aug 2011 | Changed device directory to avoid need for installation when testing- pgo
-   | 15 June     | Changed to std::tr1::shared_ptr (from boost)                        - pgo
+   | 15 June     | Changed to std::shared_ptr (from boost)                        - pgo
    +====================================================================================================
    \endverbatim
 */
@@ -1620,7 +1620,7 @@ SharedInformationItemPtr DeviceDataBase::getSharedData(std::string key) const {
 }
 
 ChecksumInfoPtr DeviceDataBase::getChecksumEntry(std::string key) {
-   ChecksumInfoPtr ptr(std::tr1::dynamic_pointer_cast<ChecksumInfo>(getSharedData(key)));
+   ChecksumInfoPtr ptr(std::dynamic_pointer_cast<ChecksumInfo>(getSharedData(key)));
    if (ptr == NULL) {
       throw MyException(std::string("DeviceDataBase::getChecksumEntry() - Reference has wrong type - ")+key);
    }
@@ -1628,7 +1628,7 @@ ChecksumInfoPtr DeviceDataBase::getChecksumEntry(std::string key) {
 }
 
 SecurityEntryPtr DeviceDataBase::getSecurityEntry(std::string key) {
-   SecurityEntryPtr ptr(std::tr1::dynamic_pointer_cast<SecurityEntry>(getSharedData(key)));
+   SecurityEntryPtr ptr(std::dynamic_pointer_cast<SecurityEntry>(getSharedData(key)));
    if (ptr == NULL) {
       throw MyException(std::string("DeviceDataBase::getSecurityEntry() - Reference has wrong type - ")+key);
    }
@@ -1636,7 +1636,7 @@ SecurityEntryPtr DeviceDataBase::getSecurityEntry(std::string key) {
 }
 
 SecurityDescriptionPtr DeviceDataBase::getSecurityDescription(std::string key) {
-   SecurityDescriptionPtr ptr(std::tr1::dynamic_pointer_cast<SecurityDescription>(getSharedData(key)));
+   SecurityDescriptionPtr ptr(std::dynamic_pointer_cast<SecurityDescription>(getSharedData(key)));
    if (ptr == NULL) {
       throw MyException(std::string("DeviceDataBase::getSecurityEntry() - Reference has wrong type - ")+key);
    }
@@ -1644,7 +1644,7 @@ SecurityDescriptionPtr DeviceDataBase::getSecurityDescription(std::string key) {
 }
 
 SecurityInfoConstPtr DeviceDataBase::getSecurityInfo(std::string key) const {
-   SecurityInfoPtr ptr(std::tr1::dynamic_pointer_cast<SecurityInfo>(getSharedData(key)));
+   SecurityInfoPtr ptr(std::dynamic_pointer_cast<SecurityInfo>(getSharedData(key)));
    if (ptr == NULL) {
       throw MyException(std::string("DeviceDataBase::getSecurityEntry() - Reference has wrong type - ")+key);
    }
@@ -1652,7 +1652,7 @@ SecurityInfoConstPtr DeviceDataBase::getSecurityInfo(std::string key) const {
 }
 
 MemoryRegionPtr DeviceDataBase::getMemoryRegion(std::string key) {
-   MemoryRegionPtr ptr(std::tr1::dynamic_pointer_cast<MemoryRegion>(getSharedData(key)));
+   MemoryRegionPtr ptr(std::dynamic_pointer_cast<MemoryRegion>(getSharedData(key)));
    if (ptr == NULL) {
       throw MyException(std::string("DeviceDataBase::getSecurityEntry() - Reference has wrong type - ")+key);
    }
@@ -1660,7 +1660,7 @@ MemoryRegionPtr DeviceDataBase::getMemoryRegion(std::string key) {
 }
 
 TclScriptConstPtr DeviceDataBase::getTclScript(std::string key) const {
-   TclScriptPtr ptr(std::tr1::dynamic_pointer_cast<TclScript>(getSharedData(key)));
+   TclScriptPtr ptr(std::dynamic_pointer_cast<TclScript>(getSharedData(key)));
    if (ptr == NULL) {
       throw MyException(std::string("DeviceDataBase::getSecurityEntry() - Reference has wrong type - ")+key);
    }
@@ -1668,7 +1668,7 @@ TclScriptConstPtr DeviceDataBase::getTclScript(std::string key) const {
 }
 
 RegisterDescriptionConstPtr DeviceDataBase::getRegisterDescription(std::string key) const {
-   RegisterDescriptionConstPtr ptr(std::tr1::dynamic_pointer_cast<RegisterDescription>(getSharedData(key)));
+   RegisterDescriptionConstPtr ptr(std::dynamic_pointer_cast<RegisterDescription>(getSharedData(key)));
    if (ptr == NULL) {
       throw MyException(std::string("DeviceDataBase::getRegisterDescription() - Reference has wrong type - ")+key);
    }
@@ -1676,7 +1676,7 @@ RegisterDescriptionConstPtr DeviceDataBase::getRegisterDescription(std::string k
 }
 
 FlashProgramConstPtr DeviceDataBase::getFlashProgram(std::string key) const {
-   FlashProgramPtr ptr(std::tr1::dynamic_pointer_cast<FlashProgram>(getSharedData(key)));
+   FlashProgramPtr ptr(std::dynamic_pointer_cast<FlashProgram>(getSharedData(key)));
    if (ptr == NULL) {
       throw MyException(std::string("DeviceDataBase::getSecurityEntry() - Reference has wrong type - ")+key);
    }
@@ -1684,7 +1684,7 @@ FlashProgramConstPtr DeviceDataBase::getFlashProgram(std::string key) const {
 }
 
 FlexNVMInfoConstPtr DeviceDataBase::getFlexNVMInfo(std::string key) const {
-   FlexNVMInfoPtr ptr(std::tr1::dynamic_pointer_cast<FlexNVMInfo>(getSharedData(key)));
+   FlexNVMInfoPtr ptr(std::dynamic_pointer_cast<FlexNVMInfo>(getSharedData(key)));
    if (ptr == NULL) {
       throw MyException(std::string("DeviceDataBase::getSecurityEntry() - Reference has wrong type - ")+key);
    }
@@ -1692,7 +1692,7 @@ FlexNVMInfoConstPtr DeviceDataBase::getFlexNVMInfo(std::string key) const {
 }
 
 ResetMethodsConstPtr DeviceDataBase::getResetMethods(std::string key) const {
-   ResetMethodsPtr ptr(std::tr1::dynamic_pointer_cast<ResetMethods>(getSharedData(key)));
+   ResetMethodsPtr ptr(std::dynamic_pointer_cast<ResetMethods>(getSharedData(key)));
    if (ptr == NULL) {
       throw MyException(std::string("DeviceDataBase::getResetMethods() - Reference has wrong type - ")+key);
    }
@@ -1700,7 +1700,7 @@ ResetMethodsConstPtr DeviceDataBase::getResetMethods(std::string key) const {
 }
 
 EraseMethodsConstPtr DeviceDataBase::getEraseMethods(std::string key) const {
-   EraseMethodsPtr ptr(std::tr1::dynamic_pointer_cast<EraseMethods>(getSharedData(key)));
+   EraseMethodsPtr ptr(std::dynamic_pointer_cast<EraseMethods>(getSharedData(key)));
    if (ptr == NULL) {
       throw MyException(std::string("DeviceDataBase::getEraseMethods() - Reference has wrong type - ")+key);
    }

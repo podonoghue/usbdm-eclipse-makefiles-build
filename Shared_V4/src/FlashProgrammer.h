@@ -27,7 +27,7 @@
 #ifndef _FLASHPROGRAMER_H_
 #define _FLASHPROGRAMER_H_
 
-#include <tr1/memory>
+#include <memory>
 
 #include "Common.h"
 #include "DeviceData.h"
@@ -166,6 +166,6 @@ protected:
    FlashProgrammer() {};
 };
 
-typedef std::tr1::shared_ptr<FlashProgrammer> FlashProgrammerPtr;
+typedef std::shared_ptr<FlashProgrammer> FlashProgrammerPtr;
 
 #endif // _FLASHPROGRAMER_H_

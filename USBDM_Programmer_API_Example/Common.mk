@@ -365,7 +365,7 @@ ifneq ($(OS),Windows_NT)
    endif
 endif
 
-CFLAGS += -std=gnu++11
+CFLAGS += -std=gnu++14
 CFLAGS  += ${THREADS} -Wall -shared ${GCC_VISIBILITY_DEFS}
 LDFLAGS += ${THREADS}
 

@@ -33,7 +33,7 @@
 #endif
 
 #include <windows.h>
-#include <tr1/memory>
+#include <memory>
 #include <stdio.h>
 
 #include "UsbdmSystem.h"
@@ -46,7 +46,7 @@ template <class T>
 class SingletonPluginFactory {
 
 protected:
-   static std::tr1::shared_ptr<T> (*__attribute__((__stdcall__)) getSingletonInstance)(...);
+   static std::shared_ptr<T> (*__attribute__((__stdcall__)) getSingletonInstance)();
    static HINSTANCE     moduleHandle;
 
    SingletonPluginFactory() {};
@@ -61,12 +61,12 @@ protected:
     *
     * @return Smart pointer to object implementing the plug-in interface
     */
-   static std::tr1::shared_ptr<T> createPlugin(std::string dllName, std::string entryPoint="createSingletonPluginInstance") {
+   static std::shared_ptr<T> createPlugin(std::string dllName, std::string entryPoint="createSingletonPluginInstance") {
       LOGGING;
       if (getSingletonInstance == 0) {
          loadClass(dllName.c_str(), entryPoint.c_str());
       }
-      std::tr1::shared_ptr<T> ptr = getSingletonInstance(0);
+      std::shared_ptr<T> ptr = getSingletonInstance();
       log.print("Use count = %ld\n", ptr.use_count());
       return ptr;
    }
@@ -95,7 +95,7 @@ public:
 };
 
 template <class T> HINSTANCE SingletonPluginFactory<T>::moduleHandle = 0;
-template <class T> std::tr1::shared_ptr<T> (*__attribute__((__stdcall__))SingletonPluginFactory<T>::getSingletonInstance)(...) = 0;
+template <class T> std::shared_ptr<T> (*__attribute__((__stdcall__))SingletonPluginFactory<T>::getSingletonInstance)() = 0;
 
 using namespace std;
 
@@ -141,7 +141,7 @@ void SingletonPluginFactory<T>::loadClass(const char *moduleName, const char *cr
    if (GetModuleFileNameA(moduleHandle, executableName, sizeof(executableName)) > 0) {
       log.print("Module path = %s\n", executableName);
    }
-   getSingletonInstance = (std::tr1::shared_ptr<T> (__attribute__((__stdcall__)) *)(...))GetProcAddress(moduleHandle, createInstanceFunctioName);
+   getSingletonInstance = (std::shared_ptr<T> (__attribute__((__stdcall__)) *)())GetProcAddress(moduleHandle, createInstanceFunctioName);
    if (getSingletonInstance == 0) {
       log.print("Entry point \'%s\' not found in module \'%s\'\n", createInstanceFunctioName, moduleName);
       throw MyException("Entry point not found in module");

@@ -63,14 +63,12 @@ long nullCallback(std::string message, std::string caption, long style) {
    return UsbdmWxConstants::NO;
 }
 
-int main(void) {
-   Logger logger;
+void doSequence(void) {
    const TargetType_t TARGET_TYPE = T_ARM;
    const char*        FLASH_IMAGE = "TestMK20.elf";
    const char*        INTERFACE   = "USBDM-OPENSDA-61168";
    const char*        DEVICE      = "FRDM_K20D50M";
 
-   try {
       fprintf(stderr, "Creating interface\n");
 
       BdmInterfacePtr bdmInterface(BdmInterfaceFactory::createInterface(TARGET_TYPE, nullCallback));
@@ -119,6 +117,13 @@ int main(void) {
       CHECK(bdmInterface->reset((TargetMode_t)(RESET_NORMAL|RESET_DEFAULT)));
 
       fprintf(stderr, "Done - Target should be executing\n");
+}
+
+int main(void) {
+   Logger logger;
+   try {
+      doSequence();
+      doSequence();
    }
    catch(MyException &error) {
       fprintf(stderr, "Exception %s \n", error.what());

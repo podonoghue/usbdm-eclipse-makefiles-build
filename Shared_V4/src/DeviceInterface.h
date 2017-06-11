@@ -28,7 +28,7 @@
 #ifndef BDM_DEVICEINTERFACE_H
 #define BDM_DEVICEINTERFACE_H
 
-#include <tr1/memory>
+#include <memory>
 
 #include "USBDM_API.h"
 #include "UsbdmSystem.h"
@@ -105,6 +105,6 @@ private:
    int                currentDeviceIndex;              //!< Index of current device
 };
 
-typedef std::tr1::shared_ptr<DeviceInterface> DeviceInterfacePtr;
+typedef std::shared_ptr<DeviceInterface> DeviceInterfacePtr;
 
 #endif /* BDM_DEVICEINTERFACE_H */

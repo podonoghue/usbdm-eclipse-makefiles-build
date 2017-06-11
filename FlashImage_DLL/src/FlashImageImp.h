@@ -33,7 +33,7 @@
 
 class  MemoryPage;
 class  EnumeratorImp;
-typedef std::tr1::shared_ptr<MemoryPage> MemoryPagePtr;
+typedef std::shared_ptr<MemoryPage> MemoryPagePtr;
 
 class FlashImageImp : public FlashImage {
 
@@ -167,6 +167,6 @@ protected:
    Elf32_Addr              getLoadAddress(Elf32_Shdr *sectionHeader);
 };
 
-typedef std::tr1::shared_ptr<FlashImage> FlashImagePtr;
+typedef std::shared_ptr<FlashImage> FlashImagePtr;
 
 #endif // _FLASHIMAGE_IMP_H_

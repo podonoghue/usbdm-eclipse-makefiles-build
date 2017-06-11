@@ -58,7 +58,7 @@
 #define USBDM_FLASHIMAGE_DECLSPEC CPP_DLL_IMPORT
 #endif
 
-#include <tr1/memory>
+#include <memory>
 #include <stdint.h>
 #include <string>
 
@@ -122,7 +122,7 @@ public:
        */
       virtual void       lastValid() = 0;
    };
-   typedef std::tr1::shared_ptr<FlashImage::Enumerator> EnumeratorPtr;
+   typedef std::shared_ptr<FlashImage::Enumerator> EnumeratorPtr;
 
 protected:
    /**
@@ -289,6 +289,6 @@ public:
    virtual void fillUnused(uint32_t size, uint32_t address, uint8_t fillValue = 0xFF) = 0;
 };
 
-typedef std::tr1::shared_ptr<FlashImage> FlashImagePtr;
+typedef std::shared_ptr<FlashImage> FlashImagePtr;
 
 #endif // FLASHIMAGE_H_

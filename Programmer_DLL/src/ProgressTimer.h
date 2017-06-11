@@ -81,6 +81,6 @@ public:
    }
 };
 
-typedef std::tr1::shared_ptr<ProgressTimer> ProgressTimerPtr;
+typedef std::shared_ptr<ProgressTimer> ProgressTimerPtr;
 
 #endif /* PROGRESSTIMER_H_ */

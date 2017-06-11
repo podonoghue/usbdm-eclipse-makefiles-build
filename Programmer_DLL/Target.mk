@@ -22,7 +22,7 @@ SOURCEDIRS := src
 CC = $(GPP)
 
 # Extra Compiler flags
-CFLAGS +=
+CFLAGS +=  
 
 # Extra C Definitions
 DEFS += $(CDEFS)  # From command line

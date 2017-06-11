@@ -65,7 +65,7 @@
 #include <iostream>
 #include <iomanip>
 #include <stdio.h>
-#include <tr1/memory>
+#include <memory>
 #include <string.h>
 
 #include "UsbdmSystem.h"
@@ -210,7 +210,7 @@ public:
 /**
  * Smart pointer for SharedInformationItem
  */
-typedef std::tr1::shared_ptr<SharedInformationItem> SharedInformationItemPtr;
+typedef std::shared_ptr<SharedInformationItem> SharedInformationItemPtr;
 
 /*
  * ============================================================================================
@@ -249,11 +249,11 @@ public:
 /**
  * Smart pointer for TclScript
  */
-typedef std::tr1::shared_ptr<TclScript>         TclScriptPtr;
+typedef std::shared_ptr<TclScript>         TclScriptPtr;
 /**
  * Smart pointer for TclScript
  */
-typedef std::tr1::shared_ptr<const TclScript>   TclScriptConstPtr;
+typedef std::shared_ptr<const TclScript>   TclScriptConstPtr;
 
 
 /*
@@ -302,11 +302,11 @@ public:
 /**
  * Smart pointer for RegisterDescription
  */
-typedef std::tr1::shared_ptr<RegisterDescription>         RegisterDescriptionPtr;
+typedef std::shared_ptr<RegisterDescription>         RegisterDescriptionPtr;
 /**
  * Smart pointer for RegisterDescription
  */
-typedef std::tr1::shared_ptr<const RegisterDescription>   RegisterDescriptionConstPtr;
+typedef std::shared_ptr<const RegisterDescription>   RegisterDescriptionConstPtr;
 
 /*
  * ============================================================================================
@@ -345,11 +345,11 @@ public:
 /**
  * Smart pointer for FlashProgram
  */
-typedef std::tr1::shared_ptr<FlashProgram>       FlashProgramPtr;
+typedef std::shared_ptr<FlashProgram>       FlashProgramPtr;
 /**
  * Smart pointer for FlashProgram
  */
-typedef std::tr1::shared_ptr<const FlashProgram> FlashProgramConstPtr;
+typedef std::shared_ptr<const FlashProgram> FlashProgramConstPtr;
 
 /*
  * ============================================================================================
@@ -388,11 +388,11 @@ public:
 /**
  * Smart pointer for SecurityDescription
  */
-typedef std::tr1::shared_ptr<SecurityDescription>       SecurityDescriptionPtr;
+typedef std::shared_ptr<SecurityDescription>       SecurityDescriptionPtr;
 /**
  * Smart pointer for SecurityDescription
  */
-typedef std::tr1::shared_ptr<const SecurityDescription> SecurityDescriptionConstPtr;
+typedef std::shared_ptr<const SecurityDescription> SecurityDescriptionConstPtr;
 
 /*
  * ============================================================================================
@@ -411,11 +411,11 @@ typedef std::tr1::shared_ptr<const SecurityDescription> SecurityDescriptionConst
 ///**
 // * Smart pointer for GnuInfoList
 // */
-//typedef std::tr1::shared_ptr<GnuInfoList>       GnuInfoListPtr;
+//typedef std::shared_ptr<GnuInfoList>       GnuInfoListPtr;
 ///**
 // * Smart pointer for GnuInfoList
 // */
-//typedef std::tr1::shared_ptr<const GnuInfoList> GnuInfoListConstPtr;
+//typedef std::shared_ptr<const GnuInfoList> GnuInfoListConstPtr;
 
 /*
  * ============================================================================================
@@ -437,11 +437,11 @@ typedef std::tr1::shared_ptr<const SecurityDescription> SecurityDescriptionConst
 ///**
 // * Smart pointer for GnuInfo
 // */
-//typedef std::tr1::shared_ptr<GnuInfo>       GnuInfoPtr;
+//typedef std::shared_ptr<GnuInfo>       GnuInfoPtr;
 ///**
 // * Smart pointer for GnuInfo
 // */
-//typedef std::tr1::shared_ptr<const GnuInfo> GnuInfoConstPtr;
+//typedef std::shared_ptr<const GnuInfo> GnuInfoConstPtr;
 /*
  * ============================================================================================
  */
@@ -511,11 +511,11 @@ public:
 /**
  * Smart pointer for ChecksumInfo
  */
-typedef std::tr1::shared_ptr<ChecksumInfo> ChecksumInfoPtr;
+typedef std::shared_ptr<ChecksumInfo> ChecksumInfoPtr;
 /**
  * Smart pointer for ChecksumInfo
  */
-typedef std::tr1::shared_ptr<const ChecksumInfo> ChecksumInfoConstPtr;
+typedef std::shared_ptr<const ChecksumInfo> ChecksumInfoConstPtr;
 /*
  * ============================================================================================
  */
@@ -614,11 +614,11 @@ public:
 /**
  * Smart pointer for SecurityInfo
  */
-typedef std::tr1::shared_ptr<SecurityInfo> SecurityInfoPtr;
+typedef std::shared_ptr<SecurityInfo> SecurityInfoPtr;
 /**
  * Smart pointer for SecurityInfo
  */
-typedef std::tr1::shared_ptr<const SecurityInfo> SecurityInfoConstPtr;
+typedef std::shared_ptr<const SecurityInfo> SecurityInfoConstPtr;
 /*
  * ============================================================================================
  */
@@ -730,11 +730,11 @@ public:
 /**
  * Smart pointer for SecurityEntry
  */
-typedef std::tr1::shared_ptr<SecurityEntry> SecurityEntryPtr;
+typedef std::shared_ptr<SecurityEntry> SecurityEntryPtr;
 /**
  * Smart pointer for SecurityEntry
  */
-typedef std::tr1::shared_ptr<const SecurityEntry> SecurityEntryConstPtr;
+typedef std::shared_ptr<const SecurityEntry> SecurityEntryConstPtr;
 /*
  * ============================================================================================
  */
@@ -839,11 +839,11 @@ public:
 /**
  * Smart pointer for FlexNVMInfo
  */
-typedef std::tr1::shared_ptr<FlexNVMInfo> FlexNVMInfoPtr;
+typedef std::shared_ptr<FlexNVMInfo> FlexNVMInfoPtr;
 /**
  * Smart pointer for FlexNVMInfo
  */
-typedef std::tr1::shared_ptr<const FlexNVMInfo> FlexNVMInfoConstPtr;
+typedef std::shared_ptr<const FlexNVMInfo> FlexNVMInfoConstPtr;
 
 /*
  * ============================================================================================
@@ -1064,8 +1064,8 @@ public:
    FlexNVMInfoConstPtr     getflexNVMInfo() const;
 };
 
-typedef std::tr1::shared_ptr<MemoryRegion> MemoryRegionPtr;
-typedef std::tr1::shared_ptr<const MemoryRegion> MemoryRegionConstPtr;
+typedef std::shared_ptr<MemoryRegion> MemoryRegionPtr;
+typedef std::shared_ptr<const MemoryRegion> MemoryRegionConstPtr;
 
 /*
  * ============================================================================================
@@ -1086,11 +1086,11 @@ class EraseMethods;
 /**
  * Smart pointer for EraseMethods
  */
-typedef std::tr1::shared_ptr<EraseMethods>         EraseMethodsPtr;
+typedef std::shared_ptr<EraseMethods>         EraseMethodsPtr;
 /**
  * Smart pointer for EraseMethods
  */
-typedef std::tr1::shared_ptr<const EraseMethods>   EraseMethodsConstPtr;
+typedef std::shared_ptr<const EraseMethods>   EraseMethodsConstPtr;
 
 
 /*
@@ -1101,11 +1101,11 @@ class ResetMethods;
 /**
  * Smart pointer for ResetMethods
  */
-typedef std::tr1::shared_ptr<ResetMethods>         ResetMethodsPtr;
+typedef std::shared_ptr<ResetMethods>         ResetMethodsPtr;
 /**
  * Smart pointer for ResetMethods
  */
-typedef std::tr1::shared_ptr<const ResetMethods>   ResetMethodsConstPtr;
+typedef std::shared_ptr<const ResetMethods>   ResetMethodsConstPtr;
 
 /*
  * ============================================================================================
@@ -1113,8 +1113,8 @@ typedef std::tr1::shared_ptr<const ResetMethods>   ResetMethodsConstPtr;
 
 class DeviceData;
 
-typedef std::tr1::shared_ptr<DeviceData> DeviceDataPtr;
-typedef std::tr1::shared_ptr<const DeviceData> DeviceDataConstPtr;
+typedef std::shared_ptr<DeviceData> DeviceDataPtr;
+typedef std::shared_ptr<const DeviceData> DeviceDataConstPtr;
 
 //! Information about a target device
 //!
@@ -1402,7 +1402,7 @@ public:
    EraseMethodsConstPtr        getEraseMethods(std::string key) const;
 };
 
-typedef std::tr1::shared_ptr<DeviceDataBase> DeviceDataBasePtr;
+typedef std::shared_ptr<DeviceDataBase> DeviceDataBasePtr;
 
 /*
  * ============================================================================================

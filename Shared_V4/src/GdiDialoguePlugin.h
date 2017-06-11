@@ -46,7 +46,7 @@
    #endif
 #endif
 
-#include <tr1/memory>
+#include <memory>
 
 #include "USBDM_API.h"
 #include "AppSettings.h"
@@ -75,6 +75,6 @@ protected:
    GdiDialoguePlugin() {}
 };
 
-typedef std::tr1::shared_ptr<GdiDialoguePlugin> GdiDialoguePluginPtr;
+typedef std::shared_ptr<GdiDialoguePlugin> GdiDialoguePluginPtr;
 
 #endif /* GDI_DIALOGUE_PLUGIN_H_ */

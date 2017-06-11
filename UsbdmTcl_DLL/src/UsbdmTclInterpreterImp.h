@@ -11,7 +11,7 @@
 #include "UsbdmTclInterpreter.h"
 
 #include <stdio.h>
-#include <tr1/memory>
+#include <memory>
 #include <tcl.h>
 #include <map>
 
@@ -136,7 +136,7 @@ public:
    }
 
 protected:
-   std::tr1::shared_ptr<Tcl_Interp>  interp;
+   std::shared_ptr<Tcl_Interp>  interp;
    Tcl_Channel                       tclChannel;       // Used as a TCL channel for STDERR & STDOUT
    UsbdmTclInterperPtr tclInterper;
 
@@ -169,6 +169,6 @@ protected:
    virtual void redirectStdOut();
 };
 
-typedef std::tr1::shared_ptr<UsbdmTclInterpreter> UsbdmTclInterperPtr;
+typedef std::shared_ptr<UsbdmTclInterpreter> UsbdmTclInterperPtr;
 
 #endif /* SRC_USBDM_TCL_INTERPRETER_IMP_H_ */

@@ -30,7 +30,7 @@
 #ifndef APPSETTINGS_HPP_
 #define APPSETTINGS_HPP_
 
-#include <tr1/memory>
+#include <memory>
 #include <map>
 #include "USBDM_API.h"
 #include "UsbdmSystem.h"
@@ -205,6 +205,6 @@ public:
    }
 };
 
-typedef std::tr1::shared_ptr<AppSettings> AppSettingsPtr;
+typedef std::shared_ptr<AppSettings> AppSettingsPtr;
 
 #endif /* APPSETTINGS_HPP_ */

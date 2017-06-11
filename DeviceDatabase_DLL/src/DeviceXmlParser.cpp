@@ -49,7 +49,7 @@
 #include <errno.h>
 #include <ctype.h>
 #include <map>
-#include <tr1/memory>
+#include <memory>
 
 #pragma GCC visibility push(default)
 
@@ -2029,7 +2029,7 @@ void DeviceXmlParser::loadDeviceData(TargetType_t targetType, const std::string 
    catch (...) {
       throw MyException("DeviceXmlParser::loadDeviceData((): Exception in XMLPlatformUtils::Initialize()");
    }
-   std::tr1::shared_ptr<DeviceXmlParser> deviceXmlParser(new DeviceXmlParser(targetType, deviceDataBase));
+   std::shared_ptr<DeviceXmlParser> deviceXmlParser(new DeviceXmlParser(targetType, deviceDataBase));
    try {
       try {
          // Load the XML

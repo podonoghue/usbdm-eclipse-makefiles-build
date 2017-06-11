@@ -8,7 +8,7 @@
 #ifndef SRC_PROGRESSCALLBACKFACTORY_H_
 #define SRC_PROGRESSCALLBACKFACTORY_H_
 
-#include <tr1/memory>
+#include <memory>
 #include <string.h>
 
 #include "USBDM_API.h"
@@ -58,7 +58,7 @@ public:
    virtual void close() = 0;
 };
 
-typedef std::tr1::shared_ptr<ProgressDialogue> ProgressDialoguePtr;
+typedef std::shared_ptr<ProgressDialogue> ProgressDialoguePtr;
 
 class ProgressDialogueFactory {
 public:

@@ -29,7 +29,7 @@
 #define SRC_PLUGINFACTORY_WIN32_H_
 
 #include <dlfcn.h>
-#include <tr1/memory>
+#include <memory>
 
 #include "UsbdmSystem.h"
 #include "MyException.h"
@@ -42,13 +42,13 @@ protected:
    static size_t ((* newInstance)(...));
    static int instanceCount;
    static void *moduleHandle;
-   static std::tr1::shared_ptr<T> dummy;
+   static std::shared_ptr<T> dummy;
 
    PluginFactory() {};
    ~PluginFactory() {};
 
 protected:
-   static std::tr1::shared_ptr<T> createPlugin(std::string dllName, std::string entryPoint="createPluginInstance") {
+   static std::shared_ptr<T> createPlugin(std::string dllName, std::string entryPoint="createPluginInstance") {
       LOGGING;
       if (newInstance == 0) {
          loadClass(dllName.c_str(), entryPoint.c_str());
@@ -60,7 +60,7 @@ protected:
       log.print("Allocated storage @%p, size = %ld\n", p, (long)classSize);
       log.print("Calling placement constructor\n");
       (*newInstance)(p);
-      std::tr1::shared_ptr<T> pp((T*)p, deleter);
+      std::shared_ptr<T> pp((T*)p, deleter);
       instanceCount++;
       return pp;
    }
@@ -83,8 +83,8 @@ protected:
 template <class T> void * PluginFactory<T>::moduleHandle = 0;
 template <class T> size_t (*PluginFactory<T>::newInstance)(...) = 0;
 template <class T> int  PluginFactory<T>::instanceCount = 0;
-//template <class T> std::tr1::shared_ptr<WxPlugin> PluginFactory<T>::dummy;
-template <class T> std::tr1::shared_ptr<T> PluginFactory<T>::dummy;
+//template <class T> std::shared_ptr<WxPlugin> PluginFactory<T>::dummy;
+template <class T> std::shared_ptr<T> PluginFactory<T>::dummy;
 
 using namespace std;
 

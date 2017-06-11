@@ -8,6 +8,7 @@
 #ifndef GDBHANDLER_H_
 #define GDBHANDLER_H_
 
+#include <memory>
 #include "BdmInterface.h"
 #include "GdbInOut.h"
 
@@ -60,6 +61,6 @@ protected:
    static const char           *getRunStateName(RunState runState);
 };
 
-typedef std::tr1::shared_ptr<GdbHandler> GdbHandlerPtr;
+typedef std::shared_ptr<GdbHandler> GdbHandlerPtr;
 
 #endif /* GDBHANDLER_H_ */

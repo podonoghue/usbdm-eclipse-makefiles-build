@@ -28,7 +28,7 @@
 #ifndef BDM_INTERFACE_H
 #define BDM_INTERFACE_H
 
-#include <tr1/memory>
+#include <memory>
 #include <string.h>
 #include <vector>
 #include <stdint.h>
@@ -448,7 +448,7 @@ public:
    *  @note Can be used to check BDM firmware/DLL compatibility
    */
    virtual USBDM_ErrorCode            getCapabilities(HardwareCapabilities_t *capabilities) = 0;
-   
+
 
   /**
    * Resets the target to normal or special mode
@@ -920,6 +920,6 @@ public:
    virtual USBDM_ErrorCode            setProgrammingMode(bool mode) = 0;
 };
 
-typedef std::tr1::shared_ptr<BdmInterface> BdmInterfacePtr;
+typedef std::shared_ptr<BdmInterface> BdmInterfacePtr;
 
 #endif /* BDM_INTERFACE_H */

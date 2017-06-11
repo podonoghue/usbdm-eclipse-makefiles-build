@@ -317,6 +317,7 @@ FlashImageImp::FlashImageImp() :
       printHeader(true),
       programHeaders(0),
       symTable(0) {
+   LOGGING;
 }
 
 /**
@@ -325,6 +326,7 @@ FlashImageImp::FlashImageImp() :
  *  @param targetType - Target type to set
  */
 void FlashImageImp::setTargetType(TargetType_t targetType) {
+   LOGGING;
    this->targetType = targetType;
    if (targetType == T_MC56F80xx) {
       wordAddresses = true;

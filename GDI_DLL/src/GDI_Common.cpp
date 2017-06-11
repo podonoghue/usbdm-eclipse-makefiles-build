@@ -87,8 +87,10 @@ Change History
 #include "UsbdmWxConstants.h"
 
 #if defined(GDI) && !defined(LEGACY)
-// Flash programming is not supported on legacy targets
-// Programming is done by Codewarrior
+/*
+ * Flash programming is not supported on legacy targets
+ * Programming is done by Codewarrior
+ */
 #define FLASH_PROGRAMMING 1
 #endif
 
@@ -114,7 +116,6 @@ Change History
 using namespace std;
 using namespace UsbdmWxConstants;
 
-
 // Nasty hack - records the first pc write to use as reset PC on future resets
 bool            pcWritten            = false;
 uint32_t        pcResetValue         = 0x000000;
@@ -125,13 +126,13 @@ BdmInterfacePtr bdmInterface;
 //============================================================================
 #ifdef FLASH_PROGRAMMING
 
-//! Description of currently selected device
+//!   Description of currently selected device
 static DeviceDataPtr deviceData;
 
-//! Flash image for programming
+//!   Flash image for programming
 static FlashImagePtr flashImage;
 
-//! Flash programmer instance
+//!   Flash programmer instance
 static FlashProgrammerPtr flashProgrammer;
 
 #endif
@@ -143,17 +144,18 @@ BdmInterface::RetryMode initialConnectOptions = (BdmInterface::RetryMode)(BdmInt
 BdmInterface::RetryMode softConnectOptions    = BdmInterface::retryNever;
 
 #ifdef FLASH_PROGRAMMING
-// Display messageBox
-// TODO optimise
+/**
+ * Display messageBox
+ */
 static long displayDialogue(std::string message, std::string caption, long style) {
    WxPluginPtr p = WxPluginFactory::createWxPlugin();
    return p->display(message, caption, style);
 }
 #endif
 
-//=====================================================================================
-// Error handling
+/** Error handling */
 DiReturnT   currentError       = DI_ERR_STATE; // No functions available until DiGdiInitIO() is called
+
 const char *currentErrorString = "GDI Not opened";
 
 //=====================================================================================
@@ -169,6 +171,11 @@ static const char *returnStrings[] = {
    "DI_ERR_FATAL",          //  = 7
 };
 
+/**
+ * Get string describing error code
+ *
+ * @param returnCode
+ */
 const char *getGDIErrorString( DiReturnT returnCode) {
 const char *errorString = "Unknown";
 
@@ -179,25 +186,31 @@ const char *errorString = "Unknown";
    return errorString;
 }
 #else
-
-const char *getGDIErrorString( DiReturnT returnCode) { return ""; }
-
+/**
+ * Get string describing error code
+ *
+ * @param returnCode
+ */
+const char *getGDIErrorString( DiReturnT returnCode) {
+   return "";
+}
 #endif
 
-//!
-//!
-//! @param errorCode   - Error code identifying error type
-//! @param errorString - Error message (NULL => use generic message)
-//!
-//! @return errorCode passed as 1st parameter
-//!
+/**
+ *  Set error state
+ *
+ *  @param errorCode   - Error code identifying error type
+ *  @param errorString - Error message (nullptr => use generic message)
+ *
+ *  @return errorCode passed as 1st parameter
+ */
 DiReturnT setErrorState(DiReturnT   errorCode,
                         const char *errorString) {
 
    currentError       = errorCode;
    currentErrorString = errorString;
 
-   if ((errorString == NULL) || (errorCode == DI_OK)) {
+   if ((errorString == nullptr) || (errorCode == DI_OK)) {
      // Add default message if specific message not already provided
      switch(errorCode) {
         case DI_OK :
@@ -232,20 +245,33 @@ DiReturnT setErrorState(DiReturnT   errorCode,
    return currentError;
 }
 
+/**
+ *  Set error state
+ *
+ *  @param errorCode GDI error code identifying error type
+ *  @param rc        USBDM error code
+ *
+ *  @return errorCode passed as 1st parameter
+ */
 DiReturnT setErrorState(DiReturnT errorCode, USBDM_ErrorCode rc) {
 
    return setErrorState(errorCode, bdmInterface->getErrorString(rc));
 }
 
+/**
+ *  Get error string
+ *
+ *  @return errorCode passed as 1st parameter
+ */
 static DiStringT getGDIErrorMessage(void) {
-
    return (DiStringT)currentErrorString;
 }
 
-//!  Close connection to target
-//!
-//!  @return error code, see \ref USBDM_ErrorCode
-//!
+/**
+ *   Close connection to target
+ *
+ *   @return error code, see \ref USBDM_ErrorCode
+ */
 static DiReturnT closeBDM(void) {
    LOGGING_E;
    DiReturnT rc = DI_OK;
@@ -258,24 +284,24 @@ static DiReturnT closeBDM(void) {
    return setErrorState(rc);
 }
 
-//===================================================================
-//! Does the following:
-//!   - Initialises USBDM interface
-//!   - Legacy  - Display USBDM Dialogue to obtain settings
-//!   - Eclipse - Loads settings from Codewarrior
-//!   - Loads device data from database
-//!   - Opens BDM
-//!   - Sets BDM options
-//!   - Sets BDM target type
-//!   - Sets up Flash programmer
-//!
-//!  Displays an error dialogue on failure. \n
-//!  May prompt to retry connection for certain errors.
-//!
-//! @return \n
-//!     DI_OK              => OK \n
-//!     DI_ERR_FATAL       => Error see \ref currentErrorString
-//!
+/**
+ *  Does the following:
+ *    - Initialises USBDM interface
+ *    - Legacy  - Display USBDM Dialogue to obtain settings
+ *    - Eclipse - Loads settings from Codewarrior
+ *    - Loads device data from database
+ *    - Opens BDM
+ *    - Sets BDM options
+ *    - Sets BDM target type
+ *    - Sets up Flash programmer
+ *
+ *   Displays an error dialogue on failure. \n
+ *   May prompt to retry connection for certain errors.
+ *
+ *  @return \n
+ *      DI_OK              => OK \n
+ *      DI_ERR_FATAL       => Error see \ref currentErrorString
+ */
 static USBDM_ErrorCode initialiseBDMInterface(void) {
    LOGGING;
    USBDM_ErrorCode rc = BDM_RC_OK;
@@ -355,19 +381,19 @@ static USBDM_ErrorCode initialiseBDMInterface(void) {
    return rc;
 }
 
-//! Open GDI
-//!
-//! @param dnGdiVersionH
-//! @param dnGdiVersionL
-//! @param dnArgc
-//! @param szArgv
-//! @param UdProcessEvents
-//!
-//!
-//! @return \n
-//!     DI_OK              => OK \n
-//!     DI_ERR_FATAL       => Error see \ref currentErrorString
-//!
+/**
+ *  Open GDI
+ *
+ * @param dnGdiVersionH
+ * @param dnGdiVersionL
+ * @param dnArgc
+ * @param szArgv
+ * @param UdProcessEvents
+ *
+ * @return \n
+ *     DI_OK              => OK \n
+ *     DI_ERR_FATAL       => Error see \ref currentErrorString
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiGdiOpen ( DiUInt32T      dnGdiVersionH,
                       DiUInt32T      dnGdiVersionL,
@@ -409,29 +435,34 @@ DiReturnT DiGdiOpen ( DiUInt32T      dnGdiVersionH,
    return setErrorState(DI_OK);
 }
 
-//! Close GDI
-//!
-//! @param fClose
-//!
-//!
-//! @return \n
-//!     DI_OK              => OK \n
-//!     DI_ERR_FATAL       => Error see \ref currentErrorString
-//!
+/**  Close GDI
+ *
+ *  @param fClose
+ *
+ *
+ *  @return \n
+ *      DI_OK              => OK \n
+ *      DI_ERR_FATAL       => Error see \ref currentErrorString
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiGdiClose ( DiBoolT fClose ) {
    LOGGING;
 
    closeBDM();
-   bdmInterface->closeBdm();
    setErrorState(DI_ERR_STATE, ("GDI Not open"));
-
-   bdmInterface.reset();
 
 #ifdef FLASH_PROGRAMMING
    flashImage.reset();
    flashProgrammer.reset();
+   deviceData.reset();
+   log.print("flashImage.use_count()      = %ld\n",  flashImage.use_count());
+   log.print("flashProgrammer.use_count() = %ld\n",  flashProgrammer.use_count());
+   log.print("deviceData.use_count()      = %ld\n",  deviceData.use_count());
 #endif
+
+   log.print("bdmInterface.use_count()    = %ld\n",  bdmInterface.use_count());
+   bdmInterface.reset();
+   log.print("bdmInterface.use_count()    = %ld\n",  bdmInterface.use_count());
 
 #if defined(LEGACY) && !defined(TEST_APP)
 //   UsbdmSystem::Log::closeLogFile();
@@ -440,15 +471,16 @@ DiReturnT DiGdiClose ( DiBoolT fClose ) {
    return DI_OK;
 }
 
-//! Get GDI version
-//!
-//! @param dnGdiVersion
-//!
-//!
-//! @return \n
-//!     DI_OK              => OK \n
-//!     DI_ERR_FATAL       => Error see \ref currentErrorString
-//!
+/**
+ *   Get GDI version
+ *
+ *  @param dnGdiVersion
+ *
+ *
+ *  @return \n
+ *      DI_OK              => OK \n
+ *      DI_ERR_FATAL       => Error see \ref currentErrorString
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiGdiVersion ( DiUInt32T *dnGdiVersion ) {
    LOGGING_E;
@@ -457,15 +489,16 @@ DiReturnT DiGdiVersion ( DiUInt32T *dnGdiVersion ) {
    return setErrorState(DI_OK);
 }
 
-//! Get Features Supported by GDI
-//!
-//! @param pdfFeatures
-//!
-//!
-//! @return \n
-//!     DI_OK              => OK \n
-//!     DI_ERR_FATAL       => Error see \ref currentErrorString
-//!
+/**
+ *  Get Features Supported by GDI
+ *
+ *  @param pdfFeatures
+ *
+ *
+ *  @return \n
+ *      DI_OK              => OK \n
+ *      DI_ERR_FATAL       => Error see \ref currentErrorString
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiGdiGetFeatures ( pDiFeaturesT pdfFeatures ) {
    LOGGING_E;
@@ -474,14 +507,15 @@ DiReturnT DiGdiGetFeatures ( pDiFeaturesT pdfFeatures ) {
    return setErrorState(DI_OK);
 }
 
-//! Set GDI Configuration
-//!
-//! @param szConfig
-//!
-//! @return \n
-//!     DI_OK              => OK \n
-//!     DI_ERR_FATAL       => Error see \ref currentErrorString
-//!
+/**
+ * Set GDI Configuration
+ *
+ *  @param szConfig
+ *
+ *  @return \n
+ *      DI_OK              => OK \n
+ *      DI_ERR_FATAL       => Error see \ref currentErrorString
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiGdiSetConfig ( DiConstStringT szConfig ) {
    LOGGING_Q;
@@ -490,13 +524,14 @@ DiReturnT DiGdiSetConfig ( DiConstStringT szConfig ) {
    return setErrorState(DI_OK);
 }
 
-//! Does initial target connection with check for secured target.
-//! The user will be prompted to mass erase the target if secured.
-//!
-//! @return \n
-//!     DI_OK              => OK \n
-//!     DI_ERR_FATAL       => Error see \ref currentErrorString
-//!
+/**
+ *  Does initial target connection with check for secured target.
+ *  The user will be prompted to mass erase the target if secured.
+ *
+ *  @return \n
+ *      DI_OK              => OK \n
+ *      DI_ERR_FATAL       => Error see \ref currentErrorString
+ */
 USBDM_ErrorCode initialConnect(void) {
    LOGGING;
    USBDM_ErrorCode rc;
@@ -564,20 +599,21 @@ USBDM_ErrorCode initialConnect(void) {
    return rc;
 }
 
-//! Configure I/O System
-//!
-//! @param pdcCommSetup unused
-//!
-//! @return \n
-//!     DI_OK              => OK \n
-//!     DI_ERR_FATAL       => Error see \ref currentErrorString
-//!
+/**
+ *  Configure I/O System
+ *
+ *  @param pdcCommSetup unused
+ *
+ *  @return \n
+ *      DI_OK              => OK \n
+ *      DI_ERR_FATAL       => Error see \ref currentErrorString
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiGdiInitIO( pDiCommSetupT pdcCommSetup ) {
    LOGGING;
 
    log.print("pdcCommSetup = %p\n", pdcCommSetup);
-   if (pdcCommSetup != NULL) {
+   if (pdcCommSetup != nullptr) {
       log.print("\n"
             "pdcCommSetup                   = %p\n"
             "pdcCommSetup->dccType          = %d\n"
@@ -624,16 +660,17 @@ DiReturnT DiGdiInitIO( pDiCommSetupT pdcCommSetup ) {
    return setErrorState(DI_OK);
 }
 
-//! Initialise Register Name/Number Map
-//!
-//! @param dnEntries
-//! @param pdriRegister
-//! @param dnProgramCounter
-//!
-//! @return \n
-//!     DI_OK              => OK \n
-//!     DI_ERR_FATAL       => Error see \ref currentErrorString
-//!
+/**
+ *  Initialise Register Name/Number Map
+ *
+ *  @param dnEntries
+ *  @param pdriRegister
+ *  @param dnProgramCounter
+ *
+ *  @return \n
+ *      DI_OK              => OK \n
+ *      DI_ERR_FATAL       => Error see \ref currentErrorString
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiGdiInitRegisterMap ( DiUInt32T         dnEntries,
                                  DiRegisterInfoT*  pdriRegister,
@@ -643,15 +680,16 @@ DiReturnT DiGdiInitRegisterMap ( DiUInt32T         dnEntries,
    return setErrorState(DI_ERR_NOTSUPPORTED);
 }
 
-//! Initialise Memory Space Name/Number Map
-//!
-//! @param dnEntries
-//! @param pdmiMemSpace
-//!
-//! @return \n
-//!     DI_OK              => OK \n
-//!     DI_ERR_FATAL       => Error see \ref currentErrorString
-//!
+/**
+ *  Initialise Memory Space Name/Number Map
+ *
+ *  @param dnEntries
+ *  @param pdmiMemSpace
+ *
+ *  @return \n
+ *      DI_OK              => OK \n
+ *      DI_ERR_FATAL       => Error see \ref currentErrorString
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiGdiInitMemorySpaceMap ( DiUInt32T            dnEntries,
                                     DiMemorySpaceInfoT*  pdmiMemSpace ) {
@@ -660,15 +698,16 @@ DiReturnT DiGdiInitMemorySpaceMap ( DiUInt32T            dnEntries,
    return setErrorState(DI_ERR_NOTSUPPORTED);
 }
 
-//! 2.2.1.9 Add Callback Procedures
-//!
-//! @param dcCallbackType
-//! @param Callback
-//!
-//! @return \n
-//!     DI_OK              => OK \n
-//!     DI_ERR_FATAL       => Error see \ref currentErrorString
-//!
+/**
+ *  2.2.1.9 Add Callback Procedures
+ *
+ *  @param dcCallbackType
+ *  @param Callback
+ *
+ *  @return \n
+ *      DI_OK              => OK \n
+ *      DI_ERR_FATAL       => Error see \ref currentErrorString
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiGdiAddCallback ( DiCallbackT dcCallbackType,
                              CallbackF   Callback ) {
@@ -680,12 +719,12 @@ DiReturnT DiGdiAddCallback ( DiCallbackT dcCallbackType,
    return setErrorState(DI_OK);
 }
 
-//! 2.2.1.10 Cancel GDI Procedure
-//!
-//!
-//! @return \n
-//!     DI_ERR_NOTSUPPORTED  => Error see \ref currentErrorString
-//!
+/**
+ *   2.2.1.10 Cancel GDI Procedure
+ *
+ *   @return \n
+ *       DI_ERR_NOTSUPPORTED  => Error see \ref currentErrorString
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiGdiCancel ( void ) {
    LOGGING_Q;
@@ -693,13 +732,14 @@ DiReturnT DiGdiCancel ( void ) {
    return setErrorState(DI_ERR_NOTSUPPORTED);
 }
 
-//! 2.2.1.11 Synchronize UD
-//!
-//! @param pfUpdate
-//!
-//! @return \n
-//!     DI_ERR_NOTSUPPORTED  => Error see \ref currentErrorString
-//!
+/**
+ *   2.2.1.11 Synchronize UD
+ *
+ *   @param pfUpdate
+ *
+ *   @return \n
+ *       DI_ERR_NOTSUPPORTED  => Error see \ref currentErrorString
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiGdiSynchronize ( DiBoolT *pfUpdate ) {
    LOGGING_Q;
@@ -713,14 +753,15 @@ static DiMenuItemT menuItems[] =
  { "Command 1", "cmd1", },
 };
 
-//! 2.2.2.1 Add DI Specific Commands to UD Menu
-//!
-//! @param pdnNrEntries
-//! @param pdmiMenuItem
-//!
+/**
+ *   2.2.2.1 Add DI Specific Commands to UD Menu
+ *
+ *   @param pdnNrEntries
+ *   @param pdmiMenuItem
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiDirectAddMenuItem ( DiUInt32T    *pdnNrEntries,
-                                 pDiMenuItemT *pdmiMenuItem ) {
+                                pDiMenuItemT *pdmiMenuItem ) {
    LOGGING_E;
 
    *pdnNrEntries = sizeof(menuItems)/sizeof(menuItems[0]);
@@ -728,54 +769,57 @@ DiReturnT DiDirectAddMenuItem ( DiUInt32T    *pdnNrEntries,
    return setErrorState(DI_OK);
 }
 
-#define MAX_DIRECT_RETURN_STRING_LENGTH (2000)
-static char directCommandResult[MAX_DIRECT_RETURN_STRING_LENGTH+1] = "";
-static char *directCommandResultPtr  = NULL;
-
-/*! \brief Provides a print function which prints data to DI_DIRECT message buffer
- *
- *  @param format Format and parameters as for printf()
- */
-void setDirectCommandString(const char *format, ...) {
-   va_list list;
-
-   if (format == NULL) {
-      directCommandResultPtr = NULL;
-      return;
-   }
-   va_start(list, format);
-   vsnprintf(directCommandResult, MAX_DIRECT_RETURN_STRING_LENGTH, format, list);
-   directCommandResultPtr = directCommandResult;
-   va_end(list);
-}
+//static char directCommandResult[1000] = "";
+//static char *directCommandResultPtr   = nullptr;
+//
+///**
+// *  Provides a print function which prints data to DI_DIRECT message buffer
+// *
+// *  @param format Format and parameters as for printf()
+// */
+//void setDirectCommandString(const char *format, ...) {
+//   va_list list;
+//
+//   if (format == nullptr) {
+//      directCommandResultPtr = nullptr;
+//      return;
+//   }
+//   va_start(list, format);
+//   vsnprintf(directCommandResult, sizeof(directCommandResult)-1, format, list);
+//   directCommandResultPtr = directCommandResult;
+//   va_end(list);
+//}
 
 #if TARGET != RS08
-//! 2.2.2.2 Send Native Command to DI
-//!
-//! @param pszCommand
-//! @param pduiUserInfo
-//!
-//! @return \n
-//!     DI_ERR_NOTSUPPORTED  => Error see \ref currentErrorString
-//!
+/**
+ *   2.2.2.2 Send Native Command to DI
+ *
+ *   @param pszCommand
+ *   @param pduiUserInfo
+ *
+ *   @return \n
+ *       DI_ERR_NOTSUPPORTED  => Error see \ref currentErrorString
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiDirectCommand ( DiConstStringT  pszCommand,
                             DiUserInfoT     *pduiUserInfo ) {
+
    LOGGING_Q;
    log.print("(%s, %p) - not supported\n", pszCommand, pduiUserInfo);
    return setErrorState(DI_ERR_NOTSUPPORTED);
 }
 #endif
 
-//! 2.2.2.3 Read String from DI
-//!
-//! @param dnNrToRead
-//! @param pcBuffer
-//! @param dnNrRead
-//!
-//! @return \n
-//!     DI_ERR_NOTSUPPORTED  => Error see \ref currentErrorString
-//!
+/**
+ *   2.2.2.3 Read String from DI
+ *
+ *   @param dnNrToRead
+ *   @param pcBuffer
+ *   @param dnNrRead
+ *
+ *   @return \n
+ *       DI_ERR_NOTSUPPORTED  => Error see \ref currentErrorString
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiDirectReadNoWait ( DiUInt32T  dnNrToRead,
                                char        *pcBuffer,
@@ -788,17 +832,18 @@ DiReturnT DiDirectReadNoWait ( DiUInt32T  dnNrToRead,
    return setErrorState(DI_ERR_NOTSUPPORTED);
 }
 
-//! 2.2.3.1 Retrieve Error Message
-//!
-//! @param pszErrorMsg
-//!
+/**
+ *   2.2.3.1 Retrieve Error Message
+ *
+ *   @param pszErrorMsg
+ */
 USBDM_GDI_DECLSPEC
 void DiErrorGetMessage ( DiConstStringT *pszErrorMsg ) {
    LOGGING_Q;
 
    *pszErrorMsg = getGDIErrorMessage();
 
-   if (pszErrorMsg == NULL) {
+   if (pszErrorMsg == nullptr) {
       log.print(" => not set\n");
    }
    else {
@@ -812,13 +857,14 @@ void DiErrorGetMessage ( DiConstStringT *pszErrorMsg ) {
    }
 }
 
-//! 2.2.4.1 Configure Target Memory
-//!
-//! @param dmmMap
-//!
-//! @return \n
-//!     DI_ERR_NOTSUPPORTED  => Error see \ref currentErrorString
-//!
+/**
+ *   2.2.4.1 Configure Target Memory
+ *
+ *   @param dmmMap
+ *
+ *   @return \n
+ *       DI_ERR_NOTSUPPORTED  => Error see \ref currentErrorString
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiMemorySetMap ( DiMemoryMapT dmmMap ) {
    LOGGING_Q;
@@ -827,13 +873,14 @@ DiReturnT DiMemorySetMap ( DiMemoryMapT dmmMap ) {
    return setErrorState(DI_ERR_NOTSUPPORTED);
 }
 
-//! 2.2.4.2 Retrieve Target Memory Configuration
-//!
-//! @param pdmmMap
-//!
-//! @return \n
-//!     DI_ERR_NOTSUPPORTED  => Error see \ref currentErrorString
-//!
+/**
+ *   2.2.4.2 Retrieve Target Memory Configuration
+ *
+ *   @param pdmmMap
+ *
+ *   @return \n
+ *       DI_ERR_NOTSUPPORTED  => Error see \ref currentErrorString
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiMemoryGetMap ( DiMemoryMapT *pdmmMap ) {
    LOGGING_Q;
@@ -842,13 +889,14 @@ DiReturnT DiMemoryGetMap ( DiMemoryMapT *pdmmMap ) {
    return setErrorState(DI_ERR_NOTSUPPORTED);
 }
 
-//! 2.2.4.3 Configure CPU to Memory Interface
-//!
-//! @param dmtcMap
-//!
-//! @return \n
-//!     DI_ERR_NOTSUPPORTED  => Error see \ref currentErrorString
-//!
+/**
+ *   2.2.4.3 Configure CPU to Memory Interface
+ *
+ *   @param dmtcMap
+ *
+ *   @return \n
+ *       DI_ERR_NOTSUPPORTED  => Error see \ref currentErrorString
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiMemorySetCpuMap ( DiMemoryToCpuT dmtcMap ) {
    LOGGING_Q;
@@ -857,13 +905,14 @@ DiReturnT DiMemorySetCpuMap ( DiMemoryToCpuT dmtcMap ) {
    return setErrorState(DI_ERR_NOTSUPPORTED);
 }
 
-//! 2.2.4.4 Retrieve CPU to Memory Interface
-//!
-//! @param pdmtcMap
-//!
-//! @return \n
-//!     DI_ERR_NOTSUPPORTED  => Error see \ref currentErrorString
-//!
+/**
+ *   2.2.4.4 Retrieve CPU to Memory Interface
+ *
+ *   @param pdmtcMap
+ *
+ *   @return \n
+ *       DI_ERR_NOTSUPPORTED  => Error see \ref currentErrorString
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiMemoryGetCpuMap ( DiMemoryToCpuT *pdmtcMap ) {
    LOGGING_Q;
@@ -882,12 +931,12 @@ DiReturnT programTargetFlash(void) {
    rc = bdmInterface->reset((TargetMode_t)(RESET_DEFAULT|RESET_SPECIAL));
 #endif
 
-   if (flashProgrammer == NULL) {
-      mtwksDisplayLine("programTargetFlash() - flashProgrammer NULL\n");
-      return setErrorState(DI_ERR_FATAL, "flashProgrammer NULL!");
+   if (flashProgrammer == nullptr) {
+      mtwksDisplayLine("programTargetFlash() - flashProgrammer not created yet!\n");
+      return setErrorState(DI_ERR_FATAL, "flashProgrammer not created yet!");
    }
    // Program target
-   rc = flashProgrammer->programFlash(flashImage, NULL, true);
+   rc = flashProgrammer->programFlash(flashImage, nullptr, true);
 
    if (rc != PROGRAMMING_RC_OK) {
       return setErrorState(DI_ERR_FATAL, rc);
@@ -897,15 +946,16 @@ DiReturnT programTargetFlash(void) {
 }
 #endif
 
-//! 2.2.5.1 Download Application
-//!
-//! @param fUseAuxiliaryPath
-//! @param ddcDownloadCommand
-//! @param ddfDownloadFormat
-//! @param pchBuffer
-//!
-//! @note DSC/CFVx GDI doesn't support flash programming
-//!
+/**
+ *   2.2.5.1 Download Application
+ *
+ *   @param fUseAuxiliaryPath
+ *   @param ddcDownloadCommand
+ *   @param ddfDownloadFormat
+ *   @param pchBuffer
+ *
+ *   @note DSC/CFVx GDI doesn't support flash programming
+ */
 #ifndef FLASH_PROGRAMMING
 USBDM_GDI_DECLSPEC
 DiReturnT DiMemoryDownload ( DiBoolT            fUseAuxiliaryPath,
@@ -953,7 +1003,7 @@ DiReturnT DiMemoryDownload ( DiBoolT            fUseAuxiliaryPath,
 
       case DI_DNLD_TERMINATE:
          rc = DI_OK;
-         if ((flashImage != NULL) && (!flashImage->isEmpty() || forceMassErase)) {
+         if ((flashImage != nullptr) && (!flashImage->isEmpty() || forceMassErase)) {
             mtwksDisplayLine("DiMemoryDownload() - DI_DNLD_TERMINATE - Programming memory image...\n");
             log.print("- DI_DNLD_TERMINATE - Programming memory image\n");
             rc = programTargetFlash();
@@ -997,18 +1047,19 @@ DiReturnT DiMemoryDownload ( DiBoolT            fUseAuxiliaryPath,
 static uint8_t memoryReadWriteBuffer[MAX_BLOCK_SIZE];
 
 #if TARGET == ARM && 0
-//! Write data to target memory
-//! ARM Memory writes are decomposed into a minimal sequence of the largest aligned object writes
-//!
-//! @param memorySpace = Size of data elements (1/2/4 bytes)
-//! @param byteCount   = Number of _bytes_ to transfer
-//! @param address     = Memory address
-//! @param buffer      = Ptr to block of data to write
-//!
-//! @return error code \n
-//!     BDM_RC_OK    => OK \n
-//!     other        => Error code - see \ref USBDM_ErrorCode
-//!
+/**
+ *   Write data to target memory
+ *   ARM Memory writes are decomposed into a minimal sequence of the largest aligned object writes
+ *
+ *   @param memorySpace = Size of data elements (1/2/4 bytes)
+ *   @param byteCount   = Number of _bytes_ to transfer
+ *   @param address     = Memory address
+ *   @param buffer      = Ptr to block of data to write
+ *
+ *   @return error code \n
+ *       BDM_RC_OK    => OK \n
+ *       other        => Error code - see \ref USBDM_ErrorCode
+ */
 static USBDM_ErrorCode ARM_WriteMemory(MemorySpace_t memorySpace, int byteCount, int address, uint8_t *buffer) {
    USBDM_ErrorCode rc = BDM_RC_OK;
    int index = 0;
@@ -1055,12 +1106,13 @@ static USBDM_ErrorCode ARM_WriteMemory(MemorySpace_t memorySpace, int byteCount,
 }
 #endif
 
-//! 2.2.5.2 Write Data to Target Memory
-//!
-//! @param daTarget        Target memory address
-//! @param pdmvBuffer      Data to write (LittleEndian on DSC)
-//! @param dnBufferItems   Number of units to write
-//!
+/**
+ *   2.2.5.2 Write Data to Target Memory
+ *
+ *   @param daTarget        Target memory address
+ *   @param pdmvBuffer      Data to write (LittleEndian on DSC)
+ *   @param dnBufferItems   Number of units to write
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiMemoryWrite ( DiAddrT       daTarget,
                           DiMemValueT  *pdmvBuffer,
@@ -1211,7 +1263,7 @@ DiReturnT DiMemoryWrite ( DiAddrT       daTarget,
 
       bool writeDone = false;
 #ifdef FLASH_PROGRAMMING
-      if (flashImage != NULL) {
+      if (flashImage != nullptr) {
 #if TARGET == RS08
          MemType_t memoryType = deviceData->getMemoryType(writeAddress);
          if ((memoryType != MemEEPROM) && (memoryType != MemFLASH) && (memoryType != MemPROM)) {
@@ -1243,18 +1295,19 @@ DiReturnT DiMemoryWrite ( DiAddrT       daTarget,
 }
 
 #if TARGET == ARM && 0
-//! Read data from target memory
-//! ARM Memory reads are decomposed into a minimal sequence of the largest aligned object reads
-//!
-//! @param memorySpace = Size of data (1/2/4 bytes)
-//! @param byteCount   = Number of bytes to transfer
-//! @param address     = Memory address
-//! @param buffer      = Where to place data
-//!
-//! @return error code \n
-//!     BDM_RC_OK    => OK \n
-//!     other        => Error code - see \ref USBDM_ErrorCode
-//!
+/**
+ *   Read data from target memory
+ *   ARM Memory reads are decomposed into a minimal sequence of the largest aligned object reads
+ *
+ *   @param memorySpace = Size of data (1/2/4 bytes)
+ *   @param byteCount   = Number of bytes to transfer
+ *   @param address     = Memory address
+ *   @param buffer      = Where to place data
+ *
+ *   @return error code \n
+ *       BDM_RC_OK    => OK \n
+ *       other        => Error code - see \ref USBDM_ErrorCode
+ */
 static USBDM_ErrorCode ARM_ReadMemory(MemorySpace_t memorySpace, int byteCount, int address, uint8_t *buffer) {
    USBDM_ErrorCode rc = BDM_RC_OK;
    int index = 0;
@@ -1301,14 +1354,15 @@ static USBDM_ErrorCode ARM_ReadMemory(MemorySpace_t memorySpace, int byteCount, 
 }
 #endif
 
-//! 2.2.5.3 Read Data from Target Memory
-//!
-//! @param daTarget
-//! @param pdmvBuffer
-//! @param dnBufferItems
-//!
-//! @note On DSC the daTarget is a word address
-//!
+/**
+ *   2.2.5.3 Read Data from Target Memory
+ *
+ *   @param daTarget
+ *   @param pdmvBuffer
+ *   @param dnBufferItems
+ *
+ *   @note On DSC the daTarget is a word address
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiMemoryRead ( DiAddrT       daTarget,
                          DiMemValueT   *pdmvBuffer,
@@ -1447,12 +1501,13 @@ DiReturnT DiMemoryRead ( DiAddrT       daTarget,
    return setErrorState(DI_OK);
 }
 
-//! 2.2.6.3 Create Register Class
-//!
-//! @param pdnRegClassId
-//! @param pdnRegisterId
-//! @param dnRegisterIdEntries
-//!
+/**
+ *   2.2.6.3 Create Register Class
+ *
+ *   @param pdnRegClassId
+ *   @param pdnRegisterId
+ *   @param dnRegisterIdEntries
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiRegisterClassCreate ( DiUInt32T *pdnRegClassId,
                                   DiUInt32T *pdnRegisterId,
@@ -1462,10 +1517,11 @@ DiReturnT DiRegisterClassCreate ( DiUInt32T *pdnRegClassId,
    return setErrorState(DI_ERR_NOTSUPPORTED);
 }
 
-//! 2.2.6.4 Delete Register Class
-//!
-//! @param dnRegClassId
-//!
+/**
+ *   2.2.6.4 Delete Register Class
+ *
+ *   @param dnRegClassId
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiRegisterClassDelete ( DiUInt32T dnRegClassId ) {
    LOGGING_Q;
@@ -1473,12 +1529,12 @@ DiReturnT DiRegisterClassDelete ( DiUInt32T dnRegClassId ) {
    return setErrorState(DI_ERR_NOTSUPPORTED);
 }
 
-
-//! 2.2.6.5 Write Value to Register Class
-//!
-//! @param dnRegClassId
-//! @param pdrvClassValue
-//!
+/**
+ *   2.2.6.5 Write Value to Register Class
+ *
+ *   @param dnRegClassId
+ *   @param pdrvClassValue
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiRegisterClassWrite ( DiUInt32T         dnRegClassId,
                                   DiRegisterValueT  *pdrvClassValue ) {
@@ -1487,11 +1543,12 @@ DiReturnT DiRegisterClassWrite ( DiUInt32T         dnRegClassId,
    return setErrorState(DI_ERR_NOTSUPPORTED);
 }
 
-//! 2.2.6.6 Read Value from Register Class
-//!
-//! @param dnRegClassId
-//! @param pdrvClassValue
-//!
+/**
+ *   2.2.6.6 Read Value from Register Class
+ *
+ *   @param dnRegClassId
+ *   @param pdrvClassValue
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiRegisterClassRead ( DiUInt32T          dnRegClassId,
                                  DiRegisterValueT   *pdrvClassValue ) {
@@ -1500,8 +1557,9 @@ DiReturnT DiRegisterClassRead ( DiUInt32T          dnRegClassId,
    return setErrorState(DI_ERR_NOTSUPPORTED);
 }
 
-//!  2.2.8.1 Reset
-//!
+/**
+ *    2.2.8.1 Reset
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiExecResetChild ( void ) {
    LOGGING_E;
@@ -1550,10 +1608,11 @@ DiReturnT DiExecResetChild ( void ) {
    return setErrorState(DI_OK);
 }
 
-//!  2.2.8.3 Continue Execution Until
-//!
-//! @param addrUntil
-//!
+/**
+ *    2.2.8.3 Continue Execution Until
+ *
+ *   @param addrUntil
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiExecContinueUntil ( DiAddrT addrUntil ) {
    LOGGING_Q;
@@ -1561,8 +1620,9 @@ DiReturnT DiExecContinueUntil ( DiAddrT addrUntil ) {
    return setErrorState(DI_ERR_NOTSUPPORTED);
 }
 
-//!  2.2.8.4 Continue Execution
-//!
+/**
+ *    2.2.8.4 Continue Execution
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiExecContinue ( void ) {
    LOGGING;
@@ -1597,8 +1657,9 @@ DiReturnT DiExecContinue ( void ) {
    return setErrorState(DI_OK);
 }
 
-//!  2.2.8.5 Continue Execution in Background
-//!
+/**
+ *    2.2.8.5 Continue Execution in Background
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiExecContinueBackground ( void ) {
    LOGGING_Q;
@@ -1607,8 +1668,9 @@ DiReturnT DiExecContinueBackground ( void ) {
    return setErrorState(DI_ERR_NOTSUPPORTED);
 }
 
-//!  2.2.8.7 Stop Execution
-//!
+/**
+ *    2.2.8.7 Stop Execution
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiExecStop ( void ) {
    LOGGING_E;
@@ -1647,10 +1709,11 @@ DiReturnT DiExecStop ( void ) {
    return setErrorState(DI_OK);
 }
 
-//!  2.2.9.1 Switch Trace System On/Off
-//!
-//! @param fOn
-//!
+/**
+ *    2.2.9.1 Switch Trace System On/Off
+ *
+ *   @param fOn
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiTraceSwitchOn ( DiBoolT fOn ) {
    LOGGING_Q;
@@ -1659,11 +1722,12 @@ DiReturnT DiTraceSwitchOn ( DiBoolT fOn ) {
    return setErrorState(DI_ERR_NOTSUPPORTED);
 }
 
-//!  2.2.9.2 Get Instruction Trace
-//!
-//! @param dnNrInstr
-//! @param pditInstrTrace
-//!
+/**
+ *    2.2.9.2 Get Instruction Trace
+ *
+ *   @param dnNrInstr
+ *   @param pditInstrTrace
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiTraceGetInstructions ( DiUInt32T       dnNrInstr,
                                     pDiInstrTraceT  pditInstrTrace ) {
@@ -1673,12 +1737,13 @@ DiReturnT DiTraceGetInstructions ( DiUInt32T       dnNrInstr,
    return setErrorState(DI_ERR_NOTSUPPORTED);
 }
 
-//!  2.2.9.3 Get Raw Trace
-//!
-//! @param dnNrFrames
-//! @param dttTraceType
-//! @param PrintRawTrace
-//!
+/**
+ *    2.2.9.3 Get Raw Trace
+ *
+ *   @param dnNrFrames
+ *   @param dttTraceType
+ *   @param PrintRawTrace
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiTracePrintRawInfo ( DiUInt32T       dnNrFrames,
                                  DiTraceTypeT    dttTraceType,
@@ -1689,12 +1754,13 @@ DiReturnT DiTracePrintRawInfo ( DiUInt32T       dnNrFrames,
    return setErrorState(DI_ERR_NOTSUPPORTED);
 }
 
-//!  2.2.9.4 Get Number of New Trace Frames
-//!
-//! @param dttTraceType
-//! @param dnNrMaxFrames
-//! @param pdnfNewFrames
-//!
+/**
+ *    2.2.9.4 Get Number of New Trace Frames
+ *
+ *   @param dttTraceType
+ *   @param dnNrMaxFrames
+ *   @param pdnfNewFrames
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiTraceGetNrOfNewFrames ( DiTraceTypeT   dttTraceType,
                                      DiUInt32T      dnNrMaxFrames,
@@ -1705,10 +1771,11 @@ DiReturnT DiTraceGetNrOfNewFrames ( DiTraceTypeT   dttTraceType,
    return setErrorState(DI_ERR_NOTSUPPORTED);
 }
 
-//!  2.2.10.1 Switch Coverage On/Off
-//!
-//! @param fOn
-//!
+/**
+ *    2.2.10.1 Switch Coverage On/Off
+ *
+ *   @param fOn
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiCoverageSwitchOn ( DiBoolT fOn ) {
    LOGGING_Q;
@@ -1717,12 +1784,13 @@ DiReturnT DiCoverageSwitchOn ( DiBoolT fOn ) {
    return setErrorState(DI_ERR_NOTSUPPORTED);
 }
 
-//!  2.2.10.2 Get Coverage Information
-//!
-//! @param daStart
-//! @param dnSize
-//! @param pdcCoverage
-//!
+/**
+ *    2.2.10.2 Get Coverage Information
+ *
+ *   @param daStart
+ *   @param dnSize
+ *   @param pdcCoverage
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiCoverageGetInfo ( DiAddrT     daStart,
                                DiUInt32T   dnSize,
@@ -1733,10 +1801,11 @@ DiReturnT DiCoverageGetInfo ( DiAddrT     daStart,
    return setErrorState(DI_ERR_NOTSUPPORTED);
 }
 
-//!  2.2.11.1 Switch Profiling On/Off
-//!
-//! @param fOn
-//!
+/**
+ *    2.2.11.1 Switch Profiling On/Off
+ *
+ *   @param fOn
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiProfilingSwitchOn ( DiBoolT fOn ) {
    LOGGING_Q;
@@ -1745,10 +1814,11 @@ DiReturnT DiProfilingSwitchOn ( DiBoolT fOn ) {
    return setErrorState(DI_ERR_NOTSUPPORTED);
 }
 
-//!  2.2.11.2 Get Profiling Information
-//!
-//! @param pdpProfile
-//!
+/**
+ *    2.2.11.2 Get Profiling Information
+ *
+ *   @param pdpProfile
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiProfileGetInfo ( DiProfileT *pdpProfile ) {
    LOGGING_Q;
@@ -1757,11 +1827,12 @@ DiReturnT DiProfileGetInfo ( DiProfileT *pdpProfile ) {
    return setErrorState(DI_ERR_NOTSUPPORTED);
 }
 
-//!  2.2.12.1 Open a State Resource
-//!
-//! @param pdnStateHandle
-//! @param szStateName
-//!
+/**
+ *    2.2.12.1 Open a State Resource
+ *
+ *   @param pdnStateHandle
+ *   @param szStateName
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiStateOpen ( DiUInt32T      *pdnStateHandle,
                         DiConstStringT  szStateName ) {
@@ -1771,11 +1842,12 @@ DiReturnT DiStateOpen ( DiUInt32T      *pdnStateHandle,
    return setErrorState(DI_ERR_NOTSUPPORTED);
 }
 
-//!  2.2.12.2 Save DI State
-//!
-//! @param dnStateHandle
-//! @param dnIndex
-//!
+/**
+ *    2.2.12.2 Save DI State
+ *
+ *   @param dnStateHandle
+ *   @param dnIndex
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiStateSave ( DiUInt32T dnStateHandle,
                          DiUInt32T dnIndex ) {
@@ -1785,11 +1857,12 @@ DiReturnT DiStateSave ( DiUInt32T dnStateHandle,
    return setErrorState(DI_ERR_NOTSUPPORTED);
 }
 
-//!  2.2.12.3 Restore DI State
-//!
-//! @param dnStateHandle
-//! @param dnIndex
-//!
+/**
+ *    2.2.12.3 Restore DI State
+ *
+ *   @param dnStateHandle
+ *   @param dnIndex
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiStateRestore ( DiUInt32T dnStateHandle,
                             DiUInt32T dnIndex ) {
@@ -1799,10 +1872,12 @@ DiReturnT DiStateRestore ( DiUInt32T dnStateHandle,
    return setErrorState(DI_ERR_NOTSUPPORTED);
 }
 
-//!  2.2.12.4 Close a State Resource
-//!
-//! @param fDelete
-//!
+/**
+ *    2.2.12.4 Close a State Resource
+ *
+ *   @param fDelete
+ *
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiStateClose ( DiBoolT fDelete ) {
    LOGGING_Q;
@@ -1811,13 +1886,14 @@ DiReturnT DiStateClose ( DiBoolT fDelete ) {
    return setErrorState(DI_ERR_NOTSUPPORTED);
 }
 
-//!  2.2.13 Get Acceptable Communication Settings
-//!
-//! @param dccType
-//! @param szAttr
-//! @param pszEntries
-//! @param pReserved
-//!
+/**
+ *    2.2.13 Get Acceptable Communication Settings
+ *
+ *   @param dccType
+ *   @param szAttr
+ *   @param pszEntries
+ *   @param pReserved
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiCommGetAcceptableSettings ( DiCommChannelT   dccType,
                                         DiConstStringT   szAttr,
@@ -1848,7 +1924,7 @@ DiReturnT DiCommGetAcceptableSettings ( DiCommChannelT   dccType,
       "USBDM #18",
       "USBDM #19",
       "USBDM #20",
-      NULL,
+      nullptr,
    };
 
 //   log.print("dccType = %x\n", dccType);
@@ -1870,7 +1946,7 @@ DiReturnT DiCommGetAcceptableSettings ( DiCommChannelT   dccType,
       for (unsigned bdmNum=0; bdmNum < deviceCount; bdmNum++) {
          options[bdmNum] = possibleOptions[bdmNum];
       }
-      options[deviceCount] = NULL;
+      options[deviceCount] = nullptr;
       log.print("(DI_COMM_PARALLEL) => DI_OK\n");
       *pszEntries = options;
       return setErrorState(DI_OK);
@@ -1881,10 +1957,11 @@ DiReturnT DiCommGetAcceptableSettings ( DiCommChannelT   dccType,
    }
 }
 
-//!  2.2.16.1 Enumerate Execution Environments
-//!
-//! @param pdExecEnv
-//!
+/**
+ *    2.2.16.1 Enumerate Execution Environments
+ *
+ *   @param pdExecEnv
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiMeeEnumExecEnv ( DiExecEnvT *pdExecEnv ) {
    LOGGING_Q;
@@ -1893,10 +1970,11 @@ DiReturnT DiMeeEnumExecEnv ( DiExecEnvT *pdExecEnv ) {
    return setErrorState(DI_ERR_NOTSUPPORTED);
 }
 
-//!  2.2.16.2 Connect to Execution Environment
-//!
-//! @param dnExecId
-//!
+/**
+ *    2.2.16.2 Connect to Execution Environment
+ *
+ *   @param dnExecId
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiMeeConnect ( DiUInt32T dnExecId ) {
    LOGGING_Q;
@@ -1917,11 +1995,12 @@ DiReturnT DiMeeConnect ( DiUInt32T dnExecId ) {
 #endif
 }
 
-//!  2.2.16.3 Get Features Supported by Execution Environment
-//!
-//! @param dnExecId
-//! @param pdfFeatures
-//!
+/**
+ *    2.2.16.3 Get Features Supported by Execution Environment
+ *
+ *   @param dnExecId
+ *   @param pdfFeatures
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiMeeGetFeatures ( DiUInt32T    dnExecId,
                              pDiFeaturesT pdfFeatures ) {
@@ -1931,11 +2010,12 @@ DiReturnT DiMeeGetFeatures ( DiUInt32T    dnExecId,
    return setErrorState(DI_ERR_NOTSUPPORTED);
 }
 
-//!  2.2.16.4 Configure I/O System to Execution Environment
-//!
-//! @param dnExecId
-//! @param pdcCommSetup
-//!
+/**
+ *    2.2.16.4 Configure I/O System to Execution Environment
+ *
+ *   @param dnExecId
+ *   @param pdcCommSetup
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiMeeInitIO ( DiUInt32T      dnExecId,
                         pDiCommSetupT  pdcCommSetup ) {
@@ -1945,10 +2025,11 @@ DiReturnT DiMeeInitIO ( DiUInt32T      dnExecId,
    return setErrorState(DI_ERR_NOTSUPPORTED);
 }
 
-//!  2.2.16.5 Set Current Connection
-//!
-//! @param dnExecId
-//!
+/**
+ *    2.2.16.5 Set Current Connection
+ *
+ *   @param dnExecId
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiMeeSelect ( DiUInt32T dnExecId ) {
    LOGGING_Q;
@@ -1957,11 +2038,12 @@ DiReturnT DiMeeSelect ( DiUInt32T dnExecId ) {
    return setErrorState(DI_OK);
 }
 
-//!  2.2.16.6 Disconnect from Execution Environment
-//!
-//! @param dnExecId
-//! @param fClose
-//!
+/**
+ *    2.2.16.6 Disconnect from Execution Environment
+ *
+ *   @param dnExecId
+ *   @param fClose
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiMeeDisconnect ( DiUInt32T  dnExecId,
                             DiBoolT    fClose ) {
@@ -1971,10 +2053,11 @@ DiReturnT DiMeeDisconnect ( DiUInt32T  dnExecId,
    return setErrorState(DI_OK);
 }
 
-//!  2.2.16.7 Connect to CPU
-//!
-//! @param dnCpuId
-//!
+/**
+ *    2.2.16.7 Connect to CPU
+ *
+ *   @param dnCpuId
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiCpuSelect ( DiUInt32T dnCpuId ) {
    LOGGING_Q;
@@ -1983,10 +2066,11 @@ DiReturnT DiCpuSelect ( DiUInt32T dnCpuId ) {
    return setErrorState(DI_ERR_NOTSUPPORTED);
 }
 
-//!  2.2.16.8 Get Current CPU
-//!
-//! @param dnCpuId
-//!
+/**
+ *    2.2.16.8 Get Current CPU
+ *
+ *   @param dnCpuId
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiCpuCurrent ( DiUInt32T *dnCpuId ) {
    LOGGING_Q;
@@ -1995,10 +2079,11 @@ DiReturnT DiCpuCurrent ( DiUInt32T *dnCpuId ) {
    return setErrorState(DI_ERR_NOTSUPPORTED);
 }
 
-//!  2.2.17 Future GDI Extensions
-//!
-//! @param information
-//!
+/**
+ *    2.2.17 Future GDI Extensions
+ *
+ *   @param information
+ */
 USBDM_GDI_DECLSPEC
 DiReturnT DiProcess ( void *information ) {
    LOGGING_Q;
@@ -2008,7 +2093,7 @@ DiReturnT DiProcess ( void *information ) {
    uint8_t  *info8  = (uint8_t*) information;
    uint32_t *info32 = (uint32_t*)information;
 
-   uint32_t *dataPtr = (uint32_t *)info32[1];
+   uint32_t *pData = (uint32_t *)info32[1];
 
    log.print("- &information = %p \n"
                   "               information = %p \n"
@@ -2027,7 +2112,7 @@ DiReturnT DiProcess ( void *information ) {
 
    log.print("- data = \n"
              "=================================================================\n");
-   UsbdmSystem::Log::Dump((uint8_t*)dataPtr, 0x100, (uint32_t)dataPtr);
+   UsbdmSystem::Log::Dump((uint8_t*)pData, 0x100, (uint32_t)pData);
    log.print("=================================================================\n");
 #endif
    return setErrorState(DI_ERR_NOTSUPPORTED);
@@ -2060,12 +2145,12 @@ DiReturnT DiProcess ( void *information ) {
 
 extern "C"
 void __attribute__ ((constructor)) gdi_dll_initialize(void) {
-   static void *libHandle = NULL;
+   static void *libHandle = nullptr;
 
    // Lock Library in memory!
-   if (libHandle == NULL) {
+   if (libHandle == nullptr) {
       libHandle = dlopen(GDI_DLL_NAME, RTLD_NOW|RTLD_NODELETE);
-      if (libHandle == NULL) {
+      if (libHandle == nullptr) {
          fprintf(stderr, "gdi_dll_initialize() - Library failed to lock %s\n", dlerror());
          return;
       }

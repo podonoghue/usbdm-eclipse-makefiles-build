@@ -23,7 +23,7 @@
    |   6 Apr 2015 | Created
    +====================================================================
     \endverbatim
-*/
+ */
 
 #ifndef SRC_PLUGINFACTORY_WIN32_H_
 #define SRC_PLUGINFACTORY_WIN32_H_
@@ -33,7 +33,7 @@
 #endif
 
 #include <windows.h>
-#include <tr1/memory>
+#include <memory>
 #include <stdio.h>
 
 #include "UsbdmSystem.h"
@@ -54,6 +54,22 @@ protected:
    PluginFactory() {};
    ~PluginFactory() {};
 
+   /**
+    * Class to act as specialized destructor
+    */
+   struct D {
+      void operator()(T* p) const {
+         LOGGING_Q;
+         log.print("Calling destructor\n");
+         p->~T();
+         log.print("Deallocating storage @%p\n", p);
+         ::operator delete(p);
+         if (--instanceCount == 0) {
+            unloadClass();
+         }
+      }
+   };
+
 protected:
    /**
     * Create plug-in from library
@@ -63,39 +79,39 @@ protected:
     *
     * @return Smart pointer to object implementing the plug-in interface
     */
-   static std::tr1::shared_ptr<T> createPlugin(std::string dllName, std::string entryPoint="createPluginInstance") {
+   static std::shared_ptr<T> createPlugin(std::string dllName, std::string entryPoint="createPluginInstance") {
       LOGGING_Q;
       if (newInstance == 0) {
          loadClass(dllName.c_str(), entryPoint.c_str());
       }
-//      log.print("Getting size\n");
+      //      log.print("Getting size\n");
       size_t classSize = (*newInstance)(0);
-//      log.print("Calling new\n");
+      //      log.print("Calling new\n");
       T* p = static_cast<T*>(::operator new(classSize));
-//      log.print("Allocated storage @%p, size = %d\n", p, classSize);
-//      log.print("Calling placement constructor\n");
+      //      log.print("Allocated storage @%p, size = %d\n", p, classSize);
+      //      log.print("Calling placement constructor\n");
       (*newInstance)(p);
-      std::tr1::shared_ptr<T> pp(p, deleter);
+      std::shared_ptr<T> pp(p, D());
       instanceCount++;
       return pp;
    }
 
 protected:
-   /**
-    * Destructor to delete plug-in interface object
-    *
-    * @param p object to delete
-    */
-   static void deleter(T *p) {
-      LOGGING_Q;
-//      log.print("Calling destructor\n");
-      p->~T();
-      log.print("Deallocating storage @%p\n", p);
-      ::operator delete(p);
-      if (--instanceCount == 0) {
-         unloadClass();
-      }
-   }
+//   /**
+//    * Destructor to delete plug-in interface object
+//    *
+//    * @param p object to delete
+//    */
+//   static void deleter(T *p) {
+//      LOGGING_Q;
+//      //      log.print("Calling destructor\n");
+//      p->~T();
+//      log.print("Deallocating storage @%p\n", p);
+//      ::operator delete(p);
+//      if (--instanceCount == 0) {
+//         unloadClass();
+//      }
+//   }
    /**
     * Load plugin class
     */
@@ -117,8 +133,8 @@ static void printSystemErrorMessage() {
    long dw = (long)GetLastError();
 
    if (!FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM, 0, dw, 0, buffer, sizeof(buffer)-1, 0 )) {
-       UsbdmSystem::Log::print("Failed to convert system error code %ld\n", dw);
-       return;
+      UsbdmSystem::Log::print("Failed to convert system error code %ld\n", dw);
+      return;
    }
    UsbdmSystem::Log::print("System Error: %s", buffer);
 }
@@ -143,11 +159,11 @@ void PluginFactory<T>::loadClass(const char *moduleName, const char *createInsta
    moduleHandle = LoadLibraryA(moduleName);
 
    if (moduleHandle == NULL) {
-//      log.print("Module \'%s\' failed to load\n", moduleName);
-//      printSystemErrorMessage();
+      //      log.print("Module \'%s\' failed to load\n", moduleName);
+      //      printSystemErrorMessage();
 
       string extendedPath = UsbdmSystem::getApplicationPath("");
-//      log.print("Trying extended search path \'%s\'\n", extendedPath.c_str());
+      //      log.print("Trying extended search path \'%s\'\n", extendedPath.c_str());
       SetDllDirectoryA((const char *)UsbdmSystem::getApplicationPath("").c_str());
 
       moduleHandle = LoadLibraryA(moduleName);
@@ -169,7 +185,7 @@ void PluginFactory<T>::loadClass(const char *moduleName, const char *createInsta
       log.print("Entry point \'%s\' not found in module \'%s\'\n", createInstanceFunctioName, moduleName);
       throw MyException("Entry point not found in module");
    }
-//   log.print("Entry point \'%s\' found @0x%p\n", createInstanceFunctioName, newInstance);
+   //   log.print("Entry point \'%s\' found @0x%p\n", createInstanceFunctioName, newInstance);
 }
 
 /**
@@ -178,7 +194,7 @@ void PluginFactory<T>::loadClass(const char *moduleName, const char *createInsta
 template <class T>
 void PluginFactory<T>::unloadClass() {
    LOGGING_Q;
-//   log.print("Unloading module @0x%p, cached @%p\n", moduleHandle, &moduleHandle);
+   //   log.print("Unloading module @0x%p, cached @%p\n", moduleHandle, &moduleHandle);
    if (FreeLibrary(moduleHandle) == 0) {
       log.print("Unloading module at @0x%p failed\n", moduleHandle);
       printSystemErrorMessage();
