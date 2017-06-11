@@ -30,6 +30,11 @@
       <copy source="Snippets/mag3310.cpp"             target="Snippets/mag3310.cpp"             replace="true"  derived="true" />
       <copy source="Snippets/mag3310-example.cpp"     target="Snippets/mag3310-example.cpp"     replace="true"  derived="true" />
 
+      <copy source="Snippets/vector.h"                target="Snippets/vector.h"                  replace="true"  derived="true" />
+      <copy source="Snippets/lsm303dlh.h"             target="Snippets/lsm303dlh.h"               replace="true"  derived="true" />
+      <copy source="Snippets/lsm303dlh.cpp"           target="Snippets/lsm303dlh.cpp"             replace="true"  derived="true" />
+      <!--copy source="Snippets/lsm303dlh-example.cpp"   target="Snippets/mma845x-example.cpp"    replace="true"  derived="true" / -->
+
       <copy source="Snippets/mma845x.h"               target="Snippets/mma845x.h"               replace="true"  derived="true" />
       <copy source="Snippets/mma845x.cpp"             target="Snippets/mma845x.cpp"             replace="true"  derived="true" />
       <copy source="Snippets/mma845x-example.cpp"     target="Snippets/mma845x-example.cpp"     replace="true"  derived="true" />

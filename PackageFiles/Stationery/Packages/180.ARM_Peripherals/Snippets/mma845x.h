@@ -27,73 +27,30 @@ namespace USBDM {
  * @{
  */
 
-#define MMA845x_CTRL_REG1_ACTIVE_MASK         (1<<0)
-#define MMA845x_CTRL_REG1_F_READ_MASK         (1<<1)
-#define MMA845x_CTRL_REG1_LNOISE_MASK         (1<<2)
-#define MMA845x_CTRL_REG1_DR_OFF              (3)
-#define MMA845x_CTRL_REG1_DR_MASK             (0x7<<MMA845x_CTRL_REG1_DR_OFF)
-#define MMA845x_CTRL_REG1_DR(x)               (((x)<<MMA845x_CTRL_REG1_DR_OFF)&MMA845x_CTRL_REG1_DR_MASK)
-#define MMA845x_CTRL_REG1_ASLP_RATE_OFF       (6)
-#define MMA845x_CTRL_REG1_ASLP_RATE_MASK      (0x3F<<MMA845x_CTRL_REG1_ASLP_RATE_OFF)
-#define MMA845x_CTRL_REG1_ASLP_RATE(x)        (((x)<<MMA845x_CTRL_REG1_ASLP_RATE_OFF)&MMA845x_CTRL_REG1_ASLP_RATE_MASK)
-
-#define MMA845x_CTRL_REG2_MODS_OFF            (0)
-#define MMA845x_CTRL_REG2_MODS_MASK           (0x3<<MMA845x_CTRL_REG1_DR_OFF)
-#define MMA845x_CTRL_REG2_MODS(x)             (((x)<<MMA845x_CTRL_REG1_DR_OFF)&MMA845x_CTRL_REG1_DR_MASK)
-#define MMA845x_CTRL_REG2_SLPE_MASK           (1<<2)
-#define MMA845x_CTRL_REG2_SMODS_OFF           (3)
-#define MMA845x_CTRL_REG2_SMODS_MASK          (0x3<<MMA845x_CTRL_REG1_DR_OFF)
-#define MMA845x_CTRL_REG2_SMODS(x)            (((x)<<MMA845x_CTRL_REG1_DR_OFF)&MMA845x_CTRL_REG1_DR_MASK)
-#define MMA845x_CTRL_REG2_RST_MASK            (1<<6)
-#define MMA845x_CTRL_REG2_ST_MASK             (1<<7)
-
-#define MMA845x_CTRL_REG3_PP_OD_MASK          (1<<0)
-#define MMA845x_CTRL_REG3_IPOL_MASK           (1<<1)
-#define MMA845x_CTRL_REG3_WAKE_A_VECM_MASK    (1<<2)
-#define MMA845x_CTRL_REG3_WAKE_FFMT_MASK      (1<<3)
-#define MMA845x_CTRL_REG3_WAKE_PULSE_MASK     (1<<4)
-#define MMA845x_CTRL_REG3_WAKE_INDPRT_MASK    (1<<5)
-#define MMA845x_CTRL_REG3_WAKE_TRANS_MASK     (1<<6)
-#define MMA845x_CTRL_REG3_FIFO_GATE_MASK      (1<<7)
-
-#define MMA845x_CTRL_REG4_INT_EN_DRDY_MASK    (1<<0)
-#define MMA845x_CTRL_REG4_INT_EN_A_VECM_MASK  (1<<1)
-#define MMA845x_CTRL_REG4_INT_EN_EN_FFMT_MASK (1<<2)
-#define MMA845x_CTRL_REG4_INT_EN_PULSE_MASK   (1<<3)
-#define MMA845x_CTRL_REG4_INT_EN_INDPRT_MASK  (1<<4)
-#define MMA845x_CTRL_REG4_INT_EN_TRANS_MASK   (1<<5)
-#define MMA845x_CTRL_REG4_INT_EN_FIFO_MASK    (1<<6)
-#define MMA845x_CTRL_REG4_INT_EN_ASLP_MASK    (1<<7)
-
-#define MMA845x_XYZ_DATA_CFG_FS_OFF           (0)
-#define MMA845x_XYZ_DATA_CFG_FS_MASK          (0x03<<MMA845x_XYZ_DATA_CFG_FS_OFF)
-#define MMA845x_XYZ_DATA_CFG_FS(x)            (((x)<<MMA845x_XYZ_DATA_CFG_FS_OFF)&MMA845x_XYZ_DATA_CFG_FS_MASK)
-#define MMA845x_XYZ_DATA_CFG_HPF_OUT_MASK     (1<<4)
-
-#define MMA845x_STATUS_ZYXDR_MASK 	(1<<3)
-
-
 /**
  * @brief Class representing an interface for MMA845x 3-axis accelerometer over I2C
  *
  * <b>Example</b>
  * @code
- *  // Instantiate interface
- *  I2c *i2c = new I2C_0();
- *  MMA845x *accelerometer = new MMA845x(i2c, MMA845x::ACCEL_2Gmode);
+ *  // Instantiate interfaces
  *
- *  uint8_t id = accelerometer->readID();
+ *  // I2C interface
+ *  I2c0     i2c0;
+ *  // Accelerometer via I2C
+ *  MMA845x  accelerometer(i2c0, MMA845x::ACCEL_2Gmode);
+ *
+ *  uint8_t id = accelerometer.readID();
  *  printf("Device ID = 0x%02X\n", id);
  *
  *  printf("Before simple calibration (make sure the device is level!)\n");
- *  accelerometer->calibrateAccelerometer();
+ *  accelerometer.calibrateAccelerometer();
  *
  *  printf("After calibration\n");
  *  for(;;) {
  *     int accelStatus;
  *     int16_t accelX,accelY,accelZ;
  *
- *     accelerometer->readAccelerometerXYZ(&accelStatus, &accelX, &accelY, &accelZ);
+ *     accelerometer.readAccelerometerXYZ(accelStatus, accelX, accelY, accelZ);
  *     printf("s=0x%02X, aX=%10d, aY=%10d, aZ=%10d\n", accelStatus, accelX, accelY, accelZ);
  *     waitMS(400);
  *  }
@@ -101,6 +58,51 @@ namespace USBDM {
  * @endcode
  */
 class MMA845x {
+
+public:
+   enum AccelDataRate {
+      AccelDataRate_800Hz      = (0<<3),  //!< Sample Rate 800 Hz
+      AccelDataRate_400Hz      = (1<<3),  //!< Sample Rate 400 Hz
+      AccelDataRate_200Hz      = (2<<3),  //!< Sample Rate 200 Hz
+      AccelDataRate_100Hz      = (3<<3),  //!< Sample Rate 100 Hz
+      AccelDataRate_50Hz       = (4<<3),  //!< Sample Rate 50 Hz
+      AccelDataRate_12_5Hz     = (5<<3),  //!< Sample Rate 12.5 Hz
+      AccelDataRate_6_25Hz     = (6<<3),  //!< Sample Rate 6.25 Hz
+      AccelDataRate_1_56Hz     = (7<<3),  //!< Sample Rate 1.56 Hz
+   };
+
+   enum AccelSleepDataRate {
+      AccelSleepDataRate_50Hz    = (0<<6), //!< Sample Rate when sleeping 50 Hz
+      AccelSleepDataRate_12_5Hz  = (1<<6), //!< Sample Rate when sleeping 12.5 Hz
+      AccelSleepDataRate_6_25Hz  = (2<<6), //!< Sample Rate when sleeping 6.25 Hz
+      AccelSleepDataRate_1_56Hz  = (3<<6), //!< Sample Rate when sleeping 1.56 Hz
+   };
+
+   /**
+    * @param[in] accelDataRate        // Rate when in normal mode
+    * @param[in] accelSleepDataRate   // Rate when is sleep
+    * @param[in] active               // Active
+    * @param[in] reducedNoise         // Reduced noise mode
+    * @param[in] fastRead             // Fast read mode
+    */
+   static constexpr uint8_t cr1Value(
+         AccelDataRate        accelDataRate        = AccelDataRate_50Hz,
+         AccelSleepDataRate   accelSleepDataRate   = AccelSleepDataRate_50Hz,
+         bool                 active               = true,
+         bool                 reducedNoise         = false,
+         bool                 fastRead             = false
+         ) {
+      return accelSleepDataRate|accelDataRate|(reducedNoise?(1<<2):0)|(fastRead?(1<<1):0)|(active?(1<<0):0);
+   }
+
+   enum AccelerometerMode {
+      ACCEL_2Gmode      = (0<<0),        //!< 2g Full-scale, no high-pass filter
+      ACCEL_4Gmode      = (1<<0),        //!< 4g Full-scale, no high-pass filter
+      ACCEL_8Gmode      = (2<<0),        //!< 8g Full-scale, no high-pass filter
+      ACCEL_2G_HPF_mode = (1<<4)|(0<<0), //!< 2g Full-scale, high-pass filter
+      ACCEL_4G_HPF_mode = (1<<4)|(1<<0), //!< 4g Full-scale, high-pass filter
+      ACCEL_8G_HPF_mode = (1<<4)|(2<<0), //!< 8g Full-scale, high-pass filter
+   } ;
 
 private:
    USBDM::I2c &i2c;
@@ -110,14 +112,14 @@ private:
    /**
     * Read Accelerometer register
     *
-    * @param regNum  - Register number
+    * @param[in] regNum  - Register number
     */
    uint8_t readReg(uint8_t regNum);
    /**
     * Write Accelerometer register
     *
-    * @param regNum  - Register number
-    * @param value   - Value to write
+    * @param[in] regNum  - Register number
+    * @param[in] value   - Value to write
     */
    void    writeReg(uint8_t regNum, uint8_t value);
    /**
@@ -128,22 +130,14 @@ private:
 
 public:
 
-   enum AccelerometerMode {
-      ACCEL_2Gmode      = MMA845x_XYZ_DATA_CFG_FS(0),                                  // 2g Full-scale, no high-pass filter
-      ACCEL_4Gmode      = MMA845x_XYZ_DATA_CFG_FS(1),                                  // 4g Full-scale, no high-pass filter
-      ACCEL_8Gmode      = MMA845x_XYZ_DATA_CFG_FS(2),                                  // 8g Full-scale, no high-pass filter
-      ACCEL_2G_HPF_mode = MMA845x_XYZ_DATA_CFG_FS(0)|MMA845x_XYZ_DATA_CFG_HPF_OUT_MASK, // 2g Full-scale, high-pass filter
-      ACCEL_4G_HPF_mode = MMA845x_XYZ_DATA_CFG_FS(1)|MMA845x_XYZ_DATA_CFG_HPF_OUT_MASK, // 4g Full-scale, high-pass filter
-      ACCEL_8G_HPF_mode = MMA845x_XYZ_DATA_CFG_FS(2)|MMA845x_XYZ_DATA_CFG_HPF_OUT_MASK, // 8g Full-scale, high-pass filter
-   } ;
-
    /**
     * Constructor
     *
-    * @param i2c  - The I2C interface to use
-    * @param mode - Mode of operation (gain and filtering)
+    * @param[in] i2c   - The I2C interface to use
+    * @param[in] mode  - Mode of operation (gain and filtering)
+    * @param[in] cr1   - Data rate etc (see cr1Value())
     */
-   MMA845x(USBDM::I2c &i2c, AccelerometerMode mode);
+   MMA845x(USBDM::I2c &i2c, AccelerometerMode mode, uint8_t cr1=cr1Value());
    /**
     * Put accelerometer into Standby mode
     */
@@ -155,18 +149,19 @@ public:
    /**
     * Obtains measurements from the accelerometer
     *
-    * @param status  - Indicates status of x, y & z measurements
-    * @param x       - X axis value
-    * @param y       - Y axis value
-    * @param z       - Z axis value
+    * @param[out] status  - Indicates status of x, y & z measurements
+    * @param[out] x       - X axis value
+    * @param[out] y       - Y axis value
+    * @param[out] z       - Z axis value
     */
-   void readAccelerometerXYZ(int *status, int16_t *x, int16_t *y, int16_t *z);
+   void readAccelerometerXYZ(int &status, int16_t &x, int16_t &y, int16_t &z);
    /**
-    * Set accelerometer mode (gain and filtering)
+    * Configure accelerometer
     *
-    * @param mode - one of ACCEL_2Gmode etc.
+    * @param[in] mode - One of ACCEL_2Gmode etc.
+    * @param[in] cr1  - Data rate etc (see cr1Value())
     */
-   void setAccelerometerMode(AccelerometerMode mode);
+   void configure(AccelerometerMode mode, uint8_t cr1=cr1Value());
    /**
     * Read ID from accelerometer
     *
@@ -175,10 +170,14 @@ public:
    uint32_t readID();
    /**
     * Calibrate accelerometer
-    * Assumes accelerometer is on a flat surface
-    * The accelerometer mode will need to be reset after this operation
+    *
+    * This assumes the accelerometer is level and stationary.
+    * If the accelerometer is too far from level then no correction is applied and error returned
+    *
+    * @return true  Success
+    * @return false Calibration failed
     */
-   void calibrateAccelerometer();
+   bool calibrateAccelerometer();
 };
 
 /**

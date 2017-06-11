@@ -43,7 +43,7 @@ void report(MMA8491Q &accelerometer) {
 
    accelerometer.active();
    waitMS(1000);
-   accelerometer.readAccelerometerXYZ(&accelStatus, &accelX, &accelY, &accelZ);
+   accelerometer.readAccelerometerXYZ(accelStatus, accelX, accelY, accelZ);
    accelerometer.standby();
    printf("s=0x%02X, aX=%10d, aY=%10d, aZ=%10d\n", accelStatus, accelX, accelY, accelZ);
 }
@@ -51,14 +51,11 @@ void report(MMA8491Q &accelerometer) {
 int main() {
    printf("Starting\n");
 
+   report(accelerometer);
    printf("Doing simple calibration\n"
           "Make sure the device is level!\n");
-   report(accelerometer);
-   waitMS(400);
-   report(accelerometer);
-   waitMS(400);
-   report(accelerometer);
-   waitMS(400);
+
+   waitMS(4000);
 
    accelerometer.calibrateAccelerometer();
 

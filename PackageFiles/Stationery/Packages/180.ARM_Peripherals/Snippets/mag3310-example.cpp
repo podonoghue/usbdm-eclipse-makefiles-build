@@ -2,7 +2,7 @@
  ============================================================================
  * @file     mag3310-example.cpp
  * @brief    Demonstrates use of MAG3310 Magnetometer over I2C
- * @version  V4.11.1.90
+ * @version  V4.11.1.80
  * @author   podonoghue
  * @note You may need to change the pin-mapping of the I2C interface
 ============================================================================
@@ -38,7 +38,7 @@ MAG3310  magnetometer(i2c0);
 void report(MAG3310 &magnetometer) {
       int magStatus;
       int16_t magX,magY,magZ;
-      magnetometer.readMagnetometerXYZ(&magStatus, &magX, &magY, &magZ);
+      magnetometer.readMagnetometerXYZ(magStatus, magX, magY, magZ);
       printf("s=0x%02X, mX=%10d, mY=%10d, mZ=%10d, ", magStatus,   magX,   magY,   magZ);
       // Assumes the sensor is level
       printf("a=%d\n", (int)(180*atan2(magX, magY)/M_PI));

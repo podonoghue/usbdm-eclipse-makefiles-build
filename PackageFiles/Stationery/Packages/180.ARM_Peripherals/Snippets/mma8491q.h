@@ -32,8 +32,11 @@ namespace USBDM {
  *
  * <b>Example</b>
  * @code
- *  // Instantiate interface
- *  I2c0    i2c0;
+ *  // Instantiate interfaces
+ *
+ *  // I2C interface
+ *  I2c0     i2c0;
+ *  // Accelerometer via I2C
  *  MMA8491Q_T<USBDM::GpioA<13>> accelerometer(i2c0);
  *
  *  uint8_t id = accelerometer.readID();
@@ -47,7 +50,7 @@ namespace USBDM {
  *     int accelStatus;
  *     int16_t accelX,accelY,accelZ;
  *
- *     accelerometer.readAccelerometerXYZ(&accelStatus, &accelX, &accelY, &accelZ);
+ *     accelerometer.readAccelerometerXYZ(accelStatus, accelX, accelY, accelZ);
  *     printf("s=0x%02X, aX=%10d, aY=%10d, aZ=%10d\n", accelStatus, accelX, accelY, accelZ);
  *     waitMS(400);
  *  }
@@ -105,7 +108,7 @@ public:
    /**
     * Constructor
     *
-    * @param i2c - The I2C interface to use
+    * @param[in] i2c The I2C interface to use
     */
    MMA8491Q(USBDM::I2c &i2c) : i2c(i2c), offsetX(0), offsetY(0), offsetZ(0) {
    }
@@ -121,14 +124,14 @@ public:
    /**
     * Obtains measurements from the accelerometer
     *
-    * @param status  - Indicates status of x, y & z measurements
-    * @param x       - X axis value
-    * @param y       - Y axis value
-    * @param z       - Z axis value
+    * @param[out] status  Indicates status of x, y & z measurements
+    * @param[out] x       X axis value
+    * @param[out] y       Y axis value
+    * @param[out] z       Z axis value
     */
-   void readAccelerometerXYZ(int *status, int16_t *x, int16_t *y, int16_t *z);
+   void readAccelerometerXYZ(int &status, int16_t &x, int16_t &y, int16_t &z);
    /**
-    * Set accelerometer mode (gain and filtering)
+    * Calibrate accelerometer
     */
    void calibrateAccelerometer();
 };
@@ -152,7 +155,7 @@ public:
    /**
     * Constructor
     *
-    * @param i2c    - The I2C interface to use
+    * @param[in] i2c The I2C interface to use
     */
    MMA8491Q_T(USBDM::I2c &i2c) : MMA8491Q(i2c) {
       enableGpio.setOutput();

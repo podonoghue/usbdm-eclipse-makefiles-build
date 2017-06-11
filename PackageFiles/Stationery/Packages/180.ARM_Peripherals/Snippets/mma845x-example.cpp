@@ -1,8 +1,8 @@
 /**
  ============================================================================
- * @file  mma845x-example.cpp
- * @brief Demonstrates use of MMA845x Accelerometer over I2C
- * @version  V4.11.1.90
+ * @file     mma845x-example.cpp
+ * @brief    Demonstrates use of MMA845x Accelerometer over I2C
+ * @version  V4.11.1.80
  * @author   podonoghue
  * @note You may need to change the pin-mapping of the I2C interface
 ============================================================================
@@ -34,13 +34,13 @@ MMA845x  accelerometer(i2c0, MMA845x::ACCEL_2Gmode);
 /**
  * Report accelerometer values
  *
- * @param accelerometer Accelerometer to use
+ * @param[in] accelerometer Accelerometer to use
  */
 void report(MMA845x &accelerometer) {
    int accelStatus;
    int16_t accelX,accelY,accelZ;
 
-   accelerometer.readAccelerometerXYZ(&accelStatus, &accelX, &accelY, &accelZ);
+   accelerometer.readAccelerometerXYZ(accelStatus, accelX, accelY, accelZ);
    printf("s=0x%02X, aX=%10d, aY=%10d, aZ=%10d\n", accelStatus, accelX, accelY, accelZ);
 }
 
@@ -50,16 +50,16 @@ int main() {
    uint8_t id = accelerometer.readID();
    printf("Device ID = 0x%02X (should be 0x1A)\n", id);
 
+   report(accelerometer);
+
    printf("Doing simple calibration\n"
           "Make sure the device is level!\n");
-   report(accelerometer);
-   waitMS(400);
-   report(accelerometer);
-   waitMS(400);
-   report(accelerometer);
-   waitMS(400);
+   waitMS(2000);
 
-   accelerometer.calibrateAccelerometer();
+   if (!accelerometer.calibrateAccelerometer()) {
+      printf("Calibration failed!\n");
+      __asm__("bkpt");
+   }
 
    // Make sure we have new values
    waitMS(100);
@@ -67,7 +67,7 @@ int main() {
    printf("After calibration\n");
    for(;;) {
       report(accelerometer);
-//      waitMS(400);
+      waitMS(400);
    }
 }
 

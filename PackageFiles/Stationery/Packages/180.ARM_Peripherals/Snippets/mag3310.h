@@ -93,14 +93,14 @@ private:
    /**
     * Read Accelerometer register
     *
-    * @param regNum  - Register number
+    * @param[in] regNum Register number
     */
    uint8_t readReg(uint8_t regNum);
    /**
     * Write Accelerometer register
     *
-    * @param regNum  - Register number
-    * @param value   - Value to write
+    * @param[in] regNum  Register number
+    * @param[in] value   Value to write
     */
    void    writeReg(uint8_t regNum, uint8_t value);
    /**
@@ -121,7 +121,7 @@ public:
    /**
     * Constructor
     *
-    * @param i2c  - The I2C interface to use
+    * @param[in] i2c The I2C interface to use
     */
    MAG3310(USBDM::I2c &i2c);
    /**
@@ -132,17 +132,17 @@ public:
     * Put accelerometer into Active mode
     */
    void active();
-   /*
+   /**
     * Obtains measurements from the Magnetometer
     *
-    * @param status  - Indicates status of x, y & z measurements
-    * @param x       - X axis value
-    * @param y       - Y axis value
-    * @param z       - Z axis value
+    * @param[out] status  Indicates status of x, y & z measurements
+    * @param[out] x       X axis value
+    * @param[out] y       Y axis value
+    * @param[out] z       Z axis value
     */
-   void readMagnetometerXYZ(int *status, int16_t *x, int16_t *y, int16_t *z);
+   void readMagnetometerXYZ(int &status, int16_t &x, int16_t &y, int16_t &z);
 
-   /*!
+   /**
     * Read ID from accelerometer
     *
     * @return ID value as 8-bit number (0x1A for MMA8451Q)

@@ -21,22 +21,22 @@ namespace USBDM {
 /**
  * Obtains measurements from the accelerometer
  *
- * @param status  - Indicates status of x, y & z measurements
- * @param x       - X axis value
- * @param y       - Y axis value
- * @param z       - Z axis value
+ * @param[out] status  Indicates status of x, y & z measurements
+ * @param[out] x       X axis value
+ * @param[out] y       Y axis value
+ * @param[out] z       Z axis value
  */
-void MMA8491Q::readAccelerometerXYZ(int *status, int16_t *x, int16_t *y, int16_t *z) {
+void MMA8491Q::readAccelerometerXYZ(int &status, int16_t &x, int16_t &y, int16_t &z) {
    uint8_t dataXYZ[7] = {STATUS};
 
    // Receive 7 registers (status, X-high, X-low, Y-high, Y-low, Z-high & Z-low)
    i2c.txRx(DEVICE_ADDRESS, 1, sizeof(dataXYZ), dataXYZ);
 
    // Unpack data and return
-   *status = dataXYZ[0];
-   *x = (((int16_t)((dataXYZ[1]<<8)+dataXYZ[2]))>>2) + offsetX;
-   *y = (((int16_t)((dataXYZ[3]<<8)+dataXYZ[4]))>>2) + offsetY;
-   *z = (((int16_t)((dataXYZ[5]<<8)+dataXYZ[6]))>>2) + offsetZ;
+   status = dataXYZ[0];
+   x = (((int16_t)((dataXYZ[1]<<8)+dataXYZ[2]))>>2) + offsetX;
+   y = (((int16_t)((dataXYZ[3]<<8)+dataXYZ[4]))>>2) + offsetY;
+   z = (((int16_t)((dataXYZ[5]<<8)+dataXYZ[6]))>>2) + offsetZ;
 }
 
 /**
@@ -59,7 +59,7 @@ void MMA8491Q::calibrateAccelerometer() {
       active();
       do {
          waitUS(1000);
-         readAccelerometerXYZ(&status, &Xout_Accel_14_bit, &Yout_Accel_14_bit, &Zout_Accel_14_bit);
+         readAccelerometerXYZ(status, Xout_Accel_14_bit, Yout_Accel_14_bit, Zout_Accel_14_bit);
       } while ((status & MMA8491Q_STATUS_ZYXDR_MASK) == 0);
       standby();
       Xout_Accel += Xout_Accel_14_bit;

@@ -42,11 +42,10 @@ enum {
    M_CTRL_REG2,   /* 11 */
 };
 
-/*
+/**
  * Constructor
  *
- * @param i2c  - The I2C interface to use
- * @param mode - Mode of operation (gain and filtering)
+ * @param[in] i2c  The I2C interface to use
  */
 MAG3310::MAG3310(USBDM::I2c &i2c) : i2c(i2c) {
    failedInit = false;
@@ -67,7 +66,7 @@ MAG3310::MAG3310(USBDM::I2c &i2c) : i2c(i2c) {
 /**
  * Read Accelerometer register
  *
- * @param regNum  - Register number
+ * @param[in] regNum Register number
  */
 uint8_t MAG3310::readReg(uint8_t regNum) {
    uint8_t command[] = {regNum};
@@ -79,8 +78,8 @@ uint8_t MAG3310::readReg(uint8_t regNum) {
 /**
  * Write Accelerometer register
  *
- * @param regNum  - Register number
- * @param value   - Value to write
+ * @param[in] regNum  Register number
+ * @param[in] value   Value to write
  */
 void MAG3310::writeReg(uint8_t regNum, uint8_t value) {
    uint8_t command[] = {regNum, value};
@@ -104,28 +103,28 @@ void MAG3310::active() {
    writeReg(M_CTRL_REG1, readReg(M_CTRL_REG1)|MAG3310_CTRL_REG1_AC_MASK);
 }
 
-/*
+/**
  * Obtains measurements from the Magnetometer
  *
- * @param status  - Indicates status of x, y & z measurements
- * @param x       - X axis value
- * @param y       - Y axis value
- * @param z       - Z axis value
+ * @param[out] status Indicates status of x, y & z measurements
+ * @param[out] x      X axis value
+ * @param[out] y      Y axis value
+ * @param[out] z      Z axis value
  */
-void MAG3310::readMagnetometerXYZ(int *status, int16_t *x, int16_t *y, int16_t *z) {
+void MAG3310::readMagnetometerXYZ(int &status, int16_t &x, int16_t &y, int16_t &z) {
    uint8_t dataXYZ[7] = {M_DR_STATUS};
 
    // Receive 7 registers (status, X-high, X-low, Y-high, Y-low, Z-high & Z-low)
    i2c.txRx(DEVICE_ADDRESS, 1, sizeof(dataXYZ), dataXYZ);
 
    // Unpack data and return
-   *status = dataXYZ[0];
-   *x = ((dataXYZ[1]<<8)+dataXYZ[2]);
-   *y = ((dataXYZ[3]<<8)+dataXYZ[4]);
-   *z = ((dataXYZ[5]<<8)+dataXYZ[6]);
+   status = dataXYZ[0];
+   x = ((dataXYZ[1]<<8)+dataXYZ[2]);
+   y = ((dataXYZ[3]<<8)+dataXYZ[4]);
+   z = ((dataXYZ[5]<<8)+dataXYZ[6]);
 }
 
-/*!
+/**
  * Read ID from accelerometer
  *
  * @return ID value as 8-bit number (0x1A for MMA8451Q)
@@ -175,7 +174,7 @@ void MAG3310::calibrateMagnetometer() {
          waitMS(10);
       } while ((~readReg(M_DR_STATUS) & (MAG3310_DR_STATUS_XDR_MASK|MAG3310_DR_STATUS_YDR_MASK|MAG3310_DR_STATUS_ZDR_MASK)) != 0);
 
-      readMagnetometerXYZ(&status, &Xout_Mag_16_bit, &Yout_Mag_16_bit, &Zout_Mag_16_bit);
+      readMagnetometerXYZ(status, Xout_Mag_16_bit, Yout_Mag_16_bit, Zout_Mag_16_bit);
       if (i == 0) {
          // Assign first sample as both maximum and minimum value
          Xout_Mag_16_bit_max = Xout_Mag_16_bit_min = Xout_Mag_16_bit;
