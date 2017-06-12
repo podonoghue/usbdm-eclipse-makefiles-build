@@ -10,7 +10,6 @@ Devices using this peripheral:
          <name>FTMRH</name>
          <description>Flash Memory Interface</description>
          <groupName>FTMRH</groupName>
-         <prependToName>FTMRH</prependToName>
          <headerStructName>FTMRH</headerStructName>
          <baseAddress>0x40020000</baseAddress>
          <size>32</size>

@@ -8,7 +8,6 @@ Devices using this peripheral:
          <name>MMDVSQ</name>
          <description>Divide and Square Root</description>
          <groupName>MMDVSQ</groupName>
-         <prependToName>MMDVSQ_</prependToName>
          <headerStructName>MMDVSQ</headerStructName>
          <baseAddress>0xF0004000</baseAddress>
          <size>32</size>

@@ -8,7 +8,6 @@ Devices using this peripheral:
          <name>DMA0</name>
          <description>Enhanced direct memory access controller</description>
          <groupName>DMA0</groupName>
-         <prependToName>DMA0</prependToName>
          <headerStructName>DMA</headerStructName>
          <baseAddress>0x40008000</baseAddress>
          <size>32</size>

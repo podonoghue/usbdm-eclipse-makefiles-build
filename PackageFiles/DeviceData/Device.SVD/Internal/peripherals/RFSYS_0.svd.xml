@@ -55,6 +55,7 @@ Devices using this peripheral:
       MK66F18
       MK70F15
       MK70F15WS
+      MK82F25615
       MKL17Z4
       MKL27Z4
       MKL27Z644
@@ -72,7 +73,6 @@ Devices using this peripheral:
          <name>RFSYS</name>
          <description>System register file</description>
          <groupName>RFSYS</groupName>
-         <prependToName>RFSYS</prependToName>
          <headerStructName>RFSYS</headerStructName>
          <baseAddress>0x40041000</baseAddress>
          <size>32</size>

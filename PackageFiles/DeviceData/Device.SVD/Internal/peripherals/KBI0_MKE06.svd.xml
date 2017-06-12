@@ -9,7 +9,6 @@ Devices using this peripheral:
          <name>KBI0</name>
          <description>Keyboard interrupts</description>
          <groupName>KBI</groupName>
-         <prependToName>KBI0</prependToName>
          <headerStructName>KBI</headerStructName>
          <baseAddress>0x40079000</baseAddress>
          <size>32</size>

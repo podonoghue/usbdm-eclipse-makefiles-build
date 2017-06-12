@@ -8,7 +8,6 @@ Devices using this peripheral:
          <name>SIM</name>
          <description>System Integration Module</description>
          <groupName>SIM</groupName>
-         <prependToName>SIM_</prependToName>
          <headerStructName>SIM</headerStructName>
          <baseAddress>0x40048000</baseAddress>
          <size>32</size>

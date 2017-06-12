@@ -14,7 +14,6 @@ Devices using this peripheral:
          <name>IRQ</name>
          <description>Interrupt</description>
          <groupName>IRQ</groupName>
-         <prependToName>IRQ</prependToName>
          <headerStructName>IRQ</headerStructName>
          <baseAddress>0x40031000</baseAddress>
          <size>32</size>

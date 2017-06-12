@@ -12,7 +12,6 @@ Devices using this peripheral:
          <name>I2C0</name>
          <description>Inter-Integrated Circuit</description>
          <groupName>I2C</groupName>
-         <prependToName>I2C0</prependToName>
          <headerStructName>I2C</headerStructName>
          <baseAddress>0x40066000</baseAddress>
          <size>32</size>

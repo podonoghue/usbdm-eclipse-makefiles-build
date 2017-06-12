@@ -10,7 +10,6 @@ Devices using this peripheral:
          <name>EPORT0</name>
          <description>Edge Port Module</description>
          <groupName>EPORT</groupName>
-         <prependToName>EPORT0</prependToName>
          <headerStructName>EPORT0</headerStructName>
          <baseAddress>0x40130000</baseAddress>
          <size>32</size>

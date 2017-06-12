@@ -7,7 +7,6 @@ Devices using this peripheral:
          <name>TPM0</name>
          <description>Timer/PWM Module (2 channels)</description>
          <groupName>TPM</groupName>
-         <prependToName>TPM0</prependToName>
          <headerStructName>TPM</headerStructName>
          <baseAddress>0x40038000</baseAddress>
          <size>32</size>

@@ -1,17 +1,12 @@
 <!--
 Devices using this peripheral: 
-      MKL17Z4
-      MKL27Z4
-      MKL27Z644
-      MKL33Z4
-      MKL43Z4
+      MKL82Z7
 -->
       <peripheral>
-         <?sourceFile "LPUART0_MKL17" ?>
+         <?sourceFile "LPUART0_FIFO_0x40054000" ?>
          <name>LPUART0</name>
          <description>Universal Asynchronous Receiver/Transmitter</description>
          <groupName>LPUART</groupName>
-         <prependToName>LPUART0</prependToName>
          <headerStructName>LPUART</headerStructName>
          <baseAddress>0x40054000</baseAddress>
          <size>32</size>
@@ -20,7 +15,7 @@ Devices using this peripheral:
          <resetMask>0xFFFFFFFF</resetMask>
          <addressBlock>
             <offset>0x0</offset>
-            <size>0x14</size>
+            <size>0x20</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
@@ -493,7 +488,7 @@ when the receiver detects an idle line</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Receiver active (LPUART_RX input not idle)</description>
+                           <description>receiver active (RXD input not idle)</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -501,21 +496,19 @@ when the receiver detects an idle line</description>
                   <field>
                      <name>LBKDE</name>
                      <description>LIN Break Detection Enable\n
-LBKDE selects a longer break character detection length. While LBKDE is set, receive data is not stored
-in the receive data buffer</description>
+LBKDE selects a longer break character detection length.\n
+While LBKDE is set, receive data is not stored in the receive data buffer</description>
                      <bitOffset>25</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Break character is detected at length 10 bit times (if M=0, SBNS=0) or 11 (if M=1, SBNS=0 or M=0, SBNS=1) or\n
-12 (if M=1, SBNS=1 or M10=1, SNBS=0) or 13 (if M10=1, SNBS=1)</description>
+                           <description>Normal break character detection</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Break character is detected at length of 11 bit times (if M=0, SBNS=0) or 12 (if M=1, SBNS=0 or M=0, SBNS=1) or\n
-14 (if M=1, SBNS=1 or M10=1, SNBS=0) or 15 (if M10=1, SNBS=1)</description>
+                           <description>LIN break detection is enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -530,14 +523,12 @@ the state of this bit. This bit should only be changed when the transmitter is d
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Break character is transmitted with length of 10 bit times (if M=0, SBNS=0) or 11 (if M=1, SBNS=0 or M=0, SBNS=1) or \n
-12 (if M=1, SBNS=1 or M10=1, SNBS=0) or 13 (if M10=1, SNBS=1)</description>
+                           <description>Short break</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Break character is transmitted with length of 13 bit times (if M=0, SBNS=0) or 14 (if M=1, SBNS=0 or M=0, SBNS=1) or \n
-15 (if M=1, SBNS=1 or M10=1, SNBS=0) or 16 (if M10=1, SNBS=1)</description>
+                           <description>Long break</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1163,7 +1154,6 @@ receiving the current character (if any) before the receiver starts receiving da
                      <description>Receive Bit 8 / Transmit Bit 9</description>
                      <bitOffset>31</bitOffset>
                      <bitWidth>1</bitWidth>
-                     <access>read-only</access>
                   </field>
                </fields>
             </register>
@@ -1307,6 +1297,557 @@ Software should only write a MA register when the associated BAUD[MAEN] bit is c
                      <description>Match Address 2</description>
                      <bitOffset>16</bitOffset>
                      <bitWidth>10</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MODIR</name>
+               <description>MODEM IrDA register\n
+The MODEM register controls options for setting the modem configuration</description>
+               <addressOffset>0x14</addressOffset>
+               <fields>
+                  <field>
+                     <name>TXCTSE</name>
+                     <description>Transmitter clear-to-send enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>CTS has no effect on the transmitter</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enables clear-to-send operation. The transmitter checks the state of CTS each time it is ready to send a character. If CTS is asserted, the character is sent. If CTS is deasserted, the signal TXD remains in the mark state and transmission is delayed until CTS is asserted. Changes in CTS as a character is being sent do not affect its transmission</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXRTSE</name>
+                     <description>Transmitter request-to-send enable</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>The transmitter has no effect on RTS</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>When a character is placed into an empty transmitter data buffer , RTS asserts one bit time before the start bit is transmitted. RTS deasserts one bit time after all characters in the transmitter data buffer and shift register are completely sent, including the last stop bit</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXRTSPOL</name>
+                     <description>Transmitter request-to-send polarity</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Transmitter RTS is active low</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Transmitter RTS is active high</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXRTSE</name>
+                     <description>Receiver request-to-send enable</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>The receiver has no effect on RTS</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>RTS assertion is configured by the RTSWATER field</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXCTSC</name>
+                     <description>Transmit CTS Configuration</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>CTS input is sampled at the start of each character</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>CTS input is sampled when the transmitter is idle</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXCTSSRC</name>
+                     <description>Transmit CTS Source</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>CTS input is the CTS pin</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>CTS input is the inverted Receiver Match result</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RTSWATER</name>
+                     <description>Receive RTS Configuration</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>RTS asserts when the receiver FIFO is full or receiving a character that causes the FIFO to become full</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>RTS asserts when the receive FIFO is less than or equal to the RXWATER configuration and negates when the receive FIFO is greater than the RXWATER configuration</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TNP</name>
+                     <description>Transmitter narrow pulse</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>1/OSR</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>2/OSR</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>3/OSR</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>4/OSR</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>IREN</name>
+                     <description>Infrared enable</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>IR disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>IR enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FIFO</name>
+               <description>FIFO Register</description>
+               <addressOffset>0x18</addressOffset>
+               <resetValue>0x22</resetValue>
+               <fields>
+                  <field>
+                     <name>RXFIFOSIZE</name>
+                     <description>Receive FIFO. Buffer Depth</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>Receive FIFO/Buffer depth = 1 dataword</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>Receive FIFO/Buffer depth = 4 datawords</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>Receive FIFO/Buffer depth = 8 datawords</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>Receive FIFO/Buffer depth = 16 datawords</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>Receive FIFO/Buffer depth = 32 datawords</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>Receive FIFO/Buffer depth = 64 datawords</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>Receive FIFO/Buffer depth = 128 datawords</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>Receive FIFO/Buffer depth = 256 datawords</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXFE</name>
+                     <description>Receive FIFO Enable</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Receive FIFO is not enabled. Buffer is depth 1. (Legacy support)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Receive FIFO is enabled. Buffer is depth indicted by RXFIFOSIZE</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXFIFOSIZE</name>
+                     <description>Transmit FIFO. Buffer Depth</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>Transmit FIFO/Buffer depth = 1 dataword</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>Transmit FIFO/Buffer depth = 4 datawords</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>Transmit FIFO/Buffer depth = 8 datawords</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>Transmit FIFO/Buffer depth = 16 datawords</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>Transmit FIFO/Buffer depth = 32 datawords</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>Transmit FIFO/Buffer depth = 64 datawords</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>Transmit FIFO/Buffer depth = 128 datawords</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>Transmit FIFO/Buffer depth = 256 datawords</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXFE</name>
+                     <description>Transmit FIFO Enable</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Transmit FIFO is not enabled. Buffer is depth 1. (Legacy support)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Transmit FIFO is enabled. Buffer is depth indicated by TXFIFOSIZE</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXUFE</name>
+                     <description>Receive FIFO Underflow Interrupt Enable</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>RXUF flag does not generate an interrupt to the host</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>RXUF flag generates an interrupt to the host</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXOFE</name>
+                     <description>Transmit FIFO Overflow Interrupt Enable</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>TXOF flag does not generate an interrupt to the host</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>TXOF flag generates an interrupt to the host</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXIDEN</name>
+                     <description>Receiver Idle Empty Enable</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>Disable RDRF assertion due to partially filled FIFO when receiver is idle</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>Enable RDRF assertion due to partially filled FIFO when receiver is idle for 1 character</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>Enable RDRF assertion due to partially filled FIFO when receiver is idle for 2 characters</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>Enable RDRF assertion due to partially filled FIFO when receiver is idle for 4 characters</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>Enable RDRF assertion due to partially filled FIFO when receiver is idle for 8 characters</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>Enable RDRF assertion due to partially filled FIFO when receiver is idle for 16 characters</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>Enable RDRF assertion due to partially filled FIFO when receiver is idle for 32 characters</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>Enable RDRF assertion due to partially filled FIFO when receiver is idle for 64 characters</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXFLUSH</name>
+                     <description>Receive FIFO/Buffer Flush</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No flush operation occurs</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>All data in the receive FIFO/buffer is cleared out</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXFLUSH</name>
+                     <description>Transmit FIFO/Buffer Flush</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No flush operation occurs</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>All data in the transmit FIFO/Buffer is cleared out</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXUF</name>
+                     <description>Receiver Buffer Underflow Flag</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No receive buffer underflow has occurred since the last time the flag was cleared</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>At least one receive buffer underflow has occurred since the last time the flag was cleared</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXOF</name>
+                     <description>Transmitter Buffer Overflow Flag</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No transmit buffer overflow has occurred since the last time the flag was cleared</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>At least one transmit buffer overflow has occurred since the last time the flag was cleared</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXEMPT</name>
+                     <description>Receive Buffer/FIFO Empty</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Receive buffer is not empty</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Receive buffer is empty</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXEMPT</name>
+                     <description>Transmit Buffer/FIFO Empty</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Transmit buffer is not empty</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Transmit buffer is empty</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>WATER</name>
+               <description>Watermark Register</description>
+               <addressOffset>0x1C</addressOffset>
+               <fields>
+                  <field>
+                     <name>TXWATER</name>
+                     <description>Transmit Watermark</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>TXCOUNT</name>
+                     <description>Transmit Counter</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>RXWATER</name>
+                     <description>Receive Watermark</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>RXCOUNT</name>
+                     <description>Receive Counter</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <access>read-only</access>
                   </field>
                </fields>
             </register>

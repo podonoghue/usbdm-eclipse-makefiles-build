@@ -9,7 +9,6 @@ Devices using this peripheral:
          <name>SDRAMC</name>
          <description>Synchronous DRAM Controller</description>
          <groupName>SDRAMC</groupName>
-         <prependToName>SDRAMC</prependToName>
          <headerStructName>SDRAMC</headerStructName>
          <baseAddress>0x4000F000</baseAddress>
          <size>32</size>

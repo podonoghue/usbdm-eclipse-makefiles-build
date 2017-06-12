@@ -23,7 +23,6 @@ Devices using this peripheral:
          <name>SDHC0</name>
          <description>Secured Digital Host Controller</description>
          <groupName>SDHC</groupName>
-         <prependToName>SDHC0</prependToName>
          <headerStructName>SDHC</headerStructName>
          <baseAddress>0x400B1000</baseAddress>
          <size>32</size>

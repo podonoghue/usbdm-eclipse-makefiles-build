@@ -8,7 +8,6 @@ Devices using this peripheral:
          <name>RCM</name>
          <description>Reset Control Module</description>
          <groupName>RCM</groupName>
-         <prependToName>RCM</prependToName>
          <headerStructName>RCM</headerStructName>
          <baseAddress>0xFFFF8110</baseAddress>
          <size>32</size>

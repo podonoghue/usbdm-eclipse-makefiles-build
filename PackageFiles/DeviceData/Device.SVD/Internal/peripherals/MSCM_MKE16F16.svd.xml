@@ -9,7 +9,6 @@ Devices using this peripheral:
          <name>MSCM</name>
          <description>MSCM</description>
          <groupName>MSCM</groupName>
-         <prependToName>MSCM_</prependToName>
          <headerStructName>MSCM</headerStructName>
          <baseAddress>0x40001000</baseAddress>
          <size>32</size>

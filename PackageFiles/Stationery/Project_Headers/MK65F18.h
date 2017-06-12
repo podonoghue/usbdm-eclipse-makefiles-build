@@ -7072,7 +7072,7 @@ typedef struct {                                /*       I2S0 Structure         
 */
 
 /* ================================================================================ */
-/* ================           LLWU (file:LLWU_PE8_4FILT)           ================ */
+/* ================           LLWU (file:LLWU_PE8_FILT4)           ================ */
 /* ================================================================================ */
 
 /**
@@ -7675,7 +7675,7 @@ typedef struct {                                /*       LPUART0 Structure      
    __IO uint32_t  CTRL;                         /**< 0008: Control Register                                             */
    __IO uint32_t  DATA;                         /**< 000C: Data Register                                                */
    __IO uint32_t  MATCH;                        /**< 0010: Match Address Register                                       */
-   __IO uint32_t  MODIR;                        /**< 0014: MODEM register                                               */
+   __IO uint32_t  MODIR;                        /**< 0014: MODEM IrDA register                                          */
 } LPUART_Type;
 
 /**

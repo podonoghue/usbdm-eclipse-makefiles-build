@@ -9,7 +9,6 @@ Devices using this peripheral:
          <name>GPIO</name>
          <description>General Purpose I/O Port</description>
          <groupName>GPIO</groupName>
-         <prependToName>GPIO</prependToName>
          <headerStructName>GPIO</headerStructName>
          <baseAddress>0x40100000</baseAddress>
          <size>32</size>

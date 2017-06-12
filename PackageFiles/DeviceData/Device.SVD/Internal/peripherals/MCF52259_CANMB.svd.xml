@@ -9,7 +9,6 @@ Devices using this peripheral:
          <name>CANMB</name>
          <description>FlexCAN Module</description>
          <groupName>CANMB</groupName>
-         <prependToName>CANMB</prependToName>
          <headerStructName>CANMB</headerStructName>
          <baseAddress>0x40170080</baseAddress>
          <size>32</size>

@@ -11,7 +11,6 @@ Devices using this peripheral:
          <name>PWT</name>
          <description>Pulse Width Timer</description>
          <groupName>PWT</groupName>
-         <prependToName>PWT</prependToName>
          <headerStructName>PWT</headerStructName>
          <baseAddress>0x40033000</baseAddress>
          <size>32</size>

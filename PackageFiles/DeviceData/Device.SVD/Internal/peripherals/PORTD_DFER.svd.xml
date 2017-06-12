@@ -28,7 +28,6 @@ Devices using this peripheral:
          <name>PORTD</name>
          <description>Pin Control and Interrupts</description>
          <groupName>PORT</groupName>
-         <prependToName>PORTD</prependToName>
          <headerStructName>PORTD</headerStructName>
          <baseAddress>0x4004C000</baseAddress>
          <size>32</size>

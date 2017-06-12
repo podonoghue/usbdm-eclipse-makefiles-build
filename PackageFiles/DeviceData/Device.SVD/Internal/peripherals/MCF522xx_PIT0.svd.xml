@@ -11,7 +11,6 @@ Devices using this peripheral:
 The PIT is a 16-bit timer that provides precise interrupts at regular intervals with minimal processor intervention. 
 The timer can count down from the value written in the modulus register or it can be a free-running down-counter</description>
          <groupName>PIT</groupName>
-         <prependToName>PIT0</prependToName>
          <headerStructName>PIT</headerStructName>
          <baseAddress>0x40150000</baseAddress>
          <size>32</size>

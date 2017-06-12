@@ -36,12 +36,12 @@
       <xi:include href="peripherals/MCF52259_GPIO.svd.xml"/>
       <xi:include href="peripherals/MCF52259_GPT.svd.xml"/>
       <xi:include href="peripherals/MCF522xx_I2C0.svd.xml"/>
-      <peripheral derivedFrom="I2C0"><name>I2C1</name>      <prependToName>I2C1</prependToName><baseAddress>0x40000380</baseAddress></peripheral>
+      <peripheral derivedFrom="I2C0"><name>I2C1</name><baseAddress>0x40000380</baseAddress></peripheral>
       <xi:include href="peripherals/MCF522xx_INTC0.svd.xml"/>
-      <peripheral derivedFrom="INTC0"><name>INTC1</name>      <prependToName>INTC1</prependToName><baseAddress>0x40000D00</baseAddress></peripheral>
+      <peripheral derivedFrom="INTC0"><name>INTC1</name><baseAddress>0x40000D00</baseAddress></peripheral>
       <xi:include href="peripherals/MCF52259_PAD.svd.xml"/>
       <xi:include href="peripherals/MCF522xx_PIT0.svd.xml"/>
-      <peripheral derivedFrom="PIT0"><name>PIT1</name>      <prependToName>PIT1</prependToName><baseAddress>0x40160000</baseAddress></peripheral>
+      <peripheral derivedFrom="PIT0"><name>PIT1</name><baseAddress>0x40160000</baseAddress></peripheral>
       <xi:include href="peripherals/MCF522xx_PMM.svd.xml"/>
       <xi:include href="peripherals/MCF522xx_PWM.svd.xml"/>
       <xi:include href="peripherals/MCF522xx_QSPI.svd.xml"/>
@@ -50,8 +50,8 @@
       <xi:include href="peripherals/MCF52259_RTC.svd.xml"/>
       <xi:include href="peripherals/MCF52259_SCM.svd.xml"/>
       <xi:include href="peripherals/MCF522xx_UART0.svd.xml"/>
-      <peripheral derivedFrom="UART0"><name>UART1</name>      <prependToName>UART1</prependToName><baseAddress>0x40000240</baseAddress></peripheral>
-      <peripheral derivedFrom="UART1"><name>UART2</name>      <prependToName>UART2</prependToName><baseAddress>0x40000280</baseAddress></peripheral>
+      <peripheral derivedFrom="UART0"><name>UART1</name><baseAddress>0x40000240</baseAddress></peripheral>
+      <peripheral derivedFrom="UART1"><name>UART2</name><baseAddress>0x40000280</baseAddress></peripheral>
       <xi:include href="peripherals/MCF52259_USB_OTG.svd.xml"/>
    </peripherals>
    <vendorExtensions>

@@ -10,7 +10,6 @@ Devices using this peripheral:
          <name>USB0</name>
          <description>USB OTG Controller with clock recovery</description>
          <groupName>USB</groupName>
-         <prependToName>USB0</prependToName>
          <headerStructName>USB</headerStructName>
          <baseAddress>0x40072000</baseAddress>
          <size>32</size>

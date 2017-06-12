@@ -9,7 +9,6 @@ Devices using this peripheral:
          <name>BWT</name>
          <description>Backup Watchdog Timer Module</description>
          <groupName>BWT</groupName>
-         <prependToName>BWT</prependToName>
          <headerStructName>BWT</headerStructName>
          <baseAddress>0x40140000</baseAddress>
          <size>32</size>

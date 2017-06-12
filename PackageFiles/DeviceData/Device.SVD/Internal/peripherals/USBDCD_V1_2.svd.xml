@@ -16,7 +16,6 @@ Devices using this peripheral:
          <name>USBDCD</name>
          <description>USB Device Charger Detection module (USB DCD V1.2)</description>
          <groupName>USBDCD</groupName>
-         <prependToName>USBDCD</prependToName>
          <headerStructName>USBDCD</headerStructName>
          <baseAddress>0x40035000</baseAddress>
          <size>32</size>

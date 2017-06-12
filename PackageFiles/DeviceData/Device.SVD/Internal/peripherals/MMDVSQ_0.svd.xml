@@ -8,7 +8,6 @@ Devices using this peripheral:
          <name>MMDVSQ</name>
          <description>Memory-Mapped Divide and Square Root</description>
          <groupName>MMDVSQ</groupName>
-         <prependToName>MMDVSQ</prependToName>
          <headerStructName>MMDVSQ</headerStructName>
          <baseAddress>0xF0004000</baseAddress>
          <size>32</size>

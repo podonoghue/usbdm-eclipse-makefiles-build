@@ -21,8 +21,8 @@
   Extensions may be mandatory for successful device header file generation
   Other changes are related to some restructuring of the schema.
  -->
-
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="qualified" version="1.1">
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/03/xml.xsd" />
   <!-- stringType requires a none empty string of a least one character length -->
   <xs:simpleType name="stringType">
     <xs:restriction base="xs:string">
@@ -94,7 +94,7 @@
   <!-- this is particularly important as these are used in ANSI C Structures during the device header file generation -->
   <xs:simpleType name="identifierType">
     <xs:restriction base="xs:string">
-      <xs:pattern value="(((%s)[_A-Za-z]{1}[_A-Za-z0-9]*)|([_A-Za-z]{1}[_A-Za-z0-9]*(\[%s\])?)|([_A-Za-z]{1}[_A-Za-z0-9]*(%s)?[_A-Za-z0-9]*))(,(((@p)|(@f)|(@a)|(@i))[_A-Za-z0-9]*)*)*"/>
+      <xs:pattern value="(((%s)[_A-Za-z]{1}[_A-Za-z0-9]*)|([_A-Za-z]{1}[_A-Za-z0-9]*(\[(%s|[0-9]+)\])?)|([_A-Za-z]{1}[_A-Za-z0-9]*(%s)?[_A-Za-z0-9]*))(,((@p)|(@f)|(@a)|(@i)|([_A-Za-z0-9]*))+)?"/>
     </xs:restriction>
   </xs:simpleType>
   <!-- enumerationNameType specifies the subset and sequence of characters used for specifying names of enumeratedValues. -->
@@ -111,7 +111,7 @@
       <xs:pattern value="[0-9]+\-[0-9]+|[A-Z]-[A-Z]|[_0-9a-zA-Z:\.\s\(\)\[\]]+(,\s*[_0-9a-zA-Z:\.\s\(\)\[\]]+)*"/>
     </xs:restriction>
   </xs:simpleType>
-  <!-- scaledNonNegativeInteger specifies the format in which numbers are represented in hexadecimal or decimar format -->
+  <!-- scaledNonNegativeInteger specifies the format in which numbers are represented in hexadecimal or decimal format -->
   <xs:simpleType name="scaledNonNegativeInteger">
     <xs:restriction base="xs:string">
       <xs:pattern value="[+]?(0x|0X|#)?[0-9a-fA-F]+[kmgtKMGT]?"/>
@@ -415,48 +415,57 @@
   </xs:complexType>
 
   <xs:complexType name="peripheralType">
-    <xs:sequence>
-      <!-- name specifies the name of a peripheral. This name is used for the System View and device header file -->
-      <xs:element name="name" type="xs:Name"/>
-      <!-- version specifies the version of the peripheral descriptions -->
-      <xs:element name="version" type="stringType" minOccurs="0"/>
-      <!-- description provides a high level functional description of the peripheral -->
-      <xs:element name="description" type="stringType" minOccurs="0"/>
-      <!-- groupName assigns this peripheral to a group of peripherals. This is only used bye the System View -->
-      <xs:element name="groupName" type="xs:Name" minOccurs="0"/>
-      <!-- prependToName specifies a prefix that is placed in front of each register name of this peripheral. 
-                         The device header file will show the registers in a C-Struct of the peripheral without the prefix. -->
-      <xs:element name="prependToName" type="xs:Name" minOccurs="0"/>
-      <!-- appendToName is a postfix that is appended to each register name of this peripheral. The device header 
-                         file will sho the registers in a C-Struct of the peripheral without the postfix -->
-      <xs:element name="appendToName" type="xs:Name" minOccurs="0"/>
-      <!-- V1.1: headerStructName specifies the name for the peripheral structure typedef
-                         used in the device header generation instead of the peripheral name -->
-      <xs:element name="headerStructName" type="xs:Name" minOccurs="0"/>
-      <!-- disableCondition contains a logical expression based on constants and register or bit-field values 
-                         if the condition is evaluated to true, the peripheral display will be disabled -->
-      <xs:element name="disableCondition" type="stringType" minOccurs="0"/>
-      <!-- baseAddress specifies the absolute base address of a peripheral. For derived peripherals it is mandatory
-                         to specify a baseAddress. -->
-      <xs:element name="baseAddress" type="scaledNonNegativeInteger"/>
-      <!-- registerPropertiesGroup elements specify the default values for register size, access permission and
-                         reset value. These default values are inherited to all registers contained in this peripheral -->
-      <xs:group ref="registerPropertiesGroup" minOccurs="0"/>
-      <!-- addressBlock specifies one or more address ranges that are assigned exclusively to this peripheral. 
-                         derived peripherals may have no addressBlock, however none-derived peripherals are required to specify
-                         at least one address block -->
-      <xs:element name="addressBlock" type="addressBlockType" minOccurs="0" maxOccurs="unbounded"/>
-      <!-- interrupt specifies can specify one or more interrtupts by name, description and value -->
-      <xs:element name="interrupt" type="interruptType" minOccurs="0" maxOccurs="unbounded"/>
-      <!-- registers section contains all registers owned by the peripheral. In case a peripheral gets derived it does
-                        not have its own registers section, hence this section is optional. A unique peripheral without a 
-                        registers section is not allowed -->
-      <xs:element name="registers" type="registersType" minOccurs="0" maxOccurs="1">
-      </xs:element>
-    </xs:sequence>
-    <xs:attribute name="derivedFrom" type="identifierType" use="optional"/>
+  	<xs:sequence>
+  		<!-- name specifies the name of a peripheral. This name is used for the System View and device header file -->
+  		<xs:element name="name" type="xs:Name" />
+  		<!-- version specifies the version of the peripheral descriptions -->
+  		<xs:element name="version" type="stringType" minOccurs="0" />
+  		<!-- description provides a high level functional description of the peripheral -->
+  		<xs:element name="description" type="stringType"
+  			minOccurs="0" />
+  		<!-- groupName assigns this peripheral to a group of peripherals. This is only used bye the System View -->
+  		<xs:element name="groupName" type="xs:Name" minOccurs="0" />
+  		<!-- prependToName specifies a prefix that is placed in front of each register name of this peripheral. 
+  			The device header file will show the registers in a C-Struct of the peripheral without the prefix. -->
+  		<xs:element name="prependToName" type="xs:Name" minOccurs="0" />
+  		<!-- appendToName is a postfix that is appended to each register name of this peripheral. The device header 
+  			file will sho the registers in a C-Struct of the peripheral without the postfix -->
+  		<xs:element name="appendToName" type="xs:Name" minOccurs="0" />
+  		<!-- V1.1: headerStructName specifies the name for the peripheral structure typedef
+  			used in the device header generation instead of the peripheral name -->
+  		<xs:element name="headerStructName" type="xs:Name"
+  			minOccurs="0" />
+  		<!-- disableCondition contains a logical expression based on constants and register or bit-field values 
+  			if the condition is evaluated to true, the peripheral display will be disabled -->
+  		<xs:element name="disableCondition" type="stringType"
+  			minOccurs="0" />
+  		<!-- baseAddress specifies the absolute base address of a peripheral. For derived peripherals it is mandatory
+  			to specify a baseAddress. -->
+  		<xs:element name="baseAddress"
+  			type="scaledNonNegativeInteger" />
+  		<!-- registerPropertiesGroup elements specify the default values for register size, access permission and
+  			reset value. These default values are inherited to all registers contained in this peripheral -->
+  		<xs:group ref="registerPropertiesGroup" minOccurs="0" />
+  		<!-- addressBlock specifies one or more address ranges that are assigned exclusively to this peripheral. 
+  			derived peripherals may have no addressBlock, however none-derived peripherals are required to specify
+  			at least one address block -->
+  		<xs:element name="addressBlock" type="addressBlockType"
+  			minOccurs="0" maxOccurs="unbounded" />
+  		<!-- interrupt specifies can specify one or more interrtupts by name, description and value -->
+  		<xs:element name="interrupt" type="interruptType"
+  			minOccurs="0" maxOccurs="unbounded" />
+  		<!-- registers section contains all registers owned by the peripheral. In case a peripheral gets derived it does
+  			not have its own registers section, hence this section is optional. A unique peripheral without a 
+  			registers section is not allowed -->
+  		<xs:element name="registers" type="registersType"
+  			minOccurs="0" maxOccurs="1">
+  		</xs:element>
+  	</xs:sequence>
+  	<xs:attribute name="derivedFrom" type="identifierType"
+  		use="optional" />
+    <xs:attribute ref="xml:base"/>
   </xs:complexType>
-  
+
   <!-- ==================================================== -->
   <!-- The top level element of a description is the device -->
   <!-- ==================================================== -->

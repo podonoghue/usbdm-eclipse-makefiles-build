@@ -1,4 +1,4 @@
-<![CDATA[<?xml version="1.0"?>
+<?xml version="1.0"?>
 <!DOCTYPE feature SYSTEM "gdb-target.dtd">
 <feature name="org.gnu.gdb.coldfire.core">
    <struct id="ps.type" size="4">
@@ -35,4 +35,4 @@
    <reg name="sp" bitsize="32" type="data_ptr"   group="general" />  
    <reg name="ps" bitsize="32" type="ps.union"    group="general" />
    <reg name="pc" bitsize="32" type="code_ptr"   group="code_ptr" />
-</feature>]]>
+</feature>

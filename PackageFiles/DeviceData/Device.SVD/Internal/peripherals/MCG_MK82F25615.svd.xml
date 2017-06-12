@@ -1,13 +1,13 @@
 <!--
 Devices using this peripheral: 
       MK82F25615
+      MKL82Z7
 -->
       <peripheral>
          <?sourceFile "MCG_MK82F25615" ?>
          <name>MCG</name>
-         <description>Multipurpose Clock Generator module</description>
+         <description>Multipurpose Clock Generator module with ICS48M</description>
          <groupName>MCG</groupName>
-         <prependToName>MCG</prependToName>
          <headerStructName>MCG</headerStructName>
          <baseAddress>0x40064000</baseAddress>
          <size>32</size>
@@ -456,12 +456,12 @@ In Low Power Stop mode, the PLL clock is always disabled</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>MCGPLLCLK disabled in Stop</description>
+                           <description>MCGPLLCLK and MCGPLLCLK2X disabled in Stop</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>MCGPLLCLK enabled in Stop</description>
+                           <description>MCGPLLCLK and MCGPLLCLK2X enabled in Stop</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -503,7 +503,7 @@ Selects the amount to divide the VCO output of the PLL</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0bXXXXX</name>
-                           <description>(N+24) Divisor</description>
+                           <description>(N+16) Divisor</description>
                            <isDefault>true</isDefault>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -587,12 +587,12 @@ The IRCST bit indicates the current source for the internal reference clock sele
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Slow clock</description>
+                           <description>Slow clock (32 kHz)</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Fast clock</description>
+                           <description>Fast clock (4 MHz)</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

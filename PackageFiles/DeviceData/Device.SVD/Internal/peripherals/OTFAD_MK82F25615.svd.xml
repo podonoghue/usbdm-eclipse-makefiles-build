@@ -7,7 +7,6 @@ Devices using this peripheral:
          <name>OTFAD</name>
          <description>OTFAD</description>
          <groupName>OTFAD</groupName>
-         <prependToName>OTFAD_</prependToName>
          <headerStructName>OTFAD</headerStructName>
          <baseAddress>0x400DAC00</baseAddress>
          <size>32</size>

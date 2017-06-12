@@ -8,7 +8,6 @@ Devices using this peripheral:
          <name>RGPIO</name>
          <description>Rapid GPIO</description>
          <groupName>RGPIO</groupName>
-         <prependToName>RGPIO</prependToName>
          <headerStructName>RGPIO</headerStructName>
          <baseAddress>0xFFC00000</baseAddress>
          <size>16</size>

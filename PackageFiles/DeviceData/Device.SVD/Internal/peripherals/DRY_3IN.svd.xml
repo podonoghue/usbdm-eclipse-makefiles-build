@@ -8,7 +8,6 @@ Devices using this peripheral:
          <name>DRY</name>
          <description>Tamper Detect and Secure Key Storage</description>
          <groupName>DRY</groupName>
-         <prependToName>DRY</prependToName>
          <headerStructName>DRY</headerStructName>
          <baseAddress>0x40042000</baseAddress>
          <size>32</size>

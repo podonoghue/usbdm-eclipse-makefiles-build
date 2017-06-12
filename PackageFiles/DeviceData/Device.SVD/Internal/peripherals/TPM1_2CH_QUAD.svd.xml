@@ -8,7 +8,6 @@ Devices using this peripheral:
          <name>TPM1</name>
          <description>Timer/PWM Module</description>
          <groupName>TPM</groupName>
-         <prependToName>TPM1</prependToName>
          <headerStructName>TPM</headerStructName>
          <baseAddress>0x400C9000</baseAddress>
          <size>32</size>

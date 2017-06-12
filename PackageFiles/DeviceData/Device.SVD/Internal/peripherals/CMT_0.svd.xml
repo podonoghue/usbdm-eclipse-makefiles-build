@@ -62,7 +62,6 @@ Devices using this peripheral:
          <name>CMT</name>
          <description>Carrier Modulator Transmitter</description>
          <groupName>CMT</groupName>
-         <prependToName>CMT</prependToName>
          <headerStructName>CMT</headerStructName>
          <baseAddress>0x40062000</baseAddress>
          <size>32</size>

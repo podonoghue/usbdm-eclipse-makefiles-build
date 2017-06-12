@@ -1,16 +1,39 @@
 <!--
 Devices using this peripheral: 
+      MK02F12810
+      MK22F12810
+      MK22F25612
+      MK22F51212
       MKL14Z4
       MKL15Z4
+      MKL16Z4
+      MKL17Z4
       MKL24Z4
       MKL25Z4
+      MKL26Z4
+      MKL27Z4
+      MKL27Z644
+      MKL33Z4
+      MKL34Z4
+      MKL36Z4
+      MKL43Z4
+      MKL46Z4
+      MKM14Z5
+      MKM33Z5
+      MKM34Z5
+      MKV10Z7
+      MKV11Z7
+      MKV30F12810
+      MKV31F12810
+      MKV31F25612
+      MKV31F51212
+      MKW01Z4
 -->
       <peripheral>
          <?sourceFile "LLWU_PE4_FILT2" ?>
          <name>LLWU</name>
          <description>Low leakage wakeup unit</description>
          <groupName>LLWU</groupName>
-         <prependToName>LLWU</prependToName>
          <headerStructName>LLWU</headerStructName>
          <baseAddress>0x4007C000</baseAddress>
          <size>32</size>
@@ -260,7 +283,7 @@ Write 1 to clear the flag</description>
                </fields>
             </register>
             <register>
-               <name>PF2</name>
+               <name>F2</name>
                <description>Flag 2 Register\n
 Contains the flags indicating if a wakeup source LLWU 15-8 caused the MCU to exit VLLS mode.\n
 Write 1 to clear the flag</description>

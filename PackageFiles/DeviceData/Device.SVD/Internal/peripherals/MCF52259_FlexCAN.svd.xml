@@ -9,7 +9,6 @@ Devices using this peripheral:
          <name>FlexCAN</name>
          <description>FlexCAN Module</description>
          <groupName>FlexCAN</groupName>
-         <prependToName>FlexCAN</prependToName>
          <headerStructName>FlexCAN</headerStructName>
          <baseAddress>0x40170000</baseAddress>
          <size>32</size>

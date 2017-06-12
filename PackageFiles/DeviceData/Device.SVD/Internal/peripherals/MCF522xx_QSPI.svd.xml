@@ -10,7 +10,6 @@ Devices using this peripheral:
          <name>QSPI</name>
          <description>Queued Serial Peripheral Interface</description>
          <groupName>QSPI</groupName>
-         <prependToName>QSPI</prependToName>
          <headerStructName>QSPI</headerStructName>
          <baseAddress>0x40000340</baseAddress>
          <size>32</size>

@@ -22,7 +22,6 @@ Devices using this peripheral:
          <name>FPU</name>
          <description>Floating Point Unit</description>
          <groupName>FPU</groupName>
-         <prependToName>FPU</prependToName>
          <headerStructName>FPU</headerStructName>
          <baseAddress>0xE000E000</baseAddress>
          <size>32</size>

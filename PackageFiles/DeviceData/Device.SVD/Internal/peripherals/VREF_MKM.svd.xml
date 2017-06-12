@@ -9,7 +9,6 @@ Devices using this peripheral:
          <name>VREF</name>
          <description>Voltage Reference</description>
          <groupName>VREF</groupName>
-         <prependToName>VREF</prependToName>
          <headerStructName>VREF</headerStructName>
          <baseAddress>0x4006F000</baseAddress>
          <size>32</size>

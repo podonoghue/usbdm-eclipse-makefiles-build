@@ -14,7 +14,6 @@ Devices using this peripheral:
          <name>ICS</name>
          <description>Internal clock source</description>
          <groupName>ICS</groupName>
-         <prependToName>ICS</prependToName>
          <headerStructName>ICS</headerStructName>
          <baseAddress>0x40064000</baseAddress>
          <size>32</size>

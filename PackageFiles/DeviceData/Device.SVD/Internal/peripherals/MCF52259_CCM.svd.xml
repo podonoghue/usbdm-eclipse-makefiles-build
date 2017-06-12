@@ -9,7 +9,6 @@ Devices using this peripheral:
          <name>CCM</name>
          <description>Chip Configuration Module</description>
          <groupName>CCM</groupName>
-         <prependToName>CCM</prependToName>
          <headerStructName>CCM</headerStructName>
          <baseAddress>0x40110004</baseAddress>
          <size>32</size>

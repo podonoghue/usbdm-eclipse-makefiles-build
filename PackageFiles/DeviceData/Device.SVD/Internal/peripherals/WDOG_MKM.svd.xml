@@ -10,7 +10,6 @@ Devices using this peripheral:
          <name>WDOG</name>
          <description>Watchdog Timer</description>
          <groupName>WDOG</groupName>
-         <prependToName>WDOG</prependToName>
          <headerStructName>WDOG</headerStructName>
          <baseAddress>0x40053000</baseAddress>
          <size>32</size>

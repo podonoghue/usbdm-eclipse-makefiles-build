@@ -8,7 +8,6 @@ Devices using this peripheral:
          <name>MTIM0</name>
          <description>Modulo Timer Module</description>
          <groupName>MTIM</groupName>
-         <prependToName>MTIM0</prependToName>
          <headerStructName>MTIM</headerStructName>
          <baseAddress>0xFFFF8410</baseAddress>
          <size>8</size>

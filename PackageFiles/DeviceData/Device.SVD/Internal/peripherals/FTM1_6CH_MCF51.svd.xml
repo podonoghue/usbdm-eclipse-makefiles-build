@@ -8,7 +8,6 @@ Devices using this peripheral:
          <name>FTM1</name>
          <description>FlexTimer Module (6 channels)</description>
          <groupName>FTM</groupName>
-         <prependToName>FTM1</prependToName>
          <headerStructName>FTM</headerStructName>
          <baseAddress>0xFFFF8480</baseAddress>
          <size>8</size>

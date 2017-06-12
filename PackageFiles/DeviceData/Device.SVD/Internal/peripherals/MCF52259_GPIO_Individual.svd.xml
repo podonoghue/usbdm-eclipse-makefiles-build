@@ -2,6 +2,7 @@
 Devices using this peripheral: 
       MCF52259
 -->
+<fragment>
       <peripheral>
          <?sourceFile "MCF52259_GPIO" ?>
          <name>GPIO_PTE</name>
@@ -234,5 +235,5 @@ Reading the CLRn register returns 0s</description>
          <prependToName>GPIO_PDD</prependToName>
          <baseAddress>0x40100015</baseAddress>
       </peripheral>
-      
+</fragment>
             

@@ -10,7 +10,6 @@ Devices using this peripheral:
          <name>FEC</name>
          <description>None</description>
          <groupName>FEC</groupName>
-         <prependToName>FEC</prependToName>
          <headerStructName>FEC</headerStructName>
          <baseAddress>0x40001004</baseAddress>
          <size>32</size>

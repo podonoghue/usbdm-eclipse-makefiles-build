@@ -10,7 +10,6 @@ Devices using this peripheral:
          <name>PWM</name>
          <description>Pulse-Width Modulation Module</description>
          <groupName>PWM</groupName>
-         <prependToName>PWM</prependToName>
          <headerStructName>PWM</headerStructName>
          <baseAddress>0x401B0000</baseAddress>
          <size>32</size>

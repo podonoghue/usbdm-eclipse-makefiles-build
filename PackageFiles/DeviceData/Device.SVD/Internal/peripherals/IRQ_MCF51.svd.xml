@@ -8,7 +8,6 @@ Devices using this peripheral:
          <name>IRQ</name>
          <description>External Interrupt</description>
          <groupName>IRQ</groupName>
-         <prependToName>IRQ</prependToName>
          <headerStructName>IRQ</headerStructName>
          <baseAddress>0xFFFF80A0</baseAddress>
          <size>8</size>

@@ -10,7 +10,6 @@ Devices using this peripheral:
          <name>AXBS</name>
          <description>Crossbar switch</description>
          <groupName>AXBS</groupName>
-         <prependToName>AXBS</prependToName>
          <headerStructName>AXBS</headerStructName>
          <baseAddress>0x40004000</baseAddress>
          <size>32</size>

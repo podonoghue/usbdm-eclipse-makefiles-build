@@ -15,7 +15,6 @@ Devices using this peripheral:
          <name>MPU</name>
          <description>Memory protection unit</description>
          <groupName>MPU</groupName>
-         <prependToName>MPU</prependToName>
          <headerStructName>MPU</headerStructName>
          <baseAddress>0x4000D000</baseAddress>
          <size>32</size>

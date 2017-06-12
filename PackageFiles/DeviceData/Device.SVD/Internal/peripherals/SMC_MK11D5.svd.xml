@@ -18,7 +18,6 @@ Devices using this peripheral:
          <name>SMC</name>
          <description>System Mode Controller</description>
          <groupName>SMC</groupName>
-         <prependToName>SMC</prependToName>
          <headerStructName>SMC</headerStructName>
          <baseAddress>0x4007E000</baseAddress>
          <size>32</size>
@@ -291,7 +290,7 @@ This field controls which LLS or VLLS sub-mode to enter if STOPM = LLSx or VLLSx
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="LLSM" > <name>VLLSM</name> <?ignoreOverlap?> <?hide?> </field>
+                  <field derivedFrom="LLSM" > <name>VLLSM</name> <bitOffset>0</bitOffset> <?ignoreOverlap?> <?hide?> </field>
                   <field>
                      <name>RAM2PO</name>
                      <description>RAM2 Power Option\n
@@ -335,7 +334,7 @@ Controls whether the POR detect circuit (for brown-out detection) is enabled in 
             <register derivedFrom="STOPCTRL"> <name>VLLSCTRL</name> <?hide?> <?doDerivedMacros?> <description>VLLS Control Register
 Provides various control bits allowing the user to fine tune
 power consumption during the stop mode selected by the STOPM field
-(Freescale old name)</description> </register>
+(Freescale old name)</description> <addressOffset>0x2</addressOffset> </register>
             <register>
                <name>PMSTAT</name>
                <description>Power Mode Status Register</description>

@@ -9,7 +9,6 @@ Devices using this peripheral:
          <name>TMR0</name>
          <description>Quad Timer</description>
          <groupName>TMR</groupName>
-         <prependToName>TMR0</prependToName>
          <headerStructName>TMR</headerStructName>
          <baseAddress>0x40057000</baseAddress>
          <size>32</size>

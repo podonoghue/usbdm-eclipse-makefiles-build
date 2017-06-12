@@ -8,7 +8,6 @@ Devices using this peripheral:
          <name>FLEXIO</name>
          <description>Flexible I/O - universal I/O module for communication (UART, SPI, I2C, I2S) and PWM purposes</description>
          <groupName>FLEXIO</groupName>
-         <prependToName>FLEXIO_</prependToName>
          <headerStructName>FLEXIO</headerStructName>
          <baseAddress>0x4005A000</baseAddress>
          <size>32</size>

@@ -9,7 +9,6 @@ Devices using this peripheral:
          <name>XBAR</name>
          <description>Crossbar Switch</description>
          <groupName>XBAR</groupName>
-         <prependToName>XBAR</prependToName>
          <headerStructName>XBAR</headerStructName>
          <baseAddress>0x40055000</baseAddress>
          <size>32</size>

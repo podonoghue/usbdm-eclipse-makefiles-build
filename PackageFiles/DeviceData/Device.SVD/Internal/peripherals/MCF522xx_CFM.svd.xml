@@ -8,7 +8,6 @@ Devices using this peripheral:
          <name>CFM</name>
          <description>ColdFire Flash Module</description>
          <groupName>CFM</groupName>
-         <prependToName>CFM</prependToName>
          <headerStructName>CFM</headerStructName>
          <baseAddress>0x401D0000</baseAddress>
          <size>32</size>

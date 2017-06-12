@@ -7,7 +7,6 @@ Devices using this peripheral:
          <name>RNGA</name>
          <description>Random Number Generator</description>
          <groupName>RNGA</groupName>
-         <prependToName>RNGA</prependToName>
          <headerStructName>RNGA</headerStructName>
          <baseAddress>0x401F0000</baseAddress>
          <size>32</size>

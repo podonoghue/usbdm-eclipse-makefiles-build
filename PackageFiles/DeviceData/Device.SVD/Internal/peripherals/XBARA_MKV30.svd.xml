@@ -11,7 +11,6 @@ Devices using this peripheral:
          <name>XBARA</name>
          <description>Crossbar Switch</description>
          <groupName>XBARA</groupName>
-         <prependToName>XBARA</prependToName>
          <headerStructName>XBARA</headerStructName>
          <baseAddress>0x40059000</baseAddress>
          <size>32</size>

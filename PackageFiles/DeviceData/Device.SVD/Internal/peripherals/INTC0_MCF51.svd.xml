@@ -10,7 +10,6 @@ Devices using this peripheral:
          <name>INTC0</name>
          <description>Interrupt Controller Module</description>
          <groupName>INTC</groupName>
-         <prependToName>INTC0</prependToName>
          <headerStructName>INTC</headerStructName>
          <baseAddress>0xFFFFFFC0</baseAddress>
          <size>32</size>

@@ -42,7 +42,6 @@ Devices using this peripheral:
          <name>SCB</name>
          <description>System Control</description>
          <groupName>SCB</groupName>
-         <prependToName>SCB</prependToName>
          <headerStructName>SCB</headerStructName>
          <baseAddress>0xE000E000</baseAddress>
          <size>32</size>

@@ -9,7 +9,6 @@ Devices using this peripheral:
          <name>FTMRE</name>
          <description>Flash Memory Interface</description>
          <groupName>FTMRE</groupName>
-         <prependToName>FTMRE</prependToName>
          <headerStructName>FTMRE</headerStructName>
          <baseAddress>0x40020000</baseAddress>
          <size>32</size>

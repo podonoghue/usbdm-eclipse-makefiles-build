@@ -7,7 +7,6 @@ Devices using this peripheral:
          <name>MCG</name>
          <description>Multipurpose Clock Generator module with ICS48M</description>
          <groupName>MCG</groupName>
-         <prependToName>MCG</prependToName>
          <headerStructName>MCG</headerStructName>
          <baseAddress>0x40064000</baseAddress>
          <size>32</size>
@@ -587,12 +586,12 @@ The IRCST bit indicates the current source for the internal reference clock sele
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>IRC is slow clock (32 kHz)</description>
+                           <description>Slow clock (32 kHz)</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>IRC is fast clock (4 MHz)</description>
+                           <description>Fast clock (4 MHz)</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

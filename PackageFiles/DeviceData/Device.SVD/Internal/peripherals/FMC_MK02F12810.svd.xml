@@ -13,7 +13,6 @@ Devices using this peripheral:
          <name>FMC</name>
          <description>Flash Memory Controller</description>
          <groupName>FMC</groupName>
-         <prependToName>FMC</prependToName>
          <headerStructName>FMC</headerStructName>
          <baseAddress>0x4001F000</baseAddress>
          <size>32</size>

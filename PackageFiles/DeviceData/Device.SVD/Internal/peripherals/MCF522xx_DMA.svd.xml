@@ -10,7 +10,6 @@ Devices using this peripheral:
          <name>DMA</name>
          <description>DMA Controller Module</description>
          <groupName>DMA</groupName>
-         <prependToName>DMA</prependToName>
          <headerStructName>DMA</headerStructName>
          <baseAddress>0x40000100</baseAddress>
          <size>32</size>

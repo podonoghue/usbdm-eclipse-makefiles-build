@@ -51,7 +51,6 @@ Devices using this peripheral:
          <name>EWM</name>
          <description>External Watchdog Monitor</description>
          <groupName>EWM</groupName>
-         <prependToName>EWM</prependToName>
          <headerStructName>EWM</headerStructName>
          <baseAddress>0x40061000</baseAddress>
          <size>32</size>

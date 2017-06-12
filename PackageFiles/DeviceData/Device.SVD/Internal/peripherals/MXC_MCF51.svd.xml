@@ -8,7 +8,6 @@ Devices using this peripheral:
          <name>MXC</name>
          <description>External Interrupt</description>
          <groupName>MXC</groupName>
-         <prependToName>MXC</prependToName>
          <headerStructName>MXC</headerStructName>
          <baseAddress>0xFFFF8080</baseAddress>
          <size>8</size>

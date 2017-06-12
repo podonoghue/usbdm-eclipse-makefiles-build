@@ -30,7 +30,6 @@ Devices using this peripheral:
          <name>MTBDWT</name>
          <description>MTB data watchpoint and trace</description>
          <groupName>MTBDWT</groupName>
-         <prependToName>MTBDWT</prependToName>
          <headerStructName>MTBDWT</headerStructName>
          <baseAddress>0xF0001000</baseAddress>
          <size>32</size>

@@ -9,7 +9,6 @@ Devices using this peripheral:
          <name>CLOCK</name>
          <description>Clock Module</description>
          <groupName>CLOCK</groupName>
-         <prependToName>CLOCK</prependToName>
          <headerStructName>CLOCK</headerStructName>
          <baseAddress>0x40120000</baseAddress>
          <size>32</size>

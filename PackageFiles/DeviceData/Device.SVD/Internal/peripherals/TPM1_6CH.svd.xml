@@ -18,7 +18,6 @@ Devices using this peripheral:
          <name>TPM1</name>
          <description>Timer/PWM Module (6 channels)</description>
          <groupName>TPM</groupName>
-         <prependToName>TPM1</prependToName>
          <headerStructName>TPM1</headerStructName>
          <baseAddress>0x40039000</baseAddress>
          <size>32</size>

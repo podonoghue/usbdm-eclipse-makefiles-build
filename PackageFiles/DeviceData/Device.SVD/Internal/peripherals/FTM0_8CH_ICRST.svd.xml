@@ -16,7 +16,6 @@ Devices using this peripheral:
          <name>FTM0</name>
          <description>FlexTimer Module (8 channels)</description>
          <groupName>FTM</groupName>
-         <prependToName>FTM0</prependToName>
          <headerStructName>FTM</headerStructName>
          <baseAddress>0x40038000</baseAddress>
          <size>32</size>

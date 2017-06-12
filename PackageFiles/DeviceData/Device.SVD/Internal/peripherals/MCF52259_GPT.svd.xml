@@ -9,7 +9,6 @@ Devices using this peripheral:
          <name>GPT</name>
          <description>None</description>
          <groupName>GPT</groupName>
-         <prependToName>GPT</prependToName>
          <headerStructName>GPT</headerStructName>
          <baseAddress>0x401A0000</baseAddress>
          <size>32</size>

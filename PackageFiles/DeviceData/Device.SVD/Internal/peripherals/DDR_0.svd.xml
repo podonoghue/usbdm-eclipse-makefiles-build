@@ -10,7 +10,6 @@ Devices using this peripheral:
          <name>DDR</name>
          <description>DRAM Controller</description>
          <groupName>DDR</groupName>
-         <prependToName>DDR</prependToName>
          <headerStructName>DDR</headerStructName>
          <baseAddress>0x400AE000</baseAddress>
          <size>32</size>

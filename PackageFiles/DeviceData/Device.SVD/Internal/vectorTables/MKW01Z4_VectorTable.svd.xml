@@ -7,143 +7,143 @@ Devices using this vector table:
    <description>MKW01Z4 VectorTable</description>
    <interrupt>
       <name>DMA0</name>
-      <value>0</value>
       <description>DMA Controller</description>
+      <value>0</value>
    </interrupt>
    <interrupt>
       <name>DMA1</name>
-      <value>1</value>
       <description>DMA Controller</description>
+      <value>1</value>
    </interrupt>
    <interrupt>
       <name>DMA2</name>
-      <value>2</value>
       <description>DMA Controller</description>
+      <value>2</value>
    </interrupt>
    <interrupt>
       <name>DMA3</name>
-      <value>3</value>
       <description>DMA Controller</description>
+      <value>3</value>
    </interrupt>
    <interrupt>
       <name>FTF_Command</name>
-      <value>5</value>
       <description>Flash Memory Interface</description>
+      <value>5</value>
    </interrupt>
    <interrupt>
       <name>PMC</name>
-      <value>6</value>
       <description>Power Management Controller</description>
+      <value>6</value>
    </interrupt>
    <interrupt>
       <name>LLWU</name>
-      <value>7</value>
       <description>Low Leakage Wakeup</description>
+      <value>7</value>
    </interrupt>
    <interrupt>
       <name>I2C0</name>
-      <value>8</value>
       <description>Inter-Integrated Circuit</description>
+      <value>8</value>
    </interrupt>
    <interrupt>
       <name>I2C1</name>
-      <value>9</value>
       <description>Inter-Integrated Circuit</description>
+      <value>9</value>
    </interrupt>
    <interrupt>
       <name>SPI0</name>
-      <value>10</value>
       <description>Serial Peripheral Interface</description>
+      <value>10</value>
    </interrupt>
    <interrupt>
       <name>SPI1</name>
-      <value>11</value>
       <description>Serial Peripheral Interface</description>
+      <value>11</value>
    </interrupt>
    <interrupt>
       <name>UART0</name>
-      <value>12</value>
       <description>Serial Communication Interface</description>
+      <value>12</value>
    </interrupt>
    <interrupt>
       <name>UART1</name>
-      <value>13</value>
       <description>Serial Communication Interface</description>
+      <value>13</value>
    </interrupt>
    <interrupt>
       <name>UART2</name>
-      <value>14</value>
       <description>Serial Communication Interface</description>
+      <value>14</value>
    </interrupt>
    <interrupt>
       <name>ADC0</name>
-      <value>15</value>
       <description>Analogue to Digital Converter</description>
+      <value>15</value>
    </interrupt>
    <interrupt>
       <name>CMP0</name>
-      <value>16</value>
       <description>High-Speed Comparator</description>
+      <value>16</value>
    </interrupt>
    <interrupt>
       <name>TPM0</name>
-      <value>17</value>
       <description>Timer/PWM Module</description>
+      <value>17</value>
    </interrupt>
    <interrupt>
       <name>TPM1</name>
-      <value>18</value>
       <description>Timer/PWM Module</description>
+      <value>18</value>
    </interrupt>
    <interrupt>
       <name>TPM2</name>
-      <value>19</value>
       <description>Timer/PWM Module</description>
+      <value>19</value>
    </interrupt>
    <interrupt>
       <name>RTC_Alarm</name>
-      <value>20</value>
       <description>Real Time Clock</description>
+      <value>20</value>
    </interrupt>
    <interrupt>
       <name>RTC_Seconds</name>
-      <value>21</value>
       <description>Real Time Clock</description>
+      <value>21</value>
    </interrupt>
    <interrupt>
       <name>PIT</name>
-      <value>22</value>
       <description>Periodic Interrupt Timer</description>
+      <value>22</value>
    </interrupt>
    <interrupt>
       <name>DAC0</name>
-      <value>25</value>
       <description>Digital to Analogue Converter</description>
+      <value>25</value>
    </interrupt>
    <interrupt>
       <name>TSI0</name>
-      <value>26</value>
       <description>Touch Sense Input</description>
+      <value>26</value>
    </interrupt>
    <interrupt>
       <name>MCG</name>
-      <value>27</value>
       <description>Multipurpose Clock Generator</description>
+      <value>27</value>
    </interrupt>
    <interrupt>
       <name>LPTMR0</name>
-      <value>28</value>
       <description>Low Power Timer</description>
+      <value>28</value>
    </interrupt>
    <interrupt>
       <name>PORTA</name>
-      <value>30</value>
       <description>General Purpose Input/Output</description>
+      <value>30</value>
    </interrupt>
    <interrupt>
       <name>PORTC_PORTD</name>
-      <value>31</value>
       <description>General Purpose Input/Output</description>
+      <value>31</value>
    </interrupt>
 </interrupts>
 

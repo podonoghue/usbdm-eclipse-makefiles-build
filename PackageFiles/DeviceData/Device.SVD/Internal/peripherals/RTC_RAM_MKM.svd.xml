@@ -8,7 +8,6 @@ Devices using this peripheral:
          <name>RTC_RAM</name>
          <description>Battery backed RAM</description>
          <groupName>RTC_RAM</groupName>
-         <prependToName>RTC_RAM</prependToName>
          <headerStructName>RTC_RAM</headerStructName>
          <baseAddress>0x40051000</baseAddress>
          <size>8</size>

@@ -27,12 +27,12 @@
       <xi:include href="peripherals/CoreDebug.svd.xml"/>
       <xi:include href="peripherals/DWT_CM0Plus.svd.xml"/>
       <xi:include href="peripherals/FGPIOA_0xF80FF000.svd.xml"/>
-      <peripheral derivedFrom="FGPIOA"><name>FGPIOB</name>      <prependToName>FGPIOB</prependToName><baseAddress>0xF80FF040</baseAddress></peripheral>
+      <peripheral derivedFrom="FGPIOA"><name>FGPIOB</name><baseAddress>0xF80FF040</baseAddress></peripheral>
       <xi:include href="peripherals/FTFA.svd.xml"/>
-      <peripheral derivedFrom="FGPIOA"><name>GPIOA</name>      <groupName>GPIO</groupName>      <prependToName>GPIOA</prependToName><baseAddress>0x400FF000</baseAddress></peripheral>
-      <peripheral derivedFrom="FGPIOA"><name>GPIOB</name>      <groupName>GPIO</groupName>      <prependToName>GPIOB</prependToName><baseAddress>0x400FF040</baseAddress></peripheral>
+      <peripheral derivedFrom="FGPIOA"><name>GPIOA</name>      <groupName>GPIO</groupName><baseAddress>0x400FF000</baseAddress></peripheral>
+      <peripheral derivedFrom="FGPIOA"><name>GPIOB</name>      <groupName>GPIO</groupName><baseAddress>0x400FF040</baseAddress></peripheral>
       <xi:include href="peripherals/I2C0_MKL.svd.xml"/>
-      <peripheral derivedFrom="I2C0"><name>I2C1</name>      <prependToName>I2C1</prependToName><baseAddress>0x40067000</baseAddress></peripheral>
+      <peripheral derivedFrom="I2C0"><name>I2C1</name><baseAddress>0x40067000</baseAddress></peripheral>
       <xi:include href="peripherals/LPTMR0_0.svd.xml"/>
       <xi:include href="peripherals/MCG_MKL02Z4.svd.xml"/>
       <xi:include href="peripherals/MCM_MKL02Z4.svd.xml"/>
@@ -43,7 +43,7 @@
       <xi:include href="peripherals/OSC0_MK.svd.xml"/>
       <xi:include href="peripherals/PMC_MK.svd.xml"/>
       <xi:include href="peripherals/PORTA_MKL02Z4.svd.xml"/>
-      <peripheral derivedFrom="PORTA"><name>PORTB</name>      <groupName>PORT</groupName>      <prependToName>PORTB</prependToName><baseAddress>0x4004A000</baseAddress></peripheral>
+      <peripheral derivedFrom="PORTA"><name>PORTB</name>      <groupName>PORT</groupName><baseAddress>0x4004A000</baseAddress></peripheral>
       <xi:include href="peripherals/RCM_MKL02Z4.svd.xml"/>
       <xi:include href="peripherals/ROM_MKL.svd.xml"/>
       <xi:include href="peripherals/SCB_CM0.svd.xml"/>
@@ -52,7 +52,7 @@
       <xi:include href="peripherals/SPI0_MKE_8Bit.svd.xml"/>
       <xi:include href="peripherals/SYST.svd.xml"/>
       <xi:include href="peripherals/TPM0_2CH.svd.xml"/>
-      <peripheral derivedFrom="TPM0"><name>TPM1</name>      <prependToName>TPM1</prependToName><baseAddress>0x40039000</baseAddress></peripheral>
+      <peripheral derivedFrom="TPM0"><name>TPM1</name><baseAddress>0x40039000</baseAddress></peripheral>
       <xi:include href="peripherals/UART0_MKL02Z4.svd.xml"/>
    </peripherals>
    <vendorExtensions>

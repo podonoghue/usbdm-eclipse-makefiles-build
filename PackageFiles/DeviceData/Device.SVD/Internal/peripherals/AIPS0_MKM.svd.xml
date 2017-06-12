@@ -9,7 +9,6 @@ Devices using this peripheral:
          <name>AIPS0</name>
          <description>AIPS-Lite Bridge</description>
          <groupName>AIPS</groupName>
-         <prependToName>AIPS0</prependToName>
          <headerStructName>AIPS</headerStructName>
          <baseAddress>0x40000000</baseAddress>
          <size>32</size>

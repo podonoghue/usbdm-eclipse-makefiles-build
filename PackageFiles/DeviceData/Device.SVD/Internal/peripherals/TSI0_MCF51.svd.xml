@@ -8,7 +8,6 @@ Devices using this peripheral:
          <name>TSI0</name>
          <description>Touch Sensing Input</description>
          <groupName>TSI</groupName>
-         <prependToName>TSI0</prependToName>
          <headerStructName>TSI</headerStructName>
          <baseAddress>0xFFFF9400</baseAddress>
          <size>32</size>

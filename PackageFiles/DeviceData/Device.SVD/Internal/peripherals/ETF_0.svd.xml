@@ -52,7 +52,6 @@ Devices using this peripheral:
          <name>ETF</name>
          <description>Embedded Trace Funnel</description>
          <groupName>ETF</groupName>
-         <prependToName>ETF</prependToName>
          <headerStructName>ETF</headerStructName>
          <baseAddress>0xE0043000</baseAddress>
          <size>32</size>

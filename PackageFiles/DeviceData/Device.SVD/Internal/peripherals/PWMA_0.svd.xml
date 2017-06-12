@@ -10,7 +10,6 @@ Devices using this peripheral:
          <name>PWMA</name>
          <description>Pulse Width Modulator with nano edge placement</description>
          <groupName>PWMA</groupName>
-         <prependToName>PWMA</prependToName>
          <headerStructName>PWMA</headerStructName>
          <baseAddress>0x40033000</baseAddress>
          <size>32</size>

@@ -7,7 +7,6 @@ Devices using this peripheral:
          <name>RFSYS</name>
          <description>System register file</description>
          <groupName>RFSYS</groupName>
-         <prependToName>RFSYS</prependToName>
          <headerStructName>RFSYS</headerStructName>
          <baseAddress>0x40041000</baseAddress>
          <size>32</size>

@@ -26,7 +26,6 @@ Devices using this peripheral:
          <name>UART0</name>
          <description>Universal Asynchronous Receiver/Transmitter (C7816, CEA709)</description>
          <groupName>UART</groupName>
-         <prependToName>UART0</prependToName>
          <headerStructName>UART</headerStructName>
          <baseAddress>0x4006A000</baseAddress>
          <size>32</size>

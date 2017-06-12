@@ -105,7 +105,6 @@ Devices using this peripheral:
          <name>SYST</name>
          <description>System timer</description>
          <groupName>SYST</groupName>
-         <prependToName>SYST</prependToName>
          <headerStructName>SYST</headerStructName>
          <baseAddress>0xE000E010</baseAddress>
          <size>32</size>

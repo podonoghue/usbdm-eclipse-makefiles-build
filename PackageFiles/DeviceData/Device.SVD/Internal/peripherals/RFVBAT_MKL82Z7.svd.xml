@@ -7,7 +7,6 @@ Devices using this peripheral:
          <name>RFVBAT</name>
          <description>VBAT register file</description>
          <groupName>RFVBAT</groupName>
-         <prependToName>RFVBAT_</prependToName>
          <headerStructName>RFVBAT</headerStructName>
          <baseAddress>0x4003E000</baseAddress>
          <size>32</size>

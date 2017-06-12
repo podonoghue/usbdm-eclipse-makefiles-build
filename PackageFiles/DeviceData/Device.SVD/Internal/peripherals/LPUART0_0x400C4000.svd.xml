@@ -8,7 +8,6 @@ Devices using this peripheral:
          <name>LPUART0</name>
          <description>Universal Asynchronous Receiver/Transmitter</description>
          <groupName>LPUART</groupName>
-         <prependToName>LPUART0</prependToName>
          <headerStructName>LPUART</headerStructName>
          <baseAddress>0x400C4000</baseAddress>
          <size>32</size>
@@ -490,7 +489,7 @@ when the receiver detects an idle line</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Receiver active (LPUART_RX input not idle)</description>
+                           <description>receiver active (RXD input not idle)</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -498,21 +497,19 @@ when the receiver detects an idle line</description>
                   <field>
                      <name>LBKDE</name>
                      <description>LIN Break Detection Enable\n
-LBKDE selects a longer break character detection length. While LBKDE is set, receive data is not stored
-in the receive data buffer</description>
+LBKDE selects a longer break character detection length.\n
+While LBKDE is set, receive data is not stored in the receive data buffer</description>
                      <bitOffset>25</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Break character is detected at length 10 bit times (if M=0, SBNS=0) or 11 (if M=1, SBNS=0 or M=0, SBNS=1) or\n
-12 (if M=1, SBNS=1 or M10=1, SNBS=0) or 13 (if M10=1, SNBS=1)</description>
+                           <description>Normal break character detection</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Break character is detected at length of 11 bit times (if M=0, SBNS=0) or 12 (if M=1, SBNS=0 or M=0, SBNS=1) or\n
-14 (if M=1, SBNS=1 or M10=1, SNBS=0) or 15 (if M10=1, SNBS=1)</description>
+                           <description>LIN break detection is enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -527,14 +524,12 @@ the state of this bit. This bit should only be changed when the transmitter is d
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Break character is transmitted with length of 10 bit times (if M=0, SBNS=0) or 11 (if M=1, SBNS=0 or M=0, SBNS=1) or \n
-12 (if M=1, SBNS=1 or M10=1, SNBS=0) or 13 (if M10=1, SNBS=1)</description>
+                           <description>Short break</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Break character is transmitted with length of 13 bit times (if M=0, SBNS=0) or 14 (if M=1, SBNS=0 or M=0, SBNS=1) or \n
-15 (if M=1, SBNS=1 or M10=1, SNBS=0) or 16 (if M10=1, SNBS=1)</description>
+                           <description>Long break</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1160,7 +1155,6 @@ receiving the current character (if any) before the receiver starts receiving da
                      <description>Receive Bit 8 / Transmit Bit 9</description>
                      <bitOffset>31</bitOffset>
                      <bitWidth>1</bitWidth>
-                     <access>read-only</access>
                   </field>
                </fields>
             </register>
@@ -1309,7 +1303,7 @@ Software should only write a MA register when the associated BAUD[MAEN] bit is c
             </register>
             <register>
                <name>MODIR</name>
-               <description>MODEM register\n
+               <description>MODEM IrDA register\n
 The MODEM register controls options for setting the modem configuration</description>
                <addressOffset>0x14</addressOffset>
                <fields>
@@ -1411,7 +1405,7 @@ The MODEM register controls options for setting the modem configuration</descrip
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>CTS input is the LPUART_CTS pin</description>
+                           <description>CTS input is the CTS pin</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>

@@ -17,7 +17,6 @@ Devices using this peripheral:
          <name>I2S0</name>
          <description>Inter-IC Sound / Synchronous Audio Interface</description>
          <groupName>I2S</groupName>
-         <prependToName>I2S0</prependToName>
          <headerStructName>I2S</headerStructName>
          <baseAddress>0x4002F000</baseAddress>
          <size>32</size>

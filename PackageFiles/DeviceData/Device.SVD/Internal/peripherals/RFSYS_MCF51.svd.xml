@@ -8,7 +8,6 @@ Devices using this peripheral:
          <name>RFSYS</name>
          <description>Register File</description>
          <groupName>RFSYS</groupName>
-         <prependToName>RFSYS</prependToName>
          <headerStructName>RFSYS</headerStructName>
          <baseAddress>0xFFFF8060</baseAddress>
          <size>8</size>

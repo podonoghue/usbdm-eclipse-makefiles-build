@@ -9,7 +9,6 @@ Devices using this peripheral:
          <name>PDB0</name>
          <description>Programmable Delay Block</description>
          <groupName>PDB</groupName>
-         <prependToName>PDB0_</prependToName>
          <headerStructName>PDB0</headerStructName>
          <baseAddress>0x40036000</baseAddress>
          <size>32</size>

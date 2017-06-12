@@ -9,7 +9,6 @@ Devices using this peripheral:
          <name>SCM</name>
          <description>System Control Module</description>
          <groupName>SCM</groupName>
-         <prependToName>SCM</prependToName>
          <headerStructName>SCM</headerStructName>
          <baseAddress>0x40000000</baseAddress>
          <size>32</size>

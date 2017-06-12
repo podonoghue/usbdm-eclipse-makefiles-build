@@ -81,7 +81,6 @@ Devices using this peripheral:
          <name>CoreDebug</name>
          <description>Core Debug</description>
          <groupName>CoreDebug</groupName>
-         <prependToName>CoreDebug</prependToName>
          <headerStructName>CoreDebug</headerStructName>
          <baseAddress>0xE000ED30</baseAddress>
          <size>32</size>

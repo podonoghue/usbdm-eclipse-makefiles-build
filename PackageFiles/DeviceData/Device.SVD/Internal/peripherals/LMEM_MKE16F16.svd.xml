@@ -9,7 +9,6 @@ Devices using this peripheral:
          <name>LMEM</name>
          <description>Local Memory Controller</description>
          <groupName>LMEM</groupName>
-         <prependToName>LMEM_</prependToName>
          <headerStructName>LMEM</headerStructName>
          <baseAddress>0xE0082000</baseAddress>
          <size>32</size>

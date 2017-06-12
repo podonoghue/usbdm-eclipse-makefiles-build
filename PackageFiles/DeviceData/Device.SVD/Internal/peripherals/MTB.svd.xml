@@ -30,7 +30,6 @@ Devices using this peripheral:
          <name>MTB</name>
          <description>Micro Trace Buffer</description>
          <groupName>MTB</groupName>
-         <prependToName>MTB</prependToName>
          <headerStructName>MTB</headerStructName>
          <baseAddress>0xF0000000</baseAddress>
          <size>32</size>

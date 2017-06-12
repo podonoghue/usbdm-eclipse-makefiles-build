@@ -32,7 +32,6 @@ Devices using this peripheral:
          <name>FTFA</name>
          <description>Flash Memory Interface</description>
          <groupName>FTFA</groupName>
-         <prependToName>FTFA</prependToName>
          <headerStructName>FTFA</headerStructName>
          <baseAddress>0x40020000</baseAddress>
          <size>32</size>

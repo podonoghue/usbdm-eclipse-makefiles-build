@@ -9,7 +9,6 @@ Devices using this peripheral:
          <name>FTFE</name>
          <description>Flash Memory Interface</description>
          <groupName>FTFE</groupName>
-         <prependToName>FTFE</prependToName>
          <headerStructName>FTFE</headerStructName>
          <baseAddress>0x40020000</baseAddress>
          <size>32</size>

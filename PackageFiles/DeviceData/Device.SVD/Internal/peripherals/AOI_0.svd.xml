@@ -11,7 +11,6 @@ Devices using this peripheral:
          <name>AOI</name>
          <description>AND/OR/INVERT module</description>
          <groupName>AOI</groupName>
-         <prependToName>AOI</prependToName>
          <headerStructName>AOI</headerStructName>
          <baseAddress>0x4005B000</baseAddress>
          <size>32</size>

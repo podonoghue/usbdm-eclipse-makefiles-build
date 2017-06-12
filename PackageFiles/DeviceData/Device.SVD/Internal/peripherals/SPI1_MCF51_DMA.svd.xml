@@ -8,7 +8,6 @@ Devices using this peripheral:
          <name>SPI1</name>
          <description>Serial Peripheral Interface</description>
          <groupName>SPI</groupName>
-         <prependToName>SPI1</prependToName>
          <headerStructName>SPI1</headerStructName>
          <baseAddress>0xFFFF81B0</baseAddress>
          <size>32</size>

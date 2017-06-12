@@ -8,7 +8,6 @@ Devices using this peripheral:
          <name>SMC</name>
          <description>System Mode Controller</description>
          <groupName>SMC</groupName>
-         <prependToName>SMC</prependToName>
          <headerStructName>SMC</headerStructName>
          <baseAddress>0xFFFF8118</baseAddress>
          <size>32</size>

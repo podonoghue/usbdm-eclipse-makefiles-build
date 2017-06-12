@@ -7,7 +7,6 @@ Devices using this peripheral:
          <name>DAC0</name>
          <description>12-Bit Digital-to-Analog Converter</description>
          <groupName>DAC</groupName>
-         <prependToName>DAC0</prependToName>
          <headerStructName>DAC</headerStructName>
          <baseAddress>0x400CC000</baseAddress>
          <size>32</size>

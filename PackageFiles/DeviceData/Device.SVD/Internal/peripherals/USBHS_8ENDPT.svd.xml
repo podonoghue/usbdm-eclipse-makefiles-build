@@ -8,7 +8,6 @@ Devices using this peripheral:
          <name>USBHS</name>
          <description>USB HS/FS/LS OTG Controller</description>
          <groupName>USBHS</groupName>
-         <prependToName>USBHS</prependToName>
          <headerStructName>USBHS</headerStructName>
          <baseAddress>0x400A1000</baseAddress>
          <size>32</size>

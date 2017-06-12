@@ -24,7 +24,6 @@ Devices using this peripheral:
          <name>DMAMUX0</name>
          <description>DMA channel multiplexor</description>
          <groupName>DMAMUX</groupName>
-         <prependToName>DMAMUX0</prependToName>
          <headerStructName>DMAMUX</headerStructName>
          <baseAddress>0x40021000</baseAddress>
          <size>32</size>

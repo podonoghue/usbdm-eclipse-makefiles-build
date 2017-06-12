@@ -9,7 +9,6 @@ Devices using this peripheral:
          <name>PORTE</name>
          <description>Pin Control and Interrupts</description>
          <groupName>PORT</groupName>
-         <prependToName>PORTE</prependToName>
          <headerStructName>PORTE</headerStructName>
          <baseAddress>0x4004A000</baseAddress>
          <size>32</size>

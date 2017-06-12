@@ -22,7 +22,7 @@
    <width>32</width>
    <peripherals>
       <xi:include href="peripherals/ACMP0_MKE.svd.xml"/>
-      <peripheral derivedFrom="ACMP0"><name>ACMP1</name>      <prependToName>ACMP1</prependToName><baseAddress>0x40074000</baseAddress></peripheral>
+      <peripheral derivedFrom="ACMP0"><name>ACMP1</name><baseAddress>0x40074000</baseAddress></peripheral>
       <xi:include href="peripherals/ADC0_MKE04.svd.xml"/>
       <xi:include href="peripherals/BP_CM0.svd.xml"/>
       <xi:include href="peripherals/CRC0_0x40032000.svd.xml"/>
@@ -32,12 +32,12 @@
       <xi:include href="peripherals/FTM0_2CH_MKE.svd.xml"/>
       <xi:include href="peripherals/FTM2_6CH_MKE.svd.xml"/>
       <xi:include href="peripherals/FTMRE_MKE04.svd.xml"/>
-      <peripheral derivedFrom="FGPIOA"><name>GPIOA</name>      <prependToName>GPIOA</prependToName><baseAddress>0x400FF000</baseAddress></peripheral>
+      <peripheral derivedFrom="FGPIOA"><name>GPIOA</name><baseAddress>0x400FF000</baseAddress></peripheral>
       <xi:include href="peripherals/I2C0_MKE.svd.xml"/>
       <xi:include href="peripherals/ICS_MKE.svd.xml"/>
       <xi:include href="peripherals/IRQ_MKE.svd.xml"/>
       <xi:include href="peripherals/KBI0_MKE02.svd.xml"/>
-      <peripheral derivedFrom="KBI0"><name>KBI1</name>      <prependToName>KBI1</prependToName><baseAddress>0x4007A000</baseAddress></peripheral>
+      <peripheral derivedFrom="KBI0"><name>KBI1</name><baseAddress>0x4007A000</baseAddress></peripheral>
       <xi:include href="peripherals/MCM_MKE02Z2.svd.xml"/>
       <xi:include href="peripherals/NV_FTMRE.svd.xml"/>
       <xi:include href="peripherals/NVIC_CM0.svd.xml"/>

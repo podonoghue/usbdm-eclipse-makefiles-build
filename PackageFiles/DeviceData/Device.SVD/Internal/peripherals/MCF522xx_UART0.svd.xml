@@ -10,7 +10,6 @@ Devices using this peripheral:
          <name>UART0</name>
          <description>Universal Asynchronous Rx/Tx</description>
          <groupName>UART</groupName>
-         <prependToName>UART0</prependToName>
          <headerStructName>UART</headerStructName>
          <baseAddress>0x40000200</baseAddress>
          <size>32</size>

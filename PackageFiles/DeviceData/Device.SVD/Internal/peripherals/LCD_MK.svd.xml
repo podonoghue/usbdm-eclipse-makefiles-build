@@ -17,7 +17,6 @@ Devices using this peripheral:
          <name>LCD</name>
          <description>Segment Liquid Crystal Display</description>
          <groupName>LCD</groupName>
-         <prependToName>LCD</prependToName>
          <headerStructName>LCD</headerStructName>
          <baseAddress>0x400BE000</baseAddress>
          <size>32</size>

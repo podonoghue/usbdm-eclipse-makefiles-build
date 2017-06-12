@@ -7,183 +7,183 @@ Devices using this vector table:
    <description>LPC11Cxx VectorTable</description>
    <interrupt>
       <name>PIO0_0</name>
+      <description>System configuration</description>
       <value>0</value>
       <peripheral>SYSCON</peripheral>
-      <description>System configuration</description>
    </interrupt>
    <interrupt>
       <name>PIO0_1</name>
+      <description>System configuration</description>
       <value>1</value>
       <peripheral>SYSCON</peripheral>
-      <description>System configuration</description>
    </interrupt>
    <interrupt>
       <name>PIO0_2</name>
+      <description>System configuration</description>
       <value>2</value>
       <peripheral>SYSCON</peripheral>
-      <description>System configuration</description>
    </interrupt>
    <interrupt>
       <name>PIO0_3</name>
+      <description>System configuration</description>
       <value>3</value>
       <peripheral>SYSCON</peripheral>
-      <description>System configuration</description>
    </interrupt>
    <interrupt>
       <name>PIO0_4</name>
+      <description>System configuration</description>
       <value>4</value>
       <peripheral>SYSCON</peripheral>
-      <description>System configuration</description>
    </interrupt>
    <interrupt>
       <name>PIO0_5</name>
+      <description>System configuration</description>
       <value>5</value>
       <peripheral>SYSCON</peripheral>
-      <description>System configuration</description>
    </interrupt>
    <interrupt>
       <name>PIO0_6</name>
+      <description>System configuration</description>
       <value>6</value>
       <peripheral>SYSCON</peripheral>
-      <description>System configuration</description>
    </interrupt>
    <interrupt>
       <name>PIO0_7</name>
+      <description>System configuration</description>
       <value>7</value>
       <peripheral>SYSCON</peripheral>
-      <description>System configuration</description>
    </interrupt>
    <interrupt>
       <name>PIO0_8</name>
+      <description>System configuration</description>
       <value>8</value>
       <peripheral>SYSCON</peripheral>
-      <description>System configuration</description>
    </interrupt>
    <interrupt>
       <name>PIO0_9</name>
+      <description>System configuration</description>
       <value>9</value>
       <peripheral>SYSCON</peripheral>
-      <description>System configuration</description>
    </interrupt>
    <interrupt>
       <name>PIO0_10</name>
+      <description>System configuration</description>
       <value>10</value>
       <peripheral>SYSCON</peripheral>
-      <description>System configuration</description>
    </interrupt>
    <interrupt>
       <name>PIO0_11</name>
+      <description>System configuration</description>
       <value>11</value>
       <peripheral>SYSCON</peripheral>
-      <description>System configuration</description>
    </interrupt>
    <interrupt>
       <name>PIO1_0</name>
+      <description>System configuration</description>
       <value>12</value>
       <peripheral>SYSCON</peripheral>
-      <description>System configuration</description>
    </interrupt>
    <interrupt>
       <name>C_CAN</name>
+      <description>C_CAN controller</description>
       <value>13</value>
       <peripheral>C_CAN</peripheral>
-      <description>C_CAN controller</description>
    </interrupt>
    <interrupt>
       <name>SPI1</name>
+      <description>SPI0</description>
       <value>14</value>
       <peripheral>SPI1</peripheral>
-      <description>SPI0</description>
    </interrupt>
    <interrupt>
       <name>I2C</name>
+      <description>I2C-bus interface</description>
       <value>15</value>
       <peripheral>I2C</peripheral>
-      <description>I2C-bus interface</description>
    </interrupt>
    <interrupt>
       <name>CT16B0</name>
+      <description>16-bit counter/timer</description>
       <value>16</value>
       <peripheral>CT16B0</peripheral>
-      <description>16-bit counter/timer</description>
    </interrupt>
    <interrupt>
       <name>CT16B1</name>
+      <description>16-bit counter/timer</description>
       <value>17</value>
       <peripheral>CT16B1</peripheral>
-      <description>16-bit counter/timer</description>
    </interrupt>
    <interrupt>
       <name>CT32B0</name>
+      <description>32-bit counter/timer</description>
       <value>18</value>
       <peripheral>CT32B0</peripheral>
-      <description>32-bit counter/timer</description>
    </interrupt>
    <interrupt>
       <name>CT32B1</name>
+      <description>32-bit counter/timer</description>
       <value>19</value>
       <peripheral>CT32B1</peripheral>
-      <description>32-bit counter/timer</description>
    </interrupt>
    <interrupt>
       <name>SPI0</name>
+      <description>SPI0</description>
       <value>20</value>
       <peripheral>SPI0</peripheral>
-      <description>SPI0</description>
    </interrupt>
    <interrupt>
       <name>UART</name>
+      <description>UART</description>
       <value>21</value>
       <peripheral>UART</peripheral>
-      <description>UART</description>
    </interrupt>
    <interrupt>
       <name>ADC</name>
+      <description>10-bit ADC</description>
       <value>24</value>
       <peripheral>ADC</peripheral>
-      <description>10-bit ADC</description>
    </interrupt>
    <interrupt>
       <name>WDT</name>
+      <description>Windowed WatchDog Timer</description>
       <value>25</value>
       <peripheral>WWDT</peripheral>
-      <description>Windowed WatchDog Timer</description>
    </interrupt>
    <interrupt>
       <name>BOD</name>
+      <description>System configuration</description>
       <value>26</value>
       <peripheral>SYSCON</peripheral>
-      <description>System configuration</description>
    </interrupt>
    <interrupt>
       <name>FMC</name>
+      <description>Flash programming firmware</description>
       <value>27</value>
       <peripheral>FLASHCTRL</peripheral>
-      <description>Flash programming firmware</description>
    </interrupt>
    <interrupt>
       <name>GPIO3</name>
+      <description>GPIO0</description>
       <value>28</value>
       <peripheral>GPIO3</peripheral>
-      <description>GPIO0</description>
    </interrupt>
    <interrupt>
       <name>GPIO2</name>
+      <description>GPIO0</description>
       <value>29</value>
       <peripheral>GPIO2</peripheral>
-      <description>GPIO0</description>
    </interrupt>
    <interrupt>
       <name>GPIO1</name>
+      <description>GPIO0</description>
       <value>30</value>
       <peripheral>GPIO1</peripheral>
-      <description>GPIO0</description>
    </interrupt>
    <interrupt>
       <name>GPIO0</name>
+      <description>GPIO0</description>
       <value>31</value>
       <peripheral>GPIO0</peripheral>
-      <description>GPIO0</description>
    </interrupt>
 </interrupts>
 

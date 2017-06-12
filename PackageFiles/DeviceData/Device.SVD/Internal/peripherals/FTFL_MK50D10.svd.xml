@@ -13,7 +13,6 @@ Devices using this peripheral:
          <name>FTFL</name>
          <description>Flash Memory Interface</description>
          <groupName>FTFL</groupName>
-         <prependToName>FTFL</prependToName>
          <headerStructName>FTFL</headerStructName>
          <baseAddress>0x40020000</baseAddress>
          <size>32</size>

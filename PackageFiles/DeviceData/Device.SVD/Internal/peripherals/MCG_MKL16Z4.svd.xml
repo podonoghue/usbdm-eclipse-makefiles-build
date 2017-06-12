@@ -12,7 +12,6 @@ Devices using this peripheral:
          <name>MCG</name>
          <description>Multipurpose Clock Generator module</description>
          <groupName>MCG</groupName>
-         <prependToName>MCG</prependToName>
          <headerStructName>MCG</headerStructName>
          <baseAddress>0x40064000</baseAddress>
          <size>32</size>

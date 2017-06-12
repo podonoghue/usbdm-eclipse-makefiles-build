@@ -7,7 +7,6 @@ Devices using this peripheral:
          <name>QSPI0</name>
          <description>QSPI</description>
          <groupName>QSPI</groupName>
-         <prependToName>QSPI0</prependToName>
          <headerStructName>QSPI</headerStructName>
          <baseAddress>0x4005A000</baseAddress>
          <size>32</size>

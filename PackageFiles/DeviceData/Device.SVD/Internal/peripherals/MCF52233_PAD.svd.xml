@@ -9,7 +9,6 @@ Devices using this peripheral:
          <name>PAD</name>
          <description>Pin Configuration</description>
          <groupName>PAD</groupName>
-         <prependToName>PAD</prependToName>
          <headerStructName>PAD</headerStructName>
          <baseAddress>0x40100078</baseAddress>
          <size>32</size>

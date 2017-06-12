@@ -8,7 +8,6 @@ Devices using this peripheral:
          <name>PCTLA</name>
          <description>Port Pin Control</description>
          <groupName>PCTLA</groupName>
-         <prependToName>PCTLA</prependToName>
          <headerStructName>PCTL</headerStructName>
          <baseAddress>0xFFFF9200</baseAddress>
          <size>8</size>

@@ -7,7 +7,6 @@ Devices using this peripheral:
          <name>CMP1</name>
          <description>Comparator, Voltage Ref, D-to-A Converter and Analog Mux</description>
          <groupName>CMP</groupName>
-         <prependToName>CMP1</prependToName>
          <headerStructName>CMP1</headerStructName>
          <baseAddress>0x40073008</baseAddress>
          <size>32</size>

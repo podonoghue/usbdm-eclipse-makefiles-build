@@ -9,7 +9,6 @@ Devices using this peripheral:
          <name>LPIT0</name>
          <description>Low Power Periodic Interrupt Timer</description>
          <groupName>LPIT</groupName>
-         <prependToName>LPIT0_</prependToName>
          <headerStructName>LPIT0</headerStructName>
          <baseAddress>0x40037000</baseAddress>
          <size>32</size>

@@ -7,7 +7,6 @@ Devices using this peripheral:
          <name>SMC</name>
          <description>System Mode Controller</description>
          <groupName>SMC</groupName>
-         <prependToName>SMC</prependToName>
          <headerStructName>SMC</headerStructName>
          <baseAddress>0x4007E000</baseAddress>
          <size>32</size>
@@ -241,7 +240,7 @@ This field controls which VLLS sub-mode to enter if STOPM=VLLSx</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="LLSM" > <name>VLLSM</name> <?ignoreOverlap?> <?hide?> </field>
+                  <field derivedFrom="LLSM" > <name>VLLSM</name> <bitOffset>0</bitOffset> <?ignoreOverlap?> <?hide?> </field>
                   <field>
                      <name>LPOPO</name>
                      <description>LPO Power Option\n

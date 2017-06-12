@@ -7,7 +7,6 @@ Devices using this peripheral:
          <name>TSI</name>
          <description>Touch sense input</description>
          <groupName>TSI</groupName>
-         <prependToName>TSI_</prependToName>
          <headerStructName>TSI</headerStructName>
          <baseAddress>0x40045000</baseAddress>
          <size>32</size>

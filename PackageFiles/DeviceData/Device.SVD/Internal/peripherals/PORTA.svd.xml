@@ -32,7 +32,6 @@ Devices using this peripheral:
          <name>PORTA</name>
          <description>Pin Control and Interrupts</description>
          <groupName>PORT</groupName>
-         <prependToName>PORTA</prependToName>
          <headerStructName>PORT</headerStructName>
          <baseAddress>0x40049000</baseAddress>
          <size>32</size>

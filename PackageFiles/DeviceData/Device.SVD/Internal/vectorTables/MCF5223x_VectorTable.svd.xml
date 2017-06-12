@@ -7,273 +7,273 @@ Devices using this vector table:
    <description>MCF5223x VectorTable</description>
    <interrupt>
       <name>EPORT1</name>
-      <value>65</value>
       <description>Edge port flag 1</description>
+      <value>65</value>
    </interrupt>
    <interrupt>
       <name>EPORT2</name>
-      <value>66</value>
       <description>Edge port flag 2</description>
+      <value>66</value>
    </interrupt>
    <interrupt>
       <name>EPORT3</name>
-      <value>67</value>
       <description>Edge port flag 3</description>
+      <value>67</value>
    </interrupt>
    <interrupt>
       <name>EPORT4</name>
-      <value>68</value>
       <description>Edge port flag 4</description>
+      <value>68</value>
    </interrupt>
    <interrupt>
       <name>EPORT5</name>
-      <value>69</value>
       <description>Edge port flag 5</description>
+      <value>69</value>
    </interrupt>
    <interrupt>
       <name>EPORT6</name>
-      <value>70</value>
       <description>Edge port flag 6</description>
+      <value>70</value>
    </interrupt>
    <interrupt>
       <name>EPORT7</name>
-      <value>71</value>
       <description>Edge port flag 7</description>
+      <value>71</value>
    </interrupt>
    <interrupt>
       <name>SCM</name>
-      <value>72</value>
       <description>Software watchdog timeout</description>
+      <value>72</value>
    </interrupt>
    <interrupt>
       <name>DMA_CH0</name>
-      <value>73</value>
       <description>DMA Channel 0 transfer complete</description>
+      <value>73</value>
    </interrupt>
    <interrupt>
       <name>DMA_CH1</name>
-      <value>74</value>
       <description>DMA Channel 1 transfer complete</description>
+      <value>74</value>
    </interrupt>
    <interrupt>
       <name>DMA_CH2</name>
-      <value>75</value>
       <description>DMA Channel 2 transfer complete</description>
+      <value>75</value>
    </interrupt>
    <interrupt>
       <name>DMA_CH3</name>
-      <value>76</value>
       <description>DMA Channel 3 transfer complete</description>
+      <value>76</value>
    </interrupt>
    <interrupt>
       <name>UART0</name>
-      <value>77</value>
       <description>UART 0 interrupt</description>
+      <value>77</value>
    </interrupt>
    <interrupt>
       <name>UART1</name>
-      <value>78</value>
       <description>UART 1 interrupt</description>
+      <value>78</value>
    </interrupt>
    <interrupt>
       <name>UART2</name>
-      <value>79</value>
       <description>UART 2 interrupt</description>
+      <value>79</value>
    </interrupt>
    <interrupt>
       <name>I2C</name>
-      <value>81</value>
       <description>I2C interrupt</description>
+      <value>81</value>
    </interrupt>
    <interrupt>
       <name>QSPI</name>
-      <value>82</value>
       <description>QSPI interrupt</description>
+      <value>82</value>
    </interrupt>
    <interrupt>
       <name>DTIM0</name>
-      <value>83</value>
       <description>DMA Timer 0 interrupt</description>
+      <value>83</value>
    </interrupt>
    <interrupt>
       <name>DTIM1</name>
-      <value>84</value>
       <description>DMA Timer 1 interrupt</description>
+      <value>84</value>
    </interrupt>
    <interrupt>
       <name>DTIM2</name>
-      <value>85</value>
       <description>DMA Timer 2 interrupt</description>
+      <value>85</value>
    </interrupt>
    <interrupt>
       <name>DTIM3</name>
-      <value>86</value>
       <description>DMA Timer 3 interrupt</description>
+      <value>86</value>
    </interrupt>
    <interrupt>
       <name>FEC_TF</name>
-      <value>87</value>
       <description>Transmit frame interrupt</description>
+      <value>87</value>
    </interrupt>
    <interrupt>
       <name>FEC_TB</name>
-      <value>88</value>
       <description>Transmit buffer interrupt</description>
+      <value>88</value>
    </interrupt>
    <interrupt>
       <name>FEC_UN</name>
-      <value>89</value>
       <description>Transmit FIFO underrun</description>
+      <value>89</value>
    </interrupt>
    <interrupt>
       <name>FEC_RL</name>
-      <value>90</value>
       <description>Collision retry limit</description>
+      <value>90</value>
    </interrupt>
    <interrupt>
       <name>FEC_RF</name>
-      <value>91</value>
       <description>Receive frame interrupt</description>
+      <value>91</value>
    </interrupt>
    <interrupt>
       <name>FEC_RB</name>
-      <value>92</value>
       <description>Receive buffer interrupt</description>
+      <value>92</value>
    </interrupt>
    <interrupt>
       <name>FEC_MII</name>
-      <value>93</value>
       <description>MII interrupt</description>
+      <value>93</value>
    </interrupt>
    <interrupt>
       <name>FEC_LC</name>
-      <value>94</value>
       <description>Late Collision</description>
+      <value>94</value>
    </interrupt>
    <interrupt>
       <name>FEC_HBERR</name>
-      <value>95</value>
       <description>Heart-beat error</description>
+      <value>95</value>
    </interrupt>
    <interrupt>
       <name>FEC_GRA</name>
-      <value>96</value>
       <description>Graceful stop complete</description>
+      <value>96</value>
    </interrupt>
    <interrupt>
       <name>FEC_EBERR</name>
-      <value>97</value>
       <description>Ethernet bus error</description>
+      <value>97</value>
    </interrupt>
    <interrupt>
       <name>FEC_BABT</name>
-      <value>98</value>
       <description>Babbling transmit error</description>
+      <value>98</value>
    </interrupt>
    <interrupt>
       <name>FEC_BABR</name>
-      <value>99</value>
       <description>Babbling receive error</description>
+      <value>99</value>
    </interrupt>
    <interrupt>
       <name>EPHY</name>
-      <value>100</value>
       <description>EPHY interrupt</description>
+      <value>100</value>
    </interrupt>
    <interrupt>
       <name>GPT_TOF</name>
-      <value>105</value>
       <description>GPT Timer overflow</description>
+      <value>105</value>
    </interrupt>
    <interrupt>
       <name>GPT_PAIF</name>
-      <value>106</value>
       <description>GPT Pulse accumulator input</description>
+      <value>106</value>
    </interrupt>
    <interrupt>
       <name>GPT_PAOVF</name>
-      <value>107</value>
       <description>GPT Pulse accumulator overflow</description>
+      <value>107</value>
    </interrupt>
    <interrupt>
       <name>GPT_C0F</name>
-      <value>108</value>
       <description>GPT Timer channel 0</description>
+      <value>108</value>
    </interrupt>
    <interrupt>
       <name>GPT_C1F</name>
-      <value>109</value>
       <description>GPT Timer channel 1</description>
+      <value>109</value>
    </interrupt>
    <interrupt>
       <name>GPT_C2F</name>
-      <value>110</value>
       <description>GPT Timer channel 2</description>
+      <value>110</value>
    </interrupt>
    <interrupt>
       <name>GPT_C3F</name>
-      <value>111</value>
       <description>GPT Timer channel 3</description>
+      <value>111</value>
    </interrupt>
    <interrupt>
       <name>PMM</name>
-      <value>112</value>
       <description>LVD</description>
+      <value>112</value>
    </interrupt>
    <interrupt>
       <name>ADC_ADCA</name>
-      <value>113</value>
       <description>ADCA conversion complete</description>
+      <value>113</value>
    </interrupt>
    <interrupt>
       <name>ADC_ADCB</name>
-      <value>114</value>
       <description>ADCB conversion complete</description>
+      <value>114</value>
    </interrupt>
    <interrupt>
       <name>ADC_ADCINT</name>
-      <value>115</value>
       <description>ADC Interrupt</description>
+      <value>115</value>
    </interrupt>
    <interrupt>
       <name>PWM</name>
-      <value>116</value>
       <description>PWM interrupt</description>
+      <value>116</value>
    </interrupt>
    <interrupt>
       <name>RNGA</name>
-      <value>117</value>
       <description>RNGA interrupt</description>
+      <value>117</value>
    </interrupt>
    <interrupt>
       <name>PIT0</name>
-      <value>119</value>
       <description>PIT 0 interrupt</description>
+      <value>119</value>
    </interrupt>
    <interrupt>
       <name>PIT1</name>
-      <value>120</value>
       <description>PIT 1 interrupt</description>
+      <value>120</value>
    </interrupt>
    <interrupt>
       <name>CFM_CBEIF</name>
-      <value>122</value>
       <description>CFM SGFM buffer empty</description>
+      <value>122</value>
    </interrupt>
    <interrupt>
       <name>CFM_CCIF</name>
-      <value>123</value>
       <description>CFM SGFM command complete</description>
+      <value>123</value>
    </interrupt>
    <interrupt>
       <name>CFM_PVIF</name>
-      <value>124</value>
       <description>CFM Protection violation</description>
+      <value>124</value>
    </interrupt>
    <interrupt>
       <name>RTC</name>
-      <value>127</value>
       <description>RTC interrupt</description>
+      <value>127</value>
    </interrupt>
 </interrupts>
 

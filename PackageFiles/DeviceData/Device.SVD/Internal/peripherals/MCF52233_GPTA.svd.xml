@@ -9,7 +9,6 @@ Devices using this peripheral:
          <name>GPTA</name>
          <description>None</description>
          <groupName>GPTA</groupName>
-         <prependToName>GPTA</prependToName>
          <headerStructName>GPTA</headerStructName>
          <baseAddress>0x401A0000</baseAddress>
          <size>32</size>

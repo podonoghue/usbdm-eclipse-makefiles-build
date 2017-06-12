@@ -10,7 +10,6 @@ Devices using this peripheral:
          <name>ENET</name>
          <description>Ethernet MAC-NET Core</description>
          <groupName>ENET</groupName>
-         <prependToName>ENET</prependToName>
          <headerStructName>ENET</headerStructName>
          <baseAddress>0x400C0000</baseAddress>
          <size>32</size>

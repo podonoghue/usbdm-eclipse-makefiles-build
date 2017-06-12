@@ -8,7 +8,6 @@ Devices using this peripheral:
          <name>LPSPI0</name>
          <description>Low power SPI</description>
          <groupName>LPSPI</groupName>
-         <prependToName>LPSPI0_</prependToName>
          <headerStructName>LPSPI0</headerStructName>
          <baseAddress>0x4002C000</baseAddress>
          <size>32</size>

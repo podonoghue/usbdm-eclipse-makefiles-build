@@ -8,7 +8,6 @@ Devices using this peripheral:
          <name>SCG</name>
          <description>System Clock Generator</description>
          <groupName>SCG</groupName>
-         <prependToName>SCG_</prependToName>
          <headerStructName>SCG</headerStructName>
          <baseAddress>0x40064000</baseAddress>
          <size>32</size>

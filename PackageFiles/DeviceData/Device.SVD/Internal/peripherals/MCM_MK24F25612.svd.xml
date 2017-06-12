@@ -7,7 +7,6 @@ Devices using this peripheral:
          <name>MCM</name>
          <description>Core Platform Miscellaneous Control Module</description>
          <groupName>MCM</groupName>
-         <prependToName>MCM</prependToName>
          <headerStructName>MCM</headerStructName>
          <baseAddress>0xE0080000</baseAddress>
          <size>32</size>

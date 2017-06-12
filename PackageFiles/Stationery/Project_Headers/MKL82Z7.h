@@ -3355,7 +3355,7 @@ typedef struct {                                /*       LPTMR0 Structure       
 */
 
 /* ================================================================================ */
-/* ================           LPUART0 (file:LPUART0_MKL82Z7)       ================ */
+/* ================           LPUART0 (file:LPUART0_FIFO_0x40054000)       ================ */
 /* ================================================================================ */
 
 /**
@@ -3367,14 +3367,14 @@ typedef struct {                                /*       LPTMR0 Structure       
 * @{
 */
 typedef struct {                                /*       LPUART0 Structure                                            */
-   __IO uint32_t  BAUD;                         /**< 0000: LPUART Baud Rate Register                                    */
-   __IO uint32_t  STAT;                         /**< 0004: LPUART Status Register                                       */
-   __IO uint32_t  CTRL;                         /**< 0008: LPUART Control Register                                      */
-   __IO uint32_t  DATA;                         /**< 000C: LPUART Data Register                                         */
-   __IO uint32_t  MATCH;                        /**< 0010: LPUART Match Address Register                                */
-   __IO uint32_t  MODIR;                        /**< 0014: LPUART Modem IrDA Register                                   */
-   __IO uint32_t  FIFO;                         /**< 0018: LPUART FIFO Register                                         */
-   __IO uint32_t  WATER;                        /**< 001C: LPUART Watermark Register                                    */
+   __IO uint32_t  BAUD;                         /**< 0000: Baud Rate Register                                           */
+   __IO uint32_t  STAT;                         /**< 0004: Status Register                                              */
+   __IO uint32_t  CTRL;                         /**< 0008: Control Register                                             */
+   __IO uint32_t  DATA;                         /**< 000C: Data Register                                                */
+   __IO uint32_t  MATCH;                        /**< 0010: Match Address Register                                       */
+   __IO uint32_t  MODIR;                        /**< 0014: MODEM IrDA register                                          */
+   __IO uint32_t  FIFO;                         /**< 0018: FIFO Register                                                */
+   __IO uint32_t  WATER;                        /**< 001C: Watermark Register                                           */
 } LPUART_Type;
 
 /**
@@ -3568,36 +3568,9 @@ typedef struct {                                /*       LPUART0 Structure      
 #define LPUART_CTRL_R8T9_SHIFT                   (31U)                                               /*!< LPUART0_CTRL.R8T9 Position              */
 #define LPUART_CTRL_R8T9(x)                      (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< LPUART0_CTRL.R8T9 Field                 */
 /* ------- DATA Bit Fields                          ------ */
-#define LPUART_DATA_R0T0_MASK                    (0x1U)                                              /*!< LPUART0_DATA.R0T0 Mask                  */
-#define LPUART_DATA_R0T0_SHIFT                   (0U)                                                /*!< LPUART0_DATA.R0T0 Position              */
-#define LPUART_DATA_R0T0(x)                      (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPUART0_DATA.R0T0 Field                 */
-#define LPUART_DATA_R1T1_MASK                    (0x2U)                                              /*!< LPUART0_DATA.R1T1 Mask                  */
-#define LPUART_DATA_R1T1_SHIFT                   (1U)                                                /*!< LPUART0_DATA.R1T1 Position              */
-#define LPUART_DATA_R1T1(x)                      (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< LPUART0_DATA.R1T1 Field                 */
-#define LPUART_DATA_R2T2_MASK                    (0x4U)                                              /*!< LPUART0_DATA.R2T2 Mask                  */
-#define LPUART_DATA_R2T2_SHIFT                   (2U)                                                /*!< LPUART0_DATA.R2T2 Position              */
-#define LPUART_DATA_R2T2(x)                      (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LPUART0_DATA.R2T2 Field                 */
-#define LPUART_DATA_R3T3_MASK                    (0x8U)                                              /*!< LPUART0_DATA.R3T3 Mask                  */
-#define LPUART_DATA_R3T3_SHIFT                   (3U)                                                /*!< LPUART0_DATA.R3T3 Position              */
-#define LPUART_DATA_R3T3(x)                      (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< LPUART0_DATA.R3T3 Field                 */
-#define LPUART_DATA_R4T4_MASK                    (0x10U)                                             /*!< LPUART0_DATA.R4T4 Mask                  */
-#define LPUART_DATA_R4T4_SHIFT                   (4U)                                                /*!< LPUART0_DATA.R4T4 Position              */
-#define LPUART_DATA_R4T4(x)                      (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< LPUART0_DATA.R4T4 Field                 */
-#define LPUART_DATA_R5T5_MASK                    (0x20U)                                             /*!< LPUART0_DATA.R5T5 Mask                  */
-#define LPUART_DATA_R5T5_SHIFT                   (5U)                                                /*!< LPUART0_DATA.R5T5 Position              */
-#define LPUART_DATA_R5T5(x)                      (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPUART0_DATA.R5T5 Field                 */
-#define LPUART_DATA_R6T6_MASK                    (0x40U)                                             /*!< LPUART0_DATA.R6T6 Mask                  */
-#define LPUART_DATA_R6T6_SHIFT                   (6U)                                                /*!< LPUART0_DATA.R6T6 Position              */
-#define LPUART_DATA_R6T6(x)                      (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPUART0_DATA.R6T6 Field                 */
-#define LPUART_DATA_R7T7_MASK                    (0x80U)                                             /*!< LPUART0_DATA.R7T7 Mask                  */
-#define LPUART_DATA_R7T7_SHIFT                   (7U)                                                /*!< LPUART0_DATA.R7T7 Position              */
-#define LPUART_DATA_R7T7(x)                      (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< LPUART0_DATA.R7T7 Field                 */
-#define LPUART_DATA_R8T8_MASK                    (0x100U)                                            /*!< LPUART0_DATA.R8T8 Mask                  */
-#define LPUART_DATA_R8T8_SHIFT                   (8U)                                                /*!< LPUART0_DATA.R8T8 Position              */
-#define LPUART_DATA_R8T8(x)                      (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< LPUART0_DATA.R8T8 Field                 */
-#define LPUART_DATA_R9T9_MASK                    (0x200U)                                            /*!< LPUART0_DATA.R9T9 Mask                  */
-#define LPUART_DATA_R9T9_SHIFT                   (9U)                                                /*!< LPUART0_DATA.R9T9 Position              */
-#define LPUART_DATA_R9T9(x)                      (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< LPUART0_DATA.R9T9 Field                 */
+#define LPUART_DATA_RT_MASK                      (0x3FFU)                                            /*!< LPUART0_DATA.RT Mask                    */
+#define LPUART_DATA_RT_SHIFT                     (0U)                                                /*!< LPUART0_DATA.RT Position                */
+#define LPUART_DATA_RT(x)                        (((uint32_t)(((uint32_t)(x))<<0U))&0x3FFUL)         /*!< LPUART0_DATA.RT Field                   */
 #define LPUART_DATA_IDLINE_MASK                  (0x800U)                                            /*!< LPUART0_DATA.IDLINE Mask                */
 #define LPUART_DATA_IDLINE_SHIFT                 (11U)                                               /*!< LPUART0_DATA.IDLINE Position            */
 #define LPUART_DATA_IDLINE(x)                    (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< LPUART0_DATA.IDLINE Field               */
@@ -4231,11 +4204,11 @@ typedef struct {                                /*       LTC0 Structure         
 */
 
 /* ================================================================================ */
-/* ================           MCG (file:MCG_MKL82Z7)               ================ */
+/* ================           MCG (file:MCG_MK82F25615)            ================ */
 /* ================================================================================ */
 
 /**
- * @brief Multipurpose Clock Generator module
+ * @brief Multipurpose Clock Generator module with ICS48M
  */
 /**
 * @addtogroup MCG_structs_GROUP MCG struct
@@ -4243,20 +4216,20 @@ typedef struct {                                /*       LTC0 Structure         
 * @{
 */
 typedef struct {                                /*       MCG Structure                                                */
-   __IO uint8_t   C1;                           /**< 0000: MCG Control 1 Register                                       */
-   __IO uint8_t   C2;                           /**< 0001: MCG Control 2 Register                                       */
-   __IO uint8_t   C3;                           /**< 0002: MCG Control 3 Register                                       */
-   __IO uint8_t   C4;                           /**< 0003: MCG Control 4 Register                                       */
-   __IO uint8_t   C5;                           /**< 0004: MCG Control 5 Register                                       */
-   __IO uint8_t   C6;                           /**< 0005: MCG Control 6 Register                                       */
-   __IO uint8_t   S;                            /**< 0006: MCG Status Register                                          */
+   __IO uint8_t   C1;                           /**< 0000: Control 1 Register                                           */
+   __IO uint8_t   C2;                           /**< 0001: Control 2 Register                                           */
+   __IO uint8_t   C3;                           /**< 0002: Control 3 Register                                           */
+   __IO uint8_t   C4;                           /**< 0003: Control 4 Register                                           */
+   __IO uint8_t   C5;                           /**< 0004: Control 5 Register                                           */
+   __IO uint8_t   C6;                           /**< 0005: Control 6 Register                                           */
+   __IO uint8_t   S;                            /**< 0006: Status Register                                              */
         uint8_t   RESERVED_0;                  
-   __IO uint8_t   SC;                           /**< 0008: MCG Status and Control Register                              */
+   __IO uint8_t   SC;                           /**< 0008: Status and Control Register                                  */
         uint8_t   RESERVED_1;                  
-   __IO uint8_t   ATCVH;                        /**< 000A: MCG Auto Trim Compare Value High Register                    */
-   __IO uint8_t   ATCVL;                        /**< 000B: MCG Auto Trim Compare Value Low Register                     */
-   __IO uint8_t   C7;                           /**< 000C: MCG Control 7 Register                                       */
-   __IO uint8_t   C8;                           /**< 000D: MCG Control 8 Register                                       */
+   __IO uint8_t   ATCVH;                        /**< 000A: ATM Compare Value High                                       */
+   __IO uint8_t   ATCVL;                        /**< 000B: ATM Compare Value Low                                        */
+   __IO uint8_t   C7;                           /**< 000C: Control 7 Register                                           */
+   __IO uint8_t   C8;                           /**< 000D: Control 8 Register                                           */
 } MCG_Type;
 
 /**
@@ -4295,15 +4268,15 @@ typedef struct {                                /*       MCG Structure          
 #define MCG_C2_LP_MASK                           (0x2U)                                              /*!< MCG_C2.LP Mask                          */
 #define MCG_C2_LP_SHIFT                          (1U)                                                /*!< MCG_C2.LP Position                      */
 #define MCG_C2_LP(x)                             (((uint8_t)(((uint8_t)(x))<<1U))&0x2UL)             /*!< MCG_C2.LP Field                         */
-#define MCG_C2_EREFS_MASK                        (0x4U)                                              /*!< MCG_C2.EREFS Mask                       */
-#define MCG_C2_EREFS_SHIFT                       (2U)                                                /*!< MCG_C2.EREFS Position                   */
-#define MCG_C2_EREFS(x)                          (((uint8_t)(((uint8_t)(x))<<2U))&0x4UL)             /*!< MCG_C2.EREFS Field                      */
-#define MCG_C2_HGO_MASK                          (0x8U)                                              /*!< MCG_C2.HGO Mask                         */
-#define MCG_C2_HGO_SHIFT                         (3U)                                                /*!< MCG_C2.HGO Position                     */
-#define MCG_C2_HGO(x)                            (((uint8_t)(((uint8_t)(x))<<3U))&0x8UL)             /*!< MCG_C2.HGO Field                        */
-#define MCG_C2_RANGE_MASK                        (0x30U)                                             /*!< MCG_C2.RANGE Mask                       */
-#define MCG_C2_RANGE_SHIFT                       (4U)                                                /*!< MCG_C2.RANGE Position                   */
-#define MCG_C2_RANGE(x)                          (((uint8_t)(((uint8_t)(x))<<4U))&0x30UL)            /*!< MCG_C2.RANGE Field                      */
+#define MCG_C2_EREFS0_MASK                       (0x4U)                                              /*!< MCG_C2.EREFS0 Mask                      */
+#define MCG_C2_EREFS0_SHIFT                      (2U)                                                /*!< MCG_C2.EREFS0 Position                  */
+#define MCG_C2_EREFS0(x)                         (((uint8_t)(((uint8_t)(x))<<2U))&0x4UL)             /*!< MCG_C2.EREFS0 Field                     */
+#define MCG_C2_HGO0_MASK                         (0x8U)                                              /*!< MCG_C2.HGO0 Mask                        */
+#define MCG_C2_HGO0_SHIFT                        (3U)                                                /*!< MCG_C2.HGO0 Position                    */
+#define MCG_C2_HGO0(x)                           (((uint8_t)(((uint8_t)(x))<<3U))&0x8UL)             /*!< MCG_C2.HGO0 Field                       */
+#define MCG_C2_RANGE0_MASK                       (0x30U)                                             /*!< MCG_C2.RANGE0 Mask                      */
+#define MCG_C2_RANGE0_SHIFT                      (4U)                                                /*!< MCG_C2.RANGE0 Position                  */
+#define MCG_C2_RANGE0(x)                         (((uint8_t)(((uint8_t)(x))<<4U))&0x30UL)            /*!< MCG_C2.RANGE0 Field                     */
 #define MCG_C2_FCFTRIM_MASK                      (0x40U)                                             /*!< MCG_C2.FCFTRIM Mask                     */
 #define MCG_C2_FCFTRIM_SHIFT                     (6U)                                                /*!< MCG_C2.FCFTRIM Position                 */
 #define MCG_C2_FCFTRIM(x)                        (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< MCG_C2.FCFTRIM Field                    */
@@ -4328,19 +4301,19 @@ typedef struct {                                /*       MCG Structure          
 #define MCG_C4_DMX32_SHIFT                       (7U)                                                /*!< MCG_C4.DMX32 Position                   */
 #define MCG_C4_DMX32(x)                          (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< MCG_C4.DMX32 Field                      */
 /* ------- C5 Bit Fields                            ------ */
-#define MCG_C5_PRDIV_MASK                        (0x7U)                                              /*!< MCG_C5.PRDIV Mask                       */
-#define MCG_C5_PRDIV_SHIFT                       (0U)                                                /*!< MCG_C5.PRDIV Position                   */
-#define MCG_C5_PRDIV(x)                          (((uint8_t)(((uint8_t)(x))<<0U))&0x7UL)             /*!< MCG_C5.PRDIV Field                      */
-#define MCG_C5_PLLSTEN_MASK                      (0x20U)                                             /*!< MCG_C5.PLLSTEN Mask                     */
-#define MCG_C5_PLLSTEN_SHIFT                     (5U)                                                /*!< MCG_C5.PLLSTEN Position                 */
-#define MCG_C5_PLLSTEN(x)                        (((uint8_t)(((uint8_t)(x))<<5U))&0x20UL)            /*!< MCG_C5.PLLSTEN Field                    */
-#define MCG_C5_PLLCLKEN_MASK                     (0x40U)                                             /*!< MCG_C5.PLLCLKEN Mask                    */
-#define MCG_C5_PLLCLKEN_SHIFT                    (6U)                                                /*!< MCG_C5.PLLCLKEN Position                */
-#define MCG_C5_PLLCLKEN(x)                       (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< MCG_C5.PLLCLKEN Field                   */
+#define MCG_C5_PRDIV0_MASK                       (0x7U)                                              /*!< MCG_C5.PRDIV0 Mask                      */
+#define MCG_C5_PRDIV0_SHIFT                      (0U)                                                /*!< MCG_C5.PRDIV0 Position                  */
+#define MCG_C5_PRDIV0(x)                         (((uint8_t)(((uint8_t)(x))<<0U))&0x7UL)             /*!< MCG_C5.PRDIV0 Field                     */
+#define MCG_C5_PLLSTEN0_MASK                     (0x20U)                                             /*!< MCG_C5.PLLSTEN0 Mask                    */
+#define MCG_C5_PLLSTEN0_SHIFT                    (5U)                                                /*!< MCG_C5.PLLSTEN0 Position                */
+#define MCG_C5_PLLSTEN0(x)                       (((uint8_t)(((uint8_t)(x))<<5U))&0x20UL)            /*!< MCG_C5.PLLSTEN0 Field                   */
+#define MCG_C5_PLLCLKEN0_MASK                    (0x40U)                                             /*!< MCG_C5.PLLCLKEN0 Mask                   */
+#define MCG_C5_PLLCLKEN0_SHIFT                   (6U)                                                /*!< MCG_C5.PLLCLKEN0 Position               */
+#define MCG_C5_PLLCLKEN0(x)                      (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< MCG_C5.PLLCLKEN0 Field                  */
 /* ------- C6 Bit Fields                            ------ */
-#define MCG_C6_VDIV_MASK                         (0x1FU)                                             /*!< MCG_C6.VDIV Mask                        */
-#define MCG_C6_VDIV_SHIFT                        (0U)                                                /*!< MCG_C6.VDIV Position                    */
-#define MCG_C6_VDIV(x)                           (((uint8_t)(((uint8_t)(x))<<0U))&0x1FUL)            /*!< MCG_C6.VDIV Field                       */
+#define MCG_C6_VDIV0_MASK                        (0x1FU)                                             /*!< MCG_C6.VDIV0 Mask                       */
+#define MCG_C6_VDIV0_SHIFT                       (0U)                                                /*!< MCG_C6.VDIV0 Position                   */
+#define MCG_C6_VDIV0(x)                          (((uint8_t)(((uint8_t)(x))<<0U))&0x1FUL)            /*!< MCG_C6.VDIV0 Field                      */
 #define MCG_C6_CME0_MASK                         (0x20U)                                             /*!< MCG_C6.CME0 Mask                        */
 #define MCG_C6_CME0_SHIFT                        (5U)                                                /*!< MCG_C6.CME0 Position                    */
 #define MCG_C6_CME0(x)                           (((uint8_t)(((uint8_t)(x))<<5U))&0x20UL)            /*!< MCG_C6.CME0 Field                       */

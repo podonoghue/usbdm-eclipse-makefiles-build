@@ -55,6 +55,7 @@ Devices using this peripheral:
       MK66F18
       MK70F15
       MK70F15WS
+      MK82F25615
       MKW21D5
       MKW22D5
       MKW24D5
@@ -64,7 +65,6 @@ Devices using this peripheral:
          <name>RFVBAT</name>
          <description>VBAT register file</description>
          <groupName>RFVBAT</groupName>
-         <prependToName>RFVBAT</prependToName>
          <headerStructName>RFVBAT</headerStructName>
          <baseAddress>0x4003E000</baseAddress>
          <size>32</size>

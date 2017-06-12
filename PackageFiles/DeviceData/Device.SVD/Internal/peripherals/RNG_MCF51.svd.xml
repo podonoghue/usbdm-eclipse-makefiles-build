@@ -7,7 +7,6 @@ Devices using this peripheral:
          <name>RNG</name>
          <description>Random Number Generator</description>
          <groupName>RNG</groupName>
-         <prependToName>RNG</prependToName>
          <headerStructName>RNG</headerStructName>
          <baseAddress>0xFFFF98C0</baseAddress>
          <size>32</size>

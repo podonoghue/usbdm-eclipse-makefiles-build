@@ -39,7 +39,6 @@ Devices using this peripheral:
          <name>ETB</name>
          <description>Embedded Trace Buffer</description>
          <groupName>ETB</groupName>
-         <prependToName>ETB</prependToName>
          <headerStructName>ETB</headerStructName>
          <baseAddress>0xE0042000</baseAddress>
          <size>32</size>

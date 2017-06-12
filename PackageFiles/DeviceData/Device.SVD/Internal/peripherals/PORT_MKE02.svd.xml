@@ -9,7 +9,6 @@ Devices using this peripheral:
          <name>PORT</name>
          <description>Port control</description>
          <groupName>PORT</groupName>
-         <prependToName>PORT</prependToName>
          <headerStructName>PORT</headerStructName>
          <baseAddress>0x40049000</baseAddress>
          <size>32</size>

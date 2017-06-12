@@ -9,7 +9,6 @@ Devices using this peripheral:
          <name>FLEXIO</name>
          <description>The FLEXIO Memory Map/Register Definition can be found here</description>
          <groupName>FLEXIO</groupName>
-         <prependToName>FLEXIO_</prependToName>
          <headerStructName>FLEXIO</headerStructName>
          <baseAddress>0x4005A000</baseAddress>
          <size>32</size>

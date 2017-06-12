@@ -7,7 +7,6 @@ Devices using this peripheral:
          <name>LLWU</name>
          <description>Low leakage wakeup unit</description>
          <groupName>LLWU</groupName>
-         <prependToName>LLWU</prependToName>
          <headerStructName>LLWU</headerStructName>
          <baseAddress>0x4007C000</baseAddress>
          <size>32</size>

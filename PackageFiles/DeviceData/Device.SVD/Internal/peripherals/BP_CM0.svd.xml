@@ -31,7 +31,6 @@ Devices using this peripheral:
          <name>BP</name>
          <description>Breakpoint Unit</description>
          <groupName>BP</groupName>
-         <prependToName>BP</prependToName>
          <headerStructName>BP</headerStructName>
          <baseAddress>0xE0002000</baseAddress>
          <size>32</size>

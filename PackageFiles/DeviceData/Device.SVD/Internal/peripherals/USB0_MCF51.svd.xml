@@ -9,7 +9,6 @@ Devices using this peripheral:
          <name>USB0</name>
          <description>Universal Serial Bus, OTG Capable Controller</description>
          <groupName>USB</groupName>
-         <prependToName>USB0</prependToName>
          <headerStructName>USB</headerStructName>
          <baseAddress>0xFFFF9000</baseAddress>
          <size>32</size>

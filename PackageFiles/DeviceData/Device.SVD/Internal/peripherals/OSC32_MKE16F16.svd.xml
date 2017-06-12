@@ -11,7 +11,6 @@ Devices using this peripheral:
          <name>OSC32</name>
          <description>RTC Oscillator</description>
          <groupName>OSC</groupName>
-         <prependToName>OSC32_</prependToName>
          <headerStructName>OSC32</headerStructName>
          <baseAddress>0x40060000</baseAddress>
          <size>32</size>

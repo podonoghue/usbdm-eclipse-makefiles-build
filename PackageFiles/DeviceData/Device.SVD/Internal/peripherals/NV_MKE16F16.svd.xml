@@ -9,7 +9,6 @@ Devices using this peripheral:
          <name>NV</name>
          <description>Flash configuration field</description>
          <groupName>NV</groupName>
-         <prependToName>NV_</prependToName>
          <headerStructName>NV</headerStructName>
          <baseAddress>0x00000400</baseAddress>
          <size>32</size>

@@ -15,7 +15,6 @@ Devices using this peripheral:
          <name>FGPIOA</name>
          <description>General Purpose Input/Output</description>
          <groupName>FGPIOA</groupName>
-         <prependToName>FGPIOA</prependToName>
          <headerStructName>GPIO</headerStructName>
          <baseAddress>0xF8000000</baseAddress>
          <size>32</size>

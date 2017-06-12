@@ -9,7 +9,6 @@ Devices using this peripheral:
          <name>RTC</name>
          <description>Real Time Clock</description>
          <groupName>RTC</groupName>
-         <prependToName>RTC</prependToName>
          <headerStructName>RTC</headerStructName>
          <baseAddress>0x40050000</baseAddress>
          <size>16</size>

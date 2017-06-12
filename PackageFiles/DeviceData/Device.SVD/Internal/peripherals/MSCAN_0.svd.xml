@@ -8,7 +8,6 @@ Devices using this peripheral:
          <name>MSCAN</name>
          <description>Scalable Controller Area Network</description>
          <groupName>MSCAN</groupName>
-         <prependToName>MSCAN</prependToName>
          <headerStructName>MSCAN</headerStructName>
          <baseAddress>0x40024000</baseAddress>
          <size>8</size>

@@ -10,7 +10,6 @@ Devices using this peripheral:
          <name>DTIM</name>
          <description>DMA Timers</description>
          <groupName>DTIM</groupName>
-         <prependToName>DTIM</prependToName>
          <headerStructName>DTIM</headerStructName>
          <baseAddress>0x40000400</baseAddress>
          <size>32</size>

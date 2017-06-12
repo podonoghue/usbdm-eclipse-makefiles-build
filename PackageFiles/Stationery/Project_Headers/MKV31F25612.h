@@ -3360,7 +3360,7 @@ typedef struct {                                /*       I2C0 Structure         
 */
 
 /* ================================================================================ */
-/* ================           LLWU (file:LLWU_PE3_FILT2)           ================ */
+/* ================           LLWU (file:LLWU_PE4_FILT2)           ================ */
 /* ================================================================================ */
 
 /**
@@ -3379,10 +3379,7 @@ typedef struct {                                /*       LLWU Structure         
    __IO uint8_t   ME;                           /**< 0004: Module Enable Register                                       */
    __IO uint8_t   F1;                           /**< 0005: Flag 1 Register                                              */
    __IO uint8_t   F2;                           /**< 0006: Flag 2 Register                                              */
-   union {                                      /**< 0000: (size=0001)                                                  */
-      __I  uint8_t   F3;                        /**< 0007: Flag 3 Register                                              */
-      __I  uint8_t   MF0;                       /**< 0007: Module Flag 0 Register                                       */
-   };
+   __I  uint8_t   F3;                           /**< 0007: Flag 3 Register                                              */
    __IO uint8_t   FILT1;                        /**< 0008: Pin Filter 1 register                                        */
    __IO uint8_t   FILT2;                        /**< 0009: Pin Filter 2 register                                        */
 } LLWU_Type;
@@ -3552,7 +3549,6 @@ typedef struct {                                /*       LLWU Structure         
 #define LLWU_F3_MWUF7_MASK                       (0x80U)                                             /*!< LLWU_F3.MWUF7 Mask                      */
 #define LLWU_F3_MWUF7_SHIFT                      (7U)                                                /*!< LLWU_F3.MWUF7 Position                  */
 #define LLWU_F3_MWUF7(x)                         (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< LLWU_F3.MWUF7 Field                     */
-/* ------- MF0 Bit Fields                           ------ */
 /* ------- FILT Bit Fields                          ------ */
 #define LLWU_FILT_FILTSEL_MASK                   (0xFU)                                              /*!< LLWU_FILT.FILTSEL Mask                  */
 #define LLWU_FILT_FILTSEL_SHIFT                  (0U)                                                /*!< LLWU_FILT.FILTSEL Position              */
@@ -3687,7 +3683,7 @@ typedef struct {                                /*       LPUART0 Structure      
    __IO uint32_t  CTRL;                         /**< 0008: Control Register                                             */
    __IO uint32_t  DATA;                         /**< 000C: Data Register                                                */
    __IO uint32_t  MATCH;                        /**< 0010: Match Address Register                                       */
-   __IO uint32_t  MODIR;                        /**< 0014: MODEM register                                               */
+   __IO uint32_t  MODIR;                        /**< 0014: MODEM IrDA register                                          */
 } LPUART_Type;
 
 /**

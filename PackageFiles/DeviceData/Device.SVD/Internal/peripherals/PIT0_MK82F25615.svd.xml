@@ -7,7 +7,6 @@ Devices using this peripheral:
          <name>PIT0</name>
          <description>Periodic Interrupt Timer</description>
          <groupName>PIT</groupName>
-         <prependToName>PIT0_</prependToName>
          <headerStructName>PIT</headerStructName>
          <baseAddress>0x40037000</baseAddress>
          <size>32</size>

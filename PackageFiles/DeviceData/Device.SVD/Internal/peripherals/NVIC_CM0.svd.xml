@@ -37,7 +37,6 @@ Devices using this peripheral:
          <name>NVIC</name>
          <description>Nested Vectored Interrupt Controller</description>
          <groupName>NVIC</groupName>
-         <prependToName>NVIC</prependToName>
          <headerStructName>NVIC</headerStructName>
          <baseAddress>0xE000E100</baseAddress>
          <size>32</size>

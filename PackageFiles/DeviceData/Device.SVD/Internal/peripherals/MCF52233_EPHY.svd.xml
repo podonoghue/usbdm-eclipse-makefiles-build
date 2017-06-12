@@ -9,7 +9,6 @@ Devices using this peripheral:
          <name>EPHY</name>
          <description>None</description>
          <groupName>EPHY</groupName>
-         <prependToName>EPHY</prependToName>
          <headerStructName>EPHY</headerStructName>
          <baseAddress>0x401E0000</baseAddress>
          <size>32</size>

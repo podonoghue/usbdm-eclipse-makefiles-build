@@ -16,7 +16,6 @@ Devices using this peripheral:
          <name>TRIAMP0</name>
          <description>Trans-Impedance Amplifier</description>
          <groupName>TRIAMP</groupName>
-         <prependToName>TRIAMP0</prependToName>
          <headerStructName>TRIAMP</headerStructName>
          <baseAddress>0x400F8000</baseAddress>
          <size>32</size>

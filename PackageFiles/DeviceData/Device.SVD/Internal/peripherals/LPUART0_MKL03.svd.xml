@@ -1,13 +1,17 @@
 <!--
 Devices using this peripheral: 
       MKL03Z4
+      MKL17Z4
+      MKL27Z4
+      MKL27Z644
+      MKL33Z4
+      MKL43Z4
 -->
       <peripheral>
          <?sourceFile "LPUART0_MKL03" ?>
          <name>LPUART0</name>
          <description>Universal Asynchronous Receiver/Transmitter</description>
          <groupName>LPUART</groupName>
-         <prependToName>LPUART0</prependToName>
          <headerStructName>LPUART</headerStructName>
          <baseAddress>0x40054000</baseAddress>
          <size>32</size>
@@ -165,6 +169,27 @@ Configures the match addressing mode used</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
+                  <field>
+                     <name>RDMAE</name>
+                     <description>Receiver Full DMA Enable (only on device with DMA)\n
+RDMAE configures the receiver data register full flag, LPUART_STAT[RDRF], to generate a DMA request</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>DMA request disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>DMA request enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="RDMAE" > <name>TDMAE</name> <description>Transmitter DMA Enable (only on device with DMA)\n
+TDMAE configures the transmit data register empty flag, LPUART_STAT[TDRE], to generate a DMA request</description> <bitOffset>23</bitOffset> </field>
                   <field>
                      <name>OSR</name>
                      <description>Over Sampling Ratio\n
@@ -468,7 +493,7 @@ when the receiver detects an idle line</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Receiver active (LPUART_RX input not idle)</description>
+                           <description>receiver active (RXD input not idle)</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -476,21 +501,19 @@ when the receiver detects an idle line</description>
                   <field>
                      <name>LBKDE</name>
                      <description>LIN Break Detection Enable\n
-LBKDE selects a longer break character detection length. While LBKDE is set, receive data is not stored
-in the receive data buffer</description>
+LBKDE selects a longer break character detection length.\n
+While LBKDE is set, receive data is not stored in the receive data buffer</description>
                      <bitOffset>25</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Break character is detected at length 10 bit times (if M=0, SBNS=0) or 11 (if M=1, SBNS=0 or M=0, SBNS=1) or\n
-12 (if M=1, SBNS=1 or M10=1, SNBS=0) or 13 (if M10=1, SNBS=1)</description>
+                           <description>Normal break character detection</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Break character is detected at length of 11 bit times (if M=0, SBNS=0) or 12 (if M=1, SBNS=0 or M=0, SBNS=1) or\n
-14 (if M=1, SBNS=1 or M10=1, SNBS=0) or 15 (if M10=1, SNBS=1)</description>
+                           <description>LIN break detection is enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -505,14 +528,12 @@ the state of this bit. This bit should only be changed when the transmitter is d
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Break character is transmitted with length of 10 bit times (if M=0, SBNS=0) or 11 (if M=1, SBNS=0 or M=0, SBNS=1) or \n
-12 (if M=1, SBNS=1 or M10=1, SNBS=0) or 13 (if M10=1, SNBS=1)</description>
+                           <description>Short break</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Break character is transmitted with length of 13 bit times (if M=0, SBNS=0) or 14 (if M=1, SBNS=0 or M=0, SBNS=1) or \n
-15 (if M=1, SBNS=1 or M10=1, SNBS=0) or 16 (if M10=1, SNBS=1)</description>
+                           <description>Long break</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1138,7 +1159,6 @@ receiving the current character (if any) before the receiver starts receiving da
                      <description>Receive Bit 8 / Transmit Bit 9</description>
                      <bitOffset>31</bitOffset>
                      <bitWidth>1</bitWidth>
-                     <access>read-only</access>
                   </field>
                </fields>
             </register>

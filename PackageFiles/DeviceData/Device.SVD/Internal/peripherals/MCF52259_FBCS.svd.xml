@@ -9,7 +9,6 @@ Devices using this peripheral:
          <name>FBCS</name>
          <description>Mini-FlexBus Control</description>
          <groupName>FBCS</groupName>
-         <prependToName>FBCS</prependToName>
          <headerStructName>FBCS</headerStructName>
          <baseAddress>0x40000080</baseAddress>
          <size>32</size>

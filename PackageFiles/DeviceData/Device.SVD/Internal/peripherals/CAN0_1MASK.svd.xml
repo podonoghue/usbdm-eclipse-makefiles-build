@@ -8,7 +8,6 @@ Devices using this peripheral:
          <name>CAN0</name>
          <description>Flex Controller Area Network module</description>
          <groupName>CAN</groupName>
-         <prependToName>CAN0</prependToName>
          <headerStructName>CAN</headerStructName>
          <baseAddress>0x40024000</baseAddress>
          <size>32</size>

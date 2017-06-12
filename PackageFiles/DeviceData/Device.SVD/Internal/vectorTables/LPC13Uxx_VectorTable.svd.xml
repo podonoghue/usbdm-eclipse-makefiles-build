@@ -7,159 +7,159 @@ Devices using this vector table:
    <description>LPC13Uxx VectorTable</description>
    <interrupt>
       <name>PIN_INT0</name>
+      <description>GPIO pin interrupt</description>
       <value>0</value>
       <peripheral>GPIO_PIN_INT</peripheral>
-      <description>GPIO pin interrupt</description>
    </interrupt>
    <interrupt>
       <name>PIN_INT1</name>
+      <description>GPIO pin interrupt</description>
       <value>1</value>
       <peripheral>GPIO_PIN_INT</peripheral>
-      <description>GPIO pin interrupt</description>
    </interrupt>
    <interrupt>
       <name>PIN_INT2</name>
+      <description>GPIO pin interrupt</description>
       <value>2</value>
       <peripheral>GPIO_PIN_INT</peripheral>
-      <description>GPIO pin interrupt</description>
    </interrupt>
    <interrupt>
       <name>PIN_INT3</name>
+      <description>GPIO pin interrupt</description>
       <value>3</value>
       <peripheral>GPIO_PIN_INT</peripheral>
-      <description>GPIO pin interrupt</description>
    </interrupt>
    <interrupt>
       <name>PIN_INT4</name>
+      <description>GPIO pin interrupt</description>
       <value>4</value>
       <peripheral>GPIO_PIN_INT</peripheral>
-      <description>GPIO pin interrupt</description>
    </interrupt>
    <interrupt>
       <name>PIN_INT5</name>
+      <description>GPIO pin interrupt</description>
       <value>5</value>
       <peripheral>GPIO_PIN_INT</peripheral>
-      <description>GPIO pin interrupt</description>
    </interrupt>
    <interrupt>
       <name>PIN_INT6</name>
+      <description>GPIO pin interrupt</description>
       <value>6</value>
       <peripheral>GPIO_PIN_INT</peripheral>
-      <description>GPIO pin interrupt</description>
    </interrupt>
    <interrupt>
       <name>PIN_INT7</name>
+      <description>GPIO pin interrupt</description>
       <value>7</value>
       <peripheral>GPIO_PIN_INT</peripheral>
-      <description>GPIO pin interrupt</description>
    </interrupt>
    <interrupt>
       <name>GINT0</name>
+      <description>GPIO group interrupt</description>
       <value>8</value>
       <peripheral>GPIO_GROUP_INT0</peripheral>
-      <description>GPIO group interrupt</description>
    </interrupt>
    <interrupt>
       <name>GINT1</name>
+      <description>GPIO group interrupt</description>
       <value>9</value>
       <peripheral>GPIO_GROUP_INT1</peripheral>
-      <description>GPIO group interrupt</description>
    </interrupt>
    <interrupt>
       <name>RIT_IRQ</name>
+      <description>Repetitive Interrupt Timer (RI timer)</description>
       <value>12</value>
       <peripheral>RITIMER</peripheral>
-      <description>Repetitive Interrupt Timer (RI timer)</description>
    </interrupt>
    <interrupt>
       <name>SSP1</name>
+      <description>SSP/SPI</description>
       <value>14</value>
       <peripheral>SSP1</peripheral>
-      <description>SSP/SPI</description>
    </interrupt>
    <interrupt>
       <name>I2C</name>
+      <description>I2C</description>
       <value>15</value>
       <peripheral>I2C</peripheral>
-      <description>I2C</description>
    </interrupt>
    <interrupt>
       <name>CT16B0</name>
+      <description>16-bit counter/timers CT16B0</description>
       <value>16</value>
       <peripheral>CT16B0</peripheral>
-      <description>16-bit counter/timers CT16B0</description>
    </interrupt>
    <interrupt>
       <name>CT16B1</name>
+      <description>16-bit counter/timers CT16B1</description>
       <value>17</value>
       <peripheral>CT16B1</peripheral>
-      <description>16-bit counter/timers CT16B1</description>
    </interrupt>
    <interrupt>
       <name>CT32B0</name>
+      <description>32-bit counter/timers CT32B0</description>
       <value>18</value>
       <peripheral>CT32B0</peripheral>
-      <description>32-bit counter/timers CT32B0</description>
    </interrupt>
    <interrupt>
       <name>CT32B1</name>
+      <description>32-bit counter/timers CT32B1</description>
       <value>19</value>
       <peripheral>CT32B1</peripheral>
-      <description>32-bit counter/timers CT32B1</description>
    </interrupt>
    <interrupt>
       <name>SSP0</name>
+      <description>SSP/SPI</description>
       <value>20</value>
       <peripheral>SSP0</peripheral>
-      <description>SSP/SPI</description>
    </interrupt>
    <interrupt>
       <name>USART</name>
+      <description>USART</description>
       <value>21</value>
       <peripheral>USART</peripheral>
-      <description>USART</description>
    </interrupt>
    <interrupt>
       <name>USB_IRQ</name>
+      <description>USB2.0 device controller</description>
       <value>22</value>
       <peripheral>USB</peripheral>
-      <description>USB2.0 device controller</description>
    </interrupt>
    <interrupt>
       <name>USB_FIQ</name>
+      <description>USB2.0 device controller</description>
       <value>23</value>
       <peripheral>USB</peripheral>
-      <description>USB2.0 device controller</description>
    </interrupt>
    <interrupt>
       <name>ADC</name>
+      <description>ADC</description>
       <value>24</value>
       <peripheral>ADC</peripheral>
-      <description>ADC</description>
    </interrupt>
    <interrupt>
       <name>WWDT</name>
+      <description>Windowed Watchdog Timer</description>
       <value>25</value>
       <peripheral>WWDT</peripheral>
-      <description>Windowed Watchdog Timer</description>
    </interrupt>
    <interrupt>
       <name>BOD_IRQ</name>
+      <description>System control block</description>
       <value>26</value>
       <peripheral>SYSCON</peripheral>
-      <description>System control block</description>
    </interrupt>
    <interrupt>
       <name>FLASH_IRQ</name>
+      <description>Flash programming firmware</description>
       <value>27</value>
       <peripheral>FLASHCTRL</peripheral>
-      <description>Flash programming firmware</description>
    </interrupt>
    <interrupt>
       <name>USBWAKEUP</name>
+      <description>USB2.0 device controller</description>
       <value>30</value>
       <peripheral>USB</peripheral>
-      <description>USB2.0 device controller</description>
    </interrupt>
 </interrupts>
 

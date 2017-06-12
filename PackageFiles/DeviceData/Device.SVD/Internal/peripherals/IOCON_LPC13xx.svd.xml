@@ -969,12 +969,12 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>STANDARD_MODE/_FAST_</name>
+                           <name>STANDARD_MODE_FAST_</name>
                            <description>Standard mode/ Fast-mode I2C</description>
                            <value>0x0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>STANDARD_I/O_FUNCTIO</name>
+                           <name>STANDARD_I_O_FUNCTIO</name>
                            <description>Standard I/O functionality</description>
                            <value>0x1</value>
                         </enumeratedValue>
@@ -1022,12 +1022,12 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>STANDARD_MODE/_FAST_</name>
+                           <name>STANDARD_MODE_FAST_</name>
                            <description>Standard mode/ Fast-mode I2C</description>
                            <value>0x0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>STANDARD_I/O_FUNCTIO</name>
+                           <name>STANDARD_I_O_FUNCTIO</name>
                            <description>Standard I/O functionality</description>
                            <value>0x1</value>
                         </enumeratedValue>

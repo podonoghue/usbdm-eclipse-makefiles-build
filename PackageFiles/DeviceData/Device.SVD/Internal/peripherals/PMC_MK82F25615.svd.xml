@@ -7,7 +7,6 @@ Devices using this peripheral:
          <name>PMC</name>
          <description>Power Management Controller</description>
          <groupName>PMC</groupName>
-         <prependToName>PMC_</prependToName>
          <headerStructName>PMC</headerStructName>
          <baseAddress>0x4007D000</baseAddress>
          <size>32</size>

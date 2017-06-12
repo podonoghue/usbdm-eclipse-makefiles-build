@@ -13,7 +13,6 @@ Devices using this peripheral:
          <name>FGPIOB</name>
          <description>General Purpose Input/Output</description>
          <groupName>FGPIOB</groupName>
-         <prependToName>FGPIOB</prependToName>
          <headerStructName>FGPIOB</headerStructName>
          <baseAddress>0xF8000040</baseAddress>
          <size>32</size>

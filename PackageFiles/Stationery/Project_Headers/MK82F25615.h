@@ -5970,7 +5970,7 @@ typedef struct {                                /*       LPTMR0 Structure       
 */
 
 /* ================================================================================ */
-/* ================           LPUART0 (file:LPUART0_MK82F25615)       ================ */
+/* ================           LPUART0 (file:LPUART0_FIFO_0x400C4000)       ================ */
 /* ================================================================================ */
 
 /**
@@ -5987,9 +5987,9 @@ typedef struct {                                /*       LPUART0 Structure      
    __IO uint32_t  CTRL;                         /**< 0008: Control Register                                             */
    __IO uint32_t  DATA;                         /**< 000C: Data Register                                                */
    __IO uint32_t  MATCH;                        /**< 0010: Match Address Register                                       */
-   __IO uint32_t  MODIR;                        /**< 0014: MODEM register                                               */
-   __IO uint32_t  FIFO;                         /**< 0018: LPUART FIFO Register                                         */
-   __IO uint32_t  WATER;                        /**< 001C: LPUART Watermark Register                                    */
+   __IO uint32_t  MODIR;                        /**< 0014: MODEM IrDA register                                          */
+   __IO uint32_t  FIFO;                         /**< 0018: FIFO Register                                                */
+   __IO uint32_t  WATER;                        /**< 001C: Watermark Register                                           */
 } LPUART_Type;
 
 /**
@@ -6904,7 +6904,7 @@ typedef struct {                                /*       LTC0 Structure         
 /* ================================================================================ */
 
 /**
- * @brief Multipurpose Clock Generator module
+ * @brief Multipurpose Clock Generator module with ICS48M
  */
 /**
 * @addtogroup MCG_structs_GROUP MCG struct
@@ -9021,7 +9021,7 @@ typedef struct {                                /*       RCM Structure          
 */
 
 /* ================================================================================ */
-/* ================           RFSYS (file:RFSYS_MK82F25615)        ================ */
+/* ================           RFSYS (file:RFSYS_0)                 ================ */
 /* ================================================================================ */
 
 /**
@@ -9080,7 +9080,7 @@ typedef struct {                                /*       RFSYS Structure        
 */
 
 /* ================================================================================ */
-/* ================           RFVBAT (file:RFVBAT_MK82F25615)       ================ */
+/* ================           RFVBAT (file:RFVBAT_0)               ================ */
 /* ================================================================================ */
 
 /**

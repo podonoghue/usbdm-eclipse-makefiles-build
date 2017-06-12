@@ -44,7 +44,6 @@ Devices using this peripheral:
          <name>ETM</name>
          <description>Embedded Trace Macrocell</description>
          <groupName>ETM</groupName>
-         <prependToName>ETM</prependToName>
          <headerStructName>ETM</headerStructName>
          <baseAddress>0xE0041000</baseAddress>
          <size>32</size>

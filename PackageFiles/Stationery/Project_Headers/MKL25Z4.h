@@ -1535,7 +1535,7 @@ typedef struct {                                /*       LLWU Structure         
    __IO uint8_t   PE4;                          /**< 0003: Pin Enable 4 Register                                        */
    __IO uint8_t   ME;                           /**< 0004: Module Enable Register                                       */
    __IO uint8_t   F1;                           /**< 0005: Flag 1 Register                                              */
-   __IO uint8_t   PF2;                          /**< 0006: Flag 2 Register                                              */
+   __IO uint8_t   F2;                           /**< 0006: Flag 2 Register                                              */
    __I  uint8_t   F3;                           /**< 0007: Flag 3 Register                                              */
    __IO uint8_t   FILT1;                        /**< 0008: Pin Filter 1 register                                        */
    __IO uint8_t   FILT2;                        /**< 0009: Pin Filter 2 register                                        */
@@ -1656,31 +1656,31 @@ typedef struct {                                /*       LLWU Structure         
 #define LLWU_F1_WUF7_MASK                        (0x80U)                                             /*!< LLWU_F1.WUF7 Mask                       */
 #define LLWU_F1_WUF7_SHIFT                       (7U)                                                /*!< LLWU_F1.WUF7 Position                   */
 #define LLWU_F1_WUF7(x)                          (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< LLWU_F1.WUF7 Field                      */
-/* ------- PF2 Bit Fields                           ------ */
-#define LLWU_PF2_WUF8_MASK                       (0x1U)                                              /*!< LLWU_PF2.WUF8 Mask                      */
-#define LLWU_PF2_WUF8_SHIFT                      (0U)                                                /*!< LLWU_PF2.WUF8 Position                  */
-#define LLWU_PF2_WUF8(x)                         (((uint8_t)(((uint8_t)(x))<<0U))&0x1UL)             /*!< LLWU_PF2.WUF8 Field                     */
-#define LLWU_PF2_WUF9_MASK                       (0x2U)                                              /*!< LLWU_PF2.WUF9 Mask                      */
-#define LLWU_PF2_WUF9_SHIFT                      (1U)                                                /*!< LLWU_PF2.WUF9 Position                  */
-#define LLWU_PF2_WUF9(x)                         (((uint8_t)(((uint8_t)(x))<<1U))&0x2UL)             /*!< LLWU_PF2.WUF9 Field                     */
-#define LLWU_PF2_WUF10_MASK                      (0x4U)                                              /*!< LLWU_PF2.WUF10 Mask                     */
-#define LLWU_PF2_WUF10_SHIFT                     (2U)                                                /*!< LLWU_PF2.WUF10 Position                 */
-#define LLWU_PF2_WUF10(x)                        (((uint8_t)(((uint8_t)(x))<<2U))&0x4UL)             /*!< LLWU_PF2.WUF10 Field                    */
-#define LLWU_PF2_WUF11_MASK                      (0x8U)                                              /*!< LLWU_PF2.WUF11 Mask                     */
-#define LLWU_PF2_WUF11_SHIFT                     (3U)                                                /*!< LLWU_PF2.WUF11 Position                 */
-#define LLWU_PF2_WUF11(x)                        (((uint8_t)(((uint8_t)(x))<<3U))&0x8UL)             /*!< LLWU_PF2.WUF11 Field                    */
-#define LLWU_PF2_WUF12_MASK                      (0x10U)                                             /*!< LLWU_PF2.WUF12 Mask                     */
-#define LLWU_PF2_WUF12_SHIFT                     (4U)                                                /*!< LLWU_PF2.WUF12 Position                 */
-#define LLWU_PF2_WUF12(x)                        (((uint8_t)(((uint8_t)(x))<<4U))&0x10UL)            /*!< LLWU_PF2.WUF12 Field                    */
-#define LLWU_PF2_WUF13_MASK                      (0x20U)                                             /*!< LLWU_PF2.WUF13 Mask                     */
-#define LLWU_PF2_WUF13_SHIFT                     (5U)                                                /*!< LLWU_PF2.WUF13 Position                 */
-#define LLWU_PF2_WUF13(x)                        (((uint8_t)(((uint8_t)(x))<<5U))&0x20UL)            /*!< LLWU_PF2.WUF13 Field                    */
-#define LLWU_PF2_WUF14_MASK                      (0x40U)                                             /*!< LLWU_PF2.WUF14 Mask                     */
-#define LLWU_PF2_WUF14_SHIFT                     (6U)                                                /*!< LLWU_PF2.WUF14 Position                 */
-#define LLWU_PF2_WUF14(x)                        (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< LLWU_PF2.WUF14 Field                    */
-#define LLWU_PF2_WUF15_MASK                      (0x80U)                                             /*!< LLWU_PF2.WUF15 Mask                     */
-#define LLWU_PF2_WUF15_SHIFT                     (7U)                                                /*!< LLWU_PF2.WUF15 Position                 */
-#define LLWU_PF2_WUF15(x)                        (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< LLWU_PF2.WUF15 Field                    */
+/* ------- F2 Bit Fields                            ------ */
+#define LLWU_F2_WUF8_MASK                        (0x1U)                                              /*!< LLWU_F2.WUF8 Mask                       */
+#define LLWU_F2_WUF8_SHIFT                       (0U)                                                /*!< LLWU_F2.WUF8 Position                   */
+#define LLWU_F2_WUF8(x)                          (((uint8_t)(((uint8_t)(x))<<0U))&0x1UL)             /*!< LLWU_F2.WUF8 Field                      */
+#define LLWU_F2_WUF9_MASK                        (0x2U)                                              /*!< LLWU_F2.WUF9 Mask                       */
+#define LLWU_F2_WUF9_SHIFT                       (1U)                                                /*!< LLWU_F2.WUF9 Position                   */
+#define LLWU_F2_WUF9(x)                          (((uint8_t)(((uint8_t)(x))<<1U))&0x2UL)             /*!< LLWU_F2.WUF9 Field                      */
+#define LLWU_F2_WUF10_MASK                       (0x4U)                                              /*!< LLWU_F2.WUF10 Mask                      */
+#define LLWU_F2_WUF10_SHIFT                      (2U)                                                /*!< LLWU_F2.WUF10 Position                  */
+#define LLWU_F2_WUF10(x)                         (((uint8_t)(((uint8_t)(x))<<2U))&0x4UL)             /*!< LLWU_F2.WUF10 Field                     */
+#define LLWU_F2_WUF11_MASK                       (0x8U)                                              /*!< LLWU_F2.WUF11 Mask                      */
+#define LLWU_F2_WUF11_SHIFT                      (3U)                                                /*!< LLWU_F2.WUF11 Position                  */
+#define LLWU_F2_WUF11(x)                         (((uint8_t)(((uint8_t)(x))<<3U))&0x8UL)             /*!< LLWU_F2.WUF11 Field                     */
+#define LLWU_F2_WUF12_MASK                       (0x10U)                                             /*!< LLWU_F2.WUF12 Mask                      */
+#define LLWU_F2_WUF12_SHIFT                      (4U)                                                /*!< LLWU_F2.WUF12 Position                  */
+#define LLWU_F2_WUF12(x)                         (((uint8_t)(((uint8_t)(x))<<4U))&0x10UL)            /*!< LLWU_F2.WUF12 Field                     */
+#define LLWU_F2_WUF13_MASK                       (0x20U)                                             /*!< LLWU_F2.WUF13 Mask                      */
+#define LLWU_F2_WUF13_SHIFT                      (5U)                                                /*!< LLWU_F2.WUF13 Position                  */
+#define LLWU_F2_WUF13(x)                         (((uint8_t)(((uint8_t)(x))<<5U))&0x20UL)            /*!< LLWU_F2.WUF13 Field                     */
+#define LLWU_F2_WUF14_MASK                       (0x40U)                                             /*!< LLWU_F2.WUF14 Mask                      */
+#define LLWU_F2_WUF14_SHIFT                      (6U)                                                /*!< LLWU_F2.WUF14 Position                  */
+#define LLWU_F2_WUF14(x)                         (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< LLWU_F2.WUF14 Field                     */
+#define LLWU_F2_WUF15_MASK                       (0x80U)                                             /*!< LLWU_F2.WUF15 Mask                      */
+#define LLWU_F2_WUF15_SHIFT                      (7U)                                                /*!< LLWU_F2.WUF15 Position                  */
+#define LLWU_F2_WUF15(x)                         (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< LLWU_F2.WUF15 Field                     */
 /* ------- F3 Bit Fields                            ------ */
 #define LLWU_F3_MWUF0_MASK                       (0x1U)                                              /*!< LLWU_F3.MWUF0 Mask                      */
 #define LLWU_F3_MWUF0_SHIFT                      (0U)                                                /*!< LLWU_F3.MWUF0 Position                  */

@@ -8,7 +8,6 @@ Devices using this peripheral:
          <name>SPI0</name>
          <description>Serial Peripheral Interface</description>
          <groupName>SPI</groupName>
-         <prependToName>SPI0</prependToName>
          <headerStructName>SPI</headerStructName>
          <baseAddress>0x4002C000</baseAddress>
          <size>32</size>

@@ -7,7 +7,6 @@ Devices using this peripheral:
          <name>CMP0</name>
          <description>High-Speed Comparator (CMP), Voltage Reference (VREF) Digital-to-Analog Converter (DAC), and Analog Mux</description>
          <groupName>CMP</groupName>
-         <prependToName>CMP0_</prependToName>
          <headerStructName>CMP</headerStructName>
          <baseAddress>0x40073000</baseAddress>
          <size>32</size>

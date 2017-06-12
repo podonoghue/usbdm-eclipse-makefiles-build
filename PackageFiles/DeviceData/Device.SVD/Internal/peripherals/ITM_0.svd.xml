@@ -52,7 +52,6 @@ Devices using this peripheral:
          <name>ITM</name>
          <description>Instrumentation Trace Macrocell</description>
          <groupName>ITM</groupName>
-         <prependToName>ITM</prependToName>
          <headerStructName>ITM</headerStructName>
          <baseAddress>0xE0000000</baseAddress>
          <size>32</size>

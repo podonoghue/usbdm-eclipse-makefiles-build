@@ -22,15 +22,15 @@
    <width>32</width>
    <peripherals>
       <xi:include href="peripherals/ADC0_MKE16F16.svd.xml"/>
-      <peripheral derivedFrom="ADC0"><name>ADC1</name>      <prependToName>ADC1_</prependToName><baseAddress>0x40027000</baseAddress></peripheral>
-      <peripheral derivedFrom="ADC0"><name>ADC2</name>      <prependToName>ADC2_</prependToName><baseAddress>0x4003C000</baseAddress></peripheral>
+      <peripheral derivedFrom="ADC0"><name>ADC1</name><baseAddress>0x40027000</baseAddress></peripheral>
+      <peripheral derivedFrom="ADC0"><name>ADC2</name><baseAddress>0x4003C000</baseAddress></peripheral>
       <xi:include href="peripherals/AIPS_MKE16F16.svd.xml"/>
       <xi:include href="peripherals/CMP0_MKE16F16.svd.xml"/>
-      <peripheral derivedFrom="CMP0"><name>CMP1</name>      <prependToName>CMP1_</prependToName><baseAddress>0x40074000</baseAddress>
-         <interrupt><name>CMP1</name><value>41</value><peripheral>CMP1</peripheral><description>High-Speed Comparator (CMP), Voltage Reference (VREF) Digital-to-Analog Converter (DAC), and Analog Mux</description></interrupt>
+      <peripheral derivedFrom="CMP0"><name>CMP1</name><baseAddress>0x40074000</baseAddress>
+         <interrupt><name>CMP1</name><description>High-Speed Comparator (CMP), Voltage Reference (VREF) Digital-to-Analog Converter (DAC), and Analog Mux</description><value>41</value></interrupt>
       </peripheral>
-      <peripheral derivedFrom="CMP0"><name>CMP2</name>      <prependToName>CMP2_</prependToName><baseAddress>0x40075000</baseAddress>
-         <interrupt><name>CMP2</name><value>70</value><peripheral>CMP2</peripheral><description>High-Speed Comparator (CMP), Voltage Reference (VREF) Digital-to-Analog Converter (DAC), and Analog Mux</description></interrupt>
+      <peripheral derivedFrom="CMP0"><name>CMP2</name><baseAddress>0x40075000</baseAddress>
+         <interrupt><name>CMP2</name><description>High-Speed Comparator (CMP), Voltage Reference (VREF) Digital-to-Analog Converter (DAC), and Analog Mux</description><value>70</value></interrupt>
       </peripheral>
       <xi:include href="peripherals/CRC0_0x40032000.svd.xml"/>
       <xi:include href="peripherals/DAC0_MKE16F16.svd.xml"/>
@@ -40,24 +40,24 @@
       <xi:include href="peripherals/FLEXIO_MKE16F16.svd.xml"/>
       <xi:include href="peripherals/FTFE_MKE16F16.svd.xml"/>
       <xi:include href="peripherals/FTM0_MKE16F16.svd.xml"/>
-      <peripheral derivedFrom="FTM0"><name>FTM1</name>      <prependToName>FTM1_</prependToName><baseAddress>0x40039000</baseAddress></peripheral>
-      <peripheral derivedFrom="FTM0"><name>FTM2</name>      <prependToName>FTM2_</prependToName><baseAddress>0x4003A000</baseAddress></peripheral>
-      <peripheral derivedFrom="FTM0"><name>FTM3</name>      <prependToName>FTM3_</prependToName><baseAddress>0x40026000</baseAddress></peripheral>
+      <peripheral derivedFrom="FTM0"><name>FTM1</name><baseAddress>0x40039000</baseAddress></peripheral>
+      <peripheral derivedFrom="FTM0"><name>FTM2</name><baseAddress>0x4003A000</baseAddress></peripheral>
+      <peripheral derivedFrom="FTM0"><name>FTM3</name><baseAddress>0x40026000</baseAddress></peripheral>
       <xi:include href="peripherals/GPIOA_MKE16F16.svd.xml"/>
-      <peripheral derivedFrom="GPIOA"><name>GPIOB</name>      <prependToName>GPIOB_</prependToName><baseAddress>0x400FF040</baseAddress></peripheral>
-      <peripheral derivedFrom="GPIOA"><name>GPIOC</name>      <prependToName>GPIOC_</prependToName><baseAddress>0x400FF080</baseAddress></peripheral>
-      <peripheral derivedFrom="GPIOA"><name>GPIOD</name>      <prependToName>GPIOD_</prependToName><baseAddress>0x400FF0C0</baseAddress></peripheral>
-      <peripheral derivedFrom="GPIOA"><name>GPIOE</name>      <prependToName>GPIOE_</prependToName><baseAddress>0x400FF100</baseAddress></peripheral>
+      <peripheral derivedFrom="GPIOA"><name>GPIOB</name><baseAddress>0x400FF040</baseAddress></peripheral>
+      <peripheral derivedFrom="GPIOA"><name>GPIOC</name><baseAddress>0x400FF080</baseAddress></peripheral>
+      <peripheral derivedFrom="GPIOA"><name>GPIOD</name><baseAddress>0x400FF0C0</baseAddress></peripheral>
+      <peripheral derivedFrom="GPIOA"><name>GPIOE</name><baseAddress>0x400FF100</baseAddress></peripheral>
       <xi:include href="peripherals/LMEM_MKE16F16.svd.xml"/>
       <xi:include href="peripherals/LPI2C0_MKE16F16.svd.xml"/>
-      <peripheral derivedFrom="LPI2C0"><name>LPI2C1</name>      <prependToName>LPI2C1_</prependToName><baseAddress>0x40067000</baseAddress></peripheral>
+      <peripheral derivedFrom="LPI2C0"><name>LPI2C1</name><baseAddress>0x40067000</baseAddress></peripheral>
       <xi:include href="peripherals/LPIT0_MKE16F16.svd.xml"/>
       <xi:include href="peripherals/LPSPI0_MKE16F16.svd.xml"/>
-      <peripheral derivedFrom="LPSPI0"><name>LPSPI1</name>      <prependToName>LPSPI1_</prependToName><baseAddress>0x4002D000</baseAddress></peripheral>
+      <peripheral derivedFrom="LPSPI0"><name>LPSPI1</name><baseAddress>0x4002D000</baseAddress></peripheral>
       <xi:include href="peripherals/LPTMR0_MKE16F16.svd.xml"/>
-      <xi:include href="peripherals/LPUART0_MKE16F16.svd.xml"/>
-      <peripheral derivedFrom="LPUART0"><name>LPUART1</name>      <prependToName>LPUART1_</prependToName><baseAddress>0x4006B000</baseAddress></peripheral>
-      <peripheral derivedFrom="LPUART0"><name>LPUART2</name>      <prependToName>LPUART2_</prependToName><baseAddress>0x4006C000</baseAddress></peripheral>
+      <xi:include href="peripherals/LPUART0_MKE_FIFO.svd.xml"/>
+      <peripheral derivedFrom="LPUART0"><name>LPUART1</name><baseAddress>0x4006B000</baseAddress></peripheral>
+      <peripheral derivedFrom="LPUART0"><name>LPUART2</name><baseAddress>0x4006C000</baseAddress></peripheral>
       <xi:include href="peripherals/MCM_MKE16F16.svd.xml"/>
       <xi:include href="peripherals/MPU_MKE16F16.svd.xml"/>
       <xi:include href="peripherals/MSCM_MKE16F16.svd.xml"/>
@@ -65,14 +65,14 @@
       <xi:include href="peripherals/OSC32_MKE16F16.svd.xml"/>
       <xi:include href="peripherals/PCC_MKE16F16.svd.xml"/>
       <xi:include href="peripherals/PDB0_MKE16F16.svd.xml"/>
-      <peripheral derivedFrom="PDB0"><name>PDB1</name>      <prependToName>PDB1_</prependToName><baseAddress>0x40031000</baseAddress></peripheral>
-      <peripheral derivedFrom="PDB0"><name>PDB2</name>      <prependToName>PDB2_</prependToName><baseAddress>0x40033000</baseAddress></peripheral>
+      <peripheral derivedFrom="PDB0"><name>PDB1</name><baseAddress>0x40031000</baseAddress></peripheral>
+      <peripheral derivedFrom="PDB0"><name>PDB2</name><baseAddress>0x40033000</baseAddress></peripheral>
       <xi:include href="peripherals/PMC_MKE16F16.svd.xml"/>
       <xi:include href="peripherals/PORTA_MKE16F16.svd.xml"/>
-      <peripheral derivedFrom="PORTA"><name>PORTB</name>      <prependToName>PORTB_</prependToName><baseAddress>0x4004A000</baseAddress></peripheral>
-      <peripheral derivedFrom="PORTB"><name>PORTC</name>      <prependToName>PORTC_</prependToName><baseAddress>0x4004B000</baseAddress></peripheral>
-      <peripheral derivedFrom="PORTB"><name>PORTD</name>      <prependToName>PORTD_</prependToName><baseAddress>0x4004C000</baseAddress></peripheral>
-      <peripheral derivedFrom="PORTA"><name>PORTE</name>      <prependToName>PORTE_</prependToName><baseAddress>0x4004D000</baseAddress></peripheral>
+      <peripheral derivedFrom="PORTA"><name>PORTB</name><baseAddress>0x4004A000</baseAddress></peripheral>
+      <peripheral derivedFrom="PORTB"><name>PORTC</name><baseAddress>0x4004B000</baseAddress></peripheral>
+      <peripheral derivedFrom="PORTB"><name>PORTD</name><baseAddress>0x4004C000</baseAddress></peripheral>
+      <peripheral derivedFrom="PORTA"><name>PORTE</name><baseAddress>0x4004D000</baseAddress></peripheral>
       <xi:include href="peripherals/PWT_MKE16F16.svd.xml"/>
       <xi:include href="peripherals/RCM_MKE16F16.svd.xml"/>
       <xi:include href="peripherals/RTC_MKE16F16.svd.xml"/>

@@ -10,7 +10,6 @@ Devices using this peripheral:
          <name>PMM</name>
          <description>Power Management</description>
          <groupName>PMM</groupName>
-         <prependToName>PMM</prependToName>
          <headerStructName>PMM</headerStructName>
          <baseAddress>0x40000012</baseAddress>
          <size>32</size>

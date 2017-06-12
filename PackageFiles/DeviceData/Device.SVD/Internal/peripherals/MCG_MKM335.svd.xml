@@ -9,7 +9,6 @@ Devices using this peripheral:
          <name>MCG</name>
          <description>Multipurpose Clock Generator module</description>
          <groupName>MCG</groupName>
-         <prependToName>MCG</prependToName>
          <headerStructName>MCG</headerStructName>
          <baseAddress>0x40064000</baseAddress>
          <size>32</size>
@@ -72,12 +71,12 @@ Enables the internal reference clock for use as MCGIRCLK</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>MCGIRCLK inactive</description>
+                           <description>MCGIRCLK disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>MCGIRCLK active</description>
+                           <description>MCGIRCLK enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -153,7 +152,8 @@ If (RANGE=0 or OSCSEL=1) 1st value is used; else 2nd value</description>
                   </field>
                   <field>
                      <name>CLKS</name>
-                     <description>Clock Source Select</description>
+                     <description>Clock Source Select\n
+Selects the clock source for MCGOUTCLK</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
@@ -232,7 +232,8 @@ In any other MCG mode, LP bit has no affect</description>
                   </field>
                   <field>
                      <name>EREFS0</name>
-                     <description>External Reference Select\nSelects the source for the external reference clock</description>
+                     <description>External Reference Select\n
+Selects the source for the external reference clock</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -427,7 +428,7 @@ The DMX32 bit controls whether the DCO frequency range is narrowed to its maximu
                <fields>
                   <field>
                      <name>PLLSTEN0</name>
-                     <description>PLL Stop Enable\n
+                     <description>PLL0 Stop Enable\n
 Enables the PLL Clock during Normal Stop mode.\n
 In Low Power Stop mode, the PLL clock is always disabled</description>
                      <bitOffset>5</bitOffset>
@@ -515,7 +516,7 @@ Controls whether the PLL or FLL output is selected as the MCG source when CLKS[1
                         <enumeratedValue>
                            <name>0b1</name>
                            <description>PLL is selected  
-(PRDIV0 need to be programmed to the correct divider to generate a PLL reference clock in the range of 2-4 MHz prior to setting the PLLS bit)</description>
+(PRDIV0 need to be programmed to the correct divider to generate a PLL reference clock in the correct range prior to setting the PLLS bit)</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -555,22 +556,25 @@ Determines if an interrupt request is made following a loss of lock indication</
 The IRCST bit indicates the current source for the internal reference clock select clock (IRCSCLK)</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>IRC is slow clock (32 kHz)</description>
+                           <description>Slow clock (32 kHz)</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>IRC is fast clock (4 MHz)</description>
+                           <description>Fast clock (4 MHz)</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>OSCINIT0</name>
-                     <description>OSC Initialization</description>
+                     <description>OSC Initialization Status\n
+This flag, which resets to 0, is set to 1 after the initialization cycles of the crystal oscillator clock are
+completed. After being set, the bit is cleared to 0 if the OSC is subsequently disabled</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -593,6 +597,7 @@ These bits indicate the current clock mode.\n
 The CLKST bits do not update immediately due to internal synchronisation between clock domains</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>2</bitWidth>
+                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
@@ -622,6 +627,7 @@ The CLKST bits do not update immediately due to internal synchronisation between
 This bit indicates the current source for the FLL reference clock</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -641,6 +647,7 @@ This bit indicates the current source for the FLL reference clock</description>
 This bit indicates the clock source selected by PLLS</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -661,6 +668,7 @@ This bit indicates whether the PLL has acquired lock.\n
 Lock detection is only enabled when the PLL is enabled</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -718,7 +726,7 @@ The LOCS0 indicates when a loss of OSC0 reference clock has occurred</descriptio
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Loss has occurred</description>
+                           <description>Loss has occurred\nWrite-1 to clear</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -804,7 +812,7 @@ same during clock mode changes where the FLL/DCO output is still valid</descript
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>ATM failed</description>
+                           <description>ATM failed\nWrite-1 to clear</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

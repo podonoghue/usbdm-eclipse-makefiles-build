@@ -11,7 +11,6 @@ Devices using this peripheral:
          <name>PDB0</name>
          <description>Programmable Delay Block (1 channels, 4 triggers, 1 DAC, 4 pulse outputs)</description>
          <groupName>PDB</groupName>
-         <prependToName>PDB0</prependToName>
          <headerStructName>PDB</headerStructName>
          <baseAddress>0x40036000</baseAddress>
          <size>32</size>

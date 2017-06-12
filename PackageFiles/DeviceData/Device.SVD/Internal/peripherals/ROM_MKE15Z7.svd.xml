@@ -9,7 +9,6 @@ Devices using this peripheral:
          <name>ROM</name>
          <description>System ROM</description>
          <groupName>ROM</groupName>
-         <prependToName>ROM_</prependToName>
          <headerStructName>ROM</headerStructName>
          <baseAddress>0xF0002000</baseAddress>
          <size>32</size>

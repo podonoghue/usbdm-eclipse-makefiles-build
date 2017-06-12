@@ -14,7 +14,6 @@ Devices using this peripheral:
          <name>ACMP0</name>
          <description>Analog comparator</description>
          <groupName>ACMP</groupName>
-         <prependToName>ACMP0</prependToName>
          <headerStructName>ACMP</headerStructName>
          <baseAddress>0x40073000</baseAddress>
          <size>32</size>

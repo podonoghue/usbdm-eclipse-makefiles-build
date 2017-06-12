@@ -15,7 +15,6 @@ Devices using this peripheral:
          <name>MC</name>
          <description>Mode Controller</description>
          <groupName>MC</groupName>
-         <prependToName>MC</prependToName>
          <headerStructName>MC</headerStructName>
          <baseAddress>0x4007E000</baseAddress>
          <size>32</size>

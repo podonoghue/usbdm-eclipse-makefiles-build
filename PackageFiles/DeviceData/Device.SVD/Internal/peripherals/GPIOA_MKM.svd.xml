@@ -10,7 +10,6 @@ Devices using this peripheral:
          <name>GPIOA</name>
          <description>General Purpose Input/Output</description>
          <groupName>GPIOA</groupName>
-         <prependToName>GPIOA</prependToName>
          <headerStructName>GPIO</headerStructName>
          <baseAddress>0x400FF000</baseAddress>
          <size>8</size>

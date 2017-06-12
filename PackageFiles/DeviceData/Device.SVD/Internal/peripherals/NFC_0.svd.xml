@@ -14,7 +14,6 @@ Devices using this peripheral:
          <name>NFC</name>
          <description>NAND flash controller</description>
          <groupName>NFC</groupName>
-         <prependToName>NFC</prependToName>
          <headerStructName>NFC</headerStructName>
          <baseAddress>0x400A8000</baseAddress>
          <size>32</size>

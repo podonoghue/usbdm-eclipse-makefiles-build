@@ -9,7 +9,6 @@ Devices using this peripheral:
          <name>LPSPI0</name>
          <description>The LPSPI Memory Map/Register Definition can be found here</description>
          <groupName>LPSPI</groupName>
-         <prependToName>LPSPI0_</prependToName>
          <headerStructName>LPSPI0</headerStructName>
          <baseAddress>0x4002C000</baseAddress>
          <size>32</size>

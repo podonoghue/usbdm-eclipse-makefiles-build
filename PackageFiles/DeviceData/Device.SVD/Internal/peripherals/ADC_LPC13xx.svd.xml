@@ -66,42 +66,42 @@ Devices using this peripheral:
                      <bitWidth>3</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>11_CLOCKS_/_10_BITS</name>
+                           <name>11_CLOCKS_10_BITS</name>
                            <description>11 clocks / 10 bits</description>
                            <value>0x0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10_CLOCKS_/_9_BITS</name>
+                           <name>10_CLOCKS_9_BITS</name>
                            <description>10 clocks / 9 bits</description>
                            <value>0x1</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>9_CLOCKS_/_8_BITS</name>
+                           <name>9_CLOCKS_8_BITS</name>
                            <description>9 clocks / 8 bits</description>
                            <value>0x2</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>8_CLOCKS_/_7_BITS</name>
+                           <name>8_CLOCKS_7_BITS</name>
                            <description>8 clocks / 7 bits</description>
                            <value>0x3</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>7_CLOCKS_/_6_BITS</name>
+                           <name>7_CLOCKS_6_BITS</name>
                            <description>7 clocks / 6 bits</description>
                            <value>0x4</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>6_CLOCKS_/_5_BITS</name>
+                           <name>6_CLOCKS_5_BITS</name>
                            <description>6 clocks / 5 bits</description>
                            <value>0x5</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>5_CLOCKS_/_4_BITS</name>
+                           <name>5_CLOCKS_4_BITS</name>
                            <description>5 clocks / 4 bits</description>
                            <value>0x6</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>4_CLOCKS_/_3_BITS</name>
+                           <name>4_CLOCKS_3_BITS</name>
                            <description>4 clocks / 3 bits</description>
                            <value>0x7</value>
                         </enumeratedValue>
@@ -134,22 +134,22 @@ Devices using this peripheral:
                            <value>0x3</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>EDGE CT32B0_MAT0</name>
+                           <name>EDGE_CT32B0_MAT0</name>
                            <description>Start conversion when the edge selected by bit 27 occurs on CT32B0_MAT0. Timer match function does not need to be selected on the device pin</description>
                            <value>0x4</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>EDGE CT32B1_MAT0</name>
+                           <name>EDGE_CT32B1_MAT0</name>
                            <description>Start conversion when the edge selected by bit 27 occurs on CT32B0_MAT1. Timer match function does not need to be selected on the device pin</description>
                            <value>0x5</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>EDGE CT16B0_MAT0</name>
+                           <name>EDGE_CT16B0_MAT0</name>
                            <description>Start conversion when the edge selected by bit 27 occurs on CT16B0_MAT0. Timer match function does not need to be selected on the device pin</description>
                            <value>0x6</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>EDGE CT16B0_MAT0</name>
+                           <name>EDGE_CT16B0_MAT0</name>
                            <description>Start conversion when the edge selected by bit 27 occurs on CT16B0_MAT1. Timer match function does not need to be selected on the device pin</description>
                            <value>0x7</value>
                         </enumeratedValue>

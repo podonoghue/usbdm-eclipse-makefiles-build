@@ -31,7 +31,6 @@ Devices using this peripheral:
          <name>DWT</name>
          <description>Data Watchpoint and Trace Unit</description>
          <groupName>DWT</groupName>
-         <prependToName>DWT</prependToName>
          <headerStructName>DWT</headerStructName>
          <baseAddress>0xF0001000</baseAddress>
          <size>32</size>

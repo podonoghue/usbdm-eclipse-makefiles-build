@@ -9,7 +9,6 @@ Devices using this peripheral:
          <name>AFE</name>
          <description>This section describes the ADC</description>
          <groupName>AFE</groupName>
-         <prependToName>AFE</prependToName>
          <headerStructName>AFE</headerStructName>
          <baseAddress>0x40030000</baseAddress>
          <size>32</size>

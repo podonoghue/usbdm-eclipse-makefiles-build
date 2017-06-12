@@ -34,7 +34,6 @@ Devices using this peripheral:
          <name>CAU</name>
          <description>Memory Mapped Cryptographic Acceleration Unit</description>
          <groupName>CAU</groupName>
-         <prependToName>CAU</prependToName>
          <headerStructName>CAU</headerStructName>
          <baseAddress>0xE0081000</baseAddress>
          <size>32</size>

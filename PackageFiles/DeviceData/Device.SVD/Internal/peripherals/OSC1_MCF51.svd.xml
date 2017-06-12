@@ -8,7 +8,6 @@ Devices using this peripheral:
          <name>OSC1</name>
          <description>System Oscillator</description>
          <groupName>OSC</groupName>
-         <prependToName>OSC1</prependToName>
          <headerStructName>OSC</headerStructName>
          <baseAddress>0xFFFF8120</baseAddress>
          <size>8</size>

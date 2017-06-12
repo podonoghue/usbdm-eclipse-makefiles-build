@@ -52,7 +52,6 @@ Devices using this peripheral:
          <name>TPIU</name>
          <description>Trace Port Interface Unit</description>
          <groupName>TPIU</groupName>
-         <prependToName>TPIU</prependToName>
          <headerStructName>TPIU</headerStructName>
          <baseAddress>0xE0040000</baseAddress>
          <size>32</size>

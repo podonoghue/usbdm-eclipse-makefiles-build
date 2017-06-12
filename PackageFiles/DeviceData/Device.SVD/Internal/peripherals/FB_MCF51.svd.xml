@@ -8,7 +8,6 @@ Devices using this peripheral:
          <name>FB</name>
          <description>FlexBus external bus interface</description>
          <groupName>FB</groupName>
-         <prependToName>FB</prependToName>
          <headerStructName>FB</headerStructName>
          <baseAddress>0xFFFFE800</baseAddress>
          <size>32</size>

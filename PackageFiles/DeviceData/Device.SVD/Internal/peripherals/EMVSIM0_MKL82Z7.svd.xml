@@ -7,7 +7,6 @@ Devices using this peripheral:
          <name>EMVSIM0</name>
          <description>EMVSIM</description>
          <groupName>EMVSIM</groupName>
-         <prependToName>EMVSIM0_</prependToName>
          <headerStructName>EMVSIM</headerStructName>
          <baseAddress>0x4004E000</baseAddress>
          <size>32</size>

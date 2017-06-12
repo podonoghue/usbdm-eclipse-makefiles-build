@@ -4791,11 +4791,11 @@ typedef struct {                                /*       LPTMR0 Structure       
 */
 
 /* ================================================================================ */
-/* ================           LPUART0 (file:LPUART0_MKE16F16)       ================ */
+/* ================           LPUART0 (file:LPUART0_MKE_FIFO)       ================ */
 /* ================================================================================ */
 
 /**
- * @brief Universal Asynchronous Receiver/Transmitter
+ * @brief Low Power Universal Asynchronous Receiver/Transmitter
  */
 /**
 * @addtogroup LPUART_structs_GROUP LPUART struct
@@ -4805,14 +4805,16 @@ typedef struct {                                /*       LPTMR0 Structure       
 typedef struct {                                /*       LPUART0 Structure                                            */
    __I  uint32_t  VERID;                        /**< 0000: Version ID Register                                          */
    __I  uint32_t  PARAM;                        /**< 0004: Parameter Register                                           */
-   __IO uint32_t  GLOBAL;                       /**< 0008: LPUART Global Register                                       */
-   __IO uint32_t  PINCFG;                       /**< 000C: LPUART Pin Configuration Register                            */
-   __IO uint32_t  BAUD;                         /**< 0010: LPUART Baud Rate Register                                    */
-   __IO uint32_t  STAT;                         /**< 0014: LPUART Status Register                                       */
-   __IO uint32_t  CTRL;                         /**< 0018: LPUART Control Register                                      */
-   __IO uint32_t  DATA;                         /**< 001C: LPUART Data Register                                         */
-   __IO uint32_t  MATCH;                        /**< 0020: LPUART Match Address Register                                */
-   __IO uint32_t  MODIR;                        /**< 0024: LPUART Modem IrDA Register                                   */
+   __IO uint32_t  GLOBAL;                       /**< 0008: Global Register                                              */
+   __IO uint32_t  PINCFG;                       /**< 000C: Pin Configuration Register                                   */
+   __IO uint32_t  BAUD;                         /**< 0010: Baud Rate Register                                           */
+   __IO uint32_t  STAT;                         /**< 0014: Status Register                                              */
+   __IO uint32_t  CTRL;                         /**< 0018: Control Register                                             */
+   __IO uint32_t  DATA;                         /**< 001C: Data Register                                                */
+   __IO uint32_t  MATCH;                        /**< 0020: Match Address Register                                       */
+   __IO uint32_t  MODIR;                        /**< 0024: MODEM IrDA register                                          */
+   __IO uint32_t  FIFO;                         /**< 0028: FIFO Register                                                */
+   __IO uint32_t  WATER;                        /**< 002C: Watermark Register                                           */
 } LPUART0_Type;
 
 /**
@@ -4875,6 +4877,9 @@ typedef struct {                                /*       LPUART0 Structure      
 #define LPUART_BAUD_MATCFG_MASK                  (0xC0000U)                                          /*!< LPUART0_BAUD.MATCFG Mask                */
 #define LPUART_BAUD_MATCFG_SHIFT                 (18U)                                               /*!< LPUART0_BAUD.MATCFG Position            */
 #define LPUART_BAUD_MATCFG(x)                    (((uint32_t)(((uint32_t)(x))<<18U))&0xC0000UL)      /*!< LPUART0_BAUD.MATCFG Field               */
+#define LPUART_BAUD_RIDMAE_MASK                  (0x100000U)                                         /*!< LPUART0_BAUD.RIDMAE Mask                */
+#define LPUART_BAUD_RIDMAE_SHIFT                 (20U)                                               /*!< LPUART0_BAUD.RIDMAE Position            */
+#define LPUART_BAUD_RIDMAE(x)                    (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< LPUART0_BAUD.RIDMAE Field               */
 #define LPUART_BAUD_RDMAE_MASK                   (0x200000U)                                         /*!< LPUART0_BAUD.RDMAE Mask                 */
 #define LPUART_BAUD_RDMAE_SHIFT                  (21U)                                               /*!< LPUART0_BAUD.RDMAE Position             */
 #define LPUART_BAUD_RDMAE(x)                     (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< LPUART0_BAUD.RDMAE Field                */
@@ -4976,6 +4981,9 @@ typedef struct {                                /*       LPUART0 Structure      
 #define LPUART_CTRL_IDLECFG_MASK                 (0x700U)                                            /*!< LPUART0_CTRL.IDLECFG Mask               */
 #define LPUART_CTRL_IDLECFG_SHIFT                (8U)                                                /*!< LPUART0_CTRL.IDLECFG Position           */
 #define LPUART_CTRL_IDLECFG(x)                   (((uint32_t)(((uint32_t)(x))<<8U))&0x700UL)         /*!< LPUART0_CTRL.IDLECFG Field              */
+#define LPUART_CTRL_M7_MASK                      (0x800U)                                            /*!< LPUART0_CTRL.M7 Mask                    */
+#define LPUART_CTRL_M7_SHIFT                     (11U)                                               /*!< LPUART0_CTRL.M7 Position                */
+#define LPUART_CTRL_M7(x)                        (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< LPUART0_CTRL.M7 Field                   */
 #define LPUART_CTRL_MA2IE_MASK                   (0x4000U)                                           /*!< LPUART0_CTRL.MA2IE Mask                 */
 #define LPUART_CTRL_MA2IE_SHIFT                  (14U)                                               /*!< LPUART0_CTRL.MA2IE Position             */
 #define LPUART_CTRL_MA2IE(x)                     (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< LPUART0_CTRL.MA2IE Field                */
@@ -5031,36 +5039,9 @@ typedef struct {                                /*       LPUART0 Structure      
 #define LPUART_CTRL_R8T9_SHIFT                   (31U)                                               /*!< LPUART0_CTRL.R8T9 Position              */
 #define LPUART_CTRL_R8T9(x)                      (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< LPUART0_CTRL.R8T9 Field                 */
 /* ------- DATA Bit Fields                          ------ */
-#define LPUART_DATA_R0T0_MASK                    (0x1U)                                              /*!< LPUART0_DATA.R0T0 Mask                  */
-#define LPUART_DATA_R0T0_SHIFT                   (0U)                                                /*!< LPUART0_DATA.R0T0 Position              */
-#define LPUART_DATA_R0T0(x)                      (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPUART0_DATA.R0T0 Field                 */
-#define LPUART_DATA_R1T1_MASK                    (0x2U)                                              /*!< LPUART0_DATA.R1T1 Mask                  */
-#define LPUART_DATA_R1T1_SHIFT                   (1U)                                                /*!< LPUART0_DATA.R1T1 Position              */
-#define LPUART_DATA_R1T1(x)                      (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< LPUART0_DATA.R1T1 Field                 */
-#define LPUART_DATA_R2T2_MASK                    (0x4U)                                              /*!< LPUART0_DATA.R2T2 Mask                  */
-#define LPUART_DATA_R2T2_SHIFT                   (2U)                                                /*!< LPUART0_DATA.R2T2 Position              */
-#define LPUART_DATA_R2T2(x)                      (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LPUART0_DATA.R2T2 Field                 */
-#define LPUART_DATA_R3T3_MASK                    (0x8U)                                              /*!< LPUART0_DATA.R3T3 Mask                  */
-#define LPUART_DATA_R3T3_SHIFT                   (3U)                                                /*!< LPUART0_DATA.R3T3 Position              */
-#define LPUART_DATA_R3T3(x)                      (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< LPUART0_DATA.R3T3 Field                 */
-#define LPUART_DATA_R4T4_MASK                    (0x10U)                                             /*!< LPUART0_DATA.R4T4 Mask                  */
-#define LPUART_DATA_R4T4_SHIFT                   (4U)                                                /*!< LPUART0_DATA.R4T4 Position              */
-#define LPUART_DATA_R4T4(x)                      (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< LPUART0_DATA.R4T4 Field                 */
-#define LPUART_DATA_R5T5_MASK                    (0x20U)                                             /*!< LPUART0_DATA.R5T5 Mask                  */
-#define LPUART_DATA_R5T5_SHIFT                   (5U)                                                /*!< LPUART0_DATA.R5T5 Position              */
-#define LPUART_DATA_R5T5(x)                      (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPUART0_DATA.R5T5 Field                 */
-#define LPUART_DATA_R6T6_MASK                    (0x40U)                                             /*!< LPUART0_DATA.R6T6 Mask                  */
-#define LPUART_DATA_R6T6_SHIFT                   (6U)                                                /*!< LPUART0_DATA.R6T6 Position              */
-#define LPUART_DATA_R6T6(x)                      (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPUART0_DATA.R6T6 Field                 */
-#define LPUART_DATA_R7T7_MASK                    (0x80U)                                             /*!< LPUART0_DATA.R7T7 Mask                  */
-#define LPUART_DATA_R7T7_SHIFT                   (7U)                                                /*!< LPUART0_DATA.R7T7 Position              */
-#define LPUART_DATA_R7T7(x)                      (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< LPUART0_DATA.R7T7 Field                 */
-#define LPUART_DATA_R8T8_MASK                    (0x100U)                                            /*!< LPUART0_DATA.R8T8 Mask                  */
-#define LPUART_DATA_R8T8_SHIFT                   (8U)                                                /*!< LPUART0_DATA.R8T8 Position              */
-#define LPUART_DATA_R8T8(x)                      (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< LPUART0_DATA.R8T8 Field                 */
-#define LPUART_DATA_R9T9_MASK                    (0x200U)                                            /*!< LPUART0_DATA.R9T9 Mask                  */
-#define LPUART_DATA_R9T9_SHIFT                   (9U)                                                /*!< LPUART0_DATA.R9T9 Position              */
-#define LPUART_DATA_R9T9(x)                      (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< LPUART0_DATA.R9T9 Field                 */
+#define LPUART_DATA_RT_MASK                      (0x3FFU)                                            /*!< LPUART0_DATA.RT Mask                    */
+#define LPUART_DATA_RT_SHIFT                     (0U)                                                /*!< LPUART0_DATA.RT Position                */
+#define LPUART_DATA_RT(x)                        (((uint32_t)(((uint32_t)(x))<<0U))&0x3FFUL)         /*!< LPUART0_DATA.RT Field                   */
 #define LPUART_DATA_IDLINE_MASK                  (0x800U)                                            /*!< LPUART0_DATA.IDLINE Mask                */
 #define LPUART_DATA_IDLINE_SHIFT                 (11U)                                               /*!< LPUART0_DATA.IDLINE Position            */
 #define LPUART_DATA_IDLINE(x)                    (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< LPUART0_DATA.IDLINE Field               */
@@ -5102,12 +5083,68 @@ typedef struct {                                /*       LPUART0 Structure      
 #define LPUART_MODIR_TXCTSSRC_MASK               (0x20U)                                             /*!< LPUART0_MODIR.TXCTSSRC Mask             */
 #define LPUART_MODIR_TXCTSSRC_SHIFT              (5U)                                                /*!< LPUART0_MODIR.TXCTSSRC Position         */
 #define LPUART_MODIR_TXCTSSRC(x)                 (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPUART0_MODIR.TXCTSSRC Field            */
+#define LPUART_MODIR_RTSWATER_MASK               (0xFF00U)                                           /*!< LPUART0_MODIR.RTSWATER Mask             */
+#define LPUART_MODIR_RTSWATER_SHIFT              (8U)                                                /*!< LPUART0_MODIR.RTSWATER Position         */
+#define LPUART_MODIR_RTSWATER(x)                 (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< LPUART0_MODIR.RTSWATER Field            */
 #define LPUART_MODIR_TNP_MASK                    (0x30000U)                                          /*!< LPUART0_MODIR.TNP Mask                  */
 #define LPUART_MODIR_TNP_SHIFT                   (16U)                                               /*!< LPUART0_MODIR.TNP Position              */
 #define LPUART_MODIR_TNP(x)                      (((uint32_t)(((uint32_t)(x))<<16U))&0x30000UL)      /*!< LPUART0_MODIR.TNP Field                 */
 #define LPUART_MODIR_IREN_MASK                   (0x40000U)                                          /*!< LPUART0_MODIR.IREN Mask                 */
 #define LPUART_MODIR_IREN_SHIFT                  (18U)                                               /*!< LPUART0_MODIR.IREN Position             */
 #define LPUART_MODIR_IREN(x)                     (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< LPUART0_MODIR.IREN Field                */
+/* ------- FIFO Bit Fields                          ------ */
+#define LPUART_FIFO_RXFIFOSIZE_MASK              (0x7U)                                              /*!< LPUART0_FIFO.RXFIFOSIZE Mask            */
+#define LPUART_FIFO_RXFIFOSIZE_SHIFT             (0U)                                                /*!< LPUART0_FIFO.RXFIFOSIZE Position        */
+#define LPUART_FIFO_RXFIFOSIZE(x)                (((uint32_t)(((uint32_t)(x))<<0U))&0x7UL)           /*!< LPUART0_FIFO.RXFIFOSIZE Field           */
+#define LPUART_FIFO_RXFE_MASK                    (0x8U)                                              /*!< LPUART0_FIFO.RXFE Mask                  */
+#define LPUART_FIFO_RXFE_SHIFT                   (3U)                                                /*!< LPUART0_FIFO.RXFE Position              */
+#define LPUART_FIFO_RXFE(x)                      (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< LPUART0_FIFO.RXFE Field                 */
+#define LPUART_FIFO_TXFIFOSIZE_MASK              (0x70U)                                             /*!< LPUART0_FIFO.TXFIFOSIZE Mask            */
+#define LPUART_FIFO_TXFIFOSIZE_SHIFT             (4U)                                                /*!< LPUART0_FIFO.TXFIFOSIZE Position        */
+#define LPUART_FIFO_TXFIFOSIZE(x)                (((uint32_t)(((uint32_t)(x))<<4U))&0x70UL)          /*!< LPUART0_FIFO.TXFIFOSIZE Field           */
+#define LPUART_FIFO_TXFE_MASK                    (0x80U)                                             /*!< LPUART0_FIFO.TXFE Mask                  */
+#define LPUART_FIFO_TXFE_SHIFT                   (7U)                                                /*!< LPUART0_FIFO.TXFE Position              */
+#define LPUART_FIFO_TXFE(x)                      (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< LPUART0_FIFO.TXFE Field                 */
+#define LPUART_FIFO_RXUFE_MASK                   (0x100U)                                            /*!< LPUART0_FIFO.RXUFE Mask                 */
+#define LPUART_FIFO_RXUFE_SHIFT                  (8U)                                                /*!< LPUART0_FIFO.RXUFE Position             */
+#define LPUART_FIFO_RXUFE(x)                     (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< LPUART0_FIFO.RXUFE Field                */
+#define LPUART_FIFO_TXOFE_MASK                   (0x200U)                                            /*!< LPUART0_FIFO.TXOFE Mask                 */
+#define LPUART_FIFO_TXOFE_SHIFT                  (9U)                                                /*!< LPUART0_FIFO.TXOFE Position             */
+#define LPUART_FIFO_TXOFE(x)                     (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< LPUART0_FIFO.TXOFE Field                */
+#define LPUART_FIFO_RXIDEN_MASK                  (0x1C00U)                                           /*!< LPUART0_FIFO.RXIDEN Mask                */
+#define LPUART_FIFO_RXIDEN_SHIFT                 (10U)                                               /*!< LPUART0_FIFO.RXIDEN Position            */
+#define LPUART_FIFO_RXIDEN(x)                    (((uint32_t)(((uint32_t)(x))<<10U))&0x1C00UL)       /*!< LPUART0_FIFO.RXIDEN Field               */
+#define LPUART_FIFO_RXFLUSH_MASK                 (0x4000U)                                           /*!< LPUART0_FIFO.RXFLUSH Mask               */
+#define LPUART_FIFO_RXFLUSH_SHIFT                (14U)                                               /*!< LPUART0_FIFO.RXFLUSH Position           */
+#define LPUART_FIFO_RXFLUSH(x)                   (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< LPUART0_FIFO.RXFLUSH Field              */
+#define LPUART_FIFO_TXFLUSH_MASK                 (0x8000U)                                           /*!< LPUART0_FIFO.TXFLUSH Mask               */
+#define LPUART_FIFO_TXFLUSH_SHIFT                (15U)                                               /*!< LPUART0_FIFO.TXFLUSH Position           */
+#define LPUART_FIFO_TXFLUSH(x)                   (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< LPUART0_FIFO.TXFLUSH Field              */
+#define LPUART_FIFO_RXUF_MASK                    (0x10000U)                                          /*!< LPUART0_FIFO.RXUF Mask                  */
+#define LPUART_FIFO_RXUF_SHIFT                   (16U)                                               /*!< LPUART0_FIFO.RXUF Position              */
+#define LPUART_FIFO_RXUF(x)                      (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< LPUART0_FIFO.RXUF Field                 */
+#define LPUART_FIFO_TXOF_MASK                    (0x20000U)                                          /*!< LPUART0_FIFO.TXOF Mask                  */
+#define LPUART_FIFO_TXOF_SHIFT                   (17U)                                               /*!< LPUART0_FIFO.TXOF Position              */
+#define LPUART_FIFO_TXOF(x)                      (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< LPUART0_FIFO.TXOF Field                 */
+#define LPUART_FIFO_RXEMPT_MASK                  (0x400000U)                                         /*!< LPUART0_FIFO.RXEMPT Mask                */
+#define LPUART_FIFO_RXEMPT_SHIFT                 (22U)                                               /*!< LPUART0_FIFO.RXEMPT Position            */
+#define LPUART_FIFO_RXEMPT(x)                    (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< LPUART0_FIFO.RXEMPT Field               */
+#define LPUART_FIFO_TXEMPT_MASK                  (0x800000U)                                         /*!< LPUART0_FIFO.TXEMPT Mask                */
+#define LPUART_FIFO_TXEMPT_SHIFT                 (23U)                                               /*!< LPUART0_FIFO.TXEMPT Position            */
+#define LPUART_FIFO_TXEMPT(x)                    (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< LPUART0_FIFO.TXEMPT Field               */
+/* ------- WATER Bit Fields                         ------ */
+#define LPUART_WATER_TXWATER_MASK                (0xFFU)                                             /*!< LPUART0_WATER.TXWATER Mask              */
+#define LPUART_WATER_TXWATER_SHIFT               (0U)                                                /*!< LPUART0_WATER.TXWATER Position          */
+#define LPUART_WATER_TXWATER(x)                  (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< LPUART0_WATER.TXWATER Field             */
+#define LPUART_WATER_TXCOUNT_MASK                (0xFF00U)                                           /*!< LPUART0_WATER.TXCOUNT Mask              */
+#define LPUART_WATER_TXCOUNT_SHIFT               (8U)                                                /*!< LPUART0_WATER.TXCOUNT Position          */
+#define LPUART_WATER_TXCOUNT(x)                  (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< LPUART0_WATER.TXCOUNT Field             */
+#define LPUART_WATER_RXWATER_MASK                (0xFF0000U)                                         /*!< LPUART0_WATER.RXWATER Mask              */
+#define LPUART_WATER_RXWATER_SHIFT               (16U)                                               /*!< LPUART0_WATER.RXWATER Position          */
+#define LPUART_WATER_RXWATER(x)                  (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< LPUART0_WATER.RXWATER Field             */
+#define LPUART_WATER_RXCOUNT_MASK                (0xFF000000U)                                       /*!< LPUART0_WATER.RXCOUNT Mask              */
+#define LPUART_WATER_RXCOUNT_SHIFT               (24U)                                               /*!< LPUART0_WATER.RXCOUNT Position          */
+#define LPUART_WATER_RXCOUNT(x)                  (((uint32_t)(((uint32_t)(x))<<24U))&0xFF000000UL)   /*!< LPUART0_WATER.RXCOUNT Field             */
 /**
  * @} */ /* End group LPUART_Register_Masks_GROUP 
  */
@@ -5130,7 +5167,7 @@ typedef struct {                                /*       LPUART0 Structure      
 /* ================================================================================ */
 
 /**
- * @brief Universal Asynchronous Receiver/Transmitter
+ * @brief Low Power Universal Asynchronous Receiver/Transmitter
  */
 
 /* LPUART1 - Peripheral instance base addresses */
@@ -5151,7 +5188,7 @@ typedef struct {                                /*       LPUART0 Structure      
 /* ================================================================================ */
 
 /**
- * @brief Universal Asynchronous Receiver/Transmitter
+ * @brief Low Power Universal Asynchronous Receiver/Transmitter
  */
 
 /* LPUART2 - Peripheral instance base addresses */

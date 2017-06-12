@@ -8,7 +8,6 @@ Devices using this peripheral:
          <name>USBPHY</name>
          <description>USBPHY Register Reference Index</description>
          <groupName>USBPHY</groupName>
-         <prependToName>USBPHY</prependToName>
          <headerStructName>USBPHY</headerStructName>
          <baseAddress>0x400A2000</baseAddress>
          <size>32</size>

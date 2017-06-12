@@ -13,7 +13,6 @@ The analog-to-digital converter (ADC) consists of two separate and complete ADCs
 sample and hold circuits. The converters share a common voltage reference and common digital control
 module</description>
          <groupName>ADC</groupName>
-         <prependToName>ADC</prependToName>
          <headerStructName>ADC</headerStructName>
          <baseAddress>0x40190000</baseAddress>
          <size>32</size>
