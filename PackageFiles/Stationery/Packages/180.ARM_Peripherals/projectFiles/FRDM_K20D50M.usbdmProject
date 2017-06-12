@@ -28,7 +28,7 @@
    <item key="$signal$PTA4_muxSetting"                     value="mux1" />
    <item key="$signal$PTA5_muxSetting"                     value="mux1" />
    <item key="$signal$PTB0_descriptionSetting"             value="Accelerometer" />
-   <item key="$signal$PTB0_muxSetting"                     value="mux1" />
+   <item key="$signal$PTB0_muxSetting"                     value="mux2" />
    <item key="$signal$PTB16_descriptionSetting"            value="USB_serial" />
    <item key="$signal$PTB16_muxSetting"                    value="mux3" />
    <item key="$signal$PTB17_descriptionSetting"            value="USB_serial" />
@@ -38,7 +38,7 @@
    <item key="$signal$PTB19_descriptionSetting"            value="Touch 2" />
    <item key="$signal$PTB19_muxSetting"                    value="mux0" />
    <item key="$signal$PTB1_descriptionSetting"             value="Accelerometer" />
-   <item key="$signal$PTB1_muxSetting"                     value="mux1" />
+   <item key="$signal$PTB1_muxSetting"                     value="mux2" />
    <item key="$signal$PTB2_muxSetting"                     value="mux1" />
    <item key="$signal$PTB3_muxSetting"                     value="mux1" />
    <item key="$signal$PTC0_muxSetting"                     value="mux0" />
@@ -165,11 +165,11 @@
    <item key="/I2C0/irqLevel"                              value="0" />
    <item key="/LLWU/irqHandlerInstalled"                   value="false" />
    <item key="/LLWU/irqLevel"                              value="0" />
-   <item key="/LLWU/llwu_filt1_filte"                      value="1" />
-   <item key="/LLWU/llwu_filt1_filtsel"                    value="12" />
+   <item key="/LLWU/llwu_filt1_filte"                      value="0" />
+   <item key="/LLWU/llwu_filt1_filtsel"                    value="0" />
    <item key="/LLWU/llwu_filt2_filte"                      value="0" />
    <item key="/LLWU/llwu_filt2_filtsel"                    value="0" />
-   <item key="/LLWU/llwu_me_wume0"                         value="true" />
+   <item key="/LLWU/llwu_me_wume0"                         value="false" />
    <item key="/LLWU/llwu_me_wume1"                         value="false" />
    <item key="/LLWU/llwu_me_wume2"                         value="false" />
    <item key="/LLWU/llwu_me_wume3"                         value="false" />
