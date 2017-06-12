@@ -42,7 +42,7 @@ int main(void) {
    // Real programs never die!
    for(;;) {
       count++;
-//      printf("Count = %d\n", count++);
+//      printf("Count = %d\n", count);
       delay();
    }
    return 0;
