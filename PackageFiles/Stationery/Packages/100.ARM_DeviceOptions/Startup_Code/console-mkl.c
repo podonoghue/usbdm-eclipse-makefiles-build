@@ -16,13 +16,12 @@
 //=================================================================================
 // UART to use
 //
-#define UART  UART0
+#define UART       UART0
 #define UART_CLOCK SYSTEM_UART0_CLOCK
 
 //=================================================================================
 // UART Port pin setup
 //
-__attribute__((always_inline))
 inline static void initDefaultUart()  {
    // Enable clock to UART
    SIM->SCGC4 |= SIM_SCGC4_UART0_MASK;
@@ -43,13 +42,12 @@ inline static void initDefaultUart()  {
 //=================================================================================
 // UART to use
 //
-#define UART  UART0
+#define UART       UART0
 #define UART_CLOCK SYSTEM_UART0_CLOCK
 
 //=================================================================================
 // UART Port pin setup
 //
-__attribute__((always_inline))
 inline static void initDefaultUart()  {
    // Enable clock to UART
    SIM->SCGC4 |= SIM_SCGC4_UART0_MASK;
@@ -75,13 +73,12 @@ inline static void initDefaultUart()  {
 //=================================================================================
 // UART to use
 //
-#define UART  UART0
+#define UART       UART0
 #define UART_CLOCK SYSTEM_UART0_CLOCK
 
 //=================================================================================
 // UART Port pin setup
 //
-__attribute__((always_inline))
 inline static void initDefaultUart()  {
    // Enable clock to UART
    SIM->SCGC4 |= SIM_SCGC4_UART0_MASK;
@@ -97,18 +94,6 @@ inline static void initDefaultUart()  {
    PORTD->PCR[7] = PORT_PCR_MUX(3);
 }
 #endif
-
-#if !defined(UART_CLOCK)
-#error "UART_CLOCK not defined"
-#endif
-
-/*
- * Initialises the Console with default settings
- */
-void console_initialise() {
-   initDefaultUart();
-   console_setBaudRate(DEFAULT_BAUD_RATE);
-}
 
 /**
  * Set Console baud rate
@@ -221,10 +206,19 @@ int console_rxChar(void) {
       }
    }  while ((status & UART_S1_RDRF_MASK) == 0);
    int ch = UART->D;
-//   console_txChar(ch);
+   //   console_txChar(ch);
    if (ch == '\r') {
       ch = '\n';
    }
    return ch;
 }
 #endif
+
+/*
+ * Initialises the Console with default settings
+ */
+void console_initialise() {
+   initDefaultUart();
+   console_setBaudRate(DEFAULT_BAUD_RATE);
+}
+
