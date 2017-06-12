@@ -81,7 +81,7 @@ Includes example port operations.
 Example project for STM32F103 (OLIMEXINO-STM32 Board)
 Includes STM32 Standard Peripheral Library (SPL) and CMSIS-RTOS 
       </example>
-      <example description="USBDM API"                       family="NONE" path="USBDM_API_Example.zip">
+      <example description="USBDM API"                       family="NONE" path="USBDM_API_Example.zip" buildTool="net.sourceforge.usbdm.cdt.toolchain.processor.usbdmConfigure.armLtdGnuToolsForARM">
 Example project using USBDM API to read data from the Flash memory of a 
 target device using a USBDM interface.
       </example>
