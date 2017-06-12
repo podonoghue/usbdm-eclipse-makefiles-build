@@ -182,8 +182,8 @@ Control extended Boot features on these devices
       <1=> Normal (RUN) - OUTDIV = /1
 </h>
  */
-#define BOOT_ENABLE    (0)      // e0
-#define FOPT_BOOTSRC   (0xC0)   // o1
+#define BOOT_ENABLE    (1)      // e0
+#define FOPT_BOOTSRC   (0x0)   // o1
 #define FOPT_MISC      (0x25)   // q2
 #define FOPT_RESERVED  (0x1A)   // Bits not controlled by above
 #define FOPT_BOOT_OFF  (0xC2)   // Value to use when (BOOT_ENABLE=0)

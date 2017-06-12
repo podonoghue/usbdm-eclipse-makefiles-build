@@ -157,7 +157,7 @@ Control extended Boot features on these devices
 </h>
  */
 #define BOOT_ENABLE    (1)      // e0
-#define FOPT_BOOTSRC   (0xC0)   // o1
+#define FOPT_BOOTSRC   (0x0)   // o1
 #define FOPT_MISC      (0x2E)   // q2
 #define FOPT_LPBOOT    (0x11)   // o3
 #define FOPT_RESERVED  (0x00)   // Bits not controlled by above

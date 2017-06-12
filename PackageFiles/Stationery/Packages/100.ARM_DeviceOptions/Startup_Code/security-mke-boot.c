@@ -180,8 +180,8 @@ Control extended Boot features on these devices
       <1=> Normal boot: Core and system clock divider (DIVCORE) is 0x0 (divide by 1).
 </h>
  */
-#define BOOT_ENABLE    (0)      // e0
-#define FOPT_BOOTSRC   (0xC0)   // o1
+#define BOOT_ENABLE    (1)      // e0
+#define FOPT_BOOTSRC   (0x0)   // o1
 #define FOPT_MISC      (0xF)    // q2
 #define FOPT_RESERVED  (0x30)   // Bits not controlled by above
 #define FOPT_BOOT_OFF  (0xC2)   // Value to use when (BOOT_ENABLE=0)
