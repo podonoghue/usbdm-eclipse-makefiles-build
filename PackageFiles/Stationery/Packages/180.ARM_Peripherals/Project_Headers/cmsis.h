@@ -184,10 +184,6 @@ public:
  *    MyTimer myTimer1("Timer 1");
  *    MyTimer myTimer2("Timer 2");
  *
- *    // Create timers
- *    myTimer1.create();
- *    myTimer2.create();
- *
  *    // Start timers
  *    myTimer1.start(1000);
  *    myTimer2.start(500);
@@ -208,7 +204,7 @@ private:
    virtual void callback() = 0;
 
    /**
-    * Shim to allow use of a static call-back
+    * Shim to allow use of a static call-back needed by CMSIS timer
     *
     * @param arg Pointer to TimerClass instance
     *
@@ -219,19 +215,20 @@ private:
       This->callback();
    }
 
+   // Hide these
+   using Timer<timerType>::create;
+   using Timer<timerType>::destroy;
+
 public:
    using Timer<timerType>::start;
    using Timer<timerType>::stop;
    using Timer<timerType>::getId;
-   using Timer<timerType>::destroy;
 
    TimerClass() : Timer<timerType>(shim) {
+       // Create timer here with required 'this' argument
+	   Timer<timerType>::create(this);
    }
    virtual ~TimerClass() {
-   }
-
-   void create() {
-      Timer<timerType>::create(this);
    }
 };
 
