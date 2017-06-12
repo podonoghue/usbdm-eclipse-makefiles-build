@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"
 ?>
 <!DOCTYPE devicePage SYSTEM "_menu.dtd" >
-<!-- llwu_pe4_filt2.xml -->
+<!-- llwu_pe8_filt4.xml -->
 
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Low Leakage Wakeup Unit">
    <binaryOption name="llwu_me_wume0" description="0: LPTMR" toolTip="Enables this peripheral to wakeup the processor">
@@ -16,11 +16,11 @@
       <choice name="Disabled" value="0" isDefault="true" />
       <choice name="Enabled"   value="1" />
    </binaryOption>   
-   <binaryOption name="llwu_me_wume3" description="3: CMP2/CMP3 (if present)"  toolTip="Enables this peripheral to wakeup the processor">
+   <binaryOption name="llwu_me_wume3" description="3: CMP2/CMP3"  toolTip="Enables this peripheral to wakeup the processor">
       <choice name="Disabled" value="0" isDefault="true" />
       <choice name="Enabled"   value="1" />
    </binaryOption>   
-   <binaryOption name="llwu_me_wume4" description="4: TSI0 (if present)"  toolTip="Enables this peripheral to wakeup the processor">
+   <binaryOption name="llwu_me_wume4" description="4: TSI0"  toolTip="Enables this peripheral to wakeup the processor">
       <choice name="Disabled" value="0" isDefault="true" />
       <choice name="Enabled"   value="1" />
    </binaryOption>   
@@ -130,6 +130,91 @@
       \t   LLWU_PE4_WUPE14($(llwu_pe4_wupe14))|  // LLWUP 14
       \t   LLWU_PE4_WUPE15($(llwu_pe4_wupe15));  // LLWUP 15 \n\n
    ]]></template>
+
+   <choiceOption name="llwu_pe5_wupe16" description="Wakeup Pin Enable" toolTip="Enables and configures the edge detection for the wakeup pin">
+      <choice name="Disabled" value="0" isDefault="true" /> <choice name="Rising" value="1" /> <choice name="Falling" value="2" /> <choice name="Either" value="3" />
+   </choiceOption>   
+   <choiceOption name="llwu_pe5_wupe17" description="Wakeup Pin Enable" toolTip="Enables and configures the edge detection for the wakeup pin">
+      <choice name="Disabled" value="0" isDefault="true" /> <choice name="Rising" value="1" /> <choice name="Falling" value="2" /> <choice name="Either" value="3" />
+   </choiceOption>   
+   <choiceOption name="llwu_pe5_wupe18" description="Wakeup Pin Enable" toolTip="Enables and configures the edge detection for the wakeup pin">
+      <choice name="Disabled" value="0" isDefault="true" /> <choice name="Rising" value="1" /> <choice name="Falling" value="2" /> <choice name="Either" value="3" />
+   </choiceOption>   
+   <choiceOption name="llwu_pe5_wupe19" description="Wakeup Pin Enable" toolTip="Enables and configures the edge detection for the wakeup pin">
+      <choice name="Disabled" value="0" isDefault="true" /> <choice name="Rising" value="1" /> <choice name="Falling" value="2" /> <choice name="Either" value="3" />
+   </choiceOption>   
+
+   <template><![CDATA[
+      \tstatic constexpr uint8_t pe5 = 
+      \t   LLWU_PE5_WUPE16($(llwu_pe5_wupe16))|  // LLWUP 16
+      \t   LLWU_PE5_WUPE17($(llwu_pe5_wupe17))|  // LLWUP 17
+      \t   LLWU_PE5_WUPE18($(llwu_pe5_wupe18))|  // LLWUP 18
+      \t   LLWU_PE5_WUPE19($(llwu_pe5_wupe19));  // LLWUP 19 \n\n
+   ]]></template>
+
+   <choiceOption name="llwu_pe6_wupe20" description="Wakeup Pin Enable" toolTip="Enables and configures the edge detection for the wakeup pin">
+      <choice name="Disabled" value="0" isDefault="true" /> <choice name="Rising" value="1" /> <choice name="Falling" value="2" /> <choice name="Either" value="3" />
+   </choiceOption>   
+   <choiceOption name="llwu_pe6_wupe21" description="Wakeup Pin Enable" toolTip="Enables and configures the edge detection for the wakeup pin">
+      <choice name="Disabled" value="0" isDefault="true" /> <choice name="Rising" value="1" /> <choice name="Falling" value="2" /> <choice name="Either" value="3" />
+   </choiceOption>   
+   <choiceOption name="llwu_pe6_wupe22" description="Wakeup Pin Enable" toolTip="Enables and configures the edge detection for the wakeup pin">
+      <choice name="Disabled" value="0" isDefault="true" /> <choice name="Rising" value="1" /> <choice name="Falling" value="2" /> <choice name="Either" value="3" />
+   </choiceOption>   
+   <choiceOption name="llwu_pe6_wupe23" description="Wakeup Pin Enable" toolTip="Enables and configures the edge detection for the wakeup pin">
+      <choice name="Disabled" value="0" isDefault="true" /> <choice name="Rising" value="1" /> <choice name="Falling" value="2" /> <choice name="Either" value="3" />
+   </choiceOption>   
+
+   <template><![CDATA[
+      \tstatic constexpr uint8_t pe6 = 
+      \t   LLWU_PE6_WUPE20($(llwu_pe6_wupe20))|  // LLWUP 20
+      \t   LLWU_PE6_WUPE21($(llwu_pe6_wupe21))|  // LLWUP 21
+      \t   LLWU_PE6_WUPE22($(llwu_pe6_wupe22))|  // LLWUP 22
+      \t   LLWU_PE6_WUPE23($(llwu_pe6_wupe23));  // LLWUP 23 \n\n
+   ]]></template>
+
+   <choiceOption name="llwu_pe7_wupe24" description="Wakeup Pin Enable" toolTip="Enables and configures the edge detection for the wakeup pin">
+      <choice name="Disabled" value="0" isDefault="true" /> <choice name="Rising" value="1" /> <choice name="Falling" value="2" /> <choice name="Either" value="3" />
+   </choiceOption>   
+   <choiceOption name="llwu_pe7_wupe25" description="Wakeup Pin Enable" toolTip="Enables and configures the edge detection for the wakeup pin">
+      <choice name="Disabled" value="0" isDefault="true" /> <choice name="Rising" value="1" /> <choice name="Falling" value="2" /> <choice name="Either" value="3" />
+   </choiceOption>   
+   <choiceOption name="llwu_pe7_wupe26" description="Wakeup Pin Enable" toolTip="Enables and configures the edge detection for the wakeup pin">
+      <choice name="Disabled" value="0" isDefault="true" /> <choice name="Rising" value="1" /> <choice name="Falling" value="2" /> <choice name="Either" value="3" />
+   </choiceOption>   
+   <choiceOption name="llwu_pe7_wupe27" description="Wakeup Pin Enable" toolTip="Enables and configures the edge detection for the wakeup pin">
+      <choice name="Disabled" value="0" isDefault="true" /> <choice name="Rising" value="1" /> <choice name="Falling" value="2" /> <choice name="Either" value="3" />
+   </choiceOption>   
+
+   <template><![CDATA[
+      \tstatic constexpr uint8_t pe7 = 
+      \t   LLWU_PE7_WUPE24($(llwu_pe7_wupe24))|  // LLWUP 24
+      \t   LLWU_PE7_WUPE25($(llwu_pe7_wupe25))|  // LLWUP 25
+      \t   LLWU_PE7_WUPE26($(llwu_pe7_wupe26))|  // LLWUP 26
+      \t   LLWU_PE7_WUPE27($(llwu_pe7_wupe27));  // LLWUP 27 \n\n
+   ]]></template>
+
+   <choiceOption name="llwu_pe8_wupe28" description="Wakeup Pin Enable" toolTip="Enables and configures the edge detection for the wakeup pin">
+      <choice name="Disabled" value="0" isDefault="true" /> <choice name="Rising" value="1" /> <choice name="Falling" value="2" /> <choice name="Either" value="3" />
+   </choiceOption>   
+   <choiceOption name="llwu_pe8_wupe29" description="Wakeup Pin Enable" toolTip="Enables and configures the edge detection for the wakeup pin">
+      <choice name="Disabled" value="0" isDefault="true" /> <choice name="Rising" value="1" /> <choice name="Falling" value="2" /> <choice name="Either" value="3" />
+   </choiceOption>   
+   <choiceOption name="llwu_pe8_wupe30" description="Wakeup Pin Enable" toolTip="Enables and configures the edge detection for the wakeup pin">
+      <choice name="Disabled" value="0" isDefault="true" /> <choice name="Rising" value="1" /> <choice name="Falling" value="2" /> <choice name="Either" value="3" />
+   </choiceOption>   
+   <choiceOption name="llwu_pe4_wupe31" description="Wakeup Pin Enable" toolTip="Enables and configures the edge detection for the wakeup pin">
+      <choice name="Disabled" value="0" isDefault="true" /> <choice name="Rising" value="1" /> <choice name="Falling" value="2" /> <choice name="Either" value="3" />
+   </choiceOption>   
+
+   <template><![CDATA[
+      \tstatic constexpr uint8_t pe8 = 
+      \t   LLWU_PE8_WUPE28($(llwu_pe8_wupe28))|  // LLWUP 28
+      \t   LLWU_PE8_WUPE29($(llwu_pe8_wupe29))|  // LLWUP 29
+      \t   LLWU_PE8_WUPE30($(llwu_pe8_wupe30))|  // LLWUP 30
+      \t   LLWU_PE8_WUPE21($(llwu_pe8_wupe21));  // LLWUP 21 \n\n
+   ]]></template>
+      
       
    <choiceOption 
       name="llwu_filt1_filte" 
@@ -146,7 +231,7 @@
       name="llwu_filt1_filtsel" 
       description="Filter 1 Pin Select" 
       toolTip="Selects 1 of the external signals to be muxed into the filter"
-      min="0" max="15" />
+      min="0" max="31" />
       
    <template><![CDATA[
       \t// Pin Filter 1 register
@@ -170,7 +255,7 @@
       name="llwu_filt2_filtsel" 
       description="Filter 2 Pin Select" 
       toolTip="Selects 1 of the external signals to be muxed into the filter"
-      min="0" max="15" />
+      min="0" max="31" />
 
    <template><![CDATA[
       \t// Pin Filter 2 register
@@ -178,7 +263,55 @@
       \t   LLWU_FILT_FILTE($(llwu_filt2_filte)) |   // Digital Filter On External Pin
       \t   LLWU_FILT_FILTSEL($(llwu_filt2_filtsel));  // Filter Pin Select\n\n
    ]]></template>
+   
+   <choiceOption 
+      name="llwu_filt3_filte" 
+      description="Digital Filter 3 On External Pin"  
+      toolTip="Controls the digital filter options for the external pin detect.">
       
+      <choice name="Filter disabled" value="0" isDefault="true" />
+      <choice name="Filter rising"   value="1" />
+      <choice name="Filter falling"  value="2" />
+      <choice name="Filter both"     value="3" />
+   </choiceOption>   
+   
+   <intOption 
+      name="llwu_filt3_filtsel" 
+      description="Filter 3 Pin Select" 
+      toolTip="Selects 1 of the external signals to be muxed into the filter"
+      min="0" max="31" />
+
+   <template><![CDATA[
+      \t// Pin Filter 3 register
+      \tstatic constexpr uint8_t filt3 =
+      \t   LLWU_FILT_FILTE($(llwu_filt3_filte)) |   // Digital Filter On External Pin
+      \t   LLWU_FILT_FILTSEL($(llwu_filt3_filtsel));  // Filter Pin Select\n\n
+   ]]></template>
+
+   <choiceOption 
+      name="llwu_filt4_filte" 
+      description="Digital Filter 4 On External Pin"  
+      toolTip="Controls the digital filter options for the external pin detect.">
+      
+      <choice name="Filter disabled" value="0" isDefault="true" />
+      <choice name="Filter rising"   value="1" />
+      <choice name="Filter falling"  value="2" />
+      <choice name="Filter both"     value="3" />
+   </choiceOption>   
+   
+   <intOption 
+      name="llwu_filt4_filtsel" 
+      description="Filter 4 Pin Select" 
+      toolTip="Selects 1 of the external signals to be muxed into the filter"
+      min="0" max="32" />
+   
+   <template><![CDATA[
+      \t// Pin Filter 4 register
+      \tstatic constexpr uint8_t filt4 =
+      \t   LLWU_FILT_FILTE($(llwu_filt4_filte)) |   // Digital Filter On External Pin
+      \t   LLWU_FILT_FILTSEL($(llwu_filt4_filtsel));  // Filter Pin Select\n\n
+   ]]></template>
+
    <xi:include href="_irqOption.xml"/>
 
    <signals/>

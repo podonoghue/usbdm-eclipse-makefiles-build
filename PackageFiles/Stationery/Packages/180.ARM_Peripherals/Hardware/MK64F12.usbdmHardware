@@ -235,7 +235,7 @@
          <irq num="I2S0_Tx_IRQn" />
          <irq num="I2S0_Rx_IRQn" />
       </peripheral>
-      <peripheral baseName="LLWU"     instance=""         version="llwu_pe3_filt2_rst">
+      <peripheral baseName="LLWU"     instance=""         version="llwu_pe4_filt2_rst">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
          <irq num="LLWU_IRQn" />
       </peripheral>

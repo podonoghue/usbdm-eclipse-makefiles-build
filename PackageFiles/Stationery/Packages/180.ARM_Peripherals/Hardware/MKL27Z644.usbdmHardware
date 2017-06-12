@@ -95,7 +95,7 @@
          <clock reg="SCGC4"         mask="SIM_SCGC4_I2C1_MASK" />
          <irq num="I2C1_IRQn" />
       </peripheral>
-      <peripheral baseName="LLWU"     instance=""         version="llwu_pe3_filt2">
+      <peripheral baseName="LLWU"     instance=""         version="llwu_pe4_filt2">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
          <irq num="LLWU_IRQn" />
       </peripheral>

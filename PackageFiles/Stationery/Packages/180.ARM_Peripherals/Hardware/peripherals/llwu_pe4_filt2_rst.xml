@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"
 ?>
 <!DOCTYPE devicePage SYSTEM "_menu.dtd" >
-<!-- llwu_pe4_filt2.xml -->
+<!-- llwu_pe4_filt2_rst.xml -->
 
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Low Leakage Wakeup Unit">
    <binaryOption name="llwu_me_wume0" description="0: LPTMR" toolTip="Enables this peripheral to wakeup the processor">
@@ -179,6 +179,31 @@
       \t   LLWU_FILT_FILTSEL($(llwu_filt2_filtsel));  // Filter Pin Select\n\n
    ]]></template>
       
+   <binaryOption 
+      name="llwu_rst_llrste" 
+      description="Low-Leakage Mode RESET Enable"
+      toolTip="This bit must be set to allow the device to be reset while in a low-leakage power mode.\n
+         On devices where Reset is not a dedicated pin, the RESET pin must also be enabled\n
+         in the explicit port mux control." >
+      <choice name="RESET pin not enabled as a LLWU mode exit source"  value="0" />
+      <choice name="RESET pin enabled as a LLWU mode exit source"      value="1" isDefault="true" />
+   </binaryOption>      
+   
+   <binaryOption 
+      name="llwu_rst_rstfilt" 
+      description="Digital Filter On RESET Pin"
+      toolTip="Enables the digital filter for the RESET pin during LLS, VLLS3, VLLS2, or VLLS1 modes." >
+      <choice name="Filter not enabled"  value="0" isDefault="true" />
+      <choice name="Filter enabled"      value="1" />
+   </binaryOption>      
+   
+   <template><![CDATA[
+      \t// LLWU Reset Enable register
+      \tstatic constexpr uint8_t rst =
+      \t   LLWU_RST_LLRSTE($(llwu_rst_llrste)) |  // Low-Leakage Mode RESET Enable
+      \t   LLWU_RST_RSTFILT($(llwu_rst_rstfilt));  // Digital Filter On RESET Pin\n\n
+   ]]></template>
+
    <xi:include href="_irqOption.xml"/>
 
    <signals/>
