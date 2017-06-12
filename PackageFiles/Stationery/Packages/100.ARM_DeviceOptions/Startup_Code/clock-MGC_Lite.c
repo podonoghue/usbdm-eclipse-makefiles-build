@@ -1,5 +1,5 @@
 /*
- *  clock-MCG_Lite.c
+ *  clock-MGC_Lite.c
  *
  *  Used for MKL03, MKL27, MKL43
  *

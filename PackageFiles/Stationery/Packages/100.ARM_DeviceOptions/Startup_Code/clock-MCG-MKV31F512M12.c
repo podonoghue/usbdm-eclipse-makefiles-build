@@ -1,11 +1,11 @@
 /*
- * clock-MK22F512M12.c
+ * clock-MCG-MKV31F512M12.c
  *
  *  Used for MK22FN512M12
  *
- * Based on K22P121M120SF7RM
+ * Based on KV31P100M120SF7RM
  *   3 Oscillators (OSC0, RTC, IRC48M)
- *   1 FLL (OSC0, RTC, IRC48M), (FRDIV=/1-/128, /32-/1024, /1280, 1536)
+ *   1 FLL (OSC0, RTC(not available), IRC48M), (FRDIV=/1-/128, /32-/1024, /1280, 1536)
  *   2 PLL (OSC0, RTC, IRC48M), (VCO PRDIV=/1-/24, VDIV=x24-x55)
  *
  * Used with:
@@ -313,7 +313,7 @@ void SystemCoreClockUpdate(void) {
    uint32_t oscerclk = 0;
    switch((MCG->C7&MCG_C7_OSCSEL_MASK)) {
       case (0<<MCG_C7_OSCSEL_SHIFT) : oscerclk = OSCCLK_CLOCK; break;
-      case (1<<MCG_C7_OSCSEL_SHIFT) : oscerclk = RTCCLK_CLOCK; break;
+//  Not available    case (1<<MCG_C7_OSCSEL_SHIFT) : oscerclk = RTCCLK_CLOCK; break;
       case (2<<MCG_C7_OSCSEL_SHIFT) : oscerclk = IRC48M_CLOCK; break;
    }
    switch (MCG->S&MCG_S_CLKST_MASK) {

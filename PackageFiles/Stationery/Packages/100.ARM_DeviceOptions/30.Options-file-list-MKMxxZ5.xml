@@ -15,32 +15,13 @@
          </and>
       </applyWhen>
       <copy source="Startup_Code/vectors-cm0.c"         target="Startup_Code/vectors.c"  replace="true" />
+      <!-- Security -->
       <copy source="Startup_Code/security-mkm.c"        target="Startup_Code/security.c" />
-      <variable id="projectOptionValue.Clock-setup" 
-         name="Clock setup code" 
-         description="Adds code for basic clock initialization - check assumptions made"
-         checkGroup="group-additional-options"/>
-      <variable id="projectOptionValue.UART-setup" 
-         name="UART setup code" 
-         description="Adds C stdio (UART) support for newlib"          
-         checkGroup="group-additional-options" >
-         <enableWhen>
-            <requirement idRef="projectOptionValue.Clock-setup"/>
-         </enableWhen>
-      </variable>
-      <projectActionList>
-         <applyWhen>
-            <variableRef idRef="projectOptionValue.Clock-setup" />
-         </applyWhen>
-         <copy source="Startup_Code/clock-MKMxx.c" target="Startup_Code/clock.c" />
-         <copy source="Project_Headers/clock_configure-MKMxx.h" target="Project_Headers/clock_configure.h" />
-      </projectActionList>
-      <projectActionList>
-         <applyWhen>
-            <variableRef idRef="projectOptionValue.UART-setup" />
-         </applyWhen>
-         <copy source="Startup_Code/console-mkm.c" target="Startup_Code/console.c" />
-         <copy source="Project_Headers/console.h" target="Project_Headers/console.h" />
-      </projectActionList>
+      <!-- Clock -->
+      <copy source="Startup_Code/clock-MCG-MKMxx.c" target="Startup_Code/clock.c" />
+      <copy source="Project_Headers/clock_configure-MCG-MKMxx.h" target="Project_Headers/clock_configure.h" />
+      <!-- Console -->
+      <copy source="Startup_Code/console-mkm.c"    target="Startup_Code/console.c" />
+      <copy source="Project_Headers/console.h"     target="Project_Headers/console.h" />
    </projectActionList>
 </root>

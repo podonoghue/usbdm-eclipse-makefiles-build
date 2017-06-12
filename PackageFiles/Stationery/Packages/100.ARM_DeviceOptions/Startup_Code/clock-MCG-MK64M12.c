@@ -1,14 +1,15 @@
 /*
- * clock-MKxx.c
+ * clock-MCG-MK64M12.c
  *
- * Based on K22P64M120SF5RM, K10P144M100SF2V2RM, K20P100M72SF1RM, K20P64M50SF0RM
- *    2 Oscillators (OSC0, RTC)
- *    1 FLL (OSC0,RTC), (FRDIV=/1-/128, /32-/1024, /1280, /1536)
- *    1 PLL (OSC0,RTC), (VCO PRDIV=/1-/24, VDIV=x24-x55)
+ *  Used for MK64FX512M12, MK64FN1M0M12, 
+ *
+ * Based on K64P144M120SF5RM
+ *   3 Oscillators (OSC0, RTC, IRC48M)
+ *   1 FLL (OSC0, RTC, IRC48M), (FRDIV=/1-/128, /32-/1024, /1280, 1536)
+ *   2 PLL (OSC0, RTC, IRC48M), (VCO PRDIV=/1-/24, VDIV=x24-x55)
  *
  * Used with:
- *    clock_private-MKxx.h
- *    clock_private-MKxxM12.h
+ *   clock_private-MK64M12.h
  *
  *  Created on: 04/03/2012
  *      Author: podonoghue
@@ -28,66 +29,6 @@
 uint32_t SystemCoreClock = SYSTEM_CORE_CLOCK;   // Hz
 uint32_t SystemBusClock  = SYSTEM_BUS_CLOCK; // Hz
 
-#if defined(ERRATA_E2448) && (ERRATA_E2448 != 0)
-typedef void (*set_sys_dividers_asm_t)(uint32_t simClkDiv1);
-
-//! Change SIM->CLKDIV1 value
-//!
-//! @param simClkDiv1 - new SIM->CLKDIV1 value
-//!
-//! @note This routine must be copied to RAM. It is a workaround for errata e2448.
-//! Flash prefetch must be disabled when the flash clock divider is changed.
-//! This cannot be performed while executing out of flash.
-//! There must be a short delay after the clock dividers are changed before prefetch
-//! can be re-enabled.
-//!
-//! @note This routine must be placed in ROM immediately before setSysDividers()
-//!
-static void setSysDividers_asm(uint32_t simClkDiv1) {
-   (void) simClkDiv1;
-   __asm__ volatile (
-       "    .equ   FMC_PFAPR_VALUE,0xffFF0000   \n"
-       "    .equ   FMC_PFAPR_ADDR,0x4001F000    \n"
-       "    .equ   SIM_CLKDIV1_ADDR,0x40048044  \n"
-       "     movw  r1,#FMC_PFAPR_ADDR&0xFFFF    \n" // Point R1 @FMC_PFAPR
-       "     movt  r1,#FMC_PFAPR_ADDR/65536     \n"
-       "     ldr   r2,[r1,#0]                   \n" // R2 = original FMC_PFAPR
-       "     movw  r3,#FMC_PFAPR_VALUE&0xFFFF   \n" // R3 = mask for new FMC_PFAPR
-       "     movt  r3,#FMC_PFAPR_VALUE>>16      \n"
-       "     orr   r3,r3,r2                     \n" // Merge with existing (Disable Flash pre-fetch)
-       "     str   r3,[r1,#0]                   \n" // Write back to FMC_PFAPR
-
-       "     movw  r0,#SIM_CLKDIV1_ADDR&0xFFFF  \n" // Point R0 @SIM->CLKDIV1
-       "     movt  r0,#SIM_CLKDIV1_ADDR/65536   \n"
-       "     str   %[value],[r0,#0]             \n" // SIM->CLKDIV1 = simClkDiv
-       "     movw  r3,#100                      \n" // Wait a while
-       "loop:                                   \n"
-       "     subs  r3,r3,#1                     \n"
-       "     bhi   loop                         \n"
-       "                                        \n"
-       "     str   r2,[r1,#0]                   \n" // Restore original FMC_PFAPR
-         :: [value] "r" (simClkDiv1) : "r0", "r1", "r2", "r3"
-      );
-}
-
-//! Change SIM->CLKDIV1 value
-//!
-//! @param simClkDiv1 - Value to write to SIM->CLKDIV1 register
-//!
-//! @note This routine must be placed in ROM immediately following setSysDividers_asm()
-//!
-static void setSysDividers(uint32_t simClkDiv1) {
-   uint8_t space[100]; // Space for RAM copy of setSysDividers_asm()
-   set_sys_dividers_asm_t fp = (set_sys_dividers_asm_t)((uint32_t)space|1);
-
-   // Copy routine to RAM (stack)
-   memcpy(space, (void*)((uint32_t)setSysDividers_asm&~1), ((uint32_t)setSysDividers)-((uint32_t)setSysDividers_asm));
-
-   // Call the function on the stack
-   (*fp)(simClkDiv1);
-}
-#endif
-
 /*! @brief Sets up the clock out of RESET
  *
  */
@@ -97,7 +38,7 @@ void clock_initialise(void) {
    // No clock setup
 #else
    // XTAL/EXTAL Pins
-   SIM->SCGC5  |= SIM_SCGC5_PORTA_MASK;
+   SIM->SCGC5    |= SIM_SCGC5_PORTA_MASK;
    PORTA->PCR[18] = PORT_PCR_MUX(0);
    PORTA->PCR[19] = PORT_PCR_MUX(0);
 
@@ -111,8 +52,14 @@ void clock_initialise(void) {
    RTC->CR = RTC_CR_SCP_M|RTC_CR_CLKO_M|RTC_CR_OSCE_M|RTC_CR_UM_M|RTC_CR_SUP_M|RTC_CR_WPE_M;
 #endif
 
+#if (MCG_C7_OSCSEL_V == 2)
+   // Note IRC48M Internal Oscillator automatically enable if MCG_C7_OSCSEL = 2
+   SIM->SCGC4 |= SIM_SCGC4_USBOTG_MASK;
+   USB0->CLK_RECOVER_IRC_EN = USB_CLK_RECOVER_IRC_EN_IRC_EN_MASK|USB_CLK_RECOVER_IRC_EN_REG_EN_MASK;
+#endif
+
    // Select OSCCLK Source
-   MCG->C7 = MCG_C7_OSCSEL_M; // OSCSEL = 0,1 -> XTAL/XTAL32
+   MCG->C7 = MCG_C7_OSCSEL_M; // OSCSEL = 0,1,2 -> XTAL/XTAL32/IRC48M
 
    // Fast Internal Clock divider
    MCG->SC = MCG_SC_FCRDIV_M;
@@ -121,21 +68,22 @@ void clock_initialise(void) {
    // =============================================================
 
    // Set conservative SIM clock dividers BEFORE switching to ensure the clock speed remain within specification
-#if defined(ERRATA_E2448) && (ERRATA_E2448 != 0)
-   setSysDividers(SIM_CLKDIV1_OUTDIV1(3) | SIM_CLKDIV1_OUTDIV2(7) | SIM_CLKDIV1_OUTDIV3(3) | SIM_CLKDIV1_OUTDIV4(7));
-#else
    SIM->CLKDIV1 = SIM_CLKDIV1_OUTDIV1(3) | SIM_CLKDIV1_OUTDIV2(7) | SIM_CLKDIV1_OUTDIV3(3) | SIM_CLKDIV1_OUTDIV4(7);
-#endif
+
    // Switch from FEI -> FEI/FBI/FEE/FBE
    // =============================================================
 
-   // Set up crystal or external clock source
+   // Set up crystal or external clock source for OSC0
    MCG->C2 =
             MCG_C2_LOCRE0_M     | // LOCRE0 = 0,1   -> Loss of clock reset enable
             MCG_C2_RANGE0_M     | // RANGE0 = 0,1,2 -> Oscillator low/high/very high clock range
             MCG_C2_HGO0_M       | // HGO0   = 0,1   -> Oscillator low power/high gain
             MCG_C2_EREFS0_M     | // EREFS0 = 0,1   -> Select external clock/crystal oscillator
             MCG_C2_IRCS_M;        // IRCS   = 0,1   -> Select slow/fast internal clock for internal reference
+
+   // Set up RTC clock monitor
+   MCG->C8 = MCG_C8_LOCRE1_M |    // LOCRE1 = 0,1 -> Loss of Lock Reset enable
+             MCG_C8_CME1_M;       // CME1   = 0,1 -> Clock monitor enable
 
 #if ((CLOCK_MODE == CLOCK_MODE_FEI) || (CLOCK_MODE == CLOCK_MODE_FBI) || (CLOCK_MODE == CLOCK_MODE_BLPI) )
    // Transition via FBI
@@ -197,20 +145,18 @@ void clock_initialise(void) {
 
    // Configure PLL Reference Frequency
    // =============================================================
-   MCG->C5 =  MCG_C5_PLLCLKEN0_M    |  // PLLCLKEN = 0,1 -> PLL -/enabled (irrespective of PLLS)
-              MCG_C5_PLLSTEN0_M     |  // PLLSTEN0 = 0,1 -> disabled/enabled in normal stop mode
-              MCG_C5_PRDIV0_M;         // PRDIV0   = N   -> PLL divider so PLL Ref. Freq. = 2-4 MHz
+   MCG->C5 =   MCG_C5_PLLCLKEN0_M    |  // PLLCLKEN0  = 0,1 -> PLL -/enabled (irrespective of PLLS)
+               MCG_C5_PLLSTEN0_M     |  // PLLSTEN0   = 0,1 -> disabled/enabled in normal stop mode
+               MCG_C5_PRDIV0_M;         // PRDIV0     = N   -> PLL divider so PLL Ref. Freq. = 2-4 MHz
 
    // Transition via PBE
-   // =============================================================
-   // Set up PLL0
    // =============================================================
    MCG->C6 = MCG_C6_LOLIE0_M    |  // LOLIE0 = 0,1 -> Loss of Lock interrupt
              MCG_C6_PLLS_M      |  // PLLS   = 0,1 -> Enable PLL
              MCG_C6_CME0_M      |  // CME0   = 0,1 -> Disable/enable clock monitor
              MCG_C6_VDIV0_M;       // VDIV0  = N   -> PLL Multiplication factor
 
-   // Wait for PLL0 to lock
+   // Wait for PLL to lock
    do {
       __asm__("nop");
    } while((MCG->S & MCG_S_LOCK0_MASK) == 0);
@@ -252,11 +198,7 @@ void clock_initialise(void) {
    } while ((MCG->S & MCG_S_CLKST_MASK) != MCG_S_CLKST_M);
 
    // Set the SIM _CLKDIV dividers
-#if defined(ERRATA_E2448) && (ERRATA_E2448 != 0)
-   setSysDividers(SIM_CLKDIV1_OUTDIV1_M | SIM_CLKDIV1_OUTDIV2_M | SIM_CLKDIV1_OUTDIV3_M | SIM_CLKDIV1_OUTDIV4_M);
-#else
    SIM->CLKDIV1 = SIM_CLKDIV1_OUTDIV1_M | SIM_CLKDIV1_OUTDIV2_M | SIM_CLKDIV1_OUTDIV3_M | SIM_CLKDIV1_OUTDIV4_M;
-#endif
 
 #if (CLOCK_MODE == CLOCK_MODE_BLPE) || (CLOCK_MODE == CLOCK_MODE_BLPI)
    // Select BLPE/BLPI clock mode
@@ -340,12 +282,18 @@ void clock_initialise(void) {
  * Updates the SystemCoreClock variable with current core Clock retrieved from CPU registers.
  */
 void SystemCoreClockUpdate(void) {
-   uint32_t oscerclk = (MCG->C7&MCG_C7_OSCSEL_MASK)?RTCCLK_CLOCK:OSCCLK_CLOCK;
+   uint32_t oscerclk = 0;
+   switch((MCG->C7&MCG_C7_OSCSEL_MASK)) {
+      case (0<<MCG_C7_OSCSEL_SHIFT) : oscerclk = OSCCLK_CLOCK; break;
+      case (1<<MCG_C7_OSCSEL_SHIFT) : oscerclk = RTCCLK_CLOCK; break;
+      case (2<<MCG_C7_OSCSEL_SHIFT) : oscerclk = IRC48M_CLOCK; break;
+   }
    switch (MCG->S&MCG_S_CLKST_MASK) {
       case MCG_S_CLKST(0) : // FLL
+         SystemCoreClock = (MCG->C4&MCG_C4_DMX32_MASK)?732:640;
          if ((MCG->C1&MCG_C1_IREFS_MASK) == 0) {
-            SystemCoreClock = oscerclk/(1<<((MCG->C1&MCG_C1_FRDIV_MASK)>>MCG_C1_FRDIV_SHIFT));
-            if (((MCG->C2&MCG_C2_RANGE0_MASK) != 0) && ((MCG->C7&MCG_C7_OSCSEL_MASK) ==  0)) {
+            SystemCoreClock *= oscerclk/(1<<((MCG->C1&MCG_C1_FRDIV_MASK)>>MCG_C1_FRDIV_SHIFT));
+            if (((MCG->C2&MCG_C2_RANGE0_MASK) != 0) && ((MCG->C7&MCG_C7_OSCSEL_MASK) !=  1)) {
                if ((MCG->C1&MCG_C1_FRDIV_MASK) == MCG_C1_FRDIV(6)) {
                   SystemCoreClock /= 20;
                }
@@ -358,9 +306,8 @@ void SystemCoreClockUpdate(void) {
             }
          }
          else {
-            SystemCoreClock = SYSTEM_SLOW_IRC_CLOCK;
+            SystemCoreClock *= SYSTEM_SLOW_IRC_CLOCK;
          }
-         SystemCoreClock *= (MCG->C4&MCG_C4_DMX32_MASK)?732:640;
          SystemCoreClock *= ((MCG->C4&MCG_C4_DRST_DRS_MASK)>>MCG_C4_DRST_DRS_SHIFT)+1;
       break;
       case MCG_S_CLKST(1) : // Internal Reference Clock

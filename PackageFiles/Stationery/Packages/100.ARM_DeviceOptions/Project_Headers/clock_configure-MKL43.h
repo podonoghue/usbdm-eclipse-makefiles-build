@@ -1,5 +1,5 @@
 /*
- * clock_private-MKL03.h
+ * clock_configure-MKL43.h
  *
  * Used for MKL03 MKL43
  *

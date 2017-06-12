@@ -1,5 +1,5 @@
 /*
- * clockMKLxx.c
+ * clock-MCG-MKLxx.c
  *
  *  Used for MKL14, MKL15, MKL16, MKL24, MKL25, MKL26, MKL34, MKL36, MKL46
  * 

@@ -11,6 +11,7 @@
          </and>
       </applyWhen>
       <copy source="Startup_Code/vectors-cm0.c"         target="Startup_Code/vectors.c"  replace="true" />
+      <!-- Security -->
       <copy source="Startup_Code/security-mkv.c"        target="Startup_Code/security.c" />
    </projectActionList>
 </root>

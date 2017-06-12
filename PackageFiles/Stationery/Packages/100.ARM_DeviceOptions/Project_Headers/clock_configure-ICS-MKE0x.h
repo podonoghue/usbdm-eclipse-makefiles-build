@@ -1,5 +1,5 @@
 /*
- * clock_private-MKE04.h
+ * clock_configure-ICS-MKE0x.h
  *
  *  Used for MKE04M4, MKE06M4
  *

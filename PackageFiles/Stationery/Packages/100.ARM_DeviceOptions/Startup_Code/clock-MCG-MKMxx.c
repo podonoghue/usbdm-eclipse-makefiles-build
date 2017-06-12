@@ -1,17 +1,15 @@
 /*
- * clock-MKV31F512M12.c
+ * clock-MCG-MKMxx.c
  *
- *  Used for MK22FN512M12
- *
- * Based on KV31P100M120SF7RM
- *   3 Oscillators (OSC0, RTC, IRC48M)
- *   1 FLL (OSC0, RTC(not available), IRC48M), (FRDIV=/1-/128, /32-/1024, /1280, 1536)
- *   2 PLL (OSC0, RTC, IRC48M), (VCO PRDIV=/1-/24, VDIV=x24-x55)
+ * Based on MKMxxZxxCxx5RM
+ *    2 Oscillators (OSC0, RTC)
+ *    1 FLL (OSC0,RTC), (FRDIV=/1-/128, /32-/1024, /1280, /1536)
+ *    1 PLL (OSC0,RTC), (VCO x375)
  *
  * Used with:
- *   clock_private-MK64M12.h
+ *    clock_private-MKMxx.h
  *
- *  Created on: 04/03/2012
+ *  Created on: 29/09/2014
  *      Author: podonoghue
  */
 #include "string.h"
@@ -29,34 +27,6 @@
 uint32_t SystemCoreClock = SYSTEM_CORE_CLOCK;   // Hz
 uint32_t SystemBusClock  = SYSTEM_BUS_CLOCK; // Hz
 
-/*!
- * Switch to/from high speed run mode
- * Changes the CPU clock frequency/1, and bus clock frequency /2
- * If the clock is set up for 120 MHz this will be the highest performance possible.
- *
- * This routine assumes that the clock preferences have been set up for the usual RUN mode and only
- * the Core clock divider needs to be changed.
- */
-void hsRunMode(bool enable) {
-   SMC->PMPROT = SMC_PMPROT_AHSRUN_MASK;
-
-   if (enable) {
-      SMC->PMCTRL = SMC_PMCTRL_RUNM(3);
-      while ((SMC->PMSTAT & 0x80) == 0) {
-         // wait for mode change
-         __asm__("nop");
-      }
-      // Set the SIM _CLKDIV dividers (CPU /1, Bus /2)
-      SIM->CLKDIV1 = (SIM_CLKDIV1_OUTDIV1(0)) | (SIM_CLKDIV1_OUTDIV2(1)) | SIM_CLKDIV1_OUTDIV3_M | SIM_CLKDIV1_OUTDIV4_M;
-   }
-   else {
-      // Set the SIM _CLKDIV dividers (CPU normal)
-      SIM->CLKDIV1 = SIM_CLKDIV1_OUTDIV1_M | SIM_CLKDIV1_OUTDIV2_M | SIM_CLKDIV1_OUTDIV3_M | SIM_CLKDIV1_OUTDIV4_M;
-      SMC->PMCTRL = SMC_PMCTRL_RUNM(0);
-   }
-   SystemCoreClockUpdate();
-}
-
 /*! @brief Sets up the clock out of RESET
  *
  */
@@ -66,28 +36,35 @@ void clock_initialise(void) {
    // No clock setup
 #else
    // XTAL/EXTAL Pins
-   SIM->SCGC5    |= SIM_SCGC5_PORTA_MASK;
-   PORTA->PCR[18] = PORT_PCR_MUX(0);
-   PORTA->PCR[19] = PORT_PCR_MUX(0);
+   SIM->SCGC5   |= SIM_SCGC5_PORTE_MASK;
+   PORTE->PCR[2] = PORT_PCR_MUX(0);
+   PORTE->PCR[3] = PORT_PCR_MUX(0);
 
    // Configure the Crystal Oscillator
    OSC0->CR = OSC_CR_ERCLKEN_M|OSC_CR_EREFSTEN_M|OSC_CR_SCP_M;
 
-#if (MCG_C7_OSCSEL_V == 1)
-   SIM->SCGC6 |= SIM_SCGC6_RTC_MASK;
-
-   // Configure the RTC Crystal Oscillator
-   RTC->CR = RTC_CR_SCP_M|RTC_CR_CLKO_M|RTC_CR_OSCE_M|RTC_CR_UM_M|RTC_CR_SUP_M|RTC_CR_WPE_M;
+#if defined(RTC_OSC_OSC_DISABLE_MASK) && defined(RTC_OSC_OSC_DISABLE_M)
+   SIM->SCGC5 |= SIM_SCGC5_IRTC_MASK|SIM_SCGC5_IRTCREGFILE_MASK;
+#define RTC_OSC_VALUE (RTC_OSC_OSC_DISABLE_M|RTC_OSC_SCP_M|RTC_OSC_BOOT_MODE_M)
+#if (RTC_OSC_VALUE!=0)
+   // Unlock RTC
+   RTC->STATUS_B = RTC_STATUS_WE(0);
+   RTC->STATUS_B = RTC_STATUS_WE(1);
+   RTC->STATUS_B = RTC_STATUS_WE(3);
+   RTC->STATUS_B = RTC_STATUS_WE(2);
+   RTC->OSC = RTC_OSC_VALUE;
+   // Lock RTC
+   RTC->STATUS_B = RTC_STATUS_WE(1);
+#endif
 #endif
 
-#if (MCG_C7_OSCSEL_V == 2)
-   // Note IRC48M Internal Oscillator automatically enable if MCG_C7_OSCSEL = 2
-   SIM->SCGC4 |= SIM_SCGC4_USBOTG_MASK;
-   USB0->CLK_RECOVER_IRC_EN = USB_CLK_RECOVER_IRC_EN_IRC_EN_MASK|USB_CLK_RECOVER_IRC_EN_REG_EN_MASK;
+#if defined(MCG_C7_PLL32KREFSEL_MASK) && defined(MCG_C7_PLL32KREFSEL_M)
+   MCG->C7 = MCG_C7_PLL32KREFSEL_M | MCG_C7_OSCSEL_M;
 #endif
 
-   // Select OSCCLK Source
-   MCG->C7 = MCG_C7_OSCSEL_M; // OSCSEL = 0,1,2 -> XTAL/XTAL32/IRC48M
+#if defined(MCG_C8_LOCRE1_MASK) && defined(MCG_C8_LOCRE1_M)
+   MCG->C8 = MCG_C8_LOCRE1_M | MCG_C8_LOLRE_M | MCG_C8_CME1_M | MCG_C8_COARSE_LOLIE_M;
+#endif
 
    // Fast Internal Clock divider
    MCG->SC = MCG_SC_FCRDIV_M;
@@ -95,23 +72,19 @@ void clock_initialise(void) {
    // Out of reset MCG is in FEI mode
    // =============================================================
 
-   // Set conservative SIM clock dividers BEFORE switching to ensure the clock speed remain within specification
-   SIM->CLKDIV1 = SIM_CLKDIV1_OUTDIV1(3) | SIM_CLKDIV1_OUTDIV2(7) | SIM_CLKDIV1_OUTDIV3(3) | SIM_CLKDIV1_OUTDIV4(7);
+   // Set conservative clock divider
+   SIM->CLKDIV1 = SIM_CLKDIV1_SYSDIV(5);
 
    // Switch from FEI -> FEI/FBI/FEE/FBE
    // =============================================================
 
-   // Set up crystal or external clock source for OSC0
+   // Set up crystal or external clock source
    MCG->C2 =
             MCG_C2_LOCRE0_M     | // LOCRE0 = 0,1   -> Loss of clock reset enable
             MCG_C2_RANGE0_M     | // RANGE0 = 0,1,2 -> Oscillator low/high/very high clock range
             MCG_C2_HGO0_M       | // HGO0   = 0,1   -> Oscillator low power/high gain
             MCG_C2_EREFS0_M     | // EREFS0 = 0,1   -> Select external clock/crystal oscillator
             MCG_C2_IRCS_M;        // IRCS   = 0,1   -> Select slow/fast internal clock for internal reference
-
-   // Set up RTC clock monitor
-   MCG->C8 = MCG_C8_LOCRE1_M |    // LOCRE1 = 0,1 -> Loss of Lock Reset enable
-             MCG_C8_CME1_M;       // CME1   = 0,1 -> Clock monitor enable
 
 #if ((CLOCK_MODE == CLOCK_MODE_FEI) || (CLOCK_MODE == CLOCK_MODE_FBI) || (CLOCK_MODE == CLOCK_MODE_BLPI) )
    // Transition via FBI
@@ -173,16 +146,14 @@ void clock_initialise(void) {
 
    // Configure PLL Reference Frequency
    // =============================================================
-   MCG->C5 =   MCG_C5_PLLCLKEN0_M    |  // PLLCLKEN0  = 0,1 -> PLL -/enabled (irrespective of PLLS)
-               MCG_C5_PLLSTEN0_M     |  // PLLSTEN0   = 0,1 -> disabled/enabled in normal stop mode
-               MCG_C5_PRDIV0_M;         // PRDIV0     = N   -> PLL divider so PLL Ref. Freq. = 2-4 MHz
+   MCG->C5 =  MCG_C5_PLLCLKEN0_M    |  // PLLCLKEN = 0,1 -> PLL -/enabled (irrespective of PLLS)
+              MCG_C5_PLLSTEN0_M;       // PLLSTEN0 = 0,1 -> disabled/enabled in normal stop mode
 
    // Transition via PBE
    // =============================================================
-   MCG->C6 = MCG_C6_LOLIE0_M    |  // LOLIE0 = 0,1 -> Loss of Lock interrupt
-             MCG_C6_PLLS_M      |  // PLLS   = 0,1 -> Enable PLL
-             MCG_C6_CME0_M      |  // CME0   = 0,1 -> Disable/enable clock monitor
-             MCG_C6_VDIV0_M;       // VDIV0  = N   -> PLL Multiplication factor
+   MCG->C6 = MCG_C6_LOLIE0_M    |
+            MCG_C6_PLLS_M      |  // PLLS  = 0,1 -> Enable PLL
+            MCG_C6_CME0_M;        // CME0  = 0,1 -> Disable/enable clock monitor
 
    // Wait for PLL to lock
    do {
@@ -226,7 +197,7 @@ void clock_initialise(void) {
    } while ((MCG->S & MCG_S_CLKST_MASK) != MCG_S_CLKST_M);
 
    // Set the SIM _CLKDIV dividers
-   SIM->CLKDIV1 = SIM_CLKDIV1_OUTDIV1_M | SIM_CLKDIV1_OUTDIV2_M | SIM_CLKDIV1_OUTDIV3_M | SIM_CLKDIV1_OUTDIV4_M;
+   SIM->CLKDIV1 = SIM_CLKDIV1_SYSDIV_M | SIM_CLKDIV1_SYSCLKMODE_M;
 
 #if (CLOCK_MODE == CLOCK_MODE_BLPE) || (CLOCK_MODE == CLOCK_MODE_BLPI)
    // Select BLPE/BLPI clock mode
@@ -250,55 +221,14 @@ void clock_initialise(void) {
 #endif
 
    /*!
-    * SOPT2 Clock multiplexing
+    * SIM->CTRL_REG Clock multiplexing
     */
-#if defined(SIM_SOPT2_SDHCSRC_MASK) && defined(SIM_SOPT2_SDHCSRC_M) // SDHC clock
-   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_SDHCSRC_MASK)|SIM_SOPT2_SDHCSRC_M;
+#if defined(SIM_CTRL_REG_CLKOUTSEL_MASK)
+   SIM->CTRL_REG = (SIM->CTRL_REG&~SIM_CTRL_REG_CLKOUTSEL_MASK)|SIM_CTRL_REG_CLKOUTSEL_M;
 #endif
 
-#if defined(SIM_SOPT2_TIMESRC_MASK) && defined(SIM_SOPT2_TIMESRC_M) // Ethernet time-stamp clock
-   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_TIMESRC_MASK)|SIM_SOPT2_TIMESRC_M;
-#endif
-
-#if defined(SIM_SOPT2_RMIISRC_MASK) && defined(SIM_SOPT2_RMIISRC_M) // RMII clock
-   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_RMIISRC_MASK)|SIM_SOPT2_RMIISRC_M;
-#endif
-
-#ifdef SIM_SCGC4_USBOTG_MASK
-   // !! WARNING !! The USB interface must be disabled for clock changes to have effect !! WARNING !!
-   SIM->SCGC4 &= ~SIM_SCGC4_USBOTG_MASK;
-#endif
-
-#if defined(SIM_SOPT2_USBSRC_MASK) && defined(SIM_SOPT2_USBSRC_M) // USB clock (48MHz req.)
-   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_USBSRC_MASK)|SIM_SOPT2_USBSRC_M;
-#endif
-
-#if defined(SIM_SOPT2_USBFSRC_MASK) && defined(SIM_SOPT2_USBFSRC_M) // USB clock (48MHz req.)
-   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_USBFSRC_MASK)|SIM_SOPT2_USBFSRC_M;
-#endif
-
-#if defined(SIM_SOPT2_PLLFLLSEL_MASK) && defined(SIM_SOPT2_PLLFLLSEL_M) // Peripheral clock
-   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_PLLFLLSEL_MASK)|SIM_SOPT2_PLLFLLSEL_M;
-#endif
-
-#if defined(SIM_SOPT2_UART0SRC_MASK) && defined(SIM_SOPT2_UART0SRC_M) // UART0 clock
-   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_UART0SRC_MASK)|SIM_SOPT2_UART0SRC_M;
-#endif
-
-#if defined(SIM_SOPT2_TPMSRC_MASK) && defined(SIM_SOPT2_TPMSRC_M) // TPM clock
-   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_TPMSRC_MASK)|SIM_SOPT2_TPMSRC_M;
-#endif
-
-#if defined(SIM_SOPT2_CLKOUTSEL_MASK) && defined(SIM_SOPT2_CLKOUTSEL_M)
-   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_CLKOUTSEL_MASK)|SIM_SOPT2_CLKOUTSEL_M;
-#endif
-
-#if defined(SIM_SOPT2_RTCCLKOUTSEL_MASK) && defined(SIM_SOPT2_RTCCLKOUTSEL_M)
-   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_RTCCLKOUTSEL_MASK)|SIM_SOPT2_RTCCLKOUTSEL_M;
-#endif
-
-#if defined(SIM_CLKDIV2_USBDIV_MASK) && defined(SIM_CLKDIV2_USBFRAC_MASK) && defined(SIM_CLKDIV2_USB_M)
-   SIM->CLKDIV2 = (SIM->CLKDIV2&~(SIM_CLKDIV2_USBDIV_MASK|SIM_CLKDIV2_USBFRAC_MASK)) | SIM_CLKDIV2_USB_M;
+#if defined(SIM_CTRL_REG_SAR_TRG_CLK_SEL_MASK)
+   SIM->CTRL_REG = (SIM->CTRL_REG&~SIM_CTRL_REG_SAR_TRG_CLK_SEL_MASK)|SIM_CTRL_REG_SAR_TRG_CLK_SEL_M;
 #endif
 
    SystemCoreClockUpdate();
@@ -310,18 +240,12 @@ void clock_initialise(void) {
  * Updates the SystemCoreClock variable with current core Clock retrieved from CPU registers.
  */
 void SystemCoreClockUpdate(void) {
-   uint32_t oscerclk = 0;
-   switch((MCG->C7&MCG_C7_OSCSEL_MASK)) {
-      case (0<<MCG_C7_OSCSEL_SHIFT) : oscerclk = OSCCLK_CLOCK; break;
-//  Not available    case (1<<MCG_C7_OSCSEL_SHIFT) : oscerclk = RTCCLK_CLOCK; break;
-      case (2<<MCG_C7_OSCSEL_SHIFT) : oscerclk = IRC48M_CLOCK; break;
-   }
+   uint32_t oscerclk = (MCG->C7&MCG_C7_OSCSEL_MASK)?SYSTEM_OSC32K_CLOCK:OSCCLK_CLOCK;
    switch (MCG->S&MCG_S_CLKST_MASK) {
       case MCG_S_CLKST(0) : // FLL
-         SystemCoreClock = (MCG->C4&MCG_C4_DMX32_MASK)?732:640;
          if ((MCG->C1&MCG_C1_IREFS_MASK) == 0) {
-            SystemCoreClock *= oscerclk/(1<<((MCG->C1&MCG_C1_FRDIV_MASK)>>MCG_C1_FRDIV_SHIFT));
-            if (((MCG->C2&MCG_C2_RANGE0_MASK) != 0) && ((MCG->C7&MCG_C7_OSCSEL_MASK) !=  1)) {
+            SystemCoreClock = oscerclk/(1<<((MCG->C1&MCG_C1_FRDIV_MASK)>>MCG_C1_FRDIV_SHIFT));
+            if ((MCG->C2&MCG_C2_RANGE0_MASK) != 0) {
                if ((MCG->C1&MCG_C1_FRDIV_MASK) == MCG_C1_FRDIV(6)) {
                   SystemCoreClock /= 20;
                }
@@ -334,8 +258,9 @@ void SystemCoreClockUpdate(void) {
             }
          }
          else {
-            SystemCoreClock *= SYSTEM_SLOW_IRC_CLOCK;
+            SystemCoreClock = SYSTEM_SLOW_IRC_CLOCK;
          }
+         SystemCoreClock *= (MCG->C4&MCG_C4_DMX32_MASK)?732:640;
          SystemCoreClock *= ((MCG->C4&MCG_C4_DRST_DRS_MASK)>>MCG_C4_DRST_DRS_SHIFT)+1;
       break;
       case MCG_S_CLKST(1) : // Internal Reference Clock
@@ -350,12 +275,15 @@ void SystemCoreClockUpdate(void) {
          SystemCoreClock = oscerclk;
          break;
       case MCG_S_CLKST(3) : // PLL
-         SystemCoreClock  = (oscerclk/10)*(((MCG->C6&MCG_C6_VDIV0_MASK)>>MCG_C6_VDIV0_SHIFT)+24);
-         SystemCoreClock /= ((MCG->C5&MCG_C5_PRDIV0_MASK)>>MCG_C5_PRDIV0_SHIFT)+1;
-         SystemCoreClock *= 10;
+         SystemCoreClock  = oscerclk*375;
          break;
    }
-   SystemBusClock    = SystemCoreClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV2_MASK)>>SIM_CLKDIV1_OUTDIV2_SHIFT)+1);
-   SystemCoreClock   = SystemCoreClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV1_MASK)>>SIM_CLKDIV1_OUTDIV1_SHIFT)+1);
+   SystemCoreClock   = SystemCoreClock/(((SIM->CLKDIV1&SIM_CLKDIV1_SYSDIV_MASK)>>SIM_CLKDIV1_SYSDIV_SHIFT)+1);
+   if ((SIM->CLKDIV1&SIM_CLKDIV1_SYSCLKMODE_MASK) != 0) {
+      SystemBusClock = SystemCoreClock/2;
+   }
+   else {
+      SystemBusClock = SystemCoreClock;
+   }
 }
 

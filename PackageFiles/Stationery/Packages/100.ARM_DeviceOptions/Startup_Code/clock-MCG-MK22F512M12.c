@@ -1,9 +1,9 @@
 /*
- * clock-MK64M12.c
+ * clock-MCG-MK22F512M12.c
  *
- *  Used for MK64FX512M12, MK64FN1M0M12, 
+ *  Used for MK22FN512M12
  *
- * Based on K64P144M120SF5RM
+ * Based on K22P121M120SF7RM
  *   3 Oscillators (OSC0, RTC, IRC48M)
  *   1 FLL (OSC0, RTC, IRC48M), (FRDIV=/1-/128, /32-/1024, /1280, 1536)
  *   2 PLL (OSC0, RTC, IRC48M), (VCO PRDIV=/1-/24, VDIV=x24-x55)
@@ -28,6 +28,34 @@
 
 uint32_t SystemCoreClock = SYSTEM_CORE_CLOCK;   // Hz
 uint32_t SystemBusClock  = SYSTEM_BUS_CLOCK; // Hz
+
+/*!
+ * Switch to/from high speed run mode
+ * Changes the CPU clock frequency/1, and bus clock frequency /2
+ * If the clock is set up for 120 MHz this will be the highest performance possible.
+ *
+ * This routine assumes that the clock preferences have been set up for the usual RUN mode and only
+ * the Core clock divider needs to be changed.
+ */
+void hsRunMode(bool enable) {
+   SMC->PMPROT = SMC_PMPROT_AHSRUN_MASK;
+
+   if (enable) {
+      SMC->PMCTRL = SMC_PMCTRL_RUNM(3);
+      while ((SMC->PMSTAT & 0x80) == 0) {
+         // wait for mode change
+         __asm__("nop");
+      }
+      // Set the SIM _CLKDIV dividers (CPU /1, Bus /2)
+      SIM->CLKDIV1 = (SIM_CLKDIV1_OUTDIV1(0)) | (SIM_CLKDIV1_OUTDIV2(1)) | SIM_CLKDIV1_OUTDIV3_M | SIM_CLKDIV1_OUTDIV4_M;
+   }
+   else {
+      // Set the SIM _CLKDIV dividers (CPU normal)
+      SIM->CLKDIV1 = SIM_CLKDIV1_OUTDIV1_M | SIM_CLKDIV1_OUTDIV2_M | SIM_CLKDIV1_OUTDIV3_M | SIM_CLKDIV1_OUTDIV4_M;
+      SMC->PMCTRL = SMC_PMCTRL_RUNM(0);
+   }
+   SystemCoreClockUpdate();
+}
 
 /*! @brief Sets up the clock out of RESET
  *
@@ -272,6 +300,23 @@ void clock_initialise(void) {
 #if defined(SIM_CLKDIV2_USBDIV_MASK) && defined(SIM_CLKDIV2_USBFRAC_MASK) && defined(SIM_CLKDIV2_USB_M)
    SIM->CLKDIV2 = (SIM->CLKDIV2&~(SIM_CLKDIV2_USBDIV_MASK|SIM_CLKDIV2_USBFRAC_MASK)) | SIM_CLKDIV2_USB_M;
 #endif
+
+#if defined(SIM_CLKDIV3_PLLFLLDIV_MASK) && defined(SIM_CLKDIV3_PLLFLL_M)
+   SIM->CLKDIV3 = SIM_CLKDIV3_PLLFLL_M&(SIM_CLKDIV3_PLLFLLDIV_MASK|SIM_CLKDIV3_PLLFLLFRAC_MASK);
+#endif
+
+#if defined(SIM_SOPT2_TPMSRC_MASK) && defined(SIM_SOPT2_TPMSRC_M)
+   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_TPMSRC_MASK) | SIM_SOPT2_TPMSRC_M;
+#endif
+
+#if defined(SIM_SOPT2_LPUARTSRC_MASK) && defined(SIM_SOPT2_LPUARTSRC_M)
+   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_LPUARTSRC_MASK) | SIM_SOPT2_LPUARTSRC_M;
+#endif
+
+#if defined(SIM_SOPT2_USBSLSRC_MASK) && defined(SIM_SOPT2_USBSLSRC_M)
+   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_USBSLSRC_MASK)|SIM_SOPT2_USBSLSRC_M;
+#endif
+
 
    SystemCoreClockUpdate();
 }

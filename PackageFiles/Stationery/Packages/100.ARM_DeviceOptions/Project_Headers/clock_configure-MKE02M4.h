@@ -1,5 +1,5 @@
 /*
- * clock_private-MKE02M4.h
+ * clock_configure-MKE02M4.h
  *
  *  Used for MKE02M4
  *

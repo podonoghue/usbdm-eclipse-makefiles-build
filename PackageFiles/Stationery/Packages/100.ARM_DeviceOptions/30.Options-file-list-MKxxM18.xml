@@ -12,32 +12,11 @@
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>
-      <variable id="projectOptionValue.Clock-setup" 
-         name="Clock setup code" 
-         description="Adds code for basic clock initialization - check assumptions made"
-         checkGroup="group-additional-options"/>
-      <variable id="projectOptionValue.UART-setup" 
-         name="UART setup code" 
-         description="Adds C stdio (UART) support for newlib"          
-         checkGroup="group-additional-options" >
-         <enableWhen>
-            <requirement idRef="projectOptionValue.Clock-setup"/>
-         </enableWhen>
-      </variable>
-      <projectActionList>
-         <applyWhen>
-            <variableRef idRef="projectOptionValue.Clock-setup" />
-         </applyWhen>
-         <copy source="Startup_Code/clock-MK66M18.c" target="Startup_Code/clock.c" />
-         <copy source="Project_Headers/clock_configure-MK66M18.h" target="Project_Headers/clock_configure.h" />
-      </projectActionList>
-      <projectActionList>
-         <applyWhen>
-            <variableRef idRef="projectOptionValue.UART-setup" />
-         </applyWhen>
-         <copy source="Startup_Code/console-mk.c" target="Startup_Code/console.c" />
-         <copy source="Project_Headers/console.h" target="Project_Headers/console.h" />
-      </projectActionList>
+      <!-- Clock -->
+      <copy source="Startup_Code/clock-MCG-MK66M18.c"              target="Startup_Code/clock.c" />
+      <copy source="Project_Headers/clock_configure-MCG-MK66M18.h" target="Project_Headers/clock_configure.h" />
+      <!-- Console -->
+      <copy source="Startup_Code/console-mk.c" target="Startup_Code/console.c" />
+      <copy source="Project_Headers/console.h" target="Project_Headers/console.h" />
    </projectActionList>
-
 </root>

@@ -1,7 +1,7 @@
 /*
- * clock_private-MKxxM7.h
+ * clock_configure-MCG-MKxxM10.h
  *
- * Based on K20P100M72SF1RM
+ * Based on K10P144M100SF2V2RM
  *   2 Oscillators (OSC0, RTC)
  *   1 FLL (OSC0, RTC), (FRDIV=/1-/128, /32-/1024, /1280, 1536)
  *   1 PLL (OSC0, RTC), (VCO PRDIV=/1-/24, VDIV=x24-x55)
@@ -28,8 +28,8 @@ extern "C" {
 
 //===================================
 // Validators
-// Common clock settings                                                          Core      Bus       Flash     Flexbus
-// <validate=net.sourceforge.usbdm.annotationEditor.validators.ClockValidate_MKxx(72000000, 50000000, 25000000, 50000000)>
+// Common clock settings                                                          Core       Bus       Flash     Flexbus
+// <validate=net.sourceforge.usbdm.annotationEditor.validators.ClockValidate_MKxx(100000000, 50000000, 25000000, 50000000)>
 //
 // PLL clock                                                                    pllOutMin pllOutMax
 // <validate=net.sourceforge.usbdm.annotationEditor.validators.PllClockValidate(48000000, 100000000)>
@@ -200,7 +200,7 @@ extern "C" {
 //  <o> System Core Clock (Hz) <name=system_core_clock> <constant>
 //  <i> Clocks the ARM Cortex-M4 core and bus masters
 //  <i> Derived from MCGOUT Clock after division by OUTDIV1
-#define SYSTEM_CORE_CLOCK 41943040UL
+#define SYSTEM_CORE_CLOCK 83886080UL
 
 // SYSTEM_BUS_CLOCK =======================================
 //
@@ -233,7 +233,7 @@ extern "C" {
 //   <o> Core & System Clock Divider (OUTDIV1) - Divide by <1-16> <#-1> <name=sim_clkdiv1_outdiv1>
 //   <i> Clocks the ARM Cortex-M4 core and bus masters [SIM_CLKDIV1_OUTDIV1]
 //   <i> MCGOUTCLK clock is source. Default /1
-#define SIM_CLKDIV1_OUTDIV1_V (1)
+#define SIM_CLKDIV1_OUTDIV1_V (0)
 #define SIM_CLKDIV1_OUTDIV1_M SIM_CLKDIV1_OUTDIV1(SIM_CLKDIV1_OUTDIV1_V)
 
 // SIM_CLKDIV1_OUTDIV2 ================================
@@ -275,7 +275,7 @@ extern "C" {
 //   <i> Enables external reference clock [OSC_CR_ERCLKEN]
 //     <0=> Disabled
 //     <1=> Enabled
-#define OSC_CR_ERCLKEN_V 0
+#define OSC_CR_ERCLKEN_V 1
 #define OSC_CR_ERCLKEN_M (OSC_CR_ERCLKEN_V<<OSC_CR_ERCLKEN_SHIFT)
 
 // OSC_CR_EREFSTEN ===============================
@@ -805,6 +805,11 @@ extern "C" {
 #define SYSTEM_UART3_CLOCK SystemBusClock
 #define SYSTEM_UART4_CLOCK SystemBusClock
 #define SYSTEM_UART5_CLOCK SystemBusClock
+
+// ERRATA_E2448 ================================
+//
+//   <q> Implement work-around for ERRATA E2448
+#define ERRATA_E2448 (0)
 
 // </h>
 

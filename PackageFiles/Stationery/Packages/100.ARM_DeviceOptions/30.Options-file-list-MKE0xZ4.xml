@@ -18,6 +18,7 @@
          <applyWhen>
             <deviceNameIs>MKE04Z8M4</deviceNameIs>
          </applyWhen>
+	 <!-- Security -->
          <copy source="Startup_Code/security-mke04z8.c"    target="Startup_Code/security.c" />
       </projectActionList>
       
@@ -25,52 +26,32 @@
          <applyWhen>
             <not><deviceNameIs>MKE04Z8M4</deviceNameIs></not>
          </applyWhen>
+	 <!-- Security -->
          <copy source="Startup_Code/security-mke04.c"      target="Startup_Code/security.c" />
       </projectActionList>
-      
-      <!-- MKE04 & MKE06 have a BME that can manipulate SRAM_U and a bit-band for SRAM_U as well -->
-      <copy source="Project_Settings/Linker_Files/MemoryMap-sramu.ld"          target="Project_Settings/Linker_Files/MemoryMap-$(targetDeviceName).ld"  replace="true" />
 
-      <variable id="projectOptionValue.Clock-setup" 
-         name="Clock setup code" 
-         description="Adds code for basic clock initialization - check assumptions made"
-         checkGroup="group-additional-options"/>
-      <variable id="projectOptionValue.UART-setup" 
-         name="UART setup code" 
-         description="Adds C stdio (UART) support for newlib"          
-         checkGroup="group-additional-options" >
-         <enableWhen>
-            <requirement idRef="projectOptionValue.Clock-setup"/>
-         </enableWhen>
-      </variable>
-      
-      <projectActionList>
-         <applyWhen>
-            <variableRef idRef="projectOptionValue.Clock-setup" />
-         </applyWhen>
-         <copy source="Startup_Code/clock-MKE0x.c" target="Startup_Code/clock.c" />
-         <copy source="Project_Headers/clock_configure-MKE0x.h" target="Project_Headers/clock_configure.h" />
-      </projectActionList>
-      <projectActionList>
-         <applyWhen>
-            <variableRef idRef="projectOptionValue.UART-setup" />
-         </applyWhen>
-         <copy source="Startup_Code/console-mke.c" target="Startup_Code/console.c" />
-         <copy source="Project_Headers/console.h" target="Project_Headers/console.h" />
-      </projectActionList>
+      <!-- Clock -->
+      <copy source="Startup_Code/clock-ICS-MKE0x.c"              target="Startup_Code/clock.c" />
+      <copy source="Project_Headers/clock_configure-ICS-MKE0x.h" target="Project_Headers/clock_configure.h" />
+      <!-- Console -->
+      <copy source="Startup_Code/console-mke.c" target="Startup_Code/console.c" />
+      <copy source="Project_Headers/console.h"  target="Project_Headers/console.h" />
+
+      <!-- MKE04 & MKE06 have a BME that can manipulate SRAM_U and a bit-band for SRAM_U as well -->
+      <copy source="Project_Settings/Linker_Files/MemoryMap-sramu.ld" target="Project_Settings/Linker_Files/MemoryMap-$(targetDeviceName).ld"  replace="true" />
 
       <projectActionList>
          <applyWhen>
             <not><variableRef idRef="hasCCNature" condition="isTrue" /></not>
          </applyWhen>
-         <copy source="Project_Headers/bitband-c-mke.h"                       target="Project_Headers/bitband.h" />
+         <copy source="Project_Headers/bitband-c-mke.h"    target="Project_Headers/bitband.h" />
       </projectActionList>
 
       <projectActionList>
          <applyWhen>
             <variableRef idRef="hasCCNature" condition="isTrue" />
          </applyWhen>
-         <copy source="Project_Headers/bitband-cpp-mke.h"                     target="Project_Headers/bitband.h" />
+         <copy source="Project_Headers/bitband-cpp-mke.h"  target="Project_Headers/bitband.h" />
       </projectActionList>
 
    </projectActionList>
