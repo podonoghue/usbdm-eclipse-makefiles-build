@@ -49,7 +49,7 @@ void report(const char *name, MMA845x &accelerometer) {
 
    // Take reading from accelerometer
    // I2C code is thread safe and MMA845x interface is stateless
-   accelerometer.readAccelerometerXYZ(&accelStatus, &accelX, &accelY, &accelZ);
+   accelerometer.readAccelerometerXYZ(accelStatus, accelX, accelY, accelZ);
 
 #if (OS_STKSIZE<(800/4))
 #error "Requires RTX Default Thread stack size to be increased to about 800 bytes for printf()"
@@ -135,7 +135,7 @@ int main() {
 
    // Start timers
    timer1.start(300);
-   timer2.start(300);
+   timer2.start(100);
 
 #else
    /**
@@ -147,13 +147,9 @@ int main() {
    static MyTimer timer1("Th 1");
    static MyTimer timer2("Th 2");
 
-   // Create timers
-   timer1.create();
-   timer2.create();
-
    // Start timers
    timer1.start(300);
-   timer2.start(300);
+   timer2.start(100);
 #endif
 
    for(;;) {
