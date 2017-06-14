@@ -97,7 +97,7 @@ using namespace USBDM;
 void LcdBase::init() {
 
 #ifdef ELEC_FREAKS
-   backlightOn();
+   backLightOff();
 #endif
 
    reset();
@@ -190,6 +190,10 @@ void LcdBase::init() {
 #endif
 
    clear(BLACK);
+#ifdef ELEC_FREAKS
+   waitMS(20);
+   backlightOn();
+#endif
 }
 
 /** Writes the entire LCD screen from a bmp file
@@ -691,7 +695,7 @@ void LcdBase::putChar(char c, int x, int y, Font &font, Colour fColour, Colour b
 #endif
 }
 
-/** Draws a null-terminated character string at the specified (x,y) address and colour
+/** Draws a nul-terminated character string at the specified (x,y) address and colour
  *
  * @param str       Character string to be displayed
  * @param x         Row address (0 .. 131)

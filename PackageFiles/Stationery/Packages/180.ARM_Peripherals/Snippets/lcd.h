@@ -167,6 +167,8 @@ protected:
    Spi      &spi;        //!< SPI interface used to communicate with LCD
    uint32_t  spiConfig;  //!< SPI communication configuration
 
+   static constexpr uint16_t  DATA_FLAG = 0x100;
+
    /**
     * Reset LCD
     */
@@ -362,11 +364,11 @@ public:
     */
    Lcd_T(Spi &spi) : LcdBase(spi) {
       // Chip select pin
-      SpiCS_n::setOutput(pcrValue(PullNone, DriveHigh));
+      SpiCS_n::setOutput(pcrValue(PinPullNone, PinDriveHigh));
       SpiCS_n::high();         // Set idle high
 
       // LCD Reset pin
-      Reset_n::setOutput(pcrValue(PullNone, DriveHigh));
+      Reset_n::setOutput(pcrValue(PinPullNone, PinDriveHigh));
       Reset_n::high();
 
       init();
@@ -405,7 +407,7 @@ public:
    virtual void txData(uint8_t data) override {
       spi.startTransaction(spiConfig);
       SpiCS_n::low();
-      spi.txRx(0x100|data);
+      spi.txRx(DATA_FLAG|data);
       SpiCS_n::high();
       spi.endTransaction();
    }
@@ -416,38 +418,39 @@ public:
     * @param colour Colour to send
     */
    virtual void txTwoPixels(Colour colour) override {
-      // Construct RRRRGGGG|GGGGRRRR|GGGGBBBB in 3 bytes = 2 pixels
-      uint8_t data1 = (colour >> 4);
-      uint8_t data2 = ((colour & 0xF) << 4) | ((colour >> 8) & 0xF);
-      uint8_t data3 = colour & 0xFF;;
+      // Construct RRRRGGGG|BBBBRRRR|GGGGBBBB in 3 bytes = 2 pixels
+      uint16_t data1 = DATA_FLAG|(colour >> 4);
+      uint16_t data2 = DATA_FLAG|(((colour & 0xF) << 4) | ((colour >> 8) & 0xF));
+      uint16_t data3 = DATA_FLAG|(colour & 0xFF);
 
       spi.startTransaction(spiConfig);
       SpiCS_n::low();
-      spi.txRx(0x100|data1);
-      spi.txRx(0x100|data2);
-      spi.txRx(0x100|data3);
+      spi.txRx(data1);
+      spi.txRx(data2);
+      spi.txRx(data3);
       SpiCS_n::high();
       spi.endTransaction();
    }
 
    /**
-    * Send a single colour multiple times to the display (2 pixels)
+    * Send a single colour multiple times to the display (multiple of 2 pixels)
     *
     * @param colour Colour to send
-    * @param size   Size of colour block
+    * @param size   Size of colour block (even)
     */
    virtual void txColourBlock(Colour colour, int size) override {
-      // Construct RRRRGGGG|GGGGRRRR|GGGGBBBB in 3 bytes = 2 pixels
-      uint8_t data1 = (colour >> 4);
-      uint8_t data2 = ((colour & 0xF) << 4) | ((colour >> 8) & 0xF);
-      uint8_t data3 = colour & 0xFF;;
+      // Construct RRRRGGGG|BBBBRRRR|GGGGBBBB in 3 bytes = 2 pixels
+      uint16_t data1 = DATA_FLAG|(colour >> 4);
+      uint16_t data2 = DATA_FLAG|(((colour & 0xF) << 4) | ((colour >> 8) & 0xF));
+      uint16_t data3 = DATA_FLAG|(colour & 0xFF);
+
       spi.startTransaction(spiConfig);
       SpiCS_n::low();
       size = (size+1)/2;
       while(size-->0) {
-         spi.txRx(0x100|data1);
-         spi.txRx(0x100|data2);
-         spi.txRx(0x100|data3);
+         spi.txRx(data1);
+         spi.txRx(data2);
+         spi.txRx(data3);
       }
       SpiCS_n::high();
       spi.endTransaction();
@@ -470,7 +473,7 @@ public:
       }
       BackLight::setDutyCycle(level);
 #else
-      BackLight::setOutput(pcrValue(PullNone, DriveHigh));
+      BackLight::setOutput(pcrValue(PinPullNone, PinDriveHigh));
       BackLight::write(level>0);
 #endif
    }
