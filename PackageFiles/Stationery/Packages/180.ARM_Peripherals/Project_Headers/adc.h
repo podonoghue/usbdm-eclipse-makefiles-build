@@ -55,7 +55,7 @@ namespace USBDM {
 /**
  * Default PCR value for pins used as GPIO (including multiplexor value)
  */
-static constexpr PcrValue ADC_DEFAULT_PCR = pcrValue(PullNone, DriveLow, PushPull, PinIrqNone, PinMuxAnalogue);
+static constexpr PcrValue ADC_DEFAULT_PCR = pcrValue(PinPullNone, PinDriveLow, PinPushPull, PinIrqNone, PinMuxAnalogue);
 
 /**
  * ADC Resolutions for use with AnalogueIO::setMode()

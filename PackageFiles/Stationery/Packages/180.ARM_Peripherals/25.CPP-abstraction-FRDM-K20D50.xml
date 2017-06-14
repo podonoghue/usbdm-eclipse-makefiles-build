@@ -15,6 +15,7 @@
       </applyWhen>
 
       <!-- These constant enables external peripheral features -->
+      <constant id="cpp.peripheral.external.max30100"          value="true" />
       <constant id="cpp.peripheral.external.elecfreaks-lcd"    value="true" />
       <constant id="cpp.peripheral.external.gps"    value="true" />
 

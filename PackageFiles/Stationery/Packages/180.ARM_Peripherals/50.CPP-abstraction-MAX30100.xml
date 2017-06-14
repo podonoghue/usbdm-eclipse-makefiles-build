@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0" >
+   <projectActionList id="CPP-abstraction-MAX30100" >
+      <applyWhen>
+         <and>
+            <or>
+               <deviceFamilyMatches>CortexM0</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM0plus</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM4</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM4F</deviceFamilyMatches>
+            </or>
+            <variableRef idRef="cpp.peripheral.external.max30100" />
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+      <projectActionList>
+         <applyWhen>
+            <variableRef idRef="projectOptionValue.CPP-abstraction" condition="isTrue"/>
+         </applyWhen>
+         <variable id="projectOptionValue.CPP-abstraction-MAX30100" 
+            name="MAX30100 SpO2 interface" 
+            description="Adds a CPP abstraction layer for a MAX30100 SpO2 e.g. MAXREFDES117 module" 
+            checkGroup="group-i2c-peripheral-options" >
+         </variable>
+   
+         <!-- MAX30100 SpO2 abstraction layer -->
+         <projectActionList>
+            <projectActionList>
+               <applyWhen >
+                  <variableRef idRef="projectOptionValue.CPP-abstraction-MAX30100" />
+               </applyWhen>
+               <copy source="Snippets/max30102.h"        target="Sources/max30102.h"       replace="true"/>
+               <copy source="Snippets/max30102.cpp"      target="Sources/max30102.cpp"     replace="true"/>
+               <copy source="Snippets/max30102.h"        target="Snippets/max30102.h"      replace="true"/>
+               <copy source="Snippets/max30102.cpp"      target="Snippets/max30102.cpp"    replace="true"/>
+            </projectActionList>
+         </projectActionList>
+      </projectActionList>
+    </projectActionList>
+</root>

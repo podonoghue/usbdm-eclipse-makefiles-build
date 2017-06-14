@@ -36,7 +36,7 @@ public:
     */
    static void enable() {
       FtmChannel::enable();
-      FtmChannel::setPCR(pcrValue(PullNone, DriveHigh));
+      FtmChannel::setPCR(pcrValue(PinPullNone, PinDriveHigh));
       FtmChannel::setPeriod(SERVO_PERIOD);
       FtmChannel::setHighTime((SERVO_MIN+SERVO_MAX)/2);
    }

@@ -440,7 +440,7 @@ public:
 
    virtual void enablePins() override {
       // Configure SPI pins
-      Spi0Info::initPCRs(pcrValue(PullUp, DriveHigh));
+      Spi0Info::initPCRs(pcrValue(PinPullUp, PinDriveHigh));
    }
 
    virtual void disablePins() override {

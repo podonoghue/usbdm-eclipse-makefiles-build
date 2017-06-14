@@ -61,8 +61,8 @@ void flashGreen(void) {
 }
 
 int main() {
-   LED1::setOutput(pcrValue(PullNone, DriveHigh));
-   LED2::setOutput(pcrValue(PullNone, DriveHigh));
+   LED1::setOutput(pcrValue(PinPullNone, PinDriveHigh));
+   LED2::setOutput(pcrValue(PinPullNone, PinDriveHigh));
 
    Pit::enable();
 

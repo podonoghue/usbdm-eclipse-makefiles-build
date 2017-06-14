@@ -43,7 +43,7 @@ It provides:\n
    // Set as digital output
    GpioC3.setOutput();
    // Or for more detailed control
-   GpioC3.setOutput(pcrValue(PullUp, DriveHigh, OpenCollector));
+   GpioC3.setOutput(pcrValue(PinPullUp, PinDriveHigh, PinOpenCollector));
 
    // Set pin (polarity is applied)
    GpioC3.set();
@@ -67,13 +67,13 @@ It provides:\n
    GpioC3.write(false);
 
    // Enable pull-up
-   GpioC3.setPullDevice(PullUp);
+   GpioC3.setPullDevice(PinPullUp);
 
    // Set drive strength
-   GpioC3.setDriveStrength(DriveHigh);
+   GpioC3.setDriveStrength(PinDriveHigh);
 
    // Set open-drain
-   GpioC3.setDriveMode(OpenDrain);
+   GpioC3.setDriveMode(PinOpenDrain);
 
    // Read pin as boolean value (polarity is applied)
    // This may be useful if the pin is open-drain
@@ -81,7 +81,7 @@ It provides:\n
 
    // Read _state_ of pin drive as boolean value (polarity is applied)
    // This may be useful if the pin is open-drain
-   GpioC3.setDriveMode(OpenDrain);
+   GpioC3.setDriveMode(PinOpenDrain);
    GpioC3.high();
    if (GpioC3.readState() != GpioC3.read()) {
       printf("Open-drain pin is being held low\n");
@@ -246,7 +246,7 @@ It provides:\n
    using LED = USBDM::GpioA<2, USBDM::ActiveLow>;
 
    // Use high drive for LED
-   LED::setOutput(pcrValue(PullNone, DriveHigh));
+   LED::setOutput(pcrValue(PinPullNone, PinDriveHigh));
 
    // Enable PIT
    Pit::enable();

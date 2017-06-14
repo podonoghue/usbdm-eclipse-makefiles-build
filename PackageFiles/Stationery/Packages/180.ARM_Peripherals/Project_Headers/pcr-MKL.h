@@ -123,33 +123,33 @@ struct PcrInfo {
 /**
  * Pull device modes
  */
-enum PullMode {
-   PullNone = PORT_PCR_PE(0),                //!< No pull device
-   PullUp   = PORT_PCR_PE(1)|PORT_PCR_PS(1), //!< Weak pull-up
-   PullDown = PORT_PCR_PE(1)|PORT_PCR_PS(0), //!< Weak pull-down
+enum PinPullMode {
+   PinPullNone = PORT_PCR_PE(0),                //!< No pull device
+   PinPullUp   = PORT_PCR_PE(1)|PORT_PCR_PS(1), //!< Weak pull-up
+   PinPullDown = PORT_PCR_PE(1)|PORT_PCR_PS(0), //!< Weak pull-down
 };
 
 /**
  * Pin drive strengths
  */
-enum DriveStrength {
-   DriveLow  = PORT_PCR_DSE(0), //!< Low drive strength
-   DriveHigh = PORT_PCR_DSE(1), //!< High drive strength
+enum PinDriveStrength {
+   PinDriveLow  = PORT_PCR_DSE(0), //!< Low drive strength
+   PinDriveHigh = PORT_PCR_DSE(1), //!< High drive strength
 };
 
 /**
  * Pin drive mode
  */
-enum DriveMode {
-   PushPull      = PORT_PCR_ODE(0), //!< Push-pull output
-   OpenDrain     = PORT_PCR_ODE(1), //!< Open-drain output
-   OpenCollector = OpenDrain,       //!< For oldies like me
+enum PinDriveMode {
+   PinPushPull      = PORT_PCR_ODE(0), //!< Push-pull output
+   PinOpenDrain     = PORT_PCR_ODE(1), //!< Open-drain output
+   PinOpenCollector = PinOpenDrain,       //!< For oldies like me
 };
 
 /**
  * Pin interrupt/DMA modes
  */
-enum InterruptMode {
+enum PinInterruptMode {
    PinIrqNone     = PORT_PCR_IRQC(0),   //!< No interrupt or DMA function
 
    PinDmaRising   = PORT_PCR_IRQC(1),   //!< Generate DMA request on rising edge
@@ -185,18 +185,18 @@ using PcrValue = uint32_t;
 /**
  * Construct PCR value from individual bit masks
  *
- * @param pullMode      One of PullNone, PullUp, PullDown, (defaults to PullNone)
- * @param driveStrength One of DriveLow, DriveHigh, (defaults to DriveLow)
- * @param driveMode     One of PushPull, OpenDrain, OpenCollector, (defaults to PushPull)
+ * @param pullMode      One of PinPullNone, PinPullUp, PinPullDown, (defaults to PinPullNone)
+ * @param driveStrength One of PinDriveLow, PinDriveHigh, (defaults to PinDriveLow)
+ * @param driveMode     One of PinPushPull, PinOpenDrain, PinOpenCollector, (defaults to PinPushPull)
  * @param interruptMode One of PinIrqNone, etc (defaults to PinIrqNone)
  * @param muxValue      Multiplexor setting (defaults to 0)
  */
 constexpr PcrValue pcrValue(
-      PullMode       pullMode       = PullNone,
-      DriveStrength  driveStrength  = DriveLow,
-      DriveMode      driveMode      = PushPull,
-      InterruptMode  interruptMode  = PinIrqNone,
-      PinMux         muxValue       = PinMuxNone) {
+      PinPullMode       pullMode       = PinPullNone,
+      PinDriveStrength  driveStrength  = PinDriveLow,
+      PinDriveMode      driveMode      = PinPushPull,
+      PinInterruptMode  interruptMode  = PinIrqNone,
+      PinMux            muxValue       = PinMuxNone) {
    return pullMode|driveStrength|driveMode|interruptMode|((muxValue<<8)&0x700);
 }
 
@@ -223,24 +223,24 @@ constexpr PcrValue pcrValue(uint32_t flags) {
  * Default PCR setting for pins (excluding multiplexor value)
  * High drive strength + Pull-up
  */
-static constexpr PcrValue DEFAULT_PCR = pcrValue(PullUp, DriveHigh);
+static constexpr PcrValue DEFAULT_PCR = pcrValue(PinPullUp, PinDriveHigh);
 
 /**
  * Default PCR value for pins used as GPIO (including multiplexor value)
  * High drive strength + Pull-up + GPIO_MUX value
  */
-static constexpr PcrValue GPIO_DEFAULT_PCR = pcrValue(PullUp, DriveHigh, PushPull, PinIrqNone, PinMuxGpio);
+static constexpr PcrValue GPIO_DEFAULT_PCR = pcrValue(PinPullUp, PinDriveHigh, PinPushPull, PinIrqNone, PinMuxGpio);
 
 /**
  * Default PCR setting for I2C pins (excluding multiplexor value)
  * High drive strength + Pull-up + Open-drain (if available)
  */
-static constexpr PcrValue I2C_DEFAULT_PCR =  pcrValue(PullUp, DriveHigh, OpenDrain, PinIrqNone);
+static constexpr PcrValue I2C_DEFAULT_PCR =  pcrValue(PinPullUp, PinDriveHigh, PinOpenDrain, PinIrqNone);
 
 /**
  * Default PCR setting for (E)XTAL pins (excluding multiplexor value)
  */
-static constexpr PcrValue XTAL_DEFAULT_PCR = pcrValue(PullNone, DriveLow, PushPull, PinIrqNone);
+static constexpr PcrValue XTAL_DEFAULT_PCR = pcrValue(PinPullNone, PinDriveLow, PinPushPull, PinIrqNone);
 
 /**
  * Type definition for PIT interrupt call back
@@ -368,7 +368,7 @@ public:
     *
     * @param mode Interrupt/DMA mode
     */
-   static void setIrq(InterruptMode mode) {
+   static void setIrq(PinInterruptMode mode) {
       *pcrReg = (*pcrReg&~PORT_PCR_IRQC_MASK) | mode;
    }
 
@@ -387,7 +387,7 @@ public:
     *
     *  @param mode Pull selection mode
     */
-   static void setPullDevice(PullMode mode) {
+   static void setPullDevice(PinPullMode mode) {
       *pcrReg = (*pcrReg&~PORT_PCR_PS_MASK) | mode;
    }
 
@@ -397,20 +397,20 @@ public:
     *
     *  @param mode Drive mode
     */
-   static void setDriveMode(DriveMode mode) {
+   static void setDriveMode(PinDriveMode mode) {
       *pcrReg = (*pcrReg&~PORT_PCR_ODE_MASK) | mode;
    }
 #else
    /**
     * Not supported
     */
-   static void setPullDevice(PullMode) {
+   static void setPullDevice(PinPullMode) {
    }
 
    /**
     * Not supported
     */
-   static void setDriveMode(DriveMode) {
+   static void setDriveMode(PinDriveMode) {
    }
 #endif
 
@@ -420,7 +420,7 @@ public:
     *
     *  @param strength Drive strength to set
     */
-   static void setDriveStrength(DriveStrength strength) {
+   static void setDriveStrength(PinDriveStrength strength) {
       *pcrReg = (*pcrReg&~PORT_PCR_DSE_MASK) | strength;
    }
 

@@ -175,6 +175,32 @@ public:
       }
    }
    /**
+    * Set pin to active level (if output)
+    *
+    * @note Polarity is significant
+    */
+   static void on() {
+      if (polarity) {
+         gpio->PSOR = MASK;
+      }
+      else {
+         gpio->PCOR = MASK;
+      }
+   }
+   /**
+    * Set pin to inactive level (if output)
+    *
+    * @note Polarity is significant
+    */
+   static void off() {
+      if (polarity) {
+         gpio->PCOR = MASK;
+      }
+      else {
+         gpio->PSOR = MASK;
+      }
+   }
+   /**
     * Write boolean value to digital output
     *
     * @param value true/false value
@@ -264,7 +290,7 @@ public:
     *
     * @param mode Interrupt/DMA mode
     */
-   static void setIrq(InterruptMode mode) {
+   static void setIrq(PinInterruptMode mode) {
       Pcr::setIrq(mode);
    }
 
@@ -278,27 +304,27 @@ public:
    /**
     * Set pull device on pin
     *
-    * @param mode Pull control value (PullNone, PullUp, PullDown)
+    * @param mode Pull control value (PinPullNone, PinPullUp, PinPullDown)
     */
-   static void setPullDevice(PullMode mode) {
+   static void setPullDevice(PinPullMode mode) {
       Pcr::setPullDevice(mode);
    }
 
    /**
     * Set drive strength on pin
     *
-    *  @param strength Drive strength to set (DriveLow, DriveHigh)
+    *  @param strength Drive strength to set (PinDriveLow, PinDriveHigh)
     */
-   static void setDriveStrength(DriveStrength strength) {
+   static void setDriveStrength(PinDriveStrength strength) {
       Pcr::setDriveStrength(strength);
    }
 
    /**
     * Set drive mode on pin
     *
-    *  @param mode Drive mode (PushPull, OpenDrain)
+    *  @param mode Drive mode (PinPushPull, PinOpenDrain)
     */
-   static void setDriveMode(DriveMode mode) {
+   static void setDriveMode(PinDriveMode mode) {
       Pcr::setDriveMode(mode);
    }
 

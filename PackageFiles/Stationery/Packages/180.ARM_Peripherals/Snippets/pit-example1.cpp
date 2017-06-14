@@ -17,7 +17,7 @@ using LED   = $(demo.cpp.red.led:USBDM::GpioB<0>);
 
 int main() {
 
-   LED::setOutput(pcrValue(PullNone, DriveHigh));
+   LED::setOutput(pcrValue(PinPullNone, PinDriveHigh));
 
    // Enable PIT
    Pit::enable();
