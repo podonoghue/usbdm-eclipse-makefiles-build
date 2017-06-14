@@ -7,14 +7,14 @@
       <applyWhen>
          <and>
 	    <or>
-               <deviceSubfamilyIs>MKE02Z4</deviceSubfamilyIs>
+               <deviceSubfamilyIs>MKE02Z2</deviceSubfamilyIs>
 	    </or>
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>
       <!-- Clock -->
       <copy source="Startup_Code/clock-ICS-MKE0x.c"                target="Startup_Code/clock.c" />
-      <copy source="Project_Headers/clock_configure-ICS-MKE02M4.h" target="Project_Headers/clock_configure.h" />
+      <copy source="Project_Headers/clock_configure-ICS-MKE02M2.h" target="Project_Headers/clock_configure.h" />
       <!-- Security -->
       <copy source="Startup_Code/security-mke02.c"      target="Startup_Code/security.c" />
       <!-- Console -->
