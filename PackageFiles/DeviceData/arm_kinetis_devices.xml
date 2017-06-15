@@ -1714,7 +1714,7 @@ Test Devices:
       <memoryRef ref="kinetis16K_16K_Ram" />
       <memoryRef ref="FTFA_PFlash0_SEC_64K_2KS" />
       <memoryRef ref="kinetisIO_MK" />
-      <sdid value="0x44601145" mask="0xFFF00F80" />
+      <sdid value="0x40601145" mask="0xFFF00F80" />
       <tclScriptRef ref="Kinetis-MKxx-Scripts" />
       <flashProgramRef ref="Kinetis-FTFA-MK-flash-program" />
       <registerDescriptionRef ref="CortexM4F-register-description" />
@@ -1724,7 +1724,7 @@ Test Devices:
       <memoryRef ref="kinetis32K_32K_Ram" />
       <memoryRef ref="FTFA_PFlash0_SEC_128K_2KS" />
       <memoryRef ref="kinetisIO_MK" />
-      <sdid value="0x44601145" mask="0xFFF00F80" />
+      <sdid value="0x40601145" mask="0xFFF00F80" />
       <tclScriptRef ref="Kinetis-MKxx-Scripts" />
       <flashProgramRef ref="Kinetis-FTFA-MK-flash-program" />
       <registerDescriptionRef ref="CortexM4F-register-description" />
@@ -1734,7 +1734,7 @@ Test Devices:
       <memoryRef ref="kinetis32K_32K_Ram" />
       <memoryRef ref="FTFA_PFlash0_SEC_256K_2KS" />
       <memoryRef ref="kinetisIO_MK" />
-      <sdid value="0x44601145" mask="0xFFF00F80" />
+      <sdid value="0x40601145" mask="0xFFF00F80" />
       <tclScriptRef ref="Kinetis-MKxx-Scripts" />
       <flashProgramRef ref="Kinetis-FTFA-MK-flash-program" />
       <registerDescriptionRef ref="CortexM4F-register-description" />
@@ -1745,7 +1745,7 @@ Test Devices:
       <memoryRef ref="kinetis16K_16K_Ram" />
       <memoryRef ref="FTFA_PFlash0_SEC_64K_2KS" />
       <memoryRef ref="kinetisIO_MK" />
-      <sdid value="0x44601145" mask="0xFFF00F80" />
+      <sdid value="0x40601145" mask="0xFFF00F80" />
       <tclScriptRef ref="Kinetis-MKxx-Scripts" />
       <flashProgramRef ref="Kinetis-FTFA-MK-flash-program" />
       <registerDescriptionRef ref="CortexM4F-register-description" />
@@ -1755,7 +1755,7 @@ Test Devices:
       <memoryRef ref="kinetis32K_32K_Ram" />
       <memoryRef ref="FTFA_PFlash0_SEC_128K_2KS" />
       <memoryRef ref="kinetisIO_MK" />
-      <sdid value="0x44601145" mask="0xFFF00F80" />
+      <sdid value="0x41601145" mask="0xFFF00F80" />
       <tclScriptRef ref="Kinetis-MKxx-Scripts" />
       <flashProgramRef ref="Kinetis-FTFA-MK-flash-program" />
       <registerDescriptionRef ref="CortexM4F-register-description" />
@@ -1766,7 +1766,7 @@ Test Devices:
       <memoryRef ref="kinetis16K_16K_Ram" />
       <memoryRef ref="FTFA_PFlash0_SEC_64K_2KS" />
       <memoryRef ref="kinetisIO_MK" />
-      <sdid value="0x44601145" mask="0xFFF00F80" />
+      <sdid value="0x43601145" mask="0xFFF00F80" />
       <tclScriptRef ref="Kinetis-MKxx-Scripts" />
       <flashProgramRef ref="Kinetis-FTFA-MK-flash-program" />
       <registerDescriptionRef ref="CortexM4F-register-description" />
@@ -1776,7 +1776,7 @@ Test Devices:
       <memoryRef ref="kinetis32K_32K_Ram" />
       <memoryRef ref="FTFA_PFlash0_SEC_128K_2KS" />
       <memoryRef ref="kinetisIO_MK" />
-      <sdid value="0x44601145" mask="0xFFF00F80" />
+      <sdid value="0x43601145" mask="0xFFF00F80" />
       <tclScriptRef ref="Kinetis-MKxx-Scripts" />
       <flashProgramRef ref="Kinetis-FTFA-MK-flash-program" />
       <registerDescriptionRef ref="CortexM4F-register-description" />
@@ -1808,7 +1808,7 @@ Test Devices:
       <memoryRef ref="kinetis32K_32K_Ram" />
       <memoryRef ref="FTFA_PFlash0_SEC_128K_2KS" />
       <memoryRef ref="kinetisIO_MK" />
-      <sdid value="0x44601145" mask="0xFFF00F80" />
+      <sdid value="0x45601145" mask="0xFFF00F80" />
       <tclScriptRef ref="Kinetis-MKxx-Scripts" />
       <flashProgramRef ref="Kinetis-FTFA-MK-flash-program" />
       <registerDescriptionRef ref="CortexM4F-register-description" />
@@ -1818,7 +1818,7 @@ Test Devices:
       <memoryRef ref="kinetis32K_32K_Ram" />
       <memoryRef ref="FTFA_PFlash0_SEC_256K_2KS" />
       <memoryRef ref="kinetisIO_MK" />
-      <sdid value="0x44601145" mask="0xFFF00F80" />
+      <sdid value="0x45601145" mask="0xFFF00F80" />
       <tclScriptRef ref="Kinetis-MKxx-Scripts" />
       <flashProgramRef ref="Kinetis-FTFA-MK-flash-program" />
       <registerDescriptionRef ref="CortexM4F-register-description" />
@@ -1829,7 +1829,7 @@ Test Devices:
       <memoryRef ref="kinetis32K_32K_Ram" />
       <memoryRef ref="FTFA_PFlash0_SEC_128K_2KS" />
       <memoryRef ref="kinetisIO_MK" />
-      <sdid value="0x44601145" mask="0xFFF00F80" />
+      <sdid value="0x46601145" mask="0xFFF00F80" />
       <tclScriptRef ref="Kinetis-MKxx-Scripts" />
       <flashProgramRef ref="Kinetis-FTFA-MK-flash-program" />
       <registerDescriptionRef ref="CortexM4F-register-description" />
@@ -1839,7 +1839,7 @@ Test Devices:
       <memoryRef ref="kinetis32K_32K_Ram" />
       <memoryRef ref="FTFA_PFlash0_SEC_256K_2KS" />
       <memoryRef ref="kinetisIO_MK" />
-      <sdid value="0x44601145" mask="0xFFF00F80" />
+      <sdid value="0x46601145" mask="0xFFF00F80" />
       <tclScriptRef ref="Kinetis-MKxx-Scripts" />
       <flashProgramRef ref="Kinetis-FTFA-MK-flash-program" />
       <registerDescriptionRef ref="CortexM4F-register-description" />
