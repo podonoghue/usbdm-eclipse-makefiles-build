@@ -31,10 +31,11 @@
                <applyWhen >
                   <variableRef idRef="projectOptionValue.CPP-abstraction-MAX30100" />
                </applyWhen>
-               <copy source="Snippets/max30102.h"        target="Sources/max30102.h"       replace="true"/>
-               <copy source="Snippets/max30102.cpp"      target="Sources/max30102.cpp"     replace="true"/>
-               <copy source="Snippets/max30102.h"        target="Snippets/max30102.h"      replace="true"/>
-               <copy source="Snippets/max30102.cpp"      target="Snippets/max30102.cpp"    replace="true"/>
+               <copy source="Snippets/max30102.h"            target="Sources/max30102.h"            replace="true"/>
+               <copy source="Snippets/max30102.cpp"          target="Sources/max30102.cpp"          replace="true"/>
+               <copy source="Snippets/max30102.h"            target="Snippets/max30102.h"           replace="true"/>
+               <copy source="Snippets/max30102.cpp"          target="Snippets/max30102.cpp"         replace="true"/>
+               <copy source="Snippets/max30102-example.cpp"  target="Snippets/max30102-example.cpp" replace="true"/>
             </projectActionList>
          </projectActionList>
       </projectActionList>

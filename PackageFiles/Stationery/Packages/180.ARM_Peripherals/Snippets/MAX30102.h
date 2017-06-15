@@ -84,6 +84,8 @@ private:
 
    float temperature = 0;
 
+   using Strobe = USBDM::GpioE<0>;
+
 public:
    /**
     * Constructor
@@ -91,14 +93,15 @@ public:
     * @param[in] i2c I2C interface to use
     */
    MAX30102(I2c &i2c) : i2c(i2c){
-      init();
+      Strobe::setOutput();
+      reset();
    }
    /**
     * @brief        Initialize the MAX30102
     *
     * @return       true on success
     */
-   bool init();
+   bool startSpo2();
    /**
     * @brief        Read a set of samples from the MAX30102 FIFO register
     * @par          Details
