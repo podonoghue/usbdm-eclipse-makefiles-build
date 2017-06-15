@@ -79,7 +79,7 @@ public:
     * @param callback Call-back function to execute by timer
     */
    constexpr Timer(void (*callback)(const void *)) :
-      os_timer_def{callback, (void*)&os_timer_cb}
+   os_timer_def{callback, (void*)&os_timer_cb}
    {
    }
    ~Timer() {
@@ -225,8 +225,8 @@ public:
    using Timer<timerType>::getId;
 
    TimerClass() : Timer<timerType>(shim) {
-       // Create timer here with required 'this' argument
-	   Timer<timerType>::create(this);
+      // Create timer here with required 'this' argument
+      Timer<timerType>::create(this);
    }
    virtual ~TimerClass() {
    }
@@ -426,7 +426,7 @@ template <typename T, size_t size>
 class Pool {
 
 private:
-         uint32_t pool[3+((sizeof(T)+3)/4)*size] = {0};
+   uint32_t pool[3+((sizeof(T)+3)/4)*size] = {0};
    const osPoolDef_t os_pool_def                 = { size, sizeof(T), pool };
 
 public:
@@ -522,6 +522,13 @@ private:
    osThreadId thread_id = 0;
 
 public:
+   /**
+    * Create thread as a wrapper for an existing thread
+    *
+    * @param thread_id   ID of existing thread
+    */
+   Thread(osThreadId thread_id) : thread_def {0, osPriorityNormal, 1, 0 }, thread_id(thread_id) {
+   };
    /**
     * Create thread
     *
@@ -770,13 +777,22 @@ public:
    using Thread::wait;
 #endif
 
-   ThreadClass() : Thread(shim) {
+   /**
+    * Create thread
+    *
+    * @param priority         Priority of thread e.g. osPriorityNormal
+    * @param stackSize        Stack size for thread or 0 to indicate default
+    */
+   ThreadClass(
+         osPriority  priority=osPriorityNormal,
+         uint32_t    stackSize=0)
+   : Thread(shim, priority, stackSize) {
    }
    virtual ~ThreadClass() {
    }
 
    void run() {
-     Thread::run(this);
+      Thread::run(this);
    }
 };
 
@@ -851,13 +867,13 @@ class MessageQueue {
    static_assert(sizeof(T)<=sizeof(int), "Object is too large to pass as message");
 
 private:
-         uint32_t        queue[4+size] = {0};
+   uint32_t              queue[4+size] = {0};
    const osMessageQDef_t os_pool_def   = { size, queue };
 
-//   static void *operator new     (size_t) = delete;
-//   static void *operator new[]   (size_t) = delete;
-//   static void  operator delete  (void*)  = delete;
-//   static void  operator delete[](void*)  = delete;
+   //   static void *operator new     (size_t) = delete;
+   //   static void *operator new[]   (size_t) = delete;
+   //   static void  operator delete  (void*)  = delete;
+   //   static void  operator delete[](void*)  = delete;
 
 public:
    MessageQueue() {
@@ -1048,15 +1064,15 @@ template <typename T, size_t size, Thread *thread=nullptr>
 class MailQueue {
 
 private:
-          uint32_t     queue[4+size];
-          uint32_t     messages[3+((sizeof(T)+3)/4)*size];
+   uint32_t            queue[4+size];
+   uint32_t            messages[3+((sizeof(T)+3)/4)*size];
    const  void         *pool[2]       = {queue, messages};
    const  os_mailQ_def os_mail_def    = {size, sizeof(T), pool};
 
-//   static void *operator new     (size_t) = delete;
-//   static void *operator new[]   (size_t) = delete;
-//   static void  operator delete  (void*)  = delete;
-//   static void  operator delete[](void*)  = delete;
+   //   static void *operator new     (size_t) = delete;
+   //   static void *operator new[]   (size_t) = delete;
+   //   static void  operator delete  (void*)  = delete;
+   //   static void  operator delete[](void*)  = delete;
 
 public:
    /**
