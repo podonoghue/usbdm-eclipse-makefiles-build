@@ -72,49 +72,51 @@ public:
 
    static constexpr volatile GPIO_Type *gpio = reinterpret_cast<volatile GPIO_Type *>(gpioAddress);
 
+   static constexpr uint32_t MASK   = (1<<bitNum);
+   static constexpr uint32_t BITNUM = bitNum;
    /**
     * Set pin as digital output
     */
    static void setOutput() {
-      bmeOr(gpio->PDDR, 1<<bitNum);
-//      gpio->PDDR |= (1<<bitNum);
+      bmeOr(gpio->PDDR, MASK);
+//      gpio->PDDR |= (MASK);
    }
    /**
     * Set pin as digital input
     */
    static void setInput() {
-      bmeAnd(gpio->PDDR, ~(1<<bitNum));
-//      gpio->PDDR &= ~(1<<bitNum);
+      bmeAnd(gpio->PDDR, ~(MASK));
+//      gpio->PDDR &= ~(MASK);
    }
    /**
     * Enable Pull-ups on pin
     */
    static void enablePup() {
-      reinterpret_cast<volatile uint32_t *>(portPue) |= (1<<bitNum);
+      reinterpret_cast<volatile uint32_t *>(portPue) |= (MASK);
    }
    /**
     * Disable Pull-ups on pin
     */
    static void disablePup() {
-      reinterpret_cast<volatile uint32_t *>(portPue) &= ~(1<<bitNum);
+      reinterpret_cast<volatile uint32_t *>(portPue) &= ~(MASK);
    }
    /**
     * Toggle pin
     */
    static void toggle() {
-      gpio->PTOR = (1<<bitNum);
+      gpio->PTOR = (MASK);
    }
    /**
     * Set pin high
     */
    static void set() {
-      gpio->PSOR = (1<<bitNum);
+      gpio->PSOR = (MASK);
    }
    /**
     * Set pin low
     */
    static void clear() {
-      gpio->PCOR = (1<<bitNum);
+      gpio->PCOR = (MASK);
    }
    /**
     * Set pin high

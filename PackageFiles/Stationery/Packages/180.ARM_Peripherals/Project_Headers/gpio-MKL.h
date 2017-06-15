@@ -86,7 +86,9 @@ public:
    using Pcr = Pcr_T<clockMask, pcrAddress, bitNum, GPIO_DEFAULT_PCR>;
 
    static constexpr volatile GPIO_Type *gpio = reinterpret_cast<volatile GPIO_Type *>(gpioAddress);
-   static constexpr uint32_t MASK = (1<<bitNum);
+
+   static constexpr uint32_t MASK   = (1<<bitNum);
+   static constexpr uint32_t BITNUM = bitNum;
 
    /**
     * Set PCR
@@ -108,7 +110,7 @@ public:
       // Set initial level before enabling pin drive
       clear();
       // Make pin an output
-      bmeOr(gpio->PDDR, 1<<bitNum);
+      bmeOr(gpio->PDDR, MASK);
 //      gpio->PDDR |= MASK;
       Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|PORT_PCR_MUX(PinMuxGpio));
    }
@@ -122,7 +124,7 @@ public:
     */
    static void setInput(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
       // Make pin an input
-      bmeAnd(gpio->PDDR, ~(1<<bitNum));
+      bmeAnd(gpio->PDDR, ~(MASK));
 //      gpio->PDDR &= ~MASK;
       Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|PORT_PCR_MUX(PinMuxGpio));
    }
@@ -131,7 +133,7 @@ public:
     */
    static void setOut() {
       // Make pin an output
-      bmeOr(gpio->PDDR, 1<<bitNum);
+      bmeOr(gpio->PDDR, MASK);
 //      gpio->PDDR |= MASK;
    }
    /**
@@ -139,7 +141,7 @@ public:
     */
    static void setIn() {
       // Make pin an input
-      bmeAnd(gpio->PDDR, ~(1<<bitNum));
+      bmeAnd(gpio->PDDR, ~(MASK));
 //      gpio->PDDR &= ~MASK;
    }
    /**

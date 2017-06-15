@@ -86,7 +86,9 @@ public:
    using Pcr = Pcr_T<clockMask, pcrAddress, bitNum, GPIO_DEFAULT_PCR>;
 
    static constexpr volatile GPIO_Type *gpio = reinterpret_cast<volatile GPIO_Type *>(gpioAddress);
-   static constexpr uint32_t MASK = (1<<bitNum);
+
+   static constexpr uint32_t MASK   = (1<<bitNum);
+   static constexpr uint32_t BITNUM = bitNum;
 
    /**
     * Set PCR
