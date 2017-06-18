@@ -1,5 +1,5 @@
 /**
- * spi.cpp (derived from spi-MK.cpp)
+ * @file spi.cpp (derived from spi-MK.cpp)
  *
  * @version  V4.12.1.80
  * @date     13 April 2016

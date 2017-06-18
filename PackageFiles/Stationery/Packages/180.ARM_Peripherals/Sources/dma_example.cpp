@@ -1,5 +1,5 @@
 /*
- * capture.cpp
+ * @file dma_example.cpp
  *
  *  Created on: 17 Oct 2016
  *      Author: podonoghue

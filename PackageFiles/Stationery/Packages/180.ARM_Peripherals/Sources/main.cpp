@@ -1,6 +1,6 @@
 /*
  ============================================================================
- * @file    main.cpp (180.ARM_Peripherals)
+ * @file    main.cpp (180.ARM_Peripherals/Sources/main.cpp)
  * @brief   Basic C++ demo using GPIO class
  *
  *  Created on: 10/1/2016
