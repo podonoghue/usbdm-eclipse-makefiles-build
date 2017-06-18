@@ -19,6 +19,8 @@ void SystemCoreClockUpdate(void) {
 /* These are overridden if actual clock code is provided */
 __attribute__((__weak__))
 uint32_t SystemCoreClock = 12000000;
+__attribute__((__weak__))
+uint32_t SystemBusClock = 12000000; /* Does LPC have equivalent ? */
 
 /* Actual Vector table */
 extern int const __vector_table[];
@@ -39,7 +41,7 @@ void rtc_initialise(void) {
 }
 
 // Dummy hook routine for when CMSIS is not used.
-__attribute__((weak))
+__attribute__((__weak__))
 void software_init_hook (void) {
 }
 
@@ -60,7 +62,7 @@ void SystemInitLowLevel(void) {
     * It may not be correct for a specific target
     */
 
-#ifdef __VTOR_PRESENT
+#if (__VTOR_PRESENT != 0)
    /* Set the interrupt vector table position */
    SCB->VTOR = (uint32_t)__vector_table;
 #endif
@@ -88,7 +90,7 @@ void SystemInit(void) {
    /* Use RTC initialisation - if present */
    rtc_initialise();
 
-#if defined (__VFP_FP__) && !defined(__SOFTFP__)
+#if defined(__VFP_FP__) && !defined(__SOFTFP__)
    /* Initialise FPU if present & in use */
    __asm__ (
          "  .equ CPACR, 0xE000ED88     \n"

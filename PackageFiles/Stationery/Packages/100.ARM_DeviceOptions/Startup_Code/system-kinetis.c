@@ -62,7 +62,7 @@ void SystemInitLowLevel(void) {
     * It may not be correct for a specific target
     */
 
-#ifdef __VTOR_PRESENT
+#if (__VTOR_PRESENT != 0)
    /* Set the interrupt vector table position */
    SCB->VTOR = (uint32_t)__vector_table;
 #endif
@@ -144,7 +144,7 @@ void SystemInit(void) {
    /* Use RTC initialisation - if present */
    rtc_initialise();
 
-#if defined (__VFP_FP__) && !defined(__SOFTFP__)
+#if defined(__VFP_FP__) && !defined(__SOFTFP__)
    /* Initialise FPU if present & in use */
    __asm__ (
          "  .equ CPACR, 0xE000ED88     \n"
