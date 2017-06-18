@@ -26,6 +26,7 @@
          <copy source="Snippets/cmsis-cpp-thread-mma845x.cpp"       target="Snippets/cmsis-cpp-thread-mma845x.cpp" />
          <copy source="Snippets/cmsis-cpp-timer.cpp"                target="Snippets/cmsis-cpp-timer.cpp" />
          <copy source="Snippets/cmsis-cpp-timer-mma845x.cpp"        target="Snippets/cmsis-cpp-timer-mma845x.cpp" />
+         <copy source="Snippets/cmsis-cpp-lcd-example.cpp"          target="Snippets/cmsis-cpp-lcd-example.cpp" />
       </projectActionList>
    </projectActionList>
 </root>
