@@ -11,31 +11,27 @@
 #include "system.h"
 
 /**
- * Implements a circular buffer with a fence dividing the buffer in to
- * a region that is being updated (added to) and another that is being processed (read).
+ * Implements a circular buffer with array based access.\n
+ * It maintains a base index used to offset the array access.\n
+ * The offset may be incremented (in a circular fashion).
+ * This is convenient for accessing a window into the filling buffer.
  *
- * @tparam size      Total size of buffer
- * @tparam reserved  The portion that is writable at any time
- * @tparam T         Type of buffer contents
+ * @tparam size  Size of buffer
+ * @tparam T     Type of buffer contents
  */
-template<uint32_t size, uint32_t reserved, typename T>
+template<uint32_t size, typename T>
 class CircularBuffer {
-   static_assert(reserved<size, "The reserved range must be < buffer size");
-
    T buffer[size];
-   T *fence, *tail;
+   T *base, *tail;
    int freeCount;
    int fullCount;
 
 public:
 
-   /** Amount of data available for processing after initial fill */
-   static constexpr int32_t DATA_SIZE = (size-reserved);
-
    /**
     * Constructor
     */
-   CircularBuffer() : fence(buffer), tail(buffer), freeCount(size), fullCount(0) {
+   constexpr CircularBuffer() : base(buffer), tail(buffer), freeCount(size), fullCount(0) {
    }
 
    /**
@@ -49,15 +45,12 @@ public:
    }
 
    /**
-    * Checks if working space in the buffer is available
-    * This basically means that the buffer is full up to at least the fence.
+    * Get number of items in buffer
     *
-    * @return true   Working buffer is available\n
-    *                Items[0...(size-reserved-1)] are available
-    * @return false  Working buffer is not available
+    * @return Count of items
     */
-   bool workingBufferAvailable() {
-      return fullCount>=(size-reserved);
+   uint32_t count() {
+      return fullCount;
    }
 
    /**
@@ -65,7 +58,7 @@ public:
     *
     * @note The item is copied to the buffer
     *
-    * @param item The item to add
+    * @param[in] item The item to add
     *
     * @return true  Success, item has been added
     * @return false Failure, the buffer is full
@@ -86,23 +79,26 @@ public:
    }
 
    /**
-    * Advance the fence by the reserved amount.
-    * This discards 'reserved' number of items.
+    * Advance the base by the given amount.
+    * This discards that number of items from the start of the buffer.
+    * The array access now start at the advanced index.
     *
-    * @return true Success
-    * @return false Failure (Less than 'reserved' items in buffer)
+    * @param[in] increment The amount to advance the base by.
+    *
+    * @return true  Success
+    * @return false Failure (Less than 'increment' items in buffer)
     */
-   bool advance() {
+   bool advance(uint32_t increment) {
       disableInterrupts();
-      if (fullCount<reserved) {
+      if (fullCount<increment) {
          enableInterrupts();
          return false;
       }
-      fullCount -= reserved;
-      freeCount += reserved;
-      fence     += reserved;
-      if (fence>=(buffer+size)) {
-         fence = buffer;
+      fullCount -= increment;
+      freeCount += increment;
+      base      += increment;
+      if (base>=(buffer+size)) {
+         base = buffer;
       }
       enableInterrupts();
       return true;
@@ -110,14 +106,15 @@ public:
 
    /**
     * Get item from buffer\n
-    * The index should be less than (size-reserved)\n
-    * The buffer should not be accessed unless workingBufferAvailable() returns true.
+    * The index is relative to the current base.
+    *
+    * @param[in] index Index of item to retrieve
     *
     * @return Item from buffer
     */
    T operator [](int index) const {
       disableInterrupts();
-      const T *p = fence+index;
+      const T *p = base+index;
       if (p>=(buffer+size)) {
          p = buffer;
       }
