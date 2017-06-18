@@ -19,6 +19,10 @@
  * Any manual changes will be lost.
  */
 #include <stdint.h>
+#ifdef __CMSIS_RTOS
+#include "cmsis.h"
+#endif
+
 #include "delay.h"
 #include "spi.h"
 #include "fonts.h"
@@ -164,8 +168,28 @@ constexpr int DEFAULT_LCD_CONTRAST = 65;
 class LcdBase {
 
 protected:
-   Spi      &spi;        //!< SPI interface used to communicate with LCD
-   uint32_t  spiConfig;  //!< SPI communication configuration
+   /** SPI interface used to communicate with LCD */
+   Spi      &spi;
+
+   /** SPI communication configuration */
+   uint32_t  spiConfig;
+
+#ifdef __CMSIS_RTOS
+   /** Mutex to protect access to LCD */
+   CMSIS::Mutex mutex;
+
+   void lock() {
+      mutex.lock();
+   }
+   void unlock() {
+      mutex.unlock();
+   }
+#else
+   void lock() {
+   }
+   void unlock() {
+   }
+#endif
 
    static constexpr uint16_t  DATA_FLAG = 0x100;
 

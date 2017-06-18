@@ -72,30 +72,34 @@ namespace USBDM {
  *
  *  // I2C interface
  *  I2c0     i2c0;
- *  // Accelerometer via I2C
+ *
+ *  // MAX30102 via I2c0
  *  MAX30102  spo2sensor(i2c0);
  *
  * @endcode
  */
-class MAX30102 {
-private:
+class MAX30102base {
+
+protected:
+   /** I2C interface to use */
    I2c &i2c;
+
+   /** I2c Device address */
    static const uint8_t DEVICE_ADDRESS = 0xAE;
 
+   /** Regularly updated with device temperature */
    float temperature = 0;
 
-   using Strobe = USBDM::GpioE<0>;
-
-public:
    /**
     * Constructor
     *
     * @param[in] i2c I2C interface to use
     */
-   MAX30102(I2c &i2c) : i2c(i2c){
-      Strobe::setOutput();
+   MAX30102base(I2c &i2c) : i2c(i2c){
       reset();
    }
+
+public:
    /**
     * @brief        Initialize the MAX30102
     *
@@ -151,6 +155,45 @@ public:
     */
    float getTempMeasurement() {
       return temperature;
+   }
+
+};
+
+
+/**
+ * @brief Class representing an interface for a MAX30102 SpO2 sensor over I2C
+ *
+ * @tparam IrqPin Pin connected to MAX30102 Irq pin
+ *
+ * <b>Example</b>
+ * @code
+ *  // Instantiate interfaces
+ *
+ *  // I2C interface
+ *  I2c0     i2c0;
+ *
+ *  // MAX30102 via I2c0 and GPIO D5 for Irq pin
+ *  MAX30102<GpioD<5>> spo2sensor(i2c0);
+ *
+ * @endcode
+ */
+template <typename IrqPin>
+class MAX30102 : public MAX30102base {
+
+public:
+   MAX30102(I2c &i2c) : MAX30102base(i2c) {
+   }
+
+   /**
+    * Configure interrupts from the device
+    *
+    * @param callback Call-back function to execute on interrupt
+    */
+   void configureInterrupts(PinCallbackFunction callback) {
+      IrqPin::setInput(pcrValue(PinPullUp));
+      IrqPin::setCallback(callback);
+      IrqPin::setIrq(PinIrqFalling);
+      IrqPin::enableNvicInterrupts();
    }
 };
 

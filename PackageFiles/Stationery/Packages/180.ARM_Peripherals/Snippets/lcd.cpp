@@ -206,6 +206,8 @@ void LcdBase::init() {
 void LcdBase::drawBitmap(uint8_t bmp[131*131]) {
    unsigned j; // loop counter
 
+   lock();
+
 #ifdef PHILIPS
    // Memory access controller
    txCommand(P_MADCTL);
@@ -256,6 +258,8 @@ void LcdBase::drawBitmap(uint8_t bmp[131*131]) {
    // Display On
    txCommand(DISON);
 #endif
+
+  unlock();
 }
 
 /** This function will clear the screen to the given colour.
@@ -264,8 +268,10 @@ void LcdBase::drawBitmap(uint8_t bmp[131*131]) {
  *
  * @author James P Lynch July 7, 2007
  */
-void LcdBase::clear(Colour colour)
-{
+void LcdBase::clear(Colour colour) {
+
+   lock();
+
 #ifdef PHILIPS
    txCommand(P_PASET);
    txData(0);
@@ -300,6 +306,8 @@ void LcdBase::clear(Colour colour)
       txData(data3);
    }
 #endif
+
+   unlock();
 }
 
 /** Sets the Row and Column addresses
@@ -310,6 +318,8 @@ void LcdBase::clear(Colour colour)
  * @author James P Lynch July 7, 2007
  */
 void LcdBase::setXY(int x, int y) {
+   lock();
+
    // Row address set (command 0x2B)
 #ifdef PHILIPS
    txCommand(P_PASET);
@@ -330,6 +340,8 @@ void LcdBase::setXY(int x, int y) {
    txData(x);
    txData(x);
 #endif
+
+   unlock();
 }
 
 /** Lights a single pixel in the specified colour at the specified x and y addresses
@@ -343,6 +355,9 @@ void LcdBase::setXY(int x, int y) {
  * @author James P Lynch July 7, 2007
  */
 void LcdBase::drawPixel(int x, int y, Colour colour) {
+
+   lock();
+
 #ifdef PHILIPS
    setXY(x, y);
    txCommand(P_RAMWR);
@@ -360,6 +375,8 @@ void LcdBase::drawPixel(int x, int y, Colour colour) {
    txData((unsigned char)(((colour & 0x0F) << 4) | 0x0F));
    txCommand(0xFF);
 #endif
+
+   unlock();
 }
 
 /** Draws a line in the specified colour from (x0,y0) to (x1,y1)
@@ -382,6 +399,9 @@ void LcdBase::drawPixel(int x, int y, Colour colour) {
  *       http://www.cs.unc.edu/~mcmillan/comp136/Lecture6/Lines.html
  */
 void LcdBase::drawLine(int x0, int y0, int x1, int y1, Colour colour) {
+
+   lock();
+
    int dy = y1 - y0;
    int dx = x1 - x0;
    int stepx, stepy;
@@ -423,6 +443,7 @@ void LcdBase::drawLine(int x0, int y0, int x1, int y1, Colour colour) {
          drawPixel(x0, y0, colour);
       }
    }
+   unlock();
 }
 
 /** Draws a rectangle in the specified colour from (x1,y1) to (x2,y2)\n
@@ -488,6 +509,9 @@ void LcdBase::drawLine(int x0, int y0, int x1, int y1, Colour colour) {
  *       drawing algorithm is reasonably efficient.
  */
 void LcdBase::drawRect(int x0, int y0, int x1, int y1, int fill, Colour colour) {
+
+   lock();
+
    int xmin, xmax, ymin, ymax;
    // Check if the rectangle is to be filled
    if (fill) {
@@ -532,6 +556,8 @@ void LcdBase::drawRect(int x0, int y0, int x1, int y1, int fill, Colour colour) 
       drawLine(x0, y0, x0, y1, colour);
       drawLine(x1, y0, x1, y1, colour);
    }
+
+   unlock();
 }
 
 /** Draws an ASCII character at the specified (x,y) address and colour
@@ -608,6 +634,9 @@ void LcdBase::drawRect(int x0, int y0, int x1, int y1, int fill, Colour colour) 
  *  @author James P Lynch July 7, 2007
  */
 void LcdBase::putChar(char c, int x, int y, Font &font, Colour fColour, Colour bColour) {
+
+   lock();
+
    unsigned int nCols;
    unsigned int nRows;
    unsigned int nBytes;
@@ -693,6 +722,8 @@ void LcdBase::putChar(char c, int x, int y, Font &font, Colour fColour, Colour b
 #ifdef EPSON
    txCommand(NOP);
 #endif
+
+   unlock();
 }
 
 /** Draws a nul-terminated character string at the specified (x,y) address and colour
@@ -732,6 +763,9 @@ void LcdBase::putStr(const char *str, int x, int y, Font &font, Colour fColour, 
  *  @param setting - contrast level (0..127) ?
  */
 void LcdBase::setContrast(uint8_t setting) {
+
+   lock();
+
 #ifdef EPSON
    txCommand(VOLCTR);       // electronic volume, this is the contrast/brightness(EPSON)
    txData(setting);         // volume (contrast) setting - course adjustment,  -- original was 24
@@ -743,6 +777,8 @@ void LcdBase::setContrast(uint8_t setting) {
    txCommand(P_SETCON);     // Contrast/brightness
    txData(setting);
 #endif
+
+   unlock();
 }
 
 /** Draws a line circle in the specified colour at center (x0,y0) with radius
@@ -759,6 +795,9 @@ void LcdBase::setContrast(uint8_t setting) {
  *        http://www.wikipedia.org
  */
 void LcdBase::drawCircle(int centreX, int centreY, int radius, Colour colour, int circleType) {
+
+   lock();
+
    int f = 1 - radius;
    int ddF_x = 0;
    int ddF_y = -2 * radius;
@@ -811,5 +850,7 @@ void LcdBase::drawCircle(int centreX, int centreY, int radius, Colour colour, in
          drawPixel(centreX + y, centreY - x, colour);   // 315-360
       }
    }
+
+   unlock();
 }
 

@@ -179,7 +179,7 @@ static constexpr uint8_t spO2Value(AdcRange adcRange, SpO2SampleRate spO2SampleR
  *
  * @return       true on success
  */
-bool MAX30102::writeReg(uint8_t addr, uint8_t data) {
+bool MAX30102base::writeReg(uint8_t addr, uint8_t data) {
 
    uint8_t i2cData[2] = {addr, data};
    return i2c.transmit(DEVICE_ADDRESS, sizeof(i2cData), i2cData) == E_NO_ERROR;
@@ -193,7 +193,7 @@ bool MAX30102::writeReg(uint8_t addr, uint8_t data) {
  *
  * @return       true on success
  */
-bool MAX30102::readReg(uint8_t addr, uint8_t &data) {
+bool MAX30102base::readReg(uint8_t addr, uint8_t &data) {
 
    uint8_t i2cData[] = {addr};
    if (i2c.txRx(DEVICE_ADDRESS, 1, i2cData, sizeof(i2cData), i2cData) == E_NO_ERROR) {
@@ -209,7 +209,7 @@ bool MAX30102::readReg(uint8_t addr, uint8_t &data) {
  *
  * @return       true on success
  */
-bool MAX30102::startSpo2() {
+bool MAX30102base::startSpo2() {
    static const uint8_t initData[] = {
          REG_INTR_ENABLE_1,                                                            // Start write at REG_INTR_ENABLE_1 == 0x02
          /* 0x02 */ interruptEnable1Value(false, true, false, false, false),           // Interrupts from ppgRdy
@@ -244,7 +244,7 @@ bool MAX30102::startSpo2() {
  *
  * @return       true on success
  */
-bool MAX30102::readLeds(uint32_t &redLed, uint32_t &irLed) {
+bool MAX30102base::readLeds(uint32_t &redLed, uint32_t &irLed) {
    // Read and clear interrupt status registers
    // Read 2 bytes [Interrupt Status 1 & 2]
    uint8_t intStatus[2];
@@ -277,8 +277,6 @@ bool MAX30102::readLeds(uint32_t &redLed, uint32_t &irLed) {
 
    int numSamples = (writePointer-readPointer)&0x1F;
 
-   Strobe::set();
-
    uint8_t i2cData[6];
 
    if (numSamples>1) {
@@ -306,8 +304,6 @@ bool MAX30102::readLeds(uint32_t &redLed, uint32_t &irLed) {
    irLed += i2cData[index++];
    irLed &= 0x03FFFF;  // Keep [17..0]
 
-   Strobe::clear();
-
    static unsigned sampleCount = TEMP_UPDATE_PERIOD;
    if (sampleCount++ == TEMP_UPDATE_PERIOD) {
       // Start temperature measurement every TEMP_UPDATE_PERIOD samples e.g. 1000 = ~10 seconds @100 Hz
@@ -322,7 +318,7 @@ bool MAX30102::readLeds(uint32_t &redLed, uint32_t &irLed) {
  *
  * @return       true on success
  */
-bool MAX30102::startTempMeasurement() {
+bool MAX30102base::startTempMeasurement() {
    static const uint8_t command[] = {REG_TEMP_CONFIG, 0x01};
    return i2c.transmit(DEVICE_ADDRESS, sizeof(command), command) == E_NO_ERROR;
 }
@@ -332,6 +328,6 @@ bool MAX30102::startTempMeasurement() {
  *
  * @return       true on success
  */
-bool MAX30102::reset() {
+bool MAX30102base::reset() {
    return writeReg(REG_MODE_CONFIG, 0x40);
 }

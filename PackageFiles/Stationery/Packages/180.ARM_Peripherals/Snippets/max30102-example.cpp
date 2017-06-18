@@ -15,7 +15,6 @@
 #include "hardware.h"
 #include "delay.h"
 #include "max30102.h"
-#include "max30102-example.h"
 #include "SpO2algorithm.h"
 
 static constexpr uint32_t SAMPLE_SIGNAL = (1<<0);
@@ -26,18 +25,23 @@ using RedLed    = USBDM::gpio_LED_RED;
 using BlueLed   = USBDM::gpio_LED_BLUE;
 using GreenLed  = USBDM::gpio_LED_GREEN;
 
-using IrqPin    = USBDM::GpioD<5>;
-static_assert(USBDM::GpioDInfo::irqHandlerInstalled, "Irq Handler must be installed");
-
+// Access to main thread
 CMSIS::Thread mainThread(CMSIS::Thread::getMyId());
 
-USBDM::I2c0 i2c;
-USBDM::MAX30102 spo2Sensor(i2c);
+// I2c interface to use
+USBDM::I2c0     i2c;
+
+using Max30102IrqPin = USBDM::GpioD<5>;
+
+static_assert(Max30102IrqPin::irqHandlerInstalled, "Irq Handler must be installed for this port");
+
+// MAX30102 connected via I2c and using D5 as Irq pin
+USBDM::MAX30102<Max30102IrqPin> spo2Sensor(i2c);
 
 using Strobe = USBDM::GpioE<1>;
 
 /** Circular buffer for samples */
-CircularBuffer<500,100,Pair> buffer;
+static Spo2Buffer spo2Buffer;
 
 /**
  * Thread to handle retrieving a sample from the sensor and saving in
@@ -57,7 +61,7 @@ public:
     * Constructor
     * Thread runs at higher priority but spends most of its time sleeping
     */
-   SampleProcessor() : ThreadClass(osPriorityAboveNormal) {
+   SampleProcessor() : ThreadClass(osPriorityAboveNormal, 300) {
    }
 
 private:
@@ -70,28 +74,32 @@ private:
     * - Trigger processing when sufficient (new) data
     */
    virtual void task() override {
+      Strobe::low();
+
       for(;;) {
          CMSIS::Thread::signalWait(SAMPLE_SIGNAL);
 
          // Save sample to buffer
          Pair reading;
          spo2Sensor.readLeds(reading.redLed, reading.irLed);
-         buffer.push(reading);
+         spo2Buffer.push(reading);
          switch(state) {
             case filling :
-               Strobe::low();
-               if (buffer.workingBufferAvailable()) {
-                  // Working area has filled
-                  Strobe::toggle();
-                  state = working;
+               if (spo2Buffer.count() < BUFFER_SIZE) {
+                  // Still filling
+                  break;
                }
-               break;
+               // Working area has filled
+               state = working;
+               /* no break */
             case working :
-               if (buffer.isFull()) {
-                  // New data to process
-                  Strobe::toggle();
-                  buffer.advance();
+               if (spo2Buffer.count() == BUFFER_SIZE) {
+                  // New set of data to process
                   mainThread.signalSet(PROCESS_BLOCK);
+               }
+               else if (spo2Buffer.count() == BUFFER_SIZE+BUFFER_MARGIN) {
+                  // Buffer should have been processed by now - discard some old data
+                  spo2Buffer.advance(UPDATE_INTERVAL);
                }
                break;
          }
@@ -105,12 +113,12 @@ SampleProcessor sampleProcessor;
  * IRQ handler for sensor interrupt pin
  * Just signals the sampleProcessor thread
  */
-static void callback(uint32_t status) {
+static void callback(uint32_t /* status */) {
    // Check IRQ from correct pin
-   if (status&IrqPin::MASK) {
+//   if (status&IrqPin::MASK) {
       // Signal thread to process sample
       sampleProcessor.signalSet(SAMPLE_SIGNAL);
-   }
+//   }
 };
 
 int main() {
@@ -127,25 +135,21 @@ int main() {
 
    Strobe::setOutput();
 
-   IrqPin::setInput(pcrValue(PinPullUp, PinDriveLow, PinOpenCollector));
-   IrqPin::setCallback(callback);
-   IrqPin::setIrq(PinIrqFalling);
-   IrqPin::enableNvicInterrupts();
-
    sampleProcessor.run();
+   spo2Sensor.configureInterrupts(callback);
    spo2Sensor.startSpo2();
 
    int count = 0;
    for(;;) {
       CMSIS::Thread::signalWait(PROCESS_BLOCK);
-      printf("Buffer Processing\n");
-
       uint32_t  spo2;
       bool      spo2Valid;
       uint32_t  heartRate;
       bool      heartRateValid;
-      maxim_heart_rate_and_oxygen_saturation(spo2, spo2Valid, heartRate, heartRateValid);
-      printf("%d:Buffer Processing - %s:%ld, %s:%ld\n", count++, spo2Valid?"OK":"Fail", spo2, heartRateValid?"OK":"Fail", heartRate);
+      Strobe::set();
+      maxim_heart_rate_and_oxygen_saturation(spo2Buffer, spo2, spo2Valid, heartRate, heartRateValid);
+      Strobe::clear();
+      printf("%d:Buffer Processed - SpO2=%4ld:%s, Pulse=:%4ld:%s\n", count++, spo2, spo2Valid?"OK  ":"Fail", heartRate, heartRateValid?"OK  ":"Fail");
    }
    return 0;
 }

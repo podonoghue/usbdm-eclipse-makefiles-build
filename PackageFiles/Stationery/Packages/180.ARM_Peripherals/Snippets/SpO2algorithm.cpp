@@ -1,4 +1,4 @@
-/** \file algorithm.cpp ******************************************************
+/** \file SpO2algorithm.cpp ******************************************************
  *
  * Project: MAXREFDES117#
  * Filename: algorithm.cpp
@@ -59,7 +59,6 @@
  *******************************************************************************
  */
 #include "SpO2algorithm.h"
-#include "max30102-example.h"
 
 #define HR_FIFO_SIZE    7
 #define MA4_SIZE        4 // DO NOT CHANGE
@@ -102,23 +101,24 @@ static  int32_t an_y[BUFFER_SIZE];           // Processed Red LED values
  *               Since this algorithm is aiming for Arm M0/M3. Formula for SPO2 did not achieve the accuracy due to register overflow.
  *               Thus, accurate SPO2 is precalculated and save long uch_spo2_table[] per each ratio.
  *
- * \param[out]    pn_spo2              - Calculated SpO2 value
- * \param[out]    pch_spo2_valid       - true if the calculated SpO2 value is valid
- * \param[out]    pn_heart_rate        - Calculated heart rate value
- * \param[out]    pch_hr_valid         - true if the calculated heart rate value is valid
+ * @param[in]  spo2Buffer      - Buffer contains MAX30102 IR LED and Red LED values
+ * @param[out] pn_spo2         - Calculated SpO2 value
+ * @param[out] pch_spo2_valid  - Indicates if the calculated SpO2 value is valid
+ * @param[out] pn_heart_rate   - Calculated heart rate value
+ * @param[out] pch_hr_valid    - Indicates if the calculated heart rate value is valid
  *
  * \retval       None
  */
-void maxim_heart_rate_and_oxygen_saturation(uint32_t &pn_spo2, bool &pch_spo2_valid, uint32_t &pn_heart_rate, bool &pch_hr_valid) {
+void maxim_heart_rate_and_oxygen_saturation(Spo2Buffer &spo2Buffer, uint32_t &pn_spo2, bool &pch_spo2_valid, uint32_t &pn_heart_rate, bool &pch_hr_valid) {
 
    // Remove DC of IR signal
    uint32_t un_ir_mean = 0;
    for (unsigned k=0 ; k<BUFFER_SIZE ; k++ ) {
-      un_ir_mean += buffer[k].irLed;
+      un_ir_mean += spo2Buffer[k].irLed;
    }
    un_ir_mean = un_ir_mean/BUFFER_SIZE ;
    for (unsigned k=0 ; k<BUFFER_SIZE ; k++ )  {
-      an_x[k] =  buffer[k].irLed - un_ir_mean ;
+      an_x[k] =  spo2Buffer[k].irLed - un_ir_mean ;
    }
 
    // 4 point moving average
@@ -167,7 +167,7 @@ void maxim_heart_rate_and_oxygen_saturation(uint32_t &pn_spo2, bool &pch_spo2_va
       pch_hr_valid  = true;
    }
    else  {
-      pn_heart_rate = -999;
+      pn_heart_rate = 0;
       pch_hr_valid  = false;
    }
 
@@ -179,8 +179,8 @@ void maxim_heart_rate_and_oxygen_saturation(uint32_t &pn_spo2, bool &pch_spo2_va
    // Raw value : RED(=y) and IR(=X)
    // We need to assess DC and AC value of ir and red PPG.
    for (unsigned k=0 ; k<BUFFER_SIZE ; k++ )  {
-      an_x[k] =  buffer[k].irLed;
-      an_y[k] =  buffer[k].redLed;
+      an_x[k] =  spo2Buffer[k].irLed;
+      an_y[k] =  spo2Buffer[k].redLed;
    }
 
    // Find precise min near an_ir_valley_locs
@@ -205,7 +205,7 @@ void maxim_heart_rate_and_oxygen_saturation(uint32_t &pn_spo2, bool &pch_spo2_va
    }
    if (n_exact_ir_valley_locs_count<2) {
       // Do not use SPO2 since signal ratio is out of range
-      pn_spo2 =  -999 ;
+      pn_spo2 =  0 ;
       pch_spo2_valid  = false;
       return;
    }
@@ -225,7 +225,7 @@ void maxim_heart_rate_and_oxygen_saturation(uint32_t &pn_spo2, bool &pch_spo2_va
    }
    for (unsigned k=0; k< n_exact_ir_valley_locs_count; k++){
       if (an_exact_ir_valley_locs[k] > BUFFER_SIZE ){
-         pn_spo2 =  -999 ; // do not use SPO2 since valley loc is out of range
+         pn_spo2 =  0 ; // do not use SPO2 since valley loc is out of range
          pch_spo2_valid  = false;
          return;
       }
@@ -283,7 +283,7 @@ void maxim_heart_rate_and_oxygen_saturation(uint32_t &pn_spo2, bool &pch_spo2_va
       pch_spo2_valid = true;
    }
    else{
-      pn_spo2        = -999 ; // do not use SPO2 since signal ratio is out of range
+      pn_spo2        = 0 ; // do not use SPO2 since signal ratio is out of range
       pch_spo2_valid = false;
    }
 }
