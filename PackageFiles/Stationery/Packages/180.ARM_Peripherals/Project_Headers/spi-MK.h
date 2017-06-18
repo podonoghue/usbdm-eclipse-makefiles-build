@@ -417,10 +417,11 @@ public:
     * @return osErrorISR: osMutexWait cannot be called from interrupt service routines.
     */
    virtual osStatus startTransaction(uint32_t ctarValue=0, int milliseconds=osWaitForever) override {
-      if (ctarValue != 0) {
+      osStatus status = mutex.wait(milliseconds);
+      if ((status == osOK) && (ctarValue != 0)) {
          spi->CTAR[0] = ctarValue;
       }
-      return mutex.wait(milliseconds);
+      return status;
    }
 
    /**
