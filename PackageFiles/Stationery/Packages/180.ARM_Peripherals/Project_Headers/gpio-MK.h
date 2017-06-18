@@ -368,7 +368,11 @@ public:
  */
 template<class Info, const uint32_t bitNum, Polarity polarity>
 class  Gpio_T : public GpioBase_T<Info::clockMask, Info::pcrAddress, Info::gpioAddress, bitNum, polarity> {
+
    static_assert((bitNum<32), "Illegal signal");
+
+public:
+   static constexpr bool irqHandlerInstalled = Info::irqHandlerInstalled;
 };
 
 /**
