@@ -15,25 +15,13 @@
  */
 namespace CMSIS {
 
-/**
- * Based on os_timer_cb in rt_CMSIS.c
- * Timer Control Block
- */
-struct osTimerControlBlock_t {
-   struct os_timer_cb_ *next;   // Pointer to next active Timer
-   uint8_t             state;   // Timer State
-   uint8_t              type;   // Timer Type (Periodic/One-shot)
-   uint16_t         reserved;   // Reserved
-   uint32_t             tcnt;   // Timer Delay Count
-   uint32_t             icnt;   // Timer Initial Count
-   void                 *arg;   // Timer Function Argument
-   const osTimerDef_t *timer;   // Pointer to Timer definition
-};
+using Callback = void (*)(const void *);
 
 /**
  * Wrapper for CMSIS Timer
  *
- * @tparam timerType Type of timer e.g. osTimerPeriodic, osTimerOnce
+ * A timer allows the scheduling of the execution of a callback function after a particular
+ * delay(osTimerOnce mode) or at a regular interval (osTimerPeriodic mode).
  *
  * Example:
  * @code
@@ -41,6 +29,7 @@ struct osTimerControlBlock_t {
  * // Timer example
  * //
  * void timerExample() {
+ *    // auto function used as call-backs
  *    static auto cb1 = [] (const void *) {
  *       RED_LED::toggle();
  *    };
@@ -48,15 +37,14 @@ struct osTimerControlBlock_t {
  *       GREEN_LED::toggle();
  *    };
  *
- *    static CMSIS::Timer<osTimerPeriodic> myTimer1(cb1);
- *    static CMSIS::Timer<osTimerPeriodic> myTimer2(cb2);
+ *    // Create the two timer being used
+ *    static CMSIS::Timer myTimer1(cb1, osTimerPeriodic);
+ *    static CMSIS::Timer myTimer2(cb2, osTimerPeriodic);
  *
  *    RED_LED::setOutput();
  *    GREEN_LED::setOutput();
  *
- *    myTimer2.create();
- *    myTimer1.create();
- *
+ *    // Start the timers 
  *    myTimer2.start(500);
  *    myTimer1.start(1000);
  *
@@ -65,41 +53,81 @@ struct osTimerControlBlock_t {
  * }
  * @endcode
  */
-template<os_timer_type timerType=osTimerPeriodic>
 class Timer {
 
 private:
+   /**
+    * Based on os_timer_cb in rt_CMSIS.c
+    * Timer Control Block
+    */
+   struct osTimerControlBlock_t {
+      struct os_timer_cb_ *next;   // Pointer to next active Timer
+      uint8_t             state;   // Timer State
+      uint8_t              type;   // Timer Type (Periodic/One-shot)
+      uint16_t         reserved;   // Reserved
+      uint32_t             tcnt;   // Timer Delay Count
+      uint32_t             icnt;   // Timer Initial Count
+      void                 *arg;   // Timer Function Argument
+      const osTimerDef_t *timer;   // Pointer to Timer definition
+   };
+
    osTimerControlBlock_t  os_timer_cb  = {0,0,0,0,0,0,0,0};
    const osTimerDef_t     os_timer_def;
 
 public:
    /**
-    * Constructor
+    * Constructor - Create timer
     *
-    * @param callback Call-back function to execute by timer
+    * @param[in] callback  Call-back function to execute by timer
+    * @param[in] argument  Pointer to data to pass to callback (should be persistent)
+    * @param[in] timerType Type of timer e.g. osTimerPeriodic, osTimerOnce
     */
-   constexpr Timer(void (*callback)(const void *)) :
-   os_timer_def{callback, (void*)&os_timer_cb}
-   {
+   Timer(Callback callback, void *argument, os_timer_type timerType) :
+     os_timer_def{callback, (void*)&os_timer_cb} {
+      osTimerId timer_id __attribute__((unused)) = osTimerCreate(&os_timer_def, timerType, argument);
+      assert((void*)timer_id == (void*)&os_timer_cb);
    }
+   /**
+    * Constructor - Create timer of given type
+    *
+    * @param[in] callback  Call-back function to execute by timer
+    * @param[in] timerType Type of timer e.g. osTimerPeriodic, osTimerOnce
+    */
+   Timer(Callback callback, os_timer_type timerType) :
+      Timer(callback, nullptr, timerType) {
+   }
+   /**
+    * Constructor - Create Periodic timer
+    *
+    * @param[in] callback  Call-back function to execute by timer
+    * @param[in] argument  Pointer to data to pass to callback (should be persistent)
+    */
+   Timer(Callback callback, void *argument=nullptr) :
+      Timer(callback, argument, osTimerPeriodic){
+   }
+   /**
+    * Destructor
+    */
    ~Timer() {
       if (os_timer_cb.state != 0) {
          destroy();
       }
    }
    /**
-    * Create timer
+    * Recreate the associated CMSIS timer with different characteristics
     *
-    * @param argument Pointer to data to pass to callback (should be persistent)
+    * @param[in] argument  Pointer to data to pass to callback (should be persistent)
+    * @param[in] timerType Type of timer e.g. osTimerPeriodic, osTimerOnce
     *
-    * @note Not usually required as done on first use
+    * @return true  Success
+    * @return false Failure
     */
-   void create(void *argument=nullptr) {
+   bool create(void *argument=nullptr, os_timer_type timerType=osTimerPeriodic) {
       osTimerId timer_id __attribute__((unused)) = osTimerCreate(&os_timer_def, timerType, argument);
-      assert((void*)timer_id == (void*)&os_timer_cb);
+      return ((void*)timer_id == (void*)&os_timer_cb);
    }
    /**
-    * Destroy timer
+    * Destroy the associated CMSIS timer
     *
     * @return error code:
     * @return - osOK:              The timer has been deleted.
@@ -118,7 +146,7 @@ public:
    /**
     * Start or restart timer
     *
-    * @param millisec Interval in milliseconds
+    * @param[in] millisec Interval in milliseconds
     */
    void start(int millisec) {
       USBDM::setAndCheckCmsisErrorCode(osTimerStart((osTimerId)&os_timer_cb, millisec));
@@ -126,7 +154,7 @@ public:
    /**
     * Start or restart timer
     *
-    * @param interval Interval in seconds
+    * @param[in] interval Interval in seconds
     */
    void start(double interval) {
       start((int)round(interval*1000.0));
@@ -143,6 +171,7 @@ public:
 
 /**
  * Wrapper for CMSIS Timer.
+ *
  * This class incorporates the call-back function.
  *
  * @tparam timerType Type of timer e.g. osTimerPeriodic, osTimerOnce
@@ -169,7 +198,7 @@ public:
  *     //
  *     // Constructor
  *     //
- *     // @param Name for timer function to report
+ *     // @param[in] Name for timer function to report
  *     //
  *     MyThread(const char *name) : fName(name) {
  *     }
@@ -190,23 +219,20 @@ public:
  *
  * @endcode
  */
-template<os_timer_type timerType=osTimerPeriodic>
-class TimerClass : Timer<timerType> {
+class TimerClass : Timer {
 
 private:
 
    /*
     * Derived classes must override this function to implement the thread\n
     * This would usually be an endless loop
-    *
-    * @param This class pointer
     */
    virtual void callback() = 0;
 
    /**
     * Shim to allow use of a static call-back needed by CMSIS timer
     *
-    * @param arg Pointer to TimerClass instance
+    * @param[in] arg Pointer to TimerClass instance
     *
     * Strictly should be a separate non-member function with C linkage.
     */
@@ -216,24 +242,28 @@ private:
    }
 
    // Hide these
-   using Timer<timerType>::create;
-   using Timer<timerType>::destroy;
+   using Timer::create;
+   using Timer::destroy;
 
 public:
-   using Timer<timerType>::start;
-   using Timer<timerType>::stop;
-   using Timer<timerType>::getId;
+   using Timer::start;
+   using Timer::stop;
+   using Timer::getId;
 
-   TimerClass() : Timer<timerType>(shim) {
-      // Create timer here with required 'this' argument
-      Timer<timerType>::create(this);
+   TimerClass(os_timer_type timerType=osTimerPeriodic) : Timer(shim, this, timerType) {
    }
    virtual ~TimerClass() {
    }
 };
 
 /**
- * Wrapper for CMSIS Mutex
+ * Wrapper for CMSIS mutex
+ *
+ * A Mutex can be used to:
+ *    - Synchronize the execution of threads
+ *    - Protect access to shared resources. (Implement critical region protection).
+ *
+ * @note Mutex cannot be used in an ISR
  */
 class Mutex {
 
@@ -258,56 +288,54 @@ public:
    /**
     * Obtain mutex
     *
-    * @param millisec How long to wait in milliseconds. Use osWaitForever for indefinite wait
+    * This method may wait until the mutex is available.\n
+    * The millisec parameter allow the wait time to be specified.
     *
-    * @return osOK: The mutex has been obtain.
-    * @return osErrorTimeoutResource: The mutex could not be obtained in the given time.
-    * @return osErrorResource: The mutex could not be obtained when no timeout was specified.
-    * @return osErrorParameter: The parameter mutex_id is incorrect.
-    * @return osErrorISR: osMutexWait cannot be called from interrupt service routines.
+    * @param[in] millisec How long to wait in milliseconds.\n
+    *                     Use osWaitForever for an indefinite wait\n
+    *                     Use 0 to immediately fail if the mutex is not available.
+    *
+    * @return osOK:                    The mutex has been obtained.
+    * @return osErrorTimeoutResource:  The mutex could not be obtained in the given time.
+    * @return osErrorResource:         The mutex could not be obtained when no timeout was specified.
+    * @return osErrorParameter:        The parameter mutex_id is incorrect.
+    * @return osErrorISR:              osMutexWait cannot be called from interrupt service routines.
     */
    osStatus wait(uint32_t millisec=osWaitForever) {
       return osMutexWait((osMutexId) os_mutex_cb, millisec);
    }
    /**
-    * Obtain mutex
-    *
-    * @param millisec How long to wait in milliseconds. Use osWaitForever for indefinite wait
-    *
-    * @return osOK: The mutex has been obtain.
-    * @return osErrorTimeoutResource: The mutex could not be obtained in the given time.
-    * @return osErrorResource: The mutex could not be obtained when no timeout was specified.
-    * @return osErrorParameter: The parameter mutex_id is incorrect.
-    * @return osErrorISR: osMutexWait cannot be called from interrupt service routines.
-    */
-   osStatus lock(uint32_t millisec=osWaitForever) {
-      return osMutexWait((osMutexId) os_mutex_cb, millisec);
-   }
-   /**
-    * Obtain mutex
-    *
-    * @return osOK: The mutex has been obtain.
-    * @return osErrorTimeoutResource: The mutex could not be obtained in the given time.
-    */
-   osStatus tryLock() {
-      return osMutexWait((osMutexId) os_mutex_cb, 0);
-   }
-   /**
     * Release mutex
     *
-    * @return osOK: the mutex has been correctly released.
-    * @return osErrorResource: the mutex was not obtained before.
-    * @return osErrorISR: osMutexRelease cannot be called from interrupt service routines.
+    * Release the mutex that was obtained with wait().\n
+    * Other threads that are currently waiting for this mutex will be put into the READY state.
+    *
+    * @return osOK:              The mutex has been correctly released.
+    * @return osErrorResource:   The mutex was not obtained beforehand.
+    * @return osErrorISR:        osMutexRelease cannot be called from interrupt service routines.
     */
    osStatus release() {
       return osMutexRelease((osMutexId) os_mutex_cb);
    }
    /**
-    * Release mutex
+    * Obtain mutex\n
+    * See @ref wait();
+    */
+   osStatus lock(uint32_t millisec=osWaitForever) {
+      return osMutexWait((osMutexId) os_mutex_cb, millisec);
+   }
+   /**
+    * Try to obtain mutex with immediate fail if unsuccessful.
     *
-    * @return osOK: the mutex has been correctly released.
-    * @return osErrorResource: the mutex was not obtained before.
-    * @return osErrorISR: osMutexRelease cannot be called from interrupt service routines.
+    * @return osOK:                   The mutex has been obtain.
+    * @return osErrorTimeoutResource: The mutex could not be obtained immediately.
+    */
+   osStatus tryLock() {
+      return osMutexWait((osMutexId) os_mutex_cb, 0);
+   }
+   /**
+    * Unlock mutex\n
+    * See @ref release()
     */
    osStatus unlock() {
       return osMutexRelease((osMutexId) os_mutex_cb);
@@ -315,12 +343,7 @@ public:
    /**
     * Get mutex ID
     *
-    * @return CMSIS Mutex ID
-    *
-    * @return osOK: The mutex has been correctly released.
-    * @return osErrorResource: The mutex was not obtained before.
-    * @return osErrorParameter: The parameter mutex_id is incorrect.
-    * @return osErrorISR: osMutexRelease cannot be called from interrupt service routines.
+    * @return CMSIS mutex ID
     */
    osMutexId getID() {
       return (osMutexId) os_mutex_cb;
@@ -339,7 +362,7 @@ public:
    /**
     * Create semaphore
     *
-    * @param count Number of available resources.
+    * @param[in] count Number of available resources.
     */
    Semaphore(int32_t count) {
       osSemaphoreId semaphore_id __attribute__((unused)) = osSemaphoreCreate(&os_semaphore_def, count);
@@ -354,7 +377,7 @@ public:
    /**
     * Obtain semaphore
     *
-    * @param millisec How long to wait in milliseconds. Use osWaitForever for indefinite wait
+    * @param[in] millisec How long to wait in milliseconds. Use osWaitForever for indefinite wait
     *
     * @return Number of available tokens, or -1 in case of incorrect parameters.
     */
@@ -382,6 +405,10 @@ public:
 
 /**
  * Wrapper for CMSIS Memory Allocation Pool
+ *
+ * This allows a pool of same-size items to be created.\n
+ * Items can be allocated and freed from the pool.\n
+ * The main purpose is to avoid fragmentation inherent in the usual C allocation methods
  *
  * @tparam T      Type of items in pool
  * @tparam size   Size of pool in items
@@ -469,7 +496,7 @@ public:
    /**
     * Return a memory block to a memory pool.
     *
-    * @param buffer Address of buffer to return to pool
+    * @param[in] buffer Address of buffer to return to pool
     *
     * @return osOK:             The memory block is released.
     * @return osErrorValue:     Block does not belong to the memory pool.
@@ -488,8 +515,6 @@ public:
       return (osPoolId)pool;
    }
 };
-//template <class T, size_t size> uint32_t Pool<T,size>::pool[] = {0};
-//template <class T, size_t size> const osPoolDef_t Pool<T,size>::os_pool_def = { size, sizeof(T), pool };
 
 /**
  * Wrapper for CMSIS Thread
@@ -517,41 +542,14 @@ public:
 class Thread {
 
 private:
-
    const osThreadDef_t thread_def;
    osThreadId thread_id = 0;
 
 public:
    /**
-    * Create thread as a wrapper for an existing thread
-    *
-    * @param thread_id   ID of existing thread
-    */
-   Thread(osThreadId thread_id) : thread_def {0, osPriorityNormal, 1, 0 }, thread_id(thread_id) {
-   };
-   /**
-    * Create thread
-    *
-    * @param threadFunction   Function to execute as the thread
-    * @param priority         Priority of thread e.g. osPriorityNormal
-    * @param stackSize        Stack size for thread or 0 to indicate default
-    */
-   Thread(
-         void        (*threadFunction)(const void *),
-         osPriority  priority=osPriorityNormal,
-         uint32_t    stackSize=0) :
-            thread_def {threadFunction, priority, 1, stackSize } {
-   };
-   /**
-    * Delete thread
-    */
-   ~Thread() {
-      osThreadTerminate(thread_id);
-   }
-   /**
     * Run thread
     *
-    * @param argument Argument to thread function
+    * @param[in] argument Argument to thread function
     */
    void run(void *argument=nullptr) {
       thread_id = osThreadCreate(&thread_def, argument);
@@ -584,7 +582,7 @@ public:
    /**
     * Set thread Priority
     *
-    * @param priority Priority to set for thread
+    * @param[in] priority Priority to set for thread
     *
     * @return osOK:              The priority of the thread has been successfully changed.
     * @return osErrorValue:      Incorrect priority value.
@@ -610,7 +608,7 @@ public:
    /**
     * Set the specified Signal Flags on the thread
     *
-    * @param signals Specifies the signal flags of the thread that should be set.
+    * @param[in] signals Specifies the signal flags of the thread that should be set.
     *
     * @return Previous signal flags of the specified thread or 0x80000000 in case of incorrect parameters or call from ISR.
     *
@@ -621,7 +619,7 @@ public:
    /**
     * Clear the specified Signal Flags on the thread
     *
-    * @param signals Specifies the signal flags of the thread that shall be cleared.
+    * @param[in] signals Specifies the signal flags of the thread that shall be cleared.
     *
     * @return Previous signal flags of the specified thread or 0x80000000 in case of incorrect parameters or call from ISR.
     */
@@ -631,8 +629,8 @@ public:
    /**
     * Wait for one or more Signal Flags to become signaled for the current thread.
     *
-    * @param signals  Wait until all specified signal flags set or 0 for any single signal flag.
-    * @param millisec How long to wait in milliseconds. Use osWaitForever for indefinite wait
+    * @param[in] signals  Wait until all specified signal flags set or 0 for any single signal flag.
+    * @param[in] millisec How long to wait in milliseconds. Use osWaitForever for indefinite wait
     *
     * @return Structure describing event occurring with status:
     * @return - osOK: no signal received when the timeout value millisec was 0.
@@ -662,7 +660,7 @@ public:
     * Wait for any event of the type Signal, Message, Mail for a specified time peiod.
     * While the system waits the thread that is calling this function is put into the state WAITING. When millisec is set to osWaitForever the function will wait for an infinite time until a event occurs.
     *
-    * @param millisec How long to wait in milliseconds. Use osWaitForever for indefinite wait.
+    * @param[in] millisec How long to wait in milliseconds. Use osWaitForever for indefinite wait.
     *
     * @return Status with:
     * @return osEventSignal:  Signal event occurred and is returned.
@@ -679,7 +677,7 @@ public:
    /**
     * Wait for a specified time period in milliseconds.
     *
-    * @param millisec How long to wait in milliseconds. Use osWaitForever for indefinite wait.
+    * @param[in] millisec How long to wait in milliseconds. Use osWaitForever for indefinite wait.
     *
     * @return Status with:
     * @return osEventTimeout:  The time delay is executed.
@@ -688,10 +686,36 @@ public:
    static osStatus delay(uint32_t millisec) {
       return osDelay(millisec);
    }
+   /**
+    * Create thread as a wrapper for an existing thread
+    *
+    * @param[in] thread_id   ID of existing thread
+    */
+   Thread(osThreadId thread_id) : thread_def{0, osPriorityNormal, 1, 0}, thread_id(thread_id) {
+   };
+   /**
+    * Create thread
+    *
+    * @param[in] threadFunction   Function to execute as the thread
+    * @param[in] priority         Priority of thread e.g. osPriorityNormal
+    * @param[in] stackSize        Stack size for thread or 0 to indicate default
+    */
+   Thread(
+         Callback    threadFunction,
+         osPriority  priority=osPriorityNormal,
+         uint32_t    stackSize=0) : thread_def {threadFunction, priority, 1, stackSize} {
+         };
+         /**
+          * Delete thread
+          */
+         ~Thread() {
+            osThreadTerminate(thread_id);
+         }
 };
 
 /**
  * Wrapper for CMSIS Thread.
+ *
  * This class incorporates the thread function.
  *
  * <b>Example declaration</b>
@@ -719,7 +743,7 @@ public:
  *     //
  *     // Constructor
  *     //
- *     // @param Name for thread function to report
+ *     // @param[in] Name for thread function to report
  *     //
  *     MyThread(const char *name) : fName(name) {
  *     }
@@ -745,15 +769,13 @@ private:
    /*
     * Derived classes must override this function to implement the thread\n
     * This would usually be an endless loop
-    *
-    * @param This class pointer
     */
    virtual void task() = 0;
 
    /**
     * Shim to allow use of a static call-back
     *
-    * @param arg Pointer to ThreadClass instance
+    * @param[in] arg Pointer to ThreadClass instance
     *
     * Strictly should be a separate non-member function with C linkage.
     */
@@ -780,8 +802,8 @@ public:
    /**
     * Create thread
     *
-    * @param priority         Priority of thread e.g. osPriorityNormal
-    * @param stackSize        Stack size for thread or 0 to indicate default
+    * @param[in] priority         Priority of thread e.g. osPriorityNormal
+    * @param[in] stackSize        Stack size for thread or 0 to indicate default
     */
    ThreadClass(
          osPriority  priority=osPriorityNormal,
@@ -799,8 +821,14 @@ public:
 /**
  * Wrapper for CMSIS Message Queue
  *
+ * Basic approach:
+ *    - Message queues work in conjunction with a <b>pool</b> of <b>messages</b>.
+ *    - Messages are <b>allocated</b> from the pool and added to the queue.
+ *    - Messages are then removed from the queue and <b>freed</b> after use.
  *
- * @tparam T      Type of items in message queue
+ * @tparam T      Type of items in message queue. Must fit in 32-bits\n
+ *                This is typically a simple type like a character or integer or a pointer to
+ *                a larger type allocated in some independent fashion.
  * @tparam size   Size of message queue in items
  *
  * Example:
@@ -897,25 +925,9 @@ public:
    }
    /**
     * Put message to queue.
-    * Waits indefinitely.
-    *
-    * @param info     Message to send
-    *
-    * @return osOK: the message is put into the queue.
-    * @return osErrorParameter: a parameter is invalid or outside of a permitted range.
-    */
-   void put(T info) {
-      if ((queue[0]==0) && (queue[1]==0)) {
-         create();
-      }
-      osStatus status = osMessagePut((osMessageQId)queue, (uint32_t)info, osWaitForever);
-      assert(status == osOK);
-   }
-   /**
-    * Put message to queue.
     * Returns immediately (for use in ISRs)
     *
-    * @param info     Message to send
+    * @param[in] info     Message to send
     *
     * @return osOK: the message is put into the queue.
     * @return osErrorResource: no memory in the queue was available.
@@ -927,15 +939,15 @@ public:
    /**
     * Put message to queue with timeout
     *
-    * @param info     Message to enter
-    * @param millisec How long to wait in milliseconds. Use osWaitForever for indefinite wait
+    * @param[in] info     Message to enter
+    * @param[in] millisec How long to wait in milliseconds. Use osWaitForever for indefinite wait
     *
     * @return osOK: the message is put into the queue.
     * @return osErrorResource: no memory in the queue was available.
     * @return osErrorTimeoutResource: no memory in the queue was available during the given time limit.
     * @return osErrorParameter: a parameter is invalid or outside of a permitted range.
     */
-   osStatus put(T info, uint32_t millisec) {
+   osStatus put(T info, uint32_t millisec=osWaitForever) {
       if ((queue[0]==0) && (queue[1]==0)) {
          create();
       }
@@ -944,7 +956,7 @@ public:
    /**
     * Get message from queue.
     *
-    * @param millisec How long to wait in milliseconds. Use osWaitForever for indefinite wait
+    * @param[in] millisec How long to wait in milliseconds. Use osWaitForever for indefinite wait
     *
     * @return Status and Error Codes
     * @return osOK: no message is available in the queue and no timeout was specified.
@@ -982,18 +994,16 @@ public:
    }
 };
 
-//template <class T, size_t size, Thread *thread>
-//uint32_t MessageQueue<T,size,thread>::queue[] = {0};
-//
-//template <class T, size_t size, Thread *thread>
-//const osMessageQDef_t MessageQueue<T,size,thread>:: os_pool_def = { size, queue };
-
 /**
- * Wrapper for CMSIS Message Queue
+ * Wrapper for CMSIS MailQueue queue
  *
+ * Basic approach:
+ *    - Mail queues work in conjunction with a <b>pool</b> of <b>messages</b>.
+ *    - Messages are <b>allocated</b> from the pool and added to the mail queue.
+ *    - Messages are then removed from the mail queue and <b>freed</b> after use.
  *
- * @tparam T      Type of items in message queue
- * @tparam size   Size of message queue in items
+ * @tparam T      Type of items in mail queue (determines size of items in pool)
+ * @tparam size   Size of mail queue in items (determines number of items that can be allocated from the pool)
  *
  * Example:
  * @code
@@ -1087,9 +1097,9 @@ public:
       assert(queue_id == (osMailQId)pool);
    }
    /**
-    * Allocate a memory block from the mail queue
+    * Allocate a memory block from the mail queue memory pool
     *
-    * @param millisec How long to wait in milliseconds. Use osWaitForever for indefinite wait.
+    * @param[in] millisec How long to wait in milliseconds. Use osWaitForever for indefinite wait.
     *
     * @return Pointer to allocated block or nullptr on failure.
     */
@@ -1102,7 +1112,7 @@ public:
 
    /**
     * Allocate a memory block from the mail queue\n
-    * For use in ISRs.
+    * For use in ISRs.  It will immediately fail if no buffers are available.
     *
     * @return Pointer to allocated block or nullptr on failure.
 
@@ -1116,7 +1126,7 @@ public:
    /**
     * Allocate a memory block from the mail queue and initialise to all zeroes.
     *
-    * @param millisec How long to wait in milliseconds. Use osWaitForever for indefinite wait.
+    * @param[in] millisec How long to wait in milliseconds. Use osWaitForever for indefinite wait.
     *
     * @return Pointer to allocated block or nullptr on failure.
     */
@@ -1131,7 +1141,7 @@ public:
     * Allocate a memory block from the mail queue and initialise to all zeroes.\n
     * For use in ISRs.
     *
-    * @param millisec How long to wait in milliseconds. Use osWaitForever for indefinite wait
+    * @param[in] millisec How long to wait in milliseconds. Use osWaitForever for indefinite wait
     *
     * @return Pointer to allocated block or nullptr on failure.
     */
@@ -1142,7 +1152,7 @@ public:
    /**
     * Free a memory block from the mail queue.
     *
-    * @param mail Mail block to free (previously allocated with alloc or calloc)
+    * @param[in] mail Mail block to free (previously allocated with alloc or calloc)
     *
     * @return osOK: the mail block is released.
     * @return osErrorValue: mail block does not belong to the mail queue pool.
@@ -1155,7 +1165,7 @@ public:
    /**
     * Get a mail item from the mail queue.
     *
-    * @param millisec How long to wait in milliseconds. Use osWaitForever for indefinite wait.
+    * @param[in] millisec How long to wait in milliseconds. Use osWaitForever for indefinite wait.
     *
     * @return Status with:
     * @return osOK: no mail is available in the queue and no timeout was specified
@@ -1182,7 +1192,7 @@ public:
    /**
     * Put a mail item into the mail queue.
     *
-    * @param mail A mail block previously allocated by alloc() or calloc().
+    * @param[in] mail A mail block previously allocated by alloc() or calloc().
     *
     * @return osOK: no mail is available in the queue and no timeout was specified
     * @return osErrorValue: mail was previously not allocated as memory slot.
@@ -1200,17 +1210,6 @@ public:
       return (osMailQId)queue;
    }
 };
-//template <class T, size_t size, Thread *thread>
-//uint32_t MailQueue<T,size,thread>::queue[4+size];
-//
-//template <class T, size_t size, Thread *thread>
-//uint32_t MailQueue<T,size,thread>::messages[3+((sizeof(T)+3)/4)*size];
-//
-//template <class T, size_t size, Thread *thread>
-//const void *MailQueue<T,size,thread>::pool[2] = {queue, messages};
-//
-//template <class T, size_t size, Thread *thread>
-//const os_mailQ_def MailQueue<T,size,thread>::os_mail_def = {size, sizeof(T), pool};
 
 }; // end namespace CMSIS
 #endif /* PROJECT_HEADERS_CMSIS_H_ */
