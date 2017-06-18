@@ -1,11 +1,12 @@
 /*
  ============================================================================
- * @file main-stm.c
+ * @file main.c (100.ARM_DeviceOptions/main-stm.c)
  *
  *  Created on: 04/12/2012
  *      Author: podonoghue
  ============================================================================
  */
+
 #include <stdio.h>
 #include "system.h"
 #include "derivative.h"

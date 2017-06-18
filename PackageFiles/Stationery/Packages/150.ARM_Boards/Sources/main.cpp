@@ -1,6 +1,6 @@
 /*
  ============================================================================
- * @file main.c (150.ARM_Boards/Sources/main.c)
+ * @file main.cpp (150.ARM_Boards/Sources/main.cpp)
  *
  *  Created on: 04/12/2012
  *      Author: podonoghue
@@ -28,7 +28,7 @@ int main(void) {
       count++;
       greenLedToggle();
 //      printf("Count = %d\n", count);
-      waitMS(100);
+      USBDM::waitMS(100);
    }
    return 0;
 }

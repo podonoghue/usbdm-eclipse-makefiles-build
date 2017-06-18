@@ -43,7 +43,7 @@
             <copy source="Project_Headers/leds.h"        target="Project_Headers/leds.h" />
             <copy source="Project_Headers/Board_LEDs.h"  target="Project_Headers/Board_LEDs.h" />
             <copy source="Sources/leds.c"                target="Sources/leds.cpp" />
-            <copy source="Sources/main.c"                target="Sources/main.cpp" replace="true" />
+            <copy source="Sources/main.cpp"              target="Sources/main.cpp" replace="true" />
          </projectActionList>
          <projectActionList>
             <applyWhen >
@@ -80,7 +80,7 @@
             <copy source="Project_Headers/leds.h"        target="Project_Headers/leds.h" />
             <copy source="Project_Headers/Board_LEDs.h"  target="Project_Headers/Board_LEDs.h" />
             <copy source="Sources/leds.c"                target="Sources/leds.cpp" />
-            <copy source="Sources/main.c"                target="Sources/main.cpp" replace="true" />
+            <copy source="Sources/main.cpp"              target="Sources/main.cpp" replace="true" />
          </projectActionList>
          <projectActionList>
             <applyWhen >
@@ -117,7 +117,7 @@
             <copy source="Project_Headers/leds.h"        target="Project_Headers/leds.h" />
             <copy source="Project_Headers/Board_LEDs.h"  target="Project_Headers/Board_LEDs.h" />
             <copy source="Sources/leds-mke.c"            target="Sources/leds.cpp" />
-            <copy source="Sources/main.c"                target="Sources/main.cpp" replace="true" />
+            <copy source="Sources/main.cpp"              target="Sources/main.cpp" replace="true" />
          </projectActionList>
          <projectActionList>
             <applyWhen >
@@ -154,7 +154,7 @@
             <copy source="Project_Headers/leds.h"        target="Project_Headers/leds.h" />
             <copy source="Project_Headers/Board_LEDs.h"  target="Project_Headers/Board_LEDs.h" />
             <copy source="Sources/leds-mkm.c"            target="Sources/leds.cpp" />
-            <copy source="Sources/main.c"                target="Sources/main.cpp" replace="true" />
+            <copy source="Sources/main.cpp"              target="Sources/main.cpp" replace="true" />
          </projectActionList>
          <projectActionList>
             <applyWhen >

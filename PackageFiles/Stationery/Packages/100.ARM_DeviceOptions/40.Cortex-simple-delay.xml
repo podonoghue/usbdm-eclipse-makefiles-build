@@ -2,12 +2,10 @@
 <!DOCTYPE root SYSTEM "../package.dtd">
 
 <root version="1.0">
-   <projectActionList id="CPP-abstraction-simple-delay">
+   <projectActionList id="cortex-simple-delay">
       <applyWhen>
          <and>
             <variableRef idRef="outputType" condition="matches"  value=".*ProjectType\.exe$" />
-            <not><variableRef idRef="projectOptionValue.Kinetis-SDK-enable" condition="isTrue"/></not>
-            <not><variableRef idRef="projectOptionValue.Kinetis-PE"         condition="isTrue"/></not>
          </and>
       </applyWhen>
 
@@ -22,7 +20,7 @@
          <applyWhen>
             <not><variableRef idRef="hasCCNature" condition="isTrue" /></not>
          </applyWhen>
-         <copy source="Sources/delay.cpp" target="Sources/delay.c" />
+         <copy source="Sources/delay.c" target="Sources/delay.c" />
       </projectActionList>
    </projectActionList>
 </root>
