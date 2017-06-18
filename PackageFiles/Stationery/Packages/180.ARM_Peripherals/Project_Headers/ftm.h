@@ -64,49 +64,49 @@ namespace USBDM {
 /**
  * Controls basic operation of PWM/Input capture
  */
-enum Ftm_ChannelMode {
+enum FtmChannelMode {
    //! Capture rising edge
-   ftm_inputCaptureRisingEdge                = FTM_CnSC_MS(0)|FTM_CnSC_ELS(1),
+   FtmInputCaptureRisingEdge                = FTM_CnSC_MS(0)|FTM_CnSC_ELS(1),
    //! Capture falling edge
-   ftm_inputCaptureFallingEdge               = FTM_CnSC_MS(0)|FTM_CnSC_ELS(2),
+   FtmInputCaptureFallingEdge               = FTM_CnSC_MS(0)|FTM_CnSC_ELS(2),
    //! Capture both rising and falling edges
-   ftm_inputCaptureEitherEdge                = FTM_CnSC_MS(0)|FTM_CnSC_ELS(3),
+   FtmInputCaptureEitherEdge                = FTM_CnSC_MS(0)|FTM_CnSC_ELS(3),
    //! Output compare operation
-   ftm_outputCompare                         = FTM_CnSC_MS(1),
+   FtmOutputCompare                         = FTM_CnSC_MS(1),
    //! Toggle pin on output compare
-   ftm_outputCompareToggle                   = FTM_CnSC_MS(1)|FTM_CnSC_ELS(1),
+   FtmOutputCompareToggle                   = FTM_CnSC_MS(1)|FTM_CnSC_ELS(1),
    //! Clear pin on output compare
-   ftm_outputCompareClear                    = FTM_CnSC_MS(1)|FTM_CnSC_ELS(2),
+   FtmOutputCompareClear                    = FTM_CnSC_MS(1)|FTM_CnSC_ELS(2),
    //! Set pin on output compare
-   ftm_outputCompareSet                      = FTM_CnSC_MS(1)|FTM_CnSC_ELS(3),
+   FtmOutputCompareSet                      = FTM_CnSC_MS(1)|FTM_CnSC_ELS(3),
    //! PWM with high-true pulses
-   ftm_pwmHighTruePulses                     = FTM_CnSC_MS(2)|FTM_CnSC_ELS(2),
+   FtmPwmHighTruePulses                     = FTM_CnSC_MS(2)|FTM_CnSC_ELS(2),
    //! PWM with low-true pulses
-   ftm_pwmLowTruePulses                      = FTM_CnSC_MS(2)|FTM_CnSC_ELS(1),
+   FtmPwmLowTruePulses                      = FTM_CnSC_MS(2)|FTM_CnSC_ELS(1),
    //! Dual edge input capture one shot - CHn configuration
-   ftm_dualEdgeCaptureOneShotRisingEdge      = FTM_CnSC_MS(0)|FTM_CnSC_ELS(1),
+   FtmDualEdgeCaptureOneShotRisingEdge      = FTM_CnSC_MS(0)|FTM_CnSC_ELS(1),
    //! Dual edge input capture continuous - CHn configuration
-   ftm_dualEdgeCaptureContinuousRisingEdge   = FTM_CnSC_MS(1)|FTM_CnSC_ELS(1),
+   FtmDualEdgeCaptureContinuousRisingEdge   = FTM_CnSC_MS(1)|FTM_CnSC_ELS(1),
    //! Dual edge input capture one shot - CHn configuration
-   ftm_dualEdgeCaptureOneShotFallingEdge     = FTM_CnSC_MS(0)|FTM_CnSC_ELS(2),
+   FtmDualEdgeCaptureOneShotFallingEdge     = FTM_CnSC_MS(0)|FTM_CnSC_ELS(2),
    //! Dual edge input capture continuous - CHn configuration
-   ftm_dualEdgeCaptureContinuousFallingEdge  = FTM_CnSC_MS(1)|FTM_CnSC_ELS(2),
+   FtmDualEdgeCaptureContinuousFallingEdge  = FTM_CnSC_MS(1)|FTM_CnSC_ELS(2),
    //! Combine mode - CHn configuration
-   ftm_CombinePositivePulse                  = FTM_CnSC_MS(0)|FTM_CnSC_ELS(2),
+   FtmCombinePositivePulse                  = FTM_CnSC_MS(0)|FTM_CnSC_ELS(2),
    //! Combine mode - CHn configuration
-   ftm_CombineNegativePulse                  = FTM_CnSC_MS(0)|FTM_CnSC_ELS(1),
+   FtmCombineNegativePulse                  = FTM_CnSC_MS(0)|FTM_CnSC_ELS(1),
 };
 
 /**
  * Control alignment of PWM function
  */
-enum Ftm_Mode {
+enum FtmMode {
    //! Left-aligned PWM - also used for input capture and output compare modes
-   ftm_leftAlign   = 0,
+   FtmModeLeftAlign   = 0,
    //! Centre-aligned PWM
-   ftm_centreAlign = FTM_SC_CPWMS_MASK,
+   FtmModeCentreAlign = FTM_SC_CPWMS_MASK,
    //! Dummy value for Quadrature encoder
-   ftm_quadrature  = 0,
+   FtmModeQuadrature  = 0,
 };
 
 /**
@@ -129,7 +129,7 @@ typedef void (*FTMChannelCallbackFunction)(volatile FTM_Type *tmr, int status);
  * const USBDM::FtmBase_T<FTM0_Info)> Ftm0;
  *
  * // Initialise PWM with initial period and alignment
- * Ftm0::setMode(200, USBDM::ftm_leftAlign);
+ * Ftm0::setMode(200, USBDM::FtmModeLeftAlign);
  *
  * // Change timer period
  * Ftm0::setPeriod(500);
@@ -184,14 +184,14 @@ public:
     * Used to change configuration after enabling interface
     *
     * @param period  Period in ticks
-    * @param mode    Mode of operation see USBDM::Ftm_Mode
+    * @param mode    Mode of operation see USBDM::FtmMode
     *
     * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
     */
-   static void configure(uint32_t period /* ticks */, Ftm_Mode mode=ftm_leftAlign) {
+   static void configure(uint32_t period /* ticks */, FtmMode mode=FtmModeLeftAlign) {
 
       tmr->SC      = mode;
-      if (mode == ftm_centreAlign) {
+      if (mode == FtmModeCentreAlign) {
          // Centre aligned PWM with CPWMS not selected
          tmr->SC   = Info::sc|FTM_SC_CPWMS_MASK;
       }
@@ -620,7 +620,7 @@ template<class Info> FTMChannelCallbackFunction    FtmIrq_T<Info>::callback     
  * using Ftm0_ch6 = USBDM::FtmChannel<FTM0Info, 6>;
  *
  * // Initialise PWM with initial period and alignment
- * Ftm0_ch6.setMode(200, PwmIO::ftm_leftAlign);
+ * Ftm0_ch6.setMode(200, PwmIO::FtmModeLeftAlign);
  *
  * // Change period (in ticks)
  * Ftm0_ch6.setPeriod(500);
@@ -641,11 +641,11 @@ public:
     * Enables owning FTM if not already enabled\n
     * Also see /ref enableChannel()
     *
-    * @param mode Mode of operation for FTM e.g.ftm_pwmHighTruePulses
+    * @param mode Mode of operation for FTM e.g.FtmPwmHighTruePulses
     *
     * @note Enables FTM as well
     */
-   static void enable(Ftm_ChannelMode mode = ftm_pwmHighTruePulses) {
+   static void enable(FtmChannelMode mode = FtmPwmHighTruePulses) {
       if (!FtmBase_T<Info>::isEnabled()) {
          // Enable parent FTM if needed
          FtmBase_T<Info>::enable();
@@ -657,9 +657,9 @@ public:
     * Enable channel (and set mode)\n
     * Doesn't affect shared settings of owning FTM
     *
-    * @param mode Mode of operation for FTM e.g.ftm_pwmHighTruePulses
+    * @param mode Mode of operation for FTM e.g.FtmPwmHighTruePulses
     */
-   static void enableChannel(Ftm_ChannelMode mode = ftm_pwmHighTruePulses) {
+   static void enableChannel(FtmChannelMode mode = FtmPwmHighTruePulses) {
       FtmBase_T<Info>::tmr->CONTROLS[channel].CnSC = mode;
    }
 
@@ -756,7 +756,7 @@ public:
  * using Ftm0_ch6 = USBDM::Ftm0Channel<6>;
  *
  * // Initialise PWM with initial period and alignment
- * Ftm0_ch6.setMode(200, PwmIO::ftm_leftAlign);
+ * Ftm0_ch6.setMode(200, PwmIO::FtmModeLeftAlign);
  *
  * // Change period (in ticks)
  * Ftm0_ch6.setPeriod(500);
@@ -863,7 +863,7 @@ public:
       *clockReg |= Info::clockMask;
       __DMB();
 
-      FtmBase_T<Info>::configure(0, ftm_quadrature);
+      FtmBase_T<Info>::configure(0, FtmModeQuadrature);
 
       ftm->QDCTRL =
             FTM_QDCTRL_QUADEN_MASK|      // Enable Quadrature encoder

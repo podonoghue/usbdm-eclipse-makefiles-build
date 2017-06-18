@@ -64,35 +64,35 @@ namespace USBDM {
 /**
  * Controls basic operation of PWM/Input capture
  */
-enum Tpm_ChannelMode {
+enum TpmChannelMode {
    //! Capture rising edge
-   tpm_inputCaptureRisingEdge  = TPM_CnSC_MS(0)|TPM_CnSC_ELS(1),
+   TpmInputCaptureRisingEdge  = TPM_CnSC_MS(0)|TPM_CnSC_ELS(1),
    //! Capture falling edge
-   tpm_inputCaptureFallingEdge = TPM_CnSC_MS(0)|TPM_CnSC_ELS(2),
+   TpmInputCaptureFallingEdge = TPM_CnSC_MS(0)|TPM_CnSC_ELS(2),
    //! Capture both rising and falling edges
-   tpm_inputCaptureEitherEdge  = TPM_CnSC_MS(0)|TPM_CnSC_ELS(3),
+   TpmInputCaptureEitherEdge  = TPM_CnSC_MS(0)|TPM_CnSC_ELS(3),
    //! Output compare operation
-   tpm_outputCompare           = TPM_CnSC_MS(1),
+   TpmOutputCompare           = TPM_CnSC_MS(1),
    //! Toggle pin on output compare
-   tpm_outputCompareToggle     = TPM_CnSC_MS(1)|TPM_CnSC_ELS(1),
+   TpmOutputCompareToggle     = TPM_CnSC_MS(1)|TPM_CnSC_ELS(1),
    //! Clear pin on output compare
-   tpm_outputCompareClear      = TPM_CnSC_MS(1)|TPM_CnSC_ELS(2),
+   TpmOutputCompareClear      = TPM_CnSC_MS(1)|TPM_CnSC_ELS(2),
    //! Set pin on output compare
-   tpm_outputCompareSet        = TPM_CnSC_MS(1)|TPM_CnSC_ELS(3),
+   TpmOutputCompareSet        = TPM_CnSC_MS(1)|TPM_CnSC_ELS(3),
    //! PWM with high-true pulses
-   tpm_pwmHighTruePulses       = TPM_CnSC_MS(2)|TPM_CnSC_ELS(2),
+   TpmPwmHighTruePulses       = TPM_CnSC_MS(2)|TPM_CnSC_ELS(2),
    //! PWM with low-true pulses
-   tpm_pwmLowTruePulses        = TPM_CnSC_MS(2)|TPM_CnSC_ELS(1),
+   TpmPwmLowTruePulses        = TPM_CnSC_MS(2)|TPM_CnSC_ELS(1),
 };
 
 /**
  * Control alignment of PWM function
  */
-enum Tpm_Mode {
+enum TpmMode {
    //! Left-aligned PWM - also used for input capture and output compare modes
-   tpm_leftAlign   = 0,
+   TpmLeftAlign   = 0,
    //! Centre-aligned PWM
-   tpm_centreAlign = TPM_SC_CPWMS_MASK,
+   TpmCentreAlign = TPM_SC_CPWMS_MASK,
 };
 
 /**
@@ -115,7 +115,7 @@ typedef void (*TPMChannelCallbackFunction)(volatile TPM_Type *tmr, int status);
  * const USBDM::TpmBase_T<TPM0_Info)> Tpm0;
  *
  * // Initialise PWM with initial period and alignment
- * Tpm0::initialise(200, USBDM::tpm_leftAlign);
+ * Tpm0::initialise(200, USBDM::TpmLeftAlign);
  *
  * // Change timer period
  * Tpm0::setPeriod(500);
@@ -169,17 +169,17 @@ public:
     * Used to change configuration after enabling interface
     *
     * @param period  Period in ticks
-    * @param mode    Mode of operation see USBDM::Tpm_Mode
+    * @param mode    Mode of operation see USBDM::TpmMode
     *
     * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
     */
-   static void configure(uint32_t period /* ticks */, Tpm_Mode mode=tpm_leftAlign) {
+   static void configure(uint32_t period /* ticks */, TpmMode mode=TpmLeftAlign) {
 
       // Disable so immediate effect
       tmr->SC      = 0;
 
       tmr->SC      = mode;
-      if (mode == tpm_centreAlign) {
+      if (mode == TpmCentreAlign) {
          // Centre aligned PWM with CPWMS not selected
          tmr->SC   = Info::sc|TPM_SC_CPWMS_MASK;
       }
@@ -217,7 +217,7 @@ public:
     *
     * @param enable true to enable, false to disable
     */
-   static void enableToiInterrupts(bool enable=true) {
+   static void enableTimerOverflowInterrupts(bool enable=true) {
       if (enable) {
          tmr->SC |= TPM_SC_TOIE_MASK;
       }
@@ -515,7 +515,7 @@ template<class Info> TPMChannelCallbackFunction  TpmIrq_T<Info>::callback = 0;
  * using Tpm0_ch6 = USBDM::TpmChannel<TPM0Info, 6>;
  *
  * // Initialise PWM with initial period and alignment
- * Tpm0_ch6.setMode(200, PwmIO::tpm_leftAlign);
+ * Tpm0_ch6.setMode(200, PwmIO::TpmLeftAlign);
  *
  * // Change period (in ticks)
  * Tpm0_ch6.setPeriod(500);
@@ -536,9 +536,11 @@ public:
     * Bug - re-enables TPM every time a channel is enabled\n
     * Use enableChannel() to avoid this
     *
-    * Enabled TPM as well
+    * @param mode Mode of operation for FTM e.g.FtmPwmHighTruePulses
+    *
+    * @note Enables FTM as well
     */
-   static void enable(Tpm_ChannelMode mode = tpm_pwmHighTruePulses) {
+   static void enable(TpmChannelMode mode = TpmPwmHighTruePulses) {
       if (!TpmBase_T<Info>::isEnabled()) {
          // Enable parent FTM if needed
          TpmBase_T<Info>::enable();
@@ -549,8 +551,10 @@ public:
    /**
     * Enable channel (and set mode)\n
     * Doesn't affect shared settings of owning TPM
+    *
+    * @param mode Mode of operation for FTM e.g.FtmPwmHighTruePulses
     */
-   static void enableChannel(Tpm_ChannelMode mode = tpm_pwmHighTruePulses) {
+   static void enableChannel(TpmChannelMode mode = TpmPwmHighTruePulses) {
       TpmBase_T<Info>::tmr->CONTROLS[channel].CnSC = mode;
    }
 
@@ -569,7 +573,12 @@ public:
       }
    }
 
-   static void setPCR(uint32_t pcrValue) {
+   /**
+    * Set Pin Control Register Value (apart from mux)
+    *
+    * @param pcrValue PCR value to set
+    */
+   static void setPCR(PcrValue pcrValue) {
       PcrTable_T<Info,  channel>::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|(Info::info[channel].pcrValue&PORT_PCR_MUX_MASK));
    }
 
@@ -642,7 +651,7 @@ public:
  * using Tpm0_ch6 = USBDM::Tpm0Channel<6>;
  *
  * // Initialise PWM with initial period and alignment
- * Tpm0_ch6.setMode(200, PwmIO::tpm_leftAlign);
+ * Tpm0_ch6.setMode(200, PwmIO::TpmLeftAlign);
  *
  * // Change period (in ticks)
  * Tpm0_ch6.setPeriod(500);
