@@ -16,7 +16,7 @@
  *
  * Allocates a frees items in a memory pool
  */
-void memoryPoolExample() {
+static void memoryPoolExample() {
    struct Data {
       int a;
       int b;

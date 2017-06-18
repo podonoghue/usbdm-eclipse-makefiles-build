@@ -42,7 +42,7 @@ MMA845x  accelerometer(i2c0, MMA845x::ACCEL_2Gmode);
  *
  * @param accelerometer Accelerometer to use
  */
-void report(const char *name, MMA845x &accelerometer) {
+static void report(const char *name, MMA845x &accelerometer) {
    int accelStatus;
    int16_t accelX,accelY,accelZ;
    static CMSIS::Mutex mutex;
@@ -62,7 +62,7 @@ void report(const char *name, MMA845x &accelerometer) {
 /**
  * Thread class incorporating timer function
  */
-class MyTimer : public CMSIS::TimerClass<osTimerPeriodic> {
+class MyTimer : public CMSIS::TimerClass {
 
 private:
    // Name to use
@@ -126,12 +126,8 @@ int main() {
    };
 
    // Create timer instances
-   CMSIS::Timer<osTimerPeriodic> timer1(timerFn);
-   CMSIS::Timer<osTimerPeriodic> timer2(timerFn);
-
-   // Create timers
-   timer1.create((void*)("Th 1"));
-   timer2.create((void*)("Th 2"));
+   CMSIS::Timer timer1(timerFn, (void*)("Th 1"), osTimerPeriodic);
+   CMSIS::Timer timer2(timerFn, (void*)("Th 2"), osTimerPeriodic);
 
    // Start timers
    timer1.start(300);

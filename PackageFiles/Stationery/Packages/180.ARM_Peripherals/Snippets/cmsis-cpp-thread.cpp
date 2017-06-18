@@ -16,7 +16,7 @@ using GREEN_LED   = USBDM::$(demo.cpp.green.led:GpioB<0>);
 /*
  * Thread example
  */
-void threadExample() {
+static void threadExample() {
    /** Thread function */
    static auto threadFn = [] (const void *) {
       for(;;) {

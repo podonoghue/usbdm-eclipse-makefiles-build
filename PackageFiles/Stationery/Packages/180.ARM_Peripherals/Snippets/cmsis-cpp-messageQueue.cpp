@@ -30,7 +30,7 @@ static CMSIS::MessageQueue<MessageData*, 10> messageQueue;
 /**
  *  Thread for sending to the message queue
  */
-void messageQueueSender(const void *) {
+static void messageQueueSender(const void *) {
    MessageData ar[30];
    for (unsigned i=0; i<(sizeof(ar)/sizeof(ar[0])); i++) {
       ar[i].a = i;
@@ -48,7 +48,7 @@ void messageQueueSender(const void *) {
 /**
  *  Thread for receiving from the message queue
  */
-void messageQueueReceiver(const void *) {
+static void messageQueueReceiver(const void *) {
    for(unsigned i=0; ; i++) {
       osEvent event = messageQueue.get(10000);
       if (event.status != osEventMessage) {
@@ -64,7 +64,7 @@ void messageQueueReceiver(const void *) {
 /*
  * Message Queue example
  */
-void messageQueueExample() {
+static void messageQueueExample() {
    printf(" message messageQueue.getId() = %p\n\r", messageQueue.getId());
 
    messageQueue.create();

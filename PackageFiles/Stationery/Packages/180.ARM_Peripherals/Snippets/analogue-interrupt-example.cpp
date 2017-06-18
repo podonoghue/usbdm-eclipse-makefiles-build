@@ -50,7 +50,7 @@ int main(void) {
    adc::setCallback(handler);
 
    // May change resolution e.g.
-//   adcChannel::setMode(USBDM::resolution_8bit_se);
+//   adcChannel::setMode(USBDM::AdcResolution_8bit_se);
 
    adcChannel::startConversion();
 

@@ -29,10 +29,10 @@ using namespace USBDM;
  **************************************************/
 
 // I2C interface
-I2c0     i2c0;
+static I2c0     i2c0;
 
 // Accelerometer via I2C
-MMA845x  accelerometer(i2c0, MMA845x::ACCEL_2Gmode);
+static MMA845x  accelerometer(i2c0, MMA845x::ACCEL_2Gmode);
 
 /**************************************************/
 
@@ -42,7 +42,7 @@ MMA845x  accelerometer(i2c0, MMA845x::ACCEL_2Gmode);
  *
  * @param accelerometer Accelerometer to use
  */
-void report(const char *name, MMA845x &accelerometer) {
+static void report(const char *name, MMA845x &accelerometer) {
    int accelStatus;
    int16_t accelX,accelY,accelZ;
    static CMSIS::Mutex mutex;

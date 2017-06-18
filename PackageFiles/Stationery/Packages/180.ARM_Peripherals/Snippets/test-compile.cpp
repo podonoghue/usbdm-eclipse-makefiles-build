@@ -31,7 +31,7 @@
  *
  * Using a ADC channel
  *  using adcChannel = USBDM::Adc0Channel<6>;
- *  adcChannel::setMode(USBDM::resolution_16bit_se);
+ *  adcChannel::setMode(USBDM::AdcResolution_16bit_se);
  *  int value = adcChannel::readAnalogue();
  * Using a timer channel
  *  using ftmChannel = USBDM::Ftm0Channel<0>;

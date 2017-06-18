@@ -26,7 +26,7 @@ int main(void) {
    adcChannel::enable();
 
    // May change default resolution e.g.
-//   adcChannel::setResolution(USBDM::resolution_8bit_se);
+//   adcChannel::setResolution(USBDM::AdcResolution_8bit_se);
 
    for(;;) {
       // Start next conversion

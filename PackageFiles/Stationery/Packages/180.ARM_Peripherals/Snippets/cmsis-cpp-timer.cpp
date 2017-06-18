@@ -33,16 +33,12 @@ void timerExample() {
    RED_LED::setOutput();
 
    // Create two timers
-   static CMSIS::Timer<osTimerPeriodic> myTimer1(cb1);
-   static CMSIS::Timer<osTimerPeriodic> myTimer2(cb2);
-
-   // Create the timers
-   myTimer2.create();
-   myTimer1.create();
+   static CMSIS::Timer myTimer1(cb1);
+   static CMSIS::Timer myTimer2(cb2);
 
    // Start the timers
-   myTimer2.start(500);
    myTimer1.start(1000);
+   myTimer2.start(500);
 
    // Report the timer IDs
    printf(" myTimer1::getId() = %p\n\r", myTimer1.getId());

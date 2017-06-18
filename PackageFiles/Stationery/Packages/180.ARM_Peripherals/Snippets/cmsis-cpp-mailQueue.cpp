@@ -30,7 +30,7 @@ static CMSIS::MailQueue<MailData, 10> mailQueue;
 /**
  *  Thread for sending to the mail queue
  */
-void mailQueueSender(const void *) {
+static void mailQueueSender(const void *) {
    for (unsigned i=0; i<20; i++) {
       MailData *data = mailQueue.alloc(0);
       if (data == nullptr) {
@@ -52,7 +52,7 @@ void mailQueueSender(const void *) {
 /**
  *  Thread for receiving from the mail queue
  */
-void mailQueueReceiver(const void *) {
+static void mailQueueReceiver(const void *) {
    for(unsigned i=0; ; i++) {
       osEvent event = mailQueue.get(5000);
       if (event.status != osEventMail) {
