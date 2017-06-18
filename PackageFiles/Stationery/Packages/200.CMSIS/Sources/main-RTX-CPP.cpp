@@ -51,7 +51,7 @@ static void callbackTick(const void *) {
 /**
  * Timer example
  */
-void timerExample() {
+static void timerExample() {
 
    // Set the LEDs as outputs
    GREEN_LED::setOutput();
@@ -59,16 +59,12 @@ void timerExample() {
    BLUE_LED::setOutput();
 
    // Create two timers
-   static CMSIS::Timer<osTimerPeriodic> timer1(callbackLed3Toggle);
-   static CMSIS::Timer<osTimerPeriodic> timer2(callbackTick);
+   static CMSIS::Timer timer1(callbackLed3Toggle);
+   static CMSIS::Timer timer2(callbackTick);
 
    // Create two threads
    static CMSIS::Thread thread1(threadLed1Toggle);
    static CMSIS::Thread thread2(threadLed2Toggle);
-
-   // Create timers
-   timer1.create();
-   timer2.create();
 
    // Start the 2 timers with different periods
    timer1.start(500);
