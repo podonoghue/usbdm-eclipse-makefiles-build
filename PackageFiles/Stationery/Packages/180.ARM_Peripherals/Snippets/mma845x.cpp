@@ -188,9 +188,9 @@ void MMA845x::active() {
  * Obtains measurements from the accelerometer
  *
  * @param[out] status  - Indicates status of x, y & z measurements
- * @param[out] x       - X axis value
- * @param[out] y       - Y axis value
- * @param[out] z       - Z axis value
+ * @param[out] x       - X axis as 16-bit signed value (14-bit range)
+ * @param[out] y       - Y axis as 16-bit signed value (14-bit range)
+ * @param[out] z       - Z axis as 16-bit signed value (14-bit range)
  */
 void MMA845x::readAccelerometerXYZ(int &status, int16_t &x, int16_t &y, int16_t &z) {
    uint8_t dataXYZ[7] = {STATUS};
@@ -199,6 +199,7 @@ void MMA845x::readAccelerometerXYZ(int &status, int16_t &x, int16_t &y, int16_t 
    i2c.txRx(DEVICE_ADDRESS, 1, sizeof(dataXYZ), dataXYZ);
 
    // Unpack data and return
+   // X,Y & Z values are sign-extended to 16-bit values
    status = dataXYZ[0];
    x = ((int16_t)((dataXYZ[1]<<8)+dataXYZ[2]))>>2;
    y = ((int16_t)((dataXYZ[3]<<8)+dataXYZ[4]))>>2;

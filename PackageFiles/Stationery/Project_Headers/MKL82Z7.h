@@ -222,7 +222,7 @@ extern void DMA7_IRQHandler(void);             /**< Interrupt Multiplexer       
 */
 
 /* ================================================================================ */
-/* ================           ADC0 (file:ADC0_MK82F25615)          ================ */
+/* ================           ADC0 (file:ADC0_DIFF_A)              ================ */
 /* ================================================================================ */
 
 /**
@@ -234,34 +234,32 @@ extern void DMA7_IRQHandler(void);             /**< Interrupt Multiplexer       
 * @{
 */
 typedef struct {                                /*       ADC0 Structure                                               */
-   __IO uint32_t  SC1A;                         /**< 0000: ADC Status and Control Registers 1                           */
-   __IO uint32_t  SC1B;                         /**< 0004: ADC Status and Control Registers 1                           */
-   __IO uint32_t  CFG1;                         /**< 0008: ADC Configuration Register 1                                 */
-   __IO uint32_t  CFG2;                         /**< 000C: ADC Configuration Register 2                                 */
-   __I  uint32_t  RA;                           /**< 0010: ADC Data Result Register                                     */
-   __I  uint32_t  RB;                           /**< 0014: ADC Data Result Register                                     */
+   __IO uint32_t  SC1[2];                       /**< 0000: Status and Control Register 1                                */
+   __IO uint32_t  CFG1;                         /**< 0008: Configuration Register 1                                     */
+   __IO uint32_t  CFG2;                         /**< 000C: Configuration Register 2                                     */
+   __I  uint32_t  R[2];                         /**< 0010: Data Result Register                                         */
    __IO uint32_t  CV1;                          /**< 0018: Compare Value                                                */
    __IO uint32_t  CV2;                          /**< 001C: Compare Value                                                */
    __IO uint32_t  SC2;                          /**< 0020: Status and Control Register 2                                */
    __IO uint32_t  SC3;                          /**< 0024: Status and Control Register 3                                */
-   __IO uint32_t  OFS;                          /**< 0028: ADC Offset Correction Register                               */
-   __IO uint32_t  PG;                           /**< 002C: ADC Plus-Side Gain Register                                  */
-   __IO uint32_t  MG;                           /**< 0030: ADC Minus-Side Gain Register                                 */
-   __IO uint32_t  CLPD;                         /**< 0034: ADC Plus-Side General Calibration Value Register             */
-   __IO uint32_t  CLPS;                         /**< 0038: ADC Plus-Side General Calibration Value Register             */
-   __IO uint32_t  CLP4;                         /**< 003C: ADC Plus-Side General Calibration Value Register             */
-   __IO uint32_t  CLP3;                         /**< 0040: ADC Plus-Side General Calibration Value Register             */
-   __IO uint32_t  CLP2;                         /**< 0044: ADC Plus-Side General Calibration Value Register             */
-   __IO uint32_t  CLP1;                         /**< 0048: ADC Plus-Side General Calibration Value Register             */
-   __IO uint32_t  CLP0;                         /**< 004C: ADC Plus-Side General Calibration Value Register             */
+   __IO uint32_t  OFS;                          /**< 0028: Offset Correction Register                                   */
+   __IO uint32_t  PG;                           /**< 002C: Plus-Side Gain Register                                      */
+   __IO uint32_t  MG;                           /**< 0030: Minus-Side Gain Register                                     */
+   __IO uint32_t  CLPD;                         /**< 0034: Plus-Side General Calibration Value                          */
+   __IO uint32_t  CLPS;                         /**< 0038: Plus-Side General Calibration Value                          */
+   __IO uint32_t  CLP4;                         /**< 003C: Plus-Side General Calibration Value                          */
+   __IO uint32_t  CLP3;                         /**< 0040: Plus-Side General Calibration Value                          */
+   __IO uint32_t  CLP2;                         /**< 0044: Plus-Side General Calibration Value                          */
+   __IO uint32_t  CLP1;                         /**< 0048: Plus-Side General Calibration Value                          */
+   __IO uint32_t  CLP0;                         /**< 004C: Plus-Side General Calibration Value                          */
         uint8_t   RESERVED_0[4];               
-   __IO uint32_t  CLMD;                         /**< 0054: ADC Minus-Side General Calibration Value Register            */
-   __IO uint32_t  CLMS;                         /**< 0058: ADC Minus-Side General Calibration Value Register            */
-   __IO uint32_t  CLM4;                         /**< 005C: ADC Minus-Side General Calibration Value Register            */
-   __IO uint32_t  CLM3;                         /**< 0060: ADC Minus-Side General Calibration Value Register            */
-   __IO uint32_t  CLM2;                         /**< 0064: ADC Minus-Side General Calibration Value Register            */
-   __IO uint32_t  CLM1;                         /**< 0068: ADC Minus-Side General Calibration Value Register            */
-   __IO uint32_t  CLM0;                         /**< 006C: ADC Minus-Side General Calibration Value Register            */
+   __IO uint32_t  CLMD;                         /**< 0054: Minus-Side General Calibration Value                         */
+   __IO uint32_t  CLMS;                         /**< 0058: Minus-Side General Calibration Value                         */
+   __IO uint32_t  CLM4;                         /**< 005C: Minus-Side General Calibration Value                         */
+   __IO uint32_t  CLM3;                         /**< 0060: Minus-Side General Calibration Value                         */
+   __IO uint32_t  CLM2;                         /**< 0064: Minus-Side General Calibration Value                         */
+   __IO uint32_t  CLM1;                         /**< 0068: Minus-Side General Calibration Value                         */
+   __IO uint32_t  CLM0;                         /**< 006C: Minus-Side General Calibration Value                         */
 } ADC_Type;
 
 /**
@@ -2338,7 +2336,7 @@ typedef struct {                                /*       FLEXIO0 Structure      
 */
 
 /* ================================================================================ */
-/* ================           FTFA (file:FTFA_MKL82Z7)             ================ */
+/* ================           FTFA (file:FTFA_XACCH)               ================ */
 /* ================================================================================ */
 
 /**
@@ -2354,39 +2352,39 @@ typedef struct {                                /*       FTFA Structure         
    __IO uint8_t   FCNFG;                        /**< 0001: Flash Configuration Register                                 */
    __I  uint8_t   FSEC;                         /**< 0002: Flash Security Register                                      */
    __I  uint8_t   FOPT;                         /**< 0003: Flash Option Register                                        */
-   __IO uint8_t   FCCOB3;                       /**< 0004: Flash Common Command Object                                  */
-   __IO uint8_t   FCCOB2;                       /**< 0005: Flash Common Command Object                                  */
-   __IO uint8_t   FCCOB1;                       /**< 0006: Flash Common Command Object                                  */
-   __IO uint8_t   FCCOB0;                       /**< 0007: Flash Common Command Object                                  */
-   __IO uint8_t   FCCOB7;                       /**< 0008: Flash Common Command Object                                  */
-   __IO uint8_t   FCCOB6;                       /**< 0009: Flash Common Command Object                                  */
-   __IO uint8_t   FCCOB5;                       /**< 000A: Flash Common Command Object                                  */
-   __IO uint8_t   FCCOB4;                       /**< 000B: Flash Common Command Object                                  */
-   __IO uint8_t   FCCOBB;                       /**< 000C: Flash Common Command Object                                  */
-   __IO uint8_t   FCCOBA;                       /**< 000D: Flash Common Command Object                                  */
-   __IO uint8_t   FCCOB9;                       /**< 000E: Flash Common Command Object                                  */
-   __IO uint8_t   FCCOB8;                       /**< 000F: Flash Common Command Object                                  */
+   __IO uint8_t   FCCOB3;                       /**< 0004: FCCOB 3 - Usually Flash address [7..0]                       */
+   __IO uint8_t   FCCOB2;                       /**< 0005: FCCOB 2 - Usually Flash address [15..8]                      */
+   __IO uint8_t   FCCOB1;                       /**< 0006: FCCOB 1 - Usually Flash address [23..16]                     */
+   __IO uint8_t   FCCOB0;                       /**< 0007: FCCOB 0 - Usually FCMD (Flash command)                       */
+   __IO uint8_t   FCCOB7;                       /**< 0008: FCCOB 7 - Usually Data Byte 3                                */
+   __IO uint8_t   FCCOB6;                       /**< 0009: FCCOB 6 - Usually Data Byte 2                                */
+   __IO uint8_t   FCCOB5;                       /**< 000A: FCCOB 5 - Usually Data Byte 1                                */
+   __IO uint8_t   FCCOB4;                       /**< 000B: FCCOB 4 - Usually Data Byte 0                                */
+   __IO uint8_t   FCCOBB;                       /**< 000C: FCCOB B - Usually Data Byte 7                                */
+   __IO uint8_t   FCCOBA;                       /**< 000D: FCCOB A - Usually Data Byte 6                                */
+   __IO uint8_t   FCCOB9;                       /**< 000E: FCCOB 9 - Usually Data Byte 5                                */
+   __IO uint8_t   FCCOB8;                       /**< 000F: FCCOB 8 - Usually Data Byte 4                                */
    __IO uint8_t   FPROT3;                       /**< 0010: Program Flash Protection                                     */
    __IO uint8_t   FPROT2;                       /**< 0011: Program Flash Protection                                     */
    __IO uint8_t   FPROT1;                       /**< 0012: Program Flash Protection                                     */
    __IO uint8_t   FPROT0;                       /**< 0013: Program Flash Protection                                     */
         uint8_t   RESERVED_0[4];               
-   __I  uint8_t   XACCH3;                       /**< 0018: Execute-only Access                                          */
-   __I  uint8_t   XACCH2;                       /**< 0019: Execute-only Access                                          */
-   __I  uint8_t   XACCH1;                       /**< 001A: Execute-only Access                                          */
-   __I  uint8_t   XACCH0;                       /**< 001B: Execute-only Access                                          */
-   __I  uint8_t   XACCL3;                       /**< 001C: Execute-only Access                                          */
-   __I  uint8_t   XACCL2;                       /**< 001D: Execute-only Access                                          */
-   __I  uint8_t   XACCL1;                       /**< 001E: Execute-only Access                                          */
-   __I  uint8_t   XACCL0;                       /**< 001F: Execute-only Access                                          */
-   __I  uint8_t   SACCH3;                       /**< 0020: Supervisor-only Access                                       */
-   __I  uint8_t   SACCH2;                       /**< 0021: Supervisor-only Access                                       */
-   __I  uint8_t   SACCH1;                       /**< 0022: Supervisor-only Access                                       */
-   __I  uint8_t   SACCH0;                       /**< 0023: Supervisor-only Access                                       */
-   __I  uint8_t   SACCL3;                       /**< 0024: Supervisor-only Access                                       */
-   __I  uint8_t   SACCL2;                       /**< 0025: Supervisor-only Access                                       */
-   __I  uint8_t   SACCL1;                       /**< 0026: Supervisor-only Access                                       */
-   __I  uint8_t   SACCL0;                       /**< 0027: Supervisor-only Access                                       */
+   __I  uint8_t   XACCH3;                       /**< 0018: Execute-only Access Registers (high)                         */
+   __I  uint8_t   XACCH2;                       /**< 0019: Execute-only Access Registers (high)                         */
+   __I  uint8_t   XACCH1;                       /**< 001A: Execute-only Access Registers (high)                         */
+   __I  uint8_t   XACCH0;                       /**< 001B: Execute-only Access Registers (high)                         */
+   __I  uint8_t   XACCL3;                       /**< 001C: Execute-only Access Registers (low)                          */
+   __I  uint8_t   XACCL2;                       /**< 001D: Execute-only Access Registers (low)                          */
+   __I  uint8_t   XACCL1;                       /**< 001E: Execute-only Access Registers (low)                          */
+   __I  uint8_t   XACCL0;                       /**< 001F: Execute-only Access Registers (low)                          */
+   __I  uint8_t   SACCH3;                       /**< 0020: Supervisor-only Access Registers (high)                      */
+   __I  uint8_t   SACCH2;                       /**< 0021: Supervisor-only Access Registers (high)                      */
+   __I  uint8_t   SACCH1;                       /**< 0022: Supervisor-only Access Registers (high)                      */
+   __I  uint8_t   SACCH0;                       /**< 0023: Supervisor-only Access Registers (high)                      */
+   __I  uint8_t   SACCL3;                       /**< 0024: Supervisor-only Access Registers (low)                       */
+   __I  uint8_t   SACCL2;                       /**< 0025: Supervisor-only Access Registers (low)                       */
+   __I  uint8_t   SACCL1;                       /**< 0026: Supervisor-only Access Registers (low)                       */
+   __I  uint8_t   SACCL0;                       /**< 0027: Supervisor-only Access Registers (low)                       */
    __I  uint8_t   FACSS;                        /**< 0028: Flash Access Segment Size Register                           */
         uint8_t   RESERVED_1[2];               
    __I  uint8_t   FACSN;                        /**< 002B: Flash Access Segment Number Register                         */
@@ -2918,7 +2916,7 @@ typedef struct {                                /*       INTMUX0 Structure      
 */
 
 /* ================================================================================ */
-/* ================           LLWU (file:LLWU_MKL82Z7)             ================ */
+/* ================           LLWU (file:LLWU_MK28F15)             ================ */
 /* ================================================================================ */
 
 /**
@@ -6451,7 +6449,7 @@ typedef struct {                                /*       ROM Structure          
 */
 
 /* ================================================================================ */
-/* ================           RTC (file:RTC_MK82F25615)            ================ */
+/* ================           RTC (file:RTC_MK28F15)               ================ */
 /* ================================================================================ */
 
 /**
@@ -8262,7 +8260,7 @@ typedef struct {                                /*       TRNG0 Structure        
 */
 
 /* ================================================================================ */
-/* ================           TSI0 (file:TSI0_MK65)                ================ */
+/* ================           TSI0 (file:TSI0_MK28F15)             ================ */
 /* ================================================================================ */
 
 /**
@@ -8274,9 +8272,9 @@ typedef struct {                                /*       TRNG0 Structure        
 * @{
 */
 typedef struct {                                /*       TSI0 Structure                                               */
-   __IO uint32_t  GENCS;                        /**< 0000: TSI General Control and Status Register                      */
-   __IO uint32_t  DATA;                         /**< 0004: TSI DATA Register                                            */
-   __IO uint32_t  TSHD;                         /**< 0008: TSI Threshold Register                                       */
+   __IO uint32_t  GENCS;                        /**< 0000: General Control and Status Register                          */
+   __IO uint32_t  DATA;                         /**< 0004: DATA Register                                                */
+   __IO uint32_t  TSHD;                         /**< 0008: Threshold Register                                           */
 } TSI_Type;
 
 /**
@@ -8383,7 +8381,7 @@ typedef struct {                                /*       TSI0 Structure         
 /* ================================================================================ */
 
 /**
- * @brief Universal Serial Bus, OTG Capable Controller
+ * @brief USB OTG Controller
  */
 /**
 * @addtogroup USB_structs_GROUP USB struct
@@ -8391,21 +8389,21 @@ typedef struct {                                /*       TSI0 Structure         
 * @{
 */
 typedef struct {                                /*       USB0 Structure                                               */
-   __I  uint8_t   PERID;                        /**< 0000: Peripheral ID register                                       */
+   __I  uint8_t   PERID;                        /**< 0000: Peripheral ID Register                                       */
         uint8_t   RESERVED_0[3];               
-   __I  uint8_t   IDCOMP;                       /**< 0004: Peripheral ID Complement register                            */
+   __I  uint8_t   IDCOMP;                       /**< 0004: Peripheral ID Complement Register                            */
         uint8_t   RESERVED_1[3];               
-   __I  uint8_t   REV;                          /**< 0008: Peripheral Revision register                                 */
+   __I  uint8_t   REV;                          /**< 0008: Peripheral Revision Register                                 */
         uint8_t   RESERVED_2[3];               
-   __I  uint8_t   ADDINFO;                      /**< 000C: Peripheral Additional Info register                          */
+   __I  uint8_t   ADDINFO;                      /**< 000C: Peripheral Additional Info Register                          */
         uint8_t   RESERVED_3[3];               
    __IO uint8_t   OTGISTAT;                     /**< 0010: OTG Interrupt Status Register                                */
         uint8_t   RESERVED_4[3];               
    __IO uint8_t   OTGICR;                       /**< 0014: OTG Interrupt Control Register                               */
         uint8_t   RESERVED_5[3];               
-   __IO uint8_t   OTGSTAT;                      /**< 0018: OTG Status register                                          */
+   __IO uint8_t   OTGSTAT;                      /**< 0018: OTG Status Register                                          */
         uint8_t   RESERVED_6[3];               
-   __IO uint8_t   OTGCTL;                       /**< 001C: OTG Control register                                         */
+   __IO uint8_t   OTGCTL;                       /**< 001C: OTG Control Register                                         */
         uint8_t   RESERVED_7[99];              
    __IO uint8_t   ISTAT;                        /**< 0080: Interrupt Status Register                                    */
         uint8_t   RESERVED_8[3];               
@@ -8413,37 +8411,37 @@ typedef struct {                                /*       USB0 Structure         
         uint8_t   RESERVED_9[3];               
    __IO uint8_t   ERRSTAT;                      /**< 0088: Error Interrupt Status Register                              */
         uint8_t   RESERVED_10[3];              
-   __IO uint8_t   ERREN;                        /**< 008C: Error Interrupt Enable register                              */
+   __IO uint8_t   ERREN;                        /**< 008C: Error Interrupt Enable Register                              */
         uint8_t   RESERVED_11[3];              
-   __I  uint8_t   STAT;                         /**< 0090: Status register                                              */
+   __I  uint8_t   STAT;                         /**< 0090: Status Register                                              */
         uint8_t   RESERVED_12[3];              
    __IO uint8_t   CTL;                          /**< 0094: Control Register                                             */
         uint8_t   RESERVED_13[3];              
-   __IO uint8_t   ADDR;                         /**< 0098: Address register                                             */
+   __IO uint8_t   ADDR;                         /**< 0098: Address Register                                             */
         uint8_t   RESERVED_14[3];              
    __IO uint8_t   BDTPAGE1;                     /**< 009C: BDT Page Register 1                                          */
         uint8_t   RESERVED_15[3];              
-   __IO uint8_t   FRMNUML;                      /**< 00A0: Frame Number register Low                                    */
+   __IO uint8_t   FRMNUML;                      /**< 00A0: Frame Number Register Low                                    */
         uint8_t   RESERVED_16[3];              
-   __IO uint8_t   FRMNUMH;                      /**< 00A4: Frame Number register High                                   */
+   __IO uint8_t   FRMNUMH;                      /**< 00A4: Frame Number Register High                                   */
         uint8_t   RESERVED_17[3];              
    __IO uint8_t   TOKEN;                        /**< 00A8: Token Register                                               */
         uint8_t   RESERVED_18[3];              
-   __IO uint8_t   SOFTHLD;                      /**< 00AC: SOF Threshold register                                       */
+   __IO uint8_t   SOFTHLD;                      /**< 00AC: SOF Threshold Register                                       */
         uint8_t   RESERVED_19[3];              
    __IO uint8_t   BDTPAGE2;                     /**< 00B0: BDT Page Register 2                                          */
         uint8_t   RESERVED_20[3];              
    __IO uint8_t   BDTPAGE3;                     /**< 00B4: BDT Page Register 3                                          */
         uint8_t   RESERVED_21[11];             
    struct {
-      __IO uint8_t   ENDPT;                     /**< 00C0: Endpoint Control register                                    */
+      __IO uint8_t   ENDPT;                     /**< 00C0: Endpoint Control Register                                    */
            uint8_t   RESERVED_22[3];           
    } ENDPOINT[16];                              /**< 00C0: (cluster: size=0x0040, 64)                                   */
-   __IO uint8_t   USBCTRL;                      /**< 0100: USB Control register                                         */
+   __IO uint8_t   USBCTRL;                      /**< 0100: USB Control Register                                         */
         uint8_t   RESERVED_23[3];              
    __I  uint8_t   OBSERVE;                      /**< 0104: USB OTG Observe Register                                     */
         uint8_t   RESERVED_24[3];              
-   __IO uint8_t   CONTROL;                      /**< 0108: USB OTG Control register                                     */
+   __IO uint8_t   CONTROL;                      /**< 0108: USB OTG Control Register                                     */
         uint8_t   RESERVED_25[3];              
    __IO uint8_t   USBTRC0;                      /**< 010C: USB Transceiver Control Register 0                           */
         uint8_t   RESERVED_26[7];              
@@ -8453,7 +8451,7 @@ typedef struct {                                /*       USB0 Structure         
         uint8_t   RESERVED_28[3];              
    __IO uint8_t   KEEP_ALIVE_WKCTRL;            /**< 0128: Keep Alive mode wakeup control                               */
         uint8_t   RESERVED_29[3];              
-   __IO uint8_t   MISCCTRL;                     /**< 012C: Miscellaneous Control register                               */
+   __IO uint8_t   MISCCTRL;                     /**< 012C: Miscellaneous Control Register                               */
         uint8_t   RESERVED_30[3];              
    __IO uint8_t   STALL_IL_DIS;                 /**< 0130: Peripheral mode stall disable for endpoints 7 to 0 in IN direction */
         uint8_t   RESERVED_31[3];              
@@ -8968,7 +8966,7 @@ typedef struct {                                /*       USB0 Structure         
 */
 
 /* ================================================================================ */
-/* ================           VREF (file:VREF_MK82F25615)          ================ */
+/* ================           VREF (file:VREF_MK28F15)             ================ */
 /* ================================================================================ */
 
 /**

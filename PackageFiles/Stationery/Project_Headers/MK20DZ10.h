@@ -6916,7 +6916,7 @@ typedef struct {                                /*       PIT Structure          
 * @{
 */
 typedef struct {                                /*       PMC Structure                                                */
-   __IO uint8_t   LVDSC1;                       /**< 0000: Low Voltage Status and Control 1                             */
+   __IO uint8_t   LVDSC1;                       /**< 0000: Low Voltage Detect Status And Control 1                      */
    __IO uint8_t   LVDSC2;                       /**< 0001: Low Voltage Status and Control 2                             */
    __IO uint8_t   REGSC;                        /**< 0002: Regulator Status and Control                                 */
 } PMC_Type;

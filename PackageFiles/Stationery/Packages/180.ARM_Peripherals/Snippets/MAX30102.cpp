@@ -77,13 +77,13 @@ using namespace USBDM;
 #define REG_REV_ID           (0xFE)
 #define REG_PART_ID          (0xFF)
 
-constexpr uint8_t INTR_STATUS_1_A_FULL   = (1<<7);
-constexpr uint8_t INTR_STATUS_1_PPG_RDY  = (1<<6);
-constexpr uint8_t INTR_STATUS_1_ALC_OVF  = (1<<5);
-constexpr uint8_t INTR_STATUS_1_PROX_INT = (1<<4);
-constexpr uint8_t INTR_STATUS_1_PWR_RDY  = (1<<0);
-
-constexpr uint8_t INTR_STATUS_2_DIE_TEMP_RDY  = (1<<1);
+/* Interrupt status as returned from readIrqStatus */
+constexpr uint16_t INTR_STATUS_DIE_TEMP_RDY  = (1<<9);
+constexpr uint16_t INTR_STATUS_A_FULL        = (1<<7);
+constexpr uint16_t INTR_STATUS_PPG_RDY       = (1<<6);
+constexpr uint16_t INTR_STATUS_ALC_OVF       = (1<<5);
+constexpr uint16_t INTR_STATUS_PROX_INT      = (1<<4);
+constexpr uint16_t INTR_STATUS_PWR_RDY       = (1<<0);
 
 /** How often to do temperature update in measurement 'ticks' **/
 constexpr unsigned TEMP_UPDATE_PERIOD    = 200;
@@ -202,6 +202,22 @@ bool MAX30102base::readReg(uint8_t addr, uint8_t &data) {
    }
    return false;
 }
+/**
+ * @brief        Read and clear IRQ registers
+ *
+ * @param[out]   status  Irq2:Irq1 as 16-bit value
+ *
+ * @return       true on success
+ */
+bool MAX30102base::readIrqStatus(uint16_t &status) {   // Read and clear interrupt status registers
+   // Read 2 bytes [Interrupt Status 1 & 2]
+   uint8_t intStatus[2] = {REG_INTR_STATUS_1};
+   if (i2c.txRx(DEVICE_ADDRESS, 1, intStatus, sizeof(intStatus), intStatus)!=0) {
+      return false;
+   }
+   status = (intStatus[1]<<8)|intStatus[0];
+   return true;
+}
 
 /**
  * @brief        Initialize the MAX30102\n
@@ -220,7 +236,7 @@ bool MAX30102base::startSpo2() {
          /* 0x07 */ 0,  // dummy
          /* 0x08 */ fifoConfigValue(Averages_None,true,15),                            // No averaging, FIFO roll-over, FIFO threshold @ 15 slots left (17 samples)
          /* 0x09 */ fifoModeValue(false, false, ModeSpO2),                             // SpO2 mode
-         /* 0x0A */ spO2Value(AdcRange_4096, SpO2SampleRate_100, LedPulseWidth_411uS), // SpO2 ADC range = 4096nA, SPO2 rate 100 Hz, LED pulseWidth 411uS
+         /* 0x0A */ spO2Value(AdcRange_4096, SpO2SampleRate_100, LedPulseWidth_411uS), // SpO2 ADC range = 4096nA, SPO2 rate 100 Hz, LED pulseWidth 411uS (18-bits)
          /* 0x0B */ 0,  // dummy
          /* 0x0C */ 36,                                                                // ~7mA for Red LED
          /* 0x0D */ 36,                                                                // ~7mA for IR LED
@@ -236,7 +252,6 @@ bool MAX30102base::startSpo2() {
  * @brief        Read a set of samples from the MAX30102 FIFO register
  * @par          Details
  *               This function reads a set of samples from the MAX30102 FIFO register.
- *               Assumes the samples are available - no checks!
  *               It also updates the temperature reading if a new measurement is available.
  *
  * @param[out]   redLed  Red LED data read
@@ -246,14 +261,12 @@ bool MAX30102base::startSpo2() {
  */
 bool MAX30102base::readLeds(uint32_t &redLed, uint32_t &irLed) {
    // Read and clear interrupt status registers
-   // Read 2 bytes [Interrupt Status 1 & 2]
-   uint8_t intStatus[2];
-   intStatus[0]=REG_INTR_STATUS_1;
-   if (i2c.txRx(DEVICE_ADDRESS, 1, intStatus, sizeof(intStatus), intStatus)!=0) {
+   uint16_t intStatus;
+   if (!readIrqStatus(intStatus)) {
       return false;
    }
    // Check for temperature measurement
-   if (intStatus[1]&INTR_STATUS_2_DIE_TEMP_RDY) {
+   if (intStatus&INTR_STATUS_DIE_TEMP_RDY) {
       uint8_t temp[2];
       temp[0]=REG_TEMP_INTEGER;
       if (i2c.txRx(DEVICE_ADDRESS, 1, temp, sizeof(temp), temp)!=0) {
@@ -262,7 +275,7 @@ bool MAX30102base::readLeds(uint32_t &redLed, uint32_t &irLed) {
       temperature = ((int8_t)temp[0])+(temp[1]*0.0625);
    }
    // Check for channel measurement
-   if ((intStatus[0]&INTR_STATUS_1_PPG_RDY) == 0) {
+   if ((intStatus&INTR_STATUS_PPG_RDY) == 0) {
       // No data
       return false;
    }
@@ -329,5 +342,9 @@ bool MAX30102base::startTempMeasurement() {
  * @return       true on success
  */
 bool MAX30102base::reset() {
-   return writeReg(REG_MODE_CONFIG, 0x40);
+   writeReg(REG_MODE_CONFIG, 0x40);
+   USBDM::waitMS(10);
+   // Clear interrupts (if any)
+   uint16_t dummy;
+   return readIrqStatus(dummy);
 }

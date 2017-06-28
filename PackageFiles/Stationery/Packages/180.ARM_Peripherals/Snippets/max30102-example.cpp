@@ -20,28 +20,29 @@
 static constexpr uint32_t SAMPLE_SIGNAL = (1<<0);
 static constexpr uint32_t PROCESS_BLOCK = (1<<0);
 
-// LED connection - change as required
+/** LED connection - change as required */
 using RedLed    = USBDM::gpio_LED_RED;
 using BlueLed   = USBDM::gpio_LED_BLUE;
 using GreenLed  = USBDM::gpio_LED_GREEN;
 
-// Access to main thread
+/** Access to main thread */
 CMSIS::Thread mainThread(CMSIS::Thread::getMyId());
 
-// I2c interface to use
+/** I2c interface to use */
 USBDM::I2c0     i2c;
 
+/** MAX30102 IRQ pin */
 using Max30102IrqPin = USBDM::GpioD<5>;
-
 static_assert(Max30102IrqPin::irqHandlerInstalled, "Irq Handler must be installed for this port");
 
-// MAX30102 connected via I2c and using D5 as Irq pin
+/** MAX30102 connected via I2c and using D5 as Irq pin */
 USBDM::MAX30102<Max30102IrqPin> spo2Sensor(i2c);
-
-using Strobe = USBDM::GpioE<1>;
 
 /** Circular buffer for samples */
 static Spo2Buffer spo2Buffer;
+
+/** Debug - check timing */
+using Strobe = USBDM::GpioE<1>;
 
 /**
  * Thread to handle retrieving a sample from the sensor and saving in
@@ -61,8 +62,11 @@ public:
     * Constructor
     * Thread runs at higher priority but spends most of its time sleeping
     */
-   SampleProcessor() : ThreadClass(osPriorityAboveNormal, 300) {
+   SampleProcessor() : ThreadClass(osPriorityAboveNormal) {
    }
+
+   using Strobe = USBDM::GpioE<1>;
+
 
 private:
    /**
@@ -139,17 +143,21 @@ int main() {
    spo2Sensor.configureInterrupts(callback);
    spo2Sensor.startSpo2();
 
+   printf("Done initialisation\n");
+
    int count = 0;
    for(;;) {
+      // Wait until data accumulates
       CMSIS::Thread::signalWait(PROCESS_BLOCK);
-      uint32_t  spo2;
-      bool      spo2Valid;
-      uint32_t  heartRate;
-      bool      heartRateValid;
+
+      // Process and report data
       Strobe::set();
+      int    spo2,      heartRate;
+      bool   spo2Valid, heartRateValid;
       maxim_heart_rate_and_oxygen_saturation(spo2Buffer, spo2, spo2Valid, heartRate, heartRateValid);
       Strobe::clear();
-      printf("%d:Buffer Processed - SpO2=%4ld:%s, Pulse=:%4ld:%s\n", count++, spo2, spo2Valid?"OK  ":"Fail", heartRate, heartRateValid?"OK  ":"Fail");
+
+      printf("%d:Buffer Processed - SpO2=%4d:%s, Pulse=:%4d:%s\n", count++, spo2, spo2Valid?"OK  ":"Fail", heartRate, heartRateValid?"OK  ":"Fail");
    }
    return 0;
 }

@@ -162,6 +162,9 @@
    <item key="/DAC1/dac_c2_dacbfup"                        value="1" />
    <item key="/DAC1/irqHandlerInstalled"                   value="false" />
    <item key="/DAC1/irqLevel"                              value="0" />
+   <item key="/FTFA/peripheral_file"                       value="ftfa" />
+   <item key="/FTFA/pflash_phrase_size"                    value="4" />
+   <item key="/FTFA/pflash_sector_size"                    value="2048" />
    <item key="/FTM0/clockFrequency"                        value="4.0E7" />
    <item key="/FTM0/clockPeriod"                           value="2.5E-8" />
    <item key="/FTM0/ftmExternalClock"                      value="0" />
@@ -210,6 +213,7 @@
    <item key="/FTM3/maximumPeriod"                         value="0.0016384" />
    <item key="/FTM3/minimumResolution"                     value="100" />
    <item key="/FTM3/period"                                value="10000" />
+   <item key="/Flash/FlashType"                            value="ftfa" />
    <item key="/GPIOA/irqHandlerInstalled"                  value="false" />
    <item key="/GPIOA/irqLevel"                             value="0" />
    <item key="/GPIOB/irqHandlerInstalled"                  value="false" />
@@ -239,7 +243,22 @@
    <item key="/LLWU/llwu_me_wume4"                         value="false" />
    <item key="/LLWU/llwu_me_wume5"                         value="false" />
    <item key="/LLWU/llwu_me_wume7"                         value="false" />
-   <item key="/LLWU/llwu_pins"                             value="" />
+   <item key="/LLWU/llwu_pe1_wupe0"                        value="0" />
+   <item key="/LLWU/llwu_pe1_wupe1"                        value="0" />
+   <item key="/LLWU/llwu_pe1_wupe2"                        value="0" />
+   <item key="/LLWU/llwu_pe1_wupe3"                        value="0" />
+   <item key="/LLWU/llwu_pe2_wupe4"                        value="0" />
+   <item key="/LLWU/llwu_pe2_wupe5"                        value="0" />
+   <item key="/LLWU/llwu_pe2_wupe6"                        value="0" />
+   <item key="/LLWU/llwu_pe2_wupe7"                        value="0" />
+   <item key="/LLWU/llwu_pe3_wupe10"                       value="0" />
+   <item key="/LLWU/llwu_pe3_wupe11"                       value="0" />
+   <item key="/LLWU/llwu_pe3_wupe8"                        value="0" />
+   <item key="/LLWU/llwu_pe3_wupe9"                        value="0" />
+   <item key="/LLWU/llwu_pe4_wupe12"                       value="0" />
+   <item key="/LLWU/llwu_pe4_wupe13"                       value="0" />
+   <item key="/LLWU/llwu_pe4_wupe14"                       value="0" />
+   <item key="/LLWU/llwu_pe4_wupe15"                       value="0" />
    <item key="/LPTMR0/clockFrequency"                      value="16384.0" />
    <item key="/LPTMR0/clockPeriod"                         value="6.103515625E-5" />
    <item key="/LPTMR0/irqHandlerInstalled"                 value="false" />
@@ -329,11 +348,38 @@
    <item key="/RTC/rtc_clkout"                             value="32768" />
    <item key="/RTC/rtc_cr_clko"                            value="true" />
    <item key="/RTC/rtc_cr_osce"                            value="true" />
-   <item key="/RTC/rtc_cr_scp"                             value="4" />
+   <item key="/RTC/rtc_cr_scp"                             value="2" />
    <item key="/RTC/rtc_cr_sup"                             value="false" />
    <item key="/RTC/rtc_cr_um"                              value="false" />
    <item key="/RTC/rtc_cr_wpe"                             value="false" />
+   <item key="/RTC/rtc_day"                                value="1" />
+   <item key="/RTC/rtc_hour"                               value="12" />
    <item key="/RTC/rtc_input_freq"                         value="32768" />
+   <item key="/RTC/rtc_lr_crl"                             value="true" />
+   <item key="/RTC/rtc_lr_lrl"                             value="true" />
+   <item key="/RTC/rtc_lr_srl"                             value="true" />
+   <item key="/RTC/rtc_lr_tcl"                             value="true" />
+   <item key="/RTC/rtc_minute"                             value="0" />
+   <item key="/RTC/rtc_month"                              value="181" />
+   <item key="/RTC/rtc_rar_crr"                            value="true" />
+   <item key="/RTC/rtc_rar_ierr"                           value="true" />
+   <item key="/RTC/rtc_rar_lrr"                            value="true" />
+   <item key="/RTC/rtc_rar_srr"                            value="true" />
+   <item key="/RTC/rtc_rar_tarr"                           value="true" />
+   <item key="/RTC/rtc_rar_tcrr"                           value="true" />
+   <item key="/RTC/rtc_rar_tprr"                           value="true" />
+   <item key="/RTC/rtc_rar_tsrr"                           value="true" />
+   <item key="/RTC/rtc_tcr_cir"                            value="0" />
+   <item key="/RTC/rtc_tcr_tcr"                            value="0" />
+   <item key="/RTC/rtc_war_crw"                            value="true" />
+   <item key="/RTC/rtc_war_ierw"                           value="true" />
+   <item key="/RTC/rtc_war_lrw"                            value="true" />
+   <item key="/RTC/rtc_war_srw"                            value="true" />
+   <item key="/RTC/rtc_war_tarw"                           value="true" />
+   <item key="/RTC/rtc_war_tcrw"                           value="true" />
+   <item key="/RTC/rtc_war_tprw"                           value="true" />
+   <item key="/RTC/rtc_war_tsrw"                           value="true" />
+   <item key="/RTC/rtc_year"                               value="2017" />
    <item key="/RTC/rtcclk_clock"                           value="32768" />
    <item key="/RTC/rtcclk_gated_clock"                     value="32768" />
    <item key="/SIM/busFreq"                                value="60MHz" />
@@ -403,23 +449,23 @@
    <item key="/SIM/system_lpuart_clock"                    value="8000000" />
    <item key="/SIM/system_peripheral_clock"                value="48000000" />
    <item key="/SIM/system_usbfs_clock"                     value="48000000" />
-   <item key="/SMC/smc_pmprot_ahsrun"                      value="true" />
+   <item key="/SMC/smc_pmprot_ahsrun"                      value="false" />
    <item key="/SMC/smc_pmprot_alls"                        value="false" />
-   <item key="/SMC/smc_pmprot_avlls"                       value="true" />
-   <item key="/SMC/smc_pmprot_avlp"                        value="true" />
+   <item key="/SMC/smc_pmprot_avlls"                       value="false" />
+   <item key="/SMC/smc_pmprot_avlp"                        value="false" />
    <item key="/SMC/smc_stopctrl_llsm"                      value="0" />
    <item key="/SMC/smc_stopctrl_porpo"                     value="false" />
    <item key="/SMC/smc_stopctrl_pstopo"                    value="0" />
    <item key="/SPI0/irqHandlerInstalled"                   value="false" />
    <item key="/SPI0/irqLevel"                              value="0" />
-   <item key="/SPI0/speed"                                 value="100000" />
+   <item key="/SPI0/speed"                                 value="10000000" />
    <item key="/SPI0/spi_lsbfe"                             value="false" />
-   <item key="/SPI0/spi_mode"                              value="1" />
+   <item key="/SPI0/spi_mode"                              value="0" />
    <item key="/SPI1/irqHandlerInstalled"                   value="false" />
    <item key="/SPI1/irqLevel"                              value="0" />
-   <item key="/SPI1/speed"                                 value="100000" />
+   <item key="/SPI1/speed"                                 value="10000000" />
    <item key="/SPI1/spi_lsbfe"                             value="false" />
-   <item key="/SPI1/spi_mode"                              value="1" />
+   <item key="/SPI1/spi_mode"                              value="0" />
    <item key="/UART0/clockSource"                          value="SystemCoreClock" />
    <item key="/UART0/defaultBaudRate"                      value="115200" />
    <item key="/UART0/irqHandlerInstalled"                  value="false" />

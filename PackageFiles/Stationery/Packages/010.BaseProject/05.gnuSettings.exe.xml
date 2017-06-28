@@ -64,5 +64,41 @@
          </projectOption>
       </projectActionList>
 
+      <!-- Floating point library option-->
+      <projectActionList id="printf-actions" >
+         <applyWhen>
+            <variableRef idRef="useFloatingpointInPrintf" condition="isTrue" />
+         </applyWhen>
+         <projectOption id="net.sourceforge.usbdm.cdt.toolchain.c.linker.printfFloat">
+            <value>true</value>
+         </projectOption>
+         <projectOption id="net.sourceforge.usbdm.cdt.toolchain.cpp.linker.printfFloat">
+            <value>true</value>
+         </projectOption>
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
+            <value>FLOATING_POINT_PRINTF</value>
+         </projectOption>
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols">
+            <value>FLOATING_POINT_PRINTF</value>
+         </projectOption>
+      </projectActionList>
+      <projectActionList id="scanf-actions" >
+         <applyWhen>
+            <variableRef idRef="useFloatingpointInScanf" condition="isTrue" />
+         </applyWhen>
+         <projectOption id="net.sourceforge.usbdm.cdt.toolchain.c.linker.scanfFloat">
+            <value>true</value>
+         </projectOption>
+         <projectOption id="net.sourceforge.usbdm.cdt.toolchain.cpp.linker.scanfFloat">
+            <value>true</value>
+         </projectOption>
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
+            <value>FLOATING_POINT_SCANF</value>
+         </projectOption>
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols">
+            <value>FLOATING_POINT_SCANF</value>
+         </projectOption>
+      </projectActionList>
+
    </projectActionList>
 </root>

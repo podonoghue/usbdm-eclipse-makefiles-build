@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE device>
+<device
+   schemaVersion="1.1"
+   xmlns:xi="http://www.w3.org/2001/XInclude"
+   xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd"
+>
+   <name>MK28F15</name>
+   <version>1.6</version>
+   <description>MK28F15 NXP Microcontroller</description>
+   <cpu>
+      <name>CM4</name>
+      <revision>r0p1</revision>
+      <endian>little</endian>
+      <mpuPresent>false</mpuPresent>
+      <fpuPresent>true</fpuPresent>
+      <vtorPresent>true</vtorPresent>
+      <nvicPrioBits>4</nvicPrioBits>
+      <vendorSystickConfig>false</vendorSystickConfig>
+   </cpu>
+   <addressUnitBits>8</addressUnitBits>
+   <width>32</width>
+   <peripherals>
+      <xi:include href="peripherals/ADC0_DIFF_A.svd.xml"/>
+      <xi:include href="peripherals/AIPS0_MK28F15.svd.xml"/>
+      <peripheral derivedFrom="AIPS0"><name>AIPS1</name><baseAddress>0x40080000</baseAddress></peripheral>
+      <xi:include href="peripherals/AXBS_8M01234567_6S.svd.xml"/>
+      <xi:include href="peripherals/CAU_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/CMP0_MK28F15.svd.xml"/>
+      <peripheral derivedFrom="CMP0"><name>CMP1</name><baseAddress>0x40073008</baseAddress></peripheral>
+      <xi:include href="peripherals/CMT_0.svd.xml"/>
+      <xi:include href="peripherals/CRC0_0x40032000.svd.xml"/>
+      <xi:include href="peripherals/DAC0_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/DMA_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/DMAMUX0_32CH_TRIG_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/EWM_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/FB_0.svd.xml"/>
+      <xi:include href="peripherals/FLEXIO0_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/FMC_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/FTFE_XACCH.svd.xml"/>
+      <xi:include href="peripherals/FTM0_8CH_ICRST.svd.xml"/>
+      <xi:include href="peripherals/FTM1_MK28F15.svd.xml"/>
+      <peripheral derivedFrom="FTM1"><name>FTM2</name><baseAddress>0x400B8000</baseAddress></peripheral>
+      <peripheral derivedFrom="FTM0"><name>FTM3</name><baseAddress>0x400B9000</baseAddress></peripheral>
+      <xi:include href="peripherals/GPIOA_0x400FF000.svd.xml"/>
+      <peripheral derivedFrom="GPIOA"><name>GPIOB</name><baseAddress>0x400FF040</baseAddress></peripheral>
+      <peripheral derivedFrom="GPIOA"><name>GPIOC</name><baseAddress>0x400FF080</baseAddress></peripheral>
+      <peripheral derivedFrom="GPIOA"><name>GPIOD</name><baseAddress>0x400FF0C0</baseAddress></peripheral>
+      <peripheral derivedFrom="GPIOA"><name>GPIOE</name><baseAddress>0x400FF100</baseAddress></peripheral>
+      <xi:include href="peripherals/I2C0_MK28F15.svd.xml"/>
+      <peripheral derivedFrom="I2C0"><name>I2C1</name><baseAddress>0x40067000</baseAddress></peripheral>
+      <peripheral derivedFrom="I2C0"><name>I2C2</name><baseAddress>0x400E6000</baseAddress></peripheral>
+      <peripheral derivedFrom="I2C0"><name>I2C3</name><baseAddress>0x400E7000</baseAddress></peripheral>
+      <xi:include href="peripherals/I2S0_MK28F15.svd.xml"/>
+      <peripheral derivedFrom="I2S0"><name>I2S1</name><baseAddress>0x400AF000</baseAddress></peripheral>
+      <xi:include href="peripherals/LLWU_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/LMEM_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/LPTMR0_0.svd.xml"/>
+      <peripheral derivedFrom="LPTMR0"><name>LPTMR1</name><baseAddress>0x40044000</baseAddress></peripheral>
+      <xi:include href="peripherals/LPUART0_FIFO_0x400C4000.svd.xml"/>
+      <peripheral derivedFrom="LPUART0"><name>LPUART1</name><baseAddress>0x400C5000</baseAddress></peripheral>
+      <peripheral derivedFrom="LPUART0"><name>LPUART2</name><baseAddress>0x400C6000</baseAddress></peripheral>
+      <peripheral derivedFrom="LPUART0"><name>LPUART3</name><baseAddress>0x400C7000</baseAddress></peripheral>
+      <peripheral derivedFrom="LPUART0"><name>LPUART4</name><baseAddress>0x400D6000</baseAddress></peripheral>
+      <xi:include href="peripherals/MCG_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/MCM_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/NV_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/NVIC_CM4.svd.xml"/>
+      <xi:include href="peripherals/OSC0_DIV.svd.xml"/>
+      <xi:include href="peripherals/PDB0_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/PIT_4CH_LTMR64.svd.xml"/>
+      <xi:include href="peripherals/PMC_HVD_SRAM.svd.xml"/>
+      <xi:include href="peripherals/PORTA.svd.xml"/>
+      <peripheral derivedFrom="PORTA"><name>PORTB</name><baseAddress>0x4004A000</baseAddress></peripheral>
+      <peripheral derivedFrom="PORTA"><name>PORTC</name><baseAddress>0x4004B000</baseAddress></peripheral>
+      <xi:include href="peripherals/PORTD_DFER.svd.xml"/>
+      <peripheral derivedFrom="PORTA"><name>PORTE</name><baseAddress>0x4004D000</baseAddress></peripheral>
+      <xi:include href="peripherals/QSPI0_0x400DA000.svd.xml"/>
+      <xi:include href="peripherals/RCM_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/RFSYS_0.svd.xml"/>
+      <xi:include href="peripherals/RFVBAT_0.svd.xml"/>
+      <xi:include href="peripherals/RTC_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/SCB_CM4_CPACR_FPCCR.svd.xml"/>
+      <xi:include href="peripherals/SDHC_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/SDRAMC_0.svd.xml"/>
+      <xi:include href="peripherals/SIM_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/SMC_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/SPI0_MK_PCSIS6_PCSSE.svd.xml"/>
+      <peripheral derivedFrom="SPI0"><name>SPI1</name><baseAddress>0x4002D000</baseAddress></peripheral>
+      <peripheral derivedFrom="SPI0"><name>SPI2</name><baseAddress>0x400AC000</baseAddress></peripheral>
+      <peripheral derivedFrom="SPI0"><name>SPI3</name><baseAddress>0x400AD000</baseAddress></peripheral>
+      <xi:include href="peripherals/SYSMPU_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/SYST.svd.xml"/>
+      <xi:include href="peripherals/TPM1_MK28F15.svd.xml"/>
+      <peripheral derivedFrom="TPM1"><name>TPM2</name><baseAddress>0x400CA000</baseAddress></peripheral>
+      <xi:include href="peripherals/TRNG0_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/TSI0_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/USB0_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/USBDCD_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/USBHS_8ENDPT.svd.xml"/>
+      <peripheral derivedFrom="USBDCD"><name>USBHSDCD</name><baseAddress>0x400A3000</baseAddress></peripheral>
+      <xi:include href="peripherals/USBPHY_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/VREF_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/WDOG_MK.svd.xml"/>
+   </peripherals>
+   <vendorExtensions>
+   <xi:include href="vectorTables/MK28F15_VectorTable.svd.xml"/>
+   </vendorExtensions>
+</device>

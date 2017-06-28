@@ -373,6 +373,9 @@ Test Devices:
       <memory id="kinetis64K_192K_Ram" type="ram">
          <memoryRange start="0x1FFF0000" size="256K"  name="ram" />
       </memory>
+      <memory id="kinetis256K_256K_Ram" type="ram">
+         <memoryRange middle="0x20000000" size="512K" name="ram" />
+      </memory>
       
       <!-- 
             Flash Memory
@@ -2459,6 +2462,32 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4F-register-description" />
          <note>K24P144M120SF5RM</note>
       </device>
+<!-- MK27-M15 -->
+      <device name="MK27FN2M0M15" family="CortexM4F" subfamily="MK27F15">
+         <memoryRef ref="kinetis256K_256K_Ram" />
+         <memoryRef ref="FTFE_PFlash0_SEC_512K_4KS" />
+         <memoryRef ref="FTFE_PFlash1_512K_4KS" />
+         <memoryRef ref="FTFE_PFlash2_512K_4KS" />
+         <memoryRef ref="FTFE_PFlash3_512K_4KS" />
+         <memoryRef ref="kinetisIO_MK" />
+         <sdid value="0x27000F80" mask="0xFFF00F80" />
+         <tclScriptRef ref="Kinetis-MKxx-Scripts" />
+         <flashProgramRef ref="Kinetis-FTFE-MK-flash-program" />
+         <registerDescriptionRef ref="CortexM4F-register-description" />
+      </device>
+<!-- MK28-M15 -->
+      <device name="MK28FN2M0M15" family="CortexM4F" subfamily="MK28F15">
+         <memoryRef ref="kinetis256K_256K_Ram" />
+         <memoryRef ref="FTFE_PFlash0_SEC_512K_4KS" />
+         <memoryRef ref="FTFE_PFlash1_512K_4KS" />
+         <memoryRef ref="FTFE_PFlash2_512K_4KS" />
+         <memoryRef ref="FTFE_PFlash3_512K_4KS" />
+         <memoryRef ref="kinetisIO_MK" />
+         <sdid value="0x28000F80" mask="0xFFF00F80" />
+         <tclScriptRef ref="Kinetis-MKxx-Scripts" />
+         <flashProgramRef ref="Kinetis-FTFE-MK-flash-program" />
+         <registerDescriptionRef ref="CortexM4F-register-description" />
+      </device>
 <!-- MK30-M7 -->
       <device name="MK30DX64M7" family="CortexM4" subfamily="MK30D7">
          <memoryRef ref="kinetis16K_16K_Ram" />
@@ -3135,6 +3164,7 @@ Test Devices:
       <device name="FRDM_K20D50M"    alias="MK20DX128M5"    hardware="frdmk20d50m" />
       <device name="FRDM_K22F1M0"    alias="MK22FN1M0AM12"  hardware="frdmk22f1m0" />
       <device name="FRDM_K22F"       alias="MK22FN512M12"   hardware="frdmk22f" />
+      <device name="FRDM_K28F"       alias="MK28FN2M0M15"   hardware="frdmk28f" />
       <device name="FRDM_K64F"       alias="MK64FN1M0M12"   hardware="frdmk64f" />
       <device name="FRDM_K66F"       alias="MK66FN2M0M18"   hardware="frdmk66f" />
       <device name="FRDM_K82F"       alias="MK82FN256M15"   hardware="frdmk82f" />

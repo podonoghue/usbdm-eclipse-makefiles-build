@@ -55,7 +55,8 @@ namespace USBDM {
 /**
  * Default PCR value for pins used as GPIO (including multiplexor value)
  */
-static constexpr PcrValue ADC_DEFAULT_PCR = pcrValue(PinPullNone, PinDriveLow, PinPushPull, PinIrqNone, PinMuxAnalogue);
+static constexpr PcrValue ADC_DEFAULT_PCR = pcrValue(
+      PinPullNone, PinDriveStrengthLow, PinDriveModePushPull, PinIrqNone, PinFilterNone, PinSlewRateFast, PinMuxAnalogue);
 
 /**
  * ADC Resolutions for use with AnalogueIO::setMode()
@@ -166,23 +167,23 @@ public:
    /**
     * Set conversion mode
     *
-    * @param resolution Resolution for converter e.g. AdcResolution_16bit_se
+    * @param adcResolution Resolution for converter e.g. AdcResolution_16bit_se
     *
     * @note This affects all channels on the ADC
     */
-   static void setResolution(AdcResolution resolution = AdcResolution_16bit_se) {
-      adc->CFG1 = (Info::cfg1&~ADC_CFG1_MODE_MASK)|(resolution&ADC_CFG1_MODE_MASK);
+   static void setResolution(AdcResolution adcResolution = AdcResolution_16bit_se) {
+      adc->CFG1 = (Info::cfg1&~ADC_CFG1_MODE_MASK)|(adcResolution&ADC_CFG1_MODE_MASK);
    }
 
    /**
     * Set averaging mode
     *
-    * @param mode Mode for averaging e.g. AdcAveraging_4 etc
+    * @param adcAveraging Mode for averaging e.g. AdcAveraging_4 etc
     *
     * @note This affects all channels on the ADC
     */
-   static void setAveraging(AdcAveraging mode = AdcAveraging_4) {
-      adc->SC3 = (ADC_SC3_AVGE_MASK|ADC_SC3_AVGS_MASK)&mode;
+   static void setAveraging(AdcAveraging adcAveraging = AdcAveraging_4) {
+      adc->SC3 = (ADC_SC3_AVGE_MASK|ADC_SC3_AVGS_MASK)|adcAveraging;
    }
 
    /**

@@ -262,8 +262,8 @@ extern void PDB2_IRQHandler(void);             /**< Programmable Delay Block    
 * @{
 */
 typedef struct {                                /*       ADC0 Structure                                               */
-   __IO uint32_t  SC1A;                         /**< 0000: ADC Status and Control Registers 1                           */
-   __IO uint32_t  SC1B;                         /**< 0004: ADC Status and Control Registers 1                           */
+   __IO uint32_t  SC1A;                         /**< 0000: ADC Status and Control Register 1                            */
+   __IO uint32_t  SC1B;                         /**< 0004: ADC Status and Control Register 1                            */
    __IO uint32_t  SC1C;                         /**< 0008: ADC Status and Control Registers 1                           */
    __IO uint32_t  SC1D;                         /**< 000C: ADC Status and Control Registers 1                           */
    __IO uint32_t  SC1E;                         /**< 0010: ADC Status and Control Registers 1                           */

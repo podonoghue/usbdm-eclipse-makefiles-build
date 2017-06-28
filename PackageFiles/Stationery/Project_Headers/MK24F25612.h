@@ -3031,10 +3031,7 @@ typedef struct {                                /*       FMC Structure          
    __IO uint32_t  PFB1CR;                       /**< 0008: Flash Bank 1 Control Register                                */
         uint8_t   RESERVED_0[244];             
    struct {
-      __IO uint32_t  S0;                        /**< 0100: Cache Tag Storage                                            */
-      __IO uint32_t  S1;                        /**< 0104: Cache Tag Storage                                            */
-      __IO uint32_t  S2;                        /**< 0108: Cache Tag Storage                                            */
-      __IO uint32_t  S3;                        /**< 010C: Cache Tag Storage                                            */
+      __IO uint32_t  S[4];                      /**< 0100: Cache Tag Storage                                            */
    } TAGVDW[4];                                 /**< 0100: (cluster: size=0x0040, 64)                                   */
         uint8_t   RESERVED_2[192];             
    struct {
@@ -3136,34 +3133,13 @@ typedef struct {                                /*       FMC Structure          
 #define FMC_PFB1CR_B1RWSC_MASK                   (0xF0000000U)                                       /*!< FMC_PFB1CR.B1RWSC Mask                  */
 #define FMC_PFB1CR_B1RWSC_SHIFT                  (28U)                                               /*!< FMC_PFB1CR.B1RWSC Position              */
 #define FMC_PFB1CR_B1RWSC(x)                     (((uint32_t)(((uint32_t)(x))<<28U))&0xF0000000UL)   /*!< FMC_PFB1CR.B1RWSC Field                 */
-/* ------- S0 Bit Fields                            ------ */
-#define FMC_S0_valid_MASK                        (0x1U)                                              /*!< FMC_S0.valid Mask                       */
-#define FMC_S0_valid_SHIFT                       (0U)                                                /*!< FMC_S0.valid Position                   */
-#define FMC_S0_valid(x)                          (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< FMC_S0.valid Field                      */
-#define FMC_S0_tag_MASK                          (0xFFFC0U)                                          /*!< FMC_S0.tag Mask                         */
-#define FMC_S0_tag_SHIFT                         (6U)                                                /*!< FMC_S0.tag Position                     */
-#define FMC_S0_tag(x)                            (((uint32_t)(((uint32_t)(x))<<6U))&0xFFFC0UL)       /*!< FMC_S0.tag Field                        */
-/* ------- S1 Bit Fields                            ------ */
-#define FMC_S1_valid_MASK                        (0x1U)                                              /*!< FMC_S1.valid Mask                       */
-#define FMC_S1_valid_SHIFT                       (0U)                                                /*!< FMC_S1.valid Position                   */
-#define FMC_S1_valid(x)                          (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< FMC_S1.valid Field                      */
-#define FMC_S1_tag_MASK                          (0xFFFC0U)                                          /*!< FMC_S1.tag Mask                         */
-#define FMC_S1_tag_SHIFT                         (6U)                                                /*!< FMC_S1.tag Position                     */
-#define FMC_S1_tag(x)                            (((uint32_t)(((uint32_t)(x))<<6U))&0xFFFC0UL)       /*!< FMC_S1.tag Field                        */
-/* ------- S2 Bit Fields                            ------ */
-#define FMC_S2_valid_MASK                        (0x1U)                                              /*!< FMC_S2.valid Mask                       */
-#define FMC_S2_valid_SHIFT                       (0U)                                                /*!< FMC_S2.valid Position                   */
-#define FMC_S2_valid(x)                          (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< FMC_S2.valid Field                      */
-#define FMC_S2_tag_MASK                          (0xFFFC0U)                                          /*!< FMC_S2.tag Mask                         */
-#define FMC_S2_tag_SHIFT                         (6U)                                                /*!< FMC_S2.tag Position                     */
-#define FMC_S2_tag(x)                            (((uint32_t)(((uint32_t)(x))<<6U))&0xFFFC0UL)       /*!< FMC_S2.tag Field                        */
-/* ------- S3 Bit Fields                            ------ */
-#define FMC_S3_valid_MASK                        (0x1U)                                              /*!< FMC_S3.valid Mask                       */
-#define FMC_S3_valid_SHIFT                       (0U)                                                /*!< FMC_S3.valid Position                   */
-#define FMC_S3_valid(x)                          (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< FMC_S3.valid Field                      */
-#define FMC_S3_tag_MASK                          (0xFFFC0U)                                          /*!< FMC_S3.tag Mask                         */
-#define FMC_S3_tag_SHIFT                         (6U)                                                /*!< FMC_S3.tag Position                     */
-#define FMC_S3_tag(x)                            (((uint32_t)(((uint32_t)(x))<<6U))&0xFFFC0UL)       /*!< FMC_S3.tag Field                        */
+/* ------- S Bit Fields                             ------ */
+#define FMC_S_valid_MASK                         (0x1U)                                              /*!< FMC_S.valid Mask                        */
+#define FMC_S_valid_SHIFT                        (0U)                                                /*!< FMC_S.valid Position                    */
+#define FMC_S_valid(x)                           (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< FMC_S.valid Field                       */
+#define FMC_S_tag_MASK                           (0xFFFC0U)                                          /*!< FMC_S.tag Mask                          */
+#define FMC_S_tag_SHIFT                          (6U)                                                /*!< FMC_S.tag Position                      */
+#define FMC_S_tag(x)                             (((uint32_t)(((uint32_t)(x))<<6U))&0xFFFC0UL)       /*!< FMC_S.tag Field                         */
 /* ------- S0UM Bit Fields                          ------ */
 #define FMC_S0UM_data_MASK                       (0xFFFFFFFFU)                                       /*!< FMC_S0UM.data Mask                      */
 #define FMC_S0UM_data_SHIFT                      (0U)                                                /*!< FMC_S0UM.data Position                  */

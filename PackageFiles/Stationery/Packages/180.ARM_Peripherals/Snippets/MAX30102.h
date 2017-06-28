@@ -137,6 +137,14 @@ public:
     */
    bool readReg(uint8_t addr, uint8_t &data);
    /**
+    * @brief        Read and clear IRQ registers
+    *
+    * @param[out]   status  Irq2:Irq1 as 16-bit value
+    *
+    * @return       true on success
+    */
+   bool readIrqStatus(uint16_t &status);
+   /**
     * @brief        Reset the MAX30102
     *
     * @return       true on success

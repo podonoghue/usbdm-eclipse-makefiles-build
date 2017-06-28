@@ -165,7 +165,7 @@ static constexpr uint32_t  XTAL_DEFAULT_PCR = 0;
  * @tparam bitNum          Bit number e.g. 3
  * @tparam defPcrValue     Default value for PCR (including MUX value)
  */
-template<uint32_t clockMask, uint32_t pcrAddress, int32_t bitNum, uint32_t defPcrValue>
+template<uint32_t clockMask, uint32_t pcrAddress, int32_t bitNum, PcrValue defPcrValue>
 class Pcr_T {
 
 private:
@@ -199,9 +199,9 @@ public:
     * Set pin PCR value\n
     * The clock to the port will be enabled before changing the PCR
     *
-    * @param pcrValue PCR value made up of PORT_PCR_x masks including MUX value
+    * @param pcrValue PCR value constructed using pcrValue() including MUX value. See See \ref pcrValue()
     */
-   static void setPCR(uint32_t pcrValue=defPcrValue) {
+   static void setPCR(PcrValue pcrValue=defPcrValue) {
       if ((pcrAddress != 0) && (bitNum >= 0)) {
          enablePortClocks(clockMask);
 
@@ -215,8 +215,8 @@ public:
     *
     * @param muxValue PCR MUX value [0..7]
     */
-   static void setMux(uint32_t muxValue) {
-      *pcrReg = (*pcrReg&~PORT_PCR_MUX_MASK)|PORT_PCR_MUX(muxValue);
+   static void setMux(PinMux pinMux) {
+      *pcrReg = (*pcrReg&~PORT_PCR_MUX_MASK)|PORT_PCR_MUX(pinMux);
    }
 
 };

@@ -54,32 +54,30 @@ struct Pair {
 };
 
 /** Maximum number of items that can accumulate while the measurement buffer is processed */
-static constexpr uint32_t BUFFER_MARGIN   = 20;
+static constexpr int BUFFER_MARGIN   = 20;
 /** Size of buffer - determines the period of sampling */
-static constexpr uint32_t BUFFER_SIZE     = 5*100;
+static constexpr int BUFFER_SIZE     = 5*100;
 /** How often to update buffer calculations (in samples) */
-static constexpr uint32_t UPDATE_INTERVAL = 100;
+static constexpr int UPDATE_INTERVAL = 100;
 
 /**
  * Circular buffer holding measurements.\n
  * The buffer is made slightly larger than the nominal size to allow for new measurements to
  * accumulate while the last set of measurements is processed.
  */
-using Spo2Buffer = CircularBuffer<BUFFER_SIZE+BUFFER_MARGIN,Pair>;
+using Spo2Buffer = CircularBuffer<(BUFFER_SIZE+BUFFER_MARGIN),Pair>;
 
 /**
  * @brief        Calculate the heart rate and SpO2 level
  * @par          Details
- *               By detecting  peaks of PPG cycle and corresponding AC/DC of red/infra-red signal, the ratio for the SPO2 is computed.
- *               Since this algorithm is aiming for Arm M0/M3. Formula for SPO2 did not achieve the accuracy due to register overflow.
- *               Thus, accurate SPO2 is precalculated and save long uch_spo2_table[] per each ratio.
+ *               By detecting peaks of PPG cycle and corresponding AC/DC of red/infra-red signal, the ratio for the SPO2 is computed.
  *
- * @param[in]  spo2Buffer      - Buffer contains MAX30102 IR LED and Red LED values
- * @param[out] pn_spo2         - Calculated SpO2 value
- * @param[out] pch_spo2_valid  - Indicates if the calculated SpO2 value is valid
- * @param[out] pn_heart_rate   - Calculated heart rate value
- * @param[out] pch_hr_valid    - Indicates if the calculated heart rate value is valid
+ * @param[in]  spo2Buffer       - Buffer contains MAX30102 IR LED and Red LED values
+ * @param[out] sp02Value        - Calculated SpO2 value
+ * @param[out] sp02IsValid      - Indicates if the calculated SpO2 value is valid
+ * @param[out] heartRateValue   - Calculated heart rate value
+ * @param[out] heartRateIsValid - Indicates if the calculated heart rate value is valid
  */
-void maxim_heart_rate_and_oxygen_saturation(Spo2Buffer &spo2Buffer, uint32_t &pn_spo2, bool &pch_spo2_valid, uint32_t &pn_heart_rate, bool &pch_hr_valid);
+void maxim_heart_rate_and_oxygen_saturation(Spo2Buffer &spo2Buffer, int &sp02Value, bool &sp02IsValid, int &heartRateValue, bool &heartRateIsValid);
 
 #endif /* SPO2_ALGORITHM_H_ */

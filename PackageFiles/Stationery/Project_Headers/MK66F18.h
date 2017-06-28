@@ -5345,8 +5345,8 @@ typedef struct {                                /*       FTFE Structure         
    __IO uint8_t   FPROT1;                       /**< 0012: Program Flash Protection                                     */
    __IO uint8_t   FPROT0;                       /**< 0013: Program Flash Protection                                     */
         uint8_t   RESERVED_0[2];               
-   __IO uint8_t   FEPROT;                       /**< 0016: EEPROM Protection Register                                   */
-   __IO uint8_t   FDPROT;                       /**< 0017: Data Flash Protection Register                               */
+   __IO uint8_t   FEPROT;                       /**< 0016: EEPROM Protection Register (If EEPROM present)               */
+   __IO uint8_t   FDPROT;                       /**< 0017: Data Flash Protection Register  (If Data Flash present)      */
    __I  uint8_t   XACCH3;                       /**< 0018: Execute-only Access                                          */
    __I  uint8_t   XACCH2;                       /**< 0019: Execute-only Access                                          */
    __I  uint8_t   XACCH1;                       /**< 001A: Execute-only Access                                          */
@@ -7937,7 +7937,7 @@ typedef struct {                                /*       LPUART0 Structure      
 */
 
 /* ================================================================================ */
-/* ================           MCG (file:MCG_MK65F18)               ================ */
+/* ================           MCG (file:MCG_MK28F15)               ================ */
 /* ================================================================================ */
 
 /**
@@ -12231,7 +12231,7 @@ typedef struct {                                /*       TPM1 Structure         
 */
 
 /* ================================================================================ */
-/* ================           TSI0 (file:TSI0_MK65)                ================ */
+/* ================           TSI0 (file:TSI0_MK28F15)             ================ */
 /* ================================================================================ */
 
 /**
@@ -12243,9 +12243,9 @@ typedef struct {                                /*       TPM1 Structure         
 * @{
 */
 typedef struct {                                /*       TSI0 Structure                                               */
-   __IO uint32_t  GENCS;                        /**< 0000: TSI General Control and Status Register                      */
-   __IO uint32_t  DATA;                         /**< 0004: TSI DATA Register                                            */
-   __IO uint32_t  TSHD;                         /**< 0008: TSI Threshold Register                                       */
+   __IO uint32_t  GENCS;                        /**< 0000: General Control and Status Register                          */
+   __IO uint32_t  DATA;                         /**< 0004: DATA Register                                                */
+   __IO uint32_t  TSHD;                         /**< 0008: Threshold Register                                           */
 } TSI_Type;
 
 /**
@@ -13939,9 +13939,9 @@ typedef struct {                                /*       USBHS Structure        
 #define USBHS_FRINDEX_FRINDEX_MASK               (0x3FFFU)                                           /*!< USBHS_FRINDEX.FRINDEX Mask              */
 #define USBHS_FRINDEX_FRINDEX_SHIFT              (0U)                                                /*!< USBHS_FRINDEX.FRINDEX Position          */
 #define USBHS_FRINDEX_FRINDEX(x)                 (((uint32_t)(((uint32_t)(x))<<0U))&0x3FFFUL)        /*!< USBHS_FRINDEX.FRINDEX Field             */
-#define USBHS_FRINDEX_Reerved_MASK               (0xFFFFC000U)                                       /*!< USBHS_FRINDEX.Reerved Mask              */
-#define USBHS_FRINDEX_Reerved_SHIFT              (14U)                                               /*!< USBHS_FRINDEX.Reerved Position          */
-#define USBHS_FRINDEX_Reerved(x)                 (((uint32_t)(((uint32_t)(x))<<14U))&0xFFFFC000UL)   /*!< USBHS_FRINDEX.Reerved Field             */
+#define USBHS_FRINDEX_Reserved_MASK              (0xFFFFC000U)                                       /*!< USBHS_FRINDEX.Reserved Mask             */
+#define USBHS_FRINDEX_Reserved_SHIFT             (14U)                                               /*!< USBHS_FRINDEX.Reserved Position         */
+#define USBHS_FRINDEX_Reserved(x)                (((uint32_t)(((uint32_t)(x))<<14U))&0xFFFFC000UL)   /*!< USBHS_FRINDEX.Reserved Field            */
 /* ------- DEVICEADDR Bit Fields                    ------ */
 #define USBHS_DEVICEADDR_USBADRA_MASK            (0x1000000U)                                        /*!< USBHS_DEVICEADDR.USBADRA Mask           */
 #define USBHS_DEVICEADDR_USBADRA_SHIFT           (24U)                                               /*!< USBHS_DEVICEADDR.USBADRA Position       */
@@ -13965,9 +13965,9 @@ typedef struct {                                /*       USBHS Structure        
 #define USBHS_TTCTRL_TTHA_MASK                   (0x7F000000U)                                       /*!< USBHS_TTCTRL.TTHA Mask                  */
 #define USBHS_TTCTRL_TTHA_SHIFT                  (24U)                                               /*!< USBHS_TTCTRL.TTHA Position              */
 #define USBHS_TTCTRL_TTHA(x)                     (((uint32_t)(((uint32_t)(x))<<24U))&0x7F000000UL)   /*!< USBHS_TTCTRL.TTHA Field                 */
-#define USBHS_TTCTRL_Reerved_MASK                (0x80000000U)                                       /*!< USBHS_TTCTRL.Reerved Mask               */
-#define USBHS_TTCTRL_Reerved_SHIFT               (31U)                                               /*!< USBHS_TTCTRL.Reerved Position           */
-#define USBHS_TTCTRL_Reerved(x)                  (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< USBHS_TTCTRL.Reerved Field              */
+#define USBHS_TTCTRL_Reserved_MASK               (0x80000000U)                                       /*!< USBHS_TTCTRL.Reserved Mask              */
+#define USBHS_TTCTRL_Reserved_SHIFT              (31U)                                               /*!< USBHS_TTCTRL.Reserved Position          */
+#define USBHS_TTCTRL_Reserved(x)                 (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< USBHS_TTCTRL.Reserved Field             */
 /* ------- BURSTSIZE Bit Fields                     ------ */
 #define USBHS_BURSTSIZE_RXPBURST_MASK            (0xFFU)                                             /*!< USBHS_BURSTSIZE.RXPBURST Mask           */
 #define USBHS_BURSTSIZE_RXPBURST_SHIFT           (0U)                                                /*!< USBHS_BURSTSIZE.RXPBURST Position       */
@@ -15009,9 +15009,9 @@ typedef struct {                                /*       USBPHY Structure       
 #define USBPHY_USB1_VBUS_DETECT_VBUSVALID_TO_SESSVALID_MASK (0x40000U)                               /*!< USBPHY_USB1_VBUS_DETECT.VBUSVALID_TO_SESSVALID Mask*/
 #define USBPHY_USB1_VBUS_DETECT_VBUSVALID_TO_SESSVALID_SHIFT (18U)                                   /*!< USBPHY_USB1_VBUS_DETECT.VBUSVALID_TO_SESSVALID Position*/
 #define USBPHY_USB1_VBUS_DETECT_VBUSVALID_TO_SESSVALID(x) (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL) /*!< USBPHY_USB1_VBUS_DETECT.VBUSVALID_TO_SESSVALID Field*/
-#define USBPHY_USB1_VBUS_DETECT_PWRUP_CMPS_MASK  (0x700000U)                                         /*!< USBPHY_USB1_VBUS_DETECT.PWRUP_CMPS Mask */
+#define USBPHY_USB1_VBUS_DETECT_PWRUP_CMPS_MASK  (0x100000U)                                         /*!< USBPHY_USB1_VBUS_DETECT.PWRUP_CMPS Mask */
 #define USBPHY_USB1_VBUS_DETECT_PWRUP_CMPS_SHIFT (20U)                                               /*!< USBPHY_USB1_VBUS_DETECT.PWRUP_CMPS Position*/
-#define USBPHY_USB1_VBUS_DETECT_PWRUP_CMPS(x)    (((uint32_t)(((uint32_t)(x))<<20U))&0x700000UL)     /*!< USBPHY_USB1_VBUS_DETECT.PWRUP_CMPS Field*/
+#define USBPHY_USB1_VBUS_DETECT_PWRUP_CMPS(x)    (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< USBPHY_USB1_VBUS_DETECT.PWRUP_CMPS Field*/
 #define USBPHY_USB1_VBUS_DETECT_DISCHARGE_VBUS_MASK (0x4000000U)                                     /*!< USBPHY_USB1_VBUS_DETECT.DISCHARGE_VBUS Mask*/
 #define USBPHY_USB1_VBUS_DETECT_DISCHARGE_VBUS_SHIFT (26U)                                           /*!< USBPHY_USB1_VBUS_DETECT.DISCHARGE_VBUS Position*/
 #define USBPHY_USB1_VBUS_DETECT_DISCHARGE_VBUS(x) (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)   /*!< USBPHY_USB1_VBUS_DETECT.DISCHARGE_VBUS Field*/
@@ -15025,15 +15025,15 @@ typedef struct {                                /*       USBPHY Structure       
 #define USBPHY_USB1_VBUS_DETECT_SET_VBUSVALID_TO_SESSVALID_MASK (0x40000U)                           /*!< USBPHY_USB1_VBUS_DETECT_SET.VBUSVALID_TO_SESSVALID Mask*/
 #define USBPHY_USB1_VBUS_DETECT_SET_VBUSVALID_TO_SESSVALID_SHIFT (18U)                               /*!< USBPHY_USB1_VBUS_DETECT_SET.VBUSVALID_TO_SESSVALID Position*/
 #define USBPHY_USB1_VBUS_DETECT_SET_VBUSVALID_TO_SESSVALID(x) (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL) /*!< USBPHY_USB1_VBUS_DETECT_SET.VBUSVALID_TO_SESSVALID Field*/
-#define USBPHY_USB1_VBUS_DETECT_SET_PWRUP_CMPS_MASK (0x700000U)                                      /*!< USBPHY_USB1_VBUS_DETECT_SET.PWRUP_CMPS Mask*/
+#define USBPHY_USB1_VBUS_DETECT_SET_PWRUP_CMPS_MASK (0x100000U)                                      /*!< USBPHY_USB1_VBUS_DETECT_SET.PWRUP_CMPS Mask*/
 #define USBPHY_USB1_VBUS_DETECT_SET_PWRUP_CMPS_SHIFT (20U)                                           /*!< USBPHY_USB1_VBUS_DETECT_SET.PWRUP_CMPS Position*/
-#define USBPHY_USB1_VBUS_DETECT_SET_PWRUP_CMPS(x) (((uint32_t)(((uint32_t)(x))<<20U))&0x700000UL)    /*!< USBPHY_USB1_VBUS_DETECT_SET.PWRUP_CMPS Field*/
+#define USBPHY_USB1_VBUS_DETECT_SET_PWRUP_CMPS(x) (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)    /*!< USBPHY_USB1_VBUS_DETECT_SET.PWRUP_CMPS Field*/
 #define USBPHY_USB1_VBUS_DETECT_SET_DISCHARGE_VBUS_MASK (0x4000000U)                                 /*!< USBPHY_USB1_VBUS_DETECT_SET.DISCHARGE_VBUS Mask*/
 #define USBPHY_USB1_VBUS_DETECT_SET_DISCHARGE_VBUS_SHIFT (26U)                                       /*!< USBPHY_USB1_VBUS_DETECT_SET.DISCHARGE_VBUS Position*/
 #define USBPHY_USB1_VBUS_DETECT_SET_DISCHARGE_VBUS(x) (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL) /*!< USBPHY_USB1_VBUS_DETECT_SET.DISCHARGE_VBUS Field*/
-#define USBPHY_USB1_VBUS_DETECT_SET_CHARGE_VBUS_MASK (0x8000000U)                                    /*!< USBPHY_USB1_VBUS_DETECT_SET.CHARGE_VBUS Mask*/
-#define USBPHY_USB1_VBUS_DETECT_SET_CHARGE_VBUS_SHIFT (27U)                                          /*!< USBPHY_USB1_VBUS_DETECT_SET.CHARGE_VBUS Position*/
-#define USBPHY_USB1_VBUS_DETECT_SET_CHARGE_VBUS(x) (((uint32_t)(((uint32_t)(x))<<27U))&0x8000000UL)  /*!< USBPHY_USB1_VBUS_DETECT_SET.CHARGE_VBUS Field*/
+#define USBPHY_USB1_VBUS_DETECT_SET_EN_CHARGER_RESISTOR_MASK (0x80000000U)                           /*!< USBPHY_USB1_VBUS_DETECT_SET.EN_CHARGER_RESISTOR Mask*/
+#define USBPHY_USB1_VBUS_DETECT_SET_EN_CHARGER_RESISTOR_SHIFT (31U)                                  /*!< USBPHY_USB1_VBUS_DETECT_SET.EN_CHARGER_RESISTOR Position*/
+#define USBPHY_USB1_VBUS_DETECT_SET_EN_CHARGER_RESISTOR(x) (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL) /*!< USBPHY_USB1_VBUS_DETECT_SET.EN_CHARGER_RESISTOR Field*/
 /* ------- USB1_VBUS_DETECT_CLR Bit Fields          ------ */
 #define USBPHY_USB1_VBUS_DETECT_CLR_VBUSVALID_THRESH_MASK (0x7U)                                     /*!< USBPHY_USB1_VBUS_DETECT_CLR.VBUSVALID_THRESH Mask*/
 #define USBPHY_USB1_VBUS_DETECT_CLR_VBUSVALID_THRESH_SHIFT (0U)                                      /*!< USBPHY_USB1_VBUS_DETECT_CLR.VBUSVALID_THRESH Position*/
@@ -15041,9 +15041,9 @@ typedef struct {                                /*       USBPHY Structure       
 #define USBPHY_USB1_VBUS_DETECT_CLR_VBUSVALID_TO_SESSVALID_MASK (0x40000U)                           /*!< USBPHY_USB1_VBUS_DETECT_CLR.VBUSVALID_TO_SESSVALID Mask*/
 #define USBPHY_USB1_VBUS_DETECT_CLR_VBUSVALID_TO_SESSVALID_SHIFT (18U)                               /*!< USBPHY_USB1_VBUS_DETECT_CLR.VBUSVALID_TO_SESSVALID Position*/
 #define USBPHY_USB1_VBUS_DETECT_CLR_VBUSVALID_TO_SESSVALID(x) (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL) /*!< USBPHY_USB1_VBUS_DETECT_CLR.VBUSVALID_TO_SESSVALID Field*/
-#define USBPHY_USB1_VBUS_DETECT_CLR_PWRUP_CMPS_MASK (0x700000U)                                      /*!< USBPHY_USB1_VBUS_DETECT_CLR.PWRUP_CMPS Mask*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_PWRUP_CMPS_MASK (0x100000U)                                      /*!< USBPHY_USB1_VBUS_DETECT_CLR.PWRUP_CMPS Mask*/
 #define USBPHY_USB1_VBUS_DETECT_CLR_PWRUP_CMPS_SHIFT (20U)                                           /*!< USBPHY_USB1_VBUS_DETECT_CLR.PWRUP_CMPS Position*/
-#define USBPHY_USB1_VBUS_DETECT_CLR_PWRUP_CMPS(x) (((uint32_t)(((uint32_t)(x))<<20U))&0x700000UL)    /*!< USBPHY_USB1_VBUS_DETECT_CLR.PWRUP_CMPS Field*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_PWRUP_CMPS(x) (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)    /*!< USBPHY_USB1_VBUS_DETECT_CLR.PWRUP_CMPS Field*/
 #define USBPHY_USB1_VBUS_DETECT_CLR_DISCHARGE_VBUS_MASK (0x4000000U)                                 /*!< USBPHY_USB1_VBUS_DETECT_CLR.DISCHARGE_VBUS Mask*/
 #define USBPHY_USB1_VBUS_DETECT_CLR_DISCHARGE_VBUS_SHIFT (26U)                                       /*!< USBPHY_USB1_VBUS_DETECT_CLR.DISCHARGE_VBUS Position*/
 #define USBPHY_USB1_VBUS_DETECT_CLR_DISCHARGE_VBUS(x) (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL) /*!< USBPHY_USB1_VBUS_DETECT_CLR.DISCHARGE_VBUS Field*/
@@ -15057,9 +15057,9 @@ typedef struct {                                /*       USBPHY Structure       
 #define USBPHY_USB1_VBUS_DETECT_TOG_VBUSVALID_TO_SESSVALID_MASK (0x40000U)                           /*!< USBPHY_USB1_VBUS_DETECT_TOG.VBUSVALID_TO_SESSVALID Mask*/
 #define USBPHY_USB1_VBUS_DETECT_TOG_VBUSVALID_TO_SESSVALID_SHIFT (18U)                               /*!< USBPHY_USB1_VBUS_DETECT_TOG.VBUSVALID_TO_SESSVALID Position*/
 #define USBPHY_USB1_VBUS_DETECT_TOG_VBUSVALID_TO_SESSVALID(x) (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL) /*!< USBPHY_USB1_VBUS_DETECT_TOG.VBUSVALID_TO_SESSVALID Field*/
-#define USBPHY_USB1_VBUS_DETECT_TOG_PWRUP_CMPS_MASK (0x700000U)                                      /*!< USBPHY_USB1_VBUS_DETECT_TOG.PWRUP_CMPS Mask*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_PWRUP_CMPS_MASK (0x100000U)                                      /*!< USBPHY_USB1_VBUS_DETECT_TOG.PWRUP_CMPS Mask*/
 #define USBPHY_USB1_VBUS_DETECT_TOG_PWRUP_CMPS_SHIFT (20U)                                           /*!< USBPHY_USB1_VBUS_DETECT_TOG.PWRUP_CMPS Position*/
-#define USBPHY_USB1_VBUS_DETECT_TOG_PWRUP_CMPS(x) (((uint32_t)(((uint32_t)(x))<<20U))&0x700000UL)    /*!< USBPHY_USB1_VBUS_DETECT_TOG.PWRUP_CMPS Field*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_PWRUP_CMPS(x) (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)    /*!< USBPHY_USB1_VBUS_DETECT_TOG.PWRUP_CMPS Field*/
 #define USBPHY_USB1_VBUS_DETECT_TOG_DISCHARGE_VBUS_MASK (0x4000000U)                                 /*!< USBPHY_USB1_VBUS_DETECT_TOG.DISCHARGE_VBUS Mask*/
 #define USBPHY_USB1_VBUS_DETECT_TOG_DISCHARGE_VBUS_SHIFT (26U)                                       /*!< USBPHY_USB1_VBUS_DETECT_TOG.DISCHARGE_VBUS Position*/
 #define USBPHY_USB1_VBUS_DETECT_TOG_DISCHARGE_VBUS(x) (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL) /*!< USBPHY_USB1_VBUS_DETECT_TOG.DISCHARGE_VBUS Field*/

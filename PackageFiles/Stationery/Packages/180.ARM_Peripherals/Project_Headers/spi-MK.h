@@ -218,9 +218,10 @@ public:
 
 #ifdef __CMSIS_RTOS
    /**
-    * Obtain SPI mutex
+    * Obtain SPI mutex and set SPI configuration
     *
-    * @param ctarValue The CTAR value to set for the transaction
+    * @param config       The configuration value to set for the transaction\n
+    *                     A value of zero leaves the configuration unchanged
     * @param milliseconds How long to wait in milliseconds. Use osWaitForever for indefinite wait
     *
     * @return osOK: The mutex has been obtain.
@@ -240,8 +241,24 @@ public:
     */
    virtual osStatus endTransaction() = 0;
 #else
-   int startTransaction(uint32_t =0, int =0) {return 0;}
-   int endTransaction() { return 0; }
+   /**
+    * Obtain SPI mutex(dummy) and set SPI configuration
+    *
+    * @param config The configuration value to set for the transaction.\n
+    *               A value of zero leaves the configuration unchanged
+    */
+   int startTransaction(uint32_t config=0, int =0) {
+      if (config != 0) {
+         spi->CTAR[0] = config;
+      }
+      return 0;
+   }
+   /**
+    * Release SPI mutex - dummy routine
+    */
+   int endTransaction() {
+      return 0;
+   }
 #endif
 
    /**
@@ -342,6 +359,26 @@ public:
     */
    uint32_t txRx(uint32_t data);
 
+   /**
+    *  Set SPI Configuration value\n
+    *  This includes timing settings, word length and transmit order
+    *
+    * @param config Configuration value
+    */
+   void setConfig(uint32_t config) {
+      spi->CTAR[0] = config;
+   }
+
+   /**
+    *  Get SPI Configuration value\n
+    *  This includes timing settings, word length and transmit order
+    *
+    * @return ctar Configuration value
+    */
+   uint32_t getConfig() {
+      return spi->CTAR[0];
+   }
+
    /** Set SPI.CTAR0 value
     *
     * @param ctar 32-bit CTAR value
@@ -407,7 +444,8 @@ public:
    /**
     * Obtain SPI mutex
     *
-    * @param ctarValue The CTAR value to set for the transaction
+    * @param config       The configuration value to set for the transaction\n
+    *                     A value of zero leaves the configuration unchanged
     * @param milliseconds How long to wait in milliseconds. Use osWaitForever for indefinite wait
     *
     * @return osOK: The mutex has been obtain.
@@ -416,10 +454,12 @@ public:
     * @return osErrorParameter: The parameter mutex_id is incorrect.
     * @return osErrorISR: osMutexWait cannot be called from interrupt service routines.
     */
-   virtual osStatus startTransaction(uint32_t ctarValue=0, int milliseconds=osWaitForever) override {
+   virtual osStatus startTransaction(uint32_t config=0, int milliseconds=osWaitForever) override {
+      // Obtain mutex
       osStatus status = mutex.wait(milliseconds);
-      if ((status == osOK) && (ctarValue != 0)) {
-         spi->CTAR[0] = ctarValue;
+      if ((status == osOK) && (config != 0)) {
+         // Change configuration for this transaction
+         spi->CTAR[0] = config;
       }
       return status;
    }
@@ -432,6 +472,7 @@ public:
     * @return osErrorISR: osMutexRelease cannot be called from interrupt service routines.
     */
    virtual osStatus endTransaction() override {
+      // Release mutex
       return mutex.release();
    }
 #endif
@@ -441,7 +482,7 @@ public:
 
    virtual void enablePins() override {
       // Configure SPI pins
-      Spi0Info::initPCRs(pcrValue(PinPullUp, PinDriveHigh));
+      Spi0Info::initPCRs(pcrValue(PinPullUp, PinDriveStrengthHigh));
    }
 
    virtual void disablePins() override {

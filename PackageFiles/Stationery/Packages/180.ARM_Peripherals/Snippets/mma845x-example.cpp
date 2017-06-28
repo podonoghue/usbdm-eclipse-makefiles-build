@@ -4,7 +4,8 @@
  * @brief    Demonstrates use of MMA845x Accelerometer over I2C
  * @version  V4.11.1.80
  * @author   podonoghue
- * @note You may need to change the pin-mapping of the I2C interface
+ *
+ * You may need to change the pin-mapping of the I2C interface
 ============================================================================
  */
 #include <stdio.h>

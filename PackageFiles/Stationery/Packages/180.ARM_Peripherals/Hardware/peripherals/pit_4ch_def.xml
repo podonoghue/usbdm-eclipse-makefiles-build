@@ -45,6 +45,7 @@
    <projectActionList id = "lptmr0_0" >
       <copy source="Snippets/pit-example1.cpp"       target="Snippets/pit-example1.cpp" />
       <copy source="Snippets/pit-example2-MK.cpp"    target="Snippets/pit-example2.cpp" />
+      <copy source="Snippets/pit-example3-MK.cpp"    target="Snippets/pit-example3.cpp" />
       <copy source="Project_Headers/pit-MK.h"        target="Project_Headers/pit.h"        replace="true" derived="true" />
    </projectActionList>
          

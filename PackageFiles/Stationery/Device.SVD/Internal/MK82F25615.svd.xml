@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE device>
+<device
+   schemaVersion="1.1"
+   xmlns:xi="http://www.w3.org/2001/XInclude"
+   xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd"
+>
+   <name>MK82F25615</name>
+   <version>1.6</version>
+   <description>MK82F25615 Freescale Microcontroller</description>
+   <cpu>
+      <name>CM4</name>
+      <revision>r0p1</revision>
+      <endian>little</endian>
+      <mpuPresent>false</mpuPresent>
+      <fpuPresent>true</fpuPresent>
+      <vtorPresent>true</vtorPresent>
+      <nvicPrioBits>4</nvicPrioBits>
+      <vendorSystickConfig>false</vendorSystickConfig>
+   </cpu>
+   <addressUnitBits>8</addressUnitBits>
+   <width>32</width>
+   <peripherals>
+      <xi:include href="peripherals/ADC0_DIFF_A.svd.xml"/>
+      <xi:include href="peripherals/AIPS0_MK82F25615.svd.xml"/>
+      <xi:include href="peripherals/AIPS1_MK82F25615.svd.xml"/>
+      <xi:include href="peripherals/AXBS_MK82F25615.svd.xml"/>
+      <xi:include href="peripherals/CAU_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/CMP0_MKV.svd.xml"/>
+      <peripheral derivedFrom="CMP0"><name>CMP1</name><baseAddress>0x40073008</baseAddress>
+         <interrupt><name>CMP1</name><description>High-Speed Comparator (CMP), Voltage Reference (VREF) Digital-to-Analog Converter (DAC), and Analog Mux</description><value>41</value></interrupt>
+      </peripheral>
+      <xi:include href="peripherals/CMT_0.svd.xml"/>
+      <xi:include href="peripherals/CRC0_0x40032000.svd.xml"/>
+      <xi:include href="peripherals/DAC0_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/DMA_MK82F25615.svd.xml"/>
+      <xi:include href="peripherals/DMAMUX0_32CH_TRIG_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/EMVSIM0_MK82F25615.svd.xml"/>
+      <peripheral derivedFrom="EMVSIM0"><name>EMVSIM1</name><baseAddress>0x400D5000</baseAddress>
+         <interrupt><name>EMVSIM1</name><description>EMVSIM</description><value>38</value></interrupt>
+      </peripheral>
+      <xi:include href="peripherals/EWM_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/FB_0.svd.xml"/>
+      <xi:include href="peripherals/FLEXIO0_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/FMC_MK82F25615.svd.xml"/>
+      <xi:include href="peripherals/FTFA_XACCH.svd.xml"/>
+      <xi:include href="peripherals/FTM0_8CH_ICRST.svd.xml"/>
+      <xi:include href="peripherals/FTM1_MK28F15.svd.xml"/>
+      <peripheral derivedFrom="FTM1"><name>FTM2</name><baseAddress>0x4003A000</baseAddress>
+         <interrupt><name>FTM2</name><description>FlexTimer Module</description><value>44</value></interrupt>
+      </peripheral>
+      <peripheral derivedFrom="FTM0"><name>FTM3</name><baseAddress>0x400B9000</baseAddress>
+         <interrupt><name>FTM3</name><description>FlexTimer Module</description><value>71</value></interrupt>
+      </peripheral>
+      <xi:include href="peripherals/GPIOA_0x400FF000.svd.xml"/>
+      <peripheral derivedFrom="GPIOA"><name>GPIOB</name><baseAddress>0x400FF040</baseAddress>
+         <interrupt><name>PORTB</name><description>General Purpose Input/Output</description><value>60</value></interrupt>
+      </peripheral>
+      <peripheral derivedFrom="GPIOA"><name>GPIOC</name><baseAddress>0x400FF080</baseAddress>
+         <interrupt><name>PORTC</name><description>General Purpose Input/Output</description><value>61</value></interrupt>
+      </peripheral>
+      <peripheral derivedFrom="GPIOA"><name>GPIOD</name><baseAddress>0x400FF0C0</baseAddress>
+         <interrupt><name>PORTD</name><description>General Purpose Input/Output</description><value>62</value></interrupt>
+      </peripheral>
+      <peripheral derivedFrom="GPIOA"><name>GPIOE</name><baseAddress>0x400FF100</baseAddress>
+         <interrupt><name>PORTE</name><description>General Purpose Input/Output</description><value>63</value></interrupt>
+      </peripheral>
+      <xi:include href="peripherals/I2C0_MK28F15.svd.xml"/>
+      <peripheral derivedFrom="I2C0"><name>I2C1</name><baseAddress>0x40067000</baseAddress>
+         <interrupt><name>I2C1</name><description>Inter-Integrated Circuit</description><value>25</value></interrupt>
+      </peripheral>
+      <peripheral derivedFrom="I2C0"><name>I2C2</name><baseAddress>0x400E6000</baseAddress>
+         <interrupt><name>I2C2</name><description>Inter-Integrated Circuit</description><value>74</value></interrupt>
+      </peripheral>
+      <peripheral derivedFrom="I2C0"><name>I2C3</name><baseAddress>0x400E7000</baseAddress>
+         <interrupt><name>I2C3</name><description>Inter-Integrated Circuit</description><value>91</value></interrupt>
+      </peripheral>
+      <xi:include href="peripherals/I2S0_MK82F25615.svd.xml"/>
+      <xi:include href="peripherals/LLWU_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/LMEM_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/LPTMR0_0.svd.xml"/>
+      <peripheral derivedFrom="LPTMR0"><name>LPTMR1</name><baseAddress>0x40044000</baseAddress>
+         <interrupt><name>LPTMR0_LPTMR1</name><description>Low Power Timer</description><value>58</value></interrupt>
+      </peripheral>
+      <xi:include href="peripherals/LPUART0_FIFO_0x400C4000.svd.xml"/>
+      <peripheral derivedFrom="LPUART0"><name>LPUART1</name><baseAddress>0x400C5000</baseAddress>
+         <interrupt><name>LPUART1</name><description>Universal Asynchronous Receiver/Transmitter</description><value>31</value></interrupt>
+      </peripheral>
+      <peripheral derivedFrom="LPUART0"><name>LPUART2</name><baseAddress>0x400C6000</baseAddress>
+         <interrupt><name>LPUART2</name><description>Universal Asynchronous Receiver/Transmitter</description><value>32</value></interrupt>
+      </peripheral>
+      <peripheral derivedFrom="LPUART0"><name>LPUART3</name><baseAddress>0x400C7000</baseAddress>
+         <interrupt><name>LPUART3</name><description>Universal Asynchronous Receiver/Transmitter</description><value>33</value></interrupt>
+      </peripheral>
+      <peripheral derivedFrom="LPUART0"><name>LPUART4</name><baseAddress>0x400D6000</baseAddress>
+         <interrupt><name>LPUART4</name><description>Universal Asynchronous Receiver/Transmitter</description><value>34</value></interrupt>
+      </peripheral>
+      <xi:include href="peripherals/LTC0_MK82F25615.svd.xml"/>
+      <xi:include href="peripherals/MCG_MK82F25615.svd.xml"/>
+      <xi:include href="peripherals/MCM_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/MPU_MK82F25615.svd.xml"/>
+      <xi:include href="peripherals/NV_MK82F25615.svd.xml"/>
+      <xi:include href="peripherals/OSC0_DIV.svd.xml"/>
+      <xi:include href="peripherals/OTFAD_MK82F25615.svd.xml"/>
+      <xi:include href="peripherals/PDB0_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/PIT_4CH_CHAIN.svd.xml"/>
+      <xi:include href="peripherals/PMC_HVD.svd.xml"/>
+      <xi:include href="peripherals/PORTA.svd.xml"/>
+      <peripheral derivedFrom="PORTA"><name>PORTB</name><baseAddress>0x4004A000</baseAddress>
+         <interrupt><name>PORTB</name><description>Pin Control and Interrupts</description><value>60</value></interrupt>
+      </peripheral>
+      <peripheral derivedFrom="PORTA"><name>PORTC</name><baseAddress>0x4004B000</baseAddress>
+         <interrupt><name>PORTC</name><description>Pin Control and Interrupts</description><value>61</value></interrupt>
+      </peripheral>
+      <xi:include href="peripherals/PORTD_DFER.svd.xml"/>
+      <peripheral derivedFrom="PORTA"><name>PORTE</name><baseAddress>0x4004D000</baseAddress>
+         <interrupt><name>PORTE</name><description>Pin Control and Interrupts</description><value>63</value></interrupt>
+      </peripheral>
+      <xi:include href="peripherals/QSPI0_0x400DA000.svd.xml"/>
+      <xi:include href="peripherals/RCM_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/RFSYS_0.svd.xml"/>
+      <xi:include href="peripherals/RFVBAT_0.svd.xml"/>
+      <xi:include href="peripherals/RTC_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/SDHC_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/SDRAMC_0.svd.xml"/>
+      <xi:include href="peripherals/SIM_MK82F25615.svd.xml"/>
+      <xi:include href="peripherals/SMC_MK82F25615.svd.xml"/>
+      <xi:include href="peripherals/SPI0_MK_PCSIS6_PCSSE.svd.xml"/>
+      <peripheral derivedFrom="SPI0"><name>SPI1</name><baseAddress>0x4002D000</baseAddress>
+         <interrupt><name>SPI1</name><description>Serial Peripheral Interface</description><value>27</value></interrupt>
+      </peripheral>
+      <peripheral derivedFrom="SPI0"><name>SPI2</name><baseAddress>0x400AC000</baseAddress>
+         <interrupt><name>SPI2</name><description>Serial Peripheral Interface</description><value>65</value></interrupt>
+      </peripheral>
+      <xi:include href="peripherals/SYST.svd.xml"/>
+      <xi:include href="peripherals/TPM1_MK28F15.svd.xml"/>
+      <peripheral derivedFrom="TPM1"><name>TPM2</name><baseAddress>0x400CA000</baseAddress>
+         <interrupt><name>TPM2</name><description>Timer/PWM Module</description><value>89</value></interrupt>
+      </peripheral>
+      <xi:include href="peripherals/TRNG0_0x400A0000.svd.xml"/>
+      <xi:include href="peripherals/TSI0_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/USB0_OTG_CLKRCV_D.svd.xml"/>
+      <xi:include href="peripherals/USBDCD_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/VREF_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/WDOG_MK.svd.xml"/>
+   </peripherals>
+   <vendorExtensions>
+   <xi:include href="vectorTables/MK82F25615_VectorTable.svd.xml"/>
+   </vendorExtensions>
+</device>

@@ -265,7 +265,7 @@
          <clock reg="SCGC2"         mask="SIM_SCGC2_LPUART0_MASK" />
          <irq num="LPUART0_RX_TX_IRQn" />
       </peripheral>
-      <peripheral baseName="MCG"      instance=""         version="mcg_mk65f18">
+      <peripheral baseName="MCG"      instance=""         version="mcg_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcg" />
          <irq num="MCG_IRQn" />
       </peripheral>
@@ -349,7 +349,7 @@
          <clock reg="SCGC2"         mask="SIM_SCGC2_TPM2_MASK" />
          <irq num="TPM2_IRQn" />
       </peripheral>
-      <peripheral baseName="TSI"      instance="0"        version="tsi0_mk65">
+      <peripheral baseName="TSI"      instance="0"        version="tsi0_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForTsi" />
          <clock reg="SCGC5"         mask="SIM_SCGC5_TSI0_MASK" />
          <irq num="TSI0_IRQn" />

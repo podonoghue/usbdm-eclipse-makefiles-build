@@ -118,8 +118,8 @@ void LcdBase::init() {
 
    spi.setDelays(100*ns,100*ns,100*ns);
 
-   // Save config
-   spiConfig = spi.getCTAR0Value();
+   // Save configuration
+   spiConfig = spi.getConfig();
 
    // Release SPI
    spi.endTransaction();
@@ -361,7 +361,7 @@ void LcdBase::drawPixel(int x, int y, Colour colour) {
 #ifdef PHILIPS
    setXY(x, y);
    txCommand(P_RAMWR);
-   // Construct RRRRGGGGBBBB=>RRRRGGGG|BBBBxxxx in 3 bytes = 2 pixels
+   // Construct RRRRGGGGBBBB=>RRRRGGGG|BBBBxxxx in 1.5 bytes = 1 pixels
    txData((unsigned char)(colour >> 4));
    txData((unsigned char)(((colour & 0x0F) << 4) | 0x00));
    txCommand(P_NOP);
@@ -370,7 +370,7 @@ void LcdBase::drawPixel(int x, int y, Colour colour) {
 #ifdef EPSON
    lcd_setXY(x, y);
    txCommand(RAMWR);
-   // Construct RRRRGGGGBBBB=>RRRRGGGG|BBBBxxxx in 3 bytes = 2 pixels
+   // Construct RRRRGGGGBBBB=>RRRRGGGG|BBBBxxxx in 1.5 bytes = 1 pixels
    txData((unsigned char)(colour >> 4));
    txData((unsigned char)(((colour & 0x0F) << 4) | 0x0F));
    txCommand(0xFF);
