@@ -261,6 +261,7 @@
       <device name="FRDM_K20D50M"     svdFileName="MK20D5"      />
       <device name="FRDM_K22F"        svdFileName="MK22F51212"  />
       <device name="FRDM_K22F1M0"     svdFileName="MK22FA12"    />
+      <device name="FRDM_K28F"        svdFileName="MK28F15"     />
       <device name="FRDM_K64F"        svdFileName="MK64F12"     />
       <device name="FRDM_K66F"        svdFileName="MK66F18"     />
       <device name="FRDM_K82F"        svdFileName="MK82F25615" />
