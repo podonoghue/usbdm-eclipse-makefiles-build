@@ -86,7 +86,33 @@ Devices using this peripheral:
                <resetMask>0x0</resetMask>
                <fields>
                   <field>
+                     <name>PD</name>
+                     <?ignoreOverlap?>
+                     <description>Pull Device Select\n
+Selects pull-up/down/none device</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0X</name>
+                           <description>Disabled</description>
+                           <value>0b0X</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Pull-up</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Pull-down</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
                      <name>PS</name>
+                     <?hide?>
                      <description>Pull Select\n
 Selects between internal pull-up or down if enabled by PE bit</description>
                      <bitOffset>0</bitOffset>
@@ -106,6 +132,7 @@ Selects between internal pull-up or down if enabled by PE bit</description>
                   </field>
                   <field>
                      <name>PE</name>
+                     <?hide?>
                      <description>Pull Enable\n
 Enables internal pull-up down resistor</description>
                      <bitOffset>1</bitOffset>
