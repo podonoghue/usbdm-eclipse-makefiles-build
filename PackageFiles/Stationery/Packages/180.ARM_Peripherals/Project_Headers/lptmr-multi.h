@@ -1,5 +1,5 @@
 /**
- * @file      lptmr.h (derived from lptmr-multi.h)
+ * @file      lptmr.h  (180.ARM_Peripherals/Project_Headers/lptmr-multi.h)
  * @version   1.0.0
  * @brief     Low Power Timer
  */

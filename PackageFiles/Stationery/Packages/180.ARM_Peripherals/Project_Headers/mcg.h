@@ -1,5 +1,5 @@
 /**
- * @file      mcg.h
+ * @file      mcg.h (180.ARM_Peripherals/Project_Headers/mgc.h)
  *
  * @brief    Abstraction layer for MCG interface
  *

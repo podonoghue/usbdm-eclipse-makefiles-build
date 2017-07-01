@@ -1,5 +1,5 @@
 /**
- * @file      pin_mapping.h (derived from pin_mapping-Generic-MK.h)
+ * @file      pin_mapping.h  (180.ARM_Peripherals/Project_Headers/pin_mapping-Generic-MK.h)
  * @version   1.2.0
  * @brief     Pin declarations for Generic devices
  *

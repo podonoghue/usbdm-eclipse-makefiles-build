@@ -6,7 +6,10 @@
 <!ENTITY DEVICE_FILE        "MKV31F51212">
 ]>
 
-<root version="1.0" >
+<root 
+   version="1.0"
+   xmlns:xi="http://www.w3.org/2001/XInclude"
+   >
    <projectActionList id="CPP-abstraction-&DEVICE_SUB_FAMILY;">
       <applyWhen>
          <and>
@@ -18,7 +21,7 @@
       <!-- Affects later CPP peripheral options -->
       <constant id="cpp.peripheral.subfamily"       value="&DEVICE_SUB_FAMILY;" />
       
-      <!-- These constants enable internal peripheral features -->
+      <!-- These constants enable peripheral features -->
       <constant id="cpp.peripheral.internal.adc"    value="true" />
       <constant id="cpp.peripheral.internal.ftm"    value="true" />
       <constant id="cpp.peripheral.internal.i2c"    value="true" />

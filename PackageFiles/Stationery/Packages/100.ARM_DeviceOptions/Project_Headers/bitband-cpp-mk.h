@@ -1,6 +1,6 @@
 /**
- * @file     bitband.h
- * @brief    Template functions to access bit-band region (derived from bitband-cpp-mk.h)
+ * @file     bitband.h (derived from bitband-cpp-mk.h)
+ * @brief    Template functions to access bit-band region
  * @version  V4.12.1.50
  * @date     5 Dec 2015
  */
@@ -49,6 +49,8 @@ namespace USBDM {
  *       See linker files.
  *
  *       Fixed locations accessed by casts e.g. GPIOC etc will be very efficient since the calculation is a constant expression.
+ *
+ *       The generated code will be very inefficient if optimization is not enabled.
  */
 
 /**
@@ -65,7 +67,7 @@ namespace USBDM {
  * @param value   Value to modify 0 or 1. Only the LSB is used
  */
 template <typename T>
-inline void bitbandWrite(T &ref, const uint32_t bitNum, uint32_t value) {
+static __attribute__((always_inline)) inline void bitbandWrite(T &ref, const uint32_t bitNum, uint32_t value) {
    uint32_t addr = (uint32_t)(&ref);
    const uint32_t mappedAddress = (addr&0xF0000000) + 0x02000000 + ((addr&0xFFFFF)*8*4) + (bitNum*4);
    *(volatile uint32_t *)(mappedAddress) = value;
@@ -88,7 +90,7 @@ inline void bitbandWrite(T &ref, const uint32_t bitNum, uint32_t value) {
  * @return Bit read as boolean value
  */
 template <typename T>
-inline uint32_t bitbandRead(T &ref, const uint32_t bitNum) {
+static __attribute__((always_inline)) inline uint32_t bitbandRead(T &ref, const uint32_t bitNum) {
    uint32_t addr = (uint32_t)(&ref);
    const uint32_t mappedAddress = (addr&0xF0000000) + 0x02000000 + ((addr&0xFFFFF)*8*4) + (bitNum*4);
    return *(volatile uint32_t *)(mappedAddress);
@@ -107,7 +109,7 @@ inline uint32_t bitbandRead(T &ref, const uint32_t bitNum) {
  * @param bitNum  Bit number
  */
 template <typename T>
-inline void bitbandSet(T &ref, const uint32_t bitNum) {
+static __attribute__((always_inline)) inline void bitbandSet(T &ref, const uint32_t bitNum) {
    bitbandWrite(ref, bitNum, true);
 }
 
@@ -124,7 +126,7 @@ inline void bitbandSet(T &ref, const uint32_t bitNum) {
  * @param bitNum  Bit number
  */
 template <typename T>
-inline void bitbandClear(T &ref, const uint32_t bitNum) {
+static __attribute__((always_inline)) inline void bitbandClear(T &ref, const uint32_t bitNum) {
    bitbandWrite(ref, bitNum, false);
 }
 

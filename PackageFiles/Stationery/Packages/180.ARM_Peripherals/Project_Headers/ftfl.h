@@ -1,5 +1,5 @@
 /**
- * @file    ftfl.h
+ * @file    ftfl.h (180.ARM_Peripherals/Project_Headers/ftfl.h)
  * @brief   Flash support for FTFL
  *
  *  Created on: 21 Sep 2016
@@ -235,7 +235,10 @@ public:
     * @return Error code
     */
    static FlashDriverError_t eraseRange(uint8_t *address, uint32_t size);
-
+   /**
+    * Mass erase entire Flash memory
+    */
+   static void eraseAll();
 };
 
 /**
@@ -454,7 +457,6 @@ public:
       }
    }
 };
-
 /**
  * @}
  */

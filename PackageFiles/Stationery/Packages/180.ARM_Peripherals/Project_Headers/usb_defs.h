@@ -1,5 +1,5 @@
 /**
- * @file     usb_defs.h
+ * @file     usb_defs.h (180.ARM_Peripherals/Project_Headers/usb_defs.h)
  * @brief    Universal Serial Bus definitions
  *
  * @version  V4.12.1.80

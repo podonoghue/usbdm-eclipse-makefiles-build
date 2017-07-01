@@ -2,7 +2,7 @@
 <!DOCTYPE devicePage SYSTEM "_menu.dtd" >
 <!-- gpio_def.xml -->
 
-<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Inter-Integrated-Circuit">
+<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="General Purpose Input/Output">
 
    <xi:include href="_irqOption.xml"/>
    

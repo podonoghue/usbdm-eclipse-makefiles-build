@@ -1,5 +1,5 @@
 /**
- * @file     cmp.h
+ * @file     cmp.h (180.ARM_Peripherals/Project_Headers/cmp.h)
  * @brief    Voltage Comparator
  *
  * @version  V4.12.1.80

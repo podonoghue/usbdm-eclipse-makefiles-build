@@ -114,13 +114,13 @@ public:
     * Assert CS
     */
    virtual void csEnable() {
-      cs_n::clear();
+      cs_n::low();
    }
    /**
     * Unassert CS
     */
    virtual void csDisable() {
-      cs_n::set();
+      cs_n::high();
    }
 };
 

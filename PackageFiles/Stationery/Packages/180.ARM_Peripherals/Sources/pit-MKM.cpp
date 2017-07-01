@@ -1,5 +1,5 @@
 /*
- * @file pit.cpp (derived from pit-MKM.cpp)
+ * @file pit.cpp (180.ARM_Peripherals/Sources/pit-MKM.cpp)
  *
  *  Created on: 12/11/2013
  *      Author: podonoghue

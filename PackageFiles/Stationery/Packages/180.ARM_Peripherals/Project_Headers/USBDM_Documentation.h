@@ -1,5 +1,5 @@
 /**
- * @file     USBDM_Documentation.h
+ * @file     USBDM_Documentation.h (180.ARM_Peripherals/Project_Headers/USBDM_Documentation.h)
  * @brief    USBDM Documentation
  */
  
@@ -46,16 +46,16 @@ It provides:\n
    GpioC3.setOutput(pcrValue(PinPullUp, PinDriveHigh, PinOpenCollector));
 
    // Set pin (polarity is applied)
-   GpioC3.set();
+   GpioC3.setActive();
 
    // Clear pin (polarity is applied)
-   GpioC3.clear();
+   GpioC3.setInactive();
 
    // Set pin to a high level (polarity is ignored)
-   GpioC3.high();
+   GpioC3.set();
 
    // Set pin to a low level (polarity is ignored)
-   GpioC3.low();
+   GpioC3.clear();
 
    // Toggle pin
    GpioC3.toggle();

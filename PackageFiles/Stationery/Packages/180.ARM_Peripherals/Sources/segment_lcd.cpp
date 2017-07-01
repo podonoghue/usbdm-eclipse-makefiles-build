@@ -1,5 +1,5 @@
 /*****************************************************************
- * @file segment_lcd.h (derived from segment_lcd.c)
+ * @file segment_lcd.h  (180.ARM_Peripherals/Sources/segment_lcd.c)
  *
  * Routines to interface to Segment LCD on FRDM-KL46Z
  *

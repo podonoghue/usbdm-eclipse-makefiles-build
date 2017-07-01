@@ -1,5 +1,5 @@
 /*
- * @file spi.cpp (derived from spi-MKL.cpp)
+ * @file spi.cpp  (180.ARM_Peripherals/Sources/spi-MKL_16bit.cpp)
  *
  *  Created on: 07/08/2012
  *      Author: podonoghue

@@ -1,5 +1,5 @@
 /**
- * @file     adc.h
+ * @file     adc.h (180.ARM_Peripherals/Project_Headers/adc.h)
  * @brief    ADC routines
  *
  * @version  V4.12.1.80

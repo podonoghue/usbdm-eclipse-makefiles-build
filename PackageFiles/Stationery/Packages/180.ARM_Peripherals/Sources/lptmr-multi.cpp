@@ -1,5 +1,5 @@
 /*
- * @file lptmr.cpp (derived from lptmr-multi.cpp)
+ * @file lptmr.cpp  (180.ARM_Peripherals/Sources/lptmr-multi.cpp)
  *
  *  Created on: 12/11/2013
  *      Author: podonoghue

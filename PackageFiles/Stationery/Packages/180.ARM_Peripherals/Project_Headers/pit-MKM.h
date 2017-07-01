@@ -1,5 +1,5 @@
 /**
- * @file      pit.h (derived from pit-MKM.h)
+ * @file      pit.h  (180.ARM_Peripherals/Project_Headers/pit-MKM.h)
  * @version   1.1.0
  * @brief     Programmable Interrupt  Timer MKL
  */

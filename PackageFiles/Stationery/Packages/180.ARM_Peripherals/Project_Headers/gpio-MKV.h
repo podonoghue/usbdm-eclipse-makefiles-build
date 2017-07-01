@@ -1,6 +1,6 @@
 /**
- * @file     gpio.h
- * @brief    General Purpose Input/Output (generated from gpio-MK.h)
+ * @file     gpio.h (180.ARM_Peripherals/Project_Headers/gpio-MKV.h)
+ * @brief    General Purpose Input/Output
  *
  * @version  V4.12.1.80
  * @date     13 April 2016

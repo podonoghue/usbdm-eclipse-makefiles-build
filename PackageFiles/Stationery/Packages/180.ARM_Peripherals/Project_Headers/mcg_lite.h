@@ -1,5 +1,5 @@
 /**
- * @file      mcg_lite.h
+ * @file      mcg.h (180.ARM_Peripherals/Project_Headers/mcg-lite.h)
  *
  * @brief    Abstraction layer for MCG Lite interface
  *

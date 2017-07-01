@@ -6,7 +6,10 @@
 <!ENTITY DEVICE_FILE        "MKE06Z4-LQFP80">
 ]>
 
-<root version="1.0" >
+<root 
+   version="1.0"
+   xmlns:xi="http://www.w3.org/2001/XInclude"
+   >
    <projectActionList id="CPP-abstraction-&DEVICE_SUB_FAMILY;">
       <applyWhen>
          <and>

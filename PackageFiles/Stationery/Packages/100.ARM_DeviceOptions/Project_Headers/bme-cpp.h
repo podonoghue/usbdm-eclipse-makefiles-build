@@ -82,7 +82,7 @@ constexpr uint8_t BME_OPCODE_BIT_SET    = 3; //!< Opcode for Setting a bit
  * <b>Examples - </b>
  *
  */
-constexpr inline uint32_t bmeOp(uint32_t addr, uint8_t opcode) {
+static constexpr __attribute__((always_inline)) inline uint32_t bmeOp(uint32_t addr, uint8_t opcode) {
    return (uint32_t)((opcode<<26)|addr);
 }
 
@@ -96,7 +96,7 @@ constexpr inline uint32_t bmeOp(uint32_t addr, uint8_t opcode) {
  * <b>Examples - </b>
  *
  */
-constexpr inline uint32_t bmeOp(const uint32_t addr, const uint8_t opcode, const uint8_t bitOffset) {
+static constexpr __attribute__((always_inline)) inline uint32_t bmeOp(const uint32_t addr, const uint8_t opcode, const uint8_t bitOffset) {
    return (uint32_t)((opcode<<26)|(bitOffset<<21)|addr);
 }
 
@@ -111,11 +111,11 @@ constexpr inline uint32_t bmeOp(const uint32_t addr, const uint8_t opcode, const
  * <b>Examples - </b>
  *
  */
-constexpr inline uint32_t bmeOp(const uint32_t addr, const uint8_t opcode, const uint8_t bitOffset, const uint8_t width) {
+static constexpr __attribute__((always_inline)) inline uint32_t bmeOp(const uint32_t addr, const uint8_t opcode, const uint8_t bitOffset, const uint8_t width) {
    // Need to re-map GPIO from 0x400FF000 => 0x4000F000
    return ((addr & (0xFFFFF000)) == 0x400FF000)?
        ((uint32_t)((opcode<<26)|(bitOffset<<23)|(width<<19)|(addr&0xFFF0FFFF))):
-       ((uint32_t)((opcode<<26)|(bitOffset<<23)|(width<<19)));
+       ((uint32_t)((opcode<<26)|(bitOffset<<23)|(width<<19)|addr));
 }
 
 /**
@@ -136,7 +136,7 @@ constexpr inline uint32_t bmeOp(const uint32_t addr, const uint8_t opcode, const
  *    bmeAnd(GPIOC->PDOR,~(7<<4)); // Clear bits 4, 5 and 7
  * @endcode
  */
-template<typename T> inline void bmeAnd(T &ref, const uint32_t mask) {
+template<typename T> static constexpr __attribute__((always_inline)) inline void bmeAnd(T &ref, const uint32_t mask) {
    *((T*)(bmeOp((uint32_t)(&ref), BME_OPCODE_AND))) = mask;
 }
 
@@ -158,7 +158,7 @@ template<typename T> inline void bmeAnd(T &ref, const uint32_t mask) {
  *    bmeOr(GPIOC->PDOR, (3<<4)); // Set bits 4 and 5
  * @endcode
  */
-template<typename T> inline void bmeOr(T &ref, const uint32_t mask) {
+template<typename T> static constexpr __attribute__((always_inline)) inline void bmeOr(T &ref, const uint32_t mask) {
    *((T*)(bmeOp((uint32_t)(&ref), BME_OPCODE_OR))) = mask;
 }
 
@@ -175,7 +175,7 @@ template<typename T> inline void bmeOr(T &ref, const uint32_t mask) {
  *    bmeXor(GPIOC->PDOR,~(0xF<<4)); // Toggle bits 4 to 7
  * @endcode
  */
-template<typename T> inline void bmeXor(T &ref, const uint32_t mask) {
+template<typename T> static constexpr __attribute__((always_inline)) inline void bmeXor(T &ref, const uint32_t mask) {
    *((T*)(bmeOp((uint32_t)(&ref), BME_OPCODE_XOR))) = mask;
 }
 
@@ -194,7 +194,7 @@ template<typename T> inline void bmeXor(T &ref, const uint32_t mask) {
  *   bmeInsert(TPM0->CONTROLS[3].CnSC, TPM_CnSC_ELS_SHIFT, 2, 1); // Set TPM0->CONTROLS[3].CnSC.ELS to 1
  * @endcode
  */
-template<typename T> inline void bmeInsert(T &ref, const uint8_t bitNum, const uint8_t width, const uint32_t value) {
+template<typename T> static constexpr __attribute__((always_inline)) inline void bmeInsert(T &ref, const uint8_t bitNum, const uint8_t width, const uint32_t value) {
    *((T*)(bmeOp((uint32_t)(&ref), BME_OPCODE_BITFIELD, bitNum, width-1))) = value<<bitNum;
 }
 
@@ -216,7 +216,7 @@ template<typename T> inline void bmeInsert(T &ref, const uint8_t bitNum, const u
  * }
  * @endcode
  */
-template<typename T> inline uint32_t bmeExtract(T &ref, const uint8_t bitNum, const uint8_t width) {
+template<typename T> static constexpr __attribute__((always_inline)) inline uint32_t bmeExtract(T &ref, const uint8_t bitNum, const uint8_t width) {
    return *((T*)(bmeOp((uint32_t)(&ref), BME_OPCODE_BITFIELD, bitNum, width-1)));
 }
 
@@ -239,7 +239,7 @@ template<typename T> inline uint32_t bmeExtract(T &ref, const uint8_t bitNum, co
  *    }
  * @endcode
  */
-template<typename T> inline uint32_t bmeTestAndClear(T &ref, const uint8_t bitNum) {
+template<typename T> static constexpr __attribute__((always_inline)) inline uint32_t bmeTestAndClear(T &ref, const uint8_t bitNum) {
    return *((T*)(bmeOp((uint32_t)(&ref), BME_OPCODE_BIT_CLEAR, bitNum)));
 }
 
@@ -263,7 +263,7 @@ template<typename T> inline uint32_t bmeTestAndClear(T &ref, const uint8_t bitNu
  *    }
  * @endcode
  */
-template<typename T> inline uint32_t bmeTestAndSet(T &ref, const uint8_t bitNum) {
+template<typename T> static constexpr __attribute__((always_inline)) inline uint32_t bmeTestAndSet(T &ref, const uint8_t bitNum) {
    return *((T*)(bmeOp((uint32_t)(&ref), BME_OPCODE_BIT_SET, bitNum)));
 }
 

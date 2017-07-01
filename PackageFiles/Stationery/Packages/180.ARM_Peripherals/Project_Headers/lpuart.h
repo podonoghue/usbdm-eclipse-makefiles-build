@@ -1,5 +1,5 @@
 /****************************************************************************************************//**
- * @file     uart.h
+ * @file     lpuart.h (180.ARM_Peripherals/Project_Headers/lpuart.h)
  *
  * @brief    Abstracion layer for UART interface
  *

@@ -1,5 +1,5 @@
 /*
- * @file mcg.cpp (derived from mcg_mkl.cpp)
+ * @file mcg.cpp (180.ARM_Peripherals/Startup_Code/mcg_mkl.cpp)
  *
  * Based on KL25
  *    1 FLL (FRDIV=/1-/128, /32-/1024, /1280, /1536)

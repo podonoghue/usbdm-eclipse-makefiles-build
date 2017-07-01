@@ -11,7 +11,6 @@
 #include "system.h"
 #include "derivative.h"
 #include "hardware.h"
-#include "delay.h"
 
 /**
  * See more examples in Snippets directory

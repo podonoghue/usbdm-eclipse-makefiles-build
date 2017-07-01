@@ -151,11 +151,11 @@ int main() {
       CMSIS::Thread::signalWait(PROCESS_BLOCK);
 
       // Process and report data
-      Strobe::set();
+      Strobe::high();
       int    spo2,      heartRate;
       bool   spo2Valid, heartRateValid;
       maxim_heart_rate_and_oxygen_saturation(spo2Buffer, spo2, spo2Valid, heartRate, heartRateValid);
-      Strobe::clear();
+      Strobe::low();
 
       printf("%d:Buffer Processed - SpO2=%4d:%s, Pulse=:%4d:%s\n", count++, spo2, spo2Valid?"OK  ":"Fail", heartRate, heartRateValid?"OK  ":"Fail");
    }

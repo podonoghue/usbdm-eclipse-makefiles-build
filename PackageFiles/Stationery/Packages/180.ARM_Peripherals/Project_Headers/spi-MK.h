@@ -1,6 +1,6 @@
 /**
- * @file     spi.h
- * @brief    Serial Peripheral Interface (derived from spi-MK.h)
+ * @file     spi.h (180.ARM_Peripherals/Project_Headers/spi-MK.h)
+ * @brief    Serial Peripheral Interface
  *
  * @version  V4.12.1.80
  * @date     13 April 2016

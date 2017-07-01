@@ -1,5 +1,5 @@
 /**
- * @file     usb_endpoint.h
+ * @file     usb_endpoint.h (180.ARM_Peripherals/Project_Headers/usb_endpoint.h)
  * @brief    Universal Serial Bus Endpoint
  *
  * @version  V4.12.1.150

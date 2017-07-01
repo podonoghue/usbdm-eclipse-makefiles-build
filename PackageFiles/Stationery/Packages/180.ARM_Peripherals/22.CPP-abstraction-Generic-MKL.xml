@@ -34,16 +34,22 @@
          <deleteResource target="Project_Headers/Board_LEDs.h" />
          <deleteResource target="Project_Headers/leds.h" />
          <deleteResource target="Sources/leds.cpp" />
+         
          <createFolder   target="Snippets" />
          <copy source="Snippets/digital-example1.cpp"                         target="Snippets/digital-example1.cpp" />
          <copy source="Snippets/digital-example2.cpp"                         target="Snippets/digital-example2.cpp" />
          <excludeSourceFolder target="Snippets" />
-         <copy source="Project_Headers/USBDM_Documentation.h"                 target="Project_Headers/USBDM_Documentation.h" />
-         <copy source="Project_Headers/hardware.h"                            target="Project_Headers/hardware.h" />
-         <copy source="Project_Headers/pcr-&DEVICE_FAMILY;.h"                 target="Project_Headers/pcr.h" />
-         <copy source="Project_Headers/gpio-&DEVICE_FAMILY;.h"                target="Project_Headers/gpio.h" />
-         <copy source="Project_Headers/pin_mapping-Generic-&DEVICE_FAMILY;.h" target="Project_Headers/pin_mapping.h" />
-         <copy source="Sources/main.cpp"                                      target="Sources/main.cpp" replace="true" />
+         
+         <copy source="Startup_Code/system-gcc.cpp"                           target="Startup_Code/system-gcc.cpp"            replace="true"  derived="true" />
+         <copy source="Project_Headers/USBDM_Documentation.h"                 target="Project_Headers/USBDM_Documentation.h"  replace="true"  derived="true" />
+         <copy source="Project_Headers/pcr-&DEVICE_FAMILY;.h"                 target="Project_Headers/pcr.h"                  replace="true"  derived="true" />
+         <copy source="Project_Headers/gpio-&DEVICE_FAMILY;.h"                target="Project_Headers/gpio.h"                 replace="true"  derived="true" />
+         <copy source="Project_Headers/hardware.h"                            target="Project_Headers/hardware.h"             replace="true"  derived="true" />
+         <copy source="Project_Headers/pin_mapping-Generic-&DEVICE_FAMILY;.h" target="Project_Headers/pin_mapping.h"          replace="true"  derived="true" />
+         
+         <copy source="Sources/usbdmError.cpp"                                target="Sources/usbdmError.cpp"                 replace="true"  derived="true" />
+         <copy source="Sources/main.cpp"                                      target="Sources/main.cpp"                       replace="true" />
+
       </projectActionList>
    </projectActionList>
 </root>

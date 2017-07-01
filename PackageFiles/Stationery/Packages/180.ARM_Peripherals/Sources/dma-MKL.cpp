@@ -1,5 +1,5 @@
 /*
- * @file dma.cpp (derived from dma-MKL.cpp)
+ * @file dma.cpp  (180.ARM_Peripherals/Sources/dma-MKL.cpp)
  *
  *  Created on: 08/07/2014
  *      Author: podonoghue

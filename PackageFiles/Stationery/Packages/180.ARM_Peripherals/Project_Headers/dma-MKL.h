@@ -1,5 +1,5 @@
 /*
- * dma.h (derived from dma-MKL.h)
+ * dma.h  (180.ARM_Peripherals/Project_Headers/dma-MKL.h)
  *
  *  Created on: 08/07/2014
  *      Author: podonoghue

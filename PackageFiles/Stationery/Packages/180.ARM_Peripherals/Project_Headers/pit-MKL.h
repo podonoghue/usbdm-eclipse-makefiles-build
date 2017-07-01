@@ -1,7 +1,7 @@
 /**
- * @file      pit.h (derived from pit-MKL.h)
+ * @file      pit.h  (180.ARM_Peripherals/Project_Headers/pit-MKL.h)
  *
- * @brief    Abstraction layer for PIT interface
+ * @brief    Programmable Interrupt Timer interface
  *
  * @version  V4.12.1.80
  * @date     13 April 2016
@@ -51,7 +51,7 @@ protected:
    static constexpr uint32_t PIT_NUMBER_OF_CHANNELS  = 2;
 
    /** Callback functions for ISRs */
-   static PITCallbackFunction callback[PIT_NUMBER_OF_CHANNELS];
+   static PITCallbackFunction callbacks[PIT_NUMBER_OF_CHANNELS];
 
 public:
    /** PIT interrupt handler -  Calls PIT0 callback */
@@ -61,8 +61,8 @@ public:
             // Clear interrupt flag
             PIT->CHANNEL[channel].TFLG = PIT_TFLG_TIF_MASK;
             // Do call-back
-            if (callback[channel] != 0) {
-               callback[channel]();
+            if (callbacks[channel] != 0) {
+               callbacks[channel]();
             }
          }
       }
@@ -91,7 +91,11 @@ public:
     * @param callback The function to call from stub ISR
     */
    static void setCallback(unsigned channel, PITCallbackFunction callback) {
-      Pit_T::callback[channel] = callback;
+      if (callback == nullptr) {
+         callback = errorCallback;
+         enableInterrupts(channel, false);
+      }
+      callbacks[channel] = callback;
    }
 
 protected:
@@ -113,14 +117,15 @@ public:
       __DMB();
 
       // Enable timer
-      pit->MCR = mcr;
+      pit->MCR = mcr&~PIT_MCR_MDIS_MASK;
 
       enableNvicInterrupts();
    }
    /**
-    *   Disable the PIT channel
+    *   Disable the PIT (all channels)
     */
-   static void finalise(uint8_t channel) {
+   static void disable() {
+      pit->MCR = PIT_MCR_MDIS_MASK;
       *clockReg &= ~Info::clockMask;
    }
 
@@ -128,6 +133,8 @@ public:
     * Enable/disable interrupts in NVIC
     *
     * @param enable True => enable, False => disable
+    *
+    * @return E_NO_ERROR on success
     */
    static ErrorCode enableNvicInterrupts(bool enable=true) {
       if (enable) {
@@ -147,6 +154,7 @@ public:
     *  Enable/Disable the PIT channel
     *
     *  @param channel   Channel to enable
+    *  @param enable    Controls whether channel is enabled or disabled
     */
    static void enableChannel(const uint8_t channel, bool enable=true) {
       if (enable) {
@@ -192,8 +200,10 @@ public:
    }
    /**
     *   Disable the PIT channel
+    *
+    *   @param channel Channel to disable
     */
-   static void finaliseChannel(uint8_t channel) {
+   static void disableChannel(uint8_t channel) {
 
       // Disable timer channel
       pit->CHANNEL[channel].TCTRL = 0;
@@ -219,7 +229,7 @@ public:
 /**
  * Callback table for programmatically set handlers
  */
-template<class Info> PITCallbackFunction Pit_T<Info>::callback[] = {0};
+template<class Info> PITCallbackFunction Pit_T<Info>::callbacks[] = {0};
 
 #ifdef PIT
 /**

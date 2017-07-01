@@ -1,5 +1,5 @@
 /**
- * @file     osc.h
+ * @file     osc.h (180.ARM_Peripherals/Project_Headers/osc.h)
  * @brief    Oscillator interface
  *
  * @version  V4.12.1.80

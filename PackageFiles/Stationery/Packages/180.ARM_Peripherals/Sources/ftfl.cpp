@@ -1,5 +1,5 @@
 /**
- * @file    ftfl.cpp
+ * @file    ftfl.cpp (180.ARM_Peripherals/Sources/ftfl.cpp)
  * @brief   Flash support code
  *
  *  Created on: 10/1/2016
@@ -28,7 +28,7 @@ static constexpr uint8_t  F_ERSSCR      =  0x09;
 //static constexpr uint8_t  F_RD1ALL      =  0x40;
 //static constexpr uint8_t  F_RDONCE      =  0x41;
 //static constexpr uint8_t  F_PGMONCE     =  0x43;
-//static constexpr uint8_t  F_ERSALL      =  0x44;
+static constexpr uint8_t  F_ERSALL      =  0x44;
 //static constexpr uint8_t  F_VFYKEY      =  0x45;
 static constexpr uint8_t  F_PGMPART     =  0x80;
 //static constexpr uint8_t  F_SETRAM      =  0x81;
@@ -265,6 +265,19 @@ FlashDriverError_t Flash::eraseRange(uint8_t *address, uint32_t size) {
       size    -= sectorSize;
    }
    return FLASH_ERR_OK;
+}
+
+/**
+ * Mass erase entire Flash memory
+ */
+void Flash::eraseAll() {
+   FTFL->FCCOB0 = F_ERSALL;
+   FlashDriverError_t rc = executeFlashCommand();
+   (void)rc;
+   // Don't expect it to get here as flash is erased!!!!
+   for(;;) {
+      __asm__("nop");
+   }
 }
 
 }

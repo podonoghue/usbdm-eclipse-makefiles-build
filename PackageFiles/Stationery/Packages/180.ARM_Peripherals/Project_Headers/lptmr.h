@@ -1,5 +1,5 @@
 /**
- * @file     lptmr.h
+ * @file     lptmr.h (180.ARM_Peripherals/Project_Headers/lptmr.h)
  * @brief    Low power timer interface
  *
  * @version  V4.12.1.80

@@ -31,11 +31,11 @@ using Led   = USBDM::gpio_LED_RED;
 void callback(int status) {
    if (status & CMP_SCR_CFR_MASK) {
       // Rising edge
-      Led::low();
+      Led::on();
    }
    else if (status & CMP_SCR_CFF_MASK) {
       // Falling edge
-      Led::high();
+      Led::off();
    }
 #ifdef DEBUG_BUILD
    else {

@@ -1,5 +1,5 @@
 /**
- * @file      hardware.h
+ * @file      hardware.h (180.ARM_Peripherals/Project_Headers/hardware.h)
  *
  * @version  V4.12.1.80
  * @date     13 April 2016

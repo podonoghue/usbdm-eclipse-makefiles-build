@@ -1,5 +1,5 @@
 /**
- * @file     ftm.h
+ * @file     ftm.h (180.ARM_Peripherals/Project_Headers/ftm.h)
  * @brief    Flexitimer Timer Module
  *
  * @version  V4.12.1.80
@@ -828,7 +828,6 @@ public:
     * Set Timer event time
     *
     * @param eventTime  Event time relative to current event time (i.e. Timer channel CnV value)
-    * @param channel    Timer channel
     */
    static void setDeltaEventTime(uint16_t eventTime) {
       FtmBase_T<Info>::setDeltaEventTime(eventTime, channel);
@@ -838,7 +837,6 @@ public:
     * Set Timer event time
     *
     * @param eventTime  Event time relative to current time (i.e. Timer CNT value)
-    * @param channel    Timer channel
     */
    static void setRelativeEventTime(uint16_t eventTime) {
       FtmBase_T<Info>::setRelativeEventTime(eventTime, channel);

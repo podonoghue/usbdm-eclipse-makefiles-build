@@ -1,5 +1,5 @@
 /**
- * @file     gpio.h (from gpio_defs-MKE.h)
+ * @file     gpio.h  (180.ARM_Peripherals/Project_Headers/gpio-MKE.h)
  * @brief    GPIO Pin routines
  *
  * @version  V4.11.1.70

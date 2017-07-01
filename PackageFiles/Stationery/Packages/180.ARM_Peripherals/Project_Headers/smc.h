@@ -1,5 +1,5 @@
 /**
- * @file     smc.h
+ * @file     smc.h (180.ARM_Peripherals/Project_Headers/smc.h)
  * @brief    System Management Controller
  *
  * @version  V4.12.1.80
