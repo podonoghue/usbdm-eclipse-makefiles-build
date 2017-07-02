@@ -129,7 +129,7 @@
       class="net.sourceforge.usbdm.deviceEditor.validators.LptmrValidate">
    </validate>
 
-   <projectActionList id = "lptmr0_0" >
+   <projectActionList id = "lptmr_files" >
       <copy source="Project_Headers/lptmr.h"     target="Project_Headers/lptmr.h"      replace="true" derived="true" />
       <copy source="Snippets/lptmr-example.cpp"  target="Snippets/lptmr-example.cpp"   replace="true" derived="true"/>
    </projectActionList>

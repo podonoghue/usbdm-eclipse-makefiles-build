@@ -107,7 +107,7 @@
       \t   SMC_STOPCTRL_LLSM($(smc_stopctrl_llsm:0));   // LLS or VLLS Mode Control\n\n
    ]]></template>
 
-   <projectActionList id = "smc_def" >
+   <projectActionList id = "smc_files" >
       <copy source="Project_Headers/smc.h"         target="Project_Headers/smc.h"         replace="true" derived="true" />
    </projectActionList>
          

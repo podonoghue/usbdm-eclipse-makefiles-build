@@ -42,7 +42,7 @@
       class="net.sourceforge.usbdm.deviceEditor.validators.PitValidate">
    </validate>
 
-   <projectActionList id = "lptmr0_0" >
+   <projectActionList id = "pit_files" >
       <copy source="Snippets/pit-example1.cpp"       target="Snippets/pit-example1.cpp" />
       <copy source="Snippets/pit-example2-MK.cpp"    target="Snippets/pit-example2.cpp" />
       <copy source="Snippets/pit-example3-MK.cpp"    target="Snippets/pit-example3.cpp" />

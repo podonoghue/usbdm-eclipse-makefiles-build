@@ -38,7 +38,7 @@ static constexpr uint32_t TIMER_MASK = ((1UL<<24)-1UL);
  *
  * @return Time value in timer ticks
  */
-static inline int64_t convertMSToTicks(uint32_t ms) {
+static __attribute__((always_inline)) inline int64_t convertMSToTicks(uint32_t ms) {
    return ((uint64_t)ms * SystemCoreClock) / 1000;
 }
 
@@ -49,7 +49,7 @@ static inline int64_t convertMSToTicks(uint32_t ms) {
  *
  * @return Time value in milliseconds
  */
-static inline int64_t convertTicksToMS(uint32_t ticks) {
+static __attribute__((always_inline)) inline int64_t convertTicksToMS(uint32_t ticks) {
    return ((uint64_t)ticks * 1000 / SystemCoreClock);
 }
 
@@ -58,7 +58,7 @@ static inline int64_t convertTicksToMS(uint32_t ticks) {
  *
  * Note this is only required if getTicks() is used by itself
  */
-static inline void enableTimer() {
+static __attribute__((always_inline)) inline void enableTimer() {
    // Reload with maximum value 2^24
    SysTick->LOAD = -1;
 
@@ -75,7 +75,7 @@ static inline void enableTimer() {
  *
  * @return Number of ticks
  */
-static inline uint32_t getTicks() {
+static __attribute__((always_inline)) inline uint32_t getTicks() {
    return SysTick->VAL;
 }
 #endif

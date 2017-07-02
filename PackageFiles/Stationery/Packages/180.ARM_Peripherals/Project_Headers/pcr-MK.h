@@ -200,17 +200,17 @@ enum PinFilter {
  * Pin Multiplexor setting
  */
 enum PinMux {
-   PinMuxNone      = (0),            //!< Used for default/no mapping
-   PinMuxAnalogue  = (0),            //!< Analogue function
-   PinMuxAnalog    = PinMuxAnalogue, //!< Analogue function
-   PinMuxTsi       = PinMuxAnalogue, //!< Touch Sense function is analogue
-   PinMuxGpio      = (1),            //!< Gpio function
-   PinMux2         = (2),            //!< Mux 2
-   PinMux3         = (3),            //!< Mux 3
-   PinMux4         = (4),            //!< Mux 4
-   PinMux5         = (5),            //!< Mux 5
-   PinMux6         = (6),            //!< Mux 6
-   PinMux7         = (7),            //!< Mux 7
+   PinMuxNone      = PORT_PCR_MUX(0), //!< Used for default/no mapping
+   PinMuxAnalogue  = PORT_PCR_MUX(0), //!< Analogue function
+   PinMuxAnalog    = PinMuxAnalogue,  //!< Analogue function
+   PinMuxTsi       = PinMuxAnalogue,  //!< Touch Sense function is analogue
+   PinMuxGpio      = PORT_PCR_MUX(1), //!< Gpio function
+   PinMux2         = PORT_PCR_MUX(2), //!< Mux 2
+   PinMux3         = PORT_PCR_MUX(3), //!< Mux 3
+   PinMux4         = PORT_PCR_MUX(4), //!< Mux 4
+   PinMux5         = PORT_PCR_MUX(5), //!< Mux 5
+   PinMux6         = PORT_PCR_MUX(6), //!< Mux 6
+   PinMux7         = PORT_PCR_MUX(7), //!< Mux 7
 };
 
 /**
@@ -254,7 +254,7 @@ static __attribute__((always_inline)) constexpr PcrValue pcrValue(
       PinSlewRate       pinSlewRate       = PinSlewRateFast,
       PinMux            pinMux            = PinMuxNone
       ) {
-   return pinPull|pinDriveStrength|pinDriveMode|pinIrq|pinFilter|pinSlewRate|(pinMux<<8); // |PORT_PCR_MUX(pinMux) KDS indexer bug
+   return pinPull|pinDriveStrength|pinDriveMode|pinIrq|pinFilter|pinSlewRate|pinMux;
 }
 
 /**
@@ -406,7 +406,8 @@ public:
     * Set pin PCR value
     * The clock to the port will be enabled before changing the PCR
     *
-    * @param[in] pcrValue PCR value constructed using pcrValue() including MUX value. See See \ref pcrValue()
+    * @param[in] pcrValue PCR value constructed using pcrValue() including MUX value.\n
+    *                     Defaults to template value.
     */
    static __attribute__((always_inline)) void setPCR(PcrValue pcrValue=defPcrValue) {
       if ((pcrAddress != 0) && (bitNum >= 0)) {
@@ -417,13 +418,35 @@ public:
       }
    }
    /**
+    * Set Pin Control Register (PCR) value
+    *
+    * @param[in] pinPull          One of PinPullNone, PinPullUp, PinPullDown (defaults to PinPullNone)
+    * @param[in] pinDriveStrength One of PinDriveStrengthLow, PinDriveStrengthHigh (defaults to PinDriveLow)
+    * @param[in] pinDriveMode     One of PinDriveModePushPull, PinDriveModeOpenDrain (defaults to PinPushPull)
+    * @param[in] pinIrq           One of PinIrqNone, etc (defaults to PinIrqNone)
+    * @param[in] pinFilter        One of PinFilterNone, PinFilterEnabled (defaults to PinFilterNone)
+    * @param[in] pinSlewRate      One of PinSlewRateSlow, PinSlewRateFast (defaults to PinSlewRateFast)
+    * @param[in] pinMux           One of PinMuxAnalogue, PinMuxGpio etc (defaults to template value)
+    */
+   static __attribute__((always_inline)) void setPCR(
+         PinPull           pinPull,
+         PinDriveStrength  pinDriveStrength  = PinDriveStrengthLow,
+         PinDriveMode      pinDriveMode      = PinDriveModePushPull,
+         PinIrq            pinIrq            = PinIrqNone,
+         PinFilter         pinFilter         = PinFilterNone,
+         PinSlewRate       pinSlewRate       = PinSlewRateFast,
+         PinMux            pinMux            = (PinMux)(defPcrValue&PORT_PCR_MUX_MASK)
+         ) {
+      setPCR(pinPull|pinDriveStrength|pinDriveMode|pinIrq|pinFilter|pinSlewRate|pinMux);
+   }
+   /**
     * Set pin PCR.MUX value
     * Assumes clock to the port has already been enabled
     *
     * @param[in] pinMux PCR MUX value [0..7]
     */
    static __attribute__((always_inline)) void setMux(PinMux pinMux) {
-      *pcrReg = (*pcrReg&~PORT_PCR_MUX_MASK)|PORT_PCR_MUX(pinMux);
+      *pcrReg = (*pcrReg&~PORT_PCR_MUX_MASK) | pinMux;
    }
    /**
     * Sets pin interrupt/DMA mode
@@ -552,7 +575,7 @@ public:
 #endif
 
    /**
-    * Enable/disable interrupts in NVIC
+    * Enable/disable Pin interrupts in NVIC
     *
     * @param[in] enable true => enable, false => disable
     */

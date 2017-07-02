@@ -42,7 +42,7 @@
       class="net.sourceforge.usbdm.deviceEditor.validators.PitValidate">
    </validate>
 
-   <projectActionList id = "lptmr0_0" >
+   <projectActionList id = "pit_files" >
       <copy source="Snippets/pit-example1.cpp"       target="Snippets/pit-example1.cpp" />
       <copy source="Snippets/pit-example2-MKL.cpp"   target="Snippets/pit-example2.cpp" />
       <copy source="Project_Headers/pit-MKL.h"       target="Project_Headers/pit.h"        replace="true" derived="true" />

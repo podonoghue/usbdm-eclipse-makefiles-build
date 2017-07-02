@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fragment SYSTEM "_menu.dtd" >
+<!-- _simFiles.xml -->
+
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
+
+   <!-- Convenient location for common files -->
+   <projectActionList id = "sim_common_files" >
+      <copy source="Project_Headers/hardware.h"        target="Project_Headers/hardware.h" replace="true"  derived="true" />
+      <copy source="Sources/usbdmError.cpp"            target="Sources/usbdmError.cpp"     replace="true"  derived="true" />
+   </projectActionList>
+
+   <projectActionList id = "sim_port_files_mkl" >
+      <copy source="Project_Headers/pcr-MKL.h"       target="Project_Headers/pcr.h"    replace="true"  derived="true" />
+      <copy source="Project_Headers/gpio-MKL.h"      target="Project_Headers/gpio.h"   replace="true"  derived="true" />
+   </projectActionList>
+      
+</fragment>

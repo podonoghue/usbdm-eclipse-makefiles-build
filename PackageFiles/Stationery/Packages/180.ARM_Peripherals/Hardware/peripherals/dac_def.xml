@@ -99,7 +99,7 @@
       
    <xi:include href="_irqOption.xml"/>         
    
-   <projectActionList id = "cmp_files" >
+   <projectActionList id = "dac_files" >
       <copy source="Project_Headers/dac.h"     target="Project_Headers/dac.h"     replace="true" derived="true" />
       <copy source="Snippets/dac-example.cpp"  target="Snippets/dac-example.cpp"  replace="true" derived="true" />
    </projectActionList>

@@ -316,7 +316,7 @@
 
    <signals/>
 
-   <projectActionList id = "llwu_def" >
+   <projectActionList id = "llwu_files" >
       <copy source="Project_Headers/llwu.h"     target="Project_Headers/llwu.h"     replace="true" derived="true" />
       <copy source="Snippets/llwu-example.cpp"  target="Snippets/llwu-example.cpp"  replace="true" derived="true" />
    </projectActionList>

@@ -380,17 +380,13 @@ Devices using this peripheral:
                Must be &lt;= Core Clock frequency"
       value="24000000" />
 
-   <projectActionList id = "sim" >
-      <copy source="Project_Headers/pcr-MKL.h"       target="Project_Headers/pcr.h"  replace="true"  derived="true" />
-   </projectActionList>
-         
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.SimValidateMKL">
       <param type="long" value="48MHz" />    <!-- Core         -->
       <param type="long" value="24MHz" />    <!-- Bus          -->
    </validate>
 
-   <xi:include href="_simFiles.xml"/>
+   <xi:include href="_simFiles-MKL.xml"/>
          
    <template><![CDATA[
       \t/*

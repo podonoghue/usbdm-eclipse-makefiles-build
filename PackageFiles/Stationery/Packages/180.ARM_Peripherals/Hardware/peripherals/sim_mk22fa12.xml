@@ -496,10 +496,6 @@ Devices using this peripheral:
                Must be &lt;= Bus Clock frequency."
       value="24000000" />
 
-   <projectActionList id = "sim" >
-      <copy source="Project_Headers/pcr-MK.h"    target="Project_Headers/pcr.h"  replace="true"  derived="true" />
-   </projectActionList>
-         
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate">
       <param type="long" value="$(coreFreq)" />    <!-- Core         -->
@@ -508,7 +504,7 @@ Devices using this peripheral:
       <param type="long" value="$(flexFreq)" />    <!-- FlexBus      -->
    </validate>
 
-   <xi:include href="_simFiles.xml"/>
+   <xi:include href="_simFiles-MK.xml"/>
          
    <template><![CDATA[
       \t/**

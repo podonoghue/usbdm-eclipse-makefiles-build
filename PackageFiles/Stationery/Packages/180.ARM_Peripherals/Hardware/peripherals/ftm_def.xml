@@ -103,7 +103,7 @@
       class="net.sourceforge.usbdm.deviceEditor.validators.FtmValidate">
    </validate>
 
-   <projectActionList id = "ftm_def" >
+   <projectActionList id = "ftm_files" >
       <copy source="Project_Headers/ftm.h"                target="Project_Headers/ftm.h"                replace="true" derived="true" />
       <copy source="Snippets/ftm-pwm-example.cpp"         target="Snippets/ftm-pwm-example.cpp"         replace="true" derived="true" />
       <copy source="Snippets/ftm-servo-example.cpp"       target="Snippets/ftm-servo-example.cpp"       replace="true" derived="true" />

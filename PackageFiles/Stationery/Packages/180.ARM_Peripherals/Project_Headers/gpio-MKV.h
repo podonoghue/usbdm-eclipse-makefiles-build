@@ -96,7 +96,7 @@ public:
     * @param pcrValue PCR value to use in configuring port (excluding MUX value). See \ref pcrValue()
     */
    static void setPCR(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
-      Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|PORT_PCR_MUX(PinMuxGpio));
+      Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|PinMuxGpio);
    }
    /**
     * @brief
@@ -112,7 +112,7 @@ public:
       // Make pin an output
       bitbandSet(gpio->PDDR, bitNum);
 //      gpio->PDDR |= MASK;
-      Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|PORT_PCR_MUX(PinMuxGpio));
+      Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|PinMuxGpio);
    }
    /**
     * @brief
@@ -126,7 +126,7 @@ public:
       // Make pin an input
       bitbandClear(gpio->PDDR, bitNum);
 //      gpio->PDDR &= ~MASK;
-      Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|PORT_PCR_MUX(PinMuxGpio));
+      Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|PinMuxGpio);
    }
    /**
     * Set pin as digital output
@@ -439,10 +439,10 @@ public:
 
       // Include the if's as I expect one branch to be removed by optimisation unless the field spans the boundary
       if ((MASK&0xFFFFUL) != 0) {
-         port->GPCLR = PORT_GPCLR_GPWE(MASK)|(pcrValue&~PORT_PCR_MUX_MASK)|PORT_PCR_MUX(PinMuxGpio);
+         port->GPCLR = PORT_GPCLR_GPWE(MASK)|(pcrValue&~PORT_PCR_MUX_MASK)|PinMuxGpio;
       }
       if ((MASK&~0xFFFFUL) != 0) {
-         port->GPCHR = PORT_GPCHR_GPWE(MASK>>16)|(pcrValue&~PORT_PCR_MUX_MASK)|PORT_PCR_MUX(PinMuxGpio);
+         port->GPCHR = PORT_GPCHR_GPWE(MASK>>16)|(pcrValue&~PORT_PCR_MUX_MASK)|PinMuxGpio;
       }
    }
    /**

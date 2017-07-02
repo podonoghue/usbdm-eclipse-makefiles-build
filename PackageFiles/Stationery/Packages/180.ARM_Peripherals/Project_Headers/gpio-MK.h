@@ -100,10 +100,10 @@ public:
    /**
     * Set Pin Control Register (PCR) value
     *
-    * @param[in] pcrValue PCR value to use in configuring pin (excluding MUX value). See \ref pcrValue()
+    * @param[in] pcrValue PCR value to use in configuring pin (excluding MUX value). See pcrValue()
     */
    static __attribute__((always_inline)) void setPCR(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
-      Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|PORT_PCR_MUX(PinMuxGpio));
+      Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|PinMuxGpio);
    }
    /**
     * Set Pin Control Register (PCR) value
@@ -116,14 +116,14 @@ public:
     * @param[in] pinSlewRate      One of PinSlewRateSlow, PinSlewRateFast (defaults to PinSlewRateFast)
     */
    static __attribute__((always_inline)) void setPCR(
-         PinPull           pinPull           = PinPullNone,
+         PinPull           pinPull,
          PinDriveStrength  pinDriveStrength  = PinDriveStrengthLow,
          PinDriveMode      pinDriveMode      = PinDriveModePushPull,
          PinIrq            pinIrq            = PinIrqNone,
          PinFilter         pinFilter         = PinFilterNone,
          PinSlewRate       pinSlewRate       = PinSlewRateFast
          ) {
-      Pcr::setPCR(pinPull|pinDriveStrength|pinDriveMode|pinIrq|pinFilter|pinSlewRate|PORT_PCR_MUX(PinMuxGpio));
+      Pcr::setPCR(pinPull|pinDriveStrength|pinDriveMode|pinIrq|pinFilter|pinSlewRate|PinMuxGpio);
    }
    /**
     * Set pin as digital output
@@ -146,14 +146,14 @@ public:
     * @note Resets the pin value to the inactive state
     * @note Use setOut() for a lightweight change of direction without affecting other pin settings.
     *
-    * @param[in] pcrValue PCR value to use in configuring port (excluding MUX value). See \ref pcrValue()
+    * @param[in] pcrValue PCR value to use in configuring port (excluding MUX value). See pcrValue()
     */
    static __attribute__((always_inline)) void setOutput(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
       // Set initial level before enabling pin drive
-      clear();
+      setInactive();
       // Make pin an output
       setOut();
-      Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|PORT_PCR_MUX(PinMuxGpio));
+      Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|PinMuxGpio);
    }
    /**
     * @brief
@@ -201,7 +201,7 @@ public:
    static __attribute__((always_inline)) void setInput(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
       // Make pin an input
       setIn();
-      Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|PORT_PCR_MUX(PinMuxGpio));
+      Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|PinMuxGpio);
    }
    /**
     * @brief
@@ -310,12 +310,21 @@ public:
     * @note Polarity is significant
     */
    static __attribute__((always_inline)) void write(bool value) {
+#ifdef RELEASE_BUILD
+      if (polarity) {
+         bitbandWrite(gpio->PDOR, bitNum, value);
+      }
+      else {
+         bitbandWrite(gpio->PDOR, bitNum, !value);
+      }
+#else
       if (value) {
          setActive();
       }
       else {
          setInactive();
       }
+#endif
    }
    /**
     * Checks if pin is high
@@ -551,10 +560,10 @@ public:
 
       // Include the if's as I expect one branch to be removed by optimization unless the field spans the boundary
       if ((MASK&0xFFFFUL) != 0) {
-         port->GPCLR = PORT_GPCLR_GPWE(MASK)|(pcrValue&~PORT_PCR_MUX_MASK)|PORT_PCR_MUX(PinMuxGpio);
+         port->GPCLR = PORT_GPCLR_GPWE(MASK)|(pcrValue&~PORT_PCR_MUX_MASK)|PinMuxGpio;
       }
       if ((MASK&~0xFFFFUL) != 0) {
-         port->GPCHR = PORT_GPCHR_GPWE(MASK>>16)|(pcrValue&~PORT_PCR_MUX_MASK)|PORT_PCR_MUX(PinMuxGpio);
+         port->GPCHR = PORT_GPCHR_GPWE(MASK>>16)|(pcrValue&~PORT_PCR_MUX_MASK)|PinMuxGpio;
       }
    }
    /**

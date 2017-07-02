@@ -148,7 +148,7 @@
       class="net.sourceforge.usbdm.deviceEditor.validators.TpmValidate">
    </validate>
 
-   <projectActionList id = "tpm_quad" >
+   <projectActionList id = "tpm_files" >
       <copy source="Project_Headers/tpm.h"         target="Project_Headers/tpm.h"          replace="true" derived="true" />
       <copy source="Snippets/tpm-pwm-example.cpp"  target="Snippets/tpm-pwm-example.cpp"   replace="true" derived="true"/>
    </projectActionList>

@@ -34,9 +34,6 @@
    <copy source="Project_Headers/USBDM_Documentation.h"  target="Project_Headers/USBDM_Documentation.h"  replace="true"  derived="true" />
    <copy source="Project_Headers/pcr-&DEVICE_FAMILY;.h"  target="Project_Headers/pcr.h"                  replace="true"  derived="true" />
    <copy source="Project_Headers/gpio-&DEVICE_FAMILY;.h" target="Project_Headers/gpio.h"                 replace="true"  derived="true" />
-   <copy source="Project_Headers/hardware.h"             target="Project_Headers/hardware.h"             replace="true"  derived="true" />
-
-   <copy source="Sources/usbdmError.cpp"                 target="Sources/usbdmError.cpp"                 replace="true"  derived="true" />
    <copy source="Sources/main.cpp"                       target="Sources/main.cpp"                       replace="true" />
 
    <copy source="projectFiles/Configure.usbdmProject"    target="Configure.usbdmProject" />

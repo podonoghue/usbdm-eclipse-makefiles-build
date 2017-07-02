@@ -165,8 +165,9 @@
 
 <!-- List of actions to be applied to a project -->
 <!ELEMENT projectActionList ((deleteResource|copy|constant)*) >
-   <!ATTLIST projectActionList id    ID     #REQUIRED>
-   <!ATTLIST projectActionList root  CDATA  #IMPLIED>
+   <!ATTLIST projectActionList id          ID            #REQUIRED>
+   <!ATTLIST projectActionList root        CDATA         #IMPLIED>
+   <!ATTLIST projectActionList doOnceOnly  (true|false)  "true">
    
 <!-- Exclude/include source file in Eclipse project -->
 <!ELEMENT excludeSourceFile EMPTY >

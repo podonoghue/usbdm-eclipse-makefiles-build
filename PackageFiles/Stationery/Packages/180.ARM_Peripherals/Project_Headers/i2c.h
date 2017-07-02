@@ -374,7 +374,7 @@ public:
        */
       for (int i=0; i<9; i++) {
          // Set clock high (ideally 3-state)
-         sclGpio.set();
+         sclGpio.high();
          for(int j=0; j<20; j++) {
             __asm__("nop");
          }

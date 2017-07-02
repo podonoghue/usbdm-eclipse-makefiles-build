@@ -441,7 +441,7 @@
       <param type="long" value="1" />              <!-- pllPostDiv   -->
    </validate>
 
-   <projectActionList id = "mcg" >
+   <projectActionList id = "mcg_files" >
       <copy source="Project_Headers/mcg.h"             target="Project_Headers/mcg.h"  replace="true"  derived="true" />
       <copy source="Startup_Code/mcg_mkl.cpp"          target="Startup_Code/mcg.cpp"   replace="true"  derived="true" />
       <copy source="Snippets/test-mcg.cpp"             target="Snippets/test-mcg.cpp"  replace="true"  derived="true" />

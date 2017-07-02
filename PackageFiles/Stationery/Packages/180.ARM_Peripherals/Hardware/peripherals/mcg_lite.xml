@@ -216,7 +216,7 @@
       class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MCG_Lite">
    </validate>
 
-   <projectActionList id = "mcg" >
+   <projectActionList id = "mcg_files" >
       <copy source="Project_Headers/mcg_lite.h"        target="Project_Headers/mcg.h"      replace="true"  derived="true" />
       <copy source="Startup_Code/mcg_lite.cpp"         target="Startup_Code/mcg.cpp"       replace="true"  derived="true" />
       <copy source="Snippets/test-mcgLite.cpp"         target="Snippets/test-mcgLite.cpp"  replace="true"  derived="true" />

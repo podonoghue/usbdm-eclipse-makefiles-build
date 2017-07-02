@@ -90,9 +90,9 @@ enum TpmChannelMode {
  */
 enum TpmMode {
    //! Left-aligned PWM - also used for input capture and output compare modes
-   TpmLeftAlign   = 0,
+   TpmModeLeftAlign   = 0,
    //! Centre-aligned PWM
-   TpmCentreAlign = TPM_SC_CPWMS_MASK,
+   TpmModeCentreAlign = TPM_SC_CPWMS_MASK,
 };
 
 /**
@@ -102,7 +102,8 @@ typedef void (*TPMCallbackFunction)(volatile TPM_Type *tmr);
 /**
  * Type definition for TPM channel interrupt call back
  *
- * @param status Flags indicating interrupt source channels
+ * @param tmr    Timer hardware instance e.g. FTM or TPM
+ * @param status Flags indicating interrupt source channel(s)
  */
 typedef void (*TPMChannelCallbackFunction)(volatile TPM_Type *tmr, int status);
 
@@ -115,7 +116,7 @@ typedef void (*TPMChannelCallbackFunction)(volatile TPM_Type *tmr, int status);
  * const USBDM::TpmBase_T<TPM0_Info)> Tpm0;
  *
  * // Initialise PWM with initial period and alignment
- * Tpm0::initialise(200, USBDM::TpmLeftAlign);
+ * Tpm0::initialise(200, USBDM::TpmModeLeftAlign);
  *
  * // Change timer period
  * Tpm0::setPeriod(500);
@@ -160,7 +161,7 @@ public:
     *
     * @return True => enabled
     */
-   static bool isEnabled() {
+   static __attribute__((always_inline)) bool isEnabled() {
       return ((*clockReg & Info::clockMask) != 0) && ((tmr->SC & TPM_SC_CMOD_MASK) != 0);
    }
 
@@ -169,17 +170,17 @@ public:
     * Used to change configuration after enabling interface
     *
     * @param period  Period in ticks
-    * @param mode    Mode of operation see USBDM::TpmMode
+    * @param tpmMode Mode of operation see USBDM::TpmMode
     *
     * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
     */
-   static void configure(uint32_t period /* ticks */, TpmMode mode=TpmLeftAlign) {
+   static void configure(uint32_t period /* ticks */, TpmMode tpmMode=TpmModeLeftAlign) {
 
       // Disable so immediate effect
       tmr->SC      = 0;
 
-      tmr->SC      = mode;
-      if (mode == TpmCentreAlign) {
+      tmr->SC      = tpmMode;
+      if (tpmMode == TpmModeCentreAlign) {
          // Centre aligned PWM with CPWMS not selected
          tmr->SC   = Info::sc|TPM_SC_CPWMS_MASK;
       }
@@ -193,11 +194,11 @@ public:
    }
 
    /**
-    * Enable/disable interrupts in NVIC
+    * Enable/disable Timer interrupts in NVIC
     *
     * @param enable true to enable, false to disable
     */
-   static void enableNvicInterrupts(bool enable=true) {
+   static __attribute__((always_inline)) void enableNvicInterrupts(bool enable=true) {
 
       if (enable) {
          // Enable interrupts
@@ -217,7 +218,7 @@ public:
     *
     * @param enable true to enable, false to disable
     */
-   static void enableTimerOverflowInterrupts(bool enable=true) {
+   static __attribute__((always_inline)) void enableTimerOverflowInterrupts(bool enable=true) {
       if (enable) {
          tmr->SC |= TPM_SC_TOIE_MASK;
       }
@@ -231,7 +232,7 @@ public:
     *
     * @param period Period in seconds as a float
     *
-    * @note Adjusts TPM pre-scaler to appropriate value.
+    * @note Adjusts Timer pre-scaler to appropriate value.
     *       This will affect all channels
     *
     * @return true => success, false => failed to find suitable values
@@ -264,11 +265,60 @@ public:
    }
 
    /**
+    * Get frequency of timer tick
+    *
+    * @return Timer frequency in Hz
+    */
+   static __attribute__((always_inline)) float getTickFrequency() {
+
+      // Calculate timer prescale factor
+      int prescaleFactor = 1<<((tmr->SC&TPM_SC_PS_MASK)>>TPM_SC_PS_SHIFT);
+
+      return (float)Info::getInputClockFrequency() / prescaleFactor;
+   }
+
+   /**
+    * Set approximate frequency of timer tick
+    *
+    * @param frequency Frequency as a float
+    * @param tolerance Tolerance in percent
+    *
+    * @note Adjusts Timer pre-scaler to appropriate value.
+    *       This will affect all channels
+    *
+    * @return E_NO_ERROR       Success
+    * @return E_ILLEGAL_PARAM  Failed to find suitable pre-scaler values
+    */
+   static ErrorCode setTickFrequency(float frequency, float tolerance) {
+      float inputClockFrequency = Info::getInputClockFrequency();
+
+      int prescaleFactor=1;
+      int prescalerValue=0;
+      while (prescalerValue<=7) {
+         float tickFrequency = inputClockFrequency/prescaleFactor;
+
+         if ((100*std::abs((tickFrequency/frequency)-1)) < tolerance) {
+            // Clear SC so immediate effect on prescale change
+            uint32_t sc = tmr->SC&~TPM_SC_PS_MASK;
+            tmr->SC     = 0;
+            __DSB();
+            tmr->SC     = sc|TPM_SC_PS(prescalerValue);
+            return E_NO_ERROR;
+         }
+         prescalerValue++;
+         prescaleFactor <<= 1;
+      }
+      // Too long a period
+      return setErrorCode(E_ILLEGAL_PARAM);
+   }
+
+   /**
     * Set period
     *
     * @param period Period in ticks
     *
-    * @return E_NO_ERROR on success
+    * @return E_NO_ERROR       Success
+    * @return E_TOO_LARGE      Failed to find suitable pre-scaler values
     *
     * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
     */
@@ -277,8 +327,9 @@ public:
       // Check if CPWMS is set (affects period)
       bool centreAlign = (tmr->SC&TPM_SC_CPWMS_MASK) != 0;
 
-      // Disable so register changes are immediate
-      tmr->SC = TPM_SC_PS(0);
+      // Disable timer so register changes are immediate
+      uint8_t sc = tmr->SC;
+      tmr->SC = TPM_SC_CMOD(0);
 
       if (centreAlign) {
 #ifdef DEBUG_BUILD
@@ -289,7 +340,7 @@ public:
 #endif
          tmr->MOD = (uint32_t)(period/2);
          // Centre aligned PWM with CPWMS not selected
-         tmr->SC  = Info::sc|TPM_SC_CPWMS_MASK;
+         tmr->SC  = sc;
       }
       else {
 #ifdef DEBUG_BUILD
@@ -300,7 +351,7 @@ public:
 #endif
          tmr->MOD = (uint32_t)(period-1);
          // Left aligned PWM without CPWMS selected
-         tmr->SC  = Info::sc;
+         tmr->SC  = sc;
       }
       // OK period
       return setErrorCode(E_NO_ERROR);
@@ -388,7 +439,7 @@ public:
     * Set PWM duty cycle
     *
     * @param dutyCycle  Duty-cycle as percentage
-    * @param channel Timer channel
+    * @param channel    Timer channel
     */
    static void setDutyCycle(int dutyCycle, int channel) {
       if (tmr->SC&TPM_SC_CPWMS_MASK) {
@@ -400,11 +451,41 @@ public:
    }
 
    /**
+    * Set Timer event time
+    *
+    * @param eventTime  Absolute event time
+    * @param channel    Timer channel
+    */
+   static __attribute__((always_inline)) void setEventTime(uint16_t eventTime, int channel) {
+      tmr->CONTROLS[channel].CnV = eventTime;
+   }
+
+   /**
+    * Set Timer event time
+    *
+    * @param eventTime  Event time relative to current event time (i.e. Timer channel CnV value)
+    * @param channel    Timer channel
+    */
+   static __attribute__((always_inline)) void setDeltaEventTime(uint16_t eventTime, int channel) {
+      tmr->CONTROLS[channel].CnV += eventTime;
+   }
+
+   /**
+    * Set Timer event time
+    *
+    * @param eventTime  Event time relative to current time (i.e. Timer CNT value)
+    * @param channel    Timer channel
+    */
+   static __attribute__((always_inline)) void setRelativeEventTime(uint16_t eventTime, int channel) {
+      tmr->CONTROLS[channel].CnV = tmr->CNT + eventTime;
+   }
+
+   /**
     * Set PWM duty cycle\n
     * Higher precision float version
     *
     * @param dutyCycle  Duty-cycle as percentage (float)
-    * @param channel Timer channel
+    * @param channel    Timer channel
     */
    static void setDutyCycle(float dutyCycle, int channel) {
       if (tmr->SC&TPM_SC_CPWMS_MASK) {
@@ -442,14 +523,14 @@ public:
     *
     * @return E_NO_ERROR on success
     */
-   static ErrorCode setHighTime(float highTime, int channel) {
+   static __attribute__((always_inline)) ErrorCode setHighTime(float highTime, int channel) {
       return setHighTime(convertSecondsToTicks(highTime), channel);
    }
 
 };
 
 /**
- * Template class to provide TPM callback
+ * Template class to provide Timer callback
  */
 template<class Info>
 class TpmIrq_T : public TpmBase_T<Info> {
@@ -477,8 +558,8 @@ public:
       }
       uint8_t status = TpmBase_T<Info>::tmr->STATUS;
       if (status) {
-         // Clear channel event flags
-         TpmBase_T<Info>::tmr->STATUS &= ~status;
+         // Clear flags for channel events being handled (w1c register if read)
+         TpmBase_T<Info>::tmr->STATUS = status;
          if (callback != 0) {
             callback(TpmBase_T<Info>::tmr, status);
          }
@@ -486,19 +567,21 @@ public:
    }
 
    /**
-    * Set TOI Callback function
+    * Set TOI Callback function\n
+    * Note that one callback is shared by all channels of the FTM
     *
-    * @param theCallback Callback function to execute on interrupt
+    * @param theCallback Callback function to execute on overflow interrupt
     */
-   static void setToiCallback(TPMCallbackFunction theCallback) {
+   static __attribute__((always_inline)) void setTimerOverflowCallback(TPMCallbackFunction theCallback) {
       toiCallback = theCallback;
    }
    /**
-    * Set channel Callback function
+    * Set channel Callback function\n
+    * Note that one callback is shared by all channels of the FTM
     *
-    * @param theCallback Callback function to execute on interrupt
+    * @param theCallback Callback function to execute on channel interrupt
     */
-   static void setChannelCallback(TPMChannelCallbackFunction theCallback) {
+   static __attribute__((always_inline)) void setChannelCallback(TPMChannelCallbackFunction theCallback) {
       callback = theCallback;
    }
 };
@@ -507,34 +590,43 @@ template<class Info> TPMCallbackFunction         TpmIrq_T<Info>::toiCallback = 0
 template<class Info> TPMChannelCallbackFunction  TpmIrq_T<Info>::callback = 0;
 
 /**
- * Template class representing a TPM timer channel
+ * Template class representing a timer channel
  *
  * Example
  * @code
  * // Instantiate the timer channel (for TPM0 channel 6)
- * using Tpm0_ch6 = USBDM::TpmChannel<TPM0Info, 6>;
+ * using Tmr0_ch6 = USBDM::TpmChannel<TPM0Info, 6>;
  *
  * // Initialise PWM with initial period and alignment
- * Tpm0_ch6.setMode(200, PwmIO::TpmLeftAlign);
+ * Tmr0_ch6.setMode(200, PwmIO::TpmModeLeftAlign);
  *
  * // Change period (in ticks)
- * Tpm0_ch6.setPeriod(500);
+ * Tmr0_ch6.setPeriod(500);
  *
  * // Change duty cycle (in percent)
- * Tpm0_ch6.setDutyCycle(45);
+ * Tmr0_ch6.setDutyCycle(45);
  * @endcode
  *
  * @tparam channel TPM timer channel
  */
 template <class Info, int channel>
-class TpmChannel_T : public TpmBase_T<Info>, CheckSignal<Info, channel> {
+class TpmChannel_T : public TpmIrq_T<Info>, public PcrTable_T<Info, channel>, CheckSignal<Info, channel> {
+
+private:
+   using PcrTable_T<Info, channel>::enableNvicInterrupts;
 
 public:
 
+   /** Timer channel number */
+   static constexpr uint32_t CHANNEL      = channel;
+
+   /** Mask for Timer channel */
+   static constexpr uint32_t CHANNEL_MASK = 1<<channel;
+
    /**
     * Enable channel (and set mode)\n
-    * Bug - re-enables TPM every time a channel is enabled\n
-    * Use enableChannel() to avoid this
+    * Enables owning FTM if not already enabled\n
+    * Also see /ref enableChannel()
     *
     * @param mode Mode of operation for FTM e.g.FtmPwmHighTruePulses
     *
@@ -550,21 +642,21 @@ public:
 
    /**
     * Enable channel (and set mode)\n
-    * Doesn't affect shared settings of owning TPM
+    * Doesn't affect shared settings of owning Timer
     *
     * @param mode Mode of operation for FTM e.g.FtmPwmHighTruePulses
     */
-   static void enableChannel(TpmChannelMode mode = TpmPwmHighTruePulses) {
+   static __attribute__((always_inline)) void enableChannel(TpmChannelMode mode = TpmPwmHighTruePulses) {
       TpmBase_T<Info>::tmr->CONTROLS[channel].CnSC = mode;
    }
 
    /**
     * Enable or disable interrupt from this channel\n
-    * Note: It is necessary to enable interrupts in the TPM as well
+    * Note: It is necessary to enable interrupts in the Timer as well
     *
     * @param enable  True => enable, False => disable
     */
-   static void enableChannelInterrupts(bool enable=true) {
+   static __attribute__((always_inline)) void enableChannelInterrupts(bool enable=true) {
       if (enable) {
          TpmBase_T<Info>::tmr->CONTROLS[channel].CnSC |= TPM_CnSC_CHIE_MASK;
       }
@@ -574,14 +666,45 @@ public:
    }
 
    /**
-    * Set Pin Control Register Value (apart from mux)
+    * Enable/disable FTM interrupts in NVIC
+    *
+    * @param enable true to enable, false to disable
+    */
+   static __attribute__((always_inline)) void enableNvicInterrupts(bool enable=true) {
+      TpmIrq_T<Info>::enableNvicInterrupts(enable);
+   }
+
+   /**
+    * Set Pin Control Register Value (apart from pin multiplexor value)
     *
     * @param pcrValue PCR value to set
     */
-   static void setPCR(PcrValue pcrValue) {
-      PcrTable_T<Info,  channel>::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|(Info::info[channel].pcrValue&PORT_PCR_MUX_MASK));
+   static __attribute__((always_inline)) void setPCR(PcrValue pcrValue) {
+      PcrTable_T<Info, channel>::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|(Info::info[channel].pcrValue&PORT_PCR_MUX_MASK));
    }
 
+   /**
+    * Set Pin Control Register (PCR) value
+    *
+    * @param[in] pinPull          One of PinPullNone, PinPullUp, PinPullDown (defaults to PinPullNone)
+    * @param[in] pinDriveStrength One of PinDriveStrengthLow, PinDriveStrengthHigh (defaults to PinDriveLow)
+    * @param[in] pinDriveMode     One of PinDriveModePushPull, PinDriveModeOpenDrain (defaults to PinPushPull)
+    * @param[in] pinIrq           One of PinIrqNone, etc (defaults to PinIrqNone)
+    * @param[in] pinFilter        One of PinFilterNone, PinFilterEnabled (defaults to PinFilterNone)
+    * @param[in] pinSlewRate      One of PinSlewRateSlow, PinSlewRateFast (defaults to PinSlewRateFast)
+    * @param[in] pinMux           One of PinMuxAnalogue, PinMuxGpio etc (defaults to FTM selection value)
+    */
+   static __attribute__((always_inline)) void setPCR(
+         PinPull           pinPull,
+         PinDriveStrength  pinDriveStrength  = PinDriveStrengthLow,
+         PinDriveMode      pinDriveMode      = PinDriveModePushPull,
+         PinIrq            pinIrq            = PinIrqNone,
+         PinFilter         pinFilter         = PinFilterNone,
+         PinSlewRate       pinSlewRate       = PinSlewRateFast,
+         PinMux            pinMux            = (PinMux)(Info::info[channel].pcrValue&PORT_PCR_MUX_MASK)
+         ) {
+      PcrTable_T<Info, channel>::setPCR(pinPull,pinDriveStrength,pinDriveMode,pinIrq,pinFilter,pinSlewRate,pinMux);
+   }
    /**
     * Set PWM high time in ticks\n
     * Assumes value is less than period
@@ -590,7 +713,7 @@ public:
     *
     * @return E_NO_ERROR on success
     */
-   static ErrorCode setHighTime(uint32_t highTime) {
+   static __attribute__((always_inline)) ErrorCode setHighTime(uint32_t highTime) {
       return TpmBase_T<Info>::setHighTime(highTime, channel);
    }
 
@@ -602,7 +725,7 @@ public:
     *
     * @return E_NO_ERROR on success
     */
-   static ErrorCode setHighTime(float highTime) {
+   static __attribute__((always_inline)) ErrorCode setHighTime(float highTime) {
       return TpmBase_T<Info>::setHighTime(highTime, channel);
    }
    /**
@@ -610,7 +733,7 @@ public:
     *
     * @param dutyCycle  Duty-cycle as percentage
     */
-   static void setDutyCycle(int dutyCycle) {
+   static __attribute__((always_inline)) void setDutyCycle(int dutyCycle) {
       TpmBase_T<Info>::setDutyCycle(dutyCycle, channel);
    }
 
@@ -619,9 +742,35 @@ public:
     *
     * @param dutyCycle  Duty-cycle as percentage
     */
-   static void setDutyCycle(float dutyCycle) {
-
+   static __attribute__((always_inline)) void setDutyCycle(float dutyCycle) {
       TpmBase_T<Info>::setDutyCycle(dutyCycle, channel);
+   }
+
+   /**
+    * Set Timer event time
+    *
+    * @param eventTime  Absolute event time
+    */
+   static __attribute__((always_inline)) void setEventTime(uint16_t eventTime) {
+      TpmBase_T<Info>::setEventTime(eventTime, channel);
+   }
+
+   /**
+    * Set Timer event time
+    *
+    * @param eventTime  Event time relative to current event time (i.e. Timer channel CnV value)
+    */
+   static __attribute__((always_inline)) void setDeltaEventTime(uint16_t eventTime) {
+      TpmBase_T<Info>::setDeltaEventTime(eventTime, channel);
+   }
+
+   /**
+    * Set Timer event time
+    *
+    * @param eventTime  Event time relative to current time (i.e. Timer CNT value)
+    */
+   static __attribute__((always_inline)) void setRelativeEventTime(uint16_t eventTime) {
+      TpmBase_T<Info>::setRelativeEventTime(eventTime, channel);
    }
 
    /**
@@ -629,38 +778,38 @@ public:
     *
     * @return Channel number (0-7)
     */
-   static constexpr int getChannelNumber(void) {
+   static __attribute__((always_inline)) constexpr int getChannelNumber(void) {
       return channel;
    }
 
    /**
     * Clear interrupt flag on channel
     */
-   static void clearInterruptFlag(void) {
+   static __attribute__((always_inline)) void clearInterruptFlag(void) {
       TpmBase_T<Info>::tmr->CONTROLS[channel].CnSC &= ~TPM_CnSC_CHF_MASK;
    }
 };
 
 #ifdef USBDM_TPM0_IS_DEFINED
 /**
- * Template class representing a TPM0 timer channel
+ * Template class representing a Timer channel
  *
  * Example
  * @code
  * // Instantiate the timer channel (for TPM0 channel 6)
- * using Tpm0_ch6 = USBDM::Tpm0Channel<6>;
+ * using Tmr0_ch6 = USBDM::Tpm0Channel<6>;
  *
  * // Initialise PWM with initial period and alignment
- * Tpm0_ch6.setMode(200, PwmIO::TpmLeftAlign);
+ * Tmr0_ch6.setMode(200, PwmIO::TpmModeLeftAlign);
  *
  * // Change period (in ticks)
- * Tpm0_ch6.setPeriod(500);
+ * Tmr0_ch6.setPeriod(500);
  *
  * // Change duty cycle (in percent)
- * Tpm0_ch6.setDutyCycle(45);
+ * Tmr0_ch6.setDutyCycle(45);
  * @endcode
  *
- * @tparam channel TPM timer channel
+ * @tparam channel Timer channel
  */
 template <int channel>
 class Tpm0Channel : public TpmChannel_T<Tpm0Info, channel> {};
@@ -677,7 +826,7 @@ using Tpm0 = TpmIrq_T<Tpm0Info>;
  *
  * Refer @ref Tpm0Channel
  *
- * @tparam channel TPM timer channel
+ * @tparam channel Timer channel
  */
 template <int channel>
 class Tpm1Channel : public TpmChannel_T<Tpm1Info, channel> {};
@@ -694,7 +843,7 @@ using Tpm1 = TpmIrq_T<Tpm1Info>;
  *
  * Refer @ref Tpm0Channel
  *
- * @tparam channel TPM timer channel
+ * @tparam channel Timer channel
  */
 template <int channel>
 class Tpm2Channel : public TpmChannel_T<Tpm2Info, channel> {};
@@ -711,14 +860,14 @@ using Tpm2 = TpmIrq_T<Tpm2Info>;
  *
  * Refer @ref Tpm0Channel
  *
- * @tparam channel TPM timer channel
+ * @tparam channel Timer channel
  */
 template <int channel>
 class Tpm3Channel : public TpmBase_T<Tpm3Info>, CheckSignal<Tpm2Info, channel> {
 
-   /**
-    * Class representing TPM0
-    */
+/**
+ * Class representing TPM3
+ */
    using Tpm3 = TpmIrq_T<Tpm3Info>;
 #endif
 
