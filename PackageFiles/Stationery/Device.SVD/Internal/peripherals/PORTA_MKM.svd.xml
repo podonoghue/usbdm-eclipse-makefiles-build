@@ -55,12 +55,12 @@ Selects pull-up/down/none device</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>Pull-up</description>
+                           <description>Pull-down</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>Pull-down</description>
+                           <description>Pull-up</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
