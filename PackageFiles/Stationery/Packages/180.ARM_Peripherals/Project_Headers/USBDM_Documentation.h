@@ -30,74 +30,87 @@ It provides:\n
 - Polling input value
 - Polarity (\ref USBDM::ActiveHigh or \ref USBDM::ActiveLow) is selected when instantiated
 
- <b>Usage</b>
+<b>Examples</b>\n
+ - @ref digital-example1.cpp
+ - @ref digital-example2.cpp
+
+<b>Usage</b>
  @code
    using namespace USBDM;
 
    // Temporary for input values
    bool x;
 
-   // Instantiate for bit 3 of GpioC as active-high signal
-   GpioC<3, ActiveHigh> GpioC3;
+   // Use pin 3 of GPIOC as active-high signal i.e. PTC3
+   using Gpio = GpioC<3, ActiveHigh>;
 
    // Set as digital output
-   GpioC3.setOutput();
-   // Or for more detailed control
-   GpioC3.setOutput(pcrValue(PinPullUp, PinDriveHigh, PinOpenCollector));
+   Gpio::setOutput();
+   // or for more detailed control
+   Gpio::setOutput(PinDriveStrengthHigh, PinDriveModeOpenDrain);
 
-   // Set pin (polarity is applied)
-   GpioC3.setActive();
+   // Set pin to active level (polarity is applied)
+   Gpio::setActive();
+   // or
+   Gpio::on();
 
-   // Clear pin (polarity is applied)
-   GpioC3.setInactive();
+   // Clear pin to inactive level (polarity is applied)
+   Gpio::setInactive();
+   // or
+   Gpio::off();
 
    // Set pin to a high level (polarity is ignored)
-   GpioC3.set();
+   Gpio::set();
+   // or
+   Gpio::high();
 
    // Set pin to a low level (polarity is ignored)
-   GpioC3.clear();
+   Gpio::clear();
+   // or
+   Gpio::low();
 
    // Toggle pin
-   GpioC3.toggle();
+   Gpio::toggle();
 
    // Set pin to boolean value (polarity is applied)
-   GpioC3.write(true);
+   Gpio::write(true);
 
    // Set pin to boolean value (polarity is applied)
-   GpioC3.write(false);
+   Gpio::write(false);
 
    // Enable pull-up
-   GpioC3.setPullDevice(PinPullUp);
+   // This will only have effect when pin is an input
+   Gpio::setPullDevice(PinPullUp);
 
    // Set drive strength
-   GpioC3.setDriveStrength(PinDriveHigh);
+   Gpio::setDriveStrength(PinDriveStrengthHigh);
 
    // Set open-drain
-   GpioC3.setDriveMode(PinOpenDrain);
+   Gpio::setDriveMode(PinDriveModeOpenDrain);
 
    // Read pin as boolean value (polarity is applied)
-   // This may be useful if the pin is open-drain
-   x = GpioC3.read();
+   x = Gpio::read();
 
    // Read _state_ of pin drive as boolean value (polarity is applied)
-   // This may be useful if the pin is open-drain
-   GpioC3.setDriveMode(PinOpenDrain);
-   GpioC3.high();
-   if (GpioC3.readState() != GpioC3.read()) {
+   // This may differ from the value on the pin
+   // May be useful if the pin is open-drain
+   Gpio::setDriveMode(PinOpenDrain);
+   Gpio::high();
+   if (Gpio::readState() != Gpio::read()) {
       printf("Open-drain pin is being held low\n");
    }
 
-   // Dynamically set pin as input
-   GpioC3.setIn();
+   // Dynamically change pin to input
+   Gpio::setIn();
 
    // Read pin as boolean value (polarity is applied)
-   x = GpioC3.read();
+   x = Gpio::read();
 
    // Read pin as boolean value (polarity is ignored)
-   x = GpioC3.isHigh();
+   x = Gpio::isHigh();
 
    // Read pin as boolean value (polarity is ignored)
-   x = GpioC3.isLow();
+   x = Gpio::isLow();
  @endcode
 
 @page ADCExamples Analogue-to-Digital
@@ -112,26 +125,31 @@ It provides:\n
 - Clock and conversion speed are done through the configuration.
 - Interrupt driven operation is also supported through a callback if enabled in the configuration.
 
- <b>Usage</b>
+<b>Examples</b>\n
+ - @ref analogue-diff-example.cpp
+ - @ref analogue-interrupt-example.cpp
+ - @ref analogue-joystick-example.cpp
+
+ <b>Usage - Single-ended measurement</b>
  @code
    using namespace USBDM;
 
    // Instantiate an ADC input (for ADC0 channel 6)
-   using Adc0_ch6 = USBDM::Adc0Channel<6>;
+   using AdcChannel = USBDM::Adc0Channel<6>;
 
    // Set ADC resolution to 16 bits
-   Adc0_ch6::setResolution(resolution_16bit_se);
+   AdcChannel::setResolution(AdcResolution_16bit_se);
 
    // Set ADC averaging to 4 samples
-   Adc0_ch6::setAveraging(averaging_4);
+   AdcChannel::setAveraging(AdcAveraging_4);
 
    // Read ADC value
-   uint32_t value = Adc0_ch6::readAnalogue();
+   uint32_t value = AdcChannel::readAnalogue();
 
    printf("ADC measurement = %lu\n", value);
  @endcode
 
- <b>Usage</b>
+ <b>Usage - Differential measurement</b>
  @code
    using namespace USBDM;
 
@@ -139,10 +157,10 @@ It provides:\n
    using Adc1_diff0 = USBDM::Adc0DiffChannel<0>;
 
    // Set ADC resolution to 11 bits differential
-   Adc1_diff0::setResolution(resolution_11bit_diff);
+   Adc1_diff0::setResolution(AdcResolution_11bit_diff);
 
    // Set ADC averaging to 4 samples
-   Adc1_diff0::setAveraging(averaging_4);
+   Adc1_diff0::setAveraging(AdcAveraging_4);
 
    // Read signed differential ADC value
    int32_t value = Adc1_diff0::readAnalogue();
@@ -162,7 +180,14 @@ It provides:\n
 - Static pin mapping in conjunction with the configuration settings.
 - Setting the FTM period in ticks or seconds
 - Setting the channel duty cycle in percentage
-- Interrupt driven operation is also supported through a callback if enabled in the configuration.
+- Interrupt driven operation is also supported through a callback if <b>enabled in the configuration</b>.
+
+<b>Examples</b>\n
+ - @ref ftm-ic-example.cpp
+ - @ref ftm-oc-example.cpp
+ - @ref ftm-pwm-example.cpp
+ - @ref ftm-quadrature-example.cpp
+ - @ref ftm-servo-example.cpp
 
  <b>Usage - PWM</b>
 @code
@@ -184,19 +209,19 @@ It provides:\n
    Ftm0::setPeriod(125*us);
 
    // Use FTM0 channel 3
-   using Ftm0Channel3 = Ftm0Channel<3> ;
+   using PwmOutput = Ftm0Channel<3> ;
 
    // Set channel to generate PWM with active-high pulses
-   Ftm0Channel3::enable(ftm_pwmHighTruePulses);
+   PwmOutput::enable(ftm_pwmHighTruePulses);
 
    // Set duty cycle as percentage
-   Ftm0Channel3::setDutyCycle(34);
+   PwmOutput::setDutyCycle(34);
 
    // Set duty cycle as percentage (float)
-   Ftm0Channel3::setDutyCycle(12.25f);
+   PwmOutput::setDutyCycle(12.25f);
 
    // Set high time in microseconds (float)
-   Ftm0Channel3::setHighTime(63*us);
+   PwmOutput::setHighTime(63*us);
 @endcode
 
  <b>Usage - Quadrature Encoder</b>
@@ -214,7 +239,7 @@ It provides:\n
    QuadEncoder::enableFilter(15);
 
    // Reset position to zero
-   // Movement will be relative to this value
+   // Movement will be relative to this position
    QuadEncoder::resetPosition();
 
    // Set up callback for quadrature overflow or underflow
@@ -230,7 +255,7 @@ It provides:\n
 
 @page PITExamples Programmable Interrupt Timer Module
 
-Convenience template for PIT hardware USBDM::Pit_T.
+Convenience template for PIT hardware. Based on USBDM::Pit_T.\n
 
 It provides:\n
 - Static pin mapping in conjunction with the configuration settings.
@@ -238,15 +263,20 @@ It provides:\n
 - Accurate busy-wait delays using a timer channel
 - Interrupt driven operation is also supported through a callback if enabled in the configuration.
 
+<b>Examples</b>\n
+ - @ref pit-example1.cpp
+ - @ref pit-example2.cpp
+ - @ref pit-example3.cpp
+
  <b>Usage - PIT busy-wait</b>
 @code
    using namespace USBDM;
 
    // LED is assumed active-low
-   using LED = USBDM::GpioA<2, USBDM::ActiveLow>;
+   using Led = USBDM::GpioA<2, USBDM::ActiveLow>;
 
    // Use high drive for LED
-   LED::setOutput(pcrValue(PinPullNone, PinDriveHigh));
+   Led::setOutput(pcrValue(PinPullNone, PinDriveHigh));
 
    // Enable PIT
    Pit::enable();
@@ -255,12 +285,13 @@ It provides:\n
    checkError();
 
    for(;;) {
-      LED::toggle();
+      Led::toggle();
 
       // Delay in milliseconds using channel 0
       Pit::delay(0, 1000*ms);
    }
 @endcode
+
 
 @example analogue-diff-example.cpp
 @example analogue-interrupt-example.cpp
@@ -269,6 +300,8 @@ It provides:\n
 @example digital-example1.cpp
 @example digital-example2.cpp
 @example flash_programming_example.cpp
+@example ftm-ic-example.cpp
+@example ftm-oc-example.cpp
 @example ftm-pwm-example.cpp
 @example ftm-quadrature-example.cpp
 @example ftm-servo-example.cpp
@@ -295,6 +328,7 @@ It provides:\n
 @example pca9685.h
 @example pit-example1.cpp
 @example pit-example2.cpp
+@example pit-example3.cpp
 @example rtc-example.cpp
 @example test-mcg.cpp
 @example tsi-mk-example.cpp
