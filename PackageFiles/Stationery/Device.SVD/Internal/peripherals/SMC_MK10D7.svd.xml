@@ -270,7 +270,8 @@ This field controls which LLS or VLLS sub-mode to enter if STOPM = LLSx or VLLSx
             </register>
             <register derivedFrom="STOPCTRL"> <name>VLLSCTRL</name> <?hide?> <?doDerivedMacros?> <description>VLLS Control Register
 Provides various control bits allowing the user to fine tune
-power consumption during the stop mode selected by the STOPM field</description> <addressOffset>0x2</addressOffset> </register>
+power consumption during the stop mode selected by the STOPM field
+(Freescale old name)</description> <addressOffset>0x2</addressOffset> </register>
             <register>
                <name>PMSTAT</name>
                <description>Power Mode Status Register</description>
