@@ -304,12 +304,18 @@ static constexpr PcrValue I2C_DEFAULT_PCR =  pcrValue(PinPullUp, PinDriveStrengt
 static constexpr PcrValue XTAL_DEFAULT_PCR = pcrValue(PinPullNone, PinDriveStrengthLow, PinDriveModePushPull);
 
 /**
- * Type definition for PIT interrupt call back
+ * Type definition for PORT interrupt call back.
+ * This callback is shared by all port pins
  *
  * @param[in] status 32-bit value from ISFR (each bit indicates an interrupt source)
  */
 typedef void (*PinCallbackFunction)(uint32_t status);
 
+/**
+ * Common PORT features shared by all port pins
+ *
+ * tparam pcrAddress Base address of PCR register array
+ */
 template<uint32_t pcrAddress>
 class PcrBase_T {
 
@@ -330,7 +336,7 @@ public:
       // Clear flags
       port->ISFR = status;
 
-      if (fCallback != 0) {
+      if (fCallback != nullptr) {
          fCallback(status);
       }
       else {
@@ -338,11 +344,11 @@ public:
       }
    }
    /**
-    * Set callback for ISR
+    * Set callback for Pin IRQ
     *
-    * @note There is a single callback function for all pins on this port.
+    * @note There is a single callback function for all pins on the related port.
     *
-    * @param[in] callback The function to call from stub ISR
+    * @param[in] callback The function to call on Pin interrupt
     */
    static __attribute__((always_inline)) void setCallback(PinCallbackFunction callback) {
       fCallback = callback;
@@ -387,6 +393,8 @@ private:
 
 public:
    using PcrBase = PcrBase_T<pcrAddress>;
+
+   using PcrBase_T<pcrAddress>::setCallback;
 
    /**
     * Enable/disable clock associated with PORT
