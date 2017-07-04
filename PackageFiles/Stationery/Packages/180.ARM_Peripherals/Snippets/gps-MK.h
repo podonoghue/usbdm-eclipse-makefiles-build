@@ -100,8 +100,8 @@ protected:
       S_geodUnits,
    };
 
-   UART_Type  *uart;
-   uint32_t   &uartClockFrequency; // Usually SystemCoreClock or SystemBusClock
+   volatile UART_Type  *uart;
+   volatile uint32_t   &uartClockFrequency; // Usually SystemCoreClock or SystemBusClock
 
    State       state;
    State       pushState;
@@ -120,7 +120,7 @@ protected:
     * @param uartClockFrequency Clock frequency of UART hardware. Usually SystemCoreClock or SystemBusClock
     *
     */
-   Gps(UART_Type *uart, uint32_t &uartClockFrequency) : uart(uart), uartClockFrequency(uartClockFrequency), state(S_idle), pushState(S_idle) {
+   Gps(volatile UART_Type *uart, volatile uint32_t *uartClockFrequency) : uart(uart), uartClockFrequency(*uartClockFrequency), state(S_idle), pushState(S_idle) {
    }
    /**
     * Start parsing a number
@@ -220,7 +220,7 @@ protected:
    static Gps *thisPtr;
 
 private:
-   using SclGpio = GpioTable_T<Info, 0>;
+   using SclGpio = GpioTable_T<Info, 0, ActiveHigh>;
 
 public:
    /**
@@ -228,7 +228,7 @@ public:
     *
     * @param uartClockFrequency Input clock frequency to UART
     */
-   Gps_T() : Gps(reinterpret_cast<UART_Type *>(Info::basePtr), Info::clockSource) {
+   Gps_T() : Gps(Info::uart, Info::clockReg) {
 
 #ifdef DEBUG_BUILD
    static_assert(Info::info[0].gpioBit != UNMAPPED_PCR, "UARTx: Tx signal is not mapped to a pin");
@@ -238,7 +238,7 @@ public:
       thisPtr = this;
 
       // Enable clock to UART interface
-      *reinterpret_cast<uint32_t *>(Info::clockReg) |= Info::clockMask;
+      *(Info::clockReg) |= Info::clockMask;
 
       // Configure Tx & Rx pins
       Info::initPCRs();
@@ -259,6 +259,7 @@ public:
       NVIC_DisableIRQ(Info::irqNums[0]);
       gpsData = Gps::gpsData;
       newData = false;
+      NVIC_EnableIRQ(Info::irqNums[0]);
       if ((sizeof(Info::irqNums)/sizeof(Info::irqNums[0])) > 1) {
          NVIC_EnableIRQ(Info::irqNums[1]);
       }

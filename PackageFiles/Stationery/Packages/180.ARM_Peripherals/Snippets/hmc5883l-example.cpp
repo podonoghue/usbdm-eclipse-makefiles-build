@@ -47,7 +47,7 @@ int main() {
    uint32_t id = magnetometer.readID();
    printf("Device ID = 0x%6lX (should be 0x483433)\n", id);
 
-   magnetometer.setGain(3);
+//   magnetometer.setGain(3);
 
    for(;;) {
       report(magnetometer);

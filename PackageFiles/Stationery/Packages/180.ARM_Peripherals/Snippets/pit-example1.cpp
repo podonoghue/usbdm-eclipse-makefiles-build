@@ -11,13 +11,15 @@
 #include "hardware.h"
 #include "pit.h"
 
+using namespace USBDM;
+
 // Connection mapping - change as required
 // Led is assumed active-low
-using LED   = $(demo.cpp.red.led:USBDM::GpioB<0>);
+using LED   = $(demo.cpp.red.led:GpioB<0>);
 
 int main() {
 
-   LED::setOutput(pcrValue(PinPullNone, PinDriveHigh));
+   LED::setOutput(PinDriveStrengthHigh);
 
    // Enable PIT
    Pit::enable();

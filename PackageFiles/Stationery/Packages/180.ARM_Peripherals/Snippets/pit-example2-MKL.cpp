@@ -62,8 +62,8 @@ void flashGreen(void) {
 }
 
 int main() {
-   RED_LED::setOutput();
-   GREEN_LED::setOutput();
+   RED_LED::setOutput(PinDriveStrengthHigh);
+   GREEN_LED::setOutput(PinDriveStrengthHigh);
 
    // Turn off LED initially
    RED_LED::set();

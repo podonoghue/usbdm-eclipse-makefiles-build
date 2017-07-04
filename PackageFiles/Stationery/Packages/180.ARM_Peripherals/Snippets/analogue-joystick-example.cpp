@@ -23,8 +23,8 @@ using namespace USBDM;
 
 // Connection mapping - change as required
 using JOYSTICK_X = $(demo.cpp.joystick.x:USBDM::Adc0Channel<0>);
-using JOYSTICK_Y = $(demo.cpp.joystick.y:USBDM::Adc0Channel<1>);
-using JOYSTICK_K = $(demo.cpp.joystick.k:USBDM::GpioB<0>);
+using JOYSTICK_Y = $(demo.cpp.joystick.y:USBDM::Adc0Channel<3>);
+using JOYSTICK_K = $(demo.cpp.joystick.k:USBDM::GpioC<3>);
 
 int main(void) {
    JOYSTICK_X::enable();

@@ -115,7 +115,7 @@ public:
    /**
     * Destructor
     */
-   virtual ~LSM303DLH() {
+   virtual ~HMC5883L() {
    }
 
    /**

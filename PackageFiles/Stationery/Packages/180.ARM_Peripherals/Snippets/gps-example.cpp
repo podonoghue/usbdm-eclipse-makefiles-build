@@ -43,8 +43,9 @@
 using namespace USBDM;
 
 /**
- * This example requires use of floating point in printf()
- * It is necessary to change the library options to support this
+ * This example requires use of floating point in printf().
+ * If this option was not selected in the new project wizard then
+ * it is necessary to change the library options.
  *
  * Right-click on project and open Properties
  *
@@ -52,7 +53,7 @@ using namespace USBDM;
  * Select [ARM C++ Linker->General] in middle panel
  * Turn on [Support %f format in printf]
  *
- * (In may be necessary to clean and re-build the project)
+ * It will be necessary to clean and re-build the project.
  */
 
 // LED connections

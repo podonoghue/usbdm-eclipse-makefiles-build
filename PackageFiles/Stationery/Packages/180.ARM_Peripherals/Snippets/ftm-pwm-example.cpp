@@ -36,7 +36,7 @@ static void delay(void) {
  *
  */
 // Connection mapping - change as required
-using LED1 = $(demo.cpp.pwm.led1:Ftm0Channel<0>);
+using LED1 = $(demo.cpp.pwm.led1:Ftm0Channel<7>);
 
 #ifdef MCU_MK64F12
 #error "PWM is not available on LEDs"
@@ -58,6 +58,7 @@ template<> void FtmIrq_T<Ftm0Info>::irqHandler() {
 
 int main() {
    LED1::enable();
+   LED1::setDriveStrength(PinDriveStrengthHigh);
 
    /*
     * Change PWM period

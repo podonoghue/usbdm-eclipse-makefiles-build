@@ -25,9 +25,9 @@ class Servo {
 
 private:
    // Assumes servo is controlled by a [1,2] millisecond pulse repeated every 20 millisecond
-   static constexpr float_t SERVO_PERIOD = 20.0 * ms;
-   static constexpr float_t SERVO_MIN    =  1.0 * ms;
-   static constexpr float_t SERVO_MAX    =  2.0 * ms;
+   static constexpr float SERVO_PERIOD = 20.0 * ms;
+   static constexpr float SERVO_MIN    =  1.0 * ms;
+   static constexpr float SERVO_MAX    =  2.0 * ms;
 
 public:
    /**
@@ -36,7 +36,7 @@ public:
     */
    static void enable() {
       FtmChannel::enable();
-      FtmChannel::setPCR(pcrValue(PinPullNone, PinDriveHigh));
+      FtmChannel::setDriveStrength(PinDriveStrengthHigh);
       FtmChannel::setPeriod(SERVO_PERIOD);
       FtmChannel::setHighTime((SERVO_MIN+SERVO_MAX)/2);
    }
@@ -57,7 +57,7 @@ public:
 // Instantiate servo on pin
 // It will be necessary to map the pin to a FTM channel in Configure.usbdmProject
 //using servo = Servo<ftm_D2>;
-using servo = Servo<Ftm0Channel<3>>;
+using servo = Servo<Ftm0Channel<0>>;
 
 int main() {
    printf("Starting\n");

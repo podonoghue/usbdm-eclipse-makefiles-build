@@ -49,8 +49,13 @@ constexpr int sectorSize = Flash::programFlashSectorSize;
  * Array located in program flash that will be programmed.
  * Must not be in same sector as code or constant data!
  */
-__attribute__ ((section(".flash"), aligned(sectorSize)))
-static uint8_t copy[sectorSize];
+#define FLASH_SECTOR_SIZE 1 // Should be set to value of sectorSize
+#if FLASH_SECTOR_SIZE == 1
+// constexpr not supported in directives!
+#error "Define FLASH_SECTOR_SIZE (above) as a simple integer equal to sectorSize"
+#endif
+__attribute__ ((section(".flash"), aligned(FLASH_SECTOR_SIZE)))
+static uint8_t copy[Flash::programFlashSectorSize];
 #endif
 
 /** Data to be programmed to flash */

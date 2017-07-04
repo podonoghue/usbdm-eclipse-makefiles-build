@@ -86,7 +86,7 @@ int main() {
 
    printf("Core freq = %ld\n", ::SystemCoreClock);
 
-   USBDM::Llwu::initialise();
+   USBDM::Llwu::enable();
    USBDM::Llwu::setCallback(llwuCallback);
 
    USBDM::Smc::initialise();
