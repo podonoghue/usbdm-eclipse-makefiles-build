@@ -69,7 +69,7 @@ public:
     */
    static void initialise() {
       smc->PMPROT   = Info::pmprot;
-      smc->VLLSCTRL = Info::vllsctrl;
+      smc->STOPCTRL = Info::stopctrl;
    }
 
    /**
