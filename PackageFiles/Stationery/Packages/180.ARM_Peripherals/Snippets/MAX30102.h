@@ -198,9 +198,9 @@ public:
     * @param callback Call-back function to execute on interrupt
     */
    void configureInterrupts(PinCallbackFunction callback) {
-      IrqPin::setInput(pcrValue(PinPullUp));
+      IrqPin::setInput(pcrValue(PinPull_Up));
       IrqPin::setCallback(callback);
-      IrqPin::setIrq(PinIrqFalling);
+      IrqPin::setIrq(PinIrq_Falling);
       IrqPin::enableNvicInterrupts();
    }
 };

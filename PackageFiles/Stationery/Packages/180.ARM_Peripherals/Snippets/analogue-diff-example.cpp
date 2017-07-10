@@ -23,7 +23,7 @@ using adcChannel = Adc0DiffChannel<0>;
 
 int main(void) {
    // Enable ADC
-   adcChannel::enable();
+   adcChannel::configure();
 
    // May change default resolution e.g.
 //   adcChannel::setResolution(USBDM::AdcResolution_8bit_se);

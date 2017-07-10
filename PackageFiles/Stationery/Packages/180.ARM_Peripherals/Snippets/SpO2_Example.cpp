@@ -77,7 +77,7 @@ using maxIrqSense = USBDM::GpioC<1> ;         // Pin PTC1 connects to the interr
 using led         = USBDM::ftm_LED_GREEN;     // PWM Green LED
 using dac         = USBDM::Dac0;
 
-USBDM::I2c0 i2c(400000, USBDM::i2c_polled);   // PTB0=SCL, PTB1=SDA
+USBDM::I2c0 i2c(400000, USBDM::i2cMode_Polled);   // PTB0=SCL, PTB1=SDA
 
 /*
  * The setup routine runs once when you press reset.

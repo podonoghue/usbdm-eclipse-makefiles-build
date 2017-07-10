@@ -28,9 +28,9 @@ void flashGreen(void) {
 }
 
 int main() {
-   Led::setOutput(PinDriveStrengthHigh);
+   Led::setOutput(PinDriveStrength_High);
 
-   Pit::enable();
+   Pit::configure();
 
    // Set handler for channel 1 programmatically
    Pit::setCallback(1, flashGreen);

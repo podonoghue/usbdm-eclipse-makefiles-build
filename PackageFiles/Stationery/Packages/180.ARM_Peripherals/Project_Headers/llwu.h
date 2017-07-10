@@ -33,11 +33,21 @@ protected:
    static constexpr volatile LLWU_Type *llwu = Info::llwu;
 
 public:
+
+   /**
+    * Basic enable of LLWU\n
+    * Includes configuring all pins
+    */
+   static void enable() {
+      // Configure pins
+      Info::initPCRs();
+   }
+
    /**
     * Initialise LLWU to default settings\n
     * Configures all LLWU pins
     */
-   static void enable() {
+   static void configure() {
 
       // Configure pins
       Info::initPCRs();

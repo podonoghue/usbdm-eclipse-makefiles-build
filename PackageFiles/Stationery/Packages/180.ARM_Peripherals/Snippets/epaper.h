@@ -384,7 +384,7 @@ public:
       constexpr float ADC_SPAN       = 3.3;
       constexpr float ADC_RESOLUTION = (float)((1<<16)-1);
 
-      s8120Cadc::setMode(Adc_Resolution::AdcResolution_16bit_se);
+      s8120Cadc::setMode(AdcResolution::AdcResolution_16bit_se);
       uint32_t sum = 0;
       for(int i=0; i<32; i++) {
          sum += (unsigned)s8120Cadc::readAnalogue();

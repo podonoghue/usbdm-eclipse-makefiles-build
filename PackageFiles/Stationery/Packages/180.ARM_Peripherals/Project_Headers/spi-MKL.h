@@ -36,15 +36,15 @@ extern "C" void SPI2_IRQHandler(void);
  */
 
 enum SpiMode {
-   SpiMode0 = SPI_C1_CPOL(0)|SPI_C1_CPHA(0), // Active-high clock (idles low), Data is captured on leading edge of SCK and changes on the following edge.
-   SpiMode1 = SPI_C1_CPOL(0)|SPI_C1_CPHA(1), // Active-high clock (idles low), Data is changes on leading edge of SCK and captured on the following edge.
-   SpiMode2 = SPI_C1_CPOL(1)|SPI_C1_CPHA(0), // Active-low clock (idles high), Data is captured on leading edge of SCK and changes on the following edge.
-   SpiMode3 = SPI_C1_CPOL(1)|SPI_C1_CPHA(1), // Active-low clock (idles high), Data is changes on leading edge of SCK and captured on the following edge.
+   SpiMode_0 = SPI_C1_CPOL(0)|SPI_C1_CPHA(0), // Active-high clock (idles low), Data is captured on leading edge of SCK and changes on the following edge.
+   SpiMode_1 = SPI_C1_CPOL(0)|SPI_C1_CPHA(1), // Active-high clock (idles low), Data is changes on leading edge of SCK and captured on the following edge.
+   SpiMode_2 = SPI_C1_CPOL(1)|SPI_C1_CPHA(0), // Active-low clock (idles high), Data is captured on leading edge of SCK and changes on the following edge.
+   SpiMode_3 = SPI_C1_CPOL(1)|SPI_C1_CPHA(1), // Active-low clock (idles high), Data is changes on leading edge of SCK and captured on the following edge.
 };
 
 enum SpiOrder {
-   SpiMsbFirst = SPI_C1_LSBFE(0),
-   SpiLsbFirst = SPI_C1_LSBFE(1),
+   SpiOrder_MsbFirst = SPI_C1_LSBFE(0),
+   SpiOrder_LsbFirst = SPI_C1_LSBFE(1),
 };
 
 using SpiModeValue = uint32_t;
@@ -52,10 +52,10 @@ using SpiModeValue = uint32_t;
 /**
  * Calculate SPI mode value from components
  *
- * @param spiMode  SPI Mode e.g. SpiMode0
- * @param spiOrder Bit order e.g. SpiMsbFirst
+ * @param spiMode  SPI Mode e.g. SpiMode_0
+ * @param spiOrder Bit order e.g. SpiOrder_MsbFirst
  */
-static constexpr SpiModeValue spiModeValue(SpiMode spiMode=SpiMode0, SpiOrder spiOrder=SpiMsbFirst) {
+static constexpr SpiModeValue spiModeValue(SpiMode spiMode=SpiMode_0, SpiOrder spiOrder=SpiOrder_MsbFirst) {
    return spiMode|spiOrder;
 }
 

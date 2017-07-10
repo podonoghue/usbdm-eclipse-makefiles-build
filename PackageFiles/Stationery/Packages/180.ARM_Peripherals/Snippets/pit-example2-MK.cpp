@@ -61,10 +61,10 @@ void flashGreen(void) {
 }
 
 int main() {
-   LED1::setOutput(PinDriveStrengthHigh);
-   LED2::setOutput(PinDriveStrengthHigh);
+   LED1::setOutput(PinDriveStrength_High);
+   LED2::setOutput(PinDriveStrength_High);
 
-   Pit::enable();
+   Pit::configure();
 
 #ifdef SET_HANDLERS_PROGRAMMATICALLY
    // Set handlers programmatically

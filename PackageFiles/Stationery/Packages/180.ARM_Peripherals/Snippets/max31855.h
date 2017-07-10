@@ -56,7 +56,7 @@ public:
 
       // Configure SPI
       spi.setSpeed(2500000);
-      spi.setMode(USBDM::SpiMode0);
+      spi.setMode(USBDM::SpiMode_0);
       spi.setDelays(0.1*USBDM::us, 0.1*USBDM::us, 0.1*USBDM::us);
       spi.setFrameSize(8);
 

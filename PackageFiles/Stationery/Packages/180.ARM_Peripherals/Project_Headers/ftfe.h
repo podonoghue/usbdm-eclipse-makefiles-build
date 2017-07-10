@@ -22,7 +22,7 @@ namespace USBDM {
  */
 
 // Error codes
-typedef enum {
+enum FlashDriverError_t {
    FLASH_ERR_OK                = (0),
    FLASH_ERR_LOCKED            = (1),  // Flash is still locked
    FLASH_ERR_ILLEGAL_PARAMS    = (2),  // Parameters illegal
@@ -39,7 +39,7 @@ typedef enum {
    FLASH_ERR_UNKNOWN           = (13), // Unspecified error
    FLASH_ERR_PROG_RDCOLERR     = (14), // Read Collision
    FLASH_ERR_NEW_EEPROM        = (15), // Indicates EEPROM has just bee partitioned and need initialisation
-} FlashDriverError_t;
+};
 
 /**
  * Class representing Flash interface

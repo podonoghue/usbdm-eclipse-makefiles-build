@@ -112,7 +112,7 @@ public:
 
       spi.startTransaction();
       spi.setSpeed(5000000);
-      spi.setMode(USBDM::SpiMode3);
+      spi.setMode(USBDM::SpiMode_3);
       spi.setDelays(1*USBDM::us, 1*USBDM::us, 1*USBDM::us);
       spi.setFrameSize(8);
 

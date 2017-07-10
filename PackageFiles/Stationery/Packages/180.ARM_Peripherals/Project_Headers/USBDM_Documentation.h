@@ -59,7 +59,7 @@ This is a template class with static methods.\n
    // Set as digital output
    Gpio::setOutput();
    // or for more detailed control
-   Gpio::setOutput(PinDriveStrengthHigh, PinDriveModeOpenDrain);
+   Gpio::setOutput(PinDriveStrength_High, PinDriveMode_OpenDrain);
 
    // Set pin to active level (polarity is applied)
    Gpio::setActive();
@@ -92,13 +92,13 @@ This is a template class with static methods.\n
 
    // Enable pull-up
    // This will only have effect when pin is an input
-   Gpio::setPullDevice(PinPullUp);
+   Gpio::setPullDevice(PinPull_Up);
 
    // Set drive strength
-   Gpio::setDriveStrength(PinDriveStrengthHigh);
+   Gpio::setDriveStrength(PinDriveStrength_High);
 
    // Set open-drain
-   Gpio::setDriveMode(PinDriveModeOpenDrain);
+   Gpio::setDriveMode(PinDriveMode_OpenDrain);
 
    // Read pin as boolean value (polarity is applied)
    x = Gpio::read();
@@ -312,7 +312,7 @@ This is a template class with static methods.\n
    using Led = GpioA<2, ActiveLow>;
 
    // Use high drive for LED
-   Led::setOutput(pcrValue(PinPullNone, PinDriveHigh));
+   Led::setOutput(pcrValue(PinPull_None, PinDrive_High));
 
    // Enable PIT
    Pit::enable();
@@ -328,6 +328,10 @@ This is a template class with static methods.\n
    }
 @endcode
 
+@page Notes Notes
+  - enable()      Enables clock and cnfigures pins (if present)
+  - configure()   As above, enable() + initialises according to Configure.usbdmProject
+  - disable()     Disables the peripheral
 
 @example analogue-diff-example.cpp
 @example analogue-interrupt-example.cpp

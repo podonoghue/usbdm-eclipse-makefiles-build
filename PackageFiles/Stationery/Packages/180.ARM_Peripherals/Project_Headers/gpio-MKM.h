@@ -613,15 +613,15 @@ static constexpr uint32_t    ADC_DEFAULT_PCR = ADC_PORT_FN;
 /**
  * ADC Resolutions for use with AnalogueIO::setMode()
  */
-enum Adc_Resolution {
-   resolution_8bit_se    = ADC_CFG1_MODE(0),
-   resolution_10bit_se   = ADC_CFG1_MODE(2),
-   resolution_12bit_se   = ADC_CFG1_MODE(1),
-   resolution_16bit_se   = ADC_CFG1_MODE(3),
-   resolution_9bit_diff  = ADC_CFG1_MODE(0),
-   resolution_11bit_diff = ADC_CFG1_MODE(2),
-   resolution_12bit_diff = ADC_CFG1_MODE(1),
-   resolution_16bit_diff = ADC_CFG1_MODE(3),
+enum AdcResolution {
+   AdcResolution_8bit_se    = ADC_CFG1_MODE(0),
+   AdcResolution_10bit_se   = ADC_CFG1_MODE(2),
+   AdcResolution_12bit_se   = ADC_CFG1_MODE(1),
+   AdcResolution_16bit_se   = ADC_CFG1_MODE(3),
+   AdcResolution_9bit_diff  = ADC_CFG1_MODE(0),
+   AdcResolution_11bit_diff = ADC_CFG1_MODE(2),
+   AdcResolution_12bit_diff = ADC_CFG1_MODE(1),
+   AdcResolution_16bit_diff = ADC_CFG1_MODE(3),
 };
 
 /**
@@ -663,7 +663,7 @@ public:
     *
     * @note This initialises the ADC
     */
-   static void setMode(uint32_t mode = resolution_16bit_se) {
+   static void setMode(uint32_t mode = AdcResolution_16bit_se) {
       // Enable clock to ADC
       *clockReg  |= info::clockMask;
 

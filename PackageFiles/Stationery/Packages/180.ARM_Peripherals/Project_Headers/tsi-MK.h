@@ -35,14 +35,22 @@ protected:
 
 public:
    /**
-    * Initialise TSI to default settings\n
-    * Configures all TSI pins
+    * Basic enable of TSI\n
+    * Includes configuring all pins
     */
-   static void enable() {
+   void enable() {
       *clockReg |= Info::clockMask;
       __DMB();
 
       Info::initPCRs();
+   }
+
+   /**
+    * Initialise TSI to default settings\n
+    * Configures all TSI pins
+    */
+   static void configure() {
+      enable();
 
       tsi->GENCS     = Info::tsi_gencs|TSI_GENCS_TSIEN_MASK;
       tsi->SCANC     = Info::tsi_scanc;

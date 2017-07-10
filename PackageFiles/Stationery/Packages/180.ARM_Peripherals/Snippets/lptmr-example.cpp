@@ -19,7 +19,7 @@ using namespace USBDM;
 #define SET_HANDLERS_PROGRAMMATICALLY
 
 // Connection mapping - change as required
-using RED_LED   = $(demo.cpp.red.led:USBDM::GpioB<0>);
+using RED_LED   = $(demo.cpp.red.led:USBDM::GpioC<3>);
 
 /*
  * This handler is set programmatically

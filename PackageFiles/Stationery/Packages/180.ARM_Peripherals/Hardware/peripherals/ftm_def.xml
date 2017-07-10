@@ -76,6 +76,28 @@
       \t    FTM_SC_PS($(ftm_sc_ps));    // Prescale Factor Selection \n\n
    ]]></template>
 
+   <category name="External Triggers" description="External Triggers">
+      <bitmaskOption name="ftm_exttrig_trig"   description="External Trigger Enable" 
+         toolTip="Enables the generation of the trigger when the FTM counter \n
+          is equal to the channel CnV register."
+         value="0"
+         bitmask="0x3F" 
+         bitList="CH2TRIG,CH3TRIG,CH4TRIG,CH5TRIG,CH0TRIG,CH1TRIG," 
+         />
+      <binaryOption name="ftm_exttrig_inittrigen" description="Initialization Trigger Enable"
+         toolTip="Enables the generation of the trigger when the FTM counter \n
+          is equal to the CNTIN register.">
+         <choice value="0" name="Disabled" />
+         <choice value="1" name="Enabled" />
+      </binaryOption>
+   </category>   
+   <template><![CDATA[
+      \t//! Default value for EXTTRIG) register\n
+      \tstatic constexpr uint32_t exttrig  = 
+      \t    $(ftm_exttrig_trig)|                              // External Trigger Enable
+      \t    FTM_EXTTRIG_INITTRIGEN($(ftm_exttrig_inittrigen));    // Initialization Trigger Enable \n\n
+   ]]></template>
+
    <category name="Advanced" description="Advanced options">
       <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)clksel"  optional="true" constant="false" />
       <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)flt0"    optional="true" constant="false" />

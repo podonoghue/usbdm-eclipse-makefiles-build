@@ -51,14 +51,22 @@ private:
 
 public:
    /**
-    * Enable the voltage reference with default settings
+    * Basic enable of VREF\n
+    * Includes configuring all pins
     */
-   static void enable() {
+   void enable() {
       // Configure pin (if necessary)
       Info::initPCRs();
 
       // Enable clock to VREF interface
       *clockReg |= Info::clockMask;
+   }
+
+   /**
+    * Enable the voltage reference with default settings
+    */
+   static void configure() {
+      enable();
 
       // Initialise hardware
       vref->TRM  = Info::vref_trm;
@@ -68,6 +76,7 @@ public:
          // Wait until stable
       }
    }
+
    /**
     * Sets the voltage reference mode
     *

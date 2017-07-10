@@ -30,7 +30,7 @@ int main() {
    printf("SystemBusClock  = %ld\n", USBDM::SystemBusClock);
    printf("SystemCoreClock = %ld\n", USBDM::SystemCoreClock);
 
-   Tsi0::enable();
+   Tsi0::configure();
 
 //   Tsi0::setCallback(tsiCallback);
 //   Tsi0::enableErrorInterrupts();

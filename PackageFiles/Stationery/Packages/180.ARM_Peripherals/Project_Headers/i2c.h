@@ -31,9 +31,9 @@ namespace USBDM {
  */
 
 /** I2C Operating mode */
-enum I2c_Mode {
-   i2c_polled    = 0,                   //!< Operate in i2c_polled mode
-   i2c_interrupt = I2C_C1_IICIE_MASK,   //!< Operate in i2c_interrupt mode
+enum I2cMode {
+   i2cMode_Polled    = 0,                   //!< Operate in Polled mode
+   i2cMode_Interrupt = I2C_C1_IICIE_MASK,   //!< Operate in Interrupt mode
 };
 
 /**
@@ -48,7 +48,7 @@ public:
 protected:
    volatile I2C_Type  *i2c;                 //!< I2C hardware instance
    I2C_State           state;               //!< State of current transaction
-   const I2c_Mode      mode;                //!< Mode of operation (i2c_interrupt/i2c_polled)
+   const I2cMode       mode;                //!< Mode of operation (i2cMode_Interrupt/i2cMode_Polled)
    uint16_t            rxBytesRemaining;    //!< Number of receive bytes remaining in current transaction
    uint16_t            txBytesRemaining;    //!< Number of transmit bytes remaining in current transaction
    uint8_t            *rxDataPtr;           //!< Pointer to receive data for current transaction
@@ -63,10 +63,10 @@ protected:
     * Construct I2C interface
     *
     * @param[in]  i2c  Base address of I2C hardware
-    * @param[in]  mode Mode of operation (i2c_interrupt or i2c_polled)
+    * @param[in]  mode Mode of operation (i2cMode_Interrupt or i2cMode_Polled)
     *
     */
-   I2c(volatile I2C_Type *i2c, I2c_Mode mode) :
+   I2c(volatile I2C_Type *i2c, I2cMode mode) :
       i2c(i2c), state(i2c_idle), mode(mode), rxBytesRemaining(0), txBytesRemaining(0), rxDataPtr(0), txDataPtr(0), addressedDevice(0), errorCode(0) {
    }
 
@@ -299,7 +299,7 @@ public:
     * @param[in]  mode       Mode of operation
     * @param[in]  myAddress  Address of this device on bus (not currently used)
     */
-   I2c_T(unsigned bps=400000, I2c_Mode mode=i2c_polled, uint8_t myAddress=0) : I2c(Info::i2c, mode) {
+   I2c_T(unsigned bps=400000, I2cMode mode=i2cMode_Polled, uint8_t myAddress=0) : I2c(Info::i2c, mode) {
 
 #ifdef DEBUG_BUILD
    // Check pin assignments
@@ -364,26 +364,26 @@ public:
    virtual void busHangReset() {
 
       // GPIOs used for bit-banging
-      GpioTable_T<Info, 0, USBDM::ActiveLow>  sclGpio; // Inactive is high
-      GpioTable_T<Info, 1, USBDM::ActiveHigh> sdaGpio;
+      using sclGpio = GpioTable_T<Info, 0, USBDM::ActiveLow>; // Inactive is high
+      using sdaGpio = GpioTable_T<Info, 1, USBDM::ActiveHigh>;
 
-      sclGpio.setOutput(Info::defaultPcrValue);
-      sdaGpio.setInput(Info::defaultPcrValue);
+      sclGpio::setOutput(Info::defaultPcrValue);
+      sdaGpio::setInput(Info::defaultPcrValue);
       /*
        * Set SCL initially high before enabling to minimise disturbance to bus
        */
       for (int i=0; i<9; i++) {
          // Set clock high (ideally 3-state)
-         sclGpio.high();
+         sclGpio::high();
          for(int j=0; j<20; j++) {
             __asm__("nop");
          }
          // If data is high bus is OK
-         if (sdaGpio.read()) {
+         if (sdaGpio::read()) {
             break;
          }
          // Set clock low
-         sclGpio.low();
+         sclGpio::low();
          for(int j=0; j<20; j++) {
             __asm__("nop");
          }

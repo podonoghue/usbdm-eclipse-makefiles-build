@@ -14,13 +14,19 @@
  * Note - Not all FTMs support quadrature encoder functions
  */
 
+using namespace USBDM;
+
+// Use FTM1 as the quadrature encoder
+// Not all FTMs support this mode
+using QuadEncoder = QuadEncoder1;
+
 /**
  * Callback executed on timer overflow/underflow
  *
  * @param tmr Pointer to hardware
  */
-void callBack(volatile FTM_Type *tmr) {
-   if (tmr->QDCTRL & FTM_QDCTRL_QUADIR_MASK) {
+void callBack() {
+   if (QuadEncoder::ftm->QDCTRL & FTM_QDCTRL_QUADIR_MASK) {
       // Indicates overflow while increasing
    }
    else {
@@ -29,12 +35,6 @@ void callBack(volatile FTM_Type *tmr) {
 }
 
 int main() {
-   using namespace USBDM;
-
-   // Use FTM1 as the quadrature encoder
-   // Not all FTMs support this mode
-   using QuadEncoder = QuadEncoder1;
-
    // Enable encoder
    QuadEncoder::enable();
 
@@ -49,6 +49,9 @@ int main() {
    QuadEncoder::setTimerOverflowCallback(callBack);
    QuadEncoder::enableTimerOverflowInterrupts();
    QuadEncoder::enableNvicInterrupts();
+
+   // Check if configuration failed
+   USBDM::checkError();
 
    for (;;) {
       // Report position

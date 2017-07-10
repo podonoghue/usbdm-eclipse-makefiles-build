@@ -20,10 +20,10 @@ using LED   = $(demo.cpp.red.led:GpioB<0>);
 
 int main() {
 
-   LED::setOutput(PinDriveStrengthHigh);
+   LED::setOutput(PinDriveStrength_High);
 
    // Enable PIT
-   Pit::enable();
+   Pit::configure();
 
    // Check for errors so far
    checkError();

@@ -109,7 +109,7 @@ void LcdBase::init() {
    spi.setSpeed(10000000);
 
    // Mode 0, MSB first
-   spi.setMode(spiModeValue(SpiMode0, SpiMsbFirst));
+   spi.setMode(spiModeValue(SpiMode_0, SpiOrder_MsbFirst));
 
    // Use 9-bit transfers
    spi.setFrameSize(9);

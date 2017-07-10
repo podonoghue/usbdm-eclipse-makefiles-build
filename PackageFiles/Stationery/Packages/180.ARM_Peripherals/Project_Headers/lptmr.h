@@ -86,7 +86,7 @@ enum LptmrPulseEdge {
 /**
  * Select when the LPTMR counter resets to zero
  */
-enum LptmrReset {
+enum LptmrResetOn {
    LptmrResetOn_Compare  = LPTMR_CSR_TFC(0), //!< LPTMR Counter is reset whenever TCF is set.
    LptmrResetOn_Overflow = LPTMR_CSR_TFC(1), //!< LPTMR Counter is reset on overflow.
 };
@@ -114,7 +114,7 @@ public:
    /**
     * Enables the LPTMR clock and configures the pins
     */
-   static void __attribute__((always_inline)) enableClock() {
+   static void __attribute__((always_inline)) enable() {
       // Configure pins
       Info::initPCRs();
 
@@ -122,38 +122,39 @@ public:
       *clockReg |= Info::clockMask;
       __DMB();
    }
+   
    /**
     * Set LPTMR to pulse counting mode with selection of input pin, edge selection and reset mode.\n
     * The timer is enabled.
     *
     * @param[in] lptmrPinSel     Input pin for Pulse Counting mode
     * @param[in] lptmrPulseEdge  Edge for pulse counting (default = rising-edge)
-    * @param[in] LptmrReset      Selects when the LPTMR counter resets to zero (default = on overflow)
+    * @param[in] lptmrResetOn    Selects when the LPTMR counter resets to zero (default = on overflow)
     */
    static void __attribute__((always_inline)) setPulseCountingMode(
          LptmrPinSel       lptmrPinSel,
          LptmrPulseEdge    lptmrPulseEdge=LptmrPulse_RisingEdge,
-         LptmrReset        lptmrReset=LptmrResetOn_Overflow) {
+         LptmrResetOn      lptmrResetOn=LptmrResetOn_Overflow) {
 
-      enableClock();
+      enable();
       // Change settings with timer disabled
-      lptmr->CSR = LPTMR_CSR_TMS_MASK|lptmrPinSel|lptmrPulseEdge|lptmrReset;
+      lptmr->CSR = LPTMR_CSR_TMS_MASK|lptmrPinSel|lptmrPulseEdge|lptmrResetOn;
       // Enable timer
-      lptmr->CSR = LPTMR_CSR_TEN_MASK|LPTMR_CSR_TMS_MASK|lptmrPinSel|lptmrPulseEdge|lptmrReset;
+      lptmr->CSR = LPTMR_CSR_TEN_MASK|LPTMR_CSR_TMS_MASK|lptmrPinSel|lptmrPulseEdge|lptmrResetOn;
    }
 
    /**
     * Set LPTMR to time counting mode.\n
     * The timer is enabled.
     *
-    * @param[in] LptmrReset Selects when the LPTMR counter resets to zero (default = on compare event)
+    * @param[in] lptmrResetOn Selects when the LPTMR counter resets to zero (default = on compare event)
     */
-   static void __attribute__((always_inline)) setTimeCountingMode(LptmrReset lptmrReset=LptmrResetOn_Compare) {
-      enableClock();
+   static void __attribute__((always_inline)) setTimeCountingMode(LptmrResetOn lptmrResetOn=LptmrResetOn_Compare) {
+      enable();
       // Change settings with timer disabled
-      lptmr->CSR = lptmrReset;
+      lptmr->CSR = lptmrResetOn;
       // Enable timer
-      lptmr->CSR = LPTMR_CSR_TEN_MASK|lptmrReset;
+      lptmr->CSR = LPTMR_CSR_TEN_MASK|lptmrResetOn;
    }
 
    /**
@@ -235,22 +236,15 @@ public:
 
    /**
     * Enable LPTMR\n
-    * Includes enabling clock and any pins used.
+    * Includes enabling clock and any pins used.\n
     * Sets LPTMR to default configuration
-    */
-   static void enable() {
-      enable();
-      configure();
-   }
-
-   /**
-    *  Configure the LPTMR
     *
     *  @param[in]  period    Period for the timer in timer ticks
     *  @param[in]  csr       Control Status Register
     *  @param[in]  psr       Prescale Register
     */
    static void configure(uint16_t period=Info::cmr, uint32_t csr=Info::csr, uint32_t psr=Info::psr) {
+      enable();
       // Disable timer
       lptmr->CSR  = csr;
       // PCS 0,1,2,3 => MCGIRCLK, LPO, ERCLK32K, OSCERCLK
@@ -368,7 +362,7 @@ public:
     *
     * @param[in]  period Period in seconds as a float
     *
-    * @note May enable and adjust the pre-scaler to appropriate value.
+    * @note Will enable and adjust the pre-scaler to appropriate value.
     *
     * @return true => success, false => failed to find suitable values for PBYP & PRESCALE
     */

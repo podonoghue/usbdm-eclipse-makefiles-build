@@ -388,11 +388,11 @@ public:
     */
    Lcd_T(Spi &spi) : LcdBase(spi) {
       // Chip select pin
-      SpiCS_n::setOutput(pcrValue(PinPullNone, PinDriveStrengthHigh));
+      SpiCS_n::setOutput(pcrValue(PinPull_None, PinDriveStrength_High));
       SpiCS_n::high();         // Set idle high
 
       // LCD Reset pin
-      Reset_n::setOutput(pcrValue(PinPullNone, PinDriveStrengthHigh));
+      Reset_n::setOutput(pcrValue(PinPull_None, PinDriveStrength_High));
       Reset_n::high();
 
       init();
@@ -497,7 +497,7 @@ public:
       }
       BackLight::setDutyCycle(level);
 #else
-      BackLight::setOutput(pcrValue(PinPullNone, PinDriveStrengthHigh));
+      BackLight::setOutput(pcrValue(PinPull_None, PinDriveStrength_High));
       BackLight::write(level>0);
 #endif
    }

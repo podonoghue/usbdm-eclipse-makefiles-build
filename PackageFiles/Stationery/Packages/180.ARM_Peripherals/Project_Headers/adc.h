@@ -56,7 +56,7 @@ namespace USBDM {
  * Default PCR value for pins used as GPIO (including multiplexor value)
  */
 static constexpr PcrValue ADC_DEFAULT_PCR = pcrValue(
-      PinPullNone, PinDriveStrengthLow, PinDriveModePushPull, PinIrqNone, PinFilterNone, PinSlewRateFast, PinMuxAnalogue);
+      PinPull_None, PinDriveStrength_Low, PinDriveMode_PushPull, PinIrq_None, PinFilter_None, PinSlewRate_Fast, PinMux_Analogue);
 
 /**
  * ADC Resolutions for use with AnalogueIO::setMode()
@@ -148,8 +148,8 @@ public:
    static constexpr volatile ADC_Type *adc      = Info::adc;
 
    /**
-    * Initialise ADC to default settings\n
-    * Configures all ADC pins
+    * Basic enable of ADC\n
+    * Includes configuring all pins
     */
    static void enable() {
       // Configure pins
@@ -160,7 +160,15 @@ public:
       // Enable clock to ADC
       *clockReg  |= Info::clockMask;
       __DMB();
+   }
 
+   /**
+    * Initialise ADC to default settings\n
+    * Configures all ADC pins
+    */
+   static void configure() {
+      enable();
+      
       // Set mode to default
       adc->CFG1 = Info::cfg1;
       adc->CFG2 = Info::cfg2;
@@ -252,21 +260,6 @@ public:
     */
    static __attribute__((always_inline)) void setAveraging(AdcAveraging adcAveraging = AdcAveraging_4) {
       adc->SC3 = (adc->SC3&~(ADC_SC3_AVGE_MASK|ADC_SC3_AVGS_MASK))|adcAveraging;
-   }
-
-   /**
-    * Configure ADC to default settings
-    *
-    * @param[in] cfg1 CFG1 register value
-    * @param[in] cfg2 CFG1 register value
-    * @param[in] sc2  SC2 register value
-    *
-    */
-   static void configure(uint32_t cfg1=Info::cfg1, uint32_t cfg2=Info::cfg2, uint32_t sc2=Info::sc2) {
-      // Set mode
-      adc->CFG1 = cfg1;
-      adc->CFG2 = cfg2;
-      adc->SC2  = sc2;
    }
 
 protected:

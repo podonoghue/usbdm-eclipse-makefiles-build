@@ -15,11 +15,11 @@
 /**
  * See more examples in Snippets directory
  *
- * Using a ADC channel
+ * Using an ADC channel
  *  using adcChannel = USBDM::Adc0Channel<6>;
  *  adcChannel::enable();
- *  adcChannel::setResolution(USBDM::resolution_16bit_se);
- *  adcChannel::setAveraging(USBDM::averaging_32);
+ *  adcChannel::setResolution(USBDM::AdcResolution_16bit_se);
+ *  adcChannel::setAveraging(USBDM::AdcAveraging_32);
  *  int value = adcChannel::readAnalogue();
  * 
  * Using a timer channel

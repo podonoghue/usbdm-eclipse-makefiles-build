@@ -36,7 +36,7 @@ public:
     */
    static void enable() {
       FtmChannel::enable();
-      FtmChannel::setDriveStrength(PinDriveStrengthHigh);
+      FtmChannel::setDriveStrength(PinDriveStrength_High);
       FtmChannel::setPeriod(SERVO_PERIOD);
       FtmChannel::setHighTime((SERVO_MIN+SERVO_MAX)/2);
    }
@@ -57,7 +57,7 @@ public:
 // Instantiate servo on pin
 // It will be necessary to map the pin to a FTM channel in Configure.usbdmProject
 //using servo = Servo<ftm_D2>;
-using servo = Servo<Ftm0Channel<0>>;
+using servo = Servo<Ftm0Channel<7>>;
 
 int main() {
    printf("Starting\n");
@@ -67,6 +67,7 @@ int main() {
 
    servo::enable();
 
+   // Check if configuration failed
    USBDM::checkError();
 
    for (;;) {

@@ -61,7 +61,8 @@ protected:
 
 public:
    /**
-    * Enable the voltage reference with default settings
+    * Basic enable CMP\n
+    * Includes configuring all pins
     */
    static void enable() {
       // Configure pins
@@ -69,6 +70,14 @@ public:
 
       // Enable clock to CMP interface
       *clockReg |= Info::clockMask;
+   }
+
+   /**
+    * Enable with default settings\n
+    * Includes configuring all pins
+    */
+   static void configure() {
+      enable();
 
       // Initialise hardware
       cmp->CR0   = Info::cr0;

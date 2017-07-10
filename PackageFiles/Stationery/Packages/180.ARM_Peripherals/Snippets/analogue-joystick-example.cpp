@@ -27,13 +27,13 @@ using JOYSTICK_Y = $(demo.cpp.joystick.y:USBDM::Adc0Channel<3>);
 using JOYSTICK_K = $(demo.cpp.joystick.k:USBDM::GpioC<3>);
 
 int main(void) {
-   JOYSTICK_X::enable();
-   JOYSTICK_Y::enable();
+   JOYSTICK_X::configure();
+   JOYSTICK_Y::configure();
    JOYSTICK_K::setInput();
 
    // May change default resolution e.g.
-//   JOYSTICK_X::setMode(USBDM::AdcResolution_8bit_se);
-//   JOYSTICK_Y::setMode(USBDM::AdcResolution_8bit_se);
+   JOYSTICK_X::setResolution(USBDM::AdcResolution_8bit_se);
+   JOYSTICK_Y::setResolution(USBDM::AdcResolution_8bit_se);
 
    for(;;) {
       int  x = JOYSTICK_X::readAnalogue();

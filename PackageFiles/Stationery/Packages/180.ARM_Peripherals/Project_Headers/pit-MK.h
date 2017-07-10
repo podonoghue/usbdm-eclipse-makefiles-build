@@ -129,11 +129,21 @@ protected:
 
 public:
    /**
+    * Basic enable of PIT\n
+    * Includes configuring all pins
+    */
+   void enable() {
+      // Enable clock
+      *clockReg |= Info::clockMask;
+      __DMB();
+   }
+
+   /**
     *  Enable the PIT with default settings
     *
     *  @param[in]  mcr       Module Control Register
     */
-   static void enable(uint32_t mcr=Info::mcr) {
+   static void configure(uint32_t mcr=Info::mcr) {
       // Enable clock
       *clockReg |= Info::clockMask;
       __DMB();
@@ -144,6 +154,7 @@ public:
          enableNvicInterrupts(i);
       }
    }
+
    /**
     *   Disable the PIT (all channels)
     */

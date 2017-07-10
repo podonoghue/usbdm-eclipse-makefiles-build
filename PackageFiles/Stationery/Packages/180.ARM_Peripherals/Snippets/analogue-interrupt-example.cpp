@@ -44,13 +44,13 @@ int main(void) {
    printf("Starting\n");
 
    // Enable ADC
-   adc::enable();
+   adc::configure();
 
    // Note: Setting callback affects all channels on that ADC
    adc::setCallback(handler);
 
    // May change resolution e.g.
-//   adcChannel::setMode(USBDM::AdcResolution_8bit_se);
+   adcChannel::setResolution(USBDM::AdcResolution_8bit_se);
 
    adcChannel::startConversion();
 

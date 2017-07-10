@@ -45,7 +45,7 @@ static volatile uint16_t periodInTicks = 0;
  *
  * @param[in] status Flags indicating interrupt source channel(s)
  */
-static void ftmCallback(volatile FTM_Type *, uint8_t status) {
+static void ftmCallback(uint8_t status) {
    static volatile uint16_t lastEventTime;
 
 //   Debug::set();
@@ -63,13 +63,13 @@ static void ftmCallback(volatile FTM_Type *, uint8_t status) {
  */
 int main() {
    printf("Starting\n");
-//   Debug::setOutput(PinDriveStrengthHigh);
+//   Debug::setOutput(PinDriveStrength_High);
 
    /**
     * FTM channel set as Input Capture using a callback function
     */
    // Pin filtering (if available)
-   Timer::setFilter(PinFilterEnabled);
+   Timer::setFilter(PinFilter_Passive);
 
    // Set callback function
    Timer::setChannelCallback(ftmCallback);
@@ -81,6 +81,9 @@ int main() {
    Timer::enableChannelInterrupts();
    // Enable interrupts for entire timer
    Timer::enableNvicInterrupts();
+
+   // Check if configuration failed
+   USBDM::checkError();
 
    for(;;) {
       uint16_t tPeriodInTicks;

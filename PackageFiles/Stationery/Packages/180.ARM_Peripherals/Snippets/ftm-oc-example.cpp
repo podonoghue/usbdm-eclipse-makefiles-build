@@ -26,7 +26,7 @@ static volatile uint16_t timerHalfPeriod;
  *
  * @param[in] status Flags indicating interrupt source channel(s)
  */
-static void ftmCallback(volatile FTM_Type *, uint8_t status) {
+static void ftmCallback(uint8_t status) {
 
    // Check channel
    if (status & Timer::CHANNEL_MASK) {
@@ -42,7 +42,7 @@ int main() {
     * FTM channel set as Output compare with pin Toggle mode using a callback function
     */
    // Pin high-drive
-   Timer::setDriveStrength(PinDriveStrengthHigh);
+   Timer::setDriveStrength(PinDriveStrength_High);
 
    // Set callback function
    Timer::setChannelCallback(ftmCallback);
@@ -60,6 +60,9 @@ int main() {
 
    // Calculate half-period in timer ticks
    timerHalfPeriod = Timer::convertSecondsToTicks(100*ms);
+
+   // Check if configuration failed
+   USBDM::checkError();
 
    for(;;) {
    }

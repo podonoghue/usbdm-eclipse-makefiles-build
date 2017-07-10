@@ -65,55 +65,40 @@ namespace USBDM {
  * Controls basic operation of PWM/Input capture
  */
 enum FtmChannelMode {
-   //! Capture rising edge
-   FtmInputCaptureRisingEdge                = FTM_CnSC_MS(0)|FTM_CnSC_ELS(1),
-   //! Capture falling edge
-   FtmInputCaptureFallingEdge               = FTM_CnSC_MS(0)|FTM_CnSC_ELS(2),
-   //! Capture both rising and falling edges
-   FtmInputCaptureEitherEdge                = FTM_CnSC_MS(0)|FTM_CnSC_ELS(3),
-   //! Output compare operation
-   FtmOutputCompare                         = FTM_CnSC_MS(1),
-   //! Toggle pin on output compare
-   FtmOutputCompareToggle                   = FTM_CnSC_MS(1)|FTM_CnSC_ELS(1),
-   //! Clear pin on output compare
-   FtmOutputCompareClear                    = FTM_CnSC_MS(1)|FTM_CnSC_ELS(2),
-   //! Set pin on output compare
-   FtmOutputCompareSet                      = FTM_CnSC_MS(1)|FTM_CnSC_ELS(3),
-   //! PWM with high-true pulses
-   FtmPwmHighTruePulses                     = FTM_CnSC_MS(2)|FTM_CnSC_ELS(2),
-   //! PWM with low-true pulses
-   FtmPwmLowTruePulses                      = FTM_CnSC_MS(2)|FTM_CnSC_ELS(1),
-   //! Dual edge input capture one shot - CHn configuration
-   FtmDualEdgeCaptureOneShotRisingEdge      = FTM_CnSC_MS(0)|FTM_CnSC_ELS(1),
-   //! Dual edge input capture continuous - CHn configuration
-   FtmDualEdgeCaptureContinuousRisingEdge   = FTM_CnSC_MS(1)|FTM_CnSC_ELS(1),
-   //! Dual edge input capture one shot - CHn configuration
-   FtmDualEdgeCaptureOneShotFallingEdge     = FTM_CnSC_MS(0)|FTM_CnSC_ELS(2),
-   //! Dual edge input capture continuous - CHn configuration
-   FtmDualEdgeCaptureContinuousFallingEdge  = FTM_CnSC_MS(1)|FTM_CnSC_ELS(2),
-   //! Combine mode - CHn configuration
-   FtmCombinePositivePulse                  = FTM_CnSC_MS(0)|FTM_CnSC_ELS(2),
-   //! Combine mode - CHn configuration
-   FtmCombineNegativePulse                  = FTM_CnSC_MS(0)|FTM_CnSC_ELS(1),
+   FtmInputCaptureRisingEdge                = FTM_CnSC_MS(0)|FTM_CnSC_ELS(1), //!< Capture rising edge
+   FtmInputCaptureFallingEdge               = FTM_CnSC_MS(0)|FTM_CnSC_ELS(2), //!< Capture falling edge
+   FtmInputCaptureEitherEdge                = FTM_CnSC_MS(0)|FTM_CnSC_ELS(3), //!< Capture both rising and falling edges
+   FtmOutputCompare                         = FTM_CnSC_MS(1),                 //!< Output compare operation
+   FtmOutputCompareToggle                   = FTM_CnSC_MS(1)|FTM_CnSC_ELS(1), //!< Toggle pin on output compare
+   FtmOutputCompareClear                    = FTM_CnSC_MS(1)|FTM_CnSC_ELS(2), //!< Clear pin on output compare
+   FtmOutputCompareSet                      = FTM_CnSC_MS(1)|FTM_CnSC_ELS(3), //!< Set pin on output compare
+   FtmPwmHighTruePulses                     = FTM_CnSC_MS(2)|FTM_CnSC_ELS(2), //!< PWM with high-true pulses
+   FtmPwmLowTruePulses                      = FTM_CnSC_MS(2)|FTM_CnSC_ELS(1), //!< PWM with low-true pulses
+   FtmDualEdgeCaptureOneShotRisingEdge      = FTM_CnSC_MS(0)|FTM_CnSC_ELS(1), //!< Dual edge input capture one shot - CHn configuration
+   FtmDualEdgeCaptureContinuousRisingEdge   = FTM_CnSC_MS(1)|FTM_CnSC_ELS(1), //!< Dual edge input capture continuous - CHn configuration
+   FtmDualEdgeCaptureOneShotFallingEdge     = FTM_CnSC_MS(0)|FTM_CnSC_ELS(2), //!< Dual edge input capture one shot - CHn configuration
+   FtmDualEdgeCaptureContinuousFallingEdge  = FTM_CnSC_MS(1)|FTM_CnSC_ELS(2), //!< Dual edge input capture continuous - CHn configuration
+   FtmCombinePositivePulse                  = FTM_CnSC_MS(0)|FTM_CnSC_ELS(2), //!< Combine mode - CHn configuration
+   FtmCombineNegativePulse                  = FTM_CnSC_MS(0)|FTM_CnSC_ELS(1), //!< Combine mode - CHn configuration
 };
 
 /**
  * Control alignment of PWM function
  */
 enum FtmMode {
-   FtmModeLeftAlign   = FTM_SC_CPWMS(0), //!< Left-aligned PWM - also used for input capture and output compare modes
-   FtmModeCentreAlign = FTM_SC_CPWMS(1), //!< Centre-aligned PWM
-   FtmModeQuadrature  = 0,               //!< Dummy value for Quadrature encoder
+   FtmMode_LeftAlign   = FTM_SC_CPWMS(0), //!< Left-aligned PWM - also used for input capture and output compare modes
+   FtmMode_CentreAlign = FTM_SC_CPWMS(1), //!< Centre-aligned PWM
+   FtmMode_Quadrature  = 0,               //!< Dummy value for Quadrature encoder
 };
 
 /**
  * Control alignment of PWM function
  */
 enum FtmClockSource {
-   FtmClockSourceNone        = FTM_SC_CLKS(0),  //!< Timer is disabled
-   FtmClockSourceSystem      = FTM_SC_CLKS(1),  //!< System clock (usually the bus clock)
-   FtmClockSourceFixedFreq   = FTM_SC_CLKS(2),  //!< Fixed frequency clock (various sources such as FLL,PLL)
-   FtmClockSourcExternal     = FTM_SC_CLKS(3),  //!< External clock provided to FTM_CLKINx pin
+   FtmClockSource_None        = FTM_SC_CLKS(0),  //!< Timer is disabled
+   FtmClockSource_System      = FTM_SC_CLKS(1),  //!< System clock (usually the bus clock)
+   FtmClockSource_FixedFreq   = FTM_SC_CLKS(2),  //!< Fixed frequency clock (various sources such as FLL,PLL)
+   FtmClockSource_External    = FTM_SC_CLKS(3),  //!< External clock provided to FTM_CLKINx pin
 };
 
 /**
@@ -128,6 +113,19 @@ enum FtmPrescale {
    FtmPrescale_32  = FTM_SC_PS(5),  //!< Divide by 32
    FtmPrescale_64  = FTM_SC_PS(6),  //!< Divide by 64
    FtmPrescale_128 = FTM_SC_PS(7),  //!< Divide by 128
+};
+
+/**
+ * Enables External trigger on a channel comparison or initialisation event
+ */
+enum FtmExternalTrigger {
+   FtmExternalTrigger_ch0   = FTM_EXTTRIG_CH0TRIG_SHIFT,  //!< External trigger on channel 0 event
+   FtmExternalTrigger_ch1   = FTM_EXTTRIG_CH1TRIG_SHIFT,  //!< External trigger on channel 1 event
+   FtmExternalTrigger_ch2   = FTM_EXTTRIG_CH2TRIG_SHIFT,  //!< External trigger on channel 2 event
+   FtmExternalTrigger_ch3   = FTM_EXTTRIG_CH3TRIG_SHIFT,  //!< External trigger on channel 3 event
+   FtmExternalTrigger_ch4   = FTM_EXTTRIG_CH4TRIG_SHIFT,  //!< External trigger on channel 4 event
+   FtmExternalTrigger_ch5   = FTM_EXTTRIG_CH5TRIG_SHIFT,  //!< External trigger on channel 5 event
+   FtmExternalTrigger_init  = FTM_EXTTRIG_CH5TRIG_SHIFT,  //!< External trigger on initialisation
 };
 
 /**
@@ -150,7 +148,7 @@ typedef void (*FTMChannelCallbackFunction)(uint8_t status);
  * const USBDM::FtmBase_T<FTM0_Info)> Ftm0;
  *
  * // Initialise PWM with initial period and alignment
- * Ftm0::setMode(200, USBDM::FtmModeLeftAlign);
+ * Ftm0::setMode(200, USBDM::FtmMode_LeftAlign);
  *
  * // Change timer period
  * Ftm0::setPeriod(500);
@@ -187,24 +185,33 @@ public:
    static constexpr volatile uint32_t *clockReg = Info::clockReg;
 
    /**
-    * Enable with default settings\n
+    * Basic enable of peripheral\n
     * Includes configuring all pins
     */
-   static void enable() {
+   static void __attribute__((always_inline)) enable() {
       // Configure pins
       Info::initPCRs();
 
-      // Enable clock to timer
+      // Enable clock to peripheral
       *clockReg |= Info::clockMask;
       __DMB();
+   }
+   
+   /**
+    * Enable with default settings\n
+    * Includes configuring all pins
+    */
+   static void configure() {
+      enable();
 
       // Common registers
       tmr->CNTIN   = 0;
       tmr->MOD     = Info::period;
       tmr->SC      = Info::sc;
-	  //TODO Make configurable
+      tmr->EXTTRIG = Info::exttrig;
+      //TODO Make configurable
       tmr->CONF    = FTM_CONF_BDMMODE(1);
-	  //TODO Make configurable
+      //TODO Make configurable
       tmr->COMBINE = FTM_COMBINE_FAULTEN0_MASK|FTM_COMBINE_FAULTEN1_MASK|FTM_COMBINE_FAULTEN2_MASK|FTM_COMBINE_FAULTEN3_MASK;
 
       enableNvicInterrupts();
@@ -228,7 +235,7 @@ public:
     * @param[in] ftmClockSource Clock source for timer
     * @param[in] ftmPrescale    Clock prescaler. Used to divide clock source before use
     */
-   static void configure(FtmMode ftmMode=FtmModeLeftAlign, FtmClockSource ftmClockSource=FtmClockSourceSystem, FtmPrescale ftmPrescale=FtmPrescale_128) {
+   static void configure(FtmMode ftmMode, FtmClockSource ftmClockSource=FtmClockSource_System, FtmPrescale ftmPrescale=FtmPrescale_128) {
       tmr->SC = ftmMode|ftmClockSource|ftmPrescale;
    }
 
@@ -237,7 +244,7 @@ public:
     *
     * @param[in] ftmMode        Mode of operation see USBDM::FtmMode
     */
-   static void setMode(FtmMode ftmMode=FtmModeLeftAlign) {
+   static void setMode(FtmMode ftmMode=FtmMode_LeftAlign) {
       tmr->SC = (tmr->SC&~FTM_SC_CPWMS_MASK)|ftmMode;
    }
 
@@ -246,7 +253,7 @@ public:
     *
     * @param[in] ftmClockSource Clock source for timer
     */
-   static void setClockSource(FtmClockSource ftmClockSource=FtmClockSourceSystem) {
+   static void setClockSource(FtmClockSource ftmClockSource=FtmClockSource_System) {
       tmr->SC = (tmr->SC&~FTM_SC_CLKS_MASK)|ftmClockSource;
    }
 
@@ -587,6 +594,20 @@ public:
    }
 
    /**
+    * Enables External trigger on a channel comparison or initialisation event
+    *
+    * @param[in] ftmExternalTrigger Indicates the event to cause the external trigger
+    */
+   static void __attribute__((always_inline)) enableExternalTrigger(FtmExternalTrigger ftmExternalTrigger, bool enable=true) {
+      if (enable) {
+         tmr->EXTTRIG |= ftmExternalTrigger;
+      }
+      else {
+         tmr->EXTTRIG &= ~ftmExternalTrigger;
+      }
+   }
+
+   /**
     * Enable/disable fault interrupts
     *
     * @param[in] enable True = >enabled, False => disabled
@@ -822,7 +843,7 @@ template<class Info> FTMCallbackFunction           FtmIrq_T<Info>::faultCallback
  * using Tmr0_ch6 = USBDM::FtmChannel<FTM0Info, 6>;
  *
  * // Initialise PWM with initial period and alignment
- * Tmr0_ch6.setMode(200, USBDM::FtmModeLeftAlign);
+ * Tmr0_ch6.setMode(200, USBDM::FtmMode_LeftAlign);
  *
  * // Change period (in ticks)
  * Tmr0_ch6.setPeriod(500);
@@ -898,7 +919,7 @@ public:
    static void enable(FtmChannelMode mode = FtmPwmHighTruePulses) {
       if (!Ftm::isEnabled()) {
          // Enable parent FTM if needed
-         Ftm::enable();
+         Ftm::configure();
       }
       Ftm::tmr->CONTROLS[channel].CnSC = mode;
    }
@@ -958,21 +979,21 @@ public:
    /**
     * Set Pin Control Register (PCR) value
     *
-    * @param[in] pinPull          One of PinPullNone, PinPullUp, PinPullDown (defaults to PinPullNone)
-    * @param[in] pinDriveStrength One of PinDriveStrengthLow, PinDriveStrengthHigh (defaults to PinDriveLow)
-    * @param[in] pinDriveMode     One of PinDriveModePushPull, PinDriveModeOpenDrain (defaults to PinPushPull)
-    * @param[in] pinIrq           One of PinIrqNone, etc (defaults to PinIrqNone)
-    * @param[in] pinFilter        One of PinFilterNone, PinFilterEnabled (defaults to PinFilterNone)
-    * @param[in] pinSlewRate      One of PinSlewRateSlow, PinSlewRateFast (defaults to PinSlewRateFast)
-    * @param[in] pinMux           One of PinMuxAnalogue, PinMuxGpio etc (defaults to FTM selection value)
+    * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down (defaults to PinPull_None)
+    * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High (defaults to PinDriveLow)
+    * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain (defaults to PinPushPull)
+    * @param[in] pinIrq           One of PinIrq_None, etc (defaults to PinIrq_None)
+    * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
+    * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Fast)
+    * @param[in] pinMux           One of PinMux_Analogue, PinMux_Gpio etc (defaults to FTM selection value)
     */
    static __attribute__((always_inline)) void setPCR(
          PinPull           pinPull,
-         PinDriveStrength  pinDriveStrength  = PinDriveStrengthLow,
-         PinDriveMode      pinDriveMode      = PinDriveModePushPull,
-         PinIrq            pinIrq            = PinIrqNone,
-         PinFilter         pinFilter         = PinFilterNone,
-         PinSlewRate       pinSlewRate       = PinSlewRateFast,
+         PinDriveStrength  pinDriveStrength  = PinDriveStrength_Low,
+         PinDriveMode      pinDriveMode      = PinDriveMode_PushPull,
+         PinIrq            pinIrq            = PinIrq_None,
+         PinFilter         pinFilter         = PinFilter_None,
+         PinSlewRate       pinSlewRate       = PinSlewRate_Fast,
          PinMux            pinMux            = (PinMux)(Info::info[channel].pcrValue&PORT_PCR_MUX_MASK)
          ) {
       Pcr::setPCR(pinPull,pinDriveStrength,pinDriveMode,pinIrq,pinFilter,pinSlewRate,pinMux);
@@ -1081,7 +1102,7 @@ public:
  * using Tmr0_ch6 = USBDM::Ftm0Channel<6>;
  *
  * // Initialise PWM with initial period and alignment
- * Tmr0_ch6.setMode(200, USBDM::FtmModeLeftAlign);
+ * Tmr0_ch6.setMode(200, USBDM::FtmMode_LeftAlign);
  *
  * // Change period (in ticks)
  * Tmr0_ch6.setPeriod(500);
@@ -1173,22 +1194,22 @@ class QuadEncoder_T : public FtmIrq_T<Info> {
    static_assert(Info::InfoQUAD::info[1].gpioBit != UNMAPPED_PCR, "QuadEncoder_T: FTM PHB is not mapped to a pin - Modify Configure.usbdm");
 #endif
 
-private:
+public:
    static constexpr volatile FTM_Type *ftm      = Info::ftm;
    static constexpr volatile uint32_t *clockReg = Info::clockReg;
 
-public:
    /**
-    * Enable quadrature decoding
+    * Enable with default settings\n
+    * Includes configuring all pins
     */
-   static void enable() {
+   static void configure() {
       Info::InfoQUAD::initPCRs();
 
       // Enable clock to timer
       *clockReg |= Info::clockMask;
       __DMB();
 
-      FtmBase_T<Info>::configure(0, FtmModeQuadrature);
+      FtmBase_T<Info>::configure(FtmMode_Quadrature);
 
       ftm->QDCTRL =
             FTM_QDCTRL_QUADEN_MASK|      // Enable Quadrature encoder

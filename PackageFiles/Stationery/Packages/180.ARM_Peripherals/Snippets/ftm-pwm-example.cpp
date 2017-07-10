@@ -57,8 +57,8 @@ template<> void FtmIrq_T<Ftm0Info>::irqHandler() {
 #endif
 
 int main() {
-   LED1::enable();
-   LED1::setDriveStrength(PinDriveStrengthHigh);
+   LED1::enable(FtmPwmHighTruePulses);
+   LED1::setDriveStrength(PinDriveStrength_High);
 
    /*
     * Change PWM period
@@ -66,8 +66,8 @@ int main() {
     */
    LED1::setPeriod(5*us);
 
-   // Check for error so far
-   checkError();
+   // Check if configuration failed
+   USBDM::checkError();
 
    for(;;) {
       for (int i=1; i<=99; i++) {

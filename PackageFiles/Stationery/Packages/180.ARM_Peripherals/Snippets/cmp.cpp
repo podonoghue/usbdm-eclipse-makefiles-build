@@ -56,7 +56,7 @@ int main() {
    Led::high();
 
    // Enable comparator before use
-   Cmp::enable();
+   Cmp::configure();
 
    // Internal DAC used for one input - set level
    Cmp::setDacLevel(20);

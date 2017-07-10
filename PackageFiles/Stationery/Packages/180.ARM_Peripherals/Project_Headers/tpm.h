@@ -90,9 +90,9 @@ enum TpmChannelMode {
  */
 enum TpmMode {
    //! Left-aligned PWM - also used for input capture and output compare modes
-   TpmModeLeftAlign   = 0,
+   TpmMode_LeftAlign   = 0,
    //! Centre-aligned PWM
-   TpmModeCentreAlign = TPM_SC_CPWMS_MASK,
+   TpmMode_CentreAlign = TPM_SC_CPWMS_MASK,
 };
 
 /**
@@ -116,7 +116,7 @@ typedef void (*TPMChannelCallbackFunction)(volatile TPM_Type *tmr, int status);
  * const USBDM::TpmBase_T<TPM0_Info)> Tpm0;
  *
  * // Initialise PWM with initial period and alignment
- * Tpm0::initialise(200, USBDM::TpmModeLeftAlign);
+ * Tpm0::initialise(200, USBDM::TpmMode_LeftAlign);
  *
  * // Change timer period
  * Tpm0::setPeriod(500);
@@ -174,13 +174,13 @@ public:
     *
     * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
     */
-   static void configure(uint32_t period /* ticks */, TpmMode tpmMode=TpmModeLeftAlign) {
+   static void configure(uint32_t period /* ticks */, TpmMode tpmMode=TpmMode_LeftAlign) {
 
       // Disable so immediate effect
       tmr->SC      = 0;
 
       tmr->SC      = tpmMode;
-      if (tpmMode == TpmModeCentreAlign) {
+      if (tpmMode == TpmMode_CentreAlign) {
          // Centre aligned PWM with CPWMS not selected
          tmr->SC   = Info::sc|TPM_SC_CPWMS_MASK;
       }
@@ -618,7 +618,7 @@ template<class Info> TPMChannelCallbackFunction  TpmIrq_T<Info>::callback = 0;
  * using Tmr0_ch6 = USBDM::TpmChannel<TPM0Info, 6>;
  *
  * // Initialise PWM with initial period and alignment
- * Tmr0_ch6.setMode(200, USBDM::TpmModeLeftAlign);
+ * Tmr0_ch6.setMode(200, USBDM::TpmMode_LeftAlign);
  *
  * // Change period (in ticks)
  * Tmr0_ch6.setPeriod(500);
@@ -748,21 +748,21 @@ public:
    /**
     * Set Pin Control Register (PCR) value
     *
-    * @param[in] pinPull          One of PinPullNone, PinPullUp, PinPullDown (defaults to PinPullNone)
-    * @param[in] pinDriveStrength One of PinDriveStrengthLow, PinDriveStrengthHigh (defaults to PinDriveLow)
-    * @param[in] pinDriveMode     One of PinDriveModePushPull, PinDriveModeOpenDrain (defaults to PinPushPull)
-    * @param[in] pinIrq           One of PinIrqNone, etc (defaults to PinIrqNone)
-    * @param[in] pinFilter        One of PinFilterNone, PinFilterEnabled (defaults to PinFilterNone)
-    * @param[in] pinSlewRate      One of PinSlewRateSlow, PinSlewRateFast (defaults to PinSlewRateFast)
-    * @param[in] pinMux           One of PinMuxAnalogue, PinMuxGpio etc (defaults to FTM selection value)
+    * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down (defaults to PinPull_None)
+    * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High (defaults to PinDriveLow)
+    * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain (defaults to PinPushPull)
+    * @param[in] pinIrq           One of PinIrq_None, etc (defaults to PinIrq_None)
+    * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
+    * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Fast)
+    * @param[in] pinMux           One of PinMux_Analogue, PinMux_Gpio etc (defaults to FTM selection value)
     */
    static __attribute__((always_inline)) void setPCR(
          PinPull           pinPull,
-         PinDriveStrength  pinDriveStrength  = PinDriveStrengthLow,
-         PinDriveMode      pinDriveMode      = PinDriveModePushPull,
-         PinIrq            pinIrq            = PinIrqNone,
-         PinFilter         pinFilter         = PinFilterNone,
-         PinSlewRate       pinSlewRate       = PinSlewRateFast,
+         PinDriveStrength  pinDriveStrength  = PinDriveStrength_Low,
+         PinDriveMode      pinDriveMode      = PinDriveMode_PushPull,
+         PinIrq            pinIrq            = PinIrq_None,
+         PinFilter         pinFilter         = PinFilter_None,
+         PinSlewRate       pinSlewRate       = PinSlewRate_Fast,
          PinMux            pinMux            = (PinMux)(Info::info[channel].pcrValue&PORT_PCR_MUX_MASK)
          ) {
       Pcr::setPCR(pinPull,pinDriveStrength,pinDriveMode,pinIrq,pinFilter,pinSlewRate,pinMux);
@@ -862,7 +862,7 @@ public:
  * using Tmr0_ch6 = USBDM::Tpm0Channel<6>;
  *
  * // Initialise PWM with initial period and alignment
- * Tmr0_ch6.setMode(200, USBDM::TpmModeLeftAlign);
+ * Tmr0_ch6.setMode(200, USBDM::TpmMode_LeftAlign);
  *
  * // Change period (in ticks)
  * Tmr0_ch6.setPeriod(500);
