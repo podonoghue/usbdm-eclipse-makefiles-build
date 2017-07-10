@@ -29,7 +29,7 @@ namespace USBDM {
 /**
  * Type definition for CMP interrupt call back
  *
- * @param status Flags indicating interrupt source (CMP_SCR_CFR_MASK, CMP_SCR_CFF_MASK)
+ * @param[in]  status Flags indicating interrupt source (CMP_SCR_CFR_MASK, CMP_SCR_CFF_MASK)
  */
 typedef void (*CMPCallbackFunction)(int status);
 
@@ -92,7 +92,7 @@ public:
    /**
     * Enable/disable interrupts in NVIC
     *
-    * @param enable true to enable, false to disable
+    * @param[in]  enable true to enable, false to disable
     */
    static void enableNvicInterrupts(bool enable=true) {
 
@@ -112,7 +112,7 @@ public:
    /**
     * Enable/disable rising edge interrupts
     *
-    * @param enable True=>enable, False=>disable
+    * @param[in]  enable True=>enable, False=>disable
     */
    static void enableRisingEdgeInterrupts(bool enable=true) {
       if (enable) {
@@ -131,7 +131,7 @@ public:
    /**
     * Enable/disable falling edge interrupts
     *
-    * @param enable True=>enable, False=>disable
+    * @param[in]  enable True=>enable, False=>disable
     */
    static void enableFallingEdgeInterrupts(bool enable=true) {
       if (enable) {
@@ -145,9 +145,9 @@ public:
    /**
     * Configure DAC
     *
-    * @param level  DAC level to select (0..63)
-    * @param source Reference source select (0..1) Usually 0=>Vin, 1=>Vdd
-    * @param enable True=>enable, False=>disable
+    * @param[in]  level  DAC level to select (0..63)
+    * @param[in]  source Reference source select (0..1) Usually 0=>Vin, 1=>Vdd
+    * @param[in]  enable True=>enable, False=>disable
     */
    static void setDacLevel(uint8_t level, uint8_t source=(Info::daccr&CMP_DACCR_VRSEL_MASK)?1:0, bool enable=true) {
       cmp->DACCR = CMP_DACCR_DACEN(enable)|CMP_DACCR_VRSEL(source)|CMP_DACCR_VOSEL(level);
@@ -156,8 +156,8 @@ public:
    /**
     * Configure Comparator input sources
     *
-    * @param positiveSource (0..7) (7 => DAC)
-    * @param negativeSource (0..7) (7 => DAC)
+    * @param[in]  positiveSource (0..7) (7 => DAC)
+    * @param[in]  negativeSource (0..7) (7 => DAC)
     */
    static void selectInputs(uint8_t positiveSource, uint8_t negativeSource) {
       //! MUX Control Register
@@ -197,7 +197,7 @@ public:
    /**
     * Set callback function
     *
-    * @param theCallback Callback function to execute on interrupt
+    * @param[in]  theCallback Callback function to execute on interrupt
     */
    static void setCallback(CMPCallbackFunction theCallback) {
       callback = theCallback;

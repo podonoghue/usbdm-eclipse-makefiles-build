@@ -22,7 +22,7 @@ namespace USBDM {
 /**
  * Type definition for TSI interrupt call back
  *
- *  @param status - Interrupt flags e.g. TSI_GENCS_EOSF_MASK, TSI_GENCS_OVRF_MASK, TSI_GENCS_EXTERF_MASK
+ *  @param[in]  status - Interrupt flags e.g. TSI_GENCS_EOSF_MASK, TSI_GENCS_OVRF_MASK, TSI_GENCS_EXTERF_MASK
  */
 typedef void (*TSICallbackFunction)(uint8_t status);
 
@@ -55,7 +55,7 @@ public:
    /**
     * Enable/disable interrupts in NVIC
     *
-    * @param enable True => enable, False => disable
+    * @param[in]  enable True => enable, False => disable
     */
    static void enableNvicInterrupts(bool enable=true) {
       if (enable) {
@@ -73,7 +73,7 @@ public:
    /**
     * Enable/disable error interrupts
     *
-    * @param enable True => enable, False => disable
+    * @param[in]  enable True => enable, False => disable
     */
    static void enableErrorInterrupts(bool enable=true) {
       if (enable) {
@@ -86,7 +86,7 @@ public:
    /**
     * Enable/disable touch sensing interrupts
     *
-    * @param enable True => enable, False => disable
+    * @param[in]  enable True => enable, False => disable
     */
    static void enableTsiInterrupts(bool enable=true) {
       if (enable) {
@@ -100,7 +100,7 @@ public:
    /**
     * Get channel count value
     *
-    * @param channel Channel number
+    * @param[in]  channel Channel number
     *
     * @return 16-bit count value
     */
@@ -156,7 +156,7 @@ public:
    /**
     * Set Callback function
     *
-    *   @param theCallback - Callback function to be executed on TSI alarm interrupt
+    *   @param[in]  theCallback - Callback function to be executed on TSI alarm interrupt
     */
    static void setCallback(TSICallbackFunction theCallback) {
       callback = theCallback;

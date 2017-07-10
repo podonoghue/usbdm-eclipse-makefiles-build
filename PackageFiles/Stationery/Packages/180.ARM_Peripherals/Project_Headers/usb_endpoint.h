@@ -66,7 +66,7 @@ public:
    /**
     * Constructor
     *
-    * @param endpointNumber End-point number
+    * @param[in]  endpointNumber End-point number
     */
    constexpr Endpoint(int endpointNumber):
       txData1(DATA0),
@@ -82,7 +82,7 @@ public:
    /**
     * Flip active odd/even buffer state
     *
-    * @param usbStat Value from USB->STAT
+    * @param[in]  usbStat Value from USB->STAT
     */
     void flipOddEven(uint8_t usbStat) {
 
@@ -136,7 +136,7 @@ protected:
 
    /** Callback used on completion of transaction
     *
-    * @param endpointState State of endpoint before completion \n
+    * @param[in]  endpointState State of endpoint before completion \n
     * e.g. EPDataOut, EPStatusIn, EPLastIn, EPStatusOut\n
     * The endpoint is in EPIdle state now.
     */
@@ -193,7 +193,7 @@ public:
    /**
     * Set callback to execute at end of transaction
     *
-    * @param callback The call-back function to execute
+    * @param[in]  callback The call-back function to execute
     */
     void setCallback(void (*callback)(EndpointState)) {
       fCallback = callback;
@@ -202,7 +202,7 @@ public:
    /**
     * Do callback if set
     *
-    * @param state State of Endpoint
+    * @param[in]  state State of Endpoint
     */
     void doCallback(EndpointState state) {
       if (fCallback != nullptr) {
@@ -214,7 +214,7 @@ public:
     *  Indicates that the next IN transaction needs to be
     *  terminated with ZLP if modulo endpoint size
     *
-    *  @param needZLP True to indicate need for ZLPs.
+    *  @param[in]  needZLP True to indicate need for ZLPs.
     *
     *  @note This flag is cleared on each transaction
     */
@@ -268,9 +268,9 @@ public:
    /**
     * Start IN transaction [Transmit, device -> host, DATA0/1]
     *
-    * @param state   State to adopt for transaction e.g. EPDataIn, EPStatusIn
-    * @param bufSize Size of buffer to send (may be zero)
-    * @param bufPtr  Pointer to buffer (may be NULL to indicate fDatabuffer is being used directly)
+    * @param[in]  state   State to adopt for transaction e.g. EPDataIn, EPStatusIn
+    * @param[in]  bufSize Size of buffer to send (may be zero)
+    * @param[in]  bufPtr  Pointer to buffer (may be NULL to indicate fDatabuffer is being used directly)
     */
     void startTxTransaction(EndpointState state, uint8_t bufSize=0, const uint8_t *bufPtr=nullptr) {
       // Pointer to data
@@ -333,9 +333,9 @@ public:
    /**
     *  Start an OUT transaction [Receive, device <- host, DATA0/1]
     *
-    *   @param state   - State to adopt for transaction e.g. EPIdle, EPDataOut, EPStatusOut
-    *   @param bufSize - Size of data to transfer (may be zero)
-    *   @param bufPtr  - Buffer for data (may be nullptr)
+    *   @param[in]  state   - State to adopt for transaction e.g. EPIdle, EPDataOut, EPStatusOut
+    *   @param[in]  bufSize - Size of data to transfer (may be zero)
+    *   @param[in]  bufPtr  - Buffer for data (may be nullptr)
     *
     *   @note The end-point is configured to to accept EP_MAXSIZE packet irrespective of bufSize
     */

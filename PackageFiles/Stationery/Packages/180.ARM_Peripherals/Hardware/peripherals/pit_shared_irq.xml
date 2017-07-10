@@ -4,6 +4,8 @@
 
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Programmable Interrupt Timer">
 
+   <aliasOption key="/SIM/system_bus_clock" displayName="PIT input clock" constant="true"/>
+
    <intOption name="pit_ldval" description="Reload value [0-65535]"
       toolTip="Value loaded in timer register on roll-over"
       value="10000" min="0" max="65535" />
@@ -49,21 +51,22 @@
    </projectActionList>
          
    <template><![CDATA[
+   
+      \t//! Default value for PIT->SC register\n
+      \tstatic constexpr uint32_t pit_ldval  = $(pit_ldval);\n\n
+      
+      \t//! PIT operation in debug mode\n
+      \tstatic constexpr uint32_t mcr = 
+      \t   PIT_MCR_FRZ($(pit_mcr_frz)) |  // Freeze in debug mode
+      \t   PIT_MCR_MDIS(0);  // Disable\n\n
+      
       \t/**
       \t * Get clock frequency
       \t *
       \t * @return Input clock frequency as a uint32_t in Hz
       \t */
-      \tstatic uint32_t getClockFrequency() {
+      \tstatic __attribute__((always_inline)) uint32_t getClockFrequency() {
       \t   return SystemBusClock;
       \t}\n\n
-   
-      \t//! Default value for PIT->SC register\n
-      \tstatic constexpr uint32_t loadValue  = 
-      \t   $(pit_ldval);\n\n
-      
-      \t//! PIT operation in debug mode\n
-      \tstatic constexpr uint32_t mcr = 
-      \t   PIT_MCR_FRZ($(pit_mcr_frz));\n\n
    ]]></template>
 </devicePage>

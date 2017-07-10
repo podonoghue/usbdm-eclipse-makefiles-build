@@ -5,11 +5,21 @@
 
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Analogue to Digital Converter">
 
-   <floatOption name="clockFrequency" 
-      constant="true"
-      description="Frequency of ADC clock"
-      toolTip="Determined from clock source and prescaler"
-      units="Hz"/>
+   <choiceOption name="adc_cfg1_adiclk" description="Clock Source"
+      toolTip="Selects the clock source for the module">
+      <choice value="0" name="Bus clock" />
+      <choice value="1" name="Alternate clock 2 (e.g. BUSCLK/2, IRC48MCLK)" />
+      <choice value="2" name="Alternate clock (OSCERCLK)" />
+      <choice value="3" name="Asynchronous clock (ADACK)" isDefault="true" />
+   </choiceOption>
+
+   <choiceOption name="adc_cfg1_adiv" description="Clock Divide Select"
+      toolTip="Selects the divide ratio used by the ADC to generate the internal clock ADCK.">
+      <choice value="0" name="Divide by 1" isDefault="true" />
+      <choice value="1" name="Divide by 2" />
+      <choice value="2" name="Divide by 4" />
+      <choice value="3" name="Divide by 8" />
+   </choiceOption>
 
    <floatOption name="adcInternalClock" 
       constant="true"
@@ -19,13 +29,12 @@
       origin="Internal ADC clock"
       units="Hz"/>
 
-   <choiceOption name="adc_cfg1_adiclk" description="Clock Source"
-      toolTip="Selects the clock source for the module">
-      <choice value="0" name="Bus clock" />
-      <choice value="1" name="Bus clock divided by 2 (BUSCLK/2)" />
-      <choice value="2" name="Alternate clock (OSCERCLK)" />
-      <choice value="3" name="Asynchronous clock (ADACK)" isDefault="true" />
-   </choiceOption>
+   <floatOption name="clockFrequency" 
+      constant="true"
+      description="Frequency of ADC clock"
+      toolTip="Determined from clock source and prescaler"
+      derived="true"
+      units="Hz"/>
 
    <choiceOption name="adc_cfg1_mode" description="Conversion mode selection"
       toolTip="Selects the ADC resolution mode.">
@@ -40,14 +49,6 @@
       <choice value="0" name="Short sample time" isDefault="true" />
       <choice value="1" name="Long sample time" />
    </binaryOption>
-
-   <choiceOption name="adc_cfg1_adiv" description="Clock Divide Select"
-      toolTip="Selects the divide ratio used by the ADC to generate the internal clock ADCK.">
-      <choice value="0" name="Divide by 1" isDefault="true" />
-      <choice value="1" name="Divide by 2" />
-      <choice value="2" name="Divide by 4" />
-      <choice value="3" name="Divide by 8" />
-   </choiceOption>
 
    <binaryOption name="adc_cfg1_adlpc" description="Low-Power Configuration"
       toolTip="Adjust power consumption">

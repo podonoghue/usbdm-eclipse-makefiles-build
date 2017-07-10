@@ -6,14 +6,505 @@ Devices using this peripheral:
 -->
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="PDB">
 
+   <aliasOption key="/SIM/system_bus_clock" displayName="PDB input clock" constant="true"/>
+
+   <choiceOption name="pdb_sc_prescaler" 
+      description="Clock Prescaler Divider Select"
+      toolTip="The PDB clock = Bus Clock/(Prescaler * Divider)">
+      <choice value="0" name="Divide by 1" />
+      <choice value="1" name="Divide by 2" />
+      <choice value="2" name="Divide by 4" />
+      <choice value="3" name="Divide by 8" />
+      <choice value="4" name="Divide by 16" />
+      <choice value="5" name="Divide by 32" />
+      <choice value="6" name="Divide by 64" />
+      <choice value="7" name="Divide by 128" />
+   </choiceOption>
+
+   <choiceOption name="pdb_sc_mult" 
+      description="Clock Divider Select"
+      toolTip="The PDB clock = Bus Clock/(Prescaler * Divider)">
+      <choice value="0" name="Divide by 1" />
+      <choice value="1" name="Divide by 10" />
+      <choice value="2" name="Divide by 20" />
+      <choice value="3" name="Divide by 40" />
+   </choiceOption>
+
+   <floatOption name="pdb_frequency" 
+      description="Frequency of PDB clock"
+      toolTip="PDB clock frequency"
+      derived="true"
+      constant="true" 
+      value="1k" min="0" units="Hz" />
+
+   <floatOption name="pdb_period" 
+      description="Period of PDB clock"
+      toolTip="PDB clock period"
+      derived="true"
+      constant="true" 
+      value="1k" min="0" units="s" />
+
+   <choiceOption name="pdb_sc_trgsel" 
+      description="Trigger Input Source Select"
+      toolTip="Selects the trigger input source for the PDB.\n
+         The trigger input source can be internal or external (EXTRG pin),\n
+         or the software trigger" >
+      <choice value="0"  name="External Trigger (PDB0_EXTRG)" />
+      <choice value="1"  name="CMP 0" />
+      <choice value="2"  name="CMP 1" />
+      <choice value="3"  name="Reserved" />
+      <choice value="4"  name="PIT Ch 0 Output" />
+      <choice value="5"  name="PIT Ch 1 Output" />
+      <choice value="6"  name="PIT Ch 2 Output" />
+      <choice value="7"  name="PIT Ch 3 Output" />
+      <choice value="8"  name="FTM0 Init and Ext Trigger Outputs" />
+      <choice value="9"  name="FTM1 Init and Ext Trigger Outputs (if present)" />
+      <choice value="10" name="FTM2 Init and Ext Trigger Outputs (if present)" />
+      <choice value="11" name="FTM3 Init and Ext Trigger Outputs (if present)" />
+      <choice value="12" name="RTC Alarm" />
+      <choice value="13" name="RTC Seconds" />
+      <choice value="14" name="LPTMR" />
+      <choice value="15" name="Software trigger is selected" />
+   </choiceOption>
+
+   <binaryOption name="pdb_sc_dmaen" 
+      description="DMA Enable"
+      toolTip="When DMA is enabled, the PDBIF flag generates a DMA request instead of an interrupt.">
+      <choice value="0" name="DMA disabled" />
+      <choice value="1" name="DMA enabled" />
+   </binaryOption>
+
+   <binaryOption name="pdb_sc_pdbie" 
+      description="Interrupt Enable"
+      toolTip="This bit enables the interrupt.\n
+         When this bit is set and DMAEN is cleared, PDBIF generates a interrupt." >
+      <choice value="0" name="Interrupt disabled" />
+      <choice value="1" name="Interrupt enabled" />
+   </binaryOption>
+
+   <binaryOption name="pdb_sc_pdbeie" 
+      description="Sequence Error Interrupt Enable"
+      toolTip="This bit enables the sequence error interrupt\n
+         When this bit is set, any of the channel sequence error flags generates a sequence error interrupt." >
+      <choice value="0" name="Interrupt disabled" />
+      <choice value="1" name="Interrupt enabled" />
+   </binaryOption>
+
+   <choiceOption name="pdb_sc_ldmod" 
+      description="Load Mode Select"
+      toolTip="Selects when to load the MOD, IDLY, CHnDLYm, INTx, and POyDLY registers,\n
+         after 1 is written to LDOK">
+      <choice value="0" name="Loaded immediately" />
+      <choice value="1" name="Loaded when the PDB counter reaches MOD" />
+      <choice value="2" name="Loaded when a trigger input event is detected" />
+      <choice value="3" name="Loaded when either the PDB counter reaches the MOD or a trigger input event is detected" />
+   </choiceOption>
+
+   <template><![CDATA[
+   \tstatic constexpr uint32_t pdb_sc = 
+   \t   PDB_SC_MULT($(pdb_sc_mult)) |      // Multiplication Factor Select for Prescaler
+   \t   PDB_SC_PDBIE($(pdb_sc_pdbie)) |     // Interrupt Enable
+   \t   PDB_SC_TRGSEL($(pdb_sc_trgsel)) |    // Trigger Input Source Select
+   \t   PDB_SC_PRESCALER($(pdb_sc_prescaler)) | // Prescaler Divider Select
+   \t   PDB_SC_DMAEN($(pdb_sc_dmaen)) |     // DMA Enable
+   \t   PDB_SC_PDBEIE($(pdb_sc_pdbeie)) |    // Sequence Error Interrupt Enable
+   \t   PDB_SC_LDMOD($(pdb_sc_ldmod));      // Load Mode Select\n\n
+   ]]></template>
+
+   <intOption name="pdb_mod" 
+      description="Counter Modulus" 
+      toolTip="Specifies the period of the main PDB counter\n
+         When the counter reaches this value, it will be reset back to zero.\n
+         If the PDB is in Continuous mode, the count begins anew"
+      value="65535" min="0" max="65535"/>
+
+   <floatOption name="pdb_mod_period" 
+      description="Period of counter"
+      derivedFrom="pdb_mod"
+      derived="true"
+      min="0" units="s" />
+
+   <template><![CDATA[
+   \tstatic constexpr uint32_t pdb_mod = 
+   \t   PDB_MOD_MOD($(pdb_mod));  // PDB Modulus\n\n
+   ]]></template>
+
+   <intOption name="pdb_idly" 
+      description="Interrupt Delay" 
+      toolTip="Specifies the delay value to schedule the PDB interrupt.\n
+         It can be used to schedule an independent interrupt at some point in the PDB cycle."
+      value="0" min="0" max="65535" />
+
+   <floatOption name="pdb_idly_delay" 
+      derivedFrom="pdb_idly"
+      derived="true"
+      value="0" min="0" units="s" />
+
+   <template><![CDATA[
+   \tstatic constexpr uint32_t pdb_idly = 
+   \t   PDB_IDLY_IDLY($(pdb_idly));  // Counter Modulus\n\n
+   ]]></template>
+
+   <category name="Channel 0" description="ADC0 triggers">
+   <bitmaskOption name="pdb_ch0_c1_en" 
+      description="Channel 0 Pre-Trigger Enables" 
+      toolTip="These bits enable the ADC pre-trigger outputs\n
+         Each pre-trigger corresponds to a conversion in the ADC as specified by SC1[n]"
+      value="0"
+      bitmask="0x3" 
+      bitList="ADC0.SC1[0],ADC0.SC1[1]" />
+      
+   <bitmaskOption name="pdb_ch0_c1_tos" 
+      description="Channel 0 Pre-Trigger Delay Enables" 
+      toolTip="These bits enable the ADC pre-trigger delay\n
+         If disabled, the pre-trigger asserts 1-clock-cycle after trigger\n
+         If enabled, the pre-trigger is further delayed until the count reaches the channel delay register value"
+      value="0"
+      bitmask="0x3" 
+      bitList="ADC0.SC1[0],ADC0.SC1[1]" />
+   
+   <intOption name="pdb_ch0_dly0" 
+      description="Channel 0 Delay 0 - ADC0.SC1[0]" 
+      toolTip="Specifies the delay value for the channel's corresponding pre-trigger."
+      value="0" min="0" max="65535" />
+
+   <floatOption name="pdb_ch0_dly0_delay" 
+      derivedFrom="pdb_ch0_dly0"
+      derived="true"
+      value="1k" min="0" units="s" />
+
+   <intOption name="pdb_ch0_dly1" 
+      description="Channel 0 Delay 1 - ADC1.SC1[1]" 
+      toolTip="Specifies the delay value for the channel's corresponding pre-trigger."
+      value="0" min="0" max="65535" />
+   
+   <floatOption name="pdb_ch0_dly1_delay" 
+      derivedFrom="pdb_ch0_dly1"
+      derived="true"
+      value="1k" min="0" units="s" />
+
+   <bitmaskOption name="pdb_ch0_c1_bb" 
+      description="Channel 0 Pre-Trigger Back-to-Back Operation Enable" 
+      toolTip="These bits enable the ADC pre-trigger operation as back-to-back mode.\n
+         Back-to-back operation enables the ADC conversions complete to trigger the next PDB channel\n
+         pre-trigger and trigger output, so that the ADC conversions can be triggered on next set\n
+         of configuration and results registers. Application code must only enable the back-to-back\n
+         operation of the pre-triggers at the leading of the back-to-back connection chain."
+      value="0"
+      bitmask="0x3" 
+      bitList="ADC1SC1B_COCO,ADC0SC1A_COCO" />
+
+   </category>
+
+   <category name="Channel 1" description="ADC1 triggers (or FTM1 if not present)" >
+   <bitmaskOption name="pdb_ch1_c1_en" 
+      description="Channel 1 Pre-Trigger Enables" 
+      toolTip="These bits enable the ADC pre-trigger outputs"
+      value="0"
+      bitmask="0x3" 
+      bitList="ADC0.SC1[0],ADC0.SC1[1]" />
+      
+   <bitmaskOption name="pdb_ch1_c1_tos" 
+      description="Channel 1 Pre-Trigger Delay Enables" 
+      toolTip="These bits enable the ADC pre-trigger delay\n
+         If disabled, the pre-trigger asserts 1-clock-cycle after trigger\n
+         If enabled, the pre-trigger is further delayed until the count reaches the channel delay register value"
+      value="0"
+      bitmask="0x3" 
+      bitList="ADC0.SC1[0],ADC0.SC1[1]" />
+   
+   <intOption name="pdb_ch1_dly0" 
+      description="Channel 1 Delay 0 - ADC1.SC1[0]" 
+      toolTip="Specifies the delay value for the channel's corresponding pre-trigger."
+      value="0" min="0" max="65535" />
+
+   <floatOption name="pdb_ch1_dly0_delay" 
+      derivedFrom="pdb_ch1_dly0"
+      derived="true"
+      value="1k" min="0" units="s" />
+
+   <intOption name="pdb_ch1_dly1" 
+      description="Channel 1 Delay 1 - ADC1.SC1[1]" 
+      toolTip="Specifies the delay value for the channel's corresponding pre-trigger."
+      value="0" min="0" max="65535" />
+   
+   <floatOption name="pdb_ch1_dly1_delay" 
+      derivedFrom="pdb_ch1_dly1"
+      derived="true"
+      value="1k" min="0" units="s" />
+      
+   <bitmaskOption name="pdb_ch1_c1_bb" 
+      description="Channel 1 Pre-Trigger Back-to-Back Operation Enable" 
+      toolTip="These bits enable the ADC pre-trigger operation as back-to-back mode.\n
+         Back-to-back operation enables the ADC conversions complete to trigger the next PDB channel\n
+         pre-trigger and trigger output, so that the ADC conversions can be triggered on next set\n
+         of configuration and results registers. Application code must only enable the back-to-back\n
+         operation of the pre-triggers at the leading of the back-to-back connection chain."
+      value="0"
+      bitmask="0x3" 
+      bitList="ADC0SC1B_COCO,ADC1SC1A_COCO" />
+   </category>
+
+   <template><![CDATA[
+   \tstruct PdbChannel {
+   \t   uint32_t c1;
+   \t   uint32_t dly0;
+   \t   uint32_t dly1;
+   \t};\n\n
+   
+   \t// Number of PDB channels
+   \tstatic constexpr size_t numChannels = 2;\n\n
+   
+   \t// Default values for channel registers
+   \tstatic constexpr PdbChannel pdb_ch[numChannels] = {
+   \t{                   // Channel[0] Control Register 1
+   \t   PDB_C1_BB($(pdb_ch0_c1_bb)) |   // Pre-Trigger Back-to-Back Operation Enable
+   \t   PDB_C1_TOS($(pdb_ch0_c1_tos)) |  // Pre-Trigger Output Select
+   \t   PDB_C1_EN($(pdb_ch0_c1_en)),    // Pre-Trigger Enable\n
+   \t   PDB_DLY_DLY($(pdb_ch0_dly0)),  // Channel[0] pre-trigger delay 0\n
+   \t   PDB_DLY_DLY($(pdb_ch0_dly1)),  // Channel[0] pre-trigger delay 1\n
+   \t},
+   \t{                   // Channel[1] Control Register 1
+   \t   PDB_C1_BB($(pdb_ch1_c1_bb)) |   // Channel Pre-Trigger Back-to-Back Operation Enable
+   \t   PDB_C1_TOS($(pdb_ch1_c1_tos)) |  // Channel Pre-Trigger Output Select
+   \t   PDB_C1_EN($(pdb_ch1_c1_en)),    // Channel Pre-Trigger Enable\n
+   \t   PDB_DLY_DLY($(pdb_ch1_dly0)),  // Channel[1] pre-trigger delay 0\n
+   \t   PDB_DLY_DLY($(pdb_ch1_dly1)),  // Channel[1] pre-trigger delay 1\n
+   \t},
+   \t};\n\n
+   ]]></template>
+
+   <category name="Dac0 Interval Trigger" description="">
+      <binaryOption name="pdb_int0c_toe" 
+         description="DAC Interval Trigger Enable"
+         toolTip="This bit enables the DAC interval trigger.">
+         <choice value="0" name="Trigger disabled" />
+         <choice value="1" name="Trigger enabled" />
+      </binaryOption>
+
+      <binaryOption name="pdb_int0c_ext" 
+         description="DAC External Trigger Input Enable"
+         toolTip="Enables the external trigger for DAC interval counter.">
+         <choice value="0" name="Input disabled" />
+         <choice value="1" name="Input enabled" />
+      </binaryOption>
+
+      <intOption name="pdb_int0_int" 
+         description="DAC Interval" 
+         toolTip="Specifies the interval value for DAC interval trigger.\n
+                  DAC interval trigger triggers DAC update when the DAC interval counter is equal to the DACINT."
+         value="0" min="0" max="65535" />
+         
+      <floatOption name="pdb_int0_int_delay" 
+         derivedFrom="pdb_int0_int"
+         derived="true"
+         min="0" units="s" />
+   </category>
+   
+   <category name="Dac1 Interval Trigger" description="">
+      <binaryOption name="pdb_int1c_toe" 
+         description="DAC Interval Trigger Enable"
+         toolTip="This bit enables the DAC interval trigger..">
+         <choice value="0" name="Trigger disabled" />
+         <choice value="1" name="Trigger enabled" />
+      </binaryOption>
+
+      <binaryOption name="pdb_int1c_ext" 
+         description="DAC External Trigger Input Enable"
+         toolTip="Enables the external trigger for DAC interval counter.">
+         <choice value="0" name="Input disabled" />
+         <choice value="1" name="Input enabled" />
+      </binaryOption>
+
+      <intOption name="pdb_int1_int" 
+         description="DAC Interval" 
+         toolTip="Specifies the interval value for DAC interval trigger.\n
+                  DAC interval trigger triggers DAC update when the DAC interval counter is equal to the DACINT."
+         value="0" min="0" max="65535" />
+         
+      <floatOption name="pdb_int1_int_delay" 
+         derivedFrom="pdb_int1_int"
+         derived="true"
+         min="0" units="s" />
+   </category>
+   
+   <template><![CDATA[
+   \tstruct PdbDac {
+   \t   uint32_t dacintc;
+   \t   uint32_t dacint;
+   \t};\n\n
+   
+   \t// Number of DACs
+   \tstatic constexpr size_t numDacs = 2;\n\n
+   
+   \t// Default values for DAC registers
+   \tstatic constexpr PdbDac pdb_dac[numDacs] = {
+   \t{                    // DAC[0] Interval register
+   \t   PDB_INTC_EXT($(pdb_int0c_ext)) | // DAC External Trigger Input Enable\n
+   \t   PDB_INTC_TOE($(pdb_int0c_toe)),  // DAC Interval Trigger Enable\n
+   \t   PDB_INT_INT($(pdb_int0_int)),   // DAC Interval\n
+   \t},
+   \t{                    // DAC[1] Interval register
+   \t   PDB_INTC_EXT($(pdb_int1c_ext)) | // DAC External Trigger Input Enable\n
+   \t   PDB_INTC_TOE($(pdb_int1c_toe)),  // DAC Interval Trigger Enable\n
+   \t   PDB_INT_INT($(pdb_int1_int)),   // DAC Interval\n
+   \t},
+   \t};\n\n
+   ]]></template>
+
+   <bitmaskOption name="pdb_poen" 
+      description="Pulse-Out Enable" 
+      toolTip="These bits enable the pulse output"
+      value="0"
+      bitmask="0x3" 
+      bitList="CMP0,CMP1" 
+      />
+   
+   <template><![CDATA[
+   \tstatic constexpr uint32_t pdb_poen = 
+   \t   PDB_POEN_POEN($(pdb_poen));   // Pulse-Out Enable\n\n
+   ]]></template>
+
+   <category name="Pulse Output 0" description="Pulse Output to CMP0" >
+   <intOption name="pdb_po0_dly_dly1" 
+      description="Pulse-Out 0 Delay 1 - rising edge" 
+      toolTip="These bits specify the delay 1 value for the Pulse-Out.\n
+         Pulse-Out goes high when the counter is equal to the DLY1"
+      value="0" min="0" max="65535" />
+
+   <floatOption name="pdb_po0_dly_dly1_delay" 
+   	  derivedFrom="pdb_po0_dly_dly1"
+      derived="true"
+      value="1" min="0" units="s" />
+
+   <intOption name="pdb_po0_dly_dly2" 
+      description="Pulse-Out 0 Delay 2 - falling edge" 
+      toolTip="These bits specify the delay 2 value for the Pulse-Out.\n
+         Pulse-Out goes low when the counter is equal to the DLY2"
+      value="0" min="0" max="65535" />
+   
+   <floatOption name="pdb_po0_dly_dly2_delay" 
+   	  derivedFrom="pdb_po0_dly_dly2"
+      derived="true"
+      value="1" min="0" units="s" />
+   </category>
+
+   <category name="Pulse Output 1" description="Pulse Output to CMP1" >
+   <intOption name="pdb_po1_dly_dly1" 
+      description="Pulse-Out 1 Delay 1 - rising edge" 
+      toolTip="These bits specify the delay 1 value for the Pulse-Out.\n
+         Pulse-Out goes high when the counter is equal to the DLY1"
+      value="0" min="0" max="65535" />
+
+   <floatOption name="pdb_po1_dly_dly1_delay" 
+   	  derivedFrom="pdb_po1_dly_dly1"
+      derived="true"
+      value="1k" min="0" units="s" />
+
+   <intOption name="pdb_po1_dly_dly2" 
+      description="Pulse-Out 1 Delay 2 - falling edge" 
+      toolTip="These bits specify the delay 2 value for the Pulse-Out.\n
+         Pulse-Out goes low when the counter is equal to the DLY2"
+      value="0" min="0" max="65535" />
+
+   <floatOption name="pdb_po1_dly_dly2_delay" 
+   	  derivedFrom="pdb_po1_dly_dly2"
+      derived="true"
+      value="1k" min="0" units="s" />
+
+   <category name="Pulse Output 2" description="Pulse Output to CMP2" >
+   <intOption name="pdb_po2_dly_dly1" 
+      description="Pulse-Out 1 Delay 1 - rising edge" 
+      toolTip="These bits specify the delay 1 value for the Pulse-Out.\n
+         Pulse-Out goes high when the PDB counter is equal to the DLY1"
+      value="0" min="0" max="65535" />
+
+   <floatOption name="pdb_po2_dly_dly1_delay" 
+   	  derivedFrom="pdb_po2_dly_dly1"
+      derived="true"
+      value="1k" min="0" units="s" />
+
+   <intOption name="pdb_po2_dly_dly2" 
+      description="Pulse-Out 2 Delay 2 - falling edge" 
+      toolTip="These bits specify the delay 2 value for the Pulse-Out.\n
+         Pulse-Out goes low when the PDB counter is equal to the DLY2"
+      value="0" min="0" max="65535" />
+
+   <floatOption name="pdb_po2_dly_dly2_delay" 
+   	  derivedFrom="pdb_po2_dly_dly2"
+      derived="true"
+      value="1k" min="0" units="s" />
+
+   <category name="Pulse Output 3" description="Pulse Output to CMP3" >
+   <intOption name="pdb_po3_dly_dly1" 
+      description="Pulse-Out 3 Delay 1 - rising edge" 
+      toolTip="These bits specify the delay 1 value for the Pulse-Out.\n
+         Pulse-Out goes high when the PDB counter is equal to the DLY1"
+      value="0" min="0" max="65535" />
+
+   <floatOption name="pdb_po3_dly_dly1_delay" 
+   	  derivedFrom="pdb_po3_dly_dly1"
+      derived="true"
+      value="1k" min="0" units="s" />
+
+   <intOption name="pdb_po3_dly_dly2" 
+      description="Pulse-Out 3 Delay 2 - falling edge" 
+      toolTip="These bits specify the delay 2 value for the Pulse-Out.\n
+         Pulse-Out goes low when the PDB counter is equal to the DLY2"
+      value="0" min="0" max="65535" />
+
+   <floatOption name="pdb_po3_dly_dly2_delay" 
+   	  derivedFrom="pdb_po3_dly_dly2"
+      derived="true"
+      value="1k" min="0" units="s" />
+
+   </category>
+
+   <template><![CDATA[
+   
+   \t// Number of PDB pulse outputs
+   \tstatic constexpr size_t numPulseOutputs = 4;\n\n
+   
+   \tstatic constexpr uint32_t pdb_podly[numPulseOutputs] = {
+   
+   \t   // Pulse Output[0] Delays {
+   \t   PDB_PODLY_DLY1($(pdb_po0_dly_dly1)) |  // Delay 1
+   \t   PDB_PODLY_DLY2($(pdb_po0_dly_dly2)),   // Delay 2\n\n
+   
+   \t   // Pulse Output[1] Delays
+   \t   PDB_PODLY_DLY1($(pdb_po1_dly_dly1)) |  // Delay 1
+   \t   PDB_PODLY_DLY2($(pdb_po1_dly_dly2)),   // Delay 2\n\n
+   
+   \t   // PDB Pulse Output[2] Delays
+   \t   PDB_PODLY_DLY1($(pdb_po2_dly_dly1)) |  // Delay 1
+   \t   PDB_PODLY_DLY2($(pdb_po2_dly_dly2)),   // Delay 2\n\n
+   
+   \t   // PDB Pulse Output[3] Delays
+   \t   PDB_PODLY_DLY1($(pdb_po3_dly_dly1)) |  // Delay 1
+   \t   PDB_PODLY_DLY2($(pdb_po3_dly_dly2)),   // Delay 2
+   \t}; \n\n
+   ]]></template>
+
+   <template><![CDATA[
+   \t/**
+   \t  * Get PDB clock frequency
+   \t  *
+   \t  * @return Frequency as a uint32_t in Hz
+   \t  */
+   \tstatic __attribute__((always_inline)) uint32_t getInputClockFrequency() {
+   \t   return SystemBusClock;
+   \t}\n\n
+   ]]></template>
+
    <xi:include href="_irqOption.xml"/>
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.PdbValidate">
+   </validate>
 
    <projectActionList id = "pdb_files">
       <copy source="Project_Headers/pdb.h"  target="Project_Headers/pdb.h"  replace="true"  derived="true" />
    </projectActionList>
          
-   <template><![CDATA[
-   ]]></template>
-
    <signals/>
 </devicePage>

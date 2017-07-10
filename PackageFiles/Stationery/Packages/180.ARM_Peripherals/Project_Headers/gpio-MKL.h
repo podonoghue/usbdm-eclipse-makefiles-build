@@ -32,8 +32,8 @@
 namespace USBDM {
 
 enum Polarity {
-   ActiveLow=false,
-   ActiveHigh=true
+   ActiveLow=false,  //!< Signal is active high i.e. Active => High level, Inactive => Low level
+   ActiveHigh=true   //!< Signal is active low i.e. Active => Low level, Inactive => High level
 };
 
 /**
@@ -81,8 +81,16 @@ enum Polarity {
  * @tparam bitNum          Bit number within PORT/GPIO
  * @tparam polarity        Either USBDM::ActiveHigh or USBDM::ActiveLow
  */
-template<uint32_t clockMask, uint32_t pcrAddress, uint32_t gpioAddress, uint32_t bitNum, Polarity polarity>
+template<uint32_t clockMask, uint32_t pcrAddress, uint32_t gpioAddress, int bitNum, Polarity polarity>
 class GpioBase_T {
+
+private:
+   /**
+    * This class is not intended to be instantiated
+    */
+   GpioBase_T() = delete;
+   GpioBase_T(const GpioBase_T&) = delete;
+   GpioBase_T(GpioBase_T&&) = delete;
 
 public:
    /** PCR associated with this GPIO pin */
@@ -92,7 +100,7 @@ public:
    static constexpr volatile GPIO_Type *gpio = reinterpret_cast<volatile GPIO_Type *>(gpioAddress);
 
    /** Bit number of accessed bit in port */
-   static constexpr uint32_t BITNUM = bitNum;
+   static constexpr int BITNUM = bitNum;
 
    /** Mask for bit within port */
    static constexpr uint32_t MASK   = (1<<bitNum);
@@ -153,6 +161,7 @@ public:
       setInactive();
       // Make pin an output
       setOut();
+      // Configure pin
       Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|PinMuxGpio);
    }
    /**
@@ -173,7 +182,12 @@ public:
          PinDriveMode      pinDriveMode      = PinDriveModePushPull,
          PinSlewRate       pinSlewRate       = PinSlewRateFast
          ) {
-      setOutput(pinDriveStrength|pinDriveMode|pinSlewRate);
+      // Set initial level before enabling pin drive
+      setInactive();
+      // Make pin an output
+      setOut();
+      // Configure pin
+      Pcr::setPCR(pinDriveStrength|pinDriveMode|pinSlewRate|PinMuxGpio);
    }
    /**
     * Set pin as digital input
@@ -220,7 +234,9 @@ public:
          PinIrq            pinIrq            = PinIrqNone,
          PinFilter         pinFilter         = PinFilterNone
          ) {
-      setInput(pinPull|pinIrq|pinFilter);
+      // Make pin an input
+      setIn();
+      Pcr::setPCR(pinPull|pinIrq|pinFilter|PinMuxGpio);
    }
    /**
     * Set pin. Pin will be high if configured as an output.
@@ -476,7 +492,8 @@ public:
     *
     * @note There is a single callback function for all pins on this port.
     *
-    * @param[in] callback The function to call on pin interrupt
+    * @param[in] callback The function to call on pin interrupt. \n
+    *                     nullptr to indicate none
     */
    static __attribute__((always_inline)) void setCallback(PinCallbackFunction callback) {
       Pcr::setCallback(callback);
@@ -491,10 +508,10 @@ public:
  * @tparam bitNum        Bit number within PORT/GPIO
  * @tparam polarity      Either USBDM::ActiveHigh or USBDM::ActiveLow
  */
-template<class Info, const uint32_t bitNum, Polarity polarity>
+template<class Info, const int bitNum, Polarity polarity>
 class  Gpio_T : public GpioBase_T<Info::clockMask, Info::pcrAddress, Info::gpioAddress, bitNum, polarity> {
 
-   static_assert((bitNum<32), "Illegal signal");
+   static_assert(((bitNum>=0)&&(bitNum<=31)), "Illegal bit number");
 
 public:
    static constexpr bool irqHandlerInstalled = Info::irqHandlerInstalled;
@@ -746,7 +763,7 @@ public:
  * @tparam bitNum        Bit number in the port
  * @tparam polarity      Either USBDM::ActiveHigh or USBDM::ActiveLow
  */
-template<uint8_t bitNum, Polarity polarity=ActiveHigh> class GpioA : public Gpio_T<GpioAInfo, bitNum, polarity> {};
+template<int bitNum, Polarity polarity=ActiveHigh> class GpioA : public Gpio_T<GpioAInfo, bitNum, polarity> {};
 using PortA = PcrBase_T<GpioAInfo::pcrAddress>;
 
 /**
@@ -826,7 +843,7 @@ template<int left, int right> class GpioAField : public Field_T<GpioAInfo, left,
  * @tparam bitNum        Bit number in the port
  * @tparam polarity      Either USBDM::ActiveHigh or USBDM::ActiveLow
  */
-template<uint8_t bitNum, Polarity polarity=ActiveHigh> class GpioB : public Gpio_T<GpioBInfo, bitNum, polarity> {};
+template<int bitNum, Polarity polarity=ActiveHigh> class GpioB : public Gpio_T<GpioBInfo, bitNum, polarity> {};
 using PortB = PcrBase_T<GpioBInfo::pcrAddress>;
 
 /**
@@ -906,7 +923,7 @@ template<int left, int right> class GpioBField : public Field_T<GpioBInfo, left,
  * @tparam bitNum        Bit number in the port
  * @tparam polarity      Either USBDM::ActiveHigh or USBDM::ActiveLow
  */
-template<uint8_t bitNum, Polarity polarity=ActiveHigh> class GpioC : public Gpio_T<GpioCInfo, bitNum, polarity> {};
+template<int bitNum, Polarity polarity=ActiveHigh> class GpioC : public Gpio_T<GpioCInfo, bitNum, polarity> {};
 using PortC = PcrBase_T<GpioCInfo::pcrAddress>;
 
 /**
@@ -986,7 +1003,7 @@ template<int left, int right> class GpioCField : public Field_T<GpioCInfo, left,
  * @tparam bitNum        Bit number in the port
  * @tparam polarity      Either USBDM::ActiveHigh or USBDM::ActiveLow
  */
-template<uint8_t bitNum, Polarity polarity=ActiveHigh> class GpioD : public Gpio_T<GpioDInfo, bitNum, polarity> {};
+template<int bitNum, Polarity polarity=ActiveHigh> class GpioD : public Gpio_T<GpioDInfo, bitNum, polarity> {};
 using PortD = PcrBase_T<GpioDInfo::pcrAddress>;
 
 /**
@@ -1066,7 +1083,7 @@ template<int left, int right> class GpioDField : public Field_T<GpioDInfo, left,
  * @tparam bitNum        Bit number in the port
  * @tparam polarity      Either USBDM::ActiveHigh or USBDM::ActiveLow
  */
-template<uint8_t bitNum, Polarity polarity=ActiveHigh> class GpioE : public Gpio_T<GpioEInfo, bitNum, polarity> {};
+template<int bitNum, Polarity polarity=ActiveHigh> class GpioE : public Gpio_T<GpioEInfo, bitNum, polarity> {};
 using PortE = PcrBase_T<GpioEInfo::pcrAddress>;
 
 /**

@@ -48,7 +48,7 @@ public:
    /*
     * Add element to queue
     *
-    * @param element Element to add
+    * @param[in]  element Element to add
     */
    void enQueue(T element) {
       assert(!isFull());
@@ -61,7 +61,7 @@ public:
    /*
     * Remove & return element from queue
     *
-    * @param element Element to add
+    * @param[in]  element Element to add
     */
    T deQueue() {
       assert(!isEmpty());

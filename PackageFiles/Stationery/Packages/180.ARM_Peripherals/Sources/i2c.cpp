@@ -30,8 +30,8 @@ const uint16_t I2c::I2C_DIVISORS[] = {
  *
  * This is calculated from processor bus frequency and given bps
  *
- * @param bps            Interface speed in bits-per-second
- * @param clockFrequency Frequency of I2C input clock
+ * @param[in]  bps            Interface speed in bits-per-second
+ * @param[in]  clockFrequency Frequency of I2C input clock
  *
  * @return I2C_F value representing speed
  */
@@ -66,7 +66,7 @@ uint8_t I2c::getBPSValue(uint32_t bps, uint32_t clockFrequency) {
 /**
  * Start Rx/Tx sequence by sending address byte
  *
- * @param address - address of slave to access
+ * @param[in]  address - address of slave to access
  */
 void I2c::sendAddress(uint8_t address) {
    // Wait for bus idle
@@ -199,9 +199,9 @@ void I2c::poll(void) {
 /**
  * Transmit message
  *
- * @param address  Address of slave to communicate with
- * @param size     Size of transmission data
- * @param data     Data to transmit, 0th byte is often register address
+ * @param[in]  address  Address of slave to communicate with
+ * @param[in]  size     Size of transmission data
+ * @param[in]  data     Data to transmit, 0th byte is often register address
  *
  * @return E_NO_ERROR on success
  */
@@ -236,9 +236,9 @@ int I2c::transmit(uint8_t address, uint16_t size, const uint8_t data[]) {
 /**
  * Receive message
  *
- * @param address  Address of slave to communicate with
- * @param size     Size of reception data
- * @param data     Data buffer for reception
+ * @param[in]  address  Address of slave to communicate with
+ * @param[in]  size     Size of reception data
+ * @param[out] data     Data buffer for reception
  *
  * @return E_NO_ERROR on success
  */
@@ -273,11 +273,11 @@ int I2c::receive(uint8_t address, uint16_t size,  uint8_t data[]) {
  * Transmit message followed by receive message.
  * Uses repeated-start.
  *
- * @param address  Address of slave to communicate with
- * @param txSize   Size of transmission data
- * @param txData   Data for transmission
- * @param rxSize   Size of reception data
- * @param rxData   Date buffer for reception
+ * @param[in]  address  Address of slave to communicate with
+ * @param[in]  txSize   Size of transmission data
+ * @param[in]  txData   Data for transmission
+ * @param[in]  rxSize   Size of reception data
+ * @param[out] rxData   Date buffer for reception
  *
  * @return E_NO_ERROR on success
  */
@@ -313,10 +313,10 @@ int I2c::txRx(uint8_t address, uint16_t txSize, const uint8_t txData[], uint16_t
  * Uses repeated-start.
  * Uses shared transmit and receive buffer
  *
- * @param address  Address of slave to communicate with
- * @param txSize   Size of transmission data
- * @param rxSize   Size of reception data
- * @param data     Data for transmission and reception
+ * @param[in]    address  Address of slave to communicate with
+ * @param[in]    txSize   Size of transmission data
+ * @param[in]    rxSize   Size of reception data
+ * @param[inout] data     Data for transmission and reception
  *
  * @return E_NO_ERROR on success
  */

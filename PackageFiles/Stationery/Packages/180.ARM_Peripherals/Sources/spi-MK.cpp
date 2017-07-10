@@ -27,8 +27,8 @@ static const uint16_t brFactors[]  = {2,4,6,8,16,32,64,128,256,512,1024,2048,409
 /**
  * Calculate communication speed factors for SPI
  *
- * @param clockFrequency => Clock frequency of SPI in Hz
- * @param frequency      => Communication frequency in Hz
+ * @param[in]  clockFrequency => Clock frequency of SPI in Hz
+ * @param[in]  frequency      => Communication frequency in Hz
  *
  * @return CTAR register value only including SPI_CTAR_BR, SPI_CTAR_PBR fields
  *

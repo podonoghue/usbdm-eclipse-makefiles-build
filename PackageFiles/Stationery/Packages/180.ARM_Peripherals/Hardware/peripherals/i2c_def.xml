@@ -4,15 +4,15 @@
 
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Inter-Integrated-Circuit">
 
-   <xi:include href="_irqOption.xml"/>
-   
    <stringOption name="clockSource" 
-      description="UART Clock Select"
+      description="I2C Clock Select"
       constant="true" 
       value="SystemBusClock"
       />
    
    <aliasOption key="/SIM/system_bus_clock" />
+   
+   <xi:include href="_irqOption.xml"/>
    
    <projectActionList id = "i2c_files" >
       <copy source="Project_Headers/i2c.h"            target="Project_Headers/i2c.h"            replace="true"  derived="true" />

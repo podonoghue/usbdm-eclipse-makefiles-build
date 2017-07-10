@@ -60,7 +60,7 @@ public:
     * Type definition for USB SETUP call back\n
     * This function is called for SETUP transactions not automatically handled
     *
-    *  @param setup SETUP packet information
+    *  @param[in]  setup SETUP packet information
     */
    typedef void (*SetupCallbackFunction)(const SetupPacket &setup);
 
@@ -73,14 +73,14 @@ public:
     * Type definition for user call back\n
     * This function is called whenever the 'user' code needs to be notified of an event
     *
-    *  @param event Reason for callback
+    *  @param[in]  event Reason for callback
     */
    typedef void (*UserCallbackFunction)(const UserEvents event);
 
    /**
     * Get name of USB token
     *
-    * @param  token USB token
+    * @param[in]   token USB token
     *
     * @return Pointer to static string
     */
@@ -89,7 +89,7 @@ public:
    /**
     * Get name of USB state
     *
-    * @param  state USB state
+    * @param[in]   state USB state
     *
     * @return Pointer to static string
     */
@@ -98,7 +98,7 @@ public:
    /**
     * Get name of USB request
     *
-    * @param  reqType Request type
+    * @param[in]   reqType Request type
     *
     * @return Pointer to static string
     */
@@ -107,15 +107,15 @@ public:
    /**
     * Report contents of BDT
     *
-    * @param name    Descriptive name to use
-    * @param bdt     BDT to report
+    * @param[in]  name    Descriptive name to use
+    * @param[in]  bdt     BDT to report
     */
    static void reportBdt(const char *name, BdtEntry *bdt);
 
    /**
     * Format SETUP packet as string
     *
-    * @param p SETUP packet
+    * @param[in]  p SETUP packet
     *
     * @return Pointer to static buffer
     */
@@ -124,9 +124,9 @@ public:
    /**
     *  Creates a valid string descriptor in UTF-16-LE from a limited UTF-8 string
     *
-    *  @param to       Where to place descriptor
-    *  @param from     Zero terminated UTF-8 C string
-    *  @param maxSize  Size of destination
+    *  @param[in]  to       Where to place descriptor
+    *  @param[in]  from     Zero terminated UTF-8 C string
+    *  @param[in]  maxSize  Size of destination
     *
     *  @note Only handles UTF-8 characters that fit in a single UTF-16 value.
     */
@@ -203,7 +203,7 @@ protected:
     * User event callback \n
     * This function is called whenever the 'user' code needs to be notified of an event
     *
-    *  @param event Reason for callback
+    *  @param[in]  event Reason for callback
     */
    static UserCallbackFunction userCallbackFunction;
 
@@ -227,7 +227,7 @@ public:
    /**
     * Enable/disable interrupts in NVIC
     *
-    * @param enable true to enable, false to disable
+    * @param[in]  enable true to enable, false to disable
     */
    static void enableNvicInterrupts(bool enable=true) {
 
@@ -247,7 +247,7 @@ public:
    /**
     * Enable/disable interrupts
     *
-    * @param mask Mask of interrupts to enable e.g. USB_INTEN_SOFTOKEN_MASK, USB_INTEN_STALLEN_MASK etc
+    * @param[in]  mask Mask of interrupts to enable e.g. USB_INTEN_SOFTOKEN_MASK, USB_INTEN_STALLEN_MASK etc
     */
    static void enableInterrupts(uint8_t mask=0xFF) {
       usb->INTEN = mask;
@@ -256,7 +256,7 @@ public:
    /**
     * Enable/disable OTG interrupts
     *
-    * @param mask Mask of interrupts to enable e.g. USB_OTGICR_IDEN_MASK, USB_OTGICR_ONEMSECEN_MASK etc
+    * @param[in]  mask Mask of interrupts to enable e.g. USB_OTGICR_IDEN_MASK, USB_OTGICR_ONEMSECEN_MASK etc
     */
    static void enableOtgInterrupts(uint8_t mask=0xFF) {
       usb->OTGICR = mask;
@@ -275,7 +275,7 @@ protected:
    /**
     * Callback used for EP0 transaction complete
     *
-    * @param state State active immediately before call-back\n
+    * @param[in]  state State active immediately before call-back\n
     * (End-point state is currently EPIdle)
     */
    static void ep0TransactionCallback(EndpointState state);
@@ -290,14 +290,14 @@ protected:
    /**
     * Adds an endpoint.
     *
-    * @param endpoint The end-point to add
+    * @param[in]  endpoint The end-point to add
     */
    static void addEndpoint(Endpoint *endpoint);
 
    /**
     * Set the USB activity flag
     *
-    * @param busy True to indicates there was recent activity
+    * @param[in]  busy True to indicates there was recent activity
     */
    static void setActive(bool busy=true) {
       activityFlag = busy;
@@ -307,7 +307,7 @@ protected:
     * Set callback for user callback\n
     * This function is called whenever the 'user' code needs to be notified of an event
     *
-    *  @param callback User callback function
+    *  @param[in]  callback User callback function
     */
    static void setUserCallback(UserCallbackFunction callback) {
       userCallbackFunction = callback;
@@ -316,7 +316,7 @@ protected:
    /**
     * Set callback for unhandled SETUP transactions
     *
-    * @param callback The call-back function to execute
+    * @param[in]  callback The call-back function to execute
     */
    static void setUnhandledSetupCallback(SetupCallbackFunction callback) {
       unhandledSetupCallback = callback;
@@ -325,7 +325,7 @@ protected:
    /**
     *  Sets the function to call when SETUP transaction is complete
     *
-    * @param callback The call-back function to execute
+    * @param[in]  callback The call-back function to execute
     */
    static void setSetupCompleteCallback(void (*callback)()) {
       setupCompleteCallback = callback;
@@ -334,7 +334,7 @@ protected:
    /**
     * Set callback for SOF transactions
     *
-    * @param callback The call-back function to execute
+    * @param[in]  callback The call-back function to execute
     */
    static void setSOFCallback(SOFCallbackFunction callback) {
       sofCallbackFunction = callback;
@@ -353,8 +353,8 @@ protected:
     * This will be in response to a SETUP transaction\n
     * The data may be split into multiple DATA0/DATA1 packets
     *
-    * @param bufSize Size of buffer to send
-    * @param bufPtr  Pointer to buffer (may be NULL to indicate controlEndpoint.fDatabuffer is being used directly)
+    * @param[in]  bufSize Size of buffer to send
+    * @param[in]  bufPtr  Pointer to buffer (may be NULL to indicate controlEndpoint.fDatabuffer is being used directly)
     */
    static void ep0StartTxTransaction(uint16_t bufSize, const uint8_t *bufPtr) {
       if (bufSize > ep0SetupBuffer.wLength) {
@@ -389,7 +389,7 @@ protected:
    /**
     * Set addressed state
     *
-    * @param address The USB address to set
+    * @param[in]  address The USB address to set
     */
    static void setUSBaddressedState( uint8_t address ) {
       if (address == 0) {
@@ -406,7 +406,7 @@ protected:
    /**
     * Set configures state
     *
-    * @param config The number of the configuration to set
+    * @param[in]  config The number of the configuration to set
     */
    static void setUSBconfiguredState( uint8_t config ) {
       if (config == 0) {
@@ -496,7 +496,7 @@ protected:
     * Does user event callback \n
     * This function is called whenever the 'user' code needs to be notified of an event
     *
-    *  @param event Reason for callback
+    *  @param[in]  event Reason for callback
     */
    static void handleUserCallback(UserEvents event) {
       if (userCallbackFunction != nullptr) {
@@ -603,7 +603,7 @@ int UsbBase_T<Info, EP0_SIZE>::suspendCounter = 0;
  * User event callback \n
  * This function is called whenever the 'user' code needs to be notified of an event
  *
- *  @param event Reason for callback
+ *  @param[in]  event Reason for callback
  */
 template<class Info, int EP0_SIZE>
 UsbBase::UserCallbackFunction UsbBase_T<Info, EP0_SIZE>::userCallbackFunction = nullptr;
@@ -933,7 +933,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleUSBResume() {
 /**
  * Callback used for EP0 transaction complete
  *
- * @param state State active immediately before call-back\n
+ * @param[in]  state State active immediately before call-back\n
  * (End-point state is currently EPIdle)
  */
 template<class Info, int EP0_SIZE>
@@ -1067,7 +1067,7 @@ void UsbBase_T<Info, EP0_SIZE>::initialise() {
 /**
  * Adds an endpoint.
  *
- * @param endpoint The end-point to add
+ * @param[in]  endpoint The end-point to add
  */
 template<class Info, int EP0_SIZE>
 void UsbBase_T<Info, EP0_SIZE>::addEndpoint(Endpoint *endpoint) {

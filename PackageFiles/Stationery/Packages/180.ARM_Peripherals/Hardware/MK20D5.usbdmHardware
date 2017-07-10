@@ -194,7 +194,7 @@
       <peripheral baseName="OSC"      instance="0"        version="osc0_mk">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForOsc" />
       </peripheral>
-      <peripheral baseName="PDB"      instance="0"        version="pdb0_1ch_2trig_0dac_2po">
+      <peripheral baseName="PDB"      instance="0"        version="pdb0_2ch_2trig_0dac_2po">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPdb" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_PDB_MASK" />
          <irq num="PDB0_IRQn" />

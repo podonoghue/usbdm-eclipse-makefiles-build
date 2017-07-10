@@ -159,12 +159,12 @@ Control whether counter is reset whenever the Timer Compare Flag is set (timer e
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Reset Timer event</description>
+                           <description>Reset on Timer event</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Rolls over</description>
+                           <description>Rolls over (at 0xFFFF)</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -195,22 +195,22 @@ Control whether counter is reset whenever the Timer Compare Flag is set (timer e
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>Input 0 is selected</description>
+                           <description>Input 0 (usually CMPx)</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>Input 1 is selected</description>
+                           <description>Input 1 (LPTMR pin 0)</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>Input 2 is selected</description>
+                           <description>Input 2 (LPTMR pin 1)</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>Input 3 is selected</description>
+                           <description>Input 3 (LPTMR pin 2)</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -413,6 +413,7 @@ Prescaler division N for the prescaler clock; Glitch Filter recognises change af
                <name>CNR</name>
                <description>Counter Register</description>
                <addressOffset>0xC</addressOffset>
+               <access>read-only</access>
                <fields>
                   <field>
                      <name>COUNTER</name>

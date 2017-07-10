@@ -1487,8 +1487,8 @@ typedef struct {                                /*       FTFA Structure         
  * @} */ /* End group FTFA_Peripheral_access_layer_GROUP 
  */
 /**
-* @addtogroup GPIOA_Peripheral_access_layer_GROUP GPIOA Peripheral Access Layer
-* @brief C Struct for GPIOA
+* @addtogroup GPIO_Peripheral_access_layer_GROUP GPIO Peripheral Access Layer
+* @brief C Struct for GPIO
 * @{
 */
 
@@ -1500,8 +1500,8 @@ typedef struct {                                /*       FTFA Structure         
  * @brief General Purpose Input/Output
  */
 /**
-* @addtogroup GPIOA_structs_GROUP GPIOA struct
-* @brief Struct for GPIOA
+* @addtogroup GPIO_structs_GROUP GPIO struct
+* @brief Struct for GPIO
 * @{
 */
 typedef struct {                                /*       GPIOA Structure                                              */
@@ -1515,7 +1515,7 @@ typedef struct {                                /*       GPIOA Structure        
 } GPIO_Type;
 
 /**
- * @} */ /* End group GPIOA_structs_GROUP 
+ * @} */ /* End group GPIO_structs_GROUP 
  */
 
 /* -------------------------------------------------------------------------------- */
@@ -1523,8 +1523,8 @@ typedef struct {                                /*       GPIOA Structure        
 /* -------------------------------------------------------------------------------- */
 
 /**
-* @addtogroup GPIOA_Register_Masks_GROUP GPIOA Register Masks
-* @brief Register Masks for GPIOA
+* @addtogroup GPIO_Register_Masks_GROUP GPIO Register Masks
+* @brief Register Masks for GPIO
 * @{
 */
 /* ------- PDOR Bit Fields                          ------ */
@@ -1532,7 +1532,7 @@ typedef struct {                                /*       GPIOA Structure        
 /* ------- PDDR Bit Fields                          ------ */
 /* ------- GACR Bit Fields                          ------ */
 /**
- * @} */ /* End group GPIOA_Register_Masks_GROUP 
+ * @} */ /* End group GPIO_Register_Masks_GROUP 
  */
 
 /* GPIOA - Peripheral instance base addresses */
@@ -1540,11 +1540,11 @@ typedef struct {                                /*       GPIOA Structure        
 #define GPIOA                          ((GPIO_Type *) GPIOA_BasePtr) //!< Freescale base pointer
 #define GPIOA_BASE_PTR                 (GPIOA) //!< Freescale style base pointer
 /**
- * @} */ /* End group GPIOA_Peripheral_access_layer_GROUP 
+ * @} */ /* End group GPIO_Peripheral_access_layer_GROUP 
  */
 /**
-* @addtogroup GPIOA_Peripheral_access_layer_GROUP GPIOA Peripheral Access Layer
-* @brief C Struct for GPIOA
+* @addtogroup GPIO_Peripheral_access_layer_GROUP GPIO Peripheral Access Layer
+* @brief C Struct for GPIO
 * @{
 */
 
@@ -1561,11 +1561,11 @@ typedef struct {                                /*       GPIOA Structure        
 #define GPIOB                          ((GPIO_Type *) GPIOB_BasePtr) //!< Freescale base pointer
 #define GPIOB_BASE_PTR                 (GPIOB) //!< Freescale style base pointer
 /**
- * @} */ /* End group GPIOA_Peripheral_access_layer_GROUP 
+ * @} */ /* End group GPIO_Peripheral_access_layer_GROUP 
  */
 /**
-* @addtogroup GPIOA_Peripheral_access_layer_GROUP GPIOA Peripheral Access Layer
-* @brief C Struct for GPIOA
+* @addtogroup GPIO_Peripheral_access_layer_GROUP GPIO Peripheral Access Layer
+* @brief C Struct for GPIO
 * @{
 */
 
@@ -1582,11 +1582,11 @@ typedef struct {                                /*       GPIOA Structure        
 #define GPIOC                          ((GPIO_Type *) GPIOC_BasePtr) //!< Freescale base pointer
 #define GPIOC_BASE_PTR                 (GPIOC) //!< Freescale style base pointer
 /**
- * @} */ /* End group GPIOA_Peripheral_access_layer_GROUP 
+ * @} */ /* End group GPIO_Peripheral_access_layer_GROUP 
  */
 /**
-* @addtogroup GPIOA_Peripheral_access_layer_GROUP GPIOA Peripheral Access Layer
-* @brief C Struct for GPIOA
+* @addtogroup GPIO_Peripheral_access_layer_GROUP GPIO Peripheral Access Layer
+* @brief C Struct for GPIO
 * @{
 */
 
@@ -1603,11 +1603,11 @@ typedef struct {                                /*       GPIOA Structure        
 #define GPIOD                          ((GPIO_Type *) GPIOD_BasePtr) //!< Freescale base pointer
 #define GPIOD_BASE_PTR                 (GPIOD) //!< Freescale style base pointer
 /**
- * @} */ /* End group GPIOA_Peripheral_access_layer_GROUP 
+ * @} */ /* End group GPIO_Peripheral_access_layer_GROUP 
  */
 /**
-* @addtogroup GPIOA_Peripheral_access_layer_GROUP GPIOA Peripheral Access Layer
-* @brief C Struct for GPIOA
+* @addtogroup GPIO_Peripheral_access_layer_GROUP GPIO Peripheral Access Layer
+* @brief C Struct for GPIO
 * @{
 */
 
@@ -1624,11 +1624,11 @@ typedef struct {                                /*       GPIOA Structure        
 #define GPIOE                          ((GPIO_Type *) GPIOE_BasePtr) //!< Freescale base pointer
 #define GPIOE_BASE_PTR                 (GPIOE) //!< Freescale style base pointer
 /**
- * @} */ /* End group GPIOA_Peripheral_access_layer_GROUP 
+ * @} */ /* End group GPIO_Peripheral_access_layer_GROUP 
  */
 /**
-* @addtogroup GPIOA_Peripheral_access_layer_GROUP GPIOA Peripheral Access Layer
-* @brief C Struct for GPIOA
+* @addtogroup GPIO_Peripheral_access_layer_GROUP GPIO Peripheral Access Layer
+* @brief C Struct for GPIO
 * @{
 */
 
@@ -1645,11 +1645,11 @@ typedef struct {                                /*       GPIOA Structure        
 #define GPIOF                          ((GPIO_Type *) GPIOF_BasePtr) //!< Freescale base pointer
 #define GPIOF_BASE_PTR                 (GPIOF) //!< Freescale style base pointer
 /**
- * @} */ /* End group GPIOA_Peripheral_access_layer_GROUP 
+ * @} */ /* End group GPIO_Peripheral_access_layer_GROUP 
  */
 /**
-* @addtogroup GPIOA_Peripheral_access_layer_GROUP GPIOA Peripheral Access Layer
-* @brief C Struct for GPIOA
+* @addtogroup GPIO_Peripheral_access_layer_GROUP GPIO Peripheral Access Layer
+* @brief C Struct for GPIO
 * @{
 */
 
@@ -1666,11 +1666,11 @@ typedef struct {                                /*       GPIOA Structure        
 #define GPIOG                          ((GPIO_Type *) GPIOG_BasePtr) //!< Freescale base pointer
 #define GPIOG_BASE_PTR                 (GPIOG) //!< Freescale style base pointer
 /**
- * @} */ /* End group GPIOA_Peripheral_access_layer_GROUP 
+ * @} */ /* End group GPIO_Peripheral_access_layer_GROUP 
  */
 /**
-* @addtogroup GPIOA_Peripheral_access_layer_GROUP GPIOA Peripheral Access Layer
-* @brief C Struct for GPIOA
+* @addtogroup GPIO_Peripheral_access_layer_GROUP GPIO Peripheral Access Layer
+* @brief C Struct for GPIO
 * @{
 */
 
@@ -1687,11 +1687,11 @@ typedef struct {                                /*       GPIOA Structure        
 #define GPIOH                          ((GPIO_Type *) GPIOH_BasePtr) //!< Freescale base pointer
 #define GPIOH_BASE_PTR                 (GPIOH) //!< Freescale style base pointer
 /**
- * @} */ /* End group GPIOA_Peripheral_access_layer_GROUP 
+ * @} */ /* End group GPIO_Peripheral_access_layer_GROUP 
  */
 /**
-* @addtogroup GPIOA_Peripheral_access_layer_GROUP GPIOA Peripheral Access Layer
-* @brief C Struct for GPIOA
+* @addtogroup GPIO_Peripheral_access_layer_GROUP GPIO Peripheral Access Layer
+* @brief C Struct for GPIO
 * @{
 */
 
@@ -1708,7 +1708,7 @@ typedef struct {                                /*       GPIOA Structure        
 #define GPIOI                          ((GPIO_Type *) GPIOI_BasePtr) //!< Freescale base pointer
 #define GPIOI_BASE_PTR                 (GPIOI) //!< Freescale style base pointer
 /**
- * @} */ /* End group GPIOA_Peripheral_access_layer_GROUP 
+ * @} */ /* End group GPIO_Peripheral_access_layer_GROUP 
  */
 /**
 * @addtogroup I2C_Peripheral_access_layer_GROUP I2C Peripheral Access Layer

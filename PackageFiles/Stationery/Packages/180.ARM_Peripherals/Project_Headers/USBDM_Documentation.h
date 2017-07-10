@@ -4,7 +4,6 @@
  */
  
  /**
-
  @mainpage USBDM Overview
 
  The classes in the USBDM namespace provide C++ wrappers for the microcontroller hardware. \n
@@ -19,7 +18,15 @@ Table of Contents
  
  @page GPIOExamples  General Purpose Input Output
 
-Convenience template for GPIO pins. Based on USBDM::GpioBase_T  \n
+Convenience template for GPIO pins. Uses the following classes:\n
+<ul>
+<li>USBDM::GpioBase_T <clockMask, pcrAddress, gpioAddress, bitNum, polarity> \n
+<li>USBDM::Gpio_T <Info, bitNum, polarity>\n
+<li>USBDM::GpioA <bitNum, polarity>, USBDM::GpioB <bitNum, polarity> etc.\n
+<li>USBDM::Field_T <Info, left, right>\n
+<li>USBDM::GpioAField <left, right>, USBDM::GpioBField <left, right> etc.\n
+</ul>
+
 This template is an interface for the general purpose I/O pin hardware. \n
 
 It provides:\n
@@ -30,18 +37,23 @@ It provides:\n
 - Polling input value
 - Polarity (\ref USBDM::ActiveHigh or \ref USBDM::ActiveLow) is selected when instantiated
 
+This is a template class with static methods.\n
+<em>It cannot be instantiated.</em>
+
 <b>Examples</b>\n
  - @ref digital-example1.cpp
  - @ref digital-example2.cpp
 
 <b>Usage</b>
  @code
+   // Open USBDM namespace.
+   // This allows access to USBDM classes and methods without the USBDM:: prefix.
    using namespace USBDM;
 
    // Temporary for input values
    bool x;
 
-   // Use pin 3 of GPIOC as active-high signal i.e. PTC3
+   // Use pin 3 of PORTC as active-high GPIO i.e. PTC3
    using Gpio = GpioC<3, ActiveHigh>;
 
    // Set as digital output
@@ -115,7 +127,12 @@ It provides:\n
 
 @page ADCExamples Analogue-to-Digital
 
-Convenience template for ADC inputs. Based on USBDM::AdcBase_T  \n
+Convenience template for ADC inputs. Use the following classes:\n
+<ul>
+<li>USBDM::AdcBase_T\n
+<li>USBDM::AdcChannel\n
+<li>USBDM::AdcDiffChannel\n
+</ul>
 This template is an interface for the ADC input pins. \n
 
 It provides:\n
@@ -125,6 +142,9 @@ It provides:\n
 - Clock and conversion speed are done through the configuration.
 - Interrupt driven operation is also supported through a callback if enabled in the configuration.
 
+This is a template class with static methods.\n
+<em>It cannot be instantiated.</em>
+
 <b>Examples</b>\n
  - @ref analogue-diff-example.cpp
  - @ref analogue-interrupt-example.cpp
@@ -132,9 +152,11 @@ It provides:\n
 
  <b>Usage - Single-ended measurement</b>
  @code
+   // Open USBDM namespace.
+   // This allows access to USBDM classes and methods without the USBDM:: prefix.
    using namespace USBDM;
 
-   // Instantiate an ADC input (for ADC0 channel 6)
+   // Use ADC0 channel 6 as ADC input (ADC_IN6)
    using AdcChannel = USBDM::Adc0Channel<6>;
 
    // Set ADC resolution to 16 bits
@@ -151,9 +173,11 @@ It provides:\n
 
  <b>Usage - Differential measurement</b>
  @code
+   // Open USBDM namespace.
+   // This allows access to USBDM classes and methods without the USBDM:: prefix.
    using namespace USBDM;
 
-   // Instantiate an ADC input for differential channel 0 (ADC_DM0, ADC_DP0)
+   // Use channel 0 as ADC differential input (ADC_DM0, ADC_DP0)
    using Adc1_diff0 = USBDM::Adc0DiffChannel<0>;
 
    // Set ADC resolution to 11 bits differential
@@ -182,6 +206,9 @@ It provides:\n
 - Setting the channel duty cycle in percentage
 - Interrupt driven operation is also supported through a callback if <b>enabled in the configuration</b>.
 
+This is a template class with static methods.\n
+<em>It cannot be instantiated.</em>
+
 <b>Examples</b>\n
  - @ref ftm-ic-example.cpp
  - @ref ftm-oc-example.cpp
@@ -191,6 +218,8 @@ It provides:\n
 
  <b>Usage - PWM</b>
 @code
+   // Open USBDM namespace.
+   // This allows access to USBDM classes and methods without the USBDM:: prefix.
    using namespace USBDM;
 
    // Initialise the timer with initial period in ticks and alignment
@@ -226,6 +255,8 @@ It provides:\n
 
  <b>Usage - Quadrature Encoder</b>
 @code
+   // Open USBDM namespace.
+   // This allows access to USBDM classes and methods without the USBDM:: prefix.
    using namespace USBDM;
 
    // Use FTM1 as the quadrature encoder
@@ -263,17 +294,22 @@ It provides:\n
 - Accurate busy-wait delays using a timer channel
 - Interrupt driven operation is also supported through a callback if enabled in the configuration.
 
+This is a template class with static methods.\n
+<em>It cannot be instantiated.</em>
+
 <b>Examples</b>\n
  - @ref pit-example1.cpp
  - @ref pit-example2.cpp
  - @ref pit-example3.cpp
 
- <b>Usage - PIT busy-wait</b>
+<b>Usage - PIT busy-wait</b>
 @code
+   // Open USBDM namespace.
+   // This allows access to USBDM classes and methods without the USBDM:: prefix.
    using namespace USBDM;
 
    // LED is assumed active-low
-   using Led = USBDM::GpioA<2, USBDM::ActiveLow>;
+   using Led = GpioA<2, ActiveLow>;
 
    // Use high drive for LED
    Led::setOutput(pcrValue(PinPullNone, PinDriveHigh));

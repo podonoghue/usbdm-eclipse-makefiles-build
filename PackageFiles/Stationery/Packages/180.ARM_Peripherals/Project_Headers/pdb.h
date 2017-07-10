@@ -26,8 +26,6 @@ namespace USBDM {
  */
 /**
  * Type definition for PDB interrupt call back
- *
- *  @param timeSinceEpoch - Time since the epoch in seconds
  */
 typedef void (*PDBCallbackFunction)();
 
@@ -49,23 +47,146 @@ public:
 
       Info::initPCRs();
 
-      pdb->SC           = Info::pdb_sc;
-      pdb->MOD          = Info::pdb_mod;
-      pdb->IDLY         = Info::pdb_idly;
-      pdb->CH[0].C1     = Info::pdb_ch0_c1;
-      pdb->CH[0].DLY[0] = Info::pdb_ch0_dly0;
-      pdb->CH[0].DLY[1] = Info::pdb_ch0_dly1;
-      pdb->POEN         = Info::pdb_poen;
-      pdb->PODLY[0]     = Info::pdb_po0_dly;
-      pdb->PODLY[1]     = Info::pdb_po1_dly;
-
+      pdb->MOD  = Info::pdb_mod;
+      pdb->IDLY = Info::pdb_idly;
+      if (Info::numChannels>0) {
+         pdb->CH[0].C1     = Info::pdb_ch[0].c1;
+         pdb->CH[0].DLY[0] = Info::pdb_ch[0].dly0;
+         pdb->CH[0].DLY[1] = Info::pdb_ch[0].dly1;
+      }
+      if (Info::numChannels>1) {
+         pdb->CH[1].C1     = Info::pdb_ch[1].c1;
+         pdb->CH[1].DLY[0] = Info::pdb_ch[1].dly0;
+         pdb->CH[1].DLY[1] = Info::pdb_ch[1].dly1;
+      }
+#ifdef PDB_INT_INT
+      if (Info::numDacs>0) {
+         pdb->DAC[0].INTC = Info::pdb_dac[0].dacintc;
+         pdb->DAC[0].INT  = Info::pdb_dac[0].dacint;
+      }
+      if (Info::numDacs>1) {
+         pdb->DAC[1].INTC = Info::pdb_dac[1].dacintc;
+         pdb->DAC[1].INT  = Info::pdb_dac[1].dacint;
+      }
+#endif
+#ifdef PDB_POEN_POEN
+      pdb->POEN = Info::pdb_poen;
+      if (Info::numPulseOutputs>0) {
+         pdb->PODLY[0]     = Info::pdb_podly[0];
+      }
+      if (Info::numPulseOutputs>1) {
+         pdb->PODLY[1]     = Info::pdb_podly[1];
+      }
+      if (Info::numPulseOutputs>2) {
+         pdb->PODLY[2]     = Info::pdb_podly[2];
+      }
+      if (Info::numPulseOutputs>3) {
+         pdb->PODLY[3]     = Info::pdb_podly[3];
+      }
+#endif
+      // Configure and trigger register load
+      pdb->SC = Info::pdb_sc|PDB_SC_PDBEN_MASK|PDB_SC_LDOK_MASK;
       enableNvicInterrupts();
+   }
+
+   /**
+    * Get 'best' dividers for given period.\n
+    * This involves finding the smallest prescaler that allows the PDB period \n
+    * to be set to greater than the given period.\n
+    * This produces the highest resolution.\n
+    * It is quite possible that other values would be more suitable for a particular application.\n
+    * For example, carefully chosen prescalers may result in less rounding for the needed intermediate points \n
+    * for pulse outputs etc.
+    *
+    * @param[in]  period          Period in seconds as a float
+    * @param[out] multValue       Determined pdb_sc_mult value
+    * @param[out] prescaleValue   Determined pdb_sc_prescaler value
+    * @param[out] mod             Calculated pdb_mod
+    *
+    * @return E_NO_ERROR  => success
+    * @return E_ERROR     => failed to find suitable values
+    */
+   static ErrorCode getDividers(float period, uint32_t &multValue, int &prescaleValue, uint32_t &mod) {
+
+      // Multiplier factors for prescale divider
+      static const int   multFactors[] = {1,10,20,40};
+
+      float inputClock = Info::getInputClockFrequency();
+
+      // No MOD value found so far
+      mod = 0;
+
+      // Try each divider multiplier
+      for (unsigned trialMultValue=0; trialMultValue<(sizeof(multFactors)/sizeof(multFactors[0])); trialMultValue++) {
+         int multfactor = multFactors[trialMultValue];
+
+         // Try prescalers from smallest to largest
+         // Find first prescaler for which a suitable modulo exists
+         int prescaleFactor=1;
+         for (unsigned trialPrescaleValue=0; trialPrescaleValue<=7; trialPrescaleValue++) {
+            float clock = inputClock/(multfactor*prescaleFactor);
+            uint32_t trialMod = round(period*clock)-1;
+   //         printf("multfactor=%2d, prescaleFactor = %3d, mod=%8d, period=%f\n", multfactor, prescaleFactor, trialMod, period);
+            if (trialMod <= 0) {
+               // Too short a period
+               return E_TOO_SMALL;
+            }
+            if (trialMod <= 65535) {
+               if (trialMod>mod) {
+                  // Better value - save
+                  prescaleValue = trialPrescaleValue;
+                  multValue     = trialMultValue;
+                  mod           = trialMod;
+               }
+               break;
+            }
+            prescaleFactor <<= 1;
+         }
+      }
+      return setErrorCode((mod==0)?E_ERROR:E_NO_ERROR);
+   }
+
+   /**
+    * Sets period to given value.
+    *
+    * It attempts to get 'best' dividers for given period.\n
+    * This involves finding the smallest prescaler that allows the PDB period \n
+    * to be set to greater than the given period.\n
+    * This produces the highest resolution.\n
+    * It is quite possible that other values would be more suitable for a particular application.\n
+    * For example, carefully chosen prescalers may result in less rounding for the needed intermediate points \n
+    * for pulse outputs etc.
+    *
+    * @param[in]  period Period in seconds as a float
+    *
+    * @return E_NO_ERROR  => success
+    * @return E_ERROR     => failed to find suitable values
+    */
+   static ErrorCode setPeriod(float period) {
+      uint32_t mult;
+      int prescale;
+      uint32_t mod;
+
+      ErrorCode rc = getDividers(period, mult, prescale, mod);
+      if (rc != E_NO_ERROR) {
+         return rc;
+      }
+      pdb->SC  = (pdb->SC&~(PDB_SC_MULT_MASK|PDB_SC_PRESCALER_MASK))|PDB_SC_MULT(mult)|PDB_SC_PRESCALER(prescale);
+      pdb->MOD = mod;
+      return E_NO_ERROR;
+   }
+
+   /**
+    * Trigger PDB sequence
+    */
+   static __attribute__((always_inline)) void softwareTrigger() {
+      pdb->SC |= PDB_SC_SWTRIG_MASK|PDB_SC_TRGSEL(15)|PDB_SC_LDOK_MASK;
    }
 
    /**
     * Enable/disable interrupts in NVIC
     *
-    * @param enable True => enable, False => disable
+    * @param[in]  enable True => enable, False => disable
     */
    static void enableNvicInterrupts(bool enable=true) {
       if (enable) {
@@ -84,7 +205,7 @@ public:
    /**
     * Enable/disable sequence error interrupts
     *
-    * @param enable True => enable, False => disable
+    * @param[in]  enable True => enable, False => disable
     */
    static void enableErrorInterrupts(bool enable=true) {
       if (enable) {
@@ -95,9 +216,9 @@ public:
       }
    }
    /**
-    * Enable/disable sequence complete interrupts
+    * Enable/disable sequence interrupts
     *
-    * @param enable True => enable, False => disable
+    * @param[in]  enable True => enable, False => disable
     */
    static void enableSequenceInterrupts(bool enable=true) {
       if (enable) {
@@ -136,7 +257,7 @@ public:
    /**
     * Set Callback function
     *
-    *   @param theCallback - Callback function to be executed on PDB interrupt
+    *   @param[in]  theCallback - Callback function to be executed on PDB interrupt
     */
    static void setCallback(PDBCallbackFunction theCallback) {
       callback = theCallback;

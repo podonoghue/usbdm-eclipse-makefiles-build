@@ -114,9 +114,9 @@ FlashDriverError_t Flash::executeFlashCommand() {
  * Read Flash Resource (IFR etc)
  * This command reads 4 bytes from the selected flash resource
  *
- * @param resourceSelectCode 00 => IFR, 01 => Version ID
- * @param address            Address in IFR etc, A23=0 => Program flash, A23=1 => Data flash
- * @param data               Buffer for data returned
+ * @param[in]  resourceSelectCode 00 => IFR, 01 => Version ID
+ * @param[in]  address            Address in IFR etc, A23=0 => Program flash, A23=1 => Data flash
+ * @param[out] data               Buffer for data returned
  *
  * @return Error code, 0 => no error
  */
@@ -143,8 +143,8 @@ FlashDriverError_t Flash::readFlashResource(uint8_t resourceSelectCode, uint32_t
  *
  * See device reference manual for the meaning of the following parameters
  *
- * @param eeprom     EEPROM Data Size value
- * @param partition  FlexNVM Partition value
+ * @param[in]  eeprom     EEPROM Data Size value
+ * @param[in]  partition  FlexNVM Partition value
  *
  * @return Error code, 0 => no error
  */
@@ -165,8 +165,8 @@ FlashDriverError_t Flash::partitionFlash(uint8_t eeprom, uint8_t partition) {
 /**
  * Program phrase to Flash memory
  *
- * @param data       Location of data to program
- * @param address    Memory address to program - must be phrase boundary
+ * @param[in]  data       Location of data to program
+ * @param[out] address    Memory address to program - must be phrase boundary
  *
  * @return Error code
  */
@@ -186,9 +186,9 @@ FlashDriverError_t Flash::programPhrase(const uint8_t *data, uint8_t *address) {
 /**
  * Program a range of bytes to Flash memory
  *
- * @param data       Location of data to program
- * @param address    Memory address to program - must be phrase boundary
- * @param size       Size of range (in bytes) to program - must be multiple of phrase size
+ * @param[in]  data       Location of data to program
+ * @param[out] address    Memory address to program - must be phrase boundary
+ * @param[in]  size       Size of range (in bytes) to program - must be multiple of phrase size
  *
  * @return Error code
  */
@@ -221,7 +221,7 @@ FlashDriverError_t Flash::programRange(const uint8_t *data, uint8_t *address, ui
 /**
  * Erase sector in Flash memory
  *
- * @param address    Memory address to erase - must be phrase boundary
+ * @param[in]  address    Memory address to erase - must be phrase boundary
  *
  * @return Error code
  */
@@ -237,8 +237,8 @@ FlashDriverError_t Flash::eraseSector(uint8_t *address) {
 /**
  * Program a range of bytes to Flash memory
  *
- * @param address    Memory address to start erasing - must be sector boundary
- * @param size       Size of range (in bytes) to erase - must be multiple of sector size
+ * @param[in]  address    Memory address to start erasing - must be sector boundary
+ * @param[in]  size       Size of range (in bytes) to erase - must be multiple of sector size
  *
  * @return Error code
  */

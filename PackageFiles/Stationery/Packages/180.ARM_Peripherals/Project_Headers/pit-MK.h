@@ -43,6 +43,15 @@ typedef void (*PITCallbackFunction)(void);
  */
 template<class Info>
 class Pit_T {
+
+private:
+   /**
+    * This class is not intended to be instantiated
+    */
+   Pit_T() = delete;
+   Pit_T(const Pit_T&) = delete;
+   Pit_T(Pit_T&&) = delete;
+
 protected:
    /** Default TCTRL value for timer channel */
    static constexpr uint32_t PIT_TCTRL_DEFAULT_VALUE = (PIT_TCTRL_TEN_MASK);
@@ -50,6 +59,7 @@ protected:
    /** Callback functions for ISRs */
    static PITCallbackFunction callbacks[Info::irqCount];
 
+   /** Callback to catch unhandled interrupt */
    static void errorCallback() {
       setAndCheckErrorCode(E_NO_HANDLER);
    }
@@ -84,8 +94,8 @@ public:
    /**
     * Enable/disable channel interrupts
     *
-    * @param channel Channel being modified
-    * @param enable  True => enable, False => disable
+    * @param[in]  channel Channel being modified
+    * @param[in]  enable  True => enable, False => disable
     */
    static void enableInterrupts(unsigned channel, bool enable=true) {
       if (enable) {
@@ -99,8 +109,8 @@ public:
    /**
     * Set callback for ISR
     *
-    * @param channel  The PIT channel to modify
-    * @param callback The function to call from stub ISR
+    * @param[in]  channel  The PIT channel to modify
+    * @param[in]  callback The function to call from stub ISR
     */
    static void setCallback(unsigned channel, PITCallbackFunction callback) {
       if (callback == nullptr) {
@@ -121,7 +131,7 @@ public:
    /**
     *  Enable the PIT with default settings
     *
-    *  @param mcr       Module Control Register
+    *  @param[in]  mcr       Module Control Register
     */
    static void enable(uint32_t mcr=Info::mcr) {
       // Enable clock
@@ -145,8 +155,8 @@ public:
    /**
     * Enable/disable interrupts in NVIC
     *
-    * @param channel Channel being modified
-    * @param enable True => enable, False => disable
+    * @param[in]  channel Channel being modified
+    * @param[in]  enable True => enable, False => disable
     *
     * @return E_NO_ERROR on success
     */
@@ -179,8 +189,8 @@ public:
    /**
     *  Enable/Disable the PIT channel
     *
-    *  @param channel   Channel to enable
-    *  @param enable    Controls whether channel is enabled or disabled
+    *  @param[in]  channel   Channel to enable
+    *  @param[in]  enable    Controls whether channel is enabled or disabled
     */
    static void enableChannel(const uint8_t channel, bool enable=true) {
       if (enable) {
@@ -194,11 +204,11 @@ public:
    /**
     *  Configure the PIT channel
     *
-    *  @param channel   Channel to configure
-    *  @param interval  Interval in timer ticks (usually bus clock period)
-    *  @param tctrl     Timer Control Register value
+    *  @param[in]  channel   Channel to configure
+    *  @param[in]  interval  Interval in timer ticks (usually bus clock period)
+    *  @param[in]  tctrl     Timer Control Register value
     */
-   static void configureChannel(const uint8_t channel, uint32_t interval=Info::loadValue, uint32_t tctrl=PIT_TCTRL_DEFAULT_VALUE) {
+   static void configureChannel(const uint8_t channel, uint32_t interval=Info::pit_ldval, uint32_t tctrl=PIT_TCTRL_DEFAULT_VALUE) {
       pit->CHANNEL[channel].LDVAL = interval;
       pit->CHANNEL[channel].TCTRL = tctrl;
       pit->CHANNEL[channel].TFLG  = PIT_TFLG_TIF_MASK;
@@ -208,9 +218,9 @@ public:
    /**
     *  Configure the PIT channel
     *
-    *  @param channel   Channel to configure
-    *  @param interval  Interval in seconds
-    *  @param tctrl     Timer Control Register value
+    *  @param[in]  channel   Channel to configure
+    *  @param[in]  interval  Interval in seconds
+    *  @param[in]  tctrl     Timer Control Register value
     */
    static void configureChannel(const uint8_t channel, float interval, uint32_t tctrl=PIT_TCTRL_DEFAULT_VALUE) {
       configureChannel(channel, (uint32_t)round(interval*PitInfo::getClockFrequency()), tctrl);
@@ -218,8 +228,8 @@ public:
    /**
     * Set period in seconds
     *
-    * @param channel Channel being modified
-    * @param interval Interval in seconds
+    * @param[in]  channel Channel being modified
+    * @param[in]  interval Interval in seconds
     */
    static void setPeriod(unsigned channel, float interval) {
       pit->CHANNEL[channel].LDVAL = round(interval*PitInfo::getClockFrequency());
@@ -227,7 +237,7 @@ public:
    /**
     *   Disable the PIT channel
     *
-    *   @param channel Channel to disable
+    *   @param[in]  channel Channel to disable
     */
    static void disableChannel(uint8_t channel) {
 
@@ -240,8 +250,8 @@ public:
    /**
     *  Use a PIT channel to implement a busy-wait delay
     *
-    *  @param channel   Channel to use
-    *  @param interval  Interval to wait in timer ticks (usually bus clock period)
+    *  @param[in]  channel   Channel to use
+    *  @param[in]  interval  Interval to wait in timer ticks (usually bus clock period)
     *
     *  @note Function doesn't return until interval has expired
     */

@@ -4,22 +4,6 @@
 
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Low power timer">
 
-   <floatOption name="clockFrequency" 
-      constant="true"
-      description="Frequency of timer clock"
-      toolTip="Determined from timer clock source and prescaler"
-      units="Hz"/>
-   <floatOption name="clockPeriod" 
-      constant="true"
-      description="Period of timer clock"
-      toolTip="Determined from timer clock source and prescaler"
-      units="s"/>
-   <floatOption name="maximumPeriod" 
-      constant="true"
-      description="Maximum period of timer"
-      toolTip="Determined from timer clock source and prescaler"
-      units="s"/>
-    
    <choiceOption name="lptmr_psr_pcs" description="Clock Source"
       toolTip="Low Power Timer clock source">
       <choice value="0" name="MCG Internal Reference Clock (MCGIRCLK)" />
@@ -28,6 +12,16 @@
       <choice value="3" name="Oscillator External Reference Clock (OSCERCLK)" />
    </choiceOption>
 
+   <binaryOption name="lptmr_psr_pbyp" description="Prescaler Bypass"
+      toolTip="When PBYP is set:\n
+      - The selected prescaler clock in Time Counter mode or\n
+        the selected input source in Pulse Counter mode, directly clocks the lptmr_cnr.\n
+        When PBYP is clear:\n
+      - The lptmr_cnr is clocked by the output of the prescaler/glitch filter">
+      <choice value="0" name="Prescaler/glitch filter is enabled" />
+      <choice value="1" name="Prescaler/glitch filter is bypassed" />
+   </binaryOption>
+   
    <choiceOption name="lptmr_psr_prescaler" description="Prescaler Value"
       toolTip="Configures the size of the Prescaler in Time Counter mode or\n
          width of the glitch filter in Pulse Counter mode">
@@ -48,15 +42,28 @@
       <choice value="14" name="Prescaler = 32768, 16384 clock glitch filter" />
       <choice value="15" name="Prescaler = 65536, 32768 clock glitch filter" />
    </choiceOption>
-   <binaryOption name="lptmr_psr_pbyp" description="Prescaler Bypass"
-      toolTip="When PBYP is set:\n
-      - The selected prescaler clock in Time Counter mode or\n
-        the selected input source in Pulse Counter mode, directly clocks the CNR.\n
-        When PBYP is clear:\n
-      - The CNR is clocked by the output of the prescaler/glitch filter">
-      <choice value="0" name="Prescaler/glitch filter is enabled" />
-      <choice value="1" name="Prescaler/glitch filter is bypassed" />
-   </binaryOption>
+   
+   <floatOption name="clockFrequency" 
+      constant="true"
+      description="Frequency of timer clock"
+      toolTip="Determined from timer clock source and prescaler"
+      derived="true"
+      units="Hz"/>
+      
+   <floatOption name="clockPeriod" 
+      constant="true"
+      description="Period of timer clock"
+      toolTip="Determined from timer clock source and prescaler"
+      derived="true"
+      units="s"/>
+      
+   <floatOption name="maximumPeriod" 
+      constant="true"
+      description="Maximum period of timer"
+      toolTip="Determined from timer clock source and prescaler"
+      derived="true"
+      units="s"/>
+    
    <template><![CDATA[
       \t//! Default Timer Compare value\n
       \tstatic constexpr uint32_t cmr = $(lptmr_cmr);\n\n
@@ -68,13 +75,19 @@
       \t   LPTMR_PSR_PCS($(lptmr_psr_pcs));\n\n
    ]]></template>
    
+   <binaryOption name="lptmr_csr_tms" description="Timer Mode Select"
+      toolTip="Configures the mode of the LPTMR">
+      <choice value="0" name="Time Counter mode" />
+      <choice value="1" name="Pulse Counter mode" />
+   </binaryOption>
+   
    <binaryOption name="lptmr_csr_tie" description="Timer interrupt enable"
       toolTip="Enables interrupts">
       <choice value="0" name="Interrupt disabled" />
       <choice value="1" name="Interrupt enabled" />
    </binaryOption>
    
-   <choiceOption name="lptmr_csr_tps" description="Timer Pin Select"
+   <choiceOption name="lptmr_csr_tps" description="Timer Pin Select for Pulse Counter mode"
       toolTip="Configures the input source to be used in Pulse Counter mode.\n
       The input connections vary by device">
       <choice value="0" name="CMP0 output" />
@@ -82,24 +95,19 @@
       <choice value="2" name="LPTMR_ALT2 pin" />
    </choiceOption>
    
-   <binaryOption name="lptmr_csr_tms" description="Timer Mode Select"
-      toolTip="Configures the mode of the LPTMR">
-      <choice value="0" name="Time Counter mode" />
-      <choice value="1" name="Pulse Counter mode" />
-   </binaryOption>
-   
-   <binaryOption name="lptmr_csr_tfc" description="Timer Free-Running Counter"
-      toolTip="When clear, TFC configures the CNR to reset whenever TCF is set.\n
-      When set, TFC configures the CNR to reset on overflow">
-      <choice value="0" name="CNR is reset whenever TCF is set" />
-      <choice value="1" name="CNR is reset on overflow" />
-   </binaryOption>
-   
-   <binaryOption name="lptmr_csr_tpp" description="Timer Pin Polarity"
+   <binaryOption name="lptmr_csr_tpp" description="Timer Pin Polarity for Pulse Counter mode"
       toolTip="Configures the polarity of the input source in Pulse Counter mode">
-      <choice value="0" name="Active-high source, rising-edge increments CNR" />
-      <choice value="1" name="Active-low source,  falling-edge increments CNR" />
+      <choice value="0" name="Active-high source, rising-edge increments lptmr_cnr" />
+      <choice value="1" name="Active-low source,  falling-edge increments lptmr_cnr" />
    </binaryOption>
+
+   <binaryOption name="lptmr_csr_tfc" description="Timer Free-Running Counter enable"
+      toolTip="When clear, lptmr_csr_tfc configures the lptmr_cnr to reset whenever lptmr_csr_tcf is set.\n
+      When set, lptmr_csr_tfc configures the lptmr_cnr to reset on overflow">
+      <choice value="0" name="lptmr_cnr is reset whenever lptmr_csr_tcf is set" />
+      <choice value="1" name="lptmr_cnr is reset on overflow" />
+   </binaryOption>
+   
    <template><![CDATA[
       \t//! Default CSR value\n
       \tstatic constexpr uint32_t csr = 
@@ -111,17 +119,23 @@
    ]]></template>
    
    <intOption name="lptmr_cmr" description="Timer Compare Register"
-      toolTip="Default value for comparison" />
+      toolTip="Default value for comparison\n
+      lptmr_csr_tcf flag is set when lptmr_cnr equals the value in the lptmr_cmr and lptmr_cnr increments. \n
+      The hardware trigger will assert until the next time the lptmr_cnr increments. \n
+      If lptmr_csr_tfc=0 the lptmr_cnr will roll-over to zero" 
+      min="0" max="65535" />
       
-   <intOption name="lptmr_cmrFrequency" 
-      description="Frequency of timer clock"
-      toolTip="Determined from timer clock source and prescaler"
-      units="Hz"/>
+   <floatOption name="lptmr_cmrPeriod"     description="Timer Compare Interval"
+      toolTip="This is determined from lptmr_cmr register and clock frequency.\n
+      When lptmr_csr_tfc=0 this is the lptmr_cnr roll-over period"
+      derived="true"
+      min="0" units="s"/>
     
-   <floatOption name="lptmr_cmrPeriod" 
-      description="Period of timer clock"
-      toolTip="Determined from timer clock source and prescaler"
-      units="s"/>
+   <floatOption name="lptmr_cmrFrequency"  description="Timer Compare Frequency"
+      toolTip="This is determined from lptmr_cmr register and clock frequency.\n
+      When lptmr_csr_tfc=0 this is the lptmr_cnr roll-over frequency"
+      derived="true"
+      min="0" units="Hz"/>
     
    <xi:include href="_irqOption.xml"/>
       

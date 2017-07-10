@@ -62,8 +62,8 @@ protected:
    /**
     * Construct I2C interface
     *
-    * @param i2c  Base address of I2C hardware
-    * @param mode Mode of operation (i2c_interrupt or i2c_polled)
+    * @param[in]  i2c  Base address of I2C hardware
+    * @param[in]  mode Mode of operation (i2c_interrupt or i2c_polled)
     *
     */
    I2c(volatile I2C_Type *i2c, I2c_Mode mode) :
@@ -80,8 +80,8 @@ protected:
     *
     * This is calculated from processor bus frequency and given bps
     *
-    * @param bps            Interface speed in bits-per-second
-    * @param clockFrequency Frequency of I2C input clock
+    * @param[in]  bps            Interface speed in bits-per-second
+    * @param[in]  clockFrequency Frequency of I2C input clock
     *
     * @return I2C_F value representing speed
     */
@@ -90,7 +90,7 @@ protected:
    /**
     * Start Rx/Tx sequence by sending address byte
     *
-    * @param address - address of slave to access
+    * @param[in]  address - address of slave to access
     */
    void sendAddress(uint8_t address);
 
@@ -99,8 +99,8 @@ protected:
     *
     * This is calculated from processor frequency and given bits-per-second
     *
-    * @param bps            - Interface speed in bits-per-second
-    * @param clockFrequency - Frequency of I2C input clock
+    * @param[in]  bps            - Interface speed in bits-per-second
+    * @param[in]  clockFrequency - Frequency of I2C input clock
     */
    void setBPS(uint32_t bps, uint32_t clockFrequency) {
       i2c->F = getBPSValue(bps, clockFrequency);
@@ -112,7 +112,7 @@ public:
    /**
     * Obtain I2C MUTEX
     *
-    * @param milliseconds How long to wait in milliseconds. Use osWaitForever for indefinite wait
+    * @param[in]  milliseconds How long to wait in milliseconds. Use osWaitForever for indefinite wait
     *
     * @return osOK: The mutex has been obtain.
     * @return osErrorTimeoutResource: The mutex could not be obtained in the given time.
@@ -172,9 +172,9 @@ public:
    /**
     * Transmit message
     *
-    * @param address  Address of slave to communicate with
-    * @param size     Size of transmission data
-    * @param data     Data to transmit, 0th byte is often register address
+    * @param[in]  address  Address of slave to communicate with
+    * @param[in]  size     Size of transmission data
+    * @param[in]  data     Data to transmit, 0th byte is often register address
     *
     * @return E_NO_ERROR on success
     */
@@ -183,9 +183,9 @@ public:
    /**
     * Receive message
     *
-    * @param address  Address of slave to communicate with
-    * @param size     Size of reception data
-    * @param data     Data buffer for reception
+    * @param[in]  address  Address of slave to communicate with
+    * @param[in]  size     Size of reception data
+    * @param[out] data     Data buffer for reception
     *
     * @return E_NO_ERROR on success
     */
@@ -196,11 +196,11 @@ public:
     *
     * Uses repeated-start.
     *
-    * @param address  Address of slave to communicate with
-    * @param txSize   Size of transmission data
-    * @param txData   Data for transmission
-    * @param rxSize   Size of reception data
-    * @param rxData   Date buffer for reception
+    * @param[in]  address  Address of slave to communicate with
+    * @param[in]  txSize   Size of transmission data
+    * @param[in]  txData   Data for transmission
+    * @param[in]  rxSize   Size of reception data
+    * @param[out] rxData   Date buffer for reception
     *
     * @return E_NO_ERROR on success
     */
@@ -211,10 +211,10 @@ public:
     * Uses repeated-start.\n
     * Uses shared transmit and receive buffer
     *
-    * @param address  Address of slave to communicate with
-    * @param txSize   Size of transmission data
-    * @param rxSize   Size of reception data
-    * @param data     Data for transmission and reception
+    * @param[in]    address  Address of slave to communicate with
+    * @param[in]    txSize   Size of transmission data
+    * @param[in]    rxSize   Size of reception data
+    * @param[inout] data     Data for transmission and reception
     *
     * @return E_NO_ERROR on success
     */
@@ -267,7 +267,7 @@ public:
    /**
     * Obtain I2C mutex
     *
-    * @param milliseconds How long to wait in milliseconds. Use osWaitForever for indefinite wait
+    * @param[in]  milliseconds How long to wait in milliseconds. Use osWaitForever for indefinite wait
     *
     * @return osOK: The mutex has been obtain.
     * @return osErrorTimeoutResource: The mutex could not be obtained in the given time.
@@ -295,9 +295,9 @@ public:
    /**
     * Construct I2C interface
     *
-    * @param bps        Tx/Rx rate
-    * @param mode       Mode of operation
-    * @param myAddress  Address of this device on bus (not currently used)
+    * @param[in]  bps        Tx/Rx rate
+    * @param[in]  mode       Mode of operation
+    * @param[in]  myAddress  Address of this device on bus (not currently used)
     */
    I2c_T(unsigned bps=400000, I2c_Mode mode=i2c_polled, uint8_t myAddress=0) : I2c(Info::i2c, mode) {
 
@@ -322,7 +322,7 @@ public:
     *
     * This is calculated from processor frequency and given bits-per-second
     *
-    * @param bps            - Interface speed in bits-per-second
+    * @param[in]  bps            - Interface speed in bits-per-second
     */
    void setBPS(uint32_t bps) {
      I2c::setBPS(bps, Info::getInputClockFrequency());
@@ -331,7 +331,7 @@ public:
    /**
     * Initialise interface
     *
-    * @param myAddress Address of self (not used)
+    * @param[in]  myAddress Address of self (not used)
     */
    void init(const uint8_t myAddress) {
 

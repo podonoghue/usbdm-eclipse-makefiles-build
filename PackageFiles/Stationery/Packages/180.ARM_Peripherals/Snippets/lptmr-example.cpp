@@ -46,14 +46,18 @@ template<> void Lptmr_T<Lptmr0Info>::irqHandler() {
 int main() {
    RED_LED::setOutput();
 
-   Lptmr0::enable();
-   
-   Lptmr0::setPeriod(20*ms);
+   // Enable LPTMR in time counting mode
+   Lptmr0::setTimeCountingMode();
+   // Set clock source
+   Lptmr0::setClock(LptmrClockSel_erclk32);
+   // Set period of timer event
+   Lptmr0::setPeriod(200*ms);
 
 #ifdef SET_HANDLERS_PROGRAMMATICALLY
    // This handler is set programmatically
    Lptmr0::setCallback(flash);
 #endif
+   Lptmr0::enableInterrupts();
 
    // Check for errors so far
    checkError();

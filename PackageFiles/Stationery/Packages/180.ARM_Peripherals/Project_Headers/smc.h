@@ -21,8 +21,6 @@ namespace USBDM {
 
 /**
  * Type definition for SMC interrupt call back
- *
- *  @param timeSinceEpoch - Time since the epoch in seconds
  */
 typedef void (*SMCCallbackFunction)();
 
@@ -75,7 +73,7 @@ public:
    /**
     * Enter Power Mode
     *
-    * @param mode Power mode e.g. wake_onInt + runm_vlpr
+    * @param[in]  mode Power mode e.g. wake_onInt + runm_vlpr
     */
    static ErrorCode enterPowerMode(uint8_t mode) {
       smc->PMCTRL = mode;
@@ -86,7 +84,7 @@ public:
    /**
     * Enter Stop Mode
     *
-    * @param mode Power mode e.g. wake_onInt + stopm_vlps
+    * @param[in]  mode Power mode e.g. wake_onInt + stopm_vlps
     */
    static ErrorCode enterStopMode(uint8_t mode) {
       smc->PMCTRL = mode;

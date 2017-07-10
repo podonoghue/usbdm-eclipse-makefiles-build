@@ -47,8 +47,8 @@ using SpiModeValue = uint32_t;
 /**
  * Calculate SPI mode value from components
  *
- * @param spiMode  SPI Mode e.g. SpiMode0
- * @param spiOrder Bit order e.g. SpiMsbFirst
+ * @param[in]  spiMode  SPI Mode e.g. SpiMode0
+ * @param[in]  spiOrder Bit order e.g. SpiMsbFirst
  */
 static constexpr SpiModeValue spiModeValue(SpiMode spiMode=SpiMode0, SpiOrder spiOrder=SpiMsbFirst) {
    return spiMode|spiOrder;
@@ -70,7 +70,7 @@ protected:
    /**
     * Constructor
     *
-    * @param baseAddress    Base address of SPI
+    * @param[in]  baseAddress    Base address of SPI
     */
    Spi(volatile SPI_Type *baseAddress) :
       spi(baseAddress), pushrMask(SPI_PUSHR_PCS_MASK) {
@@ -80,8 +80,8 @@ public:
    /**
     * Calculate communication speed factors for SPI
     *
-    * @param clockFrequency => Clock frequency of SPI in Hz
-    * @param frequency      => Communication frequency in Hz
+    * @param[in]  clockFrequency => Clock frequency of SPI in Hz
+    * @param[in]  frequency      => Communication frequency in Hz
     *
     * @return CTAR register value including SPI_CTAR_BR, SPI_CTAR_PBR fields
     *
@@ -92,8 +92,8 @@ public:
    /**
     * Calculate communication speed from SPI clock frequency and speed factors
     *
-    * @param clockFrequency => Clock frequency of SPI in Hz
-    * @param clockFactors   => CTAR register value providing SPI_CTAR_BR, SPI_CTAR_PBR fields
+    * @param[in]  clockFrequency => Clock frequency of SPI in Hz
+    * @param[in]  clockFactors   => CTAR register value providing SPI_CTAR_BR, SPI_CTAR_PBR fields
     *
     * @return Clock frequency of SPI in Hz for these factors
     */
@@ -104,10 +104,10 @@ protected:
     * Calculate Delay factors
     * Used for ASC, DT and CSSCK
     *
-    * @param delay          => Desired delay in seconds
-    * @param clockFrequency => Clock frequency of SPI in Hz
-    * @param bestPrescale   => Best prescaler value (0=>/1, 1=>/3, 2=/5, 3=>/7)
-    * @param bestDivider    => Best divider value (N=>/(2**(N+1)))
+    * @param[in]  delay          => Desired delay in seconds
+    * @param[in]  clockFrequency => Clock frequency of SPI in Hz
+    * @param[in]  bestPrescale   => Best prescaler value (0=>/1, 1=>/3, 2=/5, 3=>/7)
+    * @param[in]  bestDivider    => Best divider value (N=>/(2**(N+1)))
     *
     * @return true
     *
@@ -118,8 +118,8 @@ protected:
    /**
     * Calculate Delay factors for CSSCK (PCS assertion to SCK Delay Scaler)
     *
-    * @param delay          => Desired delay in seconds
-    * @param clockFrequency => Clock frequency of SPI in Hz
+    * @param[in]  delay          => Desired delay in seconds
+    * @param[in]  clockFrequency => Clock frequency of SPI in Hz
     *
     * @return Masks for CTAR register
     *
@@ -134,8 +134,8 @@ protected:
    /**
     * Calculate Delay factors for ASC (SCK to PCS negation delay)
     *
-    * @param delay          => Desired delay in seconds
-    * @param clockFrequency => Clock frequency of SPI in Hz
+    * @param[in]  delay          => Desired delay in seconds
+    * @param[in]  clockFrequency => Clock frequency of SPI in Hz
     *
     * @return Masks for CTAR register
     *
@@ -150,8 +150,8 @@ protected:
    /**
     * Calculate Delay factors for DT (PCS negation to PCS assertion delay between transfers)
     *
-    * @param delay          => Desired delay in seconds
-    * @param clockFrequency => Clock frequency of SPI in Hz
+    * @param[in]  delay          => Desired delay in seconds
+    * @param[in]  clockFrequency => Clock frequency of SPI in Hz
     *
     * @return Masks for CTAR register
     *
@@ -166,10 +166,10 @@ protected:
    /**
     * Calculates the CTAR value for a given set of communication delays for SPI
     *
-    * @param clockFrequency => Clock frequency of SPI in Hz
-    * @param cssck          => PCS assertion to SCK Delay Scaler
-    * @param asc            => SCK to PCS negation delay
-    * @param dt             => PCS negation to PCS assertion delay between transfers
+    * @param[in]  clockFrequency => Clock frequency of SPI in Hz
+    * @param[in]  cssck          => PCS assertion to SCK Delay Scaler
+    * @param[in]  asc            => SCK to PCS negation delay
+    * @param[in]  dt             => PCS negation to PCS assertion delay between transfers
     *
     * @return Masks for CTAR register
     *
@@ -186,9 +186,9 @@ protected:
    /**
     * Sets Communication speed for SPI
     *
-    * @param frequency      => Communication frequency in Hz
-    * @param clockFrequency => Clock frequency of SPI in Hz
-    * @param ctarNum        => Index of CTAR register to modify
+    * @param[in]  frequency      => Communication frequency in Hz
+    * @param[in]  clockFrequency => Clock frequency of SPI in Hz
+    * @param[in]  ctarNum        => Index of CTAR register to modify
     *
     * Note: Chooses the highest speed that is not greater than frequency.
     */
@@ -199,11 +199,11 @@ protected:
    /**
     * Sets the CTAR value for a given set of communication delays
     *
-    * @param clockFrequency => Clock frequency of SPI in Hz
-    * @param cssck          => PCS assertion to SCK Delay Scaler
-    * @param asc            => SCK to PCS negation delay
-    * @param dt             => PCS negation to PCS assertion delay between transfers
-    * @param ctarNum        => Index of CTAR register to modify
+    * @param[in]  clockFrequency => Clock frequency of SPI in Hz
+    * @param[in]  cssck          => PCS assertion to SCK Delay Scaler
+    * @param[in]  asc            => SCK to PCS negation delay
+    * @param[in]  dt             => PCS negation to PCS assertion delay between transfers
+    * @param[in]  ctarNum        => Index of CTAR register to modify
     *
     * Note: Determines values for the smallest delay that is not less than specified delays.
     */
@@ -220,9 +220,9 @@ public:
    /**
     * Obtain SPI mutex and set SPI configuration
     *
-    * @param config       The configuration value to set for the transaction\n
+    * @param[in]  config       The configuration value to set for the transaction\n
     *                     A value of zero leaves the configuration unchanged
-    * @param milliseconds How long to wait in milliseconds. Use osWaitForever for indefinite wait
+    * @param[in]  milliseconds How long to wait in milliseconds. Use osWaitForever for indefinite wait
     *
     * @return osOK: The mutex has been obtain.
     * @return osErrorTimeoutResource: The mutex could not be obtained in the given time.
@@ -244,7 +244,7 @@ public:
    /**
     * Obtain SPI mutex(dummy) and set SPI configuration
     *
-    * @param config The configuration value to set for the transaction.\n
+    * @param[in]  config The configuration value to set for the transaction.\n
     *               A value of zero leaves the configuration unchanged
     */
    int startTransaction(uint32_t config=0, int =0) {
@@ -274,10 +274,10 @@ public:
    /**
     * Sets the CTAR value for a given set of communication delays
     *
-    * @param cssck          => PCS assertion to SCK Delay Scaler
-    * @param asc            => SCK to PCS negation delay
-    * @param dt             => PCS negation to PCS assertion delay between transfers
-    * @param ctarNum        => Index of CTAR register to modify
+    * @param[in]  cssck          => PCS assertion to SCK Delay Scaler
+    * @param[in]  asc            => SCK to PCS negation delay
+    * @param[in]  dt             => PCS negation to PCS assertion delay between transfers
+    * @param[in]  ctarNum        => Index of CTAR register to modify
     *
     * Note: Determines values for the smallest delay that is not less than specified delays.
     */
@@ -286,8 +286,8 @@ public:
    /**
     * Sets the CTAR value for a given communication speed
     *
-    * @param frequency => Frequency in Hz (0 => use default value)
-    * @param ctarNum   => Index of CTAR register to modify
+    * @param[in]  frequency => Frequency in Hz (0 => use default value)
+    * @param[in]  ctarNum   => Index of CTAR register to modify
     *
     * Note: Chooses the highest speed that is not greater than frequency.
     * Note: This will only have effect the next time a CTAR is changed
@@ -297,8 +297,8 @@ public:
    /**
     * Sets Communication mode for SPI
     *
-    * @param mode    => SpiModeValue to set. May be calculated using spiModeValue()
-    * @param ctarNum => Index of CTAR register to modify
+    * @param[in]  mode    => SpiModeValue to set. May be calculated using spiModeValue()
+    * @param[in]  ctarNum => Index of CTAR register to modify
     */
    void setMode(SpiModeValue mode, int ctarNum=0) {
       // Sets the default CTAR value with 8 bits
@@ -309,8 +309,8 @@ public:
    /**
     * Sets Communication mode for SPI
     *
-    * @param numBits => Number of bits in each transfer
-    * @param ctarNum => Index of CTAR register to modify
+    * @param[in]  numBits => Number of bits in each transfer
+    * @param[in]  ctarNum => Index of CTAR register to modify
     */
    void setFrameSize(int numBits=8, int ctarNum=0) {
       // Sets the frame size in CTAR
@@ -321,7 +321,7 @@ public:
     * Set value that is combined with data for PUSHR register
     * For example this may be used to control which CTAR is used or which SPI_PCSx signal is asserted
     *
-    * @param pushrMask Value to combine with Tx data before writing to PUSHR register
+    * @param[in]  pushrMask Value to combine with Tx data before writing to PUSHR register
     *                  For example, SPI_PUSHR_CTAS(1)|SPI_PUSHR_PCS(1<<2)
     */
    void setPushrValue(uint32_t pushrMask) {
@@ -352,8 +352,8 @@ public:
    /**
     * Transmit and receive a value over SPI
     *
-    * @param data - Data to send (8-16 bits) <br>
-    *               May include other control bits
+    * @param[in]  data - Data to send (8-16 bits) <br>
+    *             May include other control bits
     *
     * @return Data received
     */
@@ -363,7 +363,7 @@ public:
     *  Set SPI Configuration value\n
     *  This includes timing settings, word length and transmit order
     *
-    * @param config Configuration value
+    * @param[in]  config Configuration value
     */
    void setConfig(uint32_t config) {
       spi->CTAR[0] = config;
@@ -381,7 +381,7 @@ public:
 
    /** Set SPI.CTAR0 value
     *
-    * @param ctar 32-bit CTAR value
+    * @param[in]  ctar 32-bit CTAR value
     */
    void setCTAR0Value(uint32_t ctar) {
       spi->CTAR[0] = ctar;
@@ -389,7 +389,7 @@ public:
 
    /** Set SPI.CTAR1 value
     *
-    * @param ctar 32-bit CTAR value
+    * @param[in]  ctar 32-bit CTAR value
     */
    void setCTAR1Value(uint32_t ctar) {
       spi->CTAR[1] = ctar;
@@ -414,8 +414,8 @@ public:
    /**
     * Set polarity of hardware PCS signals
     *
-    * @param signal    Signal number
-    * @param polarity  Polarity of PCSn, ActiveHigh or ActiveLow
+    * @param[in]  signal    Signal number
+    * @param[in]  polarity  Polarity of PCSn, ActiveHigh or ActiveLow
     */
    void setPcsPolarity(int signal, Polarity polarity=ActiveHigh) {
       if (polarity==ActiveHigh) {
@@ -444,9 +444,9 @@ public:
    /**
     * Obtain SPI mutex
     *
-    * @param config       The configuration value to set for the transaction\n
+    * @param[in]  config       The configuration value to set for the transaction\n
     *                     A value of zero leaves the configuration unchanged
-    * @param milliseconds How long to wait in milliseconds. Use osWaitForever for indefinite wait
+    * @param[in]  milliseconds How long to wait in milliseconds. Use osWaitForever for indefinite wait
     *
     * @return osOK: The mutex has been obtain.
     * @return osErrorTimeoutResource: The mutex could not be obtained in the given time.
@@ -493,8 +493,8 @@ public:
    /**
     * Sets Communication speed for SPI
     *
-    * @param frequency      => Frequency in Hz (0 => use default value)
-    * @param ctarNum        => Index of CTAR register to modify
+    * @param[in]  frequency      => Frequency in Hz (0 => use default value)
+    * @param[in]  ctarNum        => Index of CTAR register to modify
     *
     * Note: Chooses the highest speed that is not greater than frequency.
     */
@@ -505,10 +505,10 @@ public:
    /**
     * Sets the CTAR value for a given set of communication delays
     *
-    * @param cssck          => PCS assertion to SCK Delay Scaler
-    * @param asc            => SCK to PCS negation delay
-    * @param dt             => PCS negation to PCS assertion delay between transfers
-    * @param ctarNum        => Index of CTAR register to modify
+    * @param[in]  cssck          => PCS assertion to SCK Delay Scaler
+    * @param[in]  asc            => SCK to PCS negation delay
+    * @param[in]  dt             => PCS negation to PCS assertion delay between transfers
+    * @param[in]  ctarNum        => Index of CTAR register to modify
     *
     * Note: Determines values for the smallest delay that is not less than specified delays.
     */

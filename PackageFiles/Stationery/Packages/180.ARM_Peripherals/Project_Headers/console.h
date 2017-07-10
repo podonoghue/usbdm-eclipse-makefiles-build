@@ -57,13 +57,13 @@ void console_initialise();
 /**
  * Set Console baud rate
  *
- * @param baudRate - the baud rate to use
+ * @param[in]  baudRate - the baud rate to use
  */
 void console_setBaudRate(int baudRate);
 /**
  * Transmits a single character over the Console (blocking)
  *
- * @param ch - character to send
+ * @param[in]  ch - character to send
  */
 void console_txChar(int ch);
 /**

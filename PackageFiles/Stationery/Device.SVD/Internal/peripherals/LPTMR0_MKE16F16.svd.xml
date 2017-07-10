@@ -11,7 +11,7 @@ Devices using this peripheral:
          <name>LPTMR0</name>
          <description>Low Power Timer</description>
          <groupName>LPTMR</groupName>
-         <headerStructName>LPTMR0</headerStructName>
+         <headerStructName>LPTMR</headerStructName>
          <baseAddress>0x40040000</baseAddress>
          <size>32</size>
          <access>read-write</access>
@@ -25,7 +25,7 @@ Devices using this peripheral:
          <registers>
             <register>
                <name>CSR</name>
-               <description>Low Power Timer Control Status Register</description>
+               <description>Control Status Register</description>
                <addressOffset>0x0</addressOffset>
                <fields>
                   <field>
@@ -35,13 +35,13 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>LPTMR is disabled and internal logic is reset</description>
+                           <name>0b0</name>
+                           <description>Disabled\tLPTMR is disabled and internal logic is reset</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>LPTMR is enabled</description>
+                           <name>0b1</name>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -53,31 +53,32 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Time Counter mode</description>
+                           <name>0b0</name>
+                           <description>Time Count mode</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Pulse Counter mode</description>
+                           <name>0b1</name>
+                           <description>Pulse Count mode</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>TFC</name>
-                     <description>Timer Free-Running Counter</description>
+                     <description>Timer Free-Running Counter\n
+Control whether counter is reset whenever the Timer Compare Flag is set (timer event) or rolls over at 0xFFFF</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>CNR is reset whenever TCF is set</description>
+                           <name>0b0</name>
+                           <description>Reset on Timer event</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>CNR is reset on overflow</description>
+                           <name>0b1</name>
+                           <description>Rolls over (at 0xFFFF)</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -89,13 +90,13 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Pulse Counter input source is active-high, and the CNR will increment on the rising-edge</description>
+                           <name>0b0</name>
+                           <description>Active high/Rising edge\tPulse Counter input source is active high, and LPTMR Counter Register will increment on the rising edge</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Pulse Counter input source is active-low, and the CNR will increment on the falling-edge</description>
+                           <name>0b1</name>
+                           <description>Active Low/Falling edge\tPulse Counter input source is active low, and LPTMR Counter Register will increment on the falling edge</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -107,23 +108,23 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
-                           <description>Pulse counter input 0 is selected</description>
+                           <name>0b00</name>
+                           <description>Input 0 (usually CMPx)</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
-                           <description>Pulse counter input 1 is selected</description>
+                           <name>0b01</name>
+                           <description>Input 1 (LPTMR pin 0)</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
-                           <description>Pulse counter input 2 is selected</description>
+                           <name>0b10</name>
+                           <description>Input 2 (LPTMR pin 1)</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
-                           <description>Pulse counter input 3 is selected</description>
+                           <name>0b11</name>
+                           <description>Input 3 (LPTMR pin 2)</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -135,13 +136,13 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Timer interrupt disabled</description>
+                           <name>0b0</name>
+                           <description>Interrupt Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Timer interrupt enabled</description>
+                           <name>0b1</name>
+                           <description>Interrupt Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -153,13 +154,13 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>The value of CNR is not equal to CMR and increments</description>
+                           <name>0b0</name>
+                           <description>No event\t Counter Register has not equalled the LPTMR Compare Register and incremented</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>The value of CNR is equal to CMR and increments</description>
+                           <name>0b1</name>
+                           <description>Event\tLPTMR Counter Register has equalled the LPTMR Compare Register and incremented</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -171,12 +172,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Timer DMA Request disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Timer DMA Request enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -186,139 +187,141 @@ Devices using this peripheral:
             </register>
             <register>
                <name>PSR</name>
-               <description>Low Power Timer Prescale Register</description>
+               <description>Prescale Register</description>
                <addressOffset>0x4</addressOffset>
                <fields>
                   <field>
                      <name>PCS</name>
-                     <description>Prescaler Clock Select</description>
+                     <description>Prescaler/glitch filter Clock Select\n
+Varies with device</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
-                           <description>Prescaler/glitch filter clock 0 selected</description>
+                           <name>0b00</name>
+                           <description>MCGIRCLK</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
-                           <description>Prescaler/glitch filter clock 1 selected</description>
+                           <name>0b01</name>
+                           <description>LPO (1kHz)</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
-                           <description>Prescaler/glitch filter clock 2 selected</description>
+                           <name>0b10</name>
+                           <description>ERCLK32K (32kHz)</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
-                           <description>Prescaler/glitch filter clock 3 selected</description>
+                           <name>0b11</name>
+                           <description>External</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>PBYP</name>
-                     <description>Prescaler Bypass</description>
+                     <description>Prescaler/Glitch Filter Bypass</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Prescaler/glitch filter is enabled</description>
+                           <name>0b0</name>
+                           <description>Not bypassed</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Prescaler/glitch filter is bypassed</description>
+                           <name>0b1</name>
+                           <description>Bypassed</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>PRESCALE</name>
-                     <description>Prescale Value</description>
+                     <description>Prescale Value\n
+Prescaler division N for the prescaler clock; Glitch Filter recognises change after N rising clock edges</description>
                      <bitOffset>3</bitOffset>
                      <bitWidth>4</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0000</name>
-                           <description>Prescaler divides the prescaler clock by 2; glitch filter does not support this configuration</description>
+                           <name>0b0000</name>
+                           <description>Divide by 2 (No Glitch Filter)</description>
                            <value>0b0000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0001</name>
-                           <description>Prescaler divides the prescaler clock by 4; glitch filter recognizes change on input pin after 2 rising clock edges</description>
+                           <name>0b0001</name>
+                           <description>Divide by 4</description>
                            <value>0b0001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0010</name>
-                           <description>Prescaler divides the prescaler clock by 8; glitch filter recognizes change on input pin after 4 rising clock edges</description>
+                           <name>0b0010</name>
+                           <description>Divide by 8</description>
                            <value>0b0010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0011</name>
-                           <description>Prescaler divides the prescaler clock by 16; glitch filter recognizes change on input pin after 8 rising clock edges</description>
+                           <name>0b0011</name>
+                           <description>Divide by 16</description>
                            <value>0b0011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0100</name>
-                           <description>Prescaler divides the prescaler clock by 32; glitch filter recognizes change on input pin after 16 rising clock edges</description>
+                           <name>0b0100</name>
+                           <description>Divide by 32</description>
                            <value>0b0100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0101</name>
-                           <description>Prescaler divides the prescaler clock by 64; glitch filter recognizes change on input pin after 32 rising clock edges</description>
+                           <name>0b0101</name>
+                           <description>Divide by 64</description>
                            <value>0b0101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0110</name>
-                           <description>Prescaler divides the prescaler clock by 128; glitch filter recognizes change on input pin after 64 rising clock edges</description>
+                           <name>0b0110</name>
+                           <description>Divide by 128</description>
                            <value>0b0110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0111</name>
-                           <description>Prescaler divides the prescaler clock by 256; glitch filter recognizes change on input pin after 128 rising clock edges</description>
+                           <name>0b0111</name>
+                           <description>Divide by 256</description>
                            <value>0b0111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1000</name>
-                           <description>Prescaler divides the prescaler clock by 512; glitch filter recognizes change on input pin after 256 rising clock edges</description>
+                           <name>0b1000</name>
+                           <description>Divide by 512</description>
                            <value>0b1000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1001</name>
-                           <description>Prescaler divides the prescaler clock by 1024; glitch filter recognizes change on input pin after 512 rising clock edges</description>
+                           <name>0b1001</name>
+                           <description>Divide by 1024</description>
                            <value>0b1001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1010</name>
-                           <description>Prescaler divides the prescaler clock by 2048; glitch filter recognizes change on input pin after 1024 rising clock edges</description>
+                           <name>0b1010</name>
+                           <description>Divide by 2048</description>
                            <value>0b1010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1011</name>
-                           <description>Prescaler divides the prescaler clock by 4096; glitch filter recognizes change on input pin after 2048 rising clock edges</description>
+                           <name>0b1011</name>
+                           <description>Divide by 4096</description>
                            <value>0b1011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1100</name>
-                           <description>Prescaler divides the prescaler clock by 8192; glitch filter recognizes change on input pin after 4096 rising clock edges</description>
+                           <name>0b1100</name>
+                           <description>Divide by 8192</description>
                            <value>0b1100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1101</name>
-                           <description>Prescaler divides the prescaler clock by 16,384; glitch filter recognizes change on input pin after 8192 rising clock edges</description>
+                           <name>0b1101</name>
+                           <description>Divide by 16384</description>
                            <value>0b1101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1110</name>
-                           <description>Prescaler divides the prescaler clock by 32,768; glitch filter recognizes change on input pin after 16,384 rising clock edges</description>
+                           <name>0b1110</name>
+                           <description>Divide by 32768</description>
                            <value>0b1110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1111</name>
-                           <description>Prescaler divides the prescaler clock by 65,536; glitch filter recognizes change on input pin after 32,768 rising clock edges</description>
+                           <name>0b1111</name>
+                           <description>Divide by 65536</description>
                            <value>0b1111</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -327,7 +330,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>CMR</name>
-               <description>Low Power Timer Compare Register</description>
+               <description>Compare Register</description>
                <addressOffset>0x8</addressOffset>
                <fields>
                   <field>
@@ -340,8 +343,9 @@ Devices using this peripheral:
             </register>
             <register>
                <name>CNR</name>
-               <description>Low Power Timer Counter Register</description>
+               <description>Counter Register</description>
                <addressOffset>0xC</addressOffset>
+               <access>read-only</access>
                <fields>
                   <field>
                      <name>COUNTER</name>

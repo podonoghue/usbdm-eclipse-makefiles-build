@@ -62,12 +62,12 @@ namespace USBDM {
  * bitbandWrite(GPIOA->PDOR, 3, true); // Set bit # 3 of port
  * @endcode
  *
- * @param ref     Object to manipulate e.g. a register
- * @param bitNum  Bit number
- * @param value   Value to modify 0 or 1. Only the LSB is used
+ * @param[out] ref     Object to manipulate e.g. a register
+ * @param[in]  bitNum  Bit number
+ * @param[in]  value   Value to modify 0 or 1. Only the LSB is used
  */
 template <typename T>
-static __attribute__((always_inline)) inline void bitbandWrite(T &ref, const uint32_t bitNum, uint32_t value) {
+static __attribute__((always_inline)) inline void bitbandWrite(T &ref, const int bitNum, uint32_t value) {
    uint32_t addr = (uint32_t)(&ref);
    const uint32_t mappedAddress = (addr&0xF0000000) + 0x02000000 + ((addr&0xFFFFF)*8*4) + (bitNum*4);
    *(volatile uint32_t *)(mappedAddress) = value;
@@ -84,13 +84,13 @@ static __attribute__((always_inline)) inline void bitbandWrite(T &ref, const uin
  * }
  * @endcode
  *
- * @param ref     Object to examine e.g. a register
- * @param bitNum  Bit number
+ * @param[out] ref     Object to examine e.g. a register
+ * @param[in]  bitNum  Bit number
  *
  * @return Bit read as boolean value
  */
 template <typename T>
-static __attribute__((always_inline)) inline uint32_t bitbandRead(T &ref, const uint32_t bitNum) {
+static __attribute__((always_inline)) inline uint32_t bitbandRead(T &ref, const int bitNum) {
    uint32_t addr = (uint32_t)(&ref);
    const uint32_t mappedAddress = (addr&0xF0000000) + 0x02000000 + ((addr&0xFFFFF)*8*4) + (bitNum*4);
    return *(volatile uint32_t *)(mappedAddress);
@@ -105,11 +105,11 @@ static __attribute__((always_inline)) inline uint32_t bitbandRead(T &ref, const 
  * bitbandSet(SIM->SCGC5, SIM_SCGC5_PORTA_SHIFT); // Enable clock to PORTA
  * @endcode
  *
- * @param ref     Object to manipulate e.g. a register
- * @param bitNum  Bit number
+ * @param[out] ref     Object to manipulate e.g. a register
+ * @param[in]  bitNum  Bit number
  */
 template <typename T>
-static __attribute__((always_inline)) inline void bitbandSet(T &ref, const uint32_t bitNum) {
+static __attribute__((always_inline)) inline void bitbandSet(T &ref, const int bitNum) {
    bitbandWrite(ref, bitNum, true);
 }
 
@@ -122,11 +122,11 @@ static __attribute__((always_inline)) inline void bitbandSet(T &ref, const uint3
  * bitbandClear(SIM->SCGC5, SIM_SCGC5_PORTA_SHIFT); // Disable clock to PORTA
  * @endcode
  *
- * @param ref     Object to manipulate e.g. a register
- * @param bitNum  Bit number
+ * @param[out] ref     Object to manipulate e.g. a register
+ * @param[in]  bitNum  Bit number
  */
 template <typename T>
-static __attribute__((always_inline)) inline void bitbandClear(T &ref, const uint32_t bitNum) {
+static __attribute__((always_inline)) inline void bitbandClear(T &ref, const int bitNum) {
    bitbandWrite(ref, bitNum, false);
 }
 

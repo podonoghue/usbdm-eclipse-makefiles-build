@@ -71,7 +71,7 @@ public:
    /**
     * Transition from current clock mode to mode given
     *
-    * @param to Clock mode to transition to
+    * @param[in]  to Clock mode to transition to
     *
     * @return E_NO_ERROR on success
     */
@@ -87,7 +87,7 @@ public:
    /**
     *  Change SIM->CLKDIV1 value
     *
-    * @param simClkDiv1 - Value to write to SIM->CLKDIV1 register
+    * @param[in]  simClkDiv1 - Value to write to SIM->CLKDIV1 register
     */
    static void setSysDividers(uint32_t simClkDiv1) {
       SIM->CLKDIV1 = simClkDiv1;
@@ -96,7 +96,7 @@ public:
    /**
     * Enable/disable interrupts in NVIC
     *
-    * @param enable true to enable, false to disable
+    * @param[in]  enable true to enable, false to disable
     */
    static void enableNvicInterrupts(bool enable=true) {
 
@@ -125,7 +125,7 @@ public:
    /**
     * Set callback for ISR
     *
-    * @param callback The function to call from stub ISR
+    * @param[in]  callback The function to call from stub ISR
     */
    static void setCallback(MCGCallbackFunction callback) {
       Mcg::callback = callback;
@@ -137,7 +137,7 @@ public:
    /**
     *  Configure the MCG for given mode
     *
-    *  @param settingNumber CLock setting number
+    *  @param[in]  settingNumber CLock setting number
     */
    static void configure(int settingNumber=0) {
       clockTransition(McgInfo::clockInfo[settingNumber]);
@@ -158,7 +158,7 @@ public:
     * This routine assumes that the clock preferences have been set up for the usual RUN mode and only
     * the Core clock divider needs to be changed.
     *
-    * @param enable True to switch to HSRUN mode
+    * @param[in]  enable True to switch to HSRUN mode
     */
    static void hsRunMode(bool enable);
 

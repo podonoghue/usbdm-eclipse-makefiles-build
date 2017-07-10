@@ -40,7 +40,7 @@
       <peripheral derivedFrom="FTM1"><name>FTM2</name><baseAddress>0x4003A000</baseAddress>
          <interrupt><name>FTM2</name><description>FlexTimer Module</description><value>19</value></interrupt>
       </peripheral>
-      <xi:include href="peripherals/GPIOA_MKE16F16.svd.xml"/>
+      <xi:include href="peripherals/GPIOA_0x400FF000.svd.xml"/>
       <peripheral derivedFrom="GPIOA"><name>GPIOB</name><baseAddress>0x400FF040</baseAddress>
          <interrupt><name>PORTBCD</name><description>General Purpose Input/Output</description><value>26</value></interrupt>
       </peripheral>

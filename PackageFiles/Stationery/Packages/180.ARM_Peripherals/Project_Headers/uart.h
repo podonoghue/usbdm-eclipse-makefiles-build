@@ -45,7 +45,7 @@ protected:
    /**
     * Construct UART interface
     *
-    * @param uart             Base address of UART hardware
+    * @param[in]  uart             Base address of UART hardware
     */
    Uart(volatile UART_Type *uart) : uart(uart) {
    }
@@ -55,8 +55,8 @@ protected:
     *
     * This is calculated from baud rate and UART clock frequency
     *
-    * @param baudrate       - Interface speed in bits-per-second
-    * @param clockFrequency - Frequency of UART clock
+    * @param[in]  baudrate       - Interface speed in bits-per-second
+    * @param[in]  clockFrequency - Frequency of UART clock
     */
    void setBaudRate(uint32_t baudrate, uint32_t clockFrequency) {
 
@@ -95,7 +95,7 @@ protected:
     *
     * This is calculated from baud rate and LPUART clock frequency
     *
-    * @param baudrate       - Interface speed in bits-per-second
+    * @param[in]  baudrate       - Interface speed in bits-per-second
     */
    virtual void setBaudRate(unsigned baudrate) = 0;
 
@@ -103,8 +103,8 @@ public:
    /**
     * Transmit message
     *
-    * @param data     Data to transmit
-    * @param size     Size of transmission data
+    * @param[in]  data     Data to transmit
+    * @param[in]  size     Size of transmission data
     */
    void transmit(const uint8_t data[], uint16_t size) {
       while (size-->0) {
@@ -115,8 +115,8 @@ public:
    /**
     * Receive message
     *
-    * @param data     Data buffer for reception
-    * @param size     Size of data to receive
+    * @param[out] data     Data buffer for reception
+    * @param[in]  size     Size of data to receive
     */
    void receive(uint8_t data[], uint16_t size) {
       while (size-->0) {
@@ -147,7 +147,7 @@ public:
    /**
     * Transmit a character
     *
-    * @param ch - character to send
+    * @param[in]  ch - character to send
     */
    void write(char ch) {
       while ((uart->S1 & UART_S1_TDRE_MASK) == 0) {
@@ -159,7 +159,7 @@ public:
    /**
     * Transmit a C string
     *
-    * @param str String to print
+    * @param[in]  str String to print
     */
    void write(const char *str) {
       while (*str != '\0') {
@@ -169,7 +169,7 @@ public:
    /**
     * Transmit a unsigned
     *
-    * @param value Unsigned to print
+    * @param[in]  value Unsigned to print
     */
    void write(unsigned value) {
       char buff[20];
@@ -179,7 +179,7 @@ public:
    /**
     * Transmit a integer
     *
-    * @param value Integer to print
+    * @param[in]  value Integer to print
     */
    void write(int value) {
       char buff[20];
@@ -189,7 +189,7 @@ public:
    /**
     * Transmit an unsigned long
     *
-    * @param value Unsigned long to print
+    * @param[in]  value Unsigned long to print
     */
    void write(unsigned long value) {
       char buff[20];
@@ -199,7 +199,7 @@ public:
    /**
     * Transmit a long
     *
-    * @param value Long to print
+    * @param[in]  value Long to print
     */
    void write(long value) {
       char buff[20];
@@ -212,7 +212,7 @@ public:
     * To use this function it is necessary to enable floating point printing
     * in the linker options (Support %f format in printf -u _print_float)).
     *
-    * @param value Float to print
+    * @param[in]  value Float to print
     */
    void write(float value) {
       char buff[20];
@@ -225,7 +225,7 @@ public:
     * To use this function it is necessary to enable floating point printing
     * in the linker options (Support %f format in printf -u _print_float)).
     *
-    * @param value Double to print
+    * @param[in]  value Double to print
     */
    void write(double value) {
       char buff[20];
@@ -268,7 +268,7 @@ public:
    /**
     * Construct UART interface
     *
-    * @param baudrate         Interface speed in bits-per-second
+    * @param[in]  baudrate         Interface speed in bits-per-second
     */
    Uart_T(unsigned baudrate) : Uart(Info::uart) {
       // Enable clock to UART interface
@@ -286,7 +286,7 @@ public:
     *
     * This is calculated from baud rate and LPUART clock frequency
     *
-    * @param baudrate       - Interface speed in bits-per-second
+    * @param[in]  baudrate       - Interface speed in bits-per-second
     */
    void setBaudRate(unsigned baudrate) {
       Uart::setBaudRate(baudrate, Info::getInputClockFrequency());
@@ -309,7 +309,7 @@ protected:
 /**
  * Type definition for UART interrupt call back
  *
- *  @param status - Interrupt flags e.g. UART_S1_TDRE, UART_S1_RDRF etc
+ *  @param[in]  status - Interrupt flags e.g. UART_S1_TDRE, UART_S1_RDRF etc
  */
 typedef void (*UARTCallbackFunction)(uint8_t status);
 
@@ -340,7 +340,7 @@ public:
    /**
     * Set Callback function
     *
-    *   @param theCallback - Callback function to be executed on UART alarm interrupt
+    *   @param[in]  theCallback - Callback function to be executed on UART alarm interrupt
     */
    static void setCallback(UARTCallbackFunction theCallback) {
       callback = theCallback;
@@ -413,7 +413,7 @@ public:
    /**
     * Construct UART interface
     *
-    * @param baudrate         Interface speed in bits-per-second
+    * @param[in]  baudrate         Interface speed in bits-per-second
     */
    Uart1(unsigned baudrate=Uart1Info::defaultBaudRate) : UartIrq_T(baudrate) {
    }
@@ -451,7 +451,7 @@ public:
    /**
     * Construct UART interface
     *
-    * @param baudrate         Interface speed in bits-per-second
+    * @param[in]  baudrate         Interface speed in bits-per-second
     */
    Uart2(unsigned baudrate=Uart2Info::defaultBaudRate) : UartIrq_T(baudrate) {
    }
@@ -489,8 +489,8 @@ public:
    /**
     * Construct UART interface
     *
-    * @param baudrate         Interface speed in bits-per-second
-    * @param clockFrequency   Frequency of UART clock (SystemCoreClock or SystemBusClock)
+    * @param[in]  baudrate         Interface speed in bits-per-second
+    * @param[in]  clockFrequency   Frequency of UART clock (SystemCoreClock or SystemBusClock)
     */
    Uart3(unsigned baudrate=Uart3Info::defaultBaudRate) : UartIrq_T(baudrate) {
    }
@@ -528,8 +528,8 @@ public:
    /**
     * Construct UART interface
     *
-    * @param baudrate         Interface speed in bits-per-second
-    * @param clockFrequency   Frequency of UART clock (SystemCoreClock or SystemBusClock)
+    * @param[in]  baudrate         Interface speed in bits-per-second
+    * @param[in]  clockFrequency   Frequency of UART clock (SystemCoreClock or SystemBusClock)
     */
    Uart4(unsigned baudrate=Uart4Info::defaultBaudRate) : UartIrq_T(baudrate) {
    }

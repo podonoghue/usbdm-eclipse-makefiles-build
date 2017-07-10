@@ -15,7 +15,7 @@
    <choiceOption name="ftm_sc_clks" description="Clock Mode Selection"
       toolTip="Selects the clock source for the module">
       <choice value="0" name="Disabled" />
-      <choice value="1" name="System clock" isDefault="true" />
+      <choice value="1" name="System bus clock" isDefault="true" />
       <choice value="2" name="Fixed frequency clock" />
       <choice value="3" name="External clock" />
    </choiceOption>

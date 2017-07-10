@@ -43,7 +43,7 @@
       <peripheral derivedFrom="FTM0"><name>FTM1</name><baseAddress>0x40039000</baseAddress></peripheral>
       <peripheral derivedFrom="FTM0"><name>FTM2</name><baseAddress>0x4003A000</baseAddress></peripheral>
       <peripheral derivedFrom="FTM0"><name>FTM3</name><baseAddress>0x40026000</baseAddress></peripheral>
-      <xi:include href="peripherals/GPIOA_MKE16F16.svd.xml"/>
+      <xi:include href="peripherals/GPIOA_0x400FF000.svd.xml"/>
       <peripheral derivedFrom="GPIOA"><name>GPIOB</name><baseAddress>0x400FF040</baseAddress></peripheral>
       <peripheral derivedFrom="GPIOA"><name>GPIOC</name><baseAddress>0x400FF080</baseAddress></peripheral>
       <peripheral derivedFrom="GPIOA"><name>GPIOD</name><baseAddress>0x400FF0C0</baseAddress></peripheral>

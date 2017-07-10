@@ -78,9 +78,9 @@ protected:
     * Read Flash Resource (IFR etc)
     * This command reads 4 bytes from the selected flash resource
     *
-    * @param resourceSelectCode 00 => IFR, 01 => Version ID
-    * @param address            Address in IFR etc, A23=0 => Program flash, A23=1 => Data flash
-    * @param data               Buffer for data returned
+    * @param[in]  resourceSelectCode 00 => IFR, 01 => Version ID
+    * @param[in]  address            Address in IFR etc, A23=0 => Program flash, A23=1 => Data flash
+    * @param[out] data               Buffer for data returned
     *
     * @return Error code, 0 => no error
     */
@@ -91,8 +91,8 @@ protected:
     *
     * See device reference manual for the meaning of the following parameters
     *
-    * @param eeprom     EEPROM Data Size value
-    * @param partition  FlexNVM Partition value
+    * @param[in]  eeprom     EEPROM Data Size value
+    * @param[in]  partition  FlexNVM Partition value
     *
     * @return Error code, 0 => no error
     */
@@ -198,8 +198,8 @@ private:
    /**
     * Program a phrase to Flash memory
     *
-    * @param data       Location of data to program
-    * @param address    Memory address to program - must be phrase boundary
+    * @param[in]  data       Location of data to program
+    * @param[out] address    Memory address to program - must be phrase boundary
     *
     * @return Error code
     */
@@ -208,7 +208,7 @@ private:
    /**
     * Erase sector of Flash memory
     *
-    * @param address    Memory address to erase - must be sector boundary
+    * @param[in]  address    Memory address to erase - must be sector boundary
     *
     * @return Error code
     */
@@ -218,9 +218,9 @@ public:
    /**
     * Program a range of bytes to Flash memory
     *
-    * @param data       Location of data to program
-    * @param address    Memory address to program - must be phrase boundary
-    * @param size       Size of range (in bytes) to program - must be multiple of phrase size
+    * @param[in]  data       Location of data to program
+    * @param[out] address    Memory address to program - must be phrase boundary
+    * @param[in]  size       Size of range (in bytes) to program - must be multiple of phrase size
     *
     * @return Error code
     */
@@ -229,8 +229,8 @@ public:
    /**
     * Erase a range of Flash memory
     *
-    * @param address    Memory address to start erasing - must be sector boundary
-    * @param size       Size of range (in bytes) to erase - must be multiple of sector size
+    * @param[out] address    Memory address to start erasing - must be sector boundary
+    * @param[in]  size       Size of range (in bytes) to erase - must be multiple of sector size
     *
     * @return Error code
     */
@@ -276,7 +276,7 @@ public:
     * Assign to underlying type\n
     * This adds a wait for the Flash to be updated
     *
-    * @param data The data to assign
+    * @param[in]  data The data to assign
     */
    void operator=(const Nonvolatile &data ) {
       this->data = data;
@@ -286,7 +286,7 @@ public:
     * Assign to underlying type\n
     * This adds a wait for the Flash to be updated
     *
-    * @param data The data to assign
+    * @param[in]  data The data to assign
     */
    void operator=(const T &data ) {
       this->data = data;
@@ -296,7 +296,7 @@ public:
     * Increment underlying type\n
     * This adds a wait for the Flash to be updated
     *
-    * @param change The amount to increment
+    * @param[in]  change The amount to increment
     */
    void operator+=(const Nonvolatile &change ) {
       this->data += change;
@@ -306,7 +306,7 @@ public:
     * Increment underlying type\n
     * This adds a wait for the Flash to be updated
     *
-    * @param change The amount to increment
+    * @param[in]  change The amount to increment
     */
    void operator+=(const T &change ) {
       this->data += change;
@@ -316,7 +316,7 @@ public:
     * Decrement underlying type\n
     * This adds a wait for the Flash to be updated
     *
-    * @param change The amount to increment
+    * @param[in]  change The amount to increment
     */
    void operator-=(const Nonvolatile &change ) {
       this->data -= change;
@@ -326,7 +326,7 @@ public:
     * Decrement underlying type\n
     * This adds a wait for the Flash to be updated
     *
-    * @param change The amount to increment
+    * @param[in]  change The amount to increment
     */
    void operator-=(const T &change ) {
       this->data -= change;
@@ -379,7 +379,7 @@ public:
    /**
     * Assign to underlying array
     *
-    * @param other TArray to assign from
+    * @param[in]  other TArray to assign from
     *
     * This adds a wait for the Flash to be updated after each element is assigned
     */
@@ -393,7 +393,7 @@ public:
    /**
     * Assign to underlying array
     *
-    * @param other NonvolatileArray to assign from
+    * @param[in]  other NonvolatileArray to assign from
     *
     * This adds a wait for the Flash to be updated after each element is assigned
     */
@@ -407,7 +407,7 @@ public:
    /**
     * Assign to underlying array
     *
-    * @param other NonvolatileArray to assign to
+    * @param[in]  other NonvolatileArray to assign to
     *
     * This adds a wait for the Flash to be updated after each element is assigned
     */
@@ -420,7 +420,7 @@ public:
    /**
     * Return a reference to the underlying array element - read-only!
     *
-    * @param index Index of element to return
+    * @param[in]  index Index of element to return
     *
     * @return Reference to underlying array
     */
@@ -438,8 +438,8 @@ public:
    /**
     * Set an element of the array to the value provided
     *
-    * @param index Array index of element to change
-    * @param value Value to initialise array elements to
+    * @param[in]  index Array index of element to change
+    * @param[in]  value Value to initialise array elements to
     */
    void set(int index, T value) {
       data[index] = value;
@@ -448,7 +448,7 @@ public:
    /**
     * Set all elements of the array to the value provided
     *
-    * @param value Value to initialise array elements to
+    * @param[in]  value Value to initialise array elements to
     */
    void set(T value) {
       for (int index=0; index<dimension; index++) {

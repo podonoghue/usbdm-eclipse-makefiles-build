@@ -22,7 +22,7 @@ namespace USBDM {
 /**
  * Type definition for RTC interrupt call back
  *
- *  @param timeSinceEpoch - Time since the epoch in seconds
+ *  @param[in]  timeSinceEpoch - Time since the epoch in seconds
  */
 typedef void (*RTCCallbackFunction)(uint32_t timeSinceEpoch);
 
@@ -106,7 +106,7 @@ public:
    /**
     * Enable/disable interrupts in NVIC
     *
-    * @param enable true to enable, false to disable
+    * @param[in]  enable true to enable, false to disable
     */
    static void enableNvicInterrupts(bool enable=true) {
       // Clear pending to avoid POR interrupt
@@ -127,7 +127,7 @@ public:
    /*
     * Sets the system RTC time
     *
-    *  @param timeSinceEpoch - time since the epoch in seconds
+    *  @param[in]  timeSinceEpoch - time since the epoch in seconds
     */
    static void setTime(uint32_t timeSinceEpoch) {
       rtc->SR  = 0;
@@ -156,7 +156,7 @@ public:
    /**
     *  Set alarm time
     *
-    *  @param timeSinceEpoch - Alarm time in seconds relative to the epoch
+    *  @param[in]  timeSinceEpoch - Alarm time in seconds relative to the epoch
     */
    static void rtc_setAlarmTime(uint32_t timeSinceEpoch) {
       rtc->TAR = timeSinceEpoch;
@@ -191,7 +191,7 @@ public:
    /**
     * Enable/disable RTC Alarm interrupts
     *
-    * @param enable True=>enable, False=>disable
+    * @param[in]  enable True=>enable, False=>disable
     */
    static void enableAlarmInterrupts(bool enable=true) {
       if (enable) {
@@ -204,7 +204,7 @@ public:
    /**
     * Enable/disable RTC Seconds interrupts
     *
-    * @param enable True=>enable, False=>disable
+    * @param[in]  enable True=>enable, False=>disable
     */
    static void enableSecondsInterrupts(bool enable=true) {
       if (enable) {
@@ -217,7 +217,7 @@ public:
    /**
     * Set Callback function
     *
-    *   @param theCallback - Callback function to be executed on RTC alarm interrupt
+    *   @param[in]  theCallback - Callback function to be executed on RTC alarm interrupt
     */
    static void setCallback(RTCCallbackFunction theCallback) {
       callback = theCallback;
@@ -225,7 +225,7 @@ public:
    /**
     * Set alarm time
     *
-    *   @param time        - Time to set alarm for (time since the epoch in seconds)
+    *   @param[in]  time        - Time to set alarm for (time since the epoch in seconds)
     */
    static void setAlarm(uint32_t time) {
          RtcBase_T<Info>::rtc->TAR = time;

@@ -69,9 +69,9 @@ protected:
     * Read Flash Resource (IFR etc)
     * This command reads 4 bytes from the selected flash resource
     *
-    * @param resourceSelectCode 00 => IFR, 01 => Version ID
-    * @param address            Address in IFR etc, A23=0 => Program flash, A23=1 => Data flash
-    * @param data               Buffer for data returned
+    * @param[in]  resourceSelectCode 00 => IFR, 01 => Version ID
+    * @param[in]  address            Address in IFR etc, A23=0 => Program flash, A23=1 => Data flash
+    * @param[out] data               Buffer for data returned
     *
     * @return Error code, 0 => no error
     */
@@ -98,8 +98,8 @@ private:
    /**
     * Program a phrase to Flash memory
     *
-    * @param data       Location of data to program
-    * @param address    Memory address to program - must be phrase boundary
+    * @param[in]  data       Location of data to program
+    * @param[out] address    Memory address to program - must be phrase boundary
     *
     * @return Error code
     */
@@ -108,7 +108,7 @@ private:
    /**
     * Erase sector of Flash memory
     *
-    * @param address    Memory address to erase - must be sector boundary
+    * @param[in]  address    Memory address to erase - must be sector boundary
     *
     * @return Error code
     */
@@ -118,9 +118,9 @@ public:
    /**
     * Program a range of bytes to Flash memory
     *
-    * @param data       Location of data to program
-    * @param address    Memory address to program - must be phrase boundary
-    * @param size       Size of range (in bytes) to program - must be multiple of phrase size
+    * @param[in]  data       Location of data to program
+    * @param[out] address    Memory address to program - must be phrase boundary
+    * @param[in]  size       Size of range (in bytes) to program - must be multiple of phrase size
     *
     * @return Error code
     */
@@ -129,8 +129,8 @@ public:
    /**
     * Erase a range of Flash memory
     *
-    * @param address    Memory address to start erasing - must be sector boundary
-    * @param size       Size of range (in bytes) to erase - must be multiple of sector size
+    * @param[out] address    Memory address to start erasing - must be sector boundary
+    * @param[in]  size       Size of range (in bytes) to erase - must be multiple of sector size
     *
     * @return Error code
     */

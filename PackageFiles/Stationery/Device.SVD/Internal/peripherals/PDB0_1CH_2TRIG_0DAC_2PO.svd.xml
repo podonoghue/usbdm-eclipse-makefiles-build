@@ -1,7 +1,6 @@
 <!--
 Devices using this peripheral: 
       MK10D5
-      MK20D5
 -->
       <peripheral>
          <?sourceFile "PDB0_1CH_2TRIG_0DAC_2PO" ?>
