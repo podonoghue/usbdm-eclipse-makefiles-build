@@ -78,7 +78,7 @@ int main() {
    // Set IC/OC measurement period to accommodate at least 100ms (maximum period)
    Timer::setMeasurementPeriod(100*ms);
    // Enable interrupts from the channel
-   Timer::enableChannelInterrupts();
+   Timer::enableInterrupts();
    // Enable interrupts for entire timer
    Timer::enableNvicInterrupts();
 
@@ -92,7 +92,7 @@ int main() {
       disableInterrupts();
       tPeriodInTicks = periodInTicks;
       enableInterrupts();
-      printf("Period = %6.1f ms\n", 1000*Timer::convertTicksToSeconds((float)tPeriodInTicks));
+      printf("Period = %6.1f ms\n", 1000*Timer::convertTicksToSeconds(tPeriodInTicks));
    }
    return 0;
 }

@@ -21,7 +21,7 @@ using Timer = $(demo.cpp.pwm.led1:Ftm0Channel<7>);
 static volatile uint16_t timerHalfPeriod;
 
 /**
- * Interrupt handler for Tone interrupts
+ * Interrupt handler for Timer interrupts
  * This sets the next interrupt/pin toggle for a half-period from the last event
  *
  * @param[in] status Flags indicating interrupt source channel(s)
@@ -41,25 +41,26 @@ int main() {
    /**
     * FTM channel set as Output compare with pin Toggle mode using a callback function
     */
-   // Pin high-drive
-   Timer::setDriveStrength(PinDriveStrength_High);
-
-   // Set callback function
-   Timer::setChannelCallback(ftmCallback);
    // Enable the channel (and owning FTM) in Output Compare mode with Pin toggle
    Timer::enable(FtmOutputCompareToggle);
+   // Pin high-drive
+   Timer::setDriveStrength(PinDriveStrength_High);
+   // Set callback function
+   Timer::setChannelCallback(ftmCallback);
    // Set IC/OC measurement period to accommodate at least 1s (maximum period)
    Timer::setMeasurementPeriod(1000*ms);
-   // Enable interrupts from the channel
-   Timer::enableChannelInterrupts();
-   // Enable interrupts for entire timer
-   Timer::enableNvicInterrupts();
+
+   // Calculate half-period in timer ticks
+   // Must be one after timer clock configuration
+   timerHalfPeriod = Timer::convertSecondsToTicks(100*ms);
 
    // Trigger 1st interrupt at now+100
    Timer::setRelativeEventTime(100);
 
-   // Calculate half-period in timer ticks
-   timerHalfPeriod = Timer::convertSecondsToTicks(100*ms);
+   // Enable interrupts for entire timer
+   Timer::enableNvicInterrupts();
+   // Enable interrupts from the channel
+   Timer::enableInterrupts();
 
    // Check if configuration failed
    USBDM::checkError();

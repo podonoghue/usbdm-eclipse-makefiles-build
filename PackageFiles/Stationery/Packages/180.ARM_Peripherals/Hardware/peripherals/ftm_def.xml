@@ -41,14 +41,14 @@
       description="Period of timer clock"
       toolTip="Determined from timer clock source and prescaler"
       units="s"/>
-   <floatOption name="maximumPeriod" 
-      constant="true"
-      description="Maximum period of timer"
-      toolTip="Determined from timer clock source and prescaler"
-      units="s"/>
-   <intOption name="period" description="Period of timer"
-      toolTip="Default period of the timer"
+   <intOption name="ftm_mod" description="Modulo of timer"
+      toolTip="Period of the timer"
       value="10000" min="0" max="65535" />     
+   <floatOption name="ftm_mod_period" 
+      description="Period of timer"
+      toolTip="Period of the timer"
+      origin="Clock period * ftm_mod"
+      min="0" units="s"/>
    <binaryOption name="ftm_sc_cpwms" 
       description="Center-Aligned PWM Select"
       toolTip="Selects CPWM mode\n
@@ -66,7 +66,7 @@
       \tstatic constexpr uint32_t ftmExternalClock =  $(ftmExternalClock);\n\n
       
       \t//! Default Timer Period\n
-      \tstatic constexpr uint32_t period = $(period);\n\n
+      \tstatic constexpr uint32_t mod = FTM_MOD_MOD($(ftm_mod));\n\n
 
       \t//! Default value for SC register\n
       \tstatic constexpr uint32_t sc  = 
