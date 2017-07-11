@@ -260,9 +260,9 @@ public:
     * @note This affects pdb_sc_mult, pdb_sc_prescaler, pdb_mod
     */
    static ErrorCode setPeriod(float period) {
-      uint32_t mult;
-      int prescale;
-      uint32_t mod;
+      uint32_t mult     = 0;
+      int      prescale = 0;
+      uint32_t mod      = 0;
 
       ErrorCode rc = getDividers(period, mult, prescale, mod);
       if (rc != E_NO_ERROR) {
