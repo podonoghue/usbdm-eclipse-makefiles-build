@@ -23,7 +23,11 @@ using namespace USBDM;
 using adc        = Adc0;
 using adcChannel = Adc0Channel<19>;
 
-void handler(uint32_t value) {
+/**
+ * NOTE:  This is not a sensible approach
+ *        Using puts() in a ISR is very silly!!!!
+ */
+void handler(uint32_t value, int) {
    // Start next conversion
    adcChannel::startConversion();
    value = value/10;
