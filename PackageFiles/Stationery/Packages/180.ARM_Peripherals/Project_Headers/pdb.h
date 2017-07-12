@@ -97,6 +97,11 @@ enum PdbPretrigger1 {
    PdbPretrigger1_Delayed  = PDB_C1_EN(1<<1)|PDB_C1_TOS(1<<1),  // Pretrigger 0 asserts 1 clock + delay after trigger
 };
 
+enum PdbMode {
+   PdbMode_OneShot    = PDB_SC_CONT(0),                  // Sequence runs once only
+   PdbMode_Continuous = PDB_SC_CONT(1),                  // Sequence runs continuously
+};
+
 template <class Info>
 class PdbBase_T {
 
@@ -171,6 +176,8 @@ public:
     * @param[in] period          Required period
     *
     * @return Number of tick corresponding to the period
+    *
+    * @note This uses the current PDB clock settings (pdb_sc_mult, pdb_sc_prescaler)
     */
    static uint32_t calcTicksFromTime(float period) {
 
@@ -201,7 +208,7 @@ public:
     * @return E_NO_ERROR  => success
     * @return E_ERROR     => failed to find suitable values
     */
-   static ErrorCode getDividers(float period, uint32_t &multValue, int &prescaleValue, uint32_t &mod) {
+   static ErrorCode getDividers(float period, uint32_t &multValue, int &prescaleValue) {
 
       // Multiplier factors for prescale divider
       static const int   multFactors[] = {1,10,20,40};
@@ -209,7 +216,7 @@ public:
       float inputClock = Info::getInputClockFrequency();
 
       // No MOD value found so far
-      mod = 0;
+      uint32_t mod = 0;
 
       // Try each divider multiplier
       for (unsigned trialMultValue=0; trialMultValue<(sizeof(multFactors)/sizeof(multFactors[0])); trialMultValue++) {
@@ -262,14 +269,15 @@ public:
    static ErrorCode setPeriod(float period) {
       uint32_t mult     = 0;
       int      prescale = 0;
-      uint32_t mod      = 0;
 
-      ErrorCode rc = getDividers(period, mult, prescale, mod);
+      ErrorCode rc = getDividers(period, mult, prescale);
       if (rc != E_NO_ERROR) {
          return rc;
       }
       pdb->SC  = (pdb->SC&~(PDB_SC_MULT_MASK|PDB_SC_PRESCALER_MASK))|PDB_SC_MULT(mult)|PDB_SC_PRESCALER(prescale)|PDB_SC_PDBIF_MASK;
-      pdb->MOD = mod;
+	  // Recalculat MOD using calcTicksFromTime() to ensure consistent results
+      pdb->MOD = calcTicksFromTime(period);
+
       return E_NO_ERROR;
    }
 
@@ -313,20 +321,21 @@ public:
    /**
     * Set trigger source
     *
-    * @param[in] pdbTrigger Trigger source (pdb_sc_trgsel)
+    * @param[in] pdbTrigger      Trigger source (pdb_sc_trgsel)
+    * @param[in] pdbMode         PDB mode. Controls if the PDB does one sequence or repeats (pdb_sc_cont)
     */
-   static void __attribute__((always_inline)) setTriggerSource(PdbTrigger pdbTrigger) {
-      pdb->SC = (pdb->SC&~PDB_SC_TRGSEL_MASK)|pdbTrigger|PDB_SC_PDBIF_MASK;
+   static void __attribute__((always_inline)) setTriggerSource(PdbTrigger pdbTrigger, PdbMode pdbMode=PdbMode_OneShot) {
+      pdb->SC = (pdb->SC&~PDB_SC_TRGSEL_MASK)|pdbTrigger|pdbMode|PDB_SC_PDBIF_MASK;
    }
 
    /**
-    * Trigger PDB sequence (pdb_sc_ldok, pdb_sc_trigsel)
+    * Trigger PDB sequence (pdb_sc_swtrig, pdb_sc_trigsel)
     */
    static __attribute__((always_inline)) void softwareTrigger() {
 
       // PdbTrigger_Software must be all 1's for this to work
       static_assert(PdbTrigger_Software==PDB_SC_TRGSEL_MASK, "Unexpected value for PdbTrigger_Software");
-      pdb->SC |= PdbTrigger_Software|PDB_SC_LDOK_MASK|PDB_SC_PDBIF_MASK;
+      pdb->SC |= PdbTrigger_Software|PDB_SC_SWTRIG_MASK|PDB_SC_PDBIF_MASK;
    }
 
    /**
@@ -438,7 +447,7 @@ public:
     */
    static void setPretriggers(int channel,
          PdbPretrigger0 pdbPretrigger0,                         float delay0,
-         PdbPretrigger1 pdbPretrigger1=PdbPretrigger0_Disabled, float delay1=0.0) {
+         PdbPretrigger1 pdbPretrigger1=PdbPretrigger1_Disabled, float delay1=0.0) {
 
       pdb->CH[channel].C1     = pdbPretrigger0|pdbPretrigger1;
       pdb->CH[channel].DLY[0] = calcTicksFromTime(delay0);
@@ -461,13 +470,14 @@ public:
     * IRQ handler
     */
    static void irqHandler(void) {
+      // Clear interrupt flag
+      PdbBase_T<Info>::pdb->SC  &= ~PDB_SC_PDBIF_MASK;
       if (callback != 0) {
          callback();
       }
       else {
          setAndCheckErrorCode(E_NO_HANDLER);
       }
-      PdbBase_T<Info>::pdb->SC  &= ~PDB_SC_PDBIF_MASK;
    }
 
    /**

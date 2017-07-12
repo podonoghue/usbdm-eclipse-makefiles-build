@@ -385,7 +385,8 @@ Devices using this peripheral:
    </validate>
 
    <projectActionList id = "pdb_files">
-      <copy source="Project_Headers/pdb.h"  target="Project_Headers/pdb.h"  replace="true"  derived="true" />
+      <copy source="Project_Headers/pdb.h"       target="Project_Headers/pdb.h"        replace="true"  derived="true" />
+      <copy source="Snippets/pdb-example.cpp"    target="Snippets/pdb-example.cpp"     replace="true"  derived="true" />
    </projectActionList>
          
    <signals/>
