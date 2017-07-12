@@ -16,8 +16,8 @@
 
 namespace USBDM {
 /**
- * @addtogroup FLASH_Group FTFL, Flash interface
- * @brief Flash interface
+ * @addtogroup FTFL_Group FTFL, Flash Memory Module
+ * @brief Abstraction for Flash Memory Module
  * @{
  */
 

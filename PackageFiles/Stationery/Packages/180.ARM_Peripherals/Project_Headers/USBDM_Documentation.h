@@ -15,6 +15,7 @@ Table of Contents
  - \ref ADCExamples \n
  - \ref FTMExamples \n
  - \ref PITExamples \n
+ - \ref PDBExamples \n
  
  @page GPIOExamples  General Purpose Input Output
 
@@ -328,6 +329,46 @@ This is a template class with static methods.\n
    }
 @endcode
 
+@page PDBExamples Programmable Delay Block Module
+
+Convenience template for PDB hardware. Based on USBDM::PdbBase_T.\n
+
+It provides:\n
+- PDB configuration
+
+This is a template class with static methods.\n
+<em>It cannot be instantiated.</em>
+
+<b>Examples</b>\n
+ - @ref pdb-example.cpp
+
+<b>Usage - PDB Software Trigger</b>
+@code
+   // Open USBDM namespace.
+   // This allows access to USBDM classes and methods without the USBDM:: prefix.
+   using namespace USBDM;
+
+   Pdb::enable();
+   // Trigger from FTM
+   Pdb::setTriggerSource(PdbTrigger_Software);
+   // Set callback
+   Pdb::setCallback(pdbCallback);
+   // Interrupt during sequence
+   Pdb::enableSequenceInterrupts();
+   // Set period a bit longer than FTM period
+   Pdb::setPeriod(PERIOD);
+   // Generate interrupt near end of sequence
+   Pdb::setInterruptDelay(PERIOD-5*ms);
+   // Take ADC samples before and after sample edge
+   Pdb::setPretriggers(0, PdbPretrigger0_Delayed, HIGH_TIME-SAMPLE_DELAY, PdbPretrigger1_Delayed, HIGH_TIME+SAMPLE_DELAY);
+   // Update registers
+   Pdb::triggerRegisterLoad(PdbLoadMode_immediate);
+
+   Pdb::enableNvicInterrupts();
+
+   Pdb::softwareTrigger();
+@endcode
+
 @page Notes Notes
   - enable()      Enables clock and cnfigures pins (if present)
   - configure()   As above, enable() + initialises according to Configure.usbdmProject
@@ -369,6 +410,7 @@ This is a template class with static methods.\n
 @example pit-example1.cpp
 @example pit-example2.cpp
 @example pit-example3.cpp
+@example pdb-example.cpp
 @example rtc-example.cpp
 @example test-mcg.cpp
 @example tsi-mk-example.cpp

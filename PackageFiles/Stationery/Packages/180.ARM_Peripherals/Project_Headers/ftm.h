@@ -119,13 +119,14 @@ enum FtmPrescale {
  * Enables External trigger on a channel comparison or initialisation event
  */
 enum FtmExternalTrigger {
-   FtmExternalTrigger_ch0   = FTM_EXTTRIG_CH0TRIG_SHIFT,  //!< External trigger on channel 0 event
-   FtmExternalTrigger_ch1   = FTM_EXTTRIG_CH1TRIG_SHIFT,  //!< External trigger on channel 1 event
-   FtmExternalTrigger_ch2   = FTM_EXTTRIG_CH2TRIG_SHIFT,  //!< External trigger on channel 2 event
-   FtmExternalTrigger_ch3   = FTM_EXTTRIG_CH3TRIG_SHIFT,  //!< External trigger on channel 3 event
-   FtmExternalTrigger_ch4   = FTM_EXTTRIG_CH4TRIG_SHIFT,  //!< External trigger on channel 4 event
-   FtmExternalTrigger_ch5   = FTM_EXTTRIG_CH5TRIG_SHIFT,  //!< External trigger on channel 5 event
-   FtmExternalTrigger_init  = FTM_EXTTRIG_CH5TRIG_SHIFT,  //!< External trigger on initialisation
+   FtmExternalTrigger_ch0   = FTM_EXTTRIG_CH0TRIG_MASK,    //!< External trigger on channel 0 event
+   FtmExternalTrigger_ch1   = FTM_EXTTRIG_CH1TRIG_MASK,    //!< External trigger on channel 1 event
+   FtmExternalTrigger_ch2   = FTM_EXTTRIG_CH2TRIG_MASK,    //!< External trigger on channel 2 event
+   FtmExternalTrigger_ch3   = FTM_EXTTRIG_CH3TRIG_MASK,    //!< External trigger on channel 3 event
+   FtmExternalTrigger_ch4   = FTM_EXTTRIG_CH4TRIG_MASK,    //!< External trigger on channel 4 event
+   FtmExternalTrigger_ch5   = FTM_EXTTRIG_CH5TRIG_MASK,    //!< External trigger on channel 5 event
+   FtmExternalTrigger_init  = FTM_EXTTRIG_INITTRIGEN_MASK, //!< External trigger on initialisation
+   FtmExternalTrigger_all   = 0x7F,                        //!< All triggers
 };
 
 
@@ -330,10 +331,13 @@ public:
       int prescaleFactor=1;
       int prescalerValue=0;
 
-      // Check if CPWMS is set (affects period calculation)
-      bool centreAlign = (tmr->SC&FTM_SC_CPWMS_MASK);
-      uint32_t maxValue = centreAlign?(2*65535):65536;
+      uint32_t maxValue = 65536;
 
+      // Check if CPWMS is set (affects period calculation)
+      if (tmr->SC&FTM_SC_CPWMS_MASK) {
+         maxValue = (2*65535);
+//         period = period/2;
+      }
       while (prescalerValue<=7) {
          float    clock = inputClock/prescaleFactor;
          uint32_t mod   = round(period*clock);
@@ -565,7 +569,8 @@ public:
    /**
     *  Enables fault detection input
     *
-    *  @tparam inputNum       Number of fault input to enable (0..3)
+    *  @tparam inputNum           Number of fault input to enable (0..3)
+    *
     *  @param[in]  polarity       Polarity of fault input (true => active high))
     *  @param[in]  filterEnable   Whether to enable filtering on the fault input
     *  @param[in]  filterDelay    Delay used by the filter (1..15) - Applies to all channels
@@ -608,9 +613,10 @@ public:
    }
 
    /**
-    * Enables External trigger on a channel comparison or initialisation event
+    * Enables/disable the external trigger on a channel comparison or initialisation event
     *
     * @param[in] ftmExternalTrigger Indicates the event to cause the external trigger
+    * @param[in] enable             Whether to enable/disable the specified trigger
     */
    static void __attribute__((always_inline)) enableExternalTrigger(FtmExternalTrigger ftmExternalTrigger, bool enable=true) {
       if (enable) {
@@ -624,8 +630,9 @@ public:
    /**
     * Enables multiple external triggers on a channel comparison or initialisation event
     *
-    * @param[in] ftmExternalTrigger Indicates the events to cause the external trigger. \n
-    * Construct from ORed FtmExternalTrigger flags e.g. FtmExternalTrigger_ch0|FtmExternalTrigger_ch3
+    * @param[in] externalTriggers Indicates the events to cause the external trigger. \n
+    *                             Construct from ORed FtmExternalTrigger flags e.g. FtmExternalTrigger_ch0|FtmExternalTrigger_ch3
+    * @param[in] enable           Whether to enable/disable the specified triggers
     */
    static void __attribute__((always_inline)) enableExternalTriggers(int externalTriggers, bool enable=true) {
       enableExternalTrigger((FtmExternalTrigger)externalTriggers, enable);
@@ -759,6 +766,11 @@ public:
     * @return E_TOO_LARGE on success
     */
    static ErrorCode setHighTime(uint32_t highTime, int channel) {
+
+      if (tmr->SC&FTM_SC_CPWMS_MASK) {
+         // In CPWM the pulse width is doubled
+         highTime = (highTime+1)/2;
+      }
 #ifdef DEBUG_BUILD
       if (highTime > tmr->MOD) {
          return setErrorCode(E_TOO_LARGE);
@@ -930,27 +942,37 @@ public:
    /**
     * Configure channel and set mode\n
     * Enables owning FTM if not already enabled\n
-    * Also see enableChannel()
+    * Also see enable()
     *
-    * @param[in] mode Mode of operation for FTM e.g.FtmPwmHighTruePulses
+    * @param[in] mode           Mode of operation for FTM e.g.FtmPwmHighTruePulses
+    * @param[in] ftmChannelIrq  Whether to enable the interrupt function on this channel
+    * @param[in] ftmChannelDma  Whether to enable the DMA function on this channel
     *
     * @note Enables FTM as well
-    * @note This method has the side-effect of clearing the register update synchronisation i.e.\n
+    * @note This method has the side-effect of clearing the register update synchronisation i.e. 
     *       pending CnV register updates are discarded.
     */
-   static void configure(FtmChannelMode mode=FtmPwmHighTruePulses, bool enableIrq=false, bool enableDma=false) {
+   static void configure(
+         FtmChannelMode mode=FtmPwmHighTruePulses,
+         FtmChannelIrq  ftmChannelIrq=FtmChannelIrq_Disable,
+         FtmChannelDma  ftmChannelDma=FtmChannelDma_Disable) {
       if (!Ftm::isEnabled()) {
          // Enable parent FTM if needed
          Ftm::configure();
       }
-      Ftm::tmr->CONTROLS[channel].CnSC = mode|(FTM_CnSC_CHIE(enableIrq?1:0))|(FTM_CnSC_DMA(enableDma?1:0));
+      Ftm::tmr->CONTROLS[channel].CnSC = mode|ftmChannelIrq|ftmChannelDma;
    }
 
    /**
     * Enable channel and set mode\n
     * Doesn't affect shared settings of owning Timer
     *
-    * @param[in] mode Mode of operation for FTM e.g.FtmPwmHighTruePulses
+    * @param[in] mode           Mode of operation for FTM e.g.FtmPwmHighTruePulses
+    * @param[in] ftmChannelIrq  Whether to enable the interrupt function on this channel
+    * @param[in] ftmChannelDma  Whether to enable the DMA function on this channel
+    *
+    * @note This method has the side-effect of clearing the register update synchronisation i.e.
+    *       pending CnV register updates are discarded.
     */
    static __attribute__((always_inline)) void enable(
          FtmChannelMode mode=FtmPwmHighTruePulses,

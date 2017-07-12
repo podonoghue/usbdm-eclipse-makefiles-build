@@ -48,8 +48,8 @@
 namespace USBDM {
 
 /**
- * @addtogroup AnalogueIO_Group Analogue Input
- * @{
+ * @addtogroup ADC_Group ADC, Analogue Input
+ * @brief Abstraction for Analogue Input
  */
 
 /**
@@ -103,12 +103,18 @@ enum AdcClockDivider {
    AdcClockDivider_8       = ADC_CFG1_ADIV(3), //!< Clock divide by 4
 };
 
+enum AdcInterrupt {
+   AdcInterrupt_disable = ADC_SC1_AIEN(0), //!< No interrupt on conversion complete
+   AdcInterrupt_enable  = ADC_SC1_AIEN(1), //!< No interrupt on conversion complete
+};
+
 /**
  * Type definition for ADC interrupt call back
  *
  * @param[in] value Conversion value from channel
+ * @param[in] value Channel number for the conversion
  */
-typedef void (*ADCCallbackFunction)(uint32_t value);
+typedef void (*ADCCallbackFunction)(uint32_t value, int channel);
 
 /**
  * Template class representing an ADC
@@ -140,7 +146,7 @@ protected:
    static constexpr volatile uint32_t *clockReg = Info::clockReg;
 
    /** Callback to catch unhandled interrupt */
-   static void errorCallback(uint32_t) {
+   static void errorCallback(uint32_t, int) {
       setAndCheckErrorCode(E_NO_HANDLER);
    }
 public:
@@ -264,6 +270,20 @@ public:
 
 protected:
    /**
+    * Enables hardware trigger mode of operation and configures a channel
+    *
+    * @param[in] hardwareTrigger Hardware trigger to use for this channel\n
+    *                            This corresponds to pre-triggers in the PDB channels and SC1[n] register setups
+    * @param[in] sc1Value        SC1 register value including the ADC channel to use
+    */
+   static void enableHardwareConversion(int hardwareTrigger, int sc1Value) {
+      // Set hardware triggers
+      adc->SC2 |= ADC_SC2_ADTRG(1);
+      // Configure channel for hardware trigger input
+      adc->SC1[hardwareTrigger] = sc1Value;
+   }
+
+   /**
     * Initiates a conversion but does not wait for it to complete.\n
     * Intended for use with interrupts so ADC interrupts are enabled
     *
@@ -325,7 +345,12 @@ public:
     * IRQ handler
     */
    static void irqHandler() {
-      callback(AdcBase_T<Info>::adc->R[0]);
+      if (AdcBase_T<Info>::adc->SC1[0] & ADC_SC1_COCO_MASK) {
+         callback(AdcBase_T<Info>::adc->R[0], AdcBase_T<Info>::adc->SC1[0]&ADC_SC1_ADCH_MASK);
+      }
+      if (AdcBase_T<Info>::adc->SC1[1] & ADC_SC1_COCO_MASK) {
+         callback(AdcBase_T<Info>::adc->R[1], AdcBase_T<Info>::adc->SC1[1]&ADC_SC1_ADCH_MASK);
+      }
    }
 
    /**
@@ -367,6 +392,20 @@ template<class Info, int channel>
 class AdcChannel : public AdcBase_T<Info>, CheckSignal<Info, channel> {
 
 public:
+   /** Channel number */
+   static constexpr int CHANNEL=channel;
+
+   /**
+    * Enables hardware trigger mode of operation and configures a channel
+    *
+    * @param[in] hardwareTrigger Hardware trigger to use for this channel\n
+    *                            This corresponds to pre-triggers in the PDB channels and SC1[n] register setups
+    * @param[in] enableInterrupt Whether to generate interrupt when complete
+    */
+   static void enableHardwareConversion(int hardwareTrigger, AdcInterrupt enableInterrupt=AdcInterrupt_disable) {
+      AdcBase_T<Info>::enableHardwareConversion(hardwareTrigger, ADC_SC1_ADCH(channel)|enableInterrupt);
+   }
+
    /**
     * Initiates a conversion but does not wait for it to complete.\n
     * Intended for use with interrupts so ADC interrupts are enabled
@@ -408,6 +447,20 @@ template<class Info, int channel>
 class AdcDiffChannel : public AdcBase_T<Info>, CheckSignal<typename Info::InfoDP, channel>, CheckSignal<typename Info::InfoDM, channel> {
 
 public:
+   /** Channel number */
+   static constexpr int CHANNEL=channel;
+
+   /**
+    * Enables hardware trigger mode of operation and configures a channel
+    *
+    * @param[in] hardwareTrigger Hardware trigger to use for this channel\n
+    *                            This corresponds to pre-triggers in the PDB channels and SC1[n] register setups
+    * @param[in] enableInterrupt Whether to generate interrupt when complete
+    */
+   static void enableHardwareConversion(int hardwareTrigger, AdcInterrupt enableInterrupt=AdcInterrupt_disable) {
+      AdcBase_T<Info>::enableHardwareConversion(ADC_SC1_ADCH(channel)|ADC_SC1_DIFF_MASK, channel|enableInterrupt);
+   }
+
    /**
     * Initiates a conversion but does not wait for it to complete.\n
     * Intended for use with interrupts so ADC interrupts are enabled
