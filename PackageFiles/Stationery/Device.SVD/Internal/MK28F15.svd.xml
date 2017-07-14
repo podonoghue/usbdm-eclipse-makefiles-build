@@ -31,7 +31,7 @@
       <xi:include href="peripherals/CMT_0.svd.xml"/>
       <xi:include href="peripherals/CRC0_0x40032000.svd.xml"/>
       <xi:include href="peripherals/DAC0_MK28F15.svd.xml"/>
-      <xi:include href="peripherals/DMA_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/DMA0_32CH_EARS.svd.xml"/>
       <xi:include href="peripherals/DMAMUX0_32CH_TRIG_MK28F15.svd.xml"/>
       <xi:include href="peripherals/EWM_MK28F15.svd.xml"/>
       <xi:include href="peripherals/FB_0.svd.xml"/>

@@ -59,7 +59,7 @@
       <copy source="Snippets/flash_programming_example.cpp"  target="Snippets/flash_programming_example.cpp"  replace="true"  derived="true" />
    </projectActionList>
 
-   <constant name="FlashType" id="/Flash/FlashType" key="/Flash/FlashType" value="ftfe" />
+   <constant name="FlashType" key="/Flash/FlashType" value="ftfe" />
    
    <template><![CDATA[
       \t// Sector size for program flash (minimum erase element)

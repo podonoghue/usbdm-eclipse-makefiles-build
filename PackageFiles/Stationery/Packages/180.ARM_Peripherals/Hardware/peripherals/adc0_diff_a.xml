@@ -44,7 +44,8 @@
    </choiceOption>
 
    <binaryOption name="adc_cfg1_adlsmp" description="Sample Time Configuration"
-      toolTip="Selects between different sample times based on the conversion mode selected">
+      toolTip="Selects between different sample times based on the conversion mode selected\n
+      Longer sample times are advantageous for high impedance sources and also reduces power consumption.">
       <choice value="0" name="Short sample time" isDefault="true" />
       <choice value="1" name="Long sample time" />
    </binaryOption>

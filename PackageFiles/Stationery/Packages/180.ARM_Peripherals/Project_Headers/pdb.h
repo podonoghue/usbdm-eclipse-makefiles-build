@@ -79,27 +79,54 @@ enum PdbTrigger {
  * Controls the loading of MOD, IDLY, CHnDLYm, DACINTx,and POyDLY register from holding registers
  */
 enum PdbLoadMode {
-   PdbLoadMode_immediate = PDB_SC_LDMOD(0), //!< The register are loaded immediately after LD_OK is set
-   PdbLoadMode_mod       = PDB_SC_LDMOD(1), //!< The register are loaded when the counter reaches the modulo value
-   PdbLoadMode_event     = PDB_SC_LDMOD(2), //!< The register are loaded when a trigger event occurs
-   PdbLoadMode_both      = PDB_SC_LDMOD(3), //!< The register are loaded when either counter reaches the modulo value or trigger event occurs
+   PdbLoadMode_Immediate = PDB_SC_LDMOD(0), //!< The register are loaded immediately after LD_OK is set
+   PdbLoadMode_Modulo    = PDB_SC_LDMOD(1), //!< The register are loaded when the counter reaches the modulo value
+   PdbLoadMode_Event     = PDB_SC_LDMOD(2), //!< The register are loaded when a trigger event occurs
+   PdbLoadMode_Both      = PDB_SC_LDMOD(3), //!< The register are loaded when either counter reaches the modulo value or trigger event occurs
 };
 
-enum PdbPretrigger0 {
-   PdbPretrigger0_Disabled = PDB_C1_EN(0<<0),                   // Pretrigger 0 disabled
-   PdbPretrigger0_Bypassed = PDB_C1_EN(1<<0)|PDB_C1_TOS(0<<0),  // Pretrigger 0 asserts 1 clock after trigger
-   PdbPretrigger0_Delayed  = PDB_C1_EN(1<<0)|PDB_C1_TOS(1<<0),  // Pretrigger 0 asserts 1 clock + delay after trigger
+/**
+ * Controls whether the PDB interrupt is enabled
+ */
+enum PdbInterrupt {
+   PdbInterrupt_Disable = PDB_SC_PDBIE(0),               // Sequence interrupt disabled
+   PdbInterrupt_Enable  = PDB_SC_PDBIE(1),               // Sequence interrupt enabled
 };
 
-enum PdbPretrigger1 {
-   PdbPretrigger1_Disabled = PDB_C1_EN(0<<1),                   // Pretrigger 0 disabled
-   PdbPretrigger1_Bypassed = PDB_C1_EN(1<<1)|PDB_C1_TOS(0<<1),  // Pretrigger 0 asserts 1 clock after trigger
-   PdbPretrigger1_Delayed  = PDB_C1_EN(1<<1)|PDB_C1_TOS(1<<1),  // Pretrigger 0 asserts 1 clock + delay after trigger
-};
-
+/**
+ * Controls whether the PDB operates in one-shot or continuous mode
+ */
 enum PdbMode {
    PdbMode_OneShot    = PDB_SC_CONT(0),                  // Sequence runs once only
    PdbMode_Continuous = PDB_SC_CONT(1),                  // Sequence runs continuously
+};
+
+/**
+ * Controls whether the PDB generates interrupt requests
+ */
+enum PdbDma {
+   PdbDma_Disable  = PDB_SC_CONT(0),                  // DMA is disabled
+   PdbDma_Enable   = PDB_SC_CONT(1),                  // DMA enabled
+};
+
+/**
+ * Controls whether the PDB error interrupt is enabled
+ */
+enum PdbErrorInterrupt {
+   PdbErrorInterrupt_Disable = PDB_SC_PDBEIE(0),         // Sequence interrupt disabled
+   PdbErrorInterrupt_Enable  = PDB_SC_PDBEIE(1),         // Sequence interrupt enabled
+};
+
+enum PdbPretrigger0 {
+   PdbPretrigger0_Disable = PDB_C1_EN(0<<0),                   // Pretrigger 0 disabled
+   PdbPretrigger0_Bypass = PDB_C1_EN(1<<0)|PDB_C1_TOS(0<<0),  // Pretrigger 0 asserts 1 clock after trigger
+   PdbPretrigger0_Delay  = PDB_C1_EN(1<<0)|PDB_C1_TOS(1<<0),  // Pretrigger 0 asserts 1 clock + delay after trigger
+};
+
+enum PdbPretrigger1 {
+   PdbPretrigger1_Disable = PDB_C1_EN(0<<1),                   // Pretrigger 0 disabled
+   PdbPretrigger1_Bypass  = PDB_C1_EN(1<<1)|PDB_C1_TOS(0<<1),  // Pretrigger 0 asserts 1 clock after trigger
+   PdbPretrigger1_Delay   = PDB_C1_EN(1<<1)|PDB_C1_TOS(1<<1),  // Pretrigger 0 asserts 1 clock + delay after trigger
 };
 
 template <class Info>
@@ -130,11 +157,9 @@ public:
 
       pdb->MOD  = Info::pdb_mod;
       pdb->IDLY = Info::pdb_idly;
-      if (Info::numChannels>0) {
-         pdb->CH[0].C1     = Info::pdb_ch[0].c1;
-         pdb->CH[0].DLY[0] = Info::pdb_ch[0].dly0;
-         pdb->CH[0].DLY[1] = Info::pdb_ch[0].dly1;
-      }
+      pdb->CH[0].C1     = Info::pdb_ch[0].c1;
+      pdb->CH[0].DLY[0] = Info::pdb_ch[0].dly0;
+      pdb->CH[0].DLY[1] = Info::pdb_ch[0].dly1;
       if (Info::numChannels>1) {
          pdb->CH[1].C1     = Info::pdb_ch[1].c1;
          pdb->CH[1].DLY[0] = Info::pdb_ch[1].dly0;
@@ -319,7 +344,7 @@ public:
    }
 
    /**
-    * Set trigger source
+    * Set trigger source and whether one-shot or continuous operation
     *
     * @param[in] pdbTrigger      Trigger source (pdb_sc_trgsel)
     * @param[in] pdbMode         PDB mode. Controls if the PDB does one sequence or repeats (pdb_sc_cont)
@@ -391,6 +416,7 @@ public:
          pdb->SC &= ~PDB_SC_PDBEIE_MASK;
       }
    }
+
    /**
     * Enable/disable sequence interrupts (pdb_sc_pdbie)
     *
@@ -403,6 +429,34 @@ public:
       else {
          pdb->SC &= ~PDB_SC_PDBIE_MASK;
       }
+   }
+
+   /**
+    * Enable/disable DMA (pdb_sc_dmaen)
+    *
+    * @param[in]  enable True => enable, False => disable
+    */
+   static void enableDma(bool enable=true) {
+      if (enable) {
+         pdb->SC |= PDB_SC_DMAEN_MASK;
+      }
+      else {
+         pdb->SC &= ~PDB_SC_DMAEN_MASK;
+      }
+   }
+
+   /**
+    * Set Interrupts and DMA options
+    *
+    * @param[in] pdbInterrupt       Whether sequence interrupt requests are generated
+    * @param[in] pdbErrorInterrupt  Whether error interrupt requests are generated
+    * @param[in] pdbDma             Whether DMA requests are generated
+    */
+   static void setInterrupts(
+         PdbInterrupt         pdbInterrupt      = PdbInterrupt_Disable,
+         PdbErrorInterrupt    pdbErrorInterrupt = PdbErrorInterrupt_Disable,
+         PdbDma               pdbDma            = PdbDma_Disable) {
+      pdb->SC = (pdb->SC&~(PDB_SC_PDBIE_MASK|PDB_SC_PDBEIE_MASK|PDB_SC_DMAEN_MASK))|pdbInterrupt|pdbErrorInterrupt|pdbDma;
    }
 
    /**
@@ -422,8 +476,8 @@ public:
     * @param[in] delay1          Delay for pretrigger 1
     */
    static void setPretriggersInTicks(int channel,
-         PdbPretrigger0 pdbPretrigger0=PdbPretrigger0_Bypassed, uint16_t delay0=0,
-         PdbPretrigger1 pdbPretrigger1=PdbPretrigger0_Disabled, uint16_t delay1=0) {
+         PdbPretrigger0 pdbPretrigger0=PdbPretrigger0_Bypass,  uint16_t delay0=0,
+         PdbPretrigger1 pdbPretrigger1=PdbPretrigger0_Disable, uint16_t delay1=0) {
 
       pdb->CH[channel].C1     = pdbPretrigger0|pdbPretrigger1;
       pdb->CH[channel].DLY[0] = delay0;
@@ -447,11 +501,30 @@ public:
     */
    static void setPretriggers(int channel,
          PdbPretrigger0 pdbPretrigger0,                         float delay0,
-         PdbPretrigger1 pdbPretrigger1=PdbPretrigger1_Disabled, float delay1=0.0) {
+         PdbPretrigger1 pdbPretrigger1=PdbPretrigger1_Disable, float delay1=0.0) {
 
       pdb->CH[channel].C1     = pdbPretrigger0|pdbPretrigger1;
       pdb->CH[channel].DLY[0] = calcTicksFromTime(delay0);
       pdb->CH[channel].DLY[1] = calcTicksFromTime(delay1);
+   }
+
+   /**
+    * Get error and sequence flags for the PDB channel
+    *
+    * @param[in] channel the PDB channel to clear
+    */
+   static uint32_t getChannelFlags(int channel) {
+      return pdb->CH[channel].S;
+   }
+
+   /**
+    * Clear error and sequence flags in the PDB channel
+    *
+    * @param[in] channel the PDB channel to clear
+    */
+   static void clearErrorFlags(int channel) {
+      // Clear flags
+      pdb->CH[channel].S = PDB_S_ERR_MASK; // w1c bits
    }
 };
 
@@ -464,20 +537,27 @@ class PdbIrq_T : public PdbBase_T<Info> {
 protected:
    /** Callback function for ISR */
    static PDBCallbackFunction callback;
-
+   /** Callback function for error ISR */
+   static PDBCallbackFunction errorCallback;
+   /** Handler for unexpected interrupts */
+   static void illegalInterruptHandler() {
+      setAndCheckErrorCode(E_NO_HANDLER);
+   }
 public:
    /**
     * IRQ handler
     */
    static void irqHandler(void) {
-      // Clear interrupt flag
-      PdbBase_T<Info>::pdb->SC  &= ~PDB_SC_PDBIF_MASK;
-      if (callback != 0) {
+
+      if (PdbBase_T<Info>::pdb->SC & PDB_SC_PDBIF_MASK) {
+         // Clear interrupt flag
+         PdbBase_T<Info>::pdb->SC  &= ~PDB_SC_PDBIF_MASK;
+         // Handle expected interrupt
          callback();
+         return;
       }
-      else {
-         setAndCheckErrorCode(E_NO_HANDLER);
-      }
+      // Assume sequence error
+      errorCallback();
    }
 
    /**
@@ -486,11 +566,28 @@ public:
     *   @param[in]  theCallback - Callback function to be executed on PDB interrupt
     */
    static void setCallback(PDBCallbackFunction theCallback) {
+      if (theCallback == nullptr) {
+         callback = illegalInterruptHandler;
+         return;
+      }
       callback = theCallback;
+   }
+   /**
+    * Set Callback function
+    *
+    *   @param[in]  theCallback - Callback function to be executed on PDB interrupt
+    */
+   static void setErrorCallback(PDBCallbackFunction theCallback) {
+      if (theCallback == nullptr) {
+         errorCallback = illegalInterruptHandler;
+         return;
+      }
+      errorCallback = theCallback;
    }
 };
 
-template<class Info> PDBCallbackFunction PdbIrq_T<Info>::callback = 0;
+template<class Info> PDBCallbackFunction PdbIrq_T<Info>::callback = PdbIrq_T<Info>::illegalInterruptHandler;
+template<class Info> PDBCallbackFunction PdbIrq_T<Info>::errorCallback = PdbIrq_T<Info>::illegalInterruptHandler;
 
 #ifdef USBDM_PDB_IS_DEFINED
 /**

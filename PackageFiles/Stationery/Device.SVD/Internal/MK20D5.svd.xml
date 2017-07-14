@@ -30,7 +30,7 @@
       <xi:include href="peripherals/CRC0_0x40032000.svd.xml"/>
       <xi:include href="peripherals/CoreDebug.svd.xml"/>
       <xi:include href="peripherals/DMA0_4CH.svd.xml"/>
-      <xi:include href="peripherals/DMAMUX0_4CH_TRIG.svd.xml"/>
+      <xi:include href="peripherals/DMAMUX0_4CH_TRIG_MK20D5.svd.xml"/>
       <xi:include href="peripherals/DWT_CM4.svd.xml"/>
       <xi:include href="peripherals/ETF_0.svd.xml"/>
       <xi:include href="peripherals/EWM_2.svd.xml"/>

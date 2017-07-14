@@ -13,8 +13,8 @@
       </category>
       
       <category name="OSC" description="OSC External Reference Clock/Oscillator [OSCCLK]">
-            <aliasOption key="/OSC0/osc_input_freq" constant="false" />
-            <aliasOption key="/OSC0/erefs0" constant="false" />
+         <aliasOption key="/OSC0/osc_input_freq" constant="false" />
+         <aliasOption key="/OSC0/erefs0" constant="false" />
       </category>
       <category name="Clocks" description="Clock Sources"
          toolTip="SLOW_IRC, FAST_IRC,USB_CLKIN, LPO" >
@@ -627,7 +627,7 @@
       
    ]]></template>
          
-   <template name="McgClockInfoEntries" dim="McgInfoSize" ><![CDATA[
+   <template name="McgClockInfoEntries" dim="McgInfoSize" namespace="all" ><![CDATA[
       \t   {
       \t   //! Clock Mode
       \t   $(clock_mode),\n\n

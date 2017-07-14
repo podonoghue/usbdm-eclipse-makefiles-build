@@ -20,30 +20,55 @@
  */
 namespace USBDM {
 
-template<uint channel, uint source>
-class DmaMux_T {
+enum DmaMuxEnable {
+   DmaMuxEnable_Disable    = DMAMUX_CHCFG_ENBL(0),                      //!< DMA channel is disabled
+   DmaMuxEnable_Continuous = DMAMUX_CHCFG_ENBL(1)|DMAMUX_CHCFG_TRIG(0), //!< DMA channel is enabled
+   DmaMuxEnable_Triggered  = DMAMUX_CHCFG_ENBL(1)|DMAMUX_CHCFG_TRIG(1), //!< DMA channel is triggered by PIT channel
+};
+
+class DmaMux0 : public Dmamux0Info {
+
+   // Pointer to hardware
+//   static constexpr volatile DMAMUX_Type *dmacmux = dmamux;
+
 public:
-   static void enable() {
+
+   /**
+    * Configures and enable hardware requests on channel
+    *
+    * @param[in] dmaChannel   The DMA channel being enabled
+    * @param[in] dmaSlot      The DMA slot (source) to connect to this channel
+    * @param[in] dmaMuxEnable The mode for the channel
+    */
+   static void configure(int dmaChannel, DmaSlot dmaSlot, DmaMuxEnable dmaMuxEnable=DmaMuxEnable_Continuous) {
+#ifdef DEBUG_BUILD
+      // PIT triggering only available on 1st 4 channels
+      assert ((dmaMuxEnable != DmaMuxEnable_Triggered) || (dmaChannel<=4));
+#endif
+      // Enable clock to peripheral
+      *clockReg  |= clockMask;
+
+      // Configure channel
+      dmamux->CHCFG[dmaChannel] = dmaMuxEnable|DMAMUX_CHCFG_SOURCE(dmaSlot);
    }
-   static void disable() {
-      DMAMUX0->CHCFG[channel] = 0;
+   /**
+    * Disable hardware requests on channel
+    */
+   static void disable(int dmaChannel) {
+      // Enable clock to peripheral
+      *clockReg  |= clockMask;
+      // Disable channel
+      dmamux->CHCFG[dmaChannel] = 0;
    }
 };
 
-/**
- * Peripheral pin mapping information for UART, Universal Asynchronous Receiver/Transmitter
- */
-class DmaInfo {
-
-public:
-   //! Hardware base pointer
-   static constexpr uint32_t basePtr   = DMA0_BasePtr;
-
-   //! Clock mask for peripheral
-   static constexpr uint32_t clockMask = SIM_SCGC7_DMA_MASK;
-
-   //! Address of clock register for peripheral
-   static constexpr uint32_t clockReg  = SIM_BasePtr+offsetof(SIM_Type,SCGC7);
+enum DmaSize {
+   DmaSize_8bit    = 0,  //!< 8-bit transfer
+   DmaSize_16bit   = 1,  //!< 16-bit transfer
+   DmaSize_32bit   = 2,  //!< 32-bit transfer
+   DmaSize_16byte  = 4,  //!< 16-byte transfer
+   DmaSize_32byte  = 5,  //!< 32-byte transfer
+   DmaSize_Illegal = 7,  //!< Illegal transfer
 };
 
 /**
@@ -53,37 +78,63 @@ public:
  */
 class DmaChannel {
 public:
-   enum {
-      size8bit    = 0,
-      size16bit   = 1,
-      size32bit   = 2,
-      size16byte  = 4,
-      size32byte  = 5,
-   };
-   static constexpr uint8_t getAttrSize(uint size) {
+   /**
+    * Get DMA size from object size
+    *
+    * @param[in] size
+    *
+    * @return one of the DmaSize_xxxx values
+    */
+   static constexpr DmaSize getAttrSize(uint size) {
       return
-         (size==1)?0:
-         (size==2)?1:
-         (size==4)?2:
-         (size==16)?4:
-         (size==32)?5:7;
-   }
+         (size==1) ?DmaSize_8bit:
+         (size==2) ?DmaSize_16bit:
+         (size==4) ?DmaSize_32bit:
+         (size==16)?DmaSize_16byte:
+         (size==32)?DmaSize_32byte:
+               DmaSize_Illegal;
+   };
+
+   struct Tcd {
+      __IO uint32_t  SADDR;                     //!< Source Address
+      __IO uint16_t  SOFF;                      //!< Signed Source Address Offset
+      __IO uint16_t  ATTR;                      //!< Transfer Attributes
+      union {                                   //!< (size=0004)
+         __IO uint32_t  NBYTES_MLNO;            //!< Minor Byte Count (Minor Loop Disabled)
+         __IO uint32_t  NBYTES_MLOFFNO;         //!< Signed Minor Loop Offset (Minor Loop Enabled and Offset Disabled)
+         __IO uint32_t  NBYTES_MLOFFYES;        //!< Signed Minor Loop Offset (Minor Loop and Offset Enabled)
+      };
+      __IO uint32_t  SLAST;                     //!< Last Source Address Adjustment
+      __IO uint32_t  DADDR;                     //!< Destination Address
+      __IO uint16_t  DOFF;                      //!< Signed Destination Address Offset
+      union {                                   //!< (size=0002)
+         __IO uint16_t  CITER_ELINKNO;          //!< Current Minor Loop Link, Major Loop Count (Channel Linking Disabled)
+         __IO uint16_t  CITER_ELINKYES;         //!< Current Minor Loop Link, Major Loop Count (Channel Linking Enabled)
+      };
+      __IO uint32_t  DLASTSGA;                  //!< Last Destination Address Adjustment/Scatter Gather Address
+      __IO uint16_t  CSR;                       //!< Control and Status
+      union {                                   //!< (size=0002)
+         __IO uint16_t  BITER_ELINKNO;          //!< Beginning Minor Loop Link, Major Loop Count (Channel Linking Disabled)
+         __IO uint16_t  BITER_ELINKYES;         //!< Beginning Minor Loop Link, Major Loop Count (Channel Linking Enabled)
+      };
+   };
+
    struct SingleTransferInfo {
-      const volatile void *sourceAddress;          // Source Address
-      volatile void       *destinationAddress;     // Destination Address
-      uint32_t             nBytes;                 // Transfer Size in bytes - may include minor-loop offset
-      uint16_t             attributes;             // Attributes - see DMA_ATTR_SMOD etc
-      uint16_t             sourceOffset;           // Signed increment applied to source address after each transfer
-      uint16_t             destinationOffset;      // Signed increment applied to destination address after each transfer
+      const volatile void *sourceAddress;          //!< Source Address
+      volatile void       *destinationAddress;     //!< Destination Address
+      uint32_t             nBytes;                 //!< Transfer Size in bytes - may include minor-loop offset
+      uint16_t             attributes;             //!< Attributes - see DMA_ATTR_SMOD etc
+      uint16_t             sourceOffset;           //!< Signed increment applied to source address after each transfer
+      uint16_t             destinationOffset;      //!< Signed increment applied to destination address after each transfer
    };
    struct MultipleTransferInfo {
-      const volatile void *sourceAddress;          // Source Address
-      volatile void       *destinationAddress;     // Destination Address
-      uint32_t             nBytes;                 // Transfer Size in bytes - may include minor-loop offset
-      uint16_t             attributes;             // Attributes - see DMA_ATTR_SMOD etc
-      uint16_t             sourceOffset;           // Signed increment applied to source address after each transfer
-      uint16_t             destinationOffset;      // Signed increment applied to destination address after each transfer
-      uint16_t             numberOfTransactions;   // Number of transactions
+      const volatile void *sourceAddress;          //!< Source Address
+      volatile void       *destinationAddress;     //!< Destination Address
+      uint32_t             nBytes;                 //!< Transfer Size in bytes - may include minor-loop offset
+      uint16_t             attributes;             //!< Attributes - see DMA_ATTR_SMOD etc
+      uint16_t             sourceOffset;           //!< Signed increment applied to source address after each transfer
+      uint16_t             destinationOffset;      //!< Signed increment applied to destination address after each transfer
+      uint16_t             numberOfTransactions;   //!< Number of transactions
    };
 };
 
@@ -97,78 +148,86 @@ public:
  * @tparam channel      DMA channel to use
  * @tparam dmaSource    Hardware DMA source e.g. UART0
  */
-template<class Info, int channel, int dmaSource=-1>
-class DmaChannel_T : public DmaChannel {
+class Dma0 : public DmaChannel {
+
+   using DmaInfo = Dma0Info;
+   using MuxInfo = Dmamux0Info;
 
 protected:
    // Pointer to hardware
-   static constexpr volatile DMA_Type *dmac       = Info::dmac;
-   // Pointer to hardware
-   static constexpr volatile DMAMUX_Type *dmacmux = reinterpret_cast<volatile DMAMUX_Type*>(Info::info[channel].dmaMux);
+   static constexpr volatile DMA_Type    *dmac          = DmaInfo::dma;
    // Pointer to clock register
-   static constexpr volatile uint32_t *clockReg   = Info::clockReg;
-   // Pointer to clock register
-   static constexpr volatile uint32_t *muxClockReg   = reinterpret_cast<volatile uint32_t*>(DmaMux0Info::clockReg);
+   static constexpr volatile uint32_t    *clockReg      = DmaInfo::clockReg;
    // IRQ Num
-   static constexpr IRQn_Type irqNum              = DMA0_IRQn+channel;
+   static constexpr IRQn_Type             irqNum        = DMA0_IRQn;
 
 public:
    /**
     * Configure channel for a single transaction
     */
-   static void configure(const SingleTransferInfo *information) {
-      *muxClockReg  |= DmaMux0Info::clockMask;
+   static void configure(int channel, const SingleTransferInfo &information) {
+      // Enable clock to peripheral
+      *DmaInfo::clockReg  |= DmaInfo::clockMask;
 
-      dmac->CR                          = DMA_CR_EMLM_MASK|DMA_CR_EDBG_MASK|DMA_CR_ERCA_MASK; // ML-offset, Debug, RR priority
-      if (dmaSource>0) {
-         dmac->SERQ                     = channel; // Enable hardware request
-      }
-      else {
-         dmac->CERQ                     = channel;
-      }
-      dmac->TCD[channel].CITER_ELINKNO  = 1;                                              // Single transaction
-      dmac->TCD[channel].BITER_ELINKNO  = 1;                                              // Single transaction
-      dmac->TCD[channel].NBYTES_MLNO    = information->nBytes;                            // Number of bytes to transfer
-      dmac->TCD[channel].SADDR          = (uint32_t)information->sourceAddress;           // Source address
-      dmac->TCD[channel].SOFF           = information->sourceOffset;                      // Increment for SADDR
-      dmac->TCD[channel].ATTR           = information->attributes;                        // Attributes - see DMA_ATTR_SMOD etc
-      dmac->TCD[channel].SLAST          = 0;                                              // No adjustment as single transfer
-      dmac->TCD[channel].DADDR          = (uint32_t)information->destinationAddress;      // Destination address
-      dmac->TCD[channel].DOFF           = information->destinationOffset;                 // Increment for DADDR
-      dmac->TCD[channel].DLASTSGA       = 0;                                              // No adjustment as single transfer
+      // ML-offset, Debug, RR priority
+      dmac->CR       = DMA_CR_EMLM_MASK|DMA_CR_EDBG_MASK|DMA_CR_ERCA_MASK;
+
+      // Enable hardware request
+      dmac->SERQ     = channel;
+
+      //      if (dmaSource>0) {
+//         dmac->SERQ                     = channel; // Enable hardware request
+//      }
+//      else {
+//         dmac->CERQ                     = channel;
+//      }
+      dmac->TCD[channel].CITER_ELINKNO  = 1;                                             // Single transaction
+      dmac->TCD[channel].BITER_ELINKNO  = 1;                                             // Single transaction
+      dmac->TCD[channel].NBYTES_MLNO    = information.nBytes;                            // Number of bytes to transfer
+      dmac->TCD[channel].SADDR          = (uint32_t)information.sourceAddress;           // Source address
+      dmac->TCD[channel].SOFF           = information.sourceOffset;                      // Increment for SADDR
+      dmac->TCD[channel].ATTR           = information.attributes;                        // Attributes - see DMA_ATTR_SMOD etc
+      dmac->TCD[channel].SLAST          = 0;                                             // No adjustment as single transfer
+      dmac->TCD[channel].DADDR          = (uint32_t)information.destinationAddress;      // Destination address
+      dmac->TCD[channel].DOFF           = information.destinationOffset;                 // Increment for DADDR
+      dmac->TCD[channel].DLASTSGA       = 0;                                             // No adjustment as single transfer
       dmac->TCD[channel].CSR            = DMA_CSR_START_MASK|DMA_CSR_DREQ_MASK;
    }
    /**
     * Configure channel for a single transaction
     */
-   static void configure(const MultipleTransferInfo *information) {
-      *muxClockReg  |= DmaMux0Info::clockMask;
+   static void configure(int channel, const MultipleTransferInfo &information) {
+      *clockReg  |= MuxInfo::clockMask;
 
-      dmac->CR                          = DMA_CR_EMLM_MASK|DMA_CR_EDBG_MASK|DMA_CR_ERCA_MASK; // ML-offset, Debug, RR priority
-      if (dmaSource>0) {
-         dmac->SERQ                     = channel; // Enable hardware request
-         DMAMUX0->CHCFG[channel]        = DMAMUX_CHCFG_ENBL_MASK|DMAMUX_CHCFG_SOURCE(dmaSource);
-      }
-      else {
-         dmac->CERQ                     = channel;
-         DMAMUX0->CHCFG[channel]        = 0;
-      }
-      dmac->TCD[channel].CITER_ELINKNO  = information->numberOfTransactions;         // Number of transactions
-      dmac->TCD[channel].BITER_ELINKNO  = information->numberOfTransactions;         // Number of transactions
-      dmac->TCD[channel].NBYTES_MLNO    = information->nBytes;                       // Number of bytes to transfer
-      dmac->TCD[channel].SADDR          = (uint32_t)information->sourceAddress;      // Source address
-      dmac->TCD[channel].SOFF           = information->sourceOffset;                 // Increment for SADDR
-      dmac->TCD[channel].ATTR           = information->attributes;                   // Attributes - see DMA_ATTR_SMOD etc
-      dmac->TCD[channel].SLAST          = 0;                                         // No adjustment
-      dmac->TCD[channel].DADDR          = (uint32_t)information->destinationAddress; // Destination address
-      dmac->TCD[channel].DOFF           = information->destinationOffset;            // Increment for DADDR
-      dmac->TCD[channel].DLASTSGA       = 0;                                         // No adjustment
+      // ML-offset, Debug, RR priority
+      dmac->CR                          = DMA_CR_EMLM_MASK|DMA_CR_EDBG_MASK|DMA_CR_ERCA_MASK;
+
+      // Enable hardware request
+      dmac->SERQ                     = channel;
+
+//      if (dmaSource>0) {
+//         dmac->SERQ                     = channel; // Enable hardware request
+//      }
+//      else {
+//         dmac->CERQ                     = channel;
+//      }
+      dmac->TCD[channel].CITER_ELINKNO  = information.numberOfTransactions;         // Number of transactions
+      dmac->TCD[channel].BITER_ELINKNO  = information.numberOfTransactions;         // Number of transactions
+      dmac->TCD[channel].NBYTES_MLNO    = information.nBytes;                       // Number of bytes to transfer
+      dmac->TCD[channel].SADDR          = (uint32_t)information.sourceAddress;      // Source address
+      dmac->TCD[channel].SOFF           = information.sourceOffset;                 // Increment for SADDR
+      dmac->TCD[channel].ATTR           = information.attributes;                   // Attributes - see DMA_ATTR_SMOD etc
+      dmac->TCD[channel].SLAST          = 0;                                        // No adjustment
+      dmac->TCD[channel].DADDR          = (uint32_t)information.destinationAddress; // Destination address
+      dmac->TCD[channel].DOFF           = information.destinationOffset;            // Increment for DADDR
+      dmac->TCD[channel].DLASTSGA       = 0;                                        // No adjustment
       dmac->TCD[channel].CSR            = DMA_CSR_START_MASK;
    }
    /**
     * Waits until the channel indicates the transaction has completed
     */
-   static void waitUntilComplete() {
+   static void waitUntilComplete(int channel) {
+
       int lastCiter = dmac->TCD[channel].CITER_ELINKNO;
       while ((dmac->TCD[channel].CSR & DMA_CSR_DONE_MASK) == 0) {
          int currentCiter = dmac->TCD[channel].CITER_ELINKNO;
@@ -177,18 +236,6 @@ public:
             __asm__ volatile("nop");
          }
       }
-   }
-   /**
-    * Enable hardware requests on channel
-    */
-   static void enableRequests() {
-      DMAMUX0->CHCFG[channel] = DMAMUX_CHCFG_ENBL_MASK|DMAMUX_CHCFG_SOURCE(dmaSource);
-   }
-   /**
-    * Disable hardware requests on channel
-    */
-   static void disableRequests() {
-      DMAMUX0->CHCFG[channel] = 0;
    }
 };
 

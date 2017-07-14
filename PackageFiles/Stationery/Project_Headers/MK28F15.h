@@ -1368,7 +1368,7 @@ typedef struct {                                /*       DAC0 Structure         
 */
 
 /* ================================================================================ */
-/* ================           DMA0 (file:DMA_MK28F15)              ================ */
+/* ================           DMA0 (file:DMA0_32CH_EARS)           ================ */
 /* ================================================================================ */
 
 /**
@@ -1403,60 +1403,60 @@ typedef struct {                                /*       DMA0 Structure         
         uint8_t   RESERVED_5[12];              
    __IO uint32_t  EARS;                         /**< 0044: Enable Asynchronous Request in Stop Register                 */
         uint8_t   RESERVED_6[184];             
-   __IO uint8_t   DCHPRI3;                      /**< 0100: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI2;                      /**< 0101: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI1;                      /**< 0102: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI0;                      /**< 0103: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI7;                      /**< 0104: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI6;                      /**< 0105: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI5;                      /**< 0106: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI4;                      /**< 0107: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI11;                     /**< 0108: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI10;                     /**< 0109: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI9;                      /**< 010A: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI8;                      /**< 010B: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI15;                     /**< 010C: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI14;                     /**< 010D: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI13;                     /**< 010E: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI12;                     /**< 010F: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI19;                     /**< 0110: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI18;                     /**< 0111: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI17;                     /**< 0112: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI16;                     /**< 0113: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI23;                     /**< 0114: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI22;                     /**< 0115: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI21;                     /**< 0116: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI20;                     /**< 0117: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI27;                     /**< 0118: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI26;                     /**< 0119: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI25;                     /**< 011A: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI24;                     /**< 011B: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI31;                     /**< 011C: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI30;                     /**< 011D: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI29;                     /**< 011E: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI28;                     /**< 011F: Channel n Priority Register                                  */
+   __IO uint8_t   DCHPRI3;                      /**< 0100: Channel 3 Priority Register                                  */
+   __IO uint8_t   DCHPRI2;                      /**< 0101: Channel 2 Priority Register                                  */
+   __IO uint8_t   DCHPRI1;                      /**< 0102: Channel 1 Priority Register                                  */
+   __IO uint8_t   DCHPRI0;                      /**< 0103: Channel 0 Priority Register                                  */
+   __IO uint8_t   DCHPRI7;                      /**< 0104: Channel 7 Priority Register                                  */
+   __IO uint8_t   DCHPRI6;                      /**< 0105: Channel 6 Priority Register                                  */
+   __IO uint8_t   DCHPRI5;                      /**< 0106: Channel 5 Priority Register                                  */
+   __IO uint8_t   DCHPRI4;                      /**< 0107: Channel 4 Priority Register                                  */
+   __IO uint8_t   DCHPRI11;                     /**< 0108: Channel 11 Priority Register                                 */
+   __IO uint8_t   DCHPRI10;                     /**< 0109: Channel 10 Priority Register                                 */
+   __IO uint8_t   DCHPRI9;                      /**< 010A: Channel 9 Priority Register                                  */
+   __IO uint8_t   DCHPRI8;                      /**< 010B: Channel 8 Priority Register                                  */
+   __IO uint8_t   DCHPRI15;                     /**< 010C: Channel 15 Priority Register                                 */
+   __IO uint8_t   DCHPRI14;                     /**< 010D: Channel 14 Priority Register                                 */
+   __IO uint8_t   DCHPRI13;                     /**< 010E: Channel 13 Priority Register                                 */
+   __IO uint8_t   DCHPRI12;                     /**< 010F: Channel 12 Priority Register                                 */
+   __IO uint8_t   DCHPRI19;                     /**< 0110: Channel 19 Priority Register                                 */
+   __IO uint8_t   DCHPRI18;                     /**< 0111: Channel 18 Priority Register                                 */
+   __IO uint8_t   DCHPRI17;                     /**< 0112: Channel 17 Priority Register                                 */
+   __IO uint8_t   DCHPRI16;                     /**< 0113: Channel 16 Priority Register                                 */
+   __IO uint8_t   DCHPRI23;                     /**< 0114: Channel 23 Priority Register                                 */
+   __IO uint8_t   DCHPRI22;                     /**< 0115: Channel 22 Priority Register                                 */
+   __IO uint8_t   DCHPRI21;                     /**< 0116: Channel 21 Priority Register                                 */
+   __IO uint8_t   DCHPRI20;                     /**< 0117: Channel 20 Priority Register                                 */
+   __IO uint8_t   DCHPRI27;                     /**< 0118: Channel 27 Priority Register                                 */
+   __IO uint8_t   DCHPRI26;                     /**< 0119: Channel 26 Priority Register                                 */
+   __IO uint8_t   DCHPRI25;                     /**< 011A: Channel 25 Priority Register                                 */
+   __IO uint8_t   DCHPRI24;                     /**< 011B: Channel 24 Priority Register                                 */
+   __IO uint8_t   DCHPRI31;                     /**< 011C: Channel 31 Priority Register                                 */
+   __IO uint8_t   DCHPRI30;                     /**< 011D: Channel 30 Priority Register                                 */
+   __IO uint8_t   DCHPRI29;                     /**< 011E: Channel 29 Priority Register                                 */
+   __IO uint8_t   DCHPRI28;                     /**< 011F: Channel 28 Priority Register                                 */
         uint8_t   RESERVED_7[3808];            
    struct {
-      __IO uint32_t  SADDR;                     /**< 1000: TCD Source Address                                           */
-      __IO uint16_t  SOFF;                      /**< 1004: TCD Signed Source Address Offset                             */
-      __IO uint16_t  ATTR;                      /**< 1006: TCD Transfer Attributes                                      */
+      __IO uint32_t  SADDR;                     /**< 1000: Source Address                                               */
+      __IO uint16_t  SOFF;                      /**< 1004: Signed Source Address Offset                                 */
+      __IO uint16_t  ATTR;                      /**< 1006: Transfer Attributes                                          */
       union {                                   /**< 1000: (size=0004)                                                  */
-         __IO uint32_t  NBYTES_MLNO;            /**< 1008: TCD Minor Byte Count (Minor Loop Mapping Disabled)           */
-         __IO uint32_t  NBYTES_MLOFFNO;         /**< 1008: TCD Signed Minor Loop Offset (Minor Loop Mapping Enabled and Offset Disabled) */
-         __IO uint32_t  NBYTES_MLOFFYES;        /**< 1008: TCD Signed Minor Loop Offset (Minor Loop Mapping and Offset Enabled) */
+         __IO uint32_t  NBYTES_MLNO;            /**< 1008: Minor Byte Count (Minor Loop Disabled)                       */
+         __IO uint32_t  NBYTES_MLOFFNO;         /**< 1008: Signed Minor Loop Offset (Minor Loop Enabled and Offset Disabled) */
+         __IO uint32_t  NBYTES_MLOFFYES;        /**< 1008: Signed Minor Loop Offset (Minor Loop and Offset Enabled)     */
       };
-      __IO uint32_t  SLAST;                     /**< 100C: TCD Last Source Address Adjustment                           */
-      __IO uint32_t  DADDR;                     /**< 1010: TCD Destination Address                                      */
-      __IO uint16_t  DOFF;                      /**< 1014: TCD Signed Destination Address Offset                        */
+      __IO uint32_t  SLAST;                     /**< 100C: Last Source Address Adjustment                               */
+      __IO uint32_t  DADDR;                     /**< 1010: Destination Address                                          */
+      __IO uint16_t  DOFF;                      /**< 1014: Signed Destination Address Offset                            */
       union {                                   /**< 1000: (size=0002)                                                  */
-         __IO uint16_t  CITER_ELINKNO;          /**< 1016: TCD Current Minor Loop Link, Major Loop Count (Channel Linking Disabled) */
-         __IO uint16_t  CITER_ELINKYES;         /**< 1016: TCD Current Minor Loop Link, Major Loop Count (Channel Linking Enabled) */
+         __IO uint16_t  CITER_ELINKNO;          /**< 1016: Current Minor Loop Link, Major Loop Count (Channel Linking Disabled) */
+         __IO uint16_t  CITER_ELINKYES;         /**< 1016: Current Minor Loop Link, Major Loop Count (Channel Linking Enabled) */
       };
-      __IO uint32_t  DLASTSGA;                  /**< 1018: TCD Last Destination Address Adjustment/Scatter Gather Address */
-      __IO uint16_t  CSR;                       /**< 101C: TCD Control and Status                                       */
+      __IO uint32_t  DLASTSGA;                  /**< 1018: Last Destination Address Adjustment/Scatter Gather Address   */
+      __IO uint16_t  CSR;                       /**< 101C: Control and Status                                           */
       union {                                   /**< 1000: (size=0002)                                                  */
-         __IO uint16_t  BITER_ELINKNO;          /**< 101E: TCD Beginning Minor Loop Link, Major Loop Count (Channel Linking Disabled) */
-         __IO uint16_t  BITER_ELINKYES;         /**< 101E: TCD Beginning Minor Loop Link, Major Loop Count (Channel Linking Enabled) */
+         __IO uint16_t  BITER_ELINKNO;          /**< 101E: Beginning Minor Loop Link, Major Loop Count (Channel Linking Disabled) */
+         __IO uint16_t  BITER_ELINKYES;         /**< 101E: Beginning Minor Loop Link, Major Loop Count (Channel Linking Enabled) */
       };
    } TCD[32];                                   /**< 1000: (cluster: size=0x0400, 1024)                                 */
 } DMA_Type;
@@ -5573,7 +5573,7 @@ typedef struct {                                /*       LPTMR0 Structure       
    __IO uint32_t  CSR;                          /**< 0000: Control Status Register                                      */
    __IO uint32_t  PSR;                          /**< 0004: Prescale Register                                            */
    __IO uint32_t  CMR;                          /**< 0008: Compare Register                                             */
-   __IO uint32_t  CNR;                          /**< 000C: Counter Register                                             */
+   __I  uint32_t  CNR;                          /**< 000C: Counter Register                                             */
 } LPTMR_Type;
 
 /**

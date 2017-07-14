@@ -387,7 +387,8 @@ Devices using this peripheral:
    	  derivedFrom="pdb_po1_dly_dly2"
       derived="true"
       value="1k" min="0" units="s" />
-
+   </category>
+   
    <category name="Pulse Output 2" description="Pulse Output to CMP2" >
    <intOption name="pdb_po2_dly_dly1" 
       description="Pulse-Out 1 Delay 1 - rising edge" 

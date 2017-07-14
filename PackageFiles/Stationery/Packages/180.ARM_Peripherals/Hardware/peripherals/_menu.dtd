@@ -67,7 +67,7 @@
   
 <!ELEMENT floatOption EMPTY >
    <!ATTLIST floatOption constant     (false|true) "false">
-   <!ATTLIST floatOption name         ID          #REQUIRED>
+   <!ATTLIST floatOption name         ID           #REQUIRED>
    <!ATTLIST floatOption key          CDATA        #IMPLIED>
    <!ATTLIST floatOption origin       CDATA        #IMPLIED>
    <!ATTLIST floatOption description  CDATA        #IMPLIED>
@@ -82,6 +82,11 @@
    <!ATTLIST floatOption derivedFrom  IDREF        #IMPLIED>
   
 <!ELEMENT aliasOption EMPTY >
+   <!-- alias Option 
+   name 		Refers to another option within the same file and will be used as key and validated as a reference to an ID
+   key  		Allows reference to an option (possibly) in another file while passing validation
+   displayName	Allows the name of the model (visible in the GUI) to differ from the aliased option's name
+   -->
    <!ATTLIST aliasOption name        IDREF        #IMPLIED>
    <!ATTLIST aliasOption key         CDATA        #IMPLIED>
    <!ATTLIST aliasOption displayName CDATA        #IMPLIED>
@@ -130,7 +135,7 @@
    <!ATTLIST pinListOption derived      (false|true) "false">
    <!ATTLIST pinListOption derivedFrom  IDREF        #IMPLIED>
   
-<!ELEMENT choiceOption (choice)+ >
+<!ELEMENT choiceOption (choice)* >
    <!ATTLIST choiceOption constant     (false|true) "false">
    <!ATTLIST choiceOption name         ID           #REQUIRED>
    <!ATTLIST choiceOption key          CDATA        #IMPLIED>
@@ -159,8 +164,9 @@
    <!ATTLIST binaryOption derivedFrom  IDREF        #IMPLIED>
 
 <!ELEMENT template (#PCDATA)>
-   <!ATTLIST template name CDATA  "" >
-   <!ATTLIST template dim  CDATA  #IMPLIED >
+   <!ATTLIST template namespace (info|usbdm|class|all)  "info" >
+   <!ATTLIST template name 		CDATA  				"" >
+   <!ATTLIST template dim  		CDATA  				#IMPLIED >
 
 <!ELEMENT validate (param*) >
    <!ATTLIST validate class CDATA #REQUIRED>
@@ -198,17 +204,24 @@
 
 <!-- File to be copied to a project -->
 <!ELEMENT copy EMPTY >
-   <!ATTLIST copy source  					CDATA #REQUIRED>
-   <!ATTLIST copy target  					CDATA #REQUIRED>
-   <!ATTLIST copy type    					CDATA #IMPLIED>
+   <!ATTLIST copy source               CDATA #REQUIRED>
+   <!ATTLIST copy target               CDATA #REQUIRED>
+   <!ATTLIST copy type                 CDATA #IMPLIED>
    <!ATTLIST copy sourcePathType       (absolute|relative|unknown) #IMPLIED>
-   <!ATTLIST copy macroReplacement  	(true|false) "true">
+   <!ATTLIST copy macroReplacement     (true|false) "true">
    <!ATTLIST copy replace              (true|false) "false">
    <!ATTLIST copy derived              (true|false) "false">
    
 <!ELEMENT constant EMPTY >
+   <!-- constant 
+   key  	Allows specification of a explicit key rather than based upon the name.
+   name 	In the absence of a key it is used to create a key tied to the current peripheral/file. 
+            Used as visible name in GUI (model)
+            Supports validation as an ID.
+   weak		If true indicates the constant may already exist and this constant is discarded
+   replace  Replaces any existing constant of the same key
+   -->
    <!ATTLIST constant name         ID           #IMPLIED>
-   <!ATTLIST constant id           CDATA        #IMPLIED>
    <!ATTLIST constant key          CDATA        #IMPLIED>
    <!ATTLIST constant value        CDATA        #REQUIRED>
    <!ATTLIST constant type         (boolean|int|string)  "string" >

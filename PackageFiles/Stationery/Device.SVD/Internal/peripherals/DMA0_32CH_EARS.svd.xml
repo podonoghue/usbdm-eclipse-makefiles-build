@@ -1,7 +1,9 @@
 <!--
 Devices using this peripheral: 
+      MK28F15
       MK65F18
       MK66F18
+      MK82F25615
 -->
       <peripheral>
          <?sourceFile "DMA0_32CH_EARS" ?>
@@ -70,6 +72,7 @@ Devices using this peripheral:
                <name>CR</name>
                <description>Control Register</description>
                <addressOffset>0x0</addressOffset>
+               <resetValue>0x400</resetValue>
                <fields>
                   <field>
                      <name>EDBG</name>
@@ -1193,6 +1196,7 @@ Enables suspension of this channel by a higher priority channel</description>
                   <name>SADDR</name>
                   <description>Source Address</description>
                   <addressOffset>0x0</addressOffset>
+                  <resetMask>0x0</resetMask>
                   <fields>
                      <field>
                         <name>SADDR</name>
@@ -1206,7 +1210,7 @@ Enables suspension of this channel by a higher priority channel</description>
                   <description>Signed Source Address Offset</description>
                   <addressOffset>0x4</addressOffset>
                   <size>16</size>
-                  <resetMask>0xFFFF</resetMask>
+                  <resetMask>0x0</resetMask>
                   <fields>
                      <field>
                         <name>SOFF</name>
@@ -1296,6 +1300,7 @@ Enables suspension of this channel by a higher priority channel</description>
                   <name>NBYTES_MLNO</name>
                   <description>Minor Byte Count (Minor Loop Disabled)</description>
                   <addressOffset>0x8</addressOffset>
+                  <resetMask>0x0</resetMask>
                   <fields>
                      <field>
                         <name>NBYTES</name>
@@ -1308,6 +1313,7 @@ Enables suspension of this channel by a higher priority channel</description>
                   <name>NBYTES_MLOFFNO</name>
                   <description>Signed Minor Loop Offset (Minor Loop Enabled and Offset Disabled)</description>
                   <addressOffset>0x8</addressOffset>
+                  <resetMask>0x0</resetMask>
                   <fields>
                      <field>
                         <name>NBYTES</name>
@@ -1357,6 +1363,7 @@ Enables suspension of this channel by a higher priority channel</description>
                   <name>NBYTES_MLOFFYES</name>
                   <description>Signed Minor Loop Offset (Minor Loop and Offset Enabled)</description>
                   <addressOffset>0x8</addressOffset>
+                  <resetMask>0x0</resetMask>
                   <fields>
                      <field>
                         <name>NBYTES</name>
@@ -1413,6 +1420,7 @@ If SMLOE or DMLOE is set, this field represents a sign-extended offset applied t
                   <name>SLAST</name>
                   <description>Last Source Address Adjustment</description>
                   <addressOffset>0xC</addressOffset>
+                  <resetMask>0x0</resetMask>
                   <fields>
                      <field>
                         <name>SLAST</name>
@@ -1425,6 +1433,7 @@ If SMLOE or DMLOE is set, this field represents a sign-extended offset applied t
                   <name>DADDR</name>
                   <description>Destination Address</description>
                   <addressOffset>0x10</addressOffset>
+                  <resetMask>0x0</resetMask>
                   <fields>
                      <field>
                         <name>DADDR</name>
@@ -1438,7 +1447,7 @@ If SMLOE or DMLOE is set, this field represents a sign-extended offset applied t
                   <description>Signed Destination Address Offset</description>
                   <addressOffset>0x14</addressOffset>
                   <size>16</size>
-                  <resetMask>0xFFFF</resetMask>
+                  <resetMask>0x0</resetMask>
                   <fields>
                      <field>
                         <name>DOFF</name>
@@ -1452,7 +1461,7 @@ If SMLOE or DMLOE is set, this field represents a sign-extended offset applied t
                   <description>Current Minor Loop Link, Major Loop Count (Channel Linking Disabled)</description>
                   <addressOffset>0x16</addressOffset>
                   <size>16</size>
-                  <resetMask>0xFFFF</resetMask>
+                  <resetMask>0x0</resetMask>
                   <fields>
                      <field>
                         <name>CITER</name>
@@ -1485,7 +1494,7 @@ If SMLOE or DMLOE is set, this field represents a sign-extended offset applied t
                   <description>Current Minor Loop Link, Major Loop Count (Channel Linking Enabled)</description>
                   <addressOffset>0x16</addressOffset>
                   <size>16</size>
-                  <resetMask>0xFFFF</resetMask>
+                  <resetMask>0x0</resetMask>
                   <fields>
                      <field>
                         <name>CITER</name>
@@ -1533,6 +1542,7 @@ This is either the:\n
 \t- Destination last address adjustment or
 \t- Memory address for the next transfer control descriptor to be loaded into this channel (scatter/gather)</description>
                   <addressOffset>0x18</addressOffset>
+                  <resetMask>0x0</resetMask>
                   <fields>
                      <field>
                         <name>DLASTSGA</name>
@@ -1546,7 +1556,7 @@ This is either the:\n
                   <description>Control and Status</description>
                   <addressOffset>0x1C</addressOffset>
                   <size>16</size>
-                  <resetMask>0xFFFF</resetMask>
+                  <resetMask>0x0</resetMask>
                   <fields>
                      <field>
                         <name>START</name>
@@ -1651,6 +1661,7 @@ This flag signals the channel is currently in execution.\n
 It sets when service begins and clears when the minor loop completes or on any error</description>
                         <bitOffset>6</bitOffset>
                         <bitWidth>1</bitWidth>
+                        <access>read-only</access>
                         <enumeratedValues>
                            <enumeratedValue>
                               <name>0b0</name>
@@ -1734,7 +1745,7 @@ Allows the eDMA to be briefly stalled after each read/write</description>
                   <description>Beginning Minor Loop Link, Major Loop Count (Channel Linking Disabled)</description>
                   <addressOffset>0x1E</addressOffset>
                   <size>16</size>
-                  <resetMask>0xFFFF</resetMask>
+                  <resetMask>0x0</resetMask>
                   <fields>
                      <field>
                         <name>BITER</name>
@@ -1767,7 +1778,7 @@ Allows the eDMA to be briefly stalled after each read/write</description>
                   <description>Beginning Minor Loop Link, Major Loop Count (Channel Linking Enabled)</description>
                   <addressOffset>0x1E</addressOffset>
                   <size>16</size>
-                  <resetMask>0xFFFF</resetMask>
+                  <resetMask>0x0</resetMask>
                   <fields>
                      <field>
                         <name>BITER</name>

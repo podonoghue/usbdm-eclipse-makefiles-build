@@ -1,10 +1,10 @@
 <!--
 Devices using this peripheral: 
-      MK28F15
-      MK82F25615
+      MK65F18
+      MK66F18
 -->
       <peripheral>
-         <?sourceFile "DMAMUX0_32CH_TRIG_MK28F15" ?>
+         <?sourceFile "DMAMUX0_32CH_TRIG_MK66F18" ?>
          <name>DMAMUX0</name>
          <description>DMA channel multiplexor</description>
          <groupName>DMAMUX</groupName>
@@ -50,52 +50,52 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>2</name>
-                           <description>LPUART0_Rx</description>
+                           <description>UART0_Rx</description>
                            <value>0b000010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>3</name>
-                           <description>LPUART0_Tx</description>
+                           <description>UART0_Tx</description>
                            <value>0b000011</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>4</name>
-                           <description>LPUART1_Rx</description>
+                           <description>UART1_Rx</description>
                            <value>0b000100</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>5</name>
-                           <description>LPUART1_Tx</description>
+                           <description>UART1_Tx</description>
                            <value>0b000101</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>6</name>
-                           <description>LPUART2_Rx</description>
+                           <description>UART2_Rx</description>
                            <value>0b000110</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>7</name>
-                           <description>LPUART2_Tx</description>
+                           <description>UART2_Tx</description>
                            <value>0b000111</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>8</name>
-                           <description>LPUART3_Rx</description>
+                           <description>UART3_Rx</description>
                            <value>0b001000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>9</name>
-                           <description>LPUART3_Tx</description>
+                           <description>UART3_Tx</description>
                            <value>0b001001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>10</name>
-                           <description>LPUART4_Rx</description>
+                           <description>UART4_Rx</description>
                            <value>0b001010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>11</name>
-                           <description>LPUART4_Tx</description>
+                           <description>UART4_Tx</description>
                            <value>0b001011</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -245,7 +245,7 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>41</name>
-                           <description>Reserved</description>
+                           <description>ADC1</description>
                            <value>0b101001</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -270,7 +270,7 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>46</name>
-                           <description>Reserved</description>
+                           <description>DAC1</description>
                            <value>0b101110</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -310,32 +310,32 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>54</name>
-                           <description>Reserved</description>
+                           <description>IEEE1588_Timer0</description>
                            <value>0b110110</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>55</name>
-                           <description>Reserved</description>
+                           <description>IEEE1588_Timers1</description>
                            <value>0b110111</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>56</name>
-                           <description>Reserved</description>
+                           <description>IEEE1588_Timer2</description>
                            <value>0b111000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>57</name>
-                           <description>Reserved</description>
+                           <description>IEEE1588_Timer3</description>
                            <value>0b111001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>58</name>
-                           <description>SPI2_Rx</description>
+                           <description>LPUART0_Rx</description>
                            <value>0b111010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>59</name>
-                           <description>SPI2_Tx</description>
+                           <description>LPUART0_Tx</description>
                            <value>0b111011</value>
                         </enumeratedValue>
                         <enumeratedValue>

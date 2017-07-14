@@ -589,7 +589,7 @@
       
    ]]></template>
          
-   <template name="McgClockInfoEntries" dim="McgInfoSize" ><![CDATA[
+   <template name="McgClockInfoEntries" dim="McgInfoSize" namespace="all" ><![CDATA[
       \t   {
       \t   //! Clock Mode
       \t   $(clock_mode),\n\n

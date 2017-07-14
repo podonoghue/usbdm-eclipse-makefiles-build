@@ -3243,7 +3243,7 @@ typedef struct {                                /*       LLWU Structure         
 */
 
 /* ================================================================================ */
-/* ================           LPTMR0 (file:LPTMR0_MKL82Z7)         ================ */
+/* ================           LPTMR0 (file:LPTMR0_0)               ================ */
 /* ================================================================================ */
 
 /**
@@ -3255,10 +3255,10 @@ typedef struct {                                /*       LLWU Structure         
 * @{
 */
 typedef struct {                                /*       LPTMR0 Structure                                             */
-   __IO uint32_t  CSR;                          /**< 0000: Low Power Timer Control Status Register                      */
-   __IO uint32_t  PSR;                          /**< 0004: Low Power Timer Prescale Register                            */
-   __IO uint32_t  CMR;                          /**< 0008: Low Power Timer Compare Register                             */
-   __IO uint32_t  CNR;                          /**< 000C: Low Power Timer Counter Register                             */
+   __IO uint32_t  CSR;                          /**< 0000: Control Status Register                                      */
+   __IO uint32_t  PSR;                          /**< 0004: Prescale Register                                            */
+   __IO uint32_t  CMR;                          /**< 0008: Compare Register                                             */
+   __I  uint32_t  CNR;                          /**< 000C: Counter Register                                             */
 } LPTMR_Type;
 
 /**

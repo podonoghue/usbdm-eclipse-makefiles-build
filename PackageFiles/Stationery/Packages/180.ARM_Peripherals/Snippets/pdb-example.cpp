@@ -20,7 +20,7 @@ using namespace USBDM;
 using Led         = GpioA<2, ActiveLow>;
 using Pdb         = Pdb0;
 using Adc         = Adc0;
-using AdcChannel0 = Adc0Channel<19>;
+using AdcChannelX = Adc0Channel<19>;
 
 // Length od PDB sequence
 static constexpr float SEQ_LENGTH    = 10*ms;
@@ -38,23 +38,29 @@ static void pdbCallback() {
 
 static void configurePdb() {
 
+   // Note: Can work in timer ticks and avoid floating point if desired
+   //   Pdb::setClock(PdbPrescale_128, PdbMultiplier_10);
+   //   Pdb::setModulo(1000);
+   //   Pdb::setInterruptDelayInTicks(900);
+   //   Pdb::setPretriggersInTicks(0, PdbPretrigger0_Delayed, 800);
+
    Pdb::enable();
    // Software Trigger
    Pdb::setTriggerSource(PdbTrigger_Software, PdbMode_OneShot);
-   // Set callback
+   // Set call-backs
+   Pdb::setErrorCallback(pdbErrorCallback);
    Pdb::setCallback(pdbCallback);
-   // Interrupt during sequence
-   Pdb::enableSequenceInterrupts();
+   // Interrupts during sequence or error
+   Pdb::setInterrupts(PdbInterrupt_Enable, PdbErrorInterrupt_Enable);
+
    // Set period of sequence
    Pdb::setPeriod(SEQ_LENGTH);
    // Generate interrupt at end of sequence
    Pdb::setInterruptDelay(SEQ_LENGTH);
    // Take single ADC sample at TRIGGER_TIME
    Pdb::setPretriggers(0, PdbPretrigger0_Delayed, TRIGGER_TIME);
-   // Allow interrupts
-   Pdb::enableSequenceInterrupts();
    // Update registers
-   Pdb::triggerRegisterLoad(PdbLoadMode_immediate);
+   Pdb::triggerRegisterLoad(PdbLoadMode_Immediate);
    while (!Pdb::isRegisterLoadComplete()) {
       __asm__("nop");
    }
@@ -75,7 +81,7 @@ static void configureAdc() {
    Adc::setCallback(adcCallback);
    Adc::enableNvicInterrupts();
 
-   AdcChannel0::enableHardwareConversion(0, AdcInterrupt_enable);
+   AdcChannelX::enableHardwareConversion(0, AdcInterrupt_enable);
 }
 
 int main() {

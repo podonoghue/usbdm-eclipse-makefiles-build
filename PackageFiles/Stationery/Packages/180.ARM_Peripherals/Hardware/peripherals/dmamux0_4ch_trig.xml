@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"
+?>
+<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!-- dmamux0.xml -->
+
+<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flash Memory Module">
+
+   <constant name="NumChannels" value="4" weak="true"/>
+
+   <aliasOption name="NumChannels" constant="true" 
+      description="Number of DMA channels" 
+      toolTip="The number of DMA channels available" />
+
+   <choiceOption name="dma_chcfg0"
+      description="Mapping of DMA source (slot) to DMA channel" >
+      
+      <choice value="0" name="Disabled" />
+      <choice value="2" name="UART0 Receive" />
+      <choice value="3" name="UART0 Transmit" />
+      <choice value="4" name="UART1 Receive" />
+      <choice value="5" name="UART1 Transmit" />
+      <choice value="6" name="UART2 Receive" />
+      <choice value="7" name="UART2 Transmit" />
+      <choice value="14" name="I2S0 Receive" />
+      <choice value="15" name="I2S0 Transmit" />
+      <choice value="16" name="SPI0 Receive" />
+      <choice value="17" name="SPI0 Transmit" />
+      <choice value="22" name="I2C0" />
+      <choice value="24" name="FTM0 Channel 0" />
+      <choice value="25" name="FTM0 Channel 1" />
+      <choice value="26" name="FTM0 Channel 2" />
+      <choice value="27" name="FTM0 Channel 3" />
+      <choice value="28" name="FTM0 Channel 4" />
+      <choice value="29" name="FTM0 Channel 5" />
+      <choice value="30" name="FTM0 Channel 6" />
+      <choice value="31" name="FTM0 Channel 7" />
+      <choice value="32" name="FTM1 Channel 0" />
+      <choice value="33" name="FTM1 Channel 1" />
+      <choice value="40" name="ADC0" />
+      <choice value="42" name="CMP0" />
+      <choice value="43" name="CMP1" />
+      <choice value="47" name="CMT" />
+      <choice value="48" name="PDB" />
+      <choice value="49" name="Port A" />
+      <choice value="50" name="Port B" />
+      <choice value="51" name="Port C" />
+      <choice value="52" name="Port D" />
+      <choice value="53" name="Port E" />
+      <choice value="54" name="Always enabled 0" />
+      <choice value="55" name="Always enabled 1" />
+      <choice value="56" name="Always enabled 2" />
+      <choice value="57" name="Always enabled 3" />
+      <choice value="58" name="Always enabled 4" />
+      <choice value="59" name="Always enabled 5" />
+      <choice value="60" name="Always enabled 6" />
+      <choice value="61" name="Always enabled 7" />
+      <choice value="62" name="Always enabled 8" />
+      <choice value="63" name="Always enabled 9" />
+   </choiceOption>
+
+   <choiceOption name="dma_chcfg1" derivedFrom="dma_chcfg0"/>
+   <choiceOption name="dma_chcfg2" derivedFrom="dma_chcfg0"/>
+   <choiceOption name="dma_chcfg3" derivedFrom="dma_chcfg0"/>
+   
+   <template><![CDATA[
+      \t// Number of DMA channels implemented
+      \tstatic constexpr unsigned NumChannels = $(NumChannels);\n\n
+      
+      \tstatic constexpr uint8_t chcfg0_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg0));
+      \tstatic constexpr uint8_t chcfg1_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg1));
+      \tstatic constexpr uint8_t chcfg2_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg2));
+      \tstatic constexpr uint8_t chcfg3_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg3));
+   ]]></template>
+
+   <projectActionList id = "dmamux_files" >
+      <copy source="Project_Headers/dma-MK.h"          target="Project_Headers/dma.h"                 replace="true"  derived="true" />
+   </projectActionList>
+
+</devicePage>
