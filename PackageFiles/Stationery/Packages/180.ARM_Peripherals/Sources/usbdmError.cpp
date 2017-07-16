@@ -21,7 +21,8 @@ static const char *messages[] = {
       "Too large",
       "Illegal parameter",
       "Interrupt handler not installed",
-      "Flash initialisation failed"
+      "Flash initialisation failed",
+      "ADC Calibration failed",
 };
 
 /**

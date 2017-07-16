@@ -15,8 +15,9 @@
  * This file is generated automatically.
  * Any manual changes will be lost.
  */
-#include <stddef.h>
-#include <assert.h>
+#include <climits>
+#include <cstddef>
+#include <cassert>
 #include "derivative.h"
 
 /*
@@ -59,7 +60,8 @@ static constexpr PcrValue ADC_DEFAULT_PCR = pcrValue(
       PinPull_None, PinDriveStrength_Low, PinDriveMode_PushPull, PinIrq_None, PinFilter_None, PinSlewRate_Fast, PinMux_Analogue);
 
 /**
- * ADC Resolutions for use with AnalogueIO::setMode()
+ * ADC Resolutions\n
+ * The resolutions available vary with single-ended/differential modes
  */
 enum AdcResolution {
    AdcResolution_8bit_se    = ADC_CFG1_MODE(0),  //!<  8-bit unsigned for use with single-ended mode
@@ -76,15 +78,16 @@ enum AdcResolution {
  * ADC Averaging
  */
 enum AdcAveraging {
-   AdcAveraging_off = 0,                                 //!< No averaging - single conversion
-   AdcAveraging_4   = ADC_SC3_AVGE_MASK|ADC_SC3_AVGS(0), //!< Average across 4 conversions
-   AdcAveraging_8   = ADC_SC3_AVGE_MASK|ADC_SC3_AVGS(1), //!< Average across 8 conversions
-   AdcAveraging_16  = ADC_SC3_AVGE_MASK|ADC_SC3_AVGS(2), //!< Average across 16 conversions
-   AdcAveraging_32  = ADC_SC3_AVGE_MASK|ADC_SC3_AVGS(3), //!< Average across 32 conversions
+   AdcAveraging_off = ADC_SC3_AVGE(0),                                //!< No averaging - single conversion
+   AdcAveraging_4   = ADC_SC3_AVGE(1)|ADC_SC3_AVGS(0),                //!< Average across 4 conversions
+   AdcAveraging_8   = ADC_SC3_AVGE(1)|ADC_SC3_AVGS(1),                //!< Average across 8 conversions
+   AdcAveraging_16  = ADC_SC3_AVGE(1)|ADC_SC3_AVGS(2),                //!< Average across 16 conversions
+   AdcAveraging_32  = ADC_SC3_AVGE(1)|ADC_SC3_AVGS(3),                //!< Average across 32 conversions
+   AdcAveraging_Cal = ADC_SC3_AVGE(1)|ADC_SC3_AVGS(3)|ADC_SC3_CAL(1), //!< Average across 32 conversions + start calibration
 };
 
 /**
- * ADC clock source
+ * ADC input clock source.
  */
 enum AdcClockSource {
    AdcClockSource_Bus      = ADC_CFG1_ADICLK(0), //!< Bus Clock
@@ -103,9 +106,98 @@ enum AdcClockDivider {
    AdcClockDivider_8       = ADC_CFG1_ADIV(3), //!< Clock divide by 4
 };
 
+/**
+ * Controls whether an interrupt is triggered at the end of a conversion
+ */
 enum AdcInterrupt {
    AdcInterrupt_disable = ADC_SC1_AIEN(0), //!< No interrupt on conversion complete
    AdcInterrupt_enable  = ADC_SC1_AIEN(1), //!< No interrupt on conversion complete
+};
+
+/**
+ * Select the pretrigger
+ */
+enum AdcPretrigger {
+   AdcPretrigger_A  = 0, //!< Use pretrigger A = SC1[0]/R[0]
+   AdcPretrigger_B  = 1, //!< Use pretrigger B = SC1[1]/R[1]
+};
+
+/**
+ * Select the pretrigger
+ */
+enum AdcDma {
+   AdcDma_Disable = ADC_SC2_DMAEN(0), //!< DMA disabled
+   AdcDma_Enable  = ADC_SC2_DMAEN(1), //!< DMA enabled
+};
+
+/**
+ *  Input sample interval. Long sample times allow the use of higher input impedance sources
+ */
+enum AdcSample {
+   AdcSample_Normal  = ADC_CFG1_ADLSMP(0),                    //!< Normal sample interval
+   AdcSample_2       = ADC_CFG1_ADLSMP(1)|ADC_CFG2_ADLSTS(3), //!< Extra 2 sample clocks (6 clocks total)
+   AdcSample_6       = ADC_CFG1_ADLSMP(1)|ADC_CFG2_ADLSTS(2), //!< Extra 6 sample clocks (10 clocks total)
+   AdcSample_12      = ADC_CFG1_ADLSMP(1)|ADC_CFG2_ADLSTS(1), //!< Extra 12 sample clocks (16 clocks total)
+   AdcSample_20      = ADC_CFG1_ADLSMP(1)|ADC_CFG2_ADLSTS(0), //!< Extra 20 sample clocks (24 clocks total)
+};
+
+/**
+ * Selects between A/B multiplexor inputs on some ADC channels
+ */
+enum AdcMuxsel {
+   AdcMuxsel_A  = ADC_CFG2_MUXSEL(0), //!< The multiplexor selects A channels
+   AdcMuxsel_B  = ADC_CFG2_MUXSEL(1), //!< The multiplexor selects B channels
+};
+
+/**
+ * Allows reduced power consumption but with restricted input clock speed
+ */
+enum AdcPower {
+   AdcPower_Normal  = ADC_CFG1_ADLPC(0), //!< Normal power operation
+   AdcPower_Lowl    = ADC_CFG1_ADLPC(1), //!< Low power operation
+};
+
+/**
+ * Allows higher input clock speed operation.\n
+ * This actually extends the number of conversion clock cycles but is offset by allowing a faster input clock.
+ */
+enum AdcClockRange {
+   AdcClockRange_normal = ADC_CFG2_ADHSC(0), //!< Normal input clock range
+   AdcClockRange_high   = ADC_CFG2_ADHSC(1), //!< Higher speed input clock range selected
+};
+
+/**
+ * Controls whether the internal ADC clock is always enabled.\n
+ * In any case, if internal clock is selected for use by the converter (AdcClockSource_Asynch) then\n
+ * it will be enabled when needed for a conversion but with an extended conversion time.\n
+ * If always enable this startup delay is avoided and the clock may be use by other peripherals.
+ */
+enum AdcAsyncClock {
+   AdcAsyncClock_disabled = ADC_CFG2_ADACKEN(0), //!< ADC Asynchronous clock enable on demand.
+   AdcAsyncClock_enabled  = ADC_CFG2_ADACKEN(0), //!< ADC Asynchronous clock always enabled
+};
+
+/**
+ * Selects between single and continuous conversions
+ */
+enum AdcContinuous {
+   AdcContinuous_Disabled = ADC_SC3_ADCO(0), //!< Normal operation i.e. a single conversion will be done when triggered.
+   AdcContinuous_Enabled  = ADC_SC3_ADCO(1), //!< Continuous conversions enabled i.e. a continuous sequence of conversion will e triggered.
+};
+
+/**
+ * Controls the ADC compare function
+ */
+enum AdcCompare {
+   AdcCompare_Disabled              = ADC_SC2_ACFE(0),                                          //!< Comparisons disabled
+
+   AdcCompare_LessThan              = ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(0)|ADC_SC2_ACREN(0),        //!< Value < cv1
+   AdcCompare_GreaterThan           = ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(1)|ADC_SC2_ACREN(0),        //!< Value >= cv1
+
+   AdcCompare_OutsideRangeExclusive = (0<<8)|ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(0)|ADC_SC2_ACREN(1), //!< cv1<=cv2 => (Value < cv1) || (Value > cv2)
+   AdcCompare_InsideRangeExclusive  = (1<<8)|ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(0)|ADC_SC2_ACREN(1), //!< cv1>cv2  =>   cv2 < value < cv1
+   AdcCompare_InsideRangeInclusive  = (0<<8)|ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(1)|ADC_SC2_ACREN(1), //!< cv1<=cv2 =>   cv1 <= value <= cv2
+   AdcCompare_OutsideRangeInclusive = (1<<8)|ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(1)|ADC_SC2_ACREN(1), //!< cv1>cv2  => (Value <= cv2) || (Value >= cv1)
 };
 
 /**
@@ -169,6 +261,38 @@ public:
    }
 
    /**
+    * Initialise ADC
+    *
+    * @param[in] adcResolution   Resolution for converter e.g. AdcResolution_16bit_se
+    * @param[in] adcClockSource  Clock source e.g. AdcClockSource_Asynch
+    * @param[in] adcClockDivider Clock divider e.g. AdcClockDivider_4
+    * @param[in] adcSample       Input sample interval. Allows use of higher input impedance sources
+    * @param[in] adcPower        Allows reduced power consumption but with restricted input clock speed
+    * @param[in] adcMuxsel       Selects between A/B multiplexor inputs on channels 4-8
+    * @param[in] adcClockRange   Allows higher input clock speed operation
+    * @param[in] adcAsyncClock   Controls whether the internal ADC clock is always enabled or only when needed for a conversion
+    *
+    * @note These settings apply to all channels on the ADC.\n
+    * The resulting ADC clock rate should be restricted to the following ranges (assumes AdcPower_Normal, AdcClockRange_high):\n
+    *  [2..12MHz] for 16-bit conversion modes  \n
+    *  [1..18MHz] for other conversion modes
+    */
+   static void __attribute__((always_inline)) configure(
+         AdcResolution   adcResolution,
+         AdcClockSource  adcClockSource  = AdcClockSource_Asynch,
+         AdcClockDivider adcClockDivider = AdcClockDivider_1,
+         AdcSample       adcSample       = AdcSample_Normal,
+         AdcPower        adcPower        = AdcPower_Normal,
+         AdcMuxsel       adcMuxsel       = AdcMuxsel_B,
+         AdcClockRange   adcClockRange   = AdcClockRange_high,
+         AdcAsyncClock   adcAsyncClock   = AdcAsyncClock_disabled
+         ) {
+      enable();
+      adc->CFG1 = adcResolution|adcClockSource|adcClockDivider|adcPower|(adcSample&ADC_CFG1_ADLSMP_MASK);
+      adc->CFG2 = adcMuxsel|adcClockRange|adcAsyncClock|(adcSample&ADC_CFG2_ADLSTS_MASK);
+   }
+
+   /**
     * Initialise ADC to default settings\n
     * Configures all ADC pins
     */
@@ -220,7 +344,7 @@ public:
     *
     * @note This affects all channels on the ADC
     */
-   static __attribute__((always_inline)) void setResolution(AdcResolution adcResolution = AdcResolution_16bit_se) {
+   static __attribute__((always_inline)) void setResolution(AdcResolution adcResolution) {
       adc->CFG1 = (adc->CFG1&~ADC_CFG1_MODE_MASK)|adcResolution;
    }
 
@@ -235,7 +359,7 @@ public:
     *  [2..12MHz] for 16-bit conversion modes  \n
     *  [1..18MHz] for other conversion modes
     */
-   static __attribute__((always_inline)) void setClockSource(AdcClockSource adcClockSource = AdcClockSource_Asynch, AdcClockDivider adcClockDivider=AdcClockDivider_1) {
+   static __attribute__((always_inline)) void setClockSource(AdcClockSource adcClockSource, AdcClockDivider adcClockDivider=AdcClockDivider_1) {
       adc->CFG1 = (adc->CFG1&~(ADC_CFG1_ADIV_MASK|ADC_CFG1_ADICLK_MASK))|adcClockSource|adcClockDivider;
    }
 
@@ -244,7 +368,7 @@ public:
     *
     * @param[in] enable true to enable clock, false to disable
     *
-    * @note It is not necessary to enable the internal clock to use it as a clock source.\n
+    * @note It is not necessary to enable the internal clock to use it as an ADC clock source.\n
     *       If the internal clock is selected, it will be automatically enabled when an ADC conversion is initiated.\n
     *       However, enabling it beforehand will reduce the latency of the 1st conversion in a sequence.
     */
@@ -264,46 +388,132 @@ public:
     *
     * @note This affects all channels on the ADC
     */
-   static __attribute__((always_inline)) void setAveraging(AdcAveraging adcAveraging = AdcAveraging_4) {
+   static __attribute__((always_inline)) void setAveraging(AdcAveraging adcAveraging) {
       adc->SC3 = (adc->SC3&~(ADC_SC3_AVGE_MASK|ADC_SC3_AVGS_MASK))|adcAveraging;
+   }
+
+   /* ADC calibrate
+    *
+    * Calibrates the ADC
+    *
+    * @note Set up the ADC clock and resolution before calibration
+    *
+    * @return E_NO_ERROR       Calibration successful
+    * @return E_CALIBRATE_FAIL Failed calibration
+    */
+   static ErrorCode calibrate() {
+
+      // Save current SC3 as modified
+      uint8_t sc3 = adc->SC3;
+
+      // Start calibration
+      setAveraging(AdcAveraging_Cal);
+
+      // Wait for calibration to complete
+      while (adc->SC3 & ADC_SC3_CAL_MASK) {
+         __asm__("nop");
+      }
+
+      bool failed = adc->SC3 & ADC_SC3_CALF_MASK;
+
+      // Restore original SC3 value
+      adc->SC3 = sc3;
+
+      // Check calibration outcome
+      if(failed) {
+         // Failed calibration
+         return setErrorCode(E_CALIBRATE_FAIL);
+      }
+
+      // Calibration factor
+      uint16_t calib;
+
+      calib = adc->CLPS + adc->CLP4 + adc->CLP3 + adc->CLP2 + adc->CLP1 + adc->CLP0;
+      calib /= 2;
+      calib |= (1<<15);  // Set MSB
+      adc->PG = calib;
+
+      calib = 0;
+      calib += adc->CLMS + adc->CLM4 + adc->CLM3 + adc->CLM2 + adc->CLM1 + adc->CLM0;
+      calib /= 2;
+      calib |= (1<<15);  // Set MSB
+      adc->MG = calib;
+
+      return E_NO_ERROR;
+   }
+   /**
+    * Configure comparison mode
+    *
+    * @param[in] adcCompare   Comparison operation to enable
+    * @param[in] low          Lower threshold
+    * @param[in] high         Higher threshold (if needed)
+    */
+   static void enableComparison(AdcCompare adcCompare, int low=INT_MIN, int high=INT_MAX) {
+#ifdef DEBUG_BUILD
+      assert (low<=high);
+#endif
+      // Juggle CV1, CV2 values to satisfy comparison rules
+      switch (adcCompare) {
+         case AdcCompare_Disabled:
+            break;
+         case AdcCompare_LessThan:
+         case AdcCompare_GreaterThan:
+            adc->CV1 = low;
+            break;
+         case AdcCompare_OutsideRangeExclusive:
+         case AdcCompare_InsideRangeInclusive:
+            adc->CV1 = low;
+            adc->CV2 = high;
+            break;
+         case AdcCompare_InsideRangeExclusive:
+         case AdcCompare_OutsideRangeInclusive:
+            adc->CV1 = high;
+            adc->CV2 = low;
+            break;
+      }
+      // Set comparison fields
+      adc->SC2 |= (adc->SC2&~(ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(1)|ADC_SC2_ACREN(1)))|
+            (adcCompare&(ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(1)|ADC_SC2_ACREN(1)));
    }
 
 protected:
    /**
-    * Enables hardware trigger mode of operation and configures a channel
+    * Enables hardware trigger mode of operation and configures the channel
     *
-    * @param[in] hardwareTrigger Hardware trigger to use for this channel\n
+    * @param[in] sc1Value        SC1 register value including the ADC channel, Differential mode and interrupt enable
+    * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel\n
     *                            This corresponds to pre-triggers in the PDB channels and SC1[n] register setups
-    * @param[in] sc1Value        SC1 register value including the ADC channel to use
+    * @param[in] adcDma          Whether to generate a DMA request when each conversion completes
     */
-   static void enableHardwareConversion(int hardwareTrigger, int sc1Value) {
+   static void enableHardwareConversion(int sc1Value, AdcPretrigger adcPretrigger, AdcDma adcDma) {
       // Set hardware triggers
-      adc->SC2 |= ADC_SC2_ADTRG(1);
+      adc->SC2 = (adc->SC2)|ADC_SC2_ADTRG(1)|adcDma;
       // Configure channel for hardware trigger input
-      adc->SC1[hardwareTrigger] = sc1Value;
+      adc->SC1[adcPretrigger] = sc1Value;
    }
 
    /**
-    * Initiates a conversion but does not wait for it to complete.\n
-    * Intended for use with interrupts so ADC interrupts are enabled
+    * Initiates a conversion but does not wait for it to complete.
     *
-    * @param[in] sc1Value     SC1 register value including the ADC channel to use
-    * @param[in] continuous   If true select continuous conversion mode
+    * @param[in] sc1Value       SC1 register value. This includes channel, differential mode and interrupts enable.
+    * @param[in] adcContinuous  Select continuous conversion mode
     *
     * @return E_NO_ERROR on success
     */
-   static __attribute__((always_inline)) ErrorCode startConversion(const int sc1Value, bool continuous) {
-      if (!Info::irqHandlerInstalled) {
+   static __attribute__((always_inline)) ErrorCode startConversion(const int sc1Value, AdcContinuous adcContinuous) {
+
+      if ((sc1Value&&ADC_SC1_AIEN_MASK) && !Info::irqHandlerInstalled) {
+         // Enabling interrupts without a handler installed in vector table
          return setErrorCode(E_NO_HANDLER);
       }
-      if (continuous) {
+      if (adcContinuous) {
          adc->SC3 |= ADC_SC3_ADCO_MASK;
       }
       else {
          adc->SC3 &= ~ADC_SC3_ADCO_MASK;
       }
-      // Trigger conversion with interrupts enabled
-      adc->SC1[0] = ADC_SC1_AIEN_MASK|(sc1Value&(ADC_SC1_ADCH_MASK|ADC_SC1_AIEN_MASK|ADC_SC1_DIFF_MASK));
+      // Trigger conversion
+      adc->SC1[0] = sc1Value;
 
       return E_NO_ERROR;
    };
@@ -325,6 +535,7 @@ protected:
       }
       return (int)adc->R[0];
    };
+
 };
 
 /**
@@ -376,7 +587,7 @@ template<class Info> ADCCallbackFunction AdcIrq_T<Info>::callback = AdcBase_T<In
  * Example
  * @code
  * // Instantiate the ADC channel (for ADC0 channel 6)
- * using Adc0_ch6 = USBDM::AdcChannel<Adc0Info, 6>;
+ * using Adc0_ch6 = USBDM::AdcChannel_T<Adc0Info, 6>;
  *
  * // Set ADC resolution
  * Adc0_ch6.setMode(AdcResolution_16bit_se);
@@ -389,7 +600,7 @@ template<class Info> ADCCallbackFunction AdcIrq_T<Info>::callback = AdcBase_T<In
  * @tparam channel ADC channel
  */
 template<class Info, int channel>
-class AdcChannel : public AdcBase_T<Info>, CheckSignal<Info, channel> {
+class AdcChannel_T : public AdcBase_T<Info>, CheckSignal<Info, channel> {
 
 public:
    /** Channel number */
@@ -398,30 +609,32 @@ public:
    /**
     * Enables hardware trigger mode of operation and configures a channel
     *
-    * @param[in] hardwareTrigger Hardware trigger to use for this channel\n
-    *                            This corresponds to pre-triggers in the PDB channels and SC1[n] register setups
-    * @param[in] enableInterrupt Whether to generate interrupt when complete
+    * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel\n
+    *                            This corresponds to pre-triggers in the PDB channels and SC1[n]/R[n] register selection
+    * @param[in] enableInterrupt Whether to generate an interrupt when each conversion completes
+    * @param[in] adcDma          Whether to generate a DMA request when each conversion completes
     */
-   static void enableHardwareConversion(int hardwareTrigger, AdcInterrupt enableInterrupt=AdcInterrupt_disable) {
-      AdcBase_T<Info>::enableHardwareConversion(hardwareTrigger, ADC_SC1_ADCH(channel)|enableInterrupt);
+   static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt enableInterrupt=AdcInterrupt_disable, AdcDma adcDma=AdcDma_Disable) {
+      AdcBase_T<Info>::enableHardwareConversion(channel|enableInterrupt, adcPretrigger, adcDma);
    }
 
    /**
-    * Initiates a conversion but does not wait for it to complete.\n
-    * Intended for use with interrupts so ADC interrupts are enabled
+    * Initiates a conversion but does not wait for it to complete.
     *
-    * @param[in] continuous   If true select continuous conversion mode
+    * @param[in] adcInterrupt   Determines if an interrupt is generated when conversions are complete
+    * @param[in] adcContinuous  Select continuous conversion mode
     */
-   static __attribute__((always_inline)) void startConversion(bool continuous=false) {
-      AdcBase_T<Info>::startConversion(ADC_SC1_ADCH(channel), continuous);
+   static __attribute__((always_inline)) void startConversion(AdcInterrupt adcInterrupt=AdcInterrupt_disable, AdcContinuous adcContinuous=AdcContinuous_Disabled) {
+      AdcBase_T<Info>::startConversion(channel|adcInterrupt, adcContinuous);
    };
+
    /**
     * Initiates a conversion and waits for it to complete
     *
     * @return - the result of the conversion
     */
    static __attribute__((always_inline)) uint32_t readAnalogue() {
-      return AdcBase_T<Info>::readAnalogue(ADC_SC1_ADCH(channel));
+      return AdcBase_T<Info>::readAnalogue(channel);
    };
 };
 
@@ -444,7 +657,7 @@ public:
  * @tparam channel ADC channel
  */
 template<class Info, int channel>
-class AdcDiffChannel : public AdcBase_T<Info>, CheckSignal<typename Info::InfoDP, channel>, CheckSignal<typename Info::InfoDM, channel> {
+class AdcDiffChannel_T : public AdcBase_T<Info>, CheckSignal<typename Info::InfoDP, channel>, CheckSignal<typename Info::InfoDM, channel> {
 
 public:
    /** Channel number */
@@ -453,22 +666,24 @@ public:
    /**
     * Enables hardware trigger mode of operation and configures a channel
     *
-    * @param[in] hardwareTrigger Hardware trigger to use for this channel\n
+    * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel\n
     *                            This corresponds to pre-triggers in the PDB channels and SC1[n] register setups
-    * @param[in] enableInterrupt Whether to generate interrupt when complete
+    * @param[in] adcInterrupt    Whether to generate interrupt when complete
+    * @param[in] adcDma          Whether to generate a DMA request when each conversion completes
     */
-   static void enableHardwareConversion(int hardwareTrigger, AdcInterrupt enableInterrupt=AdcInterrupt_disable) {
-      AdcBase_T<Info>::enableHardwareConversion(ADC_SC1_ADCH(channel)|ADC_SC1_DIFF_MASK, channel|enableInterrupt);
+   static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt adcInterrupt=AdcInterrupt_disable, AdcDma adcDma=AdcDma_Disable) {
+      AdcBase_T<Info>::enableHardwareConversion(channel|ADC_SC1_DIFF_MASK|adcInterrupt, adcPretrigger, adcDma);
    }
 
    /**
     * Initiates a conversion but does not wait for it to complete.\n
     * Intended for use with interrupts so ADC interrupts are enabled
     *
-    * @param[in] continuous   If true select continuous conversion mode
+    * @param[in] adcInterrupt   Determines if an interrupt is generated when conversions are complete
+    * @param[in] adcContinuous  Select continuous conversion mode
     */
-   static __attribute__((always_inline)) void startConversion(bool continuous=false) {
-      AdcBase_T<Info>::startConversion(ADC_SC1_ADCH(channel)|ADC_SC1_DIFF_MASK, continuous);
+   static __attribute__((always_inline)) void startConversion(AdcInterrupt adcInterrupt=AdcInterrupt_disable, AdcContinuous adcContinuous=AdcContinuous_Disabled) {
+      AdcBase_T<Info>::startConversion(channel|ADC_SC1_DIFF_MASK|adcInterrupt, adcContinuous);
    };
    /**
     * Initiates a conversion and waits for it to complete
@@ -476,7 +691,7 @@ public:
     * @return - the result of the conversion
     */
    static __attribute__((always_inline)) int32_t readAnalogue() {
-      return AdcBase_T<Info>::readAnalogue(ADC_SC1_ADCH(channel)|ADC_SC1_DIFF_MASK);
+      return AdcBase_T<Info>::readAnalogue(channel|ADC_SC1_DIFF_MASK);
    };
 };
 
@@ -499,9 +714,9 @@ public:
  * @tparam channel ADC channel
  */
 template<int channel>
-class Adc0Channel : public AdcChannel<Adc0Info, channel> {
+class Adc0Channel : public AdcChannel_T<Adc0Info, channel> {
 };
-//template<int channel> using Adc0Channel = AdcChannel<Adc0Info, channel>;
+//template<int channel> using Adc0Channel = AdcChannel_T<Adc0Info, channel>;
 
 /**
  * Template class representing an ADC0 differential channel
@@ -521,9 +736,9 @@ class Adc0Channel : public AdcChannel<Adc0Info, channel> {
  * @tparam channel ADC channel
  */
 template<int channel>
-class Adc0DiffChannel : public AdcDiffChannel<Adc0Info, channel> {
+class Adc0DiffChannel : public AdcDiffChannel_T<Adc0Info, channel> {
 };
-//template<int channel> using Adc0DiffChannel = AdcDiffChannel<Adc0Info, channel>;
+//template<int channel> using Adc0DiffChannel = AdcDiffChannel_T<Adc0Info, channel>;
 
 /**
  * Class representing ADC0
@@ -550,9 +765,9 @@ using Adc0 = AdcIrq_T<Adc0Info>;
  * @tparam channel ADC channel
  */
 template<int channel>
-class Adc1Channel : public AdcChannel<Adc1Info, channel> {
+class Adc1Channel : public AdcChannel_T<Adc1Info, channel> {
 };
-//template<int channel> using Adc1Channel = AdcChannel<Adc1Info, channel>;
+//template<int channel> using Adc1Channel = AdcChannel_T<Adc1Info, channel>;
 
 /**
  * Template class representing an ADC1 differential channel
@@ -572,9 +787,9 @@ class Adc1Channel : public AdcChannel<Adc1Info, channel> {
  * @tparam channel ADC channel
  */
 template<int channel>
-class Adc1DiffChannel : public AdcDiffChannel<Adc1Info, channel> {
+class Adc1DiffChannel : public AdcDiffChannel_T<Adc1Info, channel> {
 };
-//template<int channel> using Adc1DiffChannel = AdcDiffChannel<Adc01Info, channel>;
+//template<int channel> using Adc1DiffChannel = AdcDiffChannel_T<Adc01Info, channel>;
 
 /**
  * Class representing ADC1

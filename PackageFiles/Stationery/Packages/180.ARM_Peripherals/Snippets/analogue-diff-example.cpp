@@ -19,11 +19,16 @@ using namespace USBDM;
  */
 
 // Connection mapping - change as required
+// Note - many actions on the channel affect the entire ADC
 using adcChannel = Adc0DiffChannel<0>;
 
 int main(void) {
-   // Enable ADC
-   adcChannel::configure();
+
+   // Enable and configure ADC
+   adcChannel::configure(AdcResolution_16bit_se);
+
+   // Calibrate before use
+   adcChannel::calibrate();
 
    // May change default resolution e.g.
 //   adcChannel::setResolution(USBDM::AdcResolution_8bit_se);

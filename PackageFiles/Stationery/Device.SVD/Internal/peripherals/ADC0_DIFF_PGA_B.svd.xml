@@ -746,18 +746,18 @@ Enables continuous conversions or sets of conversions (when averaging) after an 
                   <field>
                      <name>CAL</name>
                      <description>Calibration\n
-Begins the calibration sequence when set</description>
+Write 1 to begins the calibration sequence, clears when complete</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Calibration busy</description>
+                           <description>Calibration idle</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Calibration idle</description>
+                           <description>Calibration busy</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

@@ -47,19 +47,20 @@ int main(void) {
    // Do not delete this banner - otherwise putchar() macro breaks.
    printf("Starting\n");
 
-   // Enable ADC
-   adc::configure();
+   // Enable and configure ADC
+   adc::configure(AdcResolution_8bit_se);
+
+   // Calibrate before use
+   adc::calibrate();
 
    // Note: Setting callback affects all channels on that ADC
    adc::setCallback(handler);
 
-   // May change resolution e.g.
-   adcChannel::setResolution(USBDM::AdcResolution_8bit_se);
-
-   adcChannel::startConversion();
-
    // Check for error so far
    checkError();
+
+   // Start a conversion
+   adcChannel::startConversion();
 
    for(;;) {
    }

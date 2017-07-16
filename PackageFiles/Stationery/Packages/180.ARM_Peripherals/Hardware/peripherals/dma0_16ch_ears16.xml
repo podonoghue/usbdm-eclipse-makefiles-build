@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"
+?>
+<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!-- dma0_16ch_ears16.xml -->
+
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="dma0_base.xml"/>
+</fragment>

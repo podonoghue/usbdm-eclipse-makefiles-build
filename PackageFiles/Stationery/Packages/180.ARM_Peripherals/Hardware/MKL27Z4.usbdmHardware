@@ -39,7 +39,7 @@
          <irq num="DAC0_IRQn" />
       </peripheral>
       <peripheral baseName="DMA"      instance="0"        version="dma0_mkl">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDma" />
          <clock reg="SCGC7"         mask="SIM_SCGC7_DMA_MASK" />
       </peripheral>
       <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_4ch">

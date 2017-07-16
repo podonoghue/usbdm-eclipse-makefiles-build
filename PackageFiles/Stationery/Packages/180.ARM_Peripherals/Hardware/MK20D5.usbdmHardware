@@ -65,13 +65,17 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForConsole" />
       </peripheral>
       <peripheral baseName="DMA"      instance="0"        version="dma0_4ch">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDma" />
          <clock reg="SCGC7"         mask="SIM_SCGC7_DMA_MASK" />
+         <irq num="DMA0_IRQn" />
+         <irq num="DMA1_IRQn" />
+         <irq num="DMA2_IRQn" />
+         <irq num="DMA3_IRQn" />
+         <param key="NumChannels"   value="4" />
       </peripheral>
-      <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_4ch_trig">
+      <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_4ch_trig_mk20d5">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDmaMux" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_DMAMUX0_MASK" />
-         <param key="numChannels"   value="4" />
          <dma>
             <slot source="Disabled"             num="0" />
             <slot source="UART0_Receive"        num="2" />

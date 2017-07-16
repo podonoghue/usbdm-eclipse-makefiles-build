@@ -30,7 +30,7 @@ namespace USBDM {
 typedef void (*PDBCallbackFunction)();
 
 /**
- * Select the PDB clock pre-scale which affect counter speed
+ * Select the PDB clock pre-scale which affects counter speed
  */
 enum PdbPrescale {
    PdbPrescale_1      = PDB_SC_PRESCALER(0),   //!< Divide by 1
@@ -54,7 +54,7 @@ enum PdbMultiplier {
 };
 
 /**
- * Select the PDB Trigger source
+ * Selects the PDB Trigger source
  */
 enum PdbTrigger {
    PdbTrigger_External     = PDB_SC_TRGSEL(0),   //!< External Trigger Source PDBx_EXTRG
@@ -89,44 +89,44 @@ enum PdbLoadMode {
  * Controls whether the PDB interrupt is enabled
  */
 enum PdbInterrupt {
-   PdbInterrupt_Disable = PDB_SC_PDBIE(0),               // Sequence interrupt disabled
-   PdbInterrupt_Enable  = PDB_SC_PDBIE(1),               // Sequence interrupt enabled
+   PdbInterrupt_Disable = PDB_SC_PDBIE(0),  //!< Sequence interrupt disabled
+   PdbInterrupt_Enable  = PDB_SC_PDBIE(1),  //!< Sequence interrupt enabled
 };
 
 /**
  * Controls whether the PDB operates in one-shot or continuous mode
  */
 enum PdbMode {
-   PdbMode_OneShot    = PDB_SC_CONT(0),                  // Sequence runs once only
-   PdbMode_Continuous = PDB_SC_CONT(1),                  // Sequence runs continuously
+   PdbMode_OneShot    = PDB_SC_CONT(0),  //!< Sequence runs once only
+   PdbMode_Continuous = PDB_SC_CONT(1),  //!< Sequence runs continuously once triggered
 };
 
 /**
- * Controls whether the PDB generates interrupt requests
+ * Controls whether the PDB generates DMA requests
  */
 enum PdbDma {
-   PdbDma_Disable  = PDB_SC_CONT(0),                  // DMA is disabled
-   PdbDma_Enable   = PDB_SC_CONT(1),                  // DMA enabled
+   PdbDma_Disable  = PDB_SC_CONT(0),  //!< DMA is disabled
+   PdbDma_Enable   = PDB_SC_CONT(1),  //!< DMA enabled
 };
 
 /**
  * Controls whether the PDB error interrupt is enabled
  */
 enum PdbErrorInterrupt {
-   PdbErrorInterrupt_Disable = PDB_SC_PDBEIE(0),         // Sequence interrupt disabled
-   PdbErrorInterrupt_Enable  = PDB_SC_PDBEIE(1),         // Sequence interrupt enabled
+   PdbErrorInterrupt_Disable = PDB_SC_PDBEIE(0),   //!< Sequence error disabled
+   PdbErrorInterrupt_Enable  = PDB_SC_PDBEIE(1),   //!< Sequence error enabled
 };
 
 enum PdbPretrigger0 {
-   PdbPretrigger0_Disable = PDB_C1_EN(0<<0),                   // Pretrigger 0 disabled
-   PdbPretrigger0_Bypass = PDB_C1_EN(1<<0)|PDB_C1_TOS(0<<0),  // Pretrigger 0 asserts 1 clock after trigger
-   PdbPretrigger0_Delay  = PDB_C1_EN(1<<0)|PDB_C1_TOS(1<<0),  // Pretrigger 0 asserts 1 clock + delay after trigger
+   PdbPretrigger0_Disable = PDB_C1_EN(0<<0),                   //!< Pretrigger 0 disabled
+   PdbPretrigger0_Bypass  = PDB_C1_EN(1<<0)|PDB_C1_TOS(0<<0),  //!< Pretrigger 0 asserts 1 clock after trigger
+   PdbPretrigger0_Delay   = PDB_C1_EN(1<<0)|PDB_C1_TOS(1<<0),  //!< Pretrigger 0 asserts 1 clock + delay after trigger
 };
 
 enum PdbPretrigger1 {
-   PdbPretrigger1_Disable = PDB_C1_EN(0<<1),                   // Pretrigger 0 disabled
-   PdbPretrigger1_Bypass  = PDB_C1_EN(1<<1)|PDB_C1_TOS(0<<1),  // Pretrigger 0 asserts 1 clock after trigger
-   PdbPretrigger1_Delay   = PDB_C1_EN(1<<1)|PDB_C1_TOS(1<<1),  // Pretrigger 0 asserts 1 clock + delay after trigger
+   PdbPretrigger1_Disable = PDB_C1_EN(0<<1),                   //!< Pretrigger 1 disabled
+   PdbPretrigger1_Bypass  = PDB_C1_EN(1<<1)|PDB_C1_TOS(0<<1),  //!< Pretrigger 1 asserts 1 clock after trigger
+   PdbPretrigger1_Delay   = PDB_C1_EN(1<<1)|PDB_C1_TOS(1<<1),  //!< Pretrigger 1 asserts 1 clock + delay after trigger
 };
 
 template <class Info>
@@ -148,9 +148,10 @@ public:
    }
 
    /**
-    * Enable PDB\n
+    * Enables PDB and sets to default configuration.
+    *
     * Includes enabling clock and any pins used.\n
-    * Sets PDB to default configuration
+    * Sets PDB to default configuration.
     */
    static void configure() {
       enable();
@@ -198,7 +199,7 @@ public:
    /**
     * Calculate interval in ticks
     *
-    * @param[in] period          Required period
+    * @param[in] period  Required period in seconds
     *
     * @return Number of tick corresponding to the period
     *
@@ -217,18 +218,17 @@ public:
    }
 
    /**
-    * Get 'best' dividers for given period.\n
-    * This involves finding the smallest prescaler that allows the PDB period \n
-    * to be set to greater than the given period.\n
+    * Get 'best' dividers for given period.
+    * This involves finding the smallest prescaler that allows the PDB period to be set to greater
+    * than the given period.\n
     * This produces the highest resolution.\n
-    * It is quite possible that other values would be more suitable for a particular application.\n
-    * For example, carefully chosen prescalers may result in less rounding for the needed intermediate points \n
-    * for pulse outputs etc.
+    * It is quite possible that other values would be more suitable for a particular application.
+    * For example, carefully chosen prescalers may result in less rounding for the needed intermediate
+    * points for pulse outputs etc.
     *
     * @param[in]  period          Period in seconds as a float
     * @param[out] multValue       Determined pdb_sc_mult value
     * @param[out] prescaleValue   Determined pdb_sc_prescaler value
-    * @param[out] mod             Calculated pdb_mod
     *
     * @return E_NO_ERROR  => success
     * @return E_ERROR     => failed to find suitable values
@@ -277,11 +277,11 @@ public:
     * Sets period to given value.
     *
     * It attempts to get 'best' dividers for given period.\n
-    * This involves finding the smallest prescaler that allows the PDB period \n
+    * This involves finding the smallest prescaler that allows the PDB period
     * to be set to greater than the given period.\n
     * This produces the highest resolution.\n
-    * It is quite possible that other values would be more suitable for a particular application.\n
-    * For example, carefully chosen prescalers may result in less rounding for the needed intermediate points \n
+    * It is quite possible that other values would be more suitable for a particular application.
+    * For example, carefully chosen prescalers may result in less rounding for the needed intermediate points
     * for pulse outputs etc.
     *
     * @param[in]  period Period in seconds as a float
@@ -460,8 +460,9 @@ public:
    }
 
    /**
-    * Configures the pretriggers associated with a channel\n
-    * Each pretrigger corresponds to an ADC SC1[n] R[n] register pair used in hardware triggered mode i.e.\n
+    * Configures the pretriggers associated with a channel.
+    *
+    * Each pretrigger corresponds to an ADC SC1[n] R[n] register pair used in hardware triggered mode i.e.
     * Channel X, Pretrigger Y => adcX_sc1[Y], adc0_r[Y].
     * For example:
     *   Channel 0, Pretrigger 0 => adc0_sc1[0], adc0_r[0]
@@ -471,9 +472,9 @@ public:
     *
     * @param[in] channel         Channel to affect
     * @param[in] pdbPretrigger0  Pretrigger mode for pretrigger 0
-    * @param[in] delay0          Delay for pretrigger 0
+    * @param[in] delay0          Delay for pretrigger 0 in ticks
     * @param[in] pdbPretrigger1  Pretrigger mode for pretrigger 1
-    * @param[in] delay1          Delay for pretrigger 1
+    * @param[in] delay1          Delay for pretrigger 1 in ticks
     */
    static void setPretriggersInTicks(int channel,
          PdbPretrigger0 pdbPretrigger0=PdbPretrigger0_Bypass,  uint16_t delay0=0,
@@ -484,8 +485,9 @@ public:
       pdb->CH[channel].DLY[1] = delay1;
    }
    /**
-    * Configures the pretriggers associated with a channel\n
-    * Each pretrigger corresponds to an ADC SC1[n] R[n] register pair used in hardware triggered mode i.e.\n
+    * Configures the pretriggers associated with a channel.
+    *
+    * Each pretrigger corresponds to an ADC SC1[n] R[n] register pair used in hardware triggered mode i.e.
     * Channel X, Pretrigger Y => adcX_sc1[Y], adc0_r[Y].
     * For example:
     *   Channel 0, Pretrigger 0 => adc0_sc1[0], adc0_r[0]
@@ -495,12 +497,12 @@ public:
     *
     * @param[in] channel         Channel to affect
     * @param[in] pdbPretrigger0  Pretrigger mode for pretrigger 0
-    * @param[in] delay0          Delay for pretrigger 0
+    * @param[in] delay0          Delay for pretrigger 0 in seconds
     * @param[in] pdbPretrigger1  Pretrigger mode for pretrigger 1
-    * @param[in] delay1          Delay for pretrigger 1
+    * @param[in] delay1          Delay for pretrigger 1 in seconds
     */
    static void setPretriggers(int channel,
-         PdbPretrigger0 pdbPretrigger0,                         float delay0,
+         PdbPretrigger0 pdbPretrigger0,                        float delay0,
          PdbPretrigger1 pdbPretrigger1=PdbPretrigger1_Disable, float delay1=0.0) {
 
       pdb->CH[channel].C1     = pdbPretrigger0|pdbPretrigger1;

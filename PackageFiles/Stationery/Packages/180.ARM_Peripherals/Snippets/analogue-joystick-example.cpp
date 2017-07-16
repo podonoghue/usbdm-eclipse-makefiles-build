@@ -22,18 +22,20 @@ using namespace USBDM;
  */
 
 // Connection mapping - change as required
+using adc = USBDM::Adc0;
 using JOYSTICK_X = $(demo.cpp.joystick.x:USBDM::Adc0Channel<0>);
 using JOYSTICK_Y = $(demo.cpp.joystick.y:USBDM::Adc0Channel<3>);
 using JOYSTICK_K = $(demo.cpp.joystick.k:USBDM::GpioC<3>);
 
 int main(void) {
-   JOYSTICK_X::configure();
-   JOYSTICK_Y::configure();
-   JOYSTICK_K::setInput();
 
-   // May change default resolution e.g.
-   JOYSTICK_X::setResolution(USBDM::AdcResolution_8bit_se);
-   JOYSTICK_Y::setResolution(USBDM::AdcResolution_8bit_se);
+   // Enable and configure ADC
+   adc::configure(AdcResolution_8bit_se);
+
+   // Calibrate before use
+   adc::calibrate();
+
+   JOYSTICK_K::setInput();
 
    for(;;) {
       int  x = JOYSTICK_X::readAnalogue();

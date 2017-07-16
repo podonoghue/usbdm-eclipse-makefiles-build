@@ -20,7 +20,7 @@ using namespace USBDM;
 using Led         = GpioA<2, ActiveLow>;
 using Pdb         = Pdb0;
 using Adc         = Adc0;
-using AdcChannelX = Adc0Channel<19>;
+using AdcChannel  = Adc0Channel<19>;
 
 // Length od PDB sequence
 static constexpr float SEQ_LENGTH    = 10*ms;
@@ -81,7 +81,7 @@ static void configureAdc() {
    Adc::setCallback(adcCallback);
    Adc::enableNvicInterrupts();
 
-   AdcChannelX::enableHardwareConversion(0, AdcInterrupt_enable);
+   AdcChannel::enableHardwareConversion(0, AdcInterrupt_enable);
 }
 
 int main() {

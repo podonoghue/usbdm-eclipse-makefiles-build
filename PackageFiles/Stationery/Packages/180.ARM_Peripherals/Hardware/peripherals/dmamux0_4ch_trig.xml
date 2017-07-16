@@ -5,11 +5,7 @@
 
 <devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flash Memory Module">
 
-   <constant name="NumChannels" value="4" weak="true"/>
-
-   <aliasOption name="NumChannels" constant="true" 
-      description="Number of DMA channels" 
-      toolTip="The number of DMA channels available" />
+   <aliasOption key="/DMA0/NumChannels" displayName="NumChannels" constant="true" />
 
    <choiceOption name="dma_chcfg0"
       description="Mapping of DMA source (slot) to DMA channel" >
@@ -64,7 +60,7 @@
    
    <template><![CDATA[
       \t// Number of DMA channels implemented
-      \tstatic constexpr unsigned NumChannels = $(NumChannels);\n\n
+      \tstatic constexpr unsigned NumChannels = $(/DMA0/NumChannels);\n\n
       
       \tstatic constexpr uint8_t chcfg0_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg0));
       \tstatic constexpr uint8_t chcfg1_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg1));
@@ -72,8 +68,5 @@
       \tstatic constexpr uint8_t chcfg3_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg3));
    ]]></template>
 
-   <projectActionList id = "dmamux_files" >
-      <copy source="Project_Headers/dma-MK.h"          target="Project_Headers/dma.h"                 replace="true"  derived="true" />
-   </projectActionList>
 
 </devicePage>

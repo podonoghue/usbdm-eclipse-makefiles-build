@@ -10,12 +10,55 @@
 
 \tableofcontents
 Table of Contents
- - \ref PinSummary  \n
- - \ref GPIOExamples \n
  - \ref ADCExamples \n
+ - \ref DMAExamples \n
  - \ref FTMExamples \n
- - \ref PITExamples \n
+ - \ref GPIOExamples \n
+ - \ref LPTMRExamples \n
  - \ref PDBExamples \n
+ - \ref PinSummary  \n
+ - \ref PITExamples \n
+
+@page DMAExamples  Direct Memory Access Controller (DMAC)
+
+Convenience template for DMAC. Uses the following classes:\n
+<ul>
+<li>USBDM::DmaTcd \n
+<li>USBDM::DmaMux_T < DmaMuxInfo > \n
+<li>USBDM::Dma_T < DmaInfo > \n
+</ul>
+
+This template is an interface for the Direct Memory Access Controller hardware. \n
+
+It provides:\n
+- Definitions for channel mappings
+- Methods to configure the DMAC and DMAMUX
+
+This is a template class with static methods.\n
+<em>It cannot be instantiated.</em>
+
+<b>Examples</b>\n
+ - @ref dma-memory-example.cpp
+
+ @page GPIOExamples  General Purpose Input Output
+
+@page LPTMRExamples  Low Power Timer
+
+Convenience template for LPTMR. Uses the following classes:\n
+<ul>
+<li>USBDM::Lptmr_T < Info > \n
+</ul>
+
+This template is an interface for the Low Power Timer hardware. \n
+
+It provides:\n
+- Static pin mapping in conjunction with the configuration settings.
+
+This is a template class with static methods.\n
+<em>It cannot be instantiated.</em>
+
+<b>Examples</b>\n
+ - @ref lptmr-example.cpp
  
  @page GPIOExamples  General Purpose Input Output
 
@@ -131,8 +174,8 @@ This is a template class with static methods.\n
 Convenience template for ADC inputs. Use the following classes:\n
 <ul>
 <li>USBDM::AdcBase_T\n
-<li>USBDM::AdcChannel\n
-<li>USBDM::AdcDiffChannel\n
+<li>USBDM::AdcChannel_T\n
+<li>USBDM::AdcDiffChannel_T\n
 </ul>
 This template is an interface for the ADC input pins. \n
 
@@ -147,6 +190,7 @@ This is a template class with static methods.\n
 <em>It cannot be instantiated.</em>
 
 <b>Examples</b>\n
+ - @ref analogue-comparison-example.cpp
  - @ref analogue-diff-example.cpp
  - @ref analogue-interrupt-example.cpp
  - @ref analogue-joystick-example.cpp
@@ -370,16 +414,19 @@ This is a template class with static methods.\n
 @endcode
 
 @page Notes Notes
-  - enable()      Enables clock and cnfigures pins (if present)
-  - configure()   As above, enable() + initialises according to Configure.usbdmProject
+  - enable()      Enables clock and configures pins (if present)
+  - configure()   As above, enable() + initialises according to Configure.usbdmProject\n
+                  May have defaulted parameters to do custom configuration.
   - disable()     Disables the peripheral
 
+@example analogue-comparison-example.cpp
 @example analogue-diff-example.cpp
 @example analogue-interrupt-example.cpp
 @example analogue-joystick-example.cpp
 @example cmp.cpp
 @example digital-example1.cpp
 @example digital-example2.cpp
+@example dma-memory-example.cpp
 @example flash_programming_example.cpp
 @example ftm-ic-example.cpp
 @example ftm-oc-example.cpp

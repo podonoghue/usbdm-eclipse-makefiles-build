@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"
+?>
+<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!-- dma0_base.xml -->
+
+<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flash Memory Module">
+
+   <constant name="NumChannels" value="16" weak="true"/>
+
+   <aliasOption name="NumChannels" constant="true" 
+      description="Number of DMA channels" 
+      toolTip="The number of DMA channels available" />
+
+   <xi:include href="_irqOption.xml"/>         
+
+   <template><![CDATA[
+      \t// Number of DMA channels implemented
+      \tstatic constexpr unsigned NumChannels = $(NumChannels);\n\n
+   ]]></template>
+
+   <projectActionList id = "dma_files" >
+   dma-memory-example.cpp
+      <copy source="Project_Headers/dma-MK.h"          target="Project_Headers/dma.h"             replace="true"  derived="true" />
+      <copy source="Snippets/dma-memory-example.cpp"   target="Snippets/dma-memory-example.cpp"   replace="true"  derived="true" />
+   </projectActionList>
+
+</devicePage>

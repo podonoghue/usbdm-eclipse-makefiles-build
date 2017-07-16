@@ -232,16 +232,6 @@ public:
    }
 
    /**
-    * Check if FTM is enabled\n
-    * Just check for clock enable and clock source selection
-    *
-    * @return True => enabled
-    */
-   static __attribute__((always_inline)) bool isEnabled() {
-      return ((*clockReg & Info::clockMask) != 0) && ((tmr->SC & FTM_SC_CLKS_MASK) != 0);
-   }
-
-   /**
     * Configure Timer operation\n
     * Used to change configuration after enabling interface
     *
@@ -251,6 +241,16 @@ public:
     */
    static void configure(FtmMode ftmMode, FtmClockSource ftmClockSource=FtmClockSource_System, FtmPrescale ftmPrescale=FtmPrescale_128) {
       tmr->SC = ftmMode|ftmClockSource|ftmPrescale;
+   }
+
+   /**
+    * Check if FTM is enabled\n
+    * Just check for clock enable and clock source selection
+    *
+    * @return True => enabled
+    */
+   static __attribute__((always_inline)) bool isEnabled() {
+      return ((*clockReg & Info::clockMask) != 0) && ((tmr->SC & FTM_SC_CLKS_MASK) != 0);
    }
 
    /**
@@ -1007,7 +1007,7 @@ public:
     * @note This method has the side-effect of clearing the register update synchronisation i.e.\n
     *       pending CnV register updates are discarded.
     */
-   static __attribute__((always_inline)) void enableChannelDma(bool enable=true) {
+   static __attribute__((always_inline)) void enableDma(bool enable=true) {
       if (enable) {
          Ftm::tmr->CONTROLS[channel].CnSC |= FTM_CnSC_DMA_MASK;
       }
@@ -1154,15 +1154,6 @@ public:
     */
    static __attribute__((always_inline)) uint16_t getEventTime() {
       return Ftm::getEventTime(channel);
-   }
-
-   /**
-    * Get channel number
-    *
-    * @return Channel number (0-7)
-    */
-   static __attribute__((always_inline)) constexpr int getChannelNumber(void) {
-      return channel;
    }
 
    /**

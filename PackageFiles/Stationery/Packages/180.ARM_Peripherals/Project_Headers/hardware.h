@@ -30,6 +30,7 @@ enum ErrorCode {
    E_NO_HANDLER,        //!< No handler installed
    E_FLASH_INIT_FAILED, //!< Flash initialisation failed
    E_TERMINATED,        //!< The program has terminated
+   E_CALIBRATE_FAIL,    //!< Failed ADC calibration
 
    E_CMSIS_ERR_OFFSET = 1<<20, //!< Offset added to CMSIS error codes
 };
