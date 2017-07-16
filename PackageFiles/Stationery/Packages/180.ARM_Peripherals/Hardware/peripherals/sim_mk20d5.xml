@@ -399,7 +399,7 @@ Devices using this peripheral:
    
    <template><![CDATA[
       \t/**
-      \t * Select the ADC0 Trigger source in STOP and VLPS modes
+      \t * Select the ADC0 Trigger source in STOP and VLPS modes, or when ADC0 Alternative Trigger is active.
       \t */
       \tenum SimAdc0Trigger {
       \t   SimAdc0Trigger_PdbExTrig    = SIM_SOPT7_ADC0TRGSEL(0),   //!< External Trigger Source PDBx_EXTRG
@@ -412,32 +412,39 @@ Devices using this peripheral:
       \t   SimAdc0Trigger_PitCh3       = SIM_SOPT7_ADC0TRGSEL(7),   //!< PIT Channel 3
       \t   SimAdc0Trigger_Ftm0         = SIM_SOPT7_ADC0TRGSEL(8),   //!< FTM0 Init and Ext Trigger Outputs
       \t   SimAdc0Trigger_Ftm1         = SIM_SOPT7_ADC0TRGSEL(9),   //!< FTM1 Init and Ext Trigger Outputs
-      \t   SimAdc0Trigger_10           = SIM_SOPT7_ADC0TRGSEL(10),  //!< Reserved
-      \t   SimAdc0Trigger_11           = SIM_SOPT7_ADC0TRGSEL(11),  //!< Reserved
+      \t   SimAdc0Trigger_Ftm2         = SIM_SOPT7_ADC0TRGSEL(10),  //!< FTM2 Init and Ext Trigger Outputs (if present)
+      \t   SimAdc0Trigger_Ftm3         = SIM_SOPT7_ADC0TRGSEL(11),  //!< FTM3 Init and Ext Trigger Outputs (if present)
       \t   SimAdc0Trigger_RtcAlarm     = SIM_SOPT7_ADC0TRGSEL(12),  //!< RTC Alarm
       \t   SimAdc0Trigger_RtcSeconds   = SIM_SOPT7_ADC0TRGSEL(13),  //!< RTC Seconds
       \t   SimAdc0Trigger_Lptrm        = SIM_SOPT7_ADC0TRGSEL(14),  //!< LPTMR
       \t   SimAdc0Trigger_15           = SIM_SOPT7_ADC0TRGSEL(15),  //!< Reserved
-      \t};
+      \t};\n\n
       
       \t/**
-      \t * Select the ADC0 Alternative Trigger sources
+      \t * Select the ADC0 Alternative Trigger sources.
+      \t * If PDB is selected then Pre-trigger A/B is determined by the PDB setup
+      \t * otherwise Pre-trigger A/B is determined by this selection.
       \t */
       \tenum SimAdc0AltTrigger {
       \t   SimAdc0AltTrigger_Pdb           = SIM_SOPT7_ADC0ALTTRGEN(0),                              //!< PDB trigger
-      \t   SimAdc0AltTrigger_PreTrigger_A  = SIM_SOPT7_ADC0ALTTRGEN(1)|SIM_SOPT7_ADC0PRETRGSEL(0),   //!< Pre-trigger A
-      \t   SimAdc0AltTrigger_PreTrigger_B  = SIM_SOPT7_ADC0ALTTRGEN(1)|SIM_SOPT7_ADC0PRETRGSEL(0),   //!< Pre-trigger B
-      \t};
+      \t   SimAdc0AltTrigger_PreTrigger_A  = SIM_SOPT7_ADC0ALTTRGEN(1)|SIM_SOPT7_ADC0PRETRGSEL(0),   //!< Pre-trigger A (SC1[0])
+      \t   SimAdc0AltTrigger_PreTrigger_B  = SIM_SOPT7_ADC0ALTTRGEN(1)|SIM_SOPT7_ADC0PRETRGSEL(1),   //!< Pre-trigger B (SC1[1])
+      \t};\n\n
 
       \t/**
-      \t * Select the ADC0 Trigger source
+      \t * Select the ADC0 Trigger source\n
+      \t * 
+      \t * If PDB is selected by SimAdc0Trigger then Pre-trigger A/B is determined by the PDB setup,
+      \t * otherwise Pre-trigger A/B is determined by this parameter.\n
+      \t * For example, setAdc0Triggers(SimAdc0AltTrigger_PreTrigger_B, SimAdc0Trigger_PitCh0) will set the trigger source\n
+      \t * to PIT channel 0 and conversion will use SC1[1]/R[1]. 
       \t *
-      \t * @param[in] simAdc0Trigger     Select the ADC0 Trigger source in STOP and VLPS modes
-      \t * @param[in] simAdc0AltTrigger  Select the ADC0 Alternative Trigger sources
+      \t * @param[in] simAdc0AltTrigger  Select the ADC0 Alternative Trigger sources 
+      \t * @param[in] simAdc0Trigger     Select the ADC0 Trigger source in STOP and VLPS modes, or when ADC0 Alternative Trigger is active.
       \t */
       \tstatic void setAdc0Triggers(SimAdc0AltTrigger simAdc0AltTrigger, SimAdc0Trigger simAdc0Trigger=SimAdc0Trigger_PdbExTrig) {
       \t   sim->SOPT7 = simAdc0Trigger|simAdc0AltTrigger;
-      \t};
+      \t};\n\n
    ]]></template>
 
 </devicePage>
