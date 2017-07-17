@@ -270,7 +270,7 @@ This is a template class with static methods.\n
    // Initialise the timer with initial period in ticks and alignment
    // The tick rate is determined by the configuration
    // This affects all channels of the FTM
-   Ftm0::configure(200, USBDM::ftm_leftAlign);
+   Ftm0::configure(FtmMode_LeftAlign);
 
    // Set timer period in ticks
    // This affects all channels of the FTM
@@ -292,7 +292,7 @@ This is a template class with static methods.\n
    PwmOutput::setDutyCycle(34);
 
    // Set duty cycle as percentage (float)
-   PwmOutput::setDutyCycle(12.25f);
+   PwmOutput::setDutyCycle(12.25*percent);
 
    // Set high time in microseconds (float)
    PwmOutput::setHighTime(63*us);

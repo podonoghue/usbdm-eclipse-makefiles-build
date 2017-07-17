@@ -229,7 +229,7 @@ public:
  *
  * @code
  *  // Instantiate interface
- *  I2C_0 *i2c0 = new USBDM::I2c_T<I2cInfo>();
+ *  I2c *i2c0 = new USBDM::I2c_T<I2cInfo>();
  *
  *  // Transmit data
  *  const uint8_t txDataBuffer[] = {0x11, 0x22, 0x33, 0x44};
@@ -255,6 +255,13 @@ public:
 template<class Info> class I2c_T : public I2c {
 
 public:
+
+   // I2C SCL (clock) Pin
+   using sclGpio = GpioTable_T<Info, 0, USBDM::ActiveLow>; // Inactive is high
+   
+   // I2C SDA (data) Pin
+   using sdaGpio = GpioTable_T<Info, 1, USBDM::ActiveHigh>;
+
    /** Used by ISR to obtain handle of object */
    static I2c *thisPtr;
 
@@ -362,10 +369,6 @@ public:
     * This is useful if a slave is part-way through a transaction when the master goes away!
     */
    virtual void busHangReset() {
-
-      // GPIOs used for bit-banging
-      using sclGpio = GpioTable_T<Info, 0, USBDM::ActiveLow>; // Inactive is high
-      using sdaGpio = GpioTable_T<Info, 1, USBDM::ActiveHigh>;
 
       sclGpio::setOutput(Info::defaultPcrValue);
       sdaGpio::setInput(Info::defaultPcrValue);

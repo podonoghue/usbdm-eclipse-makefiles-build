@@ -57,7 +57,7 @@ template<> void FtmIrq_T<Ftm0Info>::irqHandler() {
 #endif
 
 int main() {
-   LED1::enable(FtmPwmHighTruePulses);
+   LED1::enable(FtmChMode_PwmHighTruePulses);
    LED1::setDriveStrength(PinDriveStrength_High);
 
    /*

@@ -61,38 +61,39 @@ namespace USBDM {
  * @brief Pins used for PWM, Input capture and Output compare
  * @{
  */
+ 
 /**
- * Controls basic operation of PWM/Input capture
+ * Control mode of operation of shared TPM counter
  */
-enum TpmChannelMode {
-   //! Capture rising edge
-   TpmInputCaptureRisingEdge  = TPM_CnSC_MS(0)|TPM_CnSC_ELS(1),
-   //! Capture falling edge
-   TpmInputCaptureFallingEdge = TPM_CnSC_MS(0)|TPM_CnSC_ELS(2),
-   //! Capture both rising and falling edges
-   TpmInputCaptureEitherEdge  = TPM_CnSC_MS(0)|TPM_CnSC_ELS(3),
-   //! Output compare operation
-   TpmOutputCompare           = TPM_CnSC_MS(1),
-   //! Toggle pin on output compare
-   TpmOutputCompareToggle     = TPM_CnSC_MS(1)|TPM_CnSC_ELS(1),
-   //! Clear pin on output compare
-   TpmOutputCompareClear      = TPM_CnSC_MS(1)|TPM_CnSC_ELS(2),
-   //! Set pin on output compare
-   TpmOutputCompareSet        = TPM_CnSC_MS(1)|TPM_CnSC_ELS(3),
-   //! PWM with high-true pulses
-   TpmPwmHighTruePulses       = TPM_CnSC_MS(2)|TPM_CnSC_ELS(2),
-   //! PWM with low-true pulses
-   TpmPwmLowTruePulses        = TPM_CnSC_MS(2)|TPM_CnSC_ELS(1),
+enum TpmMode {
+   //! Up counter: Used for left-aligned PWM, input capture and output compare modes
+   TpmMode_LeftAlign   = 0,
+   //! Up-down counter: Used for centre-aligned PWM 
+   TpmMode_CentreAlign = TPM_SC_CPWMS_MASK,
 };
 
 /**
- * Control alignment of PWM function
+ * Controls basic operation TPM channel
  */
-enum TpmMode {
-   //! Left-aligned PWM - also used for input capture and output compare modes
-   TpmMode_LeftAlign   = 0,
-   //! Centre-aligned PWM
-   TpmMode_CentreAlign = TPM_SC_CPWMS_MASK,
+enum TpmChMode {
+   //! Capture rising edge
+   TpmChMode_InputCaptureRisingEdge  = TPM_CnSC_MS(0)|TPM_CnSC_ELS(1),
+   //! Capture falling edge
+   TpmChMode_InputCaptureFallingEdge = TPM_CnSC_MS(0)|TPM_CnSC_ELS(2),
+   //! Capture both rising and falling edges
+   TpmChMode_InputCaptureEitherEdge  = TPM_CnSC_MS(0)|TPM_CnSC_ELS(3),
+   //! Output compare operation
+   TpmChMode_OutputCompare           = TPM_CnSC_MS(1),
+   //! Toggle pin on output compare
+   TpmChMode_OutputCompareToggle     = TPM_CnSC_MS(1)|TPM_CnSC_ELS(1),
+   //! Clear pin on output compare
+   TpmChMode_OutputCompareClear      = TPM_CnSC_MS(1)|TPM_CnSC_ELS(2),
+   //! Set pin on output compare
+   TpmChMode_OutputCompareSet        = TPM_CnSC_MS(1)|TPM_CnSC_ELS(3),
+   //! PWM with high-true pulses
+   TpmChMode_PwmHighTruePulses       = TPM_CnSC_MS(2)|TPM_CnSC_ELS(2),
+   //! PWM with low-true pulses
+   TpmChMode_PwmLowTruePulses        = TPM_CnSC_MS(2)|TPM_CnSC_ELS(1),
 };
 
 /**
@@ -681,26 +682,26 @@ public:
     * Enables owning FTM if not already enabled\n
     * Also see enableChannel()
     *
-    * @param mode Mode of operation for FTM e.g.FtmPwmHighTruePulses
+    * @param mode Mode of operation for FTM e.g.TpmChMode_PwmHighTruePulses
     *
     * @note Enables FTM as well
     */
-   static void enable(TpmChannelMode mode = TpmPwmHighTruePulses) {
+   static void enable(TpmChMode tpmChMode = TpmChMode_PwmHighTruePulses) {
       if (!Tpm::isEnabled()) {
          // Enable parent FTM if needed
          Tpm::enable();
       }
-      Tpm::tmr->CONTROLS[channel].CnSC = mode;
+      Tpm::tmr->CONTROLS[channel].CnSC = tpmChMode;
    }
 
    /**
     * Enable channel (and set mode)\n
     * Doesn't affect shared settings of owning Timer
     *
-    * @param mode Mode of operation for FTM e.g.FtmPwmHighTruePulses
+    * @param mode Mode of operation for FTM e.g.TpmChMode_PwmHighTruePulses
     */
-   static __attribute__((always_inline)) void enableChannel(TpmChannelMode mode = TpmPwmHighTruePulses) {
-      Tpm::tmr->CONTROLS[channel].CnSC = mode;
+   static __attribute__((always_inline)) void enableChannel(TpmChMode tpmChMode = TpmChMode_PwmHighTruePulses) {
+      Tpm::tmr->CONTROLS[channel].CnSC = tpmChMode;
    }
 
    /**

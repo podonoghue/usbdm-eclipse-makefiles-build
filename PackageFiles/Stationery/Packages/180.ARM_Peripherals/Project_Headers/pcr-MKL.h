@@ -25,6 +25,11 @@
  */
 namespace USBDM {
 
+enum Polarity {
+   ActiveLow=false,  //!< Signal is active high i.e. Active => High level, Inactive => Low level
+   ActiveHigh=true   //!< Signal is active low i.e. Active => Low level, Inactive => High level
+};
+
 /*
  * PORT clock masks
  */

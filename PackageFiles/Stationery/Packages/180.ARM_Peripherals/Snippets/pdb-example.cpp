@@ -3,7 +3,7 @@
  *
  * Programmable Delay Block (PDB) Example
  *
- * This example uses PDB software trigger to scedule an ADC conversion
+ * This example uses PDB software trigger to schedule an ADC conversion
  * Uses an LED for debug timing check.
 */
 #include <stdio.h>
@@ -22,7 +22,7 @@ using Pdb         = Pdb0;
 using Adc         = Adc0;
 using AdcChannel  = Adc0Channel<19>;
 
-// Length od PDB sequence
+// Length of PDB sequence
 static constexpr float SEQ_LENGTH    = 10*ms;
 
 // When to take ADC sample

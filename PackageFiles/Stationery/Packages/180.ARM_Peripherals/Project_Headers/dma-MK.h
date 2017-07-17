@@ -113,31 +113,43 @@ enum DmaCanPreemptLower {
 };
 
 /**
- * Transfer control descriptor
+ * @verbatim
+ * +------------------------------|            Simple DMA mode (MLNO Minor Loop Mapping Disabled)
+ * | Major Loop =                 |            ==================================================
+ * |    CITER x Minor Loop        |            Each DMA request triggers a minor-loop transfer sequence.
+ * |                              |            The minor loops are counted in the major-loop.
+ * | +--------------------------+ |<-DMA Req.
+ * | | Minor Loop               | |            The following are used during a minor loop:
+ * | | Each transfer            | |             - SADDR Source address
+ * | |   SADDR->DADDR           | |             - SOFF  Adjustment applied to SADDR after each transfer
+ * | |   SADDR += SOFF          | |             - DADDR Destination address
+ * | |   DADDR += DOFF          | |             - DOFF  Adjustment applied to DADDR after each transfer
+ * | | Total transfer is NBYTES | |             - NBYTES Number of bytes to transfer
+ * | +--------------------------+ |             - Attributes
+ * | +--------------------------+ |<-DMA Req.     - ATTR_SSIZE, ATTR_DSIZE Source and destination transfer sizes
+ * | | Minor Loop               | |               - ATTR_SMOD, ATTR_DMOD Modulo --TODO
+ * |..............................|
+ * | |                          | |             The number of reads and writes done will depend on NBYTES, SSIZE and DSIZE
+ * | +--------------------------+ |             For example: NBYTES=12, SSIZE=16-bits, DSIZE=32-bits => 6 reads, 3 writes
+ * | +--------------------------+ |<-DMA Req.   NBYTES must be an even multiple of SSIZE and DSIZE in bytes.
+ * | | Minor Loop               | |
+ * | | Each transfer            | |
+ * | |   SADDR->DADDR           | |
+ * | |   SADDR += SOFF          | |            The following are used by the major loop
+ * | |   DADDR += DOFF          | |             - SLAST Adjustment applied to SADDR after major loop
+ * | | Total transfer is NBYTES | |             - DLAST Adjustment applied to DADDR after major loop
+ * | +--------------------------+ |             - CITER Major loop counter - counts how many minor loops
+ * |                              |
+ * | At end of Major Loop         |            SLAST and DLAST may be used to reset the addresses to the initial value or
+ * |    SADDR += SLAST            |            link to the next transfer.
+ * |    DADDR += DLAST            |            The total transferred for the entire sequence is CITER x NBYTES.
+ * |                              |
+ * | Total transfer =             |
+ * |    CITER*NBYTES              |
+ * +------------------------------|
+ * @endverbatim
  *
- * This is a structure to define a DMA transfer
- *
- * Each DMA request triggers a minor-loop transfer sequence.
- * The minor loops are counted in a major-loop.
- *
- * The following are used during a minor loop transfer:
- *  - SADDR  Source address
- *  - SOFF   Adjustment applied to SADDR after each transfer
- *  - DADDR  Destination address
- *  - DOFF   Adjustment applied to DADDR after each transfer
- *  - NBYTES Number of bytes to transfer (multiple of ATTR_SSIZE and ATTR_DSIZE)
- *  - Attributes
- *    - ATTR_SSIZE Source transfer size\n
- *      ATTR_DSIZE Destination transfer size\n
- *      Multiple reads/write will occur to satisfy NBYTES
- *    - ATTR_SMOD, ATTR_DMOD Modulo --TODO
- *
- * The following are used by the major loop
- *  - SLAST Adjustment applied to SADDR after each major loop.\n
- *    Typically this would be used to reset the SADDR to the original value to re-use a source buffer for the next major loop
- *  - DLAST Adjustment applied to DADDR after each major loop, \n
- *    Typically this would be used to reset the DADDR to the original value to re-use a destination buffer for the next major loop
- *  - CITER Major loop counter - counts major loops
+ * Structure to define a DMA transfer
  */
 struct DmaTcd {
    uint32_t  SADDR;    //!< Source address
@@ -334,91 +346,6 @@ public:
       dmac->TCD[channel].BITER_ELINKNO = tcd.CITER;
    }
 
-//   struct SingleTransferInfo {
-//      const volatile void *sourceAddress;          //!< Source Address
-//      volatile void       *destinationAddress;     //!< Destination Address
-//      uint32_t             nBytes;                 //!< Transfer Size in bytes - may include minor-loop offset
-//      uint16_t             attributes;             //!< Attributes - see DMA_ATTR_SMOD etc
-//      uint16_t             sourceOffset;           //!< Signed increment applied to source address after each transfer
-//      uint16_t             destinationOffset;      //!< Signed increment applied to destination address after each transfer
-//   };
-//   struct MultipleTransferInfo {
-//      const volatile void *sourceAddress;          //!< Source Address
-//      volatile void       *destinationAddress;     //!< Destination Address
-//      uint32_t             nBytes;                 //!< Transfer Size in bytes - may include minor-loop offset
-//      uint16_t             attributes;             //!< Attributes - see DMA_ATTR_SMOD etc
-//      uint16_t             sourceOffset;           //!< Signed increment applied to source address after each transfer
-//      uint16_t             destinationOffset;      //!< Signed increment applied to destination address after each transfer
-//      uint16_t             numberOfTransactions;   //!< Number of transactions
-//   };
-//   /**
-//    * Configure channel for a single transaction
-//    */
-//   static void configure(DmaChannelNum channel, const SingleTransferInfo &information) {
-//      // Enable clock to peripheral
-//      *DmaInfo::clockReg  |= DmaInfo::clockMask;
-//
-//      // ML-offset, Debug, RR priority
-//      dmac->CR       = DMA_CR_EMLM_MASK|DMA_CR_EDBG_MASK|DMA_CR_ERCA_MASK;
-//
-//      // Enable hardware request
-//      dmac->SERQ     = channel;
-//
-//      //      if (dmaSource>0) {
-////         dmac->SERQ                     = channel; // Enable hardware request
-////      }
-////      else {
-////         dmac->CERQ                     = channel;
-////      }
-//      dmac->TCD[channel].CITER_ELINKNO  = 1;                                             // Single transaction
-//      dmac->TCD[channel].BITER_ELINKNO  = 1;                                             // Single transaction
-//      dmac->TCD[channel].NBYTES_MLNO    = information.nBytes;                            // Number of bytes to transfer
-//      dmac->TCD[channel].SADDR          = (uint32_t)information.sourceAddress;           // Source address
-//      dmac->TCD[channel].SOFF           = information.sourceOffset;                      // Increment for SADDR
-//      dmac->TCD[channel].ATTR           = information.attributes;                        // Attributes - see DMA_ATTR_SMOD etc
-//      dmac->TCD[channel].SLAST          = 0;                                             // No adjustment as single transfer
-//      dmac->TCD[channel].DADDR          = (uint32_t)information.destinationAddress;      // Destination address
-//      dmac->TCD[channel].DOFF           = information.destinationOffset;                 // Increment for DADDR
-//      dmac->TCD[channel].DLASTSGA       = 0;                                             // No adjustment as single transfer
-//      dmac->TCD[channel].CSR            = DMA_CSR_START_MASK|DMA_CSR_DREQ_MASK;
-//   }
-//   /**
-//    * Configure channel for a single transaction
-//    */
-//   static void configure(DmaChannelNum channel, const MultipleTransferInfo &information) {
-//      *clockReg  |= MuxInfo::clockMask;
-//
-//      // ML-offset, Debug, RR priority
-//      dmac->CR                          = DMA_CR_EMLM_MASK|DMA_CR_EDBG_MASK|DMA_CR_ERCA_MASK;
-//
-//      // Enable hardware request
-//      dmac->SERQ                     = channel;
-//
-////      if (dmaSource>0) {
-////         dmac->SERQ                     = channel; // Enable hardware request
-////      }
-////      else {
-////         dmac->CERQ                     = channel;
-////      }
-//      dmac->TCD[channel].CITER_ELINKNO  = information.numberOfTransactions;         // Number of transactions
-//      dmac->TCD[channel].BITER_ELINKNO  = information.numberOfTransactions;         // Number of transactions
-//      dmac->TCD[channel].NBYTES_MLNO    = information.nBytes;                       // Number of bytes to transfer
-//      dmac->TCD[channel].SADDR          = (uint32_t)information.sourceAddress;      // Source address
-//      dmac->TCD[channel].SOFF           = information.sourceOffset;                 // Increment for SADDR
-//      dmac->TCD[channel].ATTR           = information.attributes;                   // Attributes - see DMA_ATTR_SMOD etc
-//      dmac->TCD[channel].SLAST          = 0;                                        // No adjustment
-//      dmac->TCD[channel].DADDR          = (uint32_t)information.destinationAddress; // Destination address
-//      dmac->TCD[channel].DOFF           = information.destinationOffset;            // Increment for DADDR
-//      dmac->TCD[channel].DLASTSGA       = 0;                                        // No adjustment
-//      dmac->TCD[channel].CSR            = DMA_CSR_START_MASK;
-//   }
-   /**
-    * Enable interrupt from the given channel
-    */
-   static void __attribute__((always_inline)) enableInterrupt(DmaChannelNum channel) {
-      channel = DMA_CINT_CAIR_MASK;
-   }
-
    /**
     * Get status of last transfer error
     *
@@ -441,6 +368,24 @@ public:
             __asm__ volatile("nop");
          }
       }
+   }
+
+   /**
+    * Initiate a DMA software request on a channel.
+    *
+    * The channel should be configured beforehand using configureTransfer().\n
+    * This is a convenience function that allows re-use of already configured channel.\n
+    * All it does is set the START bit in the existing TCD.\n
+    * There is no need to use this function for a single request as the START bit may be set\n
+    * in the original TCD used with configureTransfer().
+    *
+    * @param[in]  channel Channel being modified
+    *
+    * @note There is no clear option as the flag is automatically cleared by the DMA controller when
+    *        the transfer starts.
+    */
+   static void __attribute__((always_inline)) startSoftwareRequest(DmaChannelNum channel) {
+      dmac->SSRT = channel;
    }
 
    /**
@@ -498,17 +443,6 @@ public:
     */
    static void __attribute__((always_inline)) clearInterruptRequest(DmaChannelNum channel) {
       dmac->CINT = channel;
-   }
-
-   /**
-    * Set start flag for a channel
-    *
-    * @param[in]  channel Channel being modified
-    *
-    * @note May use DmaChannelNum_All to apply to all channels
-    */
-   static void __attribute__((always_inline)) enableErrorInterrupts(DmaChannelNum channel) {
-      dmac->SSRT = channel;
    }
 
    /**

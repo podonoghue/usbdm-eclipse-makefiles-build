@@ -29,11 +29,6 @@
 
 namespace USBDM {
 
-enum Polarity {
-   ActiveLow=false,
-   ActiveHigh=true
-};
-
 /**
  * @addtogroup GPIO_Group GPIO, Digital Input/Output
  * @{

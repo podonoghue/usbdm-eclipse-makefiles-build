@@ -36,11 +36,13 @@ namespace USBDM {
  */
 class Uart {
 
+public:
+
+   volatile UART_Type * const uart;            //!< UART hardware instance
+
 protected:
 
    virtual ~Uart() {}
-
-   volatile UART_Type *uart;            //!< UART hardware instance
 
    /**
     * Construct UART interface

@@ -42,7 +42,7 @@ int main() {
     * FTM channel set as Output compare with pin Toggle mode using a callback function
     */
    // Enable the channel (and owning FTM) in Output Compare mode with Pin toggle
-   Timer::enable(FtmOutputCompareToggle);
+   Timer::enable(FtmChMode_OutputCompareToggle);
    // Pin high-drive
    Timer::setDriveStrength(PinDriveStrength_High);
    // Set callback function

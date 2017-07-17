@@ -74,7 +74,7 @@ int main() {
    // Set callback function
    Timer::setChannelCallback(ftmCallback);
    // Enable the channel (and owning FTM) in Input Capture mode
-   Timer::enable(FtmInputCaptureRisingEdge);
+   Timer::enable(FtmChMode_InputCaptureRisingEdge);
    // Set IC/OC measurement period to accommodate at least 100ms (maximum period)
    Timer::setMeasurementPeriod(100*ms);
    // Enable interrupts from the channel

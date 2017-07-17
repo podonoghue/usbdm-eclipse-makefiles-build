@@ -61,34 +61,38 @@ namespace USBDM {
  * @brief Pins used for PWM, Input capture and Output compare
  * @{
  */
+
 /**
- * Controls basic operation of PWM/Input capture
+ *  Control mode of operation of shared FTM counter
  */
-enum FtmChannelMode {
-   FtmInputCaptureRisingEdge                = FTM_CnSC_MS(0)|FTM_CnSC_ELS(1), //!< Capture rising edge
-   FtmInputCaptureFallingEdge               = FTM_CnSC_MS(0)|FTM_CnSC_ELS(2), //!< Capture falling edge
-   FtmInputCaptureEitherEdge                = FTM_CnSC_MS(0)|FTM_CnSC_ELS(3), //!< Capture both rising and falling edges
-   FtmOutputCompare                         = FTM_CnSC_MS(1),                 //!< Output compare operation
-   FtmOutputCompareToggle                   = FTM_CnSC_MS(1)|FTM_CnSC_ELS(1), //!< Toggle pin on output compare
-   FtmOutputCompareClear                    = FTM_CnSC_MS(1)|FTM_CnSC_ELS(2), //!< Clear pin on output compare
-   FtmOutputCompareSet                      = FTM_CnSC_MS(1)|FTM_CnSC_ELS(3), //!< Set pin on output compare
-   FtmPwmHighTruePulses                     = FTM_CnSC_MS(2)|FTM_CnSC_ELS(2), //!< PWM with high-true pulses
-   FtmPwmLowTruePulses                      = FTM_CnSC_MS(2)|FTM_CnSC_ELS(1), //!< PWM with low-true pulses
-   FtmDualEdgeCaptureOneShotRisingEdge      = FTM_CnSC_MS(0)|FTM_CnSC_ELS(1), //!< Dual edge input capture one shot - CHn configuration
-   FtmDualEdgeCaptureContinuousRisingEdge   = FTM_CnSC_MS(1)|FTM_CnSC_ELS(1), //!< Dual edge input capture continuous - CHn configuration
-   FtmDualEdgeCaptureOneShotFallingEdge     = FTM_CnSC_MS(0)|FTM_CnSC_ELS(2), //!< Dual edge input capture one shot - CHn configuration
-   FtmDualEdgeCaptureContinuousFallingEdge  = FTM_CnSC_MS(1)|FTM_CnSC_ELS(2), //!< Dual edge input capture continuous - CHn configuration
-   FtmCombinePositivePulse                  = FTM_CnSC_MS(0)|FTM_CnSC_ELS(2), //!< Combine mode - CHn configuration
-   FtmCombineNegativePulse                  = FTM_CnSC_MS(0)|FTM_CnSC_ELS(1), //!< Combine mode - CHn configuration
+enum FtmMode {
+   //! Up counter: Used for left-aligned PWM, input capture and output compare modes
+   FtmMode_LeftAlign   = FTM_SC_CPWMS(0),
+   //! Up-down counter: Used for centre-aligned PWM 
+   FtmMode_CentreAlign = FTM_SC_CPWMS(1),
+   //! Dummy value: Used for quadrature encoder
+   FtmMode_Quadrature  = 0,               
 };
 
 /**
- * Control alignment of PWM function
+ * Controls basic operation of PWM/Input capture
  */
-enum FtmMode {
-   FtmMode_LeftAlign   = FTM_SC_CPWMS(0), //!< Left-aligned PWM - also used for input capture and output compare modes
-   FtmMode_CentreAlign = FTM_SC_CPWMS(1), //!< Centre-aligned PWM
-   FtmMode_Quadrature  = 0,               //!< Dummy value for Quadrature encoder
+enum FtmChMode {
+   FtmChMode_InputCaptureRisingEdge                = FTM_CnSC_MS(0)|FTM_CnSC_ELS(1), //!< Capture rising edge
+   FtmChMode_InputCaptureFallingEdge               = FTM_CnSC_MS(0)|FTM_CnSC_ELS(2), //!< Capture falling edge
+   FtmChMode_InputCaptureEitherEdge                = FTM_CnSC_MS(0)|FTM_CnSC_ELS(3), //!< Capture both rising and falling edges
+   FtmChMode_OutputCompare                         = FTM_CnSC_MS(1),                 //!< Output compare operation without pin action
+   FtmChMode_OutputCompareToggle                   = FTM_CnSC_MS(1)|FTM_CnSC_ELS(1), //!< Toggle pin on output compare
+   FtmChMode_OutputCompareClear                    = FTM_CnSC_MS(1)|FTM_CnSC_ELS(2), //!< Clear pin on output compare
+   FtmChMode_OutputCompareSet                      = FTM_CnSC_MS(1)|FTM_CnSC_ELS(3), //!< Set pin on output compare
+   FtmChMode_PwmHighTruePulses                     = FTM_CnSC_MS(2)|FTM_CnSC_ELS(2), //!< PWM with high-true pulses
+   FtmChMode_PwmLowTruePulses                      = FTM_CnSC_MS(2)|FTM_CnSC_ELS(1), //!< PWM with low-true pulses
+   FtmChMode_DualEdgeCaptureOneShotRisingEdge      = FTM_CnSC_MS(0)|FTM_CnSC_ELS(1), //!< Dual edge input capture one shot - CHn configuration
+   FtmChMode_DualEdgeCaptureContinuousRisingEdge   = FTM_CnSC_MS(1)|FTM_CnSC_ELS(1), //!< Dual edge input capture continuous - CHn configuration
+   FtmChMode_DualEdgeCaptureOneShotFallingEdge     = FTM_CnSC_MS(0)|FTM_CnSC_ELS(2), //!< Dual edge input capture one shot - CHn configuration
+   FtmChMode_DualEdgeCaptureContinuousFallingEdge  = FTM_CnSC_MS(1)|FTM_CnSC_ELS(2), //!< Dual edge input capture continuous - CHn configuration
+   FtmChMode_CombinePositivePulse                  = FTM_CnSC_MS(0)|FTM_CnSC_ELS(2), //!< Combine mode - CHn configuration
+   FtmChMode_CombineNegativePulse                  = FTM_CnSC_MS(0)|FTM_CnSC_ELS(1), //!< Combine mode - CHn configuration
 };
 
 /**
@@ -159,8 +163,11 @@ typedef void (*FTMChannelCallbackFunction)(uint8_t status);
  * // Instantiate the tmr (for FTM0)
  * const USBDM::FtmBase_T<FTM0_Info)> Ftm0;
  *
+ * // Enable before 1st use
+ * Ftm0::enable();
+ *
  * // Initialise PWM with initial period and alignment
- * Ftm0::setMode(200, USBDM::FtmMode_LeftAlign);
+ * Ftm0::configure(FtmMode_LeftAlign);
  *
  * // Change timer period
  * Ftm0::setPeriod(500);
@@ -239,7 +246,11 @@ public:
     * @param[in] ftmClockSource Clock source for timer
     * @param[in] ftmPrescale    Clock prescaler. Used to divide clock source before use
     */
-   static void configure(FtmMode ftmMode, FtmClockSource ftmClockSource=FtmClockSource_System, FtmPrescale ftmPrescale=FtmPrescale_128) {
+   static void configure(
+         FtmMode        ftmMode,
+         FtmClockSource ftmClockSource = FtmClockSource_System,
+         FtmPrescale    ftmPrescale    = FtmPrescale_128) {
+
       tmr->SC = ftmMode|ftmClockSource|ftmPrescale;
    }
 
@@ -571,7 +582,7 @@ public:
     *
     *  @tparam inputNum           Number of fault input to enable (0..3)
     *
-    *  @param[in]  polarity       Polarity of fault input (true => active high))
+    *  @param[in]  polarity       Polarity of fault input
     *  @param[in]  filterEnable   Whether to enable filtering on the fault input
     *  @param[in]  filterDelay    Delay used by the filter (1..15) - Applies to all channels
     *
@@ -579,7 +590,10 @@ public:
     */
 public:
    template<uint8_t inputNum>
-   static void enableFault(bool polarity=true, bool filterEnable=false, uint32_t filterDelay=(1<<FTM_FLTCTRL_FFVAL_SHIFT)-1) {
+   static void enableFault(
+         Polarity polarity     = ActiveHigh,
+         bool     filterEnable = false,
+         uint32_t filterDelay  = (1<<FTM_FLTCTRL_FFVAL_SHIFT)-1) {
 
 #ifdef DEBUG_BUILD
    static_assert((inputNum<Info::InfoFAULT::numSignals), "FtmBase_T: Illegal fault channel");
@@ -887,8 +901,8 @@ template<class Info> FTMCallbackFunction           FtmIrq_T<Info>::faultCallback
  * // Instantiate the timer channel (for FTM0 channel 6)
  * using Tmr0_ch6 = USBDM::FtmChannel<FTM0Info, 6>;
  *
- * // Initialise PWM with initial period and alignment
- * Tmr0_ch6.setMode(200, USBDM::FtmMode_LeftAlign);
+ * // Initialise PWM with initial alignment
+ * Tmr0_ch6.configure(USBDM::FtmMode_LeftAlign);
  *
  * // Change period (in ticks)
  * Tmr0_ch6.setPeriod(500);
@@ -944,7 +958,7 @@ public:
     * Enables owning FTM if not already enabled\n
     * Also see enable()
     *
-    * @param[in] mode           Mode of operation for FTM e.g.FtmPwmHighTruePulses
+    * @param[in] ftmChMode      Mode of operation for FTM e.g.FtmChMode_PwmHighTruePulses
     * @param[in] ftmChannelIrq  Whether to enable the interrupt function on this channel
     * @param[in] ftmChannelDma  Whether to enable the DMA function on this channel
     *
@@ -953,21 +967,22 @@ public:
     *       pending CnV register updates are discarded.
     */
    static void configure(
-         FtmChannelMode mode=FtmPwmHighTruePulses,
-         FtmChannelIrq  ftmChannelIrq=FtmChannelIrq_Disable,
-         FtmChannelDma  ftmChannelDma=FtmChannelDma_Disable) {
+         FtmChMode      ftmChMode     = FtmChMode_PwmHighTruePulses,
+         FtmChannelIrq  ftmChannelIrq = FtmChannelIrq_Disable,
+         FtmChannelDma  ftmChannelDma = FtmChannelDma_Disable) {
+            
       if (!Ftm::isEnabled()) {
          // Enable parent FTM if needed
          Ftm::configure();
       }
-      Ftm::tmr->CONTROLS[channel].CnSC = mode|ftmChannelIrq|ftmChannelDma;
+      Ftm::tmr->CONTROLS[channel].CnSC = ftmChMode|ftmChannelIrq|ftmChannelDma;
    }
 
    /**
     * Enable channel and set mode\n
     * Doesn't affect shared settings of owning Timer
     *
-    * @param[in] mode           Mode of operation for FTM e.g.FtmPwmHighTruePulses
+    * @param[in] ftmChMode      Mode of operation for FTM e.g.FtmChMode_PwmHighTruePulses
     * @param[in] ftmChannelIrq  Whether to enable the interrupt function on this channel
     * @param[in] ftmChannelDma  Whether to enable the DMA function on this channel
     *
@@ -975,10 +990,11 @@ public:
     *       pending CnV register updates are discarded.
     */
    static __attribute__((always_inline)) void enable(
-         FtmChannelMode mode=FtmPwmHighTruePulses,
-         FtmChannelIrq  ftmChannelIrq=FtmChannelIrq_Disable,
-         FtmChannelDma  ftmChannelDma=FtmChannelDma_Disable) {
-      Ftm::tmr->CONTROLS[channel].CnSC = mode|ftmChannelIrq|ftmChannelDma;
+         FtmChMode      ftmChMode     = FtmChMode_PwmHighTruePulses,
+         FtmChannelIrq  ftmChannelIrq = FtmChannelIrq_Disable,
+         FtmChannelDma  ftmChannelDma = FtmChannelDma_Disable) {
+            
+      Ftm::tmr->CONTROLS[channel].CnSC = ftmChMode|ftmChannelIrq|ftmChannelDma;
    }
 
    /**

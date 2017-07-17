@@ -62,8 +62,11 @@ class Spi {
 protected:
    ~Spi() {}
 
-protected:
+public:
+
    volatile  SPI_Type * const spi; //!< SPI hardware
+
+protected:
    uint32_t  pushrMask;            //!< Value to combine with data
 
 protected:
@@ -478,6 +481,15 @@ public:
 #endif
 
 public:
+   // SPI SCK (clock) Pin
+   using sckGpio  = GpioTable_T<Info, 0, USBDM::ActiveHigh>;
+
+   // SPI SIN (data in = usually MISO) Pin
+   using sinGpio  = GpioTable_T<Info, 1, USBDM::ActiveHigh>;
+
+   // SPI SOUT (data out = usually MOSI) Pin
+   using soutGpio = GpioTable_T<Info, 2, USBDM::ActiveHigh>;
+
    virtual ~Spi_T() {}
 
    virtual void enablePins() override {
