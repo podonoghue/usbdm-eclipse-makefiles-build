@@ -114,39 +114,39 @@ enum DmaCanPreemptLower {
 
 /**
  * @verbatim
- * +------------------------------|            Simple DMA mode (MLNO Minor Loop Mapping Disabled)
+ * +------------------------------+            Simple DMA mode (MLNO = Minor Loop Mapping Disabled)
  * | Major Loop =                 |            ==================================================
- * |    CITER x Minor Loop        |            Each DMA request triggers a minor-loop transfer sequence.
- * |                              |            The minor loops are counted in the major-loop.
- * | +--------------------------+ |<-DMA Req.
- * | | Minor Loop               | |            The following are used during a minor loop:
- * | | Each transfer            | |             - SADDR Source address
- * | |   SADDR->DADDR           | |             - SOFF  Adjustment applied to SADDR after each transfer
- * | |   SADDR += SOFF          | |             - DADDR Destination address
- * | |   DADDR += DOFF          | |             - DOFF  Adjustment applied to DADDR after each transfer
- * | | Total transfer is NBYTES | |             - NBYTES Number of bytes to transfer
- * | +--------------------------+ |             - Attributes
- * | +--------------------------+ |<-DMA Req.     - ATTR_SSIZE, ATTR_DSIZE Source and destination transfer sizes
- * | | Minor Loop               | |               - ATTR_SMOD, ATTR_DMOD Modulo --TODO
- * |..............................|
- * | |                          | |             The number of reads and writes done will depend on NBYTES, SSIZE and DSIZE
- * | +--------------------------+ |             For example: NBYTES=12, SSIZE=16-bits, DSIZE=32-bits => 6 reads, 3 writes
- * | +--------------------------+ |<-DMA Req.   NBYTES must be an even multiple of SSIZE and DSIZE in bytes.
+ * |    CITER x Minor Loop        |
+ * |                              |            Each DMA request triggers a minor-loop transfer sequence.
+ * | +--------------------------+ |<-DMA Req.  The minor loops are counted in the major-loop.
  * | | Minor Loop               | |
+ * | | Each transfer            | |            The following are used during a minor loop:
+ * | |   SADDR->DADDR           | |             - SADDR Source address
+ * | |   SADDR += SOFF          | |             - SOFF  Adjustment applied to SADDR after each transfer
+ * | |   DADDR += DOFF          | |             - DADDR Destination address
+ * | | Total transfer is NBYTES | |             - DOFF  Adjustment applied to DADDR after each transfer
+ * | +--------------------------+ |             - NBYTES Number of bytes to transfer
+ * | +--------------------------+ |<-DMA Req.   - Attributes
+ * | | Minor Loop               | |               - ATTR_SSIZE, ATTR_DSIZE Source and destination transfer sizes
+ * |..............................|               - ATTR_SMOD, ATTR_DMOD Modulo --TODO
+ * | |                          | |
+ * | +--------------------------+ |             The number of reads and writes done will depend on NBYTES, SSIZE and DSIZE
+ * | +--------------------------+ |<-DMA Req.   For example: NBYTES=12, SSIZE=16-bits, DSIZE=32-bits => 6 reads, 3 writes
+ * | | Minor Loop               | |             NBYTES must be an even multiple of SSIZE and DSIZE in bytes.
  * | | Each transfer            | |
- * | |   SADDR->DADDR           | |
- * | |   SADDR += SOFF          | |            The following are used by the major loop
- * | |   DADDR += DOFF          | |             - SLAST Adjustment applied to SADDR after major loop
- * | | Total transfer is NBYTES | |             - DLAST Adjustment applied to DADDR after major loop
- * | +--------------------------+ |             - CITER Major loop counter - counts how many minor loops
- * |                              |
- * | At end of Major Loop         |            SLAST and DLAST may be used to reset the addresses to the initial value or
- * |    SADDR += SLAST            |            link to the next transfer.
- * |    DADDR += DLAST            |            The total transferred for the entire sequence is CITER x NBYTES.
- * |                              |
- * | Total transfer =             |
- * |    CITER*NBYTES              |
- * +------------------------------|
+ * | |   SADDR->DADDR           | |            The following are used by the major loop
+ * | |   SADDR += SOFF          | |             - SLAST Adjustment applied to SADDR after major loop
+ * | |   DADDR += DOFF          | |             - DLAST Adjustment applied to DADDR after major loop
+ * | | Total transfer is NBYTES | |             - CITER Major loop counter - counts how many minor loops
+ * | +--------------------------+ |
+ * |                              |            SLAST and DLAST may be used to reset the addresses to the initial value or
+ * | At end of Major Loop         |            link to the next transfer.
+ * |    SADDR += SLAST            |            The total transferred for the entire sequence is CITER x NBYTES.
+ * |    DADDR += DLAST            |
+ * |                              |            Important options in the CSR:
+ * | Total transfer =             |              - DMA_CSR_INTMAJOR = Generate interrupt at end of Major-loop
+ * |    CITER*NBYTES              |              - DMA_CSR_DREQ     = Clear hardware request at end of Major-loop
+ * +------------------------------+              - DMA_CSR_START    = Start transfer. Used for software transfers. Automatically cleared.
  * @endverbatim
  *
  * Structure to define a DMA transfer

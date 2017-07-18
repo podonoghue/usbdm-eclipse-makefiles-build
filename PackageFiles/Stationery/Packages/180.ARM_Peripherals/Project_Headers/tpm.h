@@ -217,7 +217,7 @@ public:
    /**
     * Enable/disable Timer Overflow interrupts
     *
-    * @param enable true to enable, false to disable
+    * @param[in] enable true to enable, false to disable
     */
    static __attribute__((always_inline)) void enableTimerOverflowInterrupts(bool enable=true) {
       if (enable) {
@@ -231,12 +231,14 @@ public:
    /**
     * Set period
     *
-    * @param period Period in seconds as a float
+    * @param[in] period Period in seconds as a float
     *
     * @note Adjusts Timer pre-scaler to appropriate value.
     *       This will affect all channels of the timer.
     *
-    * @return true => success, false => failed to find suitable values
+    * @return E_NO_ERROR  => success
+    * @return E_TOO_SMALL => failed to find suitable values
+    * @return E_TOO_LARGE => failed to find suitable values
     */
    static ErrorCode setPeriod(float period) {
       float inputClock = Info::getInputClockFrequency();
@@ -267,15 +269,18 @@ public:
 
    /**
     * Set measurement period.
-    * Input Capture and Output Compare will be able to operate over at least this period without overflow.
+    * Input Capture and Output Compare will be able to operate over
+    *  at least this period without overflow.
     *
-    * @param period Period in seconds as a float
+    * @param[in] period Period in seconds as a float
     *
     * @note Adjusts Timer pre-scaler to appropriate value.
     *       Timer period is set to maximum.
     *       This will affect all channels of the timer.
     *
-    * @return true => success, false => failed to find suitable values
+    * @return E_NO_ERROR  => success
+    * @return E_TOO_SMALL => failed to find suitable values
+    * @return E_TOO_LARGE => failed to find suitable values
     */
    static __attribute__((always_inline)) ErrorCode setMeasurementPeriod(float period) {
       // Try to set capture period
@@ -301,8 +306,8 @@ public:
    /**
     * Set approximate frequency of timer tick
     *
-    * @param frequency Frequency as a float
-    * @param tolerance Tolerance in percent
+    * @param[in] frequency Frequency as a float
+    * @param[in] tolerance Tolerance in percent
     *
     * @note Adjusts Timer pre-scaler to appropriate value.
     *       This will affect all channels
@@ -336,7 +341,7 @@ public:
    /**
     * Set period
     *
-    * @param period Period in ticks
+    * @param[in] period Period in ticks
     *
     * @return E_NO_ERROR       Success
     * @return E_TOO_LARGE      Failed to find suitable pre-scaler values
@@ -381,7 +386,8 @@ public:
    /**
     * Converts a time in microseconds to number of ticks
     *
-    * @param time Time in microseconds
+    * @param[in] time Time in microseconds
+    *
     * @return Time in ticks
     *
     * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
@@ -407,7 +413,8 @@ public:
    /**
     * Converts a time in microseconds to number of ticks
     *
-    * @param time Time in microseconds
+    * @param[in] time Time in microseconds
+    *
     * @return Time in ticks
     *
     * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
@@ -433,7 +440,8 @@ public:
    /**
     * Converts ticks to time in microseconds
     *
-    * @param time Time in ticks
+    * @param[in] tickInterval Time in ticks
+    *
     * @return Time in microseconds
     *
     * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.

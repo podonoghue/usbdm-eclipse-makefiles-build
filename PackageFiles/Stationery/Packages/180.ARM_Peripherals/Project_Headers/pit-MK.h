@@ -84,7 +84,7 @@ protected:
    static PitCallbackFunction callbacks[Info::irqCount];
 
    /** Callback to catch unhandled interrupt */
-   static void errorCallback() {
+   static void unhandledCallback() {
       setAndCheckErrorCode(E_NO_HANDLER);
    }
    
@@ -138,7 +138,7 @@ public:
     */
    static void setCallback(unsigned channel, PitCallbackFunction callback) {
       if (callback == nullptr) {
-         callback = errorCallback;
+         callback = unhandledCallback;
          enableInterrupts(channel, false);
       }
       callbacks[channel] = callback;
@@ -282,7 +282,7 @@ public:
          PitChannelIrq     pitChannelIrq=PitChannelIrq_Disable,
          PitChannelEnable  pitChannelEnable=PitChannelEnable_Enable) {
 
-      pit->CHANNEL[channel].LDVAL = round(interval*PitInfo::getClockFrequency());
+      pit->CHANNEL[channel].LDVAL = round((interval*PitInfo::getClockFrequency())-1);
       pit->CHANNEL[channel].TCTRL = pitChannelIrq|pitChannelEnable;
       pit->CHANNEL[channel].TFLG  = PIT_TFLG_TIF_MASK;
 
@@ -295,7 +295,7 @@ public:
     * @param[in]  interval Interval in seconds
     */
    static void setPeriod(unsigned channel, float interval) {
-      pit->CHANNEL[channel].LDVAL = round(interval*PitInfo::getClockFrequency());
+      pit->CHANNEL[channel].LDVAL = round((interval*PitInfo::getClockFrequency())-1);
    }
    /**
     * Set period in seconds
@@ -341,10 +341,10 @@ public:
  * Callback table for programmatically set handlers
  */
 template<class Info> PitCallbackFunction Pit_T<Info>::callbacks[] = {
-   errorCallback,
-   errorCallback,
-   errorCallback,
-   errorCallback
+   unhandledCallback,
+   unhandledCallback,
+   unhandledCallback,
+   unhandledCallback
 };
 
 template <class Info, int channel>
@@ -368,7 +368,7 @@ public:
          PitChannelEnable  pitChannelEnable=PitChannelEnable_Enable) {
 
       Pit_T<Info>::configureChannelInTicks(channel, interval, pitChannelIrq, pitChannelEnable);
-      Pit_T<Info>::setCallback(Pit_T<Info>::errorCallback);
+      Pit_T<Info>::setCallback(Pit_T<Info>::unhandledCallback);
    }
    /**
     *  Configure the PIT channel

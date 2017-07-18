@@ -335,7 +335,7 @@ private:
 
 protected:
    /** Callback to catch unhandled interrupt */
-   static void errorCallback(uint32_t) {
+   static void unhandledCallback(uint32_t) {
       setAndCheckErrorCode(E_NO_HANDLER);
    }
 
@@ -368,7 +368,7 @@ public:
     */
    static __attribute__((always_inline)) void setCallback(PinCallbackFunction callback) {
       if (callback == nullptr) {
-         fCallback = errorCallback;
+         fCallback = unhandledCallback;
          return;
       }
       fCallback = callback;
@@ -376,7 +376,7 @@ public:
 };
 
 template<uint32_t pcrAddress>
-PinCallbackFunction USBDM::PcrBase_T<pcrAddress>::fCallback = PcrBase_T::errorCallback;
+PinCallbackFunction USBDM::PcrBase_T<pcrAddress>::fCallback = PcrBase_T::unhandledCallback;
 
 /**
  * @brief Template representing a Pin Control Register (PCR)

@@ -32,6 +32,24 @@ namespace USBDM {
  */
 
 /**
+ * Enumeration selecting interrupt sources
+ */
+enum UartInterrupt {
+   UartInterrupt_TxHoldingEmpty  = UART_C2_TIE(1),   //!< Interrupt request on Transmit holding register empty
+   UartInterrupt_TxComplete      = UART_C2_TCIE(1),  //!< Interrupt request on Transmit complete
+   UartInterrupt_RxFull          = UART_C2_RIE(1),   //!< Interrupt request on Receive holding full
+   UartInterrupt_IdleDetect      = UART_C2_ILIE(1),  //!< Interrupt request on Idle detection
+};
+
+/**
+ * Enumeration selecting direct memory access sources
+ */
+enum UartDma {
+   UartDma_TxHoldingEmpty  = UART_C5_TDMAS(1),   //!< DMA request on Transmit holding register empty
+   UartDma_RxFull          = UART_C5_RDMAS(1),   //!< DMA request on Receive holding full
+};
+
+/**
  * Virtual Base class for UART interface
  */
 class Uart {
@@ -238,6 +256,44 @@ public:
     * Clear UART error status
     */
    virtual void clearError() = 0;
+
+   /**
+    * Enable/disable an interrupt source
+    *
+    * @param[in] uartInterrupt Interrupt source to modify
+    * @param[in] enable        True to enable, false to disable
+    *
+    * @note Changing the enabled interrupt functions may also affect the DMA settings
+    */
+   void enableInterrupt(UartInterrupt uartInterrupt, bool enable=true) {
+      if (enable) {
+         uart->C2 |= uartInterrupt;
+         uart->C5 &= ~uartInterrupt; // DMA off
+      }
+      else {
+         uart->C2 &= ~uartInterrupt;
+         uart->C5 &= ~uartInterrupt;
+      }
+   }
+   /**
+    * Enable/disable a DMA source
+    *
+    * @param[in] uartDma  Interrupt source to modify
+    * @param[in] enable   True to enable, false to disable
+    *
+    * @note Changing the enabled DMA functions will also affect the interrupt settings
+    */
+   void enableDma(UartDma uartDma, bool enable=true) {
+      // Flags are in same positions in the C3 and C5
+      if (enable) {
+         uart->C2 |= uartDma;
+         uart->C5 |= uartDma;
+      }
+      else {
+         uart->C2 &= ~uartDma;
+         uart->C5 &= ~uartDma;
+      }
+   }
 };
 
 /**

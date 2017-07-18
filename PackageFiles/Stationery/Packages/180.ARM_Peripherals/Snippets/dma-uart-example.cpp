@@ -1,23 +1,42 @@
-/*
+/**
  ============================================================================
- * @file    main.cpp (180.ARM_Peripherals/Sources/main.cpp)
- * @brief   Basic C++ demo using GPIO class
+ * @file    dma-uart-example.cpp (180.ARM_Peripherals/Snippets)
+ * @brief   DMA example using UART and PIT throttling
  *
  *  Created on: 10/1/2016
  *      Author: podonoghue
  ============================================================================
  */
+/**
+ * This example uses DMA to transfer characters from a string to the UART for transmission.
+ * The speed of transmission in throttled by the use of PIT triggering on the DMA channel (DmaMux).
+ * The transmission is made continuous by setting up the TCD appropriately:
+ * - Not clearing the DREQ on transfer complete
+ * - Arranging SLAST to return the transfer addresses to starting value after each major-loop.
+ */
 #include <stdio.h>
 #include "system.h"
 #include "derivative.h"
 #include "hardware.h"
-#include "pit.h"
-#include "pdb.h"
-#include "lptmr.h"
 #include "dma.h"
+#include "uart.h"
+#include "pit.h"
 
 using namespace USBDM;
 
+// Connection - change as required
+using Led         = GpioA<2, ActiveLow>;  // = PTA2 = D9 = Blue LED
+
+// UART to use
+Uart0 uart;
+
+// PIT channel used for throttling
+using PitChannel = PitChannel1;
+
+// DMA channel number to use (must agree with PIT channel used)
+static constexpr DmaChannelNum DMA_CHANNEL = DmaChannelNum_1;
+
+// Used to indicate complete transfer
 bool complete;
 
 /**
@@ -29,17 +48,15 @@ void dmaCallback() {
    complete = true;
 }
 
-/**
- * DMA Memory-to-memory transfer
- *
- * @param[in]  source         Source location
- * @param[in]  size           Number of bytes to transfer - must be multiple of 4
- * @param[out] destination    Destination location
- */
-static void dmaTransfer(void *source, uint32_t size, void *destination) {
+const char message[]=
+      "=================================\n\r"
+      " Hello world from DMA controller \n\r"
+      "=================================\n\r";
 
-   // DMA channel number to use
-   static constexpr DmaChannelNum DMA_CHANNEL = DmaChannelNum_1;
+/**
+ * Configure DMA from Memory-to-UART
+ */
+static void initDma() {
 
    /**
     * @verbatim
@@ -81,19 +98,20 @@ static void dmaTransfer(void *source, uint32_t size, void *destination) {
     * Structure to define the DMA transfer
     */
    static const DmaTcd tcd {
-      /* uint32_t  SADDR  Source address        */ (uint32_t)(source),               // Source array
-      /* uint16_t  SOFF   SADDR offset          */ 4,                                // SADDR advances 4 bytes for each request
-      /* uint16_t  ATTR   Transfer attributes   */ DMA_ATTR_SSIZE(DmaSize_32bit)|    // 32-bit read from SADDR
-      /*                                        */ DMA_ATTR_DSIZE(DmaSize_32bit),    // 32-bit write to DADDR
-      /* uint32_t  NBYTES Minor loop byte count */ size,                             // Total transfer in one minor-loop
-      /* uint32_t  SLAST  Last SADDR adjustment */ -size,                            // Reset SADDR to start of array on completion
-      /* uint32_t  DADDR  Destination address   */ (uint32_t)(destination),          // Start of array for result
-      /* uint16_t  DOFF   DADDR offset          */ 4,                                // DADDR advances 4 bytes for each request
-      /* uint16_t  CITER  Major loop count      */ DMA_CITER_ELINKNO_ELINK(0)|       // No ELINK
-      /*                                        */ 1,                                // 1 (software) request
-      /* uint32_t  DLAST  Last DADDR adjustment */ -size,                            // Reset DADDR to start of array on completion
-      /* uint16_t  CSR    Control and Status    */ DMA_CSR_INTMAJOR(1)|              // Generate interrupt on completion of Major-loop
-      /*                                        */ DMA_CSR_START(1)
+      /* uint32_t  SADDR  Source address        */ (uint32_t)(message),          // Source array
+      /* uint16_t  SOFF   SADDR offset          */ 1,                            // SADDR advances 1 byte for each request
+      /* uint16_t  ATTR   Transfer attributes   */ DMA_ATTR_SSIZE(DmaSize_8bit)| // 8-bit read from SADDR
+      /*                                        */ DMA_ATTR_DSIZE(DmaSize_8bit), // 8-bit write to DADDR
+      /* uint32_t  NBYTES Minor loop byte count */ 1,                            // Total transfer in one minor-loop
+      /* uint32_t  SLAST  Last SADDR adjustment */ -sizeof(message),             // Reset SADDR to start of array on completion
+      /* uint32_t  DADDR  Destination address   */ (uint32_t)(&uart.uart->D),    // Destination is UART data register
+      /* uint16_t  DOFF   DADDR offset          */ 0,                            // DADDR doesn't change
+      /* uint16_t  CITER  Major loop count      */ DMA_CITER_ELINKNO_ELINK(0)|   // No ELINK
+      /*                                        */ ((sizeof(message))/1),        // Transfer entire buffer
+      /* uint32_t  DLAST  Last DADDR adjustment */ 0,                            // DADDR doesn't change
+      /* uint16_t  CSR    Control and Status    */ DMA_CSR_INTMAJOR(1)|          // Generate interrupt on completion of Major-loop
+      /*                                        */ DMA_CSR_DREQ(0)|              // Don't clear hardware request when complete major loop (non-stop)
+      /*                                        */ DMA_CSR_START(0),             // Don't start (triggered by hardware)
    };
 
    // Sequence not complete yet
@@ -106,33 +124,66 @@ static void dmaTransfer(void *source, uint32_t size, void *destination) {
    Dma0::setCallback(DMA_CHANNEL, dmaCallback);
    Dma0::enableNvicInterrupts(DMA_CHANNEL);
 
+   // Connect DMA channel to UART but throttle by PIT Channel 1 (matches DMA channel 1)
+   DmaMux0::configure(DMA_CHANNEL, DmaSlot_UART0_Transmit, DmaMuxEnable_Triggered);
+
    // Configure the transfer
    Dma0::configureTransfer(DMA_CHANNEL, tcd);
 
-   while (!complete) {
-      __asm__("nop");
-   }
+   // Enable hardware requests
+   Dma0::enableRequests(DMA_CHANNEL);
+}
+
+/**
+ * PIT callback
+ *
+ * Used for debug timing checks.
+ * LED toggles on each PIT event
+ */
+void pitCallback() {
+   Led::toggle();
+}
+
+/*
+ * Configure the PIT
+ * - Generates regular events. Each event is used to throttle the UART Tx.
+ */
+void configurePit() {
+   // Configure base PIT
+   Pit::configure(PitDebugMode_Stop);
+
+   PitChannel::setCallback(pitCallback);
+   // Configure channel
+   PitChannel::configure(100*ms, PitChannelIrq_Enable);
 }
 
 int main() {
+
    printf("Starting\n");
 
-   uint32_t source[20]      = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
-   uint32_t destination[20] = {0};
+   Led::setOutput();
 
-   printf("Original buffer contents\n");
-   for (unsigned index=0; index<(sizeof(destination)/sizeof(destination[0])); index++) {
-      printf("%4d: , ch2=%6lu\n", index, destination[index]);
+   // Set up DMA transfer from memory -> UART
+   initDma();
+   configurePit();
+
+   // Start the UART DMA requests
+   uart.enableDma(UartDma_TxHoldingEmpty);
+
+   // Wait for completion of 1 Major-loop = 1 message
+   while (!complete) {
+      __asm__("nop");
    }
 
-   printf("Starting Transfer\n");
-   dmaTransfer(source, sizeof(source), destination);
-   printf("Completed Transfer\n");
+   // Stop the UART DMA requests
+   uart.enableDma(UartDma_TxHoldingEmpty, false);
 
-   printf("Final buffer contents\n");
-   for (unsigned index=0; index<(sizeof(destination)/sizeof(destination[0])); index++) {
-      printf("%4d: , ch2=%6lu\n", index, destination[index]);
-   }
+   printf("Done 1st message\n");
+   wait(4000*ms);
+
+   // Start the UART DMA requests again
+   printf("More coming....\n");
+   uart.enableDma(UartDma_TxHoldingEmpty);
 
    for(;;) {
       __asm__("nop");

@@ -188,11 +188,11 @@ private:
 
 protected:
    /** Callback to catch unhandled interrupt */
-   static void errorCallback(uint8_t) {
+   static void unhandledCallback(uint8_t) {
       setAndCheckErrorCode(E_NO_HANDLER);
    }
    /** Callback to catch unhandled interrupt */
-   static void errorCallback() {
+   static void unhandledCallback() {
       setAndCheckErrorCode(E_NO_HANDLER);
    }
 
@@ -854,7 +854,7 @@ public:
     */
    static __attribute__((always_inline)) void setTimerOverflowCallback(FTMCallbackFunction theCallback) {
       if (theCallback == nullptr) {
-         toiCallback = FtmIrq_T<Info>::errorCallback;
+         toiCallback = FtmIrq_T<Info>::unhandledCallback;
          return;
       }
       toiCallback = theCallback;
@@ -868,7 +868,7 @@ public:
     */
    static __attribute__((always_inline)) void setChannelCallback(FTMChannelCallbackFunction theCallback) {
       if (theCallback == nullptr) {
-         callback = FtmBase_T<Info>::errorCallback;
+         callback = FtmBase_T<Info>::unhandledCallback;
          return;
       }
       callback = theCallback;
@@ -882,16 +882,16 @@ public:
     */
    static __attribute__((always_inline)) void setFaultCallback(FTMCallbackFunction theCallback) {
       if (theCallback == nullptr) {
-         faultCallback = FtmBase_T<Info>::errorCallback;
+         faultCallback = FtmBase_T<Info>::unhandledCallback;
          return;
       }
       faultCallback = theCallback;
    }
 };
 
-template<class Info> FTMCallbackFunction           FtmIrq_T<Info>::toiCallback   = FtmBase_T<Info>::errorCallback;
-template<class Info> FTMChannelCallbackFunction    FtmIrq_T<Info>::callback      = FtmBase_T<Info>::errorCallback;
-template<class Info> FTMCallbackFunction           FtmIrq_T<Info>::faultCallback = FtmBase_T<Info>::errorCallback;
+template<class Info> FTMCallbackFunction           FtmIrq_T<Info>::toiCallback   = FtmBase_T<Info>::unhandledCallback;
+template<class Info> FTMChannelCallbackFunction    FtmIrq_T<Info>::callback      = FtmBase_T<Info>::unhandledCallback;
+template<class Info> FTMCallbackFunction           FtmIrq_T<Info>::faultCallback = FtmBase_T<Info>::unhandledCallback;
 
 /**
  * Template class representing a timer channel

@@ -6,9 +6,9 @@
 
    <aliasOption key="/SIM/system_bus_clock" displayName="PIT input clock" constant="true"/>
 
-   <intOption name="pit_ldval" description="Reload value [0-65535]"
+   <intOption name="pit_ldval" description="Reload value"
       toolTip="Value loaded in timer register on roll-over"
-      value="10000" min="0" max="65535" />
+      value="10000" min="0" max="0xFFFFFFFF" />
 
    <floatOption name="pit_period" description="Default period of timer"
       toolTip="Used to calculate the timer load value"
