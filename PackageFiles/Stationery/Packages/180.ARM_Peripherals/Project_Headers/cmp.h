@@ -26,6 +26,53 @@ namespace USBDM {
  * @{
  */
 
+enum Cmp0Input {
+   Cmp0Input_CmpIn0  = 0, //!< Cmp external pin 0
+   Cmp0Input_CmpIn1  = 1, //!< Cmp external pin 1
+   Cmp0Input_CmpIn2  = 2, //!< Cmp external pin 2
+   Cmp0Input_CmpIn3  = 3, //!< Cmp external pin 3
+   Cmp0Input_CmpIn4  = 4, //!< Cmp external pin 4
+   Cmp0Input_VRefOut = 5, //!< Vref Output
+   Cmp0Input_Bandgap = 6, //!< Internal Band-gap
+   Cmp0Input_Dac0Ref = 7, //!< 6-bit dac0 reference
+};
+
+enum Cmp1Input {
+   Cmp1Input_CmpIn0  = 0, //!< Cmp external pin 0
+   Cmp1Input_CmpIn1  = 1, //!< Cmp external pin 1
+   Cmp1Input_VRefOut = 5, //!< Vref Output
+   Cmp1Input_Bandgap = 6, //!< Internal Band-gap
+   Cmp1Input_Dac1Ref = 7, //!< 6-bit dac1 reference
+};
+
+enum CmpFilter {
+   CmpFilter_None = CMP_CR0_FILTER_CNT(0), //!< No filtering - Illegal when sampling is enabled.
+   CmpFilter_1    = CMP_CR0_FILTER_CNT(1), //!< 1 sample must agree
+   CmpFilter_2    = CMP_CR0_FILTER_CNT(2), //!< 2 samples must agree
+   CmpFilter_3    = CMP_CR0_FILTER_CNT(3), //!< 3 samples must agree
+   CmpFilter_4    = CMP_CR0_FILTER_CNT(4), //!< 4 samples must agree
+   CmpFilter_5    = CMP_CR0_FILTER_CNT(5), //!< 5 samples must agree
+   CmpFilter_6    = CMP_CR0_FILTER_CNT(6), //!< 6 samples must agree
+   CmpFilter_7    = CMP_CR0_FILTER_CNT(7), //!< 7 samples must agree
+};
+
+enum CmpHysteresis {
+   CmpHysteresis_0 = CMP_CR0_HYSTCTR(0), //!< Minimum.
+   CmpHysteresis_1 = CMP_CR0_HYSTCTR(1),
+   CmpHysteresis_2 = CMP_CR0_HYSTCTR(2),
+   CmpHysteresis_3 = CMP_CR0_HYSTCTR(3), //!< Maxiimum.
+};
+
+/**
+ * Comparator interrupt edge
+ */
+enum CmpInterrupt {
+   CmpInterrupt_None    = CMP_SCR_IER(0)|CMP_SCR_IEF(0),  //!< Rising edge
+   CmpInterrupt_Rising  = CMP_SCR_IER(1)|CMP_SCR_IEF(0),  //!< Rising edge
+   CmpInterrupt_Falling = CMP_SCR_IER(0)|CMP_SCR_IEF(1),  //!< Falling edge
+   CmpInterrupt_Both    = CMP_SCR_IER(1)|CMP_SCR_IEF(1),  //!< Rising or falling edge
+};
+
 /**
  * Type definition for CMP interrupt call back
  *
@@ -45,6 +92,7 @@ typedef void (*CMPCallbackFunction)(int status);
  *  using Cmp = USBDM::Cmp0;
  *
  *  Cmp::enable();
+ *  Cmp::configure();
  *  Cmp::setDacLevel(20);
  *  Cmp::setCallback(callback);
  *  Cmp::enableFallingEdgeInterrupts(true);
@@ -119,6 +167,15 @@ public:
    }
 
    /**
+    * Enable/disable edge interrupts
+    *
+    * @param[in]  cmpInterrupt Control edge selection
+    */
+   static void enableInterrupts(CmpInterrupt cmpInterrupt) {
+      cmp->SCR = (cmp->SCR&~(CMP_SCR_IER(1)|CMP_SCR_IEF(1)))|cmpInterrupt;
+   }
+
+   /**
     * Enable/disable rising edge interrupts
     *
     * @param[in]  enable True=>enable, False=>disable
@@ -131,12 +188,7 @@ public:
          cmp->SCR &= ~CMP_SCR_IER_MASK;
       }
    }
-   /**
-    * Clear edge interrupt flags
-    */
-   static void clearInterruptFlags() {
-      cmp->SCR |= CMP_SCR_CFR_MASK|CMP_SCR_CFF_MASK;
-   }
+
    /**
     * Enable/disable falling edge interrupts
     *
@@ -149,6 +201,27 @@ public:
       else {
          cmp->SCR &= ~CMP_SCR_IEF_MASK;
       }
+   }
+
+   /**
+    * Enable/disable DMA requests
+    *
+    * @param[in]  enable True=>enable, False=>disable
+    */
+   static void enableDmaRequests(bool enable=true) {
+      if (enable) {
+         cmp->SCR |= CMP_SCR_DMAEN_MASK;
+      }
+      else {
+         cmp->SCR &= ~CMP_SCR_DMAEN_MASK;
+      }
+   }
+
+   /**
+    * Clear edge interrupt flags
+    */
+   static void clearInterruptFlags() {
+      cmp->SCR |= CMP_SCR_CFR_MASK|CMP_SCR_CFF_MASK;
    }
 
    /**
@@ -165,16 +238,25 @@ public:
    /**
     * Configure Comparator input sources
     *
-    * @param[in]  positiveSource (0..7) (7 => DAC)
-    * @param[in]  negativeSource (0..7) (7 => DAC)
+    * @param[in]  positiveInput (0..7) (7 => DAC)
+    * @param[in]  negativeInput (0..7) (7 => DAC)
     */
-   static void selectInputs(uint8_t positiveSource, uint8_t negativeSource) {
+   static void selectInputs(uint8_t positiveInput, uint8_t negativeInput) {
       //! MUX Control Register
       cmp->MUXCR =
-         CMP_MUXCR_PSEL(positiveSource)| // Plus Input Mux Control
-         CMP_MUXCR_MSEL(negativeSource); // Minus Input Mux Control
+         CMP_MUXCR_PSEL(positiveInput)| // Plus Input Mux Control
+         CMP_MUXCR_MSEL(negativeInput); // Minus Input Mux Control
    }
 
+   /**
+    * Set input filtering and hysteresis
+    *
+    * @param[in] cmpFilter       Filtering clock pulses
+    * @param[in] cmpHysteresis   Hysteresis level
+    */
+   static void setInputConditioning(CmpFilter cmpFilter, CmpHysteresis cmpHysteresis) {
+      cmp->CR0 = cmpFilter|cmpHysteresis;
+   }
 };
 
 /**
