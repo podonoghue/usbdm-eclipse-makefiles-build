@@ -45,8 +45,14 @@ enum UartInterrupt {
  * Enumeration selecting direct memory access sources
  */
 enum UartDma {
+#ifdef UART_C5_TDMAS
    UartDma_TxHoldingEmpty  = UART_C5_TDMAS(1),   //!< DMA request on Transmit holding register empty
    UartDma_RxFull          = UART_C5_RDMAS(1),   //!< DMA request on Receive holding full
+#endif
+#ifdef UART_C5_TDMAE
+   UartDma_TxHoldingEmpty  = UART_C5_TDMAE(1),   //!< DMA request on Transmit holding register empty
+   UartDma_RxFull          = UART_C5_RDMAE(1),   //!< DMA request on Receive holding full
+#endif
 };
 
 /**
@@ -267,12 +273,13 @@ public:
     */
    void enableInterrupt(UartInterrupt uartInterrupt, bool enable=true) {
       if (enable) {
+#ifdef UART_C5_TDMAS
+         uart->C5 &= ~uartInterrupt; // DMA must be off to enable interrupts
+#endif
          uart->C2 |= uartInterrupt;
-         uart->C5 &= ~uartInterrupt; // DMA off
       }
       else {
-         uart->C2 &= ~uartInterrupt;
-         uart->C5 &= ~uartInterrupt;
+         uart->C2 &= ~uartInterrupt; // May also disable DMA
       }
    }
    /**
@@ -281,16 +288,20 @@ public:
     * @param[in] uartDma  Interrupt source to modify
     * @param[in] enable   True to enable, false to disable
     *
-    * @note Changing the enabled DMA functions will also affect the interrupt settings
+    * @note Changing the enabled DMA functions may also affect the interrupt settings
     */
    void enableDma(UartDma uartDma, bool enable=true) {
       // Flags are in same positions in the C3 and C5
       if (enable) {
-         uart->C2 |= uartDma;
          uart->C5 |= uartDma;
+#ifdef UART_C5_TDMAS
+         uart->C2 |= uartDma; // Interrupts must be enable for DMA
+#endif
       }
       else {
-         uart->C2 &= ~uartDma;
+#ifdef UART_C5_TDMAS
+         uart->C2 &= ~uartDma; // Switching DMA off shouldn't enable interrupts!
+#endif
          uart->C5 &= ~uartDma;
       }
    }

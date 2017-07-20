@@ -12,30 +12,21 @@
 #include "derivative.h"
 #include "hardware.h"
 
+// Allow access to USBDM methods without USBDM:: prefix
+using namespace USBDM;
+
 /**
  * See more examples in Snippets directory
- *
- * Using an ADC channel
- *  using adcChannel = USBDM::Adc0Channel<6>;
- *  adcChannel::enable();
- *  adcChannel::setResolution(USBDM::AdcResolution_16bit_se);
- *  adcChannel::setAveraging(USBDM::AdcAveraging_32);
- *  int value = adcChannel::readAnalogue();
- * 
- * Using a timer channel
- *  using ftmChannel = USBDM::Ftm0Channel<0>;
- *  ftmChannel::configure(1000, USBDM::ftm_leftAlign);
- *  ftmChannel::setDutyCycle(25);
  */
 
 // LED connection - change as required
-using Led   = $(demo.cpp.led:USBDM::GpioB<3>);
+using Led   = $(demo.cpp.led:GpioB<3>);
 
 int main() {
 //   printf("Starting\n");
 
-//   printf("SystemBusClock  = %ld\n", SystemBusClock);
-//   printf("SystemCoreClock = %ld\n", SystemCoreClock);
+//   printf("SystemBusClock  = %ld\n", ::SystemBusClock);
+//   printf("SystemCoreClock = %ld\n", ::SystemCoreClock);
 
    Led::setOutput();
    for(;;) {

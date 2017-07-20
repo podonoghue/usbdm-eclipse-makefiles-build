@@ -106,7 +106,7 @@ enum FtmClockSource {
 };
 
 /**
- * Control alignment of PWM function
+ * Control Prescaler for FTM clock
  */
 enum FtmPrescale {
    FtmPrescale_1   = FTM_SC_PS(0),  //!< Divide by 1
@@ -133,12 +133,17 @@ enum FtmExternalTrigger {
    FtmExternalTrigger_all   = 0x7F,                        //!< All triggers
 };
 
-
+/*
+ * Enabled Timer interrupt
+ */
 enum FtmChannelIrq {
    FtmChannelIrq_Disable = FTM_CnSC_CHIE(0), //!< Disable interrupts from this channel
    FtmChannelIrq_Enable  = FTM_CnSC_CHIE(1), //!< Enable interrupts from this channel
 };
 
+/*
+ * Enabled Timer DMA
+ */
 enum FtmChannelDma {
    FtmChannelDma_Disable = FTM_CnSC_DMA(0), //!< Disable DMA requests from this channel
    FtmChannelDma_Enable  = FTM_CnSC_DMA(1), //!< Enable DMA requests from this channel
@@ -160,16 +165,13 @@ typedef void (*FTMChannelCallbackFunction)(uint8_t status);
  *
  * Example
  * @code
- * // Instantiate the tmr (for FTM0)
- * const USBDM::FtmBase_T<FTM0_Info)> Ftm0;
+ * // Using FTM0
+ * using Ftm0 = USBDM::FtmBase_T<FTM0_Info)>;
  *
- * // Enable before 1st use
- * Ftm0::enable();
- *
- * // Initialise PWM with initial period and alignment
+ * // Initialise PWM with initial alignment and default clock source
  * Ftm0::configure(FtmMode_LeftAlign);
  *
- * // Change timer period
+ * // Set timer period
  * Ftm0::setPeriod(500);
  * @endcode
  *
@@ -204,8 +206,7 @@ public:
    static constexpr volatile uint32_t *clockReg = Info::clockReg;
 
    /**
-    * Basic enable of peripheral\n
-    * Includes configuring all pins
+    * Enables clock to peripheral and configures all pins
     */
    static void __attribute__((always_inline)) enable() {
       // Configure pins
@@ -214,15 +215,13 @@ public:
       // Enable clock to peripheral
       *clockReg |= Info::clockMask;
       __DMB();
-
-    //tmr->CONF   = FTM_CONF_BDMMODE(3);
    }
    
    /**
-    * Enable with default settings\n
+    * Configure with settings from Configure.usbdmProject.\n
     * Includes configuring all pins
     */
-   static void configure() {
+   static void defaultConfigure() {
       enable();
 
       // Common registers
@@ -239,10 +238,10 @@ public:
    }
 
    /**
-    * Configure Timer operation\n
-    * Used to change configuration after enabling interface
+    * Enables clock to peripheral and configures all pins
+    * Configures main operating settings for timer
     *
-    * @param[in] ftmMode        Mode of operation see USBDM::FtmMode
+    * @param[in] ftmMode        Mode of operation
     * @param[in] ftmClockSource Clock source for timer
     * @param[in] ftmPrescale    Clock prescaler. Used to divide clock source before use
     */
@@ -251,6 +250,7 @@ public:
          FtmClockSource ftmClockSource = FtmClockSource_System,
          FtmPrescale    ftmPrescale    = FtmPrescale_128) {
 
+      enable();
       tmr->SC = ftmMode|ftmClockSource|ftmPrescale;
    }
 
@@ -267,7 +267,7 @@ public:
    /**
     * Set timer mode
     *
-    * @param[in] ftmMode        Mode of operation see USBDM::FtmMode
+    * @param[in] ftmMode        Mode of operation
     */
    static void setMode(FtmMode ftmMode=FtmMode_LeftAlign) {
       tmr->SC = (tmr->SC&~FTM_SC_CPWMS_MASK)|ftmMode;
@@ -326,6 +326,77 @@ public:
    }
 
    /**
+    * Set modulo of counter
+    *
+    * @param[in] period Period in ticks (<65535)
+    */
+   void __attribute__((always_inline)) setMod(uint16_t mod) {
+      tmr->MOD = mod;
+   }
+
+   /**
+    * Set starting count of counter
+    *
+    * @param[in] countIn Starting count in ticks (<65535)
+    */
+   void __attribute__((always_inline)) setCountIn(uint16_t countIn) {
+      tmr->CNTIN = countIn;
+   }
+
+   /**
+    * Set period
+    *
+    * @param[in] period Period in ticks (<65535)
+    *
+    * @return E_NO_ERROR       Success
+    * @return E_TOO_LARGE      Failed to find suitable pre-scaler values
+    *
+    * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
+    */
+   static ErrorCode setPeriodInTicks(uint32_t period) {
+
+      // Check if CPWMS is set (affects period)
+      bool centreAlign = (tmr->SC&FTM_SC_CPWMS_MASK);
+
+      if (centreAlign) {
+         // Centre-aligned period is 2*MOD value but MOD is
+         // limited to 0x7FFF for sensible PWM operation
+
+         // Halve with rounding
+         period = (period+1)/2;
+#ifdef DEBUG_BUILD
+         if (period > 0x7FFFUL) {
+            // Attempt to set too long a period
+            return setErrorCode(E_TOO_LARGE);
+         }
+#endif
+      }
+      else {
+         // Left-aligned period is MOD+1 value
+         period = period-1;
+#ifdef DEBUG_BUILD
+         if (period > 0xFFFF) {
+            // Attempt to set too long a period
+            return setErrorCode(E_TOO_LARGE);
+         }
+#endif
+      }
+
+      // Disable timer so register changes are immediate
+      uint8_t sc = tmr->SC;
+      tmr->SC = FTM_SC_CLKS(0);
+
+      // Change modulo
+      tmr->MOD = period;
+
+      // Restar timer
+      tmr->SC  = sc;
+
+      // OK period
+      return setErrorCode(E_NO_ERROR);
+   }
+
+   /**
     * Set period
     *
     * @param[in] period Period in seconds as a float
@@ -342,23 +413,26 @@ public:
       int prescaleFactor=1;
       int prescalerValue=0;
 
-      uint32_t maxValue = 65536;
+      // Maximum period value in ticks
+      uint32_t maxPeriodInTicks = 65536;
 
       // Check if CPWMS is set (affects period calculation)
       if (tmr->SC&FTM_SC_CPWMS_MASK) {
-         maxValue = (2*65535);
-//         period = period/2;
+         // Centre-aligned period is ~double the MOD value but MOD is
+         // limited to 0x7FFF for sensible PWM operation so
+         // period in ticks is limited to 2*0x7FFF
+         maxPeriodInTicks = 65534;
       }
       while (prescalerValue<=7) {
          float    clock = inputClock/prescaleFactor;
-         uint32_t mod   = round(period*clock);
-         if (mod < Info::minimumResolution) {
+         uint32_t periodInTicks   = round(period*clock);
+         if (periodInTicks < Info::minimumResolution) {
             // Too short a period for 1% resolution
             return setErrorCode(E_TOO_SMALL);
          }
-         if (mod <= maxValue) {
+         if (periodInTicks <= maxPeriodInTicks) {
             tmr->SC     = (tmr->SC&~FTM_SC_PS_MASK)|FTM_SC_PS(prescalerValue);
-            setPeriodInTicks(mod);
+            setPeriodInTicks(periodInTicks);
             return E_NO_ERROR;
          }
          prescalerValue++;
@@ -388,7 +462,7 @@ public:
       ErrorCode rc = setPeriod(period);
       // Set actual period to maximum ticks in any case
       // This is the usual value for IC or OC set-up
-      setPeriodInTicks(0);
+      setPeriodInTicks(0x10000);
       return rc;
    }
    /**
@@ -437,51 +511,6 @@ public:
       }
       // Too long a period
       return setErrorCode(E_ILLEGAL_PARAM);
-   }
-
-   /**
-    * Set period
-    *
-    * @param[in] period Period in ticks
-    *
-    * @return E_NO_ERROR       Success
-    * @return E_TOO_LARGE      Failed to find suitable pre-scaler values
-    *
-    * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
-    */
-   static ErrorCode setPeriodInTicks(uint32_t period) {
-
-      // Check if CPWMS is set (affects period)
-      bool centreAlign = (tmr->SC&FTM_SC_CPWMS_MASK);
-
-      // Disable timer so register changes are immediate
-      uint8_t sc = tmr->SC;
-      tmr->SC = FTM_SC_CLKS(0);
-
-      if (centreAlign) {
-#ifdef DEBUG_BUILD
-         if (period > 2*0xFFFFUL) {
-            // Attempt to set too long a period
-            return setErrorCode(E_TOO_LARGE);
-         }
-#endif
-         tmr->MOD = (uint32_t)(period/2);
-         // Centre aligned PWM with CPWMS not selected
-         tmr->SC  = sc;
-      }
-      else {
-#ifdef DEBUG_BUILD
-         if (period > 0x10000UL) {
-            // Attempt to set too long a period
-            return setErrorCode(E_TOO_LARGE);
-         }
-#endif
-         tmr->MOD = (uint32_t)(period-1);
-         // Left aligned PWM without CPWMS selected
-         tmr->SC  = sc;
-      }
-      // OK period
-      return setErrorCode(E_NO_ERROR);
    }
 
    /**
@@ -577,6 +606,16 @@ public:
       return tickInterval/Info::getClockFrequencyF();
    }
 
+
+   /**
+    * Get Timer count
+    *
+    * @return Timer count value
+    */
+   static __attribute__((always_inline)) uint16_t getTime() {
+      return tmr->CNT;
+   }
+   
    /**
     *  Enables fault detection input
     *
@@ -679,16 +718,7 @@ public:
       tmr->FLTCTRL &= ~(1<<inputNum);
    }
 
-   /**
-    * Get Timer count
-    *
-    * @return Timer count value
-    */
-   static __attribute__((always_inline)) uint16_t getTime() {
-      return tmr->CNT;
-   }
-
-   /**
+   /*
     * *****************************************************************
     *          Channel functions
     * *****************************************************************
@@ -901,11 +931,14 @@ template<class Info> FTMCallbackFunction           FtmIrq_T<Info>::faultCallback
  * // Instantiate the timer channel (for FTM0 channel 6)
  * using Tmr0_ch6 = USBDM::FtmChannel<FTM0Info, 6>;
  *
- * // Initialise PWM with initial alignment
- * Tmr0_ch6.configure(USBDM::FtmMode_LeftAlign);
+ * // Enable and initialise Base FTM with initial alignment
+ * Tmr0_ch6::Ftm::configure(FtmMode_LeftAlign);
  *
- * // Change period (in ticks)
- * Tmr0_ch6.setPeriod(500);
+ * // Change timer period (in ticks) (affects ALL channels of timer)
+ * Tmr0_ch6.Ftm::setPeriod(500);
+ *
+ * // Configure channel as PWM
+ * Tmr0_ch6::configure(FtmChMode_PwmHighTruePulses);
  *
  * // Change duty cycle (in percent)
  * Tmr0_ch6.setDutyCycle(45);
@@ -954,9 +987,8 @@ public:
    static constexpr uint32_t CHANNEL_MASK = 1<<channel;
 
    /**
-    * Configure channel and set mode\n
-    * Enables owning FTM if not already enabled\n
-    * Also see enable()
+    * Configure channel and sets mode\n
+    * Configures owning FTM with default settings from Configure.usbdmProject if not already enabled.
     *
     * @param[in] ftmChMode      Mode of operation for FTM e.g.FtmChMode_PwmHighTruePulses
     * @param[in] ftmChannelIrq  Whether to enable the interrupt function on this channel
@@ -966,34 +998,39 @@ public:
     * @note This method has the side-effect of clearing the register update synchronisation i.e. 
     *       pending CnV register updates are discarded.
     */
-   static void configure(
+   static void defaultConfigure(
          FtmChMode      ftmChMode     = FtmChMode_PwmHighTruePulses,
          FtmChannelIrq  ftmChannelIrq = FtmChannelIrq_Disable,
          FtmChannelDma  ftmChannelDma = FtmChannelDma_Disable) {
             
       if (!Ftm::isEnabled()) {
          // Enable parent FTM if needed
-         Ftm::configure();
+         Ftm::defaultConfigure();
       }
       Ftm::tmr->CONTROLS[channel].CnSC = ftmChMode|ftmChannelIrq|ftmChannelDma;
    }
 
    /**
-    * Enable channel and set mode\n
+    * Configure channel and sets channel mode\n
     * Doesn't affect shared settings of owning Timer
     *
-    * @param[in] ftmChMode      Mode of operation for FTM e.g.FtmChMode_PwmHighTruePulses
+    * @param[in] ftmChMode      Mode of operation for channel
     * @param[in] ftmChannelIrq  Whether to enable the interrupt function on this channel
     * @param[in] ftmChannelDma  Whether to enable the DMA function on this channel
     *
     * @note This method has the side-effect of clearing the register update synchronisation i.e.
     *       pending CnV register updates are discarded.
     */
-   static __attribute__((always_inline)) void enable(
+   static __attribute__((always_inline)) void configure(
          FtmChMode      ftmChMode     = FtmChMode_PwmHighTruePulses,
          FtmChannelIrq  ftmChannelIrq = FtmChannelIrq_Disable,
          FtmChannelDma  ftmChannelDma = FtmChannelDma_Disable) {
-            
+
+#ifdef DEBUG_BUILD
+      // Check that owning FTM has been enabled
+      assert(Ftm::isEnabled());
+#endif
+
       Ftm::tmr->CONTROLS[channel].CnSC = ftmChMode|ftmChannelIrq|ftmChannelDma;
    }
 
@@ -1033,7 +1070,7 @@ public:
    }
 
    /**
-    * Enable/disable FTM interrupts in NVIC
+    * Enable/disable interrupts in NVIC
     *
     * @param[in] enable true to enable, false to disable
     */
@@ -1189,11 +1226,14 @@ public:
  * // Instantiate the timer channel (for FTM0 channel 6)
  * using Tmr0_ch6 = USBDM::Ftm0Channel<6>;
  *
- * // Initialise PWM with initial period and alignment
- * Tmr0_ch6.setMode(200, USBDM::FtmMode_LeftAlign);
+ * // Enable and initialise Base FTM with initial alignment
+ * Tmr0_ch6::Ftm::configure(FtmMode_LeftAlign);
  *
- * // Change period (in ticks)
- * Tmr0_ch6.setPeriod(500);
+ * // Change timer period (in ticks) (affects ALL channels of timer)
+ * Tmr0_ch6.Ftm::setPeriod(500);
+ *
+ * // Configure channel as PWM
+ * Tmr0_ch6::configure(FtmChMode_PwmHighTruePulses);
  *
  * // Change duty cycle (in percent)
  * Tmr0_ch6.setDutyCycle(45);

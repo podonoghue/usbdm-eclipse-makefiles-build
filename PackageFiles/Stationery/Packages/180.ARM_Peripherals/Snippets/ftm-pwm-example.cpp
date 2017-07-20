@@ -27,14 +27,6 @@ static void delay(void) {
    }
 }
 
-/*
- * This example is not supported on all targets as PWM feature may not be available
- * on the pins connected to the LEDs (e.g. K64F).
- *
- * The mapping of pins may need to be changed to map PWM to LEDs as
- * preference was given to mapping to external pins on board (e.g. KL25Z).
- *
- */
 // Connection mapping - change as required
 using LED1 = $(demo.cpp.pwm.led1:Ftm0Channel<7>);
 
@@ -57,7 +49,11 @@ template<> void FtmIrq_T<Ftm0Info>::irqHandler() {
 #endif
 
 int main() {
-   LED1::enable(FtmChMode_PwmHighTruePulses);
+   // Configure base FTM for left-aligned PWM
+   LED1::Ftm::configure(FtmMode_LeftAlign);
+   // Configure channel as high-pulses
+   LED1::configure(FtmChMode_PwmHighTruePulses);
+   // Set high-drive on pin
    LED1::setDriveStrength(PinDriveStrength_High);
 
    /*

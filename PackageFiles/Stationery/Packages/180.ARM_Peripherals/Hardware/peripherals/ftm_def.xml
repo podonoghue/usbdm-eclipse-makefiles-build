@@ -35,11 +35,13 @@
       constant="true"
       description="Frequency of timer clock"
       toolTip="Determined from timer clock source and prescaler"
+      derived="true"
       units="Hz"/>
    <floatOption name="clockPeriod" 
       constant="true"
       description="Period of timer clock"
       toolTip="Determined from timer clock source and prescaler"
+      derived="true"
       units="s"/>
    <intOption name="ftm_mod" description="Modulo of timer"
       toolTip="Period of the timer"
@@ -48,6 +50,7 @@
       description="Period of timer"
       toolTip="Period of the timer"
       origin="Clock period * ftm_mod"
+      derived="true"
       min="0" units="s"/>
    <binaryOption name="ftm_sc_cpwms" 
       description="Center-Aligned PWM Select"

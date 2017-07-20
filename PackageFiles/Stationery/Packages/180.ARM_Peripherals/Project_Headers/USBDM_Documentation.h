@@ -267,8 +267,7 @@ This is a template class with static methods.\n
    // This allows access to USBDM classes and methods without the USBDM:: prefix.
    using namespace USBDM;
 
-   // Initialise the timer with initial period in ticks and alignment
-   // The tick rate is determined by the configuration
+   // Initialise the timer with initial alignment
    // This affects all channels of the FTM
    Ftm0::configure(FtmMode_LeftAlign);
 

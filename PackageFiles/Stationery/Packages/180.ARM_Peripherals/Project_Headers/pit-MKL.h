@@ -153,13 +153,13 @@ public:
    }
 
    /**
-    *  Enable the PIT
+    *  Enables and configures the PIT
     *
     *  @param[in]  pitDebugMode  Determined whether the PIT halts when suspended during debug
     */
    static void configure(PitDebugMode pitDebugMode) {
       enable();
-      pit->MCR = pitDebugMode;
+      pit->MCR = pitDebugMode|PIT_MCR_MDIS(0); // MDIS cleared => enabled!
    }
 
    /**
@@ -169,9 +169,7 @@ public:
     *  @param[in]  mcr       Module Control Register
     */
    static void configure(uint32_t mcr=Info::mcr) {
-      // Enable clock
-      *clockReg |= Info::clockMask;
-      __DMB();
+      enable();
 
       // Enable timer
       pit->MCR = mcr&~PIT_MCR_MDIS_MASK;
@@ -300,11 +298,11 @@ public:
     *  @note Function doesn't return until interval has expired
     */
    static void delay(uint8_t channel, uint32_t interval) {
-      configureChannel(channel, interval, PIT_TCTRL_TEN_MASK);
+      configureChannel(channel, interval);
       while (pit->CHANNEL[channel].TFLG == 0) {
          __NOP();
       }
-      configureChannel(channel, (uint32_t)0, 0);
+      disableChannel(channel);
    }
 
 };

@@ -42,7 +42,7 @@ int main() {
    QuadEncoder::enableFilter(15);
 
    // Reset position to zero
-   // Movement will be relative to this value
+   // Movement will be relative to this initial position
    QuadEncoder::resetPosition();
 
    // Set up callback for quadrature overflow or underflow

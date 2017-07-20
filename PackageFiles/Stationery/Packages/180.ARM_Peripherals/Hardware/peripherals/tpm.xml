@@ -39,16 +39,19 @@
       constant="true"
       description="Frequency of timer clock"
       toolTip="Determined from timer clock source and prescaler"
+      derived="true"
       units="Hz"/>
    <floatOption name="clockPeriod" 
       constant="true"
       description="Period of timer clock"
       toolTip="Determined from timer clock source and prescaler"
+      derived="true"
       units="s"/>
    <floatOption name="maximumPeriod" 
       constant="true"
       description="Maximum period of timer"
       toolTip="Determined from timer clock source and prescaler"
+      derived="true"
       units="s"/>
    <intOption name="period" description="Period of timer"
       toolTip="Default period of the timer"

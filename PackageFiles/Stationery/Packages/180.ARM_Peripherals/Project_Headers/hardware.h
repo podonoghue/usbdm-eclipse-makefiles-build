@@ -17,10 +17,11 @@
  */
 namespace USBDM {
 
-static constexpr float ns      = 1E-9; //!< Scale factor for nanoseconds
-static constexpr float us      = 1E-6; //!< Scale factor for microseconds
-static constexpr float ms      = 1E-3; //!< Scale factor for milliseconds
-static constexpr float percent = 1.0f; //!< Scale factor for percentage as float
+static constexpr float ns      = 1E-9f; //!< Scale factor for nanoseconds
+static constexpr float us      = 1E-6f; //!< Scale factor for microseconds
+static constexpr float ms      = 1E-3f; //!< Scale factor for milliseconds
+static constexpr float seconds = 1.0f;  //!< Scale factor for seconds
+static constexpr float percent = 1.0f;  //!< Scale factor for percentage as float
 
 enum ErrorCode {
    E_NO_ERROR = 0,      //!< No error

@@ -69,6 +69,23 @@
    <choiceOption name="dma_chcfg13" derivedFrom="dma_chcfg0"/>
    <choiceOption name="dma_chcfg14" derivedFrom="dma_chcfg0"/>
    <choiceOption name="dma_chcfg15" derivedFrom="dma_chcfg0"/>
+
+   <choiceOption name="dma_chcfg16" derivedFrom="dma_chcfg0"/>
+   <choiceOption name="dma_chcfg17" derivedFrom="dma_chcfg0"/>
+   <choiceOption name="dma_chcfg18" derivedFrom="dma_chcfg0"/>
+   <choiceOption name="dma_chcfg19" derivedFrom="dma_chcfg0"/>
+   <choiceOption name="dma_chcfg20" derivedFrom="dma_chcfg0"/>
+   <choiceOption name="dma_chcfg21" derivedFrom="dma_chcfg0"/>
+   <choiceOption name="dma_chcfg22" derivedFrom="dma_chcfg0"/>
+   <choiceOption name="dma_chcfg23" derivedFrom="dma_chcfg0"/>
+   <choiceOption name="dma_chcfg24" derivedFrom="dma_chcfg0"/>
+   <choiceOption name="dma_chcfg25" derivedFrom="dma_chcfg0"/>
+   <choiceOption name="dma_chcfg26" derivedFrom="dma_chcfg0"/>
+   <choiceOption name="dma_chcfg27" derivedFrom="dma_chcfg0"/>
+   <choiceOption name="dma_chcfg28" derivedFrom="dma_chcfg0"/>
+   <choiceOption name="dma_chcfg29" derivedFrom="dma_chcfg0"/>
+   <choiceOption name="dma_chcfg30" derivedFrom="dma_chcfg0"/>
+   <choiceOption name="dma_chcfg31" derivedFrom="dma_chcfg0"/>
    
    <template><![CDATA[
       \t// Number of DMA channels implemented
@@ -90,6 +107,22 @@
       \tstatic constexpr uint8_t chcfg13_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg13));
       \tstatic constexpr uint8_t chcfg14_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg14));
       \tstatic constexpr uint8_t chcfg15_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg15));
+      \tstatic constexpr uint8_t chcfg16_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg16));
+      \tstatic constexpr uint8_t chcfg17_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg17));
+      \tstatic constexpr uint8_t chcfg18_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg18));
+      \tstatic constexpr uint8_t chcfg19_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg19));
+      \tstatic constexpr uint8_t chcfg20_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg20));
+      \tstatic constexpr uint8_t chcfg21_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg21));
+      \tstatic constexpr uint8_t chcfg22_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg22));
+      \tstatic constexpr uint8_t chcfg23_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg23));
+      \tstatic constexpr uint8_t chcfg24_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg24));
+      \tstatic constexpr uint8_t chcfg25_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg25));
+      \tstatic constexpr uint8_t chcfg26_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg26));
+      \tstatic constexpr uint8_t chcfg27_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg27));
+      \tstatic constexpr uint8_t chcfg28_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg28));
+      \tstatic constexpr uint8_t chcfg29_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg29));
+      \tstatic constexpr uint8_t chcfg30_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg30));
+      \tstatic constexpr uint8_t chcfg31_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg31));
    ]]></template>
 
 </devicePage>

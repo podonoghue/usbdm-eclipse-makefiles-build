@@ -68,5 +68,4 @@
       \tstatic constexpr uint8_t chcfg3_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg3));
    ]]></template>
 
-
 </devicePage>

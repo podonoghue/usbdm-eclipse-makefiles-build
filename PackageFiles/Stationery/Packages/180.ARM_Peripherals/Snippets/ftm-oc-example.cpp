@@ -15,6 +15,14 @@
 using namespace USBDM;
 
 // Timer LED connection - change as required
+/**
+ * This example uses FTM interrupts.
+ *
+ * It is necessary enable these in Configure.usbdmProject under the "Peripheral Parameters"->FTM tab
+ * Select irqHandlerInstalled option.
+ */
+
+// Timer channel being used - change as required
 using Timer = $(demo.cpp.pwm.led1:Ftm0Channel<7>);
 
 // Half-period for timer
@@ -39,19 +47,23 @@ static void ftmCallback(uint8_t status) {
 int main() {
    printf("Starting\n");
    /**
-    * FTM channel set as Output compare with pin Toggle mode using a callback function
+    * FTM channel set as Output compare with pin Toggle mode and using a callback function
     */
-   // Enable the channel (and owning FTM) in Output Compare mode with Pin toggle
-   Timer::enable(FtmChMode_OutputCompareToggle);
+   // Configure base FTM (affects all channels)
+   Timer::Ftm::configure(FtmMode_LeftAlign);
+
    // Pin high-drive
    Timer::setDriveStrength(PinDriveStrength_High);
+
    // Set callback function
    Timer::setChannelCallback(ftmCallback);
-   // Set IC/OC measurement period to accommodate at least 1s (maximum period)
-   Timer::setMeasurementPeriod(1000*ms);
+   // Configure the channel in Output Compare mode with Pin toggle
+   Timer::configure(FtmChMode_OutputCompareToggle);
+   // Set IC/OC measurement period to accommodate at least 100ms (maximum period)
+   Timer::setMeasurementPeriod(110*ms);
 
    // Calculate half-period in timer ticks
-   // Must be one after timer clock configuration
+   // Must be done after timer clock configuration
    timerHalfPeriod = Timer::convertSecondsToTicks(100*ms);
 
    // Trigger 1st interrupt at now+100

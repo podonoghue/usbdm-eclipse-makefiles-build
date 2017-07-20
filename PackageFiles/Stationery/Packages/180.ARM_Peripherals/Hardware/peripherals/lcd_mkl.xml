@@ -146,7 +146,7 @@
       <copy source="Snippets/segment-lcd-example.cpp"      target="Snippets/segment-lcd-example.cpp"      replace="true"  derived="true" />
    </projectActionList>
    
-   <template name="lcdPins"><![CDATA[
+   <template name="lcdPins" namespace="all" ><![CDATA[
    /** Pins used for back planes */
    static const int8_t backplanePins[]  = { $(backplanes) };\n\n
 

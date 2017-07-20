@@ -6,8 +6,9 @@
 
    <!-- Convenient location for common files -->
    <projectActionList id = "sim_common_files" >
-      <copy source="Project_Headers/hardware.h"        target="Project_Headers/hardware.h" replace="true"  derived="true" />
-      <copy source="Sources/usbdmError.cpp"            target="Sources/usbdmError.cpp"     replace="true"  derived="true" />
+      <copy source="Project_Headers/USBDM_Documentation.h"   target="Project_Headers/USBDM_Documentation.h" replace="true"  derived="true" />
+      <copy source="Project_Headers/hardware.h"              target="Project_Headers/hardware.h"            replace="true"  derived="true" />
+      <copy source="Sources/usbdmError.cpp"                  target="Sources/usbdmError.cpp"                replace="true"  derived="true" />
    </projectActionList>
 
    <projectActionList id = "sim_port_files_mkl" >

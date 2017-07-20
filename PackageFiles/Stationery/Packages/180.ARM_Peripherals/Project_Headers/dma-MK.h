@@ -282,14 +282,14 @@ public:
    };
 
    /**
-    * Enable and configure shared settings
+    * Enable and configure shared DMA settings
     *
     * @param[in] dmaArbitration        How to arbitrate between requests from different channels
     * @param[in] dmaOnError            Whether to halt when a DMA error occurs
     * @param[in] dmaLink               Whether to enable continuous link mode
     * @param[in] dmaMinorLoopMapping   Whether to enable minor loop mapping
     */
-   static void enable(
+   static void configure(
          DmaArbitration       dmaArbitration=DmaArbitration_RoundRobin,
          DmaOnError           dmaOnError=DmaOnError_Halt,
          DmaLink              dmaLink=DmaLink_Disabled,

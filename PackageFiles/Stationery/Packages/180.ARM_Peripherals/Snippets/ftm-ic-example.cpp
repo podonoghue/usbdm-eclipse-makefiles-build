@@ -29,6 +29,12 @@ using namespace USBDM;
  *
  * It will be necessary to clean and re-build the project.
  */
+/**
+ * This example uses FTM interrupts.
+ *
+ * It is necessary enable these in Configure.usbdmProject under the "Peripheral Parameters"->FTM tab
+ * Select irqHandlerInstalled option.
+ */
 
 // Timer channel for measurement - change as required
 using Timer = $(demo.cpp.pwm.led1:Ftm0Channel<7>);
@@ -68,13 +74,16 @@ int main() {
    /**
     * FTM channel set as Input Capture using a callback function
     */
+   // Configure base FTM (affects all channels)
+   Timer::Ftm::configure(FtmMode_LeftAlign);
+
    // Pin filtering (if available)
    Timer::setFilter(PinFilter_Passive);
 
    // Set callback function
    Timer::setChannelCallback(ftmCallback);
-   // Enable the channel (and owning FTM) in Input Capture mode
-   Timer::enable(FtmChMode_InputCaptureRisingEdge);
+   // Configure the channel in Input Capture mode
+   Timer::configure(FtmChMode_InputCaptureRisingEdge);
    // Set IC/OC measurement period to accommodate at least 100ms (maximum period)
    Timer::setMeasurementPeriod(100*ms);
    // Enable interrupts from the channel

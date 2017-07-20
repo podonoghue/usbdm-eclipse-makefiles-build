@@ -4,6 +4,19 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
+   <choiceOption name="irqHandlingMethod" 
+      description="Method used to install interrupt handler in vector table"
+      toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods">
+      <choice value="0" name="No handler" />
+      <choice value="1" name="Software (Use setCallback() or class method)" />
+      <choice value="2" name="Named function" />
+   </choiceOption>
+
+   <stringOption name="namedInterruptHandler" 
+      value=""
+      toolTip="This is the name of a function to be installed in the vector table as the interrupt handler for this peripheral"
+   />
+   
    <binaryOption name="irqHandlerInstalled" description="Install class handler for IRQ"
       toolTip="If enabled ths option allows the handling of interrupts using two methods\n
       - override static method irqHandler() of the class, or\n

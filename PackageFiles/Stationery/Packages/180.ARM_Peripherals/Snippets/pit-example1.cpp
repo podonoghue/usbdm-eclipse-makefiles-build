@@ -16,7 +16,7 @@ using namespace USBDM;
 
 // Connection mapping - change as required
 // Led is assumed active-low
-using LED   = $(demo.cpp.red.led:GpioB<0>);
+using LED   = $(demo.cpp.red.led:GpioA<2, ActiveLow>);
 
 int main() {
 

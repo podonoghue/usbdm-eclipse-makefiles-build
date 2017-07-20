@@ -192,12 +192,12 @@ enum AdcCompare {
    AdcCompare_Disabled              = ADC_SC2_ACFE(0),                                          //!< Comparisons disabled
 
    AdcCompare_LessThan              = ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(0)|ADC_SC2_ACREN(0),        //!< Value < cv1
-   AdcCompare_GreaterThan           = ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(1)|ADC_SC2_ACREN(0),        //!< Value >= cv1
+   AdcCompare_GreaterThanOrEqual    = ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(1)|ADC_SC2_ACREN(0),        //!< Value >= cv1
 
-   AdcCompare_OutsideRangeExclusive = (0<<8)|ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(0)|ADC_SC2_ACREN(1), //!< cv1<=cv2 => (Value < cv1) || (Value > cv2)
-   AdcCompare_InsideRangeExclusive  = (1<<8)|ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(0)|ADC_SC2_ACREN(1), //!< cv1>cv2  =>   cv2 < value < cv1
-   AdcCompare_InsideRangeInclusive  = (0<<8)|ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(1)|ADC_SC2_ACREN(1), //!< cv1<=cv2 =>   cv1 <= value <= cv2
-   AdcCompare_OutsideRangeInclusive = (1<<8)|ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(1)|ADC_SC2_ACREN(1), //!< cv1>cv2  => (Value <= cv2) || (Value >= cv1)
+   AdcCompare_OutsideRangeExclusive = (0<<8)|ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(0)|ADC_SC2_ACREN(1), //!< cv1<=cv2 => (Value < low) || (Value > high)
+   AdcCompare_InsideRangeExclusive  = (1<<8)|ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(0)|ADC_SC2_ACREN(1), //!< cv1>cv2  => low < value < high
+   AdcCompare_InsideRangeInclusive  = (0<<8)|ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(1)|ADC_SC2_ACREN(1), //!< cv1<=cv2 =>   low <= value <= high
+   AdcCompare_OutsideRangeInclusive = (1<<8)|ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(1)|ADC_SC2_ACREN(1), //!< cv1>cv2  => (Value <= low) || (Value >= high)
 };
 
 /**
@@ -261,7 +261,23 @@ public:
    }
 
    /**
-    * Initialise ADC
+    * Configure with settings from Configure.usbdmProject.\n
+    * Includes configuring all pins
+    */
+   static void defaultConfigure() {
+      enable();
+
+      // Set mode to default
+      adc->CFG1 = Info::cfg1;
+      adc->CFG2 = Info::cfg2;
+      adc->SC2  = Info::sc2;
+      adc->CV1  = Info::cv1;
+      adc->CV1  = Info::cv2;
+      enableNvicInterrupts();
+   }
+
+   /**
+    * Configure ADC
     *
     * @param[in] adcResolution   Resolution for converter e.g. AdcResolution_16bit_se
     * @param[in] adcClockSource  Clock source e.g. AdcClockSource_Asynch
@@ -290,21 +306,6 @@ public:
       enable();
       adc->CFG1 = adcResolution|adcClockSource|adcClockDivider|adcPower|(adcSample&ADC_CFG1_ADLSMP_MASK);
       adc->CFG2 = adcMuxsel|adcClockRange|adcAsyncClock|(adcSample&ADC_CFG2_ADLSTS_MASK);
-   }
-
-   /**
-    * Initialise ADC to default settings\n
-    * Configures all ADC pins
-    */
-   static void configure() {
-      enable();
-      
-      // Set mode to default
-      adc->CFG1 = Info::cfg1;
-      adc->CFG2 = Info::cfg2;
-      adc->SC2  = Info::sc2;
-
-      enableNvicInterrupts();
    }
 
    /**
@@ -457,7 +458,7 @@ public:
          case AdcCompare_Disabled:
             break;
          case AdcCompare_LessThan:
-         case AdcCompare_GreaterThan:
+         case AdcCompare_GreaterThanOrEqual:
             adc->CV1 = low;
             break;
          case AdcCompare_OutsideRangeExclusive:
@@ -603,6 +604,9 @@ template<class Info, int channel>
 class AdcChannel_T : public AdcBase_T<Info>, CheckSignal<Info, channel> {
 
 public:
+   /** Allow convenient access to owning ADC */
+   using Adc =  AdcBase_T<Info>;
+
    /** Channel number */
    static constexpr int CHANNEL=channel;
 
@@ -660,6 +664,9 @@ template<class Info, int channel>
 class AdcDiffChannel_T : public AdcBase_T<Info>, CheckSignal<typename Info::InfoDP, channel>, CheckSignal<typename Info::InfoDM, channel> {
 
 public:
+   /** Allow convenient access to owning ADC */
+   using Adc =  AdcBase_T<Info>;
+
    /** Channel number */
    static constexpr int CHANNEL=channel;
 

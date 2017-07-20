@@ -29,6 +29,7 @@
       units="Hz"
       description="Frequency of OSC Clock or Crystal [OSCCLK]"
       toolTip="Frequency of external crystal or clock on XTAL/EXTAL"
+      derived="true"
       value="8000000" />
 
    <choiceOption name="range_out"

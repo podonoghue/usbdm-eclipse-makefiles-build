@@ -540,7 +540,7 @@
       \t}\n\n
    ]]></template>
    
-   <template name="clockInfo"><![CDATA[
+   <template name="clockInfo" namespace="all" ><![CDATA[
       \tconst McgInfo::ClockInfo McgInfo::clockInfo[1] = {
       \t   {
       \t   //! Clock Mode

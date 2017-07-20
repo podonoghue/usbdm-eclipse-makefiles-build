@@ -527,7 +527,7 @@ public:
 using Lcd = Lcd_T<USBDM::gpio_D9, USBDM::gpio_D8, USBDM::ftm_D10>;
 #else
 // On/Off control of back-light
-using Lcd = Lcd_T<USBDM::gpio_D9, USBDM::gpio_D8, USBDM::gpio_D10>;
+using Lcd = Lcd_T<USBDM::$(demo.lcd.elecfreaks.cs:gpio_D9), USBDM::$(demo.lcd.elecfreaks.reset:gpio_D8), USBDM::$(demo.lcd.elecfreaks.backlight:gpio_D10)>;
 #endif
 
 /**
