@@ -7132,15 +7132,19 @@ typedef struct {                                /*       SPI0 Structure         
       __IO uint32_t  CTAR_SLAVE;                /**< 000C: Clock and Transfer Attributes Register (In Slave Mode)       */
    };
         uint8_t   RESERVED_1[24];              
-   __IO uint32_t  SR;                           /**< 002C: Status Register                                              */
+   __IO uint32_t  SR;                           /**< 002C: Status register                                              */
    __IO uint32_t  RSER;                         /**< 0030: DMA/Interrupt Request Select and Enable Register             */
    union {                                      /**< 0000: (size=0004)                                                  */
       __IO uint32_t  PUSHR;                     /**< 0034: PUSH TX FIFO Register In Master Mode                         */
       __IO uint32_t  PUSHR_SLAVE;               /**< 0034: PUSH TX FIFO Register In Slave Mode                          */
+      struct {                                  /**< 0000: (size=0004)                                                  */
+         __IO uint16_t  PUSHR_DATA;             /**< 0034: PUSH TX FIFO Register Data portion                           */
+         __IO uint16_t  PUSHR_CONTROL;          /**< 0036: PUSH TX FIFO Register Control portion                        */
+      };
    };
    __I  uint32_t  POPR;                         /**< 0038: POP RX FIFO Register                                         */
    __I  uint32_t  TXFR[4];                      /**< 003C: Transmit FIFO                                                */
-        uint8_t   RESERVED_2[48];              
+        uint8_t   RESERVED_3[48];              
    __I  uint32_t  RXFR[4];                      /**< 007C: Receive FIFO                                                 */
 } SPI_Type;
 
@@ -7238,6 +7242,9 @@ typedef struct {                                /*       SPI0 Structure         
 #define SPI_CTAR_LSBFE_MASK                      (0x1000000U)                                        /*!< SPI0_CTAR.LSBFE Mask                    */
 #define SPI_CTAR_LSBFE_SHIFT                     (24U)                                               /*!< SPI0_CTAR.LSBFE Position                */
 #define SPI_CTAR_LSBFE(x)                        (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< SPI0_CTAR.LSBFE Field                   */
+#define SPI_CTAR_MODE_MASK                       (0x6000000U)                                        /*!< SPI0_CTAR.MODE Mask                     */
+#define SPI_CTAR_MODE_SHIFT                      (25U)                                               /*!< SPI0_CTAR.MODE Position                 */
+#define SPI_CTAR_MODE(x)                         (((uint32_t)(((uint32_t)(x))<<25U))&0x6000000UL)    /*!< SPI0_CTAR.MODE Field                    */
 #define SPI_CTAR_CPHA_MASK                       (0x2000000U)                                        /*!< SPI0_CTAR.CPHA Mask                     */
 #define SPI_CTAR_CPHA_SHIFT                      (25U)                                               /*!< SPI0_CTAR.CPHA Position                 */
 #define SPI_CTAR_CPHA(x)                         (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< SPI0_CTAR.CPHA Field                    */
@@ -7251,15 +7258,18 @@ typedef struct {                                /*       SPI0 Structure         
 #define SPI_CTAR_DBR_SHIFT                       (31U)                                               /*!< SPI0_CTAR.DBR Position                  */
 #define SPI_CTAR_DBR(x)                          (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< SPI0_CTAR.DBR Field                     */
 /* ------- CTAR_SLAVE Bit Fields                    ------ */
+#define SPI_CTAR_SLAVE_MODE_MASK                 (0x6000000U)                                        /*!< SPI0_CTAR_SLAVE.MODE Mask               */
+#define SPI_CTAR_SLAVE_MODE_SHIFT                (25U)                                               /*!< SPI0_CTAR_SLAVE.MODE Position           */
+#define SPI_CTAR_SLAVE_MODE(x)                   (((uint32_t)(((uint32_t)(x))<<25U))&0x6000000UL)    /*!< SPI0_CTAR_SLAVE.MODE Field              */
 #define SPI_CTAR_SLAVE_CPHA_MASK                 (0x2000000U)                                        /*!< SPI0_CTAR_SLAVE.CPHA Mask               */
 #define SPI_CTAR_SLAVE_CPHA_SHIFT                (25U)                                               /*!< SPI0_CTAR_SLAVE.CPHA Position           */
 #define SPI_CTAR_SLAVE_CPHA(x)                   (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< SPI0_CTAR_SLAVE.CPHA Field              */
 #define SPI_CTAR_SLAVE_CPOL_MASK                 (0x4000000U)                                        /*!< SPI0_CTAR_SLAVE.CPOL Mask               */
 #define SPI_CTAR_SLAVE_CPOL_SHIFT                (26U)                                               /*!< SPI0_CTAR_SLAVE.CPOL Position           */
 #define SPI_CTAR_SLAVE_CPOL(x)                   (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< SPI0_CTAR_SLAVE.CPOL Field              */
-#define SPI_CTAR_SLAVE_FMSZ_MASK                 (0x78000000U)                                       /*!< SPI0_CTAR_SLAVE.FMSZ Mask               */
+#define SPI_CTAR_SLAVE_FMSZ_MASK                 (0xF8000000U)                                       /*!< SPI0_CTAR_SLAVE.FMSZ Mask               */
 #define SPI_CTAR_SLAVE_FMSZ_SHIFT                (27U)                                               /*!< SPI0_CTAR_SLAVE.FMSZ Position           */
-#define SPI_CTAR_SLAVE_FMSZ(x)                   (((uint32_t)(((uint32_t)(x))<<27U))&0x78000000UL)   /*!< SPI0_CTAR_SLAVE.FMSZ Field              */
+#define SPI_CTAR_SLAVE_FMSZ(x)                   (((uint32_t)(((uint32_t)(x))<<27U))&0xF8000000UL)   /*!< SPI0_CTAR_SLAVE.FMSZ Field              */
 /* ------- SR Bit Fields                            ------ */
 #define SPI_SR_POPNXTPTR_MASK                    (0xFU)                                              /*!< SPI0_SR.POPNXTPTR Mask                  */
 #define SPI_SR_POPNXTPTR_SHIFT                   (0U)                                                /*!< SPI0_SR.POPNXTPTR Position              */
@@ -7342,6 +7352,26 @@ typedef struct {                                /*       SPI0 Structure         
 #define SPI_PUSHR_SLAVE_TXDATA_MASK              (0xFFFFU)                                           /*!< SPI0_PUSHR_SLAVE.TXDATA Mask            */
 #define SPI_PUSHR_SLAVE_TXDATA_SHIFT             (0U)                                                /*!< SPI0_PUSHR_SLAVE.TXDATA Position        */
 #define SPI_PUSHR_SLAVE_TXDATA(x)                (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< SPI0_PUSHR_SLAVE.TXDATA Field           */
+/* ------- PUSHR_DATA Bit Fields                    ------ */
+#define SPI_PUSHR_DATA_TXDATA_MASK               (0xFFFFU)                                           /*!< SPI0_PUSHR_DATA.TXDATA Mask             */
+#define SPI_PUSHR_DATA_TXDATA_SHIFT              (0U)                                                /*!< SPI0_PUSHR_DATA.TXDATA Position         */
+#define SPI_PUSHR_DATA_TXDATA(x)                 (((uint16_t)(((uint16_t)(x))<<0U))&0xFFFFUL)        /*!< SPI0_PUSHR_DATA.TXDATA Field            */
+/* ------- PUSHR_CONTROL Bit Fields                 ------ */
+#define SPI_PUSHR_CONTROL_PCS_MASK               (0x3FU)                                             /*!< SPI0_PUSHR_CONTROL.PCS Mask             */
+#define SPI_PUSHR_CONTROL_PCS_SHIFT              (0U)                                                /*!< SPI0_PUSHR_CONTROL.PCS Position         */
+#define SPI_PUSHR_CONTROL_PCS(x)                 (((uint16_t)(((uint16_t)(x))<<0U))&0x3FUL)          /*!< SPI0_PUSHR_CONTROL.PCS Field            */
+#define SPI_PUSHR_CONTROL_CTCNT_MASK             (0x400U)                                            /*!< SPI0_PUSHR_CONTROL.CTCNT Mask           */
+#define SPI_PUSHR_CONTROL_CTCNT_SHIFT            (10U)                                               /*!< SPI0_PUSHR_CONTROL.CTCNT Position       */
+#define SPI_PUSHR_CONTROL_CTCNT(x)               (((uint16_t)(((uint16_t)(x))<<10U))&0x400UL)        /*!< SPI0_PUSHR_CONTROL.CTCNT Field          */
+#define SPI_PUSHR_CONTROL_EOQ_MASK               (0x800U)                                            /*!< SPI0_PUSHR_CONTROL.EOQ Mask             */
+#define SPI_PUSHR_CONTROL_EOQ_SHIFT              (11U)                                               /*!< SPI0_PUSHR_CONTROL.EOQ Position         */
+#define SPI_PUSHR_CONTROL_EOQ(x)                 (((uint16_t)(((uint16_t)(x))<<11U))&0x800UL)        /*!< SPI0_PUSHR_CONTROL.EOQ Field            */
+#define SPI_PUSHR_CONTROL_CTAS_MASK              (0x7000U)                                           /*!< SPI0_PUSHR_CONTROL.CTAS Mask            */
+#define SPI_PUSHR_CONTROL_CTAS_SHIFT             (12U)                                               /*!< SPI0_PUSHR_CONTROL.CTAS Position        */
+#define SPI_PUSHR_CONTROL_CTAS(x)                (((uint16_t)(((uint16_t)(x))<<12U))&0x7000UL)       /*!< SPI0_PUSHR_CONTROL.CTAS Field           */
+#define SPI_PUSHR_CONTROL_CONT_MASK              (0x8000U)                                           /*!< SPI0_PUSHR_CONTROL.CONT Mask            */
+#define SPI_PUSHR_CONTROL_CONT_SHIFT             (15U)                                               /*!< SPI0_PUSHR_CONTROL.CONT Position        */
+#define SPI_PUSHR_CONTROL_CONT(x)                (((uint16_t)(((uint16_t)(x))<<15U))&0x8000UL)       /*!< SPI0_PUSHR_CONTROL.CONT Field           */
 /* ------- POPR Bit Fields                          ------ */
 #define SPI_POPR_RXDATA_MASK                     (0xFFFFFFFFU)                                       /*!< SPI0_POPR.RXDATA Mask                   */
 #define SPI_POPR_RXDATA_SHIFT                    (0U)                                                /*!< SPI0_POPR.RXDATA Position               */
