@@ -11,6 +11,7 @@ Devices using this peripheral:
       MK66F18
       MK70F15WS
       MK82F25615
+      MKL82Z7
 -->
       <peripheral>
          <?sourceFile "SPI0_MK_PCSIS6_PCSSE" ?>
@@ -204,12 +205,12 @@ Controls whether the Rx FIFO discards new data when overflowing</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>PCS5/ PCSS is used as the Peripheral Chip Select[5] signal</description>
+                           <description>PCS5/PCSS is used as Chip Select signal</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>PCS5/ PCSS is used as an active-low PCS Strobe signal</description>
+                           <description>PCS5/PCSS is used as active-low PCS Strobe signal</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1041,6 +1042,7 @@ Determines if PCS remains asserted between transfers</description>
             </register>
             <register>
                <name>PUSHR_SLAVE</name>
+               <?hide?>
                <description>PUSH TX FIFO Register In Slave Mode</description>
                <addressOffset>0x34</addressOffset>
                <fields>
@@ -1073,6 +1075,7 @@ Determines if PCS remains asserted between transfers</description>
                <description>Transmit FIFO</description>
                <addressOffset>0x3C</addressOffset>
                <access>read-only</access>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>TXDATA</name>
@@ -1096,6 +1099,7 @@ Determines if PCS remains asserted between transfers</description>
                <description>Receive FIFO</description>
                <addressOffset>0x7C</addressOffset>
                <access>read-only</access>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>RXDATA</name>

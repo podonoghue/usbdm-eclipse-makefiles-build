@@ -95,7 +95,7 @@
       <xi:include href="peripherals/RTC_MK28F15.svd.xml"/>
       <xi:include href="peripherals/SIM_MKL82Z7.svd.xml"/>
       <xi:include href="peripherals/SMC_MKL82Z7.svd.xml"/>
-      <xi:include href="peripherals/SPI0_MKL82Z7.svd.xml"/>
+      <xi:include href="peripherals/SPI0_MK_PCSIS6_PCSSE.svd.xml"/>
       <peripheral derivedFrom="SPI0"><name>SPI1</name><baseAddress>0x4002D000</baseAddress>
          <interrupt><name>SPI1</name><description>Serial Peripheral Interface</description><value>36</value></interrupt>
       </peripheral>

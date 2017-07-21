@@ -159,7 +159,7 @@ Controls the module operation in dose mode</description>
                      <description>Peripheral Chip Select x Inactive State\n
 Sets the inactive level of the PCS signals</description>
                      <bitOffset>16</bitOffset>
-                     <bitWidth>5</bitWidth>
+                     <bitWidth>6</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -603,7 +603,7 @@ Defines inactive state of the CLK</description>
 The number of bits transferred per frame is equal to the FMSZ field value plus 1.\n
 The minimum valid FMSZ field value is 3</description>
                      <bitOffset>27</bitOffset>
-                     <bitWidth>4</bitWidth>
+                     <bitWidth>5</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0bX</name>
@@ -902,7 +902,7 @@ Enables TCF flag in the SR to generate an interrupt request</description> <bitOf
                      <name>PCS</name>
                      <description>Select which PCS signals are to be asserted for the transfer</description>
                      <bitOffset>16</bitOffset>
-                     <bitWidth>5</bitWidth>
+                     <bitWidth>6</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -1019,6 +1019,7 @@ Determines if PCS remains asserted between transfers</description>
             </register>
             <register>
                <name>PUSHR_SLAVE</name>
+               <?hide?>
                <description>PUSH TX FIFO Register In Slave Mode</description>
                <addressOffset>0x34</addressOffset>
                <fields>
@@ -1051,6 +1052,7 @@ Determines if PCS remains asserted between transfers</description>
                <description>Transmit FIFO</description>
                <addressOffset>0x3C</addressOffset>
                <access>read-only</access>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>TXDATA</name>
@@ -1074,6 +1076,7 @@ Determines if PCS remains asserted between transfers</description>
                <description>Receive FIFO</description>
                <addressOffset>0x7C</addressOffset>
                <access>read-only</access>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>RXDATA</name>

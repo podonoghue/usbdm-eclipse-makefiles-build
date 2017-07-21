@@ -7,6 +7,7 @@ Devices using this peripheral:
       MK10DZ10
       MK10F12
       MK11D5
+      MK11DA5
       MK11D5WS
       MK12D5
       MK20D5
@@ -15,6 +16,7 @@ Devices using this peripheral:
       MK20DZ10
       MK20F12
       MK21D5
+      MK21DA5
       MK21D5WS
       MK21FA12
       MK22D5
@@ -1064,6 +1066,7 @@ Determines if PCS remains asserted between transfers</description>
             </register>
             <register>
                <name>PUSHR_SLAVE</name>
+               <?hide?>
                <description>PUSH TX FIFO Register In Slave Mode</description>
                <addressOffset>0x34</addressOffset>
                <fields>
@@ -1096,6 +1099,7 @@ Determines if PCS remains asserted between transfers</description>
                <description>Transmit FIFO</description>
                <addressOffset>0x3C</addressOffset>
                <access>read-only</access>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>TXDATA</name>
@@ -1119,6 +1123,7 @@ Determines if PCS remains asserted between transfers</description>
                <description>Receive FIFO</description>
                <addressOffset>0x7C</addressOffset>
                <access>read-only</access>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>RXDATA</name>

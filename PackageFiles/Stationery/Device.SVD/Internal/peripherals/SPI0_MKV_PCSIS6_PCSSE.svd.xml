@@ -1040,6 +1040,7 @@ Determines if PCS remains asserted between transfers</description>
             </register>
             <register>
                <name>PUSHR_SLAVE</name>
+               <?hide?>
                <description>PUSH TX FIFO Register In Slave Mode</description>
                <addressOffset>0x34</addressOffset>
                <fields>
@@ -1072,6 +1073,7 @@ Determines if PCS remains asserted between transfers</description>
                <description>Transmit FIFO</description>
                <addressOffset>0x3C</addressOffset>
                <access>read-only</access>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>TXDATA</name>
@@ -1095,6 +1097,7 @@ Determines if PCS remains asserted between transfers</description>
                <description>Receive FIFO</description>
                <addressOffset>0x7C</addressOffset>
                <access>read-only</access>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>RXDATA</name>
