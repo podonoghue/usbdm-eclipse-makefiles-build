@@ -152,13 +152,13 @@ enum FtmChannelDma {
 /**
  * Type definition for FTM timer overflow interrupt call back
  */
-typedef void (*FTMCallbackFunction)();
+typedef void (*FtmCallbackFunction)();
 /**
  * Type definition for FTM channel interrupt call back
  *
  * @param[in] status Flags indicating interrupt source channel(s)
  */
-typedef void (*FTMChannelCallbackFunction)(uint8_t status);
+typedef void (*FtmChannelCallbackFunction)(uint8_t status);
 
 /**
  * Base class representing an FTM
@@ -846,11 +846,11 @@ class FtmIrq_T : public FtmBase_T<Info> {
 
 protected:
    /** Callback function for TOI ISR */
-   static FTMCallbackFunction toiCallback;
+   static FtmCallbackFunction toiCallback;
    /** Callback function for Channel ISR */
-   static FTMChannelCallbackFunction callback;
+   static FtmChannelCallbackFunction callback;
    /** Callback function for Channel Fault */
-   static FTMCallbackFunction faultCallback;
+   static FtmCallbackFunction faultCallback;
 
 public:
    /**
@@ -882,7 +882,7 @@ public:
     * @param[in] theCallback Callback function to execute on overflow interrupt.\n
     *                        nullptr to indicate none
     */
-   static __attribute__((always_inline)) void setTimerOverflowCallback(FTMCallbackFunction theCallback) {
+   static __attribute__((always_inline)) void setTimerOverflowCallback(FtmCallbackFunction theCallback) {
       if (theCallback == nullptr) {
          toiCallback = FtmIrq_T<Info>::unhandledCallback;
          return;
@@ -896,7 +896,7 @@ public:
     * @param[in] theCallback Callback function to execute on channel interrupt.\n
     *                        nullptr to indicate none
     */
-   static __attribute__((always_inline)) void setChannelCallback(FTMChannelCallbackFunction theCallback) {
+   static __attribute__((always_inline)) void setChannelCallback(FtmChannelCallbackFunction theCallback) {
       if (theCallback == nullptr) {
          callback = FtmBase_T<Info>::unhandledCallback;
          return;
@@ -910,7 +910,7 @@ public:
     * @param[in] theCallback Callback function to execute on fault interrupt.\n
     *                        nullptr to indicate none
     */
-   static __attribute__((always_inline)) void setFaultCallback(FTMCallbackFunction theCallback) {
+   static __attribute__((always_inline)) void setFaultCallback(FtmCallbackFunction theCallback) {
       if (theCallback == nullptr) {
          faultCallback = FtmBase_T<Info>::unhandledCallback;
          return;
@@ -919,9 +919,9 @@ public:
    }
 };
 
-template<class Info> FTMCallbackFunction           FtmIrq_T<Info>::toiCallback   = FtmBase_T<Info>::unhandledCallback;
-template<class Info> FTMChannelCallbackFunction    FtmIrq_T<Info>::callback      = FtmBase_T<Info>::unhandledCallback;
-template<class Info> FTMCallbackFunction           FtmIrq_T<Info>::faultCallback = FtmBase_T<Info>::unhandledCallback;
+template<class Info> FtmCallbackFunction           FtmIrq_T<Info>::toiCallback   = FtmBase_T<Info>::unhandledCallback;
+template<class Info> FtmChannelCallbackFunction    FtmIrq_T<Info>::callback      = FtmBase_T<Info>::unhandledCallback;
+template<class Info> FtmCallbackFunction           FtmIrq_T<Info>::faultCallback = FtmBase_T<Info>::unhandledCallback;
 
 /**
  * Template class representing a timer channel
