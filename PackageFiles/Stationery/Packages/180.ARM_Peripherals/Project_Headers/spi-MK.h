@@ -25,6 +25,12 @@
 namespace USBDM {
 
 /**
+ * Type definition for DMA interrupt call back
+ * @param status Interrupt status value from SPI->SR
+ */
+typedef void (*SpiCallbackFunction)(uint32_t status);
+
+/**
  * @addtogroup SPI_Group SPI, Serial Peripheral Interface
  * @brief C++ Class allowing access to SPI interface
  * @{
@@ -42,6 +48,54 @@ enum SpiOrder {
    SpiOrder_LsbFirst = SPI_CTAR_LSBFE(1),
 };
 
+/**
+ * Transmit FIFO Fill Request interrupt/DMA enable (TFFF flag)
+ */
+enum SpiFifoTxRequest {
+   SpiFifoTxRequest_Disabled  = SPI_RSER_TFFF_DIRS(0)|SPI_RSER_TFFF_RE(0),  // Requests disabled
+   SpiFifoTxRequest_Interrupt = SPI_RSER_TFFF_DIRS(0)|SPI_RSER_TFFF_RE(1),  // Generate FIFO Fill Interrupt requests (TFFF flag)
+   SpiFifoTxRequest_Dma       = SPI_RSER_TFFF_DIRS(1)|SPI_RSER_TFFF_RE(1),  // Generate FIFO Fill DMA requests (TFFF flag)
+};
+
+/**
+ * Receive FIFO Drain Request interrupt/DMA enable (RFDF flag)
+ */
+enum SpiFifoRxRequest {
+   SpiFifoRxRequest_Disabled  = SPI_RSER_RFDF_DIRS(0)|SPI_RSER_RFDF_RE(0),  // Requests disabled
+   SpiFifoRxRequest_Interrupt = SPI_RSER_RFDF_DIRS(0)|SPI_RSER_RFDF_RE(1),  // Generate FIFO Drain Interrupt requests (RSER flag)
+   SpiFifoRxRequest_Dma       = SPI_RSER_RFDF_DIRS(1)|SPI_RSER_RFDF_RE(1),  // Generate FIFO Drain DMA requests (RSER flag)
+};
+
+/**
+ * Controls Transmit FIFO Underflow interrupts (TFUF flag)
+ */
+enum SpiFifoUnderflowInterrupt {
+   SpiFifoUnderflowInterrupt_Disabled  = SPI_RSER_TFUF_RE(0),   // Transmit FIFO Underflow interrupts disabled
+   SpiFifoUnderflowInterrupt_Enabled   = SPI_RSER_TFUF_RE(1),   // Transmit FIFO Underflow interrupts enabled (TFUF flag)
+};
+
+/**
+ * Controls Receive FIFO Overflow interrupts (RFOF flag)
+ */
+enum SpiFifoOverflowInterrupt {
+   SpiFifoOverflowInterrupt_Disabled  = SPI_RSER_RFOF_RE(0),   // Receive FIFO Overflow interrupts disabled
+   SpiFifoOverflowInterrupt_Enabled   = SPI_RSER_RFOF_RE(1),   // Receive FIFO Overflow interrupts enabled (RFOF flag)
+};
+
+/**
+ * Controls Transmit complete interrupts (TCF Flag)
+ */
+enum SpiTxCompleteInterrupt {
+   SpiTxCompleteInterrupt_Disabled = SPI_RSER_TCF_RE(0),    // Transmission Complete Request Enable (TCF Flag)
+   SpiTxCompleteInterrupt_Enabled  = SPI_RSER_TCF_RE(1),    // Transmission Complete Request Enable (TCF Flag)
+};
+/**
+ * Controls DSPI Finished interrupts (EOQF flag)
+ */
+enum SpiEndOfQueueInterrupt {
+   SpiEndOfQueueInterrupt_Disable   = SPI_RSER_EOQF_RE(0),   // DSPI Finished Request Disabled
+   SpiEndOfQueueInterrupt_Enable    = SPI_RSER_EOQF_RE(1),   // DSPI Finished Request Enable (EOQF flag)
+};
 using SpiModeValue = uint32_t;
 
 /**
@@ -60,6 +114,11 @@ static constexpr SpiModeValue spiModeValue(SpiMode spiMode=SpiMode_0, SpiOrder s
 class Spi {
 
 protected:
+   /** Callback to catch unhandled interrupt */
+   static void unhandledCallback(uint32_t) {
+      setAndCheckErrorCode(E_NO_HANDLER);
+   }
+
    ~Spi() {}
 
 public:
@@ -247,8 +306,8 @@ public:
    /**
     * Obtain SPI mutex(dummy) and set SPI configuration
     *
-    * @param[in]  config The configuration value to set for the transaction.\n
-    *               A value of zero leaves the configuration unchanged
+    * @param[in] config The configuration value to set for the transaction.\n
+    *                   A value of zero leaves the configuration unchanged
     */
    int startTransaction(uint32_t config=0, int =0) {
       if (config != 0) {
@@ -428,6 +487,48 @@ public:
          spi->MCR |= SPI_MCR_PCSIS(1<<signal);
       }
    }
+
+   /**
+    * Starts and stops the SPI transfers.
+    *
+    * @param[in] enable true to enable
+    */
+   void enableTransfer(bool enable=true) {
+      if (enable) {
+         spi->MCR &= ~SPI_MCR_HALT_MASK;
+      }
+      else {
+         spi->MCR |= SPI_MCR_HALT_MASK;
+      }
+   }
+   /**
+    *
+    * @param[in] spiFifoTxRequest   Transmit FIFO Fill Request interrupt/DMA enable (TFFF flag)
+    * @param[in] spiFifoRxRequest   Receive FIFO Drain Request interrupt/DMA enable (RFDF flag)
+    */
+   void configureFifoRequests(
+         SpiFifoTxRequest spiFifoTxRequest,
+         SpiFifoRxRequest spiFifoRxRequest) {
+
+      spi->RSER = (spi->RSER&~(SPI_RSER_TFFF_DIRS(1)|SPI_RSER_TFFF_RE(1)|SPI_RSER_RFDF_DIRS(1)|SPI_RSER_RFDF_RE(1)))|spiFifoTxRequest|spiFifoRxRequest;
+   }
+   /**
+    *
+    * @param[in] spiTxCompleteInterrupt      Controls Transmit complete interrupts (TCF Flag)
+    * @param[in] spiEndOfQueueInterrupt      Controls DSPI Finished interrupts (EOQF flag)
+    * @param[in] spiFifoUnderflowInterrupt   Controls Transmit FIFO Underflow interrupts (TFUF flag)
+    * @param[in] spiFifoOverflowInterrupt    Controls Transmit FIFO Overflow interrupts (TFUF flag)
+    */
+   void configureInterrupts(
+         SpiTxCompleteInterrupt     spiTxCompleteInterrupt     = SpiTxCompleteInterrupt_Disabled,
+         SpiEndOfQueueInterrupt     spiEndOfQueueInterrupt     = SpiEndOfQueueInterrupt_Disable,
+         SpiFifoUnderflowInterrupt  spiFifoUnderflowInterrupt  = SpiFifoUnderflowInterrupt_Disabled,
+         SpiFifoOverflowInterrupt   spiFifoOverflowInterrupt   = SpiFifoOverflowInterrupt_Disabled
+         ) {
+
+      spi->RSER = (spi->RSER&~(SPI_RSER_TFUF_RE(1)|SPI_RSER_RFOF_RE(1)|SPI_RSER_TCF_RE(1)|SPI_RSER_EOQF_RE(1)))|
+            spiFifoUnderflowInterrupt|spiFifoOverflowInterrupt|spiTxCompleteInterrupt|spiEndOfQueueInterrupt;
+   }
 };
 
 /**
@@ -481,6 +582,8 @@ public:
 #endif
 
 public:
+   static constexpr volatile SPI_Type *SPI = Info::spi;
+
    // SPI SCK (clock) Pin
    using sckGpio  = GpioTable_T<Info, 0, USBDM::ActiveHigh>;
 
@@ -544,8 +647,15 @@ public:
       *Info::clockReg |= Info::clockMask;
       __DMB();
 
-      spi->MCR = SPI_MCR_HALT_MASK|SPI_MCR_CLR_RXF_MASK|SPI_MCR_ROOE_MASK|SPI_MCR_CLR_TXF_MASK|
-            SPI_MCR_MSTR_MASK|SPI_MCR_DCONF(0)|SPI_MCR_SMPL_PT(0)|SPI_MCR_PCSIS_MASK;
+      spi->MCR =
+            SPI_MCR_HALT(1)|        // Halt transfers
+            SPI_MCR_CLR_RXF(1)|     // Clear Rx FIFO
+            SPI_MCR_CLR_TXF(1)|     // Clear Tx FIFO
+            SPI_MCR_ROOE(1)|        // Receive FIFO Overflow Overwrite
+            SPI_MCR_MSTR(1)|        // Master mode
+            SPI_MCR_DCONF(0)|       // Must be zero
+            SPI_MCR_SMPL_PT(0)|     // 0 system clocks between SCK edge and SIN sample
+            SPI_MCR_PCSIS(1);       // Assume PCS active-low
 
       setCTAR0Value(0);         // Clear
       setCTAR1Value(0);         // Clear
@@ -557,8 +667,57 @@ public:
       // Configure SPI pins
       enablePins();
    }
+   /**
+    * Gets and clears status flags.
+    *
+    * @return status valkue (SPI->SR)
+    */
+   static uint32_t __attribute__((always_inline)) getStatus() {
+      // Capture interrupt status
+      uint32_t status = Info::spi->SR;
+      // Clear captured flags
+      Info::spi->SR = status;
+      // Return status
+      return status;
+   }
 
 };
+
+/**
+ * Template class to provide Timer callback
+ */
+template<class Info>
+class SpiIrq_T : public Spi_T<Info> {
+
+protected:
+   /** Callback function for Channel ISR */
+   static SpiCallbackFunction callback;
+
+public:
+   /**
+    * IRQ handler
+    */
+   static void irqHandler() {
+      callback(Spi_T<Info>::getStatus());
+   }
+
+   /**
+    * Set channel Callback function\n
+    * Note that one callback is shared by all channels of the SPI
+    *
+    * @param[in] theCallback Callback function to execute on interrupt.\n
+    *                        nullptr to indicate none
+    */
+   static __attribute__((always_inline)) void setCallback(SpiCallbackFunction theCallback) {
+      if (theCallback == nullptr) {
+         callback = Spi::unhandledCallback;
+         return;
+      }
+      callback = theCallback;
+   }
+};
+
+template<class Info> SpiCallbackFunction SpiIrq_T<Info>::callback = Spi::unhandledCallback;
 
 #ifdef __CMSIS_RTOS
 /** Mutex to protect access - static so per SPI */
@@ -580,7 +739,7 @@ CMSIS::Mutex Spi_T<Info>::mutex;
  * @endcode
  *
  */
-using Spi0 = Spi_T<Spi0Info>;
+using Spi0 = SpiIrq_T<Spi0Info>;
 #endif
 
 #if defined(USBDM_SPI1_IS_DEFINED)
@@ -597,7 +756,7 @@ using Spi0 = Spi_T<Spi0Info>;
  * @endcode
  *
  */
-using  Spi1 = Spi_T<Spi1Info>;
+using  Spi1 = SpiIrq_T<Spi1Info>;
 #endif
 /**
  * @}

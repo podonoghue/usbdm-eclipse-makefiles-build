@@ -35,17 +35,18 @@ void Spi::setSpeed(uint32_t targetFrequency=Spi0Info::speed) {
 
    int bestSPPR = 0;
    int bestSPR  = 0;
-   uint32_t difference = -1;
+   int32_t bestDifference = 0x7FFFFFFF;
    for (int sppr = (sizeof(spprFactors)/sizeof(spprFactors[0]))-1; sppr >= 0; sppr--) {
       for (int spr = (sizeof(sprFactors)/sizeof(sprFactors[0]))-1; spr >= 0; spr--) {
          uint32_t calculatedFrequency = SystemBusClock/(spprFactors[sppr]*sprFactors[spr]);
-         if (calculatedFrequency > targetFrequency) {
+         int32_t difference = targetFrequency-calculatedFrequency;
+         if (difference < 0) {
             // Too high stop looking here
             break;
          }
-         if ((targetFrequency - calculatedFrequency) < difference) {
+         if (difference < bestDifference) {
             // New "best value"
-            difference = (targetFrequency - calculatedFrequency);
+            bestDifference = difference;
             bestSPR  = spr;
             bestSPPR = sppr;
             interfaceFrequency = calculatedFrequency;

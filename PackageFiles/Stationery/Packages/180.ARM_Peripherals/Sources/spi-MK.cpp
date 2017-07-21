@@ -40,20 +40,20 @@ uint32_t Spi::calculateDividers(uint32_t clockFrequency, uint32_t frequency) {
       // Use highest possible rate
       return SPI_CTAR_DBR_MASK;
    }
-   int bestPBR = 0;
-   int bestBR  = 0;
-   uint32_t difference = -1;
-   uint32_t calculatedFrequency;
+   int bestPBR = 3;
+   int bestBR  = 7;
+   int32_t bestDifference = 0x7FFFFFFF;
    for (int pbr = 3; pbr >= 0; pbr--) {
       for (int br = 15; br >= 0; br--) {
-         calculatedFrequency = clockFrequency/(pbrFactors[pbr]*brFactors[br]);
-         if (calculatedFrequency > frequency) {
+         uint32_t calculatedFrequency = clockFrequency/(pbrFactors[pbr]*brFactors[br]);
+         int32_t difference = frequency-calculatedFrequency;
+         if (difference < 0) {
             // Too high stop looking here
             break;
          }
-         if ((frequency - calculatedFrequency) < difference) {
+         if (difference < bestDifference) {
             // New "best value"
-            difference = (frequency - calculatedFrequency);
+            bestDifference = difference;
             bestBR  = br;
             bestPBR = pbr;
          }
@@ -66,6 +66,7 @@ uint32_t Spi::calculateDividers(uint32_t clockFrequency, uint32_t frequency) {
    }
    return clockFactors;
 }
+
 /**
  * Calculates speed from SPI clock frequency and SPI clock factors
  *
@@ -97,20 +98,21 @@ uint32_t Spi::calculateSpeed(uint32_t clockFrequency, uint32_t clockFactors) {
  */
 void Spi::calculateDelay(float clockFrequency, float delay, int &bestPrescale, int &bestDivider) {
    const float clockPeriod = (1/clockFrequency);
-   float difference = MAXFLOAT;
+   float bestDifference = MAXFLOAT;
 
-   bestPrescale = -1;
-   bestDivider  = -1;
+   bestPrescale = 0;
+   bestDivider  = 0;
    for (int prescale = 3; prescale >= 0; prescale--) {
       for (int divider = 15; divider >= 0; divider--) {
          float calculatedDelay = clockPeriod*((prescale<<1)+1)*(1UL<<(divider+1));
-         if (calculatedDelay < delay) {
+         float difference = calculatedDelay - delay;
+         if (difference < 0) {
             // Too short - stop looking here
             break;
          }
-         if ((calculatedDelay - delay) < difference) {
+         if (difference < bestDifference) {
             // New "best delay"
-            difference = (calculatedDelay - delay);
+            bestDifference = difference;
             bestPrescale = prescale;
             bestDivider  = divider;
          }
