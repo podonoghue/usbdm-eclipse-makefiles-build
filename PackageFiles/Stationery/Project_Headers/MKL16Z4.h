@@ -4507,9 +4507,9 @@ typedef struct {                                /*       TPM1 Structure         
 * @{
 */
 typedef struct {                                /*       TSI0 Structure                                               */
-   __IO uint32_t  GENCS;                        /**< 0000: TSI General Control and Status Register                      */
-   __IO uint32_t  DATA;                         /**< 0004: TSI DATA Register                                            */
-   __IO uint32_t  TSHD;                         /**< 0008: TSI Threshold Register                                       */
+   __IO uint32_t  GENCS;                        /**< 0000: General Control and Status Register                          */
+   __IO uint32_t  DATA;                         /**< 0004: DATA Register                                                */
+   __IO uint32_t  TSHD;                         /**< 0008: Threshold Register                                           */
 } TSI_Type;
 
 /**

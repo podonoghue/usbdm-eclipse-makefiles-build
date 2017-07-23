@@ -4,8 +4,8 @@ Devices using this peripheral:
 -->
       <peripheral>
          <?sourceFile "TSI_MKE15Z7" ?>
-         <name>TSI</name>
-         <description>Touch sense input</description>
+         <name>TSI0</name>
+         <description>Touch Sensing Input</description>
          <groupName>TSI</groupName>
          <headerStructName>TSI</headerStructName>
          <baseAddress>0x40045000</baseAddress>
@@ -21,7 +21,7 @@ Devices using this peripheral:
          <registers>
             <register>
                <name>GENCS</name>
-               <description>TSI General Control and Status Register</description>
+               <description>General Control and Status Register</description>
                <addressOffset>0x0</addressOffset>
                <fields>
                   <field>
@@ -31,12 +31,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Do not enable the End-of-Scan DMA transfer request only. Depending on ESOR state, either Out-of-Range or End-of-Scan can trigger a DMA transfer request and interrupt</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Only the End-of-Scan event can trigger a DMA transfer request. The Out-of-Range event only and always triggers an interrupt if TSIIE is set</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -49,12 +49,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Scan not complete</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Scan complete</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -68,12 +68,12 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>No scan in progress</description>
+                           <name>0b0</name>
+                           <description>No scan active</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Scan in progress</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -86,67 +86,68 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Software trigger scan</description>
+                           <name>0b0</name>
+                           <description>Software trigger</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Hardware trigger scan</description>
+                           <name>0b1</name>
+                           <description>Hardware trigger</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>STPE</name>
-                     <description>TSI STOP Enable</description>
+                     <description>STOP Enable\n
+Controls operation in low power mode</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>TSI is disabled when MCU goes into low power mode</description>
+                           <name>0b0</name>
+                           <description>Disabled in low power</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Allows TSI to continue running in all low power modes</description>
+                           <name>0b1</name>
+                           <description>Enabled in low power</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>TSIIEN</name>
-                     <description>Touch Sensing Input Interrupt Enable</description>
+                     <description>Interrupt Enable</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>TSI interrupt is disabled</description>
+                           <name>0b0</name>
+                           <description>Interrupt disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>TSI interrupt is enabled</description>
+                           <name>0b1</name>
+                           <description>Interrupt enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>TSIEN</name>
-                     <description>Touch Sensing Input Module Enable</description>
+                     <description>Module Enable</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>TSI module disabled</description>
+                           <name>0b0</name>
+                           <description>Module disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>TSI module enabled</description>
+                           <name>0b1</name>
+                           <description>Module enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -176,22 +177,22 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>Vm=0.3V; Vp=1.3V; dvolt=1.0V</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
+                           <name>0b01</name>
                            <description>Vm=0.3V; Vp=1.6V; dvolt=1.3V</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
+                           <name>0b10</name>
                            <description>Vm=0.3V; Vp=1.9V; dvolt=1.6V</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
+                           <name>0b11</name>
                            <description>Vm=0.3V; Vp=2.3V; dvolt=2.0V</description>
                            <value>0b11</value>
                         </enumeratedValue>
@@ -204,13 +205,13 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Out-of-range interrupt is allowed</description>
+                           <name>0b0</name>
+                           <description>Out-of-range interrupt</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>End-of-scan interrupt is allowed</description>
+                           <name>0b1</name>
+                           <description>End-of-scan interrupt</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -220,54 +221,68 @@ Devices using this peripheral:
                      <description>Out of Range Flag</description>
                      <bitOffset>31</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Not Out-of-range</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Out-of-range</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                </fields>
             </register>
             <register>
                <name>DATA</name>
-               <description>TSI DATA Register</description>
+               <description>DATA Register</description>
                <addressOffset>0x4</addressOffset>
                <fields>
                   <field>
                      <name>TSICNT</name>
-                     <description>TSI Conversion Counter Value</description>
+                     <description>Conversion Counter Value</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>16</bitWidth>
                      <access>read-only</access>
                   </field>
                   <field>
                      <name>SWTS</name>
-                     <description>Software Trigger Start</description>
+                     <description>Software Trigger Start\n
+Used to start a scan to determine which channel is specified by TSI_DATA.TSICH</description>
                      <bitOffset>22</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>write-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No effect</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Start a scan to determine which channel is specified by TSI_DATA[TSICH]</description>
+                           <name>0b1</name>
+                           <description>Start scan</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>DMAEN</name>
-                     <description>DMA Transfer Enabled</description>
+                     <description>DMA Transfer Enabled\n
+Select between DMA and Interrupt request</description>
                      <bitOffset>23</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Interrupt is selected when the interrupt enable bit is set and the corresponding TSI events assert</description>
+                           <name>0b0</name>
+                           <description>Interrupt request</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>DMA transfer request is selected when the interrupt enable bit is set and the corresponding TSI events assert</description>
+                           <name>0b1</name>
+                           <description>DMA transfer request</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -279,129 +294,9 @@ Devices using this peripheral:
                      <bitWidth>5</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00000</name>
-                           <description>For self-cap mode: Channel 0</description>
-                           <value>0b00000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>00001</name>
-                           <description>For self-cap mode: Channel 1</description>
-                           <value>0b00001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>00010</name>
-                           <description>For self-cap mode: Channel 2</description>
-                           <value>0b00010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>00011</name>
-                           <description>For self-cap mode: Channel 3</description>
-                           <value>0b00011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>00100</name>
-                           <description>For self-cap mode: Channel 4</description>
-                           <value>0b00100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>00101</name>
-                           <description>For self-cap mode: Channel 5</description>
-                           <value>0b00101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>00110</name>
-                           <description>For self-cap mode: Channel 6</description>
-                           <value>0b00110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>00111</name>
-                           <description>For self-cap mode: Channel 7</description>
-                           <value>0b00111</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>01000</name>
-                           <description>For self-cap mode: Channel 8</description>
-                           <value>0b01000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>01001</name>
-                           <description>For self-cap mode: Channel 9</description>
-                           <value>0b01001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>01010</name>
-                           <description>For self-cap mode: Channel 10</description>
-                           <value>0b01010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>01011</name>
-                           <description>For self-cap mode: Channel 11</description>
-                           <value>0b01011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>01100</name>
-                           <description>For self-cap mode: Channel 12</description>
-                           <value>0b01100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>01101</name>
-                           <description>For self-cap mode: Channel 13</description>
-                           <value>0b01101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>01110</name>
-                           <description>For self-cap mode: Channel 14</description>
-                           <value>0b01110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>01111</name>
-                           <description>For self-cap mode: Channel 15</description>
-                           <value>0b01111</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>10000</name>
-                           <description>For self-cap mode: Channel 16</description>
-                           <value>0b10000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>10001</name>
-                           <description>For self-cap mode: Channel 17</description>
-                           <value>0b10001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>10010</name>
-                           <description>For self-cap mode: Channel 18</description>
-                           <value>0b10010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>10011</name>
-                           <description>For self-cap mode: Channel 19</description>
-                           <value>0b10011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>10100</name>
-                           <description>For self-cap mode: Channel 20</description>
-                           <value>0b10100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>10101</name>
-                           <description>For self-cap mode: Channel 21</description>
-                           <value>0b10101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>10110</name>
-                           <description>For self-cap mode: Channel 22</description>
-                           <value>0b10110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>10111</name>
-                           <description>For self-cap mode: Channel 23</description>
-                           <value>0b10111</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>11000</name>
-                           <description>For self-cap mode: Channel 24</description>
-                           <value>0b11000</value>
+                           <name>0bXXXX</name>
+                           <description>Channel #</description>
+                           <isDefault>true</isDefault>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -409,18 +304,18 @@ Devices using this peripheral:
             </register>
             <register>
                <name>TSHD</name>
-               <description>TSI Threshold Register</description>
+               <description>Threshold Register</description>
                <addressOffset>0x8</addressOffset>
                <fields>
                   <field>
                      <name>THRESL</name>
-                     <description>TSI Wakeup Channel Low-threshold</description>
+                     <description>Wakeup Channel Low-threshold</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>16</bitWidth>
                   </field>
                   <field>
                      <name>THRESH</name>
-                     <description>TSI Wakeup Channel High-threshold</description>
+                     <description>Wakeup Channel High-threshold</description>
                      <bitOffset>16</bitOffset>
                      <bitWidth>16</bitWidth>
                   </field>
@@ -439,12 +334,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>noise cancellation off</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>noise cancellation on</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -457,12 +352,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>self-cap mode</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>mutual-cap mode</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -475,22 +370,22 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>20.72MHz</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
+                           <name>0b01</name>
                            <description>16.65MHz</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
+                           <name>0b10</name>
                            <description>13.87MHz</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
+                           <name>0b11</name>
                            <description>11.91MHz</description>
                            <value>0b11</value>
                         </enumeratedValue>
@@ -503,42 +398,42 @@ Devices using this peripheral:
                      <bitWidth>3</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>000</name>
+                           <name>0b000</name>
                            <description>1/16</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>001</name>
+                           <name>0b001</name>
                            <description>1/8</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>010</name>
+                           <name>0b010</name>
                            <description>1/4</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>011</name>
+                           <name>0b011</name>
                            <description>1/2</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>100</name>
+                           <name>0b100</name>
                            <description>NA</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>101</name>
+                           <name>0b101</name>
                            <description>NA</description>
                            <value>0b101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>110</name>
+                           <name>0b110</name>
                            <description>NA</description>
                            <value>0b110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>111</name>
+                           <name>0b111</name>
                            <description>NA</description>
                            <value>0b111</value>
                         </enumeratedValue>
@@ -551,12 +446,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>1/8</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>1/4</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -569,42 +464,42 @@ Devices using this peripheral:
                      <bitWidth>3</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>000</name>
+                           <name>0b000</name>
                            <description>Ctrim=2.5p</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>001</name>
+                           <name>0b001</name>
                            <description>Ctrim=5.0p</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>010</name>
+                           <name>0b010</name>
                            <description>Ctrim=7.5p</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>011</name>
+                           <name>0b011</name>
                            <description>Ctrim=10p</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>100</name>
+                           <name>0b100</name>
                            <description>Ctrim=12.5p</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>101</name>
+                           <name>0b101</name>
                            <description>Ctrim=15p</description>
                            <value>0b101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>110</name>
+                           <name>0b110</name>
                            <description>Ctrim=17.5p</description>
                            <value>0b110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>111</name>
+                           <name>0b111</name>
                            <description>Ctrim=20p</description>
                            <value>0b111</value>
                         </enumeratedValue>
@@ -617,12 +512,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Sensitivity boost off</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Sensitivity boost on</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -635,12 +530,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>shield switch off</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>shield switch on</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -662,42 +557,42 @@ Devices using this peripheral:
                      <bitWidth>3</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>000</name>
+                           <name>0b000</name>
                            <description>select channel 6 as rx6</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>001</name>
+                           <name>0b001</name>
                            <description>select channel 7 as rx7</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>010</name>
+                           <name>0b010</name>
                            <description>select channel 8 as rx8</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>011</name>
+                           <name>0b011</name>
                            <description>select channel 9 as rx9</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>100</name>
+                           <name>0b100</name>
                            <description>select channel 10 as rx10</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>101</name>
+                           <name>0b101</name>
                            <description>select channel 11 as rx11</description>
                            <value>0b101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>110</name>
+                           <name>0b110</name>
                            <description>NA</description>
                            <value>0b110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>111</name>
+                           <name>0b111</name>
                            <description>NA</description>
                            <value>0b111</value>
                         </enumeratedValue>
@@ -710,42 +605,42 @@ Devices using this peripheral:
                      <bitWidth>3</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>000</name>
+                           <name>0b000</name>
                            <description>select channel 0 as tx0</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>001</name>
+                           <name>0b001</name>
                            <description>select channel 1 as tx1</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>010</name>
+                           <name>0b010</name>
                            <description>select channel 2 as tx2</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>011</name>
+                           <name>0b011</name>
                            <description>select channel 3 as tx3</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>100</name>
+                           <name>0b100</name>
                            <description>select channel 4 as tx4</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>101</name>
+                           <name>0b101</name>
                            <description>select channel 5 as tx5</description>
                            <value>0b101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>110</name>
+                           <name>0b110</name>
                            <description>NA</description>
                            <value>0b110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>111</name>
+                           <name>0b111</name>
                            <description>NA</description>
                            <value>0b111</value>
                         </enumeratedValue>
@@ -758,82 +653,82 @@ Devices using this peripheral:
                      <bitWidth>4</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0000</name>
+                           <name>0b0000</name>
                            <description>2.5k</description>
                            <value>0b0000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0001</name>
+                           <name>0b0001</name>
                            <description>5k</description>
                            <value>0b0001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0010</name>
+                           <name>0b0010</name>
                            <description>7.5k</description>
                            <value>0b0010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0011</name>
+                           <name>0b0011</name>
                            <description>10k</description>
                            <value>0b0011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0100</name>
+                           <name>0b0100</name>
                            <description>12.5k</description>
                            <value>0b0100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0101</name>
+                           <name>0b0101</name>
                            <description>15k</description>
                            <value>0b0101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0110</name>
+                           <name>0b0110</name>
                            <description>17.5k</description>
                            <value>0b0110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0111</name>
+                           <name>0b0111</name>
                            <description>20k</description>
                            <value>0b0111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1000</name>
+                           <name>0b1000</name>
                            <description>22.5k</description>
                            <value>0b1000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1001</name>
+                           <name>0b1001</name>
                            <description>25k</description>
                            <value>0b1001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1010</name>
+                           <name>0b1010</name>
                            <description>27.5k</description>
                            <value>0b1010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1011</name>
+                           <name>0b1011</name>
                            <description>30k</description>
                            <value>0b1011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1100</name>
+                           <name>0b1100</name>
                            <description>32.5k</description>
                            <value>0b1100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1101</name>
+                           <name>0b1101</name>
                            <description>35k</description>
                            <value>0b1101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1110</name>
+                           <name>0b1110</name>
                            <description>37.5k</description>
                            <value>0b1110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1111</name>
+                           <name>0b1111</name>
                            <description>40k</description>
                            <value>0b1111</value>
                         </enumeratedValue>
@@ -846,42 +741,42 @@ Devices using this peripheral:
                      <bitWidth>3</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>000</name>
+                           <name>0b000</name>
                            <description>1k</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>001</name>
+                           <name>0b001</name>
                            <description>2k</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>010</name>
+                           <name>0b010</name>
                            <description>3k</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>011</name>
+                           <name>0b011</name>
                            <description>4k</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>100</name>
+                           <name>0b100</name>
                            <description>5k</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>101</name>
+                           <name>0b101</name>
                            <description>6k</description>
                            <value>0b101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>110</name>
+                           <name>0b110</name>
                            <description>7k</description>
                            <value>0b110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>111</name>
+                           <name>0b111</name>
                            <description>8k</description>
                            <value>0b111</value>
                         </enumeratedValue>
@@ -894,42 +789,42 @@ Devices using this peripheral:
                      <bitWidth>3</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>000</name>
+                           <name>0b000</name>
                            <description>1uA</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>001</name>
+                           <name>0b001</name>
                            <description>2uA</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>010</name>
+                           <name>0b010</name>
                            <description>3uA</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>011</name>
+                           <name>0b011</name>
                            <description>4uA</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>100</name>
+                           <name>0b100</name>
                            <description>5uA</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>101</name>
+                           <name>0b101</name>
                            <description>6uA</description>
                            <value>0b101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>110</name>
+                           <name>0b110</name>
                            <description>7uA</description>
                            <value>0b110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>111</name>
+                           <name>0b111</name>
                            <description>8uA</description>
                            <value>0b111</value>
                         </enumeratedValue>
@@ -950,12 +845,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Enable nmos mirror</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Disable nmos mirror</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -968,22 +863,22 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>m=1</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
+                           <name>0b01</name>
                            <description>m=2</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
+                           <name>0b10</name>
                            <description>m=3</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
+                           <name>0b11</name>
                            <description>m=4</description>
                            <value>0b11</value>
                         </enumeratedValue>
@@ -997,42 +892,42 @@ Devices using this peripheral:
                      <bitWidth>3</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>000</name>
+                           <name>0b000</name>
                            <description>m=4</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>001</name>
+                           <name>0b001</name>
                            <description>m=8</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>010</name>
+                           <name>0b010</name>
                            <description>m=12</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>011</name>
+                           <name>0b011</name>
                            <description>m=16</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>100</name>
+                           <name>0b100</name>
                            <description>m=20</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>101</name>
+                           <name>0b101</name>
                            <description>m=24</description>
                            <value>0b101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>110</name>
+                           <name>0b110</name>
                            <description>m=28</description>
                            <value>0b110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>111</name>
+                           <name>0b111</name>
                            <description>m=32</description>
                            <value>0b111</value>
                         </enumeratedValue>
@@ -1045,12 +940,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Internal 1.2V voltage</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>1.2V PMC output</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1063,12 +958,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>-5V~+5V</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>0V~+5V</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1081,162 +976,162 @@ Devices using this peripheral:
                      <bitWidth>5</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00000</name>
+                           <name>0b00000</name>
                            <description>0u</description>
                            <value>0b00000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>00001</name>
+                           <name>0b00001</name>
                            <description>2u</description>
                            <value>0b00001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>00010</name>
+                           <name>0b00010</name>
                            <description>4u</description>
                            <value>0b00010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>00011</name>
+                           <name>0b00011</name>
                            <description>6u</description>
                            <value>0b00011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>00100</name>
+                           <name>0b00100</name>
                            <description>8u</description>
                            <value>0b00100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>00101</name>
+                           <name>0b00101</name>
                            <description>10u</description>
                            <value>0b00101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>00110</name>
+                           <name>0b00110</name>
                            <description>12u</description>
                            <value>0b00110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>00111</name>
+                           <name>0b00111</name>
                            <description>14u</description>
                            <value>0b00111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01000</name>
+                           <name>0b01000</name>
                            <description>16u</description>
                            <value>0b01000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01001</name>
+                           <name>0b01001</name>
                            <description>18u</description>
                            <value>0b01001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01010</name>
+                           <name>0b01010</name>
                            <description>20u</description>
                            <value>0b01010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01011</name>
+                           <name>0b01011</name>
                            <description>22u</description>
                            <value>0b01011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01100</name>
+                           <name>0b01100</name>
                            <description>24u</description>
                            <value>0b01100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01101</name>
+                           <name>0b01101</name>
                            <description>26u</description>
                            <value>0b01101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01110</name>
+                           <name>0b01110</name>
                            <description>28u</description>
                            <value>0b01110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01111</name>
+                           <name>0b01111</name>
                            <description>30u</description>
                            <value>0b01111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10000</name>
+                           <name>0b10000</name>
                            <description>32u</description>
                            <value>0b10000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10001</name>
+                           <name>0b10001</name>
                            <description>34u</description>
                            <value>0b10001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10010</name>
+                           <name>0b10010</name>
                            <description>36u</description>
                            <value>0b10010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10011</name>
+                           <name>0b10011</name>
                            <description>38u</description>
                            <value>0b10011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10100</name>
+                           <name>0b10100</name>
                            <description>40u</description>
                            <value>0b10100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10101</name>
+                           <name>0b10101</name>
                            <description>42u</description>
                            <value>0b10101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10110</name>
+                           <name>0b10110</name>
                            <description>44u</description>
                            <value>0b10110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10111</name>
+                           <name>0b10111</name>
                            <description>46u</description>
                            <value>0b10111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11000</name>
+                           <name>0b11000</name>
                            <description>48u</description>
                            <value>0b11000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11001</name>
+                           <name>0b11001</name>
                            <description>50u</description>
                            <value>0b11001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11010</name>
+                           <name>0b11010</name>
                            <description>52u</description>
                            <value>0b11010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11011</name>
+                           <name>0b11011</name>
                            <description>54u</description>
                            <value>0b11011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11100</name>
+                           <name>0b11100</name>
                            <description>56u</description>
                            <value>0b11100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11101</name>
+                           <name>0b11101</name>
                            <description>58u</description>
                            <value>0b11101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11110</name>
+                           <name>0b11110</name>
                            <description>60u</description>
                            <value>0b11110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11111</name>
+                           <name>0b11111</name>
                            <description>62u</description>
                            <value>0b11111</value>
                         </enumeratedValue>
@@ -1258,12 +1153,12 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>SSC output value is 0</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>SSC output value is 1</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1277,12 +1172,12 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>SINC filter is disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>SINC filter is enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1296,12 +1191,12 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>The counter result has no overflow occurence in the last scan process</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>The counter result has an overflow occurence in the last scan process</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1315,12 +1210,12 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>SSC function is disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>SSC function is enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1333,162 +1228,162 @@ Devices using this peripheral:
                      <bitWidth>5</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00000</name>
+                           <name>0b00000</name>
                            <description>The TSI_DATA[TSICNT] bits is the counter value of 1 scan period</description>
                            <value>0b00000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>00001</name>
+                           <name>0b00001</name>
                            <description>The TSI_DATA[TSICNT] bits is the counter value of 2 scan periods</description>
                            <value>0b00001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>00010</name>
+                           <name>0b00010</name>
                            <description>The TSI_DATA[TSICNT] bits is the counter value of 3 scan periods</description>
                            <value>0b00010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>00011</name>
+                           <name>0b00011</name>
                            <description>The TSI_DATA[TSICNT] bits is the counter value of 4 scan periods</description>
                            <value>0b00011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>00100</name>
+                           <name>0b00100</name>
                            <description>The TSI_DATA[TSICNT] bits is the counter value of 5 scan periods</description>
                            <value>0b00100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>00101</name>
+                           <name>0b00101</name>
                            <description>The TSI_DATA[TSICNT] bits is the counter value of 6 scan periods</description>
                            <value>0b00101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>00110</name>
+                           <name>0b00110</name>
                            <description>The TSI_DATA[TSICNT] bits is the counter value of 7 scan periods</description>
                            <value>0b00110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>00111</name>
+                           <name>0b00111</name>
                            <description>The TSI_DATA[TSICNT] bits is the counter value of 8 scan periods</description>
                            <value>0b00111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01000</name>
+                           <name>0b01000</name>
                            <description>The TSI_DATA[TSICNT] bits is the counter value of 9 scan periods</description>
                            <value>0b01000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01001</name>
+                           <name>0b01001</name>
                            <description>The TSI_DATA[TSICNT] bits is the counter value of 10 scan periods</description>
                            <value>0b01001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01010</name>
+                           <name>0b01010</name>
                            <description>The TSI_DATA[TSICNT] bits is the counter value of 11 scan periods</description>
                            <value>0b01010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01011</name>
+                           <name>0b01011</name>
                            <description>The TSI_DATA[TSICNT] bits is the counter value of 12 scan periods</description>
                            <value>0b01011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01100</name>
+                           <name>0b01100</name>
                            <description>The TSI_DATA[TSICNT] bits is the counter value of 13 scan periods</description>
                            <value>0b01100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01101</name>
+                           <name>0b01101</name>
                            <description>The TSI_DATA[TSICNT] bits is the counter value of 14 scan periods</description>
                            <value>0b01101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01110</name>
+                           <name>0b01110</name>
                            <description>The TSI_DATA[TSICNT] bits is the counter value of 15 scan periods</description>
                            <value>0b01110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01111</name>
+                           <name>0b01111</name>
                            <description>The TSI_DATA[TSICNT] bits is the counter value of 16 scan periods</description>
                            <value>0b01111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10000</name>
+                           <name>0b10000</name>
                            <description>The TSI_DATA[TSICNT] bits is the counter value of 17 scan periods</description>
                            <value>0b10000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10001</name>
+                           <name>0b10001</name>
                            <description>The TSI_DATA[TSICNT] bits is the counter value of 18 scan periods</description>
                            <value>0b10001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10010</name>
+                           <name>0b10010</name>
                            <description>The TSI_DATA[TSICNT] bits is the counter value of 19 scan periods</description>
                            <value>0b10010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10011</name>
+                           <name>0b10011</name>
                            <description>The TSI_DATA[TSICNT] bits is the counter value of 20 scan periods</description>
                            <value>0b10011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10100</name>
+                           <name>0b10100</name>
                            <description>The TSI_DATA[TSICNT] bits is the counter value of 21 scan periods</description>
                            <value>0b10100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10101</name>
+                           <name>0b10101</name>
                            <description>The TSI_DATA[TSICNT] bits is the counter value of 22 scan periods</description>
                            <value>0b10101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10110</name>
+                           <name>0b10110</name>
                            <description>The TSI_DATA[TSICNT] bits is the counter value of 23 scan periods</description>
                            <value>0b10110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10111</name>
+                           <name>0b10111</name>
                            <description>The TSI_DATA[TSICNT] bits is the counter value of 24 scan periods</description>
                            <value>0b10111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11000</name>
+                           <name>0b11000</name>
                            <description>The TSI_DATA[TSICNT] bits is the counter value of 25 scan periods</description>
                            <value>0b11000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11001</name>
+                           <name>0b11001</name>
                            <description>The TSI_DATA[TSICNT] bits is the counter value of 26 scan periods</description>
                            <value>0b11001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11010</name>
+                           <name>0b11010</name>
                            <description>The TSI_DATA[TSICNT] bits is the counter value of 27 scan periods</description>
                            <value>0b11010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11011</name>
+                           <name>0b11011</name>
                            <description>The TSI_DATA[TSICNT] bits is the counter value of 28 scan periods</description>
                            <value>0b11011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11100</name>
+                           <name>0b11100</name>
                            <description>The TSI_DATA[TSICNT] bits is the counter value of 29 scan periods</description>
                            <value>0b11100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11101</name>
+                           <name>0b11101</name>
                            <description>The TSI_DATA[TSICNT] bits is the counter value of 30 scan periods</description>
                            <value>0b11101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11110</name>
+                           <name>0b11110</name>
                            <description>The TSI_DATA[TSICNT] bits is the counter value of 31 scan periods</description>
                            <value>0b11110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11111</name>
+                           <name>0b11111</name>
                            <description>The TSI_DATA[TSICNT] bits is the counter value of 32 scan periods</description>
                            <value>0b11111</value>
                         </enumeratedValue>
@@ -1501,12 +1396,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Using 1 order sinc filter</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Using 2 order sinc filter</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1519,82 +1414,82 @@ Devices using this peripheral:
                      <bitWidth>4</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0000</name>
+                           <name>0b0000</name>
                            <description>div=1</description>
                            <value>0b0000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0001</name>
+                           <name>0b0001</name>
                            <description>div=2</description>
                            <value>0b0001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0010</name>
+                           <name>0b0010</name>
                            <description>div=4</description>
                            <value>0b0010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0011</name>
+                           <name>0b0011</name>
                            <description>div=8</description>
                            <value>0b0011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0100</name>
+                           <name>0b0100</name>
                            <description>div=16</description>
                            <value>0b0100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0101</name>
+                           <name>0b0101</name>
                            <description>div=32</description>
                            <value>0b0101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0110</name>
+                           <name>0b0110</name>
                            <description>div=64</description>
                            <value>0b0110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0111</name>
+                           <name>0b0111</name>
                            <description>div=128</description>
                            <value>0b0111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1000</name>
+                           <name>0b1000</name>
                            <description>NC</description>
                            <value>0b1000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1001</name>
+                           <name>0b1001</name>
                            <description>NC</description>
                            <value>0b1001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1010</name>
+                           <name>0b1010</name>
                            <description>NC</description>
                            <value>0b1010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1011</name>
+                           <name>0b1011</name>
                            <description>NC</description>
                            <value>0b1011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1100</name>
+                           <name>0b1100</name>
                            <description>NC</description>
                            <value>0b1100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1101</name>
+                           <name>0b1101</name>
                            <description>NC</description>
                            <value>0b1101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1110</name>
+                           <name>0b1110</name>
                            <description>NC</description>
                            <value>0b1110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1111</name>
+                           <name>0b1111</name>
                            <description>NC</description>
                            <value>0b1111</value>
                         </enumeratedValue>
@@ -1615,47 +1510,47 @@ Devices using this peripheral:
                      <bitWidth>8</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00000000</name>
+                           <name>0b00000000</name>
                            <description>div2(2^0*2)</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>00000001</name>
+                           <name>0b00000001</name>
                            <description>div4(2^1*2)</description>
                            <value>0b1</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>00000011</name>
+                           <name>0b00000011</name>
                            <description>div8(2^2*2)</description>
                            <value>0b11</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>00000111</name>
+                           <name>0b00000111</name>
                            <description>div16(2^3*2)</description>
                            <value>0b111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>00001111</name>
+                           <name>0b00001111</name>
                            <description>div32(2^4*2)</description>
                            <value>0b1111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>00011111</name>
+                           <name>0b00011111</name>
                            <description>div64(2^5*2)</description>
                            <value>0b11111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>00111111</name>
+                           <name>0b00111111</name>
                            <description>div128(2^6*2)</description>
                            <value>0b111111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01111111</name>
+                           <name>0b01111111</name>
                            <description>div256(2^7*2)</description>
                            <value>0b1111111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11111111</name>
+                           <name>0b11111111</name>
                            <description>div512(2^8*2)</description>
                            <value>0b11111111</value>
                         </enumeratedValue>
@@ -1668,82 +1563,82 @@ Devices using this peripheral:
                      <bitWidth>4</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0000</name>
+                           <name>0b0000</name>
                            <description>The SSC output bit 1&apos;s basic period will be 1 clock cycle of system clock</description>
                            <value>0b0000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0001</name>
+                           <name>0b0001</name>
                            <description>The SSC output bit 1&apos;s basic period will be 2 clock cycles of system clock</description>
                            <value>0b0001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0010</name>
+                           <name>0b0010</name>
                            <description>The SSC output bit 1&apos;s basic period will be 3 clock cycles of system clock</description>
                            <value>0b0010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0011</name>
+                           <name>0b0011</name>
                            <description>The SSC output bit 1&apos;s basic period will be 4 clock cycles of system clock</description>
                            <value>0b0011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0100</name>
+                           <name>0b0100</name>
                            <description>The SSC output bit 1&apos;s basic period will be 5 clock cycles of system clock</description>
                            <value>0b0100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0101</name>
+                           <name>0b0101</name>
                            <description>The SSC output bit 1&apos;s basic period will be 6 clock cycles of system clock</description>
                            <value>0b0101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0110</name>
+                           <name>0b0110</name>
                            <description>The SSC output bit 1&apos;s basic period will be 7 clock cycles of system clock</description>
                            <value>0b0110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0111</name>
+                           <name>0b0111</name>
                            <description>The SSC output bit 1&apos;s basic period will be 8 clock cycles of system clock</description>
                            <value>0b0111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1000</name>
+                           <name>0b1000</name>
                            <description>The SSC output bit 1&apos;s basic period will be 9 clock cycles of system clock</description>
                            <value>0b1000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1001</name>
+                           <name>0b1001</name>
                            <description>The SSC output bit 1&apos;s basic period will be 10 clock cycles of system clock</description>
                            <value>0b1001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1010</name>
+                           <name>0b1010</name>
                            <description>The SSC output bit 1&apos;s basic period will be 11 clock cycles of system clock</description>
                            <value>0b1010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1011</name>
+                           <name>0b1011</name>
                            <description>The SSC output bit 1&apos;s basic period will be 12 clock cycles of system clock</description>
                            <value>0b1011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1100</name>
+                           <name>0b1100</name>
                            <description>The SSC output bit 1&apos;s basic period will be 13 clock cycles of system clock</description>
                            <value>0b1100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1101</name>
+                           <name>0b1101</name>
                            <description>The SSC output bit 1&apos;s basic period will be 14 clock cycles of system clock</description>
                            <value>0b1101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1110</name>
+                           <name>0b1110</name>
                            <description>The SSC output bit 1&apos;s basic period will be 15 clock cycles of system clock</description>
                            <value>0b1110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1111</name>
+                           <name>0b1111</name>
                            <description>The SSC output bit 1&apos;s basic period will be 16 clock cycles of system clock</description>
                            <value>0b1111</value>
                         </enumeratedValue>
@@ -1756,82 +1651,82 @@ Devices using this peripheral:
                      <bitWidth>4</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0000</name>
+                           <name>0b0000</name>
                            <description>The SSC output bit 0&apos;s period will be 1 clock cycle of system clock</description>
                            <value>0b0000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0001</name>
+                           <name>0b0001</name>
                            <description>The SSC output bit 0&apos;s period will be 2 clock cycles of system clock</description>
                            <value>0b0001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0010</name>
+                           <name>0b0010</name>
                            <description>The SSC output bit 0&apos;s period will be 3 clock cycles of system clock</description>
                            <value>0b0010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0011</name>
+                           <name>0b0011</name>
                            <description>The SSC output bit 0&apos;s period will be 4 clock cycles of system clock</description>
                            <value>0b0011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0100</name>
+                           <name>0b0100</name>
                            <description>The SSC output bit 0&apos;s period will be 5 clock cycles of system clock</description>
                            <value>0b0100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0101</name>
+                           <name>0b0101</name>
                            <description>The SSC output bit 0&apos;s period will be 6 clock cycles of system clock</description>
                            <value>0b0101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0110</name>
+                           <name>0b0110</name>
                            <description>The SSC output bit 0&apos;s period will be 7 clock cycles of system clock</description>
                            <value>0b0110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0111</name>
+                           <name>0b0111</name>
                            <description>The SSC output bit 0&apos;s period will be 8 clock cycles of system clock</description>
                            <value>0b0111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1000</name>
+                           <name>0b1000</name>
                            <description>The SSC output bit 0&apos;s period will be 9 clock cycles of system clock</description>
                            <value>0b1000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1001</name>
+                           <name>0b1001</name>
                            <description>The SSC output bit 0&apos;s period will be 10 clock cycles of system clock</description>
                            <value>0b1001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1010</name>
+                           <name>0b1010</name>
                            <description>The SSC output bit 0&apos;s period will be 11 clock cycles of system clock</description>
                            <value>0b1010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1011</name>
+                           <name>0b1011</name>
                            <description>The SSC output bit 0&apos;s period will be 12 clock cycles of system clock</description>
                            <value>0b1011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1100</name>
+                           <name>0b1100</name>
                            <description>The SSC output bit 0&apos;s period will be 13 clock cycles of system clock</description>
                            <value>0b1100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1101</name>
+                           <name>0b1101</name>
                            <description>The SSC output bit 0&apos;s period will be 14 clock cycles of system clock</description>
                            <value>0b1101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1110</name>
+                           <name>0b1110</name>
                            <description>The SSC output bit 0&apos;s period will be 15 clock cycles of system clock</description>
                            <value>0b1110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1111</name>
+                           <name>0b1111</name>
                            <description>The SSC output bit 0&apos;s period will be 16 clock cycles of system clock</description>
                            <value>0b1111</value>
                         </enumeratedValue>
@@ -1844,12 +1739,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Keep the polarity of the SSC output bit</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Reverse the polarity of the SSC output bit</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1862,22 +1757,22 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>Using PRBS method generating SSC output bit</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
+                           <name>0b01</name>
                            <description>Using up-down counter generating SSC output bit</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
+                           <name>0b10</name>
                            <description>SSC function is disabled</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
+                           <name>0b11</name>
                            <description>NC</description>
                            <value>0b11</value>
                         </enumeratedValue>
@@ -1890,82 +1785,82 @@ Devices using this peripheral:
                      <bitWidth>4</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0000</name>
+                           <name>0b0000</name>
                            <description>NC</description>
                            <value>0b0000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0001</name>
+                           <name>0b0001</name>
                            <description>NC</description>
                            <value>0b0001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0010</name>
+                           <name>0b0010</name>
                            <description>The length of the PRBS is 2</description>
                            <value>0b0010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0011</name>
+                           <name>0b0011</name>
                            <description>The length of the PRBS is 3</description>
                            <value>0b0011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0100</name>
+                           <name>0b0100</name>
                            <description>The length of the PRBS is 4</description>
                            <value>0b0100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0101</name>
+                           <name>0b0101</name>
                            <description>The length of the PRBS is 5</description>
                            <value>0b0101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0110</name>
+                           <name>0b0110</name>
                            <description>The length of the PRBS is 6</description>
                            <value>0b0110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0111</name>
+                           <name>0b0111</name>
                            <description>The length of the PRBS is 7</description>
                            <value>0b0111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1000</name>
+                           <name>0b1000</name>
                            <description>The length of the PRBS is 8</description>
                            <value>0b1000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1001</name>
+                           <name>0b1001</name>
                            <description>The length of the PRBS is 9</description>
                            <value>0b1001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1010</name>
+                           <name>0b1010</name>
                            <description>The length of the PRBS is 10</description>
                            <value>0b1010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1011</name>
+                           <name>0b1011</name>
                            <description>The length of the PRBS is 11</description>
                            <value>0b1011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1100</name>
+                           <name>0b1100</name>
                            <description>The length of the PRBS is 12</description>
                            <value>0b1100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1101</name>
+                           <name>0b1101</name>
                            <description>The length of the PRBS is 13</description>
                            <value>0b1101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1110</name>
+                           <name>0b1110</name>
                            <description>The length of the PRBS is 14</description>
                            <value>0b1110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1111</name>
+                           <name>0b1111</name>
                            <description>The length of the PRBS is 15</description>
                            <value>0b1111</value>
                         </enumeratedValue>
@@ -2018,37 +1913,37 @@ Devices using this peripheral:
                      <bitWidth>5</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00000</name>
+                           <name>0b00000</name>
                            <description>The up_down counter will be updated for every sample-charge cycle</description>
                            <value>0b00000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>00001</name>
+                           <name>0b00001</name>
                            <description>The up_down counter will be updated for every 2 sample-charge cycles</description>
                            <value>0b00001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>00010</name>
+                           <name>0b00010</name>
                            <description>The up_down counter will be updated for every 3 sample-charge cycles</description>
                            <value>0b00010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>00011</name>
+                           <name>0b00011</name>
                            <description>The up_down counter will be updated for every 4 sample-charge cycles</description>
                            <value>0b00011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>00100</name>
+                           <name>0b00100</name>
                            <description>The up_down counter will be updated for every 5 sample-charge cycles</description>
                            <value>0b00100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>00101</name>
+                           <name>0b00101</name>
                            <description>The up_down counter will be updated for every 6 sample-charge cycles</description>
                            <value>0b00101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>00110</name>
+                           <name>0b00110</name>
                            <description>The up_down counter will be updated for every 7 sample-charge cycles</description>
                            <value>0b00110</value>
                         </enumeratedValue>
@@ -2061,42 +1956,42 @@ Devices using this peripheral:
                      <bitWidth>3</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>000</name>
+                           <name>0b000</name>
                            <description>The added value for up-down counter is 0</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>001</name>
+                           <name>0b001</name>
                            <description>The added value for up-down counter is 1</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>010</name>
+                           <name>0b010</name>
                            <description>The added value for up-down counter is 2</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>011</name>
+                           <name>0b011</name>
                            <description>The added value for up-down counter is 3</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>100</name>
+                           <name>0b100</name>
                            <description>The added value for up-down counter is 4</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>101</name>
+                           <name>0b101</name>
                            <description>The added value for up-down counter is 5</description>
                            <value>0b101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>110</name>
+                           <name>0b110</name>
                            <description>The added value for up-down counter is 6</description>
                            <value>0b110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>111</name>
+                           <name>0b111</name>
                            <description>The added value for up-down counter is 7</description>
                            <value>0b111</value>
                         </enumeratedValue>
@@ -2115,82 +2010,82 @@ Devices using this peripheral:
                      <bitWidth>4</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0000</name>
+                           <name>0b0000</name>
                            <description>The SSC output bit 1&apos;s min period will be (1 + TSI_SSC0[BASE_ NOCHARGE_NUM]) clock cycle of system clock</description>
                            <value>0b0000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0001</name>
+                           <name>0b0001</name>
                            <description>The SSC output bit 1&apos;s min period will be (2 + TSI_SSC0[BASE_ NOCHARGE_NUM]) clock cycles of system clock</description>
                            <value>0b0001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0010</name>
+                           <name>0b0010</name>
                            <description>The SSC output bit 1&apos;s min period will be (3 + TSI_SSC0[BASE_ NOCHARGE_NUM]) clock cycles of system clock</description>
                            <value>0b0010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0011</name>
+                           <name>0b0011</name>
                            <description>The SSC output bit 1&apos;s min period will be (4 + TSI_SSC0[BASE_ NOCHARGE_NUM]) clock cycles of system clock</description>
                            <value>0b0011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0100</name>
+                           <name>0b0100</name>
                            <description>The SSC output bit 1&apos;s min period will be (5 + TSI_SSC0[BASE_ NOCHARGE_NUM]) clock cycles of system clock</description>
                            <value>0b0100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0101</name>
+                           <name>0b0101</name>
                            <description>The SSC output bit 1&apos;s min period will be (6 + TSI_SSC0[BASE_ NOCHARGE_NUM]) clock cycles of system clock</description>
                            <value>0b0101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0110</name>
+                           <name>0b0110</name>
                            <description>The SSC output bit 1&apos;s min period will be (7 + TSI_SSC0[BASE_ NOCHARGE_NUM]) clock cycles of system clock</description>
                            <value>0b0110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0111</name>
+                           <name>0b0111</name>
                            <description>The SSC output bit 1&apos;s min period will be (8 + TSI_SSC0[BASE_ NOCHARGE_NUM]) clock cycles of system clock</description>
                            <value>0b0111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1000</name>
+                           <name>0b1000</name>
                            <description>The SSC output bit 1&apos;s min period will be (9 + TSI_SSC0[BASE_ NOCHARGE_NUM]) clock cycles of system clock</description>
                            <value>0b1000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1001</name>
+                           <name>0b1001</name>
                            <description>The SSC output bit 1&apos;s min period will be (10 + TSI_SSC0[BASE_ NOCHARGE_NUM]) clock cycles of system clock</description>
                            <value>0b1001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1010</name>
+                           <name>0b1010</name>
                            <description>The SSC output bit 1&apos;s min period will be (11 + TSI_SSC0[BASE_ NOCHARGE_NUM]) clock cycles of system clock</description>
                            <value>0b1010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1011</name>
+                           <name>0b1011</name>
                            <description>The SSC output bit 1&apos;s min period will be (12 + TSI_SSC0[BASE_ NOCHARGE_NUM]) clock cycles of system clock</description>
                            <value>0b1011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1100</name>
+                           <name>0b1100</name>
                            <description>The SSC output bit 1&apos;s min period will be (13 + TSI_SSC0[BASE_ NOCHARGE_NUM]) clock cycles of system clock</description>
                            <value>0b1100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1101</name>
+                           <name>0b1101</name>
                            <description>The SSC output bit 1&apos;s min period will be (14 + TSI_SSC0[BASE_ NOCHARGE_NUM]) clock cycles of system clock</description>
                            <value>0b1101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1110</name>
+                           <name>0b1110</name>
                            <description>The SSC output bit 1&apos;s min period will be (15 + TSI_SSC0[BASE_ NOCHARGE_NUM]) clock cycles of system clock</description>
                            <value>0b1110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1111</name>
+                           <name>0b1111</name>
                            <description>The SSC output bit 1&apos;s min period will be (16 + TSI_SSC0[BASE_ NOCHARGE_NUM]) clock cycles of system clock</description>
                            <value>0b1111</value>
                         </enumeratedValue>

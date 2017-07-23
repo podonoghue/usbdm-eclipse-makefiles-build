@@ -181,6 +181,35 @@
       \t   TSI_THRESHOLD_HTHH($(tsi_threshold_hthh));    // Low Power Channel High Threshold value\n\n
    ]]></template>
 
+   <template><![CDATA[
+      \t/**
+      \t * Get input clock when configured in Active mode
+      \t * 
+      \t * @return frequency on Hz
+      \t */
+      \tstatic uint32_t getInputClockFrequency() {
+      \t   switch(tsi->SCANC&TSI_SCANC_AMCLKS_MASK) {
+      \t      case TSI_SCANC_AMCLKS(0):  return 1000;
+      \t      case TSI_SCANC_AMCLKS(1):  return McgInfo::getMcgIrClock();
+      \t      case TSI_SCANC_AMCLKS(2):  return Osc0Info::getOscerClock();
+      \t   }
+      \t   return 0;
+      \t}\n\n
+      
+      \t/**
+      \t * Get input clock when configured in low power mode
+      \t * 
+      \t * @return frequency on Hz
+      \t */
+      \tstatic uint32_t getLowPowerInputClockFrequency() {
+      \t   switch(tsi->GENCS&TSI_GENCS_LPCLKS_MASK) {
+      \t      case TSI_GENCS_LPCLKS(0):  return 1000;
+      \t      case TSI_GENCS_LPCLKS(1):  return SimInfo::getErc32kClock();
+      \t   }
+      \t   return 0;
+      \t}\n\n
+   ]]></template>
+
    <projectActionList id="tsi_files">
       <copy source="Project_Headers/tsi-MK.h"     target="Project_Headers/tsi.h" replace="true" derived="true" />
       <copy source="Snippets/tsi-mk-example.cpp"  target="Snippets/tsi-mk-example.cpp"  replace="true"  derived="true" />

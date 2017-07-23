@@ -28,7 +28,7 @@ Devices using this peripheral:
          <registers>
             <register>
                <name>GENCS</name>
-               <description>TSI General Control and Status Register</description>
+               <description>General Control and Status Register</description>
                <addressOffset>0x0</addressOffset>
                <fields>
                   <field>
@@ -107,7 +107,7 @@ Allows the current source pair to be swapped</description>
                   </field>
                   <field>
                      <name>STPE</name>
-                     <description>TSI STOP Enable\n
+                     <description>STOP Enable\n
 Controls operation in low power mode</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
@@ -301,7 +301,7 @@ Number of Consecutive Scans Per Electrode</description>
                   <field derivedFrom="EXTCHRG" > <name>REFCHRG</name> <description>REFCHRG</description> <bitOffset>21</bitOffset> </field>
                   <field>
                      <name>MODE</name>
-                     <description>TSI analogue modes setup and status bits</description>
+                     <description>analogue modes setup and status bits</description>
                      <bitOffset>24</bitOffset>
                      <bitWidth>4</bitWidth>
                      <enumeratedValues>
@@ -367,12 +367,12 @@ Number of Consecutive Scans Per Electrode</description>
             </register>
             <register>
                <name>DATA</name>
-               <description>TSI DATA Register</description>
+               <description>DATA Register</description>
                <addressOffset>0x4</addressOffset>
                <fields>
                   <field>
                      <name>TSICNT</name>
-                     <description>TSI Conversion Counter Value</description>
+                     <description>Conversion Counter Value</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>16</bitWidth>
                      <access>read-only</access>
@@ -433,7 +433,7 @@ Select between DMA and Interrupt request</description>
             </register>
             <register>
                <name>TSHD</name>
-               <description>TSI Threshold Register</description>
+               <description>Threshold Register</description>
                <addressOffset>0x8</addressOffset>
                <fields>
                   <field>

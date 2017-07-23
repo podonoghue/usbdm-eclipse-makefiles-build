@@ -7720,21 +7720,21 @@ typedef struct {                                /*       TRGMUX1 Structure      
 */
 
 /* ================================================================================ */
-/* ================           TSI (file:TSI_MKE15Z7)               ================ */
+/* ================           TSI0 (file:TSI_MKE15Z7)              ================ */
 /* ================================================================================ */
 
 /**
- * @brief Touch sense input
+ * @brief Touch Sensing Input
  */
 /**
 * @addtogroup TSI_structs_GROUP TSI struct
 * @brief Struct for TSI
 * @{
 */
-typedef struct {                                /*       TSI Structure                                                */
-   __IO uint32_t  GENCS;                        /**< 0000: TSI General Control and Status Register                      */
-   __IO uint32_t  DATA;                         /**< 0004: TSI DATA Register                                            */
-   __IO uint32_t  TSHD;                         /**< 0008: TSI Threshold Register                                       */
+typedef struct {                                /*       TSI0 Structure                                               */
+   __IO uint32_t  GENCS;                        /**< 0000: General Control and Status Register                          */
+   __IO uint32_t  DATA;                         /**< 0004: DATA Register                                                */
+   __IO uint32_t  TSHD;                         /**< 0008: Threshold Register                                           */
    __IO uint32_t  MODE;                         /**< 000C: TSI MODE Register                                            */
    __IO uint32_t  MUL0;                         /**< 0010: TSI MUTUAL-CAP Register 0                                    */
    __IO uint32_t  MUL1;                         /**< 0014: TSI MUTUAL-CAP Register 1                                    */
@@ -7749,7 +7749,7 @@ typedef struct {                                /*       TSI Structure          
  */
 
 /* -------------------------------------------------------------------------------- */
-/* -----------     'TSI' Position & Mask macros                         ----------- */
+/* -----------     'TSI0' Position & Mask macros                        ----------- */
 /* -------------------------------------------------------------------------------- */
 
 /**
@@ -7758,206 +7758,206 @@ typedef struct {                                /*       TSI Structure          
 * @{
 */
 /* ------- GENCS Bit Fields                         ------ */
-#define TSI_GENCS_EOSDMEO_MASK                   (0x1U)                                              /*!< TSI_GENCS.EOSDMEO Mask                  */
-#define TSI_GENCS_EOSDMEO_SHIFT                  (0U)                                                /*!< TSI_GENCS.EOSDMEO Position              */
-#define TSI_GENCS_EOSDMEO(x)                     (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< TSI_GENCS.EOSDMEO Field                 */
-#define TSI_GENCS_EOSF_MASK                      (0x4U)                                              /*!< TSI_GENCS.EOSF Mask                     */
-#define TSI_GENCS_EOSF_SHIFT                     (2U)                                                /*!< TSI_GENCS.EOSF Position                 */
-#define TSI_GENCS_EOSF(x)                        (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< TSI_GENCS.EOSF Field                    */
-#define TSI_GENCS_SCNIP_MASK                     (0x8U)                                              /*!< TSI_GENCS.SCNIP Mask                    */
-#define TSI_GENCS_SCNIP_SHIFT                    (3U)                                                /*!< TSI_GENCS.SCNIP Position                */
-#define TSI_GENCS_SCNIP(x)                       (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< TSI_GENCS.SCNIP Field                   */
-#define TSI_GENCS_STM_MASK                       (0x10U)                                             /*!< TSI_GENCS.STM Mask                      */
-#define TSI_GENCS_STM_SHIFT                      (4U)                                                /*!< TSI_GENCS.STM Position                  */
-#define TSI_GENCS_STM(x)                         (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< TSI_GENCS.STM Field                     */
-#define TSI_GENCS_STPE_MASK                      (0x20U)                                             /*!< TSI_GENCS.STPE Mask                     */
-#define TSI_GENCS_STPE_SHIFT                     (5U)                                                /*!< TSI_GENCS.STPE Position                 */
-#define TSI_GENCS_STPE(x)                        (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< TSI_GENCS.STPE Field                    */
-#define TSI_GENCS_TSIIEN_MASK                    (0x40U)                                             /*!< TSI_GENCS.TSIIEN Mask                   */
-#define TSI_GENCS_TSIIEN_SHIFT                   (6U)                                                /*!< TSI_GENCS.TSIIEN Position               */
-#define TSI_GENCS_TSIIEN(x)                      (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< TSI_GENCS.TSIIEN Field                  */
-#define TSI_GENCS_TSIEN_MASK                     (0x80U)                                             /*!< TSI_GENCS.TSIEN Mask                    */
-#define TSI_GENCS_TSIEN_SHIFT                    (7U)                                                /*!< TSI_GENCS.TSIEN Position                */
-#define TSI_GENCS_TSIEN(x)                       (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< TSI_GENCS.TSIEN Field                   */
-#define TSI_GENCS_CLKSOC_SEL_MASK                (0x800U)                                            /*!< TSI_GENCS.CLKSOC_SEL Mask               */
-#define TSI_GENCS_CLKSOC_SEL_SHIFT               (11U)                                               /*!< TSI_GENCS.CLKSOC_SEL Position           */
-#define TSI_GENCS_CLKSOC_SEL(x)                  (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< TSI_GENCS.CLKSOC_SEL Field              */
-#define TSI_GENCS_RUN_CTRL_MASK                  (0x1000U)                                           /*!< TSI_GENCS.RUN_CTRL Mask                 */
-#define TSI_GENCS_RUN_CTRL_SHIFT                 (12U)                                               /*!< TSI_GENCS.RUN_CTRL Position             */
-#define TSI_GENCS_RUN_CTRL(x)                    (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< TSI_GENCS.RUN_CTRL Field                */
-#define TSI_GENCS_TSI_ANA_TEST_MASK              (0xE000U)                                           /*!< TSI_GENCS.TSI_ANA_TEST Mask             */
-#define TSI_GENCS_TSI_ANA_TEST_SHIFT             (13U)                                               /*!< TSI_GENCS.TSI_ANA_TEST Position         */
-#define TSI_GENCS_TSI_ANA_TEST(x)                (((uint32_t)(((uint32_t)(x))<<13U))&0xE000UL)       /*!< TSI_GENCS.TSI_ANA_TEST Field            */
-#define TSI_GENCS_DVOLT_MASK                     (0x180000U)                                         /*!< TSI_GENCS.DVOLT Mask                    */
-#define TSI_GENCS_DVOLT_SHIFT                    (19U)                                               /*!< TSI_GENCS.DVOLT Position                */
-#define TSI_GENCS_DVOLT(x)                       (((uint32_t)(((uint32_t)(x))<<19U))&0x180000UL)     /*!< TSI_GENCS.DVOLT Field                   */
-#define TSI_GENCS_ESOR_MASK                      (0x10000000U)                                       /*!< TSI_GENCS.ESOR Mask                     */
-#define TSI_GENCS_ESOR_SHIFT                     (28U)                                               /*!< TSI_GENCS.ESOR Position                 */
-#define TSI_GENCS_ESOR(x)                        (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< TSI_GENCS.ESOR Field                    */
-#define TSI_GENCS_OUTRGF_MASK                    (0x80000000U)                                       /*!< TSI_GENCS.OUTRGF Mask                   */
-#define TSI_GENCS_OUTRGF_SHIFT                   (31U)                                               /*!< TSI_GENCS.OUTRGF Position               */
-#define TSI_GENCS_OUTRGF(x)                      (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< TSI_GENCS.OUTRGF Field                  */
+#define TSI_GENCS_EOSDMEO_MASK                   (0x1U)                                              /*!< TSI0_GENCS.EOSDMEO Mask                 */
+#define TSI_GENCS_EOSDMEO_SHIFT                  (0U)                                                /*!< TSI0_GENCS.EOSDMEO Position             */
+#define TSI_GENCS_EOSDMEO(x)                     (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< TSI0_GENCS.EOSDMEO Field                */
+#define TSI_GENCS_EOSF_MASK                      (0x4U)                                              /*!< TSI0_GENCS.EOSF Mask                    */
+#define TSI_GENCS_EOSF_SHIFT                     (2U)                                                /*!< TSI0_GENCS.EOSF Position                */
+#define TSI_GENCS_EOSF(x)                        (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< TSI0_GENCS.EOSF Field                   */
+#define TSI_GENCS_SCNIP_MASK                     (0x8U)                                              /*!< TSI0_GENCS.SCNIP Mask                   */
+#define TSI_GENCS_SCNIP_SHIFT                    (3U)                                                /*!< TSI0_GENCS.SCNIP Position               */
+#define TSI_GENCS_SCNIP(x)                       (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< TSI0_GENCS.SCNIP Field                  */
+#define TSI_GENCS_STM_MASK                       (0x10U)                                             /*!< TSI0_GENCS.STM Mask                     */
+#define TSI_GENCS_STM_SHIFT                      (4U)                                                /*!< TSI0_GENCS.STM Position                 */
+#define TSI_GENCS_STM(x)                         (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< TSI0_GENCS.STM Field                    */
+#define TSI_GENCS_STPE_MASK                      (0x20U)                                             /*!< TSI0_GENCS.STPE Mask                    */
+#define TSI_GENCS_STPE_SHIFT                     (5U)                                                /*!< TSI0_GENCS.STPE Position                */
+#define TSI_GENCS_STPE(x)                        (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< TSI0_GENCS.STPE Field                   */
+#define TSI_GENCS_TSIIEN_MASK                    (0x40U)                                             /*!< TSI0_GENCS.TSIIEN Mask                  */
+#define TSI_GENCS_TSIIEN_SHIFT                   (6U)                                                /*!< TSI0_GENCS.TSIIEN Position              */
+#define TSI_GENCS_TSIIEN(x)                      (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< TSI0_GENCS.TSIIEN Field                 */
+#define TSI_GENCS_TSIEN_MASK                     (0x80U)                                             /*!< TSI0_GENCS.TSIEN Mask                   */
+#define TSI_GENCS_TSIEN_SHIFT                    (7U)                                                /*!< TSI0_GENCS.TSIEN Position               */
+#define TSI_GENCS_TSIEN(x)                       (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< TSI0_GENCS.TSIEN Field                  */
+#define TSI_GENCS_CLKSOC_SEL_MASK                (0x800U)                                            /*!< TSI0_GENCS.CLKSOC_SEL Mask              */
+#define TSI_GENCS_CLKSOC_SEL_SHIFT               (11U)                                               /*!< TSI0_GENCS.CLKSOC_SEL Position          */
+#define TSI_GENCS_CLKSOC_SEL(x)                  (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< TSI0_GENCS.CLKSOC_SEL Field             */
+#define TSI_GENCS_RUN_CTRL_MASK                  (0x1000U)                                           /*!< TSI0_GENCS.RUN_CTRL Mask                */
+#define TSI_GENCS_RUN_CTRL_SHIFT                 (12U)                                               /*!< TSI0_GENCS.RUN_CTRL Position            */
+#define TSI_GENCS_RUN_CTRL(x)                    (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< TSI0_GENCS.RUN_CTRL Field               */
+#define TSI_GENCS_TSI_ANA_TEST_MASK              (0xE000U)                                           /*!< TSI0_GENCS.TSI_ANA_TEST Mask            */
+#define TSI_GENCS_TSI_ANA_TEST_SHIFT             (13U)                                               /*!< TSI0_GENCS.TSI_ANA_TEST Position        */
+#define TSI_GENCS_TSI_ANA_TEST(x)                (((uint32_t)(((uint32_t)(x))<<13U))&0xE000UL)       /*!< TSI0_GENCS.TSI_ANA_TEST Field           */
+#define TSI_GENCS_DVOLT_MASK                     (0x180000U)                                         /*!< TSI0_GENCS.DVOLT Mask                   */
+#define TSI_GENCS_DVOLT_SHIFT                    (19U)                                               /*!< TSI0_GENCS.DVOLT Position               */
+#define TSI_GENCS_DVOLT(x)                       (((uint32_t)(((uint32_t)(x))<<19U))&0x180000UL)     /*!< TSI0_GENCS.DVOLT Field                  */
+#define TSI_GENCS_ESOR_MASK                      (0x10000000U)                                       /*!< TSI0_GENCS.ESOR Mask                    */
+#define TSI_GENCS_ESOR_SHIFT                     (28U)                                               /*!< TSI0_GENCS.ESOR Position                */
+#define TSI_GENCS_ESOR(x)                        (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< TSI0_GENCS.ESOR Field                   */
+#define TSI_GENCS_OUTRGF_MASK                    (0x80000000U)                                       /*!< TSI0_GENCS.OUTRGF Mask                  */
+#define TSI_GENCS_OUTRGF_SHIFT                   (31U)                                               /*!< TSI0_GENCS.OUTRGF Position              */
+#define TSI_GENCS_OUTRGF(x)                      (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< TSI0_GENCS.OUTRGF Field                 */
 /* ------- DATA Bit Fields                          ------ */
-#define TSI_DATA_TSICNT_MASK                     (0xFFFFU)                                           /*!< TSI_DATA.TSICNT Mask                    */
-#define TSI_DATA_TSICNT_SHIFT                    (0U)                                                /*!< TSI_DATA.TSICNT Position                */
-#define TSI_DATA_TSICNT(x)                       (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< TSI_DATA.TSICNT Field                   */
-#define TSI_DATA_SWTS_MASK                       (0x400000U)                                         /*!< TSI_DATA.SWTS Mask                      */
-#define TSI_DATA_SWTS_SHIFT                      (22U)                                               /*!< TSI_DATA.SWTS Position                  */
-#define TSI_DATA_SWTS(x)                         (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< TSI_DATA.SWTS Field                     */
-#define TSI_DATA_DMAEN_MASK                      (0x800000U)                                         /*!< TSI_DATA.DMAEN Mask                     */
-#define TSI_DATA_DMAEN_SHIFT                     (23U)                                               /*!< TSI_DATA.DMAEN Position                 */
-#define TSI_DATA_DMAEN(x)                        (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< TSI_DATA.DMAEN Field                    */
-#define TSI_DATA_TSICH_MASK                      (0xF8000000U)                                       /*!< TSI_DATA.TSICH Mask                     */
-#define TSI_DATA_TSICH_SHIFT                     (27U)                                               /*!< TSI_DATA.TSICH Position                 */
-#define TSI_DATA_TSICH(x)                        (((uint32_t)(((uint32_t)(x))<<27U))&0xF8000000UL)   /*!< TSI_DATA.TSICH Field                    */
+#define TSI_DATA_TSICNT_MASK                     (0xFFFFU)                                           /*!< TSI0_DATA.TSICNT Mask                   */
+#define TSI_DATA_TSICNT_SHIFT                    (0U)                                                /*!< TSI0_DATA.TSICNT Position               */
+#define TSI_DATA_TSICNT(x)                       (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< TSI0_DATA.TSICNT Field                  */
+#define TSI_DATA_SWTS_MASK                       (0x400000U)                                         /*!< TSI0_DATA.SWTS Mask                     */
+#define TSI_DATA_SWTS_SHIFT                      (22U)                                               /*!< TSI0_DATA.SWTS Position                 */
+#define TSI_DATA_SWTS(x)                         (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< TSI0_DATA.SWTS Field                    */
+#define TSI_DATA_DMAEN_MASK                      (0x800000U)                                         /*!< TSI0_DATA.DMAEN Mask                    */
+#define TSI_DATA_DMAEN_SHIFT                     (23U)                                               /*!< TSI0_DATA.DMAEN Position                */
+#define TSI_DATA_DMAEN(x)                        (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< TSI0_DATA.DMAEN Field                   */
+#define TSI_DATA_TSICH_MASK                      (0xF8000000U)                                       /*!< TSI0_DATA.TSICH Mask                    */
+#define TSI_DATA_TSICH_SHIFT                     (27U)                                               /*!< TSI0_DATA.TSICH Position                */
+#define TSI_DATA_TSICH(x)                        (((uint32_t)(((uint32_t)(x))<<27U))&0xF8000000UL)   /*!< TSI0_DATA.TSICH Field                   */
 /* ------- TSHD Bit Fields                          ------ */
-#define TSI_TSHD_THRESL_MASK                     (0xFFFFU)                                           /*!< TSI_TSHD.THRESL Mask                    */
-#define TSI_TSHD_THRESL_SHIFT                    (0U)                                                /*!< TSI_TSHD.THRESL Position                */
-#define TSI_TSHD_THRESL(x)                       (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< TSI_TSHD.THRESL Field                   */
-#define TSI_TSHD_THRESH_MASK                     (0xFFFF0000U)                                       /*!< TSI_TSHD.THRESH Mask                    */
-#define TSI_TSHD_THRESH_SHIFT                    (16U)                                               /*!< TSI_TSHD.THRESH Position                */
-#define TSI_TSHD_THRESH(x)                       (((uint32_t)(((uint32_t)(x))<<16U))&0xFFFF0000UL)   /*!< TSI_TSHD.THRESH Field                   */
+#define TSI_TSHD_THRESL_MASK                     (0xFFFFU)                                           /*!< TSI0_TSHD.THRESL Mask                   */
+#define TSI_TSHD_THRESL_SHIFT                    (0U)                                                /*!< TSI0_TSHD.THRESL Position               */
+#define TSI_TSHD_THRESL(x)                       (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< TSI0_TSHD.THRESL Field                  */
+#define TSI_TSHD_THRESH_MASK                     (0xFFFF0000U)                                       /*!< TSI0_TSHD.THRESH Mask                   */
+#define TSI_TSHD_THRESH_SHIFT                    (16U)                                               /*!< TSI0_TSHD.THRESH Position               */
+#define TSI_TSHD_THRESH(x)                       (((uint32_t)(((uint32_t)(x))<<16U))&0xFFFF0000UL)   /*!< TSI0_TSHD.THRESH Field                  */
 /* ------- MODE Bit Fields                          ------ */
-#define TSI_MODE_S_NOISE_MASK                    (0x1U)                                              /*!< TSI_MODE.S_NOISE Mask                   */
-#define TSI_MODE_S_NOISE_SHIFT                   (0U)                                                /*!< TSI_MODE.S_NOISE Position               */
-#define TSI_MODE_S_NOISE(x)                      (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< TSI_MODE.S_NOISE Field                  */
-#define TSI_MODE_MODE_MASK                       (0x2U)                                              /*!< TSI_MODE.MODE Mask                      */
-#define TSI_MODE_MODE_SHIFT                      (1U)                                                /*!< TSI_MODE.MODE Position                  */
-#define TSI_MODE_MODE(x)                         (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< TSI_MODE.MODE Field                     */
-#define TSI_MODE_SETCLK_MASK                     (0x60U)                                             /*!< TSI_MODE.SETCLK Mask                    */
-#define TSI_MODE_SETCLK_SHIFT                    (5U)                                                /*!< TSI_MODE.SETCLK Position                */
-#define TSI_MODE_SETCLK(x)                       (((uint32_t)(((uint32_t)(x))<<5U))&0x60UL)          /*!< TSI_MODE.SETCLK Field                   */
-#define TSI_MODE_S_XCH_MASK                      (0x7000U)                                           /*!< TSI_MODE.S_XCH Mask                     */
-#define TSI_MODE_S_XCH_SHIFT                     (12U)                                               /*!< TSI_MODE.S_XCH Position                 */
-#define TSI_MODE_S_XCH(x)                        (((uint32_t)(((uint32_t)(x))<<12U))&0x7000UL)       /*!< TSI_MODE.S_XCH Field                    */
-#define TSI_MODE_S_XIN_MASK                      (0x40000U)                                          /*!< TSI_MODE.S_XIN Mask                     */
-#define TSI_MODE_S_XIN_SHIFT                     (18U)                                               /*!< TSI_MODE.S_XIN Position                 */
-#define TSI_MODE_S_XIN(x)                        (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< TSI_MODE.S_XIN Field                    */
-#define TSI_MODE_S_CTRIM_MASK                    (0x380000U)                                         /*!< TSI_MODE.S_CTRIM Mask                   */
-#define TSI_MODE_S_CTRIM_SHIFT                   (19U)                                               /*!< TSI_MODE.S_CTRIM Position               */
-#define TSI_MODE_S_CTRIM(x)                      (((uint32_t)(((uint32_t)(x))<<19U))&0x380000UL)     /*!< TSI_MODE.S_CTRIM Field                  */
-#define TSI_MODE_S_SEN_MASK                      (0x400000U)                                         /*!< TSI_MODE.S_SEN Mask                     */
-#define TSI_MODE_S_SEN_SHIFT                     (22U)                                               /*!< TSI_MODE.S_SEN Position                 */
-#define TSI_MODE_S_SEN(x)                        (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< TSI_MODE.S_SEN Field                    */
-#define TSI_MODE_S_W_SHIELD_MASK                 (0x800000U)                                         /*!< TSI_MODE.S_W_SHIELD Mask                */
-#define TSI_MODE_S_W_SHIELD_SHIFT                (23U)                                               /*!< TSI_MODE.S_W_SHIELD Position            */
-#define TSI_MODE_S_W_SHIELD(x)                   (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< TSI_MODE.S_W_SHIELD Field               */
-#define TSI_MODE_S_XDN_MASK                      (0x70000000U)                                       /*!< TSI_MODE.S_XDN Mask                     */
-#define TSI_MODE_S_XDN_SHIFT                     (28U)                                               /*!< TSI_MODE.S_XDN Position                 */
-#define TSI_MODE_S_XDN(x)                        (((uint32_t)(((uint32_t)(x))<<28U))&0x70000000UL)   /*!< TSI_MODE.S_XDN Field                    */
+#define TSI_MODE_S_NOISE_MASK                    (0x1U)                                              /*!< TSI0_MODE.S_NOISE Mask                  */
+#define TSI_MODE_S_NOISE_SHIFT                   (0U)                                                /*!< TSI0_MODE.S_NOISE Position              */
+#define TSI_MODE_S_NOISE(x)                      (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< TSI0_MODE.S_NOISE Field                 */
+#define TSI_MODE_MODE_MASK                       (0x2U)                                              /*!< TSI0_MODE.MODE Mask                     */
+#define TSI_MODE_MODE_SHIFT                      (1U)                                                /*!< TSI0_MODE.MODE Position                 */
+#define TSI_MODE_MODE(x)                         (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< TSI0_MODE.MODE Field                    */
+#define TSI_MODE_SETCLK_MASK                     (0x60U)                                             /*!< TSI0_MODE.SETCLK Mask                   */
+#define TSI_MODE_SETCLK_SHIFT                    (5U)                                                /*!< TSI0_MODE.SETCLK Position               */
+#define TSI_MODE_SETCLK(x)                       (((uint32_t)(((uint32_t)(x))<<5U))&0x60UL)          /*!< TSI0_MODE.SETCLK Field                  */
+#define TSI_MODE_S_XCH_MASK                      (0x7000U)                                           /*!< TSI0_MODE.S_XCH Mask                    */
+#define TSI_MODE_S_XCH_SHIFT                     (12U)                                               /*!< TSI0_MODE.S_XCH Position                */
+#define TSI_MODE_S_XCH(x)                        (((uint32_t)(((uint32_t)(x))<<12U))&0x7000UL)       /*!< TSI0_MODE.S_XCH Field                   */
+#define TSI_MODE_S_XIN_MASK                      (0x40000U)                                          /*!< TSI0_MODE.S_XIN Mask                    */
+#define TSI_MODE_S_XIN_SHIFT                     (18U)                                               /*!< TSI0_MODE.S_XIN Position                */
+#define TSI_MODE_S_XIN(x)                        (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< TSI0_MODE.S_XIN Field                   */
+#define TSI_MODE_S_CTRIM_MASK                    (0x380000U)                                         /*!< TSI0_MODE.S_CTRIM Mask                  */
+#define TSI_MODE_S_CTRIM_SHIFT                   (19U)                                               /*!< TSI0_MODE.S_CTRIM Position              */
+#define TSI_MODE_S_CTRIM(x)                      (((uint32_t)(((uint32_t)(x))<<19U))&0x380000UL)     /*!< TSI0_MODE.S_CTRIM Field                 */
+#define TSI_MODE_S_SEN_MASK                      (0x400000U)                                         /*!< TSI0_MODE.S_SEN Mask                    */
+#define TSI_MODE_S_SEN_SHIFT                     (22U)                                               /*!< TSI0_MODE.S_SEN Position                */
+#define TSI_MODE_S_SEN(x)                        (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< TSI0_MODE.S_SEN Field                   */
+#define TSI_MODE_S_W_SHIELD_MASK                 (0x800000U)                                         /*!< TSI0_MODE.S_W_SHIELD Mask               */
+#define TSI_MODE_S_W_SHIELD_SHIFT                (23U)                                               /*!< TSI0_MODE.S_W_SHIELD Position           */
+#define TSI_MODE_S_W_SHIELD(x)                   (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< TSI0_MODE.S_W_SHIELD Field              */
+#define TSI_MODE_S_XDN_MASK                      (0x70000000U)                                       /*!< TSI0_MODE.S_XDN Mask                    */
+#define TSI_MODE_S_XDN_SHIFT                     (28U)                                               /*!< TSI0_MODE.S_XDN Position                */
+#define TSI_MODE_S_XDN(x)                        (((uint32_t)(((uint32_t)(x))<<28U))&0x70000000UL)   /*!< TSI0_MODE.S_XDN Field                   */
 /* ------- MUL0 Bit Fields                          ------ */
-#define TSI_MUL0_M_SEL_RX_MASK                   (0x7U)                                              /*!< TSI_MUL0.M_SEL_RX Mask                  */
-#define TSI_MUL0_M_SEL_RX_SHIFT                  (0U)                                                /*!< TSI_MUL0.M_SEL_RX Position              */
-#define TSI_MUL0_M_SEL_RX(x)                     (((uint32_t)(((uint32_t)(x))<<0U))&0x7UL)           /*!< TSI_MUL0.M_SEL_RX Field                 */
-#define TSI_MUL0_M_SEL_TX_MASK                   (0x70U)                                             /*!< TSI_MUL0.M_SEL_TX Mask                  */
-#define TSI_MUL0_M_SEL_TX_SHIFT                  (4U)                                                /*!< TSI_MUL0.M_SEL_TX Position              */
-#define TSI_MUL0_M_SEL_TX(x)                     (((uint32_t)(((uint32_t)(x))<<4U))&0x70UL)          /*!< TSI_MUL0.M_SEL_TX Field                 */
-#define TSI_MUL0_M_SEN_RES_MASK                  (0xF00U)                                            /*!< TSI_MUL0.M_SEN_RES Mask                 */
-#define TSI_MUL0_M_SEN_RES_SHIFT                 (8U)                                                /*!< TSI_MUL0.M_SEN_RES Position             */
-#define TSI_MUL0_M_SEN_RES(x)                    (((uint32_t)(((uint32_t)(x))<<8U))&0xF00UL)         /*!< TSI_MUL0.M_SEN_RES Field                */
-#define TSI_MUL0_M_PRE_RES_MASK                  (0xE000U)                                           /*!< TSI_MUL0.M_PRE_RES Mask                 */
-#define TSI_MUL0_M_PRE_RES_SHIFT                 (13U)                                               /*!< TSI_MUL0.M_PRE_RES Position             */
-#define TSI_MUL0_M_PRE_RES(x)                    (((uint32_t)(((uint32_t)(x))<<13U))&0xE000UL)       /*!< TSI_MUL0.M_PRE_RES Field                */
-#define TSI_MUL0_M_PRE_CURRENT_MASK              (0xE0000000U)                                       /*!< TSI_MUL0.M_PRE_CURRENT Mask             */
-#define TSI_MUL0_M_PRE_CURRENT_SHIFT             (29U)                                               /*!< TSI_MUL0.M_PRE_CURRENT Position         */
-#define TSI_MUL0_M_PRE_CURRENT(x)                (((uint32_t)(((uint32_t)(x))<<29U))&0xE0000000UL)   /*!< TSI_MUL0.M_PRE_CURRENT Field            */
+#define TSI_MUL0_M_SEL_RX_MASK                   (0x7U)                                              /*!< TSI0_MUL0.M_SEL_RX Mask                 */
+#define TSI_MUL0_M_SEL_RX_SHIFT                  (0U)                                                /*!< TSI0_MUL0.M_SEL_RX Position             */
+#define TSI_MUL0_M_SEL_RX(x)                     (((uint32_t)(((uint32_t)(x))<<0U))&0x7UL)           /*!< TSI0_MUL0.M_SEL_RX Field                */
+#define TSI_MUL0_M_SEL_TX_MASK                   (0x70U)                                             /*!< TSI0_MUL0.M_SEL_TX Mask                 */
+#define TSI_MUL0_M_SEL_TX_SHIFT                  (4U)                                                /*!< TSI0_MUL0.M_SEL_TX Position             */
+#define TSI_MUL0_M_SEL_TX(x)                     (((uint32_t)(((uint32_t)(x))<<4U))&0x70UL)          /*!< TSI0_MUL0.M_SEL_TX Field                */
+#define TSI_MUL0_M_SEN_RES_MASK                  (0xF00U)                                            /*!< TSI0_MUL0.M_SEN_RES Mask                */
+#define TSI_MUL0_M_SEN_RES_SHIFT                 (8U)                                                /*!< TSI0_MUL0.M_SEN_RES Position            */
+#define TSI_MUL0_M_SEN_RES(x)                    (((uint32_t)(((uint32_t)(x))<<8U))&0xF00UL)         /*!< TSI0_MUL0.M_SEN_RES Field               */
+#define TSI_MUL0_M_PRE_RES_MASK                  (0xE000U)                                           /*!< TSI0_MUL0.M_PRE_RES Mask                */
+#define TSI_MUL0_M_PRE_RES_SHIFT                 (13U)                                               /*!< TSI0_MUL0.M_PRE_RES Position            */
+#define TSI_MUL0_M_PRE_RES(x)                    (((uint32_t)(((uint32_t)(x))<<13U))&0xE000UL)       /*!< TSI0_MUL0.M_PRE_RES Field               */
+#define TSI_MUL0_M_PRE_CURRENT_MASK              (0xE0000000U)                                       /*!< TSI0_MUL0.M_PRE_CURRENT Mask            */
+#define TSI_MUL0_M_PRE_CURRENT_SHIFT             (29U)                                               /*!< TSI0_MUL0.M_PRE_CURRENT Position        */
+#define TSI_MUL0_M_PRE_CURRENT(x)                (((uint32_t)(((uint32_t)(x))<<29U))&0xE0000000UL)   /*!< TSI0_MUL0.M_PRE_CURRENT Field           */
 /* ------- MUL1 Bit Fields                          ------ */
-#define TSI_MUL1_M_NMIR_CTRL_MASK                (0x1U)                                              /*!< TSI_MUL1.M_NMIR_CTRL Mask               */
-#define TSI_MUL1_M_NMIR_CTRL_SHIFT               (0U)                                                /*!< TSI_MUL1.M_NMIR_CTRL Position           */
-#define TSI_MUL1_M_NMIR_CTRL(x)                  (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< TSI_MUL1.M_NMIR_CTRL Field              */
-#define TSI_MUL1_M_NMIRROR_MASK                  (0x6U)                                              /*!< TSI_MUL1.M_NMIRROR Mask                 */
-#define TSI_MUL1_M_NMIRROR_SHIFT                 (1U)                                                /*!< TSI_MUL1.M_NMIRROR Position             */
-#define TSI_MUL1_M_NMIRROR(x)                    (((uint32_t)(((uint32_t)(x))<<1U))&0x6UL)           /*!< TSI_MUL1.M_NMIRROR Field                */
-#define TSI_MUL1_M_PMIRRORR_MASK                 (0x18U)                                             /*!< TSI_MUL1.M_PMIRRORR Mask                */
-#define TSI_MUL1_M_PMIRRORR_SHIFT                (3U)                                                /*!< TSI_MUL1.M_PMIRRORR Position            */
-#define TSI_MUL1_M_PMIRRORR(x)                   (((uint32_t)(((uint32_t)(x))<<3U))&0x18UL)          /*!< TSI_MUL1.M_PMIRRORR Field               */
-#define TSI_MUL1_M_PMIRRORL_MASK                 (0xE0U)                                             /*!< TSI_MUL1.M_PMIRRORL Mask                */
-#define TSI_MUL1_M_PMIRRORL_SHIFT                (5U)                                                /*!< TSI_MUL1.M_PMIRRORL Position            */
-#define TSI_MUL1_M_PMIRRORL(x)                   (((uint32_t)(((uint32_t)(x))<<5U))&0xE0UL)          /*!< TSI_MUL1.M_PMIRRORL Field               */
-#define TSI_MUL1_M_VPRE_CHOOSE_MASK              (0x10000U)                                          /*!< TSI_MUL1.M_VPRE_CHOOSE Mask             */
-#define TSI_MUL1_M_VPRE_CHOOSE_SHIFT             (16U)                                               /*!< TSI_MUL1.M_VPRE_CHOOSE Position         */
-#define TSI_MUL1_M_VPRE_CHOOSE(x)                (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< TSI_MUL1.M_VPRE_CHOOSE Field            */
-#define TSI_MUL1_M_MODE_MASK                     (0x40000U)                                          /*!< TSI_MUL1.M_MODE Mask                    */
-#define TSI_MUL1_M_MODE_SHIFT                    (18U)                                               /*!< TSI_MUL1.M_MODE Position                */
-#define TSI_MUL1_M_MODE(x)                       (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< TSI_MUL1.M_MODE Field                   */
-#define TSI_MUL1_M_SEN_BOOST_MASK                (0xF80000U)                                         /*!< TSI_MUL1.M_SEN_BOOST Mask               */
-#define TSI_MUL1_M_SEN_BOOST_SHIFT               (19U)                                               /*!< TSI_MUL1.M_SEN_BOOST Position           */
-#define TSI_MUL1_M_SEN_BOOST(x)                  (((uint32_t)(((uint32_t)(x))<<19U))&0xF80000UL)     /*!< TSI_MUL1.M_SEN_BOOST Field              */
+#define TSI_MUL1_M_NMIR_CTRL_MASK                (0x1U)                                              /*!< TSI0_MUL1.M_NMIR_CTRL Mask              */
+#define TSI_MUL1_M_NMIR_CTRL_SHIFT               (0U)                                                /*!< TSI0_MUL1.M_NMIR_CTRL Position          */
+#define TSI_MUL1_M_NMIR_CTRL(x)                  (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< TSI0_MUL1.M_NMIR_CTRL Field             */
+#define TSI_MUL1_M_NMIRROR_MASK                  (0x6U)                                              /*!< TSI0_MUL1.M_NMIRROR Mask                */
+#define TSI_MUL1_M_NMIRROR_SHIFT                 (1U)                                                /*!< TSI0_MUL1.M_NMIRROR Position            */
+#define TSI_MUL1_M_NMIRROR(x)                    (((uint32_t)(((uint32_t)(x))<<1U))&0x6UL)           /*!< TSI0_MUL1.M_NMIRROR Field               */
+#define TSI_MUL1_M_PMIRRORR_MASK                 (0x18U)                                             /*!< TSI0_MUL1.M_PMIRRORR Mask               */
+#define TSI_MUL1_M_PMIRRORR_SHIFT                (3U)                                                /*!< TSI0_MUL1.M_PMIRRORR Position           */
+#define TSI_MUL1_M_PMIRRORR(x)                   (((uint32_t)(((uint32_t)(x))<<3U))&0x18UL)          /*!< TSI0_MUL1.M_PMIRRORR Field              */
+#define TSI_MUL1_M_PMIRRORL_MASK                 (0xE0U)                                             /*!< TSI0_MUL1.M_PMIRRORL Mask               */
+#define TSI_MUL1_M_PMIRRORL_SHIFT                (5U)                                                /*!< TSI0_MUL1.M_PMIRRORL Position           */
+#define TSI_MUL1_M_PMIRRORL(x)                   (((uint32_t)(((uint32_t)(x))<<5U))&0xE0UL)          /*!< TSI0_MUL1.M_PMIRRORL Field              */
+#define TSI_MUL1_M_VPRE_CHOOSE_MASK              (0x10000U)                                          /*!< TSI0_MUL1.M_VPRE_CHOOSE Mask            */
+#define TSI_MUL1_M_VPRE_CHOOSE_SHIFT             (16U)                                               /*!< TSI0_MUL1.M_VPRE_CHOOSE Position        */
+#define TSI_MUL1_M_VPRE_CHOOSE(x)                (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< TSI0_MUL1.M_VPRE_CHOOSE Field           */
+#define TSI_MUL1_M_MODE_MASK                     (0x40000U)                                          /*!< TSI0_MUL1.M_MODE Mask                   */
+#define TSI_MUL1_M_MODE_SHIFT                    (18U)                                               /*!< TSI0_MUL1.M_MODE Position               */
+#define TSI_MUL1_M_MODE(x)                       (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< TSI0_MUL1.M_MODE Field                  */
+#define TSI_MUL1_M_SEN_BOOST_MASK                (0xF80000U)                                         /*!< TSI0_MUL1.M_SEN_BOOST Mask              */
+#define TSI_MUL1_M_SEN_BOOST_SHIFT               (19U)                                               /*!< TSI0_MUL1.M_SEN_BOOST Position          */
+#define TSI_MUL1_M_SEN_BOOST(x)                  (((uint32_t)(((uint32_t)(x))<<19U))&0xF80000UL)     /*!< TSI0_MUL1.M_SEN_BOOST Field             */
 /* ------- SINC Bit Fields                          ------ */
-#define TSI_SINC_SSC_CONTROL_OUT_MASK            (0x1U)                                              /*!< TSI_SINC.SSC_CONTROL_OUT Mask           */
-#define TSI_SINC_SSC_CONTROL_OUT_SHIFT           (0U)                                                /*!< TSI_SINC.SSC_CONTROL_OUT Position       */
-#define TSI_SINC_SSC_CONTROL_OUT(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< TSI_SINC.SSC_CONTROL_OUT Field          */
-#define TSI_SINC_SINC_VALID_MASK                 (0x2U)                                              /*!< TSI_SINC.SINC_VALID Mask                */
-#define TSI_SINC_SINC_VALID_SHIFT                (1U)                                                /*!< TSI_SINC.SINC_VALID Position            */
-#define TSI_SINC_SINC_VALID(x)                   (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< TSI_SINC.SINC_VALID Field               */
-#define TSI_SINC_SINC_OVERFLOW_FLAG_MASK         (0x4U)                                              /*!< TSI_SINC.SINC_OVERFLOW_FLAG Mask        */
-#define TSI_SINC_SINC_OVERFLOW_FLAG_SHIFT        (2U)                                                /*!< TSI_SINC.SINC_OVERFLOW_FLAG Position    */
-#define TSI_SINC_SINC_OVERFLOW_FLAG(x)           (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< TSI_SINC.SINC_OVERFLOW_FLAG Field       */
-#define TSI_SINC_SWITCH_ENABLE_MASK              (0x8U)                                              /*!< TSI_SINC.SWITCH_ENABLE Mask             */
-#define TSI_SINC_SWITCH_ENABLE_SHIFT             (3U)                                                /*!< TSI_SINC.SWITCH_ENABLE Position         */
-#define TSI_SINC_SWITCH_ENABLE(x)                (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< TSI_SINC.SWITCH_ENABLE Field            */
-#define TSI_SINC_DECIMATION_MASK                 (0x1F0000U)                                         /*!< TSI_SINC.DECIMATION Mask                */
-#define TSI_SINC_DECIMATION_SHIFT                (16U)                                               /*!< TSI_SINC.DECIMATION Position            */
-#define TSI_SINC_DECIMATION(x)                   (((uint32_t)(((uint32_t)(x))<<16U))&0x1F0000UL)     /*!< TSI_SINC.DECIMATION Field               */
-#define TSI_SINC_ORDER_MASK                      (0x200000U)                                         /*!< TSI_SINC.ORDER Mask                     */
-#define TSI_SINC_ORDER_SHIFT                     (21U)                                               /*!< TSI_SINC.ORDER Position                 */
-#define TSI_SINC_ORDER(x)                        (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< TSI_SINC.ORDER Field                    */
-#define TSI_SINC_CUTOFF_MASK                     (0xF000000U)                                        /*!< TSI_SINC.CUTOFF Mask                    */
-#define TSI_SINC_CUTOFF_SHIFT                    (24U)                                               /*!< TSI_SINC.CUTOFF Position                */
-#define TSI_SINC_CUTOFF(x)                       (((uint32_t)(((uint32_t)(x))<<24U))&0xF000000UL)    /*!< TSI_SINC.CUTOFF Field                   */
+#define TSI_SINC_SSC_CONTROL_OUT_MASK            (0x1U)                                              /*!< TSI0_SINC.SSC_CONTROL_OUT Mask          */
+#define TSI_SINC_SSC_CONTROL_OUT_SHIFT           (0U)                                                /*!< TSI0_SINC.SSC_CONTROL_OUT Position      */
+#define TSI_SINC_SSC_CONTROL_OUT(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< TSI0_SINC.SSC_CONTROL_OUT Field         */
+#define TSI_SINC_SINC_VALID_MASK                 (0x2U)                                              /*!< TSI0_SINC.SINC_VALID Mask               */
+#define TSI_SINC_SINC_VALID_SHIFT                (1U)                                                /*!< TSI0_SINC.SINC_VALID Position           */
+#define TSI_SINC_SINC_VALID(x)                   (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< TSI0_SINC.SINC_VALID Field              */
+#define TSI_SINC_SINC_OVERFLOW_FLAG_MASK         (0x4U)                                              /*!< TSI0_SINC.SINC_OVERFLOW_FLAG Mask       */
+#define TSI_SINC_SINC_OVERFLOW_FLAG_SHIFT        (2U)                                                /*!< TSI0_SINC.SINC_OVERFLOW_FLAG Position   */
+#define TSI_SINC_SINC_OVERFLOW_FLAG(x)           (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< TSI0_SINC.SINC_OVERFLOW_FLAG Field      */
+#define TSI_SINC_SWITCH_ENABLE_MASK              (0x8U)                                              /*!< TSI0_SINC.SWITCH_ENABLE Mask            */
+#define TSI_SINC_SWITCH_ENABLE_SHIFT             (3U)                                                /*!< TSI0_SINC.SWITCH_ENABLE Position        */
+#define TSI_SINC_SWITCH_ENABLE(x)                (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< TSI0_SINC.SWITCH_ENABLE Field           */
+#define TSI_SINC_DECIMATION_MASK                 (0x1F0000U)                                         /*!< TSI0_SINC.DECIMATION Mask               */
+#define TSI_SINC_DECIMATION_SHIFT                (16U)                                               /*!< TSI0_SINC.DECIMATION Position           */
+#define TSI_SINC_DECIMATION(x)                   (((uint32_t)(((uint32_t)(x))<<16U))&0x1F0000UL)     /*!< TSI0_SINC.DECIMATION Field              */
+#define TSI_SINC_ORDER_MASK                      (0x200000U)                                         /*!< TSI0_SINC.ORDER Mask                    */
+#define TSI_SINC_ORDER_SHIFT                     (21U)                                               /*!< TSI0_SINC.ORDER Position                */
+#define TSI_SINC_ORDER(x)                        (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< TSI0_SINC.ORDER Field                   */
+#define TSI_SINC_CUTOFF_MASK                     (0xF000000U)                                        /*!< TSI0_SINC.CUTOFF Mask                   */
+#define TSI_SINC_CUTOFF_SHIFT                    (24U)                                               /*!< TSI0_SINC.CUTOFF Position               */
+#define TSI_SINC_CUTOFF(x)                       (((uint32_t)(((uint32_t)(x))<<24U))&0xF000000UL)    /*!< TSI0_SINC.CUTOFF Field                  */
 /* ------- SSC0 Bit Fields                          ------ */
-#define TSI_SSC0_SSC_PRESCALE_NUM_MASK           (0xFFU)                                             /*!< TSI_SSC0.SSC_PRESCALE_NUM Mask          */
-#define TSI_SSC0_SSC_PRESCALE_NUM_SHIFT          (0U)                                                /*!< TSI_SSC0.SSC_PRESCALE_NUM Position      */
-#define TSI_SSC0_SSC_PRESCALE_NUM(x)             (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< TSI_SSC0.SSC_PRESCALE_NUM Field         */
-#define TSI_SSC0_BASE_NOCHARGE_NUM_MASK          (0xF0000U)                                          /*!< TSI_SSC0.BASE_NOCHARGE_NUM Mask         */
-#define TSI_SSC0_BASE_NOCHARGE_NUM_SHIFT         (16U)                                               /*!< TSI_SSC0.BASE_NOCHARGE_NUM Position     */
-#define TSI_SSC0_BASE_NOCHARGE_NUM(x)            (((uint32_t)(((uint32_t)(x))<<16U))&0xF0000UL)      /*!< TSI_SSC0.BASE_NOCHARGE_NUM Field        */
-#define TSI_SSC0_CHARGE_NUM_MASK                 (0xF00000U)                                         /*!< TSI_SSC0.CHARGE_NUM Mask                */
-#define TSI_SSC0_CHARGE_NUM_SHIFT                (20U)                                               /*!< TSI_SSC0.CHARGE_NUM Position            */
-#define TSI_SSC0_CHARGE_NUM(x)                   (((uint32_t)(((uint32_t)(x))<<20U))&0xF00000UL)     /*!< TSI_SSC0.CHARGE_NUM Field               */
-#define TSI_SSC0_SSC_CONTROL_REVERSE_MASK        (0x1000000U)                                        /*!< TSI_SSC0.SSC_CONTROL_REVERSE Mask       */
-#define TSI_SSC0_SSC_CONTROL_REVERSE_SHIFT       (24U)                                               /*!< TSI_SSC0.SSC_CONTROL_REVERSE Position   */
-#define TSI_SSC0_SSC_CONTROL_REVERSE(x)          (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< TSI_SSC0.SSC_CONTROL_REVERSE Field      */
-#define TSI_SSC0_SSC_MODE_MASK                   (0x6000000U)                                        /*!< TSI_SSC0.SSC_MODE Mask                  */
-#define TSI_SSC0_SSC_MODE_SHIFT                  (25U)                                               /*!< TSI_SSC0.SSC_MODE Position              */
-#define TSI_SSC0_SSC_MODE(x)                     (((uint32_t)(((uint32_t)(x))<<25U))&0x6000000UL)    /*!< TSI_SSC0.SSC_MODE Field                 */
-#define TSI_SSC0_PRBS_OUTSEL_MASK                (0xF0000000U)                                       /*!< TSI_SSC0.PRBS_OUTSEL Mask               */
-#define TSI_SSC0_PRBS_OUTSEL_SHIFT               (28U)                                               /*!< TSI_SSC0.PRBS_OUTSEL Position           */
-#define TSI_SSC0_PRBS_OUTSEL(x)                  (((uint32_t)(((uint32_t)(x))<<28U))&0xF0000000UL)   /*!< TSI_SSC0.PRBS_OUTSEL Field              */
+#define TSI_SSC0_SSC_PRESCALE_NUM_MASK           (0xFFU)                                             /*!< TSI0_SSC0.SSC_PRESCALE_NUM Mask         */
+#define TSI_SSC0_SSC_PRESCALE_NUM_SHIFT          (0U)                                                /*!< TSI0_SSC0.SSC_PRESCALE_NUM Position     */
+#define TSI_SSC0_SSC_PRESCALE_NUM(x)             (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< TSI0_SSC0.SSC_PRESCALE_NUM Field        */
+#define TSI_SSC0_BASE_NOCHARGE_NUM_MASK          (0xF0000U)                                          /*!< TSI0_SSC0.BASE_NOCHARGE_NUM Mask        */
+#define TSI_SSC0_BASE_NOCHARGE_NUM_SHIFT         (16U)                                               /*!< TSI0_SSC0.BASE_NOCHARGE_NUM Position    */
+#define TSI_SSC0_BASE_NOCHARGE_NUM(x)            (((uint32_t)(((uint32_t)(x))<<16U))&0xF0000UL)      /*!< TSI0_SSC0.BASE_NOCHARGE_NUM Field       */
+#define TSI_SSC0_CHARGE_NUM_MASK                 (0xF00000U)                                         /*!< TSI0_SSC0.CHARGE_NUM Mask               */
+#define TSI_SSC0_CHARGE_NUM_SHIFT                (20U)                                               /*!< TSI0_SSC0.CHARGE_NUM Position           */
+#define TSI_SSC0_CHARGE_NUM(x)                   (((uint32_t)(((uint32_t)(x))<<20U))&0xF00000UL)     /*!< TSI0_SSC0.CHARGE_NUM Field              */
+#define TSI_SSC0_SSC_CONTROL_REVERSE_MASK        (0x1000000U)                                        /*!< TSI0_SSC0.SSC_CONTROL_REVERSE Mask      */
+#define TSI_SSC0_SSC_CONTROL_REVERSE_SHIFT       (24U)                                               /*!< TSI0_SSC0.SSC_CONTROL_REVERSE Position  */
+#define TSI_SSC0_SSC_CONTROL_REVERSE(x)          (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< TSI0_SSC0.SSC_CONTROL_REVERSE Field     */
+#define TSI_SSC0_SSC_MODE_MASK                   (0x6000000U)                                        /*!< TSI0_SSC0.SSC_MODE Mask                 */
+#define TSI_SSC0_SSC_MODE_SHIFT                  (25U)                                               /*!< TSI0_SSC0.SSC_MODE Position             */
+#define TSI_SSC0_SSC_MODE(x)                     (((uint32_t)(((uint32_t)(x))<<25U))&0x6000000UL)    /*!< TSI0_SSC0.SSC_MODE Field                */
+#define TSI_SSC0_PRBS_OUTSEL_MASK                (0xF0000000U)                                       /*!< TSI0_SSC0.PRBS_OUTSEL Mask              */
+#define TSI_SSC0_PRBS_OUTSEL_SHIFT               (28U)                                               /*!< TSI0_SSC0.PRBS_OUTSEL Position          */
+#define TSI_SSC0_PRBS_OUTSEL(x)                  (((uint32_t)(((uint32_t)(x))<<28U))&0xF0000000UL)   /*!< TSI0_SSC0.PRBS_OUTSEL Field             */
 /* ------- SSC1 Bit Fields                          ------ */
-#define TSI_SSC1_PRBS_SEED_LO_MASK               (0xFFU)                                             /*!< TSI_SSC1.PRBS_SEED_LO Mask              */
-#define TSI_SSC1_PRBS_SEED_LO_SHIFT              (0U)                                                /*!< TSI_SSC1.PRBS_SEED_LO Position          */
-#define TSI_SSC1_PRBS_SEED_LO(x)                 (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< TSI_SSC1.PRBS_SEED_LO Field             */
-#define TSI_SSC1_PRBS_SEED_HI_MASK               (0xFF00U)                                           /*!< TSI_SSC1.PRBS_SEED_HI Mask              */
-#define TSI_SSC1_PRBS_SEED_HI_SHIFT              (8U)                                                /*!< TSI_SSC1.PRBS_SEED_HI Position          */
-#define TSI_SSC1_PRBS_SEED_HI(x)                 (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< TSI_SSC1.PRBS_SEED_HI Field             */
-#define TSI_SSC1_PRBS_WEIGHT_LO_MASK             (0xFF0000U)                                         /*!< TSI_SSC1.PRBS_WEIGHT_LO Mask            */
-#define TSI_SSC1_PRBS_WEIGHT_LO_SHIFT            (16U)                                               /*!< TSI_SSC1.PRBS_WEIGHT_LO Position        */
-#define TSI_SSC1_PRBS_WEIGHT_LO(x)               (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< TSI_SSC1.PRBS_WEIGHT_LO Field           */
-#define TSI_SSC1_PRBS_WEIGHT_HI_MASK             (0xFF000000U)                                       /*!< TSI_SSC1.PRBS_WEIGHT_HI Mask            */
-#define TSI_SSC1_PRBS_WEIGHT_HI_SHIFT            (24U)                                               /*!< TSI_SSC1.PRBS_WEIGHT_HI Position        */
-#define TSI_SSC1_PRBS_WEIGHT_HI(x)               (((uint32_t)(((uint32_t)(x))<<24U))&0xFF000000UL)   /*!< TSI_SSC1.PRBS_WEIGHT_HI Field           */
+#define TSI_SSC1_PRBS_SEED_LO_MASK               (0xFFU)                                             /*!< TSI0_SSC1.PRBS_SEED_LO Mask             */
+#define TSI_SSC1_PRBS_SEED_LO_SHIFT              (0U)                                                /*!< TSI0_SSC1.PRBS_SEED_LO Position         */
+#define TSI_SSC1_PRBS_SEED_LO(x)                 (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< TSI0_SSC1.PRBS_SEED_LO Field            */
+#define TSI_SSC1_PRBS_SEED_HI_MASK               (0xFF00U)                                           /*!< TSI0_SSC1.PRBS_SEED_HI Mask             */
+#define TSI_SSC1_PRBS_SEED_HI_SHIFT              (8U)                                                /*!< TSI0_SSC1.PRBS_SEED_HI Position         */
+#define TSI_SSC1_PRBS_SEED_HI(x)                 (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< TSI0_SSC1.PRBS_SEED_HI Field            */
+#define TSI_SSC1_PRBS_WEIGHT_LO_MASK             (0xFF0000U)                                         /*!< TSI0_SSC1.PRBS_WEIGHT_LO Mask           */
+#define TSI_SSC1_PRBS_WEIGHT_LO_SHIFT            (16U)                                               /*!< TSI0_SSC1.PRBS_WEIGHT_LO Position       */
+#define TSI_SSC1_PRBS_WEIGHT_LO(x)               (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< TSI0_SSC1.PRBS_WEIGHT_LO Field          */
+#define TSI_SSC1_PRBS_WEIGHT_HI_MASK             (0xFF000000U)                                       /*!< TSI0_SSC1.PRBS_WEIGHT_HI Mask           */
+#define TSI_SSC1_PRBS_WEIGHT_HI_SHIFT            (24U)                                               /*!< TSI0_SSC1.PRBS_WEIGHT_HI Position       */
+#define TSI_SSC1_PRBS_WEIGHT_HI(x)               (((uint32_t)(((uint32_t)(x))<<24U))&0xFF000000UL)   /*!< TSI0_SSC1.PRBS_WEIGHT_HI Field          */
 /* ------- SSC2 Bit Fields                          ------ */
-#define TSI_SSC2_MOVE_REPEAT_NUM_MASK            (0x1FU)                                             /*!< TSI_SSC2.MOVE_REPEAT_NUM Mask           */
-#define TSI_SSC2_MOVE_REPEAT_NUM_SHIFT           (0U)                                                /*!< TSI_SSC2.MOVE_REPEAT_NUM Position       */
-#define TSI_SSC2_MOVE_REPEAT_NUM(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0x1FUL)          /*!< TSI_SSC2.MOVE_REPEAT_NUM Field          */
-#define TSI_SSC2_MOVE_STEPS_NUM_MASK             (0x700U)                                            /*!< TSI_SSC2.MOVE_STEPS_NUM Mask            */
-#define TSI_SSC2_MOVE_STEPS_NUM_SHIFT            (8U)                                                /*!< TSI_SSC2.MOVE_STEPS_NUM Position        */
-#define TSI_SSC2_MOVE_STEPS_NUM(x)               (((uint32_t)(((uint32_t)(x))<<8U))&0x700UL)         /*!< TSI_SSC2.MOVE_STEPS_NUM Field           */
-#define TSI_SSC2_MOVE_NOCHARGE_MAX_MASK          (0x3F0000U)                                         /*!< TSI_SSC2.MOVE_NOCHARGE_MAX Mask         */
-#define TSI_SSC2_MOVE_NOCHARGE_MAX_SHIFT         (16U)                                               /*!< TSI_SSC2.MOVE_NOCHARGE_MAX Position     */
-#define TSI_SSC2_MOVE_NOCHARGE_MAX(x)            (((uint32_t)(((uint32_t)(x))<<16U))&0x3F0000UL)     /*!< TSI_SSC2.MOVE_NOCHARGE_MAX Field        */
-#define TSI_SSC2_MOVE_NOCHARGE_MIN_MASK          (0xF0000000U)                                       /*!< TSI_SSC2.MOVE_NOCHARGE_MIN Mask         */
-#define TSI_SSC2_MOVE_NOCHARGE_MIN_SHIFT         (28U)                                               /*!< TSI_SSC2.MOVE_NOCHARGE_MIN Position     */
-#define TSI_SSC2_MOVE_NOCHARGE_MIN(x)            (((uint32_t)(((uint32_t)(x))<<28U))&0xF0000000UL)   /*!< TSI_SSC2.MOVE_NOCHARGE_MIN Field        */
+#define TSI_SSC2_MOVE_REPEAT_NUM_MASK            (0x1FU)                                             /*!< TSI0_SSC2.MOVE_REPEAT_NUM Mask          */
+#define TSI_SSC2_MOVE_REPEAT_NUM_SHIFT           (0U)                                                /*!< TSI0_SSC2.MOVE_REPEAT_NUM Position      */
+#define TSI_SSC2_MOVE_REPEAT_NUM(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0x1FUL)          /*!< TSI0_SSC2.MOVE_REPEAT_NUM Field         */
+#define TSI_SSC2_MOVE_STEPS_NUM_MASK             (0x700U)                                            /*!< TSI0_SSC2.MOVE_STEPS_NUM Mask           */
+#define TSI_SSC2_MOVE_STEPS_NUM_SHIFT            (8U)                                                /*!< TSI0_SSC2.MOVE_STEPS_NUM Position       */
+#define TSI_SSC2_MOVE_STEPS_NUM(x)               (((uint32_t)(((uint32_t)(x))<<8U))&0x700UL)         /*!< TSI0_SSC2.MOVE_STEPS_NUM Field          */
+#define TSI_SSC2_MOVE_NOCHARGE_MAX_MASK          (0x3F0000U)                                         /*!< TSI0_SSC2.MOVE_NOCHARGE_MAX Mask        */
+#define TSI_SSC2_MOVE_NOCHARGE_MAX_SHIFT         (16U)                                               /*!< TSI0_SSC2.MOVE_NOCHARGE_MAX Position    */
+#define TSI_SSC2_MOVE_NOCHARGE_MAX(x)            (((uint32_t)(((uint32_t)(x))<<16U))&0x3F0000UL)     /*!< TSI0_SSC2.MOVE_NOCHARGE_MAX Field       */
+#define TSI_SSC2_MOVE_NOCHARGE_MIN_MASK          (0xF0000000U)                                       /*!< TSI0_SSC2.MOVE_NOCHARGE_MIN Mask        */
+#define TSI_SSC2_MOVE_NOCHARGE_MIN_SHIFT         (28U)                                               /*!< TSI0_SSC2.MOVE_NOCHARGE_MIN Position    */
+#define TSI_SSC2_MOVE_NOCHARGE_MIN(x)            (((uint32_t)(((uint32_t)(x))<<28U))&0xF0000000UL)   /*!< TSI0_SSC2.MOVE_NOCHARGE_MIN Field       */
 /**
  * @} */ /* End group TSI_Register_Masks_GROUP 
  */
 
-/* TSI - Peripheral instance base addresses */
-#define TSI_BasePtr                    0x40045000UL //!< Peripheral base address
-#define TSI                            ((TSI_Type *) TSI_BasePtr) //!< Freescale base pointer
-#define TSI_BASE_PTR                   (TSI) //!< Freescale style base pointer
+/* TSI0 - Peripheral instance base addresses */
+#define TSI0_BasePtr                   0x40045000UL //!< Peripheral base address
+#define TSI0                           ((TSI_Type *) TSI0_BasePtr) //!< Freescale base pointer
+#define TSI0_BASE_PTR                  (TSI0) //!< Freescale style base pointer
 /**
  * @} */ /* End group TSI_Peripheral_access_layer_GROUP 
  */

@@ -554,6 +554,14 @@ Input Clock Source division factor</description>
                <addressOffset>0x8</addressOffset>
                <fields>
                   <field>
+                     <name>PEN</name>
+                     <?ignoreOverlap?>
+                     <?hide?>
+                     <description>Pin enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
                      <name>PEN0</name>
                      <description>Pin 0 enable</description>
                      <bitOffset>0</bitOffset>
