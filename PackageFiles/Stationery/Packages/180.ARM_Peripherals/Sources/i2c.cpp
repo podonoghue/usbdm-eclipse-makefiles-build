@@ -77,10 +77,10 @@ void I2c::sendAddress(uint8_t address) {
    addressedDevice = address;
 
    // Configure for Tx of address
-   i2c->C1 = mode|I2C_C1_IICEN_MASK|I2C_C1_TX_MASK;
+   i2c->C1 = i2cMode|I2C_C1_IICEN_MASK|I2C_C1_TX_MASK;
 
    // Generate START
-   i2c->C1 = mode|I2C_C1_IICEN_MASK|I2C_C1_TX_MASK|I2C_C1_MST_MASK;
+   i2c->C1 = i2cMode|I2C_C1_IICEN_MASK|I2C_C1_TX_MASK|I2C_C1_MST_MASK;
 
    // Tx address (starts interrupt process)
    i2c->D  = I2C_D_DATA(address);
@@ -127,7 +127,7 @@ void I2c::poll(void) {
                i2c->F&=~I2C_F_MULT(3);
 #endif
                // Generate REPEATED-START
-               i2c->C1 = mode|I2C_C1_IICEN_MASK|I2C_C1_MST_MASK|I2C_C1_TX_MASK|I2C_C1_RSTA_MASK;
+               i2c->C1 = i2cMode|I2C_C1_IICEN_MASK|I2C_C1_MST_MASK|I2C_C1_TX_MASK|I2C_C1_RSTA_MASK;
 #if defined(MCU_MKL25Z4)
                // Restore MULT
                i2c->F = temp;
@@ -148,7 +148,7 @@ void I2c::poll(void) {
             state = i2c_idle;
 
             // Generate stop signal
-            i2c->C1 = mode|I2C_C1_IICEN_MASK|I2C_C1_TXAK_MASK;
+            i2c->C1 = i2cMode|I2C_C1_IICEN_MASK|I2C_C1_TXAK_MASK;
             return;
          }
       }
@@ -165,11 +165,11 @@ void I2c::poll(void) {
       // Change to reception
       if (rxBytesRemaining == 1) {
          // Receiving only single byte (don't acknowledge the byte)
-         i2c->C1 = mode|I2C_C1_IICEN_MASK|I2C_C1_MST_MASK|I2C_C1_TXAK_MASK;
+         i2c->C1 = i2cMode|I2C_C1_IICEN_MASK|I2C_C1_MST_MASK|I2C_C1_TXAK_MASK;
       }
       else {
          // Switch to Rx mode
-         i2c->C1 = mode|I2C_C1_IICEN_MASK|I2C_C1_MST_MASK;
+         i2c->C1 = i2cMode|I2C_C1_IICEN_MASK|I2C_C1_MST_MASK;
       }
       // Dummy read of data to start Rx of 1st data byte
       (void)i2c->D;
@@ -181,14 +181,14 @@ void I2c::poll(void) {
          // Received last byte - complete
          state = i2c_idle;
          // Generate STOP
-         i2c->C1 = mode|I2C_C1_IICEN_MASK;
+         i2c->C1 = i2cMode|I2C_C1_IICEN_MASK;
       }
       else if (rxBytesRemaining == 1) {
          // Received 2nd last byte (don't acknowledge the last byte to follow)
-         i2c->C1 = mode|I2C_C1_IICEN_MASK|I2C_C1_MST_MASK|I2C_C1_TXAK_MASK;
+         i2c->C1 = i2cMode|I2C_C1_IICEN_MASK|I2C_C1_MST_MASK|I2C_C1_TXAK_MASK;
       }
       else {
-         i2c->C1 = mode|I2C_C1_IICEN_MASK|I2C_C1_MST_MASK;
+         i2c->C1 = i2cMode|I2C_C1_IICEN_MASK|I2C_C1_MST_MASK;
       }
       // Save receive data
       *rxDataPtr++ = i2c->D;

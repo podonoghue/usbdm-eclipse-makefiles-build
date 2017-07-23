@@ -22,6 +22,9 @@ static constexpr float us      = 1E-6f; //!< Scale factor for microseconds
 static constexpr float ms      = 1E-3f; //!< Scale factor for milliseconds
 static constexpr float seconds = 1.0f;  //!< Scale factor for seconds
 static constexpr float percent = 1.0f;  //!< Scale factor for percentage as float
+static constexpr float MHz     = 1E6f;  //!< Scale factor for MHz as float
+static constexpr float kHz     = 1E3f;  //!< Scale factor for kHz as float
+static constexpr float Hz      = 1.0f;  //!< Scale factor for Hz as float
 
 enum ErrorCode {
    E_NO_ERROR = 0,      //!< No error

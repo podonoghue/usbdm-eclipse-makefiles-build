@@ -25,16 +25,16 @@
 namespace USBDM {
 
 /**
- * Type definition for DMA interrupt call back
- * @param status Interrupt status value from SPI->SR
- */
-typedef void (*SpiCallbackFunction)(uint32_t status);
-
-/**
  * @addtogroup SPI_Group SPI, Serial Peripheral Interface
  * @brief C++ Class allowing access to SPI interface
  * @{
  */
+
+/**
+ * Type definition for DMA interrupt call back
+ * @param status Interrupt status value from SPI->SR
+ */
+typedef void (*SpiCallbackFunction)(uint32_t status);
 
 enum SpiMode {
    SpiMode_0 = SPI_CTAR_CPOL(0)|SPI_CTAR_CPHA(0), // Active-high clock (idles low), Data is captured on leading edge of SCK and changes on the following edge.
@@ -684,13 +684,13 @@ public:
 };
 
 /**
- * Template class to provide Timer callback
+ * Template class to provide callback
  */
 template<class Info>
 class SpiIrq_T : public Spi_T<Info> {
 
 protected:
-   /** Callback function for Channel ISR */
+   /** Callback function for ISR */
    static SpiCallbackFunction callback;
 
 public:
@@ -702,8 +702,7 @@ public:
    }
 
    /**
-    * Set channel Callback function\n
-    * Note that one callback is shared by all channels of the SPI
+    * Set Callback function\n
     *
     * @param[in] theCallback Callback function to execute on interrupt.\n
     *                        nullptr to indicate none
