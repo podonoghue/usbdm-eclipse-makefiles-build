@@ -111,7 +111,7 @@ public:
    /**
     * Set Pin Control Register (PCR) value
     *
-    * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down (defaults to PinPull_None)
+    * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
     * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High (defaults to PinDriveLow)
     * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain (defaults to PinPushPull)
     * @param[in] pinIrq           One of PinIrq_None, etc (defaults to PinIrq_None)
@@ -373,6 +373,38 @@ public:
       }
       else {
          return isLow();
+      }
+   }
+   /**
+    * Read pin value and return true if active level
+    *
+    * @return true/false reflecting if pin is active.
+    *
+    * @note This reads the PDIR
+    * @note Polarity is significant
+    */
+   static __attribute__((always_inline)) bool isActive() {
+      if (polarity) {
+         return isHigh();
+      }
+      else {
+         return isLow();
+      }
+   }
+   /**
+    * Read pin value and return true if inactive level
+    *
+    * @return true/false reflecting if pin is inactive.
+    *
+    * @note This reads the PDIR
+    * @note Polarity is significant
+    */
+   static __attribute__((always_inline)) bool isInactive() {
+      if (polarity) {
+         return isLow();
+      }
+      else {
+         return isHigh();
       }
    }
    /**
