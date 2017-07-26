@@ -328,10 +328,10 @@ public:
    /**
     * Set modulo of counter
     *
-    * @param[in] period Period in ticks (<65535)
+    * @param[in] modulo Modulo value in ticks (<65535)
     */
-   void __attribute__((always_inline)) setMod(uint16_t mod) {
-      tmr->MOD = mod;
+   void __attribute__((always_inline)) setMod(uint16_t modulo) {
+      tmr->MOD = modulo;
    }
 
    /**
