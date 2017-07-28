@@ -26,8 +26,8 @@
 namespace USBDM {
 
 enum Polarity {
-   ActiveLow=false,  //!< Signal is active high i.e. Active => High level, Inactive => Low level
-   ActiveHigh=true   //!< Signal is active low i.e. Active => Low level, Inactive => High level
+   ActiveLow=false,  //!< Signal is active low i.e. Active => Low level, Inactive => High level
+   ActiveHigh=true   //!< Signal is active high i.e. Active => High level, Inactive => Low level
 };
 
 /*
@@ -460,7 +460,7 @@ public:
    /**
     * Set Pin Control Register (PCR) value
     *
-    * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down (defaults to PinPull_None)
+    * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
     * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High (defaults to PinDriveLow)
     * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain (defaults to PinPushPull)
     * @param[in] pinIrq           One of PinIrq_None, etc (defaults to PinIrq_None)

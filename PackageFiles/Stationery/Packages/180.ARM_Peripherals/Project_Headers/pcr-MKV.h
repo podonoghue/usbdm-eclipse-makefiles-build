@@ -26,8 +26,8 @@
 namespace USBDM {
 
 enum Polarity {
-   ActiveLow=false,  //!< Signal is active high i.e. Active => High level, Inactive => Low level
-   ActiveHigh=true   //!< Signal is active low i.e. Active => Low level, Inactive => High level
+   ActiveLow=false,  //!< Signal is active low i.e. Active => Low level, Inactive => High level
+   ActiveHigh=true   //!< Signal is active high i.e. Active => High level, Inactive => Low level
 };
 
 /*
@@ -91,13 +91,13 @@ static inline __attribute__((always_inline)) void disablePortClocks(uint32_t clo
  * @{
  */
 
-/** Indicates the function has a fixed mapping to a pin */
+/** Pin number indicating the function has a fixed mapping to a pin */
 constexpr   int8_t FIXED_NO_PCR         = 0x00;
 
-/** Indicates the function doesn't exist */
+/** Pin number indicating the function doesn't exist. Note: -ve value*/
 constexpr   int8_t INVALID_PCR          = 0xA5;
 
-/** Indicates the function is not currently mapped to a pin */
+/** Pin number indicating the function is not currently mapped to a pin. Note: -ve value */
 constexpr   int8_t UNMAPPED_PCR         = 0xA4;
 
 /**
@@ -108,7 +108,7 @@ struct PcrInfo {
    uint32_t clockMask;   //!< Clock mask for PORT
    uint32_t pcrAddress;  //!< PCR register array address
    uint32_t gpioAddress; //!< Address of GPIO hardware associated with pin
-   int8_t   gpioBit;     //!< Bit number of pin in GPIO
+   int8_t   gpioBit;     //!< Bit number of pin in GPIO (-ve indicates unmapped/invalid)
    uint32_t pcrValue;    //!< PCR value including MUX value to select this function
 };
 
@@ -235,6 +235,7 @@ enum PinIrq {
    PinIrq_High     = PORT_PCR_IRQC(12),  //!< Generate IRQ request when high
 };
 
+/** Type for PCR value used by PCR functions */
 using PcrValue = uint32_t;
 
 /**
@@ -309,14 +310,34 @@ static constexpr PcrValue I2C_DEFAULT_PCR =  pcrValue(PinPull_Up, PinDriveStreng
 static constexpr PcrValue XTAL_DEFAULT_PCR = pcrValue(PinPull_None, PinDriveStrength_Low, PinDriveMode_PushPull);
 
 /**
- * Type definition for PIT interrupt call back
+ * Type definition for PORT interrupt call back.
+ * This callback is shared by all port pins
  *
- * @param[in] status 32-bit value from ISFR (each bit indicates an interrupt source)
+ * @param[in] status 32-bit value from ISFR (each bit indicates a pin interrupt source)
  */
 typedef void (*PinCallbackFunction)(uint32_t status);
 
+/**
+ * Common PORT features shared by all port pins
+ *
+ * tparam pcrAddress Base address of PCR register array
+ */
 template<uint32_t pcrAddress>
 class PcrBase_T {
+
+private:
+   /**
+    * This class is not intended to be instantiated
+    */
+   PcrBase_T() = delete;
+   PcrBase_T(const PcrBase_T&) = delete;
+   PcrBase_T(PcrBase_T&&) = delete;
+
+protected:
+   /** Callback to catch unhandled interrupt */
+   static void unhandledCallback(uint32_t) {
+      setAndCheckErrorCode(E_NO_HANDLER);
+   }
 
 private:
    static constexpr volatile PORT_Type *port = reinterpret_cast<volatile PORT_Type *>(pcrAddress);
@@ -335,27 +356,27 @@ public:
       // Clear flags
       port->ISFR = status;
 
-      if (fCallback != 0) {
-         fCallback(status);
-      }
-      else {
-         setAndCheckErrorCode(E_NO_HANDLER);
-      }
+      fCallback(status);
    }
    /**
-    * Set callback for ISR
+    * Set callback for Pin IRQ
     *
-    * @note There is a single callback function for all pins on this port.
+    * @note There is a single callback function for all pins on the related port.
     *
-    * @param[in] callback The function to call from stub ISR
+    * @param[in] callback The function to call on Pin interrupt. \n
+    *                     nullptr to indicate none
     */
    static __attribute__((always_inline)) void setCallback(PinCallbackFunction callback) {
+      if (callback == nullptr) {
+         fCallback = unhandledCallback;
+         return;
+      }
       fCallback = callback;
    }
 };
 
 template<uint32_t pcrAddress>
-PinCallbackFunction USBDM::PcrBase_T<pcrAddress>::fCallback = nullptr;
+PinCallbackFunction USBDM::PcrBase_T<pcrAddress>::fCallback = PcrBase_T::unhandledCallback;
 
 /**
  * @brief Template representing a Pin Control Register (PCR)
@@ -366,7 +387,7 @@ PinCallbackFunction USBDM::PcrBase_T<pcrAddress>::fCallback = nullptr;
  * using PortC_3 = USBDM::Pcr_T<SIM_SCGC5_PORTC_MASK, PORTC_BasePtr, 3, USBDM::DEFAULT_PCR>;
  *
  * // Configure PCR
- * PortC_3::setPCR(PORT_PCR_DSE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK|PORT_PCR_MUX(3));
+ * PortC_3::setPCR(PinPull_Up,PinDriveStrength_High,PinDriveMode_PushPull,PinIrq_None,PinFilter_None,PinSlewRate_Fast,PinMux_3);
  *
  * // Disable Port clock
  * PortC_3::disableClock();
@@ -377,21 +398,27 @@ PinCallbackFunction USBDM::PcrBase_T<pcrAddress>::fCallback = nullptr;
  * @tparam bitNum          Bit number e.g. 3
  * @tparam defPcrValue     Default value for PCR (including MUX value)
  */
-template<uint32_t clockMask, uint32_t pcrAddress, int32_t bitNum, PcrValue defPcrValue>
+template<uint32_t clockMask, uint32_t pcrAddress, int bitNum, PcrValue defPcrValue>
 class Pcr_T : public PcrBase_T<pcrAddress> {
-
-private:
 
 #ifdef DEBUG_BUILD
    static_assert((bitNum != UNMAPPED_PCR), "Pcr_T: Signal is not mapped to a pin - Modify Configure.usbdm");
    static_assert((bitNum != INVALID_PCR),  "Pcr_T: Non-existent signal");
-   static_assert((bitNum == UNMAPPED_PCR)||(bitNum == INVALID_PCR)||(bitNum >= 0), "Pcr_T: Illegal bit number");
+   static_assert((bitNum == UNMAPPED_PCR)||(bitNum == INVALID_PCR)||((bitNum >= 0)&&(bitNum <= 31)), "Pcr_T: Illegal bit number");
 #endif
+
+public:
+   static constexpr int      BITNUM  = bitNum;
+   static constexpr uint32_t BITMASK = (1<<bitNum);
+
+private:
 
    static constexpr volatile uint32_t *pcrReg = reinterpret_cast<volatile uint32_t *>(pcrAddress+offsetof(PORT_Type,PCR[bitNum]));
 
 public:
    using PcrBase = PcrBase_T<pcrAddress>;
+
+   using PcrBase_T<pcrAddress>::setCallback;
 
    /**
     * Enable/disable clock associated with PORT
@@ -415,7 +442,7 @@ public:
     *                     Defaults to template value.
     */
    static __attribute__((always_inline)) void setPCR(PcrValue pcrValue=defPcrValue) {
-      if ((pcrAddress != 0) && (bitNum >= 0)) {
+      if (pcrAddress != 0) {
          enablePortClocks(clockMask);
 
          // Pointer to PCR register for pin
@@ -425,7 +452,7 @@ public:
    /**
     * Set Pin Control Register (PCR) value
     *
-    * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down (defaults to PinPull_None)
+    * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
     * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High (defaults to PinDriveLow)
     * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain (defaults to PinPushPull)
     * @param[in] pinIrq           One of PinIrq_None, etc (defaults to PinIrq_None)
@@ -442,7 +469,12 @@ public:
          PinSlewRate       pinSlewRate       = PinSlewRate_Fast,
          PinMux            pinMux            = (PinMux)(defPcrValue&PORT_PCR_MUX_MASK)
          ) {
-      setPCR(pinPull|pinDriveStrength|pinDriveMode|pinIrq|pinFilter|pinSlewRate|pinMux);
+      if (pcrAddress != 0) {
+         enablePortClocks(clockMask);
+
+         // Pointer to PCR register for pin
+         *pcrReg = pinPull|pinDriveStrength|pinDriveMode|pinIrq|pinFilter|pinSlewRate|pinMux;
+      }
    }
    /**
     * Set pin PCR.MUX value
@@ -660,10 +692,10 @@ void processPcrs(uint32_t pcrValue) {
  * Pcr_T<spiInfo, 3> SpiMOSI;
  *
  * // Configure PCR
- * SpiMOSI.setPCR(PORT_PCR_DSE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK|PORT_PCR_MUX(3));
+ * SpiMOSI::setPCR(PinPull_Up,PinDriveStrength_High,PinDriveMode_PushPull,PinIrq_None,PinFilter_None,PinSlewRate_Fast,PinMux_3);
  *
  * // Disable clock to associated PORT
- * SpiMOSI.disableClock();
+ * SpiMOSI::disableClock();
  *
  * // Alternatively the PCR may be manipulated directly
  * Pcr_T<spiInfo, 3>::setPCR(PORT_PCR_DSE_MASK|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
