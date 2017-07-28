@@ -61,7 +61,8 @@ static constexpr PcrValue ADC_DEFAULT_PCR = pcrValue(
 
 /**
  * ADC Resolutions\n
- * The resolutions available vary with single-ended/differential modes
+ * The resolutions available vary with single-ended/differential modes\n
+ * Note the equivalence between modes e.g. 8-bit-se = 9-bit-diff
  */
 enum AdcResolution {
    AdcResolution_8bit_se    = ADC_CFG1_MODE(0),  //!<  8-bit unsigned for use with single-ended mode
@@ -70,7 +71,7 @@ enum AdcResolution {
    AdcResolution_16bit_se   = ADC_CFG1_MODE(3),  //!< 16-bit unsigned for use with single-ended mode
    AdcResolution_9bit_diff  = ADC_CFG1_MODE(0),  //!<  9-bit signed for use with differential mode
    AdcResolution_11bit_diff = ADC_CFG1_MODE(2),  //!< 11-bit signed for use with differential mode
-   AdcResolution_12bit_diff = ADC_CFG1_MODE(1),  //!< 12-bit signed for use with differential mode
+   AdcResolution_13bit_diff = ADC_CFG1_MODE(1),  //!< 13-bit signed for use with differential mode
    AdcResolution_16bit_diff = ADC_CFG1_MODE(3),  //!< 16-bit signed for use with differential mode
 };
 
@@ -524,9 +525,9 @@ protected:
     *
     * @param[in] sc1Value SC1 register value including the ADC channel to use
     *
-    * @return - the result of the conversion
+    * @return - the result of the conversion (should be treated as signed if differential channel)
     */
-   static int readAnalogue(const int sc1Value) {
+   static uint16_t readAnalogue(const int sc1Value) {
 
       // Trigger conversion
       adc->SC1[0] = (sc1Value&(ADC_SC1_ADCH_MASK|ADC_SC1_AIEN_MASK|ADC_SC1_DIFF_MASK));
@@ -534,7 +535,7 @@ protected:
       while ((adc->SC1[0]&ADC_SC1_COCO_MASK) == 0) {
          __asm__("nop");
       }
-      return (int)adc->R[0];
+      return (uint16_t)adc->R[0];
    };
 
 };
@@ -638,7 +639,8 @@ public:
     * @return - the result of the conversion
     */
    static __attribute__((always_inline)) uint32_t readAnalogue() {
-      return AdcBase_T<Info>::readAnalogue(channel);
+      // Zero extended to 32 bits
+      return (uint32_t)(uint16_t)AdcBase_T<Info>::readAnalogue(channel);
    };
 };
 
@@ -698,7 +700,8 @@ public:
     * @return - the result of the conversion
     */
    static __attribute__((always_inline)) int32_t readAnalogue() {
-      return AdcBase_T<Info>::readAnalogue(channel|ADC_SC1_DIFF_MASK);
+      // Value is sign-extended to 32 bits
+      return (int32_t)(int16_t)AdcBase_T<Info>::readAnalogue(channel|ADC_SC1_DIFF_MASK);
    };
 };
 
