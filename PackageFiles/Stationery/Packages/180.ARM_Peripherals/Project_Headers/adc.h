@@ -191,14 +191,12 @@ enum AdcContinuous {
  */
 enum AdcCompare {
    AdcCompare_Disabled              = ADC_SC2_ACFE(0),                                          //!< Comparisons disabled
-
-   AdcCompare_LessThan              = ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(0)|ADC_SC2_ACREN(0),        //!< Value < cv1
-   AdcCompare_GreaterThanOrEqual    = ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(1)|ADC_SC2_ACREN(0),        //!< Value >= cv1
-
-   AdcCompare_OutsideRangeExclusive = (0<<8)|ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(0)|ADC_SC2_ACREN(1), //!< cv1<=cv2 => (Value < low) || (Value > high)
-   AdcCompare_InsideRangeExclusive  = (1<<8)|ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(0)|ADC_SC2_ACREN(1), //!< cv1>cv2  => low < value < high
-   AdcCompare_InsideRangeInclusive  = (0<<8)|ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(1)|ADC_SC2_ACREN(1), //!< cv1<=cv2 =>   low <= value <= high
-   AdcCompare_OutsideRangeInclusive = (1<<8)|ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(1)|ADC_SC2_ACREN(1), //!< cv1>cv2  => (Value <= low) || (Value >= high)
+   AdcCompare_LessThan              = ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(0)|ADC_SC2_ACREN(0),        //!< ADC_value < low
+   AdcCompare_GreaterThanOrEqual    = ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(1)|ADC_SC2_ACREN(0),        //!< ADC_value >= low
+   AdcCompare_OutsideRangeExclusive = (0<<8)|ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(0)|ADC_SC2_ACREN(1), //!< (ADC_value < low) || (ADC_value > high)
+   AdcCompare_OutsideRangeInclusive = (1<<8)|ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(1)|ADC_SC2_ACREN(1), //!< (ADC_value <= low) || (ADC_value >= high)
+   AdcCompare_InsideRangeExclusive  = (1<<8)|ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(0)|ADC_SC2_ACREN(1), //!<  low < ADC_value < high
+   AdcCompare_InsideRangeInclusive  = (0<<8)|ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(1)|ADC_SC2_ACREN(1), //!<  low <= ADC_value <= high
 };
 
 /**
@@ -700,7 +698,7 @@ public:
     * @return - the result of the conversion
     */
    static __attribute__((always_inline)) int32_t readAnalogue() {
-      // Value is sign-extended to 32 bits
+      // Sign-extended to 32 bits
       return (int32_t)(int16_t)AdcBase_T<Info>::readAnalogue(channel|ADC_SC1_DIFF_MASK);
    };
 };
