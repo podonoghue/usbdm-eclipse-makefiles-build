@@ -11,41 +11,43 @@
    <item key="$signal$ADC0_DM0_descriptionSetting"         value="Photo-transistor" />
    <item key="$signal$ADC0_DM3_descriptionSetting"         value="Temperature sensor" />
    <item key="$signal$EXTAL32_descriptionSetting"          value="Reserved(EXTAL32)" />
-   <item key="$signal$PTA0_descriptionSetting"             value="Reserved(SWD)" />
+   <item key="$signal$PTA0_descriptionSetting"             value="Reserved (SWD)" />
    <item key="$signal$PTA0_muxSetting"                     value="mux7" />
    <item key="$signal$PTA12_descriptionSetting"            value="LCD_Reset*" />
    <item key="$signal$PTA13_muxSetting"                    value="mux3" />
-   <item key="$signal$PTA18_descriptionSetting"            value="Reserved(EXTAL0)" />
+   <item key="$signal$PTA18_descriptionSetting"            value="Reserved (EXTAL0)" />
    <item key="$signal$PTA18_muxSetting"                    value="mux0" />
-   <item key="$signal$PTA19_descriptionSetting"            value="Reserved(XTAL0)" />
+   <item key="$signal$PTA19_descriptionSetting"            value="Reserved (XTAL0)" />
    <item key="$signal$PTA19_muxSetting"                    value="mux0" />
    <item key="$signal$PTA1_muxSetting"                     value="mux3" />
    <item key="$signal$PTA2_descriptionSetting"             value="Blue LED, LCD_cs*" />
    <item key="$signal$PTA2_muxSetting"                     value="mux3" />
-   <item key="$signal$PTA3_descriptionSetting"             value="Reserved(SWD)" />
+   <item key="$signal$PTA3_descriptionSetting"             value="Reserved (SWD)" />
    <item key="$signal$PTA3_muxSetting"                     value="mux7" />
    <item key="$signal$PTA4_muxSetting"                     value="mux3" />
-   <item key="$signal$PTB0_descriptionSetting"             value="Accelerometer" />
+   <item key="$signal$PTB0_descriptionSetting"             value="Accelerometer SCL" />
    <item key="$signal$PTB0_muxSetting"                     value="mux2" />
-   <item key="$signal$PTB16_descriptionSetting"            value="USB_serial" />
+   <item key="$signal$PTB16_descriptionSetting"            value="USB Serial Rx" />
    <item key="$signal$PTB16_muxSetting"                    value="mux3" />
-   <item key="$signal$PTB17_descriptionSetting"            value="USB_serial" />
+   <item key="$signal$PTB17_descriptionSetting"            value="USB Serial Tx" />
    <item key="$signal$PTB17_muxSetting"                    value="mux3" />
-   <item key="$signal$PTB18_descriptionSetting"            value="Touch 1" />
+   <item key="$signal$PTB18_descriptionSetting"            value="Touch slider 1" />
    <item key="$signal$PTB18_muxSetting"                    value="mux0" />
-   <item key="$signal$PTB19_descriptionSetting"            value="Touch 2" />
+   <item key="$signal$PTB19_descriptionSetting"            value="Touch slider 2" />
    <item key="$signal$PTB19_muxSetting"                    value="mux0" />
-   <item key="$signal$PTB1_descriptionSetting"             value="Accelerometer" />
+   <item key="$signal$PTB1_descriptionSetting"             value="Accelerometer SDA" />
    <item key="$signal$PTB1_muxSetting"                     value="mux2" />
+   <item key="$signal$PTB2_muxSetting"                     value="mux0" />
+   <item key="$signal$PTB3_muxSetting"                     value="mux0" />
    <item key="$signal$PTC0_muxSetting"                     value="mux0" />
    <item key="$signal$PTC1_muxSetting"                     value="mux0" />
    <item key="$signal$PTC2_descriptionSetting"             value="LCD_backlight" />
+   <item key="$signal$PTC2_muxSetting"                     value="mux0" />
    <item key="$signal$PTC3_descriptionSetting"             value="Red LED" />
    <item key="$signal$PTC3_muxSetting"                     value="mux4" />
    <item key="$signal$PTC4_muxSetting"                     value="mux4" />
-   <item key="$signal$PTC5_muxSetting"                     value="mux6" />
-   <item key="$signal$PTC6_muxSetting"                     value="mux0" />
-   <item key="$signal$PTC7_muxSetting"                     value="mux0" />
+   <item key="$signal$PTC8_muxSetting"                     value="mux0" />
+   <item key="$signal$PTC9_muxSetting"                     value="mux0" />
    <item key="$signal$PTD1_descriptionSetting"             value="LCD_sck" />
    <item key="$signal$PTD1_muxSetting"                     value="mux2" />
    <item key="$signal$PTD2_descriptionSetting"             value="LCD_sin" />
@@ -53,14 +55,10 @@
    <item key="$signal$PTD3_muxSetting"                     value="mux2" />
    <item key="$signal$PTD4_descriptionSetting"             value="Green LED" />
    <item key="$signal$PTD4_muxSetting"                     value="mux4" />
-   <item key="$signal$PTD5_muxSetting"                     value="mux0" />
-   <item key="$signal$PTD6_muxSetting"                     value="mux0" />
-   <item key="$signal$PTE0_muxSetting"                     value="mux3" />
-   <item key="$signal$PTE1_muxSetting"                     value="mux3" />
-   <item key="$signal$RESET_b_descriptionSetting"          value="Reserved(Reset*)" />
-   <item key="$signal$USB0_DM_descriptionSetting"          value="Reserved(USB_DM)" />
-   <item key="$signal$USB0_DP_descriptionSetting"          value="Reserved(USB_DP)" />
-   <item key="$signal$VREF_OUT_descriptionSetting"         value="Vref output" />
+   <item key="$signal$PTD5_muxSetting"                     value="mux4" />
+   <item key="$signal$RESET_b_descriptionSetting"          value="Reserved(Reset button)" />
+   <item key="$signal$USB0_DM_descriptionSetting"          value="Reserved(USB)" />
+   <item key="$signal$USB0_DP_descriptionSetting"          value="Reserved(USB)" />
    <item key="$signal$XTAL32_descriptionSetting"           value="Reserved(XTAL32)" />
    <item key="/ADC0/adcInternalClock"                      value="5200000.0" />
    <item key="/ADC0/adc_cfg1_adiclk"                       value="3" />
@@ -90,7 +88,7 @@
    <item key="/CMP0/cmp_cr1_we"                            value="false" />
    <item key="/CMP0/cmp_daccr_vrsel"                       value="false" />
    <item key="/CMP0/cmp_fpr_filt_per"                      value="0" />
-   <item key="/CMP0/cmp_muxcr_msel"                        value="1" />
+   <item key="/CMP0/cmp_muxcr_msel"                        value="0" />
    <item key="/CMP0/cmp_muxcr_psel"                        value="0" />
    <item key="/CMP0/cmp_scr_dmaen"                         value="false" />
    <item key="/CMP0/cmp_scr_ief"                           value="false" />
@@ -134,10 +132,10 @@
    <item key="/FTM0/ftmExternalClock"                      value="0" />
    <item key="/FTM0/ftm_exttrig_inittrigen"                value="false" />
    <item key="/FTM0/ftm_exttrig_trig"                      value="0" />
-   <item key="/FTM0/ftm_mod"                               value="3749" />
+   <item key="/FTM0/ftm_mod"                               value="10000" />
    <item key="/FTM0/ftm_sc_clks"                           value="1" />
    <item key="/FTM0/ftm_sc_cpwms"                          value="false" />
-   <item key="/FTM0/ftm_sc_ps"                             value="7" />
+   <item key="/FTM0/ftm_sc_ps"                             value="0" />
    <item key="/FTM0/ftm_sc_toie"                           value="false" />
    <item key="/FTM0/irqHandlerInstalled"                   value="false" />
    <item key="/FTM0/irqLevel"                              value="0" />
@@ -145,10 +143,10 @@
    <item key="/FTM1/ftmExternalClock"                      value="0" />
    <item key="/FTM1/ftm_exttrig_inittrigen"                value="false" />
    <item key="/FTM1/ftm_exttrig_trig"                      value="0" />
-   <item key="/FTM1/ftm_mod"                               value="3749" />
+   <item key="/FTM1/ftm_mod"                               value="10000" />
    <item key="/FTM1/ftm_sc_clks"                           value="1" />
    <item key="/FTM1/ftm_sc_cpwms"                          value="false" />
-   <item key="/FTM1/ftm_sc_ps"                             value="7" />
+   <item key="/FTM1/ftm_sc_ps"                             value="0" />
    <item key="/FTM1/ftm_sc_toie"                           value="false" />
    <item key="/FTM1/irqHandlerInstalled"                   value="false" />
    <item key="/FTM1/irqLevel"                              value="0" />
@@ -200,7 +198,7 @@
    <item key="/LLWU/llwu_rst_rstfilt"                      value="false" />
    <item key="/LPTMR0/irqHandlerInstalled"                 value="false" />
    <item key="/LPTMR0/irqLevel"                            value="0" />
-   <item key="/LPTMR0/lptmr_cmr"                           value="1000" />
+   <item key="/LPTMR0/lptmr_cmr"                           value="65535" />
    <item key="/LPTMR0/lptmr_csr_tfc"                       value="false" />
    <item key="/LPTMR0/lptmr_csr_tie"                       value="false" />
    <item key="/LPTMR0/lptmr_csr_tms"                       value="false" />
@@ -210,7 +208,7 @@
    <item key="/LPTMR0/lptmr_psr_pcs"                       value="0" />
    <item key="/LPTMR0/lptmr_psr_prescaler"                 value="0" />
    <item key="/MCG/ERRATA_E2448"                           value="false" />
-   <item key="/MCG/LowPower"                               value="true" />
+   <item key="/MCG/LowPower"                               value="false" />
    <item key="/MCG/McgInfoSize"                            value="1" />
    <item key="/MCG/clock_mode"                             value="ClockMode_PEE" />
    <item key="/MCG/fllInputFrequency"                      value="31250" />
@@ -246,7 +244,7 @@
    <item key="/MCG/system_fast_irc_clock"                  value="4000000" />
    <item key="/MCG/system_low_power_clock"                 value="1000" />
    <item key="/MCG/system_mcgffclk_clock"                  value="31250" />
-   <item key="/MCG/system_mcgfllclk_clock"                 value="20000000" />
+   <item key="/MCG/system_mcgfllclk_clock"                 value="80000000" />
    <item key="/MCG/system_mcgirclk_clock"                  value="4000000" />
    <item key="/MCG/system_mcgoutclk_clock"                 value="96000000" />
    <item key="/MCG/system_mcgoutclk_clock_source"          value="PLL output" />
@@ -258,7 +256,7 @@
    <item key="/OSC0/osc32kclk_clock"                       value="0" />
    <item key="/OSC0/osc_cr_erclken"                        value="true" />
    <item key="/OSC0/osc_cr_erefsten"                       value="false" />
-   <item key="/OSC0/osc_cr_scp"                            value="4" />
+   <item key="/OSC0/osc_cr_scp"                            value="2" />
    <item key="/OSC0/osc_input_freq"                        value="8000000" />
    <item key="/OSC0/range"                                 value="1" />
    <item key="/OSC0/range_out"                             value="1" />
@@ -276,7 +274,7 @@
    <item key="/PDB0/pdb_ch1_dly0"                          value="0" />
    <item key="/PDB0/pdb_ch1_dly1"                          value="0" />
    <item key="/PDB0/pdb_idly"                              value="0" />
-   <item key="/PDB0/pdb_mod"                               value="0" />
+   <item key="/PDB0/pdb_mod"                               value="65535" />
    <item key="/PDB0/pdb_po0_dly_dly1"                      value="0" />
    <item key="/PDB0/pdb_po0_dly_dly2"                      value="0" />
    <item key="/PDB0/pdb_po1_dly_dly1"                      value="0" />
@@ -301,7 +299,7 @@
    <item key="/RTC/rtc_clkout"                             value="32768" />
    <item key="/RTC/rtc_cr_clko"                            value="true" />
    <item key="/RTC/rtc_cr_osce"                            value="true" />
-   <item key="/RTC/rtc_cr_scp"                             value="4" />
+   <item key="/RTC/rtc_cr_scp"                             value="2" />
    <item key="/RTC/rtc_cr_sup"                             value="false" />
    <item key="/RTC/rtc_cr_um"                              value="false" />
    <item key="/RTC/rtc_cr_wpe"                             value="false" />
@@ -344,7 +342,7 @@
    <item key="/SIM/sim_clkdiv1_outdiv4"                    value="4" />
    <item key="/SIM/sim_clkdiv2_usb"                        value="2" />
    <item key="/SIM/sim_sopt1_osc32ksel"                    value="2" />
-   <item key="/SIM/sim_sopt2_clkoutsel"                    value="4" />
+   <item key="/SIM/sim_sopt2_clkoutsel"                    value="6" />
    <item key="/SIM/sim_sopt2_pllfllsel"                    value="1" />
    <item key="/SIM/sim_sopt2_ptd7pad"                      value="false" />
    <item key="/SIM/sim_sopt2_rtcclkoutsel"                 value="true" />
@@ -370,31 +368,31 @@
    <item key="/SIM/system_peripheral_clock"                value="96000000" />
    <item key="/SIM/system_usbfs_clock"                     value="48000000" />
    <item key="/SMC/smc_pmctrl_lpwui"                       value="true" />
-   <item key="/SMC/smc_pmprot_alls"                        value="true" />
-   <item key="/SMC/smc_pmprot_avlls"                       value="true" />
-   <item key="/SMC/smc_pmprot_avlp"                        value="true" />
+   <item key="/SMC/smc_pmprot_alls"                        value="false" />
+   <item key="/SMC/smc_pmprot_avlls"                       value="false" />
+   <item key="/SMC/smc_pmprot_avlp"                        value="false" />
    <item key="/SMC/smc_stopctrl_llsm"                      value="0" />
    <item key="/SMC/smc_stopctrl_porpo"                     value="false" />
    <item key="/SPI0/irqHandlerInstalled"                   value="false" />
    <item key="/SPI0/irqLevel"                              value="0" />
-   <item key="/SPI0/speed"                                 value="100000" />
+   <item key="/SPI0/speed"                                 value="10000000" />
    <item key="/SPI0/spi_lsbfe"                             value="false" />
    <item key="/SPI0/spi_mode"                              value="0" />
    <item key="/TSI0/irqHandlerInstalled"                   value="false" />
    <item key="/TSI0/irqLevel"                              value="0" />
    <item key="/TSI0/tsi_gencs_erie"                        value="false" />
-   <item key="/TSI0/tsi_gencs_esor"                        value="false" />
+   <item key="/TSI0/tsi_gencs_esor"                        value="true" />
    <item key="/TSI0/tsi_gencs_lpclks"                      value="0" />
-   <item key="/TSI0/tsi_gencs_lpscnitv"                    value="11" />
+   <item key="/TSI0/tsi_gencs_lpscnitv"                    value="9" />
    <item key="/TSI0/tsi_gencs_nscn"                        value="8" />
    <item key="/TSI0/tsi_gencs_ps"                          value="3" />
    <item key="/TSI0/tsi_gencs_stm"                         value="false" />
    <item key="/TSI0/tsi_gencs_stpe"                        value="false" />
    <item key="/TSI0/tsi_gencs_tsiie"                       value="false" />
-   <item key="/TSI0/tsi_pen_lpsp"                          value="0" />
-   <item key="/TSI0/tsi_pen_pen"                           value="6144" />
+   <item key="/TSI0/tsi_pen_lpsp"                          value="1" />
+   <item key="/TSI0/tsi_pen_pen"                           value="6" />
    <item key="/TSI0/tsi_scanc_amclks"                      value="0" />
-   <item key="/TSI0/tsi_scanc_ampsc"                       value="7" />
+   <item key="/TSI0/tsi_scanc_ampsc"                       value="3" />
    <item key="/TSI0/tsi_scanc_extchrg"                     value="16" />
    <item key="/TSI0/tsi_scanc_refchrg"                     value="16" />
    <item key="/TSI0/tsi_scanc_smod"                        value="8" />
