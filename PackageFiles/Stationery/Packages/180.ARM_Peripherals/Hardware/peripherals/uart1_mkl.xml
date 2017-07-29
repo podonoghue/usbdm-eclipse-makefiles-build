@@ -41,6 +41,10 @@ Devices using this peripheral:
 
    <xi:include href="_irqOption.xml"/>
 
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.Validator">
+   </validate>
+
    <projectActionList id = "uart_files">
       <copy source="Project_Headers/uart.h"  target="Project_Headers/uart.h"  replace="true"  derived="true" />
    </projectActionList>

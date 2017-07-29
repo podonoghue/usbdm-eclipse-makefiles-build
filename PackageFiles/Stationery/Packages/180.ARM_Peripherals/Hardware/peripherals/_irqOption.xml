@@ -15,7 +15,8 @@
    <stringOption name="namedInterruptHandler" 
       description="Name of C function used as IRQ handler"
       value=""
-      toolTip="This is the name of a function to be installed in the vector table as the interrupt handler for this peripheral"
+      toolTip="This is the name of a function to be installed in the vector table as the interrupt handler for this peripheral\n
+               % character will be replaced with channel number etc for some peripherals with multiple handlers"
    />
    
    <template><![CDATA[

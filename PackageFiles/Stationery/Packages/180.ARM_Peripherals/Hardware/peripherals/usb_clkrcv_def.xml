@@ -15,6 +15,10 @@ Devices using this peripheral:
 
    <xi:include href="_irqOption.xml"/>
 
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.Validator">
+   </validate>
+
    <xi:include href="usb_files.xml"/>
 
    <signals/>

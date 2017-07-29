@@ -6,6 +6,10 @@
 
    <xi:include href="_irqOption.xml"/>
    
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.Validator">
+   </validate>
+
    <projectActionList id = "gpio_files" >
       <copy source="Snippets/digital-example1.cpp"  target="Snippets/digital-example1.cpp" />
       <copy source="Snippets/digital-example2.cpp"  target="Snippets/digital-example2.cpp" />

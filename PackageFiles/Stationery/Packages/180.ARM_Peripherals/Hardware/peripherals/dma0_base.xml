@@ -13,13 +13,16 @@
 
    <xi:include href="_irqOption.xml"/>         
 
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.Validator">
+   </validate>
+
    <template><![CDATA[
       \t// Number of DMA channels implemented
       \tstatic constexpr unsigned NumChannels = $(NumChannels);\n\n
    ]]></template>
 
    <projectActionList id = "dma_files" >
-   dma-memory-example.cpp
       <copy source="Project_Headers/dma-MK.h"          target="Project_Headers/dma.h"             replace="true"  derived="true" />
       <copy source="Snippets/dma-memory-example.cpp"   target="Snippets/dma-memory-example.cpp"   replace="true"  derived="true" />
       <copy source="Snippets/dma-uart-example.cpp"     target="Snippets/dma-uart-example.cpp"     replace="true"  derived="true" />

@@ -33,7 +33,22 @@ Devices using this peripheral:
       <aliasOption key="/SIM/sim_sopt5_uart$(_instance)rxsrc" optional="true" constant="false" />
    </category>
 
-   <xi:include href="_irqOption.xml"/>
+   <irqOption name="txrxHandler"  
+      description="UART Tx/Rx interrupt handler"
+      toolTip="This handler is used for normal communication events"
+      pattern="UART(%d)_RX_TX_IRQHandler" />
+   <irqOption name="errorHandler" 
+      description="UART Error interrupt handler"
+      toolTip="This handler is used for communication error events"
+      pattern="UART(%d)_ERR_IRQHandler" />
+   <irqOption name="lonHandler"   
+      description="UART LON interrupt handler"
+      toolTip="This handler is used for LON related communication events"
+      pattern="UART(%d)_LON_IRQHandler" />
+   
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.Validator">
+   </validate>
 
    <projectActionList id = "uart_files">
       <copy source="Project_Headers/uart.h"  target="Project_Headers/uart.h"  replace="true"  derived="true" />

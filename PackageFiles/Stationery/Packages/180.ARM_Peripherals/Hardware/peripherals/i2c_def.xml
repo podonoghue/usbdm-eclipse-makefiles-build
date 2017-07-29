@@ -14,6 +14,10 @@
    
    <xi:include href="_irqOption.xml"/>
    
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.Validator">
+   </validate>
+
    <projectActionList id = "i2c_files" >
       <copy source="Project_Headers/i2c.h"            target="Project_Headers/i2c.h"            replace="true"  derived="true" />
       <copy source="Sources/i2c.cpp"                  target="Sources/i2c.cpp"                  replace="true"  derived="true" />

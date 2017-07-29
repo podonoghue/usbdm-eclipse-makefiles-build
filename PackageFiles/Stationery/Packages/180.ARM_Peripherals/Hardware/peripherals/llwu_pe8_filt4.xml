@@ -314,6 +314,10 @@
 
    <xi:include href="_irqOption.xml"/>
 
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.Validator">
+   </validate>
+
    <signals/>
 
    <projectActionList id = "llwu_files" >

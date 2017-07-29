@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!ENTITY % gui_items        "(xi:include|category|constant|floatOption|intOption|bitmaskOption|choiceOption|binaryOption|stringOption|numericListOption|pinListOption|aliasOption|signals)" >
+<!ENTITY % gui_items        "(xi:include|category|constant|floatOption|intOption|bitmaskOption|choiceOption|binaryOption|irqOption|stringOption|numericListOption|pinListOption|aliasOption|signals)" >
 <!ENTITY % structure_items  "((section*)|(tab)*)" >
 <!ENTITY % control_items    "(xi:include|template|validate|projectActionList)" >
 
@@ -162,6 +162,18 @@
    <!ATTLIST binaryOption indexedBy    CDATA        #IMPLIED>
    <!ATTLIST binaryOption derived      (false|true) "false">
    <!ATTLIST binaryOption derivedFrom  IDREF        #IMPLIED>
+
+<!ELEMENT irqOption EMPTY >
+   <!ATTLIST irqOption constant     (false|true) "false">
+   <!ATTLIST irqOption name         ID           #REQUIRED>
+   <!ATTLIST irqOption key          CDATA        #IMPLIED>
+   <!ATTLIST irqOption pattern      CDATA        #REQUIRED>
+   <!ATTLIST irqOption value        CDATA        #IMPLIED>
+   <!ATTLIST irqOption origin       CDATA        #IMPLIED>
+   <!ATTLIST irqOption description  CDATA        #IMPLIED>
+   <!ATTLIST irqOption toolTip      CDATA        "">
+   <!ATTLIST irqOption derived      (false|true) "false">
+   <!ATTLIST irqOption derivedFrom  IDREF        #IMPLIED>
 
 <!ELEMENT template (#PCDATA)>
    <!ATTLIST template namespace (info|usbdm|class|all)  "info" >
