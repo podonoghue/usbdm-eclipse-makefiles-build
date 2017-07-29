@@ -4,21 +4,12 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
-   <choiceOption name="irqHandlingMethod" 
-      description="Method used to install interrupt handler in vector table"
-      toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods">
-      <choice value="0" name="No handler" />
-      <choice value="1" name="Software (Use setCallback() or override class method)" />
-      <choice value="2" name="User function (set name below)" />
-   </choiceOption>
-
-   <stringOption name="namedInterruptHandler" 
-      description="Name of C function used as IRQ handler"
-      value=""
-      toolTip="This is the name of a function to be installed in the vector table as the interrupt handler for this peripheral\n
-               % character will be replaced with channel number etc for some peripherals with multiple handlers"
-   />
-   
+   <irqOption name="irqHandlingMethod"  
+      description="Peripheral nterrupt handler"
+      toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
+      pattern="^%b%i$" 
+      classHandler="irqHandler" />
+      
    <template><![CDATA[
        \t//! Class based callback handler has been installed in vector table\n
        \tstatic constexpr bool irqHandlerInstalled = ($(irqHandlingMethod) == 1);\n\n

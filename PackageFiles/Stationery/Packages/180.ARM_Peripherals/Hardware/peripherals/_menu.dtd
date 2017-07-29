@@ -168,6 +168,7 @@
    <!ATTLIST irqOption name         ID           #REQUIRED>
    <!ATTLIST irqOption key          CDATA        #IMPLIED>
    <!ATTLIST irqOption pattern      CDATA        #REQUIRED>
+   <!ATTLIST irqOption classHandler CDATA        #REQUIRED>
    <!ATTLIST irqOption value        CDATA        #IMPLIED>
    <!ATTLIST irqOption origin       CDATA        #IMPLIED>
    <!ATTLIST irqOption description  CDATA        #IMPLIED>
