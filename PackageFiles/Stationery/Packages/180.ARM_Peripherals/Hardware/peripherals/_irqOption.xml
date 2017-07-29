@@ -4,22 +4,30 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
-   <binaryOption name="irqHandlerInstalled" description="Install class handler for IRQ"
-      toolTip="If enabled ths option allows the handling of interrupts using two methods\n
-      - override static method irqHandler() of the class, or\n
-      - use of the setCallback() method to install a handler">
-      <choice value="false"  name="No handler installed (Use external handler)" />
-      <choice value="true"   name="Handler installed (Use setCallback() or class method)" />
-   </binaryOption>
+   <choiceOption name="irqHandlingMethod" 
+      description="Method used to install interrupt handler in vector table"
+      toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods">
+      <choice value="0" name="No handler" />
+      <choice value="1" name="Software (Use setCallback() or override class method)" />
+      <choice value="2" name="User function (set name below)" />
+   </choiceOption>
 
+   <stringOption name="namedInterruptHandler" 
+      description="Name of C function used as IRQ handler"
+      value=""
+      toolTip="This is the name of a function to be installed in the vector table as the interrupt handler for this peripheral"
+   />
+   
    <template><![CDATA[
-       \t//! Callback handler has been installed in vector table\n
-       \tstatic constexpr bool irqHandlerInstalled = $(irqHandlerInstalled);\n\n
+       \t//! Class based callback handler has been installed in vector table\n
+       \tstatic constexpr bool irqHandlerInstalled = ($(irqHandlingMethod) == 1);\n\n
    ]]></template>
        
-   <intOption name="irqLevel" description="IRQ Level in NVIC [0-15]"
+   <intOption name="irqLevel" 
+      description="IRQ Level in NVIC [0-15]"
       toolTip="Sets the priority level used to configure the NVIC"
-      value="0" min="0" max="15" />
+      value="0" min="0" max="15" 
+   />
 
    <template><![CDATA[
        \t//! Default IRQ level\n
