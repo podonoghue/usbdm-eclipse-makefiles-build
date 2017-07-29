@@ -39,6 +39,9 @@ This is a template class with static methods.\n
 
 <b>Examples</b>\n
  - @ref dma-memory-example.cpp
+ - @ref  digital-example1.cpp
+ - @ref  digital-example2.cpp
+ - @ref  dma-memory-example.cpp
 
  @page GPIOExamples  General Purpose Input Output
 
@@ -426,6 +429,8 @@ This is a template class with static methods.\n
 @example digital-example1.cpp
 @example digital-example2.cpp
 @example dma-memory-example.cpp
+@example dma-spi-example.cpp
+@example dma-uart-example.cpp
 @example flash_programming_example.cpp
 @example ftm-ic-example.cpp
 @example ftm-oc-example.cpp
