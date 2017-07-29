@@ -170,22 +170,33 @@ public:
 template<class Info>
 class RtcIrq_T : public RtcBase_T<Info> {
 
+public:
+   static void unhandledInterrupt(uint32_t) {
+      setAndCheckErrorCode(E_NO_HANDLER);
+   }
+
 protected:
    /** Callback function for ISR */
-   static RTCCallbackFunction callback;
+   static RTCCallbackFunction alarmCallback;
+   static RTCCallbackFunction secondsCallback;
 
 public:
    /**
-    * IRQ handler
+    * Alarm IRQ handler
     */
-   static void irqHandler(void) {
-      if (callback != 0) {
-         callback(RtcBase_T<Info>::rtc->TSR);
-      }
-      if ((RtcBase_T<Info>::rtc->SR&RTC_SR_TAF_MASK) != 0) {
-         // Clear alarm
-         RtcBase_T<Info>::rtc->TAR   = 0;
-      }
+   static void irqAlarmHandler(void) {
+      // Clear alarm
+      RtcBase_T<Info>::rtc->TAR   = 0;
+      // Call handler
+      alarmCallback(RtcBase_T<Info>::rtc->TSR);
+   }
+
+   /**
+    * Alarm IRQ handler
+    */
+   static void irqSecondsHandler(void) {
+      // Call handler
+      secondsCallback(RtcBase_T<Info>::rtc->TSR);
    }
 
    /**
@@ -215,12 +226,28 @@ public:
       }
    }
    /**
-    * Set Callback function
+    * Set Alarm callback function
     *
     *   @param[in]  theCallback - Callback function to be executed on RTC alarm interrupt
     */
-   static void setCallback(RTCCallbackFunction theCallback) {
-      callback = theCallback;
+   static void setAlarmCallback(RTCCallbackFunction callback) {
+      if (callback == nullptr) {
+         alarmCallback = unhandledInterrupt;
+         return;
+      }
+      alarmCallback = callback;
+   }
+   /**
+    * Set Seconds callback function
+    *
+    *   @param[in]  theCallback - Callback function to be executed on RTC alarm interrupt
+    */
+   static void setSecondsCallback(RTCCallbackFunction callback) {
+      if (callback == nullptr) {
+         secondsCallback = unhandledInterrupt;
+         return;
+      }
+      secondsCallback = callback;
    }
    /**
     * Set alarm time
@@ -232,7 +259,8 @@ public:
    }
 };
 
-template<class Info> RTCCallbackFunction RtcIrq_T<Info>::callback = 0;
+template<class Info> RTCCallbackFunction RtcIrq_T<Info>::alarmCallback   = unhandledInterrupt;
+template<class Info> RTCCallbackFunction RtcIrq_T<Info>::secondsCallback = unhandledInterrupt;
 
 #ifdef USBDM_RTC_IS_DEFINED
 /**
