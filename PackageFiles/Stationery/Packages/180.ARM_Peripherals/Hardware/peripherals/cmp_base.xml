@@ -168,4 +168,8 @@
       <copy source="Snippets/cmp.cpp"       target="Snippets/cmp.cpp"       replace="true"  derived="true" />
    </projectActionList>
    
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.Validator">
+   </validate>
+
 </fragment>

@@ -33,6 +33,10 @@
    
    <xi:include href="_irqOption.xml"/>
    
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.Validator">
+   </validate>
+
    <template><![CDATA[
       #ifdef SPI_CTAR_LSBFE_SHIFT\n
       \t//! Default communication mode: order, clock phase and clock polarity

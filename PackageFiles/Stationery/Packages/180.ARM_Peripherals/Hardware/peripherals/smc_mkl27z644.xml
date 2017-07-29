@@ -91,4 +91,8 @@
       <copy source="Project_Headers/smc.h"         target="Project_Headers/smc.h"         replace="true" derived="true" />
    </projectActionList>
          
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.Validator">
+   </validate>
+
 </devicePage>
