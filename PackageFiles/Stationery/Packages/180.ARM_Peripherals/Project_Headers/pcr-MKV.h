@@ -57,14 +57,6 @@ constexpr   uint32_t PORTE_CLOCK_MASK         = SIM_SCGC5_PORTE_MASK;
 constexpr   uint32_t PORTF_CLOCK_MASK         = SIM_SCGC5_PORTF_MASK;
 #endif
 
-extern volatile uint32_t SystemMcgffClock;
-extern volatile uint32_t SystemMcgOutClock;
-extern volatile uint32_t SystemMcgFllClock;
-extern volatile uint32_t SystemMcgPllClock;
-extern volatile uint32_t SystemCoreClock;
-extern volatile uint32_t SystemBusClock;
-extern volatile uint32_t SystemLpoClock;
-
 /*
  * Enable clock to ports
  *

@@ -33,12 +33,25 @@ extern "C" uint32_t SystemBusClock;
 namespace USBDM {
 
 $(/MCG/clockInfo)
+/** MCGFFCLK - Fixed frequency clock (input to FLL) */
 volatile uint32_t SystemMcgffClock;
-volatile uint32_t SystemMcgFllClock;
-volatile uint32_t SystemMcgPllClock;
+
+/** MCGOUTCLK - Primary output from MCG, various sources */
 volatile uint32_t SystemMcgOutClock;
+
+/** MCGFLLCLK - Output of FLL */
+volatile uint32_t SystemMcgFllClock;
+
+/** MCGPLLCLK - Output of PLL */
+volatile uint32_t SystemMcgPllClock;
+
+/** Core/System clock (from MCGOUTCLK/CLKDIV) */
 volatile uint32_t SystemCoreClock;
+
+/** Bus clock (from MCGOUTCLK/CLKDIV) */
 volatile uint32_t SystemBusClock;
+
+/** LPO - Low power oscillator 1kHz clock available in LP modes */
 volatile uint32_t SystemLpoClock;
 
 /** Callback for programmatically set handler */
