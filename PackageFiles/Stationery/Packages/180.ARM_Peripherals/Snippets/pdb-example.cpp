@@ -36,6 +36,11 @@ static void pdbCallback() {
    Led::clear();
 }
 
+static void pdbErrorCallback() {
+   complete = true;
+   __BKPT();
+}
+
 static void configurePdb() {
 
    // Note: Can work in timer ticks and avoid floating point if desired
@@ -58,7 +63,7 @@ static void configurePdb() {
    // Generate interrupt at end of sequence
    Pdb::setInterruptDelay(SEQ_LENGTH);
    // Take single ADC sample at TRIGGER_TIME
-   Pdb::setPretriggers(0, PdbPretrigger0_Delayed, TRIGGER_TIME);
+   Pdb::setPretriggers(0, PdbPretrigger0_Delay, TRIGGER_TIME);
    // Update registers
    Pdb::triggerRegisterLoad(PdbLoadMode_Immediate);
    while (!Pdb::isRegisterLoadComplete()) {
@@ -81,7 +86,7 @@ static void configureAdc() {
    Adc::setCallback(adcCallback);
    Adc::enableNvicInterrupts();
 
-   AdcChannel::enableHardwareConversion(0, AdcInterrupt_enable);
+   AdcChannel::enableHardwareConversion(AdcPretrigger_0, AdcInterrupt_enable);
 }
 
 int main() {

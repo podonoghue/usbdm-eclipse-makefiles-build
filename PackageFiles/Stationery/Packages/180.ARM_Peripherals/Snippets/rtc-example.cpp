@@ -40,9 +40,10 @@ int main() {
 //   USBDM::Rtc::initialise();
 
    // Set initial callback
-   USBDM::Rtc::setCallback(handler);
+   USBDM::Rtc::setAlarmCallback(handler);
    USBDM::Rtc::setAlarm(USBDM::Rtc::getTime()+5);
    USBDM::Rtc::enableAlarmInterrupts();
+   USBDM::Rtc::enableNvicInterrupts();
 
    Led::setOutput();
    for(;;) {

@@ -119,8 +119,8 @@ enum AdcInterrupt {
  * Select the pretrigger
  */
 enum AdcPretrigger {
-   AdcPretrigger_A  = 0, //!< Use pretrigger A = SC1[0]/R[0]
-   AdcPretrigger_B  = 1, //!< Use pretrigger B = SC1[1]/R[1]
+   AdcPretrigger_0  = 0, //!< Use pretrigger A = SC1[0]/R[0]
+   AdcPretrigger_1  = 1, //!< Use pretrigger B = SC1[1]/R[1]
 };
 
 /**

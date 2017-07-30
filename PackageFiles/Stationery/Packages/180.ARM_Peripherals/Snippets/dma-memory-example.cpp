@@ -100,7 +100,7 @@ static void dmaTransfer(void *source, uint32_t size, void *destination) {
    complete = false;
 
    // Enable DMAC with default settings
-   Dma0::enable();
+   Dma0::configure();
 
    // Set callback (Interrupts are enabled in TCD)
    Dma0::setCallback(DMA_CHANNEL, dmaCallback);

@@ -114,13 +114,22 @@ public:
       if (enable) {
          // Enable interrupts
          NVIC_EnableIRQ(Info::irqNums[0]);
-
          // Set priority level
          NVIC_SetPriority(Info::irqNums[0], Info::irqLevel);
+         if (Info::irqCount>1) {
+            // Enable interrupts
+            NVIC_EnableIRQ(Info::irqNums[1]);
+            // Set priority level
+            NVIC_SetPriority(Info::irqNums[1], Info::irqLevel);
+         }
       }
       else {
          // Disable interrupts
          NVIC_DisableIRQ(Info::irqNums[0]);
+         if (Info::irqCount>1) {
+            // Disable interrupts
+            NVIC_DisableIRQ(Info::irqNums[1]);
+         }
       }
    }
 

@@ -73,10 +73,10 @@ int main() {
 #endif
 
    // Flash RED @ 1Hz
-   Pit::configureChannel(0, ::SystemBusClock/2);
+   Pit::configureChannelInTicks(0, ::SystemBusClock/2);
 
    // Flash GREEN @ 0.5Hz
-   Pit::configureChannel(1, ::SystemBusClock);
+   Pit::configureChannelInTicks(1, ::SystemBusClock);
 
    // Enable interrupts on the two channels
    Pit::enableInterrupts(0);

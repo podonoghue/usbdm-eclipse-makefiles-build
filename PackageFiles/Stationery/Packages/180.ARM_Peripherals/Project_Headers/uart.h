@@ -390,33 +390,59 @@ class UartIrq_T : public Uart_T<Info> {
 
 protected:
    /** Callback function for ISR */
-   static UARTCallbackFunction callback;
+   static UARTCallbackFunction rxTxCallback;
+   static UARTCallbackFunction errorCallback;
+
+   static void unexpectedInterrupt(uint8_t) {
+      setAndCheckErrorCode(E_NO_HANDLER);
+   }
 
    UartIrq_T(unsigned baud) : Uart_T<Info>(baud) {
    }
 
 public:
    /**
-    * IRQ handler
+    * Receive/Transmit IRQ handler
     */
-   static void irqHandler(void) {
+   static void irqRxTxHandler(void) {
       uint8_t status = Info::uart->S1;
-      if (callback != 0) {
-         callback(status);
-      }
+      rxTxCallback(status);
    }
 
    /**
-    * Set Callback function
-    *
-    *   @param[in]  theCallback - Callback function to be executed on UART alarm interrupt
+    * Error and LON event IRQ handler
     */
-   static void setCallback(UARTCallbackFunction theCallback) {
-      callback = theCallback;
+   static void irqErrorHandler(void) {
+      uint8_t status = Info::uart->S1;
+      errorCallback(status);
+   }
+
+   /**
+    * Set Receive/Transmit Callback function
+    *
+    *   @param[in]  callback - Callback function to be executed on UART receive or transmit
+    */
+   static void setRxTxCallback(UARTCallbackFunction callback) {
+      if (callback == nullptr) {
+         rxTxCallback = unexpectedInterrupt;
+      }
+      rxTxCallback = callback;
+   }
+   /**
+    * Set Error Callback function
+    *
+    *   @param[in]  callback - Callback function to be executed on UART receive or transmit
+    */
+   static void setErrorCallback(UARTCallbackFunction callback) {
+      if (callback == nullptr) {
+         errorCallback = unexpectedInterrupt;
+      }
+      errorCallback = callback;
    }
 };
 
-template<class Info> UARTCallbackFunction UartIrq_T<Info>::callback = 0;
+template<class Info> UARTCallbackFunction UartIrq_T<Info>::rxTxCallback  = unexpectedInterrupt;
+template<class Info> UARTCallbackFunction UartIrq_T<Info>::errorCallback = unexpectedInterrupt;
 
 #ifdef USBDM_UART0_IS_DEFINED
 /**

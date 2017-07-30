@@ -30,13 +30,14 @@ void flashGreen(void) {
 int main() {
    Led::setOutput(PinDriveStrength_High);
 
+   // Do default configure
    Pit::configure();
 
    // Set handler for channel 1 programmatically
    Pit::setCallback(1, flashGreen);
 
    // Flash LED @ 1Hz
-   Pit::configureChannel(1, ::SystemBusClock);
+   Pit::configureChannelInTicks(1, ::SystemBusClock);
 
    // Enable interrupts on the channel
    Pit::enableInterrupts(1);

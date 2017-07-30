@@ -325,7 +325,22 @@ public:
     *
     *  @note Function doesn't return until interval has expired
     */
-   static void delay(uint8_t channel, uint32_t interval) {
+   static void delayInTicks(uint8_t channel, uint32_t interval) {
+      configureChannelInTicks(channel, interval);
+      while (pit->CHANNEL[channel].TFLG == 0) {
+         __NOP();
+      }
+      disableChannel(channel);
+   }
+   /**
+    *  Use a PIT channel to implement a busy-wait delay
+    *
+    *  @param[in]  channel   Channel to use
+    *  @param[in]  interval  Interval to wait as a float
+    *
+    *  @note Function doesn't return until interval has expired
+    */
+   static void delay(uint8_t channel, float interval) {
       configureChannel(channel, interval);
       while (pit->CHANNEL[channel].TFLG == 0) {
          __NOP();

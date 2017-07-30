@@ -352,8 +352,8 @@ Devices using this peripheral:
       <binaryOption name="sim_sopt7_adc0pretrgsel" 
          description="ADC0 pretrigger select"
          toolTip="Selects the pre-trigger source when alternative triggers are enabled through ADC0ALTTRGEN">
-         <choice value="0" name="Pre-trigger A" isDefault="true" />
-         <choice value="1" name="Pre-trigger B" />
+         <choice value="0" name="Pre-trigger 0 (A)" isDefault="true" />
+         <choice value="1" name="Pre-trigger 1 (B)" />
       </binaryOption>
    
       <choiceOption name="sim_sopt7_adc0trgsel" 

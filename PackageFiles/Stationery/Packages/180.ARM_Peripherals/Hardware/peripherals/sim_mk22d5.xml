@@ -129,7 +129,7 @@ Devices using this peripheral:
       <binaryOption name="sim_sopt4_ftm0trg0src" 
          description="FlexTimer 0 Hardware Trigger 0 Source Select"
          toolTip="Selects the source of FTM hardware trigger 0" >
-         <choice value="0"  name="HSCMP0 output" isDefault="true" />
+         <choice value="0"  name="CMP0 output" isDefault="true" />
          <choice value="1"  name="FTM1 channel match" />
       </binaryOption>
    
@@ -241,8 +241,8 @@ Devices using this peripheral:
       <binaryOption name="sim_sopt7_adc0pretrgsel" 
          description="ADC0 pretrigger select"
          toolTip="Selects the pre-trigger source when alternative triggers are enabled through ADC0ALTTRGEN">
-         <choice value="0" name="Pre-trigger A" isDefault="true" />
-         <choice value="1" name="Pre-trigger B" />
+         <choice value="0" name="Pre-trigger 0 (A)" isDefault="true" />
+         <choice value="1" name="Pre-trigger 1 (B)" />
       </binaryOption>
    
       <choiceOption name="sim_sopt7_adc0trgsel" 
@@ -396,4 +396,5 @@ Devices using this peripheral:
       \t   sim->CLKDIV2 = clkdiv2;
       \t}
    ]]></template>
+
 </devicePage>

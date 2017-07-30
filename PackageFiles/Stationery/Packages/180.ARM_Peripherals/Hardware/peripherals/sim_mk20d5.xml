@@ -241,8 +241,8 @@ Devices using this peripheral:
       <binaryOption name="sim_sopt7_adc0pretrgsel" 
          description="ADC0 pretrigger select"
          toolTip="Selects the pre-trigger source when alternative triggers are enabled through ADC0ALTTRGEN">
-         <choice value="0" name="Pre-trigger A" isDefault="true" />
-         <choice value="1" name="Pre-trigger B" />
+         <choice value="0" name="Pre-trigger 0 (A)" isDefault="true" />
+         <choice value="1" name="Pre-trigger 1 (B)" />
       </binaryOption>
    
       <choiceOption name="sim_sopt7_adc0trgsel" 
@@ -422,21 +422,21 @@ Devices using this peripheral:
       
       \t/**
       \t * Select the ADC0 Alternative Trigger sources.
-      \t * If PDB is selected then Pre-trigger A/B is determined by the PDB setup
-      \t * otherwise Pre-trigger A/B is determined by this selection.
+      \t * If PDB is selected then Pre-trigger 0/1 is determined by the PDB setup
+      \t * otherwise Pre-trigger 0/1 is determined by this selection.
       \t */
       \tenum SimAdc0AltTrigger {
       \t   SimAdc0AltTrigger_Pdb           = SIM_SOPT7_ADC0ALTTRGEN(0),                              //!< PDB trigger
-      \t   SimAdc0AltTrigger_PreTrigger_A  = SIM_SOPT7_ADC0ALTTRGEN(1)|SIM_SOPT7_ADC0PRETRGSEL(0),   //!< Pre-trigger A (SC1[0])
-      \t   SimAdc0AltTrigger_PreTrigger_B  = SIM_SOPT7_ADC0ALTTRGEN(1)|SIM_SOPT7_ADC0PRETRGSEL(1),   //!< Pre-trigger B (SC1[1])
+      \t   SimAdc0AltTrigger_PreTrigger_0  = SIM_SOPT7_ADC0ALTTRGEN(1)|SIM_SOPT7_ADC0PRETRGSEL(0),   //!< Pre-trigger 0 = A (SC1[0])
+      \t   SimAdc0AltTrigger_PreTrigger_1  = SIM_SOPT7_ADC0ALTTRGEN(1)|SIM_SOPT7_ADC0PRETRGSEL(1),   //!< Pre-trigger 1 = B (SC1[1])
       \t};\n\n
 
       \t/**
       \t * Select the ADC0 Trigger source\n
       \t * 
-      \t * If PDB is selected by SimAdc0Trigger then Pre-trigger A/B is determined by the PDB setup,
-      \t * otherwise Pre-trigger A/B is determined by this parameter.\n
-      \t * For example, setAdc0Triggers(SimAdc0AltTrigger_PreTrigger_B, SimAdc0Trigger_PitCh0) will set the trigger source\n
+      \t * If PDB is selected by SimAdc0Trigger then Pre-trigger 0/1 is determined by the PDB setup,
+      \t * otherwise Pre-trigger 0/1 is determined by this parameter.\n
+      \t * For example, setAdc0Triggers(SimAdc0AltTrigger_PreTrigger_1, SimAdc0Trigger_PitCh0) will set the trigger source\n
       \t * to PIT channel 0 and conversion will use SC1[1]/R[1]. 
       \t *
       \t * @param[in] simAdc0AltTrigger  Select the ADC0 Alternative Trigger sources 
