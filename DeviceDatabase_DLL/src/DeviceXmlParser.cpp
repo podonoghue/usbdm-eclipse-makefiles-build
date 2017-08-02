@@ -930,7 +930,7 @@ EraseMethodsPtr DeviceXmlParser::parseEraseMethods(DOMElement *element) {
                   { "None",      DeviceData::EraseMethod::eraseNone, },
             };
             for (unsigned index=0; index<(sizeof(names)/sizeof(names[0])); index++) {
-               if (stricmp(names[index].name, sType.asCString()) == 0) {
+               if (strcasecmp(names[index].name, sType.asCString()) == 0) {
                   option = names[index].type;
                }
             }
@@ -993,7 +993,7 @@ ResetMethodsPtr DeviceXmlParser::parseResetMethods(DOMElement *element) {
                   { "vendor",    DeviceData::ResetMethod::resetVendor, },
             };
             for (unsigned index=0; index<(sizeof(names)/sizeof(names[0])); index++) {
-               if (stricmp(names[index].name, sType.asCString()) == 0) {
+               if (strcasecmp(names[index].name, sType.asCString()) == 0) {
                   option = names[index].type;
                }
             }
