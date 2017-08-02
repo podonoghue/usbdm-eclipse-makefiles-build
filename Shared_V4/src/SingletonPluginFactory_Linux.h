@@ -1,5 +1,5 @@
 /*! \file
-    \brief Base PluginFactory for Linux
+    \brief Base SingletonPluginFactory for Linux
 
     \verbatim
     Copyright (C) 2015  Peter O'Donoghue
@@ -25,8 +25,8 @@
     \endverbatim
 */
 
-#ifndef SRC_PLUGINFACTORY_LINUX_H_
-#define SRC_PLUGINFACTORY_LINUX_H_
+#ifndef SRC_SINGLETONPLUGINFACTORY_LINUX_H_
+#define SRC_SINGLETONPLUGINFACTORY_LINUX_H_
 
 #include <dlfcn.h>
 #include <memory>
@@ -38,34 +38,35 @@
  * Factory base class
  */
 template <class T>
-class PluginFactory {
+class SingletonPluginFactory {
 
 protected:
-   static std::string   dllName;
-   static size_t        (* newInstance)(T*, ...);
-   static int           instanceCount;
-   static void          *moduleHandle;
-//   static std::shared_ptr<T> dummy;
+   static std::shared_ptr<T> getSingletonInstance();
+   static std::string dllName;
+   static int instanceCount;
+   static void *moduleHandle;
+   static std::shared_ptr<T> dummy;
 
-   PluginFactory() {};
-   ~PluginFactory() {};
+   SingletonSingletonPluginFactory() {};
+   ~SingletonSingletonPluginFactory() {};
 
 protected:
-   static std::shared_ptr<T> createPlugin(std::string dllName, std::string entryPoint="createPluginInstance") {
+   /**
+    * Create plug-in from library
+    *
+    * @param dllName    String identifying the library to load
+    * @param entryPoint String describing the entry point of the loaded library
+    *
+    * @return Smart pointer to object implementing the plug-in interface
+    */
+   static std::shared_ptr<T> createPlugin(std::string dllName, std::string entryPoint="createSingletonPluginInstance") {
       LOGGING;
-      if (newInstance == 0) {
+      if (getSingletonInstance == 0) {
          loadClass(dllName.c_str(), entryPoint.c_str());
       }
-      log.print("Getting size\n");
-      size_t classSize = (*newInstance)(0);
-      log.print("Calling new\n");
-      void *p = ::operator new(classSize);
-      log.print("Allocated storage @%p, size = %ld\n", p, (long)classSize);
-      log.print("Calling placement constructor\n");
-      (*newInstance)(p);
-      std::shared_ptr<T> pp((T*)p, deleter);
-      instanceCount++;
-      return pp;
+      std::shared_ptr<T> ptr = getSingletonInstance();
+      log.print("Use count = %ld\n", ptr.use_count());
+      return ptr;
    }
 
 protected:
@@ -79,20 +80,15 @@ protected:
          unloadClass();
       }
    }
-   /**
-    * Load plugin class
-    */
    static void loadClass(const char *moduleName, const char *createInstanceFunctioName);
-   /**
-    * Unload plug-in class
-    */
    static void unloadClass();
 };
 
-template <class T> void * PluginFactory<T>::moduleHandle = 0;
-template <class T> size_t (*PluginFactory<T>::newInstance)(T*, ...) = 0;
-template <class T> int  PluginFactory<T>::instanceCount = 0;
-//template <class T> std::shared_ptr<T> PluginFactory<T>::dummy;
+template <class T> void * SingletonPluginFactory<T>::moduleHandle = 0;
+template <class T> size_t (*SingletonPluginFactory<T>::newInstance)(...) = 0;
+template <class T> int  SingletonPluginFactory<T>::instanceCount = 0;
+//template <class T> std::shared_ptr<WxPlugin> SingletonPluginFactory<T>::dummy;
+template <class T> std::shared_ptr<T> SingletonPluginFactory<T>::dummy;
 
 using namespace std;
 
@@ -109,8 +105,8 @@ static void printSystemErrorMessage() {
  * Note: Searches USBDM Application directory if necessary
  */
 template <class T>
-void PluginFactory<T>::loadClass(const char *moduleName, const char *createInstanceFunctioName) {
-   LOGGING_Q;
+void SingletonPluginFactory<T>::loadClass(const char *moduleName, const char *createInstanceFunctioName) {
+   LOGGING;
 
    if (moduleHandle != NULL) {
       log.print("Module \'%s\' already loaded\n", moduleName);
@@ -136,8 +132,8 @@ void PluginFactory<T>::loadClass(const char *moduleName, const char *createInsta
    }
    log.print("Module \'%s\' loaded @0x%p, handle cached @%p\n", moduleName, moduleHandle, &moduleHandle);
 
-   newInstance  = (size_t (*)(...))dlsym(moduleHandle, createInstanceFunctioName);
-   if (newInstance == 0) {
+   getSingletonInstance  = (std::shared_ptr<T>())dlsym(moduleHandle, createInstanceFunctioName);
+   if (getSingletonInstance == 0) {
       char buff[1000];
       snprintf(buff, sizeof(buff), "Entry point \'%s\' not found in module \'%s\'\n", createInstanceFunctioName, moduleName);
       throw MyException(std::string(buff));
@@ -149,8 +145,8 @@ void PluginFactory<T>::loadClass(const char *moduleName, const char *createInsta
  * Unload an instance of a class from a Library
  */
 template <class T>
-void PluginFactory<T>::unloadClass() {
-   LOGGING_Q;
+void SingletonPluginFactory<T>::unloadClass() {
+   LOGGING;
    log.print("Unloading module @0x%p, cached @%p\n", moduleHandle, &moduleHandle);
    if (dlclose(moduleHandle) != 0) {
       log.print("Unloading module at @0x%p failed\n", moduleHandle);
@@ -159,7 +155,7 @@ void PluginFactory<T>::unloadClass() {
    }
    log.print("Unloading module @0x%p done\n", moduleHandle);
    moduleHandle = 0;
-   newInstance = 0;
+   getSingletonInstance = 0;
 }
 
-#endif /* SRC_PLUGINFACTORY_LINUX_H_ */
+#endif /* SRC_SINGLETONPLUGINFACTORY_LINUX_H_ */
