@@ -42,31 +42,31 @@ namespace USBDM {
  * <b>Example</b>
  * @code
  * // Instantiate
- * USBDM::Gpio_T<SIM_SCGC5_PORTA_MASK, PORTA_BasePtr, GPIOA_BasePtr, 3> pta3;
+ * using Pta3 = USBDM::Gpio_T<SIM_SCGC5_PORTA_MASK, PORTA_BasePtr, GPIOA_BasePtr, 3>;
  *
  * // Set as digital output
- * pta3.setOutput();
+ * Pta3::setOutput();
  *
  * // Set pin high
- * pta3.set();
+ * Pta3::set();
  *
  * // Set pin low
- * pta3.clear();
+ * Pta3::clear();
  *
  * // Toggle pin
- * pta3.toggle();
+ * Pta3::toggle();
  *
  * // Set pin to boolean value
- * pta3.write(true);
+ * Pta3::write(true);
  *
  * // Set pin to boolean value
- * pta3.write(false);
+ * Pta3::write(false);
  *
  * // Set as digital input
- * pta3.setInput();
+ * Pta3::setInput();
  *
  * // Read pin as boolean value
- * bool x = pta3.read();
+ * bool x = Pta3::read();
  *
  * @endcode
  *
@@ -111,7 +111,7 @@ public:
    /**
     * Set Pin Control Register (PCR) value
     *
-    * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down (defaults to PinPull_None)
+    * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
     * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High (defaults to PinDriveLow)
     * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain (defaults to PinPushPull)
     * @param[in] pinIrq           One of PinIrq_None, etc (defaults to PinIrq_None)
@@ -255,7 +255,7 @@ public:
     * @note Polarity is not significant
     */
    static __attribute__((always_inline)) void set() {
-      high();
+	   gpio->PSOR = MASK;
    }
    /**
     * Clear pin. Pin will be low if configured as an output.
@@ -263,7 +263,7 @@ public:
     * @note Polarity is not significant
     */
    static __attribute__((always_inline)) void clear() {
-      low();
+	   gpio->PCOR = MASK;
    }
    /**
     * Toggle pin (if output)
@@ -381,6 +381,38 @@ public:
       }
       else {
          return isLow();
+      }
+   }
+   /**
+    * Read pin value and return true if active level
+    *
+    * @return true/false reflecting if pin is active.
+    *
+    * @note This reads the PDIR
+    * @note Polarity is significant
+    */
+   static __attribute__((always_inline)) bool isActive() {
+      if (polarity) {
+         return isHigh();
+      }
+      else {
+         return isLow();
+      }
+   }
+   /**
+    * Read pin value and return true if inactive level
+    *
+    * @return true/false reflecting if pin is inactive.
+    *
+    * @note This reads the PDIR
+    * @note Polarity is significant
+    */
+   static __attribute__((always_inline)) bool isInactive() {
+      if (polarity) {
+         return isLow();
+      }
+      else {
+         return isHigh();
       }
    }
    /**

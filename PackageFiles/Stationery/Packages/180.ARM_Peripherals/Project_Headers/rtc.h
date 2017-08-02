@@ -237,7 +237,7 @@ public:
    /**
     * Set Alarm callback function
     *
-    *   @param[in]  theCallback - Callback function to be executed on RTC alarm interrupt
+    *   @param[in]  callback - Callback function to be executed on RTC alarm interrupt
     */
    static void setAlarmCallback(RTCCallbackFunction callback) {
       if (callback == nullptr) {
@@ -249,7 +249,7 @@ public:
    /**
     * Set Seconds callback function
     *
-    *   @param[in]  theCallback - Callback function to be executed on RTC alarm interrupt
+    *   @param[in]  callback - Callback function to be executed on RTC alarm interrupt
     */
    static void setSecondsCallback(RTCCallbackFunction callback) {
       if (callback == nullptr) {
