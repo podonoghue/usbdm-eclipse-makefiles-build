@@ -826,7 +826,7 @@ DeviceData::EraseMethod DeviceData::getEraseMethod(const char *name) {
          { "None",      DeviceData::EraseMethod::eraseNone, },
    };
    for (unsigned index=0; index<(sizeof(names)/sizeof(names[0])); index++) {
-      if (stricmp(names[index].name, name) == 0) {
+      if (strcasecmp(names[index].name, name) == 0) {
          return names[index].type;
       }
    }
@@ -848,7 +848,7 @@ DeviceData::ResetMethod DeviceData::getResetMethod(const char *name) {
          { "vendor",    DeviceData::ResetMethod::resetVendor, },
    };
    for (unsigned index=0; index<(sizeof(names)/sizeof(names[0])); index++) {
-      if (stricmp(names[index].name, name) == 0) {
+      if (strcasecmp(names[index].name, name) == 0) {
          return names[index].type;
       }
    }
