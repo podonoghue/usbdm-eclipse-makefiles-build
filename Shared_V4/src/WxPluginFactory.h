@@ -18,7 +18,7 @@ public:
    static WxPluginPtr createWxPlugin() {
 
 #if defined(__linux__)
-      static std::shared_ptr<WxPlugin> dummy == 0;
+      static std::shared_ptr<WxPlugin> dummy = 0;
 
       // HACK for Linux - never unload the wxPlugin once loaded
       if (dummy == 0) {
