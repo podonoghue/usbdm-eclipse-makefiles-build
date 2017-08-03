@@ -107,6 +107,18 @@ protected:
     * Unload plug-in class
     */
    static void unloadClass();
+
+   static void printSystemErrorMessage() {
+      char buffer[200];
+      long dw = (long)GetLastError();
+
+      if (!FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM, 0, dw, 0, buffer, sizeof(buffer)-1, 0 )) {
+         UsbdmSystem::Log::print("Failed to convert system error code %ld\n", dw);
+         return;
+      }
+      UsbdmSystem::Log::print("System Error: %s", buffer);
+   }
+
 };
 
 template <class T> MODULE_HANDLE PluginFactory<T>::moduleHandle = 0;
@@ -114,17 +126,6 @@ template <class T> size_t (*STD__LINKAGE PluginFactory<T>::newInstance)(T*, ...)
 template <class T> int  PluginFactory<T>::instanceCount = 0;
 
 using namespace std;
-
-static void printSystemErrorMessage() {
-   char buffer[200];
-   long dw = (long)GetLastError();
-
-   if (!FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM, 0, dw, 0, buffer, sizeof(buffer)-1, 0 )) {
-      UsbdmSystem::Log::print("Failed to convert system error code %ld\n", dw);
-      return;
-   }
-   UsbdmSystem::Log::print("System Error: %s", buffer);
-}
 
 /**
  * Load an instance of a class from a Library

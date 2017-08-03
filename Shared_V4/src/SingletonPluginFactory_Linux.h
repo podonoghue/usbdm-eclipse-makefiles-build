@@ -84,16 +84,17 @@ protected:
    }
    static void loadClass(const char *moduleName, const char *createInstanceFunctioName);
    static void unloadClass();
+
+public:
+   static void printSystemErrorMessage() {
+      UsbdmSystem::Log::print("System Error: %s\n", dlerror());
+   }
 };
 
 template <class T> MODULE_HANDLE SingletonPluginFactory<T>::moduleHandle = 0;
 template <class T> std::shared_ptr<T> (*STD__LINKAGE SingletonPluginFactory<T>::getSingletonInstance)() = 0;
 
 using namespace std;
-
-static void printSystemErrorMessage() {
-   UsbdmSystem::Log::print("System Error: %s\n", dlerror());
-}
 
 /**
  * Load an instance of a class from a Library
@@ -116,7 +117,7 @@ void SingletonPluginFactory<T>::loadClass(const char *moduleName, const char *cr
 
    if (moduleHandle == NULL) {
       log.print("Module \'%s\' failed to load, retrying...\n", moduleName);
-      printSystemErrorMessage();
+      SingletonPluginFactory::printSystemErrorMessage();
 
       string extendedPath = UsbdmSystem::getApplicationPath(createInstanceFunctioName);
       log.print("Trying extended search path \'%s\'\n", extendedPath.c_str());
@@ -149,7 +150,7 @@ void SingletonPluginFactory<T>::unloadClass() {
    log.print("Unloading module @0x%p, cached @%p\n", moduleHandle, &moduleHandle);
    if (dlclose(moduleHandle) != 0) {
       log.print("Unloading module at @0x%p failed\n", moduleHandle);
-      printSystemErrorMessage();
+      SingletonPluginFactory::printSystemErrorMessage();
       // Ignore error as can't throw in destructor
    }
    log.print("Unloading module @0x%p done\n", moduleHandle);

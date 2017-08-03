@@ -102,7 +102,6 @@ template <class T> std::shared_ptr<T> (*STD__LINKAGE SingletonPluginFactory<T>::
 
 using namespace std;
 
-
 /**
  * Load an instance of a class from a Library
  *

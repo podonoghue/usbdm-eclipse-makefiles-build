@@ -41,7 +41,7 @@ template <class T>
 class PluginFactory {
 
 #define MODULE_HANDLE void *
-#define STD__LINKAGE  
+#define STD__LINKAGE
 
 protected:
    static std::string   dllName;
@@ -102,6 +102,10 @@ protected:
     * Unload plug-in class
     */
    static void unloadClass();
+   static void printSystemErrorMessage() {
+      UsbdmSystem::Log::print("System Error: %s\n", dlerror());
+   }
+
 };
 
 template <class T> MODULE_HANDLE PluginFactory<T>::moduleHandle = 0;
@@ -109,10 +113,6 @@ template <class T> size_t (*STD__LINKAGE PluginFactory<T>::newInstance)(T*, ...)
 template <class T> int  PluginFactory<T>::instanceCount = 0;
 
 using namespace std;
-
-static void printSystemErrorMessage() {
-   UsbdmSystem::Log::print("System Error: %s\n", dlerror());
-}
 
 /**
  * Load an instance of a class from a Library
