@@ -23,7 +23,7 @@
    |   6 Apr 2015 | Created
    +====================================================================
     \endverbatim
-*/
+ */
 
 #ifndef SRC_PLUGINFACTORY_LINUX_H_
 #define SRC_PLUGINFACTORY_LINUX_H_
@@ -40,37 +40,25 @@
 template <class T>
 class PluginFactory {
 
+#define MODULE_HANDLE void *
+#define STD__LINKAGE  
+
 protected:
    static std::string   dllName;
-   static size_t        (* newInstance)(T*, ...);
+   static MODULE_HANDLE moduleHandle;
+   static size_t        (* STD__LINKAGE newInstance)(T*, ...);
    static int           instanceCount;
-   static void          *moduleHandle;
-//   static std::shared_ptr<T> dummy;
 
    PluginFactory() {};
    ~PluginFactory() {};
 
-protected:
-   static std::shared_ptr<T> createPlugin(std::string dllName, std::string entryPoint="createPluginInstance") {
-      LOGGING;
-      if (newInstance == 0) {
-         loadClass(dllName.c_str(), entryPoint.c_str());
-      }
-      log.print("Getting size\n");
-      size_t classSize = (*newInstance)(0);
-      log.print("Calling new\n");
-      void *p = ::operator new(classSize);
-      log.print("Allocated storage @%p, size = %ld\n", p, (long)classSize);
-      log.print("Calling placement constructor\n");
-      (*newInstance)(p);
-      std::shared_ptr<T> pp((T*)p, deleter);
-      instanceCount++;
-      return pp;
-   }
-
-protected:
+   /**
+    * Destructor to delete plug-in interface object
+    *
+    * @param p object to delete
+    */
    static void deleter(T *p) {
-      LOGGING;
+      LOGGING_Q;
       log.print("Calling destructor\n");
       p->~T();
       log.print("Deallocating storage @%p\n", p);
@@ -79,6 +67,33 @@ protected:
          unloadClass();
       }
    }
+
+   /**
+    * Create plug-in from library
+    *
+    * @param dllName    String identifying the library to load
+    * @param entryPoint String describing the entry point of the loaded library
+    *
+    * @return Smart pointer to object implementing the plug-in interface
+    */
+   static std::shared_ptr<T> createPlugin(std::string dllName, std::string entryPoint="createPluginInstance") {
+      LOGGING_Q;
+      if (newInstance == 0) {
+         loadClass(dllName.c_str(), entryPoint.c_str());
+      }
+      //      log.print("Getting size\n");
+      size_t classSize = (*newInstance)(0);
+      //      log.print("Calling new\n");
+      T* p = static_cast<T*>(::operator new(classSize));
+      //      log.print("Allocated storage @%p, size = %d\n", p, classSize);
+      //      log.print("Calling placement constructor\n");
+      (*newInstance)(p);
+      std::shared_ptr<T> pp(p, deleter);
+      instanceCount++;
+      return pp;
+   }
+
+protected:
    /**
     * Load plugin class
     */
@@ -89,10 +104,9 @@ protected:
    static void unloadClass();
 };
 
-template <class T> void * PluginFactory<T>::moduleHandle = 0;
-template <class T> size_t (*PluginFactory<T>::newInstance)(T*, ...) = 0;
+template <class T> MODULE_HANDLE PluginFactory<T>::moduleHandle = 0;
+template <class T> size_t (*STD__LINKAGE PluginFactory<T>::newInstance)(T*, ...) = 0;
 template <class T> int  PluginFactory<T>::instanceCount = 0;
-//template <class T> std::shared_ptr<T> PluginFactory<T>::dummy;
 
 using namespace std;
 

@@ -16,8 +16,11 @@ class WxPluginFactory: public PluginFactory<WxPlugin> {
 
 public:
    static WxPluginPtr createWxPlugin() {
+
 #if defined(__linux__)
-      // HACK for linux - never unload plug-in once loaded
+      static std::shared_ptr<WxPlugin> dummy == 0;
+
+      // HACK for Linux - never unload the wxPlugin once loaded
       if (dummy == 0) {
          dummy =  createPlugin(DLL_NAME("usbdm-wx-plugin"), "createPluginInstance");
       }

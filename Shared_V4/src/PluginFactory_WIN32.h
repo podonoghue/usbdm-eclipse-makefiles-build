@@ -45,32 +45,34 @@
 template <class T>
 class PluginFactory {
 
+#define MODULE_HANDLE HINSTANCE
+#define STD__LINKAGE  __attribute__((__stdcall__))
+
 protected:
    static std::string   dllName;
-   static size_t        (*__attribute__((__stdcall__)) newInstance)(T*, ...);
+   static MODULE_HANDLE moduleHandle;
+   static size_t        (* STD__LINKAGE newInstance)(T*, ...);
    static int           instanceCount;
-   static HINSTANCE     moduleHandle;
 
    PluginFactory() {};
    ~PluginFactory() {};
 
    /**
-    * Class to act as specialized destructor
+    * Destructor to delete plug-in interface object
+    *
+    * @param p object to delete
     */
-   struct D {
-      void operator()(T* p) const {
-         LOGGING_Q;
-         log.print("Calling destructor\n");
-         p->~T();
-         log.print("Deallocating storage @%p\n", p);
-         ::operator delete(p);
-         if (--instanceCount == 0) {
-            unloadClass();
-         }
+   static void deleter(T *p) {
+      LOGGING_Q;
+      log.print("Calling destructor\n");
+      p->~T();
+      log.print("Deallocating storage @%p\n", p);
+      ::operator delete(p);
+      if (--instanceCount == 0) {
+         unloadClass();
       }
-   };
+   }
 
-protected:
    /**
     * Create plug-in from library
     *
@@ -91,27 +93,12 @@ protected:
       //      log.print("Allocated storage @%p, size = %d\n", p, classSize);
       //      log.print("Calling placement constructor\n");
       (*newInstance)(p);
-      std::shared_ptr<T> pp(p, D());
+      std::shared_ptr<T> pp(p, deleter);
       instanceCount++;
       return pp;
    }
 
 protected:
-//   /**
-//    * Destructor to delete plug-in interface object
-//    *
-//    * @param p object to delete
-//    */
-//   static void deleter(T *p) {
-//      LOGGING_Q;
-//      //      log.print("Calling destructor\n");
-//      p->~T();
-//      log.print("Deallocating storage @%p\n", p);
-//      ::operator delete(p);
-//      if (--instanceCount == 0) {
-//         unloadClass();
-//      }
-//   }
    /**
     * Load plugin class
     */
@@ -122,8 +109,8 @@ protected:
    static void unloadClass();
 };
 
-template <class T> HINSTANCE PluginFactory<T>::moduleHandle = 0;
-template <class T> size_t (*__attribute__((__stdcall__))PluginFactory<T>::newInstance)(T*, ...) = 0;
+template <class T> MODULE_HANDLE PluginFactory<T>::moduleHandle = 0;
+template <class T> size_t (*STD__LINKAGE PluginFactory<T>::newInstance)(T*, ...) = 0;
 template <class T> int  PluginFactory<T>::instanceCount = 0;
 
 using namespace std;

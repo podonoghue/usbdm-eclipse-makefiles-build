@@ -23,7 +23,7 @@
    |   6 Apr 2015 | Created
    +====================================================================
     \endverbatim
-*/
+ */
 
 #ifndef SRC_SINGLETONPLUGINFACTORY_WIN32_H_
 #define SRC_SINGLETONPLUGINFACTORY_WIN32_H_
@@ -45,9 +45,12 @@
 template <class T>
 class SingletonPluginFactory {
 
+#define MODULE_HANDLE HINSTANCE
+#define STD__LINKAGE  __attribute__((__stdcall__))
+
 protected:
-   static std::shared_ptr<T> (*__attribute__((__stdcall__)) getSingletonInstance)();
-   static HINSTANCE     moduleHandle;
+   static std::shared_ptr<T> (*STD__LINKAGE getSingletonInstance)();
+   static MODULE_HANDLE     moduleHandle;
 
    SingletonPluginFactory() {};
    ~SingletonPluginFactory() {};
@@ -87,15 +90,15 @@ public:
       long dw = (long)GetLastError();
 
       if (!FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM, 0, dw, 0, buffer, sizeof(buffer)-1, 0 )) {
-          UsbdmSystem::Log::print("Failed to convert system error code %ld\n", dw);
-          return;
+         UsbdmSystem::Log::print("Failed to convert system error code %ld\n", dw);
+         return;
       }
       UsbdmSystem::Log::print("System Error: %s", buffer);
    }
 };
 
-template <class T> HINSTANCE SingletonPluginFactory<T>::moduleHandle = 0;
-template <class T> std::shared_ptr<T> (*__attribute__((__stdcall__))SingletonPluginFactory<T>::getSingletonInstance)() = 0;
+template <class T> MODULE_HANDLE SingletonPluginFactory<T>::moduleHandle = 0;
+template <class T> std::shared_ptr<T> (*STD__LINKAGE SingletonPluginFactory<T>::getSingletonInstance)() = 0;
 
 using namespace std;
 
@@ -120,11 +123,11 @@ void SingletonPluginFactory<T>::loadClass(const char *moduleName, const char *cr
    moduleHandle = LoadLibraryA(moduleName);
 
    if (moduleHandle == NULL) {
-//      log.print("Module \'%s\' failed to load\n", moduleName);
-//      SingletonPluginFactory::printSystemErrorMessage();
+      //      log.print("Module \'%s\' failed to load\n", moduleName);
+      //      SingletonPluginFactory::printSystemErrorMessage();
 
       string extendedPath = UsbdmSystem::getApplicationPath("");
-//      log.print("Trying extended search path \'%s\'\n", extendedPath.c_str());
+      //      log.print("Trying extended search path \'%s\'\n", extendedPath.c_str());
       SetDllDirectoryA((const char *)UsbdmSystem::getApplicationPath("").c_str());
 
       moduleHandle = LoadLibraryA(moduleName);
@@ -141,12 +144,12 @@ void SingletonPluginFactory<T>::loadClass(const char *moduleName, const char *cr
    if (GetModuleFileNameA(moduleHandle, executableName, sizeof(executableName)) > 0) {
       log.print("Module path = %s\n", executableName);
    }
-   getSingletonInstance = (std::shared_ptr<T> (__attribute__((__stdcall__)) *)())GetProcAddress(moduleHandle, createInstanceFunctioName);
+   getSingletonInstance = (std::shared_ptr<T> (*STD__LINKAGE)())GetProcAddress(moduleHandle, createInstanceFunctioName);
    if (getSingletonInstance == 0) {
       log.print("Entry point \'%s\' not found in module \'%s\'\n", createInstanceFunctioName, moduleName);
       throw MyException("Entry point not found in module");
    }
-//   log.print("Entry point \'%s\' found @0x%p\n", createInstanceFunctioName, getSingletonInstance);
+   //   log.print("Entry point \'%s\' found @0x%p\n", createInstanceFunctioName, getSingletonInstance);
 }
 
 /**
@@ -155,7 +158,7 @@ void SingletonPluginFactory<T>::loadClass(const char *moduleName, const char *cr
 template <class T>
 void SingletonPluginFactory<T>::unloadClass() {
    LOGGING_Q;
-//   log.print("Unloading module @0x%p, cached @%p\n", moduleHandle, &moduleHandle);
+   //   log.print("Unloading module @0x%p, cached @%p\n", moduleHandle, &moduleHandle);
    if (FreeLibrary(moduleHandle) == 0) {
       log.print("Unloading module at @0x%p failed\n", moduleHandle);
       SingletonPluginFactory::printSystemErrorMessage();

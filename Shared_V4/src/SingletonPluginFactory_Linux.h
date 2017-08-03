@@ -23,7 +23,7 @@
    |   6 Apr 2015 | Created
    +====================================================================
     \endverbatim
-*/
+ */
 
 #ifndef SRC_SINGLETONPLUGINFACTORY_LINUX_H_
 #define SRC_SINGLETONPLUGINFACTORY_LINUX_H_
@@ -40,15 +40,17 @@
 template <class T>
 class SingletonPluginFactory {
 
+#define MODULE_HANDLE void *
+#define STD__LINKAGE
+
 protected:
-   static std::shared_ptr<T> getSingletonInstance();
+   static std::shared_ptr<T> (*STD__LINKAGE getSingletonInstance)();
+   static MODULE_HANDLE     moduleHandle;
    static std::string dllName;
    static int instanceCount;
-   static void *moduleHandle;
-   static std::shared_ptr<T> dummy;
 
-   SingletonSingletonPluginFactory() {};
-   ~SingletonSingletonPluginFactory() {};
+   SingletonPluginFactory() {};
+   ~SingletonPluginFactory() {};
 
 protected:
    /**
@@ -84,11 +86,8 @@ protected:
    static void unloadClass();
 };
 
-template <class T> void * SingletonPluginFactory<T>::moduleHandle = 0;
-template <class T> size_t (*SingletonPluginFactory<T>::newInstance)(...) = 0;
-template <class T> int  SingletonPluginFactory<T>::instanceCount = 0;
-//template <class T> std::shared_ptr<WxPlugin> SingletonPluginFactory<T>::dummy;
-template <class T> std::shared_ptr<T> SingletonPluginFactory<T>::dummy;
+template <class T> MODULE_HANDLE SingletonPluginFactory<T>::moduleHandle = 0;
+template <class T> std::shared_ptr<T> (*STD__LINKAGE SingletonPluginFactory<T>::getSingletonInstance)() = 0;
 
 using namespace std;
 
@@ -126,19 +125,19 @@ void SingletonPluginFactory<T>::loadClass(const char *moduleName, const char *cr
 
       if (moduleHandle == NULL) {
          log.error("Module \'%s\' failed to load\n", moduleName);
-         printSystemErrorMessage();
+         SingletonPluginFactory::printSystemErrorMessage();
          throw MyException("Module failed to load\n");
       }
    }
    log.print("Module \'%s\' loaded @0x%p, handle cached @%p\n", moduleName, moduleHandle, &moduleHandle);
 
-   getSingletonInstance  = (std::shared_ptr<T>())dlsym(moduleHandle, createInstanceFunctioName);
+   getSingletonInstance  = (std::shared_ptr<T> (*STD__LINKAGE)())dlsym(moduleHandle, createInstanceFunctioName);
    if (getSingletonInstance == 0) {
       char buff[1000];
       snprintf(buff, sizeof(buff), "Entry point \'%s\' not found in module \'%s\'\n", createInstanceFunctioName, moduleName);
       throw MyException(std::string(buff));
    }
-   log.print("Entry point \'%s\' found @0x%p\n", createInstanceFunctioName, newInstance);
+   log.print("Entry point \'%s\' found @0x%p\n", createInstanceFunctioName, getSingletonInstance);
 }
 
 /**
