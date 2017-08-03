@@ -167,7 +167,7 @@ void PluginFactory<T>::loadClass(const char *moduleName, const char *createInsta
    if (GetModuleFileNameA(moduleHandle, executableName, sizeof(executableName)) > 0) {
       log.print("Module path = %s\n", executableName);
    }
-   newInstance = (size_t (__attribute__((__stdcall__)) *)(T*, ...))GetProcAddress(moduleHandle, createInstanceFunctioName);
+   newInstance = (size_t (STD__LINKAGE *)(T*, ...))GetProcAddress(moduleHandle, createInstanceFunctioName);
    if (newInstance == 0) {
       log.print("Entry point \'%s\' not found in module \'%s\'\n", createInstanceFunctioName, moduleName);
       throw MyException("Entry point not found in module");

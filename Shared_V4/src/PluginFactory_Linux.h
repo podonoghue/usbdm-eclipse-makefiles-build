@@ -150,7 +150,7 @@ void PluginFactory<T>::loadClass(const char *moduleName, const char *createInsta
    }
    log.print("Module \'%s\' loaded @0x%p, handle cached @%p\n", moduleName, moduleHandle, &moduleHandle);
 
-   newInstance  = (size_t (*)(...))dlsym(moduleHandle, createInstanceFunctioName);
+   newInstance  = (size_t (STD__LINKAGE *)(T*, ...))dlsym(moduleHandle, createInstanceFunctioName);
    if (newInstance == 0) {
       char buff[1000];
       snprintf(buff, sizeof(buff), "Entry point \'%s\' not found in module \'%s\'\n", createInstanceFunctioName, moduleName);
