@@ -49,7 +49,7 @@ class SingletonPluginFactory {
 #define STD__LINKAGE  __attribute__((__stdcall__))
 
 protected:
-   static std::shared_ptr<T> (*STD__LINKAGE getSingletonInstance)();
+   static std::shared_ptr<T> (STD__LINKAGE (*getSingletonInstance))();
    static MODULE_HANDLE     moduleHandle;
 
    SingletonPluginFactory() {};
@@ -143,7 +143,7 @@ void SingletonPluginFactory<T>::loadClass(const char *moduleName, const char *cr
    if (GetModuleFileNameA(moduleHandle, executableName, sizeof(executableName)) > 0) {
       log.print("Module path = %s\n", executableName);
    }
-   getSingletonInstance = (std::shared_ptr<T> (*STD__LINKAGE)())GetProcAddress(moduleHandle, createInstanceFunctioName);
+   getSingletonInstance = (std::shared_ptr<T> (STD__LINKAGE *)())GetProcAddress(moduleHandle, createInstanceFunctioName);
    if (getSingletonInstance == 0) {
       log.print("Entry point \'%s\' not found in module \'%s\'\n", createInstanceFunctioName, moduleName);
       throw MyException("Entry point not found in module");
