@@ -65,14 +65,18 @@ static constexpr PcrValue ADC_DEFAULT_PCR = pcrValue(
  * Note the equivalence between modes e.g. 8-bit-se = 9-bit-diff
  */
 enum AdcResolution {
-   AdcResolution_8bit_se    = ADC_CFG1_MODE(0),  //!<  8-bit unsigned for use with single-ended mode
-   AdcResolution_10bit_se   = ADC_CFG1_MODE(2),  //!< 10-bit unsigned for use with single-ended mode
-   AdcResolution_12bit_se   = ADC_CFG1_MODE(1),  //!< 12-bit unsigned for use with single-ended mode
-   AdcResolution_16bit_se   = ADC_CFG1_MODE(3),  //!< 16-bit unsigned for use with single-ended mode
-   AdcResolution_9bit_diff  = ADC_CFG1_MODE(0),  //!<  9-bit signed for use with differential mode
-   AdcResolution_11bit_diff = ADC_CFG1_MODE(2),  //!< 11-bit signed for use with differential mode
-   AdcResolution_13bit_diff = ADC_CFG1_MODE(1),  //!< 13-bit signed for use with differential mode
-   AdcResolution_16bit_diff = ADC_CFG1_MODE(3),  //!< 16-bit signed for use with differential mode
+   AdcResolution_8bit_se_9bit_diff   = ADC_CFG1_MODE(0),  //!<  8-bit unsigned/9-bit signed
+   AdcResolution_10bit_se_11bit_diff = ADC_CFG1_MODE(2),  //!< 10-bit unsigned/11-bit signed
+   AdcResolution_12bit_se_13bit_diff = ADC_CFG1_MODE(1),  //!< 12-bit unsigned/13-bit signed
+   AdcResolution_16bit               = ADC_CFG1_MODE(3),  //!< 16-bit unsigned/unsigned
+   AdcResolution_8bit_se             = ADC_CFG1_MODE(0),  //!<  8-bit unsigned for use with single-ended mode
+   AdcResolution_10bit_se            = ADC_CFG1_MODE(2),  //!< 10-bit unsigned for use with single-ended mode
+   AdcResolution_12bit_se            = ADC_CFG1_MODE(1),  //!< 12-bit unsigned for use with single-ended mode
+   AdcResolution_16bit_se            = ADC_CFG1_MODE(3),  //!< 16-bit unsigned for use with single-ended mode
+   AdcResolution_9bit_diff           = ADC_CFG1_MODE(0),  //!<  9-bit signed for use with differential mode
+   AdcResolution_11bit_diff          = ADC_CFG1_MODE(2),  //!< 11-bit signed for use with differential mode
+   AdcResolution_13bit_diff          = ADC_CFG1_MODE(1),  //!< 12-bit signed for use with differential mode
+   AdcResolution_16bit_diff          = ADC_CFG1_MODE(3),  //!< 16-bit signed for use with differential mode
 };
 
 /**
