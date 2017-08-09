@@ -71,19 +71,15 @@
    </choiceOption>
 
    <template><![CDATA[
-      #ifndef SMC_STOPCTRL_PSTOPO
-      #define SMC_STOPCTRL_PSTOPO(x) 0
-      #endif\n\n
-      
-      #ifndef SMC_STOPCTRL_LPOPO
-      #define SMC_STOPCTRL_LPOPO(x) 0
-      #endif\n\n
-      
       \t// VLLS Control Register
       \tstatic constexpr uint8_t stopctrl =  
+      #ifdef SMC_STOPCTRL_PSTOPO
       \t   SMC_STOPCTRL_PSTOPO($(smc_stopctrl_pstopo:0)) |  // Partial Stop Option (if present)
+      #endif\n\n
       \t   SMC_STOPCTRL_PORPO($(smc_stopctrl_porpo:0)) |  // POR Power Option
+      #ifdef SMC_STOPCTRL_LPOPO
       \t   SMC_STOPCTRL_LPOPO($(smc_stopctrl_lpopo:0)) |  // POR Power Option (if present)
+      #endif\n\n
       \t   SMC_STOPCTRL_LLSM($(smc_stopctrl_llsm:0));   // LLS or VLLS Mode Control\n\n
    ]]></template>
 

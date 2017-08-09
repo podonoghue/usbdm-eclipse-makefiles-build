@@ -47,35 +47,43 @@ enum SmcVeryLowLeakageStop {
  * Determines if HSRUN mode is enabled
  */
 enum SmcHighSpeedRun {
+#ifdef SMC_PMPROT_AHSRUN
    SmcHighSpeedRun_Disable  = SMC_PMPROT_AHSRUN(0),   //!< Disallow HSRUN mode
    SmcHighSpeedRun_Enable   = SMC_PMPROT_AHSRUN(1),   //!< Allow HSRUN mode
+#else
+   SmcHighSpeedRun_Disable  = 0, // Not supported
+#endif
 };
 
 /**
  * Whether to exit to Run mode on interrupt
  */
-enum SmcWakeOnInt {
-   SmcWakeOnInt_Disable = SMC_PMCTRL_LPWUI(0),
-   SmcWakeOnInt_Enable  = SMC_PMCTRL_LPWUI(1),
+enum SmcLowPowerWakeOnInt {
+#ifdef SMC_PMCTRL_LPWUI
+   SmcLowPowerWakeOnInt_Disable = SMC_PMCTRL_LPWUI(0),  //!< Remain in VLP mode on interrupt
+   SmcLowPowerWakeOnInt_Enable  = SMC_PMCTRL_LPWUI(1),  //!< Exit to RUN mode on interrupt
+#else
+   SmcLowPowerWakeOnInt_Disable = 0, // Not supported
+#endif
 };
 
 /**
  * Sets Run mode
  */
 enum SmcRunMode {
-   SmcRunMode_Normal       = SMC_PMCTRL_RUNM(0),
-   SmcRunMode_VeryLowPower = SMC_PMCTRL_RUNM(2),
-   SmcRunMode_HighSpeed    = SMC_PMCTRL_RUNM(3),
+   SmcRunMode_Normal       = SMC_PMCTRL_RUNM(0),   //!< Normal run mode (RUN)
+   SmcRunMode_VeryLowPower = SMC_PMCTRL_RUNM(2),   //!< Very low power run mode (VLPR)
+   SmcRunMode_HighSpeed    = SMC_PMCTRL_RUNM(3),   //!< High Speed Run mode (HSRUN)
 };
 
 /**
  * Sets Stop mode
  */
 enum SmcStopMode {
-   SmcStopMode_NormalStop         = SMC_PMCTRL_STOPM(0),
-   SmcStopMode_VeryLowPowerStop   = SMC_PMCTRL_STOPM(2),
-   SmcStopMode_LowLeakageStop     = SMC_PMCTRL_STOPM(3),
-   SmcStopMode_VeryLowLeakageStop = SMC_PMCTRL_STOPM(4),
+   SmcStopMode_NormalStop         = SMC_PMCTRL_STOPM(0), //!< Normal Stop (STOP)
+   SmcStopMode_VeryLowPowerStop   = SMC_PMCTRL_STOPM(2), //!< Very-Low-Power Stop (VLPS)
+   SmcStopMode_LowLeakageStop     = SMC_PMCTRL_STOPM(3), //!< Low-Leakage Stop (LLSx)
+   SmcStopMode_VeryLowLeakageStop = SMC_PMCTRL_STOPM(4), //!< Very-Low-Leakage Stop (VLLSx)
 };
 
 /**
@@ -84,9 +92,12 @@ enum SmcStopMode {
  *  Not all modes may be supported
  */
 enum SmcPartialStopMode {
+#ifdef SMC_STOPCTRL_PSTOPO
    SmcPartialStopMode_Normal   = SMC_STOPCTRL_PSTOPO(0), //!< Normal stop mode
    SmcPartialStopMode_Partial1 = SMC_STOPCTRL_PSTOPO(1), //!< Partial Stop with both system and bus clocks disabled
    SmcPartialStopMode_Partial2 = SMC_STOPCTRL_PSTOPO(2), //!< Partial Stop with system clock disabled and bus clock enabled
+#endif
+   SmcPartialStopMode_Normal   = 0, //!< No options supported
 };
 
 /**
@@ -104,12 +115,12 @@ enum SmcPowerOnReset {
  *  Not all modes may be supported
  */
 enum SmcLowLeakageStopMode {
-   SmcLowLeakageStopMode_Vlls0 = SMC_STOPCTRL_VLLSM(0),
-   SmcLowLeakageStopMode_Vlls1 = SMC_STOPCTRL_VLLSM(1),
-   SmcLowLeakageStopMode_Vlls2 = SMC_STOPCTRL_VLLSM(2),
-   SmcLowLeakageStopMode_Vlls3 = SMC_STOPCTRL_VLLSM(3),
-   SmcLowLeakageStopMode_lls2 = SMC_STOPCTRL_LLSM(2),
-   SmcLowLeakageStopMode_lls3 = SMC_STOPCTRL_LLSM(3),
+   SmcLowLeakageStopMode_VLLS0 = SMC_STOPCTRL_VLLSM(0),
+   SmcLowLeakageStopMode_VLLS1 = SMC_STOPCTRL_VLLSM(1),
+   SmcLowLeakageStopMode_VLLS2 = SMC_STOPCTRL_VLLSM(2),
+   SmcLowLeakageStopMode_VLLS3 = SMC_STOPCTRL_VLLSM(3),
+   SmcLowLeakageStopMode_LLS2  = SMC_STOPCTRL_LLSM(2),
+   SmcLowLeakageStopMode_LLS3  = SMC_STOPCTRL_LLSM(3),
 };
 
 /**
@@ -140,16 +151,11 @@ enum SmcPowerOption {
    SmcPowerOption_Enable  = SMC_VLLSCTRL_PORPO(1),
 };
 
-/**
- * Type definition for SMC interrupt call back
- */
-typedef void (*SMCCallbackFunction)();
-
 template <class Info>
 class SmcBase_T {
 
 protected:
-   static constexpr volatile SMC_Type *smc     = Info::smc;
+   static constexpr volatile SMC_Type *smc = Info::smc;
 
 public:
 
@@ -172,29 +178,31 @@ public:
     * @param[in] smcVeryLowPower        Allows VLPR, VLPW, and VLPS modes
     * @param[in] smcLowLeakageStop      Allows LLSx modes
     * @param[in] smcVeryLowLeakageStop  Allows VLLSx modes
-    * @param[in] smcHighSpeedRun        Allows HSRUN mode
+    * @param[in] smcHighSpeedRun        Allows HSRUN mode (if supported)
     *
     * @note This is a write-once-after-reset operation
     */
-   static void enablePowerModes(
+   static ErrorCode enablePowerModes(
          SmcVeryLowPower         smcVeryLowPower,
          SmcLowLeakageStop       smcLowLeakageStop       = SmcLowLeakageStop_Disable,
          SmcVeryLowLeakageStop   smcVeryLowLeakageStop   = SmcVeryLowLeakageStop_Disable,
-         SmcHighSpeedRun         smcHighSpeedRun         = SmcHighSpeedRun_Disable) {
-      smc->PMPROT = smcVeryLowPower|smcLowLeakageStop|smcVeryLowLeakageStop|smcHighSpeedRun;
+         SmcHighSpeedRun         smcHighSpeedRun         = SmcHighSpeedRun_Disable ) {
+      uint8_t mask = smcVeryLowPower|smcLowLeakageStop|smcVeryLowLeakageStop|smcHighSpeedRun;
+      smc->PMPROT = mask;
+      return E_NO_ERROR;
    }
 
    /**
     * Allows the detailed operation in STOP mode to be controlled.
     *
-    * @param[in] smcPartialStopMode     Controls whether a Partial Stop mode is entered when STOPM=STOP
     * @param[in] smcLowLeakageStopMode  Controls which LLS/VLLS sub-mode to enter if STOPM=LLS/VLLS
     * @param[in] smcPowerOnReset        Controls whether the POR detect circuit is enabled in VLLS0 mode
+    * @param[in] smcPartialStopMode     Controls whether a Partial Stop mode is entered when STOPM=STOP (is supported)
     */
    static void setStopOptions(
-         SmcPartialStopMode      smcPartialStopMode,
          SmcLowLeakageStopMode   smcLowLeakageStopMode,
-         SmcPowerOnReset         smcPowerOnReset) {
+         SmcPowerOnReset         smcPowerOnReset,
+         SmcPartialStopMode      smcPartialStopMode=SmcPartialStopMode_Normal) {
 
       smc->STOPCTRL = smcPartialStopMode|smcPowerOnReset|smcLowLeakageStopMode;
    }
@@ -205,30 +213,74 @@ public:
     * @return SmcStatus value indicating operating mode
     */
    static SmcStatus getPowerStatus() {
+
       return smc->PMSTAT;
    }
 
    /**
-    * Enter Power Mode
+    * Enter Run Mode
     *
-    * @param[in]  mode Power mode e.g. wake_onInt + runm_vlpr
+    * @param[in]  smcRunMode  Mode to enter
+    *
+    * @return E_NO_ERROR                 No error
+    * @return E_ILLEGAL_POWER_TRANSITION Cannot transition to run mode from current run mode
     */
-   static ErrorCode enterPowerMode(uint8_t mode) {
-      smc->PMCTRL = mode;
-      //TODO - wait for entry and check error?
+   static ErrorCode enterRunMode(SmcRunMode smcRunMode) {
+
+      SmcStatus smcStatus = getPowerStatus();
+      switch(smcRunMode) {
+         case SmcRunMode_Normal:
+            break;
+         case SmcRunMode_HighSpeed:
+         case SmcRunMode_VeryLowPower:
+            if (smcStatus != SmcStatus_run) {
+               // Can only transition from RUN mode
+               return setErrorCode(E_ILLEGAL_POWER_TRANSITION);
+            }
+            break;
+         default:
+            return setErrorCode(E_ILLEGAL_PARAM);
+      }
+      smc->PMCTRL = (smc->PMCTRL&~SMC_PMCTRL_RUNM_MASK)|smcRunMode;
       return E_NO_ERROR;
    }
 
    /**
-    * Enter Stop Mode
+    * Set Stop Mode to enter on Sleep-Now or Sleep-On-Exit
     *
-    * @param[in]  mode Power mode e.g. wake_onInt + stopm_vlps
+    * @param[in]  smcStopMode             Stop mode to set
     */
-   static ErrorCode enterStopMode(uint8_t mode) {
-      smc->PMCTRL = mode;
-      //TODO - wait for entry and check error?
-      return E_NO_ERROR;
+   static void setStopMode(SmcStopMode smcStopMode) {
+
+      smc->PMCTRL = (smc->PMCTRL&~SMC_PMCTRL_STOPM_MASK)|smcStopMode;
+      // Make sure write completes
+      (void)smc->PMCTRL;
    }
+
+#ifdef SMC_PMCTRL_LPWUI_MASK
+   /**
+    * Set action on interrupt when in VLP modes (VLPR, VLPW or VLPS).
+    *
+    * @param[in]  smcLowPowerWakeOnInt    Whether to exit from any VLP to RUN mode in interrupt
+    */
+   static void setVlpInterruptAction(SmcLowPowerWakeOnInt smcLowPowerWakeOnInt) {
+
+      smc->PMCTRL = (smc->PMCTRL&~SMC_PMCTRL_LPWUI_MASK)|smcLowPowerWakeOnInt;
+      // Make sure write completes
+      (void)smc->PMCTRL;
+   }
+#else
+   /**
+    * Set action on interrupt when in VLP modes (VLPR, VLPW or VLPS).
+    *
+    * @param[in]  smcLowPowerWakeOnInt   Not supported
+    *
+    * @note Not supported
+    */
+   static void setVlpInterruptAction(SmcLowPowerWakeOnInt) {
+   }
+
+#endif
 
 };
 

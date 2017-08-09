@@ -53,17 +53,18 @@ extern volatile uint32_t SystemBusClock;
 extern volatile uint32_t SystemLpoClock;
 
 enum ErrorCode {
-   E_NO_ERROR = 0,      //!< No error
-   E_ERROR,             //!< General error
-   E_TOO_SMALL,         //!< Value too small
-   E_TOO_LARGE,         //!< Value too large
-   E_ILLEGAL_PARAM,     //!< Parameter has illegal value
-   E_NO_HANDLER,        //!< No handler installed
-   E_FLASH_INIT_FAILED, //!< Flash initialisation failed
-   E_TERMINATED,        //!< The program has terminated
-   E_CALIBRATE_FAIL,    //!< Failed ADC calibration
+   E_NO_ERROR = 0,                //!< No error
+   E_ERROR,                       //!< General error
+   E_TOO_SMALL,                   //!< Value too small
+   E_TOO_LARGE,                   //!< Value too large
+   E_ILLEGAL_PARAM,               //!< Parameter has illegal value
+   E_NO_HANDLER,                  //!< No handler installed
+   E_FLASH_INIT_FAILED,           //!< Flash initialisation failed
+   E_TERMINATED,                  //!< The program has terminated
+   E_CALIBRATE_FAIL,              //!< Failed ADC calibration
+   E_ILLEGAL_POWER_TRANSITION,    //!< Can't transit to to power mode from current power mode
 
-   E_CMSIS_ERR_OFFSET = 1<<20, //!< Offset added to CMSIS error codes
+   E_CMSIS_ERR_OFFSET = 1<<20,    //!< Offset added to CMSIS error codes
 };
 
 /** Last error set by USBDM code */
