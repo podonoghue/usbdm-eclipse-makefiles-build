@@ -362,7 +362,8 @@ public:
     *
     * @param[in]  period Period in seconds as a float
     *
-    * @note Will enable and adjust the pre-scaler to appropriate value.
+    * @note Will enable and adjust the pre-scaler to appropriate value.\n
+    *       The clock source should be selected by setClock() before using this function.
     *
     * @return true => success, false => failed to find suitable values for PBYP & PRESCALE
     */
