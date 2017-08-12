@@ -19,7 +19,7 @@ Table of Contents
  - \ref PinSummary  \n
  - \ref PITExamples \n
 
-@page DMAExamples  Direct Memory Access Controller (DMAC)
+@page DMAExamples  Direct Memory Access Controller
 
 Convenience template for DMAC. Uses the following classes:\n
 <ul>
@@ -416,10 +416,10 @@ This is a template class with static methods.\n
 @endcode
 
 @page Notes Notes
-  - enable()      Enables clock and configures pins (if present)
-  - configure()   As above, enable() + initialises according to Configure.usbdmProject\n
-                  May have defaulted parameters to do custom configuration.
-  - disable()     Disables the peripheral
+  - enable()            Enables clock and configures pins (if any configured in Configure.usbdmProject)
+  - defaultConfigure()  As above, enable() + initialises according to Configure.usbdmProject\n
+                        May have defaulted parameters to do custom configuration.
+  - disable()           Disables the peripheral
 
 @example analogue-comparison-example.cpp
 @example analogue-diff-example.cpp

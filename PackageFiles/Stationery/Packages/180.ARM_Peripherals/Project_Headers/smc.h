@@ -25,7 +25,7 @@ namespace USBDM {
  * @{
  */
 
-/*
+/**
  * Determines if VLPR, VLPW, and VLPS modes are enabled
  */
 enum SmcVeryLowPower {
@@ -33,7 +33,7 @@ enum SmcVeryLowPower {
    SmcVeryLowPower_Enable   = SMC_PMPROT_AVLP(1),   //!< Allow VLPR, VLPW, and VLPS modes
 };
 
-/*
+/**
  * Determines if any LLSx modes are enabled
  */
 enum SmcLowLeakageStop {
@@ -41,7 +41,7 @@ enum SmcLowLeakageStop {
    SmcLowLeakageStop_Enable   = SMC_PMPROT_ALLS(1),   //!< Allow Any LLSx mode
 };
 
-/*
+/**
  * Determines if any VLLSx modes are enabled
  */
 enum SmcVeryLowLeakageStop {
@@ -49,32 +49,38 @@ enum SmcVeryLowLeakageStop {
    SmcVeryLowLeakageStop_Enable   = SMC_PMPROT_AVLLS(1),   //!< Allow Any VLLSx mode
 };
 
-/*
+/**
  * Determines if HSRUN mode is enabled
+ *
+ * @note Not supported on all processors
  */
 enum SmcHighSpeedRun {
 #ifdef SMC_PMPROT_AHSRUN
    SmcHighSpeedRun_Disable  = SMC_PMPROT_AHSRUN(0),   //!< Disallow HSRUN mode
    SmcHighSpeedRun_Enable   = SMC_PMPROT_AHSRUN(1),   //!< Allow HSRUN mode
 #else
-   SmcHighSpeedRun_Disable  = 0, // Not supported
+   SmcHighSpeedRun_Disable  = 0, //!< HSRUN Not supported
 #endif
 };
 
 /**
  * Whether to exit VLP to Run mode on interrupt
+ *
+ * @note Not supported on all processors
  */
 enum SmcExitVeryLowPowerOnInt {
 #ifdef SMC_PMCTRL_LPWUI
    SmcExitVeryLowPowerOnInt_Disable = SMC_PMCTRL_LPWUI(0),  //!< Remain in VLP mode on interrupt
    SmcExitVeryLowPowerOnInt_Enable  = SMC_PMCTRL_LPWUI(1),  //!< Exit to RUN mode on interrupt
 #else
-   SmcExitVeryLowPowerOnInt_Disable = 0, // Not supported
+   SmcExitVeryLowPowerOnInt_Disable = 0, //!< LPWUI not supported
 #endif
 };
 
 /**
  * Sets Run mode
+ *
+ * @note Not all modes are supported on all processors
  */
 enum SmcRunMode {
    SmcRunMode_Normal       = SMC_PMCTRL_RUNM(0),   //!< Normal run mode (RUN)
@@ -97,15 +103,17 @@ enum SmcStopMode {
 /**
  *  Partial Stop Option\n
  *  This field controls whether a Partial Stop mode is entered when STOPM=STOP\n
- *  Not all modes may be supported
+ *
+ * @note Not supported on all processors
  */
 enum SmcPartialStopMode {
 #ifdef SMC_STOPCTRL_PSTOPO
    SmcPartialStopMode_Normal   = SMC_STOPCTRL_PSTOPO(0), //!< Normal stop mode
    SmcPartialStopMode_Partial1 = SMC_STOPCTRL_PSTOPO(1), //!< Partial Stop with both system and bus clocks disabled
    SmcPartialStopMode_Partial2 = SMC_STOPCTRL_PSTOPO(2), //!< Partial Stop with system clock disabled and bus clock enabled
+#else
+   SmcPartialStopMode_Normal   = 0, //!< Partial STOP options not supported
 #endif
-   SmcPartialStopMode_Normal   = 0, //!< No options supported
 };
 
 /**
@@ -120,15 +128,16 @@ enum SmcPowerOnReset {
 /**
  *  VLS or VLLS Mode Control\n
  *  This field controls which LLS/VLLS sub-mode to enter if STOPM=LLS/VLLS\n
- *  Not all modes may be supported
+ *
+ * @note Not all modes are supported on all processors
  */
 enum SmcLowLeakageStopMode {
-   SmcLowLeakageStopMode_VLLS0 = SMC_STOPCTRL_VLLSM(0),
-   SmcLowLeakageStopMode_VLLS1 = SMC_STOPCTRL_VLLSM(1),
-   SmcLowLeakageStopMode_VLLS2 = SMC_STOPCTRL_VLLSM(2),
-   SmcLowLeakageStopMode_VLLS3 = SMC_STOPCTRL_VLLSM(3),
-   SmcLowLeakageStopMode_LLS2  = SMC_STOPCTRL_LLSM(2),
-   SmcLowLeakageStopMode_LLS3  = SMC_STOPCTRL_LLSM(3),
+   SmcLowLeakageStopMode_VLLS0 = SMC_STOPCTRL_VLLSM(0),  //!< Enter VLLS0 in VLLSx mode
+   SmcLowLeakageStopMode_VLLS1 = SMC_STOPCTRL_VLLSM(1),  //!< Enter VLLS1 in VLLSx mode
+   SmcLowLeakageStopMode_VLLS2 = SMC_STOPCTRL_VLLSM(2),  //!< Enter VLLS2 in VLLSx mode, LLS2 in LLSx mode
+   SmcLowLeakageStopMode_VLLS3 = SMC_STOPCTRL_VLLSM(3),  //!< Enter VLLS3 in VLLSx mode, LLS3 in LLSx mode
+   SmcLowLeakageStopMode_LLS2  = SMC_STOPCTRL_LLSM(2),   //!< Enter VLLS2 in VLLSx mode, LLS2 in LLSx mode
+   SmcLowLeakageStopMode_LLS3  = SMC_STOPCTRL_LLSM(3),   //!< Enter VLLS3 in VLLSx mode, LLS3 in LLSx mode
 };
 
 /**
@@ -136,18 +145,18 @@ enum SmcLowLeakageStopMode {
  */
 enum SmcStatus {
    // Run modes
-   SmcStatus_hsrun  = SMC_PMSTAT_PMSTAT(1<<7),
-   SmcStatus_run    = SMC_PMSTAT_PMSTAT(1<<0),
-   SmcStatus_vlpr   = SMC_PMSTAT_PMSTAT(1<<2),
+   SmcStatus_hsrun  = SMC_PMSTAT_PMSTAT(1<<7),    //!< Processor is in High Speed Run mode
+   SmcStatus_run    = SMC_PMSTAT_PMSTAT(1<<0),    //!< Processor is in Normal Run mode
+   SmcStatus_vlpr   = SMC_PMSTAT_PMSTAT(1<<2),    //!< Processor is in Very Low Power Run mode
 
    // Sleep = Wait modes
-   SmcStatus_vlpw   = SMC_PMSTAT_PMSTAT(1<<3),
+   SmcStatus_vlpw   = SMC_PMSTAT_PMSTAT(1<<3),    //!< Processor is in Very Low Power Wait mode
 
    // Stop = DeepSleep modes
-   SmcStatus_stop   = SMC_PMSTAT_PMSTAT(1<<1),
-   SmcStatus_vlps   = SMC_PMSTAT_PMSTAT(1<<4),
-   SmcStatus_lls    = SMC_PMSTAT_PMSTAT(1<<5),
-   SmcStatus_vlls   = SMC_PMSTAT_PMSTAT(1<<6),
+   SmcStatus_stop   = SMC_PMSTAT_PMSTAT(1<<1),    //!< Processor is in Stop mode
+   SmcStatus_vlps   = SMC_PMSTAT_PMSTAT(1<<4),    //!< Processor is in Very Low Power Stop mode
+   SmcStatus_lls    = SMC_PMSTAT_PMSTAT(1<<5),    //!< Processor is in Low Leakage Stop mode
+   SmcStatus_vlls   = SMC_PMSTAT_PMSTAT(1<<6),    //!< Processor is in Very Low Leakage Stop mode
 };
 
 /**
@@ -155,8 +164,8 @@ enum SmcStatus {
  *  This bit controls whether the POR detect circuit is enabled in VLLS0 mode.
  */
 enum SmcPowerOption {
-   SmcPowerOption_Disable = SMC_VLLSCTRL_PORPO(0),
-   SmcPowerOption_Enable  = SMC_VLLSCTRL_PORPO(1),
+   SmcPowerOption_Disable = SMC_VLLSCTRL_PORPO(0),   //!< Disable POR detect in VLLS0
+   SmcPowerOption_Enable  = SMC_VLLSCTRL_PORPO(1),   //!< Enable POR detect in VLLS0
 };
 
 /**
@@ -171,10 +180,6 @@ protected:
    static constexpr volatile SMC_Type *smc = Info::smc;
 
 public:
-
-#ifndef SMC_PMCTRL_LPWUI
-#define SMC_PMCTRL_LPWUI 0 // Not all target support this
-#endif
 
    /**
     * Configure with settings from Configure.usbdmProject.
@@ -234,7 +239,7 @@ public:
    /**
     * Enter Run Mode
     *
-    * @param[in]  smcRunMode  Mode to enter
+    * @param[in] smcRunMode  Mode to enter
     *
     * @return E_NO_ERROR                 No error
     * @return E_ILLEGAL_POWER_TRANSITION Cannot transition to smcRunMode from current run mode
@@ -283,24 +288,52 @@ public:
    /**
     * Set Stop Mode to enter on Sleep-Now or Sleep-On-Exit
     *
-    * @param[in]  smcStopMode             Stop mode to set
+    * @param[in]  smcStopMode Stop mode to set
     */
    static void setStopMode(SmcStopMode smcStopMode) {
 
       smc->PMCTRL = (smc->PMCTRL&~SMC_PMCTRL_STOPM_MASK)|smcStopMode;
       // Make sure write completes
-      (void)smc->PMCTRL;
+      (void volatile)smc->PMCTRL;
    }
 
    /**
-    * Enter Stop Mode
+    * Enter Stop Mode (STOP, VLPS, LLSx, VLLSx)
     *
-    * @param[in]  smcStopMode Stop mode to set
+    * The processor will stop execution and enter the given STOP mode.
+    * Peripherals affected will depend on the stop mode selected.
+    *
+    * @param[in] smcStopMode Stop mode to set
     */
    static void enterStopMode(SmcStopMode smcStopMode) {
       setStopMode(smcStopMode);
       deepSleep();
    }
+
+   /**
+    * Enter Stop Mode (STOP, VLPS, LLSx, VLLSx)
+    *
+    * The processor will stop execution and enter the given STOP mode.
+    * Peripherals affected will depend on the stop mode selected.
+    * The stop mode to enter may be set by setStopMode().
+    */
+   static void enterStopMode() {
+      deepSleep();
+   }
+
+   /**
+    * Enter Wait Mode (WAIT, VLPW)
+    *
+    * The processor will stop execution and enter WAIT mode.
+    *
+    * The WAIT mode entered depend upon the current execution mode.
+    * RUN  -> WAIT
+    * VLPR -> VLPW
+    */
+   static void enterWaitMode() {
+      sleep();
+   }
+
 
 #ifdef SMC_PMCTRL_LPWUI_MASK
    /**
@@ -372,6 +405,23 @@ public:
    static void deepSleep() {
       SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
       __WFI();
+   }
+
+   /**
+    * Enable Sleep-on-exit
+    *
+    * If enabled, when the processor completes the execution of all exception handlers it
+    * returns to Thread mode and immediately enters sleep mode (Kinetis WAIT).\n
+    * Use this mechanism in applications that only require the processor to run when
+    * an exception occurs.
+    */
+   static void enableSleepOnExit(bool enable) {
+      if (enable) {
+         SCB->SCR |= SCB_SCR_SLEEPONEXIT_Msk;
+      }
+      else {
+         SCB->SCR &= ~SCB_SCR_SLEEPONEXIT_Msk;
+      }
    }
 };
 
