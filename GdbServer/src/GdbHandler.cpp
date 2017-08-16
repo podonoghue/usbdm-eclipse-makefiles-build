@@ -9,7 +9,7 @@
 
 const char *GdbHandler::getStatusName(GdbTargetStatus status) {
    const char *names[] = {
-         "UNKNOWN",
+         "UNKNOWN(LLSx/VLLSx?)",
          "NO CONNECTION",
          "RUN",
          "HALT",
@@ -19,8 +19,8 @@ const char *GdbHandler::getStatusName(GdbTargetStatus status) {
          "VLPR",
          "VLPW",
          "VLPS",
-         "LLSxRESET",
-         "VLLSxRESET",
+         "LLSxEXIT",
+         "VLLSxEXIT",
          "USER INPUT",
          };
 
