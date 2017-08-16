@@ -46,7 +46,7 @@
          <constant id="demo.cpp.nrf24l01.ce"        value="GpioD&lt;5&gt;" />   <!-- CE* connection to NRF24101 module -->
          <constant id="demo.cpp.nrf24l01.irq"       value="GpioA&lt;13&gt;" />  <!-- IRQ* connection from NRF24101 module -->
 
-         <copy source="projectFiles/&DEVICE_NAME;.usbdmProject"  target="Configure.usbdmProject"  replace="true" />
+         <copy source="projectFiles/&DEVICE_NAME;.usbdmProject"  target="Configure.usbdmProject"  overwrite="true" />
 
          <!-- Example programs -->
          <!-- copy source="Snippets/analogue-joystick-example.cpp"             target="Snippets/analogue-joystick-example.cpp"/ -->

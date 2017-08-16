@@ -416,6 +416,41 @@ public:
       }
    }
    /**
+    * Read pin value and return true if active level.\n
+    * Convenience method equivalent to isActive()
+    *
+    * @return true/false reflecting if pin is active.
+    *
+    * @note This reads the PDIR
+    * @note Polarity is significant
+    */
+   static __attribute__((always_inline)) bool isPressed() {
+      if (polarity) {
+         return isHigh();
+      }
+      else {
+         return isLow();
+      }
+   }
+   /**
+    * Read pin value and return true if inactive level.\n
+    * Convenience method equivalent to isInactive()
+    *
+    *
+    * @return true/false reflecting if pin is inactive.
+    *
+    * @note This reads the PDIR
+    * @note Polarity is significant
+    */
+   static __attribute__((always_inline)) bool isReleased() {
+      if (polarity) {
+         return isLow();
+      }
+      else {
+         return isHigh();
+      }
+   }
+   /**
     * Read value being driven to pin (if configured as output)
     *
     * @return true/false reflecting value in output register.

@@ -97,8 +97,8 @@
    </validate>
 
    <projectActionList id = "tpm_files" >
-      <copy source="Project_Headers/tpm.h"         target="Project_Headers/tpm.h"          replace="true" derived="true" />
-      <copy source="Snippets/tpm-pwm-example.cpp"  target="Snippets/tpm-pwm-example.cpp"   replace="true" derived="true"/>
+      <copy source="Project_Headers/tpm.h"         target="Project_Headers/tpm.h"          overwrite="true" derived="true" />
+      <copy source="Snippets/tpm-pwm-example.cpp"  target="Snippets/tpm-pwm-example.cpp"   overwrite="true" derived="true"/>
    </projectActionList>
          
    <template><![CDATA[

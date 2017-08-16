@@ -45,9 +45,9 @@
    </validate>
 
    <projectActionList id = "pit_files" >
-      <copy source="Snippets/pit-example1.cpp"       target="Snippets/pit-example1.cpp" />
-      <copy source="Snippets/pit-example2-MKL.cpp"   target="Snippets/pit-example2.cpp" />
-      <copy source="Project_Headers/pit-MKL.h"       target="Project_Headers/pit.h"        replace="true" derived="true" />
+      <copy source="Snippets/pit-example1.cpp"       target="Snippets/pit-example1.cpp" overwrite="true" derived="true" />
+      <copy source="Snippets/pit-example2-MKL.cpp"   target="Snippets/pit-example2.cpp" overwrite="true" derived="true" />
+      <copy source="Project_Headers/pit-MKL.h"       target="Project_Headers/pit.h"     overwrite="true" derived="true" />
    </projectActionList>
          
    <template><![CDATA[

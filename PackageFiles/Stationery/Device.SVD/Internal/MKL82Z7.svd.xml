@@ -60,7 +60,7 @@
          <interrupt><name>I2C1</name><description>Inter-Integrated Circuit</description><value>39</value></interrupt>
       </peripheral>
       <xi:include href="peripherals/INTMUX0_MKL82Z7.svd.xml"/>
-      <xi:include href="peripherals/LLWU_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/LLWU_PE8_FILT4.svd.xml"/>
       <xi:include href="peripherals/LPTMR0_0.svd.xml"/>
       <peripheral derivedFrom="LPTMR0"><name>LPTMR1</name><baseAddress>0x40044000</baseAddress>
          <interrupt><name>LPTMR1</name><description>Low Power Timer</description><value>32</value></interrupt>

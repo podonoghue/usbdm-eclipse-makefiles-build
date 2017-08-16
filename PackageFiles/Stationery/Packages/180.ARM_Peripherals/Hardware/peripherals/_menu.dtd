@@ -221,18 +221,18 @@
    <!ATTLIST copy target               CDATA #REQUIRED>
    <!ATTLIST copy type                 CDATA #IMPLIED>
    <!ATTLIST copy sourcePathType       (absolute|relative|unknown) #IMPLIED>
-   <!ATTLIST copy macroReplacement     (true|false) "true">
-   <!ATTLIST copy replace              (true|false) "false">
+   <!ATTLIST copy macroReplace         (true|false) "true">
+   <!ATTLIST copy overwrite            (true|false) "false">
    <!ATTLIST copy derived              (true|false) "false">
    
 <!ELEMENT constant EMPTY >
    <!-- constant 
-   key  	Allows specification of a explicit key rather than based upon the name.
-   name 	In the absence of a key it is used to create a key tied to the current peripheral/file. 
-            Used as visible name in GUI (model)
-            Supports validation as an ID.
-   weak		If true indicates the constant may already exist and this constant is discarded
-   replace  Replaces any existing constant of the same key
+   key       Allows specification of a explicit key rather than based upon the name.
+   name      In the absence of a key it is used to create a key tied to the current peripheral/file. 
+             Used as visible name in GUI (model)
+             Supports validation as an ID.
+   weak	     If true indicates the constant may already exist and this constant is discarded
+   overwrite Replaces any existing constant of the same key
    -->
    <!ATTLIST constant name         ID           #IMPLIED>
    <!ATTLIST constant key          CDATA        #IMPLIED>

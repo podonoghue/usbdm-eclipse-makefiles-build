@@ -12,10 +12,10 @@
       description="Phrase size for program flash (minimum program element)"/>
 
    <projectActionList id = "flash_files" >
-      <copy source="Project_Headers/flash.h"                 target="Project_Headers/flash.h"                 replace="true"  derived="true" />
-      <copy source="Project_Headers/ftfa.h"                  target="Project_Headers/ftfa.h"                  replace="true"  derived="true" />
-      <copy source="Sources/ftfa.cpp"                        target="Sources/ftfa.cpp"                        replace="true"  derived="true" />
-      <copy source="Snippets/flash_programming_example.cpp"  target="Snippets/flash_programming_example.cpp"  replace="true"  derived="true" />
+      <copy source="Project_Headers/flash.h"                 target="Project_Headers/flash.h"                 overwrite="true"  derived="true" />
+      <copy source="Project_Headers/ftfa.h"                  target="Project_Headers/ftfa.h"                  overwrite="true"  derived="true" />
+      <copy source="Sources/ftfa.cpp"                        target="Sources/ftfa.cpp"                        overwrite="true"  derived="true" />
+      <copy source="Snippets/flash_programming_example.cpp"  target="Snippets/flash_programming_example.cpp"  overwrite="true"  derived="true" />
    </projectActionList>
 
    <constant name="FlashType" key="/Flash/FlashType" value="ftfa" />

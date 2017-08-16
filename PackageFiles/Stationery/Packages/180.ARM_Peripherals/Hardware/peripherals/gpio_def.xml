@@ -31,8 +31,8 @@
    </validate>
 
    <projectActionList id = "gpio_files" >
-      <copy source="Snippets/digital-example1.cpp"  target="Snippets/digital-example1.cpp" />
-      <copy source="Snippets/digital-example2.cpp"  target="Snippets/digital-example2.cpp" />
+      <copy source="Snippets/digital-example1.cpp"  target="Snippets/digital-example1.cpp" overwrite="true" derived="true" />
+      <copy source="Snippets/digital-example2.cpp"  target="Snippets/digital-example2.cpp" overwrite="true" derived="true" />
    </projectActionList>
 
    <!--

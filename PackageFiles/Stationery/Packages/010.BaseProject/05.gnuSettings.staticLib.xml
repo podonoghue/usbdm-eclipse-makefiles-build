@@ -11,10 +11,10 @@
       </applyWhen>
    
       <!-- Creating a library -->
-      <projectOption id="gnu.c.link.option.shared" replace="true">
+      <projectOption id="gnu.c.link.option.shared" overwrite="true">
          <value>true</value>
       </projectOption>
-      <projectOption id="gnu.cpp.link.option.shared" replace="true">
+      <projectOption id="gnu.cpp.link.option.shared" overwrite="true">
          <value>true</value>
       </projectOption>
    

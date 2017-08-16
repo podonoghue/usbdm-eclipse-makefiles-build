@@ -213,8 +213,8 @@
    <signals/>
 
    <projectActionList id = "llwu_def" >
-      <copy source="Project_Headers/llwu.h"     target="Project_Headers/llwu.h"     replace="true" derived="true" />
-      <copy source="Snippets/llwu-example.cpp"  target="Snippets/llwu-example.cpp"  replace="true" derived="true" />
+      <copy source="Project_Headers/llwu.h"     target="Project_Headers/llwu.h"     overwrite="true" derived="true" />
+      <copy source="Snippets/llwu-example.cpp"  target="Snippets/llwu-example.cpp"  overwrite="true" derived="true" />
    </projectActionList>
          
 </devicePage>

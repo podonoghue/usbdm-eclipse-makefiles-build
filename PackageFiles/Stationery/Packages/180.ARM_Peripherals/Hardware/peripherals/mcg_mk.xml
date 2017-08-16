@@ -514,9 +514,9 @@
    </validate>
 
    <projectActionList id = "mcg_files" >
-      <copy source="Project_Headers/mcg.h"             target="Project_Headers/mcg.h"  replace="true"  derived="true" />
-      <copy source="Startup_Code/mcg.cpp"              target="Startup_Code/mcg.cpp"   replace="true"  derived="true" />
-      <copy source="Snippets/test-mcg.cpp"             target="Snippets/test-mcg.cpp"  replace="true"  derived="true" />
+      <copy source="Project_Headers/mcg.h"             target="Project_Headers/mcg.h"  overwrite="true"  derived="true" />
+      <copy source="Startup_Code/mcg.cpp"              target="Startup_Code/mcg.cpp"   overwrite="true"  derived="true" />
+      <copy source="Snippets/test-mcg.cpp"             target="Snippets/test-mcg.cpp"  overwrite="true"  derived="true" />
       <deleteResource target="Project_Headers/clock_configure.h" />
       <deleteResource target="Startup_Code/clock.c" />
    </projectActionList>

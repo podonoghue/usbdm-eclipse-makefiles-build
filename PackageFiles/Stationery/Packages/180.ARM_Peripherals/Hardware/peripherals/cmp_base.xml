@@ -164,8 +164,8 @@
    ]]></template>
 
    <projectActionList id = "cmp_files" >
-      <copy source="Project_Headers/cmp.h"  target="Project_Headers/cmp.h"  replace="true"  derived="true" />
-      <copy source="Snippets/cmp.cpp"       target="Snippets/cmp.cpp"       replace="true"  derived="true" />
+      <copy source="Project_Headers/cmp.h"  target="Project_Headers/cmp.h"  overwrite="true"  derived="true" />
+      <copy source="Snippets/cmp.cpp"       target="Snippets/cmp.cpp"       overwrite="true"  derived="true" />
    </projectActionList>
    
    <validate

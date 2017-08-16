@@ -41,7 +41,7 @@
       <copy source="Project_Headers/cmsis_gcc.h"                              target="Project_Headers/cmsis_gcc.h" />
       <copy source="Project_Headers/core_cmFunc.h"                            target="Project_Headers/core_cmFunc.h" />
       <copy source="Project_Headers/core_cmInstr.h"                           target="Project_Headers/core_cmInstr.h" />
-      <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(targetDevice).h" replace="true" />
+      <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(targetDevice).h" overwrite="true" />
 
 
       <!-- Base STM32 files -->

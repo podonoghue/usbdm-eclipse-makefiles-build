@@ -33,14 +33,14 @@
                <applyWhen >
                   <variableRef idRef="projectOptionValue.CPP-abstraction-EPAPER" />
                </applyWhen>
-               <copy source="Snippets/seeed-epaper-example.cpp"     target="Snippets/seeed-epaper-example.cpp" replace="true"/>
-               <copy source="Snippets/epaper.h"                     target="Snippets/epaper.h"                 replace="true"/>
-               <copy source="Snippets/epd.h"                        target="Snippets/epd.h"                    replace="true"/>
-               <copy source="Snippets/seeed_sld00200p.h"            target="Snippets/seeed_sld00200p.h"        replace="true"/>
-               <copy source="Snippets/gt20l16.h"                    target="Snippets/gt20l16.h"                replace="true"/>
-               <copy source="Snippets/epaper.cpp"                   target="Snippets/epaper.cpp"               replace="true"/>
-               <copy source="Snippets/epd.cpp"                      target="Snippets/epd.cpp"                  replace="true"/>
-               <copy source="Snippets/gt20l16.cpp"                  target="Snippets/gt20l16.cpp"              replace="true"/>
+               <copy source="Snippets/seeed-epaper-example.cpp"     target="Snippets/seeed-epaper-example.cpp" overwrite="true"/>
+               <copy source="Snippets/epaper.h"                     target="Snippets/epaper.h"                 overwrite="true"/>
+               <copy source="Snippets/epd.h"                        target="Snippets/epd.h"                    overwrite="true"/>
+               <copy source="Snippets/seeed_sld00200p.h"            target="Snippets/seeed_sld00200p.h"        overwrite="true"/>
+               <copy source="Snippets/gt20l16.h"                    target="Snippets/gt20l16.h"                overwrite="true"/>
+               <copy source="Snippets/epaper.cpp"                   target="Snippets/epaper.cpp"               overwrite="true"/>
+               <copy source="Snippets/epd.cpp"                      target="Snippets/epd.cpp"                  overwrite="true"/>
+               <copy source="Snippets/gt20l16.cpp"                  target="Snippets/gt20l16.cpp"              overwrite="true"/>
                <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
                   <value>EPAPER_AVAILABLE</value>
                </projectOption>

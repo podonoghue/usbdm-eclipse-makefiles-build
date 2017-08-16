@@ -30,14 +30,14 @@
             <applyWhen>
                <not><variableRef idRef="hasCCNature" condition="isTrue" /></not>
             </applyWhen>
-            <copy source="Sources/main-RTX.c" target="Sources/main.c" replace="true" />
+            <copy source="Sources/main-RTX.c" target="Sources/main.c" overwrite="true" />
          </projectActionList>
          <!-- Default RTX CPP main -->
          <projectActionList>
             <applyWhen>
                <variableRef idRef="hasCCNature" condition="isTrue" />
             </applyWhen>
-            <copy source="Sources/main-RTX.c" target="Sources/main.cpp" replace="true" />
+            <copy source="Sources/main-RTX.c" target="Sources/main.cpp" overwrite="true" />
          </projectActionList>
       </projectActionList>
       
@@ -54,14 +54,14 @@
             <applyWhen>
                <not><variableRef idRef="hasCCNature" condition="isTrue" /></not>
             </applyWhen>
-            <copy source="Sources/main-RTX-Blinky.c" target="Sources/main.c" replace="true" />
+            <copy source="Sources/main-RTX-Blinky.c" target="Sources/main.c" overwrite="true" />
          </projectActionList>
          <!-- Blinky RTX CPP main -->
          <projectActionList>
             <applyWhen>
                <variableRef idRef="hasCCNature" condition="isTrue" />
             </applyWhen>
-            <copy source="Sources/main-RTX-Blinky.c" target="Sources/main.cpp" replace="true" />
+            <copy source="Sources/main-RTX-Blinky.c" target="Sources/main.cpp" overwrite="true" />
          </projectActionList>
       </projectActionList>
 
@@ -73,15 +73,15 @@
                <variableRef idRef="projectOptionValue.CPP-abstraction"  defaultValue="false" />
             </and>
          </applyWhen>
-         <copy source="Sources/main-RTX-CPP.cpp"      target="Sources/main.cpp"              replace="true" />
-         <copy source="Snippets/cmsis-isr.cpp"        target="Snippets/cmsis-isr.cpp"        replace="true" />
-         <copy source="Snippets/cmsis-mailbox.cpp"    target="Snippets/cmsis-mailbox.cpp"    replace="true" />
-         <copy source="Snippets/cmsis-messages.cpp"   target="Snippets/cmsis-messages.cpp"   replace="true" />
-         <copy source="Snippets/cmsis-mutex.cpp"      target="Snippets/cmsis-mutex.cpp"      replace="true" />
-         <copy source="Snippets/cmsis-semaphore.cpp"  target="Snippets/cmsis-semaphore.cpp"  replace="true" />
-         <copy source="Snippets/cmsis-signals.cpp"    target="Snippets/cmsis-signals.cpp"    replace="true" />
-         <copy source="Snippets/cmsis-thread.cpp"     target="Snippets/cmsis-thread.cpp"     replace="true" />
-         <copy source="Snippets/cmsis-timer.cpp"      target="Snippets/cmsis-timer.cpp"      replace="true" />
+         <copy source="Sources/main-RTX-CPP.cpp"      target="Sources/main.cpp"              overwrite="true" />
+         <copy source="Snippets/cmsis-isr.cpp"        target="Snippets/cmsis-isr.cpp"        overwrite="true" />
+         <copy source="Snippets/cmsis-mailbox.cpp"    target="Snippets/cmsis-mailbox.cpp"    overwrite="true" />
+         <copy source="Snippets/cmsis-messages.cpp"   target="Snippets/cmsis-messages.cpp"   overwrite="true" />
+         <copy source="Snippets/cmsis-mutex.cpp"      target="Snippets/cmsis-mutex.cpp"      overwrite="true" />
+         <copy source="Snippets/cmsis-semaphore.cpp"  target="Snippets/cmsis-semaphore.cpp"  overwrite="true" />
+         <copy source="Snippets/cmsis-signals.cpp"    target="Snippets/cmsis-signals.cpp"    overwrite="true" />
+         <copy source="Snippets/cmsis-thread.cpp"     target="Snippets/cmsis-thread.cpp"     overwrite="true" />
+         <copy source="Snippets/cmsis-timer.cpp"      target="Snippets/cmsis-timer.cpp"      overwrite="true" />
       </projectActionList>
       
       <projectActionList id="CMSIS-base">

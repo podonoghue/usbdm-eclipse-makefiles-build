@@ -76,7 +76,7 @@
          <interrupt><name>I2C3</name><description>Inter-Integrated Circuit</description><value>91</value></interrupt>
       </peripheral>
       <xi:include href="peripherals/I2S0_MK82F25615.svd.xml"/>
-      <xi:include href="peripherals/LLWU_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/LLWU_PE8_FILT4.svd.xml"/>
       <xi:include href="peripherals/LMEM_MK28F15.svd.xml"/>
       <xi:include href="peripherals/LPTMR0_0.svd.xml"/>
       <peripheral derivedFrom="LPTMR0"><name>LPTMR1</name><baseAddress>0x40044000</baseAddress>

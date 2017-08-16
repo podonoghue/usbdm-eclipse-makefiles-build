@@ -41,7 +41,7 @@ Devices using this peripheral:
    </validate>
 
    <projectActionList id = "uart_files">
-      <copy source="Project_Headers/uart.h"  target="Project_Headers/uart.h"  replace="true"  derived="true" />
+      <copy source="Project_Headers/uart.h"  target="Project_Headers/uart.h"  overwrite="true"  derived="true" />
    </projectActionList>
          
    <template><![CDATA[

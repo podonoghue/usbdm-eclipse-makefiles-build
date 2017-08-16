@@ -38,8 +38,8 @@
    </choiceOption>
 
    <projectActionList id = "console_files" >
-      <copy source="Project_Headers/console.h"  target="Project_Headers/console.h"  replace="true"  derived="true" />
-      <copy source="Startup_Code/console.cpp"   target="Startup_Code/console.cpp"   replace="true"  derived="true" />
+      <copy source="Project_Headers/console.h"  target="Project_Headers/console.h"  overwrite="true"  derived="true" />
+      <copy source="Startup_Code/console.cpp"   target="Startup_Code/console.cpp"   overwrite="true"  derived="true" />
    </projectActionList>
     
    <template><![CDATA[

@@ -60,7 +60,7 @@
          <deleteResource target="Sources/leds.cpp" />
          <deleteResource target="Startup_Code/vectors.c" />
          <createFolder   target="Snippets" />
-         <copy source="Startup_Code/vectors-cm0.cpp"                       target="Startup_Code/vectors.cpp" macroReplacement="false" />
+         <copy source="Startup_Code/vectors-cm0.cpp"                       target="Startup_Code/vectors.cpp" macroReplace="false" />
          <copy source="Snippets/analogue-joystick-example.cpp"             target="Snippets/analogue-joystick-example.cpp"/>
          <copy source="Snippets/digital-example1.cpp"                      target="Snippets/digital-example1.cpp" />
          <copy source="Snippets/digital-example2.cpp"                      target="Snippets/digital-example2.cpp" />
@@ -68,7 +68,7 @@
          <copy source="Project_Headers/USBDM_Documentation.h"              target="Project_Headers/USBDM_Documentation.h" />
          <copy source="Project_Headers/hardware.h"                         target="Project_Headers/hardware.h" />
          <copy source="Project_Headers/gpio-&DEVICE_FAMILY;.h"             target="Project_Headers/gpio.h" />
-         <copy source="Sources/main.cpp"                                   target="Sources/main.cpp" replace="true" />
+         <copy source="Sources/main.cpp"                                   target="Sources/main.cpp" overwrite="true" />
          <copy source="projectFiles/Configure.usbdmProject"                target="Configure.usbdmProject" />
          <excludeSourceFolder target="Snippets" />
       </projectActionList>

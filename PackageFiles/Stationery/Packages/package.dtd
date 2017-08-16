@@ -77,7 +77,7 @@
    <!ATTLIST constant value        CDATA #REQUIRED>
    <!ATTLIST constant type         (boolean|int|string)  "string" >
    <!ATTLIST constant weak         (true|false)          "false">
-   <!ATTLIST constant replace      (true|false)          "false">
+   <!ATTLIST constant overwrite    (true|false)          "false">
    
 <!-- Exclude/include source file in Eclipse project -->
 <!ELEMENT excludeSourceFile EMPTY >
@@ -103,15 +103,15 @@
    <!ATTLIST copy target                CDATA #REQUIRED>
    <!ATTLIST copy type                  CDATA #IMPLIED>
    <!ATTLIST copy sourcePathType        (absolute|relative|unknown) #IMPLIED>
-   <!ATTLIST copy macroReplacement      (true|false) "true">
-   <!ATTLIST copy replace               (true|false) "false">
+   <!ATTLIST copy macroReplace          (true|false) "true">
+   <!ATTLIST copy overwrite             (true|false) "false">
    <!ATTLIST copy derived               (true|false) "false">
    
 <!-- Eclipse project options (for gcc, gdb etc) -->
 <!ELEMENT projectOption (value*)>
    <!ATTLIST projectOption id        CDATA                #REQUIRED>
    <!ATTLIST projectOption config    (all|release|debug)  "all">
-   <!ATTLIST projectOption replace   (true|false)         "false">
+   <!ATTLIST projectOption overwrite (true|false)         "false">
 
 <!-- Custom build action -->
 <!ELEMENT customAction (value)* >

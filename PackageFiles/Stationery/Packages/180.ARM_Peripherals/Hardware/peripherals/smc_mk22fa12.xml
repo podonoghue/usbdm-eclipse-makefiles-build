@@ -99,7 +99,8 @@
    ]]></template>
 
    <projectActionList id = "smc_files" >
-      <copy source="Project_Headers/smc.h"         target="Project_Headers/smc.h"         replace="true" derived="true" />
+      <copy source="Project_Headers/smc.h"                  target="Project_Headers/smc.h"                  overwrite="true" derived="true" />
+      <copy source="Project_Headers/KinetisPowerModes.png"  target="Project_Headers/KinetisPowerModes.png"  overwrite="true" derived="true" macroReplace="false" />
    </projectActionList>
          
 </devicePage>

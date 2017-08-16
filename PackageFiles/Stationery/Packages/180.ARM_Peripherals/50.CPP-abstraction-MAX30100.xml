@@ -31,15 +31,15 @@
                <applyWhen >
                   <variableRef idRef="projectOptionValue.CPP-abstraction-MAX30100" />
                </applyWhen>
-               <copy source="Snippets/max30102.h"            target="Sources/max30102.h"            replace="true"/>
-               <copy source="Snippets/max30102.cpp"          target="Sources/max30102.cpp"          replace="true"/>
+               <copy source="Snippets/max30102.h"            target="Sources/max30102.h"            overwrite="true"/>
+               <copy source="Snippets/max30102.cpp"          target="Sources/max30102.cpp"          overwrite="true"/>
 
-               <copy source="Snippets/max30102.h"            target="Snippets/max30102.h"           replace="true"/>
-               <copy source="Snippets/max30102.cpp"          target="Snippets/max30102.cpp"         replace="true"/>
-               <copy source="Snippets/CircularBuffer.h"      target="Snippets/CircularBuffer.h"     replace="true"/>
-               <copy source="Snippets/SpO2algorithm.h"       target="Snippets/SpO2algorithm.h"      replace="true"/>
-               <copy source="Snippets/SpO2algorithm.cpp"     target="Snippets/SpO2algorithm.cpp"    replace="true"/>
-               <copy source="Snippets/max30102-example.cpp"  target="Snippets/max30102-example.cpp" replace="true"/>
+               <copy source="Snippets/max30102.h"            target="Snippets/max30102.h"           overwrite="true"/>
+               <copy source="Snippets/max30102.cpp"          target="Snippets/max30102.cpp"         overwrite="true"/>
+               <copy source="Snippets/CircularBuffer.h"      target="Snippets/CircularBuffer.h"     overwrite="true"/>
+               <copy source="Snippets/SpO2algorithm.h"       target="Snippets/SpO2algorithm.h"      overwrite="true"/>
+               <copy source="Snippets/SpO2algorithm.cpp"     target="Snippets/SpO2algorithm.cpp"    overwrite="true"/>
+               <copy source="Snippets/max30102-example.cpp"  target="Snippets/max30102-example.cpp" overwrite="true"/>
             </projectActionList>
          </projectActionList>
       </projectActionList>

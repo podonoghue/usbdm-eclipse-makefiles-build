@@ -126,6 +126,15 @@ enum SmcPowerOnReset {
 };
 
 /**
+ *  POR Power Option\n
+ *  This bit controls whether the POR detect circuit is enabled in VLLS0 mode.
+ */
+enum SmcSleepOnExit {
+   SmcSleepOnExit_Disable = false,  //!< Processor does not enter SLEEP/DEEPSLEEP mode
+   SmcSleepOnExit_Enable  = true,   //!< Processor enters SLEEP/DEEPSLEEP mode on completion of interrupts
+};
+
+/**
  *  VLS or VLLS Mode Control\n
  *  This field controls which LLS/VLLS sub-mode to enter if STOPM=LLS/VLLS\n
  *
@@ -171,7 +180,10 @@ enum SmcPowerOption {
 /**
  * @brief Template class representing the System Mode Controller (SMC)
  *
- * Partially based on Freescale Application note AN4503
+ * Partially based on Freescale Application note AN4503\n
+ * Support for Kinetis Low Power operation.
+ *
+ * @image html KinetisPowerModes.png
  */
 template <class Info>
 class SmcBase_T {
@@ -182,7 +194,7 @@ protected:
 public:
 
    /**
-    * Configure with settings from Configure.usbdmProject.
+    * Configure with settings from <b>Configure.usbdmProject</b>.
     */
    static void defaultConfigure() {
       smc->PMPROT   = Info::pmprot;
@@ -190,7 +202,7 @@ public:
    }
 
    /**
-    * Enable the given power modes.\n
+    * Enable the given power modes.
     * A mode must be enabled before it can be entered.
     *
     * @param[in] smcVeryLowPower        Allows VLPR, VLPW, and VLPS modes
@@ -237,7 +249,10 @@ public:
    }
 
    /**
-    * Enter Run Mode
+    * Enter Run Mode.
+    *
+    * This may be used to change between supported RUN modes (RUN, VLPR, HSRUN).\n
+    * Only the following transitions are allowed: VLPR <-> RUN <-> HSRUN.
     *
     * @param[in] smcRunMode  Mode to enter
     *
@@ -291,49 +306,95 @@ public:
     * @param[in]  smcStopMode Stop mode to set
     */
    static void setStopMode(SmcStopMode smcStopMode) {
-
       smc->PMCTRL = (smc->PMCTRL&~SMC_PMCTRL_STOPM_MASK)|smcStopMode;
       // Make sure write completes
-      (void volatile)smc->PMCTRL;
+      __DSB();
    }
 
    /**
     * Enter Stop Mode (STOP, VLPS, LLSx, VLLSx)
+    * (ARM core DEEPSLEEP mode)
     *
-    * The processor will stop execution and enter the given STOP mode.
+    * The processor will stop execution and enter the current STOP mode.\n
+    * Peripherals affected will depend on the stop mode selected.\n
+    * The stop mode to enter may be set by setStopMode().
+    */
+   static void enterStopMode() {
+      SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
+      // Make sure write completes
+      __DSB();
+      __WFI();
+   }
+
+   /**
+    * Enter Stop Mode (STOP, VLPS, LLSx, VLLSx)
+    * (ARM core DEEPSLEEP mode)
+    *
+    * The processor will stop execution and enter the given STOP mode.\n
     * Peripherals affected will depend on the stop mode selected.
     *
     * @param[in] smcStopMode Stop mode to set
     */
    static void enterStopMode(SmcStopMode smcStopMode) {
       setStopMode(smcStopMode);
-      deepSleep();
+      enterStopMode();
    }
 
    /**
-    * Enter Stop Mode (STOP, VLPS, LLSx, VLLSx)
+    * Enter Deep Sleep mode
     *
-    * The processor will stop execution and enter the given STOP mode.
-    * Peripherals affected will depend on the stop mode selected.
-    * The stop mode to enter may be set by setStopMode().
+    * See enterStopMode();
     */
-   static void enterStopMode() {
-      deepSleep();
+   static void deepSleep() {
+      enterStopMode();
    }
 
    /**
-    * Enter Wait Mode (WAIT, VLPW)
+    * Enter Wait Mode (WAIT, VLPW)\n
+    * (ARM core SLEEP mode)
     *
-    * The processor will stop execution and enter WAIT mode.
+    * The processor will stop execution and enter SLEEP mode.\n
+    * In this mode the core clock is disabled (no code executing),
+    * but bus clocks are enabled (peripheral modules are operational).
     *
-    * The WAIT mode entered depend upon the current execution mode.
-    * RUN  -> WAIT
-    * VLPR -> VLPW
+    * This function can be used to enter normal WAIT mode or VLPW mode
+    * depending upon current run mode.
+    *
+    * Mode transitions:
+    * - RUN  -> WAIT
+    * - VLPR -> VLPW
+    *
+    * WAIT mode is exited using any enabled interrupt or RESET.
+    *
+    * For Kinetis K:
+    * If in VLPW mode, the statue of the SMC_PMCTRL[LPWUI] bit
+    * determines if the processor exits to VLPR or RUN mode.\n
+    * Use setExitVeryLowPowerOnInterrupt() to modify this action.
+    *
+    * For Kinetis L:
+    * LPWUI does not exist.\n
+    * Exits with an interrupt from VLPW will always be back to VLPR.\n
+    * Exits from an interrupt from WAIT will always be back to RUN.
+    *
+    * @note Some modules include a programmable option to disable them in wait mode.\n
+    * If those modules are programmed to disable in wait mode, they will not be able to
+    * generate interrupts to wake the core.
     */
    static void enterWaitMode() {
-      sleep();
+      SCB->SCR &= ~SCB_SCR_SLEEPDEEP_Msk;
+      // Make sure write completes
+      __DSB();
+      __WFI();
    }
 
+   /**
+    * Enter SLEEP mode
+    *
+    * See enterWaitMode();
+    */
+   static void sleep() {
+      enterWaitMode();
+   }
 
 #ifdef SMC_PMCTRL_LPWUI_MASK
    /**
@@ -359,69 +420,30 @@ public:
     *
     * @note Not supported
     */
-   static void setVlpInterruptAction(SmcExitVeryLowPowerOnInt) {
+   static void setExitVeryLowPowerOnInterrupt(SmcExitVeryLowPowerOnInt) {
    }
 
 #endif
 
    /**
-    * Enter Sleep mode (Kinetis WAIT mode)
-    *
-    * In this mode the core clock is disabled (no code executing),
-    * but bus clocks are enabled (peripheral modules are operational).
-    *
-    * This function can be used to enter normal WAIT mode or VLPW mode
-    * depending upon current run mode.
-    *
-    * Mode transitions:
-    * - RUN  -> WAIT
-    * - VLPR -> VLPW
-    *
-    * NOTE: Some modules include a programmable option to disable
-    * them in wait mode. If those modules are programmed to disable
-    * in wait mode, they will not be able to generate interrupts to
-    * wake the core.
-    *
-    * WAIT mode is exited using any enabled interrupt or RESET.
-    *
-    * For Kinetis K:
-    * If in VLPW mode, the statue of the SMC_PMCTRL[LPWUI] bit
-    * determines if the processor exits to VLPR or RUN mode.
-    * Use setExitVeryLowPowerOnInterrupt() to modify this action.
-    *
-    * For Kinetis L:
-    * LPWUI does not exist.
-    * Exits with an interrupt from VLPW will always be back to VLPR.
-    * Exits from an interrupt from Wait will always be back to Run.
-    */
-   static void sleep() {
-      SCB->SCR &= ~SCB_SCR_SLEEPDEEP_Msk;
-      __WFI();
-   }
-
-   /**
-    * Enter Deep Sleep mode
-    */
-   static void deepSleep() {
-      SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
-      __WFI();
-   }
-
-   /**
-    * Enable Sleep-on-exit
+    * Set Sleep-on-exit action
     *
     * If enabled, when the processor completes the execution of all exception handlers it
-    * returns to Thread mode and immediately enters sleep mode (Kinetis WAIT).\n
+    * returns to Thread mode and immediately enters WAIT/STOP mode (ARM core SLEEP/DEEPSLEEP mode).\n
     * Use this mechanism in applications that only require the processor to run when
     * an exception occurs.
+    *
+    * @param[in] smcSleepOnExit Determines action on completion of all exception handlers
     */
-   static void enableSleepOnExit(bool enable) {
-      if (enable) {
+   static void setSleepOnExit(SmcSleepOnExit smcSleepOnExit=SmcSleepOnExit_Enable) {
+      if (smcSleepOnExit) {
          SCB->SCR |= SCB_SCR_SLEEPONEXIT_Msk;
       }
       else {
          SCB->SCR &= ~SCB_SCR_SLEEPONEXIT_Msk;
       }
+      // Make sure write completes
+      __DSB();
    }
 };
 

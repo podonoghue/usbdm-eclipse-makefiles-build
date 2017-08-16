@@ -39,7 +39,7 @@ Devices using this peripheral:
    <xi:include href="_irqOption.xml"/>
 
    <projectActionList id = "lpuart_files">
-      <copy source="Project_Headers/lpuart.h"  target="Project_Headers/lpuart.h"  replace="true"  derived="true" />
+      <copy source="Project_Headers/lpuart.h"  target="Project_Headers/lpuart.h"  overwrite="true"  derived="true" />
    </projectActionList>
          
    <template><![CDATA[

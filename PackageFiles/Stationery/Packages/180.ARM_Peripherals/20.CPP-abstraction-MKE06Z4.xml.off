@@ -55,7 +55,7 @@
          <copy source="Project_Headers/gpio_defs-&DEVICE_FAMILY;.h"        target="Project_Headers/gpio_defs.h" />
          <copy source="Project_Headers/pin_mapping-&DEVICE_FILE;.h"        target="Project_Headers/pin_mapping.h" />
          <copy source="Sources/gpio-&DEVICE_FILE;.cpp"                     target="Sources/gpio.cpp" />
-         <copy source="Sources/main.cpp"                                   target="Sources/main.cpp" replace="true" />
+         <copy source="Sources/main.cpp"                                   target="Sources/main.cpp" overwrite="true" />
          <excludeSourceFolder target="Snippets" />
       </projectActionList>
    </projectActionList>

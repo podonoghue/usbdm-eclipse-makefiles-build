@@ -27,7 +27,7 @@
          <copy source="Project_Headers/Board_LEDs.h"  target="Project_Headers/Board_LEDs.h" />
          <copy source="Project_Headers/leds.h"        target="Project_Headers/leds.h" />
          <copy source="Sources/leds.c"                target="Sources/leds.c" />
-         <copy source="Sources/main.c"                target="Sources/main.c" replace="true" />
+         <copy source="Sources/main.c"                target="Sources/main.c" overwrite="true" />
       </projectActionList>
    </projectActionList>
 

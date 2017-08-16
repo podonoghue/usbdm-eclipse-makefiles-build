@@ -59,10 +59,10 @@
             <value>&quot;${ProjDirPath}/Sources&quot;</value>
          </projectOption>
          
-         <projectOption id="net.sourceforge.usbdm.cdt.toolchain.c.linker.linkerFile" replace="true">
+         <projectOption id="net.sourceforge.usbdm.cdt.toolchain.c.linker.linkerFile" overwrite="true">
             <value>ProcessorExpert.ld</value>
          </projectOption>
-         <projectOption id="net.sourceforge.usbdm.cdt.toolchain.cpp.linker.linkerFile" replace="true">
+         <projectOption id="net.sourceforge.usbdm.cdt.toolchain.cpp.linker.linkerFile" overwrite="true">
             <value>ProcessorExpert.ld</value>
          </projectOption>
          <excludeSourceFolder target="Startup_Code" excluded="true" />

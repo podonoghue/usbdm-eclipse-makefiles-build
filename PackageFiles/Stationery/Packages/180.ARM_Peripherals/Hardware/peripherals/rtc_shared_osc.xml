@@ -241,9 +241,9 @@
    </validate>
 
    <projectActionList id = "rtc_files" >
-      <copy source="Project_Headers/rtc.h"       target="Project_Headers/rtc.h"      replace="true"  derived="true" />
-      <copy source="Startup_Code/rtc.cpp"        target="Startup_Code/rtc.cpp"       replace="true"  derived="true" />
-      <copy source="Snippets/rtc-example.cpp"    target="Snippets/rtc-example.cpp"   replace="true"  derived="true" />
+      <copy source="Project_Headers/rtc.h"       target="Project_Headers/rtc.h"      overwrite="true"  derived="true" />
+      <copy source="Startup_Code/rtc.cpp"        target="Startup_Code/rtc.cpp"       overwrite="true"  derived="true" />
+      <copy source="Snippets/rtc-example.cpp"    target="Snippets/rtc-example.cpp"   overwrite="true"  derived="true" />
    </projectActionList>
          
 </devicePage>

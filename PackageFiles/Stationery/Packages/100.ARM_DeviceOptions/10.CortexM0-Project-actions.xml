@@ -46,7 +46,7 @@ Cortex-M0
       <copy source="Project_Headers/core_cmInstr.h"                           target="Project_Headers/core_cmInstr.h" />
       <copy source="Project_Headers/utilities-mke.h"                          target="Project_Headers/utilities.h" />
 
-      <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(targetDevice).h" replace="true" />
+      <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(targetDevice).h" overwrite="true" />
 
       <projectActionList>
          <applyWhen>

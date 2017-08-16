@@ -67,11 +67,11 @@
    ]]></template>
 
    <projectActionList id = "dma_files" >
-      <copy source="Project_Headers/dma-MK.h"                   target="Project_Headers/dma.h"                      replace="true"  derived="true" />
-      <copy source="Snippets/dma-memory-example.cpp"            target="Snippets/dma-memory-example.cpp"            replace="true"  derived="true" />
-      <copy source="Snippets/dma-memory-template-example.cpp"   target="Snippets/dma-memory-template-example.cpp"   replace="true"  derived="true" />
-      <copy source="Snippets/dma-uart-example.cpp"              target="Snippets/dma-uart-example.cpp"              replace="true"  derived="true" />
-      <copy source="Snippets/dma-spi-example.cpp"               target="Snippets/dma-spi-example.cpp"               replace="true"  derived="true" />
+      <copy source="Project_Headers/dma-MK.h"                   target="Project_Headers/dma.h"                      overwrite="true"  derived="true" />
+      <copy source="Snippets/dma-memory-example.cpp"            target="Snippets/dma-memory-example.cpp"            overwrite="true"  derived="true" />
+      <copy source="Snippets/dma-memory-template-example.cpp"   target="Snippets/dma-memory-template-example.cpp"   overwrite="true"  derived="true" />
+      <copy source="Snippets/dma-uart-example.cpp"              target="Snippets/dma-uart-example.cpp"              overwrite="true"  derived="true" />
+      <copy source="Snippets/dma-spi-example.cpp"               target="Snippets/dma-spi-example.cpp"               overwrite="true"  derived="true" />
    </projectActionList>
 
 </devicePage>

@@ -342,10 +342,10 @@ Controls whether the POR detect circuit (for brown-out detection) is enabled in 
                   </field>
                </fields>
             </register>
-            <register derivedFrom="STOPCTRL"> <name>VLLSCTRL</name> <?hide?> <?doDerivedMacros?> <description>VLLS Control Register
+            <register derivedFrom="STOPCTRL"> <name>VLLSCTRL</name><?hide?> <?doDerivedMacros?> <description>VLLS Control Register
 Provides various control bits allowing the user to fine tune
 power consumption during the stop mode selected by the STOPM field
-(Freescale old name)</description> <addressOffset>0x2</addressOffset> </register>
+(Freescale old name)</description> </register>
             <register>
                <name>PMSTAT</name>
                <description>Power Mode Status Register</description>

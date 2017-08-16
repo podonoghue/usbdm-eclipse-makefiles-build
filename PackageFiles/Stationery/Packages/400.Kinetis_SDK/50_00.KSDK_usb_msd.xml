@@ -62,11 +62,11 @@
             </projectOption>
             
             <!-- C Link options -->
-            <projectOption id="gnu.c.link.option.other" replace="true">
+            <projectOption id="gnu.c.link.option.other" overwrite="true">
                <value>&quot;--defsym=__ram_vector_table__=1&quot;</value>
             </projectOption>
             <!-- C++ Link options -->
-            <projectOption id="gnu.cpp.link.option.other" replace="true">
+            <projectOption id="gnu.cpp.link.option.other" overwrite="true">
                <value>&quot;--defsym=__ram_vector_table__=1&quot;</value>
             </projectOption>
          </projectActionList>

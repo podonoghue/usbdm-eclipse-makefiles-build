@@ -19,7 +19,7 @@ Devices using this peripheral:
       value="32" min="0" max="63" />
       
    <projectActionList id = "vref_files">
-      <copy source="Project_Headers/vref.h"  target="Project_Headers/vref.h"  replace="true"  derived="true" />
+      <copy source="Project_Headers/vref.h"  target="Project_Headers/vref.h"  overwrite="true"  derived="true" />
    </projectActionList>
          
    <template><![CDATA[

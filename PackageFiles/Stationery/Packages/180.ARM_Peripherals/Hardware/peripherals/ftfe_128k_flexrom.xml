@@ -54,11 +54,11 @@
    </choiceOption>
 
    <projectActionList id = "flash_files" >
-      <copy source="Project_Headers/flash.h"                 target="Project_Headers/flash.h"                 replace="true"  derived="true" />
-      <copy source="Project_Headers/ftfe.h"                  target="Project_Headers/ftfe.h"                  replace="true"  derived="true" />
-      <copy source="Sources/ftfe.cpp"                        target="Sources/ftfe.cpp"                        replace="true"  derived="true" />
-      <copy source="Snippets/nonvolatile_example.cpp"        target="Snippets/nonvolatile_example.cpp"        replace="true"  derived="true" />
-      <copy source="Snippets/flash_programming_example.cpp"  target="Snippets/flash_programming_example.cpp"  replace="true"  derived="true" />
+      <copy source="Project_Headers/flash.h"                 target="Project_Headers/flash.h"                 overwrite="true"  derived="true" />
+      <copy source="Project_Headers/ftfe.h"                  target="Project_Headers/ftfe.h"                  overwrite="true"  derived="true" />
+      <copy source="Sources/ftfe.cpp"                        target="Sources/ftfe.cpp"                        overwrite="true"  derived="true" />
+      <copy source="Snippets/nonvolatile_example.cpp"        target="Snippets/nonvolatile_example.cpp"        overwrite="true"  derived="true" />
+      <copy source="Snippets/flash_programming_example.cpp"  target="Snippets/flash_programming_example.cpp"  overwrite="true"  derived="true" />
    </projectActionList>
 
    <constant name="FlashType" key="/Flash/FlashType" value="ftfe" />

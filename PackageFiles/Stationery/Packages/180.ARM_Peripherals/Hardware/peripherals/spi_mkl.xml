@@ -27,9 +27,9 @@
    </binaryOption>
       
    <projectActionList id = "spi_files" >
-         <copy source="Project_Headers/spi-MKL.h"       target="Project_Headers/spi.h" replace="true"  derived="true" />
-         <copy source="Project_Headers/dma-MKL.h"       target="Project_Headers/dma.h" replace="true"  derived="true" />
-         <copy source="Sources/spi-MKL.cpp"             target="Sources/spi.cpp"       replace="true"  derived="true" />
+         <copy source="Project_Headers/spi-MKL.h"       target="Project_Headers/spi.h" overwrite="true"  derived="true" />
+         <copy source="Project_Headers/dma-MKL.h"       target="Project_Headers/dma.h" overwrite="true"  derived="true" />
+         <copy source="Sources/spi-MKL.cpp"             target="Sources/spi.cpp"       overwrite="true"  derived="true" />
    </projectActionList>
    
    <xi:include href="_irqOption.xml"/>

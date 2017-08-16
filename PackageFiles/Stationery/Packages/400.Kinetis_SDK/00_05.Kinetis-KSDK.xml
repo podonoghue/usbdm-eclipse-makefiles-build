@@ -46,10 +46,10 @@
             <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" />
          </applyWhen>
          <!-- ASM Include paths -->
-         <projectOption id="net.sourceforge.usbdm.cdt.toolchain.cppAssembler.Directories.includePaths" replace="true">
+         <projectOption id="net.sourceforge.usbdm.cdt.toolchain.cppAssembler.Directories.includePaths" overwrite="true">
          </projectOption>
          <!-- C Include paths -->
-         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths" replace="true">
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths" overwrite="true">
             <value>&quot;${usbdm_kds_path}/platform/utilities/inc&quot;</value>
             <value>&quot;${usbdm_kds_path}/platform/osa/inc&quot;</value>
             <value>&quot;${usbdm_kds_path}/platform/CMSIS/Include&quot;</value>
@@ -59,7 +59,7 @@
             <value>&quot;${usbdm_kds_path}/platform/system/inc&quot;</value>
          </projectOption>
          <!-- C++ Include paths -->
-         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths" replace="true">
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths" overwrite="true">
             <value>&quot;${usbdm_kds_path}/platform/utilities/inc&quot;</value>
             <value>&quot;${usbdm_kds_path}/platform/osa/inc&quot;</value>
             <value>&quot;${usbdm_kds_path}/platform/CMSIS/Include&quot;</value>

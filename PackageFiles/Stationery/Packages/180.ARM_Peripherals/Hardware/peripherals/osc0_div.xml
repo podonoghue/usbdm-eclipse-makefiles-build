@@ -123,7 +123,7 @@
    </validate>
 
    <projectActionList id = "osc_files" >
-      <copy source="Project_Headers/osc.h"  target="Project_Headers/osc.h"  replace="true"  derived="true" />
+      <copy source="Project_Headers/osc.h"  target="Project_Headers/osc.h"  overwrite="true"  derived="true" />
    </projectActionList>
          
    <template><![CDATA[
