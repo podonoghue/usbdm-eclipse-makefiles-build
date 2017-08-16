@@ -80,10 +80,14 @@ USBDM_ErrorCode GdbHandler_CFV1::initialise() {
    return BDM_RC_OK;
 }
 
-USBDM_ErrorCode GdbHandler_CFV1::resetTarget() {
+USBDM_ErrorCode GdbHandler_CFV1::resetTarget(DeviceData::ResetMethod resetMethod) {
    LOGGING;
 
-   USBDM_ErrorCode rc = GdbHandlerCommon::resetTarget();
+   USBDM_ErrorCode rc = GdbHandlerCommon::resetTarget(resetMethod);
+   if (rc != BDM_RC_OK) {
+      // Retry with hardware reset
+      rc = GdbHandlerCommon::resetTarget(DeviceData::resetHardware);
+   }
    if (rc != BDM_RC_OK) {
       return rc;
    }
@@ -99,7 +103,7 @@ USBDM_ErrorCode GdbHandler_CFV1::resetTarget() {
    if (rc2 == BDM_RC_OK) {
       uint32_t resetSP = get32bitBE(buff+0);
       uint32_t resetPC = get32bitBE(buff+4);
-      log.print("Writing PC=0x%08X, SP=-x%08X\n", resetPC, resetSP);
+      log.print("Writing PC=0x%08X, SP=0x%08X\n", resetPC, resetSP);
       writeSP(resetSP); // This will be SSP after reset
       writePC(resetPC);
    }
@@ -459,7 +463,7 @@ GdbHandler::GdbTargetStatus GdbHandler_CFV1::pollTarget(void) {
          return T_UNKNOWN;
       }
       reportGdbPrintf((GdbMessageLevel)(M_ERROR|M_DIALOGUE), "Resetting target due to connection failure\n");
-      usbdmResetTarget(true);
+      resetTarget();
       resetAttempted = true;
       return T_UNKNOWN;
    }

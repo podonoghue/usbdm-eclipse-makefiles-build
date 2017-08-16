@@ -316,12 +316,16 @@ DeviceData::ResetMethod GdbHandlerCommon::getResetMethod() {
    return resetMethod;
 }
 
-USBDM_ErrorCode GdbHandlerCommon::resetTarget() {
+USBDM_ErrorCode GdbHandlerCommon::resetTarget(DeviceData::ResetMethod resetMethod) {
    LOGGING;
 
    TargetMode_t targetMode;
 
-   DeviceData::ResetMethod resetMethod = getResetMethod();
+   log.error("Reset method %s\n", DeviceData::getResetMethodName(resetMethod));
+   if (resetMethod == DeviceData::resetTargetDefault) {
+      resetMethod = getResetMethod();
+      log.error("Reset defaulted to method %s\n", DeviceData::getResetMethodName(resetMethod));
+   }
    switch (resetMethod) {
       default:
       case DeviceData::resetTargetDefault:
@@ -1171,7 +1175,7 @@ void GdbHandlerCommon::reportLocation(char mode, int reason) {
 }
 
 USBDM_ErrorCode GdbHandlerCommon::doCommand(const GdbPacket *pkt) {
-   LOGGING_Q;
+   LOGGING;
    unsigned address;
    unsigned numBytes;
    const char *ccptr;
@@ -1431,15 +1435,6 @@ USBDM_ErrorCode GdbHandlerCommon::doCommand(const GdbPacket *pkt) {
    return BDM_RC_OK;
 }
 
-///*
-// *   Return target status without polling target
-// *
-// *   @return Target status
-// */
-//GdbHandler::GdbTargetStatus GdbHandlerCommon::getGdbTargetStatus(void) {
-//   return gdbTargetStatus;
-//}
-
 /**
  * Get the current timeout value
  */
@@ -1450,26 +1445,13 @@ unsigned GdbHandlerCommon::getConnectionTimeout() {
    return 10;
 }
 
-USBDM_ErrorCode GdbHandlerCommon::usbdmResetTarget(bool retry) {
-   LOGGING_E;
-
-   bdmInterface->reset((TargetMode_t)(RESET_DEFAULT|RESET_SPECIAL));
-   USBDM_ErrorCode rc = bdmInterface->connect();
-   if ((rc != BDM_RC_OK) && retry) {
-      reportGdbPrintf("USBDM_Connect() failed, rc = \n", bdmInterface->getErrorString(rc));
-      log.print("USBDM_Connect() failed - retry\n");
-      rc = usbdmResetTarget(false);
-   }
-   return rc;
-}
-
 USBDM_ErrorCode GdbHandlerCommon::initBreakpoints() {
    LOGGING;
    USBDM_ErrorCode rc = gdbBreakpoints->initBreakpoints();
    if (rc != BDM_RC_OK) {
       log.error("gdbBreakpoints->initBreakpoints() failed, rc = %s", bdmInterface->getErrorString(rc));
       reportGdbPrintf(M_INFO, "initBreakpoints() failed, rc = %s\n", bdmInterface->getErrorString(rc));
-      usbdmResetTarget(false);
+      resetTarget();
       rc = gdbBreakpoints->initBreakpoints();
    }
    initBreakpointsDone = true;

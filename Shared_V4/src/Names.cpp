@@ -1501,7 +1501,7 @@ static const bitInfo bitNames[] = {
       {"CORE_HOLD|",     MDM_AP_Control_Core_Hold_Reset},
       {"VLLDBGREQ|",     MDM_AP_Control_VLLDBGREQ},
       {"VLLDBGACK|",     MDM_AP_Control_VLLDBGACK},
-      {"STATUS_ACK|",    MDM_AP_Control_Status_Ack},
+      {"LLS_VLLSx_ACK|", MDM_AP_Control_LLS_VLLSx_Ack},
       {NULL, 0},
 };
 const bitInfo *bitPtr = bitNames;

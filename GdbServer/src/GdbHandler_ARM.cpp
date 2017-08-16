@@ -96,17 +96,29 @@ USBDM_ErrorCode GdbHandler_ARM::initialise() {
 
    USBDM_ErrorCode rc = GdbHandlerCommon::initialise();
 
-   // Ignore Secured as may still be able to program device after mass-erase
+   // Ignore secured as may still be able to program device after mass-erase
+   if ((rc != BDM_RC_OK)&&(rc != BDM_RC_SECURED)) {
+      resetTarget();
+      rc = GdbHandlerCommon::initialise();
+   }
+   if ((rc != BDM_RC_OK)&&(rc != BDM_RC_SECURED)) {
+      // In case target is in LLSx or VLLSx with debug interface unavailable
+      resetTarget(DeviceData::resetHardware);
+      rc = GdbHandlerCommon::initialise();
+   }
    if ((rc != BDM_RC_OK)&&(rc != BDM_RC_SECURED)) {
       return rc;
    }
    return configureMDM_AP();
 }
 
-USBDM_ErrorCode GdbHandler_ARM::resetTarget() {
+USBDM_ErrorCode GdbHandler_ARM::resetTarget(DeviceData::ResetMethod resetMethod) {
    LOGGING;
 
-   USBDM_ErrorCode rc = GdbHandlerCommon::resetTarget();
+   USBDM_ErrorCode rc = GdbHandlerCommon::resetTarget(resetMethod);
+   if (rc != BDM_RC_OK) {
+      rc = GdbHandlerCommon::resetTarget(DeviceData::resetHardware);
+   }
    if (rc != BDM_RC_OK) {
       return rc;
    }
@@ -296,7 +308,7 @@ uint32_t GdbHandler_ARM::getCachedR1() {
 /**
  * Configure the MDM_AP register for Kinetis targets
  *
- * @return
+ * @return Error code
  */
 USBDM_ErrorCode GdbHandler_ARM::configureKinetisMDM_AP() {
 
@@ -304,34 +316,43 @@ USBDM_ErrorCode GdbHandler_ARM::configureKinetisMDM_AP() {
    USBDM_ErrorCode rc = BDM_RC_OK;
 
    if (isKinetisDevice) {
-      unsigned long mdm_ap_control;
-      rc = bdmInterface->readCReg(ARM_CRegMDM_AP_Control, &mdm_ap_control);
+      unsigned long mdm_ap_control = 0;
+
+      // Acknowledge (clear) LLSx/VLLSx sticky flags in MDM_AP_STATUS
+      rc = bdmInterface->writeCReg(ARM_CRegMDM_AP_Control, mdm_ap_control|MDM_AP_Control_LLS_VLLSx_Ack);
       if (rc != BDM_RC_OK) {
-         log.error("Reading MDM_AP_Control failed, rc=%s", bdmInterface->getErrorString(rc));
+         log.error("Writing MDM_AP_Control failed, rc=%s\n", bdmInterface->getErrorString(rc));
          return rc;
       }
-      // Clear flags
-      rc = bdmInterface->writeCReg(ARM_CRegMDM_AP_Control, mdm_ap_control|MDM_AP_Control_VLLDBGACK|MDM_AP_Control_Status_Ack);
+
       if (bdmInterface->isCatchVLLSx()) {
-         // Set monitor LLS & VLLSx
-         // LLS   - flag is set but execution continues
-         // VLLSx - flag sets and core halts
+         // Set monitor VLLSx reset
+         // MDM_AP_CONTROL.VLLSx flag sets and core halts
          log.print("Activating MDM_AP_Control_VLLDBGREQ\n");
-         rc = bdmInterface->writeCReg(ARM_CRegMDM_AP_Control, mdm_ap_control|MDM_AP_Control_VLLDBGREQ);
-         if (rc != BDM_RC_OK) {
-            log.error("Reading MDM_AP_Control failed, rc=%s", bdmInterface->getErrorString(rc));
-            return rc;
-         }
+         reportGdbPrintf(M_BORINGINFO, "Activating MDM_AP_Control_VLLDBGREQ\n");
+
+         // Request Hold in reset after VLLSx exit (reset)
+         mdm_ap_control |= MDM_AP_Control_VLLDBGREQ;
+      }
+      // Release from VLLSx reset (if necessary)
+      mdm_ap_control |= MDM_AP_Control_VLLDBGACK;
+
+      // Configure MDM_AP_CONTROL
+      rc = bdmInterface->writeCReg(ARM_CRegMDM_AP_Control, mdm_ap_control);
+      if (rc != BDM_RC_OK) {
+         log.error("Writing MDM_AP_Control failed, rc=%s", bdmInterface->getErrorString(rc));
+         return rc;
       }
    }
    return rc;
 }
 
-//! Write to target register
-//!
-//! @param regNo     - number of register to read (GDB numbering)
-//! @param regValue  - value to write
-//!
+/**
+ * Write to target register
+ *
+ * @param regNo     - number of register to read (GDB numbering)
+ * @param regValue  - value to write
+ */
 void GdbHandler_ARM::writeReg(unsigned regNo, unsigned long regValue) {
    LOGGING;
    if (!isValidRegister(regNo))
@@ -367,12 +388,26 @@ USBDM_ErrorCode GdbHandler_ARM::armReadMemoryWord(unsigned long address, unsigne
    return rc;
 }
 
-//! Get run state by polling target
-//!
-//! @return status - status of target T_UNKNOWN/T_SLEEP/T_HALT/T_RUNNING
-//!
+/**
+ * Get run state by polling target\n
+ * Will attempt simple re-connect if necessary
+ *
+ * @return Status of target T_HALT, T_RUNNING etc
+ *
+ * @return T_NOCONNECTION Unable to connect to target - may be in LLSx or VLLSx.
+ * @return T_RUNNING      Currently executing
+ * @return T_HALT         Currently in debug halt
+ * @return T_RESET        Currently in reset
+ * @return T_WAIT         Currently in sleep (WAIT)
+ * @return T_STOP         Currently in deep-sleep (STOP)
+ * @return T_VLPR         Currently in low-power run (VLPR)
+ * @return T_VLPW         Currently in low power sleep (VLPW)
+ * @return T_VLPS         Currently in low power deep-sleep (VLPS)
+ * @return T_LLSxEXIT     Exited LLSx state
+ * @return T_VLLSxEXIT    Exited VLLSx state
+ */
 GdbHandler::GdbTargetStatus GdbHandler_ARM::getTargetStatus() {
-   LOGGING_Q;
+   LOGGING;
 
    static GdbTargetStatus  lastStatus = T_UNKNOWN;
    GdbTargetStatus         status     = T_UNKNOWN;
@@ -381,8 +416,12 @@ GdbHandler::GdbTargetStatus GdbHandler_ARM::getTargetStatus() {
 
    do {
       if (isKinetisDevice) {
+         /**
+          *  Use Kinetis MDM_AP
+          */
          unsigned long mdm_ap_status;
          rc = bdmInterface->readCReg(ARM_CRegMDM_AP_Status, &mdm_ap_status);
+
          if (rc != BDM_RC_OK) {
             log.print("Doing autoReconnect\n");
             if (bdmInterface->connect() != BDM_RC_OK) {
@@ -394,47 +433,54 @@ GdbHandler::GdbTargetStatus GdbHandler_ARM::getTargetStatus() {
                rc = bdmInterface->readCReg(ARM_CRegMDM_AP_Status, &mdm_ap_status);
             }
          }
+         log.print("mdm_ap_status = %s(0x%08lX)\n", getMDM_APStatusName(mdm_ap_status), mdm_ap_status);
          if (rc != BDM_RC_OK) {
             status = T_NOCONNECTION;
             break;
          }
-         if (mdm_ap_status&MDM_AP_Status_Core_Halted) {
-            status =  T_HALT;
-            break;
+         if (targetBreakPending) {
+            // Do this as soon as possible after OK connection
+            bdmInterface->writeCReg(ARM_CRegMDM_AP_Control, MDM_AP_Control_Debug_Request);
+            log.print("Asserting MDM_AP_Control_Debug_Request\n");
          }
          if (mdm_ap_status&MDM_AP_Status_VLLSx_Mode_Exit) {
-            status =  T_VLLSxRESET;
+            // Target is being held in reset until mdm-ap_control.VLLDBGACK is written
+            // Sticky bit cleared by mdm-ap_control.LLS_VLLSx_Ack
+            status =  T_VLLSxEXIT;
             break;
          }
          if (mdm_ap_status&MDM_AP_Status_LLS_Mode_Exit) {
-            status =  T_LLSxRESET;
+            // Target has exited LLSx mode and is executing
+            // Sticky bit cleared by mdm-ap_control.LLS_VLLSx_Ack
+            status =  T_LLSxEXIT;
             break;
          }
-         if (mdm_ap_status&MDM_AP_Status_Core_SLEEPDEEP) {
-            if (mdm_ap_status&MDM_AP_Status_VLP_Mode) {
-               status =  T_VLPS;
-               break;
-            }
-            else {
-               status =  T_STOP;
-               break;
-            }
+         if (mdm_ap_status&MDM_AP_Status_Core_Halted) {
+            // Target is halted
+            status =  T_HALT;
+            break;
          }
          if (mdm_ap_status&MDM_AP_Status_Core_SLEEPING) {
-            if (mdm_ap_status&MDM_AP_Status_VLP_Mode) {
-               status =  T_VLPW;
+            // Target is halted in WAIT/VLPW/STOP/VLPS mode
+
+            if (mdm_ap_status&MDM_AP_Status_Core_SLEEPDEEP) {
+               // Target is in STOP or VLPS mode
+               status =  (mdm_ap_status&MDM_AP_Status_LP_Enable)?T_VLPS:T_STOP;
                break;
             }
             else {
-               status =  T_WAIT;
+               // Target is halted in WAIT or VLPW mode
+               status =  (mdm_ap_status&MDM_AP_Status_LP_Enable)?T_VLPW:T_WAIT;
                break;
             }
          }
          if (mdm_ap_status&MDM_AP_Status_VLP_Mode) {
+            // Target is running in VLPR mode
             status =  T_VLPR;
             break;
          }
          if ((mdm_ap_status&MDM_AP_Status_System_Reset) == 0) {
+            // Target is currently in RESET state
             status =  T_RESET;
             break;
          }
@@ -444,6 +490,7 @@ GdbHandler::GdbTargetStatus GdbHandler_ARM::getTargetStatus() {
 
       unsigned long dhcsr;
       USBDM_ErrorCode rc = armReadMemoryWord(DHCSR, &dhcsr);
+      log.print("dhcsr = 0x%08lX\n", dhcsr);
       if (rc != BDM_RC_OK) {
          log.print("Doing autoReconnect\n");
          if (bdmInterface->connect() != BDM_RC_OK) {
@@ -864,6 +911,12 @@ GdbHandler::GdbTargetStatus GdbHandler_ARM::handleHostedBreak() {
 GdbHandler::GdbTargetStatus GdbHandler_ARM::handleHalted() {
    LOGGING;
    bool looping = false;
+
+   log.print("Doing autoReconnect\n");
+   if (bdmInterface->connect() != BDM_RC_OK) {
+      log.print("Connect failed\n");
+   }
+
    if (runState == Running) {
       // Target has just halted - cache registers
       readRegs();
@@ -930,50 +983,125 @@ GdbHandler::GdbTargetStatus GdbHandler_ARM::handleHalted() {
  */
 GdbHandler::GdbTargetStatus GdbHandler_ARM::pollTarget(void) {
    LOGGING;
-   static int  unsuccessfulPollCount = 0;                    // Count of unsuccessful polls of the target
-   static bool resetAttempted = false;                       // Set if reset already tried
+   static int      unsuccessfulPollCount = 0;                    // Count of unsuccessful polls of the target
+   static bool     resetAttempted = false;                       // Set if reset already tried
+   static int      busy = 0;
+   static RunState lastRunState = RunState::Halted;
+
    int         timeoutLimit   = getConnectionTimeout() * 10; // Scale to 100 ms ticks
 
-   if (targetBreakPending) {
-      // Halt target
-      bdmInterface->halt();
-   }
-   GdbTargetStatus gdbTargetStatus = getTargetStatus();
-   log.print("gdbTargetStatus(on poll) = %s\n", getStatusName(gdbTargetStatus));
-   log.print("runState(on entry)       = %s\n", getRunStateName(runState));
+   static GdbTargetStatus gdbTargetStatus = GdbTargetStatus::T_UNKNOWN;
+   static constexpr int BREAK_TIMEOUT = 20; // 2 seconds
 
-   if (gdbTargetStatus == T_NOCONNECTION) {
-      if (resetAttempted) {
-         return T_NOCONNECTION;
-      }
-      if ((unsuccessfulPollCount++ < timeoutLimit) || (timeoutLimit == 0)) {
-         return T_UNKNOWN;
-      }
-      reportGdbPrintf((GdbMessageLevel)(M_ERROR|M_DIALOGUE), "Resetting target due to connection failure\n");
-      usbdmResetTarget(true);
-      resetAttempted = true;
-      return T_UNKNOWN;
+   if (lastRunState != runState) {
+      lastRunState = runState;
+      unsuccessfulPollCount = 0;
    }
-   resetAttempted = false;
-   unsuccessfulPollCount = 0;
+   if (busy>0) {
+      log.print("Recursed\n");
+      return gdbTargetStatus;
+   }
+   busy++;
 
-   if ((gdbTargetStatus == T_VLLSxRESET) || (gdbTargetStatus == T_LLSxRESET)) {
-      configureKinetisMDM_AP();
-      // Re-establish breakpoints as lost on reset
-      notifyBreakpointsCleared();
-      activateBreakpoints();
-   }
-   if ((gdbTargetStatus == T_HALT)) {
-      // Check for semi-hosting
-      unsigned long pc;
-      readPC(&pc);
-      if (checkHostedBreak(pc)) {
-         gdbTargetStatus = handleHostedBreak();
+   log.print("runState(on entry)       = %s, pollCount = %d\n", getRunStateName(runState), unsuccessfulPollCount);
+
+   do {
+      gdbTargetStatus = getTargetStatus();
+      log.print("gdbTargetStatus(on poll) = %s\n", getStatusName(gdbTargetStatus));
+
+      if (targetBreakPending) {
+         // Halt target
+         log.print("Breaking - halting target\n");
+         bdmInterface->halt();
       }
-   }
-   if ((gdbTargetStatus == T_HALT)) {
-      gdbTargetStatus = handleHalted();
-   }
+
+      if (gdbTargetStatus == T_NOCONNECTION) {
+         if (resetAttempted) {
+            // Already attempted reset - just give up
+            gdbTargetStatus = T_NOCONNECTION;
+            break;
+         }
+         // Decide whether to reset target or continue waiting
+         // This is necessary to support LLSx & VLLSx modes where communication is lost
+         if (unsuccessfulPollCount++ < timeoutLimit) {
+            // Still in timeout or no timeout
+            gdbTargetStatus = T_UNKNOWN;
+            break;
+         }
+         if (targetBreakPending && (unsuccessfulPollCount < BREAK_TIMEOUT)) {
+            // Waiting for break and not timeout
+            gdbTargetStatus = T_UNKNOWN;
+            break;
+         }
+         if (!targetBreakPending && (timeoutLimit == 0)) {
+            // Not breaking and not timeout
+            gdbTargetStatus = T_UNKNOWN;
+            break;
+         }
+//         reportGdbPrintf((GdbMessageLevel)(M_ERROR|M_DIALOGUE), "Reseting target due to connection failure\n");
+         reportGdbPrintf(M_ERROR, "Reseting target due to connection failure\n");
+         // Check connection again in case user has done something to correct communication error
+         gdbTargetStatus = getTargetStatus();
+         if (gdbTargetStatus == T_NOCONNECTION) {
+            resetTarget();
+            resetAttempted = true;
+            gdbTargetStatus = getTargetStatus();
+            if (gdbTargetStatus == T_NOCONNECTION) {
+               gdbTargetStatus = T_UNKNOWN;
+               break;
+            }
+         }
+      }
+      resetAttempted = false;
+      unsuccessfulPollCount = 0;
+
+      if (gdbTargetStatus == T_VLLSxEXIT) {
+         log.print("VLLSx Exit detected\n");
+         reportGdbPrintf(M_INFO, "VLLSx Exit detected\n");
+
+         unsigned long mdm_ap_status;
+         bdmInterface->readCReg(ARM_CRegMDM_AP_Status, &mdm_ap_status);
+         log.print("mdm_ap_status = %s(0x%08lX)\n", getMDM_APStatusName(mdm_ap_status), mdm_ap_status);
+
+         // Re-establish breakpoints as lost on exit
+         notifyBreakpointsCleared();
+
+         bdmInterface->readCReg(ARM_CRegMDM_AP_Status, &mdm_ap_status);
+         log.print("mdm_ap_status = %s(0x%08lX)\n", getMDM_APStatusName(mdm_ap_status), mdm_ap_status);
+         activateBreakpoints();
+
+         bdmInterface->readCReg(ARM_CRegMDM_AP_Status, &mdm_ap_status);
+         log.print("mdm_ap_status = %s(0x%08lX)\n", getMDM_APStatusName(mdm_ap_status), mdm_ap_status);
+
+         // Release reset
+         configureKinetisMDM_AP();
+
+         bdmInterface->readCReg(ARM_CRegMDM_AP_Status, &mdm_ap_status);
+         log.print("mdm_ap_status = %s(0x%08lX)\n", getMDM_APStatusName(mdm_ap_status), mdm_ap_status);
+
+         break;
+      }
+      if (gdbTargetStatus == T_LLSxEXIT) {
+         log.print("LLSx Exit detected\n");
+         reportGdbPrintf(M_INFO, "LLSx Exit detected\n");
+         configureKinetisMDM_AP();
+         break;
+      }
+      if ((gdbTargetStatus == T_HALT)) {
+         // Check for semi-hosting
+         unsigned long pc;
+         readPC(&pc);
+         if (checkHostedBreak(pc)) {
+            gdbTargetStatus = handleHostedBreak();
+         }
+      }
+      if ((gdbTargetStatus == T_HALT)) {
+         gdbTargetStatus = handleHalted();
+      }
+   } while (false);
+
+   busy--;
+
    log.print("gdbTargetStatus(on exit) = %s\n", getStatusName(gdbTargetStatus));
    log.print("runState(on exit)        = %s\n", getRunStateName(runState));
    return gdbTargetStatus;

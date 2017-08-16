@@ -244,12 +244,19 @@ static USBDM_ErrorCode resetHardware(TargetMode_t resetMode) {
 
    log.print("Doing Hardware reset\n");
 
-   if (armDebugInformation.MDM_AP_present) {
-      // Debug interface still operates during hardware reset
-      // So apply reset early
+   // Require target access
+   rc = armInitialise();
+   if ((rc != BDM_RC_OK) || armDebugInformation.MDM_AP_present) {
+      /*
+       * If initialize failed or it's a Freescale device
+       * apply reset early
+       */
       USBDM_ControlPins(PIN_RESET_LOW);
    }
-
+   if (rc != BDM_RC_OK) {
+      // Require target access - try again
+      armInitialise();
+   }
    if (armDebugInformation.KinetisSecured) {
       log.error("Secured Kinetis device - using truncated reset\n");
    }
@@ -281,7 +288,6 @@ static USBDM_ErrorCode resetHardware(TargetMode_t resetMode) {
  */
 static USBDM_ErrorCode resetSoftware(TargetMode_t resetMode) {
    LOGGING;
-   USBDM_ErrorCode rc;
 
    log.print("Doing Software reset\n");
 
@@ -303,6 +309,11 @@ static USBDM_ErrorCode resetSoftware(TargetMode_t resetMode) {
 //      armWriteMemoryWord(DBGMCU_CR, (DBGMCU_IWDG_STOP|DBGMCU_WWDG_STOP));
 //   }
 
+   // Require target access
+   USBDM_ErrorCode rc = armInitialise();
+   if (rc != BDM_RC_OK) {
+      return rc;
+   }
    rc = doSetupResetRegisters(resetMode);
 
    /**
@@ -320,7 +331,8 @@ static USBDM_ErrorCode resetSoftware(TargetMode_t resetMode) {
    return rc;
 }
 
-/** Reset ARM-SWD target using Freescale Kinetis specific features
+/**
+ *  Reset ARM-SWD target using Freescale Kinetis specific features
  *
  *  @param target_mode - Reset mode \n
  *         RESET_SPECIAL/RESET_NORMAL
@@ -345,6 +357,11 @@ static USBDM_ErrorCode resetVendor(TargetMode_t resetMode) {
 //      UsbdmSystem::milliSleep(bdmOptions.resetRecoveryInterval);
 //   }
 
+   // Require target access
+   USBDM_ErrorCode rc = armInitialise();
+   if (rc != BDM_RC_OK) {
+      return rc;
+   }
    unsigned long mdm_ap_control;
    USBDM_ErrorCode rcMDM = USBDM_ReadCReg(ARM_CRegMDM_AP_Control, &mdm_ap_control);
    if (rcMDM != BDM_RC_OK) {
@@ -430,11 +447,6 @@ USBDM_ErrorCode resetARM(TargetMode_t targetMode) {
    TargetMode_t resetMode   = (TargetMode_t)(targetMode&RESET_MODE_MASK);
    log.print("%s\n", getTargetModeName((TargetMode_t)(resetMethod|resetMode)));
 
-   // Require target access
-   USBDM_ErrorCode rc = armInitialise();
-   if (rc != BDM_RC_OK) {
-      return rc;
-   }
    if (resetMethod == RESET_DEFAULT) {
       // Default for ARM is hardware
       resetMethod = RESET_HARDWARE;
@@ -449,13 +461,27 @@ USBDM_ErrorCode resetARM(TargetMode_t targetMode) {
       }
    }
 #endif
-
+   // Require target access
+   USBDM_ErrorCode rc = BDM_RC_OK;
    switch (resetMethod) {
       case RESET_VENDOR:
+         // Apply Vendor reset method
          rc = resetVendor(resetMode);
          break;
 
-      case RESET_ALL:
+      case RESET_ALL: // VENDOR, HARDWARE, SOFTWARE
+         // Apply Vendor reset method
+         rc = resetVendor(resetMode);
+         if (rc != BDM_RC_OK) {
+            // Apply hardware reset
+            rc = resetHardware(resetMode);
+         }
+         if (rc != BDM_RC_OK) {
+            // Apply hardware reset
+            rc = resetSoftware(resetMode);
+         }
+         break;
+
       case RESET_HARDWARE :
          // Apply hardware reset
          rc = resetHardware(resetMode);

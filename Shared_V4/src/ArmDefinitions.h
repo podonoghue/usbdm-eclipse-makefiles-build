@@ -116,7 +116,7 @@
 #define MDM_AP_Control_Core_Hold_Reset       (1UL<<4)
 #define MDM_AP_Control_VLLDBGREQ             (1UL<<5)
 #define MDM_AP_Control_VLLDBGACK             (1UL<<6)
-#define MDM_AP_Control_Status_Ack            (1UL<<7)
+#define MDM_AP_Control_LLS_VLLSx_Ack         (1UL<<7)
 
 // AP#0 - AHB-AP
 #define AHB_AP_CSW     (0x00000000U) // AHB-AP Control/Status Word register
