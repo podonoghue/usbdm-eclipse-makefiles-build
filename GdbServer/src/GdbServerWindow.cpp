@@ -99,7 +99,7 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
     deferredOpen = value;
  }
 
- /*!
+ /**
   *  Translate a IPaddress into a meaningful string
   *
   *  @param addr The address to translate
@@ -118,7 +118,7 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
     return *serverAddr;
  }
 
- /*!
+ /**
   *  Create server listening on socket
   *  Subscribes to connection events with ID SERVER_ID
   */
@@ -205,8 +205,8 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
  // event handlers
  //===========================================================================
 
- /*!  Handler for Drop connection menu item
-  *
+ /**
+  *  Handler for Drop connection menu item
   */
  void GdbServerWindow::OnDropConnection(wxCommandEvent& WXUNUSED(event)) {
     LOGGING_Q;
@@ -216,8 +216,8 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
     }
  }
 
- /*!   Handler for Quit button
-  *
+ /**
+  *   Handler for Quit button
   */
  void GdbServerWindow::OnChangeSettings(wxCommandEvent& WXUNUSED(event)) {
     if (confirmDropConnection()) {
@@ -228,15 +228,15 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
     }
  }
 
- /*!   Handler for Quit button
-  *
+ /**
+  *   Handler for Quit button
   */
  void GdbServerWindow::OnQuit(wxCommandEvent& WXUNUSED(event)) {
     Close(false);
  }
 
- /*!   Handler for Close Window
-  *
+ /**
+  *   Handler for Close Window
   */
  void GdbServerWindow::OnCloseWindow(wxCloseEvent& event) {
     LOGGING_Q;
@@ -250,35 +250,35 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
     }
  }
 
- /*!  Handler for Clear Log Button
-  *
+ /**
+  * Handler for Clear Log Button
   */
  void GdbServerWindow::OnClearLog(wxCommandEvent& WXUNUSED(event)) {
     statusTextControl->Clear();
  }
 
- /*!   Verbose log check-box menu item
-  *
+ /**
+  *  Verbose log check-box menu item
   */
  void GdbServerWindow::OnDisableLog(wxCommandEvent& event) {
     setLoggingLevel(GdbHandler::M_ERROR);
  }
 
- /*!
-  *    Verbose log check-box menu item
+ /**
+  *  Verbose log check-box menu item
   */
  void GdbServerWindow::OnModerateLog(wxCommandEvent& event) {
     setLoggingLevel(GdbHandler::M_INFO);
  }
 
- /*!   Verbose log check-box menu item
-  *
+ /**
+  *  Verbose log check-box menu item
   */
  void GdbServerWindow::OnVerboseLog(wxCommandEvent& event) {
     setLoggingLevel(GdbHandler::M_BORINGINFO);
  }
 
- /*!
+ /**
   * Handler for Halt Target menu item
   */
  void GdbServerWindow::OnHaltTarget(wxCommandEvent& event) {
@@ -286,16 +286,16 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
     statusTextControl->AppendText(_("User halt of target - step GDB to synchronise\n"));
  }
 
- /*!  Handler for Reset Target menu item
-  *
+ /**
+  * Handler for Reset Target menu item
   */
  void GdbServerWindow::OnResetTarget(wxCommandEvent& event) {
     gdbHandler->resetTarget();
     statusTextControl->AppendText(_("User reset of target - step GDB to synchronise\n"));
  }
 
- /*!  Handler for Mask interrupts menu item
-  *
+ /**
+  * Handler for Mask interrupts menu item
   */
  void GdbServerWindow::OnToggleMaskISR(wxCommandEvent& event) {
     bool disableInterrupts = event.IsChecked();
@@ -305,8 +305,8 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
     }
  }
 
- /*!  Handler for Reset Target menu item
-  *
+ /**
+  * Handler for Reset Target menu item
   */
  void GdbServerWindow::OnToggleCatchVLLS(wxCommandEvent& event) {
     bool catchVLLS = event.IsChecked();
@@ -320,7 +320,7 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
 
  }
 
- /*!  Handler for Timeout menu item
+ /**  Handler for Timeout menu item
   *
   */
  void GdbServerWindow::OnSetTimeout(wxCommandEvent& WXUNUSED(event)) {
@@ -335,7 +335,7 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
     bdmInterface->setConnectionTimeout((unsigned)value);
  }
 
- /*!
+ /**
   *  Handler for Server events (before connection)
   *
   *  - Only expects connection events wxSOCKET_CONNECTION
@@ -401,19 +401,17 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
     UpdateStatusBar();
  }
 
- /*! Handler for Timer events
+ /**
+  *  Handler for Timer events
   *
   *   - Handles polling target when running
   */
  void GdbServerWindow::OnTimer(wxTimerEvent& event) {
     LOGGING;
     pollTarget();
- //   if ((clientSocket!= NULL) && clientSocket->IsData()) {
- //      log.print("OnTimer:: Data available?\n");
- //   }
  }
 
- /*!
+ /**
   *  Drop client connection and clean up
   *
   */
@@ -448,7 +446,8 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
     UpdateStatusBar();
  }
 
- /*!  Report error message
+ /**
+  *  Report error message
   *
   *   @param msg   Message to display
   *   @param rc    Error code
@@ -462,10 +461,10 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
        }
     }
     if (level&GdbHandler::M_DIALOGUE) {
-       Iconize(false); // restore the window if minimized
-       SetFocus();     // focus on my window
-       Raise();        // bring window to front
-       Show(true);     // show the window
+       Iconize(false); // Restore the window if minimized
+       SetFocus();     // Focus on my window
+       Raise();        // Bring window to front
+       Show(true);     // Show the window
        wxMessageBox(
           wxString(msg, wxConvUTF8),                      /* message */
           wxString("Message", wxConvUTF8),                /* caption */
@@ -493,7 +492,8 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
 
  GdbServerWindow *GdbServerWindow::GdbMessageWrapper::me = NULL; //!< handle on GdbServerWindow
 
- /*! Call back to display messages from GDB handler
+ /**
+  *  Call back to display messages from GDB handler
   *
   *   @param msg   Message to display
   *   @param level Level
@@ -505,7 +505,7 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
     return me->reportError(msg, level, rc);
  }
 
- /*!
+ /**
   *  Handler for Socket events (after connection)
   *
   *  - Only expects:
@@ -545,7 +545,15 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
 
              gdbInOut = new GdbInOutWx(clientSocket, statusTextControl);
              GdbHandler::GdbCallback cb = GdbMessageWrapper::getCallBack(this);
-             gdbHandler = GdbHandlerFactory::createGdbHandler(bdmInterface->getBdmOptions().targetType, gdbInOut, bdmInterface, deviceInterface, cb, tty);
+
+             gdbHandler = GdbHandlerFactory::createGdbHandler(
+                   bdmInterface->getBdmOptions().targetType,
+                   gdbInOut,
+                   bdmInterface,
+                   deviceInterface,
+                   cb,
+                   tty);
+
              rc = gdbHandler->initialise();
              if (rc != BDM_RC_OK) {
                 // Try again after Reset
@@ -601,57 +609,69 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
     UpdateStatusBar();
  }
 
- /*!  Poll target to check run status
-  *
+ /**
+  * Poll target to check run status
   */
  void GdbServerWindow::pollTarget() {
-    LOGGING_Q;
+    LOGGING;
     static GdbHandler::GdbTargetStatus lastTargetStatus = GdbHandler::T_UNKNOWN;
 
-    targetStatus = GdbHandler::T_NOCONNECTION;
+    static unsigned recurse = 0;
 
-    int pollInterval = pollIntervalFast;
+    if (recurse>0) {
+       log.print("Recursed - exit\n");
+       return;
+    }
 
-    if (gdbHandler == 0) {
-       log.print("Stopping timer\n");
-       if (statusTimer != 0) {
-          statusTimer->Stop();
+    recurse++;
+    do {
+       targetStatus = GdbHandler::T_NOCONNECTION;
+
+       int pollInterval = pollIntervalFast;
+
+       if (gdbHandler == 0) {
+          if (statusTimer != 0) {
+             log.print("Stopping timer\n");
+             statusTimer->Stop();
+          }
+          break;
        }
-       return;
-    }
 
-    if (deferredOpen || deferredFail) {
-       // Don't poll before opening target or shutting down
-       return;
-    }
-    targetStatus = gdbHandler->pollTarget();
-    log.print("Status = %s\n", GdbHandler::getStatusName(targetStatus));
-    switch (targetStatus) {
-       case GdbHandler::T_HALT:
-       case GdbHandler::T_RESET:
-          pollInterval = pollIntervalSlow;
-          entryTextControl->Enable(0);
+       if (deferredOpen || deferredFail) {
+          // Don't poll before opening target or shutting down
           break;
-       case GdbHandler::T_USER_INPUT:
-          entryTextControl->Enable();
-          pollInterval = pollIntervalSlow;
-          break;
-       default:
-          entryTextControl->Enable(0);
-          break;
-    }
+       }
+       targetStatus = gdbHandler->pollTarget();
+       log.print("Status = %s\n", GdbHandler::getStatusName(targetStatus));
 
-    if (targetStatus != lastTargetStatus) {
-       lastTargetStatus = targetStatus;
-       UpdateStatusBar();
-    }
-    if (statusTimer != 0) {
-       statusTimer->Start(pollInterval, wxTIMER_ONE_SHOT);
-    }
+       switch (targetStatus) {
+          case GdbHandler::T_HALT:
+          case GdbHandler::T_RESET:
+             pollInterval = pollIntervalSlow;
+             entryTextControl->Enable(false);
+             break;
+          case GdbHandler::T_USER_INPUT:
+             entryTextControl->Enable();
+             pollInterval = pollIntervalSlow;
+             break;
+          default:
+             entryTextControl->Enable(false);
+             break;
+       }
+
+       if (targetStatus != lastTargetStatus) {
+          lastTargetStatus = targetStatus;
+          UpdateStatusBar();
+       }
+       if (statusTimer != 0) {
+          statusTimer->Start(pollInterval, wxTIMER_ONE_SHOT);
+       }
+    } while (0);
+    recurse--;
  }
 
- /*!  Update status bar
-  *
+ /**
+  * Update status bar
   */
  void GdbServerWindow::UpdateStatusBar() {
 
