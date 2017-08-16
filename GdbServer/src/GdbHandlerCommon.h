@@ -79,11 +79,18 @@ protected:
       }
       return gdbBreakpoints->removeBreakpoint(type, address, size);
    }
-   virtual USBDM_ErrorCode    usbdmResetTarget(bool retry);
+//   virtual USBDM_ErrorCode    usbdmResetTarget(bool retry);
 
    virtual UsbdmTclInterperPtr   getTclInterface();
    virtual USBDM_ErrorCode       runTCLCommand(const char *command);
-   virtual USBDM_ErrorCode       resetTarget() override;
+   /**
+    * Reset target into special mode
+    *
+    * @param resetMethod  Reset method to use
+    *
+    * @return Error code
+    */
+   virtual USBDM_ErrorCode       resetTarget(DeviceData::ResetMethod resetMethod=DeviceData::resetTargetDefault) override;
    virtual USBDM_ErrorCode       stepTarget(bool disableInterrupts) override;
    virtual USBDM_ErrorCode       continueTarget(void) override;
    virtual USBDM_ErrorCode       haltTarget() override;

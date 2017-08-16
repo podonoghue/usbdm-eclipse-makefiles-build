@@ -11,6 +11,7 @@
 #include <memory>
 #include "BdmInterface.h"
 #include "GdbInOut.h"
+#include "DeviceData.h"
 
 class GdbHandler {
 
@@ -27,18 +28,18 @@ public:
    typedef USBDM_ErrorCode (*GdbCallback)(const char *msg, GdbMessageLevel level, USBDM_ErrorCode rc);
 
    enum GdbTargetStatus {
-      T_UNKNOWN =  0,         // Unknown not polled or may be sleeping
-      T_NOCONNECTION,
-      T_RUNNING,              // Executing
-      T_HALT,                 // Debug halt
-      T_RESET,                // Target in reset
-      T_WAIT,                 // Low power sleep (WAIT)
-      T_STOP,                 // Low power deep-sleep (STOP)
-      T_VLPR,                 // Low-power run (VLPR)
-      T_VLPW,                 // Low power sleep (VLPW)
-      T_VLPS,                 // Low power deep-sleep (VLPS)
-      T_LLSxRESET,            // Stopped after LLSx Reset
-      T_VLLSxRESET,           // Stopped after VLLSx Reset
+      T_UNKNOWN =  0,         // Unknown - not yet polled or may be LLSx/VLLSx without timeout
+      T_NOCONNECTION,         // Unable to connect to target - may be in LLSx or VLLSx.
+      T_RUNNING,              // Currently executing
+      T_HALT,                 // Currently in debug halt
+      T_RESET,                // Currently in reset
+      T_WAIT,                 // Currently in sleep (WAIT)
+      T_STOP,                 // Currently in deep-sleep (STOP)
+      T_VLPR,                 // Currently in low-power run (VLPR)
+      T_VLPW,                 // Currently in low power sleep (VLPW)
+      T_VLPS,                 // Currently in low power deep-sleep (VLPS)
+      T_LLSxEXIT,             // Exited LLSx state
+      T_VLLSxEXIT,            // Exited VLLSx state
       T_USER_INPUT,           // Stopped waiting for character in semi-hosting
    };
 
@@ -46,14 +47,66 @@ public:
    GdbHandler() {};
    virtual ~GdbHandler() {};
 
+   /**
+    * Initialize target
+    *
+    * @return Error code
+    */
    virtual USBDM_ErrorCode      initialise() = 0;
+   /**
+    * Do GDB command
+    *
+    * @param pkt Packet indicate command
+    *
+    * @return
+    */
    virtual USBDM_ErrorCode      doCommand(const GdbPacket *pkt) = 0;
+   /**
+    * Poll target status
+    *
+    * @return Target status
+    */
    virtual GdbTargetStatus      pollTarget() = 0;
+   /**
+    *
+    * @return
+    */
    virtual USBDM_ErrorCode      updateTarget() = 0;
-   virtual USBDM_ErrorCode      resetTarget() = 0;
+   /**
+    * Reset Target
+    *
+    * @param resetMethod  Reset method to use
+    *
+    * @return
+    */
+   virtual USBDM_ErrorCode      resetTarget(DeviceData::ResetMethod resetMethod=DeviceData::ResetMethod::resetTargetDefault) = 0;
+   /**
+    * Step target
+    *
+    * @param disableInterrupts  Whether interrupts should be enabled during stepping
+    *
+    * @return
+    */
    virtual USBDM_ErrorCode      stepTarget(bool disableInterrupts) = 0;
+   /**
+    * Continue target execution
+    *
+    * @return
+    */
    virtual USBDM_ErrorCode      continueTarget() = 0;
+   /**
+    * Halt target
+    *
+    * @return
+    */
    virtual USBDM_ErrorCode      haltTarget() = 0;
+   /**
+    * Get name for target status
+    *
+    * @param status
+    *
+    * @return
+    */
    static const char           *getStatusName(GdbTargetStatus status);
 
 protected:

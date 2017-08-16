@@ -58,7 +58,7 @@ const uint8_t *getFpCompAddress(uint32_t address) {
 //! modifying target breakpoint hardware
 //!
 void GdbBreakpoints_ARM::activateBreakpoints(void) {
-   LOGGING_E;
+   LOGGING;
    MemoryBreakInfo *bpPtr;
    if (breakpointsActive) {
       log.print("Breakpoints already active\n");

@@ -25,9 +25,7 @@ public:
          IGdbTty              *tty);
    virtual ~GdbHandler_ARM();
 
-   virtual USBDM_ErrorCode   resetTarget() override;
-//   virtual USBDM_ErrorCode       stepTarget(bool disableInterrupts);
-//   virtual USBDM_ErrorCode       haltTarget();
+   virtual USBDM_ErrorCode   resetTarget(DeviceData::ResetMethod=DeviceData::resetTargetDefault) override;
    virtual USBDM_ErrorCode   continueTarget(void) override;
    virtual void              maskInterrupts(bool disableInterrupts) override;
    virtual void              writeReg(unsigned regNo, unsigned long regValue) override;

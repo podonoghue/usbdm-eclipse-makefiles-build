@@ -111,8 +111,9 @@ protected:
    IGdbTty                      *tty;
    GdbHandlerPtr                 gdbHandler;
 
-   static const int              pollIntervalFast = 100;      // ms
-   static const int              pollIntervalSlow = 1000;     // ms
+   static const int              pollIntervalVeryFast = 10;   // ms
+   static const int              pollIntervalFast     = 100;  // ms
+   static const int              pollIntervalSlow     = 1000; // ms
 
    enum {
       // id for sockets
