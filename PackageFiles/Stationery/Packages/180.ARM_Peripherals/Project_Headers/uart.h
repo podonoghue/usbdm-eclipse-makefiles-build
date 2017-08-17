@@ -127,6 +127,83 @@ protected:
 
 public:
    /**
+    * Converts an unsigned long to a string
+    *
+    * @param[in] value Unsigned long to convert
+    * @param[in] ptr   Buffer to write result (at least 12 characters)
+    * @param[in] radix Radix for conversion [2..16]
+    *
+    * @return Pointer to '\0' null character at end of converted number\n
+    *         May be used for incrementally writing to a buffer.
+    */
+   static char *ultoa(unsigned long value, char *ptr, int radix=10) {
+#ifdef DEBUG_BUILD
+      if (ptr == nullptr) {
+         __BKPT();
+      }
+      if ((radix<2)||(radix>16)) {
+         __BKPT();
+      }
+#endif
+      // Save origin for reversal
+      char *optr = ptr;
+      // Convert backwards
+      do {
+         *ptr++ = "0123456789ABCDEF"[value % radix];
+         value /= radix;
+      } while (value != 0);
+      // Terminate (and leave ptr at last digit!)
+      char *rptr = ptr;
+      *ptr = '\0';
+      // Reverse digits
+      while (optr < ptr) {
+         char t = *optr;
+         *optr++ = *--ptr;
+         *ptr = t;
+      }
+      return rptr;
+   }
+
+   /**
+    * Converts a long to a string
+    *
+    * @param[in] value Long to convert
+    * @param[in] ptr   Buffer to write result (at least 12 characters)
+    * @param[in] radix Radix for conversion [2..16]
+    *
+    * @return Pointer to '\0' null character at end of converted number\n
+    *         May be used for incrementally writing to a buffer.
+    */
+   static char *ltoa(long value, char *ptr, int radix=10) {
+      if (value<0) {
+         *ptr++ = '-';
+         value = -value;
+      }
+      return ultoa(value, ptr, radix);
+   }
+
+   /**
+    * Copies a C string including terminating '\0' character
+    *
+    * @param[out] dst  Where to copy string
+    * @param[in]  src  Source to copy from
+    *
+    * @return Pointer to '\0' null character at end of converted number\n
+    *         May be used for incrementally writing to a buffer.
+    */
+   static char *strcpy(char *dst, const char *src) {
+#ifdef DEBUG_BUILD
+      if (dst == nullptr) {
+         __BKPT();
+      }
+#endif
+      do {
+         *dst++ = *src;
+      } while (*src++ != '\0');
+      return dst-1;
+   }
+
+   /**
     * Transmit message
     *
     * @param[in]  data     Data to transmit
@@ -149,10 +226,20 @@ public:
          *data++ = readChar();
       }
    }
-   /*
+   /**
+    * Check if character is available from UART
+    *
+    * @return true  Character available i.e. readChar() will not block
+    * @return false No character available
+    */
+   bool isCharAvailable() {
+      return (uart->S1 & UART_S1_RDRF_MASK) != 0;
+   }
+
+   /**
     * Receives a single character over the UART (blocking)
     *
-    * @return - character received
+    * @return Character received
     */
    int readChar(void) {
       uint8_t status;
@@ -183,6 +270,15 @@ public:
       uart->D = ch;
    }
    /**
+    * Transmit a character with newline
+    *
+    * @param[in]  ch - character to send
+    */
+   void writeln(char ch) {
+      write(ch);
+      write("\n\r");
+   }
+   /**
     * Transmit a C string
     *
     * @param[in]  str String to print
@@ -193,52 +289,103 @@ public:
       }
    }
    /**
-    * Transmit a unsigned
+    * Transmit a C string with new line
     *
-    * @param[in]  value Unsigned to print
+    * @param[in]  str String to print
     */
-   void write(unsigned value) {
-      char buff[20];
-      snprintf(buff, sizeof(buff), "%u", value);
-      write(buff);
+   void writeln(const char *str) {
+      write(str);
+      write("\n\r");
    }
    /**
-    * Transmit a integer
-    *
-    * @param[in]  value Integer to print
-    */
-   void write(int value) {
-      char buff[20];
-      snprintf(buff, sizeof(buff), "%d", value);
-      write(buff);
-   }
-   /**
-    * Transmit an unsigned long
+    * Transmit an unsigned long integer
     *
     * @param[in]  value Unsigned long to print
+    * @param[in]  radix Radix for conversion [2..16]
     */
-   void write(unsigned long value) {
-      char buff[20];
-      snprintf(buff, sizeof(buff), "%lu", value);
+   void write(unsigned long value, int radix=10) {
+      char buff[35];
+      ultoa(value, buff, radix);
       write(buff);
    }
    /**
-    * Transmit a long
+    * Transmit an unsigned long integer with newline
+    *
+    * @param[in]  value Unsigned long to print
+    * @param[in]  radix Radix for conversion [2..16]
+    */
+   void writeln(unsigned long value, int radix=10) {
+      write(value, radix);
+      write("\n\r");
+   }
+   /**
+    * Transmit a long integer
     *
     * @param[in]  value Long to print
+    * @param[in]  radix Radix for conversion [2..16]
     */
-   void write(long value) {
-      char buff[20];
-      snprintf(buff, sizeof(buff), "%ld", value);
-      write(buff);
+   void write(long value, int radix=10) {
+      if (value<0) {
+         write('-');
+         value = -value;
+      }
+      write((unsigned long) value, radix);
+   }
+   /**
+    * Transmit a long integer with newline
+    *
+    * @param[in]  value Long to print
+    * @param[in]  radix Radix for conversion [2..16]
+    */
+   void writeln(long value, int radix=10) {
+      write(value, radix);
+      write("\n\r");
+   }
+
+   /**
+    * Transmit an unsigned integer
+    *
+    * @param[in]  value Unsigned to print
+    * @param[in]  radix Radix for conversion [2..16]
+    */
+   void write(unsigned value, int radix=10) {
+      write((unsigned long)value, radix);
+   }
+   /**
+    * Transmit an unsigned integer with newline
+    *
+    * @param[in]  value Unsigned to print
+    * @param[in]  radix Radix for conversion [2..16]
+    */
+   void writeln(unsigned value, int radix=10) {
+      writeln((unsigned long)value, radix);
+   }
+   /**
+    * Transmit an integer
+    *
+    * @param[in]  value Integer to print
+    * @param[in]  radix Radix for conversion [2..16]
+    */
+   void write(int value, int radix=10) {
+      write((long)value, radix);
+   }
+   /**
+    * Transmit an integer with newline
+    *
+    * @param[in]  value Integer to print
+    * @param[in]  radix Radix for conversion [2..16]
+    */
+   void writeln(int value, int radix=10) {
+      writeln((long)value, radix);
    }
    /**
     * Transmit a float
     *
-    * To use this function it is necessary to enable floating point printing
-    * in the linker options (Support %f format in printf -u _print_float)).
-    *
     * @param[in]  value Float to print
+    *
+    * @note Uses snprintf() which is large.
+    * @note To use this function it is necessary to enable floating point printing\n
+    *       in the linker options (Support %f format in printf -u _print_float)).
     */
    void write(float value) {
       char buff[20];
@@ -246,17 +393,44 @@ public:
       write(buff);
    }
    /**
+    * Transmit a float with newline
+    *
+    * @param[in]  value Float to print
+    *
+    * @note Uses snprintf() which is large.
+    * @note To use this function it is necessary to enable floating point printing\n
+    *       in the linker options (Support %f format in printf -u _print_float)).
+    */
+   void writeln(float value) {
+      write(value);
+      write("\n\r");
+   }
+   /**
     * Transmit a double
     *
-    * To use this function it is necessary to enable floating point printing
-    * in the linker options (Support %f format in printf -u _print_float)).
-    *
     * @param[in]  value Double to print
+    *
+    * @note Uses snprintf() which is large.
+    * @note To use this function it is necessary to enable floating point printing\n
+    *       in the linker options (Support %f format in printf -u _print_float)).
     */
    void write(double value) {
       char buff[20];
       snprintf(buff, sizeof(buff), "%f", value);
       write(buff);
+   }
+   /**
+    * Transmit a double with newline
+    *
+    * @param[in]  value Double to print
+    *
+    * @note Uses snprintf() which is large.
+    * @note To use this function it is necessary to enable floating point printing\n
+    *       in the linker options (Support %f format in printf -u _print_float)).
+    */
+   void writeln(double value) {
+      write(value);
+      write("\n\r");
    }
    /*
     * Clear UART error status
