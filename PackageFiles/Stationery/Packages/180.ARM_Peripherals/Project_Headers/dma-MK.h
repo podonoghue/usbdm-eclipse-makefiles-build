@@ -116,7 +116,7 @@ enum DmaCanPreemptLower {
  * Get DMA size of object.\n
  * For use in TCD ATTR value
  *
- * @param[in] size
+ * @param[in] obj Object to obtain DMA size value for
  *
  * @return one of the DmaSize_xxxx values
  */
