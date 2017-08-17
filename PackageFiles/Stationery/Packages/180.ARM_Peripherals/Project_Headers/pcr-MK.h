@@ -368,7 +368,7 @@ public:
 };
 
 template<uint32_t pcrAddress>
-PinCallbackFunction USBDM::PcrBase_T<pcrAddress>::fCallback = PcrBase_T::unhandledCallback;
+PinCallbackFunction USBDM::PcrBase_T<pcrAddress>::fCallback = PcrBase_T<pcrAddress>::unhandledCallback;
 
 /**
  * @brief Template representing a Pin Control Register (PCR)
