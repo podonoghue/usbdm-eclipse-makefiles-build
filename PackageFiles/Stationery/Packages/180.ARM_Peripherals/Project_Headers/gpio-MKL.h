@@ -105,7 +105,7 @@ public:
     *
     * @param[in] pcrValue PCR value to use in configuring pin (excluding MUX value). See pcrValue()
     */
-   static __attribute__((always_inline)) void setPCR(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
+   static void setPCR(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
       Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|PinMux_Gpio);
    }
    /**
@@ -118,7 +118,7 @@ public:
     * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
     * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Fast)
     */
-   static __attribute__((always_inline)) void setPCR(
+   static void setPCR(
          PinPull           pinPull,
          PinDriveStrength  pinDriveStrength  = PinDriveStrength_Low,
          PinDriveMode      pinDriveMode      = PinDriveMode_PushPull,
@@ -133,7 +133,7 @@ public:
     *
     * @note Does not affect other pin settings
     */
-   static __attribute__((always_inline)) void setOut() {
+   static void setOut() {
       // Make pin an output
 #ifdef RELEASE_BUILD
       bmeOr(gpio->PDDR, MASK);
@@ -151,7 +151,7 @@ public:
     *
     * @param[in] pcrValue PCR value to use in configuring port (excluding MUX value). See pcrValue()
     */
-   static __attribute__((always_inline)) void setOutput(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
+   static void setOutput(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
       // Set initial level before enabling pin drive
       setInactive();
       // Make pin an output
@@ -172,24 +172,19 @@ public:
     * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain (defaults to PinPushPull)
     * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Fast)
     */
-   static __attribute__((always_inline)) void setOutput(
+   static void setOutput(
          PinDriveStrength  pinDriveStrength,
          PinDriveMode      pinDriveMode      = PinDriveMode_PushPull,
          PinSlewRate       pinSlewRate       = PinSlewRate_Fast
          ) {
-      // Set initial level before enabling pin drive
-      setInactive();
-      // Make pin an output
-      setOut();
-      // Configure pin
-      Pcr::setPCR(pinDriveStrength|pinDriveMode|pinSlewRate|PinMux_Gpio);
+      setOutput(pinDriveStrength|pinDriveMode|pinSlewRate);
    }
    /**
     * Set pin as digital input
     *
     * @note Does not affect other pin settings
     */
-   static __attribute__((always_inline)) void setIn() {
+   static void setIn() {
       // Make pin an input
 #ifdef RELEASE_BUILD
       bmeAnd(gpio->PDDR, ~(MASK));
@@ -207,7 +202,7 @@ public:
     *
     * @param[in] pcrValue PCR value to use in configuring port (excluding MUX value)
     */
-   static __attribute__((always_inline)) void setInput(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
+   static void setInput(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
       // Make pin an input
       setIn();
       Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|PinMux_Gpio);
@@ -224,21 +219,19 @@ public:
     * @param[in] pinIrq           One of PinIrq_None, etc (defaults to PinIrq_None)
     * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
     */
-   static __attribute__((always_inline)) void setInput(
+   static void setInput(
          PinPull           pinPull,
          PinIrq            pinIrq            = PinIrq_None,
          PinFilter         pinFilter         = PinFilter_None
          ) {
-      // Make pin an input
-      setIn();
-      Pcr::setPCR(pinPull|pinIrq|pinFilter|PinMux_Gpio);
+      setInput(pinPull|pinIrq|pinFilter|PinMux_Gpio);
    }
    /**
     * Set pin. Pin will be high if configured as an output.
     *
     * @note Polarity is not significant
     */
-   static __attribute__((always_inline)) void high() {
+   static void high() {
       gpio->PSOR = MASK;
    }
    /**
@@ -246,7 +239,7 @@ public:
     *
     * @note Polarity is not significant
     */
-   static __attribute__((always_inline)) void low() {
+   static void low() {
       gpio->PCOR = MASK;
    }
    /**
@@ -254,7 +247,7 @@ public:
     *
     * @note Polarity is not significant
     */
-   static __attribute__((always_inline)) void set() {
+   static void set() {
 	   gpio->PSOR = MASK;
    }
    /**
@@ -262,13 +255,13 @@ public:
     *
     * @note Polarity is not significant
     */
-   static __attribute__((always_inline)) void clear() {
+   static void clear() {
 	   gpio->PCOR = MASK;
    }
    /**
     * Toggle pin (if output)
     */
-   static __attribute__((always_inline)) void toggle() {
+   static void toggle() {
       gpio->PTOR = MASK;
    }
    /**
@@ -276,7 +269,7 @@ public:
     *
     * @note Polarity is significant
     */
-   static __attribute__((always_inline)) void setActive() {
+   static void setActive() {
       if (polarity) {
          set();
       }
@@ -289,7 +282,7 @@ public:
     *
     * @note Polarity is significant
     */
-   static __attribute__((always_inline)) void setInactive() {
+   static void setInactive() {
       if (polarity) {
          clear();
       }
@@ -302,7 +295,7 @@ public:
     *
     * @note Polarity is significant
     */
-   static __attribute__((always_inline)) void on() {
+   static void on() {
       setActive();
    }
    /**
@@ -310,7 +303,7 @@ public:
     *
     * @note Polarity is significant
     */
-   static __attribute__((always_inline)) void off() {
+   static void off() {
       setInactive();
    }
    /**
@@ -320,7 +313,7 @@ public:
     *
     * @note Polarity is significant
     */
-   static __attribute__((always_inline)) void write(bool value) {
+   static void write(bool value) {
 #ifdef RELEASE_BUILD
       if (polarity) {
          bmeInsert(gpio->PDOR, bitNum, 1, value);
@@ -345,11 +338,11 @@ public:
     * @note This reads the PDIR
     * @note Polarity is NOT significant
     */
-   static __attribute__((always_inline)) bool isHigh() {
+   static bool isHigh() {
 #ifdef RELEASE_BUILD
       return bmeExtract(gpio->PDIR, bitNum, 1);
 #else
-      return gpio->PDIR & (1<<bitNum);
+      return (gpio->PDIR & MASK) != 0;
 #endif
    }
    /**
@@ -360,11 +353,11 @@ public:
     * @note This reads the PDIR
     * @note Polarity is NOT significant
     */
-   static __attribute__((always_inline)) bool isLow() {
+   static bool isLow() {
 #ifdef RELEASE_BUILD
       return !bmeExtract(gpio->PDIR, bitNum, 1);
 #else
-      return !(gpio->PDIR & (1<<bitNum));
+      return (gpio->PDIR & MASK) == 0;
 #endif
    }
    /**
@@ -375,7 +368,7 @@ public:
     * @note This reads the PDIR
     * @note Polarity is significant
     */
-   static __attribute__((always_inline)) bool read() {
+   static bool read() {
       if (polarity) {
          return isHigh();
       }
@@ -391,7 +384,7 @@ public:
     * @note This reads the PDIR
     * @note Polarity is significant
     */
-   static __attribute__((always_inline)) bool isActive() {
+   static bool isActive() {
       if (polarity) {
          return isHigh();
       }
@@ -407,7 +400,7 @@ public:
     * @note This reads the PDIR
     * @note Polarity is significant
     */
-   static __attribute__((always_inline)) bool isInactive() {
+   static bool isInactive() {
       if (polarity) {
          return isLow();
       }
@@ -424,7 +417,7 @@ public:
     * @note This reads the PDIR
     * @note Polarity is significant
     */
-   static __attribute__((always_inline)) bool isPressed() {
+   static bool isPressed() {
       if (polarity) {
          return isHigh();
       }
@@ -442,7 +435,7 @@ public:
     * @note This reads the PDIR
     * @note Polarity is significant
     */
-   static __attribute__((always_inline)) bool isReleased() {
+   static bool isReleased() {
       if (polarity) {
          return isLow();
       }
@@ -458,11 +451,11 @@ public:
     * @note This reads the PDOR
     * @note Polarity is significant
     */
-   static __attribute__((always_inline)) bool readState() {
+   static bool readState() {
 #ifdef RELEASE_BUILD
       uint32_t t = bmeExtract(gpio->PDOR, bitNum, 1);
 #else
-      uint32_t t = gpio->PDOR & (1<<bitNum);
+      uint32_t t = gpio->PDOR & MASK;
 #endif
       if (polarity) {
          return t;
@@ -476,14 +469,14 @@ public:
     *
     * @param[in] pinIrq Interrupt/DMA mode
     */
-   static __attribute__((always_inline)) void setIrq(PinIrq pinIrq) {
+   static void setIrq(PinIrq pinIrq) {
       Pcr::setIrq(pinIrq);
    }
 
    /**
     * Clear interrupt flag for pin
     */
-   static __attribute__((always_inline)) void clearIrqFlag() {
+   static void clearIrqFlag() {
       Pcr::clearIrqFlag();
    }
 
@@ -492,7 +485,7 @@ public:
     *
     * @param[in] pinPull Pin pull control value (PinPull_None, PinPull_Up, PinPull_Down)
     */
-   static __attribute__((always_inline)) void setPullDevice(PinPull pinPull) {
+   static void setPullDevice(PinPull pinPull) {
       Pcr::setPullDevice(pinPull);
    }
 
@@ -501,7 +494,7 @@ public:
     *
     *  @param[in] pinDriveStrength Pin drive strength to set (PinDriveLow, PinDriveHigh)
     */
-   static __attribute__((always_inline)) void setDriveStrength(PinDriveStrength pinDriveStrength) {
+   static void setDriveStrength(PinDriveStrength pinDriveStrength) {
       Pcr::setDriveStrength(pinDriveStrength);
    }
 
@@ -510,7 +503,7 @@ public:
     *
     *  @param[in] pinDriveMode Pin drive mode (PinPushPull, PinOpenDrain)
     */
-   static __attribute__((always_inline)) void setDriveMode(PinDriveMode pinDriveMode) {
+   static void setDriveMode(PinDriveMode pinDriveMode) {
       Pcr::setDriveMode(pinDriveMode);
    }
 
@@ -519,7 +512,7 @@ public:
     *
     *  @param[in] pinSlewRate Slew rate. Either PinSlewRate_Slow or PinSlewRate_Fast
     */
-   static __attribute__((always_inline)) void setSlewRate(PinSlewRate  pinSlewRate) {
+   static void setSlewRate(PinSlewRate  pinSlewRate) {
       Pcr::setSlewRate(pinSlewRate);
    }
 
@@ -528,14 +521,14 @@ public:
     *
     *  @param[in] pinFilter Pin filter option. Either PinFilter_None or PinFilter_Passive
     */
-   static __attribute__((always_inline)) void setFilter(PinFilter pinFilter) {
+   static void setFilter(PinFilter pinFilter) {
       Pcr::setFilter(pinFilter);
    }
    /**
     * Locks most of the pin properties e.g. drive strength, pull-device etc.
     * The pin properties remains locked until the next reset
     */
-   static __attribute__((always_inline)) void lock() {
+   static void lock() {
       Pcr::lock();
    }
 
@@ -545,7 +538,7 @@ public:
     *
     * @param[in] enable True => enable, False => disable
     */
-   static __attribute__((always_inline)) void enableNvicInterrupts(bool enable=true) {
+   static void enableNvicInterrupts(bool enable=true) {
       Pcr::enableNvicInterrupts(enable);
    }
 
@@ -557,7 +550,7 @@ public:
     * @param[in] callback The function to call on pin interrupt. \n
     *                     nullptr to indicate none
     */
-   static __attribute__((always_inline)) void setCallback(PinCallbackFunction callback) {
+   static void setCallback(PinCallbackFunction callback) {
       Pcr::setCallback(callback);
    }
 
@@ -645,7 +638,7 @@ public:
     *
     * @param[in] pcrValue PCR value to use in configuring port (excluding mux fn)
     */
-   static __attribute__((always_inline)) void setPCRs(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
+   static void setPCRs(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
       // Enable clock to GPCLR & GPCHR
       *clockReg |= Info::clockMask;
 
@@ -667,7 +660,7 @@ public:
     * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
     * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Fast)
     */
-   static __attribute__((always_inline)) void setPCRs(
+   static void setPCRs(
          PinPull           pinPull           = PinPull_None,
          PinDriveStrength  pinDriveStrength  = PinDriveStrength_Low,
          PinDriveMode      pinDriveMode      = PinDriveMode_PushPull,
@@ -686,7 +679,7 @@ public:
     *
     * @param[in] pcrValue PCR value to use in configuring port (excluding mux fn)
     */
-   static __attribute__((always_inline)) void setOutput(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
+   static void setOutput(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
       setPCRs(pcrValue);
       bmeOr(gpio->PDDR, MASK);
    }
@@ -701,7 +694,7 @@ public:
     * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain (defaults to PinPushPull)
     * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Fast)
     */
-   static __attribute__((always_inline)) void setOutput(
+   static void setOutput(
          PinDriveStrength  pinDriveStrength,
          PinDriveMode      pinDriveMode      = PinDriveMode_PushPull,
          PinSlewRate       pinSlewRate       = PinSlewRate_Fast
@@ -717,7 +710,7 @@ public:
     *
     * @param[in] pcrValue PCR value to use in configuring port (excluding mux fn)
     */
-   static __attribute__((always_inline)) void setInput(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
+   static void setInput(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
       setPCRs(pcrValue);
       bmeAnd(gpio->PDDR, ~MASK);
    }
@@ -729,7 +722,7 @@ public:
     * @param[in] pinIrq           One of PinIrq_None, etc (defaults to PinIrq_None)
     * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
     */
-   static __attribute__((always_inline)) void setInput(
+   static void setInput(
          PinPull           pinPull,
          PinIrq            pinIrq            = PinIrq_None,
          PinFilter         pinFilter         = PinFilter_None
@@ -741,7 +734,7 @@ public:
     *
     * @param[in] mask Mask for pin directions (1=>out, 0=>in)
     */
-   static __attribute__((always_inline)) void setDirection(uint32_t mask) {
+   static void setDirection(uint32_t mask) {
       bmeInsert(gpio->PDDR, right, left-right+1, mask);
    }
    /**
@@ -749,7 +742,7 @@ public:
     *
     * @param[in] mask Mask to apply to the field (1 => set bit, 0 => unchanged)
     */
-   static __attribute__((always_inline)) void bitSet(const uint32_t mask) {
+   static void bitSet(const uint32_t mask) {
       gpio->PSOR = (mask<<right)&MASK;
    }
    /**
@@ -757,7 +750,7 @@ public:
     *
     * @param[in] mask Mask to apply to the field (1 => clear bit, 0 => unchanged)
     */
-   static __attribute__((always_inline)) void bitClear(const uint32_t mask) {
+   static void bitClear(const uint32_t mask) {
       gpio->PCOR = (mask<<right)&MASK;
    }
    /**
@@ -765,7 +758,7 @@ public:
     *
     * @param[in] mask Mask to apply to the field (1 => toggle bit, 0 => unchanged)
     */
-   static __attribute__((always_inline)) void bitToggle(const uint32_t mask) {
+   static void bitToggle(const uint32_t mask) {
       gpio->PTOR = (mask<<right)&MASK;
    }
    /**
@@ -773,7 +766,7 @@ public:
     *
     * @return value from field
     */
-   static __attribute__((always_inline)) uint32_t read() {
+   static uint32_t read() {
       return bmeExtract(gpio->PDIR, right, left-right+1);
    }
    /**
@@ -781,7 +774,7 @@ public:
     *
     * @param[in] value to insert as field
     */
-   static __attribute__((always_inline)) void write(uint32_t value) {
+   static void write(uint32_t value) {
       bmeInsert(gpio->PDOR, right, left-right+1, value);
    }
 };
