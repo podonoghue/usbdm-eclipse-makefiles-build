@@ -168,6 +168,13 @@ inline void clearError() {
 
 } // End namespace USBDM
 
+// Use when in-lining makes the only makes the release build smaller
+#ifdef DEBUG_BUILD
+#define INLINE_RELEASE
+#else
+#define INLINE_RELEASE __attribute__((always_inline))
+#endif
+
 #include "pin_mapping.h"
 #include "delay.h"
 
