@@ -22,6 +22,7 @@
 #include "derivative.h"
 #include "hardware.h"
 #include "mcg.h"
+#include "ctype.h"
 
 namespace USBDM {
 
@@ -42,10 +43,25 @@ enum UartInterrupt {
 };
 
 enum Radix {
-   Radix_2  = 2,
-   Radix_8  = 8,
-   Radix_10 = 10,
-   Radix_16 = 16,
+   Radix_2  = 2,   //!< Convert as binary number
+   Radix_8  = 8,   //!< Convert as octal number
+   Radix_10 = 10,  //!< Convert as decimal number
+   Radix_16 = 16,  //!< Convert as hexadecimal number
+};
+
+enum WhiteSpaceType {
+   /**
+    * With operator<< Discard input white-space characters
+    */
+   WhiteSpace
+};
+
+enum EndOfLineType  {
+   /**
+    * With operator<< Discard input until end-of-line \n
+    * With operator>> Write end-of-line
+    */
+   EndOfLine
 };
 
 /**
@@ -72,6 +88,14 @@ public:
    volatile UART_Type * const uart;            //!< UART hardware instance
 
 protected:
+   /**
+    * Current radix for << and >> operators
+    */
+   Radix fRadix = Radix_10;
+   /**
+    * One character look-ahead
+    */
+   int   lookAhead = -1;
 
    virtual ~Uart() {}
 
@@ -88,8 +112,8 @@ protected:
     *
     * This is calculated from baud rate and UART clock frequency
     *
-    * @param[in]  baudrate       - Interface speed in bits-per-second
-    * @param[in]  clockFrequency - Frequency of UART clock
+    * @param[in]  baudrate       Interface speed in bits-per-second
+    * @param[in]  clockFrequency Frequency of UART clock
     */
    void __attribute__((noinline)) setBaudRate(uint32_t baudrate, uint32_t clockFrequency) {
 
@@ -128,14 +152,34 @@ protected:
     *
     * This is calculated from baud rate and LPUART clock frequency
     *
-    * @param[in]  baudrate       - Interface speed in bits-per-second
+    * @param[in]  baudrate  Interface speed in bits-per-second
     */
    virtual void setBaudRate(unsigned baudrate) = 0;
 
    /**
-    * Current radix for << operator
+    * Convert character to digit in given radix
+    *
+    * @param ch    The character to convert
+    * @param radix The radix to use
+    *
+    * @return >=0 Digit in range 0 - (radix-1)
+    * @return <0  Invalid character for radix
     */
-   Radix fRadix = Radix_10;
+   static int convertDigit(int ch, Radix radix) {
+      unsigned digit = ch - '0';
+      if (digit<10) {
+         return (digit<radix)?digit:-1;
+      }
+      digit = ch-'a'+10;
+      if (digit<radix) {
+         return digit;
+      }
+      digit = ch-'A'+10;
+      if (digit<radix) {
+         return digit;
+      }
+      return -1;
+   }
 
 public:
    /**
@@ -148,7 +192,7 @@ public:
     * @return Pointer to '\0' null character at end of converted number\n
     *         May be used for incrementally writing to a buffer.
     */
-   static __attribute__((noinline)) char *ultoa(unsigned long value, char *ptr, int radix=10) {
+   static __attribute__((noinline)) char *ultoa(unsigned long value, char *ptr, Radix radix=Radix_10) {
 #ifdef DEBUG_BUILD
       if (ptr == nullptr) {
          __BKPT();
@@ -186,7 +230,7 @@ public:
     * @return Pointer to '\0' null character at end of converted number\n
     *         May be used for incrementally writing to a buffer.
     */
-   static char *ltoa(long value, char *ptr, int radix=10) {
+   static INLINE_RELEASE char *ltoa(long value, char *ptr, Radix radix=Radix_10) {
       if (value<0) {
          *ptr++ = '-';
          value = -value;
@@ -216,7 +260,7 @@ public:
    }
 
    /**
-    * Transmit message
+    * Transmit data
     *
     * @param[in]  data     Data to transmit
     * @param[in]  size     Size of transmission data
@@ -228,7 +272,7 @@ public:
    }
 
    /**
-    * Receive message
+    * Receive data
     *
     * @param[out] data     Data buffer for reception
     * @param[in]  size     Size of data to receive
@@ -238,41 +282,94 @@ public:
          *data++ = readChar();
       }
    }
+
+   /**
+    * Receive string until terminator character\n
+    * The terminating character is discarded and the string '\0' terminated
+    *
+    * @param[out] data       Data buffer for reception
+    * @param[in]  size       Size of data buffer (including '\0')
+    * @param[in]  terminator Terminating character
+    *
+    * @return number of characters read (excluding terminator)
+    *
+    * Usage
+    * @code
+    *    char buff[100];
+    *    int numChars = gets(buff, sizeof(buff));
+    * @endcode
+    */
+   int gets(char data[], uint16_t size, char terminator='\n') {
+      char *ptr = data;
+      while (size-->1) {
+         char ch = readChar();
+         if (ch == terminator) {
+            break;
+         }
+         *ptr++ = ch;
+      }
+      *ptr = '\0';
+      return ptr-data;
+   }
+
+   /**
+    * Push a value to the look-ahead buffer
+    *
+    * @param ch Character to push
+    */
+   void __attribute__((always_inline)) pushBack(char ch) {
+      lookAhead = (uint8_t)ch;
+   }
+
    /**
     * Check if character is available from UART
     *
     * @return true  Character available i.e. readChar() will not block
     * @return false No character available
     */
-   bool isCharAvailable() {
-      return (uart->S1 & UART_S1_RDRF_MASK) != 0;
+   bool INLINE_RELEASE isCharAvailable() {
+      return (lookAhead>0) || (uart->S1 & UART_S1_RDRF_MASK);
    }
 
    /**
-    * Receives a single character over the UART (blocking)
+    * Peek at UART buffer.
+    * This routine supports a 1-character lookahead
     *
-    * @return Character received
+    * @return <0   No character available
+    * @return >=0  Character available from UART
+    *
+    * @note This may trigger reading a character from the UART buffer, clearing flags etc.
     */
-   int __attribute__((noinline)) readChar(void) {
-      uint8_t status;
-      // Wait for Rx buffer full
-      do {
-         status = uart->S1;
-         // Clear & ignore pending errors
-         if ((status & (UART_S1_FE_MASK|UART_S1_OR_MASK|UART_S1_PF_MASK|UART_S1_NF_MASK)) != 0) {
-            clearError();
-         }
-      }  while ((status & UART_S1_RDRF_MASK) == 0);
-      int ch = uart->D;
-      if (ch == '\r') {
-         ch = '\n';
+   int __attribute__((noinline)) peek() {
+      if (lookAhead>0) {
+         return lookAhead;
       }
-      return ch;
+      // Get status from UART
+      uint8_t status = uart->S1;
+
+      // Clear & ignore pending errors
+      if ((status & (UART_S1_FE_MASK|UART_S1_OR_MASK|UART_S1_PF_MASK|UART_S1_NF_MASK)) != 0) {
+         clearError();
+      }
+      // Check for Rx buffer full
+      if ((status & UART_S1_RDRF_MASK) == 0) {
+         // No char available
+         return -1;
+      }
+      // Save as current lookahead
+      pushBack(uart->D);
+      if (lookAhead == (uint8_t)'\r') {
+         pushBack('\n');
+      }
+      return lookAhead;
    }
+
    /**
     * Transmit a character
     *
     * @param[in]  ch - character to send
+    *
+    * @return Reference to the Uart
     */
    Uart __attribute__((noinline)) &write(char ch) {
       while ((uart->S1 & UART_S1_TDRE_MASK) == 0) {
@@ -285,19 +382,34 @@ public:
       }
       return *this;
    }
+
+   /**
+    * Transmit an end-of-line
+    *
+    * @return Reference to the Uart
+    */
+   Uart INLINE_RELEASE &writeln() {
+      return write('\n');
+   }
+
    /**
     * Transmit a character with newline
     *
     * @param[in]  ch - character to send
+    *
+    * @return Reference to the Uart
     */
-   Uart &writeln(char ch) {
+   Uart INLINE_RELEASE &writeln(char ch) {
       write(ch);
       return write('\n');
    }
+
    /**
     * Transmit a C string
     *
     * @param[in]  str String to print
+    *
+    * @return Reference to the Uart
     */
    Uart &write(const char *str) {
       while (*str != '\0') {
@@ -305,56 +417,94 @@ public:
       }
       return *this;
    }
+
    /**
     * Transmit a C string with new line
     *
     * @param[in]  str String to print
+    *
+    * @return Reference to the Uart
     */
    Uart INLINE_RELEASE &writeln(const char *str) {
       write(str);
       return write('\n');
    }
+
+   /**
+    * Transmit a boolean value
+    *
+    * @param[in]  b Boolean to print
+    *
+    * @return Reference to the Uart
+    */
+   Uart &write(bool b) {
+      return write(b?"true":"false");
+   }
+
+   /**
+    * Transmit a boolean value with new line
+    *
+    * @param[in]  b Boolean to print
+    *
+    * @return Reference to the Uart
+    */
+   Uart INLINE_RELEASE &writeln(bool b) {
+      write(b);
+      return write('\n');
+   }
+
    /**
     * Transmit an unsigned long integer
     *
     * @param[in]  value Unsigned long to print
     * @param[in]  radix Radix for conversion [2..16]
+    *
+    * @return Reference to the Uart
     */
-   Uart __attribute__((noinline)) &write(unsigned long value, int radix=10) {
+   Uart __attribute__((noinline)) &write(unsigned long value, Radix radix=Radix_10) {
       static char buff[35];
       ultoa(value, buff, radix);
       return write(buff);
    }
+
    /**
     * Transmit an unsigned long integer with newline
     *
     * @param[in]  value Unsigned long to print
     * @param[in]  radix Radix for conversion [2..16]
+    *
+    * @return Reference to the Uart
     */
-   Uart INLINE_RELEASE &writeln(unsigned long value, int radix=10) {
+   Uart INLINE_RELEASE &writeln(unsigned long value, Radix radix=Radix_10) {
       write(value, radix);
       return write('\n');
    }
+
    /**
     * Transmit a long integer
     *
     * @param[in]  value Long to print
     * @param[in]  radix Radix for conversion [2..16]
+    *
+    * @return Reference to the Uart
     */
-   Uart INLINE_RELEASE &write(long value, int radix=10) {
+   Uart INLINE_RELEASE &write(long value, Radix radix=Radix_10) {
       if (value<0) {
          write('-');
          value = -value;
       }
       return write((unsigned long) value, radix);
    }
+
    /**
     * Transmit a long integer with newline
     *
     * @param[in]  value Long to print
     * @param[in]  radix Radix for conversion [2..16]
+    *
+    * @return Reference to the Uart
     */
-   Uart INLINE_RELEASE &writeln(long value, int radix=10) {
+   Uart INLINE_RELEASE &writeln(long value, Radix radix=Radix_10) {
       write(value, radix);
       return write('\n');
    }
@@ -364,41 +514,55 @@ public:
     *
     * @param[in]  value Unsigned to print
     * @param[in]  radix Radix for conversion [2..16]
+    *
+    * @return Reference to the Uart
     */
-   Uart INLINE_RELEASE &write(unsigned value, int radix=10) {
+   Uart INLINE_RELEASE &write(unsigned value, Radix radix=Radix_10) {
       return write((unsigned long)value, radix);
    }
+
    /**
     * Transmit an unsigned integer with newline
     *
     * @param[in]  value Unsigned to print
     * @param[in]  radix Radix for conversion [2..16]
+    *
+    * @return Reference to the Uart
     */
-   Uart INLINE_RELEASE &writeln(unsigned value, int radix=10) {
+   Uart INLINE_RELEASE &writeln(unsigned value, Radix radix=Radix_10) {
       return writeln((unsigned long)value, radix);
    }
+
    /**
     * Transmit an integer
     *
     * @param[in]  value Integer to print
     * @param[in]  radix Radix for conversion [2..16]
+    *
+    * @return Reference to the Uart
     */
-   Uart INLINE_RELEASE &write(int value, int radix=10) {
+   Uart INLINE_RELEASE &write(int value, Radix radix=Radix_10) {
       return write((long)value, radix);
    }
+
    /**
     * Transmit an integer with newline
     *
     * @param[in]  value Integer to print
     * @param[in]  radix Radix for conversion [2..16]
+    *
+    * @return Reference to the Uart
     */
-   Uart INLINE_RELEASE  &writeln(int value, int radix=10) {
+   Uart INLINE_RELEASE  &writeln(int value, Radix radix=Radix_10) {
       return writeln((long)value, radix);
    }
+
    /**
     * Transmit a double
     *
     * @param[in]  value Double to print
+    *
+    * @return Reference to the Uart
     *
     * @note Uses snprintf() which is large.
     * @note To use this function it is necessary to enable floating point printing\n
@@ -409,10 +573,13 @@ public:
       snprintf(buff, sizeof(buff), "%f", value);
       return write(buff);
    }
+
    /**
     * Transmit a double with newline
     *
     * @param[in]  value Double to print
+    *
+    * @return Reference to the Uart
     *
     * @note Uses snprintf() which is large.
     * @note To use this function it is necessary to enable floating point printing\n
@@ -422,10 +589,13 @@ public:
       write(value);
       return write('\n');
    }
+
    /**
     * Transmit a float
     *
     * @param[in]  value Float to print
+    *
+    * @return Reference to the Uart
     *
     * @note Uses snprintf() which is large.
     * @note To use this function it is necessary to enable floating point printing\n
@@ -434,10 +604,13 @@ public:
    Uart INLINE_RELEASE &write(float value) {
       return write((double)value);
    }
+
    /**
     * Transmit a float with newline
     *
     * @param[in]  value Float to print
+    *
+    * @return Reference to the Uart
     *
     * @note Uses snprintf() which is large.
     * @note To use this function it is necessary to enable floating point printing\n
@@ -446,6 +619,7 @@ public:
    Uart INLINE_RELEASE &writeln(float value) {
       return writeln((double)value);
    }
+
    /**
     * Transmit a character
     *
@@ -456,6 +630,7 @@ public:
    Uart INLINE_RELEASE &operator <<(const char ch) {
       return write(ch);
    }
+
    /**
     * Transmit a C string
     *
@@ -466,6 +641,7 @@ public:
    Uart INLINE_RELEASE &operator <<(const char *str) {
       return write(str);
    }
+
    /**
     * Transmit an unsigned long integer
     *
@@ -476,6 +652,7 @@ public:
    Uart INLINE_RELEASE &operator <<(unsigned long value) {
       return write(value, fRadix);
    }
+
    /**
     * Transmit a long integer
     *
@@ -486,6 +663,7 @@ public:
    Uart INLINE_RELEASE &operator <<(long value) {
       return write(value, fRadix);
    }
+
    /**
     * Transmit an unsigned integer
     *
@@ -496,6 +674,7 @@ public:
    Uart INLINE_RELEASE &operator <<(unsigned int value) {
       return write(value, fRadix);
    }
+
    /**
     * Transmit an integer
     *
@@ -506,10 +685,13 @@ public:
    Uart INLINE_RELEASE &operator <<(int value) {
       return write(value, fRadix);
    }
+
    /**
     * Transmit a float
     *
     * @param[in]  value Float to print
+    *
+    * @return Reference to the Uart
     *
     * @note Uses snprintf() which is large.
     * @note To use this function it is necessary to enable floating point printing\n
@@ -518,10 +700,13 @@ public:
    Uart INLINE_RELEASE &operator <<(float value) {
       return write((double)value);
    }
+
    /**
     * Transmit a double
     *
     * @param[in]  value Double to print
+    *
+    * @return Reference to the Uart
     *
     * @note Uses snprintf() which is large.
     * @note To use this function it is necessary to enable floating point printing\n
@@ -546,13 +731,322 @@ public:
    }
 
    /**
+    * Write end-of-line
+    *
+    * @return Reference to the Uart
+    */
+   Uart INLINE_RELEASE &operator <<(EndOfLineType) {
+      write('\n');
+      return *this;
+   }
+
+   /**
+    * Receives a single character
+    *
+    * @return Character received
+    */
+   int __attribute__((noinline)) readChar(void) {
+      int ch;
+      do {
+         ch = peek();
+      } while (ch < 0);
+      lookAhead = -1;
+      return ch;
+   }
+
+   /**
+    * Discard white-space from the input
+    *
+    * @return Reference to the Uart
+    */
+   Uart INLINE_RELEASE &skipWhiteSpace() {
+      int ch;
+      do {
+         ch = readChar();
+      } while (isspace(ch));
+      pushBack(ch);
+      return *this;
+   }
+
+   /**
+    * Discard input until end-of-line (inclusive)
+    *
+    * @return Reference to the Uart
+    */
+   Uart INLINE_RELEASE &readln() {
+      while (readChar() != '\n') {
+         __asm__("nop");
+      }
+      return *this;
+   }
+
+   /**
+    * Read a character from the input
+    *
+    * @param ch Where to place character read
+    *
+    * @return Reference to the Uart
+    */
+   Uart INLINE_RELEASE &read(char &ch) {
+      ch = readChar();
+      return *this;
+   }
+
+   /**
+    * Receives an unsigned long
+    *
+    * @param value Where to place value read
+    * @param radix The radix to use
+    *
+    * @return Reference to the Uart
+    *
+    * @note Skips leading whitespace
+    */
+   Uart &read(unsigned long &value, Radix radix=Radix_10) {
+      // Skip white space
+      int ch;
+      do {
+         ch = readChar();
+      } while (isspace(ch));
+
+      // Parse number
+      value = 0;
+      for(;;) {
+         int digit = convertDigit(ch, radix);
+         if (digit<0) {
+            break;
+         }
+         value *= radix;
+         value += digit;
+         ch = readChar();
+      }
+      // Push back 1st non-digit
+      pushBack(ch);
+      return *this;
+   }
+
+   /**
+    * Receives an unsigned long and then discards characters until end of line.
+    *
+    * @param value Where to place value read
+    * @param radix The radix to use
+    *
+    * @return Reference to the Uart
+    *
+    * @note Skips leading whitespace
+    */
+   Uart INLINE_RELEASE &readln(unsigned long &value, Radix radix=Radix_10) {
+      read(value, radix);
+      return readln();
+   }
+
+   /**
+    * Receives a long
+    *
+    * @param value Where to place value read
+    * @param radix The radix to use
+    *
+    * @return Reference to the Uart
+    *
+    * @note Skips leading whitespace
+    */
+   Uart &read(long &value, Radix radix=Radix_10) {
+      // Skip white space
+      int ch;
+      do {
+         ch = readChar();
+      } while (isspace(ch));
+
+      // Check if sign character
+      int sign = -1;
+      if (ch != '-') {
+         sign = 1;
+         pushBack(ch);
+      }
+      unsigned long temp;
+      read(temp, radix);
+      value = temp * sign;
+      return *this;
+   }
+
+   /**
+    * Receives a long and then discards characters until end of line.
+    *
+    * @param value Where to place value read
+    * @param radix The radix to use
+    *
+    * @return Reference to the Uart
+    *
+    * @note Skips leading whitespace
+    */
+   Uart INLINE_RELEASE &readln(long &value, Radix radix=Radix_10) {
+      read(value, radix);
+      return readln();
+   }
+
+   /**
+    * Receives an unsigned integer
+    *
+    * @param value Where to place value read
+    * @param radix The radix to use
+    *
+    * @return Reference to the Uart
+    *
+    * @note Skips leading whitespace
+    */
+   Uart &read(unsigned int &value, Radix radix=Radix_10) {
+      unsigned long temp;
+      read(temp, radix);
+      value = temp;
+      return *this;
+   }
+
+   /**
+    * Receives an unsigned integer and then discards characters until end of line.
+    *
+    * @param value Where to place value read
+    * @param radix The radix to use
+    *
+    * @return Reference to the Uart
+    *
+    * @note Skips leading whitespace
+    */
+   Uart INLINE_RELEASE &readln(unsigned &value, Radix radix=Radix_10) {
+      read(value, radix);
+      return readln();
+   }
+
+   /**
+    * Receives an integer
+    *
+    * @param value Where to place value read
+    * @param radix The radix to use
+    *
+    * @return Reference to the Uart
+    *
+    * @note Skips leading whitespace
+    */
+   Uart &read(int &value, Radix radix=Radix_10) {
+      long temp;
+      read(temp, radix);
+      value = temp;
+      return *this;
+   }
+
+   /**
+    * Receives an integer and then discards characters until end of line.
+    *
+    * @param value Where to place value read
+    * @param radix The radix to use
+    *
+    * @return Reference to the Uart
+    *
+    * @note Skips leading whitespace
+    */
+   Uart INLINE_RELEASE &readln(int &value, Radix radix=Radix_10) {
+      read(value, radix);
+      return readln();
+   }
+
+   /**
+    * Discard white-space from the input
+    *
+    * @return Reference to the Uart
+    */
+   Uart INLINE_RELEASE &operator >>(WhiteSpaceType) {
+      return skipWhiteSpace();
+   }
+
+   /**
+    * Discard input until end-of-line
+    *
+    * @return Reference to the Uart
+    */
+   Uart &operator >>(EndOfLineType) {
+      while (readChar() != '\n') {
+         __asm__("nop");
+      }
+      return *this;
+   }
+
+   /**
+    * Sets the conversion radix for integer types
+    *
+    * @param radix Radix to set
+    *
+    * @return Reference to the Uart
+    *
+    * @note Only applies for operator<< methods
+    */
+   Uart INLINE_RELEASE &operator >>(Radix radix) {
+      fRadix = radix;
+      return *this;
+   }
+
+   /**
+    * Receives a single character
+    *
+    * @param ch Where to place character read
+    *
+    * @return Reference to the Uart
+    */
+   Uart INLINE_RELEASE &operator >>(char &ch) {
+      ch = readChar();
+      return *this;
+   }
+
+   /**
+    * Receives an unsigned long
+    *
+    * @param value Where to place value read
+    *
+    * @return Reference to the Uart
+    */
+   Uart INLINE_RELEASE &operator >>(unsigned long &value) {
+      return read(value, fRadix);
+   }
+
+   /**
+    * Receives a long
+    *
+    * @param value Where to place value read
+    *
+    * @return Reference to the Uart
+    */
+   Uart INLINE_RELEASE &operator >>(long &value) {
+      return read(value, fRadix);
+   }
+
+   /**
+    * Receives an unsigned long
+    *
+    * @param value Where to place value read
+    *
+    * @return Reference to the Uart
+    */
+   Uart INLINE_RELEASE &operator >>(unsigned int &value) {
+      return read(value, fRadix);
+   }
+
+   /**
+    * Receives an integer
+    *
+    * @param value Where to place value read
+    *
+    * @return Reference to the Uart
+    */
+   Uart INLINE_RELEASE &operator >>(int &value) {
+      return read(value, fRadix);
+   }
+
+   /**
     * Get conversion radix for given base
     *
     * @param radix Base to convert to radix [2..16]
     *
     * @return Radix corresponding to base
     */
-   static Radix radix(int radix) {
+   static constexpr Radix radix(int radix) {
       return (Radix)radix;
    }
 
@@ -580,6 +1074,7 @@ public:
          uart->C2 &= ~uartInterrupt; // May also disable DMA
       }
    }
+
    /**
     * Enable/disable a DMA source
     *
@@ -653,7 +1148,7 @@ public:
     *
     * This is calculated from baud rate and LPUART clock frequency
     *
-    * @param[in]  baudrate       - Interface speed in bits-per-second
+    * @param[in]  baudrate Interface speed in bits-per-second
     */
    void INLINE_RELEASE setBaudRate(unsigned baudrate) {
       Uart::setBaudRate(baudrate, Info::getInputClockFrequency());
@@ -718,7 +1213,7 @@ public:
    /**
     * Set Receive/Transmit Callback function
     *
-    *   @param[in]  callback - Callback function to be executed on UART receive or transmit
+    *   @param[in]  callback Callback function to be executed on UART receive or transmit
     */
    static void setRxTxCallback(UARTCallbackFunction callback) {
       if (callback == nullptr) {
@@ -726,10 +1221,11 @@ public:
       }
       rxTxCallback = callback;
    }
+
    /**
     * Set Error Callback function
     *
-    *   @param[in]  callback - Callback function to be executed on UART receive or transmit
+    *   @param[in]  callback Callback function to be executed on UART receive or transmit
     */
    static void setErrorCallback(UARTCallbackFunction callback) {
       if (callback == nullptr) {
