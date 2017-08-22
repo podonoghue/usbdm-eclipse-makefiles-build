@@ -97,6 +97,11 @@ protected:
     */
    int   lookAhead = -1;
 
+   /**
+    * Indicate in error state
+    */
+   bool inErrorState = false;
+
    virtual ~Uart() {}
 
    /**
@@ -159,8 +164,8 @@ protected:
    /**
     * Convert character to digit in given radix
     *
-    * @param ch    The character to convert
-    * @param radix The radix to use
+    * @param[in] ch    The character to convert
+    * @param[in] radix The radix to use
     *
     * @return >=0 Digit in range 0 - (radix-1)
     * @return <0  Invalid character for radix
@@ -315,7 +320,7 @@ public:
    /**
     * Push a value to the look-ahead buffer
     *
-    * @param ch Character to push
+    * @param[in] ch Character to push
     */
    void __attribute__((always_inline)) pushBack(char ch) {
       lookAhead = (uint8_t)ch;
@@ -623,12 +628,23 @@ public:
    /**
     * Transmit a character
     *
-    * @param[in]  ch - character to send
+    * @param[in]  ch Character to print
     *
     * @return Reference to the Uart
      */
-   Uart INLINE_RELEASE &operator <<(const char ch) {
+   Uart INLINE_RELEASE &operator <<(char ch) {
       return write(ch);
+   }
+
+   /**
+    * Transmit a boolean value
+    *
+    * @param[in]  b Boolean to print
+    *
+    * @return Reference to the Uart
+     */
+   Uart INLINE_RELEASE &operator <<(bool b) {
+      return write(b);
    }
 
    /**
@@ -719,7 +735,7 @@ public:
    /**
     * Sets the conversion radix for integer types
     *
-    * @param radix Radix to set
+    * @param[in] radix Radix to set
     *
     * @return Reference to the Uart
     *
@@ -783,7 +799,7 @@ public:
    /**
     * Read a character from the input
     *
-    * @param ch Where to place character read
+    * @param[out] ch Where to place character read
     *
     * @return Reference to the Uart
     */
@@ -793,10 +809,22 @@ public:
    }
 
    /**
+    * Get and clear error state
+    *
+    * @return true  No error
+    * @return false Last operation failed e.g. illegal digit at start of number
+    */
+   bool isOk() {
+      bool t = inErrorState;
+      inErrorState = false;
+      return !t;
+   }
+
+   /**
     * Receives an unsigned long
     *
-    * @param value Where to place value read
-    * @param radix The radix to use
+    * @param[out] value Where to place value read
+    * @param[in]  radix The radix to use
     *
     * @return Reference to the Uart
     *
@@ -809,27 +837,38 @@ public:
          ch = readChar();
       } while (isspace(ch));
 
+      // Check if sign character
+      bool negative = (ch == '-');
+      if (negative) {
+         // Discard  '-'
+         ch = readChar();
+      }
+
       // Parse number
+      // Must have at least 1 digit
+      int  digit   = convertDigit(ch, radix);
+      inErrorState = (digit<0);
+
       value = 0;
-      for(;;) {
-         int digit = convertDigit(ch, radix);
-         if (digit<0) {
-            break;
-         }
+      while (digit>=0) {
          value *= radix;
          value += digit;
          ch = readChar();
+         digit = convertDigit(ch, radix);
       }
       // Push back 1st non-digit
       pushBack(ch);
+      if (negative) {
+         value = -value;
+      }
       return *this;
    }
 
    /**
     * Receives an unsigned long and then discards characters until end of line.
     *
-    * @param value Where to place value read
-    * @param radix The radix to use
+    * @param[out] value Where to place value read
+    * @param[in]  radix The radix to use
     *
     * @return Reference to the Uart
     *
@@ -843,37 +882,25 @@ public:
    /**
     * Receives a long
     *
-    * @param value Where to place value read
-    * @param radix The radix to use
+    * @param[out] value Where to place value read
+    * @param[in]  radix The radix to use
     *
     * @return Reference to the Uart
     *
     * @note Skips leading whitespace
     */
    Uart &read(long &value, Radix radix=Radix_10) {
-      // Skip white space
-      int ch;
-      do {
-         ch = readChar();
-      } while (isspace(ch));
-
-      // Check if sign character
-      int sign = -1;
-      if (ch != '-') {
-         sign = 1;
-         pushBack(ch);
-      }
       unsigned long temp;
       read(temp, radix);
-      value = temp * sign;
+      value = temp;
       return *this;
    }
 
    /**
     * Receives a long and then discards characters until end of line.
     *
-    * @param value Where to place value read
-    * @param radix The radix to use
+    * @param[out] value Where to place value read
+    * @param[in]  radix The radix to use
     *
     * @return Reference to the Uart
     *
@@ -887,8 +914,8 @@ public:
    /**
     * Receives an unsigned integer
     *
-    * @param value Where to place value read
-    * @param radix The radix to use
+    * @param[out] value Where to place value read
+    * @param[in]  radix The radix to use
     *
     * @return Reference to the Uart
     *
@@ -904,8 +931,8 @@ public:
    /**
     * Receives an unsigned integer and then discards characters until end of line.
     *
-    * @param value Where to place value read
-    * @param radix The radix to use
+    * @param[out] value Where to place value read
+    * @param[in]  radix The radix to use
     *
     * @return Reference to the Uart
     *
@@ -919,8 +946,8 @@ public:
    /**
     * Receives an integer
     *
-    * @param value Where to place value read
-    * @param radix The radix to use
+    * @param[out] value Where to place value read
+    * @param[in]  radix The radix to use
     *
     * @return Reference to the Uart
     *
@@ -936,8 +963,8 @@ public:
    /**
     * Receives an integer and then discards characters until end of line.
     *
-    * @param value Where to place value read
-    * @param radix The radix to use
+    * @param[out] value Where to place value read
+    * @param[in]  radix The radix to use
     *
     * @return Reference to the Uart
     *
@@ -972,7 +999,7 @@ public:
    /**
     * Sets the conversion radix for integer types
     *
-    * @param radix Radix to set
+    * @param[in]  radix Radix to set
     *
     * @return Reference to the Uart
     *
@@ -986,7 +1013,7 @@ public:
    /**
     * Receives a single character
     *
-    * @param ch Where to place character read
+    * @param[out] ch Where to place character read
     *
     * @return Reference to the Uart
     */
@@ -998,9 +1025,11 @@ public:
    /**
     * Receives an unsigned long
     *
-    * @param value Where to place value read
+    * @param[out] value Where to place value read
     *
     * @return Reference to the Uart
+    *
+    * @note Skips leading whitespace
     */
    Uart INLINE_RELEASE &operator >>(unsigned long &value) {
       return read(value, fRadix);
@@ -1009,9 +1038,11 @@ public:
    /**
     * Receives a long
     *
-    * @param value Where to place value read
+    * @param[out] value Where to place value read
     *
     * @return Reference to the Uart
+    *
+    * @note Skips leading whitespace
     */
    Uart INLINE_RELEASE &operator >>(long &value) {
       return read(value, fRadix);
@@ -1020,9 +1051,11 @@ public:
    /**
     * Receives an unsigned long
     *
-    * @param value Where to place value read
+    * @param[out] value Where to place value read
     *
     * @return Reference to the Uart
+    *
+    * @note Skips leading whitespace
     */
    Uart INLINE_RELEASE &operator >>(unsigned int &value) {
       return read(value, fRadix);
@@ -1031,9 +1064,11 @@ public:
    /**
     * Receives an integer
     *
-    * @param value Where to place value read
+    * @param[out] value Where to place value read
     *
     * @return Reference to the Uart
+    *
+    * @note Skips leading whitespace
     */
    Uart INLINE_RELEASE &operator >>(int &value) {
       return read(value, fRadix);
@@ -1042,7 +1077,7 @@ public:
    /**
     * Get conversion radix for given base
     *
-    * @param radix Base to convert to radix [2..16]
+    * @param[in]  radix Base to convert to radix [2..16]
     *
     * @return Radix corresponding to base
     */

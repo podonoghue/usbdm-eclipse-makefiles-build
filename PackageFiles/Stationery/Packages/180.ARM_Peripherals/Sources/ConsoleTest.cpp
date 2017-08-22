@@ -22,22 +22,27 @@ using namespace USBDM;
 using Led   = USBDM::GpioA<2,USBDM::ActiveLow>;
 
 int main() {
-   char buff[100];
-   int integer;
-   long longInteger;
+   char     buff[100];
+   int      integer;
+   long     longInteger;
    unsigned unsignedInteger;
    unsigned long unsignedLong;
 
-   console.writeln("Starting");
+   console.writeln().writeln("Starting");
 
-   //   console.write("3.1f      = ").writeln(3.1f);
-   //   console.write("3.2f      = ").writeln(3.2f);
-   //   console.write("3.3f      = ").writeln(3.3f);
-   //   console.write("3.4f      = ").writeln(3.4f);
+   if (!console.write("Number: ").readln(integer).isOk()) {
+      console.writeln("Opps");
+   }
+   else {
+      console.writeln(integer);
+   }
 
+   console.write("3.1f      = ").writeln(3.1f);
+   console.write("3.1       = ").writeln(3.1);
+
+   // Test writing basic types using various methods
    console.write("True  = ").writeln(true);
    console.write("False = ").writeln(false);
-
    console.write("isCharAvailable() = ").writeln(console.isCharAvailable());
 
    console.write("x         = ").writeln('x');
@@ -60,25 +65,29 @@ int main() {
    console.write("UINT_MAX,Radix_10  = ").writeln(UINT_MAX,Radix_10);
    console.write("UINT_MAX,Radix_16  = ").writeln(UINT_MAX,Radix_16);
 
-   console<<"0UL,Radix_2        = "<<Radix_2<<0UL<<"\n";
-   console<<"ULONG_MAX,Radix_2  = "<<Radix_2<<ULONG_MAX<<"\n";
-   console<<"ULONG_MAX,Radix_8  = "<<Radix_8<<ULONG_MAX<<"\n";
-   console<<"ULONG_MAX,Radix_10 = "<<Radix_10<<ULONG_MAX<<"\n";
-   console<<"ULONG_MAX,Radix_16 = "<<Radix_16<<ULONG_MAX<<"\n";
-   console<<"UINT_MAX,Radix_2   = "<<Radix_2<<UINT_MAX<<"\n";
-   console<<"UINT_MAX,Radix_8   = "<<Radix_8<<UINT_MAX<<"\n";
-   console<<"UINT_MAX,Radix_10  = "<<Radix_10<<UINT_MAX<<"\n";
-   console<<"UINT_MAX,Radix_16  = "<<Radix_16<<UINT_MAX<<"\n";
-   console<<"UINT_MAX,radix(16) = "<<Uart::radix(16)<<UINT_MAX<<"\n";
-   console<<"UINT_MAX,radix(10) = "<<Uart::radix(10)<<UINT_MAX<<"\n";
-   console<<"UINT_MAX,radix(8)  = "<<Uart::radix(8)<<UINT_MAX<<"\n";
-   console<<"UINT_MAX,radix(2)  = "<<Uart::radix(2)<<UINT_MAX<<"\n";
+   console<<"true               = "<<true<<EndOfLine;
+   console<<"false              = "<<false<<EndOfLine;
+   console<<"1>2                = "<<(1>2)<<EndOfLine;
+   console<<"1<2                = "<<(1<2)<<EndOfLine;
+   console<<"0UL,Radix_2        = "<<Radix_2<<0UL<<EndOfLine;
+   console<<"ULONG_MAX,Radix_2  = "<<Radix_2<<ULONG_MAX<<EndOfLine;
+   console<<"ULONG_MAX,Radix_8  = "<<Radix_8<<ULONG_MAX<<EndOfLine;
+   console<<"ULONG_MAX,Radix_10 = "<<Radix_10<<ULONG_MAX<<EndOfLine;
+   console<<"ULONG_MAX,Radix_16 = "<<Radix_16<<ULONG_MAX<<EndOfLine;
+   console<<"UINT_MAX,Radix_2   = "<<Radix_2<<UINT_MAX<<EndOfLine;
+   console<<"UINT_MAX,Radix_8   = "<<Radix_8<<UINT_MAX<<EndOfLine;
+   console<<"UINT_MAX,Radix_10  = "<<Radix_10<<UINT_MAX<<EndOfLine;
+   console<<"UINT_MAX,Radix_16  = "<<Radix_16<<UINT_MAX<<EndOfLine;
+   console<<"UINT_MAX,radix(16) = "<<Uart::radix(16)<<UINT_MAX<<EndOfLine;
+   console<<"UINT_MAX,radix(10) = "<<Uart::radix(10)<<UINT_MAX<<EndOfLine;
+   console<<"UINT_MAX,radix(8)  = "<<Uart::radix(8)<<UINT_MAX<<EndOfLine;
+   console<<"UINT_MAX,radix(2)  = "<<Uart::radix(2)<<UINT_MAX<<EndOfLine;
    console<<Radix_10;
 
    Console::ultoa(100, buff);
-   console.write("ultoa(100, buff)  = ");console.writeln(buff);
+   console.write("ultoa(100, buff)  = ").writeln(buff);
    Console::ltoa(-100, buff);
-   console.write("ltoa(-100, buff)  = ");console.writeln(buff);
+   console.write("ltoa(-100, buff)  = ").writeln(buff);
 
    char *ptr = buff;
    ptr = Console::strcpy(ptr, "Console::ultoa(100, buff) = ");
@@ -86,6 +95,7 @@ int main() {
    ptr = Console::strcpy(ptr,  ", oh well!");
    console.writeln(buff);
 
+   // Test input
    console.write("Value (in radix 2): ").readln(integer,Radix_2);
    console.write(integer, Radix_10)
          .write(", 0x").write((unsigned long)integer, Radix_16)
@@ -99,13 +109,13 @@ int main() {
 
    console<<Radix_10;
    console<<"value :">>integer>>EndOfLine;
-   console<<"value :"<<integer<<EndOfLine;
+   console<<integer<<EndOfLine;
    console<<"value :">>longInteger>>EndOfLine;
-   console<<"value :"<<longInteger<<EndOfLine;
+   console<<longInteger<<EndOfLine;
    console<<"value :">>unsignedInteger>>EndOfLine;
-   console<<"value :"<<unsignedInteger<<EndOfLine;
+   console<<unsignedInteger<<EndOfLine;
    console<<"value :">>unsignedLong>>EndOfLine;
-   console<<"value :"<<unsignedLong<<EndOfLine;
+   console<<unsignedLong<<EndOfLine;
 
    console.write("Two integers : ").read(integer,Radix_16).readln(longInteger,Radix_16);
    console.write(integer).write(", ").writeln(longInteger);
@@ -115,6 +125,7 @@ int main() {
    console.writeln(unsignedInteger);
    console.write("An integer   : ").readln(unsignedLong);
    console.writeln(unsignedLong);
+
    Uart1 uart1{};
    uart1.isCharAvailable();
 
