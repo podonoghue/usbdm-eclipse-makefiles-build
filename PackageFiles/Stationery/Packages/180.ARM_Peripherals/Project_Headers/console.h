@@ -4,6 +4,7 @@
  * @date    13 June 2015
  */
 #include <derivative.h>
+#include <uart.h>
 
  /*
  * *****************************

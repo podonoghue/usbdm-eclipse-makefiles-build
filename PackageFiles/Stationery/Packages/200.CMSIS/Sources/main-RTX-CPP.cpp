@@ -6,14 +6,16 @@
  * RTX example program
  *----------------------------------------------------------------------------
  */
-#include <stdio.h>
 #include "cmsis.h"                      // CMSIS RTX
 #include "hardware.h"                   // Hardware interface
 #include "RTX_Conf_CM.cfg"
+#include "console.h"
 
-using RED_LED   = USBDM::$(demo.cpp.red.led:GpioB<3>);
-using GREEN_LED = USBDM::$(demo.cpp.green.led:GpioB<4>);
-using BLUE_LED  = USBDM::$(demo.cpp.blue.led:GpioB<5>);
+using namespace USBDM;
+
+using RED_LED   = GpioC<3>;
+using GREEN_LED = GpioD<4>;
+using BLUE_LED  = GpioA<2>;
 
 // Thread to toggle first LED
 static void threadLed1Toggle(const void *) {
@@ -40,12 +42,8 @@ static void callbackLed3Toggle(const void *) {
 static void callbackTick(const void *) {
    static int i = 0;
    (void)i;
-#if (OS_TIMERSTKSZ<(800/4))
-#warning "Requires RTX Timer Thread stack size to be increased to about 800 bytes for printf()"
-#else
    // Report the callback
-   printf("Callback - %d\n\r", i++);
-#endif
+   console<<"Callback - "<<i++<<"\n";
 };
 
 /**
@@ -74,17 +72,14 @@ static void timerExample() {
    thread1.run();
    thread2.run();
 
-#if (OS_MAINSTKSIZE<(800/4))
-#warning "Requires RTX Main Thread stack size to be increased to about 800 bytes for printf()"
-#else
    // Report the IDs
-   printf(" timer1::getId()   = %p\n\r", timer1.getId());
-   printf(" timer2::getId()   = %p\n\r", timer2.getId());
+   console<<Radix_16;
+   console<<" timer1::getId()   = 0x"<<timer1.getId()<<"\n";
+   console<<" timer2::getId()   = 0x"<<timer2.getId()<<"\n";
 
-   printf(" thread1::getId()  = %p\n\r", thread1.getId());
-   printf(" thread2::getId()  = %p\n\r", thread2.getId());
-#endif
-
+   console<<" thread1::getId()  = 0x"<<thread1.getId()<<"\n";
+   console<<" thread2::getId()  = 0x"<<thread2.getId()<<"\n";
+   console<<Radix_Default;
 }
 
 int main() {

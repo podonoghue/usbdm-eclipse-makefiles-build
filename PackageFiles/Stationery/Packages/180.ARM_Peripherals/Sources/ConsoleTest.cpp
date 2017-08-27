@@ -15,6 +15,30 @@
 #include "uart.h"
 #include "console.h"
 
+
+#if 0
+namespace USBDM {
+
+extern Uart0 uart0;
+
+template<> void Uart_T<Uart0Info>::irqRxTxHandler() {
+   uint8_t status = uart0.uart->S1;
+   if (status & UART_S1_RDRF_MASK) {
+      rxQueue.enQueue(uart0.uart->D);
+   }
+}
+
+template<> int Uart_T<Uart0Info>::_readChar() override {
+
+}
+
+template<> void Uart_T<Uart0Info>::irqErrorHandler() {
+   uart0.clearError();
+}
+
+}; // end namespace USBDM
+#endif
+
 // Allow access to USBDM methods without USBDM:: prefix
 using namespace USBDM;
 
@@ -43,7 +67,7 @@ int main() {
    // Test writing basic types using various methods
    console.write("True  = ").writeln(true);
    console.write("False = ").writeln(false);
-   console.write("isCharAvailable() = ").writeln(console.isCharAvailable());
+   console.write("peek() = ").writeln(console.peek());
 
    console.write("x         = ").writeln('x');
    console.write("0UL       = ").writeln(0UL);
@@ -67,6 +91,7 @@ int main() {
 
    console<<"true               = "<<true<<EndOfLine;
    console<<"false              = "<<false<<EndOfLine;
+   console<<"peek()             = "<<console.peek()<<EndOfLine;
    console<<"1>2                = "<<(1>2)<<EndOfLine;
    console<<"1<2                = "<<(1<2)<<EndOfLine;
    console<<"0UL,Radix_2        = "<<Radix_2<<0UL<<EndOfLine;
@@ -117,7 +142,7 @@ int main() {
    console<<"value :">>unsignedLong>>EndOfLine;
    console<<unsignedLong<<EndOfLine;
 
-   console.write("Two integers : ").read(integer,Radix_16).readln(longInteger,Radix_16);
+   console.write("Two hex integers : ").read(integer,Radix_16).readln(longInteger,Radix_16);
    console.write(integer).write(", ").writeln(longInteger);
    console.write("An integer   : ").readln(longInteger);
    console.writeln(longInteger);
@@ -126,11 +151,14 @@ int main() {
    console.write("An integer   : ").readln(unsignedLong);
    console.writeln(unsignedLong);
 
-   Uart1 uart1{};
-   uart1.isCharAvailable();
-
-   uart1.readChar();
    console.readChar();
+
+//   UartBuffered_T<Uart0Info> uart0(115200);
+
+//   console.setRxTxCallback(nullptr);
+
+   Uart1 uart1;
+   uart1.readChar();
 
    Led::setOutput();
    for(;;) {
