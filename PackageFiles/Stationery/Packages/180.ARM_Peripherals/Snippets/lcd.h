@@ -172,7 +172,7 @@ protected:
    Spi      &spi;
 
    /** SPI communication configuration */
-   uint32_t  spiConfig;
+   uint32_t  spiConfig = 0;
 
 #ifdef __CMSIS_RTOS
    /** Mutex to protect access to LCD */
@@ -248,6 +248,8 @@ public:
    LcdBase(Spi &spi) : spi(spi) {
    }
 
+   virtual ~LcdBase() {
+   }
 #ifdef ELEC_FREAKS
    /**
     * Set backlight level
