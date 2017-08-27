@@ -41,7 +41,7 @@ public:
       wxTextCtrl::SetMaxLength(32);
    }
 
-   /**!
+   /**
     * Set width in bytes
     *
     * @param width Width in bytes of security field
@@ -62,9 +62,9 @@ public:
       wxTextCtrl::ChangeValue(buff);
    }
 
-   //!
-   //! @return value from control as zero-padded on the right string
-   //!
+   /**
+    *  @return value from control as zero-padded on the right string
+    */
    const std::string getHexValues() {
       char buf[2*fWidth+1];
       memset(buf, '0', sizeof(buf));

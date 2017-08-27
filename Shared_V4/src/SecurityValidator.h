@@ -20,8 +20,8 @@
 #include "DeviceData.h"
 
 class SecurityValidator : public wxTextValidator {
-   bool              enabled;                //! Controls if validation is done
-   SecurityInfoPtr   securityInfoPtr;        //! Security information to maintain & use
+   bool              enabled;                //!< Controls if validation is done
+   SecurityInfoPtr   securityInfoPtr;        //!< Security information to maintain & use
    wxArrayString     acceptedCharacters;
 
 public:
@@ -78,11 +78,11 @@ public:
       }
       return win;
    }
-
-   //! Get value from associated text control
-   //!
-   //! @return value from control as zero-padded string
-   //!
+   /**
+    *  Get value from associated text control
+    *
+    *  @return value from control as zero-padded string
+    */
    const std::string getHexValues() {
       LOGGING;
       wxTextCtrl *win = GetWindow();
@@ -101,8 +101,9 @@ public:
       log.print("Size = %d, Value = \'%s\'\n", size, buf);
       return  std::string(buf);
    }
-
-   //! @param value Value to set
+   /**
+    * @param value Value to set
+    */
    void setObject(SecurityInfoPtr securityInfoPtr) {
       this->securityInfoPtr = securityInfoPtr;
       wxTextCtrl *win = GetWindow();
@@ -115,11 +116,11 @@ public:
       LOGGING_E;
       return new SecurityValidator(*this);
    }
-
-   //! Enable or disable validation
-   //!
-   //! @param enabled  true to enable validation
-   //!
+   /**
+    *  Enable or disable validation
+    *
+    *  @param enabled  true to enable validation
+    */
    void enable(bool enabled) {
       LOGGING_E;
       this->enabled = enabled;

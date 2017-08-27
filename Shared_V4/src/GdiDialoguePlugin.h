@@ -1,4 +1,4 @@
-/*! \file
+/** \file
     \brief Header file for GdiDialoguePlugin.cpp
 
     \verbatim
@@ -56,7 +56,7 @@ class GdiDialoguePlugin;
 
 class GdiDialoguePlugin {
 public:
-   /*!
+   /**
     *  Creates and displays the Dialogue to obtain settings from the user.
     *  - Accepts and updates settings object
     *  - Prompts user to select BDM etc.

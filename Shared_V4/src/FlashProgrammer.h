@@ -61,7 +61,7 @@
 class USBDM_FLASHPROGRAMMER_DECLSPEC FlashProgrammer {
 
 public:
-   /*
+   /**
     * Address modifiers used by various targets
     */
    enum AddressModifiers {
@@ -70,6 +70,7 @@ public:
       ADDRESS_EEPROM = 1UL<<30,  //!< EEPROM
       ADDRESS_A23    = 1UL<<23,  //!< A23 bit for Flex/DataFlash on ARM/CFV1+
    };
+
    /**
     * Different flash operations
     */

@@ -43,21 +43,21 @@ class DeviceInterface {
 
 public:
    /**
-    * Get device database
+    *  Get device database
     *
-    * @return Smart pointer to device database
+    *  @return Smart pointer to device database
     */
    DeviceDataBasePtr  getDeviceDatabase()              { return deviceDatabase; }
    /**
-    * Get reference to current device in device database
+    *  Get reference to current device in device database
     *
     * @return Smart pointer to current device
     */
    DeviceDataPtr&     getCurrentDevice()               { return currentDevice; }
    /**
-    * Get index of device in database
+    *  Get index of device in database
     *
-    * @return index of currently selected device
+    *  @return index of currently selected device
     */
    int                getCurrentDeviceIndex()          { return currentDeviceIndex; }
 
@@ -68,25 +68,25 @@ public:
    virtual ~DeviceInterface();
 
    /**
-    * Load device database
+    *  Load device database
     *
-    * @return error code
+    *  @return error code
     */
    virtual USBDM_ErrorCode loadDeviceDatabase(void);
    /**
-    * Select device in database by index
+    *  Select device in database by index
     *
-    * @param deviceIndex Index to select device
+    *  @param deviceIndex Index to select device
     */
    virtual USBDM_ErrorCode setCurrentDeviceByIndex(int deviceIndex);
    /**
-    * Select device in database by name
+    *  Select device in database by name
     *
-    * @param name Name of device to select
+    *  @param name Name of device to select
     */
    virtual USBDM_ErrorCode setCurrentDeviceByName(std::string name);
    /**
-    * Load settings
+    *  Load settings
     *
     *  @param settings Settings object to load settings from
     */

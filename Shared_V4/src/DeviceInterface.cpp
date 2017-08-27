@@ -12,8 +12,8 @@ using namespace std;
 
 #include "DeviceInterface.h"
 
-/*!
- *  Load device database
+/**
+ *  Load device database from disk
  */
 USBDM_ErrorCode DeviceInterface::loadDeviceDatabase(void) {
    USBDM_ErrorCode rc = BDM_RC_OK;
@@ -36,12 +36,13 @@ const string targetBusFrequencyKey(      settingsKey ".targetBusFrequency");
 const string eraseMethodKey(             settingsKey ".eraseMethod");
 const string resetMethodKey(             settingsKey ".resetMethod");
 
-/*!  Select current device by device index
+/**
+ *  Select current device by device index
  *
- *   @param deviceIndex - Index into device database of desired device
+ *  @param deviceIndex - Index into device database of desired device
  *
- *   @return true  => device is made the current device \n
- *           false => index out of range, device is set to the 1st device (index 0)
+ *  @return true  => device is made the current device \n
+ *  @return false => index out of range, device is set to the 1st device (index 0)
  */
 USBDM_ErrorCode DeviceInterface::setCurrentDeviceByIndex(int newDeviceIndex) {
    LOGGING_Q;
@@ -68,12 +69,13 @@ USBDM_ErrorCode DeviceInterface::setCurrentDeviceByIndex(int newDeviceIndex) {
    return rc;
 }
 
-/*!  Select current device by device name
+/**
+ *  Select current device by device name
  *
- *   @param deviceName - Name of desired device
+ *  @param deviceName - Name of desired device
  *
- *   @return true  => device is made the current device \n
- *           false => device not found, device is set to the default device
+ *  @return true  => device is made the current device \n
+ *  @return false => device not found, device is set to the default device
  */
 USBDM_ErrorCode DeviceInterface::setCurrentDeviceByName(string deviceName) {
    LOGGING_Q;
@@ -91,7 +93,9 @@ USBDM_ErrorCode DeviceInterface::setCurrentDeviceByName(string deviceName) {
 }
 
 /**
- * @param targetType Type of target, affects options shown
+ *  Create device interface to given target
+ *
+ *  @param targetType Type of target, affects options shown
  */
 DeviceInterface::DeviceInterface(TargetType_t targetType) : targetType(targetType) {
 
@@ -104,12 +108,16 @@ DeviceInterface::DeviceInterface(TargetType_t targetType) : targetType(targetTyp
    currentDevice->setSecurity(SEC_SMART);
 }
 
+/**
+ *  Destructor
+ */
 DeviceInterface::~DeviceInterface() {
    LOGGING_E;
    deviceDatabase.reset();
 }
 
-/*!  Load settings from object
+/**
+ *  Load settings from object
  *
  *  @param  settings Settings object
  */
@@ -133,7 +141,8 @@ void DeviceInterface::loadSettings(const AppSettings &settings) {
    currentDevice->setResetMethod( (DeviceData::ResetMethod) settings.getValue(resetMethodKey, currentDevice->getResetMethod()));
 }
 
-/*!  Save settings to object
+/**
+ *  Save settings to object
  *
  *  @param  settings Settings object
  */

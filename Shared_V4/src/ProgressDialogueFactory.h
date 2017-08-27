@@ -19,40 +19,40 @@ protected:
 
 public:
    virtual ~ProgressDialogue() {}
-   /*
+   /**
     * Pulse the progress display
     *
     * @param message - optional new message to display
     */
    virtual bool pulse(std::string message="") = 0;
-   /*
+   /**
     * Update the progress display
     *
     * @param amount  - absolute progress level to set as a fraction of total
     * @param message - optional new message to display
     */
    virtual bool update(int amount, std::string message="") = 0;
-   /*
+   /**
     * Update the progress display
     *
     * @param amount  - relative progress level as a fraction of total
     * @param message - optional new message to display
     */
    virtual bool incrementalUpdate(int relativeAmount, std::string message="") = 0;
-   /*
+   /**
     * Update the progress display
     *
     * @param amount  - absolute progress level to set as a percentage
     * @param message - optional new message to display
     */
    virtual bool percentageUpdate(int percent, std::string message="") = 0;
-   /*
+   /**
     * Sets the maximum value of the progress indicator range
     *
     * @param maximum  - maximum value
     */
    virtual void setRange(int maximum) = 0;
-   /*
+   /**
     * Close the dialogue
     */
    virtual void close() = 0;

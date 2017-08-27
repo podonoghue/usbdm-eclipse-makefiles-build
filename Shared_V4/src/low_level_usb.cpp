@@ -156,9 +156,8 @@ libusb_context *context;
 /**
  *  Initialisation of low-level USB interface
  *
- *   @return\n
- *        BDM_RC_OK        - success \n
- *        BDM_RC_USB_ERROR - various errors
+ *  @return BDM_RC_OK        - success
+ *  @return BDM_RC_USB_ERROR - various errors
  */
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_init( void ) {
@@ -194,9 +193,8 @@ USBDM_ErrorCode bdm_usb_init( void ) {
 /**
  *  De-initialise low-level USB interface
  *
- *   @return\n
- *        BDM_RC_OK        - success \n
- *        BDM_RC_USB_ERROR - various errors
+ *  @return BDM_RC_OK        - success
+ *  @return BDM_RC_USB_ERROR - various errors
  */
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_exit( void ) {
@@ -213,8 +211,7 @@ USBDM_ErrorCode bdm_usb_exit( void ) {
 /**
  *  Release all devices referenced by bdm_usb_findDevices
  *
- *   @return\n
- *        BDM_RC_OK        - success \n
+ *  @return BDM_RC_OK        - success
  */
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_releaseDevices(void) {
@@ -242,9 +239,8 @@ USBDM_ErrorCode bdm_usb_releaseDevices(void) {
  *   @param deviceCount Number of devices found.  This is set
  *                      to zero on any error.
  *
- *   @return\n
- *        BDM_RC_OK        - success - found at least 1 device \n
- *        BDM_RC_USB_ERROR - no device found or various errors
+ *   @return BDM_RC_OK        - success - found at least 1 device
+ *   @return BDM_RC_USB_ERROR - no device found or various errors
  */
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_findDevices(unsigned *devCount, const UsbId usbIds[]) {
@@ -379,9 +375,8 @@ USBDM_ErrorCode bdm_walkConfig( libusb_device *device ) {
  *
  *  @param device_no Device number to open
  *
- *  @return \n
- *     == BDM_RC_OK (0)     => Success\n
- *     == BDM_RC_USB_ERROR  => USB failure
+ *  @return == BDM_RC_OK (0)     => Success
+ *  @return == BDM_RC_USB_ERROR  => USB failure
  */
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_open( unsigned int device_no ) {
@@ -517,9 +512,8 @@ USBDM_ErrorCode bdm_usb_close( void ) {
  *  @param deviceDescription  Ptr to buffer for descriptor
  *  @param maxLength          Size of buffer
  *
- *  @return \n
- *     == BDM_RC_OK (0)          => Success\n
- *     == BDM_RC_USB_ERROR       => USB failure
+ *  @return == BDM_RC_OK (0)     => Success\n
+ *  @return == BDM_RC_USB_ERROR  => USB failure
  */
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_getStringDescriptor(int index, char *descriptorBuffer, unsigned maxLength) {
@@ -581,9 +575,8 @@ USBDM_ErrorCode bdm_usb_getStringDescriptor(int index, char *descriptorBuffer, u
  *     data[1]    = Command byte \n
  *     data[2..N] = parameter(s) for command \n
  *
- *  @return \n
- *     == BDM_RC_OK (0)     => Success\n
- *     == BDM_RC_USB_ERROR  => USB failure
+ *  @return == BDM_RC_OK (0)     => Success\n
+ *  @return == BDM_RC_USB_ERROR  => USB failure
  */
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_send_ep0( const unsigned char * data ) {
@@ -643,10 +636,9 @@ USBDM_ErrorCode bdm_usb_send_ep0( const unsigned char * data ) {
  *
  *  @param actualRxSize - Size of received data (may be NULL if not needed)
  *
- *  @return \n
- *     == BDM_RC_OK (0)     => Success, OK response from device\n
- *     == BDM_RC_USB_ERROR  => USB failure \n
- *     == else              => Error code from Device
+ *  @return == BDM_RC_OK (0)     => Success, OK response from device\n
+ *  @return == BDM_RC_USB_ERROR  => USB failure \n
+ *  @return == else              => Error code from Device
  */
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_recv_ep0(unsigned char *data, unsigned *actualRxSize) {
@@ -730,16 +722,15 @@ USBDM_ErrorCode bdm_usb_recv_ep0(unsigned char *data, unsigned *actualRxSize) {
  *
  *  Sent [bmRequestType|bRequest|wValue|wIndex|wLength] [data...]
  *
- * @param bmRequest - the request field for the setup packet
- * @param wValue    - the value field for the setup packet
- * @param wIndex    - the index field for the setup packet
- * @param data	     - buffer for transmit data
- * @param wLength	  - the length field for the setup packet. The data buffer should be at least this size.
- * @param timeout	  - timeout (in milliseconds) that this function should wait for ACK. 0 => unlimited.
+ *  @param bmRequest - the request field for the setup packet
+ *  @param wValue    - the value field for the setup packet
+ *  @param wIndex    - the index field for the setup packet
+ *  @param data	   - buffer for transmit data
+ *  @param wLength	- the length field for the setup packet. The data buffer should be at least this size.
+ *  @param timeout	- timeout (in milliseconds) that this function should wait for ACK. 0 => unlimited.
  *
- * @return
- *   == 0 => USB transfer OK \n
- *   != 0 => USB transfer Failed
+ *  @return == 0 => USB transfer OK
+ *  @return != 0 => USB transfer Failed
  *
 */
 DLL_LOCAL
@@ -785,16 +776,15 @@ USBDM_ErrorCode bdm_usb_raw_send_ep0(unsigned int         bmRequest,
  *  Sent     [bmRequestType|bRequest|wValue|wIndex|wLength]
  *  Received [data...]
  *
- * @param bmRequest - the request field for the setup packet
- * @param wValue    - the value field for the setup packet
- * @param wIndex    - the index field for the setup packet
- * @param data      - a suitably-sized data buffer for received data
- * @param wLength   - the length field for the setup packet. The data buffer should be at least this size.
- * @param timeout   - timeout (in milliseconds) that this function should wait for ACK. 0 => unlimited.
+ *  @param bmRequest - the request field for the setup packet
+ *  @param wValue    - the value field for the setup packet
+ *  @param wIndex    - the index field for the setup packet
+ *  @param data      - a suitably-sized data buffer for received data
+ *  @param wLength   - the length field for the setup packet. The data buffer should be at least this size.
+ *  @param timeout   - timeout (in milliseconds) that this function should wait for ACK. 0 => unlimited.
  *
- *  @return \n
- *     == BDM_RC_OK (0)     => Success, OK response from device\n
- *     == BDM_RC_USB_ERROR  => USB failure \n
+ *  @return == BDM_RC_OK (0)     => Success, OK response from device
+ *  @return == BDM_RC_USB_ERROR  => USB failure
  */
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_raw_recv_ep0(unsigned int   bmRequest,
@@ -859,9 +849,8 @@ USBDM_ErrorCode bdm_usb_raw_recv_ep0(unsigned int   bmRequest,
  *     ======================================== \n
  *     data[0]      = error code (=rc)
  *
- *  @return
- *    BDM_RC_OK        => USB transfer OK \n
- *    BDM_RC_USB_ERROR => USB transfer Failed
+ *  @return BDM_RC_OK        => USB transfer OK \n
+ *  @return BDM_RC_USB_ERROR => USB transfer Failed
  */
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_send_epOut(unsigned int count, const unsigned char *data) {
@@ -933,10 +922,9 @@ static unsigned char dummyBuffer[512];
  *
  *  @param actualCount = Actual number of bytes received
  *
- *  @return                                                       \n
- *     == BDM_RC_OK (0)     => Success, OK response from device   \n
- *     == BDM_RC_USB_ERROR  => USB failure                        \n
- *     == else              => Error code from Device
+ *  @return == BDM_RC_OK (0)     => Success, OK response from device   \n
+ *  @return == BDM_RC_USB_ERROR  => USB failure                        \n
+ *  @return == else              => Error code from Device
  */
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_recv_epIn(unsigned count, unsigned char *data, unsigned *actualCount) {
@@ -1328,10 +1316,9 @@ USBDM_ErrorCode bdmVersion5_usb_transaction(
  *  @param timeout      = timeout in ms
  *  @param actualRxSize = number of bytes actually received (may be NULL if not required)
  *
- *  @return                                                          \n
- *     == BDM_RC_OK (0)     => Success, OK response from device      \n
- *     == BDM_RC_USB_ERROR  => USB failure                           \n
- *     == else              => Error code from BDM
+ *  @return == BDM_RC_OK (0)     => Success, OK response from device      \n
+ *  @return == BDM_RC_USB_ERROR  => USB failure                           \n
+ *  @return == else              => Error code from BDM
  */
 DLL_LOCAL
 USBDM_ErrorCode bdm_usb_transaction( unsigned int   txSize,

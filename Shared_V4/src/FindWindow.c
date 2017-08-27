@@ -6,18 +6,20 @@
 
 // Not currently used
 
-//! A rather crude effort to locate an Eclipse window - Any one!
-//!
-//! @return HWND of Any Eclipse window located
-//!
+/**
+ *  A rather crude effort to locate an Eclipse window - Any one!
+ *
+ *  @return HWND of Any Eclipse window located
+ */
 HWND FindEclipseWindowHwnd(void) {
    return FindWindowExA(NULL,NULL,"SWT_Window0",0);
 }
 
-//! Locates the HWND of a Console Application
-//!
-//! @return HWND of Console Application
-//!
+/**
+ * Locates the HWND of a Console Application
+ *
+ * @return HWND of Console Application
+ */
 HWND GetConsoleHwnd(void) {
 const int MaxTitleSize = 1024;           // Size for console window titles.
    char pszNewWindowTitle[MaxTitleSize]; // Fabricated window title.

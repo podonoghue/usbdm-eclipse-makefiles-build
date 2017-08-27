@@ -5,12 +5,12 @@
  *      Author: podonoghue
  */
 
-/*! \file
-    \brief Debugging message file
-
-    This file provides mappings from various code numbers to strings.\n
-    It is mostly used for debugging messages.
-*/
+/** \file
+ *   \brief Debugging message file
+ *
+ *   This file provides mappings from various code numbers to strings.\n
+ *   It is mostly used for debugging messages.
+ */
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -22,10 +22,11 @@
 #include "UsbdmSystem.h"
 #include "DeviceData.h"
 
-//! Obtain a description of the hardware version
-//!
-//! @return ptr to static string describing the hardware
-//!
+/**
+ *  Obtain a description of the hardware version
+ *
+ *  @return ptr to static string describing the hardware
+ */
 const char *getHardwareDescription(unsigned int hardwareVersion) {
    //! BDM hardware descriptions
    static const char *hardwareDescriptions[] = {
@@ -61,11 +62,11 @@ const char *getHardwareDescription(unsigned int hardwareVersion) {
    }
    return hardwareName;
 }
-
-//! Obtain a short description of the hardware
-//!
-//! @return ptr to static string describing the hardware
-//!
+/**
+ *  Obtain a short description of the hardware
+ *
+ *  @return ptr to static string describing the hardware
+ */
 const char *getBriefHardwareDescription(unsigned int hardwareVersion) {
    static const char *briefHardwareDescriptions[] = {
     /*  0  */  "Reserved",
@@ -139,13 +140,13 @@ static const char *const ICPerrorMessages[] = {
     "Flash Operation Failed",             // 2
     "Verify Failed",                      // 3
 };
-
-//! \brief Maps an ICP Error Code # to a string
-//!
-//! @param error Error number
-//!
-//! @return pointer to static string describing the error
-//!
+/**
+ *  \brief Maps an ICP Error Code # to a string
+ *
+ *  @param error Error number
+ *
+ *  @return pointer to static string describing the error
+ */
 const char *getICPErrorName(unsigned char error) {
    char const *errorName = NULL;
 
@@ -157,13 +158,13 @@ const char *getICPErrorName(unsigned char error) {
    }
    return errorName;
 }
-
-//! \brief Maps a Target type # to a string
-//!
-//! @param type = Target type #
-//!
-//! @return pointer to static string describing the target
-//!
+/**
+ *  \brief Maps a Target type # to a string
+ *
+ *  @param type = Target type #
+ *
+ *  @return pointer to static string describing the target
+ */
 char const *getTargetTypeName( unsigned int type ) {
    static const char *names[] = {
       "HCS12","HCS08","RS08","CFV1","CFVx","JTAG",
@@ -203,13 +204,13 @@ char const *getConnectionStateName(SpeedMode_t level) {
       default                    : return "Speed-??";
    }
 }
-
-//! \brief Maps the BDM status to text
-//!
-//! @param USBDMStatus => status value to interpret
-//!
-//! @return pointer to static string buffer describing the value
-//!
+/**
+ * \brief Maps the BDM status to text
+ *
+ * @param USBDMStatus => status value to interpret
+ *
+ * @return pointer to static string buffer describing the value
+ */
 char const *getBDMStatusName(USBDMStatus_t *USBDMStatus) {
    static char buff[150] = "";
    snprintf(buff, sizeof(buff), "%s, %s, %s, %s, %s, %s, %s",
@@ -318,13 +319,13 @@ static const char *const newCommandTable[]= {
    "CMD_USBDM_JTAG_READ_WRITE"               , // 43,
    "CMD_USBDM_JTAG_EXECUTE_SEQUENCE"         , // 44,
 };
-
-//! \brief Maps a command code to a string
-//!
-//! @param command Command number
-//!
-//! @return pointer to static string describing the command
-//!
+/**
+ * \brief Maps a command code to a string
+ *
+ * @param command Command number
+ *
+ * @return pointer to static string describing the command
+ */
 const char *getCommandName(unsigned char command) {
    char const *commandName = NULL;
 
@@ -361,13 +362,13 @@ static const char *const debugCommands[] = {
    "Test BDM Tx Routine",         // 17
    "SWD test",                    // 18
 };
-
-//! \brief Maps a Debug Command # to a string
-//!
-//! @param cmd Debug command number
-//!
-//! @return pointer to static string describing the command
-//!
+/**
+ * \brief Maps a Debug Command # to a string
+ *
+ * @param cmd Debug command number
+ *
+ * @return pointer to static string describing the command
+ */
 const char *getDebugCommandName(unsigned char cmd) {
    char const *cmdName = NULL;
    if (cmd < sizeof(debugCommands)/sizeof(debugCommands[0])) {
@@ -388,27 +389,27 @@ char const *getAutoConnectName(AutoConnect_t mode) {
    }
    return buff;
 }
-
-//!  Creates dummy register name in static buffer
-//!
-//! @param regAddr number indicating the register
-//!
-//! @return ptr to static buffer
-//!
+/**
+ *   Creates dummy register name in static buffer
+ *
+ *  @param regAddr number indicating the register
+ *
+ *  @return ptr to static buffer
+ */
 static const char *getUnknownReg(unsigned int regAddr) {
    static char buffer[20];
    memset(buffer, 0, sizeof(buffer));
    snprintf(buffer, sizeof(buffer)-1, "UnknowReg#%X", regAddr);
    return buffer;
 }
-
-//! \brief Maps a Coldfire V1 Control register # to a string
-//! (As used by WRITE_CREG/READ_CREG)
-//!
-//! @param regAddr = register address
-//!
-//! @return pointer to static string describing the register
-//!
+/**
+ *  \brief Maps a Coldfire V1 Control register # to a string
+ *  (As used by WRITE_CREG/READ_CREG)
+ *
+ *  @param regAddr = register address
+ *
+ *  @return pointer to static string describing the register
+ */
 char const *getCFV1ControlRegName( unsigned int regAddr ){
    static const char *names[] = {
       "OTHER_A7","VBR","CPUCR",NULL, "MACSR", "MASK", "ACC", NULL,
@@ -425,14 +426,14 @@ char const *getCFV1ControlRegName( unsigned int regAddr ){
    }
    return regName;
 }
-
-//! \brief Maps a Coldfire V2,3,4 Control register # to a string
-//! (As used by RCREG/WCREG commands)
-//!
-//! @param regAddr = register address
-//!
-//! @return pointer to static string describing the register
-//!
+/**
+ *  \brief Maps a Coldfire V2,3,4 Control register # to a string
+ *  (As used by RCREG/WCREG commands)
+ *
+ *  @param regAddr = register address
+ *
+ *  @return pointer to static string describing the register
+ */
 char const *getCFVxControlRegName( unsigned int regAddr ){
 static const char *regs[] = {"D0","D1","D2","D3","D4","D5","D6","D7",
                              "A0","A1","A2","A3","A4","A5","A6","USP"};
@@ -465,21 +466,20 @@ const char *regName = NULL;
    }
    return regName;
 }
-
-//! \brief Maps a ARM-SWD Debug register # to a string
-//!
-//! @param regAddr = register address
-//!
-//! @return pointer to static string describing the command
-//!
+/**
+ *  \brief Maps a ARM-SWD Debug register # to a string
+ *
+ *  @param regAddr = register address
+ *  The regAddr is actually a AP bus address as follows:
+ *     A[31:24]  => DP-AP-SELECT[31:24] (AP # Select) \n
+ *     A[23:8]   => unused (0)
+ *     A[7:4]    => DP-AP-SELECT[7:4]   (Bank select within AP) \n
+ *     A[3:2]    => APACC[3:2]          (Register select within AP bank)
+ *     A[1:0]    => unused (0)
+ *
+ *  @return pointer to static string describing the command
+ */
 char const *getARMControlRegName( unsigned int regAddr ) {
-   //! The regAddr is actually a AP bus address as follows:
-   //!    A[31:24]  => DP-AP-SELECT[31:24] (AP # Select) \n
-   //!    A[23:8]   => unused (0)
-   //!    A[7:4]    => DP-AP-SELECT[7:4]   (Bank select within AP) \n
-   //!    A[3:2]    => APACC[3:2]          (Register select within AP bank)
-   //!    A[1:0]    => unused (0)
-   //!
    switch(regAddr) {
       // AP#0 - Common ARM AHB-AP
       case ARM_CRegAHB_AP_CSW     : return "AHB_AP.CSW";  // AHB-AP Control/Status Word register
@@ -501,14 +501,14 @@ char const *getARMControlRegName( unsigned int regAddr ) {
          regAddr, (regAddr>>24)&0xFF, (regAddr>>4)&0x0F, (regAddr>>2)&0x2);
    return buff;
 }
-
-//! \brief Maps a Coldfire V1 Debug register # to a string
-//! (As used by WRITE_DREG/READ_DREG)
-//!
-//! @param regAddr = register address
-//!
-//! @return pointer to static string describing the command
-//!
+/**
+ *  \brief Maps a Coldfire V1 Debug register # to a string
+ *  (As used by WRITE_DREG/READ_DREG)
+ *
+ *  @param regAddr = register address
+ *
+ *  @return pointer to static string describing the command
+ */
 char const *getCFV1DebugRegName( unsigned int regAddr ){
    static const char *names[] = {
      "CSR","XCSR","CSR2","CSR3",// 00-03
@@ -541,14 +541,14 @@ char const *getCFV1DebugRegName( unsigned int regAddr ){
    }
    return regName;
 }
-
-//! \brief Maps a Coldfire V2,3,4 Debug register # to a string
-//! (As used by WDMREG)/RDMREG))
-//!
-//! @param regAddr = register address
-//!
-//! @return pointer to static string describing the command
-//!
+/**
+ *  \brief Maps a Coldfire V2,3,4 Debug register # to a string
+ *  (As used by WDMREG)/RDMREG))
+ *
+ *  @param regAddr = register address
+ *
+ *  @return pointer to static string describing the command
+ */
 char const *getCFVxDebugRegName( unsigned int regAddr ){
    static const char *names[] = {"CSR", NULL, NULL, NULL,   // 00-03
                                  NULL,"BAAR","AATR","TDR",  // 04-07
@@ -568,13 +568,13 @@ char const *getCFVxDebugRegName( unsigned int regAddr ){
    }
    return regName;
 }
-
-//! \brief Maps a ARM-SWD Debug register # to a string
-//!
-//! @param regAddr = register address
-//!
-//! @return pointer to static string describing the command
-//!
+/**
+ *  \brief Maps a ARM-SWD Debug register # to a string
+ *
+ *  @param regAddr = register address
+ *
+ *  @return pointer to static string describing the command
+ */
 char const *getSWDDebugRegName( unsigned int regAddr ) {
    static const char *names[] = {
    "DP_IDCODE/ABORT",    //!< DP-IDCODE read, ABORT write
@@ -593,14 +593,14 @@ char const *getSWDDebugRegName( unsigned int regAddr ) {
       return names[regAddr];
    }
 }
-
-//! \brief Maps a Coldfire V2,3,4 Debug register # to a string
-//! (As used by WDMREG)/RDMREG))
-//!
-//! @param regAddr = register address
-//!
-//! @return pointer to static string describing the command
-//!
+/**
+ *  \brief Maps a Coldfire V2,3,4 Debug register # to a string
+ *  (As used by WDMREG)/RDMREG))
+ *
+ *  @param regAddr = register address
+ *
+ *  @return pointer to static string describing the command
+ */
 char const *getHCS12DebugRegName( unsigned int regAddr ) {
    if (regAddr == 0xFF01) {
       return "BDMSTS";
@@ -616,13 +616,13 @@ char const *getHCS12DebugRegName( unsigned int regAddr ) {
    }
    return getUnknownReg(regAddr);
 }
-
-//! \brief Maps a S12Z register # to a string
-//!
-//! @param regAddr = register address
-//!
-//! @return pointer to static string describing the command
-//!
+/**
+ *  \brief Maps a S12Z register # to a string
+ *
+ *  @param regAddr = register address
+ *
+ *  @return pointer to static string describing the command
+ */
 char const *getS12ZRegName( unsigned int regAddr ) {
    static const char *names[] = {
       "D0","D1","D2","D3","D4","D5","D6","D7",
@@ -638,13 +638,13 @@ char const *getS12ZRegName( unsigned int regAddr ) {
    }
    return regName;
 }
-
-//! \brief Maps a HCS12 register # to a string
-//!
-//! @param regAddr = register address
-//!
-//! @return pointer to static string describing the command
-//!
+/**
+ *  \brief Maps a HCS12 register # to a string
+ *
+ *  @param regAddr = register address
+ *
+ *  @return pointer to static string describing the command
+ */
 char const *getHCS12RegName( unsigned int regAddr ) {
    static const char *names[] = {
       NULL,NULL,NULL,"PC","D","X","Y","SP"
@@ -659,13 +659,13 @@ char const *getHCS12RegName( unsigned int regAddr ) {
    }
    return regName;
 }
-
-//! \brief Maps a HCS08 register # to a string
-//!
-//! @param regAddr = register address
-//!
-//! @return pointer to static string describing the command
-//!
+/**
+ *  \brief Maps a HCS08 register # to a string
+ *
+ *  @param regAddr = register address
+ *
+ *  @return pointer to static string describing the command
+ */
 char const *getHCS08RegName( unsigned int regAddr ) {
    static const char *names[] = {
       NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,
@@ -681,13 +681,13 @@ char const *getHCS08RegName( unsigned int regAddr ) {
    }
    return regName;
 }
-
-//! \brief Maps a RS08 register # to a string
-//!
-//! @param regAddr = register address
-//!
-//! @return pointer to static string describing the command
-//!
+/**
+ *  \brief Maps a RS08 register # to a string
+ *
+ *  @param regAddr = register address
+ *
+ *  @return pointer to static string describing the command
+ */
 char const *getRS08RegName( unsigned int regAddr ) {
    static const char *names[] = {
       NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,
@@ -703,14 +703,14 @@ char const *getRS08RegName( unsigned int regAddr ) {
    }
    return regName;
 }
-
-//! \brief Maps a Coldfire V1 register # to a string
-//! (As used by WRITE_Rn/READ_Rn)
-//!
-//! @param regAddr = register address
-//!
-//! @return pointer to static string describing the command
-//!
+/**
+ *  \brief Maps a Coldfire V1 register # to a string
+ *  (As used by WRITE_Rn/READ_Rn)
+ *
+ *  @param regAddr = register address
+ *
+ *  @return pointer to static string describing the command
+ */
 char const *getCFV1RegName( unsigned int regAddr ){
    static const char *names[] = {
       "D0","D1","D2","D3","D4","D5","D6","D7",
@@ -736,14 +736,14 @@ char const *getCFV1RegName( unsigned int regAddr ){
    }
    return regName;
 }
-
-//! \brief Maps a Coldfire V2,3,4 register # to a string
-//! (As used by WAREG/RAREG,WDREG/RDREG)
-//!
-//! @param regAddr = register address
-//!
-//! @return pointer to static string describing the command
-//!
+/**
+ *  \brief Maps a Coldfire V2,3,4 register # to a string
+ *  (As used by WAREG/RAREG,WDREG/RDREG)
+ *
+ *  @param regAddr = register address
+ *
+ *  @return pointer to static string describing the command
+ */
 char const *getCFVxRegName( unsigned int regAddr ) {
    static const char *names[] = {
       "D0","D1","D2","D3","D4","D5","D6","D7",
@@ -759,13 +759,13 @@ char const *getCFVxRegName( unsigned int regAddr ) {
    }
    return regName;
 }
-
-//! \brief Maps a DSC register # to a string
-//!
-//! @param regNum = register number
-//!
-//! @return pointer to static string describing the register
-//!
+/**
+ *  \brief Maps a DSC register # to a string
+ *
+ *  @param regNum = register number
+ *
+ *  @return pointer to static string describing the register
+ */
 char const *getDSCRegName( unsigned int regAddr) {
    static const char *const regNames[] =  {
       // Core registers
@@ -838,14 +838,14 @@ char const *getDSCRegName( unsigned int regAddr) {
    }
    return regName;
 }
-
-//! \brief Maps a register # to a string
-//!
-//! @param targetType = target type (T_HC12 etc)
-//! @param regNo      = register address
-//!
-//! @return pointer to static string describing the command
-//!
+/**
+ *  \brief Maps a register # to a string
+ *
+ *  @param targetType = target type (T_HC12 etc)
+ *  @param regNo      = register address
+ *
+ *  @return pointer to static string describing the command
+ */
 char const *getRegName( unsigned int targetType,
                         unsigned int regNo ){
    switch (targetType) {
@@ -871,13 +871,13 @@ char const *getRegName( unsigned int targetType,
    };
    return "Invalid target!";
 }
-
-//! \brief Maps a CFVx CSR register value to a string
-//!
-//! @param CSR = CSR register value
-//!
-//! @return pointer to static string buffer describing the CSR
-//!
+/**
+ *  \brief Maps a CFVx CSR register value to a string
+ *
+ *  @param CSR = CSR register value
+ *
+ *  @return pointer to static string buffer describing the CSR
+ */
 char const *getCFVx_CSR_Name( unsigned int CSR) {
    static const char *hrlName[] = {
       "A","B","C","D","?","?","?","?",
@@ -916,13 +916,13 @@ char const *getCFVx_CSR_Name( unsigned int CSR) {
                );
    return buff;
 }
-
-//! \brief Maps a HCS12ZVM BDMSTS register value to a string
-//!
-//! @param BDMSTS = BDMSTS register value
-//!
-//! @return pointer to static string buffer describing the BDMSTS
-//!
+/**
+ *  \brief Maps a HCS12ZVM BDMSTS register value to a string
+ *
+ *  @param BDMSTS = BDMSTS register value
+ *
+ *  @return pointer to static string buffer describing the BDMSTS
+ */
 char const *getHCS12ZVM_BDMSTS_Name( unsigned int BDMSTS) {
    static char buff[100];
 
@@ -938,13 +938,13 @@ char const *getHCS12ZVM_BDMSTS_Name( unsigned int BDMSTS) {
                  (BDMSTS&(1<<0))?"ERASE, ":"" );
    return buff;
 }
-
-//! \brief Maps a HCS12 BDMSTS register value to a string
-//!
-//! @param BDMSTS = BDMSTS register value
-//!
-//! @return pointer to static string buffer describing the BDMSTS
-//!
+/**
+ *  \brief Maps a HCS12 BDMSTS register value to a string
+ *
+ *  @param BDMSTS = BDMSTS register value
+ *
+ *  @return pointer to static string buffer describing the BDMSTS
+ */
 char const *getHCS12_BDMSTS_Name( unsigned int BDMSTS) {
    static char buff[100];
 
@@ -960,13 +960,13 @@ char const *getHCS12_BDMSTS_Name( unsigned int BDMSTS) {
                  (BDMSTS&(1<<0))?"?, ":"" );
    return buff;
 }
-
-//! \brief Maps a HCS08 BDCSCR register value to a string
-//!
-//! @param BDCSCR = BDCSCR register value
-//!
-//! @return pointer to static string buffer describing the BDCSCR
-//!
+/**
+ *  \brief Maps a HCS08 BDCSCR register value to a string
+ *
+ *  @param BDCSCR = BDCSCR register value
+ *
+ *  @return pointer to static string buffer describing the BDCSCR
+ */
 char const *getHCS08_BDCSCR_Name( unsigned int BDCSCR) {
    static char buff[100];
 
@@ -982,13 +982,13 @@ char const *getHCS08_BDCSCR_Name( unsigned int BDCSCR) {
                  (BDCSCR&(1<<0))?"DVF, ":"" );
    return buff;
 }
-
-//! \brief Maps a RS08 BDCSCR register value to a string
-//!
-//! @param BDCSCR = BDCSCR register value
-//!
-//! @return pointer to static string buffer describing the BDCSCR
-//!
+/**
+ *  \brief Maps a RS08 BDCSCR register value to a string
+ *
+ *  @param BDCSCR = BDCSCR register value
+ *
+ *  @return pointer to static string buffer describing the BDCSCR
+ */
 char const *getRS08_BDCSCR_Name( unsigned int BDCSCR) {
 static char buff[100];
    snprintf(buff, sizeof(buff), "(0x%2.2X) = %s%s%s%s%s%s%s",
@@ -1002,13 +1002,13 @@ static char buff[100];
                  (BDCSCR&(1<<1))?"WSF, ":"" );
    return buff;
 }
-
-//! \brief Maps a CFV1 XCSR register MSB value to a string
-//!
-//! @param XCSR = XCSR register value
-//!
-//! @return pointer to static string buffer describing the XCSR
-//!
+/**
+ *  \brief Maps a CFV1 XCSR register MSB value to a string
+ *
+ *  @param XCSR = XCSR register value
+ *
+ *  @return pointer to static string buffer describing the XCSR
+ */
 char const *getCFV1_XCSR_Name( unsigned int XCSR) {
    static char buff[100];
    static const char *mode[] = {"RUN,", "STOP,", "HALT,", "???,"};
@@ -1022,14 +1022,14 @@ char const *getCFV1_XCSR_Name( unsigned int XCSR) {
                  (XCSR&(1<<0))?"ENBDM, ":"" );
    return buff;
 }
-
-//! \brief Maps a Status register value to a string
-//!
-//! @param targetType = Type of target (T_HC12 etc)
-//! @param value      = register value
-//!
-//! @return pointer to static string buffer describing the value
-//!
+/**
+ *  \brief Maps a Status register value to a string
+ *
+ *  @param targetType = Type of target (T_HC12 etc)
+ *  @param value      = register value
+ *
+ *  @return pointer to static string buffer describing the value
+ */
 char const *getStatusRegName(unsigned int targetType, unsigned int value) {
 
    switch (targetType) {
@@ -1049,13 +1049,13 @@ char const *getStatusRegName(unsigned int targetType, unsigned int value) {
          return "Illegal Target!";
    }
 }
-
-//! \brief Maps a Capability vector to Text
-//!
-//! @param capability => capability vector
-//!
-//! @return pointer to static string buffer describing the XCSR
-//!
+/**
+ *  \brief Maps a Capability vector to Text
+ *
+ *  @param capability => capability vector
+ *
+ *  @return pointer to static string buffer describing the XCSR
+ */
 const char *getCapabilityName(unsigned int capability) {
 unsigned index;
 static char buff[250] = "";
@@ -1191,9 +1191,9 @@ char const *getClockSelectName(ClkSwValues_t level) {
       default :         return "Clock-??";
    }
 }
-
-//! Map JTAG Exit action codes to strings
-//!
+/**
+ *  Map JTAG Exit action codes to strings
+ */
 const char *getExitAction(int action) {
 static char buff[100];
 const char *exitAction;
@@ -1230,11 +1230,11 @@ const char *fillMode;
    snprintf(buff, sizeof(buff), "%s%s", exitAction, fillMode);
    return buff;
 }
-
-//! Print bdm option structure to log file
-//!
-//! @param options - options to report
-//!
+/**
+ *  Print bdm option structure to log file
+ *
+ *  @param options - options to report
+ */
 const char *printBdmOptions(const USBDM_ExtendedOptions_t *options) {
    static char buff[1000];
    snprintf(buff, sizeof(buff), "\n"
@@ -1281,13 +1281,13 @@ const char *printBdmOptions(const USBDM_ExtendedOptions_t *options) {
          );
    return buff;
 }
-
-//! \brief Maps a ARM register # to a string
-//!
-//! @param regAddr = register number
-//!
-//! @return pointer to static string describing the register
-//!
+/**
+ *  \brief Maps a ARM register # to a string
+ *
+ *  @param regAddr = register number
+ *
+ *  @return pointer to static string describing the register
+ */
 char const *getARMRegName( unsigned int regAddr ) {
    static const char *regs[] = {"R0","R1","R2","R3","R4","R5","R6","R7",
                                 "R8","R9","R10","R11","R12","SP","LR","PC",
@@ -1621,9 +1621,9 @@ const char *getMemSpaceName(MemorySpace_t memSpace) {
    }
    return buffer;
 }
-
-//! Converts an OnceStatus_t to a string for debug
-//!
+/**
+ *  Converts an OnceStatus_t to a string for debug
+ */
 const char *getOnceStatusName(int status) {
    switch (status) {
       case executeMode        : return "executeMode";

@@ -118,10 +118,10 @@ typedef enum {
   AddrPaged,  //<! Pages addresses
 } AddressType;
 
-
-//! SecurityInfo options when programming
-//! These options affect the handling of the NVOPT/NVSEC location
-//!
+/**
+ * SecurityInfo options when programming
+ * These options affect the handling of the NVOPT/NVSEC location
+ */
 typedef enum {
    SEC_DEFAULT      = 0,   //!< Leave Flash image unchanged
    SEC_SECURED      = 1,   //!< Make Flash image secured
@@ -197,6 +197,9 @@ protected:
    SharedInformationItem() {}
 
 public:
+   /**
+    *  Destructor
+    */
    virtual ~SharedInformationItem() {};
 
    /**
@@ -226,22 +229,22 @@ private:
 
 public:
    /**
-    * Construct script
+    *  Construct script
     *
-    * @param script String representing script
+    *  @param script String representing script
     */
    TclScript(std::string script) : script(script) {}
    ~TclScript() {}
    /**
-    * Return readable representation
+    *  Return readable representation
     *
-    * @return Description
+    *  @return Description
     */
    const std::string toString() const;
    /**
-    * Get script
+    *  Get script
     *
-    * @return string representing the script
+    *  @return string representing the script
     */
    const std::string getScript() const;
 };
@@ -318,27 +321,28 @@ typedef std::shared_ptr<const RegisterDescription>   RegisterDescriptionConstPtr
 class DEVICE_DATA_DESCSPEC FlashProgram: public SharedInformationItem {
 
 private:
-   std::string flashProgram;  //!< String representing the flash program (SRECs)
+   /** String representing the flash program (SRECs) */
+   std::string flashProgram;
 
 public:
    /**
-    * Construct Flash program entry
+    *  Construct Flash program entry
     *
-    * @param program Flash program (SRECs)
+    *  @param program Flash program (SRECs)
     */
    FlashProgram(std::string program) :
       flashProgram(program) {}
    ~FlashProgram() {}
    /**
-    * Returns the flash program as a string
+    *  Returns the flash program as a string
     *
-    * @return Readable string representing the flash program
+    *  @return Readable string representing the flash program
     */
    const std::string toString() const;
    /**
-    * Returns the flash program as a string
+    *  Returns the flash program as a string
     *
-    * @return Flash program as string
+    *  @return Flash program as string
     */
    const std::string getFlashProgram() const;
 };
@@ -364,23 +368,23 @@ private:
 
 public:
    /**
-    * Construct security description
+    *  Construct security description
     *
-    * @param desc Description
+    *  @param desc Description
     */
    SecurityDescription(std::string desc) : securityDescription(desc) {}
    ~SecurityDescription() {}
    const std::string toString() const;
    /**
-    * Get security description
+    *  Get security description
     *
-    * @return Description
+    *  @return Description
     */
    const std::string getSecurityDescription() const;
    /**
-    * Set security description
+    *  Set security description
     *
-    * @param desc Description
+    *  @param desc Description
     */
    void setSecurityDescription(std::string desc);
 };
@@ -394,54 +398,6 @@ typedef std::shared_ptr<SecurityDescription>       SecurityDescriptionPtr;
  */
 typedef std::shared_ptr<const SecurityDescription> SecurityDescriptionConstPtr;
 
-/*
- * ============================================================================================
- */
-///**
-// * Class representing a list of GNU information in the database
-// */
-//class DEVICE_DATA_DESCSPEC GnuInfoList: public SharedInformationItem {
-//
-//public:
-//   GnuInfoList() {}
-//   ~GnuInfoList() {}
-//   const std::string toString() const;
-//};
-//
-///**
-// * Smart pointer for GnuInfoList
-// */
-//typedef std::shared_ptr<GnuInfoList>       GnuInfoListPtr;
-///**
-// * Smart pointer for GnuInfoList
-// */
-//typedef std::shared_ptr<const GnuInfoList> GnuInfoListConstPtr;
-
-/*
- * ============================================================================================
- */
-///**
-// * Class representing GNU information in the database
-// */
-//class DEVICE_DATA_DESCSPEC GnuInfo {
-//
-//public:
-//   GnuInfo() {}
-//    ~GnuInfo() {}
-//    /*
-//     *
-//     */
-//    const std::string toString() const;
-//};
-//
-///**
-// * Smart pointer for GnuInfo
-// */
-//typedef std::shared_ptr<GnuInfo>       GnuInfoPtr;
-///**
-// * Smart pointer for GnuInfo
-// */
-//typedef std::shared_ptr<const GnuInfo> GnuInfoConstPtr;
 /*
  * ============================================================================================
  */
@@ -465,7 +421,7 @@ private:
 
 public:
    /**
-    * Create checksum information
+    *  Create checksum information
     *
     *  @param startAddress Address of start of checksum range
     *  @param endAddress   Address of end of checksum range
@@ -474,37 +430,37 @@ public:
     */
    ChecksumInfo(uint32_t startAddress, uint32_t endAddress, uint32_t locationAddress, ChecksumType type);
    /**
-    * Copy constructor
+    *  Copy constructor
     *
-    * @param other Other to copy
+    *  @param other Other to copy
     */
    ChecksumInfo(const ChecksumInfo& other);
    /**
-    * Destructor
+    *  Destructor
     */
    ~ChecksumInfo() {}
    /**
-    * Returns a description as a string
+    *  Returns a description as a string
     *
-    * @return Readable string representing the checksum
+    *  @return Readable string representing the checksum
     */
    const std::string toString() const;
    /**
-    * Update the checksum within the given image
+    *  Update the checksum within the given image
     *
-    * @return FlashImage to update
+    *  @return FlashImage to update
     */
    USBDM_ErrorCode updateChecksum(FlashImagePtr flashImage) const;
    /**
-    * Get location of checksum information
+    *  Get location of checksum information
     *
-    * @return size
+    *  @return size
     */
    unsigned getlocation() const;
    /**
-    * Get size of security information
+    *  Get size of security information
     *
-    * @return size
+    *  @return size
     */
    unsigned getSize() const;
 };
@@ -544,70 +500,70 @@ public:
     */
    SecurityInfo() : size(0), mode(custom), securityInfo("") {}
    /**
-    * Create security information
+    *  Create security information
     *
-    * @param   size           Size of entry in bytes
-    * @param   mode           Type of entry
-    * @param   securityInfo   String representing the values
+    *  @param   size           Size of entry in bytes
+    *  @param   mode           Type of entry
+    *  @param   securityInfo   String representing the values
     */
    SecurityInfo(int size, SecType mode, std::string securityInfo);
    /**
-    * Copy constructor
+    *  Copy constructor
     *
-    * @param other Other to copy
+    *  @param other Other to copy
     */
    SecurityInfo(const SecurityInfo& other);
    /**
-    * Destructor
+    *  Destructor
     */
    ~SecurityInfo() {}
    /**
-    * Returns the flash program as a string
+    *  Returns the flash program as a string
     *
-    * @return Readable string representing the flash program
+    *  @return Readable string representing the flash program
     */
    const std::string toString() const;
    /**
-    * Get security values as string
+    *  Get security values as string
     *
-    * @return string
+    *  @return string
     */
    std::string       getSecurityInfo() const;
    /**
-    * Set security value
+    *  Set security value
     *
-    * @param securityInfo Values to set
+    *  @param securityInfo Values to set
     */
    void              setSecurityInfo(const std::string &securityInfo);
    /**
-    * Get security values as array of uint8_t
+    *  Get security values as array of uint8_t
     *
-    * @return constant array
+    *  @return constant array
     */
    const uint8_t    *getData() const;
    /**
-    * Set security value
+    *  Set security value
     *
-    * @param size Size of security information
-    * @param data Values to set
+    *  @param size Size of security information
+    *  @param data Values to set
     */
    void              setData(unsigned size, uint8_t *data);
    /**
-    * Set security mode
+    *  Set security mode
     *
-    * @param mode Mode to set
+    *  @param mode Mode to set
     */
    void              setMode(SecType mode);
    /**
-    * Get security mode
+    *  Get security mode
     *
-    * @return mode
+    *  @return mode
     */
    SecType           getMode() const;
    /**
-    * Get size of security information
+    *  Get size of security information
     *
-    * @return size
+    *  @return size
     */
    unsigned          getSize() const;
 };
@@ -636,11 +592,11 @@ private:
 
 public:
    /**
-    * Create security entry
+    *  Create security entry
     *
-    * @param securityDesc  Description of entry
-    * @param unsecureInfo  Unsecure information
-    * @param secureInfo    Secure information
+    *  @param securityDesc  Description of entry
+    *  @param unsecureInfo  Unsecure information
+    *  @param secureInfo    Secure information
     */
    SecurityEntry(SecurityDescriptionPtr securityDesc,
                  SecurityInfoPtr        unsecureInfo,
@@ -649,11 +605,11 @@ public:
       unsecureInformation(unsecureInfo),
       secureInformation(secureInfo) {}
    /**
-    * Create security entry
+    *  Create security entry
     *
-    * @param securityDesc  Description of entry
-    * @param unsecureInfo  Unsecure information
-    * @param secureInfo    Secure information
+    *  @param securityDesc  Description of entry
+    *  @param unsecureInfo  Unsecure information
+    *  @param secureInfo    Secure information
     */
    SecurityEntry(SecurityDescriptionPtr securityDesc,
                  SecurityInfoPtr        lpcChecksum)
@@ -666,63 +622,63 @@ public:
     ~SecurityEntry() {}
 
     /**
-     * Get readable description
+     *  Get readable description
      *
-     * @return string
+     *  @return string
      */
     const std::string           toString() const;
     /**
-     * Get security description
+     *  Get security description
      *
-     * @return string
+     *  @return string
      */
     SecurityDescriptionConstPtr getSecurityDescription()     const;
     /**
-     * Get unsecure information
+     *  Get unsecure information
      *
-     * @return string
+     *  @return string
      */
     SecurityInfoConstPtr        getUnsecureInformation()     const;
     /**
-     * Get secure information
+     *  Get secure information
      *
-     * @return string
+     *  @return string
      */
     SecurityInfoConstPtr        getSecureInformation()       const;
     /**
-     * Get custom secure information
+     *  Get custom secure information
      *
-     * @return string
+     *  @return string
      */
     SecurityInfoConstPtr        getCustomSecureInformation() const;
     /**
-     * Get security description
+     *  Get security description
      *
-     * @return string
+     *  @return string
      */
     SecurityDescriptionPtr      getSecurityDescription();
     /**
-     * Get unsecure information
+     *  Get unsecure information
      *
-     * @return string
+     *  @return string
      */
     SecurityInfoPtr             getUnsecureInformation();
     /**
-     * Get custom secure information
+     *  Get custom secure information
      *
-     * @return string
+     *  @return string
      */
     SecurityInfoPtr             getSecureInformation();
     /**
-     * Get custom secure information
+     *  Get custom secure information
      *
-     * @return string
+     *  @return string
      */
     SecurityInfoPtr             getCustomSecureInformation();
     /**
-     * Set custom secure information
+     *  Set custom secure information
      *
-     * @param securityInfo
+     *  @param securityInfo
      */
     void                        setCustomSecureInformation(SecurityInfoPtr securityInfo);
 };
@@ -754,11 +710,11 @@ public:
       uint8_t        value;         //!< EEPROM Data Set Size (as used in Program Partition command)
       unsigned       size;          //!< EEEPROM size in bytes (FlexRAM used for EEPROM emulation)
       /**
-       * Create EEEPROM size entry
+       *  Create EEEPROM size entry
        *
-       * @param description   Readable description
-       * @param value         Value used in programming
-       * @param size          Size represented by this value
+       *  @param description   Readable description
+       *  @param value         Value used in programming
+       *  @param size          Size represented by this value
        */
       EeepromSizeValue(std::string description, uint8_t value, unsigned size);
    };
@@ -771,11 +727,11 @@ public:
       uint8_t        value;        //!< FlexNVM Partition Code (as used in Program Partition command)
       unsigned       backingStore; //!< EEPROM backing store size in bytes
       /**
-       * Create FLEX NVM partition entry
+       *  Create FLEX NVM partition entry
        *
-       * @param description   Readable description
-       * @param value         Value used in programming
-       * @param backingStore  Backing store size for this entry
+       *  @param description   Readable description
+       *  @param value         Value used in programming
+       *  @param backingStore  Backing store size for this entry
        */
       FlexNvmPartitionValue(std::string description, uint8_t value, unsigned backingStore);
    };
@@ -787,52 +743,52 @@ private:
 
 public:
     /**
-     * Create FLEX NVM information
+     *  Create FLEX NVM information
      *
-     * @param backingRatio Ratio between EEEPROM and backing EEPROM
+     *  @param backingRatio Ratio between EEEPROM and backing EEPROM
      */
     FlexNVMInfo(int backingRatio = 16) : backingRatio(backingRatio) {}
     ~FlexNVMInfo() {}
     /**
-     * Provides readable description of object
+     *  Provides readable description of object
      *
-     * @return string
+     *  @return string
      */
     const std::string toString() const;
     /**
-     * Returns list of permitted EEEPROM values for use in partition command
+     *  Returns list of permitted EEEPROM values for use in partition command
      *
-     * @return vector of permitted values
+     *  @return vector of permitted values
      */
     const std::vector<FlexNVMInfo::EeepromSizeValue> &getEeepromSizeValues() const;
     /**
      *  Returns list of permitted Partition values for use in partition command
      *
-     * @return vector of permitted values
+     *  @return vector of permitted values
      */
     const std::vector<FlexNVMInfo::FlexNvmPartitionValue> &getFlexNvmPartitionValues() const;
     /**
-     * Add EEPROM size value
+     *  Add EEPROM size value
      *
-     * @param eeepromSizeValue value to add
+     *  @param eeepromSizeValue value to add
      */
     void addEeepromSizeValues(const EeepromSizeValue &eeepromSizeValue);
     /**
-     * Add FLEX NVM partition value
+     *  Add FLEX NVM partition value
      *
-     * @param flexNvmPartitionValue value to add
+     *  @param flexNvmPartitionValue value to add
      */
     void addFlexNvmPartitionValues(const FlexNvmPartitionValue &flexNvmPartitionValue);
-    /*
-     * Get backing ratio
+    /**
+     *  Get backing ratio
      *
-     * @return Current ratio
+     *  @return Current ratio
      */
     unsigned getBackingRatio() const;
     /**
-     * Set backing ratio
+     *  Set backing ratio
      *
-     * @param backingRatio Ratio to set
+     *  @param backingRatio Ratio to set
      */
     void setBackingRatio(unsigned  backingRatio);
 };
@@ -888,24 +844,24 @@ private:
    /**
     *  Find the index of the memory range containing the given address
     *
-    * @param address - address to look for
+    *  @param address - address to look for
     *
-    * @return range index or -1 if not found
+    *  @return range index or -1 if not found
     *
-    * @note - Uses cache
+    *  @note - Uses cache
     */
    int findMemoryRangeIndex(uint32_t address) const;
 
 public:
    /**
-    * Constructor for memory region
+    *  Constructor for memory region
     *
-    * @param type
-    * @param registerAddress
-    * @param pageAddress
-    * @param securityAddress
-    * @param sectorSize
-    * @param alignment
+    *  @param type
+    *  @param registerAddress
+    *  @param pageAddress
+    *  @param securityAddress
+    *  @param sectorSize
+    *  @param alignment
     */
    MemoryRegion (MemType_t type = MemInvalid,
                  uint32_t  registerAddress = 0,
@@ -928,47 +884,48 @@ public:
    /**
     *  Add a memory range to this memory region
     *
-    * @param startAddress - start address (inclusive)
-    * @param endAddress   - end address (inclusive)
-    * @param pageNo       - page number (if used)
+    *  @param startAddress - start address (inclusive)
+    *  @param endAddress   - end address (inclusive)
+    *  @param pageNo       - page number (if used)
     */
    void addRange (uint32_t startAddress, uint32_t endAddress, uint16_t pageNo=DefaultPageNo);
 
    /**
     *  Check if an address is within this memory region
-    * @param address - address to check
     *
-    * @return true/false result
+    *  @param address - address to check
+    *
+    *  @return true/false result
     */
    bool contains(uint32_t address) const;
 
    /**
     *  Find the last contiguous address relative to the address
     *
-    * @param address        Start address to check
-    * @param lastContinuous The end address of the largest contiguous memory range including address
-    * @param memorySpace    Memory space to check
+    *  @param address        Start address to check
+    *  @param lastContinuous The end address of the largest contiguous memory range including address
+    *  @param memorySpace    Memory space to check
     *
-    * @return true  = start address is within memory
-    *         false = start address is not within memory
+    *  @return true  = start address is within memory
+    *          false = start address is not within memory
     */
    bool findLastContiguous(uint32_t address, uint32_t *lastContinuous, MemorySpace_t memorySpace = MS_None) const;
 
    /**
     *  Get page number for address
     *
-    * @param address - address to check
+    *  @param address - address to check
     *
-    * @return MemoryRegion::NoPageNo if not paged/within memory
+    *  @return MemoryRegion::NoPageNo if not paged/within memory
     */
    uint16_t getPageNo(uint32_t address) const;
 
    /**
     *  Obtain string describing the memory type
     *
-    * @param memoryType - Memory type
+    *  @param memoryType - Memory type
     *
-    * @return - ptr to static string describing type
+    *  @return - ptr to static string describing type
     */
    static const char *getMemoryTypeName(MemType_t memoryType);
 
@@ -980,32 +937,32 @@ public:
    /**
     *  Indicates if a programmable type e.g Flash, eeprom etc.
     *
-    * @param memoryType - Memory type
+    *  @param memoryType - Memory type
     *
-    * @return - true/false result
+    *  @return - true/false result
     */
    static bool isProgrammableMemory(MemType_t memoryType);
 
    /**
     *  Indicates if the memory region is of a programmable type e.g Flash, eeprom etc.
     *
-    * @return - true/false result
+    *  @return - true/false result
     */
    bool isProgrammableMemory() const;
 
    /**
     *  Indicates if a simple writable type e.g RAM etc.
     *
-    * @param memoryType - Memory type
+    *  @param memoryType - Memory type
     *
-    * @return - true/false result
+    *  @return - true/false result
     */
    static bool isWritableMemory(MemType_t memoryType);
 
    /**
     *  Indicates if the memory region is of a programmable type e.g Flash, eeprom etc.
     *
-    * @return - true/false result
+    *  @return - true/false result
     */
    bool isWritableMemory() const;
 
@@ -1123,20 +1080,20 @@ class DEVICE_DATA_DESCSPEC DeviceData {
 public:
    //! How to handle erasing of flash before programming
    typedef enum  {
-      eraseTargetDefault,  //! Use target default
-      eraseNone,           //! Don't erase
-      eraseMass,           //! Mass erase / unsecure
-      eraseAll,            //! Erase all flash arrays
-      eraseSelective,      //! Erase flash block selectively
+      eraseTargetDefault,  //!< Use target default
+      eraseNone,           //!< Don't erase
+      eraseMass,           //!< Mass erase / unsecure
+      eraseAll,            //!< Erase all flash arrays
+      eraseSelective,      //!< Erase flash block selectively
    } EraseMethod;
 
    //! How to reset target
    typedef enum  {
-      resetTargetDefault,  //! Use target default
-      resetHardware,       //! Use hardware reset
-      resetSoftware,       //! Use software reset
-      resetVendor,         //! Use device default reset method
-      resetNone,           //! Use hardware reset
+      resetTargetDefault,  //!< Use target default
+      resetHardware,       //!< Use hardware reset
+      resetSoftware,       //!< Use software reset
+      resetVendor,         //!< Use device default reset method
+      resetNone,           //!< Use hardware reset
    } ResetMethod;
 
    /** Get readable names for erase options */
@@ -1172,9 +1129,9 @@ public:
    };
 
    /**
-    * This function finds a base device.
+    *  This function finds a base device.
     *
-    * @return Base device if an alias or this if not an alias
+    *  @return Base device if an alias or this if not an alias
     */
    static DeviceDataPtr getBaseDevice(DeviceDataPtr device) {
       while (device->baseDevice != nullptr) {
@@ -1184,9 +1141,9 @@ public:
    }
 
    /**
-    * This function set a base device.
+    *  This function set a base device.
     *
-    * @param baseDevice Device to set as base device
+    *  @param baseDevice Device to set as base device
     */
    void setBaseDevice(DeviceDataPtr baseDevice) {
       this->baseDevice = baseDevice;
@@ -1323,7 +1280,7 @@ public:
  */
 
 /**
- * Database of device information
+ *  Database of device information
  */
 class DEVICE_DATA_DESCSPEC DeviceDataBase {
 
@@ -1341,9 +1298,9 @@ private:
 
 public:
    /**
-    * Constructs device database for given target type
+    *  Constructs device database for given target type
     *
-    * @param targetType Type of target device
+    *  @param targetType Type of target device
     */
    DeviceDataBase(const TargetType_t targetType) : targetType(targetType) {
       loadDeviceData();
@@ -1351,13 +1308,13 @@ public:
    ~DeviceDataBase();
 
    /**
-    * Obtain iterator for start of database
+    *  Obtain iterator for start of database
     *
     *  @return iterator positioned at start
     */
    std::vector<DeviceDataPtr>::const_iterator begin() const;
    /**
-    * Obtain iterator for end of database
+    *  Obtain iterator for end of database
     *
     *  @return iterator positioned at end
     */
@@ -1365,20 +1322,20 @@ public:
 
    /** Searches the known devices for a device with given name
     *
-    * @param targetName - Name of device
+    *  @param targetName - Name of device
     *
-    * @returns entry found or NULL if no suitable device found
+    *  @returns entry found or NULL if no suitable device found
     *
-    * @note - If the device is an alias then it will return the true device
+    *  @note - If the device is an alias then it will return the true device
     */
    DeviceDataConstPtr          findDeviceFromName(const std::string &targetName) const;
    DeviceDataPtr               findMutableDeviceFromName(const std::string &targetName) const;
 
    /** Searches the known devices for a device with given name
     *
-    * @param targetName - Name of device
+    *  @param targetName - Name of device
     *
-    * @returns index or -1 if not found
+    *  @returns index or -1 if not found
     */
    int                         findDeviceIndexFromName(const std::string &targetName) const;
    const DeviceData           &operator[](unsigned index) const;
@@ -1419,32 +1376,32 @@ public:
    EraseMethods() : fMethod(0), fDefaultMethod(DeviceData::EraseMethod::eraseNone) {
    }
    /**
-    * Add erase method
+    *  Add erase method
     */
    void addMethod(DeviceData::EraseMethod method) {
       fMethod |= (1<<((int)method));
    }
    /**
-    * Add default erase method
+    *  Add default erase method
     */
    void addDefaultMethod(DeviceData::EraseMethod method) {
       addMethod(method);
       fDefaultMethod = method;
    }
    /**
-    * Remove erase method
+    *  Remove erase method
     */
    void removeMethod(DeviceData::EraseMethod method) {
       fMethod &= ~(1<<((int)method));
    }
    /**
-    * Checks if a method is available
+    *  Checks if a method is available
     */
    bool isAvailableMethod(DeviceData::EraseMethod method) const {
       return (fMethod & (1<<((int)method))) != 0;
    }
    /**
-    * Get default method
+    *  Get default method
     */
    DeviceData::EraseMethod getDefaultMethod() const {
       return fDefaultMethod;
@@ -1464,37 +1421,37 @@ class DEVICE_DATA_DESCSPEC ResetMethods : public SharedInformationItem {
 
 public:
    /**
-    * Create default empty
+    *  Create default empty
     */
    ResetMethods() : fMethod(0), fDefaultMethod(DeviceData::ResetMethod::resetTargetDefault) {
    }
    /**
-    * Add method
+    *  Add method
     */
    void addMethod(DeviceData::ResetMethod method) {
       fMethod |= (1<<((int)method));
    }
    /**
-    * Add default erase method
+    *  Add default erase method
     */
    void addDefaultMethod(DeviceData::ResetMethod method) {
       addMethod(method);
       fDefaultMethod = method;
    }
    /**
-    * Remove erase method
+    *  Remove erase method
     */
    void removeMethod(DeviceData::ResetMethod method) {
       fMethod &= ~(1<<((int)method));
    }
    /**
-    * Checks if a method is available
+    *  Checks if a method is available
     */
    bool isAvailableMethod(DeviceData::ResetMethod method) const {
       return (fMethod & (1<<((int)method))) != 0;
    }
    /**
-    * Get default method
+    *  Get default method
     */
    DeviceData::ResetMethod getDefaultMethod() const {
       return fDefaultMethod;

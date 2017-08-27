@@ -257,14 +257,14 @@ public:
     */
    virtual USBDM_ErrorCode      loadDataBytes(uint32_t bufferSize, uint32_t address, const uint8_t data[], bool dontOverwrite = false) = 0;
 
-   /*
+   /**
     * Get first allocated address
     *
     * @return - first allocated address
     */
    virtual unsigned getFirstAllocatedAddress() = 0;
 
-   /*
+   /**
     * Get last allocated address
     *
     * @return - last allocated address
