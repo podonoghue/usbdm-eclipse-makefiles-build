@@ -56,7 +56,7 @@ Devices using this peripheral:
    <irqOption name="txrxHandler"  
       description="UART Tx/Rx interrupt handler"
       toolTip="This handler is used for normal communication events"
-      pattern="^UART%i_RX_TX$" 
+      pattern="^UART%i(_RX_TX)?$" 
       classHandler="irqRxTxHandler" />
    <irqOption name="errorHandler" 
       description="UART Error interrupt handler"

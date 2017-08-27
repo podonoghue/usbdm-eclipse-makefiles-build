@@ -65,17 +65,13 @@ void console_txChar(int ch) {
 }
 
 /*
- * Receives a single character fropm Console (blocking)
+ * Receives a single character from Console (blocking)
  *
  * @return - character received
  */
 extern "C"
 int console_rxChar(void) {
-   int ch = console.readChar();
-   if (ch == '\r') {
-      ch = '\n';
-   }
-   return ch;
+   return console.readChar();
 }
 
 /**

@@ -33,6 +33,26 @@ Devices using this peripheral:
       <choice value="115200"  name="115200" isDefault="true" />
    </choiceOption>
 
+   <binaryOption name="uartClass" 
+      description="Input buffering"
+      toolTip="This option determines whether an interrupt-driven driver\n 
+               incorporating a queue is used to buffer input data" >
+      <choice name="Unbuffered" value="Uart_T" />
+      <choice name="Buffered"   value="UartBuffered_T" />
+   </binaryOption>
+   
+   <intOption name="receiveBufferSize" description="Size of input buffer" 
+      toolTip="This value determines the size of the receive buffer\n
+               for the interrupt driven driver version  "
+       value="50" min="1" max="1000"
+      />
+
+   <intOption name="transmitBufferSize" description="Size of output buffer" 
+      toolTip="This value determines the size of the transmit buffer\n
+               for the interrupt driven driver version  "
+       value="50" min="1" max="1000"
+      />
+
    <category name="Advanced" description="Advanced options">
       <aliasOption key="/SIM/sim_sopt5_uart$(_instance)ode"   optional="true" constant="false" />
       <aliasOption key="/SIM/sim_sopt5_uart$(_instance)txsrc" optional="true" constant="false" />
@@ -42,7 +62,7 @@ Devices using this peripheral:
    <irqOption name="txrxHandler"  
       description="UART Tx/Rx interrupt handler"
       toolTip="This handler is used for normal communication events"
-      pattern="^UART%i_RX_TX$" 
+      pattern="^UART%i(_RX_TX)?$" 
       classHandler="irqRxTxHandler" />
    <irqOption name="errorHandler" 
       description="UART Error interrupt handler"
@@ -72,18 +92,26 @@ Devices using this peripheral:
    ]]></template>
       
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.Validator">
+      class="net.sourceforge.usbdm.deviceEditor.validators.UartValidate">
    </validate>
 
    <projectActionList id = "uart_files">
       <copy source="Project_Headers/formatted_io.h"  target="Project_Headers/formatted_io.h"  overwrite="true"  derived="true" />
-      <copy source="Project_Headers/uart.h"          target="Project_Headers/uart.h"          overwrite="true"  derived="true" />
+      <copy source="Project_Headers/uart.h"          target="Project_Headers/uart.h"          overwrite="true"  derived="true" macroReplace="true" />
    </projectActionList>
          
    <template><![CDATA[
+   \t//! Indicates whether the UART needs a write to clear status errors
    \tstatic constexpr bool statusNeedsWrite = false;\n\n
-      
+
+   \t//! Default Baud rate used if not explicitly given
    \tstatic constexpr uint32_t defaultBaudRate = $(defaultBaudRate);\n\n
+   
+   \t//! Default buffer size for receive queue when interrupt driven
+   \tstatic constexpr unsigned receiveBufferSize = $(receiveBufferSize);\n\n
+
+   \t//! Default buffer size for transmit queue when interrupt driven
+   \tstatic constexpr unsigned transmitBufferSize = $(transmitBufferSize);\n\n
 
    \t/**
    \t * Get input clock frequency

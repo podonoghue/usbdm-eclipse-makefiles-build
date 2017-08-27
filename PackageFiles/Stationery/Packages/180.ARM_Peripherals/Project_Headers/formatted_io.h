@@ -333,7 +333,7 @@ public:
     *
     * @param[in]  ch - character to send
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     */
    FormattedIO INLINE_RELEASE &write(char ch) {
       writeCh(ch);
@@ -343,7 +343,7 @@ public:
    /**
     * Transmit an end-of-line
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     */
    FormattedIO INLINE_RELEASE &writeln() {
       return write('\n');
@@ -354,7 +354,7 @@ public:
     *
     * @param[in]  ch - character to send
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     */
    FormattedIO  INLINE_RELEASE &writeln(char ch) {
       write(ch);
@@ -366,7 +366,7 @@ public:
     *
     * @param[in]  str String to print
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     */
    FormattedIO &write(const char *str) {
       while (*str != '\0') {
@@ -380,7 +380,7 @@ public:
     *
     * @param[in]  str String to print
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     */
    FormattedIO INLINE_RELEASE &writeln(const char *str) {
       write(str);
@@ -392,7 +392,7 @@ public:
     *
     * @param[in]  b Boolean to print
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     */
    FormattedIO INLINE_RELEASE &write(bool b) {
       return write(b?"true":"false");
@@ -403,7 +403,7 @@ public:
     *
     * @param[in]  b Boolean to print
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     */
    FormattedIO INLINE_RELEASE &writeln(bool b) {
       write(b);
@@ -416,7 +416,7 @@ public:
     * @param[in]  value Unsigned long to print
     * @param[in]  radix Radix for conversion [2..16]
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     */
    FormattedIO __attribute__((noinline)) &write(unsigned long value, Radix radix=Radix_10) {
       static char buff[35];
@@ -430,7 +430,7 @@ public:
     * @param[in]  value Unsigned long to print
     * @param[in]  radix Radix for conversion [2..16]
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     */
    FormattedIO INLINE_RELEASE &writeln(unsigned long value, Radix radix=Radix_10) {
       write(value, radix);
@@ -443,9 +443,9 @@ public:
     * @param[in]  value Pointer value to print
     * @param[in]  radix Radix for conversion [2..16]
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     */
-   FormattedIO INLINE_RELEASE &write(void *value, Radix radix=Radix_10) {
+   FormattedIO INLINE_RELEASE &write(const void *value, Radix radix=Radix_10) {
       return write((unsigned long) value, radix);
    }
 
@@ -455,9 +455,9 @@ public:
     * @param[in]  value Pointer value to print
     * @param[in]  radix Radix for conversion [2..16]
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     */
-   FormattedIO INLINE_RELEASE &writeln(void *value, Radix radix=Radix_10) {
+   FormattedIO INLINE_RELEASE &writeln(const void *value, Radix radix=Radix_10) {
       return writeln((unsigned long) value, radix);
    }
 
@@ -467,7 +467,7 @@ public:
     * @param[in]  value Long to print
     * @param[in]  radix Radix for conversion [2..16]
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     */
    FormattedIO INLINE_RELEASE &write(long value, Radix radix=Radix_10) {
       if (value<0) {
@@ -483,7 +483,7 @@ public:
     * @param[in]  value Long to print
     * @param[in]  radix Radix for conversion [2..16]
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     */
    FormattedIO INLINE_RELEASE &writeln(long value, Radix radix=Radix_10) {
       write(value, radix);
@@ -496,7 +496,7 @@ public:
     * @param[in]  value Unsigned to print
     * @param[in]  radix Radix for conversion [2..16]
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     */
    FormattedIO INLINE_RELEASE &write(unsigned value, Radix radix=Radix_10) {
       return write((unsigned long)value, radix);
@@ -508,7 +508,7 @@ public:
     * @param[in]  value Unsigned to print
     * @param[in]  radix Radix for conversion [2..16]
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     */
    FormattedIO INLINE_RELEASE &writeln(unsigned value, Radix radix=Radix_10) {
       return writeln((unsigned long)value, radix);
@@ -520,7 +520,7 @@ public:
     * @param[in]  value Integer to print
     * @param[in]  radix Radix for conversion [2..16]
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     */
    FormattedIO INLINE_RELEASE &write(int value, Radix radix=Radix_10) {
       return write((long)value, radix);
@@ -532,7 +532,7 @@ public:
     * @param[in]  value Integer to print
     * @param[in]  radix Radix for conversion [2..16]
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     */
    FormattedIO INLINE_RELEASE  &writeln(int value, Radix radix=Radix_10) {
       return writeln((long)value, radix);
@@ -543,7 +543,7 @@ public:
     *
     * @param[in]  value Double to print
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     *
     * @note Uses snprintf() which is large.
     * @note To use this function it is necessary to enable floating point printing\n
@@ -560,7 +560,7 @@ public:
     *
     * @param[in]  value Double to print
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     *
     * @note Uses snprintf() which is large.
     * @note To use this function it is necessary to enable floating point printing\n
@@ -576,7 +576,7 @@ public:
     *
     * @param[in]  value Float to print
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     *
     * @note Uses snprintf() which is large.
     * @note To use this function it is necessary to enable floating point printing\n
@@ -591,7 +591,7 @@ public:
     *
     * @param[in]  value Float to print
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     *
     * @note Uses snprintf() which is large.
     * @note To use this function it is necessary to enable floating point printing\n
@@ -606,7 +606,7 @@ public:
     *
     * @param[in]  ch Character to print
     *
-    * @return Reference to the Uart
+    * @return Reference to self
      */
    FormattedIO INLINE_RELEASE &operator <<(char ch) {
       return write(ch);
@@ -617,7 +617,7 @@ public:
     *
     * @param[in]  b Boolean to print
     *
-    * @return Reference to the Uart
+    * @return Reference to self
      */
    FormattedIO INLINE_RELEASE &operator <<(bool b) {
       return write(b);
@@ -628,7 +628,7 @@ public:
     *
     * @param[in]  str String to print
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     */
    FormattedIO INLINE_RELEASE &operator <<(const char *str) {
       return write(str);
@@ -639,7 +639,7 @@ public:
     *
     * @param[in]  value Unsigned long to print
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     */
    FormattedIO INLINE_RELEASE &operator <<(unsigned long value) {
       return write(value, fRadix);
@@ -650,7 +650,7 @@ public:
     *
     * @param[in]  value Long to print
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     */
    FormattedIO INLINE_RELEASE &operator <<(long value) {
       return write(value, fRadix);
@@ -661,7 +661,7 @@ public:
     *
     * @param[in]  value Unsigned to print
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     */
    FormattedIO INLINE_RELEASE &operator <<(unsigned int value) {
       return write(value, fRadix);
@@ -672,20 +672,20 @@ public:
     *
     * @param[in]  value Integer to print
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     */
    FormattedIO INLINE_RELEASE &operator <<(int value) {
       return write(value, fRadix);
    }
 
    /**
-    * Transmit a long integer
+    * Transmit a pointer value
     *
     * @param[in]  value Pointer value to print
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     */
-   FormattedIO INLINE_RELEASE &operator <<(void *value) {
+   FormattedIO INLINE_RELEASE &operator <<(const void *value) {
       return write((unsigned long)value, fRadix);
    }
 
@@ -694,7 +694,7 @@ public:
     *
     * @param[in]  value Float to print
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     *
     * @note Uses snprintf() which is large.
     * @note To use this function it is necessary to enable floating point printing\n
@@ -709,7 +709,7 @@ public:
     *
     * @param[in]  value Double to print
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     *
     * @note Uses snprintf() which is large.
     * @note To use this function it is necessary to enable floating point printing\n
@@ -724,7 +724,7 @@ public:
     *
     * @param[in] radix Radix to set
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     *
     * @note Only applies for operator<< methods
     */
@@ -736,7 +736,7 @@ public:
    /**
     * Write end-of-line
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     */
    FormattedIO INLINE_RELEASE &operator <<(EndOfLineType) {
       write('\n');
@@ -746,7 +746,7 @@ public:
    /**
     * Flush output data
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     */
    FormattedIO INLINE_RELEASE &operator <<(FlushType) {
       flushOutput();
@@ -756,7 +756,7 @@ public:
    /**
     * Discard white-space from the input
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     */
    FormattedIO INLINE_RELEASE &skipWhiteSpace() {
       int ch;
@@ -770,7 +770,7 @@ public:
    /**
     * Discard input until end-of-line (inclusive)
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     */
    FormattedIO INLINE_RELEASE &readln() {
       while (readChar() != '\n') {
@@ -784,7 +784,7 @@ public:
     *
     * @param[out] ch Where to place character read
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     */
    FormattedIO INLINE_RELEASE &read(char &ch) {
       ch = readChar();
@@ -809,7 +809,7 @@ public:
     * @param[out] value Where to place value read
     * @param[in]  radix The radix to use
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     *
     * @note Skips leading whitespace
     */
@@ -858,7 +858,7 @@ public:
     * @param[out] value Where to place value read
     * @param[in]  radix The radix to use
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     *
     * @note Skips leading whitespace
     */
@@ -873,7 +873,7 @@ public:
     * @param[out] value Where to place value read
     * @param[in]  radix The radix to use
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     *
     * @note Skips leading whitespace
     */
@@ -890,7 +890,7 @@ public:
     * @param[out] value Where to place value read
     * @param[in]  radix The radix to use
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     *
     * @note Skips leading whitespace
     */
@@ -905,7 +905,7 @@ public:
     * @param[out] value Where to place value read
     * @param[in]  radix The radix to use
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     *
     * @note Skips leading whitespace
     */
@@ -922,7 +922,7 @@ public:
     * @param[out] value Where to place value read
     * @param[in]  radix The radix to use
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     *
     * @note Skips leading whitespace
     */
@@ -937,7 +937,7 @@ public:
     * @param[out] value Where to place value read
     * @param[in]  radix The radix to use
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     *
     * @note Skips leading whitespace
     */
@@ -954,7 +954,7 @@ public:
     * @param[out] value Where to place value read
     * @param[in]  radix The radix to use
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     *
     * @note Skips leading whitespace
     */
@@ -966,7 +966,7 @@ public:
    /**
     * Discard white-space from the input
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     */
    FormattedIO INLINE_RELEASE &operator >>(WhiteSpaceType) {
       return skipWhiteSpace();
@@ -975,7 +975,7 @@ public:
    /**
     * Discard input until end-of-line
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     */
    FormattedIO INLINE_RELEASE &operator >>(EndOfLineType) {
       while (readChar() != '\n') {
@@ -987,7 +987,7 @@ public:
    /**
     * Flush input data
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     */
    FormattedIO INLINE_RELEASE &operator >>(FlushType) {
       flushInput();
@@ -999,7 +999,7 @@ public:
     *
     * @param[in]  radix Radix to set
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     *
     * @note Only applies for operator<< methods
     */
@@ -1013,7 +1013,7 @@ public:
     *
     * @param[out] ch Where to place character read
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     */
    FormattedIO INLINE_RELEASE &operator >>(char &ch) {
       ch = readChar();
@@ -1025,7 +1025,7 @@ public:
     *
     * @param[out] value Where to place value read
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     *
     * @note Skips leading whitespace
     */
@@ -1038,7 +1038,7 @@ public:
     *
     * @param[out] value Where to place value read
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     *
     * @note Skips leading whitespace
     */
@@ -1051,7 +1051,7 @@ public:
     *
     * @param[out] value Where to place value read
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     *
     * @note Skips leading whitespace
     */
@@ -1064,7 +1064,7 @@ public:
     *
     * @param[out] value Where to place value read
     *
-    * @return Reference to the Uart
+    * @return Reference to self
     *
     * @note Skips leading whitespace
     */
