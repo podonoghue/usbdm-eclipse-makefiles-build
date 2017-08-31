@@ -24,11 +24,116 @@ Table of Contents
 
 Convenience template for UART. Uses the following classes:\n
 <ul>
-<li> USBDM::Console
-<li> USBDM::Uart0
-<li> USBDM::Uart1
-<li> USBDM::Uart2
+<li>USBDM::Uart_T < Info >
+<li>USBDM::UartBuffered_T < Info, rxSize, txSize >
+<ul>
+<li>USBDM::Console
+<li>USBDM::Uart0
+<li>USBDM::Uart1
+<li>USBDM::Uart2
 </ul>
+</ul>
+
+ <b>Usage</b>
+ @code
+   console.writeln().writeln("Starting");
+
+   // Floating point requires printf() options
+   console.write("3.1f      = ").writeln(3.1f);
+   console.write("3.1       = ").writeln(3.1);
+
+   // Writing basic types using various methods
+
+   // Characters and strings
+   console.write("x         = ").writeln('x');
+
+   // Boolean
+   console.write("True   = ").writeln(true);
+   console.write("False  = ").writeln(false);
+   console.write("peek() = ").writeln(console.peek());
+
+   // Integer types
+   console.write("0UL       = ").writeln(0UL);
+   console.write("ULONG_MAX = ").writeln(ULONG_MAX);
+   console.write("LONG_MIN  = ").writeln(LONG_MIN);
+   console.write("LONG_MAX  = ").writeln(LONG_MAX);
+   console.write("0U        = ").writeln(0U);
+   console.write("UINT_MAX  = ").writeln(UINT_MAX);
+   console.write("INT_MIN   = ").writeln(INT_MIN);
+   console.write("INT_MAX   = ").writeln(INT_MAX);
+
+   // Integer types in different radixes
+   console.write("0UL,Radix_2        = ").writeln(0UL,Radix_2).flushOutput();
+   console.write("ULONG_MAX,Radix_2  = ").writeln(ULONG_MAX,Radix_2);
+   console.write("ULONG_MAX,Radix_8  = ").writeln(ULONG_MAX,Radix_8);
+   console.write("ULONG_MAX,Radix_10 = ").writeln(ULONG_MAX,Radix_10);
+   console.write("ULONG_MAX,Radix_16 = ").writeln(ULONG_MAX,Radix_16);
+   console.write("UINT_MAX,Radix_2   = ").writeln(UINT_MAX,Radix_2);
+   console.write("UINT_MAX,Radix_8   = ").writeln(UINT_MAX,Radix_8);
+   console.write("UINT_MAX,Radix_10  = ").writeln(UINT_MAX,Radix_10);
+   console.write("UINT_MAX,Radix_16  = ").writeln(UINT_MAX,Radix_16);
+
+   // Write operations using operator<<
+   console<<"true               = "<<true<<EndOfLine;
+   console<<"false              = "<<false<<EndOfLine;
+   console<<"peek()             = "<<console.peek()<<EndOfLine;
+   console<<"1>2                = "<<(1>2)<<EndOfLine;
+   console<<"1<2                = "<<(1<2)<<EndOfLine;
+   console<<"0UL,Radix_2        = "<<Radix_2<<0UL<<EndOfLine;
+   console<<"ULONG_MAX,Radix_2  = "<<Radix_2<<ULONG_MAX<<EndOfLine;
+   console<<"ULONG_MAX,Radix_8  = "<<Radix_8<<ULONG_MAX<<EndOfLine;
+   console<<"ULONG_MAX,Radix_10 = "<<Radix_10<<ULONG_MAX<<EndOfLine;
+   console<<"ULONG_MAX,Radix_16 = "<<Radix_16<<ULONG_MAX<<EndOfLine;
+   console<<"UINT_MAX,Radix_2   = "<<Radix_2<<UINT_MAX<<EndOfLine;
+   console<<"UINT_MAX,Radix_8   = "<<Radix_8<<UINT_MAX<<EndOfLine;
+   console<<"UINT_MAX,Radix_10  = "<<Radix_10<<UINT_MAX<<EndOfLine;
+   console<<"UINT_MAX,Radix_16  = "<<Radix_16<<UINT_MAX<<EndOfLine;
+   console<<"UINT_MAX,radix(16) = "<<Uart::radix(16)<<UINT_MAX<<EndOfLine;
+   console<<"UINT_MAX,radix(10) = "<<Uart::radix(10)<<UINT_MAX<<EndOfLine;
+   console<<"UINT_MAX,radix(8)  = "<<Uart::radix(8)<<UINT_MAX<<EndOfLine;
+   console<<"UINT_MAX,radix(2)  = "<<Uart::radix(2)<<UINT_MAX<<EndOfLine;
+   console<<Radix_10;
+
+   // Operator>>
+   console<<Radix_10;
+   console<<"value :">>integer>>EndOfLine;
+   console<<integer<<EndOfLine;
+   console<<"value :">>longInteger>>EndOfLine;
+   console<<longInteger<<EndOfLine;
+   console<<"value :">>unsignedInteger>>EndOfLine;
+   console<<unsignedInteger<<EndOfLine;
+   console<<"value :">>unsignedLong>>EndOfLine;
+   console<<unsignedLong<<EndOfLine;
+
+   // Mixed I/O
+   console.write("Two hex integers : ").read(integer,Radix_16).readln(longInteger,Radix_16);
+   console.write(integer, Radix_16).write(", ").writeln(longInteger, Radix_16);
+   console.write("An integer   : ").readln(longInteger);
+   console.writeln(longInteger);
+   console.write("An integer   : ").readln(unsignedInteger);
+   console.writeln(unsignedInteger);
+   console.write("An integer   : ").readln(unsignedLong);
+   console.writeln(unsignedLong);
+
+   // I/O with error checks
+   if (console.write("Number: ").readln(integer).isError()) {
+      console.writeln("Opps");
+   }
+   else {
+      console.writeln(integer);
+   }
+   // Utility functions
+   Console::ultoa(100, buff);
+   console.write("ultoa(100, buff)  = ").writeln(buff);
+   Console::ltoa(-100, buff);
+   console.write("ltoa(-100, buff)  = ").writeln(buff);
+
+   char *ptr = buff;
+   ptr = Console::strcpy(ptr, "Console::ultoa(100, buff) = ");
+   ptr = Console::ultoa(100, ptr);
+   ptr = Console::strcpy(ptr, ", oh well!");
+   console.writeln(buff);
+ @endcode
 
 @page DMAExamples  Direct Memory Access Controller
 
@@ -475,6 +580,7 @@ This is a template class with static methods.\n
 @example analogue-interrupt-example.cpp
 @example analogue-joystick-example.cpp
 @example cmp.cpp
+@example ConsoleTest.cpp
 @example digital-example1.cpp
 @example digital-example2.cpp
 @example dma-memory-example.cpp

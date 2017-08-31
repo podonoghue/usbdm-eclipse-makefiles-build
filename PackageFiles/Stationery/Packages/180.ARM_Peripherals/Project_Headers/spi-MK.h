@@ -2,7 +2,7 @@
  * @file     spi.h (180.ARM_Peripherals/Project_Headers/spi-MK.h)
  * @brief    Serial Peripheral Interface
  *
- * @version  V4.12.1.80
+ * @version  V4.12.1.210
  * @date     13 April 2016
  */
 #ifndef INCLUDE_USBDM_SPI_H_
@@ -101,15 +101,15 @@ enum SpiEndOfQueueInterrupt {
  */
 enum SpiPeripheralSelect {
    SpiPeripheralSelect_None = SPI_PUSHR_PCS(0),   //!< Select peripheral using programmatic GPIO
-   SpiPeripheralSelect_0    = SPI_PUSHR_PCS(1<<0),//!< Select peripheral PCS0 signal
-   SpiPeripheralSelect_1    = SPI_PUSHR_PCS(1<<1),//!< Select peripheral PCS1 signal
-   SpiPeripheralSelect_2    = SPI_PUSHR_PCS(1<<2),//!< Select peripheral PCS2 signal
-   SpiPeripheralSelect_3    = SPI_PUSHR_PCS(1<<3),//!< Select peripheral PCS3 signal
-   SpiPeripheralSelect_4    = SPI_PUSHR_PCS(1<<4),//!< Select peripheral PCS4 signal
+   SpiPeripheralSelect_0    = SPI_PUSHR_PCS(1<<0),//!< Select peripheral using SPI_PCS0 signal
+   SpiPeripheralSelect_1    = SPI_PUSHR_PCS(1<<1),//!< Select peripheral using SPI_PCS1 signal
+   SpiPeripheralSelect_2    = SPI_PUSHR_PCS(1<<2),//!< Select peripheral using SPI_PCS2 signal
+   SpiPeripheralSelect_3    = SPI_PUSHR_PCS(1<<3),//!< Select peripheral using SPI_PCS3 signal
+   SpiPeripheralSelect_4    = SPI_PUSHR_PCS(1<<4),//!< Select peripheral using SPI_PCS4 signal
 };
 
 /**
- * Select which CTAS setting to use for transaction
+ * Select which CTAR to use for transaction
  */
 enum SpiCtarSelect {
    SpiCtarSelect_0 = (0), //!< CTAR #0
@@ -128,8 +128,8 @@ enum SpiSelectMode {
  * Used to hold SPI configuration that may commonly be modified for different target peripherals
  */
 struct SpiConfig {
-   uint32_t pushr; //!  PUSHR register value e.g. Target, selection mode etc
-   uint32_t ctar;  //!  CTAR register value e.g. Baud, number of bits, timing
+   uint32_t pushr; //!<  PUSHR register value e.g. Target, selection mode etc
+   uint32_t ctar;  //!<  CTAR register value e.g. Baud, number of bits, timing
 };
 
 using SpiModeValue = uint32_t;
