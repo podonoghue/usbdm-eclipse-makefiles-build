@@ -141,10 +141,17 @@ enum SmcSleepOnExit {
  * @note Not all modes are supported on all processors
  */
 enum SmcLowLeakageStopMode {
+#ifdef SMC_STOPCTRL_VLLSM
    SmcLowLeakageStopMode_VLLS0 = SMC_STOPCTRL_VLLSM(0),  //!< Enter VLLS0 in VLLSx mode
    SmcLowLeakageStopMode_VLLS1 = SMC_STOPCTRL_VLLSM(1),  //!< Enter VLLS1 in VLLSx mode
    SmcLowLeakageStopMode_VLLS2 = SMC_STOPCTRL_VLLSM(2),  //!< Enter VLLS2 in VLLSx mode, LLS2 in LLSx mode
    SmcLowLeakageStopMode_VLLS3 = SMC_STOPCTRL_VLLSM(3),  //!< Enter VLLS3 in VLLSx mode, LLS3 in LLSx mode
+#else
+   SmcLowLeakageStopMode_VLLS0 = (0),  //!< Not supported
+   SmcLowLeakageStopMode_VLLS1 = (0),  //!< Not supported
+   SmcLowLeakageStopMode_VLLS2 = (0),  //!< Not supported
+   SmcLowLeakageStopMode_VLLS3 = (0),  //!< Not supported
+#endif
    SmcLowLeakageStopMode_LLS2  = SMC_STOPCTRL_LLSM(2),   //!< Enter VLLS2 in VLLSx mode, LLS2 in LLSx mode
    SmcLowLeakageStopMode_LLS3  = SMC_STOPCTRL_LLSM(3),   //!< Enter VLLS3 in VLLSx mode, LLS3 in LLSx mode
 };
@@ -173,8 +180,13 @@ enum SmcStatus {
  *  This bit controls whether the POR detect circuit is enabled in VLLS0 mode.
  */
 enum SmcPowerOption {
+#ifdef SMC_VLLSCTRL_PORPO
    SmcPowerOption_Disable = SMC_VLLSCTRL_PORPO(0),   //!< Disable POR detect in VLLS0
    SmcPowerOption_Enable  = SMC_VLLSCTRL_PORPO(1),   //!< Enable POR detect in VLLS0
+#else
+   SmcPowerOption_Disable = (0),   //!< Not supported
+   SmcPowerOption_Enable  = (0),   //!< Not supported
+#endif
 };
 
 /**
@@ -415,8 +427,6 @@ public:
 #else
    /**
     * Set action on interrupt when in VLP modes (VLPR, VLPW or VLPS).
-    *
-    * @param[in]  SmcExitVeryLowPowerOnInt   Not supported
     *
     * @note Not supported
     */

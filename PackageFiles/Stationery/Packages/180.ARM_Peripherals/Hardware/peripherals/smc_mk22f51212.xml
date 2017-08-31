@@ -54,7 +54,7 @@
    </choiceOption>
       
    <template><![CDATA[
-      #ifndef SMC_PMCTRL_LPWUI
+      #ifdef SMC_PMCTRL_LPWUI
       \t// Power Mode Control Register
       \tstatic constexpr uint8_t pmctrl =  
       \t   SMC_PMCTRL_LPWUI($(smc_pmctrl_lpwui:0));   // Low Power Wake Up on Interrupt\n\n
