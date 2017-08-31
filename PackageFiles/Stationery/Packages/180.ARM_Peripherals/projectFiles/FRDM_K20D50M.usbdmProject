@@ -42,7 +42,6 @@
    <item key="$signal$PTC0_muxSetting"                     value="mux0" />
    <item key="$signal$PTC1_muxSetting"                     value="mux0" />
    <item key="$signal$PTC2_descriptionSetting"             value="LCD_backlight" />
-   <item key="$signal$PTC2_muxSetting"                     value="mux0" />
    <item key="$signal$PTC3_descriptionSetting"             value="Red LED" />
    <item key="$signal$PTC3_muxSetting"                     value="mux4" />
    <item key="$signal$PTC4_muxSetting"                     value="mux4" />
@@ -74,7 +73,6 @@
    <item key="/ADC0/adc_sc2_dmaen"                         value="false" />
    <item key="/ADC0/adc_sc2_refsel"                        value="0" />
    <item key="/ADC0/high_comparison_value"                 value="0" />
-   <item key="/ADC0/irqHandlerInstalled"                   value="false" />
    <item key="/ADC0/irqLevel"                              value="0" />
    <item key="/ADC0/low_comparison_value"                  value="0" />
    <item key="/CMP0/cmp_cr0_filter_cnt"                    value="0" />
@@ -93,7 +91,6 @@
    <item key="/CMP0/cmp_scr_dmaen"                         value="false" />
    <item key="/CMP0/cmp_scr_ief"                           value="false" />
    <item key="/CMP0/cmp_scr_ier"                           value="false" />
-   <item key="/CMP0/irqHandlerInstalled"                   value="false" />
    <item key="/CMP0/irqLevel"                              value="0" />
    <item key="/CMP1/cmp_cr0_filter_cnt"                    value="0" />
    <item key="/CMP1/cmp_cr0_hystctr"                       value="0" />
@@ -111,12 +108,10 @@
    <item key="/CMP1/cmp_scr_dmaen"                         value="false" />
    <item key="/CMP1/cmp_scr_ief"                           value="false" />
    <item key="/CMP1/cmp_scr_ier"                           value="false" />
-   <item key="/CMP1/irqHandlerInstalled"                   value="false" />
    <item key="/CMP1/irqLevel"                              value="0" />
    <item key="/Console/console_device"                     value="USBDM::Uart0" />
    <item key="/Console/defaultBaudRate"                    value="115200" />
    <item key="/DMA0/NumChannels"                           value="4" />
-   <item key="/DMA0/irqHandlerInstalled"                   value="false" />
    <item key="/DMA0/irqLevel"                              value="0" />
    <item key="/DMAMUX0/dma_chcfg0"                         value="0" />
    <item key="/DMAMUX0/dma_chcfg1"                         value="0" />
@@ -137,7 +132,6 @@
    <item key="/FTM0/ftm_sc_cpwms"                          value="false" />
    <item key="/FTM0/ftm_sc_ps"                             value="0" />
    <item key="/FTM0/ftm_sc_toie"                           value="false" />
-   <item key="/FTM0/irqHandlerInstalled"                   value="false" />
    <item key="/FTM0/irqLevel"                              value="0" />
    <item key="/FTM0/minimumResolution"                     value="100" />
    <item key="/FTM1/ftmExternalClock"                      value="0" />
@@ -148,24 +142,16 @@
    <item key="/FTM1/ftm_sc_cpwms"                          value="false" />
    <item key="/FTM1/ftm_sc_ps"                             value="0" />
    <item key="/FTM1/ftm_sc_toie"                           value="false" />
-   <item key="/FTM1/irqHandlerInstalled"                   value="false" />
    <item key="/FTM1/irqLevel"                              value="0" />
    <item key="/FTM1/minimumResolution"                     value="100" />
    <item key="/Flash/FlashType"                            value="ftfl" />
-   <item key="/GPIOA/irqHandlerInstalled"                  value="false" />
    <item key="/GPIOA/irqLevel"                             value="0" />
-   <item key="/GPIOB/irqHandlerInstalled"                  value="false" />
    <item key="/GPIOB/irqLevel"                             value="0" />
-   <item key="/GPIOC/irqHandlerInstalled"                  value="false" />
    <item key="/GPIOC/irqLevel"                             value="0" />
-   <item key="/GPIOD/irqHandlerInstalled"                  value="false" />
    <item key="/GPIOD/irqLevel"                             value="0" />
-   <item key="/GPIOE/irqHandlerInstalled"                  value="false" />
    <item key="/GPIOE/irqLevel"                             value="0" />
    <item key="/I2C0/clockSource"                           value="SystemBusClock" />
-   <item key="/I2C0/irqHandlerInstalled"                   value="false" />
    <item key="/I2C0/irqLevel"                              value="0" />
-   <item key="/LLWU/irqHandlerInstalled"                   value="false" />
    <item key="/LLWU/irqLevel"                              value="0" />
    <item key="/LLWU/llwu_filt1_filte"                      value="0" />
    <item key="/LLWU/llwu_filt1_filtsel"                    value="0" />
@@ -196,7 +182,6 @@
    <item key="/LLWU/llwu_pe4_wupe15"                       value="0" />
    <item key="/LLWU/llwu_rst_llrste"                       value="true" />
    <item key="/LLWU/llwu_rst_rstfilt"                      value="false" />
-   <item key="/LPTMR0/irqHandlerInstalled"                 value="false" />
    <item key="/LPTMR0/irqLevel"                            value="0" />
    <item key="/LPTMR0/lptmr_cmr"                           value="65535" />
    <item key="/LPTMR0/lptmr_csr_tfc"                       value="false" />
@@ -213,7 +198,6 @@
    <item key="/MCG/clock_mode"                             value="ClockMode_PEE" />
    <item key="/MCG/fllInputFrequency"                      value="31250" />
    <item key="/MCG/fll_enabled"                            value="false" />
-   <item key="/MCG/irqHandlerInstalled"                    value="false" />
    <item key="/MCG/irqLevel"                               value="0" />
    <item key="/MCG/mcg_c1_clks"                            value="0" />
    <item key="/MCG/mcg_c1_frdiv"                           value="3" />
@@ -261,7 +245,6 @@
    <item key="/OSC0/range"                                 value="1" />
    <item key="/OSC0/range_out"                             value="1" />
    <item key="/OSC0/system_oscerclk_clock"                 value="8000000" />
-   <item key="/PDB0/irqHandlerInstalled"                   value="false" />
    <item key="/PDB0/irqLevel"                              value="0" />
    <item key="/PDB0/pdb_ch0_c1_bb"                         value="0" />
    <item key="/PDB0/pdb_ch0_c1_en"                         value="0" />
@@ -288,13 +271,11 @@
    <item key="/PDB0/pdb_sc_pdbie"                          value="false" />
    <item key="/PDB0/pdb_sc_prescaler"                      value="0" />
    <item key="/PDB0/pdb_sc_trgsel"                         value="0" />
-   <item key="/PIT/irqHandlerInstalled"                    value="false" />
    <item key="/PIT/irqLevel"                               value="0" />
    <item key="/PIT/pit_ldval"                              value="10000" />
    <item key="/PIT/pit_mcr_frz"                            value="false" />
    <item key="/PIT/pit_tctrl_ch1"                          value="false" />
    <item key="/PIT/pit_tctrl_ch3"                          value="false" />
-   <item key="/RTC/irqHandlerInstalled"                    value="false" />
    <item key="/RTC/irqLevel"                               value="0" />
    <item key="/RTC/rtc_clkout"                             value="32768" />
    <item key="/RTC/rtc_cr_clko"                            value="true" />
@@ -373,12 +354,10 @@
    <item key="/SMC/smc_pmprot_avlp"                        value="false" />
    <item key="/SMC/smc_stopctrl_llsm"                      value="0" />
    <item key="/SMC/smc_stopctrl_porpo"                     value="false" />
-   <item key="/SPI0/irqHandlerInstalled"                   value="false" />
    <item key="/SPI0/irqLevel"                              value="0" />
    <item key="/SPI0/speed"                                 value="10000000" />
    <item key="/SPI0/spi_lsbfe"                             value="false" />
    <item key="/SPI0/spi_mode"                              value="0" />
-   <item key="/TSI0/irqHandlerInstalled"                   value="false" />
    <item key="/TSI0/irqLevel"                              value="0" />
    <item key="/TSI0/tsi_gencs_erie"                        value="false" />
    <item key="/TSI0/tsi_gencs_esor"                        value="true" />
@@ -400,17 +379,13 @@
    <item key="/TSI0/tsi_threshold_lthh"                    value="0" />
    <item key="/UART0/clockSource"                          value="SystemCoreClock" />
    <item key="/UART0/defaultBaudRate"                      value="115200" />
-   <item key="/UART0/irqHandlerInstalled"                  value="false" />
    <item key="/UART0/irqLevel"                             value="0" />
    <item key="/UART1/clockSource"                          value="SystemCoreClock" />
    <item key="/UART1/defaultBaudRate"                      value="115200" />
-   <item key="/UART1/irqHandlerInstalled"                  value="false" />
    <item key="/UART1/irqLevel"                             value="0" />
    <item key="/UART2/clockSource"                          value="SystemBusClock" />
    <item key="/UART2/defaultBaudRate"                      value="115200" />
-   <item key="/UART2/irqHandlerInstalled"                  value="false" />
    <item key="/UART2/irqLevel"                             value="0" />
-   <item key="/USB0/irqHandlerInstalled"                   value="false" />
    <item key="/USB0/irqLevel"                              value="0" />
    <item key="/VREF/vref_sc_icompen"                       value="true" />
    <item key="/VREF/vref_sc_mode_lv"                       value="1" />
