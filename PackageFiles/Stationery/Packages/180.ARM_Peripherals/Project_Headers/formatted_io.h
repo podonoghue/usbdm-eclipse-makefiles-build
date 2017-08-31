@@ -794,13 +794,13 @@ public:
    /**
     * Get and clear error state
     *
-    * @return true  No error
-    * @return false Last operation failed e.g. illegal digit at start of number
+    * @return false No error
+    * @return true  Operation failed since last checked e.g. illegal digit at start of number
     */
-   bool isOk() {
+   bool isError() {
       bool t = inErrorState;
       inErrorState = false;
-      return !t;
+      return t;
    }
 
    /**
