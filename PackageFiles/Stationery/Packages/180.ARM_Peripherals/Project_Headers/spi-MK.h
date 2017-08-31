@@ -31,7 +31,7 @@ namespace USBDM {
  */
 
 /**
- * Type definition for DMA interrupt call back
+ * Type definition for interrupt call back
  * @param status Interrupt status value from SPI->SR
  */
 typedef void (*SpiCallbackFunction)(uint32_t status);
@@ -96,6 +96,42 @@ enum SpiEndOfQueueInterrupt {
    SpiEndOfQueueInterrupt_Disable   = SPI_RSER_EOQF_RE(0),   // DSPI Finished Request Disabled
    SpiEndOfQueueInterrupt_Enable    = SPI_RSER_EOQF_RE(1),   // DSPI Finished Request Enable (EOQF flag)
 };
+/**
+ * Select which Peripheral Select Line to assert during transaction
+ */
+enum SpiPeripheralSelect {
+   SpiPeripheralSelect_None = SPI_PUSHR_PCS(0),   //!< Select peripheral using programmatic GPIO
+   SpiPeripheralSelect_0    = SPI_PUSHR_PCS(1<<0),//!< Select peripheral PCS0 signal
+   SpiPeripheralSelect_1    = SPI_PUSHR_PCS(1<<1),//!< Select peripheral PCS1 signal
+   SpiPeripheralSelect_2    = SPI_PUSHR_PCS(1<<2),//!< Select peripheral PCS2 signal
+   SpiPeripheralSelect_3    = SPI_PUSHR_PCS(1<<3),//!< Select peripheral PCS3 signal
+   SpiPeripheralSelect_4    = SPI_PUSHR_PCS(1<<4),//!< Select peripheral PCS4 signal
+};
+
+/**
+ * Select which CTAS setting to use for transaction
+ */
+enum SpiCtarSelect {
+   SpiCtarSelect_0 = (0), //!< CTAR #0
+   SpiCtarSelect_1 = (1), //!< CTAR #1
+};
+
+/**
+ * Select whether Peripheral Select is returned to idle between transfers to the same peripheral
+ */
+enum SpiSelectMode {
+   SpiSelectMode_Idle          = SPI_PUSHR_CONT(0), //!< Peripheral Select returns to idle between transfers
+   SpiSelectMode_Continuous    = SPI_PUSHR_CONT(1), //!< Peripheral Select remains asserted between transfers
+};
+
+/**
+ * Used to hold SPI configuration that may commonly be modified for different target peripherals
+ */
+struct SpiConfig {
+   uint32_t pushr; //!  PUSHR register value e.g. Target, selection mode etc
+   uint32_t ctar;  //!  CTAR register value e.g. Baud, number of bits, timing
+};
+
 using SpiModeValue = uint32_t;
 
 /**
@@ -135,7 +171,7 @@ protected:
     * @param[in]  baseAddress    Base address of SPI
     */
    Spi(volatile SPI_Type *baseAddress) :
-      spi(baseAddress), pushrMask(SPI_PUSHR_PCS_MASK) {
+      spi(baseAddress), pushrMask(0) {
    }
 
 public:
@@ -254,7 +290,7 @@ protected:
     *
     * Note: Chooses the highest speed that is not greater than frequency.
     */
-   void setSpeed(uint32_t clockFrequency, uint32_t frequency, int ctarNum) {
+   void setSpeed(uint32_t clockFrequency, uint32_t frequency, SpiCtarSelect ctarNum=SpiCtarSelect_0) {
       spi->CTAR[ctarNum] = (spi->CTAR[ctarNum] & ~(SPI_CTAR_BR_MASK|SPI_CTAR_PBR_MASK)) | calculateDividers(clockFrequency, frequency);
    }
 
@@ -269,7 +305,7 @@ protected:
     *
     * Note: Determines values for the smallest delay that is not less than specified delays.
     */
-   void setDelays(uint32_t clockFrequency, float cssck, float asc, float dt, int ctarNum) {
+   void setDelays(uint32_t clockFrequency, float cssck, float asc, float dt, SpiCtarSelect ctarNum=SpiCtarSelect_0) {
 
       uint32_t ctarValue = spi->CTAR[ctarNum] &
             ~(SPI_CTAR_ASC_MASK|SPI_CTAR_PASC_MASK|SPI_CTAR_DT_MASK|SPI_CTAR_PDT_MASK|SPI_CTAR_CSSCK_MASK|SPI_CTAR_PCSSCK_MASK);
@@ -282,8 +318,7 @@ public:
    /**
     * Obtain SPI mutex and set SPI configuration
     *
-    * @param[in]  config       The configuration value to set for the transaction\n
-    *                     A value of zero leaves the configuration unchanged
+    * @param[in]  config       The configuration value to set for the transaction
     * @param[in]  milliseconds How long to wait in milliseconds. Use osWaitForever for indefinite wait
     *
     * @return osOK: The mutex has been obtain.
@@ -292,7 +327,20 @@ public:
     * @return osErrorParameter: The parameter mutex_id is incorrect.
     * @return osErrorISR: osMutexWait cannot be called from interrupt service routines.
     */
-   virtual osStatus startTransaction(uint32_t ctarValue=0, int milliseconds=osWaitForever) = 0;
+   virtual osStatus startTransaction(SpiConfig &config, int milliseconds=osWaitForever) = 0;
+
+   /**
+    * Obtain SPI mutex (SPI configuration unchanged)
+    *
+    * @param[in]  milliseconds How long to wait in milliseconds. Use osWaitForever for indefinite wait
+    *
+    * @return osOK: The mutex has been obtain.
+    * @return osErrorTimeoutResource: The mutex could not be obtained in the given time.
+    * @return osErrorResource: The mutex could not be obtained when no timeout was specified.
+    * @return osErrorParameter: The parameter mutex_id is incorrect.
+    * @return osErrorISR: osMutexWait cannot be called from interrupt service routines.
+    */
+   virtual osStatus startTransaction(int milliseconds=osWaitForever) = 0;
 
    /**
     * Release SPI mutex
@@ -304,19 +352,23 @@ public:
    virtual osStatus endTransaction() = 0;
 #else
    /**
-    * Obtain SPI mutex(dummy) and set SPI configuration
-    *
-    * @param[in] config The configuration value to set for the transaction.\n
-    *                   A value of zero leaves the configuration unchanged
+    * Obtain SPI - dummy routine (non RTOS)
     */
-   int startTransaction(uint32_t config=0, int =0) {
-      if (config != 0) {
-         spi->CTAR[0] = config;
-      }
+   int startTransaction(int =0) {
       return 0;
    }
    /**
-    * Release SPI mutex - dummy routine
+    * Obtain SPI and set SPI configuration
+    *
+    * @param[in] config The configuration values to set for the transaction.
+    */
+   int startTransaction(SpiConfig &config, int =0) {
+      spi->CTAR[0] = config.ctar;
+      pushrMask    = config.pushr;
+      return 0;
+   }
+   /**
+    * Release SPI - dummy routine (non RTOS)
     */
    int endTransaction() {
       return 0;
@@ -343,7 +395,7 @@ public:
     *
     * Note: Determines values for the smallest delay that is not less than specified delays.
     */
-   virtual void setDelays(float cssck=1*USBDM::ms, float asc=1*USBDM::ms, float dt=1*USBDM::ms, int ctarNum=0) = 0;
+   virtual void setDelays(float cssck=1*USBDM::us, float asc=1*USBDM::us, float dt=1*USBDM::us, SpiCtarSelect ctarNum=SpiCtarSelect_0) = 0;
 
    /**
     * Sets the CTAR value for a given communication speed
@@ -354,7 +406,7 @@ public:
     * Note: Chooses the highest speed that is not greater than frequency.
     * Note: This will only have effect the next time a CTAR is changed
     */
-   virtual void setSpeed(uint32_t frequency, int ctarNum=0) = 0;
+   virtual void setSpeed(uint32_t frequency, SpiCtarSelect ctarNum=SpiCtarSelect_0) = 0;
 
    /**
     * Sets Communication mode for SPI
@@ -362,7 +414,7 @@ public:
     * @param[in]  mode    => SpiModeValue to set. May be calculated using spiModeValue()
     * @param[in]  ctarNum => Index of CTAR register to modify
     */
-   void setMode(SpiModeValue mode, int ctarNum=0) {
+   void setMode(SpiModeValue mode, SpiCtarSelect ctarNum=SpiCtarSelect_0) {
       // Sets the default CTAR value with 8 bits
       spi->CTAR[ctarNum] = (spi->CTAR[ctarNum]&~(SPI_CTAR_CPHA_MASK|SPI_CTAR_CPOL_MASK|SPI_CTAR_LSBFE_MASK)) |
             (mode & (SPI_CTAR_CPHA_MASK|SPI_CTAR_CPOL_MASK|SPI_CTAR_LSBFE_MASK));
@@ -374,20 +426,36 @@ public:
     * @param[in]  numBits => Number of bits in each transfer
     * @param[in]  ctarNum => Index of CTAR register to modify
     */
-   void setFrameSize(int numBits=8, int ctarNum=0) {
+   void setFrameSize(int numBits, SpiCtarSelect ctarNum=SpiCtarSelect_0) {
       // Sets the frame size in CTAR
       spi->CTAR[ctarNum] = (spi->CTAR[ctarNum]&~(SPI_CTAR_FMSZ_MASK)) |
             SPI_CTAR_FMSZ(numBits-1);
    }
    /**
-    * Set value that is combined with data for PUSHR register
-    * For example this may be used to control which CTAR is used or which SPI_PCSx signal is asserted
+    * Sets up hardware peripheral select (SPI_PCSx) for transfer.
+    * Also controls which CTAR is used for the transaction.
     *
-    * @param[in]  pushrMask Value to combine with Tx data before writing to PUSHR register
-    *                  For example, SPI_PUSHR_CTAS(1)|SPI_PUSHR_PCS(1<<2)
+    * @param[in]  spiPeripheralSelect  Which peripheral to select using SPI_PCSx signal
+    * @param[in]  polarity             Polarity of SPI_PCSx, ActiveHigh or ActiveLow to select device
+    * @param[in]  spiSelectMode        Whether SPI_PCSx signal is returned to idle between transfers
+    * @param[in]  spiCtarSelect        Which CTAR to use for transaction
     */
-   void setPushrValue(uint32_t pushrMask) {
-      this->pushrMask = pushrMask;
+   void setPeripheralSelect(
+         SpiPeripheralSelect spiPeripheralSelect,
+         Polarity            polarity,
+         SpiSelectMode       spiSelectMode       = SpiSelectMode_Idle,
+         SpiCtarSelect       spiCtarSelect       = SpiCtarSelect_0) {
+      pushrMask = spiPeripheralSelect|spiSelectMode|SPI_PUSHR_CTAS(spiCtarSelect);
+
+      if (polarity) {
+         // ActiveHigh
+         spi->MCR &= ~spiPeripheralSelect;
+      }
+      else {
+         // ActiveLow
+         spi->MCR |= spiPeripheralSelect;
+      }
+
    }
    /**
     *  Transmit and receive a series of 4 to 8-bit values
@@ -427,21 +495,23 @@ public:
     *
     * @param[in]  config Configuration value
     */
-   void setConfig(uint32_t config) {
-      spi->CTAR[0] = config;
+   void setConfig(const SpiConfig &config) {
+      spi->CTAR[0] = config.ctar;
+      pushrMask    = config.pushr;
    }
 
    /**
     *  Get SPI Configuration value\n
     *  This includes timing settings, word length and transmit order
     *
-    * @return ctar Configuration value
+    * @return Configuration value
     */
-   uint32_t getConfig() {
-      return spi->CTAR[0];
+   SpiConfig getConfig() {
+      return SpiConfig{pushrMask,spi->CTAR[0]};
    }
 
-   /** Set SPI.CTAR0 value
+   /**
+    * Set SPI.CTAR0 value
     *
     * @param[in]  ctar 32-bit CTAR value
     */
@@ -449,7 +519,8 @@ public:
       spi->CTAR[0] = ctar;
    }
 
-   /** Set SPI.CTAR1 value
+   /**
+    * Set SPI.CTAR1 value
     *
     * @param[in]  ctar 32-bit CTAR value
     */
@@ -457,7 +528,8 @@ public:
       spi->CTAR[1] = ctar;
    }
 
-   /** Get SPI.CTAR0 value
+   /**
+    * Get SPI.CTAR0 value
     *
     * @return ctar 32-bit CTAR value
     */
@@ -465,27 +537,13 @@ public:
       return spi->CTAR[0];
    }
 
-   /** Get SPI.CTAR1 value
+   /**
+    * Get SPI.CTAR1 value
     *
     * @return ctar 32-bit CTAR value
     */
    uint32_t getCTAR1Value() {
       return spi->CTAR[1];
-   }
-
-   /**
-    * Set polarity of hardware PCS signals
-    *
-    * @param[in]  signal    Signal number
-    * @param[in]  polarity  Polarity of PCSn, ActiveHigh or ActiveLow
-    */
-   void setPcsPolarity(int signal, Polarity polarity=ActiveHigh) {
-      if (polarity==ActiveHigh) {
-         spi->MCR &= ~SPI_MCR_PCSIS(1<<signal);
-      }
-      else {
-         spi->MCR |= SPI_MCR_PCSIS(1<<signal);
-      }
    }
 
    /**
@@ -548,7 +606,7 @@ public:
    /**
     * Obtain SPI mutex
     *
-    * @param[in]  config       The configuration value to set for the transaction\n
+    * @param[in]  config  The configuration to set for the transaction\n
     *                     A value of zero leaves the configuration unchanged
     * @param[in]  milliseconds How long to wait in milliseconds. Use osWaitForever for indefinite wait
     *
@@ -558,13 +616,31 @@ public:
     * @return osErrorParameter: The parameter mutex_id is incorrect.
     * @return osErrorISR: osMutexWait cannot be called from interrupt service routines.
     */
-   virtual osStatus startTransaction(uint32_t config=0, int milliseconds=osWaitForever) override {
+   virtual osStatus startTransaction(SpiConfig &config, int milliseconds=osWaitForever) override {
       // Obtain mutex
       osStatus status = mutex.wait(milliseconds);
-      if ((status == osOK) && (config != 0)) {
+      if (status == osOK) {
          // Change configuration for this transaction
-         spi->CTAR[0] = config;
+         spi->CTAR[0] = config.ctar;
+         pushrMask    = config.pushr;
       }
+      return status;
+   }
+
+   /**
+    * Obtain SPI mutex
+    *
+    * @param[in]  milliseconds How long to wait in milliseconds. Use osWaitForever for indefinite wait
+    *
+    * @return osOK: The mutex has been obtain.
+    * @return osErrorTimeoutResource: The mutex could not be obtained in the given time.
+    * @return osErrorResource: The mutex could not be obtained when no timeout was specified.
+    * @return osErrorParameter: The parameter mutex_id is incorrect.
+    * @return osErrorISR: osMutexWait cannot be called from interrupt service routines.
+    */
+   virtual osStatus startTransaction(int milliseconds=osWaitForever) override {
+      // Obtain mutex
+      osStatus status = mutex.wait(milliseconds);
       return status;
    }
 
@@ -585,19 +661,19 @@ public:
    static constexpr volatile SPI_Type *SPI = Info::spi;
 
    // SPI SCK (clock) Pin
-   using sckGpio  = GpioTable_T<Info, 0, USBDM::ActiveHigh>;
+   using sckGpio  = GpioTable_T<Info, 0, ActiveHigh>;
 
    // SPI SIN (data in = usually MISO) Pin
-   using sinGpio  = GpioTable_T<Info, 1, USBDM::ActiveHigh>;
+   using sinGpio  = GpioTable_T<Info, 1, ActiveHigh>;
 
    // SPI SOUT (data out = usually MOSI) Pin
-   using soutGpio = GpioTable_T<Info, 2, USBDM::ActiveHigh>;
+   using soutGpio = GpioTable_T<Info, 2, ActiveHigh>;
 
    virtual ~Spi_T() {}
 
    virtual void enablePins() override {
       // Configure SPI pins
-      Spi0Info::initPCRs(pcrValue(PinPull_Up, PinDriveStrength_High));
+      Info::initPCRs(pcrValue(PinPull_Up, PinDriveStrength_High));
    }
 
    virtual void disablePins() override {
@@ -606,15 +682,18 @@ public:
    }
 
    /**
-    * Sets Communication speed for SPI
+    * Sets Communication speed for SPI.
+    * This also updates the communication delays based on the frequency.
     *
     * @param[in]  frequency      => Frequency in Hz (0 => use default value)
     * @param[in]  ctarNum        => Index of CTAR register to modify
     *
     * Note: Chooses the highest speed that is not greater than frequency.
     */
-   virtual void setSpeed(uint32_t frequency, int ctarNum=0) override {
+   virtual void setSpeed(uint32_t frequency, SpiCtarSelect ctarNum=SpiCtarSelect_0) override {
       Spi::setSpeed(Info::getClockFrequency(), frequency, ctarNum);
+      float SPI_PADDING2 = 1/(10.0*frequency);
+      setDelays(SPI_PADDING2, SPI_PADDING2, SPI_PADDING2, ctarNum);
    }
 
    /**
@@ -627,7 +706,7 @@ public:
     *
     * Note: Determines values for the smallest delay that is not less than specified delays.
     */
-   void setDelays(float cssck=10*USBDM::us, float asc=10*USBDM::us, float dt=10*USBDM::us, int ctarNum=0) override {
+   void setDelays(float cssck=1*USBDM::us, float asc=1*USBDM::us, float dt=1*USBDM::us, SpiCtarSelect ctarNum=SpiCtarSelect_0) override {
       Spi::setDelays(Info::getClockFrequency(), cssck, asc, dt, ctarNum);
    }
 
@@ -655,14 +734,13 @@ public:
             SPI_MCR_MSTR(1)|        // Master mode
             SPI_MCR_DCONF(0)|       // Must be zero
             SPI_MCR_SMPL_PT(0)|     // 0 system clocks between SCK edge and SIN sample
-            SPI_MCR_PCSIS(1);       // Assume PCS active-low
+            SPI_MCR_PCSIS(0);       // Assume all SPI_PCSx active-high
 
       setCTAR0Value(0);         // Clear
       setCTAR1Value(0);         // Clear
       setFrameSize(8);          // Default 8-bit transfers
       setSpeed(Info::speed);    // Use default speed
       setMode(Info::modeValue); // Use default mode
-      setDelays();              // Defaults
 
       // Configure SPI pins
       enablePins();

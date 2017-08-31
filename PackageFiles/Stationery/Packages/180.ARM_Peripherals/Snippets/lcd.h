@@ -172,7 +172,7 @@ protected:
    Spi      &spi;
 
    /** SPI communication configuration */
-   uint32_t  spiConfig = 0;
+   SpiConfig  spiConfig;
 
 #ifdef __CMSIS_RTOS
    /** Mutex to protect access to LCD */

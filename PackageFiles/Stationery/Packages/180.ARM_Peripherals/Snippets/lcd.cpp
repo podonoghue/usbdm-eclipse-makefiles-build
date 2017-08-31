@@ -114,10 +114,6 @@ void LcdBase::init() {
    // Use 9-bit transfers
    spi.setFrameSize(9);
 
-//   spi.setCTAR0Value(SPI_CTAR_PASC(1)|SPI_CTAR_ASC(0)|SPI_CTAR_SLAVE_FMSZ(9-1));
-
-   spi.setDelays(100*ns,100*ns,100*ns);
-
    // Save configuration
    spiConfig = spi.getConfig();
 
