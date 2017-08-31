@@ -784,7 +784,7 @@ Devices using this peripheral:
 
       \t/**
       \t * Select the ADC1 Trigger source\n
-      \T * 
+      \t * 
       \t * If PDB is selected by SimAdc0Trigger then Pre-trigger 0/1 is determined by the PDB setup,
       \t * otherwise Pre-trigger 0/1 is determined by this parameter.\n
       \t * For example, setAdc1Triggers(SimAdc1AltTrigger_PreTrigger_1, SimAdc1Trigger_PitCh0) will set the trigger source\n
