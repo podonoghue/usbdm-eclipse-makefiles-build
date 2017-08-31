@@ -1,43 +1,14 @@
 /*
  ============================================================================
- * @file    main.cpp (180.ARM_Peripherals/Sources/main.cpp)
- * @brief   Basic C++ demo using GPIO class
+ * @file    ConsoleTest.cpp (180.ARM_Peripherals/Snippets/ConsoleTest.cpp)
+ * @brief   Basic C++ demo using Console class
  *
  *  Created on: 10/1/2016
  *      Author: podonoghue
  ============================================================================
  */
-#include <stdio.h>
 #include <limits.h>
-#include "system.h"
-#include "derivative.h"
-#include "hardware.h"
-#include "uart.h"
 #include "console.h"
-
-
-#if 0
-namespace USBDM {
-
-extern Uart0 uart0;
-
-template<> void Uart_T<Uart0Info>::irqRxTxHandler() {
-   uint8_t status = uart0.uart->S1;
-   if (status & UART_S1_RDRF_MASK) {
-      rxQueue.enQueue(uart0.uart->D);
-   }
-}
-
-template<> int Uart_T<Uart0Info>::_readChar() override {
-
-}
-
-template<> void Uart_T<Uart0Info>::irqErrorHandler() {
-   uart0.clearError();
-}
-
-}; // end namespace USBDM
-#endif
 
 // Allow access to USBDM methods without USBDM:: prefix
 using namespace USBDM;
@@ -46,15 +17,15 @@ using namespace USBDM;
 using Led   = USBDM::GpioA<2,USBDM::ActiveLow>;
 
 int main() {
-   char     buff[100];
-   int      integer;
-   long     longInteger;
-   unsigned unsignedInteger;
-   unsigned long unsignedLong;
+   char           buff[100];
+   int            integer;
+   long           longInteger;
+   unsigned       unsignedInteger;
+   unsigned long  unsignedLong;
 
    console.writeln().writeln("Starting");
 
-   if (!console.write("Number: ").readln(integer).isOk()) {
+   if (console.write("Number: ").readln(integer).isError()) {
       console.writeln("Opps");
    }
    else {
@@ -65,8 +36,8 @@ int main() {
    console.write("3.1       = ").writeln(3.1);
 
    // Test writing basic types using various methods
-   console.write("True  = ").writeln(true);
-   console.write("False = ").writeln(false);
+   console.write("True   = ").writeln(true);
+   console.write("False  = ").writeln(false);
    console.write("peek() = ").writeln(console.peek());
 
    console.write("x         = ").writeln('x');
@@ -79,7 +50,7 @@ int main() {
    console.write("INT_MIN   = ").writeln(INT_MIN);
    console.write("INT_MAX   = ").writeln(INT_MAX);
 
-   console.write("0UL,Radix_2        = ").writeln(0UL,Radix_2);
+   console.write("0UL,Radix_2        = ").writeln(0UL,Radix_2).flushOutput();
    console.write("ULONG_MAX,Radix_2  = ").writeln(ULONG_MAX,Radix_2);
    console.write("ULONG_MAX,Radix_8  = ").writeln(ULONG_MAX,Radix_8);
    console.write("ULONG_MAX,Radix_10 = ").writeln(ULONG_MAX,Radix_10);
@@ -117,7 +88,7 @@ int main() {
    char *ptr = buff;
    ptr = Console::strcpy(ptr, "Console::ultoa(100, buff) = ");
    ptr = Console::ultoa(100, ptr);
-   ptr = Console::strcpy(ptr,  ", oh well!");
+   ptr = Console::strcpy(ptr, ", oh well!");
    console.writeln(buff);
 
    // Test input
@@ -143,7 +114,7 @@ int main() {
    console<<unsignedLong<<EndOfLine;
 
    console.write("Two hex integers : ").read(integer,Radix_16).readln(longInteger,Radix_16);
-   console.write(integer).write(", ").writeln(longInteger);
+   console.write(integer, Radix_16).write(", ").writeln(longInteger, Radix_16);
    console.write("An integer   : ").readln(longInteger);
    console.writeln(longInteger);
    console.write("An integer   : ").readln(unsignedInteger);
@@ -153,12 +124,12 @@ int main() {
 
    console.readChar();
 
-//   UartBuffered_T<Uart0Info> uart0(115200);
+   // If direct interrupt handling is needed.
+   //   console.setRxTxCallback(nullptr);
 
-//   console.setRxTxCallback(nullptr);
-
-   Uart1 uart1;
-   uart1.readChar();
+   // Above functions may be applied directly to any Uart as well.
+   //   Uart1 uart1;
+   //   uart1<<"Hello World\n";
 
    Led::setOutput();
    for(;;) {
