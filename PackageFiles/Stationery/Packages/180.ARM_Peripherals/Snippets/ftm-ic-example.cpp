@@ -33,7 +33,7 @@ using namespace USBDM;
  * This example uses FTM interrupts.
  *
  * It is necessary enable these in Configure.usbdmProject under the "Peripheral Parameters"->FTM tab
- * Select irqHandlerInstalled option.
+ * Select irqHandlingMethod option (Class Method - Software ...)
  */
 
 // Timer channel for measurement - change as required
