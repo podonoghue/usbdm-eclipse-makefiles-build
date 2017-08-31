@@ -142,8 +142,7 @@ public:
 #endif
    }
    /**
-    * Enable pin as digital output with initial inactive level.
-    * Configures all Pin Control Register (PCR) values
+    * Enable pin as digital output with initial inactive level and configures Pin Control Register (PCR) values
     *
     * @note Resets the Pin Control Register value (PCR value).
     * @note Resets the pin value to the inactive state
@@ -161,8 +160,7 @@ public:
    }
    /**
     * @brief
-    * Enable pin as digital output with initial inactive level.
-    * Configures all Pin Control Register (PCR) values
+    * Enable pin as digital output with initial inactive level and configures Pin Control Register (PCR) values
     *
     * @note Resets the Pin Control Register value (PCR value).
     * @note Resets the pin value to the inactive state
@@ -194,8 +192,7 @@ public:
    }
    /**
     * @brief
-    * Enable pin as digital input.
-    * Configures all Pin Control Register (PCR) values
+    * Enable pin as digital input and configures Pin Control Register (PCR) value
     *
     * @note Resets the Pin Control Register value (PCR value).
     * @note Use setIn() for a lightweight change of direction without affecting other pin settings.
@@ -209,8 +206,7 @@ public:
    }
    /**
     * @brief
-    * Enable pin as digital input.
-    * Configures all Pin Control Register (PCR) values
+    * Enable pin as digital input and configures Pin Control Register (PCR) value
     *
     * @note Reset the Pin Control Register value (PCR value).
     * @note Use setIn() for a lightweight change of direction without affecting other pin settings.
@@ -554,7 +550,7 @@ public:
 template<class Info, const int bitNum, Polarity polarity>
 class  Gpio_T : public GpioBase_T<Info::clockMask, Info::pcrAddress, Info::gpioAddress, bitNum, polarity> {
 
-   static_assert(((bitNum>=0)&&(bitNum<=31)), "Illegal bit number");
+   static_assert(((bitNum>=0)&&(bitNum<=31)), "Illegal bit number in Gpio");
 
 public:
    static constexpr bool irqHandlerInstalled = Info::irqHandlerInstalled;
@@ -608,6 +604,8 @@ using  GpioTable_T = GpioBase_T<Info::info[index].clockMask, Info::info[index].p
 template<class Info, const uint32_t left, const uint32_t right>
 class Field_T {
 
+   static_assert(((left<=31)&&(left>=right)&&(right>=0)), "Illegal bit number for left or right in GpioField");
+
 private:
    static constexpr volatile GPIO_Type *gpio = reinterpret_cast<volatile GPIO_Type *>(Info::gpioAddress);
    static constexpr volatile PORT_Type *port = reinterpret_cast<volatile PORT_Type *>(Info::pcrAddress);
@@ -659,11 +657,18 @@ public:
       setPCRs(pinPull|pinDriveStrength|pinDriveMode|pinIrq|pinFilter|pinSlewRate);
    }
    /**
-    * Set pin as digital output
-    * Configures all Pin Control Register (PCR) values
+    * Set all pins as digital outputs.
+    *
+    * @note Does not affect other pin settings
+    */
+   static void setOut() {
+      gpio->PDDR |= MASK;
+   }
+   /**
+    * Set all pins as digital outputs and configures all Pin Control Register (PCR) values
     *
     * @note This will also reset the Pin Control Register value (PCR value).
-    * @note Use setDirection() for a lightweight change of direction without affecting other pin settings.
+    * @note Use setOut() or setDirection() for a lightweight change of direction without affecting other pin settings.
     *
     * @param[in] pcrValue PCR value to use in configuring port (excluding mux fn)
     */
@@ -672,11 +677,10 @@ public:
       gpio->PDDR |= MASK;
    }
    /**
-    * Set pin as digital output
-    * Configures all Pin Control Register (PCR) values
+    * Set all pins as digital outputs and configures all Pin Control Register (PCR) values
     *
     * @note This will also reset the Pin Control Register value (PCR value).
-    * @note Use setDirection() for a lightweight change of direction without affecting other pin settings.
+    * @note Use setOut() or setDirection() for a lightweight change of direction without affecting other pin settings.
     *
     * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High (defaults to PinDriveLow)
     * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain (defaults to PinPushPull)
@@ -691,10 +695,17 @@ public:
    }
    /**
     * Set all pins as digital inputs.
-    * Configures all Pin Control Register (PCR) values
+    *
+    * @note Does not affect other pin settings
+    */
+   static void setIn() {
+      gpio->PDDR &= ~MASK;
+   }
+   /**
+    * Set all pins as digital inputs and configures all Pin Control Register (PCR) values
     *
     * @note This will also reset the Pin Control Register value (PCR value).
-    * @note Use setDirection() for a lightweight change of direction without affecting other pin settings.
+    * @note Use setIn() or setDirection() for a lightweight change of direction without affecting other pin settings.
     *
     * @param[in] pcrValue PCR value to use in configuring port (excluding mux fn)
     */
@@ -703,8 +714,10 @@ public:
       gpio->PDDR &= ~MASK;
    }
    /**
-    * Sets all pins as digital inputs.
-    * Configures all Pin Control Register (PCR) values
+    * Sets all pins as digital inputs and configures all Pin Control Register (PCR) values
+    *
+    * @note This will also reset the Pin Control Register value (PCR value).
+    * @note Use setIn() or setDirection() for a lightweight change of direction without affecting other pin settings.
     *
     * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down (defaults to PinPull_None)
     * @param[in] pinIrq           One of PinIrq_None, etc (defaults to PinIrq_None)
