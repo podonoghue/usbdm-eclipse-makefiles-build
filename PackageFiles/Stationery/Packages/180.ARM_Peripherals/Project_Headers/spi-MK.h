@@ -443,7 +443,7 @@ public:
    void setPeripheralSelect(
          SpiPeripheralSelect spiPeripheralSelect,
          Polarity            polarity,
-         SpiSelectMode       spiSelectMode       = SpiSelectMode_Idle,
+         SpiSelectMode       spiSelectMode,
          SpiCtarSelect       spiCtarSelect       = SpiCtarSelect_0) {
       pushrMask = spiPeripheralSelect|spiSelectMode|SPI_PUSHR_CTAS(spiCtarSelect);
 
@@ -458,32 +458,25 @@ public:
 
    }
    /**
-    *  Transmit and receive a series of 4 to 8-bit values
+    *  Transmit and receive a series of values
+    *
+    *  @tparam T Type for data transfer (may be inferred from parameters)
     *
     *  @param[in]  dataSize  Number of values to transfer
-    *  @param[in]  txData    Transmit bytes (may be NULL for Rx only)
-    *  @param[out] rxData    Receive byte buffer (may be NULL for Tx only)
+    *  @param[in]  txData    Transmit bytes (may be nullptr for Receive only)
+    *  @param[out] rxData    Receive byte buffer (may be nullptr for Transmit only)
     *
-    *  Note: rxData may use same buffer as txData
+    *  @note: rxData may use same buffer as txData
+    *  @note: Size of txData and rxData should be appropriate for transmission size.
     */
-   void txRxBytes(uint32_t dataSize, const uint8_t *txData, uint8_t *rxData=0);
-
-   /**
-    *  Transmit and receive a series of 9 to 16-bit values
-    *
-    *  @param[in]  dataSize  Number of values to transfer
-    *  @param[in]  txData    Transmit values (may be NULL for Rx only)
-    *  @param[out] rxData    Receive buffer (may be NULL for Tx only)
-    *
-    *  Note: rxData may use same buffer as txData
-    */
-   void txRxWords(uint32_t dataSize, const uint16_t *txData, uint16_t *rxData=0);
+   template<typename T>
+   void txRx(uint32_t dataSize, const T *txData, T *rxData=nullptr);
 
    /**
     * Transmit and receive a value over SPI
     *
-    * @param[in]  data - Data to send (8-16 bits) <br>
-    *             May include other control bits
+    * @param[in] data - Data to send (4-16 bits) <br>
+    *                   May include other control bits
     *
     * @return Data received
     */
@@ -505,6 +498,8 @@ public:
     *  This includes timing settings, word length and transmit order
     *
     * @return Configuration value
+    *
+    * @note Typically used with startTransaction()
     */
    SpiConfig getConfig() {
       return SpiConfig{pushrMask,spi->CTAR[0]};
@@ -604,10 +599,9 @@ protected:
 
 public:
    /**
-    * Obtain SPI mutex
+    * Obtain SPI mutex and set SPI configuration
     *
-    * @param[in]  config  The configuration to set for the transaction\n
-    *                     A value of zero leaves the configuration unchanged
+    * @param[in]  config       The configuration to set for the transaction
     * @param[in]  milliseconds How long to wait in milliseconds. Use osWaitForever for indefinite wait
     *
     * @return osOK: The mutex has been obtain.
@@ -628,7 +622,7 @@ public:
    }
 
    /**
-    * Obtain SPI mutex
+    * Obtain SPI mutex (SPI configuration unchanged)
     *
     * @param[in]  milliseconds How long to wait in milliseconds. Use osWaitForever for indefinite wait
     *
@@ -640,8 +634,7 @@ public:
     */
    virtual osStatus startTransaction(int milliseconds=osWaitForever) override {
       // Obtain mutex
-      osStatus status = mutex.wait(milliseconds);
-      return status;
+      return mutex.wait(milliseconds);
    }
 
    /**
@@ -793,6 +786,47 @@ public:
       callback = theCallback;
    }
 };
+
+/**
+ *  Transmit and receive a series of values
+ *
+ *  @tparam T Type for data transfer (may be inferred from parameters)
+ *
+ *  @param[in]  dataSize  Number of values to transfer
+ *  @param[in]  txData    Transmit bytes (may be nullptr for Receive only)
+ *  @param[out] rxData    Receive byte buffer (may be nullptr for Transmit only)
+ *
+ *  @note: rxData may use same buffer as txData
+ *  @note: Size of txData and rxData should be appropriate for transmission size.
+ */
+template<typename T>
+void __attribute__((noinline)) Spi::txRx(uint32_t dataSize, const T *txData, T *rxData) {
+
+   static_assert (((sizeof(T) == 1)||(sizeof(T) == 2)), "Size of data type T must be 8 or 16-bits");
+
+   while(dataSize-->0) {
+      uint32_t sendData = 0xFFFF;
+      if (txData != nullptr) {
+         sendData = (uint16_t)*txData++;
+      }
+      if (dataSize == 0) {
+         // Mark last data
+         sendData |= SPI_PUSHR_EOQ_MASK;
+      }
+      else {
+         // Keep SPI_PCS asserted between data
+         sendData |= SPI_PUSHR_CONT_MASK;
+      }
+      uint32_t receiveData = txRx(sendData);
+      if (rxData != nullptr) {
+         *rxData++ = receiveData;
+      }
+   }
+   spi->MCR |= SPI_MCR_HALT_MASK;
+   while ((spi->SR&SPI_SR_TXRXS_MASK)) {
+      __asm__("nop");
+   }
+}
 
 template<class Info> SpiCallbackFunction SpiIrq_T<Info>::callback = Spi::unhandledCallback;
 
