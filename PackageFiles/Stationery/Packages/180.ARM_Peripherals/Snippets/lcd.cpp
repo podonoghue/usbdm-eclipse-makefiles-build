@@ -114,6 +114,9 @@ void LcdBase::init() {
    // Use 9-bit transfers
    spi.setFrameSize(9);
 
+   // Use software selection of peripheral
+   spi.setPeripheralSelect(SpiPeripheralSelect_None, ActiveLow, SpiSelectMode_Idle);
+
    // Save configuration
    spiConfig = spi.getConfig();
 
