@@ -177,5 +177,6 @@ inline void clearError() {
 
 #include "pin_mapping.h"
 #include "delay.h"
+#include "console.h"
 
 #endif /* PROJECT_HEADERS_HARDWARE_H_ */

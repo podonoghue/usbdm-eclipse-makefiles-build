@@ -1,15 +1,12 @@
 /*
  ============================================================================
  * @file    main.cpp (180.ARM_Peripherals/Sources/main.cpp)
- * @brief   Basic C++ demo using GPIO class
+ * @brief   Basic C++ demo
  *
  *  Created on: 10/1/2016
  *      Author: podonoghue
  ============================================================================
  */
-#include <stdio.h>
-#include "system.h"
-#include "derivative.h"
 #include "hardware.h"
 
 // Allow access to USBDM methods without USBDM:: prefix
@@ -23,16 +20,14 @@ using namespace USBDM;
 using Led   = $(demo.cpp.led:GpioB<3>);
 
 int main() {
-//   printf("Starting\n");
-
-//   printf("SystemBusClock  = %ld\n", ::SystemBusClock);
-//   printf("SystemCoreClock = %ld\n", ::SystemCoreClock);
+   console.writeln("Starting\n");
+   console.write("SystemBusClock  = ").writeln(::SystemBusClock);
 
    Led::setOutput();
    for(;;) {
       Led::toggle();
       USBDM::waitMS(100);
-//      printf("Tick\n");
+      console.writeln("Tick\n");
    }
    return 0;
 }
