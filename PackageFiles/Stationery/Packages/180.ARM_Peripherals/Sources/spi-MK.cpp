@@ -123,83 +123,19 @@ void Spi::calculateDelay(float clockFrequency, float delay, int &bestPrescale, i
 /**
  * Transmit and receive a value over SPI
  *
- * @param[in] data - Data to send (8-16 bits) <br>
+ * @param[in] data - Data to send (4-16 bits) <br>
  *                   May include other control bits
  *
  * @return Data received
  */
 uint32_t Spi::txRx(uint32_t data) {
    spi->MCR &= ~SPI_MCR_HALT_MASK;
-   spi->PUSHR = data;
+   spi->PUSHR = data|pushrMask;
    while ((spi->SR & SPI_SR_TCF_MASK)==0) {
       __asm__("nop");
    }
    spi->SR = SPI_SR_TCF_MASK|SPI_SR_EOQF_MASK;
    return spi->POPR;  // Return read data
-}
-
-/**
- *  Transmit and receive a series of 4 to 8-bit values
- *
- *  @param[in]  dataSize  Number of values to transfer
- *  @param[in]  txData    Transmit bytes (may be NULL for Rx only)
- *  @param[out] rxData    Receive byte buffer (may be NULL for Tx only)
- *
- *  Note: rxData may use same buffer as txData
- */
-void Spi::txRxBytes(uint32_t dataSize, const uint8_t *txData, uint8_t *rxData) {
-   while(dataSize-->0) {
-      uint32_t sendData = 0xFF;
-      if (txData != 0) {
-         sendData = *txData++;
-      }
-      if (dataSize == 0) {
-         sendData |= SPI_PUSHR_EOQ_MASK;
-      }
-      else {
-         sendData |= SPI_PUSHR_CONT_MASK;
-      }
-      uint32_t data = txRx(sendData|pushrMask);
-      if (rxData != 0) {
-         *rxData++ = data;
-      }
-   }
-   spi->MCR |= SPI_MCR_HALT_MASK;
-   while ((spi->SR&SPI_SR_TXRXS_MASK)) {
-      __asm__("nop");
-   }
-}
-
-/**
- *  Transmit and receive a series of 9 to 16-bit values
- *
- *  @param[in]  dataSize  Number of values to transfer
- *  @param[in]  txData    Transmit values (may be NULL for Rx only)
- *  @param[out] rxData    Receive buffer (may be NULL for Tx only)
- *
- *  Note: rxData may use same buffer as txData
- */
-void Spi::txRxWords(uint32_t dataSize, const uint16_t *txData, uint16_t *rxData) {
-   while(dataSize-->0) {
-      uint32_t sendData = 0xFFFF;
-      if (txData != 0) {
-         sendData = *txData++;
-      }
-      if (dataSize == 0) {
-         sendData |= SPI_PUSHR_EOQ_MASK;
-      }
-      else {
-         sendData |= SPI_PUSHR_CONT_MASK;
-      }
-      uint32_t data = txRx(sendData|pushrMask);
-      if (rxData != 0) {
-         *rxData++ = data;
-      }
-   }
-   spi->MCR |= SPI_MCR_HALT_MASK;
-   while ((spi->SR&SPI_SR_TXRXS_MASK)) {
-      __asm__("nop");
-   }
 }
 
 } // End namespace USBDM
