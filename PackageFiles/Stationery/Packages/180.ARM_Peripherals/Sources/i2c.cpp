@@ -199,7 +199,7 @@ void I2c::poll(void) {
 /**
  * Transmit message
  *
- * @param[in]  address  Address of slave to communicate with
+ * @param[in]  address  Address of slave to communicate with (should include LSB = R/W bit = 0)
  * @param[in]  size     Size of transmission data
  * @param[in]  data     Data to transmit, 0th byte is often register address
  *
@@ -236,7 +236,7 @@ int I2c::transmit(uint8_t address, uint16_t size, const uint8_t data[]) {
 /**
  * Receive message
  *
- * @param[in]  address  Address of slave to communicate with
+ * @param[in]  address  Address of slave to communicate with (should include LSB = R/W bit = 0)
  * @param[in]  size     Size of reception data
  * @param[out] data     Data buffer for reception
  *
@@ -273,7 +273,7 @@ int I2c::receive(uint8_t address, uint16_t size,  uint8_t data[]) {
  * Transmit message followed by receive message.
  * Uses repeated-start.
  *
- * @param[in]  address  Address of slave to communicate with
+ * @param[in]  address  Address of slave to communicate with (should include LSB = R/W bit = 0)
  * @param[in]  txSize   Size of transmission data
  * @param[in]  txData   Data for transmission
  * @param[in]  rxSize   Size of reception data
@@ -313,7 +313,7 @@ int I2c::txRx(uint8_t address, uint16_t txSize, const uint8_t txData[], uint16_t
  * Uses repeated-start.
  * Uses shared transmit and receive buffer
  *
- * @param[in]    address  Address of slave to communicate with
+ * @param[in]    address  Address of slave to communicate with (should include LSB = R/W bit = 0)
  * @param[in]    txSize   Size of transmission data
  * @param[in]    rxSize   Size of reception data
  * @param[inout] data     Data for transmission and reception

@@ -13,9 +13,6 @@
 // Allow access to USBDM methods without USBDM:: prefix
 using namespace USBDM;
 
-// LED connection - change as required
-using Led   = USBDM::GpioA<2,USBDM::ActiveLow>;
-
 int main() {
    char           buff[100];
    int            integer;
@@ -131,11 +128,8 @@ int main() {
    //   Uart1 uart1;
    //   uart1<<"Hello World\n";
 
-   Led::setOutput();
    for(;;) {
-      Led::toggle();
-      USBDM::waitMS(100);
-      //      printf("Tick\n");
+      __asm__("nop");
    }
    return 0;
 }

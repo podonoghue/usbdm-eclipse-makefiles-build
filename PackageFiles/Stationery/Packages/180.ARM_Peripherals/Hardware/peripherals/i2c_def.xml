@@ -22,6 +22,8 @@
       <copy source="Project_Headers/i2c.h"            target="Project_Headers/i2c.h"            overwrite="true"  derived="true" />
       <copy source="Sources/i2c.cpp"                  target="Sources/i2c.cpp"                  overwrite="true"  derived="true" />
       
+      <copy source="Snippets/i2c-example.cpp"         target="Snippets/i2c-example.cpp"         overwrite="true"  derived="true" />
+
       <copy source="Snippets/fxos8700cq.h"            target="Snippets/fxos8700cq.h"            overwrite="true"  derived="true" />
       <copy source="Snippets/fxos8700cq.cpp"          target="Snippets/fxos8700cq.cpp"          overwrite="true"  derived="true" />
       <copy source="Snippets/fxos8700cq-example.cpp"  target="Snippets/fxos8700cq-example.cpp"  overwrite="true"  derived="true" />

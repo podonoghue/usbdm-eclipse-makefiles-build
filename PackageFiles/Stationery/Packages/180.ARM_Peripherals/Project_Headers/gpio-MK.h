@@ -572,28 +572,28 @@ using  GpioTable_T = GpioBase_T<Info::info[index].clockMask, Info::info[index].p
  * <b>Example</b>
  * @code
  * // Instantiate object representing Port A 6 down to 3
- * Field_T<GpioAInfo, 6, 3> pta6_3;
+ * using pta6_3 = Field_T<GpioAInfo, 6, 3>;
  *
  * // Set as digital output
- * pta6_3.setOutput();
+ * pta6_3::setOutput();
  *
  * // Write value to field
- * pta6_3.write(0x53);
+ * pta6_3::write(0x53);
  *
  * // Clear all of field
- * pta6_3.bitClear();
+ * pta6_3::bitClear();
  *
  * // Clear lower two bits of field
- * pta6_3.bitClear(0x3);
+ * pta6_3::bitClear(0x3);
  *
  * // Set lower two bits of field
- * pta6_3.bitSet(0x3);
+ * pta6_3::bitSet(0x3);
  *
  * // Set as digital input
- * pta6_3.setInput();
+ * pta6_3::setInput();
  *
  * // Read pin as int value
- * int x = pta6_3.read();
+ * int x = pta6_3::read();
  * @endcode
  *
  * @tparam Info           Class describing the GPIO and PORT
@@ -792,28 +792,28 @@ public:
  * GpioA<3, ActiveHigh> GpioA3;
  *
  * // Set as digital output
- * GpioA3.setOutput();
+ * GpioA3::setOutput();
  *
  * // Set pin high
- * GpioA3.set();
+ * GpioA3::set();
  *
  * // Set pin low
- * GpioA3.clear();
+ * GpioA3::clear();
  *
  * // Toggle pin
- * GpioA3.toggle();
+ * GpioA3::toggle();
  *
  * // Set pin to boolean value
- * GpioA3.write(true);
+ * GpioA3::write(true);
  *
  * // Set pin to boolean value
- * GpioA3.write(false);
+ * GpioA3::write(false);
  *
  * // Set as digital input
- * GpioA3.setInput();
+ * GpioA3::setInput();
  *
  * // Read pin as boolean value
- * bool x = GpioA3.read();
+ * bool x = GpioA3::read();
  * @endcode
  *
  * @tparam bitNum        Bit number in the port
@@ -830,28 +830,28 @@ using PortA = PcrBase_T<GpioAInfo::pcrAddress>;
  * using namespace USBDM;
  *
  * // Instantiate for bit 6 down to 3 of GpioA
- * GpioAField<6,3> GpioA6_3;
+ * using GpioA6_3 = GpioAField<6,3>;
  *
  * // Set as digital output
- * GpioA6_3.setOutput();
+ * GpioA6_3::setOutput();
  *
  * // Write value to field
- * GpioA6_3.write(0x53);
+ * GpioA6_3::write(0x53);
  *
  * // Clear all of field
- * GpioA6_3.bitClear();
+ * GpioA6_3::bitClear();
  *
  * // Clear lower two bits of field
- * GpioA6_3.bitClear(0x3);
+ * GpioA6_3::bitClear(0x3);
  *
  * // Set lower two bits of field
- * GpioA6_3.bitSet(0x3);
+ * GpioA6_3::bitSet(0x3);
  *
  * // Set as digital input
- * GpioA6_3.setInput();
+ * GpioA6_3::setInput();
  *
  * // Read pin as int value
- * int x = GpioA6_3.read();
+ * int x = GpioA6_3::read();
  * @endcode
  *
  * @tparam left          Bit number of leftmost bit in port (inclusive)
@@ -869,31 +869,31 @@ template<int left, int right> class GpioAField : public Field_T<GpioAInfo, left,
  * using namespace USBDM;
  *
  * // Instantiate for bit 3 of GpioB
- * GpioB<3, ActiveHigh> GpioB3;
+ * using GpioB3 = GpioB<3, ActiveHigh>;
  *
  * // Set as digital output
- * GpioB3.setOutput();
+ * GpioB3::setOutput();
  *
  * // Set pin high
- * GpioB3.set();
+ * GpioB3::set();
  *
  * // Set pin low
- * GpioB3.clear();
+ * GpioB3::clear();
  *
  * // Toggle pin
- * GpioB3.toggle();
+ * GpioB3::toggle();
  *
  * // Set pin to boolean value
- * GpioB3.write(true);
+ * GpioB3::write(true);
  *
  * // Set pin to boolean value
- * GpioB3.write(false);
+ * GpioB3::write(false);
  *
  * // Set as digital input
- * GpioB3.setInput();
+ * GpioB3::setInput();
  *
  * // Read pin as boolean value
- * bool x = GpioB3.read();
+ * bool x = GpioB3::read();
  * @endcode
  *
  * @tparam bitNum        Bit number in the port
@@ -910,28 +910,28 @@ using PortB = PcrBase_T<GpioBInfo::pcrAddress>;
  * using namespace USBDM;
  *
  * // Instantiate for bit 6 down to 3 of GpioB
- * GpioBField<6,3> GpioB6_3;
+ * using GpioB6_3 = GpioBField<6,3>;
  *
  * // Set as digital output
- * GpioB6_3.setOutput();
+ * GpioB6_3::setOutput();
  *
  * // Write value to field
- * GpioB6_3.write(0x53);
+ * GpioB6_3::write(0x53);
  *
  * // Clear all of field
- * GpioB6_3.bitClear();
+ * GpioB6_3::bitClear();
  *
  * // Clear lower two bits of field
- * GpioB6_3.bitClear(0x3);
+ * GpioB6_3::bitClear(0x3);
  *
  * // Set lower two bits of field
- * GpioB6_3.bitSet(0x3);
+ * GpioB6_3::bitSet(0x3);
  *
  * // Set as digital input
- * GpioB6_3.setInput();
+ * GpioB6_3::setInput();
  *
  * // Read pin as int value
- * int x = GpioB6_3.read();
+ * int x = GpioB6_3::read();
  * @endcode
  *
  * @tparam left          Bit number of leftmost bit in port (inclusive)
@@ -949,31 +949,31 @@ template<int left, int right> class GpioBField : public Field_T<GpioBInfo, left,
  * using namespace USBDM;
  *
  * // Instantiate for bit 3 of GpioC
- * GpioC<3, ActiveHigh> GpioC3;
+ * using GpioC3 = GpioC<3, ActiveHigh>;
  *
  * // Set as digital output
- * GpioC3.setOutput();
+ * GpioC3::setOutput();
  *
  * // Set pin high
- * GpioC3.set();
+ * GpioC3::set();
  *
  * // Set pin low
- * GpioC3.clear();
+ * GpioC3::clear();
  *
  * // Toggle pin
- * GpioC3.toggle();
+ * GpioC3::toggle();
  *
  * // Set pin to boolean value
- * GpioC3.write(true);
+ * GpioC3::write(true);
  *
  * // Set pin to boolean value
- * GpioC3.write(false);
+ * GpioC3::write(false);
  *
  * // Set as digital input
- * GpioC3.setInput();
+ * GpioC3::setInput();
  *
  * // Read pin as boolean value
- * bool x = GpioC3.read();
+ * bool x = GpioC3::read();
  * @endcode
  *
  * @tparam bitNum        Bit number in the port
@@ -990,28 +990,28 @@ using PortC = PcrBase_T<GpioCInfo::pcrAddress>;
  * using namespace USBDM;
  *
  * // Instantiate for bit 6 down to 3 of GpioC
- * GpioCField<6,3> GpioC6_3;
+ * using GpioC6_3 = GpioCField<6,3>;
  *
  * // Set as digital output
- * GpioC6_3.setOutput();
+ * GpioC6_3::setOutput();
  *
  * // Write value to field
- * GpioC6_3.write(0x53);
+ * GpioC6_3::write(0x53);
  *
  * // Clear all of field
- * GpioC6_3.bitClear();
+ * GpioC6_3::bitClear();
  *
  * // Clear lower two bits of field
- * GpioC6_3.bitClear(0x3);
+ * GpioC6_3::bitClear(0x3);
  *
  * // Set lower two bits of field
- * GpioC6_3.bitSet(0x3);
+ * GpioC6_3::bitSet(0x3);
  *
  * // Set as digital input
- * GpioC6_3.setInput();
+ * GpioC6_3::setInput();
  *
  * // Read pin as int value
- * int x = GpioC6_3.read();
+ * int x = GpioC6_3::read();
  * @endcode
  *
  * @tparam left          Bit number of leftmost bit in port (inclusive)
@@ -1029,31 +1029,31 @@ template<int left, int right> class GpioCField : public Field_T<GpioCInfo, left,
  * using namespace USBDM;
  *
  * // Instantiate for bit 3 of GpioD
- * GpioD<3, ActiveHigh> GpioD3;
+ * using GpioD3 = GpioD<3, ActiveHigh>;
  *
  * // Set as digital output
- * GpioD3.setOutput();
+ * GpioD3::setOutput();
  *
  * // Set pin high
- * GpioD3.set();
+ * GpioD3::set();
  *
  * // Set pin low
- * GpioD3.clear();
+ * GpioD3::clear();
  *
  * // Toggle pin
- * GpioD3.toggle();
+ * GpioD3::toggle();
  *
  * // Set pin to boolean value
- * GpioD3.write(true);
+ * GpioD3::write(true);
  *
  * // Set pin to boolean value
- * GpioD3.write(false);
+ * GpioD3::write(false);
  *
  * // Set as digital input
- * GpioD3.setInput();
+ * GpioD3::setInput();
  *
  * // Read pin as boolean value
- * bool x = GpioD3.read();
+ * bool x = GpioD3::read();
  * @endcode
  *
  * @tparam bitNum        Bit number in the port
@@ -1070,28 +1070,28 @@ using PortD = PcrBase_T<GpioDInfo::pcrAddress>;
  * using namespace USBDM;
  *
  * // Instantiate for bit 6 down to 3 of GpioD
- * GpioDField<6,3> GpioD6_3;
+ * using GpioD6_3 = GpioDField<6,3>;
  *
  * // Set as digital output
- * GpioD6_3.setOutput();
+ * GpioD6_3::setOutput();
  *
  * // Write value to field
- * GpioD6_3.write(0x53);
+ * GpioD6_3::write(0x53);
  *
  * // Clear all of field
- * GpioD6_3.bitClear();
+ * GpioD6_3::bitClear();
  *
  * // Clear lower two bits of field
- * GpioD6_3.bitClear(0x3);
+ * GpioD6_3::bitClear(0x3);
  *
  * // Set lower two bits of field
- * GpioD6_3.bitSet(0x3);
+ * GpioD6_3::bitSet(0x3);
  *
  * // Set as digital input
- * GpioD6_3.setInput();
+ * GpioD6_3::setInput();
  *
  * // Read pin as int value
- * int x = GpioD6_3.read();
+ * int x = GpioD6_3::read();
  * @endcode
  *
  * @tparam left          Bit number of leftmost bit in port (inclusive)
@@ -1109,31 +1109,31 @@ template<int left, int right> class GpioDField : public Field_T<GpioDInfo, left,
  * using namespace USBDM;
  *
  * // Instantiate for bit 3 of GpioE
- * GpioE<3, ActiveHigh> GpioE3;
+ * using GpioE3 = GpioE<3, ActiveHigh>;
  *
  * // Set as digital output
- * GpioE3.setOutput();
+ * GpioE3::setOutput();
  *
  * // Set pin high
- * GpioE3.set();
+ * GpioE3::set();
  *
  * // Set pin low
- * GpioE3.clear();
+ * GpioE3::clear();
  *
  * // Toggle pin
- * GpioE3.toggle();
+ * GpioE3::toggle();
  *
  * // Set pin to boolean value
- * GpioE3.write(true);
+ * GpioE3::write(true);
  *
  * // Set pin to boolean value
- * GpioE3.write(false);
+ * GpioE3::write(false);
  *
  * // Set as digital input
- * GpioE3.setInput();
+ * GpioE3::setInput();
  *
  * // Read pin as boolean value
- * bool x = GpioE3.read();
+ * bool x = GpioE3::read();
  * @endcode
  *
  * @tparam bitNum        Bit number in the port
@@ -1150,28 +1150,28 @@ using PortE = PcrBase_T<GpioEInfo::pcrAddress>;
  * using namespace USBDM;
  *
  * // Instantiate for bit 6 down to 3 of GpioE
- * GpioEField<6,3> GpioE6_3;
+ * using GpioE6_3 = GpioEField<6,3>;
  *
  * // Set as digital output
- * GpioE6_3.setOutput();
+ * GpioE6_3::setOutput();
  *
  * // Write value to field
- * GpioE6_3.write(0x53);
+ * GpioE6_3::write(0x53);
  *
  * // Clear all of field
- * GpioE6_3.bitClear();
+ * GpioE6_3::bitClear();
  *
  * // Clear lower two bits of field
- * GpioE6_3.bitClear(0x3);
+ * GpioE6_3::bitClear(0x3);
  *
  * // Set lower two bits of field
- * GpioE6_3.bitSet(0x3);
+ * GpioE6_3::bitSet(0x3);
  *
  * // Set as digital input
- * GpioE6_3.setInput();
+ * GpioE6_3::setInput();
  *
  * // Read pin as int value
- * int x = GpioE6_3.read();
+ * int x = GpioE6_3::read();
  * @endcode
  *
  * @tparam left          Bit number of leftmost bit in port (inclusive)

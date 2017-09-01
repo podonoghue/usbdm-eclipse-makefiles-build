@@ -186,7 +186,7 @@ public:
    /**
     * Transmit message
     *
-    * @param[in]  address  Address of slave to communicate with
+    * @param[in]  address  Address of slave to communicate with (should include LSB = R/W bit = 0)
     * @param[in]  size     Size of transmission data
     * @param[in]  data     Data to transmit, 0th byte is often register address
     *
@@ -197,7 +197,7 @@ public:
    /**
     * Receive message
     *
-    * @param[in]  address  Address of slave to communicate with
+    * @param[in]  address  Address of slave to communicate with (should include LSB = R/W bit = 0)
     * @param[in]  size     Size of reception data
     * @param[out] data     Data buffer for reception
     *
@@ -210,7 +210,7 @@ public:
     *
     * Uses repeated-start.
     *
-    * @param[in]  address  Address of slave to communicate with
+    * @param[in]  address  Address of slave to communicate with (should include LSB = R/W bit = 0)
     * @param[in]  txSize   Size of transmission data
     * @param[in]  txData   Data for transmission
     * @param[in]  rxSize   Size of reception data
@@ -225,7 +225,7 @@ public:
     * Uses repeated-start.\n
     * Uses shared transmit and receive buffer
     *
-    * @param[in]    address  Address of slave to communicate with
+    * @param[in]  address  Address of slave to communicate with (should include LSB = R/W bit = 0)
     * @param[in]    txSize   Size of transmission data
     * @param[in]    rxSize   Size of reception data
     * @param[inout] data     Data for transmission and reception
