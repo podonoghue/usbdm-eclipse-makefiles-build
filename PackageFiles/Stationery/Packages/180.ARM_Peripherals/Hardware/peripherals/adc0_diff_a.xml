@@ -21,6 +21,7 @@
    </choiceOption>
 
    <floatOption name="adcInternalClock" 
+      derived="true"
       constant="true"
       description="Frequency of Internal ADC clock"
       toolTip="Varies with ADLPC and ADHSC"

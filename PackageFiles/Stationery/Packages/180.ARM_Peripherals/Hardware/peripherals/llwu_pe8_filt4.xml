@@ -203,7 +203,7 @@
    <choiceOption name="llwu_pe8_wupe30" description="Wakeup Pin Enable" toolTip="Enables and configures the edge detection for the wakeup pin">
       <choice name="Disabled" value="0" isDefault="true" /> <choice name="Rising" value="1" /> <choice name="Falling" value="2" /> <choice name="Either" value="3" />
    </choiceOption>   
-   <choiceOption name="llwu_pe4_wupe31" description="Wakeup Pin Enable" toolTip="Enables and configures the edge detection for the wakeup pin">
+   <choiceOption name="llwu_pe8_wupe31" description="Wakeup Pin Enable" toolTip="Enables and configures the edge detection for the wakeup pin">
       <choice name="Disabled" value="0" isDefault="true" /> <choice name="Rising" value="1" /> <choice name="Falling" value="2" /> <choice name="Either" value="3" />
    </choiceOption>   
 
@@ -212,7 +212,7 @@
       \t   LLWU_PE8_WUPE28($(llwu_pe8_wupe28))|  // LLWUP 28
       \t   LLWU_PE8_WUPE29($(llwu_pe8_wupe29))|  // LLWUP 29
       \t   LLWU_PE8_WUPE30($(llwu_pe8_wupe30))|  // LLWUP 30
-      \t   LLWU_PE8_WUPE21($(llwu_pe8_wupe21));  // LLWUP 21 \n\n
+      \t   LLWU_PE8_WUPE31($(llwu_pe8_wupe31));  // LLWUP 31 \n\n
    ]]></template>
       
       

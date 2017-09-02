@@ -29,9 +29,11 @@
       units="Hz"
       description="Frequency of OSC Clock or Crystal [OSCCLK]"
       toolTip="Frequency of external crystal or clock on XTAL/EXTAL"
+      derived="true"
       value="8000000" />
 
    <choiceOption name="range_out"
+      derived="true"
       constant="true"
       description="Frequency Range Select"
       toolTip="This range value is determined from the Oscillator frequency.\n
@@ -43,6 +45,7 @@
    </choiceOption>
 
    <choiceOption name="range"
+      derived="true"
       constant="true"
       description="Frequency Range Select"
       toolTip="Selects the frequency range for the crystal oscillator\n
@@ -105,6 +108,7 @@
    </choiceOption>
  
    <intOption name="system_oscerclk_clock"
+         derived="true"
          units="Hz"
          description="Oscillator clock to peripherals [OSCERCLK]"
          toolTip="Generated from OSCCLK"
@@ -112,6 +116,7 @@
          constant="true" />
 
    <intOption name="osc32kclk_clock"
+         derived="true"
          units="Hz"
          description="Oscillator low range 32K clock [OSC32KCLK]"
          toolTip="Generated from OSCCLK. May be used as ERCLK32K"

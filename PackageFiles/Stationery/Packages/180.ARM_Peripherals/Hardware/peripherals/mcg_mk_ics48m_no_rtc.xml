@@ -6,8 +6,8 @@
 
    <section>
       <category name="OSC" description="OSC External Reference Clock/Oscillator [OSCCLK]">
-            <aliasOption key="/OSC0/osc_input_freq" constant="false" />
-            <aliasOption key="/OSC0/erefs0" constant="false" />
+         <aliasOption key="/OSC0/osc_input_freq" constant="false" />
+         <aliasOption key="/OSC0/erefs0" constant="false" />
       </category>
       <category name="Clocks" description="Clock Sources"
          toolTip="SLOW_IRC, FAST_IRC, USB_CLKIN, LPO, IRCLK48MCLK" >
@@ -136,6 +136,7 @@
             </binaryOption>
       
             <intOption name="system_mcgirclk_clock" 
+               derived="true"
                units="Hz"
                description="Frequency of Internal Reference [MCGIRCLK] "
                toolTip="Derived from system_slow_irc_clock or system_fast_irc_clock/fcrdiv"
@@ -151,6 +152,7 @@
          </choiceOption>
       
          <intOption name="mcg_erc_clock" 
+            derived="true"
             units="Hz"
             constant="true"  
             description="MCG External Reference Clock [OSCSELCLK]"
@@ -215,6 +217,7 @@
       
          <category name="FLL" description="FLL Settings">
             <binaryOption name="fll_enabled"
+               derived="true"
                constant="true"
                description="FLL State"
                toolTip="Determined from clock mode selected" >
@@ -225,6 +228,7 @@
             <aliasOption key="/OSC0/range" />
             
             <choiceOption name="mcg_c1_frdiv"
+               derived="true"
                indexedBy="McgInfoSize"
                constant="true"
                description="FLL External Reference Divider"
@@ -243,6 +247,7 @@
             </choiceOption>
       
             <intOption name="fllInputFrequency" 
+               derived="true"
                constant="true"
                units="Hz"
                description="FLL Input clock frequency"
@@ -265,6 +270,7 @@
             </binaryOption>
       
             <choiceOption name="mcg_c4_drst_drs"
+               derived="true"
                indexedBy="McgInfoSize"
                constant="true"
                description="DCO Range Select"
@@ -288,6 +294,7 @@
          
          <category name="PLL0" description="PLL0 Settings">
             <binaryOption name="pll0Enabled"
+               derived="true"
                constant="true"
                description="PLL0 State"
                toolTip="Determined from clock mode selected or enabled by mcg_c5_pllclken" >
@@ -341,7 +348,8 @@
                value="24" />
          </category>
       
-         <intOption name="system_mcgpllclk_clock" 
+         <intOption name="system_mcgpllclk_clock"
+            derived="true" 
             constant="true"
             units="Hz"
             description="PLL Output clock frequency"
@@ -358,7 +366,8 @@
          <aliasOption key="/SIM/system_erclk32k_clock" />
          <aliasOption name="system_low_power_clock" />
       
-         <stringOption name="system_mcgoutclk_clock_source" 
+         <stringOption name="system_mcgoutclk_clock_source"
+            derived="true" 
             description="System MCG Output Clock source [MCGOUTCLK]" 
             constant="true"
             toolTip="Source of MCG Output Clock\n
@@ -379,6 +388,7 @@
          <category name="Device Parameters" description="Register values">
             <category name="MCG_C1" description="MCG Control Register 1">
                <choiceOption name="mcg_c1_clks"
+                  derived="true"
                   constant="true"
                   description="MCGOUTCLK Clock Source Select"
                   toolTip="Selects the clock source for MCGOUTCLK\n
@@ -410,6 +420,7 @@
                <aliasOption key="/OSC0/erefs0" />
          
                <binaryOption name="mcg_c2_lp"
+                  derived="true"
                   constant="true"
                   description="Low Power Select" 
                   toolTip="Whether FLL or PLL continues operation when bypassed\n
@@ -434,7 +445,8 @@
             
             <category name="MCG_C6" description="MCG Control Register 6">
                <aliasOption name="mcg_c6_lolie0" />
-               <binaryOption name="mcg_c6_plls" 
+               <binaryOption name="mcg_c6_plls"
+                  derived="true" 
                   indexedBy="McgInfoSize"
                   constant="true"
                   description="FLL/PLL selected as Clock source when CLKS=0\n

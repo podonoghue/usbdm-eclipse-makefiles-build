@@ -123,7 +123,7 @@
       lptmr_csr_tcf flag is set when lptmr_cnr equals the value in the lptmr_cmr and lptmr_cnr increments. \n
       The hardware trigger will assert until the next time the lptmr_cnr increments. \n
       If lptmr_csr_tfc=0 the lptmr_cnr will roll-over to zero" 
-      min="0" max="65535" />
+      value="65535" min="0" max="65535" />
       
    <floatOption name="lptmr_cmrPeriod"     description="Timer Compare Interval"
       toolTip="This is determined from lptmr_cmr register and clock frequency.\n

@@ -21,7 +21,7 @@ Devices using this peripheral:
          units="Hz"
          description="Frequency of External 32k Reference Clock [ERCLK32K]"
          toolTip="Derived from OSC32KCLK, RTCCLK or LPO" 
-         value="32000"
+         value="32768"
          constant="true" />
    </category>
    <template><![CDATA[
@@ -44,6 +44,7 @@ Devices using this peripheral:
       \t   }
       \t}\n\n
    ]]></template>
+   
    <category name="SOPT2" description="Clock Gating">
       <binaryOption name="sim_sopt2_rtcclkoutsel" 
          description="RTC clock out select [RTC_CLKOUT pin]"
@@ -122,7 +123,7 @@ Devices using this peripheral:
       \t/**
       \t * Get Peripheral clock frequency
       \t *
-      \t * @return Clock frequency as a uint32_t in Hz
+      \t * @return Frequency as a uint32_t in Hz
       \t */
       \tstatic uint32_t getPeripheralClock() {
       \t   
@@ -401,6 +402,7 @@ Devices using this peripheral:
    ]]></template>
    <category name="CLKDIV1" description="System Clock Dividers">
       <intOption name="sim_clkdiv1_outdiv1" 
+         derived="true"
          constant="true"
          description="Core &amp; System Clock Divider (OUTDIV1) - Divide by [1-16]"
          toolTip="Clocks the ARM Cortex-M4 core and bus masters [SIM_CLKDIV1_OUTDIV1]\n
@@ -408,6 +410,7 @@ Devices using this peripheral:
          value="1" offset="-1" min="1" max="16" />
    
       <intOption name="sim_clkdiv1_outdiv2" 
+         derived="true"
          constant="true"
          description="Bus Clock Divider (OUTDIV2) - Divide by [1-16]"
          toolTip="Clocks the bus slaves and peripheral [SIM_CLKDIV1_OUTDIV2]\n
@@ -416,6 +419,7 @@ Devices using this peripheral:
          value="1" offset="-1" min="1" max="16" />
    
       <intOption name="sim_clkdiv1_outdiv3" 
+         derived="true"
          constant="true"
          description="Flexbus Clock Divider (OUTDIV3) - Divide by [1-16]"
          toolTip="Clocks the flexbus interface [SIM_CLKDIV1_OUTDIV3]\n
@@ -424,6 +428,7 @@ Devices using this peripheral:
          value="1" offset="-1" min="1" max="16" />
    
       <intOption name="sim_clkdiv1_outdiv4" 
+         derived="true"
          constant="true"
          description="Flash Clock Divider (OUTDIV4) - Divide by [1-16]"
          toolTip="Clocks the flash memory [SIM_CLKDIV1_OUTDIV4]\n

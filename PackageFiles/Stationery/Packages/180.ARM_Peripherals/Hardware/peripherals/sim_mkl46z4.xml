@@ -23,7 +23,7 @@ Devices using this peripheral:
          units="Hz"
          description="Frequency of External 32k Reference Clock [ERCLK32K]"
          toolTip="External reference clock available to come peripherals (usually ~32kHz)" 
-         value="32000"
+         value="32768"
          constant="true" />
    </category>
    <template><![CDATA[
@@ -76,7 +76,7 @@ Devices using this peripheral:
          
       <choiceOption name="sim_sopt2_uart0src" 
          description="UART0 Clock select"
-         toolTip="Selects the clock source for the UART0 transmit and receive clock">
+         toolTip="Selects the clock source for the transmit and receive clock">
          <choice value="0"  name="Disabled" />
          <choice value="1"  name="Peripheral Clock" isDefault="true" />
          <choice value="2"  name="OSCERCLK clock" />
@@ -106,7 +106,7 @@ Devices using this peripheral:
    
       <choiceOption name="sim_sopt2_tpmsrc" 
          description="TPM Clock source"
-         toolTip="Selects the clock source for the TPM counter clock">
+         toolTip="Selects the clock source for the timer clock">
          <choice value="0"  name="Disabled" />
          <choice value="1"  name="Peripheral Clock" isDefault="true" />
          <choice value="2"  name="OSCERCLK clock" />
@@ -132,6 +132,7 @@ Devices using this peripheral:
          <choice value="6"  name="OSCERCLK0" />
          <choice value="7"  name="Reserved" />
       </choiceOption>
+
    </category>
    <template><![CDATA[
       \t//! System Options Register 2
@@ -172,7 +173,6 @@ Devices using this peripheral:
       \t   case SIM_SOPT2_UART0SRC(3): return McgInfo::getMcgIrClock();
       \t   }
       \t}\n\n
-      
       \t/**
       \t * Get TPM input clock frequency
       \t *
@@ -346,6 +346,7 @@ Devices using this peripheral:
    ]]></template>
    <category name="CLKDIV1" description="System Clock Dividers">
       <intOption name="sim_clkdiv1_outdiv1" 
+         derived="true"
          constant="true"
          description="Core &amp; System Clock Divider (OUTDIV1) - Divide by [1-16]"
          toolTip="Clocks the ARM Cortex-M4 core and bus masters [SIM_CLKDIV1_OUTDIV1]\n
@@ -353,6 +354,7 @@ Devices using this peripheral:
          value="1" offset="-1" min="1" max="16" />
    
       <intOption name="sim_clkdiv1_outdiv4" 
+         derived="true"
          constant="true"
          description="Flash Clock Divider (OUTDIV4) - Divide by [1-16]"
          toolTip="Clocks the flash memory [SIM_CLKDIV1_OUTDIV4]\n

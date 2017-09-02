@@ -163,6 +163,7 @@
    <aliasOption name="system_low_power_clock" />
 
    <stringOption name="system_mcgoutclk_clock_source" 
+      derived="true" 
       description="System MCG Output Clock source [MCGOUTCLK]" 
       constant="true"
       toolTip="Source of MCG Output Clock\n
@@ -181,6 +182,7 @@
    <category name="Device Parameters" description="Register values">
       <category name="MCG_C1" description="MCG Control Register 1">
          <choiceOption name="mcg_c1_clks"
+            derived="true"
             constant="true"
             description="MCGOUTCLK Clock Source Select"
             toolTip="Selects the clock source for MCGOUTCLK\n
