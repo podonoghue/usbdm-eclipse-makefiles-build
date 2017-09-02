@@ -14,10 +14,7 @@
  * - Clears the DREQ on transfer complete
  * - Arranging SLAST/DLAST to return the transfer addresses to starting value after each major-loop.
  */
-#include <stdio.h>
 #include <string.h>
-#include "system.h"
-#include "derivative.h"
 #include "hardware.h"
 #include "dma.h"
 #include "spi.h"
@@ -25,10 +22,13 @@
 using namespace USBDM;
 
 // Connection - change as required
-using Led         = GpioC<3, ActiveLow>;  // = PTA2 = D9 = Blue LED
+using Led = GpioC<3, ActiveLow>;  // = PTA2 = D9 = Blue LED
 
 // SPI to use
 Spi0 spi;
+
+// Which SPI PCS signal to assert
+static constexpr SpiPeripheralSelect spiSelect = SpiPeripheralSelect_2;
 
 // DMA channel numbers
 static constexpr DmaChannelNum DMA_TX_CHANNEL = DmaChannelNum_0;
@@ -47,31 +47,31 @@ void dmaCallback() {
 }
 
 static constexpr uint32_t PUSH_BASE =
-      SPI_PUSHR_CONT(0)|
+      SPI_PUSHR_CONT(1)|
       SPI_PUSHR_CTAS(0)|
       SPI_PUSHR_EOQ(0)|
       SPI_PUSHR_CTCNT(0)|
-      SPI_PUSHR_PCS(1<<0);
+      spiSelect;
 
 const uint32_t txBuffer[]= {
-      SPI_PUSHR_TXDATA(1)|PUSH_BASE|SPI_PUSHR_CONT(1)|SPI_PUSHR_CTCNT(1),
-      SPI_PUSHR_TXDATA(2)|PUSH_BASE|SPI_PUSHR_CONT(1),
-      SPI_PUSHR_TXDATA(3)|PUSH_BASE|SPI_PUSHR_CONT(1),
-      SPI_PUSHR_TXDATA(4)|PUSH_BASE|SPI_PUSHR_CONT(1),
-      SPI_PUSHR_TXDATA(5)|PUSH_BASE|SPI_PUSHR_CONT(1),
-      SPI_PUSHR_TXDATA(6)|PUSH_BASE|SPI_PUSHR_CONT(1),
-      SPI_PUSHR_TXDATA(7)|PUSH_BASE|SPI_PUSHR_CONT(1),
-      SPI_PUSHR_TXDATA(8)|PUSH_BASE|SPI_PUSHR_CONT(1),
-      SPI_PUSHR_TXDATA(9)|PUSH_BASE|SPI_PUSHR_CONT(1),
-      SPI_PUSHR_TXDATA(10)|PUSH_BASE|SPI_PUSHR_CONT(1),
-      SPI_PUSHR_TXDATA(11)|PUSH_BASE|SPI_PUSHR_CONT(1),
-      SPI_PUSHR_TXDATA(12)|PUSH_BASE|SPI_PUSHR_CONT(1),
-      SPI_PUSHR_TXDATA(13)|PUSH_BASE|SPI_PUSHR_CONT(1),
-      SPI_PUSHR_TXDATA(14)|PUSH_BASE|SPI_PUSHR_CONT(0)|SPI_PUSHR_EOQ(0),
+      PUSH_BASE|SPI_PUSHR_TXDATA(1)|SPI_PUSHR_CTCNT(0),
+      PUSH_BASE|SPI_PUSHR_TXDATA(2),
+      PUSH_BASE|SPI_PUSHR_TXDATA(3),
+      PUSH_BASE|SPI_PUSHR_TXDATA(4),
+      PUSH_BASE|SPI_PUSHR_TXDATA(5),
+      PUSH_BASE|SPI_PUSHR_TXDATA(6),
+      PUSH_BASE|SPI_PUSHR_TXDATA(7),
+      PUSH_BASE|SPI_PUSHR_TXDATA(8),
+      PUSH_BASE|SPI_PUSHR_TXDATA(9),
+      PUSH_BASE|SPI_PUSHR_TXDATA(10),
+      PUSH_BASE|SPI_PUSHR_TXDATA(11),
+      PUSH_BASE|SPI_PUSHR_TXDATA(12),
+      PUSH_BASE|SPI_PUSHR_TXDATA(13),
+      (PUSH_BASE|SPI_PUSHR_TXDATA(14))&~SPI_PUSHR_CONT(1),
 };
 
-uint8_t rxBuffer[sizeof(txBuffer)/4];
-const uint8_t rxTestBuffer[sizeof(txBuffer)/4] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14};
+uint8_t rxBuffer[sizeof(txBuffer)/sizeof(txBuffer[0])];
+const uint8_t rxTestBuffer[sizeof(txBuffer)/sizeof(txBuffer[0])] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14};
 
 /**
  * Configure DMA from Memory-to-UART
@@ -194,8 +194,8 @@ void spiCallback(uint32_t) {
  * Configure SPI
  */
 void configureSpi() {
-   spi.setSpeed(20000000);
-   spi.setDelays(50*ns, 50*ns, 1*us);
+   spi.setSpeed(24000000);
+   spi.setPeripheralSelect(spiSelect, ActiveLow, SpiSelectMode_Idle);
    spi.setCallback(spiCallback);
    spi.configureInterrupts(
          SpiTxCompleteInterrupt_Enabled,
@@ -208,8 +208,7 @@ void configureSpi() {
 /**
  * Start transfer
  */
-void doTransfer() {
-//   spi.spi->PUSHR_CONTROL = SPI_PUSHR_CONTROL_CTAS(0)|SPI_PUSHR_CONTROL_PCS(1);
+void startTransfer() {
    complete = false;
 
    spi.getStatus();
@@ -223,9 +222,7 @@ void doTransfer() {
 }
 
 int main() {
-   __asm__("nop");
-
-   printf("Starting\n");
+   console.writeln("Starting");
 
    Led::setOutput();
 
@@ -234,8 +231,8 @@ int main() {
    configureSpi();
 
    for(;;) {
-      // Do a transfer
-      doTransfer();
+      // Start transfer
+      startTransfer();
 
       // Wait for completion of 1 Major-loop = 1 txBuffer
       while (!complete) {
@@ -243,25 +240,9 @@ int main() {
       }
       // Check expected Rx data
       if (memcmp(rxBuffer, rxTestBuffer, sizeof(rxBuffer)) != 0) {
-         printf("Failed\n");
+         console.writeln("Failed Verify\n");
          __BKPT();
       }
-      else {
-//         printf("Success\n");
-      }
-   }
-   // Stop the UART DMA requests
-   //   uart.enableDma(UartDma_TxHoldingEmpty, false);
-
-   printf("Done 1st txBuffer\n");
-   wait(4000*ms);
-
-   // Start the UART DMA requests again
-   printf("More coming....\n");
-   //   uart.enableDma(UartDma_TxHoldingEmpty);
-
-   for(;;) {
-      __asm__("nop");
    }
    return 0;
 }
