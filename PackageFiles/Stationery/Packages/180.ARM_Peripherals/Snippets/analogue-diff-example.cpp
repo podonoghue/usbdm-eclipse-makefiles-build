@@ -7,9 +7,6 @@
  *      Author: podonoghue
  ============================================================================
  */
-#include <stdio.h>
-#include "system.h"
-#include "derivative.h"
 #include "hardware.h"
 
 using namespace USBDM;
@@ -20,22 +17,23 @@ using namespace USBDM;
 
 // Connection mapping - change as required
 // Note - many actions on the channel affect the entire ADC
-using adcChannel = Adc0DiffChannel<0>;
+using Adc        = Adc0;
+using AdcChannel = Adc0DiffChannel<0>;
 
 int main(void) {
 
    // Enable and configure ADC
-   adcChannel::configure(AdcResolution_9bit_diff);
+   Adc::configure(AdcResolution_9bit_diff);
 
    // Calibrate before use
-   adcChannel::calibrate();
+   Adc::calibrate();
 
    // May change default resolution e.g.
-   adcChannel::setResolution(USBDM::AdcResolution_11bit_diff);
+   Adc::setResolution(USBDM::AdcResolution_11bit_diff);
 
    for(;;) {
       // Start next conversion
-      uint32_t value = adcChannel::readAnalogue();
-      printf("Value = %7ld\n", value);
+      uint32_t value = AdcChannel::readAnalogue();
+      console.write("Value = ").writeln(value);
    }
 }

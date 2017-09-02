@@ -7,9 +7,6 @@
  *      Author: podonoghue
  ============================================================================
  */
-#include <stdio.h>
-#include "system.h"
-#include "derivative.h"
 #include "hardware.h"
 
 using namespace USBDM;
@@ -23,6 +20,7 @@ using namespace USBDM;
 
 // Connection mapping - change as required
 using adc = USBDM::Adc0;
+
 using JOYSTICK_X = $(demo.cpp.joystick.x:USBDM::Adc0Channel<0>);
 using JOYSTICK_Y = $(demo.cpp.joystick.y:USBDM::Adc0Channel<3>);
 using JOYSTICK_K = $(demo.cpp.joystick.k:USBDM::GpioC<3>);
@@ -41,6 +39,6 @@ int main(void) {
       int  x = JOYSTICK_X::readAnalogue();
       int  y = JOYSTICK_Y::readAnalogue();
       bool k = JOYSTICK_K::read();
-      printf("Joystick (X,Y,Z) = (%7d, %7d, %s)\n", x, y, k?"HIGH":"LOW");
+      console.write("Joystick (X,Y,K) = ").write(x).write(", ").write(y).write(", ").writeln(k?"HIGH":"LOW");
    }
 }

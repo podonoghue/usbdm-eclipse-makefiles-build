@@ -9,19 +9,17 @@
  *      Author: podonoghue
  ============================================================================
  */
-#include <stdio.h>
-#include "system.h"
-#include "derivative.h"
-#include "hardware.h"
-#include "delay.h"
 
+#include "hardware.h"
 #include "cmp.h"
 
+using namespace USBDM;
+
 // Connections - change as required
-using Cmp   = USBDM::Cmp0;
+using Cmp   = Cmp0;
 
 // Led to control
-using Led   = USBDM::gpio_LED_RED;
+using Led   = gpio_LED_RED;
 
 /**
  * Comparator callback
@@ -46,10 +44,7 @@ void callback(int status) {
 }
 
 int main() {
-//   printf("Starting\n");
-
-//   printf("SystemBusClock  = %ld\n", SystemBusClock);
-//   printf("SystemCoreClock = %ld\n", SystemCoreClock);
+   console.writeln("Starting");
 
    // LED initially off (active low)
    Led::setOutput();

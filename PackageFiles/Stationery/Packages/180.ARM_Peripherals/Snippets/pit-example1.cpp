@@ -6,9 +6,6 @@
  * Toggles LED use PIT for delay.
  * This example uses busy-waiting so it not a practical solution
  */
-#include <stdio.h>
-#include "system.h"
-#include "derivative.h"
 #include "hardware.h"
 #include "pit.h"
 

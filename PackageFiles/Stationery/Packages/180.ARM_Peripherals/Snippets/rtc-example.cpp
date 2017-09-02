@@ -7,43 +7,38 @@
  *      Author: podonoghue
  ============================================================================
  */
-#include <stdio.h>
 #include <ctime>
-#include "system.h"
-#include "derivative.h"
 #include "hardware.h"
-#include "delay.h"
 #include "rtc.h"
+
+using namespace USBDM;
 
 /**
  * Real Time Clock Example
  */
 // LED connection - change as required
-using Led = $(demo.cpp.led:USBDM::GpioA<2,USBDM::ActiveLow>);
+using Led = GpioA<2,ActiveLow>;
 
 /**
  * Callback handler from RTC Alarm
  */
 void handler(uint32_t timeSinceEpoch) {
    // Set repeat callback for 5 seconds from now
-   USBDM::Rtc::setAlarm(timeSinceEpoch+4);
+   Rtc::setAlarm(timeSinceEpoch+4);
    Led::toggle();
 }
 
 int main() {
-   printf("Starting\n");
-
-   printf("SystemBusClock  = %lu\n", SystemBusClock);
-   printf("SystemCoreClock = %lu\n", SystemCoreClock);
+   console.writeln("Starting");
 
    // Enable RTC - done by startup code
-//   USBDM::Rtc::initialise();
+//   Rtc::initialise();
 
    // Set initial callback
-   USBDM::Rtc::setAlarmCallback(handler);
-   USBDM::Rtc::setAlarm(USBDM::Rtc::getTime()+5);
-   USBDM::Rtc::enableAlarmInterrupts();
-   USBDM::Rtc::enableNvicInterrupts();
+   Rtc::setAlarmCallback(handler);
+   Rtc::setAlarm(Rtc::getTime()+5);
+   Rtc::enableAlarmInterrupts();
+   Rtc::enableNvicInterrupts();
 
    Led::setOutput();
    for(;;) {
@@ -53,8 +48,8 @@ int main() {
 
       time (&rawtime);
       timeinfo = localtime(&rawtime);
-      strftime(buffer, sizeof(buffer), "%d-%m-%Y %I:%M:%S\n", timeinfo);
-      printf(buffer);
+      strftime(buffer, sizeof(buffer), "%d-%m-%Y %I:%M:%S", timeinfo);
+      console.writeln(buffer);
       __WFE();
    }
    return 0;

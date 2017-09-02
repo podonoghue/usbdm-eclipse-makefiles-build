@@ -7,12 +7,8 @@
  *      Author: podonoghue
  ============================================================================
  */
-#include <stdio.h>
 #include <algorithm>
-#include "system.h"
-#include "derivative.h"
 #include "hardware.h"
-#include "delay.h"
 #include "tsi.h"
 
 using namespace USBDM;
@@ -174,7 +170,8 @@ void tsiExample() {
       LedB::write(chBOn);
 
       // Report values
-      printf("chA=%s(%5d) chB=%s(%5d)\n", (chAOn)?"On ":"Off", chA, (chBOn)?"On ":"Off", chB);
+      console.write("chA=").write(chAOn?"On ":"Off").write("(").write(chA).write("), ");
+      console.write("chB=").write(chBOn?"On ":"Off").write("(").write(chB).write("))");
    }
 
 }

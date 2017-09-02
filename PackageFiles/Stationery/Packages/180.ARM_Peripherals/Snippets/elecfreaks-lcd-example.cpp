@@ -63,8 +63,8 @@ static constexpr int CIRCLE_RADIUS = (20);
  */
 void drawCursor(int x, int y, int colour) {
    lcd.drawCircle(x, y, CIRCLE_RADIUS, colour);
-//   lcd.drawRect(x-CIRCLE_RADIUS/2, y-CIRCLE_RADIUS/2, x+CIRCLE_RADIUS/2, y+CIRCLE_RADIUS/2, false, colour);
-//   lcd.drawRect(x-CIRCLE_RADIUS/2, y-CIRCLE_RADIUS/2, x+CIRCLE_RADIUS/2, y+CIRCLE_RADIUS/2, true, colour);
+//   lcd.drawRect(x-CIRCLE_RADIUS/2, y-1, x+CIRCLE_RADIUS/2, y+1, false, colour);
+//   lcd.drawRect(x-1, y-CIRCLE_RADIUS/2, x+1, y+CIRCLE_RADIUS/2, false, colour);
 }
 
 int main() {

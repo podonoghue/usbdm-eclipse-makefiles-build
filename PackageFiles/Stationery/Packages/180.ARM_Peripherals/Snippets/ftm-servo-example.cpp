@@ -7,9 +7,6 @@
  *      Author: podonoghue
  ============================================================================
  */
-#include <stdio.h>
-#include "system.h"
-#include "derivative.h"
 #include "hardware.h"
 
 using namespace USBDM;
@@ -60,10 +57,7 @@ public:
 using servo = Servo<Ftm0Channel<7>>;
 
 int main() {
-   printf("Starting\n");
-
-   printf("SystemBusClock  = %ld\n", ::SystemBusClock);
-   printf("SystemCoreClock = %ld\n", ::SystemCoreClock);
+   console.writeln("Starting\n");
 
    servo::enable();
 
@@ -74,7 +68,7 @@ int main() {
       for(int i=0;i<=180;i++) {
          servo::setPosition(i);
          waitMS(50);
-         printf("Position = %d\n", i);
+         console.write("Position = ").writeln(i);
       }
    }
    return 0;

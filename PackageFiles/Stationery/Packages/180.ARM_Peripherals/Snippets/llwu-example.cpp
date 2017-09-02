@@ -9,20 +9,16 @@
  *      Author: podonoghue
  ========================================================================================
  */
-#include <stdio.h>
-#include "system.h"
-#include "derivative.h"
 #include "hardware.h"
-#include "delay.h"
-#include "console.h"
 
 #include "mcg.h"
 #include "llwu.h"
 #include "smc.h"
-#include "uart.h"
+
+using namespace USBDM;
 
 // LED connection - change as required
-using Led   = USBDM::GpioC<3>;
+using Led   = GpioC<3>;
 
 void llwuCallback() {
    __asm__("nop");
@@ -82,33 +78,33 @@ McgInfo::ClockInfo vlprClockInfo = {
 int main() {
    console_setBaudRate(9600);
 
-   printf("Starting\n");
+   console.writeln("Starting\n");
 
-   printf("Core freq = %ld\n", ::SystemCoreClock);
+   console.write("Core frequency = ").writeln(::SystemCoreClock);
 
-   USBDM::Llwu::configure();
-   USBDM::Llwu::setCallback(llwuCallback);
+   Llwu::defaultConfigure();
+   Llwu::setCallback(llwuCallback);
 
-   USBDM::Smc::initialise();
+   Smc::defaultConfigure();
 
    Led::setOutput();
 
    for (;;) {
       Led::toggle();
 
-      USBDM::Mcg::clockTransition(vlprClockInfo);
+      Mcg::clockTransition(vlprClockInfo);
       console_setBaudRate(9600);
-      USBDM::Smc::enterPowerMode(Smc::runm_vlpr);
-      printf("LP Core freq = %ld\n", ::SystemCoreClock);
-      printf("mode = %d\n", Smc::getPowerMode());
-      USBDM::waitMS(1000);
+      Smc::enterRunMode(SmcRunMode_VeryLowPower);
+      console.write("LP Core freq = ").writeln(::SystemCoreClock);
+      console.write("mode = ").writeln(Smc::getPowerStatus());
+      waitMS(1000);
 
-      USBDM::Smc::enterPowerMode(Smc::runm_run);
-      USBDM::Mcg::clockTransition(USBDM::McgInfo::clockInfo[0]);
+      Smc::enterRunMode(SmcRunMode_Normal);
+      Mcg::clockTransition(McgInfo::clockInfo[0]);
       console_setBaudRate(9600);
-      printf("LP Core freq = %ld\n", ::SystemCoreClock);
-      printf("mode = %d\n", Smc::getPowerMode());
-      USBDM::waitMS(1000);
+      console.write("LP Core freq = ").writeln(::SystemCoreClock);
+      console.write("mode = ").writeln(Smc::getPowerStatus());
+      waitMS(1000);
    }
    return 0;
 }

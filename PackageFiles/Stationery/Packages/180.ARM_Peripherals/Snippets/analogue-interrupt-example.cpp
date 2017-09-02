@@ -7,9 +7,6 @@
  *      Author: podonoghue
  ============================================================================
  */
-#include <stdio.h>
-#include "system.h"
-#include "derivative.h"
 #include "hardware.h"
 
 using namespace USBDM;
@@ -25,7 +22,7 @@ using adcChannel = Adc0Channel<19>;
 
 /**
  * NOTE:  This is not a sensible approach
- *        Using puts() in a ISR is very silly!!!!
+ *        Using serial I/O in a ISR is very silly!!!!
  */
 void handler(uint32_t value, int) {
    // Start next conversion
@@ -33,19 +30,14 @@ void handler(uint32_t value, int) {
    value = value/10;
    for (uint i=0; i<75; i++) {
       if (i<value) {
-         putchar('X');
+         console.write('X');
       }
-//      else {
-//         putchar(' ');
-//      }
    }
-   putchar('\n');
-//   printf("Value = %7ld\r", value);
+   console.writeln();
 }
 
 int main(void) {
-   // Do not delete this banner - otherwise putchar() macro breaks.
-   printf("Starting\n");
+   console.writeln("Starting");
 
    // Enable and configure ADC
    adc::configure(AdcResolution_8bit_se);

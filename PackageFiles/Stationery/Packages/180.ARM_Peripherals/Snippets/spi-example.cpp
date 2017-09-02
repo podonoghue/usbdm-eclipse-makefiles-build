@@ -22,7 +22,7 @@ int main() {
    // Configure SPI
    spi.setSpeed(10*MHz);
    spi.setMode(SpiMode_0);
-   spi.setPeripheralSelect(SpiPeripheralSelect_2, ActiveLow, SpiSelectMode_Idle);
+   spi.setPeripheralSelect(SpiPeripheralSelect_0, ActiveLow, SpiSelectMode_Idle);
    spi.setFrameSize(8);
 
    // Save configuration

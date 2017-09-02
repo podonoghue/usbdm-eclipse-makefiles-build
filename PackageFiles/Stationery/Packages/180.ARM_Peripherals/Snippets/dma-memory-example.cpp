@@ -7,13 +7,7 @@
  *      Author: podonoghue
  ============================================================================
  */
-#include <stdio.h>
-#include "system.h"
-#include "derivative.h"
 #include "hardware.h"
-#include "pit.h"
-#include "pdb.h"
-#include "lptmr.h"
 #include "dma.h"
 
 using namespace USBDM;
@@ -115,23 +109,23 @@ static void dmaTransfer(void *source, uint32_t size, void *destination) {
 }
 
 int main() {
-   printf("Starting\n");
+   console.writeln("Starting");
 
    uint32_t source[20]      = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
    uint32_t destination[20] = {0};
 
-   printf("Original buffer contents\n");
+   console.writeln("Original buffer contents");
    for (unsigned index=0; index<(sizeof(destination)/sizeof(destination[0])); index++) {
-      printf("%4d: , ch2=%6lu\n", index, destination[index]);
+      console.write(index).write(": , ch2=").writeln(destination[index]);
    }
 
-   printf("Starting Transfer\n");
+   console.writeln("Starting Transfer\n");
    dmaTransfer(source, sizeof(source), destination);
-   printf("Completed Transfer\n");
+   console.writeln("Completed Transfer\n");
 
-   printf("Final buffer contents\n");
+   console.writeln("Final buffer contents\n");
    for (unsigned index=0; index<(sizeof(destination)/sizeof(destination[0])); index++) {
-      printf("%4d: , ch2=%6lu\n", index, destination[index]);
+      console.write(index).write(": , ch2=").writeln(destination[index]);
    }
 
    for(;;) {

@@ -1,9 +1,6 @@
 /**
  * @file pit-example3-MK.cpp
  */
-#include <stdio.h>
-#include "system.h"
-#include "derivative.h"
 #include "hardware.h"
 #include "pit.h"
 

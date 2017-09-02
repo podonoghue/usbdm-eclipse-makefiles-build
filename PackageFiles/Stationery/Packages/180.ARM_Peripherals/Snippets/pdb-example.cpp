@@ -6,13 +6,8 @@
  * This example uses PDB software trigger to schedule an ADC conversion
  * Uses an LED for debug timing check.
 */
-#include <stdio.h>
-#include "system.h"
-#include "derivative.h"
 #include "hardware.h"
-#include "pit.h"
 #include "pdb.h"
-#include "lptmr.h"
 
 using namespace USBDM;
 
@@ -90,7 +85,7 @@ static void configureAdc() {
 }
 
 int main() {
-   printf("Starting\n");
+   console.writeln("Starting");
 
    Led::setOutput();
 
@@ -103,7 +98,7 @@ int main() {
       while (!complete) {
          __WFI();
       }
-      printf("ch1=%6lu\n", result);
+      console.write("ch1 = ").writeln(result);
    }
    for(;;) {
       __asm__("nop");

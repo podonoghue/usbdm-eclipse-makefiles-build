@@ -7,7 +7,6 @@
  *      Author: podonoghue
  ============================================================================
  */
-#include <stdio.h>
 #include "hardware.h"
 
 /*
@@ -55,7 +54,7 @@ int main() {
 
    for (;;) {
       // Report position
-      printf("Shaft position = %d\n\r", QuadEncoder::getPosition());
+      console.write("Shaft position = ").writeln(QuadEncoder::getPosition());
    }
 
    return 0;

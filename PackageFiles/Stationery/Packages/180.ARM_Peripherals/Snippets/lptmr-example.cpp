@@ -1,9 +1,6 @@
 /**
  * @file lptmr-example.cpp
  */
-#include <stdio.h>
-#include "system.h"
-#include "derivative.h"
 #include "hardware.h"
 #include "lptmr.h"
 
@@ -19,7 +16,7 @@ using namespace USBDM;
 #define SET_HANDLERS_PROGRAMMATICALLY
 
 // Connection mapping - change as required
-using RED_LED   = $(demo.cpp.red.led:USBDM::GpioC<3>);
+using RED_LED   = USBDM::GpioC<3>;
 
 /*
  * This handler is set programmatically
