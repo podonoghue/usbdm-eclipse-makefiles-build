@@ -355,6 +355,7 @@ public:
     * Obtain SPI - dummy routine (non RTOS)
     */
    int startTransaction(int =0) {
+      spi->MCR &= ~SPI_MCR_HALT_MASK;
       return 0;
    }
    /**
@@ -363,6 +364,7 @@ public:
     * @param[in] config The configuration values to set for the transaction.
     */
    int startTransaction(SpiConfig &config, int =0) {
+      spi->MCR    &= ~SPI_MCR_HALT_MASK;
       spi->CTAR[0] = config.ctar;
       pushrMask    = config.pushr;
       return 0;
@@ -371,6 +373,7 @@ public:
     * Release SPI - dummy routine (non RTOS)
     */
    int endTransaction() {
+      spi->MCR  |= SPI_MCR_HALT_MASK;
       return 0;
    }
 #endif
@@ -614,6 +617,7 @@ public:
       // Obtain mutex
       osStatus status = mutex.wait(milliseconds);
       if (status == osOK) {
+         spi->MCR    &= ~SPI_MCR_HALT_MASK;
          // Change configuration for this transaction
          spi->CTAR[0] = config.ctar;
          pushrMask    = config.pushr;
@@ -634,7 +638,11 @@ public:
     */
    virtual osStatus startTransaction(int milliseconds=osWaitForever) override {
       // Obtain mutex
-      return mutex.wait(milliseconds);
+      osStatus status = mutex.wait(milliseconds);
+      if (status == osOK) {
+         spi->MCR &= ~SPI_MCR_HALT_MASK;
+      }
+      return status;
    }
 
    /**
@@ -646,6 +654,7 @@ public:
     */
    virtual osStatus endTransaction() override {
       // Release mutex
+      spi->MCR |= SPI_MCR_HALT_MASK;
       return mutex.release();
    }
 #endif
@@ -720,14 +729,14 @@ public:
       __DMB();
 
       spi->MCR =
-            SPI_MCR_HALT(1)|        // Halt transfers
+            SPI_MCR_HALT(1)|        // Halt transfers initially
             SPI_MCR_CLR_RXF(1)|     // Clear Rx FIFO
             SPI_MCR_CLR_TXF(1)|     // Clear Tx FIFO
             SPI_MCR_ROOE(1)|        // Receive FIFO Overflow Overwrite
             SPI_MCR_MSTR(1)|        // Master mode
             SPI_MCR_DCONF(0)|       // Must be zero
             SPI_MCR_SMPL_PT(0)|     // 0 system clocks between SCK edge and SIN sample
-            SPI_MCR_PCSIS(0);       // Assume all SPI_PCSx active-high
+            SPI_MCR_PCSIS(0);       // Assume all SPI_PCSx active-high (initially)
 
       setCTAR0Value(0);         // Clear
       setCTAR1Value(0);         // Clear
@@ -797,7 +806,7 @@ public:
  *  @param[out] rxData    Receive byte buffer (may be nullptr for Transmit only)
  *
  *  @note: rxData may use same buffer as txData
- *  @note: Size of txData and rxData should be appropriate for transmission size.
+ *  @note: Size of txData and rxData should be appropriate for dataSize.
  */
 template<typename T>
 void __attribute__((noinline)) Spi::txRx(uint32_t dataSize, const T *txData, T *rxData) {
@@ -814,16 +823,20 @@ void __attribute__((noinline)) Spi::txRx(uint32_t dataSize, const T *txData, T *
          sendData |= SPI_PUSHR_EOQ_MASK;
       }
       else {
-         // Keep SPI_PCS asserted between data
+         // Keep SPI_PCS asserted between data values
          sendData |= SPI_PUSHR_CONT_MASK;
       }
-      uint32_t receiveData = txRx(sendData);
+      spi->PUSHR = sendData|pushrMask;
+      while ((spi->SR & SPI_SR_TCF_MASK)==0) {
+      }
+      spi->SR = SPI_SR_TCF_MASK|SPI_SR_EOQF_MASK;
+      uint32_t receiveData = spi->POPR;
       if (rxData != nullptr) {
          *rxData++ = receiveData;
       }
    }
-   spi->MCR |= SPI_MCR_HALT_MASK;
-   while ((spi->SR&SPI_SR_TXRXS_MASK)) {
+   // Wait until tx/rx complete
+   while ((spi->SR&SPI_SR_TXRXS_MASK) == 0) {
       __asm__("nop");
    }
 }

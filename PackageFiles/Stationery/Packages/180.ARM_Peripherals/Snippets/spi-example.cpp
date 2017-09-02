@@ -8,7 +8,8 @@
  ============================================================================
  */
 /*
- * This example requires a loop-back between SPI_MOSI and SPI_MISO
+ * This example requires a loop-back between SPI_MOSI and SPI_MISO.
+ * It may be necessary to adjust the peripheral selection to an available pin.
  */
 #include <string.h>
 #include "spi.h"
