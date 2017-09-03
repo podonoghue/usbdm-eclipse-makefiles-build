@@ -27,7 +27,7 @@ int main() {
    for(;;) {
       Led::toggle();
       USBDM::waitMS(100);
-      console.writeln("Tick\n");
+      console.writeln("Tick...");
    }
    return 0;
 }

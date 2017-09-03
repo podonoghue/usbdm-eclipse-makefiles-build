@@ -226,9 +226,14 @@ public:
     */
    static void configure(DmaChannelNum dmaChannel, DmaSlot dmaSlot, DmaMuxEnable dmaMuxEnable=DmaMuxEnable_Continuous) {
 #ifdef DEBUG_BUILD
-      // PIT triggering only available on 1st 4 channels
-      assert ((dmaMuxEnable != DmaMuxEnable_Triggered) || (dmaChannel<=4));
-      assert (dmaChannel < DmaMuxInfo::NumChannels);
+      if ((dmaMuxEnable == DmaMuxEnable_Triggered) && (dmaChannel>USBDM::PitInfo::irqCount)) {
+         // PIT triggering only available on channels corresponding to PIT channels
+         setAndCheckErrorCode(E_ILLEGAL_PARAM);
+      }
+      if (dmaChannel >= DmaMuxInfo::NumChannels) {
+         // Channel doesn't exists
+         setAndCheckErrorCode(E_ILLEGAL_PARAM);
+      }
 #endif
       // Enable clock to peripheral
       *DmaMuxInfo::clockReg  |= DmaMuxInfo::clockMask;
@@ -483,9 +488,11 @@ public:
     * @return E_NO_ERROR on success
     */
    static ErrorCode enableNvicInterrupts(DmaChannelNum channel, bool enable=true) {
+#ifdef DEBUG_BUILD
       if (channel>=DmaInfo::NumChannels) {
          setAndCheckErrorCode(E_ILLEGAL_PARAM);
       }
+#endif
 
       IRQn_Type irqNum = (IRQn_Type)(DmaInfo::irqNums[0] + channel);
       if (enable) {

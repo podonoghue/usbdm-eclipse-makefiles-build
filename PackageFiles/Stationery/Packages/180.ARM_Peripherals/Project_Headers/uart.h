@@ -201,7 +201,7 @@ public:
    /**
     * Enable/disable a DMA source
     *
-    * @param[in] uartDma  Interrupt source to modify
+    * @param[in] uartDma  DMA source to modify
     * @param[in] enable   True to enable, false to disable
     *
     * @note Changing the enabled DMA functions may also affect the interrupt settings

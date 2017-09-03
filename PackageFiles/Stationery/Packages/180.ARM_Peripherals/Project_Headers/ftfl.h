@@ -46,6 +46,13 @@ enum FlashDriverError_t {
  */
 class Flash : public FtflInfo {
 
+public:
+   /** A23 == 0 => indicates PROGRAM flash */
+   static constexpr uint32_t PROGRAM_ADDRESS_FLAG = (0<<23);
+
+   /** A23 == 1 => indicates DATA flash */
+   static constexpr uint32_t DATA_ADDRESS_FLAG    = (1<<23);
+
 protected:
 
    /** Minimum ratio for EEPROM to Flash backing storage */
@@ -115,27 +122,29 @@ protected:
    template<EepromSel eeprom=eepromSel, PartitionSel partition=partitionSel, PartitionSplit split=partitionSplit>
    static FlashDriverError_t initialiseEeprom () {
 
-   //   printf("initialiseEeprom(eeprom=%d bytes, eeprom backing=%ldK, residual flash=%ldK)\n",
-   //         eepromSizes[eeprom].size, partitionInformation[partition].eeepromSize>>10, partitionInformation[partition].flashSize>>10);
+      //      console.
+      //         write("initialiseEeprom(eeprom=").write(eepromSizes[eeprom].size).write(" bytes, ").
+      //         write("eeprom backing=").write(eepromSizes[eeprom].size).write("K, ").
+      //         write("residual flash=").write(partitionInformation[partition].eeepromSize>>10).writeln("K)");
 
       if (isFlexRamConfigured()) {
          return FLASH_ERR_OK;
       }
       if ((eepromSizes[eeprom].size*MINIMUM_BACKING_RATIO)>(partitionInformation[partition].eeepromSize)) {
-//         printf("Backing ratio (Flash/EEPROM) is too small\n");
+         //         console.writeln("Backing ratio (Flash/EEPROM) is too small\n");
          USBDM::setErrorCode(E_FLASH_INIT_FAILED);
          return FLASH_ERR_ILLEGAL_PARAMS;
       }
-   #if defined(RELEASE_BUILD)
+#if defined(RELEASE_BUILD)
       // EEPROM only available in release build
       FlashDriverError_t rc = partitionFlash(eepromSizes[eeprom].value|split, partitionInformation[partition].value);
       if (rc != 0) {
-         //      printf("Partitioning Flash failed\n");
+         //               console.writeln("Partitioning Flash failed\n");
          return rc;
       }
       // Indicate EEPROM needs initialisation - this is not an error
       return FLASH_ERR_NEW_EEPROM;
-   #else
+#else
       (void) eeprom;
       (void) partition;
       (void) split;
@@ -145,7 +154,7 @@ protected:
       // Initialisation pretend EEPROM on every reset
       // This return code is not an error
       return FLASH_ERR_NEW_EEPROM;
-   #endif
+#endif
    }
 
 public:
@@ -160,23 +169,23 @@ public:
 
       return waitForFlashReady() && (FTFL->FCNFG&FTFL_FCNFG_EEERDY_MASK);
 
-      //   printf("FTFL->FCNFG = 0x%02X\n", FTFL->FCNFG);
-      //   printf("FTFL->FCNFG.FTFL_FCNFG_RAMRDY = %s\n", FTFL->FCNFG&FTFL_FCNFG_RAMRDY_MASK?"true":"false");
-      //   printf("FTFL->FCNFG.FTFL_FCNFG_EEERDY = %s\n", FTFL->FCNFG&FTFL_FCNFG_EEERDY_MASK?"true":"false");
-
-      //   uint8_t result[4];
-      //   FlashDriverError_t rc = readFlashResource(0, DATA_ADDRESS_FLAG|0xFC, result);
-      //   if (rc != 0) {
-      ////      printf("IFR read failed, rc=%d\n", rc);
-      //      return false;
-      //   }
-      //   uint8_t flexNvmPartitionSize = result[0];
-      //   uint8_t eepromDatSetSize     = result[1];
-
-      //   printf("FlexNVM partition code = 0x%02X\n", flexNvmPartitionSize);
-      //   printf("EEPROM data set size   = 0x%02X\n", eepromDatSetSize);
-
-      //      return (FTFL->FCNFG&FTFL_FCNFG_EEERDY_MASK);
+//      console.write("FTFL->FCNFG = ").writeln(FTFL->FCNFG, Radix_16);
+//      console.write("FTFL->FCNFG.FTFL_FCNFG_RAMRDY = ").writeln((bool)(FTFL->FCNFG&FTFL_FCNFG_RAMRDY_MASK));
+//      console.write("FTFL->FCNFG.FTFL_FCNFG_EEERDY = ").writeln((bool)(FTFL->FCNFG&FTFL_FCNFG_EEERDY_MASK));
+//
+//      uint8_t result[4];
+//      FlashDriverError_t rc = readFlashResource(0, DATA_ADDRESS_FLAG|0xFC, result);
+//      if (rc != 0) {
+//         console.write("IFR read failed, rc=").writeln(rc);
+//         return false;
+//      }
+//      uint8_t flexNvmPartitionSize = result[0];
+//      uint8_t eepromDatSetSize     = result[1];
+//
+//      console.write("FlexNVM partition code = ").writeln(flexNvmPartitionSize, Radix_16);
+//      console.write("EEPROM data set size   = ").writeln(eepromDatSetSize, Radix_16);
+//
+//      return (FTFL->FCNFG&FTFL_FCNFG_EEERDY_MASK);
    }
 
    /**

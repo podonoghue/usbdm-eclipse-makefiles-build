@@ -253,7 +253,11 @@ public:
          for (unsigned trialPrescaleValue=0; trialPrescaleValue<=7; trialPrescaleValue++) {
             float clock = inputClock/(multfactor*prescaleFactor);
             uint32_t trialMod = round(period*clock)-1;
-   //         printf("multfactor=%2d, prescaleFactor = %3d, mod=%8d, period=%f\n", multfactor, prescaleFactor, trialMod, period);
+//            console.
+//               write("multfactor = ").write(multfactor).
+//               write(", prescaleFactor = ").write(prescaleFactor).
+//               write(", mod = ").write(trialMod).
+//               write(", period = ").writeln(period);
             if (trialMod <= 0) {
                // Too short a period
                return E_TOO_SMALL;

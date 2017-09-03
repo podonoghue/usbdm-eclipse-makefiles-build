@@ -27,6 +27,7 @@ Table of Contents
 Convenience template for SPI. Uses the following classes:\n
 <ul>
 <li>USBDM::I2c_T < Info >
+<li>USBDM::I2c
 <ul>
 <li>USBDM::I2c0
 <li>USBDM::I2c1
@@ -41,6 +42,7 @@ Convenience template for SPI. Uses the following classes:\n
 Convenience template for SPI. Uses the following classes:\n
 <ul>
 <li>USBDM::Spi_T < Info >
+<li>USBDM::Spi
 <ul>
 <li>USBDM::Spi0
 <li>USBDM::Spi1
@@ -249,7 +251,7 @@ This is a template class with static methods.\n
    Gpio::setDriveMode(PinOpenDrain);
    Gpio::high();
    if (Gpio::readState() != Gpio::read()) {
-      printf("Open-drain pin is being held low\n");
+      console.writeln("Open-drain pin is being held low");
    }
 
    // Dynamically change pin to input
@@ -321,7 +323,7 @@ This is a template class with static methods.\n
    // Read ADC value
    uint32_t value = AdcChannel::readAnalogue();
 
-   printf("ADC measurement = %lu\n", value);
+   console.write("ADC measurement = ").writeln(value);
  @endcode
 
  <b>Usage - Differential measurement</b>
@@ -342,7 +344,7 @@ This is a template class with static methods.\n
    // Read signed differential ADC value
    int32_t value = Adc1_diff0::readAnalogue();
 
-   printf("ADC measurement = %ld\n", value);
+   console.write("ADC measurement = ").writeln(value);
  @endcode
 
 @page FTMExamples Flexible Timer Module
@@ -446,7 +448,7 @@ This is a template class with static methods.\n
 
    for (;;) {
       // Report position
-      printf("Shaft position = %d\n\r", QuadEncoder::getPosition());
+      console.write("Shaft position = ").writeln(QuadEncoder::getPosition());
    }
 @endcode
 

@@ -1310,7 +1310,7 @@ using Ftm3 = FtmIrq_T<Ftm3Info>;
  *  QuadEncoder_T<Ftm0Info> encoder0;
  *
  *  for(;;) {
- *     printf("Position = %d\n", encoder.getPosition());
+ *     console.write("Position =").writeln(encoder.getPosition());
  *  }
  * @endcode
  */

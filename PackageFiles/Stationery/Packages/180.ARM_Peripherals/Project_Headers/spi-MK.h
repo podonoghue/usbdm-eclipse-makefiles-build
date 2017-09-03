@@ -806,7 +806,7 @@ public:
  *  @param[out] rxData    Receive byte buffer (may be nullptr for Transmit only)
  *
  *  @note: rxData may use same buffer as txData
- *  @note: Size of txData and rxData should be appropriate for dataSize.
+ *  @note: Size of txData and rxData should be appropriate for transmission size.
  */
 template<typename T>
 void __attribute__((noinline)) Spi::txRx(uint32_t dataSize, const T *txData, T *rxData) {

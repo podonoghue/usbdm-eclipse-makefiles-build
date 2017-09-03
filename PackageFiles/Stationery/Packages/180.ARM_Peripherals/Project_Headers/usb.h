@@ -1294,6 +1294,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleGetDescriptor() {
 
             // Generate Semi-unique Serial number
             uint32_t uid = SIM->UIDH^SIM->UIDMH^SIM->UIDML^SIM->UIDL;
+//            FormattedIO::ltoa(uid, utf8Buff, Radix_10);
             snprintf((char *)utf8Buff, sizeof(utf8Buff), SERIAL_NO, uid);
 
             // Use end-point internal buffer directly - may result in truncation

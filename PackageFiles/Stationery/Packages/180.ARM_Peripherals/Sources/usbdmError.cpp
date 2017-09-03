@@ -55,6 +55,13 @@ const char *getErrorMessage(ErrorCode err) {
 }
 
 #ifdef DEBUG_BUILD
+void abort(const char *msg) {
+   console.writeln(msg);
+   while(true) {
+      __BKPT();
+   }
+}
+
 /**
  * Check for error code being set (drastically!)
  * This routine does not return if there is an error
@@ -64,7 +71,7 @@ ErrorCode checkError() {
       const char *msg = getErrorMessage();
       __attribute__((unused))
       int cmsisErrorCode = errorCode & ~E_CMSIS_ERR_OFFSET;
-      puts(msg);
+      console.writeln(msg);
       // If you arrive here then an error has been detected.
       // If a CMSIS error, check the 'cmsisErrorCode' above and refer to the CMSIS error codes
       __BKPT();

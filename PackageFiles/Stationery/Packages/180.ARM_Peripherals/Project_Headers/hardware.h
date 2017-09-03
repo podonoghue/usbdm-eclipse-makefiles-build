@@ -113,6 +113,15 @@ inline static ErrorCode setErrorCode(ErrorCode err) {
 }
 
 /**
+ * Abort program execution with message
+ *
+ * @param msg  Message to print to console
+ *
+ * @note Uses a breakpoint rather that exiting the program
+ */
+extern void abort(const char *msg);
+
+/**
  * Set error code and check for error
  *
  * @param[in]  err Error code to set
@@ -173,6 +182,28 @@ inline void clearError() {
 #define INLINE_RELEASE
 #else
 #define INLINE_RELEASE __attribute__((always_inline))
+#endif
+
+#if defined (DEBUG_BUILD) && !defined (NDEBUG)
+#define USBDM_STRINGIFY(x)  #x
+#define USBDM_TOSTRING(x)   USBDM_STRINGIFY(x)
+/**
+ * Macro to do ASSERT operation in debug build
+ *
+ * @param __e Assert expression to evaluate
+ * @param __m Message to print if expression is false
+ */
+#define USBDM_ASSERT(__e, __m) ((__e) ? (void)0 : (void)console.writeln("Assertion Failed @" __FILE__ ":" USBDM_TOSTRING(__LINE__) " - " __m))
+#define usbdm_assert(__e, __m) USBDM_ASSERT(__e, __m)
+#else
+/**
+ * Macro to do ASSERT operation in debug build
+ *
+ * @param __e Assert expression to evaluate
+ * @param __m Message to print if expression is false
+ */
+#define USBDM_ASSERT(__e, __m) ((void)0)
+#define usbdm_assert(__e, __m) ((void)0)
 #endif
 
 #include "pin_mapping.h"
