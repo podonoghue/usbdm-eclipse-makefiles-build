@@ -12,7 +12,7 @@
 
 using namespace USBDM;
 
-bool complete;
+static volatile bool complete;
 
 /**
  * DMA complete callback

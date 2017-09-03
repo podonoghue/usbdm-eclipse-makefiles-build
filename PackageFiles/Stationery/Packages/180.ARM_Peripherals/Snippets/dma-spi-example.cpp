@@ -35,14 +35,14 @@ static constexpr DmaChannelNum DMA_TX_CHANNEL = DmaChannelNum_0;
 static constexpr DmaChannelNum DMA_RX_CHANNEL = DmaChannelNum_1;
 
 // Used to indicate complete transfer
-bool complete;
+static volatile bool complete;
 
 /**
  * DMA complete callback
  *
  * Sets flag to indicate sequence complete.
  */
-void dmaCallback() {
+static void dmaCallback() {
    complete = true;
 }
 
@@ -70,8 +70,8 @@ const uint32_t txBuffer[]= {
       (PUSH_BASE|SPI_PUSHR_TXDATA(14))&~SPI_PUSHR_CONT(1),
 };
 
-uint8_t rxBuffer[sizeof(txBuffer)/sizeof(txBuffer[0])];
-const uint8_t rxTestBuffer[sizeof(txBuffer)/sizeof(txBuffer[0])] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14};
+static uint8_t rxBuffer[sizeof(txBuffer)/sizeof(txBuffer[0])];
+static const uint8_t rxTestBuffer[sizeof(txBuffer)/sizeof(txBuffer[0])] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14};
 
 /**
  * Configure DMA from Memory-to-UART
@@ -186,14 +186,14 @@ static void initDma() {
  *
  * @param status Interrupt status value from SPI->SR
  */
-void spiCallback(uint32_t) {
+static void spiCallback(uint32_t) {
    Led::toggle();
 }
 
 /**
  * Configure SPI
  */
-void configureSpi() {
+static void configureSpi() {
    spi.setSpeed(24000000);
    spi.setPeripheralSelect(spiSelect, ActiveLow, SpiSelectMode_Idle);
    spi.setCallback(spiCallback);
@@ -208,7 +208,7 @@ void configureSpi() {
 /**
  * Start transfer
  */
-void startTransfer() {
+static void startTransfer() {
    complete = false;
 
    spi.getStatus();

@@ -18,14 +18,14 @@
 
 using namespace USBDM;
 
-bool complete;
+static volatile bool complete;
 
 /**
  * DMA complete callback
  *
  * Sets flag to indicate sequence complete.
  */
-void dmaCallback() {
+static void dmaCallback() {
    complete = true;
 }
 
