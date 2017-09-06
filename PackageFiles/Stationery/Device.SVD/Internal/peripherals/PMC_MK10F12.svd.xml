@@ -1,8 +1,6 @@
 <!--
 Devices using this peripheral: 
-      MK10D5
       MK10F12
-      MK20D5
       MK20F12
       MK60F12
       MK60F15
@@ -12,7 +10,7 @@ Devices using this peripheral:
       MK70F15WS
 -->
       <peripheral>
-         <?sourceFile "PMC_MK10D5" ?>
+         <?sourceFile "PMC_MK10F12" ?>
          <name>PMC</name>
          <description>Power Management Controller</description>
          <groupName>PMC</groupName>

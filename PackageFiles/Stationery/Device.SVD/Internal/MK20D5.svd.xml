@@ -55,7 +55,7 @@
       <xi:include href="peripherals/OSC0_MK.svd.xml"/>
       <xi:include href="peripherals/PDB0_2CH_2TRIG_0DAC_2PO.svd.xml"/>
       <xi:include href="peripherals/PIT_4CH.svd.xml"/>
-      <xi:include href="peripherals/PMC_MK10D5.svd.xml"/>
+      <xi:include href="peripherals/PMC_MK.svd.xml"/>
       <xi:include href="peripherals/PORTA.svd.xml"/>
       <peripheral derivedFrom="PORTA"><name>PORTB</name><baseAddress>0x4004A000</baseAddress></peripheral>
       <peripheral derivedFrom="PORTA"><name>PORTC</name><baseAddress>0x4004B000</baseAddress></peripheral>

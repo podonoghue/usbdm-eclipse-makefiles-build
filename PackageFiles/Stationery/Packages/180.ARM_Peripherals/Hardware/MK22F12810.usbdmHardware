@@ -205,6 +205,10 @@
          <irq num="PIT2_IRQn" />
          <irq num="PIT3_IRQn" />
       </peripheral>
+      <peripheral baseName="PMC"      instance=""         version="pmc_mk">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPmc" />
+         <irq num="PMC_IRQn" />
+      </peripheral>
       <peripheral baseName="RTC"      instance=""         version="rtc_mk22f12810">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRtc" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_RTC_MASK" />

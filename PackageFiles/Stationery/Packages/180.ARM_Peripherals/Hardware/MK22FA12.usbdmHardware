@@ -237,6 +237,10 @@
          <irq num="PIT2_IRQn" />
          <irq num="PIT3_IRQn" />
       </peripheral>
+      <peripheral baseName="PMC"      instance=""         version="pmc_mk">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPmc" />
+         <irq num="PMC_IRQn" />
+      </peripheral>
       <peripheral baseName="POWER"    instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPower" />
       </peripheral>

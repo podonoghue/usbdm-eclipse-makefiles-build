@@ -80,7 +80,7 @@
       <peripheral derivedFrom="OSC0"><name>OSC1</name><baseAddress>0x400E5000</baseAddress></peripheral>
       <xi:include href="peripherals/PDB0_4CH_2TRIG_2DAC_4PO.svd.xml"/>
       <xi:include href="peripherals/PIT_4CH.svd.xml"/>
-      <xi:include href="peripherals/PMC_MK10D5.svd.xml"/>
+      <xi:include href="peripherals/PMC_MK10F12.svd.xml"/>
       <xi:include href="peripherals/PORTA_DFER.svd.xml"/>
       <peripheral derivedFrom="PORTA"><name>PORTB</name><baseAddress>0x4004A000</baseAddress></peripheral>
       <peripheral derivedFrom="PORTA"><name>PORTC</name><baseAddress>0x4004B000</baseAddress></peripheral>
