@@ -66,15 +66,15 @@ enum PitChannelEnable {
  * @endcode
  */
 template<class Info>
-class Pit_T {
+class PitBase_T {
 
 private:
    /**
     * This class is not intended to be instantiated
     */
-   Pit_T() = delete;
-   Pit_T(const Pit_T&) = delete;
-   Pit_T(Pit_T&&) = delete;
+   PitBase_T() = delete;
+   PitBase_T(const PitBase_T&) = delete;
+   PitBase_T(PitBase_T&&) = delete;
 
 protected:
    /** Default TCTRL value for timer channel */
@@ -353,7 +353,7 @@ public:
 /**
  * Callback table for programmatically set handlers
  */
-template<class Info> PitCallbackFunction Pit_T<Info>::callbacks[] = {
+template<class Info> PitCallbackFunction PitBase_T<Info>::callbacks[] = {
    unhandledCallback,
    unhandledCallback,
    unhandledCallback,
@@ -361,7 +361,7 @@ template<class Info> PitCallbackFunction Pit_T<Info>::callbacks[] = {
 };
 
 template <class Info, int channel>
-class PitChannel_T : public Pit_T<Info> {
+class PitChannel_T : public PitBase_T<Info> {
 
 public:
 
@@ -380,8 +380,8 @@ public:
          PitChannelIrq     pitChannelIrq=PitChannelIrq_Disable,
          PitChannelEnable  pitChannelEnable=PitChannelEnable_Enable) {
 
-      Pit_T<Info>::configureChannelInTicks(channel, interval, pitChannelIrq, pitChannelEnable);
-      Pit_T<Info>::setCallback(Pit_T<Info>::unhandledCallback);
+      PitBase_T<Info>::configureChannelInTicks(channel, interval, pitChannelIrq, pitChannelEnable);
+      PitBase_T<Info>::setCallback(PitBase_T<Info>::unhandledCallback);
    }
    /**
     *  Configure the PIT channel
@@ -395,7 +395,7 @@ public:
          PitChannelIrq     pitChannelIrq=PitChannelIrq_Disable,
          PitChannelEnable  pitChannelEnable=PitChannelEnable_Enable) {
 
-      Pit_T<Info>::configureChannel(channel, interval, pitChannelIrq, pitChannelEnable);
+      PitBase_T<Info>::configureChannel(channel, interval, pitChannelIrq, pitChannelEnable);
    }
    /**
     * Set period in seconds
@@ -403,7 +403,7 @@ public:
     * @param[in]  interval Interval in seconds
     */
    static void __attribute__((always_inline)) setPeriod(float interval) {
-      Pit_T<Info>::setPeriod(channel, interval);
+      PitBase_T<Info>::setPeriod(channel, interval);
    }
    /**
     * Set period in seconds
@@ -411,13 +411,13 @@ public:
     * @param[in]  interval Interval in seconds
     */
    static void __attribute__((always_inline)) setPeriodInTicks(uint32_t interval) {
-      Pit_T<Info>::setPeriodInTicks(channel, interval);
+      PitBase_T<Info>::setPeriodInTicks(channel, interval);
    }
    /**
     *   Disable the PIT channel
     */
    static void __attribute__((always_inline)) disable() {
-      Pit_T<Info>::disableChannel(channel);
+      PitBase_T<Info>::disableChannel(channel);
    }
    /**
     * Set callback for channel ISR
@@ -425,7 +425,7 @@ public:
     * @param[in]  callback The function to call from stub ISR
     */
    static void __attribute__((always_inline)) setCallback(PitCallbackFunction callback) {
-      Pit_T<Info>::setCallback(channel, callback);
+      PitBase_T<Info>::setCallback(channel, callback);
    }
    /**
     * Enable/disable channel interrupts
@@ -433,7 +433,7 @@ public:
     * @param[in]  enable  True => enable, False => disable
     */
    static void __attribute__((always_inline)) enableInterrupts(bool enable=true) {
-      Pit_T<Info>::enableInterrupts(channel, enable);
+      PitBase_T<Info>::enableInterrupts(channel, enable);
    }
    /**
     * Enable/disable interrupts in NVIC
@@ -443,7 +443,7 @@ public:
     * @return E_NO_ERROR on success
     */
    static ErrorCode __attribute__((always_inline)) enableNvicInterrupts(bool enable=true) {
-      return Pit_T<Info>::enableNvicInterrupts(channel, enable);
+      return PitBase_T<Info>::enableNvicInterrupts(channel, enable);
    }
 
 };
@@ -452,7 +452,7 @@ public:
 /**
  * @brief class representing the PIT
  */
-using Pit = Pit_T<PitInfo>;
+using Pit = PitBase_T<PitInfo>;
 /**
  * @brief class representing the PIT channel 0
  */

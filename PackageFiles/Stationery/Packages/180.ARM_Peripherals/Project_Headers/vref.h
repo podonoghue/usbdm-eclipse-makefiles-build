@@ -24,29 +24,31 @@ namespace USBDM {
  * @addtogroup VREF_Group VREF, Voltage Reference
  * @brief Pins used for Voltage Reference
  * @{
+ */
+
 /**
  * Template class representing a Voltage Reference
  *
  * @tparam info      Information class for VREF
  *
  * @code
- * using vref = Vref_T<VrefInfo>;
+ * using vref = VrefBase_T<VrefInfo>;
  *
  *  vref::initialise();
  *
  * @endcode
  */
 template<class Info>
-class Vref_T {
+class VrefBase_T {
 
 private:
    static constexpr volatile VREF_Type *vref    = Info::vref;
    static constexpr volatile uint32_t *clockReg = Info::clockReg;
 
 #ifdef DEBUG_BUILD
-   static_assert((Info::info[0].gpioBit != UNMAPPED_PCR), "Vref_T: Vref signal is not mapped to a pin - Modify Configure.usbdm");
-   static_assert((Info::info[0].gpioBit != INVALID_PCR),  "Vref_T: Non-existent signal used for Vref input");
-   static_assert((Info::info[0].gpioBit == UNMAPPED_PCR)||(Info::info[0].gpioBit == INVALID_PCR)||(Info::info[0].gpioBit >= 0), "Vref_T: Illegal signal used for Vref");
+   static_assert((Info::info[0].gpioBit != UNMAPPED_PCR), "VrefBase_T: Vref signal is not mapped to a pin - Modify Configure.usbdm");
+   static_assert((Info::info[0].gpioBit != INVALID_PCR),  "VrefBase_T: Non-existent signal used for Vref input");
+   static_assert((Info::info[0].gpioBit == UNMAPPED_PCR)||(Info::info[0].gpioBit == INVALID_PCR)||(Info::info[0].gpioBit >= 0), "VrefBase_T: Illegal signal used for Vref");
 #endif
 
 public:
@@ -96,7 +98,7 @@ public:
 };
 
 #if defined(USBDM_VREF_IS_DEFINED)
-using Vref = Vref_T<VrefInfo>;
+using Vref = VrefBase_T<VrefInfo>;
 #endif
 
 #if defined(USBDM_VREF0_IS_DEFINED)

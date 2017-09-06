@@ -94,8 +94,46 @@ enum LlwuFilterPinMode {
  */
 typedef void (*LLWUCallbackFunction)();
 
+/**
+ * Template class providing interface to Low Leakage Wake-up Unit
+ *
+ * @tparam info      Information class for LLWU
+ *
+ * @code
+ * using llwu = LlwuBase_T<LlwuInfo>;
+ *
+ *  llwu::configure();
+ *
+ * @endcode
+ */
 template <class Info>
 class LlwuBase_T {
+
+protected:
+   /** Callback function for ISR */
+   static LLWUCallbackFunction callback;
+
+public:
+   /**
+    * IRQ handler
+    */
+   static void irqHandler(void) {
+      if (callback != 0) {
+         callback();
+      }
+      else {
+         setAndCheckErrorCode(E_NO_HANDLER);
+      }
+   }
+
+   /**
+    * Set Callback function
+    *
+    *   @param[in]  theCallback - Callback function to be executed on LLWU interrupt
+    */
+   static void setCallback(LLWUCallbackFunction theCallback) {
+      callback = theCallback;
+   }
 
 protected:
    static constexpr volatile LLWU_Type *llwu = Info::llwu;
@@ -271,46 +309,13 @@ public:
    }
 };
 
-/**
- * Template class to provide LLWU callback
- */
-template<class Info>
-class LlwuIrq_T : public LlwuBase_T<Info> {
-
-protected:
-   /** Callback function for ISR */
-   static LLWUCallbackFunction callback;
-
-public:
-   /**
-    * IRQ handler
-    */
-   static void irqHandler(void) {
-      if (callback != 0) {
-         callback();
-      }
-      else {
-         setAndCheckErrorCode(E_NO_HANDLER);
-      }
-   }
-
-   /**
-    * Set Callback function
-    *
-    *   @param[in]  theCallback - Callback function to be executed on LLWU interrupt
-    */
-   static void setCallback(LLWUCallbackFunction theCallback) {
-      callback = theCallback;
-   }
-};
-
-template<class Info> LLWUCallbackFunction LlwuIrq_T<Info>::callback = 0;
+template<class Info> LLWUCallbackFunction LlwuBase_T<Info>::callback = 0;
 
 #ifdef USBDM_LLWU_IS_DEFINED
 /**
  * Class representing LLWU
  */
-using Llwu = LlwuIrq_T<LlwuInfo>;
+using Llwu = LlwuBase_T<LlwuInfo>;
 
 #endif
 

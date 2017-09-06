@@ -3,50 +3,40 @@
  * @file    ftm-ic-example.cpp
  * @brief   Demo using Ftm class to implement a basic Input Capture system
  *
- * This example uses floating point calculations and required printf() %f support
+ * An FTM input channel is used to measure the period of a waveform.
+ * This example uses floating point calculations.
  *
  *  Created on: 3/7/2017
  *      Author: podonoghue
  ================================================================================
  */
-#include <stdio.h>
-#include "system.h"
-#include "derivative.h"
 #include "hardware.h"
 
 using namespace USBDM;
-
-/**
- * This example requires use of floating point in printf().
- * If this option was not selected in the new project wizard then
- * it is necessary to change the library options.
- *
- * Right-click on project and open Properties
- *
- * Select [C/C++ Build->Settings] on left of [Tool Settings] tab
- * Select [ARM C++ Linker->General] in middle panel
- * Turn on [Support %f format in printf]
- *
- * It will be necessary to clean and re-build the project.
- */
 /**
  * This example uses FTM interrupts.
  *
  * It is necessary enable these in Configure.usbdmProject under the "Peripheral Parameters"->FTM tab
  * Select irqHandlingMethod option (Class Method - Software ...)
  */
+// Timer being used - change as required
+// Could also access as TimerChannel::Ftm
+using Timer = Ftm0;
 
 // Timer channel for measurement - change as required
-using Timer = $(demo.cpp.pwm.led1:Ftm0Channel<7>);
+using TimerChannel = Ftm0Channel<7>;
 
-// Period between events
+// Period between input edges in ticks
 // This variable is shared with the interrupt routine
 static volatile uint16_t periodInTicks = 0;
 
-//using Debug = gpio_D0;
+// Maximum measurement time
+static const float MEASUREMENT_TIME = 100*ms;
+
+using Debug = GpioA<12>;
 
 /**
- * Interrupt handler for Tone interrupts
+ * Interrupt handler for Timer interrupts
  * This sets the next interrupt/pin toggle for a half-period from the last event
  *
  * @param[in] status Flags indicating interrupt source channel(s)
@@ -54,42 +44,49 @@ static volatile uint16_t periodInTicks = 0;
 static void ftmCallback(uint8_t status) {
    static volatile uint16_t lastEventTime;
 
-//   Debug::set();
+   Debug::set();
    // Check channel
-   if (status & Timer::CHANNEL_MASK) {
-      uint16_t currentEventTime = Timer::getEventTime();
+   if (status & TimerChannel::CHANNEL_MASK) {
+      uint16_t currentEventTime = TimerChannel::getEventTime();
       periodInTicks = currentEventTime-lastEventTime;
       lastEventTime = currentEventTime;
    }
-//   Debug::clear();
+   Debug::clear();
 }
 
-/**
- * This example uses floating point calculations and required printf() %f support
- */
 int main() {
-   printf("Starting\n");
-//   Debug::setOutput(PinDriveStrength_High);
+   console.writeln("Starting");
+
+   Debug::setOutput(PinDriveStrength_High);
 
    /**
     * FTM channel set as Input Capture using a callback function
     */
    // Configure base FTM (affects all channels)
-   Timer::Ftm::configure(FtmMode_LeftAlign);
+   Timer::configure(
+         FtmMode_LeftAlign,      // Left-aligned is required for OC/IC
+         FtmClockSource_System,  // Bus clock usually
+         FtmPrescale_1);         // The prescaler will be re-calculated later
 
-   // Pin filtering (if available)
-   Timer::setFilter(PinFilter_Passive);
+   // Set IC/OC measurement period to accommodate maximum measurement + 10%
+   // This adjusts the prescaler value but does not change the clock source
+   Timer::setMeasurementPeriod(1.1*MEASUREMENT_TIME);
 
    // Set callback function
    Timer::setChannelCallback(ftmCallback);
-   // Configure the channel in Input Capture mode
-   Timer::configure(FtmChMode_InputCaptureRisingEdge);
-   // Set IC/OC measurement period to accommodate at least 100ms (maximum period)
-   Timer::setMeasurementPeriod(100*ms);
-   // Enable interrupts from the channel
-   Timer::enableInterrupts();
+
    // Enable interrupts for entire timer
    Timer::enableNvicInterrupts();
+
+   // Configure pin associated with channel
+   TimerChannel::setFilter(PinFilter_Passive);
+   TimerChannel::setPullDevice(PinPull_Up);
+
+   // Configure the channel in Input Capture mode
+   TimerChannel::configure(FtmChMode_InputCaptureRisingEdge);
+
+   // Enable interrupts from the channel
+   TimerChannel::enableInterrupts();
 
    // Check if configuration failed
    USBDM::checkError();
@@ -101,7 +98,9 @@ int main() {
       disableInterrupts();
       tPeriodInTicks = periodInTicks;
       enableInterrupts();
-      printf("Period = %6.1f ms\n", 1000*Timer::convertTicksToSeconds(tPeriodInTicks));
+      int intervalInMicroseconds = (int)(1000000*TimerChannel::convertTicksToSeconds(tPeriodInTicks));
+      console.write("Period = ").write(intervalInMicroseconds).writeln(" us");
+//      printf("Period = %4d ms\n", intervalInMilliseconds);
    }
    return 0;
 }

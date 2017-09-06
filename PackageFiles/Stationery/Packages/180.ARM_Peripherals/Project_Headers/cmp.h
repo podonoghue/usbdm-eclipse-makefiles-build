@@ -104,6 +104,35 @@ template<class Info>
 class CmpBase_T {
 
 protected:
+   /** Callback function for ISR */
+   static CMPCallbackFunction callback;
+
+public:
+   /**
+    * IRQ handler
+    */
+   static void irqHandler() {
+      int status = CmpBase_T<Info>::cmp->SCR&(CMP_SCR_CFR_MASK|CMP_SCR_CFF_MASK);
+      // Clear interrupt
+      CmpBase_T<Info>::cmp->SCR |= status;
+      if (callback != 0) {
+         callback(status);
+      }
+      else {
+         setAndCheckErrorCode(E_NO_HANDLER);
+      }
+   }
+
+   /**
+    * Set callback function
+    *
+    * @param[in]  theCallback Callback function to execute on interrupt
+    */
+   static void setCallback(CMPCallbackFunction theCallback) {
+      callback = theCallback;
+   }
+
+protected:
    static constexpr volatile CMP_Type *cmp      = Info::cmp;
    static constexpr volatile uint32_t *clockReg = Info::clockReg;
 
@@ -259,62 +288,26 @@ public:
    }
 };
 
-/**
- * Template class to provide CMP callback
- */
-template<class Info>
-class CmpIrq_T : public CmpBase_T<Info> {
-
-protected:
-   /** Callback function for ISR */
-   static CMPCallbackFunction callback;
-
-public:
-   /**
-    * IRQ handler
-    */
-   static void irqHandler() {
-      int status = CmpBase_T<Info>::cmp->SCR&(CMP_SCR_CFR_MASK|CMP_SCR_CFF_MASK);
-      // Clear interrupt
-      CmpBase_T<Info>::cmp->SCR |= status;
-      if (callback != 0) {
-         callback(status);
-      }
-      else {
-         setAndCheckErrorCode(E_NO_HANDLER);
-      }
-   }
-
-   /**
-    * Set callback function
-    *
-    * @param[in]  theCallback Callback function to execute on interrupt
-    */
-   static void setCallback(CMPCallbackFunction theCallback) {
-      callback = theCallback;
-   }
-};
-
-template<class Info> CMPCallbackFunction CmpIrq_T<Info>::callback = 0;
+template<class Info> CMPCallbackFunction CmpBase_T<Info>::callback = 0;
 
 #if defined(USBDM_CMP_IS_DEFINED)
-using Cmp = CmpIrq_T<CmpInfo>;
+using Cmp = CmpBase_T<CmpInfo>;
 #endif
 
 #if defined(USBDM_CMP0_IS_DEFINED)
-using Cmp0 = CmpIrq_T<Cmp0Info>;
+using Cmp0 = CmpBase_T<Cmp0Info>;
 #endif
 
 #if defined(USBDM_CMP1_IS_DEFINED)
-using Cmp1 = CmpIrq_T<Cmp1Info>;
+using Cmp1 = CmpBase_T<Cmp1Info>;
 #endif
 
 #if defined(USBDM_CMP2_IS_DEFINED)
-using Cmp2 = CmpIrq_T<Cmp2Info>;
+using Cmp2 = CmpBase_T<Cmp2Info>;
 #endif
 
 #if defined(USBDM_CMP3_IS_DEFINED)
-using Cmp3 = CmpIrq_T<Cmp3Info>;
+using Cmp3 = CmpBase_T<Cmp3Info>;
 #endif
 /**
  * @}

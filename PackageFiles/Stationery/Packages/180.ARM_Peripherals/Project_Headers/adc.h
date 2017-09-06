@@ -228,6 +228,40 @@ typedef void (*ADCCallbackFunction)(uint32_t value, int channel);
 template<class Info>
 class AdcBase_T {
 
+protected:
+   /** Callback function for ISR */
+   static ADCCallbackFunction callback;
+
+public:
+
+   using AdcInfo = Info;
+
+   /**
+    * IRQ handler
+    */
+   static void irqHandler() {
+      if (adc->SC1[0] & ADC_SC1_COCO_MASK) {
+         callback(adc->R[0], adc->SC1[0]&ADC_SC1_ADCH_MASK);
+      }
+      if (adc->SC1[1] & ADC_SC1_COCO_MASK) {
+         callback(adc->R[1], adc->SC1[1]&ADC_SC1_ADCH_MASK);
+      }
+   }
+
+   /**
+    * Set Callback function
+    *
+    * @param[in] theCallback Callback function to execute on interrupt.\n
+    *            nullptr to remove handler
+    */
+   static void setCallback(ADCCallbackFunction theCallback) {
+      if (theCallback == nullptr) {
+         callback = errorCallback;
+         return;
+      }
+      callback = theCallback;
+   }
+
 private:
    /**
     * This class is not intended to be instantiated
@@ -542,48 +576,7 @@ protected:
 
 };
 
-/**
- * Template class to provide ADC callback
- */
-template<class Info>
-class AdcIrq_T : public AdcBase_T<Info> {
-
-protected:
-   /** Callback function for ISR */
-   static ADCCallbackFunction callback;
-
-public:
-
-   using AdcInfo = Info;
-
-   /**
-    * IRQ handler
-    */
-   static void irqHandler() {
-      if (AdcBase_T<Info>::adc->SC1[0] & ADC_SC1_COCO_MASK) {
-         callback(AdcBase_T<Info>::adc->R[0], AdcBase_T<Info>::adc->SC1[0]&ADC_SC1_ADCH_MASK);
-      }
-      if (AdcBase_T<Info>::adc->SC1[1] & ADC_SC1_COCO_MASK) {
-         callback(AdcBase_T<Info>::adc->R[1], AdcBase_T<Info>::adc->SC1[1]&ADC_SC1_ADCH_MASK);
-      }
-   }
-
-   /**
-    * Set Callback function
-    *
-    * @param[in] theCallback Callback function to execute on interrupt.\n
-    *            nullptr to remove handler
-    */
-   static void setCallback(ADCCallbackFunction theCallback) {
-      if (theCallback == nullptr) {
-         callback = AdcBase_T<Info>::errorCallback;
-         return;
-      }
-      callback = theCallback;
-   }
-};
-
-template<class Info> ADCCallbackFunction AdcIrq_T<Info>::callback = AdcBase_T<Info>::errorCallback;
+template<class Info> ADCCallbackFunction AdcBase_T<Info>::callback = AdcBase_T<Info>::errorCallback;
 
 /**
  * Template class representing an ADC channel
@@ -755,7 +748,7 @@ class Adc0DiffChannel : public AdcDiffChannel_T<Adc0Info, channel> {
 /**
  * Class representing ADC0
  */
-using Adc0 = AdcIrq_T<Adc0Info>;
+using Adc0 = AdcBase_T<Adc0Info>;
 #endif
 
 #ifdef USBDM_ADC1_IS_DEFINED
@@ -806,7 +799,7 @@ class Adc1DiffChannel : public AdcDiffChannel_T<Adc1Info, channel> {
 /**
  * Class representing ADC1
  */
-using Adc1 = AdcIrq_T<Adc1Info>;
+using Adc1 = AdcBase_T<Adc1Info>;
 #endif
 
 /**

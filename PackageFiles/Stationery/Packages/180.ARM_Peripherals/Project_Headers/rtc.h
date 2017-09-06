@@ -26,8 +26,109 @@ namespace USBDM {
  */
 typedef void (*RTCCallbackFunction)(uint32_t timeSinceEpoch);
 
+/**
+ * Template class providing interface to Real Time Clock
+ *
+ * @tparam info      Information class for RTC
+ *
+ * @code
+ * using rtc = RtcBase_T<RtcInfo>;
+ *
+ *  rtc::enableAlarmInterrupts();
+ *
+ * @endcode
+ */
 template <class Info>
 class RtcBase_T {
+
+public:
+   static void unhandledInterrupt(uint32_t) {
+      setAndCheckErrorCode(E_NO_HANDLER);
+   }
+
+protected:
+   /** Callback function for ISR */
+   static RTCCallbackFunction alarmCallback;
+   static RTCCallbackFunction secondsCallback;
+
+public:
+   /**
+    * Alarm IRQ handler
+    */
+   static void irqAlarmHandler(void) {
+      // Clear alarm
+      RtcBase_T<Info>::rtc->TAR   = 0;
+      // Call handler
+      alarmCallback(RtcBase_T<Info>::rtc->TSR);
+   }
+
+   /**
+    * Alarm IRQ handler
+    */
+   static void irqSecondsHandler(void) {
+      // Call handler
+      secondsCallback(RtcBase_T<Info>::rtc->TSR);
+   }
+
+   /**
+    * Enable/disable RTC Alarm interrupts
+    *
+    * @param[in]  enable True=>enable, False=>disable
+    */
+   static void enableAlarmInterrupts(bool enable=true) {
+      if (enable) {
+         RTC->IER   |= RTC_IER_TAIE_MASK;
+      }
+      else {
+         RTC->IER   &= ~RTC_IER_TAIE_MASK;
+      }
+   }
+   /**
+    * Enable/disable RTC Seconds interrupts
+    *
+    * @param[in]  enable True=>enable, False=>disable
+    */
+   static void enableSecondsInterrupts(bool enable=true) {
+      if (enable) {
+         RTC->IER   |= RTC_IER_TSIE_MASK;
+      }
+      else {
+         RTC->IER   &= ~RTC_IER_TSIE_MASK;
+      }
+   }
+   /**
+    * Set Alarm callback function
+    *
+    *   @param[in]  callback - Callback function to be executed on RTC alarm interrupt
+    */
+   static void setAlarmCallback(RTCCallbackFunction callback) {
+      if (callback == nullptr) {
+         alarmCallback = unhandledInterrupt;
+         return;
+      }
+      alarmCallback = callback;
+   }
+   /**
+    * Set Seconds callback function
+    *
+    *   @param[in]  callback - Callback function to be executed on RTC alarm interrupt
+    */
+   static void setSecondsCallback(RTCCallbackFunction callback) {
+      if (callback == nullptr) {
+         secondsCallback = unhandledInterrupt;
+         return;
+      }
+      secondsCallback = callback;
+   }
+   /**
+    * Set alarm time
+    *
+    *   @param[in]  time        - Time to set alarm for (time since the epoch in seconds)
+    */
+   static void setAlarm(uint32_t time) {
+         RtcBase_T<Info>::rtc->TAR = time;
+   }
+
 
 protected:
    static constexpr volatile RTC_Type *rtc      = Info::rtc;
@@ -173,109 +274,14 @@ public:
 
 };
 
-/**
- * Template class to provide RTC callback
- */
-template<class Info>
-class RtcIrq_T : public RtcBase_T<Info> {
-
-public:
-   static void unhandledInterrupt(uint32_t) {
-      setAndCheckErrorCode(E_NO_HANDLER);
-   }
-
-protected:
-   /** Callback function for ISR */
-   static RTCCallbackFunction alarmCallback;
-   static RTCCallbackFunction secondsCallback;
-
-public:
-   /**
-    * Alarm IRQ handler
-    */
-   static void irqAlarmHandler(void) {
-      // Clear alarm
-      RtcBase_T<Info>::rtc->TAR   = 0;
-      // Call handler
-      alarmCallback(RtcBase_T<Info>::rtc->TSR);
-   }
-
-   /**
-    * Alarm IRQ handler
-    */
-   static void irqSecondsHandler(void) {
-      // Call handler
-      secondsCallback(RtcBase_T<Info>::rtc->TSR);
-   }
-
-   /**
-    * Enable/disable RTC Alarm interrupts
-    *
-    * @param[in]  enable True=>enable, False=>disable
-    */
-   static void enableAlarmInterrupts(bool enable=true) {
-      if (enable) {
-         RTC->IER   |= RTC_IER_TAIE_MASK;
-      }
-      else {
-         RTC->IER   &= ~RTC_IER_TAIE_MASK;
-      }
-   }
-   /**
-    * Enable/disable RTC Seconds interrupts
-    *
-    * @param[in]  enable True=>enable, False=>disable
-    */
-   static void enableSecondsInterrupts(bool enable=true) {
-      if (enable) {
-         RTC->IER   |= RTC_IER_TSIE_MASK;
-      }
-      else {
-         RTC->IER   &= ~RTC_IER_TSIE_MASK;
-      }
-   }
-   /**
-    * Set Alarm callback function
-    *
-    *   @param[in]  callback - Callback function to be executed on RTC alarm interrupt
-    */
-   static void setAlarmCallback(RTCCallbackFunction callback) {
-      if (callback == nullptr) {
-         alarmCallback = unhandledInterrupt;
-         return;
-      }
-      alarmCallback = callback;
-   }
-   /**
-    * Set Seconds callback function
-    *
-    *   @param[in]  callback - Callback function to be executed on RTC alarm interrupt
-    */
-   static void setSecondsCallback(RTCCallbackFunction callback) {
-      if (callback == nullptr) {
-         secondsCallback = unhandledInterrupt;
-         return;
-      }
-      secondsCallback = callback;
-   }
-   /**
-    * Set alarm time
-    *
-    *   @param[in]  time        - Time to set alarm for (time since the epoch in seconds)
-    */
-   static void setAlarm(uint32_t time) {
-         RtcBase_T<Info>::rtc->TAR = time;
-   }
-};
-
-template<class Info> RTCCallbackFunction RtcIrq_T<Info>::alarmCallback   = unhandledInterrupt;
-template<class Info> RTCCallbackFunction RtcIrq_T<Info>::secondsCallback = unhandledInterrupt;
+template<class Info> RTCCallbackFunction RtcBase_T<Info>::alarmCallback   = unhandledInterrupt;
+template<class Info> RTCCallbackFunction RtcBase_T<Info>::secondsCallback = unhandledInterrupt;
 
 #ifdef USBDM_RTC_IS_DEFINED
 /**
  * Class representing RTC
  */
-using Rtc = RtcIrq_T<RtcInfo>;
+using Rtc = RtcBase_T<RtcInfo>;
 
 #endif
 

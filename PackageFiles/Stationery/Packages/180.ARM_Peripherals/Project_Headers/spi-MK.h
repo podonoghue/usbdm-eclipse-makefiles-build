@@ -593,7 +593,34 @@ public:
  * @tparam  Info           Class describing Spi hardware
  */
 template<class Info>
-class Spi_T : public Spi {
+class SpiBase_T : public Spi {
+
+protected:
+   /** Callback function for ISR */
+   static SpiCallbackFunction callback;
+
+public:
+   /**
+    * IRQ handler
+    */
+   static void irqHandler() {
+      callback(SpiBase_T<Info>::getStatus());
+   }
+
+   /**
+    * Set Callback function\n
+    *
+    * @param[in] theCallback Callback function to execute on interrupt.\n
+    *                        nullptr to indicate none
+    */
+   static __attribute__((always_inline)) void setCallback(SpiCallbackFunction theCallback) {
+      if (theCallback == nullptr) {
+         callback = Spi::unhandledCallback;
+         return;
+      }
+      callback = theCallback;
+   }
+
 
 #ifdef __CMSIS_RTOS
 protected:
@@ -671,7 +698,7 @@ public:
    // SPI SOUT (data out = usually MOSI) Pin
    using soutGpio = GpioTable_T<Info, 2, ActiveHigh>;
 
-   virtual ~Spi_T() {}
+   virtual ~SpiBase_T() {}
 
    virtual void enablePins() override {
       // Configure SPI pins
@@ -715,7 +742,7 @@ public:
    /**
     * Constructor
     */
-   Spi_T() : Spi(reinterpret_cast<volatile SPI_Type*>(Info::spi)) {
+   SpiBase_T() : Spi(reinterpret_cast<volatile SPI_Type*>(Info::spi)) {
 
 #ifdef DEBUG_BUILD
       // Check pin assignments
@@ -764,39 +791,6 @@ public:
 };
 
 /**
- * Template class to provide callback
- */
-template<class Info>
-class SpiIrq_T : public Spi_T<Info> {
-
-protected:
-   /** Callback function for ISR */
-   static SpiCallbackFunction callback;
-
-public:
-   /**
-    * IRQ handler
-    */
-   static void irqHandler() {
-      callback(Spi_T<Info>::getStatus());
-   }
-
-   /**
-    * Set Callback function\n
-    *
-    * @param[in] theCallback Callback function to execute on interrupt.\n
-    *                        nullptr to indicate none
-    */
-   static __attribute__((always_inline)) void setCallback(SpiCallbackFunction theCallback) {
-      if (theCallback == nullptr) {
-         callback = Spi::unhandledCallback;
-         return;
-      }
-      callback = theCallback;
-   }
-};
-
-/**
  *  Transmit and receive a series of values
  *
  *  @tparam T Type for data transfer (may be inferred from parameters)
@@ -841,12 +835,12 @@ void __attribute__((noinline)) Spi::txRx(uint32_t dataSize, const T *txData, T *
    }
 }
 
-template<class Info> SpiCallbackFunction SpiIrq_T<Info>::callback = Spi::unhandledCallback;
+template<class Info> SpiCallbackFunction SpiBase_T<Info>::callback = Spi::unhandledCallback;
 
 #ifdef __CMSIS_RTOS
 /** Mutex to protect access - static so per SPI */
 template<class Info>
-CMSIS::Mutex Spi_T<Info>::mutex;
+CMSIS::Mutex SpiBase_T<Info>::mutex;
 #endif
 
 #if defined(USBDM_SPI0_IS_DEFINED)
@@ -863,7 +857,7 @@ CMSIS::Mutex Spi_T<Info>::mutex;
  * @endcode
  *
  */
-using Spi0 = SpiIrq_T<Spi0Info>;
+using Spi0 = SpiBase_T<Spi0Info>;
 #endif
 
 #if defined(USBDM_SPI1_IS_DEFINED)
@@ -880,7 +874,7 @@ using Spi0 = SpiIrq_T<Spi0Info>;
  * @endcode
  *
  */
-using  Spi1 = SpiIrq_T<Spi1Info>;
+using  Spi1 = SpiBase_T<Spi1Info>;
 #endif
 /**
  * @}

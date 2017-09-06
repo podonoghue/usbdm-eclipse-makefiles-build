@@ -19,8 +19,20 @@
 
 namespace USBDM {
 
+/**
+ * Template class providing interface to Oscillator
+ *
+ * @tparam info      Information class for OSC
+ *
+ * @code
+ * using osc = OscBase_T<OscInfo>;
+ *
+ *  osc::configure();
+ *
+ * @endcode
+ */
 template <class Info>
-class Osc {
+class OscBase_T {
 
 protected:
    static constexpr volatile OSC_Type *osc = Info::osc;
@@ -41,11 +53,17 @@ public:
 };
 
 #ifdef USBDM_OSC0_IS_DEFINED
-class Osc0 : public Osc<Osc0Info> {};
+/**
+ * Class providing interface to Oscillator
+ */
+class Osc0 : public OscBase_T<Osc0Info> {};
 #endif
 
 #ifdef USBDM_OSC1_IS_DEFINED
-class Osc1 : public Osc<Osc1Info> {};
+/**
+ * Class providing interface to Oscillator 1
+ */
+class Osc1 : public OscBase_T<Osc1Info> {};
 #endif
 
 } // End namespace USBDM

@@ -243,7 +243,7 @@ public:
  *
  * @code
  *  // Instantiate interface
- *  I2c *i2c0 = new USBDM::I2c_T<I2cInfo>();
+ *  I2c *i2c0 = new USBDM::I2cBase_T<I2cInfo>();
  *
  *  // Transmit data
  *  const uint8_t txDataBuffer[] = {0x11, 0x22, 0x33, 0x44};
@@ -266,7 +266,7 @@ public:
  *
  * @tparam Info            Class describing I2C hardware
  */
-template<class Info> class I2c_T : public I2c {
+template<class Info> class I2cBase_T : public I2c {
 
 public:
    // Handle on I2C hardware
@@ -325,7 +325,7 @@ public:
     * @param[in]  i2cMode    Mode of operation
     * @param[in]  myAddress  Address of this device on bus (not currently used)
     */
-   I2c_T(unsigned bps=400000, I2cMode i2cMode=I2cMode_Polled, uint8_t myAddress=0) : I2c(Info::i2c, i2cMode) {
+   I2cBase_T(unsigned bps=400000, I2cMode i2cMode=I2cMode_Polled, uint8_t myAddress=0) : I2c(Info::i2c, i2cMode) {
 
 #ifdef DEBUG_BUILD
       // Check pin assignments
@@ -341,7 +341,7 @@ public:
    /**
     * Destructor
     */
-   virtual ~I2c_T() {}
+   virtual ~I2cBase_T() {}
 
    /**
     * Set channel Callback function\n
@@ -436,15 +436,15 @@ public:
    }
 };
 
-template<class Info> I2cCallbackFunction I2c_T<Info>::callback = I2c::unhandledCallback;
+template<class Info> I2cCallbackFunction I2cBase_T<Info>::callback = I2c::unhandledCallback;
 
 /** Used by ISR to obtain handle of object */
-template<class Info> I2c *I2c_T<Info>::thisPtr = 0;
+template<class Info> I2c *I2cBase_T<Info>::thisPtr = 0;
 
 #ifdef __CMSIS_RTOS
 /** Mutex to protect access - static so per I2C */
 template<class Info>
-CMSIS::Mutex I2c_T<Info>::mutex;
+CMSIS::Mutex I2cBase_T<Info>::mutex;
 #endif
 
 #if defined(USBDM_I2C0_IS_DEFINED)
@@ -452,9 +452,9 @@ CMSIS::Mutex I2c_T<Info>::mutex;
  * @brief Class representing the I2C0 interface
  *
  * <b>Example</b>\n
- * Refer @ref I2c_T
+ * Refer @ref I2cBase_T
  */
-using I2c0 = I2c_T<I2c0Info>;
+using I2c0 = I2cBase_T<I2c0Info>;
 #endif
 
 #if defined(USBDM_I2C1_IS_DEFINED)
@@ -462,9 +462,9 @@ using I2c0 = I2c_T<I2c0Info>;
  * @brief Class representing the I2C1 interface
  *
  * <b>Example</b>
- * Refer @ref I2c_T
+ * Refer @ref I2cBase_T
  */
-using I2c1 = I2c_T<I2c1Info>;
+using I2c1 = I2cBase_T<I2c1Info>;
 #endif
 
 #if defined(USBDM_I2C2_IS_DEFINED)
@@ -472,9 +472,9 @@ using I2c1 = I2c_T<I2c1Info>;
  * @brief Class representing the I2C2 interface
  *
  * <b>Example</b>
- * Refer @ref I2c_T
+ * Refer @ref I2cBase_T
  */
-using I2c2 = I2c_T<I2c2Info>;
+using I2c2 = I2cBase_T<I2c2Info>;
 #endif
 
 /**

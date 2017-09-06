@@ -211,7 +211,16 @@ struct DmaTcd {
 };
 
 /**
- * Class providing interface to DMA Multiplexor
+ * Template class providing interface to DMA Multiplexor
+ *
+ * @tparam info      Information class for DMAMux
+ *
+ * @code
+ * using dmamux = DmaMux_T<DmaMuxInfo>;
+ *
+ *  dmamux::configure();
+ *
+ * @endcode
  */
 template <class DmaMuxInfo>
 class DmaMux_T {
@@ -254,10 +263,12 @@ public:
 };
 
 /**
+ * Class representing a DMA controller
+ *
  * @tparam DmaInfo Information describing DMA controller
  */
 template<class DmaInfo>
-class Dma_T {
+class DmaBase_T {
 
    using MuxInfo = Dmamux0Info;
 
@@ -526,7 +537,7 @@ public:
 /**
  * Callback table for programmatically set handlers
  */
-template<class DmaInfo> DmaCallbackFunction Dma_T<DmaInfo>::callbacks[] = {
+template<class DmaInfo> DmaCallbackFunction DmaBase_T<DmaInfo>::callbacks[] = {
       noHandlerCallback,
       noHandlerCallback,
       noHandlerCallback,
@@ -542,11 +553,11 @@ using DmaMux1 = DmaMux_T<Dmamux1Info>;
 #endif
 
 #ifdef USBDM_DMA0_IS_DEFINED
-using Dma0 = Dma_T<Dma0Info>;
+using Dma0 = DmaBase_T<Dma0Info>;
 #endif
 
 #ifdef USBDM_DMA1_IS_DEFINED
-using Dma0 = Dma_T<Dma1Info>;
+using Dma0 = DmaBase_T<Dma1Info>;
 #endif
 
 /**

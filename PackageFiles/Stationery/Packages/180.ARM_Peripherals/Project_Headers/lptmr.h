@@ -95,7 +95,7 @@ enum LptmrResetOn {
  * @brief Template class representing a Low Power Timer
  */
 template<class Info>
-class Lptmr_T {
+class LptmrBase_T {
 
 protected:
    /** Minimum resolution required when setting interval */
@@ -396,7 +396,7 @@ public:
    }
 };
 
-template<class Info> LPTMRCallbackFunction Lptmr_T<Info>::callback = 0;
+template<class Info> LPTMRCallbackFunction LptmrBase_T<Info>::callback = 0;
 
 #ifdef LPTMR0
 /**
@@ -420,7 +420,7 @@ template<class Info> LPTMRCallbackFunction Lptmr_T<Info>::callback = 0;
  *
  * @endcode
  */
-using Lptmr0 = Lptmr_T<Lptmr0Info>;
+using Lptmr0 = LptmrBase_T<Lptmr0Info>;
 #endif
 
 /**

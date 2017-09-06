@@ -265,8 +265,9 @@ typedef void (*UARTCallbackFunction)(uint8_t status);
 template<class Info> class Uart_T : public Uart {
 
 protected:
-   /** Callback function for ISR */
+   /** Callback function for RxTx ISR */
    static UARTCallbackFunction rxTxCallback;
+   /** Callback function for Error ISR */
    static UARTCallbackFunction errorCallback;
 
 public:

@@ -85,7 +85,7 @@ int main() {
    Llwu::defaultConfigure();
    Llwu::setCallback(llwuCallback);
 
-   Smc::defaultConfigure();
+   Smc::enablePowerModes(SmcVeryLowPower_Enable, SmcLowLeakageStop_Disable, SmcVeryLowLeakageStop_Disable, SmcHighSpeedRun_Disable);
 
    Led::setOutput();
 

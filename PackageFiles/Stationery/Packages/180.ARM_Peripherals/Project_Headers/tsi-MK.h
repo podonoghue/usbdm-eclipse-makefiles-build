@@ -127,6 +127,50 @@ template <class Info>
 class TsiBase_T {
 
 protected:
+   /** Callback function for ISR */
+   static TSICallbackFunction callback;
+
+public:
+   /**
+    * IRQ handler
+    */
+   static void irqHandler(void) {
+
+      // Capture flags
+      uint32_t status = TsiBase_T<Info>::tsi->GENCS;
+
+      status &= TSI_GENCS_SCNIP_MASK|TSI_GENCS_EOSF_MASK|TSI_GENCS_OUTRGF_MASK|TSI_GENCS_OVRF_MASK|TSI_GENCS_EXTERF_MASK;
+
+      if ((status&(TSI_GENCS_EOSF_MASK|TSI_GENCS_OUTRGF_MASK|TSI_GENCS_OVRF_MASK|TSI_GENCS_EXTERF_MASK)) == 0) {
+         // Ignore spurious interrupts?
+         return;
+      }
+      // Clear flags
+      TsiBase_T<Info>::tsi->GENCS |= status; // w1c found flags
+      if (status == (TSI_GENCS_SCNIP_MASK|TSI_GENCS_EOSF_MASK)) {
+         // Ignore EOSF unless SCNIP is clear to avoid multiple events due to errata e3926
+         // This assumes that there is at least some idle time between sequences - as there should be
+         return;
+      }
+      // Execute call-back
+      callback(status);
+   }
+
+   /**
+    * Set Callback function
+    *
+    *   @param[in]  theCallback - Callback function to be executed on TSI alarm interrupt
+    */
+   static void setCallback(TSICallbackFunction theCallback) {
+      if (theCallback == nullptr) {
+         callback = TsiBase_T<Info>::unhandledInterrupt;
+         return;
+      }
+      callback = theCallback;
+   }
+
+
+protected:
    static constexpr volatile TSI_Type *tsi      = Info::tsi;
    static constexpr volatile uint32_t *clockReg = Info::clockReg;
 
@@ -349,63 +393,13 @@ public:
    }
 };
 
-/**
- * Template class to provide TSI callback
- */
-template<class Info>
-class TsiIrq_T : public TsiBase_T<Info> {
-
-protected:
-   /** Callback function for ISR */
-   static TSICallbackFunction callback;
-
-public:
-   /**
-    * IRQ handler
-    */
-   static void irqHandler(void) {
-
-      // Capture flags
-      uint32_t status = TsiBase_T<Info>::tsi->GENCS;
-
-      status &= TSI_GENCS_SCNIP_MASK|TSI_GENCS_EOSF_MASK|TSI_GENCS_OUTRGF_MASK|TSI_GENCS_OVRF_MASK|TSI_GENCS_EXTERF_MASK;
-
-      if ((status&(TSI_GENCS_EOSF_MASK|TSI_GENCS_OUTRGF_MASK|TSI_GENCS_OVRF_MASK|TSI_GENCS_EXTERF_MASK)) == 0) {
-         // Ignore spurious interrupts?
-         return;
-      }
-      // Clear flags
-      TsiBase_T<Info>::tsi->GENCS |= status; // w1c found flags
-      if (status == (TSI_GENCS_SCNIP_MASK|TSI_GENCS_EOSF_MASK)) {
-         // Ignore EOSF unless SCNIP is clear to avoid multiple events due to errata e3926
-         // This assumes that there is at least some idle time between sequences - as there should be
-         return;
-      }
-      // Execute call-back
-      callback(status);
-   }
-
-   /**
-    * Set Callback function
-    *
-    *   @param[in]  theCallback - Callback function to be executed on TSI alarm interrupt
-    */
-   static void setCallback(TSICallbackFunction theCallback) {
-      if (theCallback == nullptr) {
-         callback = TsiBase_T<Info>::unhandledInterrupt;
-         return;
-      }
-      callback = theCallback;
-   }
-};
-
-template<class Info> TSICallbackFunction TsiIrq_T<Info>::callback = TsiBase_T<Info>::unhandledInterrupt;
+template<class Info> TSICallbackFunction TsiBase_T<Info>::callback = TsiBase_T<Info>::unhandledInterrupt;
 
 #ifdef USBDM_TSI_IS_DEFINED
 /**
  * Class representing TSI
  */
-using Tsi = TsiIrq_T<TsiInfo>;
+using Tsi = TsiBase_T<TsiInfo>;
 
 #endif
 
@@ -413,7 +407,7 @@ using Tsi = TsiIrq_T<TsiInfo>;
 /**
  * Class representing TSI
  */
-using Tsi0 = TsiIrq_T<Tsi0Info>;
+using Tsi0 = TsiBase_T<Tsi0Info>;
 
 #endif
 

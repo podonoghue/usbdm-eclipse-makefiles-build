@@ -206,6 +206,14 @@ protected:
 public:
 
    /**
+    * Basic enable of SMC\n
+    * Includes configuring all pins
+    */
+   static __attribute__((always_inline)) void enable() {
+      // No clock or pins
+   }
+
+   /**
     * Configure with settings from <b>Configure.usbdmProject</b>.
     */
    static void defaultConfigure() {
@@ -278,6 +286,11 @@ public:
       switch(smcRunMode) {
          case SmcRunMode_Normal:
             smc->PMCTRL = (smc->PMCTRL&~SMC_PMCTRL_RUNM_MASK)|smcRunMode;
+            // Wait for power regulator status to change
+            while ((PMC->REGSC & PMC_REGSC_REGONS_MASK) != PMC_REGSC_REGONS(1)) {
+               __asm__("nop");
+            }
+            // Wait for power status to change
             while (getPowerStatus() != SmcStatus_run) {
                __asm__("nop");
             }
@@ -289,6 +302,11 @@ public:
                return setErrorCode(E_ILLEGAL_POWER_TRANSITION);
             }
             smc->PMCTRL = (smc->PMCTRL&~SMC_PMCTRL_RUNM_MASK)|smcRunMode;
+            // Wait for power regulator status to change
+            while ((PMC->REGSC & PMC_REGSC_REGONS_MASK) != PMC_REGSC_REGONS(1)) {
+               __asm__("nop");
+            }
+            // Wait for power status to change
             while (getPowerStatus() != SmcStatus_hsrun) {
                __asm__("nop");
             }
@@ -302,6 +320,11 @@ public:
             }
 #endif
             smc->PMCTRL = (smc->PMCTRL&~SMC_PMCTRL_RUNM_MASK)|smcRunMode;
+            // Wait for power regulator status to change
+            while ((PMC->REGSC & PMC_REGSC_REGONS_MASK) != PMC_REGSC_REGONS(0)) {
+               __asm__("nop");
+            }
+            // Wait for power status to change
             while (getPowerStatus() != SmcStatus_vlpr) {
                __asm__("nop");
             }
@@ -428,7 +451,7 @@ public:
    /**
     * Set action on interrupt when in VLP modes (VLPR, VLPW or VLPS).
     *
-    * @note Not supported
+    * @note Not supported on this target
     */
    static void setExitVeryLowPowerOnInterrupt(SmcExitVeryLowPowerOnInt) {
    }

@@ -129,8 +129,72 @@ enum PdbPretrigger1 {
    PdbPretrigger1_Delay   = PDB_C1_EN(1<<1)|PDB_C1_TOS(1<<1),  //!< Pretrigger 1 asserts 1 clock + delay after trigger
 };
 
+/**
+ * Template class providing interface to Programmable Delay Block
+ *
+ * @tparam info      Information class for PDB
+ *
+ * @code
+ * using pdb = PdbBase_T<PdbInfo>;
+ *
+ *  pdb::configure();
+ *
+ * @endcode
+ */
 template <class Info>
 class PdbBase_T {
+
+protected:
+   /** Callback function for ISR */
+   static PDBCallbackFunction callback;
+   /** Callback function for error ISR */
+   static PDBCallbackFunction errorCallback;
+   /** Handler for unexpected interrupts */
+   static void illegalInterruptHandler() {
+      setAndCheckErrorCode(E_NO_HANDLER);
+   }
+public:
+   /**
+    * IRQ handler
+    */
+   static void irqHandler(void) {
+
+      if (PdbBase_T<Info>::pdb->SC & PDB_SC_PDBIF_MASK) {
+         // Clear interrupt flag
+         PdbBase_T<Info>::pdb->SC  &= ~PDB_SC_PDBIF_MASK;
+         // Handle expected interrupt
+         callback();
+         return;
+      }
+      // Assume sequence error
+      errorCallback();
+   }
+
+   /**
+    * Set Callback function
+    *
+    *   @param[in]  theCallback - Callback function to be executed on PDB interrupt
+    */
+   static void setCallback(PDBCallbackFunction theCallback) {
+      if (theCallback == nullptr) {
+         callback = illegalInterruptHandler;
+         return;
+      }
+      callback = theCallback;
+   }
+   /**
+    * Set Callback function
+    *
+    *   @param[in]  theCallback - Callback function to be executed on PDB interrupt
+    */
+   static void setErrorCallback(PDBCallbackFunction theCallback) {
+      if (theCallback == nullptr) {
+         errorCallback = illegalInterruptHandler;
+         return;
+      }
+      errorCallback = theCallback;
+   }
+
 
 protected:
    static constexpr volatile PDB_Type *pdb      = Info::pdb;
@@ -534,72 +598,14 @@ public:
    }
 };
 
-/**
- * Template class to provide PDB callback
- */
-template<class Info>
-class PdbIrq_T : public PdbBase_T<Info> {
-
-protected:
-   /** Callback function for ISR */
-   static PDBCallbackFunction callback;
-   /** Callback function for error ISR */
-   static PDBCallbackFunction errorCallback;
-   /** Handler for unexpected interrupts */
-   static void illegalInterruptHandler() {
-      setAndCheckErrorCode(E_NO_HANDLER);
-   }
-public:
-   /**
-    * IRQ handler
-    */
-   static void irqHandler(void) {
-
-      if (PdbBase_T<Info>::pdb->SC & PDB_SC_PDBIF_MASK) {
-         // Clear interrupt flag
-         PdbBase_T<Info>::pdb->SC  &= ~PDB_SC_PDBIF_MASK;
-         // Handle expected interrupt
-         callback();
-         return;
-      }
-      // Assume sequence error
-      errorCallback();
-   }
-
-   /**
-    * Set Callback function
-    *
-    *   @param[in]  theCallback - Callback function to be executed on PDB interrupt
-    */
-   static void setCallback(PDBCallbackFunction theCallback) {
-      if (theCallback == nullptr) {
-         callback = illegalInterruptHandler;
-         return;
-      }
-      callback = theCallback;
-   }
-   /**
-    * Set Callback function
-    *
-    *   @param[in]  theCallback - Callback function to be executed on PDB interrupt
-    */
-   static void setErrorCallback(PDBCallbackFunction theCallback) {
-      if (theCallback == nullptr) {
-         errorCallback = illegalInterruptHandler;
-         return;
-      }
-      errorCallback = theCallback;
-   }
-};
-
-template<class Info> PDBCallbackFunction PdbIrq_T<Info>::callback = PdbIrq_T<Info>::illegalInterruptHandler;
-template<class Info> PDBCallbackFunction PdbIrq_T<Info>::errorCallback = PdbIrq_T<Info>::illegalInterruptHandler;
+template<class Info> PDBCallbackFunction PdbBase_T<Info>::callback = PdbBase_T<Info>::illegalInterruptHandler;
+template<class Info> PDBCallbackFunction PdbBase_T<Info>::errorCallback = PdbBase_T<Info>::illegalInterruptHandler;
 
 #ifdef USBDM_PDB_IS_DEFINED
 /**
  * Class representing PDB
  */
-using Pdb = PdbIrq_T<PdbInfo>;
+using Pdb = PdbBase_T<PdbInfo>;
 
 #endif
 
@@ -607,12 +613,12 @@ using Pdb = PdbIrq_T<PdbInfo>;
 /**
  * Class representing PDB
  */
-using Pdb0 = PdbIrq_T<Pdb0Info>;
+using Pdb0 = PdbBase_T<Pdb0Info>;
 
 #endif
 
 /**
- * End LPTMR_Group
+ * End PDB_Group
  * @}
  */
 } // End namespace USBDM
