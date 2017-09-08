@@ -687,7 +687,6 @@ public:
       return tickInterval/Info::getClockFrequencyF();
    }
 
-
    /**
     * Get Timer count
     *
@@ -697,6 +696,32 @@ public:
       return tmr->CNT;
    }
    
+   /**
+    * Get Timer event flags
+    *
+    * @return Flags indicating if an event has occurred on a channel
+    *         There is one bit for each channel
+    */
+   static __attribute__((always_inline)) unsigned getInterruptFlags() {
+      return tmr->STATUS;
+   }
+
+   /**
+    * Get and Clear Timer event flags
+    *
+    * @return Flags indicating if an event has occurred on a channel
+    *         There is one bit for each channel
+    *
+    * @note Only flags captured in the return value are cleared
+    */
+   static __attribute__((always_inline)) unsigned getAndClearInterruptFlags() {
+      // Note requires read and write zero to clear flags
+      // so only flags captured in status are cleared
+      unsigned status = tmr->STATUS;
+      tmr->STATUS = ~status;
+      return status;
+   }
+
    /**
     *  Enables fault detection input
     *
@@ -949,6 +974,11 @@ template<class Info> FtmCallbackFunction           FtmBase_T<Info>::faultCallbac
 template <class Info, int channel>
 class FtmChannel_T : public FtmBase_T<Info>, protected PcrTable_T<Info, channel>, CheckSignal<Info, channel> {
 
+private:
+   // Hide these FTM methods
+   static unsigned getAndClearInterruptFlags() {return 0;};
+   static unsigned getInterruptFlags()         {return 0;};
+
 protected:
    // Allow more convenient access to template super-classes
    using PcrBase = PcrBase_T<Info::info[channel].pcrAddress>;
@@ -961,7 +991,7 @@ public:
    // Allow access to timer hardware instance
    using FtmBase_T<Info>::tmr;
 
-   // Make these PCR functions available
+   // Make these PCR methods available
    using Pcr::setDriveMode;
    using Pcr::setDriveStrength;
    using Pcr::setFilter;
@@ -1008,7 +1038,7 @@ public:
          // Enable parent FTM if needed
          Ftm::defaultConfigure();
       }
-      Ftm::tmr->CONTROLS[channel].CnSC = ftmChMode|ftmChannelIrq|ftmChannelDma;
+      tmr->CONTROLS[channel].CnSC = ftmChMode|ftmChannelIrq|ftmChannelDma;
    }
 
    /**
@@ -1032,7 +1062,7 @@ public:
       assert(Ftm::isEnabled());
 #endif
 
-      Ftm::tmr->CONTROLS[channel].CnSC = ftmChMode|ftmChannelIrq|ftmChannelDma;
+      tmr->CONTROLS[channel].CnSC = ftmChMode|ftmChannelIrq|ftmChannelDma;
    }
 
    /**
@@ -1050,8 +1080,8 @@ public:
       assert(Ftm::isEnabled());
 #endif
 
-      Ftm::tmr->CONTROLS[channel].CnSC =
-            (Ftm::tmr->CONTROLS[channel].CnSC & ~(FTM_CnSC_MS_MASK|FTM_CnSC_ELS_MASK))|ftmChMode;
+      tmr->CONTROLS[channel].CnSC =
+            (tmr->CONTROLS[channel].CnSC & ~(FTM_CnSC_MS_MASK|FTM_CnSC_ELS_MASK))|ftmChMode;
    }
 
    /**
@@ -1065,10 +1095,10 @@ public:
     */
    static __attribute__((always_inline)) void enableInterrupts(bool enable=true) {
       if (enable) {
-         Ftm::tmr->CONTROLS[channel].CnSC |= FTM_CnSC_CHIE_MASK;
+         tmr->CONTROLS[channel].CnSC |= FTM_CnSC_CHIE_MASK;
       }
       else {
-         Ftm::tmr->CONTROLS[channel].CnSC &= ~FTM_CnSC_CHIE_MASK;
+         tmr->CONTROLS[channel].CnSC &= ~FTM_CnSC_CHIE_MASK;
       }
    }
 
@@ -1082,10 +1112,10 @@ public:
     */
    static __attribute__((always_inline)) void enableDma(bool enable=true) {
       if (enable) {
-         Ftm::tmr->CONTROLS[channel].CnSC |= FTM_CnSC_DMA_MASK;
+         tmr->CONTROLS[channel].CnSC |= FTM_CnSC_DMA_MASK;
       }
       else {
-         Ftm::tmr->CONTROLS[channel].CnSC &= ~FTM_CnSC_DMA_MASK;
+         tmr->CONTROLS[channel].CnSC &= ~FTM_CnSC_DMA_MASK;
       }
    }
 
@@ -1138,6 +1168,46 @@ public:
          ) {
       Pcr::setPCR(pinPull,pinDriveStrength,pinDriveMode,pinIrq,pinFilter,pinSlewRate,pinMux);
    }
+
+   /**
+    * @brief
+    * Enable pin as digital output with initial inactive level and configures Pin Control Register (PCR) values
+    *
+    * @note Resets the Pin Control Register value (PCR value).
+    * @note Resets the pin value to the inactive state
+    * @note Use setOut() for a lightweight change of direction without affecting other pin settings.
+    *
+    * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
+    * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain (defaults to PinPushPull)
+    * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Fast)
+    */
+   static void setOutput(
+         PinDriveStrength  pinDriveStrength,
+         PinDriveMode      pinDriveMode      = PinDriveMode_PushPull,
+         PinSlewRate       pinSlewRate       = PinSlewRate_Fast
+         ) {
+      setPCR(pinDriveStrength|pinDriveMode|pinSlewRate);
+   }
+
+   /**
+    * @brief
+    * Enable pin as digital input and configures Pin Control Register (PCR) value
+    *
+    * @note Reset the Pin Control Register value (PCR value).
+    * @note Use setIn() for a lightweight change of direction without affecting other pin settings.
+    *
+    * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
+    * @param[in] pinIrq           One of PinIrq_None, etc (defaults to PinIrq_None)
+    * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
+    */
+   static void setInput(
+         PinPull           pinPull,
+         PinIrq            pinIrq            = PinIrq_None,
+         PinFilter         pinFilter         = PinFilter_None
+         ) {
+      setPCR(pinPull|pinIrq|pinFilter|PinMux_Gpio);
+   }
+
    /**
     * Set PWM high time in ticks\n
     * Assumes value is less than period
@@ -1230,11 +1300,39 @@ public:
    }
 
    /**
+    * Get Timer interrupt flag
+    *
+    * @return true  Indicates an event has occurred on a channel
+    * @return false Indicates no event has occurred on a channel since last polled
+    */
+   static __attribute__((always_inline)) bool getInterruptFlag() {
+      return (tmr->STATUS&CHANNEL_MASK) != 0;
+   }
+
+   /**
+    * Get and Clear Timer interrupt flag
+    *
+    * @return true  Indicates an event has occurred on a channel
+    * @return false Indicates no event has occurred on a channel since last polled
+    *
+    * @note Only flags captured in the return value are cleared
+    */
+   static __attribute__((always_inline)) bool getAndClearInterruptFlag() {
+      // Note - requires read and write zero to clear flags
+      // so only flags captured in status are cleared
+      bool status = (tmr->STATUS&CHANNEL_MASK) != 0;
+      tmr->STATUS = ~CHANNEL_MASK;
+      return status;
+   }
+
+   /**
     * Clear interrupt flag on channel
     */
    static __attribute__((always_inline)) void clearInterruptFlag(void) {
-      Ftm::tmr->CONTROLS[channel].CnSC &= ~FTM_CnSC_CHF_MASK;
+      // Note - requires read and write zero to clear flag
+      tmr->CONTROLS[channel].CnSC &= ~FTM_CnSC_CHF_MASK;
    }
+
 };
 
 #ifdef USBDM_FTM0_IS_DEFINED
