@@ -42,6 +42,7 @@ Console console;
 extern "C"
 void console_initialise() {
    console.setBaudRate(defaultBaudRate);
+   console.setEcho(EchoMode_On);
 }
 
 /*

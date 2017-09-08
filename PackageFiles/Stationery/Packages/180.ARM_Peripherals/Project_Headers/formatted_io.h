@@ -56,6 +56,14 @@ enum EndOfLineType {
    EndOfLine
 };
 
+enum EchoMode {
+   /*
+    * For use with operator<< and operator>>
+    */
+   EchoMode_Off = false, //!< Turn echo off
+   EchoMode_On  = true,  //!< Turn echo on
+};
+
 enum FlushType {
    /**
     * With operator<< Discard queued input \n
@@ -79,6 +87,11 @@ protected:
     * Indicate in error state
     */
    bool inErrorState = false;
+
+   /**
+    * Control echo of input characters
+    */
+   EchoMode echo = EchoMode_Off;
 
    /**
     * One character look-ahead
@@ -162,6 +175,9 @@ public:
       lookAhead = _readChar();
       if (lookAhead == (uint8_t)'\r') {
          lookAhead = '\n';
+      }
+      if (echo) {
+         _writeCh(lookAhead);
       }
       return lookAhead;
    }
@@ -744,6 +760,24 @@ public:
    }
 
    /**
+    * Enable/Disable echoing of input characters
+    *
+    * @return Reference to self
+    */
+   FormattedIO INLINE_RELEASE &operator <<(EchoMode echoMode) {
+      return setEcho(echoMode);
+   }
+
+   /**
+    * Enable/Disable echoing of input characters
+    *
+    * @return Reference to self
+    */
+   FormattedIO INLINE_RELEASE &operator >>(EchoMode echoMode) {
+      return setEcho(echoMode);
+   }
+
+   /**
     * Flush output data
     *
     * @return Reference to self
@@ -852,6 +886,17 @@ public:
       return *this;
    }
 
+   /**
+    * Controls echoing of input characters
+    *
+    * @param echoOn
+    *
+    * @return Reference to self
+    */
+   FormattedIO &setEcho(EchoMode echoMode=EchoMode_On) {
+      echo = echoMode;
+      return *this;
+   }
    /**
     * Receives an unsigned long and then discards characters until end of line.
     *
