@@ -78,6 +78,7 @@ enum FtmMode {
  * Controls basic operation of PWM/Input capture
  */
 enum FtmChMode {
+   FtmChMode_Disabled                              = FTM_CnSC_MS(0)|FTM_CnSC_ELS(0), //!< Channel disabled
    FtmChMode_InputCaptureRisingEdge                = FTM_CnSC_MS(0)|FTM_CnSC_ELS(1), //!< Capture rising edge
    FtmChMode_InputCaptureFallingEdge               = FTM_CnSC_MS(0)|FTM_CnSC_ELS(2), //!< Capture falling edge
    FtmChMode_InputCaptureEitherEdge                = FTM_CnSC_MS(0)|FTM_CnSC_ELS(3), //!< Capture both rising and falling edges
