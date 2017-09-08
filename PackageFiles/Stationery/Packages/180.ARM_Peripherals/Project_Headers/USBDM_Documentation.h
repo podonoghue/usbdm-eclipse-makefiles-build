@@ -26,7 +26,7 @@ Table of Contents
 
 Convenience template for SPI. Uses the following classes:\n
 <ul>
-<li>USBDM::I2c_T < Info >
+<li>USBDM::I2cBase_T < Info >
 <li>USBDM::I2c
 <ul>
 <li>USBDM::I2c0
@@ -41,7 +41,7 @@ Convenience template for SPI. Uses the following classes:\n
 
 Convenience template for SPI. Uses the following classes:\n
 <ul>
-<li>USBDM::Spi_T < Info >
+<li>USBDM::SpiBase_T < Info >
 <li>USBDM::Spi
 <ul>
 <li>USBDM::Spi0
@@ -108,7 +108,7 @@ Convenience template for DMAC. Uses the following classes:\n
 <ul>
 <li>USBDM::DmaTcd \n
 <li>USBDM::DmaMux_T < DmaMuxInfo > \n
-<li>USBDM::Dma_T < DmaInfo > \n
+<li>USBDM::DmaBase_T < DmaInfo > \n
 </ul>
 
 This template is an interface for the Direct Memory Access Controller hardware. \n
@@ -132,7 +132,7 @@ This is a template class with static methods.\n
 
 Convenience template for LPTMR. Uses the following classes:\n
 <ul>
-<li>USBDM::Lptmr_T < Info > \n
+<li>USBDM::LptmrBase_T < Info > \n
 </ul>
 
 This template is an interface for the Low Power Timer hardware. \n
@@ -159,13 +159,13 @@ Convenience template for GPIO pins. Uses the following classes:\n
 <li>USBDM::GpioD <bitNum, polarity>
 <li>USBDM::GpioE <bitNum, polarity>
 </ul>
-<li>USBDM::Field_T <Info, left, right>\n
+<li>USBDM::Field_T <Info, left, right, polarity>\n
 <ul>
-<li>USBDM::GpioAField <left, right>
-<li>USBDM::GpioBField <left, right>
-<li>USBDM::GpioCField <left, right>
-<li>USBDM::GpioDField <left, right>
-<li>USBDM::GpioEField <left, right>
+<li>USBDM::GpioAField <left, right, polarity>
+<li>USBDM::GpioBField <left, right, polarity>
+<li>USBDM::GpioCField <left, right, polarity>
+<li>USBDM::GpioDField <left, right, polarity>
+<li>USBDM::GpioEField <left, right, polarity>
 </ul>
 </ul>
 
@@ -454,7 +454,7 @@ This is a template class with static methods.\n
 
 @page PITExamples Programmable Interrupt Timer Module
 
-Convenience template for PIT hardware. Based on USBDM::Pit_T.\n
+Convenience template for PIT hardware. Based on USBDM::PitBase_T.\n
 
 It provides:\n
 - Static pin mapping in conjunction with the configuration settings.
