@@ -681,7 +681,7 @@ void processPcrs(uint32_t pcrValue) {
  * Code examples:
  * @code
  * // Create PCR type
- * Pcr_T<spiInfo, 3> SpiMOSI;
+ * PcrTable_T<spiInfo, 3> SpiMOSI;
  *
  * // Configure PCR
  * SpiMOSI::setPCR(PinPull_Up,PinDriveStrength_High,PinDriveMode_PushPull,PinIrq_None,PinFilter_None,PinSlewRate_Fast,PinMux_3);

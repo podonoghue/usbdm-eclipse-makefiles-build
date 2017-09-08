@@ -74,7 +74,7 @@ namespace USBDM {
  * @tparam pcrAddress      Address of PORT (PCR register array) associated with GPIO
  * @tparam gpioAddress     GPIO hardware address
  * @tparam bitNum          Bit number within PORT/GPIO
- * @tparam polarity        Either USBDM::ActiveHigh or USBDM::ActiveLow
+ * @tparam polarity        Polarity of pin. Either ActiveHigh or ActiveLow
  */
 template<uint32_t clockMask, uint32_t pcrAddress, uint32_t gpioAddress, int bitNum, Polarity polarity>
 class GpioBase_T {
@@ -225,7 +225,7 @@ public:
    /**
     * Set pin. Pin will be high if configured as an output.
     *
-    * @note Polarity is not significant
+    * @note Polarity _is_ _not_ significant
     */
    static void high() {
       gpio->PSOR = MASK;
@@ -233,7 +233,7 @@ public:
    /**
     * Clear pin. Pin will be low if configured as an output.
     *
-    * @note Polarity is not significant
+    * @note Polarity _is_ _not_ significant
     */
    static void low() {
       gpio->PCOR = MASK;
@@ -241,7 +241,7 @@ public:
    /**
     * Set pin. Pin will be high if configured as an output.
     *
-    * @note Polarity is not significant
+    * @note Polarity _is_ _not_ significant
     */
    static void set() {
 	   gpio->PSOR = MASK;
@@ -249,7 +249,7 @@ public:
    /**
     * Clear pin. Pin will be low if configured as an output.
     *
-    * @note Polarity is not significant
+    * @note Polarity _is_ _not_ significant
     */
    static void clear() {
 	   gpio->PCOR = MASK;
@@ -263,7 +263,7 @@ public:
    /**
     * Set pin to active level (if configured as output)
     *
-    * @note Polarity is significant
+    * @note Polarity _is_ significant
     */
    static void setActive() {
       if (polarity) {
@@ -276,7 +276,7 @@ public:
    /**
     * Set pin to inactive level (if configured as output)
     *
-    * @note Polarity is significant
+    * @note Polarity _is_ significant
     */
    static void setInactive() {
       if (polarity) {
@@ -289,7 +289,7 @@ public:
    /**
     * Set pin to active level (if configured as output)
     *
-    * @note Polarity is significant
+    * @note Polarity _is_ significant
     */
    static void on() {
       setActive();
@@ -297,7 +297,7 @@ public:
    /**
     * Set pin to inactive level (if configured as output)
     *
-    * @note Polarity is significant
+    * @note Polarity _is_ significant
     */
    static void off() {
       setInactive();
@@ -307,7 +307,7 @@ public:
     *
     * @param[in] value true/false value
     *
-    * @note Polarity is significant
+    * @note Polarity _is_ significant
     */
    static void write(bool value) {
 #ifdef RELEASE_BUILD
@@ -332,7 +332,7 @@ public:
     * @return true/false reflecting value on pin
     *
     * @note This reads the PDIR
-    * @note Polarity is NOT significant
+    * @note Polarity _is_ _not_ significant
     */
    static bool isHigh() {
       return (gpio->PDIR & MASK) != 0;
@@ -343,7 +343,7 @@ public:
     * @return true/false reflecting value on pin
     *
     * @note This reads the PDIR
-    * @note Polarity is NOT significant
+    * @note Polarity _is_ _not_ significant
     */
    static bool isLow() {
       return (gpio->PDIR & MASK) == 0;
@@ -354,7 +354,7 @@ public:
     * @return true/false reflecting pin value.
     *
     * @note This reads the PDIR
-    * @note Polarity is significant
+    * @note Polarity _is_ significant
     */
    static bool read() {
       if (polarity) {
@@ -370,7 +370,7 @@ public:
     * @return true/false reflecting if pin is active.
     *
     * @note This reads the PDIR
-    * @note Polarity is significant
+    * @note Polarity _is_ significant
     */
    static bool isActive() {
       if (polarity) {
@@ -386,7 +386,7 @@ public:
     * @return true/false reflecting if pin is inactive.
     *
     * @note This reads the PDIR
-    * @note Polarity is significant
+    * @note Polarity _is_ significant
     */
    static bool isInactive() {
       if (polarity) {
@@ -403,7 +403,7 @@ public:
     * @return true/false reflecting if pin is active.
     *
     * @note This reads the PDIR
-    * @note Polarity is significant
+    * @note Polarity _is_ significant
     */
    static bool isPressed() {
       if (polarity) {
@@ -421,7 +421,7 @@ public:
     * @return true/false reflecting if pin is inactive.
     *
     * @note This reads the PDIR
-    * @note Polarity is significant
+    * @note Polarity _is_ significant
     */
    static bool isReleased() {
       if (polarity) {
@@ -437,7 +437,7 @@ public:
     * @return true/false reflecting value in output register.
     *
     * @note This reads the PDOR
-    * @note Polarity is significant
+    * @note Polarity _is_ significant
     */
    static bool readState() {
       uint32_t t = gpio->PDOR & MASK;
@@ -545,7 +545,7 @@ public:
  *
  * @tparam Info          Gpio information class
  * @tparam bitNum        Bit number within PORT/GPIO
- * @tparam polarity      Either USBDM::ActiveHigh or USBDM::ActiveLow
+ * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
 template<class Info, const int bitNum, Polarity polarity>
 class  Gpio_T : public GpioBase_T<Info::clockMask, Info::pcrAddress, Info::gpioAddress, bitNum, polarity> {
@@ -561,7 +561,7 @@ public:
  *
  * @tparam Info          Peripheral information class
  * @tparam index         Index of signal within the info table
- * @tparam polarity      Either USBDM::ActiveHigh or USBDM::ActiveLow
+ * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
 template<class Info, const uint32_t index, Polarity polarity>
 using  GpioTable_T = GpioBase_T<Info::info[index].clockMask, Info::info[index].pcrAddress, Info::info[index].gpioAddress, Info::info[index].gpioBit, polarity>;
@@ -599,9 +599,9 @@ using  GpioTable_T = GpioBase_T<Info::info[index].clockMask, Info::info[index].p
  * @tparam Info           Class describing the GPIO and PORT
  * @tparam left           Bit number of leftmost bit in GPIO (inclusive)
  * @tparam right          Bit number of rightmost bit in GPIO (inclusive)
- * @tparam defPcrValue    Default value for PCR including multiplexor value
+ * @tparam polarity       Polarity of all pins. Either ActiveHigh or ActiveLow
  */
-template<class Info, const uint32_t left, const uint32_t right>
+template<class Info, const uint32_t left, const uint32_t right, Polarity polarity=ActiveHigh>
 class Field_T {
 
    static_assert(((left<=31)&&(left>=right)&&(right>=0)), "Illegal bit number for left or right in GpioField");
@@ -742,6 +742,8 @@ public:
     * Set bits in field
     *
     * @param[in] mask Mask to apply to the field (1 => set bit, 0 => unchanged)
+    *
+    * @note Polarity _is_ _not_ significant
     */
    static void bitSet(const uint32_t mask) {
       gpio->PSOR = (mask<<right)&MASK;
@@ -750,6 +752,8 @@ public:
     * Clear bits in field
     *
     * @param[in] mask Mask to apply to the field (1 => clear bit, 0 => unchanged)
+    *
+    * @note Polarity _is_ _not_ significant
     */
    static void bitClear(const uint32_t mask) {
       gpio->PCOR = (mask<<right)&MASK;
@@ -766,16 +770,30 @@ public:
     * Read field
     *
     * @return value from field
+    *
+    * @note Polarity _is_ significant
     */
    static uint32_t read() {
-      return ((gpio->PDIR) & MASK)>>right;
+      uint32_t t;
+      if (polarity) {
+         t = gpio->PDIR;
+      }
+      else {
+         t = ~gpio->PDIR;
+      }
+      return (t & MASK)>>right;
    }
    /**
     * Write field
     *
     * @param[in] value to insert as field
+    *
+    * @note Polarity _is_ significant
     */
    static void write(uint32_t value) {
+      if (!polarity) {
+         value = ~value;
+      }
       gpio->PDOR = ((gpio->PDOR) & ~MASK) | ((value<<right)&MASK);
    }
 };
@@ -817,7 +835,7 @@ public:
  * @endcode
  *
  * @tparam bitNum        Bit number in the port
- * @tparam polarity      Either USBDM::ActiveHigh or USBDM::ActiveLow
+ * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
 template<int bitNum, Polarity polarity=ActiveHigh> class GpioA : public Gpio_T<GpioAInfo, bitNum, polarity> {};
 using PortA = PcrBase_T<GpioAInfo::pcrAddress>;
@@ -856,8 +874,10 @@ using PortA = PcrBase_T<GpioAInfo::pcrAddress>;
  *
  * @tparam left          Bit number of leftmost bit in port (inclusive)
  * @tparam right         Bit number of rightmost bit in port (inclusive)
+ * @tparam polarity      Polarity of all pins. Either ActiveHigh or ActiveLow
  */
-template<int left, int right> class GpioAField : public Field_T<GpioAInfo, left, right> {};
+template<int left, int right, Polarity polarity=ActiveHigh>
+class GpioAField : public Field_T<GpioAInfo, left, right, polarity> {};
 #endif
 
 #ifdef USBDM_GPIOB_IS_DEFINED
@@ -897,7 +917,7 @@ template<int left, int right> class GpioAField : public Field_T<GpioAInfo, left,
  * @endcode
  *
  * @tparam bitNum        Bit number in the port
- * @tparam polarity      Either USBDM::ActiveHigh or USBDM::ActiveLow
+ * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
 template<int bitNum, Polarity polarity=ActiveHigh> class GpioB : public Gpio_T<GpioBInfo, bitNum, polarity> {};
 using PortB = PcrBase_T<GpioBInfo::pcrAddress>;
@@ -936,8 +956,10 @@ using PortB = PcrBase_T<GpioBInfo::pcrAddress>;
  *
  * @tparam left          Bit number of leftmost bit in port (inclusive)
  * @tparam right         Bit number of rightmost bit in port (inclusive)
+ * @tparam polarity      Polarity of all pins. Either ActiveHigh or ActiveLow
  */
-template<int left, int right> class GpioBField : public Field_T<GpioBInfo, left, right> {};
+template<int left, int right, Polarity polarity=ActiveHigh>
+class GpioBField : public Field_T<GpioBInfo, left, right, polarity> {};
 #endif
 
 #ifdef USBDM_GPIOC_IS_DEFINED
@@ -977,7 +999,7 @@ template<int left, int right> class GpioBField : public Field_T<GpioBInfo, left,
  * @endcode
  *
  * @tparam bitNum        Bit number in the port
- * @tparam polarity      Either USBDM::ActiveHigh or USBDM::ActiveLow
+ * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
 template<int bitNum, Polarity polarity=ActiveHigh> class GpioC : public Gpio_T<GpioCInfo, bitNum, polarity> {};
 using PortC = PcrBase_T<GpioCInfo::pcrAddress>;
@@ -1016,8 +1038,10 @@ using PortC = PcrBase_T<GpioCInfo::pcrAddress>;
  *
  * @tparam left          Bit number of leftmost bit in port (inclusive)
  * @tparam right         Bit number of rightmost bit in port (inclusive)
+ * @tparam polarity      Polarity of all pins. Either ActiveHigh or ActiveLow
  */
-template<int left, int right> class GpioCField : public Field_T<GpioCInfo, left, right> {};
+template<int left, int right, Polarity polarity=ActiveHigh>
+class GpioCField : public Field_T<GpioCInfo, left, right, polarity> {};
 #endif
 
 #ifdef USBDM_GPIOD_IS_DEFINED
@@ -1057,7 +1081,7 @@ template<int left, int right> class GpioCField : public Field_T<GpioCInfo, left,
  * @endcode
  *
  * @tparam bitNum        Bit number in the port
- * @tparam polarity      Either USBDM::ActiveHigh or USBDM::ActiveLow
+ * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
 template<int bitNum, Polarity polarity=ActiveHigh> class GpioD : public Gpio_T<GpioDInfo, bitNum, polarity> {};
 using PortD = PcrBase_T<GpioDInfo::pcrAddress>;
@@ -1096,8 +1120,10 @@ using PortD = PcrBase_T<GpioDInfo::pcrAddress>;
  *
  * @tparam left          Bit number of leftmost bit in port (inclusive)
  * @tparam right         Bit number of rightmost bit in port (inclusive)
+ * @tparam polarity      Polarity of all pins. Either ActiveHigh or ActiveLow
  */
-template<int left, int right> class GpioDField : public Field_T<GpioDInfo, left, right> {};
+template<int left, int right, Polarity polarity=ActiveHigh>
+class GpioDField : public Field_T<GpioDInfo, left, right, polarity> {};
 #endif
 
 #ifdef USBDM_GPIOE_IS_DEFINED
@@ -1137,7 +1163,7 @@ template<int left, int right> class GpioDField : public Field_T<GpioDInfo, left,
  * @endcode
  *
  * @tparam bitNum        Bit number in the port
- * @tparam polarity      Either USBDM::ActiveHigh or USBDM::ActiveLow
+ * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
 template<int bitNum, Polarity polarity=ActiveHigh> class GpioE : public Gpio_T<GpioEInfo, bitNum, polarity> {};
 using PortE = PcrBase_T<GpioEInfo::pcrAddress>;
@@ -1176,8 +1202,10 @@ using PortE = PcrBase_T<GpioEInfo::pcrAddress>;
  *
  * @tparam left          Bit number of leftmost bit in port (inclusive)
  * @tparam right         Bit number of rightmost bit in port (inclusive)
+ * @tparam polarity      Polarity of all pins. Either ActiveHigh or ActiveLow
  */
-template<int left, int right> class GpioEField : public Field_T<GpioEInfo, left, right> {};
+template<int left, int right, Polarity polarity=ActiveHigh>
+class GpioEField : public Field_T<GpioEInfo, left, right, polarity> {};
 #endif
 
 /**
