@@ -51,13 +51,16 @@ int main() {
    uint8_t id = accelerometer.readID();
    printf("Device ID = 0x%02X (should be 0x1A)\n", id);
 
+   // Check if any USBDM error yet (constructors)
+   checkError();
+
    report(accelerometer);
 
    printf("Doing simple calibration\n"
           "Make sure the device is level!\n");
    waitMS(2000);
 
-   if (!accelerometer.calibrateAccelerometer()) {
+   if (accelerometer.calibrateAccelerometer() != E_NO_ERROR) {
       printf("Calibration failed!\n");
       __asm__("bkpt");
    }

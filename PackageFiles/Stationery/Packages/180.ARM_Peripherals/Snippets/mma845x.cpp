@@ -126,12 +126,11 @@ enum {
  */
 MMA845x::MMA845x(USBDM::I2c &i2c, AccelerometerMode mode, uint8_t cr1) : i2c(i2c) {
    if (readReg(WHO_AM_I) != WHO_AM_I_VALUE) {
-      failedInit = true;
+      setErrorCode(E_NO_COMMUNICATION);
       return;
    }
    reset();
    configure(mode, cr1);
-   failedInit = false;
 }
 
 /**
@@ -235,10 +234,10 @@ uint32_t MMA845x::readID(void) {
  * This assumes the accelerometer is level and stationary.
  * If the accelerometer is too far from level then no correction is applied and error returned
  *
- * @return true  Success
- * @return false Calibration failed
+ * @return E_NO_ERROR       Success
+ * @return E_CALIBRATE_FAIL Calibration failed
  */
-bool MMA845x::calibrateAccelerometer() {
+ErrorCode MMA845x::calibrateAccelerometer() {
 
    uint8_t originalControlReg1Value   = readReg(CTRL_REG1);
    uint8_t originalXYXDataConfigValue = readReg(XYZ_DATA_CFG);
@@ -283,7 +282,7 @@ bool MMA845x::calibrateAccelerometer() {
    bool rangeError = (Xout_Accel<-128) || (Xout_Accel>127) || (Yout_Accel<-128) || (Yout_Accel>127) || (Zout_Accel<-128) || (Zout_Accel>127);
 
    if (rangeError) {
-      return false;
+      return setErrorCode(E_CALIBRATE_FAIL);
    }
 
    // Make inactive so setting can be modified
@@ -295,5 +294,5 @@ bool MMA845x::calibrateAccelerometer() {
 
    // Restore original settings
    writeReg(CTRL_REG1, originalControlReg1Value);
-   return true;
+   return E_NO_ERROR;
 }

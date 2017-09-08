@@ -126,7 +126,6 @@ private:
     * Reset Accelerometer
     */
    void    reset(void);
-   bool    failedInit;
 
 public:
 
@@ -177,7 +176,7 @@ public:
     * @return true  Success
     * @return false Calibration failed
     */
-   bool calibrateAccelerometer();
+   ErrorCode calibrateAccelerometer();
 };
 
 /**
