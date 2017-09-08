@@ -60,9 +60,10 @@ enum ErrorCode {
    E_ILLEGAL_PARAM,               //!< Parameter has illegal value
    E_NO_HANDLER,                  //!< No handler installed
    E_FLASH_INIT_FAILED,           //!< Flash initialisation failed
-   E_TERMINATED,                  //!< The program has terminated
    E_CALIBRATE_FAIL,              //!< Failed ADC calibration
-   E_ILLEGAL_POWER_TRANSITION,    //!< Can't transit to to power mode from current power mode
+   E_ILLEGAL_POWER_TRANSITION,    //!< Can't transit to power mode from current power mode
+   E_NO_COMMUNICATION,            //!< Failed communication
+   E_TERMINATED,                  //!< The program has terminated
 
    E_CMSIS_ERR_OFFSET = 1<<20,    //!< Offset added to CMSIS error codes
 };

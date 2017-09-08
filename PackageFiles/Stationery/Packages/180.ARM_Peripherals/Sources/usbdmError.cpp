@@ -23,6 +23,9 @@ static const char *messages[] = {
       "Interrupt handler not installed",
       "Flash initialisation failed",
       "ADC Calibration failed",
+      "Illegal processor run-mode transition",
+      "Failed communication",
+      "Program has terminated",
 };
 
 /**
