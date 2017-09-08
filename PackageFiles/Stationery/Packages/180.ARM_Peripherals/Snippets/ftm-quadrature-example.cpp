@@ -21,8 +21,6 @@ using QuadEncoder = QuadEncoder1;
 
 /**
  * Callback executed on timer overflow/underflow
- *
- * @param tmr Pointer to hardware
  */
 void callBack() {
    if (QuadEncoder::ftm->QDCTRL & FTM_QDCTRL_QUADIR_MASK) {
@@ -41,7 +39,7 @@ int main() {
    QuadEncoder::enableFilter(15);
 
    // Reset position to zero
-   // Movement will be relative to this initial position
+   // Movement will be +/- relative to this initial position
    QuadEncoder::resetPosition();
 
    // Set up callback for quadrature overflow or underflow

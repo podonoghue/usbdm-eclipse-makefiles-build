@@ -16,7 +16,8 @@ using namespace USBDM;
 /**
  * This example uses FTM interrupts.
  *
- * It is necessary enable these in Configure.usbdmProject under the "Peripheral Parameters"->FTM tab
+ * It is necessary to enable these in Configure.usbdmProject
+ * under the "Peripheral Parameters"->FTM tab.
  * Select irqHandlingMethod option (Class Method - Software ...)
  */
 // Timer being used - change as required
@@ -37,12 +38,12 @@ using Debug = GpioA<12>;
 
 /**
  * Interrupt handler for Timer interrupts
- * This sets the next interrupt/pin toggle for a half-period from the last event
+ * This calculates the time between events (rising edges)
  *
  * @param[in] status Flags indicating interrupt source channel(s)
  */
 static void ftmCallback(uint8_t status) {
-   static volatile uint16_t lastEventTime;
+   static uint16_t lastEventTime;
 
    Debug::set();
    // Check channel
@@ -83,7 +84,10 @@ int main() {
    TimerChannel::setPullDevice(PinPull_Up);
 
    // Configure the channel in Input Capture mode
-   TimerChannel::configure(FtmChMode_InputCaptureRisingEdge);
+   TimerChannel::configure(
+         FtmChMode_InputCaptureRisingEdge,
+         FtmChannelIrq_Enable,
+         FtmChannelDma_Disable);
 
    // Enable interrupts from the channel
    TimerChannel::enableInterrupts();
@@ -98,9 +102,8 @@ int main() {
       disableInterrupts();
       tPeriodInTicks = periodInTicks;
       enableInterrupts();
-      int intervalInMicroseconds = (int)(1000000*TimerChannel::convertTicksToSeconds(tPeriodInTicks));
+      int intervalInMicroseconds = (int)(1000*TimerChannel::convertTicksToSeconds(tPeriodInTicks));
       console.write("Period = ").write(intervalInMicroseconds).writeln(" us");
-//      printf("Period = %4d ms\n", intervalInMilliseconds);
    }
    return 0;
 }

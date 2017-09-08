@@ -1,6 +1,6 @@
 /*
  ============================================================================
- * @file    ftm-oc-example.cpp
+ * @file    ftm-oc-example2.cpp (180.ARM_Peripherals/Snippets)
  * @brief   Demo using Ftm class to implement a basic Output Compare system
  *
  *  An FTM output generates a rectangular waveform with 50ms low /100ms high
@@ -81,11 +81,11 @@ int main() {
          FtmClockSource_System,  // Bus clock usually
          FtmPrescale_1);         // The prescaler will be re-calculated later
 
-   // Set IC/OC measurement period to accommodate maximum period + 10%
+   // Set IC/OC measurement period to longest interval + 10%
    // This adjusts the prescaler value but does not change the clock source
    Timer::setMeasurementPeriod(1.1*max(WAVEFORM_HIGH_TIME, WAVEFORM_LOW_TIME));
 
-   // Calculate half-period in timer ticks
+   // Calculate waveform times in timer ticks
    // Must be done after timer clock configuration (above)
    waveformHighTime = Timer::convertSecondsToTicks(WAVEFORM_HIGH_TIME);
    waveformLowTime  = Timer::convertSecondsToTicks(WAVEFORM_LOW_TIME);

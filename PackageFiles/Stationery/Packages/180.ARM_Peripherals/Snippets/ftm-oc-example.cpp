@@ -1,9 +1,9 @@
 /*
  ============================================================================
- * @file    ftm-oc-example.cpp
+ * @file    ftm-oc-example.cpp (180.ARM_Peripherals/Snippets)
  * @brief   Demo using Ftm class to implement a basic Output Compare system
  *
- *  An FTM output is used to generate a square wave with 100ms period
+ *  An FTM output generates a square wave with 100ms period
  *
  *  Created on: 3/7/2017
  *      Author: podonoghue
@@ -12,12 +12,14 @@
 #include "hardware.h"
 
 using namespace USBDM;
+
 /**
  * This example uses FTM interrupts.
  *
  * It is necessary enable these in Configure.usbdmProject under the "Peripheral Parameters"->FTM tab
  * Select irqHandlingMethod option (Class Method - Software ...)
  */
+
 // Timer being used - change as required
 // Could also access as TimerChannel::Ftm
 using Timer = Ftm0;
