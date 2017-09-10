@@ -25,10 +25,10 @@ typedef void( *const intfunc )( void );
  * Most of the vector table is initialised to point at this handler.
  *
  * If you end up here it probably means:
- *   - Failed to enable the interrupt handler in the USBDM device configuration
+ *   - Failed to enable the interrupt handler in the USBDM configuration (Configure.usbdmProject)
  *   - You have accidently enabled an interrupt source in a peripheral
  *   - Enabled the wrong interrupt source
- *   - Failed to install or create a handler for an interrupt you intended using e.g. mis-spelled the name.
+ *   - Failed to install or create a handler for an interrupt you intended using e.g. misspelled the name.
  *     Compare your handler (C function) name to that used in the vector table.
  *
  * You can check 'vectorNum' below to determine the interrupt source.  Look this up in the vector table below.
