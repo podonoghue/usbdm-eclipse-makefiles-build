@@ -14,7 +14,7 @@ namespace USBDM {
 volatile ErrorCode errorCode = E_NO_ERROR;
 
 /** Table of error messages indexed by error code */
-static const char *messages[] = {
+static const char *messages[] {
       "No error",
       "General error",
       "Too small",
