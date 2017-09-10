@@ -286,8 +286,16 @@ public:
 
 #ifdef __CMSIS_RTOS
 protected:
-   /** Mutex to protect access - static so per I2C template instantiation */
-   static CMSIS::Mutex mutex;
+   /**
+    * Mutex to protect access\n
+    * Using a static accessor function avoids issues with static object initialisation order
+    *
+    * @return mutex
+    */
+   static CMSIS::Mutex &mutex() {
+      static CMSIS::Mutex mutex;
+      return mutex;
+   }
 
 public:
    /**
@@ -302,7 +310,7 @@ public:
     * @return osErrorISR: osMutexWait cannot be called from interrupt service routines.
     */
    virtual osStatus startTransaction(int milliseconds=osWaitForever) override {
-      return mutex.wait(milliseconds);
+      return mutex().wait(milliseconds);
    }
 
    /**
@@ -313,7 +321,7 @@ public:
     * @return osErrorISR: osMutexRelease cannot be called from interrupt service routines.
     */
    virtual osStatus endTransaction() override {
-      return mutex.release();
+      return mutex().release();
    }
 #endif
 
@@ -440,12 +448,6 @@ template<class Info> I2cCallbackFunction I2cBase_T<Info>::callback = I2c::unhand
 
 /** Used by ISR to obtain handle of object */
 template<class Info> I2c *I2cBase_T<Info>::thisPtr = 0;
-
-#ifdef __CMSIS_RTOS
-/** Mutex to protect access - static so per I2C */
-template<class Info>
-CMSIS::Mutex I2cBase_T<Info>::mutex;
-#endif
 
 #if defined(USBDM_I2C0_IS_DEFINED)
 /**

@@ -446,7 +446,7 @@ public:
    void setPeripheralSelect(
          SpiPeripheralSelect spiPeripheralSelect,
          Polarity            polarity,
-         SpiSelectMode       spiSelectMode,
+         SpiSelectMode       spiSelectMode       = SpiSelectMode_Idle,
          SpiCtarSelect       spiCtarSelect       = SpiCtarSelect_0) {
       pushrMask = spiPeripheralSelect|spiSelectMode|SPI_PUSHR_CTAS(spiCtarSelect);
 
@@ -624,8 +624,17 @@ public:
 
 #ifdef __CMSIS_RTOS
 protected:
-   /** Mutex to protect access - static so per SPI */
-   static CMSIS::Mutex mutex;
+   /**
+    * Mutex to protect access\n
+    * Using a static accessor function avoids issues with static object initialisation order
+    *
+    * @return mutex
+    */
+   static CMSIS::Mutex &mutex() {
+      /** Mutex to protect access - static so per SPI */
+      static CMSIS::Mutex mutex;
+      return mutex;
+   }
 
 public:
    /**
@@ -642,7 +651,7 @@ public:
     */
    virtual osStatus startTransaction(SpiConfig &config, int milliseconds=osWaitForever) override {
       // Obtain mutex
-      osStatus status = mutex.wait(milliseconds);
+      osStatus status = mutex().wait(milliseconds);
       if (status == osOK) {
          spi->MCR    &= ~SPI_MCR_HALT_MASK;
          // Change configuration for this transaction
@@ -665,8 +674,11 @@ public:
     */
    virtual osStatus startTransaction(int milliseconds=osWaitForever) override {
       // Obtain mutex
-      osStatus status = mutex.wait(milliseconds);
-      if (status == osOK) {
+      osStatus status = mutex().wait(milliseconds);
+      if (status != osOK) {
+         setCmsisErrorCode(status);
+      }
+      else {
          spi->MCR &= ~SPI_MCR_HALT_MASK;
       }
       return status;
@@ -682,7 +694,7 @@ public:
    virtual osStatus endTransaction() override {
       // Release mutex
       spi->MCR |= SPI_MCR_HALT_MASK;
-      return mutex.release();
+      return mutex().release();
    }
 #endif
 
@@ -836,12 +848,6 @@ void __attribute__((noinline)) Spi::txRx(uint32_t dataSize, const T *txData, T *
 }
 
 template<class Info> SpiCallbackFunction SpiBase_T<Info>::callback = Spi::unhandledCallback;
-
-#ifdef __CMSIS_RTOS
-/** Mutex to protect access - static so per SPI */
-template<class Info>
-CMSIS::Mutex SpiBase_T<Info>::mutex;
-#endif
 
 #if defined(USBDM_SPI0_IS_DEFINED)
 /**

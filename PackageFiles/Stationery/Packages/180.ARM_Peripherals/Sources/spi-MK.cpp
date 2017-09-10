@@ -21,8 +21,8 @@
  */
 namespace USBDM {
 
-static const uint16_t pbrFactors[] = {2,3,5,7};
-static const uint16_t brFactors[]  = {2,4,6,8,16,32,64,128,256,512,1024,2048,4096,8192,16384,32768};
+static const uint16_t pbrFactors[] {2,3,5,7};
+static const uint16_t brFactors[] {2,4,6,8,16,32,64,128,256,512,1024,2048,4096,8192,16384,32768};
 
 /**
  * Calculate communication speed factors for SPI
