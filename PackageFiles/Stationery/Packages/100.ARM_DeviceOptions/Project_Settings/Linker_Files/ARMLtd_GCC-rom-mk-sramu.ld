@@ -177,6 +177,11 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
   __VECTOR_RAM = DEFINED(__ram_vector_table__) ? __VECTOR_RAM__ : __VECTOR_TABLE;
   __RAM_VECTOR_TABLE_SIZE_BYTES = __interrupts_ram_end__ - __interrupts_ram_start__;
   
+   .bdts :
+   {
+      *(.bss*endPointBdts*) /* Load USB BDTs as they are aligned */
+   } > ram
+  
    .data : AT (__etext)
    {
       __data_start__ = .;
