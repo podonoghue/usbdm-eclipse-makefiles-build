@@ -15,6 +15,7 @@
  * Class representing an MAX31855 connected over SPI
  */
 class Max31855 {
+
 public:
    enum ThermocoupleStatus {
       TH_ENABLED,          // Enabled and OK
@@ -28,13 +29,13 @@ public:
 protected:
 
    /** SPI configuration value */
-   uint32_t spiConfig = 0;
+   USBDM::SpiConfig spiConfig;
 
-   /** SPI used for LCD */
+   /** SPI used for communication */
    USBDM::Spi &spi;
 
-   /** Number of PCS signal to use */
-   const int pinNum;
+   /** Which PCS signal to use */
+   const USBDM::SpiPeripheralSelect pinNum;
 
    /** Offset to add to reading from probe */
    int   offset;
@@ -47,21 +48,23 @@ public:
     * Constructor
     *
     * @param[in] spi     The SPI to use to communicate with MAX31855
-    * @param[in] pinNum  Number of PCS to use
+    * @param[in] pinNum  PCS to use
     */
-   Max31855(USBDM::Spi &spi, int pinNum) : spi(spi), pinNum(pinNum) {
-      spi.setPcsPolarity(pinNum, USBDM::ActiveLow);
+   Max31855(USBDM::Spi &spi, USBDM::SpiPeripheralSelect pinNum) : 
+      spi(spi), pinNum(pinNum) {
+      using namespace USBDM;
 
       spi.startTransaction();
 
       // Configure SPI
-      spi.setSpeed(2500000);
-      spi.setMode(USBDM::SpiMode_0);
-      spi.setDelays(0.1*USBDM::us, 0.1*USBDM::us, 0.1*USBDM::us);
+      spi.setPeripheralSelect(pinNum, ActiveLow);
+      spi.setSpeed(2.5*MHz);
+      spi.setMode(SpiMode_0);
       spi.setFrameSize(8);
 
       // Record configuration in case SPI is shared
-      spiConfig = spi.getCTAR0Value();
+      spiConfig = spi.getConfig();
+
       spi.endTransaction();
       }
 
@@ -124,8 +127,7 @@ public:
             0xFF, 0xFF, 0xFF, 0xFF,
       };
       spi.startTransaction(spiConfig);
-      spi.setPushrValue(SPI_PUSHR_CTAS(0)|SPI_PUSHR_PCS(1<<pinNum));
-      spi.txRxBytes(sizeof(data), nullptr, data);
+      spi.txRx(sizeof(data), (uint8_t*)nullptr, data);
       spi.endTransaction();
 
       // Temperature = sign-extended 14-bit value
