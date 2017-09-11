@@ -600,11 +600,20 @@ template<class Info, int channel>
 class AdcChannel_T : public AdcBase_T<Info>, CheckSignal<Info, channel> {
 
 public:
+   using Pcr = PcrTable_T<Info, channel>;
+
    /** Allow convenient access to owning ADC */
    using Adc =  AdcBase_T<Info>;
 
    /** Channel number */
    static constexpr int CHANNEL=channel;
+
+#if 0
+   static void enable() {
+      // Map pin to ADC
+      Pcr::setPCR(Info::info[channel].pcrValue);
+   }
+#endif
 
    /**
     * Enables hardware trigger mode of operation and configures a channel

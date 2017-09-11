@@ -23,7 +23,12 @@ using Led   = Ftm0Channel<7>;
 
 int main() {
    // Configure base FTM for left-aligned PWM
-   Timer::configure(FtmMode_LeftAlign);
+   Timer::configure(
+         FtmMode_LeftAlign,
+         FtmClockSource_System,
+         FtmPrescale_1
+   );
+
    /*
     * Change PWM period
     * Note - Setting the period of Led affects all channels on the same FTM
@@ -33,8 +38,9 @@ int main() {
    // Configure channel as high-pulses
    Led::configure(FtmChMode_PwmHighTruePulses);
 
-   // Set high-drive on pin
+   // Configure pin associated with channel
    Led::setDriveStrength(PinDriveStrength_High);
+   Led::setDriveMode(PinDriveMode_PushPull);
 
    // Check if configuration failed
    USBDM::checkError();

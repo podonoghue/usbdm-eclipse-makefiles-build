@@ -973,16 +973,7 @@ template<class Info> FtmCallbackFunction           FtmBase_T<Info>::faultCallbac
  * @tparam channel FTM timer channel
  */
 template <class Info, int channel>
-class FtmChannel_T : public FtmBase_T<Info>, protected PcrTable_T<Info, channel>, CheckSignal<Info, channel> {
-
-private:
-   // Hide these FTM methods
-   static unsigned getAndClearInterruptFlags() {return 0;};
-   static unsigned getInterruptFlags()         {return 0;};
-
-protected:
-   // Allow more convenient access to template super-classes
-   using PcrBase = PcrBase_T<Info::info[channel].pcrAddress>;
+class FtmChannel_T : public FtmBase_T<Info>, public PcrTable_T<Info, channel>, CheckSignal<Info, channel> {
 
 public:
    // Allow more convenient access to template super-classes
@@ -992,14 +983,20 @@ public:
    // Allow access to timer hardware instance
    using FtmBase_T<Info>::tmr;
 
-   // Make these PCR methods available
-   using Pcr::setDriveMode;
-   using Pcr::setDriveStrength;
-   using Pcr::setFilter;
-   using Pcr::setPullDevice;
-   using Pcr::setSlewRate;
-   using Pcr::setPCR;
+private:
+   /*
+    * I would use 'using' to hide these functions but the eclipse
+    * indexer gets confused about visibility
+    */
+   // Hide these FTM methods as FTM channel methods are preferred
+   static unsigned getAndClearInterruptFlags() {return 0;};
+   static unsigned getInterruptFlags()         {return 0;};
 
+   // Hide these PCR methods as they are similar to FTM methods
+   static void setCallback(PinCallbackFunction) {} // Use setPinCallback()
+   static void setIrq(PinIrq) {}                   // Use setPinIrq()
+
+public:
    /**
     * Set callback for Pin IRQ
     *
@@ -1009,7 +1006,24 @@ public:
     *                     nullptr to indicate none
     */
    static __attribute__((always_inline)) void setPinCallback(PinCallbackFunction callback) {
-      PcrBase::setCallback(callback);
+      Pcr::setCallback(callback);
+   }
+
+   /**
+    * Clear interrupt flag on pin associated with channel
+    * Assumes clock to the port has already been enabled
+    */
+   static __attribute__((always_inline)) void clearPinInterruptFlag() {
+      Pcr::clearInterruptFlag();
+   }
+   /**
+    * Sets interrupt/DMA mode on pin associated with channel
+    * Assumes clock to the port has already been enabled
+    *
+    * @param[in] pinIrq Interrupt/DMA mode
+    */
+   static __attribute__((always_inline)) void setPinIrq(PinIrq pinIrq) {
+      Pcr::setIrq(pinIrq);
    }
 
    /** Timer channel number */
@@ -1062,8 +1076,20 @@ public:
       // Check that owning FTM has been enabled
       assert(Ftm::isEnabled());
 #endif
-
       tmr->CONTROLS[channel].CnSC = ftmChMode|ftmChannelIrq|ftmChannelDma;
+
+#if 0
+      // Configure pin if used
+      switch (ftmChMode) {
+         case FtmChMode_Disabled :
+         case FtmChMode_OutputCompare :
+            // Don't change pin setting
+            break;
+         default:
+            // Map pin to FTM
+            Pcr::setPCR(Info::info[channel].pcrValue);
+       }
+#endif
    }
 
    /**
@@ -1080,7 +1106,6 @@ public:
       // Check that owning FTM has been enabled
       assert(Ftm::isEnabled());
 #endif
-
       tmr->CONTROLS[channel].CnSC =
             (tmr->CONTROLS[channel].CnSC & ~(FTM_CnSC_MS_MASK|FTM_CnSC_ELS_MASK))|ftmChMode;
    }
@@ -1139,18 +1164,21 @@ public:
    }
 
    /**
-    * Set Pin Control Register Value (apart from pin multiplexor value)
+    * Set Pin Control Register Value. \n
+    * Pin multiplexor value = FTM selection value. \n
+    * The clock to the port will be enabled before changing the PCR
     *
     * @param[in] pcrValue PCR value to set
     */
-   static __attribute__((always_inline)) void setPCR(PcrValue pcrValue) {
+   static __attribute__((always_inline)) void setPCR(PcrValue pcrValue=Info::info[channel].pcrValue) {
       Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|(Info::info[channel].pcrValue&PORT_PCR_MUX_MASK));
    }
 
    /**
-    * Set Pin Control Register (PCR) value
+    * Set Pin Control Register (PCR) value \n
+    * The clock to the port will be enabled before changing the PCR
     *
-    * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down (defaults to PinPull_None)
+    * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
     * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High (defaults to PinDriveLow)
     * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain (defaults to PinPushPull)
     * @param[in] pinIrq           One of PinIrq_None, etc (defaults to PinIrq_None)
@@ -1171,12 +1199,31 @@ public:
    }
 
    /**
-    * @brief
-    * Enable pin as digital output with initial inactive level and configures Pin Control Register (PCR) values
+    * Configures Pin Control Register (PCR) value for a FTM input to default values\n
+    * This will map the pin to the FTM function (mux value) \n
+    * The clock to the port will be enabled before changing the PCR
     *
     * @note Resets the Pin Control Register value (PCR value).
-    * @note Resets the pin value to the inactive state
-    * @note Use setOut() for a lightweight change of direction without affecting other pin settings.
+    */
+   static void setOutput() {
+      Pcr::setPCR(Info::info[channel].pcrValue);
+   }
+
+   /**
+    * Configures Pin Control Register (PCR) value for a FTM input to default values\n
+    * This will map the pin to the FTM function (mux value) \n
+    * The clock to the port will be enabled before changing the PCR
+    *
+    * @note Resets the Pin Control Register value (PCR value).
+    */
+   static void setInput() {
+      Pcr::setPCR(Info::info[channel].pcrValue);
+   }
+
+   /**
+    * Set Pin Control Register (PCR) value \n
+    * This will map the pin to the FTM function (mux value) \n
+    * The clock to the port will be enabled before changing the PCR
     *
     * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
     * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain (defaults to PinPushPull)
@@ -1187,15 +1234,13 @@ public:
          PinDriveMode      pinDriveMode      = PinDriveMode_PushPull,
          PinSlewRate       pinSlewRate       = PinSlewRate_Fast
          ) {
-      setPCR(pinDriveStrength|pinDriveMode|pinSlewRate);
+      Pcr::setPCR(pinDriveStrength|pinDriveMode|pinSlewRate|(Info::info[channel].pcrValue&PORT_PCR_MUX_MASK));
    }
 
    /**
-    * @brief
-    * Enable pin as digital input and configures Pin Control Register (PCR) value
-    *
-    * @note Reset the Pin Control Register value (PCR value).
-    * @note Use setIn() for a lightweight change of direction without affecting other pin settings.
+    * Set Pin Control Register (PCR) value \n
+    * This will map the pin to the FTM function (mux value) \n
+    * The clock to the port will be enabled before changing the PCR
     *
     * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
     * @param[in] pinIrq           One of PinIrq_None, etc (defaults to PinIrq_None)
@@ -1206,7 +1251,7 @@ public:
          PinIrq            pinIrq            = PinIrq_None,
          PinFilter         pinFilter         = PinFilter_None
          ) {
-      setPCR(pinPull|pinIrq|pinFilter|PinMux_Gpio);
+      Pcr::setPCR(pinPull|pinIrq|pinFilter|(Info::info[channel].pcrValue&PORT_PCR_MUX_MASK));
    }
 
    /**

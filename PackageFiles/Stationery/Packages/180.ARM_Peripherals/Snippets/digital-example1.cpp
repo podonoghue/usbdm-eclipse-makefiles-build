@@ -20,10 +20,14 @@ using RED_LED   = $(demo.cpp.red.led:USBDM::GpioB<0,ActiveLow>);
 using GREEN_LED = $(demo.cpp.green.led:USBDM::GpioB<1,ActiveLow>);
 
 int main() {
-   RED_LED::setOutput();
-   GREEN_LED::setOutput();
-   RED_LED::set();
-   GREEN_LED::set();
+   RED_LED::setOutput(
+         PinDriveStrength_High,
+         PinDriveMode_PushPull,
+         PinSlewRate_Slow);
+   GREEN_LED::setOutput(
+         PinDriveStrength_High,
+         PinDriveMode_PushPull,
+         PinSlewRate_Slow);
    for(;;) {
       RED_LED::toggle();
       USBDM::waitMS(100);

@@ -427,7 +427,7 @@ public:
    }
 
    /**
-    * Set pin PCR value
+    * Set Pin Control Register (PCR) value \n
     * The clock to the port will be enabled before changing the PCR
     *
     * @param[in] pcrValue PCR value constructed using pcrValue() including MUX value.\n
@@ -442,7 +442,21 @@ public:
       }
    }
    /**
-    * Set Pin Control Register (PCR) value
+    * Get Pin Control Register (PCR) value \n
+    * The clock to the port will be enabled before reading the PCR
+    *
+    * @return pcrValue PCR value.
+    */
+   static __attribute__((always_inline)) PcrValue getPCR() {
+      if (pcrAddress == 0) {
+         return (PcrValue) 0;
+      }
+      enablePortClocks(clockMask);
+      return *pcrReg;
+   }
+   /**
+    * Set Pin Control Register (PCR) value \n
+    * The clock to the port will be enabled before changing the PCR
     *
     * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
     * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High (defaults to PinDriveLow)
@@ -452,7 +466,7 @@ public:
     * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Fast)
     * @param[in] pinMux           One of PinMux_Analogue, PinMux_Gpio etc (defaults to template value)
     */
-   static __attribute__((always_inline)) void setPCR(
+   static void setPCR(
          PinPull           pinPull,
          PinDriveStrength  pinDriveStrength  = PinDriveStrength_Low,
          PinDriveMode      pinDriveMode      = PinDriveMode_PushPull,
@@ -468,6 +482,44 @@ public:
          *pcrReg = pinPull|pinDriveStrength|pinDriveMode|pinIrq|pinFilter|pinSlewRate|pinMux;
       }
    }
+   /**
+    * @brief
+    * Set Pin Control Register Attributes. \n
+    * Only specified attributes are changed.
+    *
+    * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
+    * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain (defaults to PinPushPull)
+    * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Fast)
+    */
+   static void setOutput(
+         PinDriveStrength  pinDriveStrength,
+         PinDriveMode      pinDriveMode      = PinDriveMode_PushPull,
+         PinSlewRate       pinSlewRate       = PinSlewRate_Fast) {
+
+      *pcrReg =
+            (*pcrReg&~(PORT_PCR_DSE_MASK|PORT_PCR_ODE_MASK|PORT_PCR_SRE_MASK)) |
+            (pinDriveStrength|pinDriveMode|pinSlewRate);
+   }
+
+   /**
+    * @brief
+    * Set Pin Control Register Attributes. \n
+    * Only specified attributes are changed.
+    *
+    * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
+    * @param[in] pinIrq           One of PinIrq_None, etc (defaults to PinIrq_None)
+    * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
+    */
+   static void setInput(
+         PinPull           pinPull,
+         PinIrq            pinIrq            = PinIrq_None,
+         PinFilter         pinFilter         = PinFilter_None) {
+
+      *pcrReg =
+            (*pcrReg&~(PORT_PCR_PD_MASK|PORT_PCR_IRQC_MASK|PORT_PCR_PFE_MASK)) |
+            (pinPull|pinIrq|pinFilter);
+   }
+
    /**
     * Set pin PCR.MUX value
     * Assumes clock to the port has already been enabled
@@ -488,10 +540,10 @@ public:
    }
 
    /**
-    * Clear interrupt flag
+    * Clear pin interrupt flag
     * Assumes clock to the port has already been enabled
     */
-   static __attribute__((always_inline)) void clearIrqFlag() {
+   static __attribute__((always_inline)) void clearInterruptFlag() {
       *pcrReg |= PORT_PCR_ISF_MASK;
    }
 

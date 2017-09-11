@@ -376,7 +376,7 @@ public:
 };
 
 template<uint32_t pcrAddress>
-PinCallbackFunction USBDM::PcrBase_T<pcrAddress>::fCallback = PcrBase_T::unhandledCallback;
+PinCallbackFunction USBDM::PcrBase_T<pcrAddress>::fCallback = PcrBase_T<pcrAddress>::unhandledCallback;
 
 /**
  * @brief Template representing a Pin Control Register (PCR)
@@ -435,7 +435,7 @@ public:
    }
 
    /**
-    * Set pin PCR value
+    * Set Pin Control Register (PCR) value \n
     * The clock to the port will be enabled before changing the PCR
     *
     * @param[in] pcrValue PCR value constructed using pcrValue() including MUX value.\n
@@ -450,7 +450,8 @@ public:
       }
    }
    /**
-    * Set Pin Control Register (PCR) value
+    * Set Pin Control Register (PCR) value \n
+    * The clock to the port will be enabled before changing the PCR
     *
     * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
     * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High (defaults to PinDriveLow)
@@ -717,7 +718,7 @@ void processPcrs(uint32_t pcrValue) {
  * Code examples:
  * @code
  * // Create PCR type
- * Pcr_T<spiInfo, 3> SpiMOSI;
+ * PcrTable_T<spiInfo, 3> SpiMOSI;
  *
  * // Configure PCR
  * SpiMOSI::setPCR(PinPull_Up,PinDriveStrength_High,PinDriveMode_PushPull,PinIrq_None,PinFilter_None,PinSlewRate_Fast,PinMux_3);

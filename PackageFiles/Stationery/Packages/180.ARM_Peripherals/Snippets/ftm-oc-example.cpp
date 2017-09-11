@@ -76,8 +76,13 @@ int main() {
    Timer::enableNvicInterrupts();
 
    // Configure pin associated with channel
-   TimerChannel::setDriveStrength(PinDriveStrength_High);
-   TimerChannel::setDriveMode(PinDriveMode_PushPull);
+   TimerChannel::setOutput(
+         PinDriveStrength_High,
+         PinDriveMode_PushPull,
+         PinSlewRate_Slow);
+   // or change individual attributes
+   //  TimerChannel::setDriveStrength(PinDriveStrength_High);
+   //  TimerChannel::setDriveMode(PinDriveMode_PushPull);
 
    // Trigger 1st interrupt at now+100
    TimerChannel::setRelativeEventTime(100);

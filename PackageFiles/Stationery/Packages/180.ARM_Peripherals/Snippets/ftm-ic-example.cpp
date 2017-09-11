@@ -80,8 +80,13 @@ int main() {
    Timer::enableNvicInterrupts();
 
    // Configure pin associated with channel
-   TimerChannel::setFilter(PinFilter_Passive);
-   TimerChannel::setPullDevice(PinPull_Up);
+   TimerChannel::setInput(
+         PinPull_None,
+         PinIrq_None,
+         PinFilter_Passive);
+   // or change individual attributes
+   //  TimerChannel::setPullDevice(PinPull_Up);
+   //  TimerChannel::setFilter(PinFilter_Passive);
 
    // Configure the channel in Input Capture mode
    TimerChannel::configure(

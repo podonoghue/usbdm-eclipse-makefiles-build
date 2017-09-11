@@ -28,8 +28,14 @@ using Switch =   $(demo.cpp.external.switch:USBDM::GpioB<0,ActiveLow>);
 using Led    =   $(demo.cpp.external.led:USBDM::GpioB<1,ActiveLow>);
 
 int main(void) {
-   Led::setOutput(PinDriveStrength_High);
-   Switch::setInput(PinPull_Up);
+   Led::setOutput(
+         PinDriveStrength_High,
+         PinDriveMode_PushPull,
+         PinSlewRate_Slow);
+   Switch::setInput(
+         PinPull_Up,
+         PinIrq_None,
+         PinFilter_Passive);
 
    for(;;) {
       Led::write(!Switch::read());
