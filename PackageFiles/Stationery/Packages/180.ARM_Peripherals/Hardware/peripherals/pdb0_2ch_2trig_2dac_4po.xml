@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- pdb_def.xml -->
 <!--
 Devices using this peripheral: 
 -->
-<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="PDB">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="PDB">
 
    <aliasOption key="/SIM/system_bus_clock" displayName="PDB input clock" constant="true"/>
 
@@ -510,4 +510,4 @@ Devices using this peripheral:
    </projectActionList>
          
    <signals/>
-</devicePage>
+</peripheralPage>

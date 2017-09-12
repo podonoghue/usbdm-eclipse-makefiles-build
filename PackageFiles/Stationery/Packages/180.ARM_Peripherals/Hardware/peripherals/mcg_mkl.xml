@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- mgc_mkl.xml -->
-<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="MCG" description="Multipurpose Clock Generator" >
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="MCG" description="Multipurpose Clock Generator" >
    <category name="Clock monitors" description="Clock monitors">
    
       <binaryOption name="mcg_c6_cme0" 
@@ -592,4 +592,4 @@
       \t   }
       \t};
    ]]></template>
-</devicePage>
+</peripheralPage>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"
 ?>
-<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- ftfl.xml -->
 
-<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flash Memory Module" >
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flash Memory Module" >
 
    <aliasOption key="pflash_sector_size" constant="true"
       description="Sector size for program flash (minimum erase element)"/>
@@ -29,4 +29,4 @@
          
    ]]></template>
 
-</devicePage>
+</peripheralPage>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- mgc_lite.xml -->
 
-<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="MCG" description="Multipurpose Clock Generator" >
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="MCG" description="Multipurpose Clock Generator" >
    <category name="LIRC" description="Low Speed Internal Reference Clock Sources [LIRC]" >
       <intOption name="system_slow_irc_clock"
          origin="SLOW IRC"
@@ -356,4 +356,4 @@
       \t   }
       \t};
    ]]></template>
-</devicePage>
+</peripheralPage>

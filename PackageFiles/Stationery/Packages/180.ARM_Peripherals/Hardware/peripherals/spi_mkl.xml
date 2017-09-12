@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- spi_mkl.xml -->
 
-<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Serial Peripheral Interface">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Serial Peripheral Interface">
    
    <intOption name="speed" 
       description="Speed of interface"
@@ -35,7 +35,7 @@
    <xi:include href="_irqOption.xml"/>
    
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.Validator">
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator">
    </validate>
 
    <template><![CDATA[
@@ -57,4 +57,4 @@
    ]]></template>
 
    <signals/>
-</devicePage>
+</peripheralPage>

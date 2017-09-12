@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE list SYSTEM "_menu.dtd" >
+<!-- examples.xml -->
+
+<list name="CommonSettings" >
+
+<binaryOption name="mapAllPins" 
+   description="Map all allocated pins"
+   toolTip="Map all allocated pins during startup using mapAllPins()">
+   <choice value="false" name="Don't map" />
+   <choice value="true"  name="Map during startup" />
+</binaryOption>
+
+<binaryOption name="mapPinsOnEnable" 
+   description="Map pin when enabled"
+   toolTip="Map all allocated pins on a peripheral when the\n
+            peripheral is enabled by enable() method etc.">
+   <choice value="false" name="Don't map" />
+   <choice value="true"  name="Map when enabled" isDefault="true"/>
+</binaryOption>
+
+<!-- Template is added to pin_mapping.h -->
+<template namespace="usbdm"><![CDATA[
+   /** Enables mapping of all allocated pins during startup using mapAllPins() */
+   static constexpr bool MAP_ALL_PINS = $(mapAllPins);\n\n
+   
+   /** Map all allocated pins on a peripheral when peripheral is enabled */
+   static constexpr bool MAP_ALL_PINS_ON_ENABLE = $(mapPinsOnEnable);\n\n
+   
+]]></template>
+
+<!-- Convenient location for common files -->
+<projectActionList id = "CommonSettings_files" >
+   <!-- copy source="Sources/xxxx.cpp"                  target="Sources/xxxx.cpp"                overwrite="true"  derived="true" / -->
+</projectActionList>
+
+</list>

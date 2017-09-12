@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- rtc_shared_osc.xml -->
 
-<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Real-time Clock">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Real-time Clock">
 
    <category name="Clock sources" description="Source for the clock used by RTC">
       <aliasOption key="/OSC0/osc32kclk_clock"        constant="true" />
@@ -246,4 +246,4 @@
       <copy source="Snippets/rtc-example.cpp"    target="Snippets/rtc-example.cpp"   overwrite="true"  derived="true" />
    </projectActionList>
          
-</devicePage>
+</peripheralPage>

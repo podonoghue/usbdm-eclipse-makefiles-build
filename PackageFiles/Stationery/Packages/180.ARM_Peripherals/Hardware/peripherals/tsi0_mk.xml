@@ -1,13 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- tsi0_mk.xml -->
 <!--
    Devices using this peripheral:
 -->
-<devicePage
+<peripheralPage
    xmlns:xi="http://www.w3.org/2001/XInclude"
    name="_instance"
    description="TSI">
+   
+   <binaryOption name="mapPinsOnEnable" 
+      description="Map pins when enabled"
+      toolTip="Map all allocated pins on peripheral when the\n
+               peripheral is enabled by enable() method etc.">
+      <choice value="false" name="Don't map" />
+      <choice value="true"  name="Map when enabled" isDefault="true"/>
+   </binaryOption>
+   
+   <!-- Template is added to pin_mapping.h -->
+   <template><![CDATA[
+      \t/** Map all allocated pins on peripheral when enabled */
+      \tstatic constexpr bool mapPinsOnEnable = $(mapPinsOnEnable);\n\n
+   ]]></template>
    
    <binaryOption
       name="tsi_gencs_stpe"
@@ -218,9 +232,9 @@
    <xi:include href="_irqOption.xml"/>
 
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.Validator">
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator">
    </validate>
 
    <signals />
 
-</devicePage>
+</peripheralPage>

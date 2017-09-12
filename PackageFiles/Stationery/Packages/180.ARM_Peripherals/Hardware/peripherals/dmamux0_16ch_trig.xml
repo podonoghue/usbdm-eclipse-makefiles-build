@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"
 ?>
-<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- dmamux0.xml -->
 
-<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flash Memory Module">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flash Memory Module">
 
    <aliasOption key="/DMA0/NumChannels" displayName="NumChannels" constant="true" />
 
@@ -92,4 +92,4 @@
       \tstatic constexpr uint8_t chcfg15_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg15));
    ]]></template>
 
-</devicePage>
+</peripheralPage>

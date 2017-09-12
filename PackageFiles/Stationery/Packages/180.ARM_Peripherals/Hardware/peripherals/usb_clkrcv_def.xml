@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- usb_clkrcv_def.xml -->
 <!--
 Devices using this peripheral: 
 -->
-<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="USB">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="USB">
 
    <aliasOption key="/MCG/system_usb_clkin_clock" constant="false" optional="true"/>
    <aliasOption key="/SIM/sim_sopt2_usbsrc" constant="false" optional="true"/>
@@ -16,10 +16,10 @@ Devices using this peripheral:
    <xi:include href="_irqOption.xml"/>
 
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.Validator">
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator">
    </validate>
 
    <xi:include href="usb_files.xml"/>
 
    <signals/>
-</devicePage>
+</peripheralPage>

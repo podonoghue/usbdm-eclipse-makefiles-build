@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- i2c0_def.xml -->
 
-<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Inter-Integrated-Circuit">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Inter-Integrated-Circuit">
 
    <choiceOption name="console_device" 
       description="UART to use for console"
@@ -59,4 +59,4 @@
    <signals name="UART3"/>
    <signals name="UART4"/>
    <signals name="UART5"/>
-</devicePage>
+</peripheralPage>

@@ -1,9 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"
 ?>
-<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- llwu_pe8_filt4.xml -->
+   
+   <binaryOption name="mapPinsOnEnable" 
+      description="Map pins when enabled"
+      toolTip="Map all allocated pins on peripheral when the\n
+               peripheral is enabled by enable() method etc.">
+      <choice value="false" name="Don't map" />
+      <choice value="true"  name="Map when enabled" isDefault="true"/>
+   </binaryOption>
+   
+   <!-- Template is added to pin_mapping.h -->
+   <template><![CDATA[
+      \t/** Map all allocated pins on peripheral when enabled */
+      \tstatic constexpr bool mapPinsOnEnable = $(mapPinsOnEnable);\n\n
+   ]]></template>
 
-<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Low Leakage Wakeup Unit">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Low Leakage Wakeup Unit">
    <binaryOption name="llwu_me_wume0" description="0: LPTMR" toolTip="Enables this peripheral to wakeup the processor">
       <choice name="Disabled" value="0" isDefault="true" />
       <choice name="Enabled"   value="1" />
@@ -315,7 +329,7 @@
    <xi:include href="_irqOption.xml"/>
 
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.Validator">
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator">
    </validate>
 
    <signals/>
@@ -325,4 +339,4 @@
       <copy source="Snippets/llwu-example.cpp"  target="Snippets/llwu-example.cpp"  overwrite="true" derived="true" />
    </projectActionList>
          
-</devicePage>
+</peripheralPage>

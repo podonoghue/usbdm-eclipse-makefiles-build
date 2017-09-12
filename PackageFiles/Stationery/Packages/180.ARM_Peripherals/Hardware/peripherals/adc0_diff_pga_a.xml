@@ -1,9 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- adc0_diff_pga_a.xml -->
 <!-- INCOMPLETE -->
 
-<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Analogue to Digital Converter">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Analogue to Digital Converter">
+
+   <binaryOption name="mapPinsOnEnable" 
+      description="Map pins when enabled"
+      toolTip="Map all allocated pins on a peripheral when the\n
+               peripheral is enabled by enable() method etc.">
+      <choice value="false" name="Don't map" />
+      <choice value="true"  name="Map when enabled" isDefault="true"/>
+   </binaryOption>
+   
+   <!-- Template is added to pin_mapping.h -->
+   <template><![CDATA[
+      \t/** Map all allocated pins on a peripheral when enabled */
+      \tstatic constexpr bool mapPinsOnEnable = $(mapPinsOnEnable);\n\n
+      
+   ]]></template>
 
    <choiceOption name="adc_cfg1_adiclk" description="Clock Source"
       toolTip="Selects the clock source for the module">
@@ -22,6 +37,7 @@
    </choiceOption>
 
    <floatOption name="adcInternalClock" 
+      derived="true"
       constant="true"
       description="Frequency of Internal ADC clock"
       toolTip="Varies with ADLPC and ADHSC"
@@ -202,4 +218,4 @@
    
    <signals/>
    
-</devicePage>
+</peripheralPage>

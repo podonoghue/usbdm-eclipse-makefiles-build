@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!ENTITY % gui_items        "(xi:include|category|constant|floatOption|intOption|bitmaskOption|choiceOption|binaryOption|irqOption|stringOption|numericListOption|pinListOption|aliasOption|signals)" >
-<!ENTITY % structure_items  "((section*)|(tab)*)" >
+<!ENTITY % structure_items  "(xi:include|section|tab|list)" >
 <!ENTITY % control_items    "(xi:include|template|validate|projectActionList)" >
 
 <!-- Include another file -->
@@ -9,14 +9,18 @@
    <!ATTLIST xi:include href      CDATA        #REQUIRED>
 
 <!-- Root fileElement -->
-<!ELEMENT devicePage (((%structure_items;),(%control_items;)*)|(%gui_items;|%control_items;)*) >
-   <!ATTLIST devicePage xmlns:xi     CDATA        #IMPLIED>
-   <!ATTLIST devicePage name         CDATA        #REQUIRED>
-   <!ATTLIST devicePage description  CDATA        #REQUIRED>
-   <!ATTLIST devicePage toolTip      CDATA        "">
+<!ELEMENT peripheralPage ((%structure_items;|%gui_items;|%control_items;)*) >
+   <!ATTLIST peripheralPage xmlns:xi     CDATA        #IMPLIED>
+   <!ATTLIST peripheralPage name         CDATA        #REQUIRED>
+   <!ATTLIST peripheralPage description  CDATA        #REQUIRED>
+   <!ATTLIST peripheralPage toolTip      CDATA        "">
 
 <!ELEMENT fragment ANY >
    <!ATTLIST fragment xmlns:xi CDATA #IMPLIED>
+
+<!ELEMENT list (((%structure_items;),(%control_items;)*)|(%gui_items;|%control_items;)*) >
+   <!ATTLIST list name         CDATA        #IMPLIED>
+   <!ATTLIST list description  CDATA        #IMPLIED>
 
 <!ELEMENT section (((%structure_items;),(%control_items;)*)|(%gui_items;|%control_items;)*) >
    <!ATTLIST section name         CDATA        #IMPLIED>
@@ -27,6 +31,7 @@
 <!ELEMENT category ((%gui_items;)*) >
    <!ATTLIST category xmlns:xi     CDATA        #IMPLIED>
    <!ATTLIST category name         CDATA        #REQUIRED>
+   <!ATTLIST category dim          CDATA        "0">
    <!ATTLIST category description  CDATA        #REQUIRED>
    <!ATTLIST category toolTip      CDATA        "">
 

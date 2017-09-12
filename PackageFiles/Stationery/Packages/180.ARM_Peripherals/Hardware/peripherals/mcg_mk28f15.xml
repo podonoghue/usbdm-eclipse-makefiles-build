@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- mcg_mk65f18.xml -->
 
-<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="MCG" description="Multipurpose Clock Generator" >
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="MCG" description="Multipurpose Clock Generator" >
 
    <section>
       <category name="RTC" description="RTC External Reference Clock/Oscillator [ERCLK32K]">
@@ -770,4 +770,4 @@
       \t   MCG_C11_PLLCS($(mcg_c11_pllcs)), // PLLCS PLL Clock Select
       \t   },
    ]]></template>
-</devicePage>
+</peripheralPage>

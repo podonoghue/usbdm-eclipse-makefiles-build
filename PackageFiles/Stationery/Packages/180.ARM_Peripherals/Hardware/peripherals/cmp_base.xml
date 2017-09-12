@@ -1,8 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- cmp_base.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
+   
+   <binaryOption name="mapPinsOnEnable" 
+      description="Map pins when enabled"
+      toolTip="Map all allocated pins on peripheral when the\n
+               peripheral is enabled by enable() method etc.">
+      <choice value="false" name="Don't map" />
+      <choice value="true"  name="Map when enabled" isDefault="true"/>
+   </binaryOption>
+   
+   <!-- Template is added to pin_mapping.h -->
+   <template><![CDATA[
+      \t/** Map all allocated pins on peripheral when enabled */
+      \tstatic constexpr bool mapPinsOnEnable = $(mapPinsOnEnable);\n\n
+      
+   ]]></template>
    
    <choiceOption name="cmp_cr0_filter_cnt" 
       description="Filter Sample Count"
@@ -169,7 +184,7 @@
    </projectActionList>
    
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.Validator">
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator">
    </validate>
 
 </fragment>

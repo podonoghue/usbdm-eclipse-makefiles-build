@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- sim_mk20d5.xml -->
 <!--
 Devices using this peripheral: 
 -->
-<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="SIM">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="SIM">
    
    <constant name="rtcSharesPins" value="true" />
    
@@ -426,4 +426,4 @@ Devices using this peripheral:
       \t   sim->CLKDIV1 = clkdiv1;
       \t}
    ]]></template>
-</devicePage>
+</peripheralPage>

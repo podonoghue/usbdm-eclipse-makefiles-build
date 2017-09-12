@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"
 ?>
-<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- ftfe_64k_flexrom.xml -->
 
-<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flash Memory Module" >
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flash Memory Module" >
 
    <!-- Aliases for predefined values -->
    <aliasOption key="pflash_sector_size" constant="true"
@@ -154,4 +154,4 @@
       
    ]]></template>
 
-</devicePage>
+</peripheralPage>

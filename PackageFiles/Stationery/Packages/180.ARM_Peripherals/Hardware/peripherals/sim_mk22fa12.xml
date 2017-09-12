@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- sim_mk22f51212.xml -->
 <!--
 Devices using this peripheral: 
 -->
-<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="SIM">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="SIM">
    
    <category name="SOPT1" description="RTC signals">
       <choiceOption name="sim_sopt1_osc32ksel" 
@@ -532,4 +532,4 @@ Devices using this peripheral:
       \t   sim->CLKDIV2 = clkdiv2;
       \t}
    ]]></template>
-</devicePage>
+</peripheralPage>

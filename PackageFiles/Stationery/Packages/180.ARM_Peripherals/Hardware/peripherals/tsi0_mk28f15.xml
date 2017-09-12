@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- tsi0_mk65.xml -->
 <!--
 Devices using this peripheral: 
 -->
-<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="TSI">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="TSI">
 
    <projectActionList id = "tsi_files">
       <copy source="Project_Headers/tsi-MK.h"  target="Project_Headers/tsi.h"  overwrite="true"  derived="true" />
@@ -14,4 +14,4 @@ Devices using this peripheral:
    ]]></template>
 
    <signals/>
-</devicePage>
+</peripheralPage>

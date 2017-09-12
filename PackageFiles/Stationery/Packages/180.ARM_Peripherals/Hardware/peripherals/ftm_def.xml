@@ -1,8 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- ftm_def.xml -->
 
-<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flex timer">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flex timer">
+   
+   <binaryOption name="mapPinsOnEnable" 
+      description="Map pins when enabled"
+      toolTip="Map all allocated pins on peripheral when the\n
+               peripheral is enabled by enable() method etc.">
+      <choice value="false" name="Don't map" />
+      <choice value="true"  name="Map when enabled" isDefault="true"/>
+   </binaryOption>
+   
+   <!-- Template is added to pin_mapping.h -->
+   <template><![CDATA[
+      \t/** Map all allocated pins on peripheral when enabled */
+      \tstatic constexpr bool mapPinsOnEnable = $(mapPinsOnEnable);\n\n
+   ]]></template>
 
    <intOption name="minimumResolution" description="Minimum resolution for TPM interval"
       toolTip="This value is used as a minimum value for the timer interval in ticks \n
@@ -181,4 +195,4 @@
 
    <signals/>
    <signals name="FTM" />
-</devicePage>
+</peripheralPage>

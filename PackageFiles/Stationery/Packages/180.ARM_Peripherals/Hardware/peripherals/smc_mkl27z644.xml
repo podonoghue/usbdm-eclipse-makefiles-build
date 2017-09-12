@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"
 ?>
-<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- smc_mkl27z644.xml -->
 
-<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Low Leakage Wakeup Unit">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Low Leakage Wakeup Unit">
 
    <binaryOption name="smc_pmprot_avlp" 
       description="Allow very low power modes" 
@@ -89,7 +89,7 @@
    </projectActionList>
          
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.Validator">
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator">
    </validate>
 
-</devicePage>
+</peripheralPage>

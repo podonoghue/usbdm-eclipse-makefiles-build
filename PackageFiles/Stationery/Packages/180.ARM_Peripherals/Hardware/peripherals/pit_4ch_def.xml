@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- pit.xml -->
 
-<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Programmable Interrupt Timer">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Programmable Interrupt Timer">
 
    <aliasOption key="/SIM/system_bus_clock" displayName="PIT input clock" constant="true"/>
 
@@ -109,4 +109,4 @@
       \t   return SystemBusClock;
       \t}\n\n
    ]]></template>
-</devicePage>
+</peripheralPage>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- cmp0_pstm_trigm.xml -->
 
-<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Comparitor">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Comparitor">
  
    <xi:include href="cmp_base.xml"/>
  
@@ -43,4 +43,4 @@
 
    <signals/>
    
-</devicePage>
+</peripheralPage>

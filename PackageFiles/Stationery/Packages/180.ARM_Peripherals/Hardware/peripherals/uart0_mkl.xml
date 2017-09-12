@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- uart_mkl04.xml -->
 <!--
 Devices using this peripheral: 
 -->
-<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="UART">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="UART">
+   
+   <binaryOption name="mapPinsOnEnable" 
+      description="Map pins when enabled"
+      toolTip="Map all allocated pins on peripheral when the\n
+               peripheral is enabled by enable() method etc.">
+      <choice value="false" name="Don't map" />
+      <choice value="true"  name="Map when enabled" isDefault="true"/>
+   </binaryOption>
+   
+   <!-- Template is added to pin_mapping.h -->
+   <template><![CDATA[
+      \t/** Map all allocated pins on peripheral when enabled */
+      \tstatic constexpr bool mapPinsOnEnable = $(mapPinsOnEnable);\n\n
+   ]]></template>
 
    <aliasOption key="/SIM/sim_sopt2_uart$(_instance)src" optional="true" constant="false"  />
    <aliasOption key="/SIM/system_uart$(_instance)_clock" optional="true" />
@@ -119,4 +133,4 @@ Devices using this peripheral:
    ]]></template>
 
    <signals/>
-</devicePage>
+</peripheralPage>

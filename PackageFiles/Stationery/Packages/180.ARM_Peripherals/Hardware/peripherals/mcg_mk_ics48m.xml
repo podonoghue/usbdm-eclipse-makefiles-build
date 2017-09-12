@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- mcg_mk_ics48m.xml -->
 
-<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="MCG" description="Multipurpose Clock Generator" >
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="MCG" description="Multipurpose Clock Generator" >
 
-   <section>
       <category name="RTC" description="RTC External Reference Clock/Oscillator [ERCLK32K]">
          <aliasOption key="/RTC/rtc_input_freq"  constant="false"  optional="true"/>
          <aliasOption key="/RTC/rtcclk_clock"  optional="true"/>
@@ -62,9 +61,7 @@
 
       <xi:include href="_irqOption.xml"/>
       
-   </section>
-   <section>
-      <tab name="One">
+   <list name="Config" description="Run configuration">
          <binaryOption name="LowPower"
             description="Restict operation to Low Power modes" 
             toolTip="Restricts values available">
@@ -507,8 +504,7 @@
                <aliasOption name="mcg_c8_cme1" />
             </category>
          </category>
-      </tab>
-   </section>
+   </list>
    
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MK_ICS48M">
@@ -687,4 +683,4 @@
       \t   MCG_C8_CME1($(mcg_c8_cme1)),    // CME1   Clock Monitor Enable 1
       \t   },
    ]]></template>
-</devicePage>
+</peripheralPage>

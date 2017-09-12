@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- pmc.xml -->
 <!-- INCOMPLETE -->
 
-<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Power Management Controller">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Power Management Controller">
 
    <binaryOption name="pmc_lvdsc1_lvdie" 
       description="Low-Voltage Detect Interrupt Enable"
@@ -88,11 +88,11 @@
    <xi:include href="_irqOption.xml"/>
 
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.Validator">
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator">
    </validate>
 
    <projectActionList id = "pmc_files" >
       <copy source="Project_Headers/pmc.h"       target="Project_Headers/pmc.h"     overwrite="true" derived="true" />
    </projectActionList>
          
-</devicePage>
+</peripheralPage>

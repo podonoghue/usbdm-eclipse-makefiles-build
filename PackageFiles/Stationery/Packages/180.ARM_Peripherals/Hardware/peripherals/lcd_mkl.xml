@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- lcd_mkl.xml -->
-<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Oscillator">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Oscillator">
 
    <aliasOption key="/SIM/sim_sopt1_osc32ksel"   constant="false" />
    <aliasOption key="/SIM/system_erclk32k_clock" constant="true"/>
@@ -170,5 +170,5 @@
    \t   $(lcd_gcr_clock); // Clock source\n\n
    ]]></template>
    
-</devicePage>
+</peripheralPage>
 

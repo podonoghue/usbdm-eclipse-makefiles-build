@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE devicePage SYSTEM "_menu.dtd" >
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- pga.xml -->
 <!-- INCOMPLETE -->
 
-<devicePage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Programmable Gain Amplifier">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Programmable Gain Amplifier">
    <binaryOption name="dummy" 
       description="dummy"
       toolTip="dummy">
@@ -11,4 +11,4 @@
       <choice value="1" name="Enabled" isDefault="true" />
    </binaryOption>
 
-</devicePage>
+</peripheralPage>
