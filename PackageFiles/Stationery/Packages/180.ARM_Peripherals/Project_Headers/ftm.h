@@ -286,11 +286,20 @@ public:
    static constexpr volatile uint32_t *clockReg = Info::clockReg;
 
    /**
+    * Configures all mapped pins associated with this peripheral
+    */
+   static void __attribute__((always_inline)) configureAllPins() {
+      // Configure pins
+      Info::initPCRs();
+   }
+
+   /**
     * Enables clock to peripheral and configures all pins
     */
    static void __attribute__((always_inline)) enable() {
-      // Configure pins
-      Info::initPCRs();
+      if (Info::mapPinsOnEnable) {
+         configureAllPins();
+      }
 
       // Enable clock to peripheral
       *clockReg |= Info::clockMask;
@@ -1078,18 +1087,18 @@ public:
 #endif
       tmr->CONTROLS[channel].CnSC = ftmChMode|ftmChannelIrq|ftmChannelDma;
 
-#if 0
-      // Configure pin if used
-      switch (ftmChMode) {
-         case FtmChMode_Disabled :
-         case FtmChMode_OutputCompare :
-            // Don't change pin setting
-            break;
-         default:
-            // Map pin to FTM
-            Pcr::setPCR(Info::info[channel].pcrValue);
-       }
-#endif
+      if (!Info::mapPinsOnEnable) {
+         // Configure pin if used
+         switch (ftmChMode) {
+            case FtmChMode_Disabled :
+            case FtmChMode_OutputCompare :
+               // Don't change pin setting
+               break;
+            default:
+               // Map pin to FTM
+               Pcr::setPCR(Info::info[channel].pcrValue);
+         }
+      }
    }
 
    /**

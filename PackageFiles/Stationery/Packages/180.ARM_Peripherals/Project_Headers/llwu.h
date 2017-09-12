@@ -141,12 +141,19 @@ protected:
 public:
 
    /**
+    * Configures all mapped pins associated with this peripheral
+    */
+   static void __attribute__((always_inline)) configureAllPins() {
+      // Configure pins
+      Info::initPCRs();
+   }
+
+   /**
     * Basic enable of LLWU\n
     * Includes configuring all pins
     */
    static void enable() {
-      // Configure pins
-      Info::initPCRs();
+      configureAllPins();
    }
 
    /**

@@ -136,6 +136,14 @@ protected:
 
 public:
    /**
+    * Configures all mapped pins associated with this peripheral
+    */
+   static void __attribute__((always_inline)) configureAllPins() {
+      // Configure pins
+      Info::initPCRs();
+   }
+
+   /**
     * Initialise RTC to default settings\n
     * Configures all RTC pins
     */
@@ -151,8 +159,7 @@ public:
          return;
       }
 
-      // Configure pins
-      Info::initPCRs();
+      configureAllPins();
 
       // Enable to debug RTX startup
 #if defined(DEBUG_BUILD) && 0

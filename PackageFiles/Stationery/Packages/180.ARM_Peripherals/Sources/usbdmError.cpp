@@ -83,4 +83,13 @@ ErrorCode checkError() {
 }
 #endif
 
+   /**
+    * Startup code for C++ classes
+    */
+   extern "C" void __attribute__((constructor)) cpp_initialise() {
+      if (MAP_ALL_PINS) {
+         mapAllPins();
+      }
+   }
+
 } // end namespace USBDM

@@ -23,13 +23,15 @@ using AdcChannel = Adc0DiffChannel<0>;
 int main(void) {
 
    // Enable and configure ADC
-   Adc::configure(AdcResolution_9bit_diff);
+   Adc::configure(AdcResolution_11bit_diff);
 
    // Calibrate before use
    Adc::calibrate();
 
    // May change default resolution e.g.
-   Adc::setResolution(USBDM::AdcResolution_11bit_diff);
+   Adc::setResolution(USBDM::AdcResolution_9bit_diff);
+
+   AdcChannel::enable();
 
    for(;;) {
       // Start next conversion

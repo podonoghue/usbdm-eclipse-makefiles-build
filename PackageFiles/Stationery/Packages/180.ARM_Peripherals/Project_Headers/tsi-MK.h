@@ -179,13 +179,24 @@ protected:
    }
 public:
    /**
+    * Configures all mapped pins associated with this peripheral
+    */
+   static void __attribute__((always_inline)) configureAllPins() {
+      // Configure pins
+      Info::initPCRs();
+   }
+
+   /**
     * Enables TSI bus interface clock and configures all pins
     */
    static void enable() {
+
+      if (Info::mapPinsOnEnable) {
+         configureAllPins();
+      }
+
       *clockReg |= Info::clockMask;
       __DMB();
-
-      Info::initPCRs();
    }
 
    /**

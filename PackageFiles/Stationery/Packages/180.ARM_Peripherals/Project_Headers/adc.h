@@ -283,14 +283,23 @@ public:
    static constexpr volatile ADC_Type *adc      = Info::adc;
 
    /**
-    * Basic enable of ADC\n
-    * Includes configuring all pins
+    * Configures all mapped pins associated with this peripheral
     */
-   static void enable() {
+   static void __attribute__((always_inline)) configureAllPins() {
       // Configure pins
       Info::initPCRs();
       Info::InfoDP::initPCRs();
       Info::InfoDM::initPCRs();
+   }
+
+   /**
+    * Basic enable of ADC\n
+    * Includes enabling clock and configuring all pins
+    */
+   static void enable() {
+      if (Info::mapPinsOnEnable) {
+         configureAllPins();
+      }
 
       // Enable clock to ADC
       *clockReg  |= Info::clockMask;
@@ -608,12 +617,13 @@ public:
    /** Channel number */
    static constexpr int CHANNEL=channel;
 
-#if 0
-   static void enable() {
+   /**
+    * Configure pins associated with this ADC channel.
+    */
+   static void setInput() {
       // Map pin to ADC
       Pcr::setPCR(Info::info[channel].pcrValue);
    }
-#endif
 
    /**
     * Enables hardware trigger mode of operation and configures a channel
@@ -670,11 +680,23 @@ template<class Info, int channel>
 class AdcDiffChannel_T : public AdcBase_T<Info>, CheckSignal<typename Info::InfoDP, channel>, CheckSignal<typename Info::InfoDM, channel> {
 
 public:
+   using PcrP = PcrTable_T<typename Info::InfoDP, channel>;
+   using PcrM = PcrTable_T<typename Info::InfoDM, channel>;
+
    /** Allow convenient access to owning ADC */
    using Adc =  AdcBase_T<Info>;
 
    /** Channel number */
    static constexpr int CHANNEL=channel;
+
+   /**
+    * Configure pins associated with this ADC channel.
+    */
+   static void setInput() {
+      // Map pins to ADC
+      PcrP::setPCR(Info::InfoDP::info[channel].pcrValue);
+      PcrM::setPCR(Info::InfoDM::info[channel].pcrValue);
+   }
 
    /**
     * Enables hardware trigger mode of operation and configures a channel

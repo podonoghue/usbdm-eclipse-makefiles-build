@@ -712,9 +712,16 @@ public:
 
    virtual ~SpiBase_T() {}
 
-   virtual void enablePins() override {
-      // Configure SPI pins
+   /**
+    * Configures all mapped pins associated with this peripheral
+    */
+   static void __attribute__((always_inline)) configureAllPins() {
+      // Configure pins
       Info::initPCRs(pcrValue(PinPull_Up, PinDriveStrength_High));
+   }
+
+   virtual void enablePins() override {
+      configureAllPins();
    }
 
    virtual void disablePins() override {
@@ -763,6 +770,10 @@ public:
       static_assert(Info::info[2].gpioBit != UNMAPPED_PCR, "SPIx_SOUT has not been assigned to a pin");
 #endif
 
+      if (Info::mapPinsOnEnable) {
+         configureAllPins();
+      }
+
       // Enable SPI module clock
       *Info::clockReg |= Info::clockMask;
       __DMB();
@@ -782,9 +793,6 @@ public:
       setFrameSize(8);          // Default 8-bit transfers
       setSpeed(Info::speed);    // Use default speed
       setMode(Info::modeValue); // Use default mode
-
-      // Configure SPI pins
-      enablePins();
    }
    /**
     * Gets and clears status flags.

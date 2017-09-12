@@ -39,13 +39,21 @@ protected:
 
 public:
    /**
+    * Configures all mapped pins associated with this peripheral
+    */
+   static void __attribute__((always_inline)) configureAllPins() {
+      // Configure pins
+      Info::initPCRs();
+   }
+
+   /**
     * Initialise OSC to default settings\n
     * Configures all OSC pins
     */
    static void initialise() {
-
-      // Configure pins
-      Info::initPCRs();
+      if (Info::mapPinsOnEnable) {
+         configureAllPins();
+      }
 
       // Configure Osc
       osc->CR  = Info::cr;

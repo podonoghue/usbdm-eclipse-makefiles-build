@@ -202,13 +202,21 @@ protected:
 
 public:
    /**
+    * Configures all mapped pins associated with this peripheral
+    */
+   static void __attribute__((always_inline)) configureAllPins() {
+      // Configure pins
+      Info::initPCRs();
+   }
+
+   /**
     * Enable clock to the PDB
     */
    static void  __attribute__((always_inline)) enable() {
+      configureAllPins();
+
       *clockReg |= Info::clockMask;
       __DMB();
-
-      Info::initPCRs();
    }
 
    /**

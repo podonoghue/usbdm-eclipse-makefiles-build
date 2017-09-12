@@ -53,12 +53,19 @@ private:
 
 public:
    /**
+    * Configures all mapped pins associated with this peripheral
+    */
+   static void __attribute__((always_inline)) configureAllPins() {
+      // Configure pins
+      Info::initPCRs();
+   }
+
+   /**
     * Basic enable of VREF\n
     * Includes configuring all pins
     */
    void enable() {
-      // Configure pin (if necessary)
-      Info::initPCRs();
+      configureAllPins();
 
       // Enable clock to VREF interface
       *clockReg |= Info::clockMask;

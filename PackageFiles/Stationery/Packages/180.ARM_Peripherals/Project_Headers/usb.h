@@ -212,6 +212,14 @@ protected:
 
 public:
    /**
+    * Configures all mapped pins associated with this peripheral
+    */
+   static void __attribute__((always_inline)) configureAllPins() {
+      // Configure pins
+      Info::initPCRs();
+   }
+
+   /**
     * Initialise USB to default settings\n
     * Configures all USB pins
     */
@@ -219,7 +227,7 @@ public:
       *clockReg |= Info::clockMask;
       __DMB();
 
-      Info::initPCRs();
+      configureAllPins();
 
       enableNvicInterrupts();
    }

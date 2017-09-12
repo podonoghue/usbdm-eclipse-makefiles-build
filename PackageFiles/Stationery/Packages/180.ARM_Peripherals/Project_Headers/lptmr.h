@@ -112,11 +112,18 @@ protected:
 
 public:
    /**
+    * Configures all mapped pins associated with this peripheral
+    */
+   static void __attribute__((always_inline)) configureAllPins() {
+      // Configure pins
+      Info::initPCRs();
+   }
+
+   /**
     * Enables the LPTMR clock and configures the pins
     */
    static void __attribute__((always_inline)) enable() {
-      // Configure pins
-      Info::initPCRs();
+      configureAllPins();
 
       // Enable clock
       *clockReg |= Info::clockMask;

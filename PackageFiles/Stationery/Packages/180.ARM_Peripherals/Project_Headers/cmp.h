@@ -216,12 +216,21 @@ protected:
 
 public:
    /**
+    * Configures all mapped pins associated with this peripheral
+    */
+   static void __attribute__((always_inline)) configureAllPins() {
+      // Configure pins
+      Info::initPCRs();
+   }
+
+   /**
     * Basic enable CMP\n
     * Includes clock enable and configuring all pins
     */
    static void enable() {
-      // Configure pins
-      Info::initPCRs();
+      if (Info::mapPinsOnEnable) {
+         configureAllPins();
+      }
 
       // Enable clock to CMP interface
       *clockReg |= Info::clockMask;

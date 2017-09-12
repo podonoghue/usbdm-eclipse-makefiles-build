@@ -272,6 +272,14 @@ protected:
 
 public:
    /**
+    * Configures all mapped pins associated with this peripheral
+    */
+   static void __attribute__((always_inline)) configureAllPins() {
+      // Configure pins
+      Info::initPCRs();
+   }
+
+   /**
     * Construct UART interface
     *
     * @param[in]  baudrate         Interface speed in bits-per-second
@@ -280,8 +288,10 @@ public:
       // Enable clock to UART interface
       *Info::clockReg |= Info::clockMask;
 
-      // Configure pins
-      Info::initPCRs();
+      if (Info::mapPinsOnEnable) {
+         configureAllPins();
+      }
+
       setBaudRate(baudrate);
 
       uart->C2 = UART_C2_TE(1)|UART_C2_RE(1);

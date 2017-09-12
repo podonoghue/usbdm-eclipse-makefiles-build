@@ -21,7 +21,6 @@
    <item key="$signal$PTA19_muxSetting"                    value="mux0" />
    <item key="$signal$PTA1_muxSetting"                     value="mux3" />
    <item key="$signal$PTA2_descriptionSetting"             value="Blue LED, LCD_cs*" />
-   <item key="$signal$PTA2_muxSetting"                     value="mux3" />
    <item key="$signal$PTA3_descriptionSetting"             value="Reserved (SWD)" />
    <item key="$signal$PTA3_muxSetting"                     value="mux7" />
    <item key="$signal$PTA4_muxSetting"                     value="mux3" />
@@ -73,14 +72,12 @@
    <item key="/MCG/pll0InputFrequency"                     value="4000000" />
    <item key="/MCG/pll0OutputFrequency"                    value="96000000" />
    <item key="/MCG/system_mcgffclk_clock"                  value="31250" />
-   <item key="/MCG/system_mcgfllclk_clock"                 value="80000000" />
    <item key="/MCG/system_mcgoutclk_clock"                 value="96000000" />
    <item key="/SIM/busFreq"                                value="50MHz" />
    <item key="/SIM/coreFreq"                               value="50MHz" />
    <item key="/SIM/flashFreq"                              value="25MHz" />
    <item key="/SIM/flexFreq"                               value="50MHz" />
    <item key="/SIM/sim_clkdiv2_usb"                        value="2" />
-   <item key="/SIM/sim_sopt2_clkoutsel"                    value="6" />
    <item key="/SIM/sim_sopt2_pllfllsel"                    value="1" />
    <item key="/SIM/system_peripheral_clock"                value="96000000" />
    <item key="/SIM/system_usbfs_clock"                     value="48000000" />

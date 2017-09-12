@@ -78,6 +78,7 @@ static void configureAdc() {
 
    Adc::enable();
    Adc::setResolution(AdcResolution_8bit_se);
+   Adc::calibrate();
    Adc::setCallback(adcCallback);
    Adc::enableNvicInterrupts();
 

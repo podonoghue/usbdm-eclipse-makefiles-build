@@ -327,6 +327,14 @@ public:
 
 public:
    /**
+    * Configures all mapped pins associated with this peripheral
+    */
+   static void __attribute__((always_inline)) configureAllPins() {
+      // Configure pins
+      Info::initPCRs();
+   }
+
+   /**
     * Construct I2C interface
     *
     * @param[in]  bps        Tx/Rx rate
@@ -342,6 +350,11 @@ public:
 #endif
 
       busHangReset();
+
+      if (Info::mapPinsOnEnable) {
+         configureAllPins();
+      }
+
       init(myAddress);
       setBPS(bps);
    }
@@ -389,9 +402,6 @@ public:
       *Info::clockReg |= Info::clockMask;
 
       thisPtr = this;
-
-      // Configure I2C pins
-      Info::initPCRs();
 
       if (i2cMode&I2C_C1_IICIE_MASK) {
          NVIC_EnableIRQ(Info::irqNums[0]);
