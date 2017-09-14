@@ -265,25 +265,25 @@ public:
 /**
  * Class representing a DMA controller
  *
- * @tparam DmaInfo Information describing DMA controller
+ * @tparam Info Information describing DMA controller
  */
-template<class DmaInfo>
+template<class Info>
 class DmaBase_T {
 
    using MuxInfo = Dmamux0Info;
 
 protected:
    // Pointer to hardware
-   static constexpr volatile DMA_Type    *dmac          = DmaInfo::dma;
+   static constexpr volatile DMA_Type    *dmac          = Info::dma;
 
    // Pointer to clock register
-   static constexpr volatile uint32_t    *clockReg      = DmaInfo::clockReg;
+   static constexpr volatile uint32_t    *clockReg      = Info::clockReg;
 
    // IRQ Num
    static constexpr IRQn_Type             irqNum        = DMA0_IRQn;
 
    /** Callback functions for ISRs */
-   static DmaCallbackFunction callbacks[DmaInfo::NumChannels];
+   static DmaCallbackFunction callbacks[Info::NumChannels];
 
    /** Callback to catch unhandled interrupt */
    static void noHandlerCallback() {
@@ -493,25 +493,26 @@ public:
    /**
     * Enable/disable interrupts in NVIC
     *
-    * @param[in]  channel Channel being modified
-    * @param[in]  enable  True => enable, False => disable
-    *
+    * @param[in]  channel   Channel being modified
+    * @param[in]  enable    True => enable, False => disable
+    * @param[in]  priority  Interrupt priority
+	
     * @return E_NO_ERROR on success
     */
-   static ErrorCode enableNvicInterrupts(DmaChannelNum channel, bool enable=true) {
+   static ErrorCode enableNvicInterrupts(DmaChannelNum channel, bool enable=true, uint32_t priority=NvicPriority_Normal) {
 #ifdef DEBUG_BUILD
-      if (channel>=DmaInfo::NumChannels) {
+      if (channel>=Info::NumChannels) {
          setAndCheckErrorCode(E_ILLEGAL_PARAM);
       }
 #endif
 
-      IRQn_Type irqNum = (IRQn_Type)(DmaInfo::irqNums[0] + channel);
+      IRQn_Type irqNum = (IRQn_Type)(Info::irqNums[0] + channel);
       if (enable) {
          // Enable interrupts
          NVIC_EnableIRQ(irqNum);
 
          // Set priority level
-         NVIC_SetPriority(irqNum, DmaInfo::irqLevel);
+         NVIC_SetPriority(irqNum, priority);
       }
       else {
          // Disable interrupts
@@ -537,7 +538,7 @@ public:
 /**
  * Callback table for programmatically set handlers
  */
-template<class DmaInfo> DmaCallbackFunction DmaBase_T<DmaInfo>::callbacks[] = {
+template<class Info> DmaCallbackFunction DmaBase_T<Info>::callbacks[] = {
       noHandlerCallback,
       noHandlerCallback,
       noHandlerCallback,

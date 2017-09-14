@@ -214,21 +214,23 @@ public:
    /**
     * Enable/disable interrupts in NVIC
     *
-    * @param[in]  enable true to enable, false to disable
+    * @param[in]  enable    True => enable, False => disable
+    * @param[in]  priority  Interrupt priority
     */
-   static void enableNvicInterrupts(bool enable=true) {
+   static void enableNvicInterrupts(bool enable=true, uint32_t priority=NvicPriority_Normal) {
       // Clear pending to avoid POR interrupt
       NVIC_ClearPendingIRQ(Info::irqNums[0]);
       if (enable) {
          // Enable interrupts
          NVIC_EnableIRQ(Info::irqNums[0]);
+
          // Set priority level
-         NVIC_SetPriority(Info::irqNums[0], Info::irqLevel);
+         NVIC_SetPriority(Info::irqNums[0], priority);
          if (Info::irqCount>1) {
             // Enable interrupts
             NVIC_EnableIRQ(Info::irqNums[1]);
             // Set priority level
-            NVIC_SetPriority(Info::irqNums[1], Info::irqLevel);
+            NVIC_SetPriority(Info::irqNums[1], priority);
          }
       }
       else {

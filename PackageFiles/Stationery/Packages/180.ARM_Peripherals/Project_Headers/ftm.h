@@ -391,18 +391,19 @@ public:
    }
 
    /**
-    * Enable/disable Timer interrupts in NVIC
+    * Enable/disable interrupts in NVIC
     *
-    * @param[in] enable true to enable, false to disable
+    * @param[in]  enable    True => enable, False => disable
+    * @param[in]  priority  Interrupt priority
     */
-   static __attribute__((always_inline)) void enableNvicInterrupts(bool enable=true) {
+   static void enableNvicInterrupts(bool enable=true, uint32_t priority=NvicPriority_Normal) {
 
       if (enable) {
          // Enable interrupts
          NVIC_EnableIRQ(Info::irqNums[0]);
 
          // Set priority level
-         NVIC_SetPriority(Info::irqNums[0], Info::irqLevel);
+         NVIC_SetPriority(Info::irqNums[0], priority);
       }
       else {
          // Disable interrupts
@@ -1367,7 +1368,7 @@ public:
    /**
     * Set Timer event time
     *
-    * @param[in] eventTime  Event time relative to current event time (i.e. Timer channel CnV value)
+    * @param[in] offset  Event time relative to current event time (i.e. Timer channel CnV value)
     *
     * @note The actual CnV register update will be delayed by the FTM register synchronisation mechanism
     */

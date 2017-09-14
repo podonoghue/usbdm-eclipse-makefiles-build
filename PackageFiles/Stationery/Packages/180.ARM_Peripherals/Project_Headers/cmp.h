@@ -442,16 +442,17 @@ public:
    /**
     * Enable/disable interrupts in NVIC
     *
-    * @param[in]  enable true to enable, false to disable
+    * @param[in]  enable    True => enable, False => disable
+    * @param[in]  priority  Interrupt priority
     */
-   static void enableNvicInterrupts(bool enable=true) {
+   static void enableNvicInterrupts(bool enable=true, uint32_t priority=NvicPriority_Normal) {
 
       if (enable) {
          // Enable interrupts
          NVIC_EnableIRQ(Info::irqNums[0]);
 
          // Set priority level
-         NVIC_SetPriority(Info::irqNums[0], Info::irqLevel);
+         NVIC_SetPriority(Info::irqNums[0], priority);
       }
       else {
          // Disable interrupts
@@ -520,8 +521,8 @@ public:
    /**
     * Enable and configure DAC
     *
-    * @param[in]  level  DAC level to select (0..63)
-    * @param[in]  source Reference source select
+    * @param[in]  level        DAC level to select (0..63)
+    * @param[in]  cmpDacSource Reference source select
     */
    static void configureDac(
          uint8_t       level,
