@@ -99,7 +99,7 @@ SECTIONS
 
     . = ALIGN(4);
     _etext = .;
-  } >rom
+  } >flash
 
   .data :
   {
@@ -111,7 +111,7 @@ SECTIONS
     *(.gnu.linkonce.d.*)
     . = ALIGN (4);
     _edata = .;
-  } >ram AT>rom
+  } >ram AT>flash
 
   .bss :
   {
@@ -125,7 +125,7 @@ SECTIONS
     __bss_end__ = . ;
     _end = __bss_end__;
     __end = __bss_end__;
-  } >ram AT>rom
+  } >ram AT>flash
 
    /* Minimum HEAP - from top of BSS */
   .heap_dummy :
