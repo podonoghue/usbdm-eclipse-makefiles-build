@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE root SYSTEM "../_menu.dtd" >
+<!DOCTYPE section >
 <!-- FRDM_K66F.xml -->
 
-<section>
+<section name="DeviceSettings">
          <!-- Definitions used by example programs -->
          <item key="demo.cpp.led"                value="USBDM::GpioC&lt;9&gt;" /> <!-- Digital I/O generic LED -->
          <item key="demo.cpp.pwm.led1"           value="ftm_LED_RED" />      <!-- FTM/TPM to LED -->
