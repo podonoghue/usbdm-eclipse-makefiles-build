@@ -13,6 +13,13 @@ using namespace USBDM;
  *
  * Toggles LEDs
  */
+/**
+ * This example uses PIT interrupts.
+ *
+ * It is necessary to enable these in Configure.usbdmProject
+ * under the "Peripheral Parameters"->PIT tab.
+ * Select irqHandlerChannelX option (Class Method - Software ...)
+ */
 
 // Comment out the following line to use static interrupt handlers
 #define SET_HANDLERS_PROGRAMMATICALLY
@@ -21,26 +28,33 @@ using namespace USBDM;
 using LED1 = $(demo.cpp.red.led:USBDM::GpioA<2, USBDM::ActiveLow>);
 using LED2 = $(demo.cpp.green.led:USBDM::GpioC<3, USBDM::ActiveLow>);
 
+using Timer         = Pit;
+using TimerChannelA = PitChannel<0>;
+using TimerChannelB = PitChannel<1>;
+
 #ifndef SET_HANDLERS_PROGRAMMATICALLY
 /**
- * Example showing how to create custom IRQ handlers for PIT channels
+ * Example showing how to create custom IRQ handlers for PIT channels by
+ * providing an explicit instantiation of the PIT template function for ISR
  */
 namespace USBDM {
 
 /*
- * If using naked handler it must be named exactly as shown
+ * If using a naked handler it must be named exactly as shown
  * MK version - individual handler for each PIT channel
+ *
+ * This method avoids the overhead of the indirection through a call-back
  */
-template<> void Pit_T<PitInfo>::irq0Handler() {
+template<> void PitBase_T<PitInfo>::irq0Handler() {
    // Clear interrupt flag
-   PIT->CHANNEL[0].TFLG = PIT_TFLG_TIF_MASK;
-   LED1::toggle();
+   pit->CHANNEL[0].TFLG = PIT_TFLG_TIF_MASK;
+   Led1::toggle();
 }
 
-template<> void Pit_T<PitInfo>::irq1Handler() {
+template<> void PitBase_T<PitInfo>::irq1Handler() {
    // Clear interrupt flag
-   PIT->CHANNEL[1].TFLG = PIT_TFLG_TIF_MASK;
-   LED2::toggle();
+   pit->CHANNEL[1].TFLG = PIT_TFLG_TIF_MASK;
+   Led2::toggle();
 }
 
 } // end namespace USBDM
@@ -50,34 +64,43 @@ template<> void Pit_T<PitInfo>::irq1Handler() {
  * These handlers are set programmatically
  */
 void flashRed(void) {
-   LED1::toggle();
+   Led1::toggle();
 }
 
 void flashGreen(void) {
-   LED2::toggle();
+   Led2::toggle();
 }
 
 int main() {
-   LED1::setOutput(PinDriveStrength_High);
-   LED2::setOutput(PinDriveStrength_High);
+   Led1::setOutput(
+         PinDriveStrength_High,
+         PinDriveMode_PushPull,
+         PinSlewRate_Slow);
 
-   Pit::configure();
+   Led2::setOutput(
+         PinDriveStrength_High,
+         PinDriveMode_PushPull,
+         PinSlewRate_Slow);
+
+   Timer::configure();
 
 #ifdef SET_HANDLERS_PROGRAMMATICALLY
    // Set handlers programmatically
-   Pit::setCallback(0, flashRed);
-   Pit::setCallback(1, flashGreen);
+   Timer::setCallback(0, flashRed);
+   Timer::setCallback(1, flashGreen);
 #endif
 
-   // Flash RED @ 1Hz
-   Pit::configureChannelInTicks(0, ::SystemBusClock/2);
+   // Flash 1st LED @ 2Hz
+   TimerChannelA::configureChannelInTicks(0, ::SystemBusClock/2);
+   // or TimerChannelA::configureChannel(0, 500*ms);
 
-   // Flash GREEN @ 0.5Hz
-   Pit::configureChannelInTicks(1, ::SystemBusClock);
+   // Flash 2nd LED @ 1Hz
+   TimerChannelB::configureChannelInTicks(1, ::SystemBusClock);
+   // or TimerChannelB::configureChannel(1, 1*seconds);
 
    // Enable interrupts on the two channels
-   Pit::enableInterrupts(0);
-   Pit::enableInterrupts(1);
+   TimerChannelA::enableInterrupts();
+   TimerChannelB::enableInterrupts();
 
    // Check for errors so far
    checkError();
