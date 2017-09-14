@@ -6,6 +6,14 @@
       <applyWhen>
          <and>
             <variableRef idRef="outputType" condition="matches"  value=".*ProjectType\.exe$" />
+            <or>
+               <deviceFamilyMatches>CortexM0</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM0plus</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM3</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM3F</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM4</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM4F</deviceFamilyMatches>
+            </or>
          </and>
       </applyWhen>
 
