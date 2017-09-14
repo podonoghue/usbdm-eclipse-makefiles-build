@@ -135,6 +135,16 @@ enum FtmExternalTrigger {
 };
 
 /*
+ * Enabled Timer interrupt or DMA
+ */
+enum FtmChannelAction {
+   FtmChannelAction_None   = FTM_CnSC_CHIE(0)|FTM_CnSC_DMA(0), //!< No action on event
+   FtmChannelAction_Irq    = FTM_CnSC_CHIE(1)|FTM_CnSC_DMA(0), //!< Interrupt on event
+   FtmChannelAction_Dma    = FTM_CnSC_CHIE(0)|FTM_CnSC_DMA(1), //!< Dma on event
+   FtmChannelAction_IrqDma = FTM_CnSC_CHIE(1)|FTM_CnSC_DMA(1), //!< Dma+Interrupt on event
+};
+
+/*
  * Enabled Timer interrupt
  */
 enum FtmChannelIrq {
@@ -748,7 +758,7 @@ public:
    static void enableFault(
          Polarity polarity     = ActiveHigh,
          bool     filterEnable = false,
-         uint32_t filterDelay  = (1<<FTM_FLTCTRL_FFVAL_SHIFT)-1) {
+         uint32_t filterDelay  = FTM_FLTCTRL_FFVAL_MASK>>(FTM_FLTCTRL_FFVAL_SHIFT+1)) {
 
 #ifdef DEBUG_BUILD
    static_assert((inputNum<Info::InfoFAULT::numSignals), "FtmBase_T: Illegal fault channel");
@@ -994,7 +1004,7 @@ public:
 
 private:
    /*
-    * I would use 'using' to hide these functions but the eclipse
+    * I could use 'using' to hide these functions but the Eclipse
     * indexer gets confused about visibility
     */
    // Hide these FTM methods as FTM channel methods are preferred
@@ -1102,6 +1112,40 @@ public:
    }
 
    /**
+    * Configure channel\n
+    * Doesn't affect shared settings of owning Timer
+    *
+    * @param[in] ftmChMode         Mode of operation for channel
+    * @param[in] ftmChannelAction  Whether to enable the interrupt or DMA function on this channel
+    *
+    * @note This method has the side-effect of clearing the register update synchronisation i.e.
+    *       pending CnV register updates are discarded.
+    */
+   static __attribute__((always_inline)) void configure(
+         FtmChMode         ftmChMode,
+         FtmChannelAction  ftmChannelAction) {
+
+#ifdef DEBUG_BUILD
+      // Check that owning FTM has been enabled
+      assert(Ftm::isEnabled());
+#endif
+      tmr->CONTROLS[channel].CnSC = ftmChMode|ftmChannelAction;
+
+      if (!Info::mapPinsOnEnable) {
+         // Configure pin if used
+         switch (ftmChMode) {
+            case FtmChMode_Disabled :
+            case FtmChMode_OutputCompare :
+               // Don't change pin setting
+               break;
+            default:
+               // Map pin to FTM
+               Pcr::setPCR(Info::info[channel].pcrValue);
+         }
+      }
+   }
+
+   /**
     * Set channel mode
     *
     * @param[in] ftmChMode      Mode of operation for channel
@@ -1110,13 +1154,21 @@ public:
     *       pending CnV register updates are discarded.
     */
    static __attribute__((always_inline)) void setMode(FtmChMode ftmChMode) {
-
-#ifdef DEBUG_BUILD
-      // Check that owning FTM has been enabled
-      assert(Ftm::isEnabled());
-#endif
       tmr->CONTROLS[channel].CnSC =
             (tmr->CONTROLS[channel].CnSC & ~(FTM_CnSC_MS_MASK|FTM_CnSC_ELS_MASK))|ftmChMode;
+   }
+
+   /**
+    * Set channel action on event
+    *
+    * @param[in] ftmChannelAction  Whether to enable the interrupt or DMA function on this channel
+    *
+    * @note This method has the side-effect of clearing the register update synchronisation i.e.
+    *       pending CnV register updates are discarded.
+    */
+   static __attribute__((always_inline)) void setAction(FtmChannelAction ftmChannelAction) {
+      tmr->CONTROLS[channel].CnSC =
+            (tmr->CONTROLS[channel].CnSC & ~(FTM_CnSC_CHIE_MASK|FTM_CnSC_DMA_MASK))|ftmChannelAction;
    }
 
    /**
@@ -1319,19 +1371,19 @@ public:
     *
     * @note The actual CnV register update will be delayed by the FTM register synchronisation mechanism
     */
-   static __attribute__((always_inline)) void setDeltaEventTime(uint16_t eventTime) {
-      Ftm::setDeltaEventTime(eventTime, channel);
+   static __attribute__((always_inline)) void setDeltaEventTime(uint16_t offset) {
+      Ftm::setDeltaEventTime(offset, channel);
    }
 
    /**
     * Set Timer event time relative to current timer count value
     *
-    * @param[in] eventTime  Event time relative to current time (i.e. Timer CNT value)
+    * @param[in] offset  Event time relative to current time (i.e. Timer CNT value)
     *
     * @note The actual CnV register update will be delayed by the FTM register synchronisation mechanism
     */
-   static __attribute__((always_inline)) void setRelativeEventTime(uint16_t eventTime) {
-      Ftm::setRelativeEventTime(eventTime, channel);
+   static __attribute__((always_inline)) void setRelativeEventTime(uint16_t offset) {
+      Ftm::setRelativeEventTime(offset, channel);
    }
 
    /**

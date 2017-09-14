@@ -18,8 +18,8 @@ using namespace USBDM;
  */
 
 // Connection mapping - change as required
-using Timer = Ftm0;
-using Led   = Ftm0Channel<7>;
+using Timer = $(demo.cpp.ftm:Ftm0);
+using Led   = $(demo.cpp.pwm.led1:Ftm0Channel<7>);
 
 int main() {
    // Configure base FTM for left-aligned PWM
