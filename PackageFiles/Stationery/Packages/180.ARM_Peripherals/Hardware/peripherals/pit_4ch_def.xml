@@ -8,7 +8,7 @@
 
    <intOption name="pit_ldval" description="Reload value"
       toolTip="Value loaded in timer register on roll-over"
-      value="10000" min="0" max="0xFFFFFFFF" />
+      value="4799" min="0" max="0xFFFFFFFF" />
 
    <floatOption name="pit_period" description="Default period of timer"
       toolTip="Used to calculate the timer load value"
@@ -71,7 +71,7 @@
       description="IRQ Level in NVIC [0-15]"
       toolTip="Sets the priority level used to configure the NVIC\n
                Lower numbers represent higher priorities"
-      value="15" min="0" max="15" 
+      value="7" min="0" max="15" 
    />
 
    <template><![CDATA[
