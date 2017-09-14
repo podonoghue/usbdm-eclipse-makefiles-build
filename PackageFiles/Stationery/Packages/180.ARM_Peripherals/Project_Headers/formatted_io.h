@@ -889,7 +889,7 @@ public:
    /**
     * Controls echoing of input characters
     *
-    * @param echoOn
+    * @param echoMode
     *
     * @return Reference to self
     */

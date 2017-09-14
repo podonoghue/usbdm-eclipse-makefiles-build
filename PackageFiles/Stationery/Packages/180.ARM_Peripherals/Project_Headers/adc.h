@@ -206,8 +206,8 @@ enum AdcCompare {
 /**
  * Type definition for ADC interrupt call back
  *
- * @param[in] value Conversion value from channel
- * @param[in] value Channel number for the conversion
+ * @param[in] value   Conversion value from channel
+ * @param[in] channel Channel number for the conversion
  */
 typedef void (*ADCCallbackFunction)(uint32_t value, int channel);
 
@@ -357,16 +357,17 @@ public:
    /**
     * Enable/disable interrupts in NVIC
     *
-    * @param[in] enable true to enable, false to disable
+    * @param[in]  enable    True => enable, False => disable
+    * @param[in]  priority  Interrupt priority
     */
-   static __attribute__((always_inline)) void enableNvicInterrupts(bool enable=true) {
+   static void enableNvicInterrupts(bool enable=true, uint32_t priority=NvicPriority_Normal) {
 
       if (enable) {
          // Enable interrupts
          NVIC_EnableIRQ(Info::irqNums[0]);
 
          // Set priority level
-         NVIC_SetPriority(Info::irqNums[0], Info::irqLevel);
+         NVIC_SetPriority(Info::irqNums[0], priority);
       }
       else {
          // Disable interrupts

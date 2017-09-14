@@ -370,17 +370,16 @@ public:
    /**
     * Enable/disable interrupts in NVIC
     *
-    * @param[in]  enable    True => enable, False => disable
-    * @param[in]  priority  Interrupt priority
+    * @param[in] enable true to enable, false to disable
     */
-   static void enableNvicInterrupts(bool enable=true, uint32_t priority=NvicPriority_Normal) {
+   static void enableNvicInterrupts(bool enable=true) {
 
       if (enable) {
          // Enable interrupts
          NVIC_EnableIRQ(Info::irqNums[0]);
 
          // Set priority level
-         NVIC_SetPriority(Info::irqNums[0], priority);
+         NVIC_SetPriority(Info::irqNums[0], Info::irqLevel);
       }
       else {
          // Disable interrupts
