@@ -86,8 +86,8 @@ int main() {
 
 #ifdef SET_HANDLERS_PROGRAMMATICALLY
    // Set handlers programmatically
-   Timer::setCallback(0, flashRed);
-   Timer::setCallback(1, flashGreen);
+   TimerChannelA::setCallback(flashRed);
+   TimerChannelB::setCallback(flashGreen);
 #endif
 
    // Flash 1st LED @ 2Hz

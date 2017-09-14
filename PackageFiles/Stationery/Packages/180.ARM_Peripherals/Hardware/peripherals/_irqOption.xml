@@ -8,7 +8,7 @@
       description="Peripheral nterrupt handler"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
       pattern="^%b%i$" 
-      classHandler="irqHandler" />
+      classHandler="%c%i::irqHandler" />
       
    <template><![CDATA[
        \t//! Class based callback handler has been installed in vector table\n

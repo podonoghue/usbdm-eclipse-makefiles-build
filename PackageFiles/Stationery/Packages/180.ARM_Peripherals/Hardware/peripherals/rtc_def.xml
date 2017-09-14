@@ -313,13 +313,13 @@
       description="RTC Alarm interrupt handler"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
       pattern="^RTC_Alarm$" 
-      classHandler="irqAlarmHandler" />
+      classHandler="%c%i::irqAlarmHandler" />
       
    <irqOption name="irqSecondsHandler"  
       description="RTC Seconds interrupt handler"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
       pattern="^RTC_Seconds$" 
-      classHandler="irqSecondsHandler" />
+      classHandler="%c%i::irqSecondsHandler" />
       
    <template><![CDATA[
        \t//! Class based callback handler has been installed in vector table\n

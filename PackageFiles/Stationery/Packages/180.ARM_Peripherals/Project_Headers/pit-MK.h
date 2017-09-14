@@ -34,7 +34,7 @@ namespace USBDM {
 typedef void (*PitCallbackFunction)(void);
 
 /**
- * Enable the PIT
+ * Control PIT operation in debug mode (suspended for debugging)
  */
 enum PitDebugMode {
    PitDebugMode_Run  = PIT_MCR_FRZ(0),  //!< PIT continues to run in debug mode
@@ -42,7 +42,7 @@ enum PitDebugMode {
 };
 
 /**
- * Enable the PIT
+ * Enable the PIT interrupts
  */
 enum PitChannelIrq {
    PitChannelIrq_Disable  = PIT_TCTRL_TIE(0),  //!< PIT channel interrupt disabled
@@ -50,7 +50,7 @@ enum PitChannelIrq {
 };
 
 /**
- * Enable the PIT
+ * Enable the PIT channel
  */
 enum PitChannelEnable {
    PitChannelEnable_Disable  = PIT_TCTRL_TEN(0),  //!< PIT channel disabled
@@ -80,40 +80,11 @@ protected:
    /** Default TCTRL value for timer channel */
    static constexpr uint32_t PIT_TCTRL_DEFAULT_VALUE = (PIT_TCTRL_TEN_MASK);
 
-   /** Callback functions for ISRs */
-   static PitCallbackFunction callbacks[Info::irqCount];
-
    /** Callback to catch unhandled interrupt */
    static void unhandledCallback() {
       setAndCheckErrorCode(E_NO_HANDLER);
    }
    
-public:
-   /** PIT interrupt handler -  Calls PIT0 callback */
-   static void irq0Handler() {
-      // Clear interrupt flag
-      pit->CHANNEL[0].TFLG = PIT_TFLG_TIF_MASK;
-      callbacks[0]();
-   }
-   /** PIT interrupt handler -  Calls PIT1 callback */
-   static void irq1Handler() {
-      // Clear interrupt flag
-      pit->CHANNEL[1].TFLG = PIT_TFLG_TIF_MASK;
-      callbacks[1]();
-   }
-   /** PIT interrupt handler -  Calls PIT2 callback */
-   static void irq2Handler() {
-      // Clear interrupt flag
-      pit->CHANNEL[2].TFLG = PIT_TFLG_TIF_MASK;
-      callbacks[2]();
-   }
-   /** PIT interrupt handler -  Calls PIT3 callback */
-   static void irq3Handler() {
-      // Clear interrupt flag
-      pit->CHANNEL[3].TFLG = PIT_TFLG_TIF_MASK;
-      callbacks[3]();
-   }
-
 public:
    /**
     * Enable/disable channel interrupts
@@ -128,20 +99,6 @@ public:
       else {
          pit->CHANNEL[channel].TCTRL &= ~PIT_TCTRL_TIE_MASK;
       }
-   }
-
-   /**
-    * Set callback for ISR
-    *
-    * @param[in]  channel  The PIT channel to modify
-    * @param[in]  callback The function to call from stub ISR
-    */
-   static void setCallback(unsigned channel, PitCallbackFunction callback) {
-      if (callback == nullptr) {
-         callback = unhandledCallback;
-         enableInterrupts(channel, false);
-      }
-      callbacks[channel] = callback;
    }
 
 protected:
@@ -239,6 +196,7 @@ public:
          pit->CHANNEL[channel].TCTRL &= ~PIT_TCTRL_TEN_MASK;
       }
    }
+
    /**
     *  Configure the PIT channel
     *
@@ -259,6 +217,7 @@ public:
 
       enableNvicInterrupts(channel);
    }
+
    /**
     *  Configure the PIT channel
     *
@@ -279,6 +238,7 @@ public:
 
       enableNvicInterrupts(channel);
    }
+
    /**
     * Set period in seconds
     *
@@ -288,6 +248,7 @@ public:
    static void setPeriod(unsigned channel, float interval) {
       pit->CHANNEL[channel].LDVAL = round((interval*PitInfo::getClockFrequency())-1);
    }
+
    /**
     * Set period in seconds
     *
@@ -297,6 +258,7 @@ public:
    static void setPeriodInTicks(unsigned channel, uint32_t interval) {
       pit->CHANNEL[channel].LDVAL = interval-1;
    }
+
    /**
     *   Disable the PIT channel
     *
@@ -310,6 +272,7 @@ public:
       // Disable timer interrupts
       enableNvicInterrupts(channel, false);
    }
+
    /**
     *  Use a PIT channel to implement a busy-wait delay
     *
@@ -325,6 +288,7 @@ public:
       }
       disableChannel(channel);
    }
+
    /**
     *  Use a PIT channel to implement a busy-wait delay
     *
@@ -340,17 +304,6 @@ public:
       }
       disableChannel(channel);
    }
-
-};
-
-/**
- * Callback table for programmatically set handlers
- */
-template<class Info> PitCallbackFunction PitBase_T<Info>::callbacks[] = {
-   unhandledCallback,
-   unhandledCallback,
-   unhandledCallback,
-   unhandledCallback
 };
 
 /**
@@ -361,7 +314,30 @@ template<class Info> PitCallbackFunction PitBase_T<Info>::callbacks[] = {
 template <class Info, int channel>
 class PitChannel_T : public PitBase_T<Info> {
 
+protected:
+   static PitCallbackFunction callback;
+
 public:
+   /**
+    * Set interrupt callback
+    *
+    * @param[in]  channel           PIT channel to modify
+    * @param[in]  callbackFunction  Function to call from stub ISR
+    */
+   static void setCallback(PitCallbackFunction callbackFunction) {
+      if (callbackFunction == nullptr) {
+         callbackFunction = PitBase_T<Info>::unhandledCallback;
+         enableInterrupts(false);
+      }
+      callback = callbackFunction;
+   }
+
+   /** PIT interrupt handler -  Calls PIT0 callback */
+   static void irqHandler() {
+      // Clear interrupt flag
+      PitBase_T<Info>::pit->CHANNEL[channel].TFLG = PIT_TFLG_TIF_MASK;
+      callback();
+   }
 
    /** Timer channel number */
    static constexpr int CHANNEL = channel;
@@ -381,6 +357,7 @@ public:
       PitBase_T<Info>::configureChannelInTicks(channel, interval, pitChannelIrq);
       PitBase_T<Info>::setCallback(channel, PitBase_T<Info>::unhandledCallback);
    }
+
    /**
     *  Configure the PIT channel\n
     *  Assume PIT has already been configured
@@ -395,6 +372,7 @@ public:
 
       PitBase_T<Info>::configureChannel(channel, interval, pitChannelIrq);
    }
+
    /**
     * Set period in seconds
     *
@@ -403,6 +381,7 @@ public:
    static void __attribute__((always_inline)) setPeriod(float interval) {
       PitBase_T<Info>::setPeriod(channel, interval);
    }
+
    /**
     * Set period in seconds
     *
@@ -411,20 +390,14 @@ public:
    static void __attribute__((always_inline)) setPeriodInTicks(uint32_t interval) {
       PitBase_T<Info>::setPeriodInTicks(channel, interval);
    }
+
    /**
     *   Enable/Disable the PIT channel
     */
    static void __attribute__((always_inline)) enable(bool enable=true) {
       PitBase_T<Info>::enableChannel(channel, enable);
    }
-   /**
-    * Set callback for channel ISR
-    *
-    * @param[in]  callback The function to call from stub ISR
-    */
-   static void __attribute__((always_inline)) setCallback(PitCallbackFunction callback) {
-      PitBase_T<Info>::setCallback(channel, callback);
-   }
+
    /**
     * Enable/disable channel interrupts
     *
@@ -433,6 +406,7 @@ public:
    static void __attribute__((always_inline)) enableInterrupts(bool enable=true) {
       PitBase_T<Info>::enableInterrupts(channel, enable);
    }
+
    /**
     * Enable/disable interrupts in NVIC
     *
@@ -446,6 +420,11 @@ public:
    }
 
 };
+
+/**
+ * Callback for programmatically set handlers
+ */
+template <class Info, int channel> PitCallbackFunction PitChannel_T<Info, channel>::callback;
 
 #ifdef PIT
 /**

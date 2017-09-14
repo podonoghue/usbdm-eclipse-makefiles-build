@@ -72,17 +72,17 @@ Devices using this peripheral:
       description="UART Tx/Rx interrupt handler"
       toolTip="This handler is used for normal communication events"
       pattern="^UART%i(_RX_TX)?$" 
-      classHandler="irqRxTxHandler" />
+      classHandler="%c%i::irqRxTxHandler" />
    <irqOption name="errorHandler" 
       description="UART Error interrupt handler"
       toolTip="This handler is used for communication error events"
       pattern="^UART%i_ERR$"  
-      classHandler="irqErrorHandler"/>
+      classHandler="%c%i::irqErrorHandler"/>
    <irqOption name="lonHandler"   
       description="UART LON interrupt handler - not all devices support LON"
       toolTip="This handler is used for LON related communication events"
       pattern="^UART%i_LON$"  
-      classHandler="irqErrorHandler"/>
+      classHandler="%c%i::irqErrorHandler"/>
         
    <template><![CDATA[
        \t//! Class based callback handler has been installed in vector table\n
