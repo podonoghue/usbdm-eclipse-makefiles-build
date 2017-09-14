@@ -207,6 +207,17 @@ inline void clearError() {
 #define usbdm_assert(__e, __m) ((void)0)
 #endif
 
+/**
+ * Convenience names for common priority levels
+ */
+enum NvicPriority {
+   NvicPriority_High     = 0, //!< NvicPriority_High
+   NvicPriority_MidHigh  = 3, //!< NvicPriority_MidHigh
+   NvicPriority_Normal   = 7, //!< NvicPriority_Normal
+   NvicPriority_Midlow   = 11,//!< NvicPriority_Midlow
+   NvicPriority_Low      = 15,//!< NvicPriority_Low
+};
+
 #include "pin_mapping.h"
 #include "delay.h"
 #include "console.h"
