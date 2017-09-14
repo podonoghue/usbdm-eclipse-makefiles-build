@@ -150,22 +150,22 @@ This is a template class with static methods.\n
 
 Convenience template for GPIO pins. Uses the following classes:\n
 <ul>
-<li>USBDM::GpioBase_T <clockMask, pcrAddress, gpioAddress, bitNum, polarity> \n
-<li>USBDM::Gpio_T <Info, bitNum, polarity>\n
+<li>USBDM::GpioBase_T &lt;clockMask, pcrAddress, gpioAddress, bitNum, polarity&gt; \n
+<li>USBDM::Gpio_T &lt;Info, bitNum, polarity&gt;\n
 <ul>
-<li>USBDM::GpioA <bitNum, polarity>
-<li>USBDM::GpioB <bitNum, polarity>
-<li>USBDM::GpioC <bitNum, polarity>
-<li>USBDM::GpioD <bitNum, polarity>
-<li>USBDM::GpioE <bitNum, polarity>
+<li>USBDM::GpioA &lt;bitNum, polarity&gt;
+<li>USBDM::GpioB &lt;bitNum, polarity&gt;
+<li>USBDM::GpioC &lt;bitNum, polarity&gt;
+<li>USBDM::GpioD &lt;bitNum, polarity&gt;
+<li>USBDM::GpioE &lt;bitNum, polarity&gt;
 </ul>
-<li>USBDM::Field_T <Info, left, right, polarity>\n
+<li>USBDM::Field_T &lt;Info, left, right, polarity&gt;\n
 <ul>
-<li>USBDM::GpioAField <left, right, polarity>
-<li>USBDM::GpioBField <left, right, polarity>
-<li>USBDM::GpioCField <left, right, polarity>
-<li>USBDM::GpioDField <left, right, polarity>
-<li>USBDM::GpioEField <left, right, polarity>
+<li>USBDM::GpioAField &lt;left, right, polarity&gt;
+<li>USBDM::GpioBField &lt;left, right, polarity&gt;
+<li>USBDM::GpioCField &lt;left, right, polarity&gt;
+<li>USBDM::GpioDField &lt;left, right, polarity&gt;
+<li>USBDM::GpioEField &lt;left, right, polarity&gt;
 </ul>
 </ul>
 
@@ -454,8 +454,13 @@ This is a template class with static methods.\n
 
 @page PITExamples Programmable Interrupt Timer Module
 
-Convenience template for PIT hardware. Based on USBDM::PitBase_T.\n
-
+Convenience template for PIT hardware. \n
+Uses the following classes:
+<ul>
+<li> USBDM::PitBase_T &lt;Info&gt;
+<li> USBDM::Pit
+<li> USBDM::PitChannel &lt;channel&gt;
+</ul>
 It provides:\n
 - Static pin mapping in conjunction with the configuration settings.
 - Setting the PIT channel period in seconds

@@ -1,5 +1,5 @@
 /**
- * @file pit-example3-MK.cpp
+ * @file pit-example3.cpp (derived from pit-example3-MK.cpp)
  */
 #include "hardware.h"
 #include "pit.h"
@@ -13,31 +13,39 @@ using namespace USBDM;
  *
  * Toggles LED
  */
+/**
+ * This example uses PIT interrupts.
+ *
+ * It is necessary to enable these in Configure.usbdmProject
+ * under the "Peripheral Parameters"->PIT tab.
+ * Select irqHandlerChannelX option (Class Method - Software ...)
+ */
 
 // Connection mapping - change as required
-using Led = USBDM::GpioC<3, ActiveLow>;
+using Led = $(demo.cpp.blue.led:GpioA<2, USBDM::ActiveLow>);
 
+using Timer        = Pit;
+using TimerChannel = PitChannel<0>;
 /*
  * This callback is set programmatically
  */
-void flashGreen(void) {
+void flash(void) {
    Led::toggle();
 }
 
 int main() {
-   Led::setOutput(PinDriveStrength_High);
+   Led::setOutput(
+         PinDriveStrength_High,
+         PinDriveMode_PushPull,
+         PinSlewRate_Slow);
 
-   // Do default configure
-   Pit::configure();
+   Timer::configure(PitDebugMode_Stop);
 
-   // Set handler for channel 1 programmatically
-   Pit::setCallback(1, flashGreen);
+   // Set handler programmatically
+   TimerChannel::setCallback(flash);
 
    // Flash LED @ 1Hz
-   Pit::configureChannelInTicks(1, ::SystemBusClock);
-
-   // Enable interrupts on the channel
-   Pit::enableInterrupts(1);
+   TimerChannel::configureInTicks(::SystemBusClock, PitChannelIrq_Enable);
 
    // Check for errors so far
    checkError();

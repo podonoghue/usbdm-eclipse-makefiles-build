@@ -318,10 +318,13 @@ protected:
    static PitCallbackFunction callback;
 
 public:
+
+   /** Timer channel number */
+   static constexpr int CHANNEL = channel;
+
    /**
     * Set interrupt callback
     *
-    * @param[in]  channel           PIT channel to modify
     * @param[in]  callbackFunction  Function to call from stub ISR
     */
    static void setCallback(PitCallbackFunction callbackFunction) {
@@ -332,39 +335,31 @@ public:
       callback = callbackFunction;
    }
 
-   /** PIT interrupt handler -  Calls PIT0 callback */
+   /** PIT interrupt handler -  Calls PIT callback */
    static void irqHandler() {
       // Clear interrupt flag
       PitBase_T<Info>::pit->CHANNEL[channel].TFLG = PIT_TFLG_TIF_MASK;
       callback();
    }
 
-   /** Timer channel number */
-   static constexpr int CHANNEL = channel;
-
    /**
-    *  Configure the PIT channel\n
-    *  Assume PIT has already been configured
+    *  Configure the PIT channel
     *
     *  @param[in]  interval          Interval in timer ticks (usually bus clock)
     *  @param[in]  pitChannelIrq     Whether to enable interrupts
-    *  @param[in]  pitChannelEnable  Whether to enable channel initially
     */
    static void __attribute__((always_inline)) configureInTicks(
          uint32_t          interval,
          PitChannelIrq     pitChannelIrq=PitChannelIrq_Disable) {
 
       PitBase_T<Info>::configureChannelInTicks(channel, interval, pitChannelIrq);
-      PitBase_T<Info>::setCallback(channel, PitBase_T<Info>::unhandledCallback);
    }
 
    /**
-    *  Configure the PIT channel\n
-    *  Assume PIT has already been configured
+    *  Configure the PIT channel
     *
     *  @param[in]  interval          Interval in seconds
     *  @param[in]  pitChannelIrq     Whether to enable interrupts
-    *  @param[in]  pitChannelEnable  Whether to enable channel initially
     */
    static void __attribute__((always_inline)) configure(
          float             interval,

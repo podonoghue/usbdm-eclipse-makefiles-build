@@ -25,8 +25,8 @@ using namespace USBDM;
 #define SET_HANDLERS_PROGRAMMATICALLY
 
 // Connection mapping - change as required
-using LED1 = $(demo.cpp.red.led:USBDM::GpioA<2, USBDM::ActiveLow>);
-using LED2 = $(demo.cpp.green.led:USBDM::GpioC<3, USBDM::ActiveLow>);
+using Led1 = $(demo.cpp.blue.led:GpioA<2, USBDM::ActiveLow>);
+using Led2 = $(demo.cpp.red.led:GpioC<3, USBDM::ActiveLow>);
 
 using Timer         = Pit;
 using TimerChannelA = PitChannel<0>;
@@ -61,13 +61,13 @@ template<> void PitBase_T<PitInfo>::irq1Handler() {
 #endif
 
 /*
- * These handlers are set programmatically
+ * These callbacks are set programmatically
  */
-void flashRed(void) {
+void flashA(void) {
    Led1::toggle();
 }
 
-void flashGreen(void) {
+void flashB(void) {
    Led2::toggle();
 }
 
@@ -82,25 +82,23 @@ int main() {
          PinDriveMode_PushPull,
          PinSlewRate_Slow);
 
-   Timer::configure();
+   Timer::configure(PitDebugMode_Stop);
 
 #ifdef SET_HANDLERS_PROGRAMMATICALLY
    // Set handlers programmatically
-   TimerChannelA::setCallback(flashRed);
-   TimerChannelB::setCallback(flashGreen);
+   TimerChannelA::setCallback(flashA);
+   TimerChannelB::setCallback(flashB);
 #endif
 
    // Flash 1st LED @ 2Hz
-   TimerChannelA::configureChannelInTicks(0, ::SystemBusClock/2);
-   // or TimerChannelA::configureChannel(0, 500*ms);
+   TimerChannelA::configureInTicks(::SystemBusClock/2, PitChannelIrq_Enable);
+   // or
+//   TimerChannelA::configure(500*ms, PitChannelIrq_Enable);
 
    // Flash 2nd LED @ 1Hz
-   TimerChannelB::configureChannelInTicks(1, ::SystemBusClock);
-   // or TimerChannelB::configureChannel(1, 1*seconds);
-
-   // Enable interrupts on the two channels
-   TimerChannelA::enableInterrupts();
-   TimerChannelB::enableInterrupts();
+   TimerChannelB::configureInTicks(::SystemBusClock, PitChannelIrq_Enable);
+   // or
+//   TimerChannelB::configure(1*seconds, PitChannelIrq_Enable);
 
    // Check for errors so far
    checkError();
