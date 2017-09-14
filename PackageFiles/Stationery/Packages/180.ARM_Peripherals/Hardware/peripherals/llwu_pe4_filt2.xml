@@ -2,7 +2,9 @@
 ?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- llwu_pe4_filt2.xml -->
-   
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Low Leakage Wakeup Unit">
+
    <binaryOption name="mapPinsOnEnable" 
       description="Map pins when enabled"
       toolTip="Map all allocated pins on peripheral when the\n
@@ -17,7 +19,6 @@
       \tstatic constexpr bool mapPinsOnEnable = $(mapPinsOnEnable);\n\n
    ]]></template>
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Low Leakage Wakeup Unit">
    <binaryOption name="llwu_me_wume0" description="0: LPTMR" toolTip="Enables this peripheral to wakeup the processor">
       <choice name="Disabled" value="0" isDefault="true" />
       <choice name="Enabled"   value="1" />
