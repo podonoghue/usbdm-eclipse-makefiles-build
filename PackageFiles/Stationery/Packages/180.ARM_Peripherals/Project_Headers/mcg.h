@@ -135,6 +135,22 @@ public:
    static McgInfo::ClockMode currentClockMode;
 
    /**
+    * Get current clock mode
+    *
+    * @return
+    */
+   static McgInfo::ClockMode getClockMode() {
+      return currentClockMode;
+   }
+
+   /**
+    * Get name for clock mode
+    *
+    * @return Pointer to static string
+    */
+   static const char *getClockMode(McgInfo::ClockMode);
+
+   /**
     *  Configure the MCG for given mode
     *
     *  @param[in]  settingNumber CLock setting number

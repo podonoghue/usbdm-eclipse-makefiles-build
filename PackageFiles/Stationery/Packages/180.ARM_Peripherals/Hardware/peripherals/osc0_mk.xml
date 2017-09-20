@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- osc0_mk.xml -->
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Oscillator">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Oscillator" >
    
    <binaryOption name="mapPinsOnEnable" 
       description="Map pins when enabled"
@@ -46,7 +46,7 @@
       derived="true"
       value="8000000" />
 
-   <choiceOption name="range_out"
+   <choiceOption name="oscillatorRange"
       derived="true"
       constant="true"
       description="Frequency Range Select"
@@ -56,18 +56,6 @@
       <choice value="1" name="High range" />
       <choice value="2" name="Very High range" />
       <choice value="0" name="Unconstrained by Oscillator" />
-   </choiceOption>
-
-   <choiceOption name="range"
-      derived="true"
-      constant="true"
-      description="Frequency Range Select"
-      toolTip="Selects the frequency range for the crystal oscillator\n
-         and/or divider for FLL input clock">
-      <choice value="0" name="Low range" />
-      <choice value="1" name="High range" />
-      <choice value="2" name="Very High range" />
-      <choice value="0" name="Unused" />
    </choiceOption>
 
    <binaryOption name="hgo0"

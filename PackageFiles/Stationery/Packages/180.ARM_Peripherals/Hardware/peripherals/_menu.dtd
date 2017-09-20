@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!ENTITY % gui_items        "(xi:include|category|constant|floatOption|intOption|bitmaskOption|choiceOption|binaryOption|irqOption|stringOption|numericListOption|pinListOption|aliasOption|signals)" >
+<!ENTITY % gui_items        "(xi:include|category|indexedCategory|constant|floatOption|intOption|bitmaskOption|choiceOption|binaryOption|irqOption|stringOption|numericListOption|pinListOption|aliasOption|signals)" >
 <!ENTITY % structure_items  "(xi:include|section|tab|list)" >
 <!ENTITY % control_items    "(xi:include|template|validate|projectActionList)" >
 
@@ -28,13 +28,18 @@
 <!ELEMENT tab (((%structure_items;),(%control_items;)*)|(%gui_items;|%control_items;)*) >
    <!ATTLIST tab name         CDATA        #REQUIRED>
 
+<!ELEMENT indexedCategory ((%gui_items;)*) >
+   <!ATTLIST indexedCategory xmlns:xi     CDATA        #IMPLIED>
+   <!ATTLIST indexedCategory name         CDATA        #REQUIRED>
+   <!ATTLIST indexedCategory description  CDATA        #REQUIRED>
+   <!ATTLIST indexedCategory toolTip      CDATA        "">
+   <!ATTLIST indexedCategory dim  		   CDATA        "0" >
+
 <!ELEMENT category ((%gui_items;)*) >
    <!ATTLIST category xmlns:xi     CDATA        #IMPLIED>
    <!ATTLIST category name         CDATA        #REQUIRED>
-   <!ATTLIST category dim          CDATA        "0">
    <!ATTLIST category description  CDATA        #REQUIRED>
    <!ATTLIST category toolTip      CDATA        "">
-
 
 <!ELEMENT intOption EMPTY >
    <!ATTLIST intOption constant     (false|true) "false">
@@ -184,10 +189,11 @@
 <!ELEMENT template (#PCDATA)>
    <!ATTLIST template namespace (info|usbdm|class|all)  "info" >
    <!ATTLIST template name 		CDATA  				"" >
-   <!ATTLIST template dim  		CDATA  				#IMPLIED >
+   <!ATTLIST template dim  		CDATA  				"0" >
 
 <!ELEMENT validate (param*) >
    <!ATTLIST validate class CDATA #REQUIRED>
+   <!ATTLIST validate dim  		   CDATA        "0" >
    
 <!ELEMENT param EMPTY >
    <!ATTLIST param type  (long|string) #REQUIRED>

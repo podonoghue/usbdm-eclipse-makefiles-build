@@ -53,21 +53,6 @@ Devices using this peripheral:
          <choice value="1"  name="RTC 32.768kHz clock" isDefault="true" />
       </binaryOption>
    
-      <choiceOption name="sim_sopt2_pllfllsel" 
-         description="Peripheral Clock select"
-         toolTip="Selects the clock for various peripherals (LPUART, TPM etc.)">
-         <choice value="0"  name="MCGFLLCLK clock" isDefault="true" />
-         <choice value="1"  name="MCGPLLCLK clock" />
-         <choice value="2"  name="Reserved" />
-         <choice value="3"  name="IRC48 MHz clock" />
-      </choiceOption>
-   
-      <intOption name="system_peripheral_clock"
-         constant="true"
-         units="Hz"
-         description="Peripheral Clock frequency"
-         toolTip="Frequency of Peripheral Clock available to various peripherals"  />
-         
       <choiceOption name="sim_sopt2_usbsrc" 
          description="USB clock source select"
          toolTip="Selects the source for the USB clock">
@@ -470,42 +455,6 @@ Devices using this peripheral:
       \t   SIM_SOPT7_ADC0PRETRGSEL($(sim_sopt7_adc0pretrgsel)) |   // ADC0 pretrigger select
       \t   SIM_SOPT7_ADC0TRGSEL($(sim_sopt7_adc0trgsel));       // ADC0 trigger select\n\n
    ]]></template>
-   <category name="CLKDIV1" description="System Clock Dividers">
-      <intOption name="sim_clkdiv1_outdiv1" 
-         derived="true"
-         constant="true"
-         description="Core &amp; System Clock Divider (OUTDIV1) - Divide by [1-16]"
-         toolTip="Clocks the ARM Cortex-M4 core and bus masters [SIM_CLKDIV1_OUTDIV1]\n
-                  Divides MCGOUT Clock to generate system_core_clock"
-         value="1" offset="-1" min="1" max="16" />
-   
-      <intOption name="sim_clkdiv1_outdiv2" 
-         derived="true"
-         constant="true"
-         description="Bus Clock Divider (OUTDIV2) - Divide by [1-16]"
-         toolTip="Clocks the bus slaves and peripheral [SIM_CLKDIV1_OUTDIV2]\n
-            Divides MCGOUT Clock to generate system_bus_clock\n
-            MCGOUTCLK clock is source. Default /2"
-         value="1" offset="-1" min="1" max="16" />
-   
-      <intOption name="sim_clkdiv1_outdiv3" 
-         derived="true"
-         constant="true"
-         description="Flexbus Clock Divider (OUTDIV3) - Divide by [1-16]"
-         toolTip="Clocks the flexbus interface [SIM_CLKDIV1_OUTDIV3]\n
-                  Divides MCGOUT Clock to generate system_flexbus_clock\n
-                  MCGOUTCLK clock is source. Default /2"
-         value="1" offset="-1" min="1" max="16" />
-   
-      <intOption name="sim_clkdiv1_outdiv4" 
-         derived="true"
-         constant="true"
-         description="Flash Clock Divider (OUTDIV4) - Divide by [1-16]"
-         toolTip="Clocks the flash memory [SIM_CLKDIV1_OUTDIV4]\n
-                  Divides MCGOUT Clock to generate system_flash_clock\n
-                  MCGOUTCLK clock is source. Default /4"
-         value="4" offset="-1" min="1" max="16" />
-   </category>
    <template><![CDATA[
       \t//! System Clock Divider Register 1
       \tstatic constexpr uint32_t clkdiv1 = 
@@ -536,26 +485,49 @@ Devices using this peripheral:
          <choice value="12" name="Divide by 7 (div=6, frac=0)" />
          <choice value="14" name="Divide by 8 (div=7, frac=0)" />
       </choiceOption>
-   </category>   
+   </category>
+      
    <template><![CDATA[
       \t//! System Clock Divider Register 2
       \tstatic constexpr uint32_t clkdiv2 = 
       \t   $(sim_clkdiv2_usb);  // USB clock divider divisor & fraction \n\n
    ]]></template>
    
-   <intOption name="system_core_clock" 
-      units="Hz"
-      description="System Core Clock"
-      toolTip="Clocks the ARM Cortex-M4 core and bus masters"
+   <indexedCategory name="ClockConfig." dim="3" 
+         description="Clock configurations" 
+         toolTip="Clock configurations for different run modes" >
+         
+      <aliasOption key="/MCG/ClockConfig."
+        constant="true"/>
+      
+      <choiceOption name="sim_sopt2_pllfllsel."
+         description="Peripheral Clock select"
+         toolTip="Selects the clock for various peripherals (LPUART, TPM etc.)">
+         <choice value="0"  name="MCGFLLCLK clock" isDefault="true" />
+         <choice value="1"  name="MCGPLLCLK clock" />
+         <choice value="2"  name="Reserved" />
+         <choice value="3"  name="IRC48 MHz clock" />
+      </choiceOption>
+   
+      <intOption name="system_peripheral_clock."
+         constant="true"
+         units="Hz"
+         description="Peripheral Clock frequency"
+         toolTip="Frequency of Peripheral Clock available to various peripherals"  />
+	 
+      <intOption name="system_core_clock." 
+         units="Hz"
+         description="System Core Clock"
+         toolTip="Clocks the ARM Cortex-M4 core and bus masters"
       value="120000000" />
-
-   <intOption name="system_bus_clock" 
-      units="Hz"
-      description="System Bus Clock"
-      toolTip="Clocks the bus slaves and peripherals\n
-               Must be &lt;= Core Clock frequency and an integer divisor"
+   
+      <intOption name="system_bus_clock." 
+         units="Hz"
+         description="System Bus Clock"
+         toolTip="Clocks the bus slaves and peripherals\n
+                  Must be &lt;= Core Clock frequency and an integer divisor"
       value="60000000" />
-
+   
    <intOption name="system_flexbus_clock" 
       units="Hz"
       description="System Flexbus Clock"
@@ -563,16 +535,55 @@ Devices using this peripheral:
                Must be &lt;= Bus Clock frequency"
       value="60000000" />
 
-   <intOption name="system_flash_clock" 
-      units="Hz"
-      description="System Flash Clock"
-      toolTip="Clocks the flash memory\n
-               Must be an integer divisor of the Core Clock.\n
-               Must be &lt;= Bus Clock frequency."
+      <intOption name="system_flash_clock." 
+         units="Hz"
+         description="System Flash Clock"
+         toolTip="Clocks the flash memory\n
+                  Must be an integer divisor of the Core Clock.\n
+                  Must be &lt;= Bus Clock frequency."
       value="24000000" />
-
+	 
+      <category name="CLKDIV1" description="System Clock Dividers">
+         <intOption name="sim_clkdiv1_outdiv1." 
+            derived="true"
+            constant="true"
+            description="Core &amp; System Clock Divider (OUTDIV1) - Divide by [1-16]"
+            toolTip="Clocks the ARM Cortex-M4 core and bus masters [SIM_CLKDIV1_OUTDIV1]\n
+                     Divides MCGOUT Clock to generate system_core_clock"
+            value="1" offset="-1" min="1" max="16" />
+      
+         <intOption name="sim_clkdiv1_outdiv2." 
+            derived="true"
+            constant="true"
+            description="Bus Clock Divider (OUTDIV2) - Divide by [1-16]"
+            toolTip="Clocks the bus slaves and peripheral [SIM_CLKDIV1_OUTDIV2]\n
+               Divides MCGOUT Clock to generate system_bus_clock\n
+               MCGOUTCLK clock is source. Default /2"
+            value="1" offset="-1" min="1" max="16" />
+      
+      <intOption name="sim_clkdiv1_outdiv3." 
+         derived="true"
+         constant="true"
+         description="Flexbus Clock Divider (OUTDIV3) - Divide by [1-16]"
+         toolTip="Clocks the flexbus interface [SIM_CLKDIV1_OUTDIV3]\n
+                  Divides MCGOUT Clock to generate system_flexbus_clock\n
+                  MCGOUTCLK clock is source. Default /2"
+         value="1" offset="-1" min="1" max="16" />
+   
+         <intOption name="sim_clkdiv1_outdiv4." 
+            derived="true"
+            constant="true"
+            description="Flash Clock Divider (OUTDIV4) - Divide by [1-16]"
+            toolTip="Clocks the flash memory [SIM_CLKDIV1_OUTDIV4]\n
+                     Divides MCGOUT Clock to generate system_flash_clock\n
+                     MCGOUTCLK clock is source. Default /4"
+            value="4" offset="-1" min="1" max="16" />
+      </category>
+   </indexedCategory>
+   
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate">
+      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate"
+      dim="3">
       <param type="long" value="$(coreFreq)" />    <!-- Core         -->
       <param type="long" value="$(busFreq)" />     <!-- Bus          -->
       <param type="long" value="$(flashFreq)" />   <!-- Flash        -->
@@ -598,8 +609,7 @@ Devices using this peripheral:
       \t   sim->SOPT5 = sopt5;
       \t   sim->SOPT7 = sopt7;
       \t
-      \t   sim->CLKDIV1 = clkdiv1;
       \t   sim->CLKDIV2 = clkdiv2;
-      \t}
+      \t}\n\n
    ]]></template>
 </peripheralPage>

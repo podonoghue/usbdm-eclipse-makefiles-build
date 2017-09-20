@@ -22,6 +22,7 @@ using Timer = $(demo.cpp.ftm:Ftm0);
 using Led   = $(demo.cpp.pwm.led1:Ftm0Channel<7>);
 
 int main() {
+
    // Configure base FTM for left-aligned PWM
    Timer::configure(
          FtmMode_LeftAlign,
@@ -31,7 +32,7 @@ int main() {
 
    /*
     * Change PWM period
-    * Note - Setting the period of Led affects all channels on the same FTM
+    * Note - Setting the period affects all channels of the FTM
     */
    Timer::setPeriod(5*us);
 

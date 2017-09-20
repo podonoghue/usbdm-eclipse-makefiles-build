@@ -161,6 +161,15 @@ enum FtmChannelDma {
 };
 
 /**
+ * Selects pairs of channels for some operations
+ */
+enum FtmChannelPair {
+   FtmChannelPair_0_1 = (1<<0),//!< Channel Pair select for channels 0 and 1
+   FtmChannelPair_2_3 = (1<<1),//!< Channel Pair select for channels 2 and 3
+   FtmChannelPair_4_5 = (1<<2),//!< Channel Pair select for channels 4 and 5
+   FtmChannelPair_6_7 = (1<<3),//!< Channel Pair select for channels 6 adn 6
+};
+/**
  * Type definition for FTM timer overflow interrupt call back
  */
 typedef void (*FtmCallbackFunction)();
@@ -428,19 +437,23 @@ public:
    /**
     * Set modulo of counter
     *
+    * This value is write-buffered and updated by MOD synchronisation.
+    *
     * @param[in] modulo Modulo value in ticks (<65535)
     */
-   void __attribute__((always_inline)) setMod(uint16_t modulo) {
+   static void __attribute__((always_inline)) setMod(uint16_t modulo) {
       tmr->MOD = modulo;
    }
 
    /**
-    * Set starting count of counter
+    * Set starting value for counter (CNTIN)
     *
-    * @param[in] countIn Starting count in ticks (<65535)
+    * This value is write-buffered and updated by CNTIN synchronisation.
+    *
+    * @param[in] polarityMask  Starting value in ticks (<65535)
     */
-   void __attribute__((always_inline)) setCountIn(uint16_t countIn) {
-      tmr->CNTIN = countIn;
+   static void __attribute__((always_inline)) setCounterStartValue(uint32_t startValue) {
+         tmr->CNTIN = startValue;
    }
 
    /**
@@ -851,16 +864,6 @@ public:
     * *****************************************************************
     */
    /**
-    * Set Timer event time
-    *
-    * @param[in] eventTime  Absolute event time i.e. value to use as timer comparison value
-    * @param[in] channel    Timer channel
-    */
-   static __attribute__((always_inline)) void setEventTime(uint16_t eventTime, int channel) {
-      tmr->CONTROLS[channel].CnV = eventTime;
-   }
-
-   /**
     * Get Timer event time
     *
     * @param[in] channel    Timer channel
@@ -872,7 +875,21 @@ public:
    }
 
    /**
+    * Set Timer event time
+    *
+    * This value is write-buffered and updated by Cnv synchronisation.
+    *
+    * @param[in] eventTime  Absolute event time i.e. value to use as timer comparison value
+    * @param[in] channel    Timer channel
+    */
+   static __attribute__((always_inline)) void setEventTime(uint16_t eventTime, int channel) {
+      tmr->CONTROLS[channel].CnV = eventTime;
+   }
+
+   /**
     * Set Timer event time relative to current event time
+    *
+    * This value is write-buffered and updated by Cnv synchronisation.
     *
     * @param[in] eventTime  Event time relative to current event time (i.e. Timer channel CnV value)
     * @param[in] channel    Timer channel
@@ -883,6 +900,8 @@ public:
 
    /**
     * Set Timer event time relative to current timer count value
+    *
+    * This value is write-buffered and updated by Cnv synchronisation.
     *
     * @param[in] eventTime  Event time relative to current time (i.e. Timer CNT value)
     * @param[in] channel    Timer channel
@@ -961,6 +980,80 @@ public:
     */
    static __attribute__((always_inline)) ErrorCode setHighTime(float highTime, int channel) {
       return setHighTime(convertSecondsToTicks(highTime), channel);
+   }
+
+   /**
+    * Set polarity of all channels
+    *
+    * @param polarityMask  Polarity to set
+    * @param channelMask   Bit mask 0 => active-high, 1 => active-low
+    */
+   static void setPolarity(uint32_t channelMask) {
+         tmr->POL = channelMask;
+   }
+
+   /**
+    * Set polarity of selected channels
+    *
+    * @param polarityMask  Polarity to set
+    * @param channelMask   Bit mask indicating channels to affect
+    */
+   static void setPolarity(Polarity polarity, uint32_t channelMask) {
+      if (polarity) {
+         tmr->POL &= ~channelMask;
+      }
+      else {
+         tmr->POL |= channelMask;
+      }
+   }
+
+   /**
+    * Set initial state for channels outputs
+    *
+    * @param initialValue  Bit mask value for channels
+    */
+   static void setOutputInitialValue(uint32_t initialValue) {
+         tmr->OUTINIT = initialValue;
+   }
+
+   /**
+    * Set output mask for channels outputs
+    *
+    * The mask of a channel determines if its output responds, that is,
+    * it is masked or not, when a match occurs
+    * This value is write-buffered and updated by PWM synchronisation.
+    *
+    * @param maskValue  Bit mask value 0 => not masked, 1 => masked
+    */
+   static void setOutputMaskValue(uint32_t maskValue) {
+         tmr->OUTMASK = maskValue;
+   }
+
+   /**
+    * Set inverting control
+    *
+    * This controls when the channel (n) and (n+1) outputs are exchanged.
+    * Each bit enables the inverting operation for the corresponding channels pair.
+    * This value is write-buffered and updated by INVCTRL synchronisation.
+    *
+    * @param enableMask  Bit mask for channels (combination of FtmChannelPair)
+    */
+   static void setInvertedChannelPairs(uint32_t enableMask) {
+         tmr->OUTINIT = enableMask;
+   }
+
+   /**
+    * Force channel outputs
+    *
+    * This enables software control of channel output and
+    * defines the value forced to the channel output.
+    * This value is write-buffered and updated by SWOCTRL synchronisation.
+    *
+    * @param enableMask  Bit mask for channels to be forced 1 => forced
+    * @param outputMask  Bit mask for values to be forced to channels
+    */
+   static void forceChannelOutpus(uint32_t enableMask, uint32_t outputMask) {
+         tmr->SWOCTRL = (enableMask&0xFF)|((outputMask<<8)&0xFF00);
    }
 
 };
@@ -1441,6 +1534,14 @@ public:
       tmr->CONTROLS[channel].CnSC &= ~FTM_CnSC_CHF_MASK;
    }
 
+   /**
+    * Set polarity of channels
+    *
+    * @param polarityMask Bit mask 0 => active-high, 1 => active-low
+    */
+   static void setPolarity(Polarity polarity) {
+      Ftm::setPolarity(polarity, CHANNEL_MASK);
+   }
 };
 
 #ifdef USBDM_FTM0_IS_DEFINED
