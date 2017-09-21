@@ -40,6 +40,14 @@ extern volatile uint32_t SystemLpoClock;
 
 extern void setSysDividersStub(uint32_t simClkDiv1);
 
+
+   /*
+    * Clock configuration names
+    */
+	enum {
+$(/MCG/ClockConfig:!!!!!!!Not found!!!!!!!)
+    };
+
 /**
  * @addtogroup MCG_Group MCG, Multipurpose Clock Generator
  * @brief Abstraction for Multipurpose Clock Generator
@@ -148,7 +156,16 @@ public:
     *
     * @return Pointer to static string
     */
-   static const char *getClockMode(McgInfo::ClockMode);
+   static const char *getClockModeName(McgInfo::ClockMode);
+
+   /**
+    * Get name for current clock mode
+    *
+    * @return Pointer to static string
+    */
+   static const char *getClockModeName() {
+      return getClockModeName(getClockMode());
+   }
 
    /**
     *  Configure the MCG for given mode

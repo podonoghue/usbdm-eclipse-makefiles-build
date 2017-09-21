@@ -1,6 +1,6 @@
 /*
  ============================================================================
- * @file    ConsoleTest.cpp (180.ARM_Peripherals/Snippets/ConsoleTest.cpp)
+ * @file    console-example.cpp (180.ARM_Peripherals/Snippets)
  * @brief   Basic C++ demo using Console class
  *
  *  Created on: 10/1/2016
@@ -77,15 +77,15 @@ int main() {
    console<<"UINT_MAX,radix(2)  = "<<Uart::radix(2)<<UINT_MAX<<EndOfLine;
    console<<Radix_10;
 
-   Console::ultoa(100, buff);
+   FormattedIO::ultoa(100, buff);
    console.write("ultoa(100, buff)  = ").writeln(buff);
-   Console::ltoa(-100, buff);
+   FormattedIO::ltoa(-100, buff);
    console.write("ltoa(-100, buff)  = ").writeln(buff);
 
    char *ptr = buff;
-   ptr = Console::strcpy(ptr, "Console::ultoa(100, buff) = ");
-   ptr = Console::ultoa(100, ptr);
-   ptr = Console::strcpy(ptr, ", oh well!");
+   ptr = FormattedIO::strcpy(ptr, "Console::ultoa(100, buff) = ");
+   ptr = FormattedIO::ultoa(100, ptr);
+   ptr = FormattedIO::strcpy(ptr, ", oh well!");
    console.writeln(buff);
 
    // Test input
@@ -98,7 +98,7 @@ int main() {
    console<<Radix_10<<integer<<", 0x"<<Radix_16<<(unsigned long)integer<<", 0b"<<Radix_2<<(unsigned long)integer<<EndOfLine;
 
    int length = console.write("text : ").gets(buff, sizeof(buff));
-   console.write("[").write(length).write(" chars] = '").write(buff).writeln("'");
+   console.write("[").write(length).write(" chars] = '").write(buff).writeln("'")<<Flush;
 
    console<<Radix_10;
    console<<"value :">>integer>>EndOfLine;

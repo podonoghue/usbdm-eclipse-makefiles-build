@@ -32,6 +32,10 @@ extern "C" uint32_t SystemBusClock;
 
 namespace USBDM {
 
+#ifndef SIM_CLKDIV1_OUTDIV2
+#define SIM_CLKDIV1_OUTDIV2(x) 0
+#endif
+
 #ifndef SIM_CLKDIV1_OUTDIV3
 #define SIM_CLKDIV1_OUTDIV3(x) (0)
 #endif
@@ -130,7 +134,7 @@ MCGCallbackFunction Mcg::callback = {0};
 /** Current clock mode (FEI out of reset) */
 McgInfo::ClockMode Mcg::currentClockMode = McgInfo::ClockMode::ClockMode_FEI;
 
-#ifdef SMC_PMPROT_AHSRUN_MASK
+#if defined(SMC_PMPROT_AHSRUN_MASK) && 0
 /**
  * Switch to/from high speed run mode
  * Changes the CPU clock frequency/1, and bus clock frequency /2
@@ -172,20 +176,12 @@ constexpr uint8_t clockTransitionTable[8][8] = {
          /* ClockMode_PEE,  */ { McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE,  McgInfo::ClockMode_PBE, },
    };
 
-#ifndef SIM_CLKDIV1_OUTDIV3
-#define SIM_CLKDIV1_OUTDIV3(x) 0
-#endif
-
-#ifndef SIM_CLKDIV1_OUTDIV2
-#define SIM_CLKDIV1_OUTDIV2(x) 0
-#endif
-
 /**
  * Get name for clock mode
  *
  * @return Pointer to static string
  */
-const char *Mcg::getClockMode(McgInfo::ClockMode clockMode) {
+const char *Mcg::getClockModeName(McgInfo::ClockMode clockMode) {
    static const char *modeNames[] {
          "FEI",
          "FEE",

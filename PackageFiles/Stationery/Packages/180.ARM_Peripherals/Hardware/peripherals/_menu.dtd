@@ -13,7 +13,7 @@
    <!ATTLIST peripheralPage xmlns:xi     CDATA        #IMPLIED>
    <!ATTLIST peripheralPage name         CDATA        #REQUIRED>
    <!ATTLIST peripheralPage description  CDATA        #REQUIRED>
-   <!ATTLIST peripheralPage toolTip      CDATA        "">
+   <!ATTLIST peripheralPage toolTip      CDATA        #IMPLIED>
 
 <!ELEMENT fragment ANY >
    <!ATTLIST fragment xmlns:xi CDATA #IMPLIED>
@@ -30,16 +30,18 @@
 
 <!ELEMENT indexedCategory ((%gui_items;)*) >
    <!ATTLIST indexedCategory xmlns:xi     CDATA        #IMPLIED>
-   <!ATTLIST indexedCategory name         CDATA        #REQUIRED>
+   <!ATTLIST indexedCategory name         ID           #REQUIRED>
    <!ATTLIST indexedCategory description  CDATA        #REQUIRED>
-   <!ATTLIST indexedCategory toolTip      CDATA        "">
-   <!ATTLIST indexedCategory dim  		   CDATA        "0" >
+   <!ATTLIST indexedCategory toolTip      CDATA        #IMPLIED>
+   <!ATTLIST indexedCategory dim          CDATA        "0" >
+   <!ATTLIST indexedCategory value        CDATA        #IMPLIED>
+   <!ATTLIST indexedCategory constant     (false|true) "false">
 
 <!ELEMENT category ((%gui_items;)*) >
    <!ATTLIST category xmlns:xi     CDATA        #IMPLIED>
    <!ATTLIST category name         CDATA        #REQUIRED>
    <!ATTLIST category description  CDATA        #REQUIRED>
-   <!ATTLIST category toolTip      CDATA        "">
+   <!ATTLIST category toolTip      CDATA        #IMPLIED>
 
 <!ELEMENT intOption EMPTY >
    <!ATTLIST intOption constant     (false|true) "false">
@@ -47,8 +49,8 @@
    <!ATTLIST intOption key          CDATA        #IMPLIED>
    <!ATTLIST intOption origin       CDATA        #IMPLIED>
    <!ATTLIST intOption description  CDATA        #IMPLIED>
-   <!ATTLIST intOption toolTip      CDATA        "">
-   <!ATTLIST intOption value        CDATA        "0">
+   <!ATTLIST intOption toolTip      CDATA        #IMPLIED>
+   <!ATTLIST intOption value        CDATA        #IMPLIED>
    <!ATTLIST intOption units        (None|Hz|s)  "None">
    <!ATTLIST intOption step         CDATA        "1">
    <!-- Minimum value (displayed value) -->
@@ -67,8 +69,8 @@
    <!ATTLIST bitmaskOption key           CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption origin        CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption description   CDATA        #IMPLIED>
-   <!ATTLIST bitmaskOption toolTip       CDATA        "">
-   <!ATTLIST bitmaskOption value         CDATA        "0">
+   <!ATTLIST bitmaskOption toolTip       CDATA        #IMPLIED>
+   <!ATTLIST bitmaskOption value         CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption bitmask       CDATA        "0xFFFF">
    <!ATTLIST bitmaskOption bitList       CDATA        "">
    <!ATTLIST bitmaskOption indexedBy     CDATA        #IMPLIED>
@@ -81,8 +83,8 @@
    <!ATTLIST floatOption key          CDATA        #IMPLIED>
    <!ATTLIST floatOption origin       CDATA        #IMPLIED>
    <!ATTLIST floatOption description  CDATA        #IMPLIED>
-   <!ATTLIST floatOption toolTip      CDATA        "">
-   <!ATTLIST floatOption value        CDATA        "0">
+   <!ATTLIST floatOption toolTip      CDATA        #IMPLIED>
+   <!ATTLIST floatOption value        CDATA        #IMPLIED>
    <!ATTLIST floatOption units        (None|Hz|s)  "None">
    <!-- Minimum value (displayed value) -->
    <!ATTLIST floatOption min          CDATA        #IMPLIED>
@@ -111,8 +113,8 @@
    <!ATTLIST stringOption key          CDATA        #IMPLIED>
    <!ATTLIST stringOption origin       CDATA        #IMPLIED>
    <!ATTLIST stringOption description  CDATA        #IMPLIED>
-   <!ATTLIST stringOption toolTip      CDATA        "">
-   <!ATTLIST stringOption value        CDATA        "0">
+   <!ATTLIST stringOption toolTip      CDATA        #IMPLIED>
+   <!ATTLIST stringOption value        CDATA        #IMPLIED>
    <!ATTLIST stringOption indexedBy    CDATA        #IMPLIED>
    <!ATTLIST stringOption derived      (false|true) "false">
    <!ATTLIST stringOption derivedFrom  IDREF        #IMPLIED>
@@ -123,8 +125,8 @@
    <!ATTLIST numericListOption key          CDATA        #IMPLIED>
    <!ATTLIST numericListOption origin       CDATA        #IMPLIED>
    <!ATTLIST numericListOption description  CDATA        #IMPLIED>
-   <!ATTLIST numericListOption toolTip      CDATA        "">
-   <!ATTLIST numericListOption value        CDATA        "0">
+   <!ATTLIST numericListOption toolTip      CDATA        #IMPLIED>
+   <!ATTLIST numericListOption value        CDATA        #IMPLIED>
    <!ATTLIST numericListOption size         CDATA        #IMPLIED>
    <!ATTLIST numericListOption min          CDATA        #IMPLIED>
    <!ATTLIST numericListOption max          CDATA        #IMPLIED>
@@ -138,8 +140,8 @@
    <!ATTLIST pinListOption key          CDATA        #IMPLIED>
    <!ATTLIST pinListOption origin       CDATA        #IMPLIED>
    <!ATTLIST pinListOption description  CDATA        #IMPLIED>
-   <!ATTLIST pinListOption toolTip      CDATA        "">
-   <!ATTLIST pinListOption value        CDATA        "0">
+   <!ATTLIST pinListOption toolTip      CDATA        #IMPLIED>
+   <!ATTLIST pinListOption value        CDATA        #IMPLIED>
    <!ATTLIST pinListOption size         CDATA        #IMPLIED>
    <!ATTLIST pinListOption indexedBy    CDATA        #IMPLIED>
    <!ATTLIST pinListOption derived      (false|true) "false">
@@ -151,7 +153,7 @@
    <!ATTLIST choiceOption key          CDATA        #IMPLIED>
    <!ATTLIST choiceOption origin       CDATA        #IMPLIED>
    <!ATTLIST choiceOption description  CDATA        #IMPLIED>
-   <!ATTLIST choiceOption toolTip      CDATA        "">
+   <!ATTLIST choiceOption toolTip      CDATA        #IMPLIED>
    <!ATTLIST choiceOption units        (None|Hz|Seconds)    "None">
    <!ATTLIST choiceOption indexedBy    CDATA        #IMPLIED>
    <!ATTLIST choiceOption derived      (false|true) "false">
@@ -168,7 +170,7 @@
    <!ATTLIST binaryOption key          CDATA        #IMPLIED>
    <!ATTLIST binaryOption origin       CDATA        #IMPLIED>
    <!ATTLIST binaryOption description  CDATA        #IMPLIED>
-   <!ATTLIST binaryOption toolTip      CDATA        "">
+   <!ATTLIST binaryOption toolTip      CDATA        #IMPLIED>
    <!ATTLIST binaryOption indexedBy    CDATA        #IMPLIED>
    <!ATTLIST binaryOption derived      (false|true) "false">
    <!ATTLIST binaryOption derivedFrom  IDREF        #IMPLIED>
@@ -182,14 +184,14 @@
    <!ATTLIST irqOption value        CDATA        #IMPLIED>
    <!ATTLIST irqOption origin       CDATA        #IMPLIED>
    <!ATTLIST irqOption description  CDATA        #IMPLIED>
-   <!ATTLIST irqOption toolTip      CDATA        "">
+   <!ATTLIST irqOption toolTip      CDATA        #IMPLIED>
    <!ATTLIST irqOption derived      (false|true) "false">
    <!ATTLIST irqOption derivedFrom  IDREF        #IMPLIED>
 
 <!ELEMENT template (#PCDATA)>
    <!ATTLIST template namespace (info|usbdm|class|all)  "info" >
-   <!ATTLIST template name 		CDATA  				"" >
-   <!ATTLIST template dim  		CDATA  				"0" >
+   <!ATTLIST template name 		CDATA  					"" >
+   <!ATTLIST template dim  		CDATA  					"0" >
 
 <!ELEMENT validate (param*) >
    <!ATTLIST validate class CDATA #REQUIRED>

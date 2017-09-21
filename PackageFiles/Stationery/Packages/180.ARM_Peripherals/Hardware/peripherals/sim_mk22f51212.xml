@@ -602,7 +602,8 @@ Devices using this peripheral:
    
    <indexedCategory name="ClockConfig." dim="3" 
          description="Clock configurations" 
-         toolTip="Clock configurations for different run modes" >
+         toolTip="Clock configurations for different run modes"
+	 value="" >
          
       <aliasOption key="/MCG/ClockConfig."
         constant="true"/>

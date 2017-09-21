@@ -206,6 +206,35 @@ protected:
 public:
 
    /**
+    * Get name from SMC status
+    *
+    * @param status
+    *
+    * @return Pointer to static string
+    */
+   static const char *getSmcStatusName(SmcStatus status) {
+      if (status == SmcStatus_hsrun) {
+         return "HSRUN";
+      }
+      if (status == SmcStatus_run) {
+         return "RUN";
+      }
+      if (status == SmcStatus_vlpr) {
+         return "VLPR";
+      }
+      return "Impossible while running!";
+   }
+   /**
+    * Get name from current SMC status
+    *
+    * @param status
+    *
+    * @return Pointer to static string
+    */
+   static const char *getSmcStatusName() {
+      return getSmcStatusName(getStatus());
+   }
+   /**
     * Basic enable of SMC\n
     * Includes configuring all pins
     */
@@ -263,7 +292,7 @@ public:
     *
     * @return SmcStatus value indicating operating mode
     */
-   static SmcStatus getPowerStatus() {
+   static SmcStatus getStatus() {
 
       return (SmcStatus)(smc->PMSTAT);
    }
@@ -281,7 +310,7 @@ public:
     */
    static ErrorCode enterRunMode(SmcRunMode smcRunMode) {
 #ifdef SMC_PMPROT_AHSRUN
-      SmcStatus smcStatus = getPowerStatus();
+      SmcStatus smcStatus = getStatus();
 #endif
       switch(smcRunMode) {
          case SmcRunMode_Normal:
@@ -291,7 +320,7 @@ public:
                __asm__("nop");
             }
             // Wait for power status to change
-            while (getPowerStatus() != SmcStatus_run) {
+            while (getStatus() != SmcStatus_run) {
                __asm__("nop");
             }
             break;
@@ -307,7 +336,7 @@ public:
                __asm__("nop");
             }
             // Wait for power status to change
-            while (getPowerStatus() != SmcStatus_hsrun) {
+            while (getStatus() != SmcStatus_hsrun) {
                __asm__("nop");
             }
             break;
@@ -325,7 +354,7 @@ public:
                __asm__("nop");
             }
             // Wait for power status to change
-            while (getPowerStatus() != SmcStatus_vlpr) {
+            while (getStatus() != SmcStatus_vlpr) {
                __asm__("nop");
             }
             break;
