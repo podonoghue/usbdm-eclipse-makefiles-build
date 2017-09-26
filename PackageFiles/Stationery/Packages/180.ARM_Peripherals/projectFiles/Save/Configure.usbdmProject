@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<section name="USBDM">
-   <item key="$$DeviceInfo_Target_Device"   value="$(targetDevice)"/>
-   <item key="$$Hardware_Source_Filename"   value="$(cpp.peripheral.subfamily).usbdmHardware" />
-</section>
