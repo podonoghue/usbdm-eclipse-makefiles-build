@@ -48,4 +48,15 @@
       \t   $(irqHandlerInstalled);\n\n
    ]]></template>
    
+   <xi:include href="_irqOption.xml"/>         
+      <projectActionList id = "cmp_files" >
+      <copy source="Project_Headers/cmp.h"     target="Project_Headers/cmp.h"     overwrite="true"  derived="true" />
+      <copy source="Snippets/cmp-example.cpp"  target="Snippets/cmp-example.cpp"  overwrite="true"  derived="true" />
+   </projectActionList>
+   
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator">
+   </validate>
+
+   
 </fragment>
