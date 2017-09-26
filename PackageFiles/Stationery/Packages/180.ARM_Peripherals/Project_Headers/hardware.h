@@ -178,11 +178,17 @@ inline void clearError() {
 
 } // End namespace USBDM
 
-// Use when in-lining makes the only makes the release build smaller
+// Use when in-lining makes the release build smaller
 #ifdef DEBUG_BUILD
-#define INLINE_RELEASE
+#define INLINE_RELEASE __attribute__((noinline))
 #else
 #define INLINE_RELEASE __attribute__((always_inline))
+#endif
+
+#ifdef DEBUG_BUILD
+#define NOINLINE_DEBUG __attribute__((noinline))
+#else
+#define NOINLINE_DEBUG
 #endif
 
 #if defined (DEBUG_BUILD) && !defined (NDEBUG)

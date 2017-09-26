@@ -261,7 +261,7 @@ public:
     * @param[in] theCallback Callback function to execute on overflow interrupt.\n
     *                        nullptr to indicate none
     */
-   static __attribute__((always_inline)) void setTimerOverflowCallback(FtmCallbackFunction theCallback) {
+   static void INLINE_RELEASE setTimerOverflowCallback(FtmCallbackFunction theCallback) {
       if (theCallback == nullptr) {
          toiCallback = unhandledCallback;
          return;
@@ -275,7 +275,7 @@ public:
     * @param[in] theCallback Callback function to execute on channel interrupt.\n
     *                        nullptr to indicate none
     */
-   static __attribute__((always_inline)) void setChannelCallback(FtmChannelCallbackFunction theCallback) {
+   static void INLINE_RELEASE setChannelCallback(FtmChannelCallbackFunction theCallback) {
       if (theCallback == nullptr) {
          callback = unhandledCallback;
          return;
@@ -289,7 +289,7 @@ public:
     * @param[in] theCallback Callback function to execute on fault interrupt.\n
     *                        nullptr to indicate none
     */
-   static __attribute__((always_inline)) void setFaultCallback(FtmCallbackFunction theCallback) {
+   static void INLINE_RELEASE setFaultCallback(FtmCallbackFunction theCallback) {
       if (theCallback == nullptr) {
          faultCallback = unhandledCallback;
          return;
@@ -307,7 +307,7 @@ public:
    /**
     * Configures all mapped pins associated with this peripheral
     */
-   static void __attribute__((always_inline)) configureAllPins() {
+   static void INLINE_RELEASE configureAllPins() {
       // Configure pins
       Info::initPCRs();
    }
@@ -315,7 +315,7 @@ public:
    /**
     * Enables clock to peripheral and configures all pins
     */
-   static void __attribute__((always_inline)) enable() {
+   static void INLINE_RELEASE enable() {
       if (Info::mapPinsOnEnable) {
          configureAllPins();
       }
@@ -368,7 +368,7 @@ public:
     *
     * @return True => enabled
     */
-   static __attribute__((always_inline)) bool isEnabled() {
+   static INLINE_RELEASE bool isEnabled() {
       return ((*clockReg & Info::clockMask) != 0) && ((tmr->SC & FTM_SC_CLKS_MASK) != 0);
    }
 
@@ -405,7 +405,7 @@ public:
     * @param[in]  enable    True => enable, False => disable
     * @param[in]  priority  Interrupt priority
     */
-   static void enableNvicInterrupts(bool enable=true, uint32_t priority=NvicPriority_Normal) {
+   static void INLINE_RELEASE enableNvicInterrupts(bool enable=true, uint32_t priority=NvicPriority_Normal) {
 
       if (enable) {
          // Enable interrupts
@@ -425,7 +425,7 @@ public:
     *
     * @param[in] enable true to enable, false to disable
     */
-   static __attribute__((always_inline)) void enableTimerOverflowInterrupts(bool enable=true) {
+   static void INLINE_RELEASE enableTimerOverflowInterrupts(bool enable=true) {
       if (enable) {
          tmr->SC |= FTM_SC_TOIE_MASK;
       }
@@ -441,7 +441,7 @@ public:
     *
     * @param[in] modulo Modulo value in ticks (<65535)
     */
-   static void __attribute__((always_inline)) setMod(uint16_t modulo) {
+   static void INLINE_RELEASE setMod(uint16_t modulo) {
       tmr->MOD = modulo;
    }
 
@@ -452,7 +452,7 @@ public:
     *
     * @param[in] polarityMask  Starting value in ticks (<65535)
     */
-   static void __attribute__((always_inline)) setCounterStartValue(uint32_t startValue) {
+   static void INLINE_RELEASE setCounterStartValue(uint32_t startValue) {
          tmr->CNTIN = startValue;
    }
 
@@ -570,7 +570,7 @@ public:
     * @return E_TOO_SMALL => failed to find suitable values
     * @return E_TOO_LARGE => failed to find suitable values
     */
-   static __attribute__((always_inline)) ErrorCode setMeasurementPeriod(float period) {
+   static INLINE_RELEASE ErrorCode setMeasurementPeriod(float period) {
       // Try to set capture period
       ErrorCode rc = setPeriod(period);
       // Set actual period to maximum ticks in any case
@@ -584,7 +584,7 @@ public:
     *
     * @return Timer frequency in Hz
     */
-   static __attribute__((always_inline)) float getTickFrequency() {
+   static INLINE_RELEASE float getTickFrequency() {
 
       // Calculate timer prescale factor
       int prescaleFactor = 1<<((tmr->SC&FTM_SC_PS_MASK)>>FTM_SC_PS_SHIFT);
@@ -716,7 +716,7 @@ public:
     *
     * @return Time in seconds
     */
-   static float __attribute__((always_inline)) convertTicksToSeconds(int tickInterval) {
+   static float INLINE_RELEASE convertTicksToSeconds(int tickInterval) {
       // Calculate period
       return tickInterval/Info::getClockFrequencyF();
    }
@@ -726,7 +726,7 @@ public:
     *
     * @return Timer count value
     */
-   static __attribute__((always_inline)) uint16_t getTime() {
+   static INLINE_RELEASE uint16_t getTime() {
       return tmr->CNT;
    }
    
@@ -736,7 +736,7 @@ public:
     * @return Flags indicating if an event has occurred on a channel
     *         There is one bit for each channel
     */
-   static __attribute__((always_inline)) unsigned getInterruptFlags() {
+   static INLINE_RELEASE unsigned getInterruptFlags() {
       return tmr->STATUS;
    }
 
@@ -748,7 +748,7 @@ public:
     *
     * @note Only flags captured in the return value are cleared
     */
-   static __attribute__((always_inline)) unsigned getAndClearInterruptFlags() {
+   static INLINE_RELEASE unsigned getAndClearInterruptFlags() {
       // Note requires read and write zero to clear flags
       // so only flags captured in status are cleared
       unsigned status = tmr->STATUS;
@@ -811,7 +811,7 @@ public:
     * @param[in] ftmExternalTrigger Indicates the event to cause the external trigger
     * @param[in] enable             Whether to enable/disable the specified trigger
     */
-   static void __attribute__((always_inline)) enableExternalTrigger(FtmExternalTrigger ftmExternalTrigger, bool enable=true) {
+   static void INLINE_RELEASE enableExternalTrigger(FtmExternalTrigger ftmExternalTrigger, bool enable=true) {
       if (enable) {
          tmr->EXTTRIG |= ftmExternalTrigger;
       }
@@ -827,7 +827,7 @@ public:
     *                             Construct from ORed FtmExternalTrigger flags e.g. FtmExternalTrigger_ch0|FtmExternalTrigger_ch3
     * @param[in] enable           Whether to enable/disable the specified triggers
     */
-   static void __attribute__((always_inline)) enableExternalTriggers(int externalTriggers, bool enable=true) {
+   static void INLINE_RELEASE enableExternalTriggers(int externalTriggers, bool enable=true) {
       enableExternalTrigger((FtmExternalTrigger)externalTriggers, enable);
    }
 
@@ -836,7 +836,7 @@ public:
     *
     * @param[in] enable True = >enabled, False => disabled
     */
-   static __attribute__((always_inline)) void enableFaultInterrupt(bool enable=true) {
+   static void INLINE_RELEASE enableFaultInterrupt(bool enable=true) {
       if (enable) {
          tmr->MODE |= FTM_MODE_FAULTIE_MASK;
       }
@@ -851,7 +851,7 @@ public:
     *  @tparam inputNum        Number of fault input to enable (0..3)
     */
    template<int inputNum>
-   static __attribute__((always_inline)) void disableFault() {
+   static void INLINE_RELEASE disableFault() {
       static_assert(inputNum<=4, "Illegal fault channel");
 
       // Enable fault on channel
@@ -870,7 +870,7 @@ public:
     *
     * @return Absolute time of last event i.e. value from timer event register
     */
-   static __attribute__((always_inline)) uint16_t getEventTime(int channel) {
+   static INLINE_RELEASE uint16_t getEventTime(int channel) {
       return tmr->CONTROLS[channel].CnV;
    }
 
@@ -882,7 +882,7 @@ public:
     * @param[in] eventTime  Absolute event time i.e. value to use as timer comparison value
     * @param[in] channel    Timer channel
     */
-   static __attribute__((always_inline)) void setEventTime(uint16_t eventTime, int channel) {
+   static void INLINE_RELEASE setEventTime(uint16_t eventTime, int channel) {
       tmr->CONTROLS[channel].CnV = eventTime;
    }
 
@@ -894,7 +894,7 @@ public:
     * @param[in] eventTime  Event time relative to current event time (i.e. Timer channel CnV value)
     * @param[in] channel    Timer channel
     */
-   static __attribute__((always_inline)) void setDeltaEventTime(uint16_t eventTime, int channel) {
+   static void INLINE_RELEASE setDeltaEventTime(uint16_t eventTime, int channel) {
       tmr->CONTROLS[channel].CnV += eventTime;
    }
 
@@ -906,7 +906,7 @@ public:
     * @param[in] eventTime  Event time relative to current time (i.e. Timer CNT value)
     * @param[in] channel    Timer channel
     */
-   static __attribute__((always_inline)) void setRelativeEventTime(uint16_t eventTime, int channel) {
+   static void INLINE_RELEASE setRelativeEventTime(uint16_t eventTime, int channel) {
       tmr->CONTROLS[channel].CnV = tmr->CNT + eventTime;
    }
 
@@ -978,7 +978,7 @@ public:
     *
     * @return E_NO_ERROR on success
     */
-   static __attribute__((always_inline)) ErrorCode setHighTime(float highTime, int channel) {
+   static INLINE_RELEASE ErrorCode setHighTime(float highTime, int channel) {
       return setHighTime(convertSecondsToTicks(highTime), channel);
    }
 
@@ -1118,7 +1118,7 @@ public:
     * @param[in] callback The function to call on Pin interrupt.\n
     *                     nullptr to indicate none
     */
-   static __attribute__((always_inline)) void setPinCallback(PinCallbackFunction callback) {
+   static void INLINE_RELEASE setPinCallback(PinCallbackFunction callback) {
       Pcr::setCallback(callback);
    }
 
@@ -1126,7 +1126,7 @@ public:
     * Clear interrupt flag on pin associated with channel
     * Assumes clock to the port has already been enabled
     */
-   static __attribute__((always_inline)) void clearPinInterruptFlag() {
+   static void INLINE_RELEASE clearPinInterruptFlag() {
       Pcr::clearInterruptFlag();
    }
    /**
@@ -1135,7 +1135,7 @@ public:
     *
     * @param[in] pinIrq Interrupt/DMA mode
     */
-   static __attribute__((always_inline)) void setPinIrq(PinIrq pinIrq) {
+   static void INLINE_RELEASE setPinIrq(PinIrq pinIrq) {
       Pcr::setIrq(pinIrq);
    }
 
@@ -1180,7 +1180,7 @@ public:
     * @note This method has the side-effect of clearing the register update synchronisation i.e.
     *       pending CnV register updates are discarded.
     */
-   static __attribute__((always_inline)) void configure(
+   static void INLINE_RELEASE configure(
          FtmChMode      ftmChMode     = FtmChMode_PwmHighTruePulses,
          FtmChannelIrq  ftmChannelIrq = FtmChannelIrq_Disable,
          FtmChannelDma  ftmChannelDma = FtmChannelDma_Disable) {
@@ -1204,6 +1204,15 @@ public:
          }
       }
    }
+   /**
+    * Get channel mode
+    *
+    * @return Current mode of operation for the channel
+    */
+   static INLINE_RELEASE FtmChMode getMode() {
+      return (FtmChMode)(tmr->CONTROLS[channel].CnSC &
+            (FTM_CnSC_MS_MASK|FTM_CnSC_ELS_MASK));
+   }
 
    /**
     * Configure channel\n
@@ -1215,7 +1224,7 @@ public:
     * @note This method has the side-effect of clearing the register update synchronisation i.e.
     *       pending CnV register updates are discarded.
     */
-   static __attribute__((always_inline)) void configure(
+   static void INLINE_RELEASE configure(
          FtmChMode         ftmChMode,
          FtmChannelAction  ftmChannelAction) {
 
@@ -1247,7 +1256,7 @@ public:
     * @note This method has the side-effect of clearing the register update synchronisation i.e.
     *       pending CnV register updates are discarded.
     */
-   static __attribute__((always_inline)) void setMode(FtmChMode ftmChMode) {
+   static void INLINE_RELEASE setMode(FtmChMode ftmChMode) {
       tmr->CONTROLS[channel].CnSC =
             (tmr->CONTROLS[channel].CnSC & ~(FTM_CnSC_MS_MASK|FTM_CnSC_ELS_MASK))|ftmChMode;
    }
@@ -1260,7 +1269,7 @@ public:
     * @note This method has the side-effect of clearing the register update synchronisation i.e.
     *       pending CnV register updates are discarded.
     */
-   static __attribute__((always_inline)) void setAction(FtmChannelAction ftmChannelAction) {
+   static void INLINE_RELEASE setAction(FtmChannelAction ftmChannelAction) {
       tmr->CONTROLS[channel].CnSC =
             (tmr->CONTROLS[channel].CnSC & ~(FTM_CnSC_CHIE_MASK|FTM_CnSC_DMA_MASK))|ftmChannelAction;
    }
@@ -1274,7 +1283,7 @@ public:
     * @note This method has the side-effect of clearing the register update synchronisation i.e.\n
     *       pending CnV register updates are discarded.
     */
-   static __attribute__((always_inline)) void enableInterrupts(bool enable=true) {
+   static void INLINE_RELEASE enableInterrupts(bool enable=true) {
       if (enable) {
          tmr->CONTROLS[channel].CnSC |= FTM_CnSC_CHIE_MASK;
       }
@@ -1291,7 +1300,7 @@ public:
     * @note This method has the side-effect of clearing the register update synchronisation i.e.\n
     *       pending CnV register updates are discarded.
     */
-   static __attribute__((always_inline)) void enableDma(bool enable=true) {
+   static void INLINE_RELEASE enableDma(bool enable=true) {
       if (enable) {
          tmr->CONTROLS[channel].CnSC |= FTM_CnSC_DMA_MASK;
       }
@@ -1305,7 +1314,7 @@ public:
     *
     * @param[in] enable true to enable, false to disable
     */
-   static __attribute__((always_inline)) void enableNvicInterrupts(bool enable=true) {
+   static void INLINE_RELEASE enableNvicInterrupts(bool enable=true) {
       FtmBase_T<Info>::enableNvicInterrupts(enable);
    }
 
@@ -1314,7 +1323,7 @@ public:
     *
     * @param[in] enable true => enable, false => disable
     */
-   static __attribute__((always_inline)) void enablePinNvicInterrupts(bool enable=true) {
+   static void INLINE_RELEASE enablePinNvicInterrupts(bool enable=true) {
       Pcr::enableNvicInterrupts(enable);
    }
 
@@ -1325,7 +1334,7 @@ public:
     *
     * @param[in] pcrValue PCR value to set
     */
-   static __attribute__((always_inline)) void setPCR(PcrValue pcrValue=Info::info[channel].pcrValue) {
+   static void INLINE_RELEASE setPCR(PcrValue pcrValue=Info::info[channel].pcrValue) {
       Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|(Info::info[channel].pcrValue&PORT_PCR_MUX_MASK));
    }
 
@@ -1341,7 +1350,7 @@ public:
     * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Fast)
     * @param[in] pinMux           One of PinMux_Analogue, PinMux_Gpio etc (defaults to FTM selection value)
     */
-   static __attribute__((always_inline)) void setPCR(
+   static void INLINE_RELEASE setPCR(
          PinPull           pinPull,
          PinDriveStrength  pinDriveStrength  = PinDriveStrength_Low,
          PinDriveMode      pinDriveMode      = PinDriveMode_PushPull,
@@ -1419,7 +1428,7 @@ public:
     *
     * @note The actual CnV register update will be delayed by the FTM register synchronisation mechanism
     */
-   static __attribute__((always_inline)) ErrorCode setHighTimeInTicks(uint32_t highTime) {
+   static INLINE_RELEASE ErrorCode setHighTimeInTicks(uint32_t highTime) {
       return Ftm::setHighTime(highTime, channel);
    }
 
@@ -1433,7 +1442,7 @@ public:
     *
     * @note The actual CnV register update will be delayed by the FTM register synchronisation mechanism
     */
-   static __attribute__((always_inline)) ErrorCode setHighTime(float highTime) {
+   static INLINE_RELEASE ErrorCode setHighTime(float highTime) {
       return Ftm::setHighTime(highTime, channel);
    }
    /**
@@ -1443,7 +1452,7 @@ public:
     *
     * @note The actual CnV register update will be delayed by the FTM register synchronisation mechanism
     */
-   static __attribute__((always_inline)) void setDutyCycle(int dutyCycle) {
+   static void INLINE_RELEASE setDutyCycle(int dutyCycle) {
       Ftm::setDutyCycle(dutyCycle, channel);
    }
 
@@ -1454,7 +1463,7 @@ public:
     *
     * @note The actual CnV register update will be delayed by the FTM register synchronisation mechanism
     */
-   static __attribute__((always_inline)) void setDutyCycle(float dutyCycle) {
+   static void INLINE_RELEASE setDutyCycle(float dutyCycle) {
       Ftm::setDutyCycle(dutyCycle, channel);
    }
 
@@ -1465,7 +1474,7 @@ public:
     *
     * @note The actual CnV register update will be delayed by the FTM register synchronisation mechanism
     */
-   static __attribute__((always_inline)) void setDeltaEventTime(uint16_t offset) {
+   static void INLINE_RELEASE setDeltaEventTime(uint16_t offset) {
       Ftm::setDeltaEventTime(offset, channel);
    }
 
@@ -1476,7 +1485,7 @@ public:
     *
     * @note The actual CnV register update will be delayed by the FTM register synchronisation mechanism
     */
-   static __attribute__((always_inline)) void setRelativeEventTime(uint16_t offset) {
+   static void INLINE_RELEASE setRelativeEventTime(uint16_t offset) {
       Ftm::setRelativeEventTime(offset, channel);
    }
 
@@ -1487,7 +1496,7 @@ public:
     *
     * @note The actual CnV register update will be delayed by the FTM register synchronisation mechanism
     */
-   static __attribute__((always_inline)) void setEventTime(uint16_t eventTime) {
+   static void INLINE_RELEASE setEventTime(uint16_t eventTime) {
       Ftm::setEventTime(eventTime, channel);
    }
 
@@ -1496,7 +1505,7 @@ public:
     *
     * @return Absolute time of last event i.e. value from timer event register
     */
-   static __attribute__((always_inline)) uint16_t getEventTime() {
+   static INLINE_RELEASE uint16_t getEventTime() {
       return Ftm::getEventTime(channel);
    }
 
@@ -1506,7 +1515,7 @@ public:
     * @return true  Indicates an event has occurred on a channel
     * @return false Indicates no event has occurred on a channel since last polled
     */
-   static __attribute__((always_inline)) bool getInterruptFlag() {
+   static INLINE_RELEASE bool getInterruptFlag() {
       return (tmr->STATUS&CHANNEL_MASK) != 0;
    }
 
@@ -1518,7 +1527,7 @@ public:
     *
     * @note Only flags captured in the return value are cleared
     */
-   static __attribute__((always_inline)) bool getAndClearInterruptFlag() {
+   static INLINE_RELEASE bool getAndClearInterruptFlag() {
       // Note - requires read and write zero to clear flags
       // so only flags captured in status are cleared
       bool status = (tmr->STATUS&CHANNEL_MASK) != 0;
@@ -1529,7 +1538,7 @@ public:
    /**
     * Clear interrupt flag on channel
     */
-   static __attribute__((always_inline)) void clearInterruptFlag(void) {
+   static void INLINE_RELEASE clearInterruptFlag(void) {
       // Note - requires read and write zero to clear flag
       tmr->CONTROLS[channel].CnSC &= ~FTM_CnSC_CHF_MASK;
    }
@@ -1689,7 +1698,7 @@ public:
    /**
     * Reset position to zero
     */
-   static __attribute__((always_inline)) void resetPosition() {
+   static void INLINE_RELEASE resetPosition() {
       // Note: writing ANY value clears CNT (cannot set value)
       ftm->CNT = 0;
    }
@@ -1698,7 +1707,7 @@ public:
     *
     * @return Signed number representing position relative to reference location
     */
-   static __attribute__((always_inline)) int16_t getPosition() {
+   static INLINE_RELEASE int16_t getPosition() {
       return (int16_t)(ftm->CNT);
    }
 };
