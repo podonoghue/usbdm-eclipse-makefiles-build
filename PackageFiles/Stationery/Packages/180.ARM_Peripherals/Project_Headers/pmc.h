@@ -204,11 +204,18 @@ public:
    }
 
    /**
+    * Release pins after VLLSx exit
+    */
+   static void releasePins () {
+      pmc->REGSC |= PMC_REGSC_ACKISO_MASK;
+   }
+
+   /**
     * Determines availability of Band-gap reference
     *
     * @param[in] pmcBandgapMode   Controls when Band-gap reference is available to internal devices e.g. CMP etc.
     */
-   static void setBangapOperation(PmcBandgapMode pmcBandgapMode=PmcBandgapMode_On) {
+   static void setBandgapOperation(PmcBandgapMode pmcBandgapMode=PmcBandgapMode_On) {
       pmc->REGSC = pmcBandgapMode;
    }
 
@@ -241,7 +248,7 @@ template<class Info> PMCCallbackFunction PmcBase_T<Info>::callback = PmcBase_T<I
 /**
  * Class representing PMC
  */
-using Pmc = PmcBase_T<PmcInfo>;
+class Pmc : public PmcBase_T<PmcInfo> {};
 
 #endif
 
@@ -249,7 +256,7 @@ using Pmc = PmcBase_T<PmcInfo>;
 /**
  * Class representing PMC
  */
-using Pmc = PmcBase_T<PmcInfo>;
+class Pmc : public PmcBase_T<PmcInfo> {};
 
 #endif
 
