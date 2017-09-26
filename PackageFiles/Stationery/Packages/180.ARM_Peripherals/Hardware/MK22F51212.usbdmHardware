@@ -231,6 +231,9 @@
       <peripheral baseName="POWER"    instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPower" />
       </peripheral>
+      <peripheral baseName="RCM"      instance=""         version="rcm_mk_ssrs">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRcm" />
+      </peripheral>
       <peripheral baseName="RNG"      instance=""         version="rng_1">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_RNGA_MASK" />
