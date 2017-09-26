@@ -5,7 +5,7 @@
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
    <irqOption name="irqHandlingMethod"  
-      description="Peripheral nterrupt handler"
+      description="Peripheral interrupt handler"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
       pattern="^%b%i$" 
       classHandler="%c%i::irqHandler" />
