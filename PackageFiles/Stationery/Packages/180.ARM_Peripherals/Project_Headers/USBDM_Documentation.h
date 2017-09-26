@@ -543,7 +543,8 @@ This is a template class with static methods.\n
 
 @page Notes Notes
   - enable()            Enables clock and configures pins (if any configured in Configure.usbdmProject)
-  - defaultConfigure()  As above, enable() + initialises according to Configure.usbdmProject\n
+  - configureAllPins()  Configures all pins associated with the peripheral
+  - defaultConfigure()  enable() + initialises according to Configure.usbdmProject\n
                         May have defaulted parameters to do custom configuration.
   - disable()           Disables the peripheral
 
