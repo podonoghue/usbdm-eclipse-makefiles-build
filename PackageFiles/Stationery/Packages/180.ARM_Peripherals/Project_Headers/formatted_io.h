@@ -119,7 +119,7 @@ protected:
     * @return >=0 Digit in range 0 - (radix-1)
     * @return <0  Invalid character for radix
     */
-   static int convertDigit(int ch, Radix radix) {
+   static int NOINLINE_DEBUG convertDigit(int ch, Radix radix) {
       unsigned digit = ch - '0';
       if (digit<10) {
          return (digit<radix)?digit:-1;
@@ -165,7 +165,7 @@ public:
     * @return <0   No character available
     * @return >=0  Character available
     */
-   int __attribute__((noinline)) peek() {
+   int NOINLINE_DEBUG peek() {
       if (lookAhead>0) {
          return lookAhead;
       }
@@ -187,7 +187,7 @@ public:
     *
     * @param[in] ch Character to push
     */
-   void INLINE_RELEASE pushBack(char ch) {
+   void NOINLINE_DEBUG pushBack(char ch) {
       lookAhead = (uint8_t)ch;
    }
 
@@ -196,7 +196,7 @@ public:
     *
     * @param[in]  ch - character to send
     */
-   void __attribute__((noinline))  writeCh(char ch) {
+   void NOINLINE_DEBUG writeCh(char ch) {
       _writeCh(ch);
    }
 
@@ -205,7 +205,7 @@ public:
     *
     * @return Character received
     */
-   int __attribute__((noinline)) readChar() {
+   int NOINLINE_DEBUG readChar() {
       int ch;
       do {
          ch = peek();
@@ -217,14 +217,14 @@ public:
    /**
     * Converts an unsigned long to a string
     *
-    * @param[in] value Unsigned long to convert
     * @param[in] ptr   Buffer to write result (at least 12 characters)
+    * @param[in] value Unsigned long to convert
     * @param[in] radix Radix for conversion [2..16]
     *
     * @return Pointer to '\0' null character at end of converted number\n
     *         May be used for incrementally writing to a buffer.
     */
-   static __attribute__((noinline)) char *ultoa(unsigned long value, char *ptr, Radix radix=Radix_10) {
+   static NOINLINE_DEBUG char *ultoa(char *ptr, unsigned long value, Radix radix=Radix_10) {
 #ifdef DEBUG_BUILD
       if (ptr == nullptr) {
          __BKPT();
@@ -255,19 +255,19 @@ public:
    /**
     * Converts a long to a string
     *
-    * @param[in] value Long to convert
     * @param[in] ptr   Buffer to write result (at least 12 characters)
+    * @param[in] value Long to convert
     * @param[in] radix Radix for conversion [2..16]
     *
     * @return Pointer to '\0' null character at end of converted number\n
     *         May be used for incrementally writing to a buffer.
     */
-   static INLINE_RELEASE char *ltoa(long value, char *ptr, Radix radix=Radix_10) {
+   static NOINLINE_DEBUG char *ltoa(char *ptr, long value, Radix radix=Radix_10) {
       if (value<0) {
          *ptr++ = '-';
          value = -value;
       }
-      return ultoa(value, ptr, radix);
+      return ultoa(ptr, value, radix);
    }
 
    /**
@@ -276,10 +276,10 @@ public:
     * @param[out] dst  Where to copy string
     * @param[in]  src  Source to copy from
     *
-    * @return Pointer to '\0' null character at end of converted number\n
+    * @return Pointer to '\0' null character at end of concatenated string.\n
     *         May be used for incrementally writing to a buffer.
     */
-   static __attribute__((noinline)) char *strcpy(char *dst, const char *src) {
+   static NOINLINE_DEBUG char *strcpy(char *dst, const char *src) {
 #ifdef DEBUG_BUILD
       if (dst == nullptr) {
          __BKPT();
@@ -297,7 +297,7 @@ public:
     * @param[in]  data     Data to transmit
     * @param[in]  size     Size of transmission data
     */
-   void transmit(const uint8_t data[], uint16_t size) {
+   void NOINLINE_DEBUG transmit(const uint8_t data[], uint16_t size) {
       while (size-->0) {
          writeCh(*data++);
       }
@@ -309,7 +309,7 @@ public:
     * @param[out] data     Data buffer for reception
     * @param[in]  size     Size of data to receive
     */
-   void receive(uint8_t data[], uint16_t size) {
+   void NOINLINE_DEBUG receive(uint8_t data[], uint16_t size) {
       while (size-->0) {
          *data++ = readChar();
       }
@@ -331,7 +331,7 @@ public:
     *    int numChars = gets(buff, sizeof(buff));
     * @endcode
     */
-   int gets(char data[], uint16_t size, char terminator='\n') {
+   int NOINLINE_DEBUG gets(char data[], uint16_t size, char terminator='\n') {
       char *ptr = data;
       while (size-->1) {
          char ch = readChar();
@@ -351,7 +351,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO INLINE_RELEASE &write(char ch) {
+   FormattedIO NOINLINE_DEBUG &write(char ch) {
       writeCh(ch);
       return *this;
    }
@@ -361,7 +361,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO INLINE_RELEASE &writeln() {
+   FormattedIO NOINLINE_DEBUG &writeln() {
       return write('\n');
    }
 
@@ -372,7 +372,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO  INLINE_RELEASE &writeln(char ch) {
+   FormattedIO  NOINLINE_DEBUG &writeln(char ch) {
       write(ch);
       return write('\n');
    }
@@ -384,7 +384,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO &write(const char *str) {
+   FormattedIO NOINLINE_DEBUG &write(const char *str) {
       while (*str != '\0') {
          write(*str++);
       }
@@ -398,7 +398,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO INLINE_RELEASE &writeln(const char *str) {
+   FormattedIO NOINLINE_DEBUG &writeln(const char *str) {
       write(str);
       return write('\n');
    }
@@ -410,7 +410,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO INLINE_RELEASE &write(bool b) {
+   FormattedIO NOINLINE_DEBUG &write(bool b) {
       return write(b?"true":"false");
    }
 
@@ -421,7 +421,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO INLINE_RELEASE &writeln(bool b) {
+   FormattedIO NOINLINE_DEBUG &writeln(bool b) {
       write(b);
       return write('\n');
    }
@@ -434,9 +434,9 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO __attribute__((noinline)) &write(unsigned long value, Radix radix=Radix_10) {
+   FormattedIO NOINLINE_DEBUG &write(unsigned long value, Radix radix=Radix_10) {
       static char buff[35];
-      ultoa(value, buff, radix);
+      ultoa(buff, value, radix);
       return write(buff);
    }
 
@@ -448,7 +448,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO INLINE_RELEASE &writeln(unsigned long value, Radix radix=Radix_10) {
+   FormattedIO NOINLINE_DEBUG &writeln(unsigned long value, Radix radix=Radix_10) {
       write(value, radix);
       return write('\n');
    }
@@ -461,7 +461,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO INLINE_RELEASE &write(const void *value, Radix radix=Radix_10) {
+   FormattedIO NOINLINE_DEBUG &write(const void *value, Radix radix=Radix_10) {
       return write((unsigned long) value, radix);
    }
 
@@ -473,7 +473,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO INLINE_RELEASE &writeln(const void *value, Radix radix=Radix_10) {
+   FormattedIO NOINLINE_DEBUG &writeln(const void *value, Radix radix=Radix_10) {
       return writeln((unsigned long) value, radix);
    }
 
@@ -485,7 +485,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO INLINE_RELEASE &write(long value, Radix radix=Radix_10) {
+   FormattedIO NOINLINE_DEBUG &write(long value, Radix radix=Radix_10) {
       if (value<0) {
          write('-');
          value = -value;
@@ -501,7 +501,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO INLINE_RELEASE &writeln(long value, Radix radix=Radix_10) {
+   FormattedIO NOINLINE_DEBUG &writeln(long value, Radix radix=Radix_10) {
       write(value, radix);
       return write('\n');
    }
@@ -514,7 +514,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO INLINE_RELEASE &write(unsigned value, Radix radix=Radix_10) {
+   FormattedIO NOINLINE_DEBUG &write(unsigned value, Radix radix=Radix_10) {
       return write((unsigned long)value, radix);
    }
 
@@ -526,7 +526,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO INLINE_RELEASE &writeln(unsigned value, Radix radix=Radix_10) {
+   FormattedIO NOINLINE_DEBUG &writeln(unsigned value, Radix radix=Radix_10) {
       return writeln((unsigned long)value, radix);
    }
 
@@ -538,7 +538,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO INLINE_RELEASE &write(int value, Radix radix=Radix_10) {
+   FormattedIO NOINLINE_DEBUG &write(int value, Radix radix=Radix_10) {
       return write((long)value, radix);
    }
 
@@ -550,7 +550,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO INLINE_RELEASE  &writeln(int value, Radix radix=Radix_10) {
+   FormattedIO NOINLINE_DEBUG  &writeln(int value, Radix radix=Radix_10) {
       return writeln((long)value, radix);
    }
 
@@ -565,7 +565,7 @@ public:
     * @note To use this function it is necessary to enable floating point printing\n
     *       in the linker options (Support %f format in printf -u _print_float)).
     */
-   FormattedIO &write(double value) {
+   FormattedIO NOINLINE_DEBUG &write(double value) {
       char buff[20];
       snprintf(buff, sizeof(buff), "%f", value);
       return write(buff);
@@ -582,7 +582,7 @@ public:
     * @note To use this function it is necessary to enable floating point printing\n
     *       in the linker options (Support %f format in printf -u _print_float).
     */
-   FormattedIO INLINE_RELEASE &writeln(double value) {
+   FormattedIO NOINLINE_DEBUG &writeln(double value) {
       write(value);
       return write('\n');
    }
@@ -598,7 +598,7 @@ public:
     * @note To use this function it is necessary to enable floating point printing\n
     *       in the linker options (Support %f format in printf -u _print_float).
     */
-   FormattedIO INLINE_RELEASE &write(float value) {
+   FormattedIO NOINLINE_DEBUG &write(float value) {
       return write((double)value);
    }
 
@@ -613,7 +613,7 @@ public:
     * @note To use this function it is necessary to enable floating point printing\n
     *       in the linker options (Support %f format in printf -u _print_float)).
     */
-   FormattedIO INLINE_RELEASE &writeln(float value) {
+   FormattedIO NOINLINE_DEBUG &writeln(float value) {
       return writeln((double)value);
    }
 
@@ -624,7 +624,7 @@ public:
     *
     * @return Reference to self
      */
-   FormattedIO INLINE_RELEASE &operator <<(char ch) {
+   FormattedIO NOINLINE_DEBUG &operator <<(char ch) {
       return write(ch);
    }
 
@@ -635,7 +635,7 @@ public:
     *
     * @return Reference to self
      */
-   FormattedIO INLINE_RELEASE &operator <<(bool b) {
+   FormattedIO NOINLINE_DEBUG &operator <<(bool b) {
       return write(b);
    }
 
@@ -646,7 +646,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO INLINE_RELEASE &operator <<(const char *str) {
+   FormattedIO NOINLINE_DEBUG &operator <<(const char *str) {
       return write(str);
    }
 
@@ -657,7 +657,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO INLINE_RELEASE &operator <<(unsigned long value) {
+   FormattedIO NOINLINE_DEBUG &operator <<(unsigned long value) {
       return write(value, fRadix);
    }
 
@@ -668,7 +668,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO INLINE_RELEASE &operator <<(long value) {
+   FormattedIO NOINLINE_DEBUG &operator <<(long value) {
       return write(value, fRadix);
    }
 
@@ -679,7 +679,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO INLINE_RELEASE &operator <<(unsigned int value) {
+   FormattedIO NOINLINE_DEBUG &operator <<(unsigned int value) {
       return write(value, fRadix);
    }
 
@@ -690,7 +690,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO INLINE_RELEASE &operator <<(int value) {
+   FormattedIO NOINLINE_DEBUG &operator <<(int value) {
       return write(value, fRadix);
    }
 
@@ -701,7 +701,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO INLINE_RELEASE &operator <<(const void *value) {
+   FormattedIO NOINLINE_DEBUG &operator <<(const void *value) {
       return write((unsigned long)value, fRadix);
    }
 
@@ -716,7 +716,7 @@ public:
     * @note To use this function it is necessary to enable floating point printing\n
     *       in the linker options (Support %f format in printf -u _print_float)).
     */
-   FormattedIO INLINE_RELEASE &operator <<(float value) {
+   FormattedIO NOINLINE_DEBUG &operator <<(float value) {
       return write((double)value);
    }
 
@@ -731,7 +731,7 @@ public:
     * @note To use this function it is necessary to enable floating point printing\n
     *       in the linker options (Support %f format in printf -u _print_float)).
     */
-   FormattedIO INLINE_RELEASE &operator <<(double value) {
+   FormattedIO NOINLINE_DEBUG &operator <<(double value) {
       return write(value);
    }
 
@@ -744,7 +744,7 @@ public:
     *
     * @note Only applies for operator<< methods
     */
-   FormattedIO INLINE_RELEASE &operator <<(Radix radix) {
+   FormattedIO NOINLINE_DEBUG &operator <<(Radix radix) {
       fRadix = radix;
       return *this;
    }
@@ -754,7 +754,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO INLINE_RELEASE &operator <<(EndOfLineType) {
+   FormattedIO NOINLINE_DEBUG &operator <<(EndOfLineType) {
       write('\n');
       return *this;
    }
@@ -764,7 +764,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO INLINE_RELEASE &operator <<(EchoMode echoMode) {
+   FormattedIO NOINLINE_DEBUG &operator <<(EchoMode echoMode) {
       return setEcho(echoMode);
    }
 
@@ -773,7 +773,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO INLINE_RELEASE &operator >>(EchoMode echoMode) {
+   FormattedIO NOINLINE_DEBUG &operator >>(EchoMode echoMode) {
       return setEcho(echoMode);
    }
 
@@ -782,7 +782,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO INLINE_RELEASE &operator <<(FlushType) {
+   FormattedIO NOINLINE_DEBUG &operator <<(FlushType) {
       flushOutput();
       return *this;
    }
@@ -792,7 +792,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO INLINE_RELEASE &skipWhiteSpace() {
+   FormattedIO NOINLINE_DEBUG &skipWhiteSpace() {
       int ch;
       do {
          ch = readChar();
@@ -806,7 +806,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO INLINE_RELEASE &readln() {
+   FormattedIO NOINLINE_DEBUG &readln() {
       while (readChar() != '\n') {
          __asm__("nop");
       }
@@ -820,7 +820,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO INLINE_RELEASE &read(char &ch) {
+   FormattedIO NOINLINE_DEBUG &read(char &ch) {
       ch = readChar();
       return *this;
    }
@@ -831,7 +831,7 @@ public:
     * @return false No error
     * @return true  Operation failed since last checked e.g. illegal digit at start of number
     */
-   bool isError() {
+   bool NOINLINE_DEBUG isError() {
       bool t = inErrorState;
       inErrorState = false;
       return t;
@@ -847,7 +847,7 @@ public:
     *
     * @note Skips leading whitespace
     */
-   FormattedIO &read(unsigned long &value, Radix radix=Radix_10) {
+   FormattedIO NOINLINE_DEBUG &read(unsigned long &value, Radix radix=Radix_10) {
       // Skip white space
       int ch;
       do {
@@ -893,7 +893,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO &setEcho(EchoMode echoMode=EchoMode_On) {
+   FormattedIO NOINLINE_DEBUG &setEcho(EchoMode echoMode=EchoMode_On) {
       echo = echoMode;
       return *this;
    }
@@ -907,7 +907,7 @@ public:
     *
     * @note Skips leading whitespace
     */
-   FormattedIO INLINE_RELEASE &readln(unsigned long &value, Radix radix=Radix_10) {
+   FormattedIO NOINLINE_DEBUG &readln(unsigned long &value, Radix radix=Radix_10) {
       read(value, radix);
       return readln();
    }
@@ -922,7 +922,7 @@ public:
     *
     * @note Skips leading whitespace
     */
-   FormattedIO INLINE_RELEASE &read(long &value, Radix radix=Radix_10) {
+   FormattedIO NOINLINE_DEBUG &read(long &value, Radix radix=Radix_10) {
       unsigned long temp;
       read(temp, radix);
       value = temp;
@@ -939,7 +939,7 @@ public:
     *
     * @note Skips leading whitespace
     */
-   FormattedIO INLINE_RELEASE &readln(long &value, Radix radix=Radix_10) {
+   FormattedIO NOINLINE_DEBUG &readln(long &value, Radix radix=Radix_10) {
       read(value, radix);
       return readln();
    }
@@ -954,7 +954,7 @@ public:
     *
     * @note Skips leading whitespace
     */
-   FormattedIO INLINE_RELEASE &read(unsigned int &value, Radix radix=Radix_10) {
+   FormattedIO NOINLINE_DEBUG &read(unsigned int &value, Radix radix=Radix_10) {
       unsigned long temp;
       read(temp, radix);
       value = temp;
@@ -971,7 +971,7 @@ public:
     *
     * @note Skips leading whitespace
     */
-   FormattedIO INLINE_RELEASE &readln(unsigned &value, Radix radix=Radix_10) {
+   FormattedIO NOINLINE_DEBUG &readln(unsigned &value, Radix radix=Radix_10) {
       read(value, radix);
       return readln();
    }
@@ -986,7 +986,7 @@ public:
     *
     * @note Skips leading whitespace
     */
-   FormattedIO INLINE_RELEASE &read(int &value, Radix radix=Radix_10) {
+   FormattedIO NOINLINE_DEBUG &read(int &value, Radix radix=Radix_10) {
       long temp;
       read(temp, radix);
       value = temp;
@@ -1003,7 +1003,7 @@ public:
     *
     * @note Skips leading whitespace
     */
-   FormattedIO INLINE_RELEASE &readln(int &value, Radix radix=Radix_10) {
+   FormattedIO NOINLINE_DEBUG &readln(int &value, Radix radix=Radix_10) {
       read(value, radix);
       return readln();
    }
@@ -1013,7 +1013,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO INLINE_RELEASE &operator >>(WhiteSpaceType) {
+   FormattedIO NOINLINE_DEBUG &operator >>(WhiteSpaceType) {
       return skipWhiteSpace();
    }
 
@@ -1022,7 +1022,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO INLINE_RELEASE &operator >>(EndOfLineType) {
+   FormattedIO NOINLINE_DEBUG &operator >>(EndOfLineType) {
       while (readChar() != '\n') {
          __asm__("nop");
       }
@@ -1034,7 +1034,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO INLINE_RELEASE &operator >>(FlushType) {
+   FormattedIO NOINLINE_DEBUG &operator >>(FlushType) {
       flushInput();
       return *this;
    }
@@ -1048,7 +1048,7 @@ public:
     *
     * @note Only applies for operator<< methods
     */
-   FormattedIO INLINE_RELEASE &operator >>(Radix radix) {
+   FormattedIO NOINLINE_DEBUG &operator >>(Radix radix) {
       fRadix = radix;
       return *this;
    }
@@ -1060,7 +1060,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO INLINE_RELEASE &operator >>(char &ch) {
+   FormattedIO NOINLINE_DEBUG &operator >>(char &ch) {
       ch = readChar();
       return *this;
    }
@@ -1074,7 +1074,7 @@ public:
     *
     * @note Skips leading whitespace
     */
-   FormattedIO INLINE_RELEASE &operator >>(unsigned long &value) {
+   FormattedIO NOINLINE_DEBUG &operator >>(unsigned long &value) {
       return read(value, fRadix);
    }
 
@@ -1087,7 +1087,7 @@ public:
     *
     * @note Skips leading whitespace
     */
-   FormattedIO INLINE_RELEASE &operator >>(long &value) {
+   FormattedIO NOINLINE_DEBUG &operator >>(long &value) {
       return read(value, fRadix);
    }
 
@@ -1100,7 +1100,7 @@ public:
     *
     * @note Skips leading whitespace
     */
-   FormattedIO INLINE_RELEASE &operator >>(unsigned int &value) {
+   FormattedIO NOINLINE_DEBUG &operator >>(unsigned int &value) {
       return read(value, fRadix);
    }
 
@@ -1113,7 +1113,7 @@ public:
     *
     * @note Skips leading whitespace
     */
-   FormattedIO INLINE_RELEASE &operator >>(int &value) {
+   FormattedIO NOINLINE_DEBUG &operator >>(int &value) {
       return read(value, fRadix);
    }
 
@@ -1124,7 +1124,7 @@ public:
     *
     * @return Radix corresponding to base
     */
-   static constexpr Radix radix(unsigned radix) {
+   static constexpr Radix NOINLINE_DEBUG radix(unsigned radix) {
       return (Radix)radix;
    }
 
