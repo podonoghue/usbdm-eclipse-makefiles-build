@@ -323,12 +323,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>sleep</description>
+                           <description>Sleep</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>deep sleep</description>
+                           <description>Deep-sleep</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -341,12 +341,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>only enabled interrupts or events can wakeup the processor, disabled interrupts are excluded</description>
+                           <description>Only enabled interrupts or events can wakeup the processor, disabled interrupts are excluded</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>enabled events and all interrupts, including disabled interrupts, can wakeup the processor</description>
+                           <description>Enabled events and all interrupts, including disabled interrupts, can wakeup the processor</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

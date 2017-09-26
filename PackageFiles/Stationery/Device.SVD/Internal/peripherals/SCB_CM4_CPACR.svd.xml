@@ -368,12 +368,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>o not sleep when returning to Thread mode</description>
+                           <description>Do not sleep when returning to Thread mode</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>enter sleep, or deep sleep, on return from an ISR</description>
+                           <description>Enter sleep, or deep sleep, on return from an ISR</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -386,12 +386,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>sleep</description>
+                           <description>Sleep</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>deep sleep</description>
+                           <description>Deep-sleep</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -404,12 +404,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>only enabled interrupts or events can wakeup the processor, disabled interrupts are excluded</description>
+                           <description>Only enabled interrupts or events can wakeup the processor, disabled interrupts are excluded</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>enabled events and all interrupts, including disabled interrupts, can wakeup the processor</description>
+                           <description>Enabled events and all interrupts, including disabled interrupts, can wakeup the processor</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -429,12 +429,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>processor can enter Thread mode only when no exception is active</description>
+                           <description>Processor can enter Thread mode only when no exception is active</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>processor can enter Thread mode from any level under the control of an EXC_RETURN value</description>
+                           <description>Processor can enter Thread mode from any level under the control of an EXC_RETURN value</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -447,12 +447,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>disable</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>enable</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -465,12 +465,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>do not trap unaligned halfword and word accesses</description>
+                           <description>Do not trap unaligned halfword and word accesses</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>trap unaligned halfword and word accesses</description>
+                           <description>Trap unaligned halfword and word accesses</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -483,12 +483,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>do not trap divide by 0</description>
+                           <description>Do not trap divide by 0</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>trap divide by 0</description>
+                           <description>Trap divide by 0</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -501,12 +501,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>data bus faults caused by load and store instructions cause a lock-up</description>
+                           <description>Data bus faults caused by load and store instructions cause a lock-up</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>handlers running at priority -1 and -2 ignore data bus faults caused by load and store instructions</description>
+                           <description>Handlers running at priority -1 and -2 ignore data bus faults caused by load and store instructions</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
