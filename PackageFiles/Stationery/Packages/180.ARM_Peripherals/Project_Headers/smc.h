@@ -121,8 +121,8 @@ enum SmcPartialStopMode {
  *  This bit controls whether the POR detect circuit is enabled in VLLS0 mode.
  */
 enum SmcPowerOnReset {
-   SmcPowerOnReset_Disable = SMC_STOPCTRL_PORPO(0),   //!< Power on reset in STOP disabled
-   SmcPowerOnReset_Enable  = SMC_STOPCTRL_PORPO(1),   //!< Power on reset in STOP enabled
+   SmcPowerOnReset_Disable = SMC_STOPCTRL_PORPO(0),   //!< Power on reset (brown-out detection) in STOP disabled
+   SmcPowerOnReset_Enable  = SMC_STOPCTRL_PORPO(1),   //!< Power on reset (brown-out detection) in STOP enabled
 };
 
 /**
@@ -146,14 +146,15 @@ enum SmcLowLeakageStopMode {
    SmcLowLeakageStopMode_VLLS1 = SMC_STOPCTRL_VLLSM(1),  //!< Enter VLLS1 in VLLSx mode
    SmcLowLeakageStopMode_VLLS2 = SMC_STOPCTRL_VLLSM(2),  //!< Enter VLLS2 in VLLSx mode, LLS2 in LLSx mode
    SmcLowLeakageStopMode_VLLS3 = SMC_STOPCTRL_VLLSM(3),  //!< Enter VLLS3 in VLLSx mode, LLS3 in LLSx mode
-#else
-   SmcLowLeakageStopMode_VLLS0 = (0),  //!< Not supported
-   SmcLowLeakageStopMode_VLLS1 = (0),  //!< Not supported
-   SmcLowLeakageStopMode_VLLS2 = (0),  //!< Not supported
-   SmcLowLeakageStopMode_VLLS3 = (0),  //!< Not supported
 #endif
-   SmcLowLeakageStopMode_LLS2  = SMC_STOPCTRL_LLSM(2),   //!< Enter VLLS2 in VLLSx mode, LLS2 in LLSx mode
-   SmcLowLeakageStopMode_LLS3  = SMC_STOPCTRL_LLSM(3),   //!< Enter VLLS3 in VLLSx mode, LLS3 in LLSx mode
+#ifdef SMC_STOPCTRL_LLSM
+   SmcLowLeakageStopMode_VLLS0 = SMC_STOPCTRL_LLSM(0),  //!< Enter VLLS0 in VLLSx mode
+   SmcLowLeakageStopMode_VLLS1 = SMC_STOPCTRL_LLSM(1),  //!< Enter VLLS1 in VLLSx mode
+   SmcLowLeakageStopMode_VLLS2 = SMC_STOPCTRL_LLSM(2),  //!< Enter VLLS2 in VLLSx mode, LLS2 in LLSx mode
+   SmcLowLeakageStopMode_VLLS3 = SMC_STOPCTRL_LLSM(3),  //!< Enter VLLS3 in VLLSx mode, LLS3 in LLSx mode
+   SmcLowLeakageStopMode_LLS2  = SMC_STOPCTRL_LLSM(2),  //!< Enter VLLS2 in VLLSx mode, LLS2 in LLSx mode
+   SmcLowLeakageStopMode_LLS3  = SMC_STOPCTRL_LLSM(3),  //!< Enter VLLS3 in VLLSx mode, LLS3 in LLSx mode
+#endif
 };
 
 /**
@@ -277,12 +278,12 @@ public:
     *
     * @param[in] smcLowLeakageStopMode  Controls which LLS/VLLS sub-mode to enter if STOPM=LLS/VLLS
     * @param[in] smcPowerOnReset        Controls whether the POR detect circuit is enabled in VLLS0 mode
-    * @param[in] smcPartialStopMode     Controls whether a Partial Stop mode is entered when STOPM=STOP (is supported)
+    * @param[in] smcPartialStopMode     Controls whether a Partial Stop mode is entered when STOPM=STOP (if supported)
     */
    static void setStopOptions(
          SmcLowLeakageStopMode   smcLowLeakageStopMode,
-         SmcPowerOnReset         smcPowerOnReset,
-         SmcPartialStopMode      smcPartialStopMode=SmcPartialStopMode_Normal) {
+         SmcPowerOnReset         smcPowerOnReset         = SmcPowerOnReset_Disable,
+         SmcPartialStopMode      smcPartialStopMode      = SmcPartialStopMode_Normal) {
 
       smc->STOPCTRL = smcPartialStopMode|smcPowerOnReset|smcLowLeakageStopMode;
    }
@@ -405,7 +406,7 @@ public:
    }
 
    /**
-    * Enter Deep Sleep mode
+    * Enter Deep Sleep mode with the current STOP settings
     *
     * See enterStopMode();
     */

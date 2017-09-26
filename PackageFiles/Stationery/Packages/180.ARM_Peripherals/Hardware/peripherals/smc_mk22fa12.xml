@@ -67,13 +67,13 @@
       <choice name="RAM2 powered in VLLS2" value="1" />
    </binaryOption>   
    
-   <choiceOption name="smc_stopctrl_llsm" 
-      description="LLS or VLLS Mode Control"
-      toolTip="This field controls which LLS or VLLS sub-mode to enter if STOPM = VLLS">
+   <choiceOption name="smc_stopctrl_vllsm" 
+      description="VLLS Mode Control"
+      toolTip="This field controls which VLLS sub-mode to enter if STOPM = VLLS">
       <choice value="0" name="VLLS0" />
       <choice value="1" name="VLLS1" />
       <choice value="2" name="VLLS2" />
-      <choice value="3" name="VLLS3" />
+      <choice value="3" name="VLLS3" isDefault="true" />
       <choice value="4" name="Reserved" />
       <choice value="5" name="Reserved" />
       <choice value="6" name="Reserved" />
@@ -95,12 +95,13 @@
       \t   SMC_STOPCTRL_LPOPO($(smc_stopctrl_lpopo:0)) |  // POR Power Option (if present)
       #endif\n\n
       \t   SMC_STOPCTRL_RAM2PO($(smc_stopctrl_ram2po:0)) |  // RAM2 Power Option (if present)
-      \t   SMC_STOPCTRL_LLSM($(smc_stopctrl_llsm:0));   // LLS or VLLS Mode Control\n\n
+      \t   SMC_STOPCTRL_VLLSM($(smc_stopctrl_vllsm:0));   // LLS or VLLS Mode Control\n\n
    ]]></template>
 
    <projectActionList id = "smc_files" >
       <copy source="Project_Headers/smc.h"                  target="Project_Headers/smc.h"                  overwrite="true" derived="true" />
       <copy source="Project_Headers/KinetisPowerModes.png"  target="Project_Headers/KinetisPowerModes.png"  overwrite="true" derived="true" macroReplace="false" />
+      <copy source="Snippets/vlpr-run-hsrun-example.cpp"    target="Snippets/vlpr-run-hsrun-example.cpp"    overwrite="true" derived="true" />
    </projectActionList>
          
 </peripheralPage>

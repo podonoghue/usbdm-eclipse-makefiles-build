@@ -8,19 +8,27 @@
  ============================================================================
  */
 /*
- * This examples assumes that three appropriate clock configurations have been created:
+ * This examples assumes that two appropriate clock configurations have been created:
  *  - ClockConfig_PEE_48MHz   For RUN mode (Core=48MHz, Bus=48MHz, Flash = 24MHz)
  *  - ClockConfig_BLPI_4MHz   For VLPR mode (Core=4MHz, Bus=4MHz, Flash = 800kHz)
  */
 #include "hardware.h"
 #include "mcg.h"
 #include "smc.h"
+#include "lptmr.h"
 
 // Allow access to USBDM methods without USBDM:: prefix
 using namespace USBDM;
 
 // LED connection - change as required
 using Led   = USBDM::GpioA<2>;
+
+using WakeupTimer = Lptmr0;
+
+void wakeupCallback() {
+   __asm__("nop");
+   Led::toggle();
+}
 
 int main() {
    console.writeln("Starting\n");
@@ -37,6 +45,11 @@ int main() {
 
    Led::setOutput();
 
+   WakeupTimer::configureTimeCountingMode(LptmrResetOn_Compare, LptmrInterrupt_Enable);
+   WakeupTimer::setPeriod(3*seconds);
+   WakeupTimer::setCallback(wakeupCallback);
+   WakeupTimer::enableNvicInterrupts();
+
    for(;;) {
       /*
        * RUN -> VLPR
@@ -48,7 +61,6 @@ int main() {
       Smc::enterRunMode(SmcRunMode_VeryLowPower);
       console<<Smc::getSmcStatusName()<<":"<<Mcg::getClockModeName()<<"@"<<::SystemCoreClock<<" Hz\n";
       waitMS(200);
-      Led::toggle();
       /*
        * VLPR -> RUN
        * Change mode then clock up
@@ -59,7 +71,6 @@ int main() {
       console.setBaudRate(defaultBaudRate);
       console<<Smc::getSmcStatusName()<<":"<<Mcg::getClockModeName()<<"@"<<::SystemCoreClock<<" Hz\n";
       waitMS(200);
-      Led::toggle();
    }
    return 0;
 }

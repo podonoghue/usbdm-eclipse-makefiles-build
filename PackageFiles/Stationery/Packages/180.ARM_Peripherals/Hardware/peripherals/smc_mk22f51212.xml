@@ -74,7 +74,7 @@
       <choice value="0" name="VLLS0 if PMCTRL[STOPM]=VLLSx, reserved if PMCTRL[STOPM]=LLSx" />
       <choice value="1" name="VLLS1 if PMCTRL[STOPM]=VLLSx, reserved if PMCTRL[STOPM]=LLSx" />
       <choice value="2" name="VLLS2 if PMCTRL[STOPM]=VLLSx, LLS2 if PMCTRL[STOPM]=LLSx" />
-      <choice value="3" name="VLLS3 if PMCTRL[STOPM]=VLLSx, LLS3 if PMCTRL[STOPM]=LLSx" />
+      <choice value="3" name="VLLS3 if PMCTRL[STOPM]=VLLSx, LLS3 if PMCTRL[STOPM]=LLSx" isDefault="true" />
       <choice value="4" name="Reserved" />
       <choice value="5" name="Reserved" />
       <choice value="6" name="Reserved" />
@@ -102,6 +102,7 @@
    <projectActionList id = "smc_files" >
       <copy source="Project_Headers/smc.h"                  target="Project_Headers/smc.h"                  overwrite="true" derived="true" />
       <copy source="Project_Headers/KinetisPowerModes.png"  target="Project_Headers/KinetisPowerModes.png"  overwrite="true" derived="true" macroReplace="false" />
+      <copy source="Snippets/vlpr-run-hsrun-example.cpp"    target="Snippets/vlpr-run-hsrun-example.cpp"    overwrite="true" derived="true" />
    </projectActionList>
          
 </peripheralPage>
