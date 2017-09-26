@@ -21,7 +21,10 @@
       <choice value="15" name="I2S0 Transmit" />
       <choice value="16" name="SPI0 Receive" />
       <choice value="17" name="SPI0 Transmit" />
+      <choice value="18" name="SPI1 Receive" />
+      <choice value="19" name="SPI1 Transmit" />
       <choice value="22" name="I2C0" />
+      <choice value="22" name="I2C1" />
       <choice value="24" name="FTM0 Channel 0" />
       <choice value="25" name="FTM0 Channel 1" />
       <choice value="26" name="FTM0 Channel 2" />
@@ -32,9 +35,13 @@
       <choice value="31" name="FTM0 Channel 7" />
       <choice value="32" name="FTM1 Channel 0" />
       <choice value="33" name="FTM1 Channel 1" />
+      <choice value="34" name="FTM2 Channel 1" />
+      <choice value="35" name="FTM2 Channel 1" />
       <choice value="40" name="ADC0" />
+      <choice value="41" name="ADC1" />
       <choice value="42" name="CMP0" />
       <choice value="43" name="CMP1" />
+      <choice value="45" name="DAC0" />
       <choice value="47" name="CMT" />
       <choice value="48" name="PDB" />
       <choice value="49" name="Port A" />
@@ -92,4 +99,58 @@
       \tstatic constexpr uint8_t chcfg15_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg15));
    ]]></template>
 
+   <template namespace="usbdm"><![CDATA[
+      \t/** 
+      \t * DMA channel numbers 
+      \t */
+      \tenum DmaSlot {
+      \t   DmaSlot_Disabled                    = 0,
+      \t   DmaSlot_UART0_Receive               = 2,
+      \t   DmaSlot_UART0_Transmit              = 3,
+      \t   DmaSlot_UART1_Receive               = 4,
+      \t   DmaSlot_UART1_Transmit              = 5,
+      \t   DmaSlot_UART2_Receive               = 6,
+      \t   DmaSlot_UART2_Transmit              = 7,
+      \t   DmaSlot_I2S0_Receive                = 14,
+      \t   DmaSlot_I2S0_Transmit               = 15,
+      \t   DmaSlot_SPI0_Receive                = 16,
+      \t   DmaSlot_SPI0_Transmit               = 17,
+      \t   DmaSlot_SPI0_Receive                = 18,
+      \t   DmaSlot_SPI0_Transmit               = 19,
+      \t   DmaSlot_I2C0                        = 22,
+      \t   DmaSlot_I2C1                        = 23,
+      \t   DmaSlot_FTM0_Ch_0                   = 24,
+      \t   DmaSlot_FTM0_Ch_1                   = 25,
+      \t   DmaSlot_FTM0_Ch_2                   = 26,
+      \t   DmaSlot_FTM0_Ch_3                   = 27,
+      \t   DmaSlot_FTM0_Ch_4                   = 28,
+      \t   DmaSlot_FTM0_Ch_5                   = 29,
+      \t   DmaSlot_FTM0_Ch_6                   = 30,
+      \t   DmaSlot_FTM0_Ch_7                   = 31,
+      \t   DmaSlot_FTM1_Ch_0                   = 32,
+      \t   DmaSlot_FTM1_Ch_1                   = 33,
+      \t   DmaSlot_ADC0                        = 40,
+      \t   DmaSlot_ADC1                        = 41,
+      \t   DmaSlot_CMP0                        = 42,
+      \t   DmaSlot_CMP1                        = 43,
+      \t   DmaSlot_DAC0                        = 45,
+      \t   DmaSlot_CMT                         = 47,
+      \t   DmaSlot_PDB                         = 48,
+      \t   DmaSlot_PortA                       = 49,
+      \t   DmaSlot_PortB                       = 50,
+      \t   DmaSlot_PortC                       = 51,
+      \t   DmaSlot_PortD                       = 52,
+      \t   DmaSlot_PortE                       = 53,
+      \t   DmaSlot_AlwaysEnabled0              = 54,
+      \t   DmaSlot_AlwaysEnabled1              = 55,
+      \t   DmaSlot_AlwaysEnabled2              = 56,
+      \t   DmaSlot_AlwaysEnabled3              = 57,
+      \t   DmaSlot_AlwaysEnabled4              = 48,
+      \t   DmaSlot_AlwaysEnabled5              = 59,
+      \t   DmaSlot_AlwaysEnabled6              = 60,
+      \t   DmaSlot_AlwaysEnabled7              = 61,
+      \t   DmaSlot_AlwaysEnabled8              = 62,
+      \t   DmaSlot_AlwaysEnabled9              = 63,
+      \t};
+   ]]></template>
 </peripheralPage>
