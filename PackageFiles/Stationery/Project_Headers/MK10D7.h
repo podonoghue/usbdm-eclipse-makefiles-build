@@ -5872,7 +5872,7 @@ typedef struct {                                /*       PMC Structure          
 */
 
 /* ================================================================================ */
-/* ================           PORTA (file:PORTA_DFER)              ================ */
+/* ================           PORTA (file:PORTA)                   ================ */
 /* ================================================================================ */
 
 /**
@@ -5889,10 +5889,6 @@ typedef struct {                                /*       PORTA Structure        
    __O  uint32_t  GPCHR;                        /**< 0084: Global Pin Control High Register                             */
         uint8_t   RESERVED_0[24];              
    __IO uint32_t  ISFR;                         /**< 00A0: Interrupt Status Flag Register                               */
-        uint8_t   RESERVED_1[28];              
-   __IO uint32_t  DFER;                         /**< 00C0: Digital Filter Enable Register                               */
-   __IO uint32_t  DFCR;                         /**< 00C4: Digital Filter Clock Register                                */
-   __IO uint32_t  DFWR;                         /**< 00C8: Digital Filter Width Register                                */
 } PORT_Type;
 
 /**
@@ -5957,15 +5953,6 @@ typedef struct {                                /*       PORTA Structure        
 #define PORT_GPCHR_GPWE_SHIFT                    (16U)                                               /*!< PORTA_GPCHR.GPWE Position               */
 #define PORT_GPCHR_GPWE(x)                       (((uint32_t)(((uint32_t)(x))<<16U))&0xFFFF0000UL)   /*!< PORTA_GPCHR.GPWE Field                  */
 /* ------- ISFR Bit Fields                          ------ */
-/* ------- DFER Bit Fields                          ------ */
-/* ------- DFCR Bit Fields                          ------ */
-#define PORT_DFCR_CS_MASK                        (0x1U)                                              /*!< PORTA_DFCR.CS Mask                      */
-#define PORT_DFCR_CS_SHIFT                       (0U)                                                /*!< PORTA_DFCR.CS Position                  */
-#define PORT_DFCR_CS(x)                          (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< PORTA_DFCR.CS Field                     */
-/* ------- DFWR Bit Fields                          ------ */
-#define PORT_DFWR_FILT_MASK                      (0x1FU)                                             /*!< PORTA_DFWR.FILT Mask                    */
-#define PORT_DFWR_FILT_SHIFT                     (0U)                                                /*!< PORTA_DFWR.FILT Position                */
-#define PORT_DFWR_FILT(x)                        (((uint32_t)(((uint32_t)(x))<<0U))&0x1FUL)          /*!< PORTA_DFWR.FILT Field                   */
 /**
  * @} */ /* End group PORT_Register_Masks_GROUP 
  */

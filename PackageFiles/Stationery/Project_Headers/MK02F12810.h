@@ -4309,7 +4309,7 @@ typedef struct {                                /*       PORTA Structure        
 */
 
 /* ================================================================================ */
-/* ================           PORTC (derived from PORTB)           ================ */
+/* ================           PORTC (derived from PORTA)           ================ */
 /* ================================================================================ */
 
 /**
@@ -4330,62 +4330,16 @@ typedef struct {                                /*       PORTA Structure        
 */
 
 /* ================================================================================ */
-/* ================           PORTD (file:PORTD_DFER)              ================ */
+/* ================           PORTD (derived from PORTA)           ================ */
 /* ================================================================================ */
 
 /**
  * @brief Pin Control and Interrupts
  */
-/**
-* @addtogroup PORT_structs_GROUP PORT struct
-* @brief Struct for PORT
-* @{
-*/
-typedef struct {                                /*       PORTD Structure                                              */
-   __IO uint32_t  PCR[32];                      /**< 0000: Pin Control Register                                         */
-   __O  uint32_t  GPCLR;                        /**< 0080: Global Pin Control Low Register                              */
-   __O  uint32_t  GPCHR;                        /**< 0084: Global Pin Control High Register                             */
-        uint8_t   RESERVED_0[24];              
-   __IO uint32_t  ISFR;                         /**< 00A0: Interrupt Status Flag Register                               */
-        uint8_t   RESERVED_1[28];              
-   __IO uint32_t  DFER;                         /**< 00C0: Digital Filter Enable Register                               */
-   __IO uint32_t  DFCR;                         /**< 00C4: Digital Filter Clock Register                                */
-   __IO uint32_t  DFWR;                         /**< 00C8: Digital Filter Width Register                                */
-} PORTD_Type;
-
-/**
- * @} */ /* End group PORT_structs_GROUP 
- */
-
-/* -------------------------------------------------------------------------------- */
-/* -----------     'PORTD' Position & Mask macros                       ----------- */
-/* -------------------------------------------------------------------------------- */
-
-/**
-* @addtogroup PORT_Register_Masks_GROUP PORT Register Masks
-* @brief Register Masks for PORT
-* @{
-*/
-/* ------- PCR Bit Fields                           ------ */
-/* ------- GPCLR Bit Fields                         ------ */
-/* ------- GPCHR Bit Fields                         ------ */
-/* ------- ISFR Bit Fields                          ------ */
-/* ------- DFER Bit Fields                          ------ */
-/* ------- DFCR Bit Fields                          ------ */
-#define PORT_DFCR_CS_MASK                        (0x1U)                                              /*!< PORTD_DFCR.CS Mask                      */
-#define PORT_DFCR_CS_SHIFT                       (0U)                                                /*!< PORTD_DFCR.CS Position                  */
-#define PORT_DFCR_CS(x)                          (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< PORTD_DFCR.CS Field                     */
-/* ------- DFWR Bit Fields                          ------ */
-#define PORT_DFWR_FILT_MASK                      (0x1FU)                                             /*!< PORTD_DFWR.FILT Mask                    */
-#define PORT_DFWR_FILT_SHIFT                     (0U)                                                /*!< PORTD_DFWR.FILT Position                */
-#define PORT_DFWR_FILT(x)                        (((uint32_t)(((uint32_t)(x))<<0U))&0x1FUL)          /*!< PORTD_DFWR.FILT Field                   */
-/**
- * @} */ /* End group PORT_Register_Masks_GROUP 
- */
 
 /* PORTD - Peripheral instance base addresses */
 #define PORTD_BasePtr                  0x4004C000UL //!< Peripheral base address
-#define PORTD                          ((PORTD_Type *) PORTD_BasePtr) //!< Freescale base pointer
+#define PORTD                          ((PORT_Type *) PORTD_BasePtr) //!< Freescale base pointer
 #define PORTD_BASE_PTR                 (PORTD) //!< Freescale style base pointer
 /**
  * @} */ /* End group PORT_Peripheral_access_layer_GROUP 
@@ -4397,7 +4351,7 @@ typedef struct {                                /*       PORTD Structure        
 */
 
 /* ================================================================================ */
-/* ================           PORTE (derived from PORTB)           ================ */
+/* ================           PORTE (derived from PORTA)           ================ */
 /* ================================================================================ */
 
 /**

@@ -4334,7 +4334,7 @@ typedef struct {                                /*       PORTA Structure        
 */
 
 /* ================================================================================ */
-/* ================           PORTC (derived from PORTB)           ================ */
+/* ================           PORTC (derived from PORTA)           ================ */
 /* ================================================================================ */
 
 /**
@@ -4376,7 +4376,7 @@ typedef struct {                                /*       PORTD Structure        
    __IO uint32_t  DFER;                         /**< 00C0: Digital Filter Enable Register                               */
    __IO uint32_t  DFCR;                         /**< 00C4: Digital Filter Clock Register                                */
    __IO uint32_t  DFWR;                         /**< 00C8: Digital Filter Width Register                                */
-} PORTD_Type;
+} PORT_DFER_Type;
 
 /**
  * @} */ /* End group PORT_structs_GROUP 
@@ -4410,7 +4410,7 @@ typedef struct {                                /*       PORTD Structure        
 
 /* PORTD - Peripheral instance base addresses */
 #define PORTD_BasePtr                  0x4004C000UL //!< Peripheral base address
-#define PORTD                          ((PORTD_Type *) PORTD_BasePtr) //!< Freescale base pointer
+#define PORTD                          ((PORT_DFER_Type *) PORTD_BasePtr) //!< Freescale base pointer
 #define PORTD_BASE_PTR                 (PORTD) //!< Freescale style base pointer
 /**
  * @} */ /* End group PORT_Peripheral_access_layer_GROUP 
@@ -4422,7 +4422,7 @@ typedef struct {                                /*       PORTD Structure        
 */
 
 /* ================================================================================ */
-/* ================           PORTE (derived from PORTB)           ================ */
+/* ================           PORTE (derived from PORTA)           ================ */
 /* ================================================================================ */
 
 /**
