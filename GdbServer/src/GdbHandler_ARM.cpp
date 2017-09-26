@@ -403,8 +403,8 @@ USBDM_ErrorCode GdbHandler_ARM::armReadMemoryWord(unsigned long address, unsigne
  * @return T_VLPR         Currently in low-power run (VLPR)
  * @return T_VLPW         Currently in low power sleep (VLPW)
  * @return T_VLPS         Currently in low power deep-sleep (VLPS)
- * @return T_LLSxEXIT     Exited LLSx state
- * @return T_VLLSxEXIT    Exited VLLSx state
+ * @return T_LLSxEXIT     Running - Exited LLSx state
+ * @return T_VLLSxEXIT    Running - Exited VLLSx state
  */
 GdbHandler::GdbTargetStatus GdbHandler_ARM::getTargetStatus() {
    LOGGING;
@@ -433,7 +433,7 @@ GdbHandler::GdbTargetStatus GdbHandler_ARM::getTargetStatus() {
                rc = bdmInterface->readCReg(ARM_CRegMDM_AP_Status, &mdm_ap_status);
             }
          }
-         log.print("mdm_ap_status = %s(0x%08lX)\n", getMDM_APStatusName(mdm_ap_status), mdm_ap_status);
+         log.print("mdm_ap_status - %s(0x%08lX)\n", getMDM_APStatusName(mdm_ap_status), mdm_ap_status);
          if (rc != BDM_RC_OK) {
             status = T_NOCONNECTION;
             break;
@@ -460,23 +460,21 @@ GdbHandler::GdbTargetStatus GdbHandler_ARM::getTargetStatus() {
             status =  T_HALT;
             break;
          }
+         if (mdm_ap_status&MDM_AP_Status_Core_SLEEPDEEP) {
+            // Target is halted in STOP/VLPS mode
+            // Interprets STOP with LP_Enable as Pseudo-VLPS when in debug mode
+            // See Reference manual MDM-AP Status description
+            status = (mdm_ap_status&(MDM_AP_Status_VLP_Mode|MDM_AP_Status_LP_Enable))?T_VLPS:T_STOP;
+            break;
+         }
          if (mdm_ap_status&MDM_AP_Status_Core_SLEEPING) {
-            // Target is halted in WAIT/VLPW/STOP/VLPS mode
-
-            if (mdm_ap_status&MDM_AP_Status_Core_SLEEPDEEP) {
-               // Target is in STOP or VLPS mode
-               status =  (mdm_ap_status&MDM_AP_Status_LP_Enable)?T_VLPS:T_STOP;
-               break;
-            }
-            else {
-               // Target is halted in WAIT or VLPW mode
-               status =  (mdm_ap_status&MDM_AP_Status_LP_Enable)?T_VLPW:T_WAIT;
-               break;
-            }
+            // Target is halted in WAIT/VLPW mode
+            status = (mdm_ap_status&MDM_AP_Status_VLP_Mode)?T_VLPW:T_WAIT;
+            break;
          }
          if (mdm_ap_status&MDM_AP_Status_VLP_Mode) {
-            // Target is running in VLPR mode
-            status =  T_VLPR;
+            // Target is halted in VLPR mode
+            status = T_VLPR;
             break;
          }
          if ((mdm_ap_status&MDM_AP_Status_System_Reset) == 0) {
