@@ -77,14 +77,14 @@ int main() {
    console<<"UINT_MAX,radix(2)  = "<<Uart::radix(2)<<UINT_MAX<<EndOfLine;
    console<<Radix_10;
 
-   FormattedIO::ultoa(100, buff);
+   FormattedIO::ultoa(buff, 100);
    console.write("ultoa(100, buff)  = ").writeln(buff);
-   FormattedIO::ltoa(-100, buff);
+   FormattedIO::ltoa(buff, -100);
    console.write("ltoa(-100, buff)  = ").writeln(buff);
 
    char *ptr = buff;
    ptr = FormattedIO::strcpy(ptr, "Console::ultoa(100, buff) = ");
-   ptr = FormattedIO::ultoa(100, ptr);
+   ptr = FormattedIO::ultoa(ptr, 100);
    ptr = FormattedIO::strcpy(ptr, ", oh well!");
    console.writeln(buff);
 
@@ -98,7 +98,7 @@ int main() {
    console<<Radix_10<<integer<<", 0x"<<Radix_16<<(unsigned long)integer<<", 0b"<<Radix_2<<(unsigned long)integer<<EndOfLine;
 
    int length = console.write("text : ").gets(buff, sizeof(buff));
-   console.write("[").write(length).write(" chars] = '").write(buff).writeln("'")<<Flush;
+   console.write("[").write(length).write(" chars] = '").write(buff).writeln("'").flushOutput();
 
    console<<Radix_10;
    console<<"value :">>integer>>EndOfLine;
