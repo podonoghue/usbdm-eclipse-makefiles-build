@@ -142,7 +142,8 @@ public:
 #endif
    }
    /**
-    * Enable pin as digital output with initial inactive level and configures Pin Control Register (PCR) values
+    * Enable pin as digital output with initial inactive level.\n
+    * Configures all Pin Control Register (PCR) values
     *
     * @note Resets the Pin Control Register value (PCR value).
     * @note Resets the pin value to the inactive state
@@ -160,7 +161,8 @@ public:
    }
    /**
     * @brief
-    * Enable pin as digital output with initial inactive level and configures Pin Control Register (PCR) values
+    * Enable pin as digital output with initial inactive level.\n
+    * Configures all Pin Control Register (PCR) values
     *
     * @note Resets the Pin Control Register value (PCR value).
     * @note Resets the pin value to the inactive state
@@ -192,7 +194,8 @@ public:
    }
    /**
     * @brief
-    * Enable pin as digital input and configures Pin Control Register (PCR) value
+    * Enable pin as digital input.\n
+    * Configures all Pin Control Register (PCR) values
     *
     * @note Resets the Pin Control Register value (PCR value).
     * @note Use setIn() for a lightweight change of direction without affecting other pin settings.
@@ -206,7 +209,8 @@ public:
    }
    /**
     * @brief
-    * Enable pin as digital input and configures Pin Control Register (PCR) value
+    * Enable pin as digital input.\n
+    * Configures all Pin Control Register (PCR) values
     *
     * @note Reset the Pin Control Register value (PCR value).
     * @note Use setIn() for a lightweight change of direction without affecting other pin settings.
@@ -222,6 +226,13 @@ public:
          ) {
       setInput(pinPull|pinIrq|pinFilter|PinMux_Gpio);
    }
+
+#ifdef PORT_DFCR_CS_MASK
+   static void configureDigitalFilter() {
+
+   }
+#endif
+
    /**
     * Set pin. Pin will be high if configured as an output.
     *
@@ -460,8 +471,8 @@ public:
    /**
     * Clear interrupt flag for pin
     */
-   static void clearIrqFlag() {
-      Pcr::clearIrqFlag();
+   static void clearInterruptFlag() {
+      Pcr::clearInterruptFlag();
    }
 
    /**
@@ -516,14 +527,44 @@ public:
       Pcr::lock();
    }
 
+#ifdef PORT_DFCR_CS_MASK
    /**
-    * Enable/disable pin interrupts.
+    * Configures Digital Pin Filter
     * Convenience wrapper for PCR function
     *
-    * @param[in] enable True => enable, False => disable
+    * @param pinDigitalFilterClock  Clock source
+    * @param filterLength           Filter length in clock ticks
+    *
+    * @note Not all ports support this feature
+    * @note This affects the digital filter for all pins of this port
     */
-   static void enableNvicInterrupts(bool enable=true) {
-      Pcr::enableNvicInterrupts(enable);
+   static void configureDigitalFilter(PinDigitalFilterClock pinDigitalFilterClock, int filterLength) {
+      Pcr::configureDigitalFilter(pinDigitalFilterClock, filterLength);
+   }
+
+   /**
+    * Enable/disable digital filter on the pin
+    * Convenience wrapper for PCR function
+    *
+    * @param enable  True => enable, False => disable
+    *
+    * @note Not all ports support this feature
+    */
+   static void enableDigitalFilter(bool enable) {
+      Pcr::enableDigitalFilter(enable);
+   }
+#endif
+
+   /**
+    * Enable/disable pin interrupts.\n
+    * Any pending NVIC interrupts are first cleared.
+    * Convenience wrapper for PCR function
+    *
+    * @param[in] enable    True => enable, False => disable
+    * @param[in] priority  Interrupt priority
+    */
+   static void enableNvicInterrupts(bool enable=true, uint32_t priority=NvicPriority_Normal) {
+      Pcr::enableNvicInterrupts(enable, priority);
    }
 
    /**
@@ -572,28 +613,28 @@ using  GpioTable_T = GpioBase_T<Info::info[index].clockMask, Info::info[index].p
  * <b>Example</b>
  * @code
  * // Instantiate object representing Port A 6 down to 3
- * using pta6_3 = Field_T<GpioAInfo, 6, 3>;
+ * using Pta6_3 = Field_T<GpioAInfo, 6, 3>;
  *
  * // Set as digital output
- * pta6_3::setOutput();
+ * Pta6_3::setOutput();
  *
  * // Write value to field
- * pta6_3::write(0x53);
+ * Pta6_3::write(0x53);
  *
  * // Clear all of field
- * pta6_3::bitClear();
+ * Pta6_3::bitClear();
  *
  * // Clear lower two bits of field
- * pta6_3::bitClear(0x3);
+ * Pta6_3::bitClear(0x3);
  *
  * // Set lower two bits of field
- * pta6_3::bitSet(0x3);
+ * Pta6_3::bitSet(0x3);
  *
  * // Set as digital input
- * pta6_3::setInput();
+ * Pta6_3::setInput();
  *
  * // Read pin as int value
- * int x = pta6_3::read();
+ * int x = Pta6_3::read();
  * @endcode
  *
  * @tparam Info           Class describing the GPIO and PORT
@@ -608,7 +649,12 @@ class Field_T {
 
 private:
    static constexpr volatile GPIO_Type *gpio = reinterpret_cast<volatile GPIO_Type *>(Info::gpioAddress);
+
+#ifdef PORT_DFCR_CS_MASK
+   static constexpr volatile PORT_DFER_Type *port = reinterpret_cast<volatile PORT_DFER_Type *>(Info::pcrAddress);
+#else
    static constexpr volatile PORT_Type *port = reinterpret_cast<volatile PORT_Type *>(Info::pcrAddress);
+#endif
    /**
     * Mask for the bits being manipulated
     */
@@ -665,7 +711,8 @@ public:
       gpio->PDDR |= MASK;
    }
    /**
-    * Set all pins as digital outputs and configures all Pin Control Register (PCR) values
+    * Sets all pin as digital outputs\n
+    * Configures all Pin Control Register (PCR) values
     *
     * @note This will also reset the Pin Control Register value (PCR value).
     * @note Use setOut() or setDirection() for a lightweight change of direction without affecting other pin settings.
@@ -677,7 +724,8 @@ public:
       gpio->PDDR |= MASK;
    }
    /**
-    * Set all pins as digital outputs and configures all Pin Control Register (PCR) values
+    * Sets all pin as digital outputs\n
+    * Configures all Pin Control Register (PCR) values
     *
     * @note This will also reset the Pin Control Register value (PCR value).
     * @note Use setOut() or setDirection() for a lightweight change of direction without affecting other pin settings.
@@ -702,7 +750,8 @@ public:
       gpio->PDDR &= ~MASK;
    }
    /**
-    * Set all pins as digital inputs and configures all Pin Control Register (PCR) values
+    * Set all pins as digital inputs\n
+	* Configures all Pin Control Register (PCR) values
     *
     * @note This will also reset the Pin Control Register value (PCR value).
     * @note Use setIn() or setDirection() for a lightweight change of direction without affecting other pin settings.
@@ -714,7 +763,8 @@ public:
       gpio->PDDR &= ~MASK;
    }
    /**
-    * Sets all pins as digital inputs and configures all Pin Control Register (PCR) values
+    * Set all pins as digital inputs\n
+	* Configures all Pin Control Register (PCR) values
     *
     * @note This will also reset the Pin Control Register value (PCR value).
     * @note Use setIn() or setDirection() for a lightweight change of direction without affecting other pin settings.
