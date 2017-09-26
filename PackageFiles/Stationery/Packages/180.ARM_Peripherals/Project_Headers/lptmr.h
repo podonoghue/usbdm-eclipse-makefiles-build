@@ -79,16 +79,32 @@ enum LptmrPinSel {
  * Select the LPTMR Pulse Mode input pin polarity
  */
 enum LptmrPulseEdge {
-   LptmrPulse_RisingEdge  = LPTMR_CSR_TPP(0), //!< LPTMR Time counting mode
-   LptmrPulse_FallingEdge = LPTMR_CSR_TPP(1), //!< LPTMR Pulse counting mode
+   LptmrPulse_RisingEdge  = LPTMR_CSR_TPP(0), //!< LPTMR time counting mode
+   LptmrPulse_FallingEdge = LPTMR_CSR_TPP(1), //!< LPTMR pulse counting mode
 };
 
 /**
  * Select when the LPTMR counter resets to zero
  */
 enum LptmrResetOn {
-   LptmrResetOn_Compare  = LPTMR_CSR_TFC(0), //!< LPTMR Counter is reset whenever TCF is set.
-   LptmrResetOn_Overflow = LPTMR_CSR_TFC(1), //!< LPTMR Counter is reset on overflow.
+   LptmrResetOn_Compare  = LPTMR_CSR_TFC(0), //!< LPTMR counter is reset whenever TCF is set.
+   LptmrResetOn_Overflow = LPTMR_CSR_TFC(1), //!< LPTMR counter is reset on overflow.
+};
+
+/**
+ * Select LPTMR mode
+ */
+enum LptmrMode {
+   LptmrMode_Time          = LPTMR_CSR_TMS(0), //!< LPTMR operates in time mode
+   LptmrMode_PulseCounting = LPTMR_CSR_TMS(1), //!< LPTMR operates in pulse counting mode
+};
+
+/**
+ * Enable/Disable LPTMR interrupts
+ */
+enum LptmrInterrupt {
+   LptmrInterrupt_Disable = LPTMR_CSR_TIE(0), //!< Disable LPTMR interrupts
+   LptmrInterrupt_Enable  = LPTMR_CSR_TIE(1), //!< Enable LPTMR interrupts
 };
 
 /**
@@ -122,7 +138,7 @@ public:
    /**
     * Enables the LPTMR clock and configures the pins
     */
-   static void __attribute__((always_inline)) enable() {
+   static void enable() {
       configureAllPins();
 
       // Enable clock
@@ -132,46 +148,77 @@ public:
    
    /**
     * Set LPTMR to pulse counting mode with selection of input pin, edge selection and reset mode.\n
-    * The timer is enabled.
+    * The timer is enabled and pins configured.
     *
     * @param[in] lptmrPinSel     Input pin for Pulse Counting mode
     * @param[in] lptmrPulseEdge  Edge for pulse counting (default = rising-edge)
     * @param[in] lptmrResetOn    Selects when the LPTMR counter resets to zero (default = on overflow)
+    * @param[in] lptmrInterrupt  Enable/disable interrupts
     */
-   static void __attribute__((always_inline)) setPulseCountingMode(
+   static void configurePulseCountingMode(
          LptmrPinSel       lptmrPinSel,
-         LptmrPulseEdge    lptmrPulseEdge=LptmrPulse_RisingEdge,
-         LptmrResetOn      lptmrResetOn=LptmrResetOn_Overflow) {
+         LptmrPulseEdge    lptmrPulseEdge = LptmrPulse_RisingEdge,
+         LptmrResetOn      lptmrResetOn   = LptmrResetOn_Overflow,
+         LptmrInterrupt    lptmrInterrupt = LptmrInterrupt_Disable) {
 
       enable();
       // Change settings with timer disabled
-      lptmr->CSR = LPTMR_CSR_TMS_MASK|lptmrPinSel|lptmrPulseEdge|lptmrResetOn;
+      lptmr->CSR = LptmrMode_PulseCounting|lptmrPinSel|lptmrPulseEdge|lptmrResetOn|lptmrInterrupt;
       // Enable timer
-      lptmr->CSR = LPTMR_CSR_TEN_MASK|LPTMR_CSR_TMS_MASK|lptmrPinSel|lptmrPulseEdge|lptmrResetOn;
+      lptmr->CSR = LptmrMode_PulseCounting|lptmrPinSel|lptmrPulseEdge|lptmrResetOn|lptmrInterrupt|LPTMR_CSR_TEN_MASK;
    }
 
    /**
     * Set LPTMR to time counting mode.\n
-    * The timer is enabled.
+    * The timer is enabled and pins configured.
     *
-    * @param[in] lptmrResetOn Selects when the LPTMR counter resets to zero (default = on compare event)
+    * @param[in] lptmrResetOn    Selects when the LPTMR counter resets to zero
+    * @param[in] lptmrInterrupt  Enable/disable interrupts
+    * @param[in] lptmrClockSel   Clock source selection
+    * @param[in] lptmrPrescale   Clock divider
     */
-   static void __attribute__((always_inline)) setTimeCountingMode(LptmrResetOn lptmrResetOn=LptmrResetOn_Compare) {
+   static void configureTimeCountingMode(
+         LptmrResetOn      lptmrResetOn   = LptmrResetOn_Compare,
+         LptmrInterrupt    lptmrInterrupt = LptmrInterrupt_Disable,
+         LptmrClockSel     lptmrClockSel  = LptmrClockSel_mcgirclk,
+         LptmrPrescale     lptmrPrescale  = LptmrPrescale_Bypass) {
       enable();
       // Change settings with timer disabled
-      lptmr->CSR = lptmrResetOn;
-      // Enable timer
-      lptmr->CSR = LPTMR_CSR_TEN_MASK|lptmrResetOn;
+      lptmr->CSR = LptmrMode_Time|lptmrResetOn|lptmrInterrupt;
+      // Set clock source and prescaler
+      lptmr->PSR = lptmrClockSel|lptmrPrescale;
+      // Set dummy timer value to avoid immediate interrupts
+      lptmr->CMR = (uint32_t)-1;
+      // Enable timer and clear interrupt flag
+      lptmr->CSR = LptmrMode_Time|lptmrResetOn|lptmrInterrupt|LPTMR_CSR_TEN_MASK|LPTMR_CSR_TCF_MASK;
    }
 
    /**
-    * Set LPTMR clock source and prescaler
+    * Restarts the counter\n
+    * Mostly for debug.
+    *
+    */
+   static void restart() {
+      uint32_t csr = lptmr->CSR;
+      lptmr->CSR   = 0;
+      lptmr->CSR   = csr|LPTMR_CSR_TCF_MASK;
+   }
+
+   /**
+    * Set LPTMR clock source and prescaler\n
+    * These settings are used for the clock prescaler in timer mode and glitch filter in pulse-counting mode.
     *
     * @param[in] lptmrClockSel   Clock source selection
     * @param[in] lptmrPrescale   Clock divider
     */
-   static void __attribute__((always_inline)) setClock(LptmrClockSel lptmrClockSel, LptmrPrescale lptmrPrescale=LptmrPrescale_Bypass) {
-      lptmr->PSR = lptmrClockSel|lptmrPrescale;
+   static void setClock(
+         LptmrClockSel lptmrClockSel,
+         LptmrPrescale lptmrPrescale   = LptmrPrescale_Bypass) {
+
+      uint32_t csr = lptmr->CSR;
+      lptmr->CSR   = 0;
+      lptmr->PSR   = lptmrClockSel|lptmrPrescale;
+      lptmr->CSR   = csr;
    }
 
    /**
@@ -179,7 +226,7 @@ public:
     *
     * @param[in]  enable true to enable, false to disable
     */
-   static void __attribute__((always_inline)) enableInterrupts(bool enable=true) {
+   static void enableInterrupts(bool enable=true) {
       if (enable) {
          lptmr->CSR |= LPTMR_CSR_TIE_MASK;
       }
@@ -189,12 +236,21 @@ public:
    }
 
    /**
+    * Clear interrupt flag
+    */
+   static void clearInterruptFlag() {
+      lptmr->CSR |= LPTMR_CSR_TCF_MASK;
+   }
+
+   /**
     * Enable/disable interrupts in NVIC
     *
     * @param[in]  enable    True => enable, False => disable
     * @param[in]  priority  Interrupt priority
     */
-   static void enableNvicInterrupts(bool enable=true, uint32_t priority=NvicPriority_Normal) {
+   static void enableNvicInterrupts(
+         bool     enable   = true,
+         uint32_t priority = NvicPriority_Normal) {
 
       if (enable) {
          // Enable interrupts
@@ -241,26 +297,22 @@ public:
    }
 
    /**
-    * Enable LPTMR\n
+    * Enable LPTMR with default configuration\n
     * Includes enabling clock and any pins used.\n
     * Sets LPTMR to default configuration
-    *
-    *  @param[in]  period    Period for the timer in timer ticks
-    *  @param[in]  csr       Control Status Register
-    *  @param[in]  psr       Prescale Register
     */
-   static void configure(uint16_t period=Info::cmr, uint32_t csr=Info::csr, uint32_t psr=Info::psr) {
+   static void defaultConfigure() {
       enable();
       // Disable timer
-      lptmr->CSR  = csr;
+      lptmr->CSR  = Info::csr;
       // PCS 0,1,2,3 => MCGIRCLK, LPO, ERCLK32K, OSCERCLK
-      lptmr->PSR  = psr;
+      lptmr->PSR  = Info::psr;
       // Period/Compare value
-      lptmr->CMR  = period;
+      lptmr->CMR  = Info::cmr;
       // Enable timer
       lptmr->CSR |= LPTMR_CSR_TEN_MASK;
 
-      if (csr & LPTMR_CSR_TIE_MASK) {
+      if (Info::csr & LPTMR_CSR_TIE_MASK) {
          // Enable timer interrupts
          NVIC_EnableIRQ(Info::irqNums[0]);
 
@@ -286,7 +338,7 @@ public:
     * @return Time in ticks
     *
     * @note Assumes prescale has been chosen appropriately.
-    * @note Rudimentary range checking only.
+    * @note Rudimentary range checking only. Sets error code.
     */
    static uint32_t convertMicrosecondsToTicks(int time) {
 
@@ -297,11 +349,11 @@ public:
 #ifdef DEBUG_BUILD
       if (rv > 0xFFFFUL) {
          // Attempt to set too long a period
-         __BKPT();
+         setErrorCode(E_TOO_LARGE);
       }
       if (rv == 0) {
          // Attempt to set too short a period
-         __BKPT();
+         setErrorCode(E_TOO_SMALL);
       }
 #endif
       return rv;
@@ -314,7 +366,7 @@ public:
     * @return Time in ticks
     *
     * @note Assumes prescale has been chosen appropriately.
-    * @note Rudimentary range checking only.
+    * @note Rudimentary range checking only. Sets error code.
     */
    static uint32_t convertMillisecondsToTicks(int time) {
 
@@ -325,11 +377,11 @@ public:
 #ifdef DEBUG_BUILD
       if (rv > 0xFFFFUL) {
          // Attempt to set too long a period
-         __BKPT();
+         setErrorCode(E_TOO_LARGE);
       }
       if (rv == 0) {
          // Attempt to set too short a period
-         __BKPT();
+         setErrorCode(E_TOO_SMALL);
       }
 #endif
       return rv;
@@ -343,6 +395,7 @@ public:
     * @return Time in ticks
     *
     * @note Uses floating point
+    * @note Rudimentary range checking only. Sets error code.
     */
    static uint32_t convertSecondsToTicks(float time) {
 
@@ -353,11 +406,11 @@ public:
 #ifdef DEBUG_BUILD
       if (rv > 0xFFFFUL) {
          // Attempt to set too long a period
-         __BKPT();
+         setErrorCode(E_TOO_LARGE);
       }
       if (rv == 0) {
          // Attempt to set too long a period
-         __BKPT();
+         setErrorCode(E_TOO_SMALL);
       }
 #endif
       return rv;
@@ -371,9 +424,14 @@ public:
     * @note Will enable and adjust the pre-scaler to appropriate value.\n
     *       The clock source should be selected by setClock() before using this function.
     *
-    * @return true => success, false => failed to find suitable values for PBYP & PRESCALE
+    * @return E_NO_ERROR      => Success
+    * @return E_ILLEGAL_PARAM => Failed to find suitable values for PBYP & PRESCALE
     */
    static ErrorCode setPeriod(float period) {
+      // Disable LPTMR before prescale change
+      uint32_t csr = lptmr->CSR;
+      lptmr->CSR = 0;
+
       float    inputClock = Info::getInputClockFrequency();
       int      prescaleFactor=1;
       uint32_t prescalerValue=0;
@@ -385,9 +443,6 @@ public:
             return setErrorCode(E_TOO_SMALL);
          }
          if (mod <= 65535) {
-            // Disable LPTMR before prescale change
-            uint32_t csr = lptmr->CSR;
-            lptmr->CSR = 0;
             __DSB();
             lptmr->CMR  = mod;
             lptmr->PSR  = (lptmr->PSR & ~(LPTMR_PSR_PRESCALE_MASK|LPTMR_PSR_PBYP_MASK))|LPTMR_PSR_PRESCALE(prescalerValue-1)|LPTMR_PSR_PBYP(prescalerValue==0);
@@ -398,7 +453,40 @@ public:
          prescaleFactor <<= 1;
       }
       // Too long a period
-      return setErrorCode(E_TOO_LARGE);
+      return setErrorCode(E_ILLEGAL_PARAM);
+   }
+
+   /**
+    * Set glitch filter interval.\n
+    * This adjusts the clock prescaler so that the filter interval is at least the given value.
+    *
+    * @param[in]  interval Interval in seconds as a float
+    *
+    * @note Will enable and adjust the pre-scaler to appropriate value.\n
+    *       The clock source should be selected by setClock() before using this function.
+    *
+    * @return E_NO_ERROR      => Success
+    * @return E_ILLEGAL_PARAM => Failed to find suitable values for PBYP & PRESCALE
+    */
+   static ErrorCode setFilterInterval(float interval) {
+      long     inputClock = Info::getInputClockFrequency();
+      int      prescaleFactor=1;
+      uint32_t prescalerValue=0;
+      while (prescalerValue<=16) {
+         if ((interval*prescaleFactor) < inputClock) {
+            // Disable LPTMR before prescale change
+            uint32_t csr = lptmr->CSR;
+            lptmr->CSR = 0;
+            __DSB();
+            lptmr->PSR  = (lptmr->PSR & ~(LPTMR_PSR_PRESCALE_MASK|LPTMR_PSR_PBYP_MASK))|LPTMR_PSR_PRESCALE(prescalerValue-1)|LPTMR_PSR_PBYP(prescalerValue==0);
+            lptmr->CSR  = csr;
+            return E_NO_ERROR;
+         }
+         prescalerValue++;
+         prescaleFactor <<= 1;
+      }
+      // Too long a period
+      return setErrorCode(E_ILLEGAL_PARAM);
    }
 };
 
