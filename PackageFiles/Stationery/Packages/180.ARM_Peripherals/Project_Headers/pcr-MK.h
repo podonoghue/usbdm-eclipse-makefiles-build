@@ -98,7 +98,7 @@ constexpr   int8_t UNMAPPED_PCR         = 0xA4;
  */
 struct PcrInfo {
    uint32_t clockMask;   //!< Clock mask for PORT
-   uint32_t pcrAddress;  //!< PCR register array address
+   uint32_t portAddress; //!< PORT address
    uint32_t gpioAddress; //!< Address of GPIO hardware associated with pin
    int8_t   gpioBit;     //!< Bit number of pin in GPIO (-ve indicates unmapped/invalid)
    uint32_t pcrValue;    //!< PCR value including MUX value to select this function
@@ -189,8 +189,11 @@ enum PinSlewRate {
  * Not all pins support this function
  */
 enum PinFilter {
-   PinFilter_None      = PORT_PCR_PFE(0), //!< No pin filter
-   PinFilter_Passive   = PORT_PCR_PFE(1), //!< Pin filter enabled
+   PinFilter_None      = PORT_PCR_PFE(0),  //!< No pin filter
+   PinFilter_Passive   = PORT_PCR_PFE(1),  //!< Pin filter enabled
+#ifdef PORT_DFCR_CS_MASK
+   PinFilter_Digital   = (1<<14), //!< Digital pin filter enabled - Not available on all ports
+#endif
 };
 
 /**
@@ -255,6 +258,16 @@ static __attribute__((always_inline)) constexpr PcrValue pcrValue(
    return pinPull|pinDriveStrength|pinDriveMode|pinIrq|pinFilter|pinSlewRate|pinMux;
 }
 
+#ifdef PORT_DFCR_CS_MASK
+   /**
+    * Controls the Digital Pin Filter clock source
+    */
+   enum PinDigitalFilterClock {
+      PinDigitalFilterClock_BusClock = PORT_DFCR_CS(0),//!< Pin Digital Filter Clock = BusClock
+      PinDigitalFilterClock_LpoClock = PORT_DFCR_CS(1),//!< Pin Digital Filter Clock = Low Power Oscillator
+   };
+#endif
+
 /**
  * Construct PCR value from existing PcrValue and extra flags
  *
@@ -312,9 +325,9 @@ typedef void (*PinCallbackFunction)(uint32_t status);
 /**
  * Common PORT features shared by all port pins
  *
- * tparam pcrAddress Base address of PCR register array
+ * tparam portAddress Address of port to be used
  */
-template<uint32_t pcrAddress>
+template<uint32_t portAddress>
 class PcrBase_T {
 
 private:
@@ -332,8 +345,12 @@ protected:
    }
 
 private:
-   static constexpr volatile PORT_Type *port = reinterpret_cast<volatile PORT_Type *>(pcrAddress);
 
+#ifdef PORT_DFCR_CS_MASK
+   static constexpr volatile PORT_DFER_Type *port = reinterpret_cast<volatile PORT_DFER_Type *>(portAddress);
+#else
+   static constexpr volatile PORT_Type      *port = reinterpret_cast<volatile PORT_Type *>(portAddress);
+#endif
    /** Callback functions for ISRs */
    static PinCallbackFunction fCallback;
 
@@ -367,8 +384,8 @@ public:
    }
 };
 
-template<uint32_t pcrAddress>
-PinCallbackFunction USBDM::PcrBase_T<pcrAddress>::fCallback = PcrBase_T<pcrAddress>::unhandledCallback;
+template<uint32_t portAddress>
+PinCallbackFunction USBDM::PcrBase_T<portAddress>::fCallback = PcrBase_T<portAddress>::unhandledCallback;
 
 /**
  * @brief Template representing a Pin Control Register (PCR)
@@ -386,12 +403,12 @@ PinCallbackFunction USBDM::PcrBase_T<pcrAddress>::fCallback = PcrBase_T<pcrAddre
  * @endcode
  *
  * @tparam clockMask       Mask for SIM clock register associated with this PCR
- * @tparam pcrAddress      PORT to be manipulated e.g. PORTA (PCR array)
+ * @tparam portAddress     PORT to be manipulated e.g. PORTA (PCR array)
  * @tparam bitNum          Bit number e.g. 3
  * @tparam defPcrValue     Default value for PCR (including MUX value)
  */
-template<uint32_t clockMask, uint32_t pcrAddress, int bitNum, PcrValue defPcrValue>
-class Pcr_T : public PcrBase_T<pcrAddress> {
+template<uint32_t clockMask, uint32_t portAddress, int bitNum, PcrValue defPcrValue>
+class Pcr_T : public PcrBase_T<portAddress> {
 
 #ifdef DEBUG_BUILD
    static_assert((bitNum != UNMAPPED_PCR), "Pcr_T: Signal is not mapped to a pin - Modify Configure.usbdm");
@@ -405,12 +422,17 @@ public:
 
 private:
 
-   static constexpr volatile uint32_t *pcrReg = reinterpret_cast<volatile uint32_t *>(pcrAddress+offsetof(PORT_Type,PCR[bitNum]));
+#ifdef PORT_DFCR_CS_MASK
+   static constexpr volatile uint32_t       *pcrReg = reinterpret_cast<volatile uint32_t       *>(portAddress+offsetof(PORT_DFER_Type,PCR[bitNum]));
+   static constexpr volatile PORT_DFER_Type *port   = reinterpret_cast<volatile PORT_DFER_Type *>(portAddress);
+#else
+   static constexpr volatile uint32_t       *pcrReg = reinterpret_cast<volatile uint32_t       *>(portAddress+offsetof(PORT_Type,PCR[bitNum]));
+#endif
 
 public:
-   using PcrBase = PcrBase_T<pcrAddress>;
+   using PcrBase = PcrBase_T<portAddress>;
 
-   using PcrBase_T<pcrAddress>::setCallback;
+   using PcrBase_T<portAddress>::setCallback;
 
    /**
     * Enable/disable clock associated with PORT
@@ -434,9 +456,12 @@ public:
     *                     Defaults to template value.
     */
    static __attribute__((always_inline)) void setPCR(PcrValue pcrValue=defPcrValue) {
-      if (pcrAddress != 0) {
+      if (portAddress != 0) {
          enablePortClocks(clockMask);
 
+#ifdef PORT_DFCR_CS_MASK
+         enableDigitalFilter(pcrValue&PinFilter_Digital);
+#endif
          // Pointer to PCR register for pin
          *pcrReg = pcrValue;
       }
@@ -448,7 +473,7 @@ public:
     * @return pcrValue PCR value.
     */
    static __attribute__((always_inline)) PcrValue getPCR() {
-      if (pcrAddress == 0) {
+      if (portAddress == 0) {
          return (PcrValue) 0;
       }
       enablePortClocks(clockMask);
@@ -475,10 +500,13 @@ public:
          PinSlewRate       pinSlewRate       = PinSlewRate_Fast,
          PinMux            pinMux            = (PinMux)(defPcrValue&PORT_PCR_MUX_MASK)
          ) {
-      if (pcrAddress != 0) {
+      if (portAddress != 0) {
          enablePortClocks(clockMask);
 
-         // Pointer to PCR register for pin
+#ifdef PORT_DFCR_CS_MASK
+         enableDigitalFilter(pinFilter == PinFilter_Digital);
+#endif
+         // Set PCR register for pin
          *pcrReg = pinPull|pinDriveStrength|pinDriveMode|pinIrq|pinFilter|pinSlewRate|pinMux;
       }
    }
@@ -515,6 +543,9 @@ public:
          PinIrq            pinIrq            = PinIrq_None,
          PinFilter         pinFilter         = PinFilter_None) {
 
+#ifdef PORT_DFCR_CS_MASK
+         enableDigitalFilter(pinFilter == PinFilter_Digital);
+#endif
       *pcrReg =
             (*pcrReg&~(PORT_PCR_PD_MASK|PORT_PCR_IRQC_MASK|PORT_PCR_PFE_MASK)) |
             (pinPull|pinIrq|pinFilter);
@@ -609,7 +640,10 @@ public:
     *  @param[in] pinFilter Pin filter option. Either PinFilter_None or PinFilter_Passive
     */
    static __attribute__((always_inline)) void setFilter(PinFilter pinFilter) {
-      *pcrReg = (*pcrReg&~PORT_PCR_PFE_MASK) | pinFilter;
+#ifdef PORT_DFCR_CS_MASK
+         enableDigitalFilter(pinFilter == PinFilter_Digital);
+#endif
+         *pcrReg = (*pcrReg&~PORT_PCR_PFE_MASK) | pinFilter;
    }
 #else
    /**
@@ -656,26 +690,69 @@ public:
 #endif
 
    /**
-    * Enable/disable Pin interrupts in NVIC
+    * Enable/disable Pin interrupts in NVIC.\n
+    * Any pending NVIC interrupts are first cleared.
     *
-    * @param[in] enable true => enable, false => disable
+    * @param[in]  enable    True => enable, False => disable
+    * @param[in]  priority  Interrupt priority
     */
-   static __attribute__((always_inline)) void enableNvicInterrupts(bool enable=true) {
+   static __attribute__((always_inline)) void enableNvicInterrupts(bool enable=true, uint32_t priority=NvicPriority_Normal) {
 
-      constexpr IRQn_Type irqNum = (IRQn_Type)(PORTA_IRQn+((pcrAddress-PORTA_BasePtr)/(PORTB_BasePtr-PORTA_BasePtr)));
+      constexpr IRQn_Type irqNum = (IRQn_Type)(PORTA_IRQn+((portAddress-PORTA_BasePtr)/(PORTB_BasePtr-PORTA_BasePtr)));
 
       if (enable) {
+         // Set priority level
+         NVIC_SetPriority(irqNum, priority);
+         // Clear pending interrupts
+         NVIC_ClearPendingIRQ(irqNum);
          // Enable interrupts
          NVIC_EnableIRQ(irqNum);
-
-         // Set priority level
-         NVIC_SetPriority(irqNum, 3);
       }
       else {
          // Disable interrupts
          NVIC_DisableIRQ(irqNum);
       }
    }
+
+#ifdef PORT_DFCR_CS_MASK
+   /**
+    * Configures Digital Pin Filter
+    *
+    * @param pinDigitalFilterClock  Clock source
+    * @param filterLength           Filter length in clock ticks
+    *
+    * @note Not all ports support this feature
+    * @note This affects the digital filter for all pins of this port
+    */
+   static void configureDigitalFilter(PinDigitalFilterClock pinDigitalFilterClock, int filterLength) {
+      // Disable all filtering before change
+      uint32_t dfer = port->DFER;
+      port->DFER = 0;
+
+      port->DFCR = pinDigitalFilterClock;
+      port->DFWR = PORT_DFWR_FILT(filterLength);
+
+      // Restore filtering on pins
+      port->DFER = dfer;
+   }
+
+   /**
+    * Enable/disable digital filter on the pin
+    *
+    * @param enable  True => enable, False => disable
+    *
+    * @note Not all ports support this feature
+    */
+   static void enableDigitalFilter(bool enable) {
+      if (enable) {
+         port->DFER |= BITMASK;
+      }
+      else {
+         port->DFER &= ~BITMASK;
+      }
+   }
+#endif
+
 };
 
 /**
@@ -749,7 +826,7 @@ void processPcrs(uint32_t pcrValue) {
  * @tparam index         Index of pin in configuration table
  */
 template<class Info, uint8_t index> using PcrTable_T =
-      Pcr_T<Info::info[index].clockMask, Info::info[index].pcrAddress, Info::info[index].gpioBit, Info::info[index].pcrValue>;
+      Pcr_T<Info::info[index].clockMask, Info::info[index].portAddress, Info::info[index].gpioBit, Info::info[index].pcrValue>;
 
 /**
  * @}
