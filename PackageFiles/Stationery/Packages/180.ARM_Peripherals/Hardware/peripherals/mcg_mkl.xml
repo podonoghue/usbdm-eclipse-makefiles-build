@@ -488,10 +488,6 @@
       \t   ClockMode_PEE,
       \t};\n\n
       
-      \tenum ClockConfig {
-      \t   $(ClockConfig[0]),
-      \t   $(ClockConfig[1]),
-      \t};\n\n
       \t//! Frequency of Slow Internal Reference Clock [~32kHz]
       \tstatic constexpr uint32_t system_slow_irc_clock = $(system_slow_irc_clock)UL;\n\n
       

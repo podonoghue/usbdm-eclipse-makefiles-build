@@ -44,9 +44,10 @@ extern void setSysDividersStub(uint32_t simClkDiv1);
    /*
     * Clock configuration names
     */
-	enum {
+   enum ClockConfig {
 $(/MCG/ClockConfig:!!!!!!!Not found!!!!!!!)
-    };
+      ClockConfig_default = 0,
+   };
 
 /**
  * @addtogroup MCG_Group MCG, Multipurpose Clock Generator

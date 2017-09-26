@@ -602,11 +602,6 @@
       \t   ClockMode_PEE,
       \t};\n\n
       
-      \tenum ClockConfig {
-      \t   $(ClockConfig[0]),
-      \t   $(ClockConfig[1]),
-      \t};\n\n
-
       \t//! Frequency of Internal 48MHz Clock
       \tstatic constexpr uint32_t irc48m_clock = $(system_irc48m_clock)UL;\n\n
       

@@ -472,7 +472,7 @@ void Mcg::initialise(void) {
    currentClockMode = McgInfo::ClockMode::ClockMode_None;
 
    // Transition to desired clock mode
-   clockTransition(McgInfo::clockInfo[0]);
+   clockTransition(McgInfo::clockInfo[ClockConfig_default]);
 
    SimInfo::initRegs();
 
