@@ -67,11 +67,10 @@
    <item key="/Flash/FlashType"                            value="ftfl" />
    <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_PEE_48MHz" />
    <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_FEE_40MHz" />
-   <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_BLPI_4MHz" />
+   <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_BLPE_4MHz" />
    <item key="/MCG/clock_mode[0]"                          value="ClockMode_PEE" />
    <item key="/MCG/clock_mode[1]"                          value="ClockMode_FEE" />
-   <item key="/MCG/clock_mode[2]"                          value="ClockMode_BLPI" />
-   <item key="/MCG/mcg_c1_irefs[2]"                        value="true" />
+   <item key="/MCG/clock_mode[2]"                          value="ClockMode_BLPE" />
    <item key="/MCG/mcg_c5_prdiv0[0]"                       value="2" />
    <item key="/MCG/mcg_c5_prdiv0[1]"                       value="2" />
    <item key="/MCG/mcg_c5_prdiv0[2]"                       value="2" />
@@ -83,11 +82,11 @@
    <item key="/MCG/pll0OutputFrequency[0]"                 value="96000000" />
    <item key="/MCG/system_mcgffclk_clock[0]"               value="31250" />
    <item key="/MCG/system_mcgffclk_clock[1]"               value="31250" />
-   <item key="/MCG/system_mcgffclk_clock[2]"               value="32768" />
+   <item key="/MCG/system_mcgffclk_clock[2]"               value="31250" />
    <item key="/MCG/system_mcgfllclk_clock[1]"              value="80000000" />
    <item key="/MCG/system_mcgoutclk_clock[0]"              value="96000000" />
    <item key="/MCG/system_mcgoutclk_clock[1]"              value="80000000" />
-   <item key="/MCG/system_mcgoutclk_clock[2]"              value="4000000" />
+   <item key="/MCG/system_mcgoutclk_clock[2]"              value="8000000" />
    <item key="/SIM/ClockConfig[0]"                         value="" />
    <item key="/SIM/ClockConfig[1]"                         value="" />
    <item key="/SIM/ClockConfig[2]"                         value="" />
@@ -102,7 +101,7 @@
    <item key="/SIM/system_core_clock[1]"                   value="40000000" />
    <item key="/SIM/system_core_clock[2]"                   value="4000000" />
    <item key="/SIM/system_flash_clock[1]"                  value="20000000" />
-   <item key="/SIM/system_flash_clock[2]"                  value="800000" />
+   <item key="/SIM/system_flash_clock[2]"                  value="1000000" />
    <item key="/SIM/system_peripheral_clock[0]"             value="96000000" />
    <item key="/SIM/system_peripheral_clock[1]"             value="80000000" />
    <item key="/SIM/system_peripheral_clock[2]"             value="96000000" />
