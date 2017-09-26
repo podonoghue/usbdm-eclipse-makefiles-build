@@ -1,6 +1,5 @@
 <!--
 Devices using this peripheral: 
-      MK10D7
       MK10D10
       MK10DZ10
       MK10F12
@@ -8,24 +7,18 @@ Devices using this peripheral:
       MK11DA5
       MK11D5WS
       MK12D5
-      MK20D7
       MK20D10
       MK20DZ10
       MK20F12
       MK21D5
       MK21DA5
       MK21D5WS
-      MK22D5
-      MK30D7
       MK30D10
       MK30DZ10
-      MK40D7
       MK40D10
       MK40DZ10
-      MK50D7
       MK50D10
       MK50DZ10
-      MK51D7
       MK51D10
       MK51DZ10
       MK52D10
@@ -49,7 +42,7 @@ Devices using this peripheral:
          <name>PORTA</name>
          <description>Pin Control and Interrupts</description>
          <groupName>PORT</groupName>
-         <headerStructName>PORT</headerStructName>
+         <headerStructName>PORT_DFER</headerStructName>
          <baseAddress>0x40049000</baseAddress>
          <size>32</size>
          <access>read-write</access>

@@ -1,7 +1,5 @@
 <!--
 Devices using this peripheral: 
-      MK02F12810
-      MK10D5
       MK21FA12
       MK22F12810
       MK22F25612
@@ -29,7 +27,7 @@ Devices using this peripheral:
          <name>PORTD</name>
          <description>Pin Control and Interrupts</description>
          <groupName>PORT</groupName>
-         <headerStructName>PORTD</headerStructName>
+         <headerStructName>PORT_DFER</headerStructName>
          <baseAddress>0x4004C000</baseAddress>
          <size>32</size>
          <access>read-write</access>
