@@ -71,7 +71,7 @@ public:
     *
     * @return Bit mask representing sources
     */
-   static uint32_t getResetSources() {
+   static uint32_t getResetSource() {
       return (rcm->SRS1<<8)|rcm->SRS0;
    }
 
@@ -81,7 +81,7 @@ public:
     *
     * @return Bit mask representing sources
     */
-   static uint32_t getStickyResetSources() {
+   static uint32_t getStickyResetSource() {
       return (rcm->SSRS1<<8)|rcm->SSRS0;
    }
 
@@ -91,7 +91,7 @@ public:
     *
     * @return Bit mask representing sources
     */
-   static uint32_t getAndClearStickyResetSources() {
+   static uint32_t getAndClearStickyResetSource() {
       uint32_t snapShot = (rcm->SSRS1<<8)|rcm->SSRS0;
       rcm->SSRS0 = 0xFF;
       rcm->SSRS1 = 0xFF;
@@ -104,7 +104,7 @@ public:
     *
     * @return Bit mask representing sources
     */
-   static const char *getResetSourcesDescription(uint32_t source) {
+   static const char *getResetSourceDescription(uint32_t source) {
       static char buff[20];
       static const char *names[] = {
             "Wakeup,",
@@ -138,8 +138,8 @@ public:
     *
     * @return Bit mask representing sources
     */
-   static const char *getResetSourcesDescription() {
-      return getResetSourcesDescription(getResetSources());
+   static const char *getResetSourceDescription() {
+      return getResetSourceDescription(getResetSource());
    }
 };
 
