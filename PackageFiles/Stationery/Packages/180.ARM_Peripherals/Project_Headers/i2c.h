@@ -68,7 +68,7 @@ protected:
    uint8_t            *rxDataPtr;           //!< Pointer to receive data for current transaction
    const uint8_t      *txDataPtr;           //!< Pointer to transmit data for current transaction
    uint8_t             addressedDevice;     //!< Address of device being communicated with
-   uint8_t             errorCode;           //!< Error code from last transaction
+   ErrorCode           errorCode;           //!< Error code from last transaction
 
    /** I2C baud rate divisor table */
    static const uint16_t I2C_DIVISORS[4*16];
@@ -80,7 +80,9 @@ protected:
     * @param[in]  i2cMode Mode of operation (I2cMode_Interrupt or I2cMode_Polled)
     */
    I2c(volatile I2C_Type *i2c, I2cMode i2cMode) :
-      state(i2c_idle), i2c(i2c), i2cMode(i2cMode), rxBytesRemaining(0), txBytesRemaining(0), rxDataPtr(0), txDataPtr(0), addressedDevice(0), errorCode(0) {
+      state(i2c_idle), i2c(i2c), i2cMode(i2cMode), rxBytesRemaining(0),
+      txBytesRemaining(0), rxDataPtr(0), txDataPtr(0), addressedDevice(0),
+      errorCode(E_NO_ERROR) {
    }
 
    /**
@@ -147,11 +149,11 @@ public:
    /**
     * Obtain I2C MUTEX - dummy
     */
-   virtual int startTransaction(int =0) {return 0;};
+   virtual ErrorCode startTransaction(int =0) {return E_NO_ERROR;};
    /**
     * Release I2C MUTEX - dummy
     */
-   virtual int endTransaction() {return 0;};
+   virtual ErrorCode endTransaction() {return E_NO_ERROR;};
 #endif
 
    /**
@@ -192,7 +194,7 @@ public:
     *
     * @return E_NO_ERROR on success
     */
-   int transmit(uint8_t address, uint16_t size, const uint8_t data[]);
+   ErrorCode transmit(uint8_t address, uint16_t size, const uint8_t data[]);
 
    /**
     * Receive message
@@ -203,7 +205,7 @@ public:
     *
     * @return E_NO_ERROR on success
     */
-   int receive(uint8_t address, uint16_t size,  uint8_t data[]);
+   ErrorCode receive(uint8_t address, uint16_t size,  uint8_t data[]);
 
    /**
     * Transmit message followed by receive message.
@@ -218,7 +220,7 @@ public:
     *
     * @return E_NO_ERROR on success
     */
-   int txRx(uint8_t address, uint16_t txSize, const uint8_t txData[], uint16_t rxSize, uint8_t rxData[] );
+   ErrorCode txRx(uint8_t address, uint16_t txSize, const uint8_t txData[], uint16_t rxSize, uint8_t rxData[] );
 
    /**
     * Transmit message followed by receive message.
@@ -232,7 +234,7 @@ public:
     *
     * @return E_NO_ERROR on success
     */
-   int txRx(uint8_t address, uint16_t txSize, uint16_t rxSize, uint8_t data[] );
+   ErrorCode txRx(uint8_t address, uint16_t txSize, uint16_t rxSize, uint8_t data[] );
 
 };
 
@@ -351,12 +353,12 @@ public:
 
       busHangReset();
 
+      init(myAddress);
+      setBPS(bps);
+
       if (Info::mapPinsOnEnable) {
          configureAllPins();
       }
-
-      init(myAddress);
-      setBPS(bps);
    }
 
    /**

@@ -63,6 +63,8 @@ enum ErrorCode {
    E_CALIBRATE_FAIL,              //!< Failed ADC calibration
    E_ILLEGAL_POWER_TRANSITION,    //!< Can't transit to power mode from current power mode
    E_NO_COMMUNICATION,            //!< Failed communication
+   E_NO_ACK,                      //!< No acknowledge (I2C)
+   E_LOST_ARBITRATION,            //!< Lost arbitration for bus (I2C)
    E_TERMINATED,                  //!< The program has terminated
 
    E_CMSIS_ERR_OFFSET = 1<<20,    //!< Offset added to CMSIS error codes
