@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0" >
+   <projectActionList id="CPP-abstraction-sht14-humidity-display" >
+      <applyWhen>
+         <and>
+            <or>
+               <deviceFamilyMatches>CortexM0</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM0plus</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM4</deviceFamilyMatches>
+               <deviceFamilyMatches>CortexM4F</deviceFamilyMatches>
+            </or>
+            <variableRef idRef="outputType"  condition="matches" value=".*ProjectType\.exe$" />
+            <variableRef idRef="hasCCNature" condition="isTrue" />
+         </and>
+      </applyWhen>
+      <projectActionList>
+         <applyWhen>
+            <variableRef idRef="projectOptionValue.CPP-abstraction" condition="isTrue"/>
+         </applyWhen>
+         <variable id="projectOptionValue.CPP-abstraction-sht14-humidity" 
+            name="SHT14 Humidity and temperature sensor" 
+            description="Adds a CPP abstraction layer for a SHT14 Humidity and temperature sensor" 
+            checkGroup="group-i2c-peripheral-options" >
+         </variable>
+   
+         <!-- LED CPP abstraction layer -->
+         <projectActionList>
+            <projectActionList>
+               <applyWhen >
+                  <variableRef idRef="projectOptionValue.CPP-abstraction-sht14-humidity" />
+               </applyWhen>
+               <copy source="Snippets/sht14.h"            target="Sources/sht14.h"             overwrite="true"/>
+               <copy source="Snippets/sht14-example.cpp"  target="Snippets/sht14-example.cpp"  overwrite="true"/>
+            </projectActionList>
+         </projectActionList>
+      </projectActionList>
+    </projectActionList>
+</root>
