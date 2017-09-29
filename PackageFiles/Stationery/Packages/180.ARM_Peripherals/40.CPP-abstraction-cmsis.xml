@@ -5,7 +5,7 @@
    <projectActionList id="CPP-abstraction-cmsis-wrapper">
       <applyWhen>
          <and>
-            <variableRef idRef="outputType" condition="matches"               value=".*ProjectType\.exe$" />
+            <variableRef idRef="outputType"  condition="matches" value=".*ProjectType\.exe$" />
             <variableRef idRef="hasCCNature" condition="isTrue" />
          </and>
       </applyWhen>
