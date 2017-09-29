@@ -124,7 +124,7 @@ namespace USBDM {
  */
 struct PcrInfo {
    uint32_t clockMask;   //!< Clock mask for PORT
-   uint32_t pcrAddress;  //!< PCR register array address
+   uint32_t portAddress;  //!< PCR register array address
    uint32_t gpioAddress; //!< Address of GPIO hardware associated with pin
    int8_t   gpioBit;     //!< Bit number of pin in GPIO
    int8_t   muxValue;    //!< PCR multiplexor value to select this function
@@ -187,16 +187,16 @@ static constexpr uint32_t  I2C_DEFAULT_PCR = DEFAULT_PCR|PORT_PCR_ODE_MASK;
  * @endcode
  *
  * @tparam clockMask       Mask for SIM clock register associated with this PCR
- * @tparam pcrAddress      PORT to be manipulated e.g. PORTA (PCR array)
+ * @tparam portAddress      PORT to be manipulated e.g. PORTA (PCR array)
  * @tparam bitNum          Bit number e.g. 3
  * @tparam defPcrValue     Default value for PCR
  */
-template<uint32_t clockMask, uint32_t pcrAddress, int32_t bitNum, uint32_t defPcrValue=DEFAULT_PCR>
+template<uint32_t clockMask, uint32_t portAddress, int32_t bitNum, uint32_t defPcrValue=DEFAULT_PCR>
 class Pcr_T {
 
 private:
    // Pointer to PCR register for pin
-   static constexpr volatile uint32_t *pcrReg = reinterpret_cast<volatile uint32_t *>(pcrAddress+offsetof(PORT_Type,PCR[bitNum]));
+   static constexpr volatile uint32_t *pcrReg = reinterpret_cast<volatile uint32_t *>(portAddress+offsetof(PORT_Type,PCR[bitNum]));
 
 public:
    /**
@@ -254,7 +254,7 @@ public:
  * @tparam pcrValue      Default value for PCR excluding mux value
  */
 template<class info, uint8_t index, uint32_t pcrValue=info::pcrValue> using PcrTable_T =
-      Pcr_T<info::info[index].clockMask, info::info[index].pcrAddress, info::info[index].gpioBit, PORT_PCR_MUX(info::info[index].muxValue)|pcrValue>;
+      Pcr_T<info::info[index].clockMask, info::info[index].portAddress, info::info[index].gpioBit, PORT_PCR_MUX(info::info[index].muxValue)|pcrValue>;
 
 /**
  * @brief Template function to set a PCR to the default value
@@ -446,7 +446,7 @@ public:
  * @tparam defPcrValue     Default value for PCR including multiplexor value
  */
 template<class Info, const uint32_t bitNum, uint32_t defPcrValue=Info::pcrValue>
-using  Gpio_T = GpioBase_T<Pcr_T<Info::clockMask, Info::pcrAddress, bitNum, defPcrValue>, Info::gpioAddress, bitNum, defPcrValue>;
+using  Gpio_T = GpioBase_T<Pcr_T<Info::clockMask, Info::portAddress, bitNum, defPcrValue>, Info::gpioAddress, bitNum, defPcrValue>;
 
 /**
  * Create GPIO from Peripheral Info class
@@ -458,7 +458,7 @@ using  Gpio_T = GpioBase_T<Pcr_T<Info::clockMask, Info::pcrAddress, bitNum, defP
 template<class Info, const uint32_t bitNum, uint32_t defPcrValue=Info::pcrValue>
 using  GpioTable_T =
    GpioBase_T<
-   Pcr_T<Info::info[bitNum].clockMask, Info::info[bitNum].pcrAddress, bitNum, defPcrValue>,
+   Pcr_T<Info::info[bitNum].clockMask, Info::info[bitNum].portAddress, bitNum, defPcrValue>,
    Info::info[bitNum].gpioAddress,
    bitNum,
    (defPcrValue&~PORT_PCR_MUX_MASK)|PORT_PCR_MUX(Info::info[bitNum].muxValue)>;
@@ -503,7 +503,7 @@ class Field_T {
 
 private:
    static constexpr volatile GPIO_Type *gpio = reinterpret_cast<volatile GPIO_Type *>(Info::gpioAddress);
-   static constexpr volatile PORT_Type *port = reinterpret_cast<volatile PORT_Type *>(Info::pcrAddress);
+   static constexpr volatile PORT_Type *port = reinterpret_cast<volatile PORT_Type *>(Info::portAddress);
    /**
     * Mask for the bits being manipulated
     */

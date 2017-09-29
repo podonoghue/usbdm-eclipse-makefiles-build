@@ -163,7 +163,7 @@ namespace USBDM {
 class GpioAInfo {
 public:
    //! PORT Hardware base pointer
-   static constexpr uint32_t pcrAddress   = PORTA_BasePtr;
+   static constexpr uint32_t portAddress   = PORTA_BasePtr;
 
    //! GPIO Hardware base pointer
    static constexpr uint32_t gpioAddress   = GPIOA_BasePtr;
@@ -194,7 +194,7 @@ public:
 class GpioBInfo {
 public:
    //! PORT Hardware base pointer
-   static constexpr uint32_t pcrAddress   = PORTB_BasePtr;
+   static constexpr uint32_t portAddress   = PORTB_BasePtr;
 
    //! GPIO Hardware base pointer
    static constexpr uint32_t gpioAddress   = GPIOB_BasePtr;
@@ -225,7 +225,7 @@ public:
 class GpioCInfo {
 public:
    //! PORT Hardware base pointer
-   static constexpr uint32_t pcrAddress   = PORTC_BasePtr;
+   static constexpr uint32_t portAddress   = PORTC_BasePtr;
 
    //! GPIO Hardware base pointer
    static constexpr uint32_t gpioAddress   = GPIOC_BasePtr;
@@ -256,7 +256,7 @@ public:
 class GpioDInfo {
 public:
    //! PORT Hardware base pointer
-   static constexpr uint32_t pcrAddress   = PORTD_BasePtr;
+   static constexpr uint32_t portAddress   = PORTD_BasePtr;
 
    //! GPIO Hardware base pointer
    static constexpr uint32_t gpioAddress   = GPIOD_BasePtr;
@@ -287,7 +287,7 @@ public:
 class GpioEInfo {
 public:
    //! PORT Hardware base pointer
-   static constexpr uint32_t pcrAddress   = PORTE_BasePtr;
+   static constexpr uint32_t portAddress   = PORTE_BasePtr;
 
    //! GPIO Hardware base pointer
    static constexpr uint32_t gpioAddress   = GPIOE_BasePtr;

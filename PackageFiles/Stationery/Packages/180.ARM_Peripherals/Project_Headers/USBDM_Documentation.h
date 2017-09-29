@@ -150,7 +150,7 @@ This is a template class with static methods.\n
 
 Convenience template for GPIO pins. Uses the following classes:\n
 <ul>
-<li>USBDM::GpioBase_T &lt;clockMask, pcrAddress, gpioAddress, bitNum, polarity&gt; \n
+<li>USBDM::GpioBase_T &lt;clockMask, portAddress, gpioAddress, bitNum, polarity&gt; \n
 <li>USBDM::Gpio_T &lt;Info, bitNum, polarity&gt;\n
 <ul>
 <li>USBDM::GpioA &lt;bitNum, polarity&gt;
