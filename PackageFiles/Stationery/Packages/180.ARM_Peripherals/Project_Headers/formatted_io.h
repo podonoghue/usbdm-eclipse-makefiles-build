@@ -56,6 +56,16 @@ enum EndOfLineType {
    EndOfLine
 };
 
+/**
+ * Padding for integers
+ */
+enum Padding {
+   Padding_None ,         //!< No padding
+   Padding_LeadingSpaces, //!< Pad with leading spaces
+   Padding_LeadingZeroes, //!< Pad with leading zeroes
+   Padding_TrailingSpaces,//!< Pad with trailing spaces
+};
+
 enum EchoMode {
    /*
     * For use with operator<< and operator>>
@@ -97,6 +107,16 @@ protected:
     * One character look-ahead
     */
    int16_t lookAhead = -1;
+
+   /**
+    * Padding for integers
+    */
+   Padding fPadding = Padding_None;
+
+   /**
+    * Width used for integers numbers
+    */
+   int fWidth = 0;
 
    /**
     * Construct formatter interface
@@ -215,6 +235,30 @@ public:
    }
 
    /**
+    * Set padding for integers
+    *
+    * @param padding Padding mode
+    *
+    * @return Reference to self
+    */
+   FormattedIO &setPadding(Padding padding) {
+      fPadding = padding;
+      return *this;
+   }
+
+   /**
+    * Set width for integers
+    *
+    * @param width Width to use
+    *
+    * @return Reference to self
+    */
+   FormattedIO &setWidth(int width) {
+      fWidth = width;
+      return *this;
+   }
+
+   /**
     * Converts an unsigned long to a string
     *
     * @param[in] ptr   Buffer to write result (at least 12 characters)
@@ -224,7 +268,7 @@ public:
     * @return Pointer to '\0' null character at end of converted number\n
     *         May be used for incrementally writing to a buffer.
     */
-   static NOINLINE_DEBUG char *ultoa(char *ptr, unsigned long value, Radix radix=Radix_10) {
+   NOINLINE_DEBUG char *ultoa(char *ptr, unsigned long value, Radix radix=Radix_10) {
 #ifdef DEBUG_BUILD
       if (ptr == nullptr) {
          __BKPT();
@@ -240,15 +284,40 @@ public:
          *ptr++ = "0123456789ABCDEF"[value % radix];
          value /= radix;
       } while (value != 0);
-      // Terminate and leave ptr at last digit
-      *ptr = '\0';
+
+      // Add leading padding
+      switch (fPadding) {
+         case Padding_None:
+            break;
+         case Padding_LeadingSpaces:
+            while ((ptr-beginPtr) < fWidth) {
+               *ptr++ = ' ';
+            }
+            break;
+         case Padding_LeadingZeroes:
+            while ((ptr-beginPtr) < fWidth) {
+               *ptr++ = '0';
+            }
+            break;
+         case Padding_TrailingSpaces:
+            break;
+      }
       // Reverse digits
       char *endPtr = ptr-1;
-      while (beginPtr < endPtr) {
-         char t = *beginPtr;
-         *beginPtr++ = *endPtr;
+      char *tPtr   = beginPtr;
+      while (tPtr < endPtr) {
+         char t = *tPtr;
+         *tPtr++ = *endPtr;
          *endPtr-- = t;
       }
+      // Add trailing padding
+      if (fPadding==Padding_TrailingSpaces) {
+         while ((ptr-beginPtr) < fWidth) {
+            *ptr++ = ' ';
+         }
+      }
+      // Terminate and leave ptr at last digit
+      *ptr = '\0';
       return ptr;
    }
 
@@ -262,7 +331,7 @@ public:
     * @return Pointer to '\0' null character at end of converted number\n
     *         May be used for incrementally writing to a buffer.
     */
-   static NOINLINE_DEBUG char *ltoa(char *ptr, long value, Radix radix=Radix_10) {
+   NOINLINE_DEBUG char *ltoa(char *ptr, long value, Radix radix=Radix_10) {
       if (value<0) {
          *ptr++ = '-';
          value = -value;
@@ -357,6 +426,19 @@ public:
    }
 
    /**
+    * Reset to default formatting
+    * Radix = radix_10, width=0, fPadding=Padding_None
+    *
+    * @return Reference to self
+    */
+   FormattedIO NOINLINE_DEBUG &reset() {
+      fWidth = 0;
+      fPadding = Padding_None;
+      fRadix = Radix_10;
+      return *this;
+   }
+
+   /**
     * Transmit an end-of-line
     *
     * @return Reference to self
@@ -374,7 +456,7 @@ public:
     */
    FormattedIO  NOINLINE_DEBUG &writeln(char ch) {
       write(ch);
-      return write('\n');
+      return writeln();
    }
 
    /**
@@ -400,7 +482,7 @@ public:
     */
    FormattedIO NOINLINE_DEBUG &writeln(const char *str) {
       write(str);
-      return write('\n');
+      return writeln();
    }
 
    /**
@@ -423,7 +505,7 @@ public:
     */
    FormattedIO NOINLINE_DEBUG &writeln(bool b) {
       write(b);
-      return write('\n');
+      return writeln();
    }
 
    /**
@@ -450,7 +532,7 @@ public:
     */
    FormattedIO NOINLINE_DEBUG &writeln(unsigned long value, Radix radix=Radix_10) {
       write(value, radix);
-      return write('\n');
+      return writeln();
    }
 
    /**
@@ -503,7 +585,7 @@ public:
     */
    FormattedIO NOINLINE_DEBUG &writeln(long value, Radix radix=Radix_10) {
       write(value, radix);
-      return write('\n');
+      return writeln();
    }
 
    /**
@@ -584,7 +666,7 @@ public:
     */
    FormattedIO NOINLINE_DEBUG &writeln(double value) {
       write(value);
-      return write('\n');
+      return writeln();
    }
 
    /**
@@ -755,8 +837,7 @@ public:
     * @return Reference to self
     */
    FormattedIO NOINLINE_DEBUG &operator <<(EndOfLineType) {
-      write('\n');
-      return *this;
+      return writeln();
    }
 
    /**
