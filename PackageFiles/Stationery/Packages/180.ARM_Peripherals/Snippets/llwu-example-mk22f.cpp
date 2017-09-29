@@ -28,7 +28,6 @@
 // Allow access to USBDM methods without USBDM:: prefix
 using namespace USBDM;
 
-// LED connection - change as required
 // Using LEDs rather defeats VLLSx mode!
 using GreenLed  = GpioA<2,ActiveLow>;
 using LedRed    = GpioC<3,ActiveLow>;
@@ -98,9 +97,9 @@ void testStopMode(
       SmcLowLeakageStopMode   smcLowLeakageStopMode=SmcLowLeakageStopMode_VLLS3) {
 
    switch (smcStopMode) {
-      case SmcStopMode_NormalStop:           console.write("Doing Normal Stop\n");         break;
+      case SmcStopMode_NormalStop:           console.write("Doing Normal Stop\n");           break;
       case SmcStopMode_VeryLowPowerStop:     console.write("Doing Very Low Power Stop\n");   break;
-      case SmcStopMode_LowLeakageStop:       console.write("Doing Low Leakage Stop\n");     break;
+      case SmcStopMode_LowLeakageStop:       console.write("Doing Low Leakage Stop\n");      break;
       case SmcStopMode_VeryLowLeakageStop:   console.write("Doing Very Low Leakage Stop\n"); break;
    };
 
@@ -184,7 +183,7 @@ void enablePin(Test test, bool enable) {
          PinFilter_Passive);
 
    if (enable && (test>=LLS2)) {
-      // Use LLWU in Low-leakage modes
+      // Use LLWU in most Low-leakage modes
       Llwu::clearAllFlags();
 
       // Configure wake-up pin via LLWU
@@ -362,7 +361,7 @@ void help() {
 }
 
 int main() {
-   console.write("\nExecuting from RESET, SRS=").writeln(Rcm::getResetSourcesDescription());
+   console.write("\nExecuting from RESET, SRS=").writeln(Rcm::getResetSourceDescription());
 
    // Configure LEDs
    GreenLed::setOutput(
