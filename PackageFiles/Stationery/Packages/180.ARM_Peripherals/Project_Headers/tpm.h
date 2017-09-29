@@ -806,7 +806,7 @@ class TpmChannel_T : public TpmIrq_T<Info>, protected PcrTable_T<Info, channel>,
 
 protected:
    // Allow more convenient access to template super-classes
-   using PcrBase = PcrBase_T<Info::info[channel].pcrAddress>;
+   using PcrBase = PcrBase_T<Info::info[channel].portAddress>;
 
 public:
    // Allow more convenient access to template super-classes
