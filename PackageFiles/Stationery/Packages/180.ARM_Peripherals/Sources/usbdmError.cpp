@@ -25,6 +25,8 @@ static const char *messages[] {
       "ADC Calibration failed",
       "Illegal processor run-mode transition",
       "Failed communication",
+      "I2C No acknowledge",
+      "I2C Lost arbitration for bus",
       "Program has terminated",
 };
 
