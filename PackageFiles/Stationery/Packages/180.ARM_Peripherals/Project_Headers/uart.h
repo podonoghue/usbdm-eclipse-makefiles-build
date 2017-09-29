@@ -97,7 +97,7 @@ protected:
     *
     * @param[in]  ch - character to send
     */
-   virtual void _writeCh(char ch) override {
+   virtual void _writeChar(char ch) override {
       while ((uart->S1 & UART_S1_TDRE_MASK) == 0) {
          // Wait for Tx buffer empty
          __asm__("nop");
@@ -439,7 +439,7 @@ protected:
     *
     * @param[in]  ch - character to send
     */
-   virtual void _writeCh(char ch) override {
+   virtual void _writeChar(char ch) override {
       // Wait for space in buffer
       while (txQueue.isFull()) {
          __asm__("nop");
@@ -447,7 +447,7 @@ protected:
       txQueue.enQueue(ch);
       uart->C2 |= UART_C2_TE_MASK;
       if (ch=='\n') {
-        _writeCh('\r');
+        _writeChar('\r');
       }
    }
 

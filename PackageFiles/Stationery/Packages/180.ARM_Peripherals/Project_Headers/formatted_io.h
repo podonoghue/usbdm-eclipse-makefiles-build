@@ -176,7 +176,7 @@ protected:
     *
     * @param[in]  ch - character to send
     */
-   virtual void _writeCh(char ch) = 0;
+   virtual void _writeChar(char ch) = 0;
 
 public:
    /**
@@ -197,7 +197,7 @@ public:
          lookAhead = '\n';
       }
       if (echo) {
-         _writeCh(lookAhead);
+         _writeChar(lookAhead);
       }
       return lookAhead;
    }
@@ -212,12 +212,12 @@ public:
    }
 
    /**
-    * Writes a character (blocking)
+    * Writes a character
     *
     * @param[in]  ch - character to send
     */
-   void NOINLINE_DEBUG writeCh(char ch) {
-      _writeCh(ch);
+   void NOINLINE_DEBUG writeChar(char ch) {
+      _writeChar(ch);
    }
 
    /**
@@ -368,7 +368,7 @@ public:
     */
    void NOINLINE_DEBUG transmit(const uint8_t data[], uint16_t size) {
       while (size-->0) {
-         writeCh(*data++);
+         writeChar(*data++);
       }
    }
 
@@ -421,7 +421,7 @@ public:
     * @return Reference to self
     */
    FormattedIO NOINLINE_DEBUG &write(char ch) {
-      writeCh(ch);
+      writeChar(ch);
       return *this;
    }
 
