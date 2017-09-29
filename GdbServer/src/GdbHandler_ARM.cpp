@@ -910,11 +910,6 @@ GdbHandler::GdbTargetStatus GdbHandler_ARM::handleHalted() {
    LOGGING;
    bool looping = false;
 
-   log.print("Doing autoReconnect\n");
-   if (bdmInterface->connect() != BDM_RC_OK) {
-      log.print("Connect failed\n");
-   }
-
    if (runState == Running) {
       // Target has just halted - cache registers
       readRegs();
