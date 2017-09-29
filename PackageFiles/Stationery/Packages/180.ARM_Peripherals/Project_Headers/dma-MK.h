@@ -121,7 +121,7 @@ enum DmaCanPreemptLower {
  * @return one of the DmaSize_xxxx values
  */
 template <class T>
-static constexpr DmaSize dmaSize(const T &obj) {
+static constexpr DmaSize getDmaSize(const T &obj) {
    static_assert(((sizeof(obj)==1)||(sizeof(obj)==2)||(sizeof(obj)==4)||(sizeof(obj)==16)||(sizeof(obj)==32)), "Illegal DMA transfer size");
    return
       (sizeof(obj)==1) ?DmaSize_8bit:
@@ -142,7 +142,7 @@ static constexpr DmaSize dmaSize(const T &obj) {
  */
 template <class T>
 static constexpr uint32_t dmaSSize(const T &obj) {
-   return DMA_ATTR_SSIZE(dmaSize(obj));
+   return DMA_ATTR_SSIZE(getDmaSize(obj));
 }
 
 /**
@@ -155,7 +155,21 @@ static constexpr uint32_t dmaSSize(const T &obj) {
  */
 template <class T>
 static constexpr uint32_t dmaDSize(const T &obj) {
-   return DMA_ATTR_DSIZE(dmaSize(obj));
+   return DMA_ATTR_DSIZE(getDmaSize(obj));
+}
+
+/**
+ * Get DMA source and destination size of objects.\n
+ * For use in TCD ATTR value
+ *
+ * @param[in] sobj DMA source object to get size of
+ * @param[in] dobj DMA destination object to get size of
+ *
+ * @return mask suitable for use as part of TCD.ATTR value
+ */
+template <class Ts, class Td>
+static constexpr uint16_t dmaSize(const Ts &sobj, const Td &dobj) {
+   return DMA_ATTR_SSIZE(getDmaSize(sobj))|DMA_ATTR_DSIZE(getDmaSize(dobj));
 }
 
 /**
