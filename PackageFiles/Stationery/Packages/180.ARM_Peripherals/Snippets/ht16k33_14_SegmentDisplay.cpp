@@ -10,8 +10,7 @@
 #include "string.h"
 #include "HT16k33_14_SegmentDisplay.h"
 
-// Allow access to USBDM methods without USBDM:: prefix
-using namespace USBDM;
+namespace USBDM {
 
 #ifdef nativeToLe16
 #undef nativeToLe16
@@ -176,7 +175,9 @@ static const uint16_t fontTable[] = {
  */
 void HT16k33_14_SegmentDisplay::sendDisplayData() {
    displayData.command = 0;
+   i2c->startTransaction();
    i2c->transmit(ADDRESS, 9, &displayData.command);
+   i2c->endTransaction();
 }
 
 /**
@@ -194,20 +195,21 @@ void HT16k33_14_SegmentDisplay::setup() {
  *
  * @param[in]  ch - character to send
  */
-void HT16k33_14_SegmentDisplay::_writeCh(char ch) {
+void HT16k33_14_SegmentDisplay::_writeChar(char ch) {
    if (ch == '\r') {
       // Move to start of line
       position = 0;
+      return;
+   }
+   else if (ch == '\n') {
+      // New line - start over
+      clear();
       return;
    }
    if (position>3) {
       // Off end of display - scroll left
       position--;
       memcpy(displayData.data, displayData.data+1, sizeof(displayData.data)-sizeof(displayData.data[0]));
-   }
-   if (ch == '\n') {
-      // New line - start over
-      clear();
    }
    if (((uint8_t)ch)>(sizeof(fontTable)/sizeof(fontTable[0]))) {
       // Illegal character
@@ -217,3 +219,5 @@ void HT16k33_14_SegmentDisplay::_writeCh(char ch) {
    sendDisplayData();
 }
 
+
+}  // namespace USBDM

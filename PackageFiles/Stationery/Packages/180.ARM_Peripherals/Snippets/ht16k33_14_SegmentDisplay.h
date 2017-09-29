@@ -13,30 +13,39 @@
 #include "i2c.h"
 #include "formatted_io.h"
 
-class HT16k33_14_SegmentDisplay : public USBDM::FormattedIO {
+namespace USBDM {
+
+class HT16k33_14_SegmentDisplay : public FormattedIO {
 
 private:
+   // I2C address
    static constexpr uint8_t ADDRESS = 0xE0;
 
-   USBDM::I2c *i2c;
+   // I2C interface
+   I2c *i2c;
 
+   // Character position in display
    unsigned position = 0;
 
+   // Structure to represent data for transmission to display
    struct Displaydata {
       uint8_t   fill;
       uint8_t   command;
       uint16_t  data[4];
    };
 
+   // Data for transmission to display
    Displaydata displayData __attribute__((packed));
 
    /**
     * Set command to interface
     *
-    * @param command Command to send
+    * @param[in] command Command to send
     */
    void sendCommand(uint8_t command) {
+      i2c->startTransaction();
       i2c->transmit(ADDRESS, sizeof(command), &command);
+      i2c->endTransaction();
    }
 
    /**
@@ -63,23 +72,14 @@ private:
     *
     * @param[in]  ch - character to send
     */
-   void _writeCh(char ch);
+   virtual void _writeChar(char ch) override ;
 
    /**
     * Receives a character (blocking)
     *
     * @return Character received
     */
-   int _readch() {
-      return -1;
-   }
-
-   /**
-    * Receives a character (blocking)
-    *
-    * @return Character received
-    */
-   virtual int _readChar() { return -1; };
+   virtual int _readChar() override { return -1; };
 
 public:
    /**
@@ -110,19 +110,19 @@ public:
     * Construct interface to 14-segment display using HT16K33 over I2C
     * e.g. Adafruit backpack
     *
-    * @param i2c
+    * @param[in] i2c
     */
-   HT16k33_14_SegmentDisplay(USBDM::I2c *i2c) : i2c(i2c) {
+   HT16k33_14_SegmentDisplay(I2c *i2c) : i2c(i2c) {
       clear();
       setup();
-      setPadding(USBDM::Padding_LeadingZeroes);
+      setPadding(Padding_LeadingZeroes);
       setWidth(4);
    }
 
    /**
     * Set programmable Row driver/Interrupt pin function
     *
-    * @param intPinFunction Function for pin
+    * @param[in] intPinFunction Function for pin
     */
    void setPinFunction(IntPinFunction intPinFunction) {
       sendCommand(0b10100000|intPinFunction);
@@ -145,7 +145,7 @@ public:
    /**
     * Set display brightness
     *
-    * @param brightness Value in range 0 - 15
+    * @param[in] brightness Value in range 0 - 15
     */
    void setBrightness(uint8_t brightness) {
       sendCommand(0xE0|(brightness&0xF));
@@ -154,8 +154,8 @@ public:
    /**
     * Set display features
     *
-    * @param on         Display on/off
-    * @param blinkRate  Blink rate
+    * @param[in] on         Display on/off
+    * @param[in] blinkRate  Blink rate
     */
    void setDisplay(DisplayEnable displayEnable, BlinkRate blinkRate) {
       sendCommand(0x80|blinkRate|displayEnable);
@@ -167,17 +167,19 @@ public:
     * @return true  Character available i.e. _readChar() will not block
     * @return false No character available
     */
-   virtual bool _isCharAvailable() { return false; };
+   virtual bool _isCharAvailable() override { return false; };
 
    /**
     *  Flush output data
     */
-   virtual void flushOutput() {};
+   virtual void flushOutput() override {};
 
    /**
     *  Flush input data
     */
-   virtual void flushInput() {};
+   virtual void flushInput() override {};
 };
+
+}  // namespace USBDM
 
 #endif /* SOURCES_HT16K33_14_SEGMENTDISPLAY_H_ */
