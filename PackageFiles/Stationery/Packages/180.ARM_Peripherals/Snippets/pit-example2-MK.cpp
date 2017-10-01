@@ -100,6 +100,9 @@ int main() {
    // or
 //   TimerChannelB::configure(1*seconds, PitChannelIrq_Enable);
 
+   TimerChannelA::enableNvicInterrupts(true, NvicPriority_Normal);
+   TimerChannelB::enableNvicInterrupts(true, NvicPriority_Normal);
+
    // Check for errors so far
    checkError();
 

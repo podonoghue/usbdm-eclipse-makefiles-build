@@ -525,11 +525,11 @@ public:
     * Any pending NVIC interrupts are first cleared.
     * Convenience wrapper for PCR function
     *
-    * @param[in] enable    True => enable, False => disable
-    * @param[in] priority  Interrupt priority
+    * @param[in] enable        True => enable, False => disable
+    * @param[in] nvicPriority  Interrupt priority
     */
-   static void enableNvicInterrupts(bool enable=true, uint32_t priority=NvicPriority_Normal) {
-      Pcr::enableNvicInterrupts(enable, priority);
+   static void enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
+      Pcr::enableNvicInterrupts(enable, nvicPriority);
    }
 
    /**

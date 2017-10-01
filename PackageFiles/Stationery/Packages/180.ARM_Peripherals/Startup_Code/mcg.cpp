@@ -465,9 +465,9 @@ void Mcg::SystemCoreClockUpdate(void) {
 }
 
 /**
- * Sets up the clock out of RESET
+ * Initialise MCG to default settings.
  */
-void Mcg::initialise(void) {
+void Mcg::defaultConfigure() {
 
    currentClockMode = McgInfo::ClockMode::ClockMode_None;
 

@@ -51,6 +51,7 @@ namespace USBDM {
 /**
  * @addtogroup ADC_Group ADC, Analogue Input
  * @brief Abstraction for Analogue Input
+ * @{
  */
 
 /**
@@ -211,16 +212,36 @@ enum AdcCompare {
  */
 typedef void (*ADCCallbackFunction)(uint32_t value, int channel);
 
+
 /**
- * Template class representing an ADC
+ * Provides common unhandledCallback for all ADCs.
+ * This class is not intended to be instantiated.
+ */
+class AdcBase {
+
+private:
+   AdcBase() = delete;
+   AdcBase(const PcrBase&) = delete;
+   AdcBase(PcrBase&&) = delete;
+
+public:
+   /** Callback to catch unhandled interrupt */
+   static void unhandledCallback(uint32_t, int) {
+      setAndCheckErrorCode(E_NO_HANDLER);
+   }
+};
+
+/**
+ * Template class representing an ADC.
+ * This class is not intended to be instantiated.
  *
  * Example
  * @code
- *  // Instantiate ADC channel adc0_se8
- *  const AdcBase_T<adc0Info> Adc0;
+ *  // Access to ADC0
+ *  using Adc0 = AdcBase_T<adc0Info>;
  *
  *  // Initialise ADC
- *  Adc0.setMode(AdcResolution_16bit_se);
+ *  Adc0::setMode(AdcResolution_16bit_se);
  *  @endcode
  *
  * @tparam info Table of information describing ADC
@@ -228,12 +249,18 @@ typedef void (*ADCCallbackFunction)(uint32_t value, int channel);
 template<class Info>
 class AdcBase_T {
 
+private:
+   AdcBase_T() = delete;
+   AdcBase_T(const AdcBase_T&) = delete;
+   AdcBase_T(AdcBase_T&&) = delete;
+
 protected:
    /** Callback function for ISR */
    static ADCCallbackFunction callback;
 
 public:
 
+   /** Allow convenient access to associate AdcInfo */
    using AdcInfo = Info;
 
    /**
@@ -256,28 +283,16 @@ public:
     */
    static void setCallback(ADCCallbackFunction theCallback) {
       if (theCallback == nullptr) {
-         callback = errorCallback;
+         callback = AdcBase::unhandledCallback;
          return;
       }
       callback = theCallback;
    }
 
-private:
-   /**
-    * This class is not intended to be instantiated
-    */
-   AdcBase_T() = delete;
-   AdcBase_T(const AdcBase_T&) = delete;
-   AdcBase_T(AdcBase_T&&) = delete;
-
 protected:
    /** Clock register for peripheral */
    static constexpr volatile uint32_t *clockReg = Info::clockReg;
 
-   /** Callback to catch unhandled interrupt */
-   static void errorCallback(uint32_t, int) {
-      setAndCheckErrorCode(E_NO_HANDLER);
-   }
 public:
    /** Peripheral hardware instance */
    static constexpr volatile ADC_Type *adc      = Info::adc;
@@ -293,7 +308,7 @@ public:
    }
 
    /**
-    * Basic enable of ADC\n
+    * Basic enable of ADC.
     * Includes enabling clock and configuring all pins
     */
    static void enable() {
@@ -307,8 +322,21 @@ public:
    }
 
    /**
-    * Configure with settings from Configure.usbdmProject.\n
-    * Includes configuring all pins
+    * Disables the ADC.
+    * Does not change ADC pin mapping
+    */
+   static void disable() {
+      adc->CFG1 = 0;
+      adc->CFG2 = 0;
+      adc->SC2  = 0;
+
+      // Disable clock to ADC
+      *clockReg  &= ~Info::clockMask;
+   }
+
+   /**
+    * Configure with settings from Configure.usbdmProject.
+    * Includes configuring all pins.
     */
    static void defaultConfigure() {
       enable();
@@ -323,7 +351,7 @@ public:
    }
 
    /**
-    * Configure ADC
+    * Configure the ADC
     *
     * @param[in] adcResolution   Resolution for converter e.g. AdcResolution_16bit_se
     * @param[in] adcClockSource  Clock source e.g. AdcClockSource_Asynch
@@ -358,31 +386,21 @@ public:
     * Enable/disable interrupts in NVIC
     *
     * @param[in]  enable    True => enable, False => disable
-    * @param[in]  priority  Interrupt priority
+    * @param[in]  nvicPriority  Interrupt priority
     */
-   static void enableNvicInterrupts(bool enable=true, uint32_t priority=NvicPriority_Normal) {
+   static void enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
 
       if (enable) {
          // Enable interrupts
          NVIC_EnableIRQ(Info::irqNums[0]);
 
          // Set priority level
-         NVIC_SetPriority(Info::irqNums[0], priority);
+         NVIC_SetPriority(Info::irqNums[0], nvicPriority);
       }
       else {
          // Disable interrupts
          NVIC_DisableIRQ(Info::irqNums[0]);
       }
-   }
-
-   /**
-    * Disables the ADC\n
-    * Does not change ADC pin mapping
-    */
-   static void disable() {
-      adc->CFG1 = 0;
-      adc->CFG2 = 0;
-      adc->SC2  = 0;
    }
 
    /**
@@ -440,9 +458,9 @@ public:
       adc->SC3 = (adc->SC3&~(ADC_SC3_AVGE_MASK|ADC_SC3_AVGS_MASK))|adcAveraging;
    }
 
-   /* ADC calibrate
-    *
-    * Calibrates the ADC
+   /**
+    * ADC calibrate.
+    * Calibrates the ADC before first use.
     *
     * @note Set up the ADC clock and resolution before calibration
     *
@@ -489,8 +507,9 @@ public:
 
       return E_NO_ERROR;
    }
+
    /**
-    * Configure comparison mode
+    * Configure comparison mode.
     *
     * @param[in] adcCompare   Comparison operation to enable
     * @param[in] low          Lower threshold
@@ -526,7 +545,7 @@ public:
 
 protected:
    /**
-    * Enables hardware trigger mode of operation and configures the channel
+    * Enables hardware trigger mode of operation and configures the channel.
     *
     * @param[in] sc1Value        SC1 register value including the ADC channel, Differential mode and interrupt enable
     * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel\n
@@ -567,11 +586,11 @@ protected:
    };
 
    /**
-    * Initiates a conversion and waits for it to complete
+    * Initiates a conversion and waits for it to complete.
     *
     * @param[in] sc1Value SC1 register value including the ADC channel to use
     *
-    * @return - the result of the conversion (should be treated as signed if differential channel)
+    * @return The result of the conversion. This should be treated as a signed value if differential mode
     */
    static uint16_t readAnalogue(const int sc1Value) {
 
@@ -586,10 +605,10 @@ protected:
 
 };
 
-template<class Info> ADCCallbackFunction AdcBase_T<Info>::callback = AdcBase_T<Info>::errorCallback;
+template<class Info> ADCCallbackFunction AdcBase_T<Info>::callback = AdcBase::unhandledCallback;
 
 /**
- * Template class representing an ADC channel
+ * Template class representing an ADC channel.
  *
  * Example
  * @code
@@ -597,10 +616,10 @@ template<class Info> ADCCallbackFunction AdcBase_T<Info>::callback = AdcBase_T<I
  * using Adc0_ch6 = USBDM::AdcChannel_T<Adc0Info, 6>;
  *
  * // Set ADC resolution
- * Adc0_ch6.setMode(AdcResolution_16bit_se);
+ * Adc0_ch6::setMode(AdcResolution_16bit_se);
  *
  * // Read ADC value
- * uint32_t value = Adc0_ch6.readAnalogue();
+ * uint32_t value = Adc0_ch6::readAnalogue();
  * @endcode
  *
  * @tparam info    Table of information describing ADC
@@ -619,7 +638,8 @@ public:
    static constexpr int CHANNEL=channel;
 
    /**
-    * Configure pins associated with this ADC channel.
+    * Configure the pin associated with this ADC channel.
+    * The pin is in analogue mode so no PCR settings are active.
     */
    static void setInput() {
       // Map pin to ADC
@@ -627,7 +647,7 @@ public:
    }
 
    /**
-    * Enables hardware trigger mode of operation and configures a channel
+    * Enables hardware trigger mode of operation and configures a channel.
     *
     * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel\n
     *                            This corresponds to pre-triggers in the PDB channels and SC1[n]/R[n] register selection
@@ -640,6 +660,7 @@ public:
 
    /**
     * Initiates a conversion but does not wait for it to complete.
+    * Intended for use with interrupts so ADC interrupts are enabled
     *
     * @param[in] adcInterrupt   Determines if an interrupt is generated when conversions are complete
     * @param[in] adcContinuous  Select continuous conversion mode
@@ -649,7 +670,7 @@ public:
    };
 
    /**
-    * Initiates a conversion and waits for it to complete
+    * Initiates a conversion and waits for it to complete.
     *
     * @return - the result of the conversion
     */
@@ -681,7 +702,10 @@ template<class Info, int channel>
 class AdcDiffChannel_T : public AdcBase_T<Info>, CheckSignal<typename Info::InfoDP, channel>, CheckSignal<typename Info::InfoDM, channel> {
 
 public:
+   /** PCR associated with plus channel */
    using PcrP = PcrTable_T<typename Info::InfoDP, channel>;
+
+   /** PCR associated with minus channel */
    using PcrM = PcrTable_T<typename Info::InfoDM, channel>;
 
    /** Allow convenient access to owning ADC */
@@ -691,7 +715,8 @@ public:
    static constexpr int CHANNEL=channel;
 
    /**
-    * Configure pins associated with this ADC channel.
+    * Configure the pins associated with this ADC channel.
+    * The pins are in analogue mode so no PCR settings are active.
     */
    static void setInput() {
       // Map pins to ADC
@@ -700,7 +725,7 @@ public:
    }
 
    /**
-    * Enables hardware trigger mode of operation and configures a channel
+    * Enables hardware trigger mode of operation and configures a channel.
     *
     * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel\n
     *                            This corresponds to pre-triggers in the PDB channels and SC1[n] register setups
@@ -712,7 +737,7 @@ public:
    }
 
    /**
-    * Initiates a conversion but does not wait for it to complete.\n
+    * Initiates a conversion but does not wait for it to complete.
     * Intended for use with interrupts so ADC interrupts are enabled
     *
     * @param[in] adcInterrupt   Determines if an interrupt is generated when conversions are complete
@@ -721,8 +746,9 @@ public:
    static __attribute__((always_inline)) void startConversion(AdcInterrupt adcInterrupt=AdcInterrupt_disable, AdcContinuous adcContinuous=AdcContinuous_Disabled) {
       AdcBase_T<Info>::startConversion(channel|ADC_SC1_DIFF_MASK|adcInterrupt, adcContinuous);
    };
+
    /**
-    * Initiates a conversion and waits for it to complete
+    * Initiates a conversion and waits for it to complete.
     *
     * @return - the result of the conversion
     */
@@ -751,8 +777,7 @@ public:
  * @tparam channel ADC channel
  */
 template<int channel>
-class Adc0Channel : public AdcChannel_T<Adc0Info, channel> {
-};
+class Adc0Channel : public AdcChannel_T<Adc0Info, channel> {};
 //template<int channel> using Adc0Channel = AdcChannel_T<Adc0Info, channel>;
 
 /**
@@ -773,14 +798,14 @@ class Adc0Channel : public AdcChannel_T<Adc0Info, channel> {
  * @tparam channel ADC channel
  */
 template<int channel>
-class Adc0DiffChannel : public AdcDiffChannel_T<Adc0Info, channel> {
-};
+class Adc0DiffChannel : public AdcDiffChannel_T<Adc0Info, channel> {};
 //template<int channel> using Adc0DiffChannel = AdcDiffChannel_T<Adc0Info, channel>;
 
 /**
  * Class representing ADC0
  */
-using Adc0 = AdcBase_T<Adc0Info>;
+class Adc0 : public AdcBase_T<Adc0Info>{};
+//using Adc0 = AdcBase_T<Adc0Info>;
 #endif
 
 #ifdef USBDM_ADC1_IS_DEFINED
@@ -802,8 +827,7 @@ using Adc0 = AdcBase_T<Adc0Info>;
  * @tparam channel ADC channel
  */
 template<int channel>
-class Adc1Channel : public AdcChannel_T<Adc1Info, channel> {
-};
+class Adc1Channel : public AdcChannel_T<Adc1Info, channel> {};
 //template<int channel> using Adc1Channel = AdcChannel_T<Adc1Info, channel>;
 
 /**
@@ -824,17 +848,18 @@ class Adc1Channel : public AdcChannel_T<Adc1Info, channel> {
  * @tparam channel ADC channel
  */
 template<int channel>
-class Adc1DiffChannel : public AdcDiffChannel_T<Adc1Info, channel> {
-};
+class Adc1DiffChannel : public AdcDiffChannel_T<Adc1Info, channel> {};
 //template<int channel> using Adc1DiffChannel = AdcDiffChannel_T<Adc01Info, channel>;
 
 /**
  * Class representing ADC1
  */
-using Adc1 = AdcBase_T<Adc1Info>;
+class Adc1 : public AdcBase_T<Adc1Info>{};
+//using Adc1 = AdcBase_T<Adc1Info>;
 #endif
 
 /**
+ * End ADC_Group
  * @}
  */
 

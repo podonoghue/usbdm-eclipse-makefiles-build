@@ -1,13 +1,13 @@
    /**
     * Enable/disable interrupts in NVIC
     *
-    * @param[in]  channel   Channel being modified
-    * @param[in]  enable    True => enable, False => disable
-    * @param[in]  priority  Interrupt priority
+    * @param[in]  channel       Channel being modified
+    * @param[in]  enable        True => enable, False => disable
+    * @param[in]  nvicPriority  Interrupt priority
 	
     * @return E_NO_ERROR on success
     */
-   static ErrorCode enableNvicInterrupts(XXXX channel, bool enable=true, uint32_t priority=NvicPriority_Normal) {
+   static ErrorCode enableNvicInterrupts(XXXX channel, bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
 #ifdef DEBUG_BUILD
       if (channel>=Info::NumChannels) {
          setAndCheckErrorCode(E_ILLEGAL_PARAM);
@@ -20,7 +20,7 @@
          NVIC_EnableIRQ(irqNum);
 
          // Set priority level
-         NVIC_SetPriority(irqNum, priority);
+         NVIC_SetPriority(irqNum, nvicPriority);
       }
       else {
          // Disable interrupts

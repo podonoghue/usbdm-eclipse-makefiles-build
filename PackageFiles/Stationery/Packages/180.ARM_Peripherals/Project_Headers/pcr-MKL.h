@@ -704,16 +704,16 @@ public:
     * Enable/disable Pin interrupts in NVIC.\n
     * Any pending NVIC interrupts are first cleared.
     *
-    * @param[in]  enable    True => enable, False => disable
-    * @param[in]  priority  Interrupt priority
+    * @param[in]  enable        True => enable, False => disable
+    * @param[in]  nvicPriority  Interrupt priority
     */
-   static __attribute__((always_inline)) void enableNvicInterrupts(bool enable=true, uint32_t priority=NvicPriority_Normal) {
+   static __attribute__((always_inline)) void enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
 
       constexpr IRQn_Type irqNum = (IRQn_Type)(PORTA_IRQn+((portAddress-PORTA_BasePtr)/(PORTB_BasePtr-PORTA_BasePtr)));
 
       if (enable) {
          // Set priority level
-         NVIC_SetPriority(irqNum, priority);
+         NVIC_SetPriority(irqNum, nvicPriority);
          // Clear pending interrupts
          NVIC_ClearPendingIRQ(irqNum);
          // Enable interrupts

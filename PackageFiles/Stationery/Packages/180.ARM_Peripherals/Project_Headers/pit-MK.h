@@ -154,13 +154,13 @@ public:
    /**
     * Enable/disable interrupts in NVIC
     *
-    * @param[in]  channel   Channel being modified
-    * @param[in]  enable    True => enable, False => disable
-    * @param[in]  priority  Interrupt priority
+    * @param[in]  channel       Channel being modified
+    * @param[in]  enable        True => enable, False => disable
+    * @param[in]  nvicPriority  Interrupt priority
     *
     * @return E_NO_ERROR on success
     */
-   static ErrorCode enableNvicInterrupts(unsigned channel, bool enable=true, uint32_t priority=NvicPriority_Normal) {
+   static ErrorCode enableNvicInterrupts(unsigned channel, bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
       static const IRQn_Type irqNums[] = {
             Info::irqNums[0], Info::irqNums[1], Info::irqNums[2], Info::irqNums[3],
       };
@@ -173,7 +173,7 @@ public:
          NVIC_EnableIRQ(irqNum);
 
          // Set priority level
-         NVIC_SetPriority(irqNum, priority);
+         NVIC_SetPriority(irqNum, nvicPriority);
       }
       else {
          // Disable interrupts
@@ -203,8 +203,6 @@ public:
     *  @param[in]  channel           Channel to configure
     *  @param[in]  interval          Interval in timer ticks (usually bus clock period)
     *  @param[in]  pitChannelIrq     Whether to enable interrupts
-    *
-    *  @note NVIC is configured
     */
    static void configureChannelInTicks(
          uint8_t           channel,
@@ -214,8 +212,6 @@ public:
       pit->CHANNEL[channel].LDVAL = interval-1;
       pit->CHANNEL[channel].TCTRL = pitChannelIrq|PIT_TCTRL_TEN(1);
       pit->CHANNEL[channel].TFLG  = PIT_TFLG_TIF_MASK;
-
-      enableNvicInterrupts(channel);
    }
 
    /**
@@ -224,8 +220,6 @@ public:
     *  @param[in]  channel           Channel to configure
     *  @param[in]  interval          Interval in seconds
     *  @param[in]  pitChannelIrq     Whether to enable interrupts
-    *
-    *  @note NVIC is configured
     */
    static void configureChannel(
          uint8_t           channel,
@@ -235,8 +229,6 @@ public:
       pit->CHANNEL[channel].LDVAL = round((interval*PitInfo::getClockFrequency())-1);
       pit->CHANNEL[channel].TCTRL = pitChannelIrq|PIT_TCTRL_TEN(1);
       pit->CHANNEL[channel].TFLG  = PIT_TFLG_TIF_MASK;
-
-      enableNvicInterrupts(channel);
    }
 
    /**
@@ -268,9 +260,6 @@ public:
 
       // Disable timer channel
       pit->CHANNEL[channel].TCTRL = 0;
-
-      // Disable timer interrupts
-      enableNvicInterrupts(channel, false);
    }
 
    /**
@@ -405,13 +394,13 @@ public:
    /**
     * Enable/disable interrupts in NVIC
     *
-    * @param[in]  enable      True => enable, False => disable
-    * @param[in]  priority    Interrupt priority
+    * @param[in]  enable        True => enable, False => disable
+    * @param[in]  nvicPriority  Interrupt priority
     *
     * @return E_NO_ERROR on success
     */
-   static ErrorCode __attribute__((always_inline)) enableNvicInterrupts(bool enable=true, uint32_t priority=NvicPriority_Normal) {
-      return PitBase_T<Info>::enableNvicInterrupts(channel, enable, NvicPriority_Normal);
+   static ErrorCode __attribute__((always_inline)) enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
+      return PitBase_T<Info>::enableNvicInterrupts(channel, enable, nvicPriority);
    }
 
 };

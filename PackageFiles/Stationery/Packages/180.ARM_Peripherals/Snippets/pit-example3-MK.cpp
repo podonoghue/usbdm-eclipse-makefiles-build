@@ -47,6 +47,8 @@ int main() {
    // Flash LED @ 1Hz
    TimerChannel::configureInTicks(::SystemBusClock, PitChannelIrq_Enable);
 
+   TimerChannel::enableNvicInterrupts(true, NvicPriority_Normal);
+
    // Check for errors so far
    checkError();
 

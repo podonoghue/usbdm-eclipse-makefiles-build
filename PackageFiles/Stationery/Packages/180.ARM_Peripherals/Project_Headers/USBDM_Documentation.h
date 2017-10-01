@@ -552,7 +552,7 @@ This is a template class with static methods.\n
 @example analogue-diff-example.cpp
 @example analogue-interrupt-example.cpp
 @example analogue-joystick-example.cpp
-@example cmp.cpp
+@example cmp-example.cpp
 @example console-example.cpp
 @example dac-example.cpp
 @example digital-example1.cpp
@@ -574,7 +574,8 @@ This is a template class with static methods.\n
 @example hmc5883l.cpp
 @example hmc5883l.h
 @example i2c-example.cpp
-@example llwu-example.cpp
+@example llwu-example-mk20.cpp
+@example llwu-example-mk22f.cpp
 @example lptmr-example.cpp
 @example mag3310-example.cpp
 @example mag3310.cpp
@@ -595,7 +596,7 @@ This is a template class with static methods.\n
 @example pdb-example.cpp
 @example rtc-example.cpp
 @example spi-example.cpp
-@example test-mcg.cpp
+@example mcg-test.cpp
 @example tsi-mk-example.cpp
 @example usb.cpp
 @example usb_cdc_interface.cpp

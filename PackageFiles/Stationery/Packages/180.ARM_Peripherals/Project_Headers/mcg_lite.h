@@ -23,6 +23,12 @@
 
 namespace USBDM {
 
+/**
+ * @addtogroup MCG_Group MCG, Multipurpose Clock Generator
+ * @brief Abstraction for Multipurpose Clock Generator
+ * @{
+ */
+
 /** MCGFFCLK - Fixed frequency clock (input to FLL) */
 extern volatile uint32_t SystemMcgffClock;
 /** MCGOUTCLK - Primary output from MCG, various sources */
@@ -40,11 +46,6 @@ extern volatile uint32_t SystemLpoClock;
 
 extern void setSysDividersStub(uint32_t simClkDiv1);
 
-/**
- * @addtogroup MCG_Group MCG, Multipurpose Clock Generator
- * @brief Abstraction for Multipurpose Clock Generator
- * @{
- */
 /**
  * Type definition for MCG interrupt call back
  */
@@ -71,7 +72,9 @@ public:
    /**
     * Transition from current clock mode to mode given
     *
-    * @param to Clock mode to transition to
+    * @param[in]  to Clock mode to transition to
+    *
+    * @return E_NO_ERROR on success
     */
    static int clockTransition(const McgInfo::ClockInfo &to);
 
@@ -85,7 +88,7 @@ public:
    /**
     *  Change SIM->CLKDIV1 value
     *
-    * @param simClkDiv1 - Value to write to SIM->CLKDIV1 register
+    * @param[in]  simClkDiv1 - Value to write to SIM->CLKDIV1 register
     */
    static void setSysDividers(uint32_t simClkDiv1) {
       SIM->CLKDIV1 = simClkDiv1;
@@ -97,7 +100,7 @@ public:
    /**
     *  Configure the MCG for given mode
     *
-    *  @param settingNumber CLock setting number
+    *  @param[in]  settingNumber CLock setting number
     */
    static void configure(int settingNumber=0) {
       clockTransition(McgInfo::clockInfo[settingNumber]);

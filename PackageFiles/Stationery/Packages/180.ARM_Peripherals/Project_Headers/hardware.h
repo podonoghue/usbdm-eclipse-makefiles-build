@@ -219,11 +219,13 @@ inline void clearError() {
  * Convenience names for common priority levels
  */
 enum NvicPriority {
-   NvicPriority_High     = 0, //!< NvicPriority_High
-   NvicPriority_MidHigh  = 3, //!< NvicPriority_MidHigh
-   NvicPriority_Normal   = 7, //!< NvicPriority_Normal
+   NvicPriority_VeryHigh = 0, //!< NvicPriority_VeryHigh
+   NvicPriority_High     = 2, //!< NvicPriority_High
+   NvicPriority_MidHigh  = 5, //!< NvicPriority_MidHigh
+   NvicPriority_Normal   = 8, //!< NvicPriority_Normal
    NvicPriority_Midlow   = 11,//!< NvicPriority_Midlow
-   NvicPriority_Low      = 15,//!< NvicPriority_Low
+   NvicPriority_Low      = 13,//!< NvicPriority_Low
+   NvicPriority_VeryLow  = 15,//!< NvicPriority_VeryLow
 };
 
 #include "pin_mapping.h"
