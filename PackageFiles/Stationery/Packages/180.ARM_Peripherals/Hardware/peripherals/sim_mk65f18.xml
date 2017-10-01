@@ -24,6 +24,7 @@ Devices using this peripheral:
          value="32768"
          constant="true" />
    </category>
+   
    <template><![CDATA[
       \t//! System Options Register 1
       \tstatic constexpr uint32_t sopt1 = 
@@ -163,7 +164,7 @@ Devices using this peripheral:
       \t   SIM_SOPT2_TIMESRC($(sim_sopt2_timesrc)) |       // IEEE 1588 timestamp clock source select
       \t   SIM_SOPT2_RMIISRC($(sim_sopt2_rmiisrc)) |       // Ethernet RMII clock source select
       \t   SIM_SOPT2_USBSRC($(sim_sopt2_usbsrc)) |        // USB clock source select
-      \t   SIM_SOPT2_PLLFLLSEL($(sim_sopt2_pllfllsel)) |     // PLL/FLL clock select
+      \t   SIM_SOPT2_PLLFLLSEL($(sim_sopt2_pllfllsel[0])) |     // PLL/FLL clock select
       \t   SIM_SOPT2_CLKOUTSEL($(sim_sopt2_clkoutsel)) |     // CLKOUT pin clock source select
       \t   SIM_SOPT2_RTCCLKOUTSEL($(sim_sopt2_rtcclkoutsel));   // RTC clock out select\n\n
 
@@ -765,8 +766,7 @@ Devices using this peripheral:
          <choice value="12" name="Divide by 7 (div=6, frac=0)" />
          <choice value="14" name="Divide by 8 (div=7, frac=0)" />
       </choiceOption>
-   </category>
-      
+   </category>   
    <template><![CDATA[
       \t//! System Clock Divider Register 2
       \tstatic constexpr uint32_t clkdiv2 = 
@@ -848,7 +848,7 @@ Devices using this peripheral:
          toolTip="Clocks the flash memory\n
                   Must be an integer divisor of the Core Clock.\n
                   Must be &lt;= Bus Clock frequency."
-      value="24000000" />
+         value="24000000" />
 	 
       <category name="CLKDIV1" description="System Clock Dividers">
          <intOption name="sim_clkdiv1_outdiv1." 

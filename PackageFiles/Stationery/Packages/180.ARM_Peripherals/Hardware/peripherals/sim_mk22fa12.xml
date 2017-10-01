@@ -56,6 +56,8 @@ Devices using this peripheral:
    
       <aliasOption key="/SIM/sim_sopt2_pllfllsel." constant="false" />
    
+      <aliasOption key="/SIM/system_peripheral_clock." />
+         
       <choiceOption name="sim_sopt2_usbsrc" 
          description="USB clock source select"
          toolTip="Selects the source for the USB clock">
@@ -106,7 +108,7 @@ Devices using this peripheral:
       \t   SIM_SOPT2_FBSL($(sim_sopt2_fbsl)) |          // FlexBus security level
       \t   SIM_SOPT2_PTD7PAD($(sim_sopt2_ptd7pad)) |       // PTD7 pad drive strength
       \t   SIM_SOPT2_USBSRC($(sim_sopt2_usbsrc)) |        // USB clock source select
-      \t   SIM_SOPT2_PLLFLLSEL($(sim_sopt2_pllfllsel)) |     // PLL/FLL clock select
+      \t   SIM_SOPT2_PLLFLLSEL($(sim_sopt2_pllfllsel[0])) |     // PLL/FLL clock select
       \t   SIM_SOPT2_CLKOUTSEL($(sim_sopt2_clkoutsel)) |     // CLKOUT pin clock source select
       \t   SIM_SOPT2_RTCCLKOUTSEL($(sim_sopt2_rtcclkoutsel));   // RTC clock out select\n\n
 

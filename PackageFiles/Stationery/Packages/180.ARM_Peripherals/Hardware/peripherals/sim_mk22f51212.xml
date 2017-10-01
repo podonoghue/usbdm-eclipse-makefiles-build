@@ -602,7 +602,7 @@ Devices using this peripheral:
    
    <indexedCategory name="ClockConfig." dim="3" 
          description="Clock configurations" 
-         toolTip="Clock configurations for different run modes"
+         toolTip="Clock configurations for different run modes" 
 	 value="" >
          
       <aliasOption key="/MCG/ClockConfig."
@@ -617,7 +617,7 @@ Devices using this peripheral:
          <choice value="3"  name="IRC48 MHz clock" />
       </choiceOption>
    
-      <intOption name="system_peripheral_clock." key="/SIM/system_peripheral_clock."
+      <intOption name="system_peripheral_clock."
          constant="true"
          units="Hz"
          description="Peripheral Clock frequency"

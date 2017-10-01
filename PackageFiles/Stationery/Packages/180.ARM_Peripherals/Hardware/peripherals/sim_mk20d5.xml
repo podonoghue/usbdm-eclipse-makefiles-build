@@ -98,7 +98,7 @@ Devices using this peripheral:
       \tstatic constexpr uint32_t sopt2 = 
       \t   SIM_SOPT2_PTD7PAD($(sim_sopt2_ptd7pad)) |       // PTD7 pad drive strength
       \t   SIM_SOPT2_USBSRC($(sim_sopt2_usbsrc)) |        // USB clock source select
-      \t   SIM_SOPT2_PLLFLLSEL($(/SIM/sim_sopt2_pllfllsel[0])) |     // PLL/FLL clock select
+      \t   SIM_SOPT2_PLLFLLSEL($(sim_sopt2_pllfllsel[0])) |     // PLL/FLL clock select
       \t   SIM_SOPT2_CLKOUTSEL($(sim_sopt2_clkoutsel)) |     // CLKOUT pin clock source select
       \t   SIM_SOPT2_RTCCLKOUTSEL($(sim_sopt2_rtcclkoutsel));   // RTC clock out select\n\n
 
@@ -308,7 +308,8 @@ Devices using this peripheral:
    
    <indexedCategory name="ClockConfig." dim="3" 
          description="Clock configurations" 
-         toolTip="Clock configurations for different run modes" >
+         toolTip="Clock configurations for different run modes" 
+	 value="" >
          
       <aliasOption key="/MCG/ClockConfig."
         constant="true"/>
@@ -320,7 +321,7 @@ Devices using this peripheral:
          <choice value="1"  name="MCGPLLCLK clock" />
       </choiceOption>
    
-      <intOption name="system_peripheral_clock." key="/SIM/system_peripheral_clock."
+      <intOption name="system_peripheral_clock."
          constant="true"
          units="Hz"
          description="Peripheral Clock frequency"
