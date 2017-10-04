@@ -388,6 +388,10 @@ int Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
    }
    setSysDividers(clockInfo.clkdiv1);
 
+#ifdef SIM_CLKDIV3_PLLFLLDIV
+   SIM->CLKDIV3 = clockInfo.clkdiv3;
+#endif
+
    SystemCoreClockUpdate();
 
    mcg->C8 = clockInfo.c8; // Enable clock monitors
