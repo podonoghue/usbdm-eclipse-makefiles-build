@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- dac0_16ch_fifo16.xml -->
+
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="dac_def.xml"/>
+</fragment>
