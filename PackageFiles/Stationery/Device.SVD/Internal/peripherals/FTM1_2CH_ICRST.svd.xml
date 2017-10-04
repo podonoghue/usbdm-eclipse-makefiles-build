@@ -239,12 +239,12 @@ An interrupt is generated when TOF equals one</description>
                         <enumeratedValues>
                            <enumeratedValue>
                               <name>0b0</name>
-                              <description>FTM counter is not reset when the selected channel (n) input event is detected</description>
+                              <description>FTM counter is not reset when the selected channel input event is detected</description>
                               <value>0b0</value>
                            </enumeratedValue>
                            <enumeratedValue>
                               <name>0b1</name>
-                              <description>FTM counter is reset when the selected channel (n) input event is detected</description>
+                              <description>FTM counter is reset when the selected channel input event is detected</description>
                               <value>0b1</value>
                            </enumeratedValue>
                         </enumeratedValues>

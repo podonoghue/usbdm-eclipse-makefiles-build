@@ -315,12 +315,12 @@ Controls availability of the comparator output on the associated CMPO output pin
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Interrupt disabled</description>
+                           <description>Interrupt Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Interrupt enabled</description>
+                           <description>Interrupt Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -334,12 +334,12 @@ Controls availability of the comparator output on the associated CMPO output pin
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>DMA disabled</description>
+                           <description>DMA Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>DMA enabled</description>
+                           <description>DMA Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -367,12 +367,12 @@ Controls availability of the comparator output on the associated CMPO output pin
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Vin1 is reference Vin</description>
+                           <description>Vin1 (usually Vref)</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Vin2 is reference Vin</description>
+                           <description>Vin2 (usually Vdd)</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

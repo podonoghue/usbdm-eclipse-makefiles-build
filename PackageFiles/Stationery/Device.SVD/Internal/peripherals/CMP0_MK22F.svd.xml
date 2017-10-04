@@ -1,11 +1,12 @@
 <!--
 Devices using this peripheral: 
       MK22F51212
+      MK28F15
 -->
       <peripheral>
          <?sourceFile "CMP0_MK22F" ?>
          <name>CMP0</name>
-         <description>Comparator, Voltage Ref, D-to-A Converter and Analog Mux</description>
+         <description>High-Speed Comparator (CMP), Voltage Reference (VREF) Digital-to-Analog Converter (DAC), and Analog Mux</description>
          <groupName>CMP</groupName>
          <headerStructName>CMP</headerStructName>
          <baseAddress>0x40073000</baseAddress>

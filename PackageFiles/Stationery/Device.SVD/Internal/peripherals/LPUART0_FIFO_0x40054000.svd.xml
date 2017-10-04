@@ -23,6 +23,7 @@ Devices using this peripheral:
                <name>BAUD</name>
                <description>Baud Rate Register</description>
                <addressOffset>0x0</addressOffset>
+               <resetValue>0xF000004</resetValue>
                <fields>
                   <field>
                      <name>SBR</name>
@@ -1484,7 +1485,7 @@ The MODEM register controls options for setting the modem configuration</descrip
                <name>FIFO</name>
                <description>FIFO Register</description>
                <addressOffset>0x18</addressOffset>
-               <resetValue>0x22</resetValue>
+               <resetValue>0xC00022</resetValue>
                <fields>
                   <field>
                      <name>RXFIFOSIZE</name>

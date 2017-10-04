@@ -24,6 +24,7 @@ Devices using this peripheral:
       MK22FA12
       MK24F12
       MK24F25612
+      MK28F15
       MK30D7
       MK30D10
       MK40D7
@@ -39,12 +40,14 @@ Devices using this peripheral:
       MK64F12
       MK65F18
       MK66F18
+      MK82F25615
       MKL03Z4
       MKL17Z4
       MKL27Z4
       MKL27Z644
       MKL33Z4
       MKL43Z4
+      MKL82Z7
       MKV30F12810
       MKV31F12810
       MKV31F25612
@@ -136,12 +139,12 @@ These bits select the buffer modes for the Voltage Reference module</description
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>Low-power buffer</description>
+                           <description>High power buffer mode enabled</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>High-power buffer</description>
+                           <description>Low-power buffer mode enabled</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>

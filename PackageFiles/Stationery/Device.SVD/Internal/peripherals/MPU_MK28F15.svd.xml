@@ -1,9 +1,9 @@
 <!--
 Devices using this peripheral: 
-      MK82F25615
+      MK28F15
 -->
       <peripheral>
-         <?sourceFile "MPU_MK82F25615" ?>
+         <?sourceFile "MPU_MK28F15" ?>
          <name>MPU</name>
          <description>Memory protection unit</description>
          <groupName>MPU</groupName>
@@ -20,7 +20,7 @@ Devices using this peripheral:
          </addressBlock>
          <addressBlock>
             <offset>0x10</offset>
-            <size>0x28</size>
+            <size>0x38</size>
             <usage>registers</usage>
          </addressBlock>
          <addressBlock>
@@ -99,27 +99,27 @@ Devices using this peripheral:
                   <field>
                      <name>SPERR</name>
                      <description>Slave Port n Error</description>
-                     <bitOffset>27</bitOffset>
-                     <bitWidth>5</bitWidth>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>7</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0</name>
                            <description>No error has occurred for slave port n</description>
-                           <value>0b00000</value>
+                           <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>1</name>
                            <description>An error has occurred for slave port n</description>
-                           <value>0b00001</value>
+                           <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                </fields>
             </register>
             <cluster>
-               <dim>5</dim>
+               <dim>7</dim>
                <dimIncrement>8</dimIncrement>
-               <dimIndex>0,1,2,3,4</dimIndex>
+               <dimIndex>0,1,2,3,4,5,6</dimIndex>
                <name>SP,@p@f@i</name>
                <addressOffset>0x10</addressOffset>
                <register>
@@ -557,7 +557,7 @@ Devices using this peripheral:
                <name>RGDAAC%s</name>
                <description>Region Descriptor Alternate Access Control n</description>
                <addressOffset>0x800</addressOffset>
-               <resetValue>0x61F7DF</resetValue>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>M0UM</name>

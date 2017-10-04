@@ -54,12 +54,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b0</name>
+                           <name>0</name>
                            <description>MPU is disabled. All accesses from all bus masters are allowed</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b1</name>
+                           <name>1</name>
                            <description>MPU is enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -73,17 +73,17 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b0000</name>
+                           <name>0000</name>
                            <description>8 region descriptors</description>
                            <value>0b0000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b0001</name>
+                           <name>0001</name>
                            <description>12 region descriptors</description>
                            <value>0b0001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b0010</name>
+                           <name>0010</name>
                            <description>16 region descriptors</description>
                            <value>0b0010</value>
                         </enumeratedValue>
@@ -110,12 +110,12 @@ Devices using this peripheral:
                      <bitWidth>8</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b0</name>
+                           <name>0</name>
                            <description>No error has occurred for slave port n</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b1</name>
+                           <name>1</name>
                            <description>An error has occurred for slave port n</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -131,10 +131,9 @@ Devices using this peripheral:
                <addressOffset>0x10</addressOffset>
                <register>
                   <name>EAR</name>
-                  <description>Error Address Register, Slave Port n</description>
+                  <description>Error Address Register, slave port n</description>
                   <addressOffset>0x0</addressOffset>
                   <access>read-only</access>
-                  <resetMask>0x0</resetMask>
                   <fields>
                      <field>
                         <name>EADDR</name>
@@ -145,10 +144,9 @@ Devices using this peripheral:
                </register>
                <register>
                   <name>EDR</name>
-                  <description>Error Detail Register, Slave Port n</description>
+                  <description>Error Detail Register, slave port n</description>
                   <addressOffset>0x4</addressOffset>
                   <access>read-only</access>
-                  <resetMask>0x0</resetMask>
                   <fields>
                      <field>
                         <name>ERW</name>
@@ -157,12 +155,12 @@ Devices using this peripheral:
                         <bitWidth>1</bitWidth>
                         <enumeratedValues>
                            <enumeratedValue>
-                              <name>0b0</name>
+                              <name>0</name>
                               <description>Read</description>
                               <value>0b0</value>
                            </enumeratedValue>
                            <enumeratedValue>
-                              <name>0b1</name>
+                              <name>1</name>
                               <description>Write</description>
                               <value>0b1</value>
                            </enumeratedValue>
@@ -175,22 +173,22 @@ Devices using this peripheral:
                         <bitWidth>3</bitWidth>
                         <enumeratedValues>
                            <enumeratedValue>
-                              <name>0b000</name>
+                              <name>000</name>
                               <description>User mode, instruction access</description>
                               <value>0b000</value>
                            </enumeratedValue>
                            <enumeratedValue>
-                              <name>0b001</name>
+                              <name>001</name>
                               <description>User mode, data access</description>
                               <value>0b001</value>
                            </enumeratedValue>
                            <enumeratedValue>
-                              <name>0b010</name>
+                              <name>010</name>
                               <description>Supervisor mode, instruction access</description>
                               <value>0b010</value>
                            </enumeratedValue>
                            <enumeratedValue>
-                              <name>0b011</name>
+                              <name>011</name>
                               <description>Supervisor mode, data access</description>
                               <value>0b011</value>
                            </enumeratedValue>
@@ -204,7 +202,7 @@ Devices using this peripheral:
                      </field>
                      <field>
                         <name>EPID</name>
-                        <description>Error process identification</description>
+                        <description>Error Process Identification</description>
                         <bitOffset>8</bitOffset>
                         <bitWidth>8</bitWidth>
                      </field>
@@ -270,7 +268,7 @@ Devices using this peripheral:
                      </field>
                      <field>
                         <name>M0PE</name>
-                        <description>Bus master 0 process identifier enable</description>
+                        <description>Bus Master 0 Process Identifier enable</description>
                         <bitOffset>5</bitOffset>
                         <bitWidth>1</bitWidth>
                      </field>
@@ -288,7 +286,7 @@ Devices using this peripheral:
                      </field>
                      <field>
                         <name>M1PE</name>
-                        <description>Bus master 1 process identifier enable</description>
+                        <description>Bus Master 1 Process Identifier enable</description>
                         <bitOffset>11</bitOffset>
                         <bitWidth>1</bitWidth>
                      </field>
@@ -306,7 +304,7 @@ Devices using this peripheral:
                      </field>
                      <field>
                         <name>M2PE</name>
-                        <description>Bus master 2 process identifier enable</description>
+                        <description>Bus Master 2 Process Identifier Enable</description>
                         <bitOffset>17</bitOffset>
                         <bitWidth>1</bitWidth>
                      </field>
@@ -317,14 +315,14 @@ Devices using this peripheral:
                         <bitWidth>3</bitWidth>
                         <enumeratedValues>
                            <enumeratedValue>
-                              <name>0b0</name>
+                              <name>0</name>
                               <description>An attempted access of that mode may be terminated with an access error (if not allowed by another descriptor) and the access not performed</description>
-                              <value>0b0</value>
+                              <value>0b000</value>
                            </enumeratedValue>
                            <enumeratedValue>
-                              <name>0b1</name>
+                              <name>1</name>
                               <description>Allows the given access type to occur</description>
-                              <value>0b1</value>
+                              <value>0b001</value>
                            </enumeratedValue>
                         </enumeratedValues>
                      </field>
@@ -335,22 +333,22 @@ Devices using this peripheral:
                         <bitWidth>2</bitWidth>
                         <enumeratedValues>
                            <enumeratedValue>
-                              <name>0b00</name>
+                              <name>00</name>
                               <description>r/w/x; read, write and execute allowed</description>
                               <value>0b00</value>
                            </enumeratedValue>
                            <enumeratedValue>
-                              <name>0b01</name>
+                              <name>01</name>
                               <description>r/x; read and execute allowed, but no write</description>
                               <value>0b01</value>
                            </enumeratedValue>
                            <enumeratedValue>
-                              <name>0b10</name>
+                              <name>10</name>
                               <description>r/w; read and write allowed, but no execute</description>
                               <value>0b10</value>
                            </enumeratedValue>
                            <enumeratedValue>
-                              <name>0b11</name>
+                              <name>11</name>
                               <description>Same as User mode defined in M3UM</description>
                               <value>0b11</value>
                            </enumeratedValue>
@@ -358,17 +356,17 @@ Devices using this peripheral:
                      </field>
                      <field>
                         <name>M3PE</name>
-                        <description>Bus master 3 process identifier enable</description>
+                        <description>Bus Master 3 Process Identifier Enable</description>
                         <bitOffset>23</bitOffset>
                         <bitWidth>1</bitWidth>
                         <enumeratedValues>
                            <enumeratedValue>
-                              <name>0b0</name>
+                              <name>0</name>
                               <description>Do not include the process identifier in the evaluation</description>
                               <value>0b0</value>
                            </enumeratedValue>
                            <enumeratedValue>
-                              <name>0b1</name>
+                              <name>1</name>
                               <description>Include the process identifier and mask (RGDn_WORD3) in the region hit evaluation</description>
                               <value>0b1</value>
                            </enumeratedValue>
@@ -381,12 +379,12 @@ Devices using this peripheral:
                         <bitWidth>1</bitWidth>
                         <enumeratedValues>
                            <enumeratedValue>
-                              <name>0b0</name>
+                              <name>0</name>
                               <description>Bus master 4 writes terminate with an access error and the write is not performed</description>
                               <value>0b0</value>
                            </enumeratedValue>
                            <enumeratedValue>
-                              <name>0b1</name>
+                              <name>1</name>
                               <description>Bus master 4 writes allowed</description>
                               <value>0b1</value>
                            </enumeratedValue>
@@ -399,12 +397,12 @@ Devices using this peripheral:
                         <bitWidth>1</bitWidth>
                         <enumeratedValues>
                            <enumeratedValue>
-                              <name>0b0</name>
+                              <name>0</name>
                               <description>Bus master 4 reads terminate with an access error and the read is not performed</description>
                               <value>0b0</value>
                            </enumeratedValue>
                            <enumeratedValue>
-                              <name>0b1</name>
+                              <name>1</name>
                               <description>Bus master 4 reads allowed</description>
                               <value>0b1</value>
                            </enumeratedValue>
@@ -417,12 +415,12 @@ Devices using this peripheral:
                         <bitWidth>1</bitWidth>
                         <enumeratedValues>
                            <enumeratedValue>
-                              <name>0b0</name>
+                              <name>0</name>
                               <description>Bus master 5 writes terminate with an access error and the write is not performed</description>
                               <value>0b0</value>
                            </enumeratedValue>
                            <enumeratedValue>
-                              <name>0b1</name>
+                              <name>1</name>
                               <description>Bus master 5 writes allowed</description>
                               <value>0b1</value>
                            </enumeratedValue>
@@ -435,12 +433,12 @@ Devices using this peripheral:
                         <bitWidth>1</bitWidth>
                         <enumeratedValues>
                            <enumeratedValue>
-                              <name>0b0</name>
+                              <name>0</name>
                               <description>Bus master 5 reads terminate with an access error and the read is not performed</description>
                               <value>0b0</value>
                            </enumeratedValue>
                            <enumeratedValue>
-                              <name>0b1</name>
+                              <name>1</name>
                               <description>Bus master 5 reads allowed</description>
                               <value>0b1</value>
                            </enumeratedValue>
@@ -453,12 +451,12 @@ Devices using this peripheral:
                         <bitWidth>1</bitWidth>
                         <enumeratedValues>
                            <enumeratedValue>
-                              <name>0b0</name>
+                              <name>0</name>
                               <description>Bus master 6 writes terminate with an access error and the write is not performed</description>
                               <value>0b0</value>
                            </enumeratedValue>
                            <enumeratedValue>
-                              <name>0b1</name>
+                              <name>1</name>
                               <description>Bus master 6 writes allowed</description>
                               <value>0b1</value>
                            </enumeratedValue>
@@ -471,12 +469,12 @@ Devices using this peripheral:
                         <bitWidth>1</bitWidth>
                         <enumeratedValues>
                            <enumeratedValue>
-                              <name>0b0</name>
+                              <name>0</name>
                               <description>Bus master 6 reads terminate with an access error and the read is not performed</description>
                               <value>0b0</value>
                            </enumeratedValue>
                            <enumeratedValue>
-                              <name>0b1</name>
+                              <name>1</name>
                               <description>Bus master 6 reads allowed</description>
                               <value>0b1</value>
                            </enumeratedValue>
@@ -489,12 +487,12 @@ Devices using this peripheral:
                         <bitWidth>1</bitWidth>
                         <enumeratedValues>
                            <enumeratedValue>
-                              <name>0b0</name>
+                              <name>0</name>
                               <description>Bus master 7 writes terminate with an access error and the write is not performed</description>
                               <value>0b0</value>
                            </enumeratedValue>
                            <enumeratedValue>
-                              <name>0b1</name>
+                              <name>1</name>
                               <description>Bus master 7 writes allowed</description>
                               <value>0b1</value>
                            </enumeratedValue>
@@ -507,12 +505,12 @@ Devices using this peripheral:
                         <bitWidth>1</bitWidth>
                         <enumeratedValues>
                            <enumeratedValue>
-                              <name>0b0</name>
+                              <name>0</name>
                               <description>Bus master 7 reads terminate with an access error and the read is not performed</description>
                               <value>0b0</value>
                            </enumeratedValue>
                            <enumeratedValue>
-                              <name>0b1</name>
+                              <name>1</name>
                               <description>Bus master 7 reads allowed</description>
                               <value>0b1</value>
                            </enumeratedValue>
@@ -533,12 +531,12 @@ Devices using this peripheral:
                         <bitWidth>1</bitWidth>
                         <enumeratedValues>
                            <enumeratedValue>
-                              <name>0b0</name>
+                              <name>0</name>
                               <description>Region descriptor is invalid</description>
                               <value>0b0</value>
                            </enumeratedValue>
                            <enumeratedValue>
-                              <name>0b1</name>
+                              <name>1</name>
                               <description>Region descriptor is valid</description>
                               <value>0b1</value>
                            </enumeratedValue>
@@ -546,13 +544,13 @@ Devices using this peripheral:
                      </field>
                      <field>
                         <name>PIDMASK</name>
-                        <description>Process identifier mask</description>
+                        <description>Process Identifier Mask</description>
                         <bitOffset>16</bitOffset>
                         <bitWidth>8</bitWidth>
                      </field>
                      <field>
                         <name>PID</name>
-                        <description>Process identifier</description>
+                        <description>Process Identifier</description>
                         <bitOffset>24</bitOffset>
                         <bitWidth>8</bitWidth>
                      </field>
@@ -566,6 +564,7 @@ Devices using this peripheral:
                <name>RGDAAC%s</name>
                <description>Region Descriptor Alternate Access Control n</description>
                <addressOffset>0x800</addressOffset>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>M0UM</name>
@@ -581,7 +580,7 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>M0PE</name>
-                     <description>Bus master 0 process identifier enable</description>
+                     <description>Bus Master 0 Process Identifier Enable</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
                   </field>
@@ -599,7 +598,7 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>M1PE</name>
-                     <description>Bus master 1 process identifier enable</description>
+                     <description>Bus Master 1 Process Identifier Enable</description>
                      <bitOffset>11</bitOffset>
                      <bitWidth>1</bitWidth>
                   </field>
@@ -617,7 +616,7 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>M2PE</name>
-                     <description>Bus master 2 process identifier enable</description>
+                     <description>Bus Master 2 Process Identifier Enable</description>
                      <bitOffset>17</bitOffset>
                      <bitWidth>1</bitWidth>
                   </field>
@@ -628,14 +627,14 @@ Devices using this peripheral:
                      <bitWidth>3</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b0</name>
+                           <name>0</name>
                            <description>An attempted access of that mode may be terminated with an access error (if not allowed by another descriptor) and the access not performed</description>
-                           <value>0b0</value>
+                           <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b1</name>
+                           <name>1</name>
                            <description>Allows the given access type to occur</description>
-                           <value>0b1</value>
+                           <value>0b001</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -646,22 +645,22 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b00</name>
+                           <name>00</name>
                            <description>r/w/x; read, write and execute allowed</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b01</name>
+                           <name>01</name>
                            <description>r/x; read and execute allowed, but no write</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b10</name>
+                           <name>10</name>
                            <description>r/w; read and write allowed, but no execute</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b11</name>
+                           <name>11</name>
                            <description>Same as User mode defined in M3UM</description>
                            <value>0b11</value>
                         </enumeratedValue>
@@ -669,17 +668,17 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>M3PE</name>
-                     <description>Bus master 3 process identifier enable</description>
+                     <description>Bus Master 3 Process Identifier Enable</description>
                      <bitOffset>23</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b0</name>
+                           <name>0</name>
                            <description>Do not include the process identifier in the evaluation</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b1</name>
+                           <name>1</name>
                            <description>Include the process identifier and mask (RGDn.RGDAAC) in the region hit evaluation</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -692,12 +691,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b0</name>
+                           <name>0</name>
                            <description>Bus master 4 writes terminate with an access error and the write is not performed</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b1</name>
+                           <name>1</name>
                            <description>Bus master 4 writes allowed</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -710,12 +709,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b0</name>
+                           <name>0</name>
                            <description>Bus master 4 reads terminate with an access error and the read is not performed</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b1</name>
+                           <name>1</name>
                            <description>Bus master 4 reads allowed</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -728,12 +727,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b0</name>
+                           <name>0</name>
                            <description>Bus master 5 writes terminate with an access error and the write is not performed</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b1</name>
+                           <name>1</name>
                            <description>Bus master 5 writes allowed</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -746,12 +745,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b0</name>
+                           <name>0</name>
                            <description>Bus master 5 reads terminate with an access error and the read is not performed</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b1</name>
+                           <name>1</name>
                            <description>Bus master 5 reads allowed</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -764,12 +763,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b0</name>
+                           <name>0</name>
                            <description>Bus master 6 writes terminate with an access error and the write is not performed</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b1</name>
+                           <name>1</name>
                            <description>Bus master 6 writes allowed</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -782,12 +781,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b0</name>
+                           <name>0</name>
                            <description>Bus master 6 reads terminate with an access error and the read is not performed</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b1</name>
+                           <name>1</name>
                            <description>Bus master 6 reads allowed</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -800,12 +799,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b0</name>
+                           <name>0</name>
                            <description>Bus master 7 writes terminate with an access error and the write is not performed</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b1</name>
+                           <name>1</name>
                            <description>Bus master 7 writes allowed</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -818,12 +817,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b0</name>
+                           <name>0</name>
                            <description>Bus master 7 reads terminate with an access error and the read is not performed</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b1</name>
+                           <name>1</name>
                            <description>Bus master 7 reads allowed</description>
                            <value>0b1</value>
                         </enumeratedValue>

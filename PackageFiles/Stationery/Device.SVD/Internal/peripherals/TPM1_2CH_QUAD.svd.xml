@@ -1,7 +1,9 @@
 <!--
 Devices using this peripheral: 
+      MK28F15
       MK65F18
       MK66F18
+      MK82F25615
 -->
       <peripheral>
          <?sourceFile "TPM1_2CH_QUAD" ?>
@@ -534,7 +536,7 @@ Indicates if the TPM counter has overflowed</description>
                <fields>
                   <field>
                      <name>QUADEN</name>
-                     <description>no description available</description>
+                     <description>Enables the quadrature decoder mode</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -552,7 +554,7 @@ Indicates if the TPM counter has overflowed</description>
                   </field>
                   <field>
                      <name>TOFDIR</name>
-                     <description>no description available</description>
+                     <description>Indicates if the TOF bit was set on the top or the bottom of counting</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
@@ -790,6 +792,23 @@ Controls if the counter is reloaded due to a rising edge on the selected input t
                      <description>Trigger Select</description>
                      <bitOffset>24</bitOffset>
                      <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>Channel 0 pin input capture</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>Channel 1 pin input capture</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0011</name>
+                           <description>Channel 0 or Channel 1 pin input capture</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                </fields>
             </register>

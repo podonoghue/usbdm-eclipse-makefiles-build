@@ -4,7 +4,7 @@ Devices using this peripheral:
       MK82F25615
 -->
       <peripheral>
-         <?sourceFile "PDB0_MK28F15" ?>
+         <?sourceFile "PDB0_1CH_2TRIG_1DAC_2PO" ?>
          <name>PDB0</name>
          <description>Programmable Delay Block (1 channel, 2 triggers, 1 DAC, 2 pulse outputs)</description>
          <groupName>PDB</groupName>
@@ -548,64 +548,71 @@ Reading this field returns the value that is effective for the current cycle</de
                   </fields>
                </register>
             </cluster>
-            <register>
-               <name>INTC</name>
-               <description>DAC Interval Trigger n Control register</description>
+            <cluster>
+               <dim>1</dim>
+               <dimIncrement>8</dimIncrement>
+               <dimIndex>0</dimIndex>
+               <name>DAC,@pDAC@f@i</name>
                <addressOffset>0x150</addressOffset>
-               <fields>
-                  <field>
-                     <name>TOE</name>
-                     <description>DAC Interval Trigger Enable</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>EXT</name>
-                     <description>DAC External Trigger Input Enable\n
+               <register>
+                  <name>INTC</name>
+                  <description>DAC Interval Trigger n Control Register</description>
+                  <addressOffset>0x0</addressOffset>
+                  <fields>
+                     <field>
+                        <name>TOE</name>
+                        <description>DAC Interval Trigger Enable</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Disabled</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Enabled</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>EXT</name>
+                        <description>DAC External Trigger Input Enable\n
 Enables the external trigger for DAC interval counter</description>
-                     <bitOffset>1</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled\tDAC interval counter is reset and counting starts when a rising edge is detected on selected trigger input source or software trigger is selected and SWTRIG is written with 1</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled\tDAC external trigger input enabled. DAC interval counter is bypassed and DAC external trigger input triggers the DAC interval trigger</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>INT</name>
-               <description>DAC Interval n Register\n
+                        <bitOffset>1</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Disabled\tDAC interval counter is reset and counting starts when a rising edge is detected on selected trigger input source or software trigger is selected and SWTRIG is written with 1</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Enabled\tDAC external trigger input enabled. DAC interval counter is bypassed and DAC external trigger input triggers the DAC interval trigger</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>INT</name>
+                  <description>DAC Interval n Register\n
 Specifies the interval value for DAC interval trigger. DAC interval trigger triggers DAC[1:0] update when the DAC interval counter is equal to the DACINT. Reading this field returns the value of internal register that is effective for the current PDB cycle</description>
-               <addressOffset>0x154</addressOffset>
-               <fields>
-                  <field>
-                     <name>INT</name>
-                     <description>DAC Interval</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>16</bitWidth>
-                  </field>
-               </fields>
-            </register>
+                  <addressOffset>0x4</addressOffset>
+                  <fields>
+                     <field>
+                        <name>INT</name>
+                        <description>DAC Interval</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>16</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+            </cluster>
             <register>
                <name>POEN</name>
                <description>Pulse-Out Enable Register</description>
