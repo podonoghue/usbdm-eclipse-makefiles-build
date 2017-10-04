@@ -96,14 +96,14 @@
             <choice value="1" name="Reset request" />
          </binaryOption>
 
-            <binaryOption name="mcg_c9_pll_cme" 
+            <binaryOption name="mcg_c9_pll_cme." 
                description="MCG External PLL Clock Monitor Enable"
                toolTip="Enables the loss of clock monitoring circuit for the MCG External PLL (EXT_PLL) reference clock">
                <choice value="0" name="PLL clock monitor disabled" />
                <choice value="1" name="PLL clock monitor enabled" />
             </binaryOption>
 
-            <binaryOption name="mcg_c9_pll_locre" 
+            <binaryOption name="mcg_c9_pll_locre." 
                description="MCG External PLL Loss of Clock Reset Enable"
                toolTip="Determines wheather an interrupt or a reset request is made following a loss of the\n
                         MCG External PLL clock when the MCG is running in PEE mode">
@@ -366,7 +366,7 @@
       </category>
    
       <category name="PLL0" description="PLL0 Settings">
-         <binaryOption name="mcg_c11_pllcs" 
+         <binaryOption name="mcg_c11_pllcs." 
             description="PLL Clock Select (Some targets only)"
             toolTip="Controls whether PLL0 or PLL1 (USB1 PFDCLK) is selected as the MCG\n
                     source when CLKS are programmed in PLL Engaged External (PEE) mode.">
@@ -620,7 +620,13 @@
       \t//! Structure for clock configurations
       \tstruct ClockInfo {
       \t   //! System Clock Divider Register 1
-      \t   const uint32_t clkdiv1;
+      \t   const uint32_t clkdiv1;\n\n
+      
+      \t#ifdef SIM_CLKDIV3_PLLFLLDIV
+      \t   //! PLLFLL clock divider divisor & fraction
+      \t   const uint32_t clkdiv3;
+      \t#endif\n\n
+      
       \t   //! Clock Mode
       \t   const ClockMode clockMode:8;
       \t   //! Control Register 1 - FRDIV, IRCLKEN, IREFSTEN, (-CLKS, -IREFS)
@@ -709,6 +715,11 @@
       \t      SIM_CLKDIV1_OUTDIV2($(/SIM/sim_clkdiv1_outdiv2.:0))|  // Bus clock
       \t      SIM_CLKDIV1_OUTDIV1($(/SIM/sim_clkdiv1_outdiv1.:0)),  // Core/system clock\n\n
               
+      \t#ifdef SIM_CLKDIV3_PLLFLLDIV
+      \t      //! System Clock Divider Register 3
+      \t      $(/SIM/sim_clkdiv3_pllfll.:0),
+      \t#endif\n\n
+      
       \t      //! Clock Mode
       \t      $(clock_mode.),\n\n
               
@@ -753,7 +764,7 @@
       \t      MCG_C9_PLL_CME($(mcg_c9_pll_cme.))   | // PLL_CME MCG External PLL Clock Monitor Enable
       \t      MCG_C9_PLL_LOCRE($(mcg_c9_pll_locre.)),  // PLL_LOCRE   MCG External PLL Loss of Clock Reset Enable
       
-      \t/     /! Control Register 11
+      \t      //! Control Register 11
       \t      MCG_C11_PLLCS($(mcg_c11_pllcs.)), // PLLCS PLL Clock Select\n
       \t   },
    ]]></template>

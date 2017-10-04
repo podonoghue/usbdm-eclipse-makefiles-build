@@ -548,7 +548,13 @@
       \t//! Structure for clock configurations
       \tstruct ClockInfo {
       \t   //! System Clock Divider Register 1
-      \t   const uint32_t clkdiv1;
+      \t   const uint32_t clkdiv1;\n\n
+      
+      \t#ifdef SIM_CLKDIV3_PLLFLLDIV
+      \t   //! PLLFLL clock divider divisor & fraction
+      \t   const uint32_t clkdiv3;
+      \t#endif\n\n
+      
       \t   //! Clock Mode
       \t   const ClockMode clockMode:8;
       \t   //! Control Register 1 - FRDIV, IRCLKEN, IREFSTEN, (-CLKS, -IREFS)
@@ -632,6 +638,11 @@
       \t      SIM_CLKDIV1_OUTDIV2($(/SIM/sim_clkdiv1_outdiv2.:0))|  // Bus clock
       \t      SIM_CLKDIV1_OUTDIV1($(/SIM/sim_clkdiv1_outdiv1.:0)),  // Core/system clock\n\n
               
+      \t#ifdef SIM_CLKDIV3_PLLFLLDIV
+      \t      //! System Clock Divider Register 3
+      \t      $(/SIM/sim_clkdiv3_pllfll.:0),
+      \t#endif\n\n
+      
       \t      //! Clock Mode
       \t      $(clock_mode.),\n\n
               
