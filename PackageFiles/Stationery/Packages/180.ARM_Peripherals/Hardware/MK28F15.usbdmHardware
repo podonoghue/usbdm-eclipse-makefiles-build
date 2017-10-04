@@ -1,0 +1,2441 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE root SYSTEM "_Hardware.dtd">
+<!-- MK28F15.usbdmHardware -->
+<!-- 
+   Generated from MK28F15.csv
+-->
+
+<root version="1.2.0">
+   <family name="MK28F15">
+      <device name="FRDM_K28F"    manual="K28P210M150SF5RM" package="FRDM_K28F" />
+      <device name="MK28FN2M0CAU15R" manual="K28P210M150SF5RM" package="WLCSP_210" />
+      <device name="MK28FN2M0VMI15" manual="K28P210M150SF5RM" package="BGA_169" />
+   </family>
+   <peripherals>
+      <peripheral baseName="ADC"      instance="0"        version="adc0_diff_a">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForAdc" />
+         <clock reg="SCGC6"         mask="SIM_SCGC6_ADC0_MASK" />
+         <irq num="ADC0_IRQn" />
+      </peripheral>
+      <peripheral baseName="CMP"      instance="0"        version="cmp0_mk22f">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCmp" />
+         <clock reg="SCGC4"         mask="SIM_SCGC4_CMP_MASK" />
+         <irq num="CMP0_IRQn" />
+      </peripheral>
+      <peripheral baseName="CMP"      instance="1"        version="cmp0_mk22f">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCmp" />
+         <clock reg="SCGC4"         mask="SIM_SCGC4_CMP_MASK" />
+         <irq num="CMP1_IRQn" />
+      </peripheral>
+      <peripheral baseName="CMT"      instance=""         version="cmt_0">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCmt" />
+         <clock reg="SCGC4"         mask="SIM_SCGC4_CMT_MASK" />
+         <irq num="CMT_IRQn" />
+      </peripheral>
+      <peripheral baseName="CONTROL"  instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForControl" />
+      </peripheral>
+      <peripheral baseName="CRC"      instance="0"        version="crc0_0x40032000">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
+         <clock reg="SCGC6"         mask="SIM_SCGC6_CRC_MASK" />
+      </peripheral>
+      <peripheral baseName="Console"  instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForConsole" />
+      </peripheral>
+      <peripheral baseName="DAC"      instance="0"        version="dac0_mk28f15">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDac" />
+         <clock reg="SCGC6"         mask="SIM_SCGC6_DAC0_MASK" />
+      </peripheral>
+      <peripheral baseName="DMA"      instance="0"        version="dma0_32ch_ears">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDma" />
+         <clock reg="SCGC7"         mask="SIM_SCGC7_DMA_MASK" />
+         <irq num="DMA0_DMA16_IRQn" />
+         <irq num="DMA1_DMA17_IRQn" />
+         <irq num="DMA2_DMA18_IRQn" />
+         <irq num="DMA3_DMA19_IRQn" />
+         <irq num="DMA4_DMA20_IRQn" />
+         <irq num="DMA5_DMA21_IRQn" />
+         <irq num="DMA6_DMA22_IRQn" />
+         <irq num="DMA7_DMA23_IRQn" />
+         <irq num="DMA8_DMA24_IRQn" />
+         <irq num="DMA9_DMA25_IRQn" />
+         <irq num="DMA10_DMA26_IRQn" />
+         <irq num="DMA11_DMA27_IRQn" />
+         <irq num="DMA12_DMA28_IRQn" />
+         <irq num="DMA13_DMA29_IRQn" />
+         <irq num="DMA14_DMA30_IRQn" />
+         <irq num="DMA15_DMA31_IRQn" />
+         <param key="NumChannels"   value="64" />
+      </peripheral>
+      <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_32ch_trig_mk28f15">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDmaMux" />
+         <clock reg="SCGC6"         mask="SIM_SCGC6_DMAMUX_MASK" />
+      </peripheral>
+      <peripheral baseName="EWM"      instance=""         version="ewm_mk28f15">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForEwm" />
+         <clock reg="SCGC4"         mask="SIM_SCGC4_EWM_MASK" />
+      </peripheral>
+      <peripheral baseName="FB"       instance=""         version="fb_0">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexBus" />
+      </peripheral>
+      <peripheral baseName="FLEXBUS"  instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+         <clock reg="SCGC7"         mask="SIM_SCGC7_FLEXBUS_MASK" />
+      </peripheral>
+      <peripheral baseName="FLEXIO"   instance=""         version="flexio0_mk28f15">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
+         <clock reg="SCGC2"         mask="SIM_SCGC2_FLEXIO_MASK" />
+      </peripheral>
+      <peripheral baseName="FTFE"     instance=""         version="ftfe_xacch">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlash" />
+         <clock reg="SCGC6"         mask="SIM_SCGC6_FTF_MASK" />
+         <param key="dflash_phrase_size" value="8" />
+         <param key="pflash_sector_size" value="4096" />
+         <param key="dflash_sector_size" value="4096" />
+         <param key="pflash_phrase_size" value="8" />
+         <param key="peripheral_file" value="ftfe_128k_flexrom" />
+      </peripheral>
+      <peripheral baseName="FTM"      instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForShared" />
+      </peripheral>
+      <peripheral baseName="FTM"      instance="0"        version="ftm0_8ch_icrst">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
+         <clock reg="SCGC6"         mask="SIM_SCGC6_FTM0_MASK" />
+         <irq num="FTM0_IRQn" />
+      </peripheral>
+      <peripheral baseName="FTM"      instance="1"        version="ftm1_8ch_icrst">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
+         <clock reg="SCGC6"         mask="SIM_SCGC6_FTM1_MASK" />
+         <irq num="FTM1_IRQn" />
+      </peripheral>
+      <peripheral baseName="FTM"      instance="2"        version="ftm1_8ch_icrst">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
+         <clock reg="SCGC6"         mask="SIM_SCGC6_FTM2_MASK" />
+         <irq num="FTM1_IRQn" />
+         <irq num="FTM2_IRQn" />
+      </peripheral>
+      <peripheral baseName="FTM"      instance="3"        version="ftm0_8ch_icrst">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
+         <clock reg="SCGC3"         mask="SIM_SCGC3_FTM3_MASK" />
+         <irq num="FTM0_IRQn" />
+      </peripheral>
+      <peripheral baseName="GPIO"     instance="A"        version="gpioa_0x400ff000">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
+         <clock reg="SCGC5"         mask="SIM_SCGC5_PORTA_MASK" />
+         <irq num="PORTA_IRQn" />
+      </peripheral>
+      <peripheral baseName="GPIO"     instance="B"        version="gpioa_0x400ff000">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
+         <clock reg="SCGC5"         mask="SIM_SCGC5_PORTB_MASK" />
+         <irq num="PORTB_IRQn" />
+      </peripheral>
+      <peripheral baseName="GPIO"     instance="C"        version="gpioa_0x400ff000">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
+         <clock reg="SCGC5"         mask="SIM_SCGC5_PORTC_MASK" />
+         <irq num="PORTC_IRQn" />
+      </peripheral>
+      <peripheral baseName="GPIO"     instance="D"        version="gpioa_0x400ff000">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
+         <clock reg="SCGC5"         mask="SIM_SCGC5_PORTD_MASK" />
+         <irq num="PORTD_IRQn" />
+      </peripheral>
+      <peripheral baseName="GPIO"     instance="E"        version="gpioa_0x400ff000">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
+         <clock reg="SCGC5"         mask="SIM_SCGC5_PORTE_MASK" />
+         <irq num="PORTE_IRQn" />
+      </peripheral>
+      <peripheral baseName="I2C"      instance="0"        version="i2c0_mk28f15">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2c" />
+         <clock reg="SCGC4"         mask="SIM_SCGC4_I2C0_MASK" />
+         <irq num="I2C0_IRQn" />
+      </peripheral>
+      <peripheral baseName="I2C"      instance="1"        version="i2c0_mk28f15">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2c" />
+         <clock reg="SCGC4"         mask="SIM_SCGC4_I2C1_MASK" />
+         <irq num="I2C1_IRQn" />
+      </peripheral>
+      <peripheral baseName="I2C"      instance="2"        version="i2c0_mk28f15">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2c" />
+      </peripheral>
+      <peripheral baseName="I2C"      instance="3"        version="i2c0_mk28f15">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2c" />
+         <clock reg="SCGC1"         mask="SIM_SCGC1_I2C3_MASK" />
+      </peripheral>
+      <peripheral baseName="I2S"      instance="0"        version="i2s0_mk28f15">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2s" />
+         <clock reg="SCGC6"         mask="SIM_SCGC6_I2S0_MASK" />
+         <irq num="I2S0_Tx_IRQn" />
+         <irq num="I2S0_Rx_IRQn" />
+      </peripheral>
+      <peripheral baseName="I2S"      instance="1"        version="i2s0_mk28f15">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2s" />
+         <clock reg="SCGC3"         mask="SIM_SCGC3_I2S1_MASK" />
+         <irq num="I2S1_Tx_IRQn" />
+         <irq num="I2S1_Rx_IRQn" />
+      </peripheral>
+      <peripheral baseName="LLWU"     instance=""         version="llwu_pe8_filt4">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
+      </peripheral>
+      <peripheral baseName="LPTMR"    instance="0"        version="lptmr0_0">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />
+         <clock reg="SCGC5"         mask="SIM_SCGC5_LPTMR0_MASK" />
+         <irq num="LPTMR0_LPTMR1_IRQn" />
+      </peripheral>
+      <peripheral baseName="LPTMR"    instance="1"        version="lptmr0_0">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />
+         <clock reg="SCGC5"         mask="SIM_SCGC5_LPTMR1_MASK" />
+         <irq num="LPTMR0_LPTMR1_IRQn" />
+      </peripheral>
+      <peripheral baseName="LPUART"   instance="0"        version="lpuart0_fifo_0x400c4000">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLpuart" />
+         <clock reg="SCGC2"         mask="SIM_SCGC2_LPUART0_MASK" />
+         <irq num="LPUART0_IRQn" />
+      </peripheral>
+      <peripheral baseName="LPUART"   instance="1"        version="lpuart0_fifo_0x400c4000">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLpuart" />
+         <clock reg="SCGC2"         mask="SIM_SCGC2_LPUART1_MASK" />
+         <irq num="LPUART1_IRQn" />
+      </peripheral>
+      <peripheral baseName="LPUART"   instance="2"        version="lpuart0_fifo_0x400c4000">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLpuart" />
+         <clock reg="SCGC2"         mask="SIM_SCGC2_LPUART2_MASK" />
+         <irq num="LPUART2_IRQn" />
+      </peripheral>
+      <peripheral baseName="LPUART"   instance="3"        version="lpuart0_fifo_0x400c4000">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLpuart" />
+         <clock reg="SCGC2"         mask="SIM_SCGC2_LPUART3_MASK" />
+         <irq num="LPUART3_IRQn" />
+      </peripheral>
+      <peripheral baseName="LPUART"   instance="4"        version="lpuart0_fifo_0x400c4000">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLpuart" />
+         <clock reg="SCGC2"         mask="SIM_SCGC2_LPUART4_MASK" />
+         <irq num="LPUART4_IRQn" />
+      </peripheral>
+      <peripheral baseName="MCG"      instance=""         version="mcg_mk28f15">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcg" />
+         <irq num="MCG_IRQn" />
+      </peripheral>
+      <peripheral baseName="MPU"      instance=""         version="mpu_mk28f15">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
+         <clock reg="SCGC7"         mask="SIM_SCGC7_MPU_MASK" />
+      </peripheral>
+      <peripheral baseName="OSC"      instance="0"        version="osc0_div">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForOsc" />
+      </peripheral>
+      <peripheral baseName="PDB"      instance="0"        version="pdb0_1ch_2trig_1dac_2po">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPdb" />
+         <clock reg="SCGC6"         mask="SIM_SCGC6_PDB_MASK" />
+         <irq num="PDB0_IRQn" />
+      </peripheral>
+      <peripheral baseName="PIT"      instance=""         version="pit_4ch_ltmr64">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPit" />
+         <clock reg="SCGC6"         mask="SIM_SCGC6_PIT_MASK" />
+         <irq num="PIT0_IRQn" />
+         <irq num="PIT1_IRQn" />
+         <irq num="PIT2_IRQn" />
+         <irq num="PIT3_IRQn" />
+      </peripheral>
+      <peripheral baseName="PMC"      instance=""         version="pmc_hvd_sram">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPmc" />
+         <irq num="PMC_IRQn" />
+      </peripheral>
+      <peripheral baseName="POWER"    instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPower" />
+      </peripheral>
+      <peripheral baseName="QSPI"     instance="0"        version="qspi0_0x400da000">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
+         <clock reg="SCGC2"         mask="SIM_SCGC2_QSPI_MASK" />
+      </peripheral>
+      <peripheral baseName="RCM"      instance=""         version="rcm_mk28f15">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRcm" />
+      </peripheral>
+      <peripheral baseName="RTC"      instance=""         version="rtc_mk28f15">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRtc" />
+         <clock reg="SCGC6"         mask="SIM_SCGC6_RTC_MASK" />
+         <irq num="RTC_Alarm_IRQn" />
+         <irq num="RTC_Seconds_IRQn" />
+      </peripheral>
+      <peripheral baseName="SDHC"     instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+         <clock reg="SCGC3"         mask="SIM_SCGC3_SDHC_MASK" />
+         <irq num="FTM1_IRQn" />
+      </peripheral>
+      <peripheral baseName="SDHC"     instance="0"        version="sdhc_mk28f15">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSdhc" />
+      </peripheral>
+      <peripheral baseName="SDRAMC"   instance=""         version="sdramc_0">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSdramc" />
+         <clock reg="SCGC7"         mask="SIM_SCGC7_SDRAMC_MASK" />
+      </peripheral>
+      <peripheral baseName="SIM"      instance=""         version="sim_mk28f15">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSim" />
+         <param key="flashFreq"     value="25MHz" />
+         <param key="coreFreq"      value="150MHz" />
+         <param key="busFreq"       value="75MHz" />
+         <param key="flexFreq"      value="75MHz" />
+      </peripheral>
+      <peripheral baseName="SMC"      instance=""         version="smc_mk28f15">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSmc" />
+      </peripheral>
+      <peripheral baseName="SPI"      instance="0"        version="spi0_mk_pcsis6_pcsse">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
+         <clock reg="SCGC6"         mask="SIM_SCGC6_SPI0_MASK" />
+         <irq num="SPI0_IRQn" />
+      </peripheral>
+      <peripheral baseName="SPI"      instance="1"        version="spi0_mk_pcsis6_pcsse">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
+         <clock reg="SCGC6"         mask="SIM_SCGC6_SPI1_MASK" />
+         <irq num="SPI0_IRQn" />
+         <irq num="SPI1_IRQn" />
+      </peripheral>
+      <peripheral baseName="SPI"      instance="2"        version="spi0_mk_pcsis6_pcsse">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
+      </peripheral>
+      <peripheral baseName="SPI"      instance="3"        version="spi0_mk_pcsis6_pcsse">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
+         <clock reg="SCGC3"         mask="SIM_SCGC3_SPI3_MASK" />
+         <irq num="SPI0_IRQn" />
+      </peripheral>
+      <peripheral baseName="TPM"      instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForShared" />
+      </peripheral>
+      <peripheral baseName="TPM"      instance="1"        version="tpm1_2ch_quad">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
+         <clock reg="SCGC2"         mask="SIM_SCGC2_TPM1_MASK" />
+      </peripheral>
+      <peripheral baseName="TPM"      instance="2"        version="tpm1_2ch_quad">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
+         <clock reg="SCGC2"         mask="SIM_SCGC2_TPM2_MASK" />
+      </peripheral>
+      <peripheral baseName="TRNG"     instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+         <clock reg="SCGC3"         mask="SIM_SCGC3_TRNG_MASK" />
+      </peripheral>
+      <peripheral baseName="USB"      instance="0"        version="usb0_mk28f15">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUsb" />
+         <clock reg="SCGC4"         mask="SIM_SCGC4_USBOTG_MASK" />
+         <irq num="USB0_IRQn" />
+      </peripheral>
+      <peripheral baseName="USBDCD"   instance=""         version="usbdcd_mk28f15">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUsbdcd" />
+         <clock reg="SCGC6"         mask="SIM_SCGC6_USBDCD_MASK" />
+      </peripheral>
+      <peripheral baseName="USBHS"    instance=""         version="usbhs_8endpt">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUsbhs" />
+         <clock reg="SCGC3"         mask="SIM_SCGC3_USBHS_MASK" />
+      </peripheral>
+      <peripheral baseName="USBHSDCD" instance=""         version="usbdcd_mk28f15">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+         <clock reg="SCGC3"         mask="SIM_SCGC3_USBHSDCD_MASK" />
+      </peripheral>
+      <peripheral baseName="USBHSPHY" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+         <clock reg="SCGC3"         mask="SIM_SCGC3_USBHSPHY_MASK" />
+      </peripheral>
+      <peripheral baseName="VREF"     instance=""         version="vref_c">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForVref" />
+         <clock reg="SCGC4"         mask="SIM_SCGC4_VREF_MASK" />
+      </peripheral>
+   </peripherals>
+   <pins>
+      <pin name="ADC0_DM0"     isFixed="true">
+         <mux sel="fixed"         signal="ADC0_DM0" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="ADC0_DM1"     isFixed="true">
+         <mux sel="fixed"         signal="ADC0_DM1" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="ADC0_DM3"     isFixed="true">
+         <mux sel="fixed"         signal="ADC0_DM3" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="ADC0_DP0"     isFixed="true">
+         <mux sel="fixed"         signal="ADC0_DP0" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="ADC0_DP1"     isFixed="true">
+         <mux sel="fixed"         signal="ADC0_DP1" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="ADC0_DP3"     isFixed="true">
+         <mux sel="fixed"         signal="ADC0_DP3" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="ADC0_SE16"    isFixed="true">
+         <mux sel="fixed"         signal="ADC0_SE16" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="DAC0_OUT"     isFixed="true">
+         <mux sel="fixed"         signal="DAC0_OUT" />
+         <mux sel="fixed"         signal="CMP1_IN3" />
+         <mux sel="fixed"         signal="ADC0_SE23" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="EXTAL32"      isFixed="true">
+         <mux sel="fixed"         signal="EXTAL32" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="RESET_b"      isFixed="true">
+         <mux sel="fixed"         signal="RESET_b" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="RTC_WAKEUP_b" isFixed="true">
+         <mux sel="fixed"         signal="RTC_WAKEUP_b" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="USB0_DM"      isFixed="true">
+         <mux sel="fixed"         signal="USB0_DM" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="USB0_DP"      isFixed="true">
+         <mux sel="fixed"         signal="USB0_DP" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="USB1_DM"      isFixed="true">
+         <mux sel="fixed"         signal="USB1_DM" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="USB1_DP"      isFixed="true">
+         <mux sel="fixed"         signal="USB1_DP" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="USB1_VBUS"    isFixed="true">
+         <mux sel="fixed"         signal="USB1_VBUS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="USB1_VSS"     isFixed="true">
+         <mux sel="fixed"         signal="USB1_VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VBAT"         isFixed="true">
+         <mux sel="fixed"         signal="VBAT" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VDD"          isFixed="true">
+         <mux sel="fixed"         signal="VDD" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VDD1"         isFixed="true">
+         <mux sel="fixed"         signal="VDD" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VDD2"         isFixed="true">
+         <mux sel="fixed"         signal="VDD" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VDD3"         isFixed="true">
+         <mux sel="fixed"         signal="VDD" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VDD4"         isFixed="true">
+         <mux sel="fixed"         signal="VDD" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VDD5"         isFixed="true">
+         <mux sel="fixed"         signal="VDD" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VDD6"         isFixed="true">
+         <mux sel="fixed"         signal="VDD" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VDD7"         isFixed="true">
+         <mux sel="fixed"         signal="VDD" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VDD8"         isFixed="true">
+         <mux sel="fixed"         signal="VDD" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VDD9"         isFixed="true">
+         <mux sel="fixed"         signal="VDD" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VDD10"        isFixed="true">
+         <mux sel="fixed"         signal="VDD" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VDDA"         isFixed="true">
+         <mux sel="fixed"         signal="VDDA" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VDDIO_E"      isFixed="true">
+         <mux sel="fixed"         signal="VDDIO_E" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VDDIO_E1"     isFixed="true">
+         <mux sel="fixed"         signal="VDDIO_E" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VDDIO_E2"     isFixed="true">
+         <mux sel="fixed"         signal="VDDIO_E" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VDD_CORE"     isFixed="true">
+         <mux sel="fixed"         signal="VDD_CORE" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VDD_CORE1"    isFixed="true">
+         <mux sel="fixed"         signal="VDD_CORE" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VDD_CORE2"    isFixed="true">
+         <mux sel="fixed"         signal="VDD_CORE" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VDD_CORE3"    isFixed="true">
+         <mux sel="fixed"         signal="VDD_CORE" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VREFH"        isFixed="true">
+         <mux sel="fixed"         signal="VREFH" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VREFL"        isFixed="true">
+         <mux sel="fixed"         signal="VREFL" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VREF_OUT"     isFixed="true">
+         <mux sel="fixed"         signal="VREF_OUT" />
+         <mux sel="fixed"         signal="CMP1_IN5" />
+         <mux sel="fixed"         signal="CMP0_IN5" />
+         <mux sel="fixed"         signal="ADC0_SE22" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VREG_IN0"     isFixed="true">
+         <mux sel="fixed"         signal="VREG_IN0" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VREG_IN1"     isFixed="true">
+         <mux sel="fixed"         signal="Disabled" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VREG_OUT"     isFixed="true">
+         <mux sel="fixed"         signal="VREG_OUT" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS"          isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS1"         isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS2"         isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS3"         isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS4"         isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS5"         isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS6"         isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS7"         isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS8"         isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS9"         isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS10"        isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS11"        isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS12"        isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS13"        isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS14"        isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS15"        isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS16"        isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS17"        isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS18"        isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS19"        isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS20"        isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS21"        isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS22"        isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS23"        isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS24"        isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS25"        isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS26"        isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS27"        isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS28"        isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS29"        isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS30"        isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS31"        isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS32"        isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS33"        isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS34"        isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS35"        isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS36"        isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS37"        isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS38"        isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS39"        isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS40"        isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS41"        isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS42"        isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSS43"        isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSSA"         isFixed="true">
+         <mux sel="fixed"         signal="VSSA" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="VSSA1"        isFixed="true">
+         <mux sel="fixed"         signal="VSSA" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="XTAL32"       isFixed="true">
+         <mux sel="fixed"         signal="XTAL32" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="PTA0">
+         <mux sel="mux1"          signal="GPIOA_0" />
+         <mux sel="mux2"          signal="LPUART0_CTS_b" />
+         <mux sel="mux3"          signal="FTM0_CH5" />
+         <mux sel="mux5"          signal="FXIO0_D10" />
+         <mux sel="mux7"          signal="JTAG_TCLK" />
+         <mux sel="mux7"          signal="SWD_CLK" />
+         <reset sel="mux7" />
+      </pin>
+      <pin name="PTA1">
+         <mux sel="mux1"          signal="GPIOA_1" />
+         <mux sel="mux2"          signal="LPUART0_RX" />
+         <mux sel="mux3"          signal="FTM0_CH6" />
+         <mux sel="mux4"          signal="I2C3_SDA" />
+         <mux sel="mux5"          signal="FXIO0_D11" />
+         <mux sel="mux7"          signal="JTAG_TDI" />
+         <reset sel="mux7" />
+      </pin>
+      <pin name="PTA2">
+         <mux sel="mux1"          signal="GPIOA_2" />
+         <mux sel="mux2"          signal="LPUART0_TX" />
+         <mux sel="mux3"          signal="FTM0_CH7" />
+         <mux sel="mux4"          signal="I2C3_SCL" />
+         <mux sel="mux5"          signal="FXIO0_D12" />
+         <mux sel="mux7"          signal="JTAG_TDO" />
+         <mux sel="mux7"          signal="TRACE_SWO" />
+         <reset sel="mux7" />
+      </pin>
+      <pin name="PTA3">
+         <mux sel="mux1"          signal="GPIOA_3" />
+         <mux sel="mux2"          signal="LPUART0_RTS_b" />
+         <mux sel="mux3"          signal="FTM0_CH0" />
+         <mux sel="mux5"          signal="FXIO0_D13" />
+         <mux sel="mux7"          signal="JTAG_TMS" />
+         <mux sel="mux7"          signal="SWD_DIO" />
+         <reset sel="mux7" />
+      </pin>
+      <pin name="PTA4">
+         <mux sel="mux1"          signal="GPIOA_4" />
+         <mux sel="mux1"          signal="LLWU_P3" />
+         <mux sel="mux3"          signal="FTM0_CH1" />
+         <mux sel="mux5"          signal="FXIO0_D14" />
+         <mux sel="mux7"          signal="NMI_b" />
+         <reset sel="mux7" />
+      </pin>
+      <pin name="PTA5">
+         <mux sel="mux1"          signal="GPIOA_5" />
+         <mux sel="mux2"          signal="USB0_CLKIN" />
+         <mux sel="mux3"          signal="FTM0_CH2" />
+         <mux sel="mux5"          signal="FXIO0_D15" />
+         <mux sel="mux6"          signal="I2S0_TX_BCLK" />
+         <mux sel="mux7"          signal="JTAG_TRST_b" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTA6">
+         <mux sel="mux1"          signal="GPIOA_6" />
+         <mux sel="mux2"          signal="I2C2_SCL" />
+         <mux sel="mux3"          signal="FTM0_CH3" />
+         <mux sel="mux5"          signal="CLKOUT" />
+         <mux sel="mux7"          signal="TRACE_CLKOUT" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTA7">
+         <mux sel="mux0"          signal="ADC0_SE10" />
+         <mux sel="mux1"          signal="GPIOA_7" />
+         <mux sel="mux2"          signal="I2C2_SDA" />
+         <mux sel="mux3"          signal="FTM0_CH4" />
+         <mux sel="mux7"          signal="TRACE_D3" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTA8">
+         <mux sel="mux0"          signal="ADC0_SE11" />
+         <mux sel="mux1"          signal="GPIOA_8" />
+         <mux sel="mux2"          signal="I2C1_SCL" />
+         <mux sel="mux3"          signal="FTM1_CH0" />
+         <mux sel="mux6"          signal="FTM1_QD_PHA" />
+         <mux sel="mux6"          signal="TPM1_CH0" />
+         <mux sel="mux7"          signal="TRACE_D2" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTA9">
+         <mux sel="mux1"          signal="GPIOA_9" />
+         <mux sel="mux2"          signal="I2C1_SDA" />
+         <mux sel="mux3"          signal="FTM1_CH1" />
+         <mux sel="mux6"          signal="FTM1_QD_PHB" />
+         <mux sel="mux6"          signal="TPM1_CH1" />
+         <mux sel="mux7"          signal="TRACE_D1" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTA10">
+         <mux sel="mux1"          signal="GPIOA_10" />
+         <mux sel="mux1"          signal="LLWU_P22" />
+         <mux sel="mux2"          signal="I2C2_SDA" />
+         <mux sel="mux3"          signal="FTM2_CH0" />
+         <mux sel="mux5"          signal="FXIO0_D16" />
+         <mux sel="mux6"          signal="FTM2_QD_PHA" />
+         <mux sel="mux6"          signal="TPM2_CH0" />
+         <mux sel="mux7"          signal="TRACE_D0" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTA11">
+         <mux sel="mux1"          signal="GPIOA_11" />
+         <mux sel="mux1"          signal="LLWU_P23" />
+         <mux sel="mux2"          signal="I2C2_SCL" />
+         <mux sel="mux3"          signal="FTM2_CH1" />
+         <mux sel="mux5"          signal="FXIO0_D17" />
+         <mux sel="mux6"          signal="FTM2_QD_PHB" />
+         <mux sel="mux6"          signal="TPM2_CH1" />
+         <mux sel="mux7"          signal="USB1_ID" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTA12">
+         <mux sel="mux1"          signal="GPIOA_12" />
+         <mux sel="mux3"          signal="FTM1_CH0" />
+         <mux sel="mux4"          signal="TRACE_CLKOUT" />
+         <mux sel="mux5"          signal="FXIO0_D18" />
+         <mux sel="mux6"          signal="I2S0_TXD0" />
+         <mux sel="mux7"          signal="FTM1_QD_PHA" />
+         <mux sel="mux7"          signal="TPM1_CH0" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTA13">
+         <mux sel="mux1"          signal="GPIOA_13" />
+         <mux sel="mux1"          signal="LLWU_P4" />
+         <mux sel="mux3"          signal="FTM1_CH1" />
+         <mux sel="mux4"          signal="TRACE_D3" />
+         <mux sel="mux5"          signal="FXIO0_D19" />
+         <mux sel="mux6"          signal="I2S0_TX_FS" />
+         <mux sel="mux7"          signal="FTM1_QD_PHB" />
+         <mux sel="mux7"          signal="TPM1_CH1" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTA14">
+         <mux sel="mux1"          signal="GPIOA_14" />
+         <mux sel="mux2"          signal="SPI0_PCS0" />
+         <mux sel="mux3"          signal="LPUART0_TX" />
+         <mux sel="mux4"          signal="TRACE_D2" />
+         <mux sel="mux5"          signal="FXIO0_D20" />
+         <mux sel="mux6"          signal="I2S0_RX_BCLK" />
+         <mux sel="mux7"          signal="I2S0_TXD1" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTA15">
+         <mux sel="mux1"          signal="GPIOA_15" />
+         <mux sel="mux2"          signal="SPI0_SCK" />
+         <mux sel="mux3"          signal="LPUART0_RX" />
+         <mux sel="mux4"          signal="TRACE_D1" />
+         <mux sel="mux5"          signal="FXIO0_D21" />
+         <mux sel="mux6"          signal="I2S0_RXD0" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTA16">
+         <mux sel="mux1"          signal="GPIOA_16" />
+         <mux sel="mux2"          signal="SPI0_SOUT" />
+         <mux sel="mux3"          signal="LPUART0_CTS_b" />
+         <mux sel="mux4"          signal="TRACE_D0" />
+         <mux sel="mux5"          signal="FXIO0_D22" />
+         <mux sel="mux6"          signal="I2S0_RX_FS" />
+         <mux sel="mux7"          signal="I2S0_RXD1" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTA17">
+         <mux sel="mux1"          signal="GPIOA_17" />
+         <mux sel="mux2"          signal="SPI0_SIN" />
+         <mux sel="mux3"          signal="LPUART0_RTS_b" />
+         <mux sel="mux5"          signal="FXIO0_D23" />
+         <mux sel="mux6"          signal="I2S0_MCLK" />
+         <mux sel="mux7"          signal="I2S1_MCLK" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTA18">
+         <mux sel="mux0"          signal="EXTAL0" />
+         <mux sel="mux1"          signal="GPIOA_18" />
+         <mux sel="mux3"          signal="FTM0_FLT2" />
+         <mux sel="mux4"          signal="FTM_CLKIN0" />
+         <mux sel="mux7"          signal="TPM_CLKIN0" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTA19">
+         <mux sel="mux0"          signal="XTAL0" />
+         <mux sel="mux1"          signal="GPIOA_19" />
+         <mux sel="mux3"          signal="FTM1_FLT0" />
+         <mux sel="mux4"          signal="FTM_CLKIN1" />
+         <mux sel="mux6"          signal="LPTMR0_ALT1" />
+         <mux sel="mux6"          signal="LPTMR1_ALT1" />
+         <mux sel="mux7"          signal="TPM_CLKIN1" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTA20">
+         <mux sel="mux1"          signal="GPIOA_20" />
+         <mux sel="mux2"          signal="I2C0_SCL" />
+         <mux sel="mux3"          signal="LPUART4_TX" />
+         <mux sel="mux4"          signal="FTM_CLKIN1" />
+         <mux sel="mux5"          signal="FXIO0_D8" />
+         <mux sel="mux6"          signal="EWM_OUT_b" />
+         <mux sel="mux7"          signal="TPM_CLKIN1" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTA21">
+         <mux sel="mux1"          signal="GPIOA_21" />
+         <mux sel="mux1"          signal="LLWU_P21" />
+         <mux sel="mux2"          signal="I2C0_SDA" />
+         <mux sel="mux3"          signal="LPUART4_RX" />
+         <mux sel="mux5"          signal="FXIO0_D9" />
+         <mux sel="mux6"          signal="EWM_IN" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTA22">
+         <mux sel="mux1"          signal="GPIOA_22" />
+         <mux sel="mux3"          signal="LPUART4_CTS_b" />
+         <mux sel="mux5"          signal="FXIO0_D6" />
+         <mux sel="mux6"          signal="RTC_CLKOUT" />
+         <mux sel="mux7"          signal="USB0_CLKIN" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTA23">
+         <mux sel="mux1"          signal="GPIOA_23" />
+         <mux sel="mux3"          signal="LPUART4_RTS_b" />
+         <mux sel="mux5"          signal="FXIO0_D7" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTA24">
+         <mux sel="mux1"          signal="GPIOA_24" />
+         <mux sel="mux3"          signal="LPUART2_TX" />
+         <mux sel="mux4"          signal="SDHC0_D1" />
+         <mux sel="mux5"          signal="FB_A15" />
+         <mux sel="mux5"          signal="SDRAM_D15" />
+         <mux sel="mux6"          signal="FB_A29" />
+         <mux sel="mux7"          signal="I2S1_TX_BCLK" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTA25">
+         <mux sel="mux1"          signal="GPIOA_25" />
+         <mux sel="mux3"          signal="LPUART2_RX" />
+         <mux sel="mux4"          signal="SDHC0_D0" />
+         <mux sel="mux5"          signal="FB_A14" />
+         <mux sel="mux5"          signal="SDRAM_D14" />
+         <mux sel="mux6"          signal="FB_A28" />
+         <mux sel="mux7"          signal="I2S1_TX_FS" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTA26">
+         <mux sel="mux1"          signal="GPIOA_26" />
+         <mux sel="mux3"          signal="LPUART2_CTS_b" />
+         <mux sel="mux4"          signal="SDHC0_DCLK" />
+         <mux sel="mux5"          signal="FB_A13" />
+         <mux sel="mux5"          signal="SDRAM_D13" />
+         <mux sel="mux6"          signal="FB_A27" />
+         <mux sel="mux7"          signal="I2S1_TXD0" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTA27">
+         <mux sel="mux1"          signal="GPIOA_27" />
+         <mux sel="mux3"          signal="LPUART2_RTS_b" />
+         <mux sel="mux4"          signal="SDHC0_CMD" />
+         <mux sel="mux5"          signal="FB_A12" />
+         <mux sel="mux5"          signal="SDRAM_D12" />
+         <mux sel="mux6"          signal="FB_A26" />
+         <mux sel="mux7"          signal="I2S1_TXD1" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTA28">
+         <mux sel="mux1"          signal="GPIOA_28" />
+         <mux sel="mux3"          signal="LPUART3_TX" />
+         <mux sel="mux4"          signal="SDHC0_D3" />
+         <mux sel="mux6"          signal="FB_A25" />
+         <mux sel="mux7"          signal="I2S1_RXD1" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTA29">
+         <mux sel="mux1"          signal="GPIOA_29" />
+         <mux sel="mux3"          signal="LPUART3_RX" />
+         <mux sel="mux4"          signal="SDHC0_D2" />
+         <mux sel="mux6"          signal="FB_A24" />
+         <mux sel="mux7"          signal="I2S1_RXD0" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTA30">
+         <mux sel="mux1"          signal="GPIOA_30" />
+         <mux sel="mux2"          signal="I2C3_SDA" />
+         <mux sel="mux3"          signal="LPUART3_CTS_b" />
+         <mux sel="mux5"          signal="FB_A11" />
+         <mux sel="mux5"          signal="SDRAM_D11" />
+         <mux sel="mux7"          signal="I2S1_RX_FS" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTA31">
+         <mux sel="mux1"          signal="GPIOA_31" />
+         <mux sel="mux2"          signal="I2C3_SCL" />
+         <mux sel="mux3"          signal="LPUART3_RTS_b" />
+         <mux sel="mux5"          signal="FB_A10" />
+         <mux sel="mux5"          signal="SDRAM_D10" />
+         <mux sel="mux7"          signal="I2S1_RX_BCLK" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTB0">
+         <mux sel="mux0"          signal="ADC0_SE8" />
+         <mux sel="mux1"          signal="GPIOB_0" />
+         <mux sel="mux1"          signal="LLWU_P5" />
+         <mux sel="mux2"          signal="I2C0_SCL" />
+         <mux sel="mux3"          signal="FTM1_CH0" />
+         <mux sel="mux5"          signal="SDRAM_CAS_b" />
+         <mux sel="mux6"          signal="FTM1_QD_PHA" />
+         <mux sel="mux6"          signal="TPM1_CH0" />
+         <mux sel="mux7"          signal="FXIO0_D0" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTB1">
+         <mux sel="mux0"          signal="ADC0_SE9" />
+         <mux sel="mux1"          signal="GPIOB_1" />
+         <mux sel="mux2"          signal="I2C0_SDA" />
+         <mux sel="mux3"          signal="FTM1_CH1" />
+         <mux sel="mux5"          signal="SDRAM_RAS_b" />
+         <mux sel="mux6"          signal="FTM1_QD_PHB" />
+         <mux sel="mux6"          signal="TPM1_CH1" />
+         <mux sel="mux7"          signal="FXIO0_D1" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTB2">
+         <mux sel="mux0"          signal="ADC0_SE12" />
+         <mux sel="mux1"          signal="GPIOB_2" />
+         <mux sel="mux2"          signal="I2C0_SCL" />
+         <mux sel="mux3"          signal="LPUART0_RTS_b" />
+         <mux sel="mux5"          signal="SDRAM_WE_b" />
+         <mux sel="mux6"          signal="FTM0_FLT3" />
+         <mux sel="mux7"          signal="FXIO0_D2" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTB3">
+         <mux sel="mux0"          signal="ADC0_SE13" />
+         <mux sel="mux1"          signal="GPIOB_3" />
+         <mux sel="mux2"          signal="I2C0_SDA" />
+         <mux sel="mux3"          signal="LPUART0_CTS_b" />
+         <mux sel="mux5"          signal="SDRAM_CS0_b" />
+         <mux sel="mux6"          signal="FTM0_FLT0" />
+         <mux sel="mux7"          signal="FXIO0_D3" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTB4">
+         <mux sel="mux1"          signal="GPIOB_4" />
+         <mux sel="mux5"          signal="SDRAM_CS1_b" />
+         <mux sel="mux6"          signal="FTM1_FLT0" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTB5">
+         <mux sel="mux1"          signal="GPIOB_5" />
+         <mux sel="mux6"          signal="FTM2_FLT0" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTB6">
+         <mux sel="mux1"          signal="GPIOB_6" />
+         <mux sel="mux5"          signal="FB_AD23" />
+         <mux sel="mux5"          signal="SDRAM_D23" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTB7">
+         <mux sel="mux1"          signal="GPIOB_7" />
+         <mux sel="mux5"          signal="FB_AD22" />
+         <mux sel="mux5"          signal="SDRAM_D22" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTB8">
+         <mux sel="mux1"          signal="GPIOB_8" />
+         <mux sel="mux3"          signal="LPUART3_RTS_b" />
+         <mux sel="mux5"          signal="FB_AD21" />
+         <mux sel="mux5"          signal="SDRAM_D21" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTB9">
+         <mux sel="mux1"          signal="GPIOB_9" />
+         <mux sel="mux2"          signal="SPI1_PCS1" />
+         <mux sel="mux3"          signal="LPUART3_CTS_b" />
+         <mux sel="mux5"          signal="FB_AD20" />
+         <mux sel="mux5"          signal="SDRAM_D20" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTB10">
+         <mux sel="mux1"          signal="GPIOB_10" />
+         <mux sel="mux2"          signal="SPI1_PCS0" />
+         <mux sel="mux3"          signal="LPUART3_RX" />
+         <mux sel="mux4"          signal="I2C2_SCL" />
+         <mux sel="mux5"          signal="FB_AD19" />
+         <mux sel="mux5"          signal="SDRAM_D19" />
+         <mux sel="mux6"          signal="FTM0_FLT1" />
+         <mux sel="mux7"          signal="FXIO0_D4" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTB11">
+         <mux sel="mux1"          signal="GPIOB_11" />
+         <mux sel="mux2"          signal="SPI1_SCK" />
+         <mux sel="mux3"          signal="LPUART3_TX" />
+         <mux sel="mux4"          signal="I2C2_SDA" />
+         <mux sel="mux5"          signal="FB_AD18" />
+         <mux sel="mux5"          signal="SDRAM_D18" />
+         <mux sel="mux6"          signal="FTM0_FLT2" />
+         <mux sel="mux7"          signal="FXIO0_D5" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTB12">
+         <mux sel="mux1"          signal="GPIOB_12" />
+         <mux sel="mux2"          signal="LPUART0_RTS_b" />
+         <mux sel="mux3"          signal="FTM1_CH0" />
+         <mux sel="mux4"          signal="FTM0_CH4" />
+         <mux sel="mux5"          signal="FB_A9" />
+         <mux sel="mux5"          signal="SDRAM_D9" />
+         <mux sel="mux6"          signal="FTM1_QD_PHA" />
+         <mux sel="mux6"          signal="TPM1_CH0" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTB13">
+         <mux sel="mux1"          signal="GPIOB_13" />
+         <mux sel="mux2"          signal="LPUART0_CTS_b" />
+         <mux sel="mux3"          signal="FTM1_CH1" />
+         <mux sel="mux4"          signal="FTM0_CH5" />
+         <mux sel="mux5"          signal="FB_A8" />
+         <mux sel="mux5"          signal="SDRAM_D8" />
+         <mux sel="mux6"          signal="FTM1_QD_PHB" />
+         <mux sel="mux6"          signal="TPM1_CH1" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTB14">
+         <mux sel="mux1"          signal="GPIOB_14" />
+         <mux sel="mux2"          signal="LPUART0_RX" />
+         <mux sel="mux5"          signal="FB_A7" />
+         <mux sel="mux5"          signal="SDRAM_D7" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTB15">
+         <mux sel="mux1"          signal="GPIOB_15" />
+         <mux sel="mux2"          signal="LPUART0_TX" />
+         <mux sel="mux5"          signal="FB_A6" />
+         <mux sel="mux5"          signal="SDRAM_D6" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTB16">
+         <mux sel="mux1"          signal="GPIOB_16" />
+         <mux sel="mux2"          signal="SPI1_SOUT" />
+         <mux sel="mux3"          signal="LPUART0_RX" />
+         <mux sel="mux4"          signal="FTM_CLKIN0" />
+         <mux sel="mux5"          signal="FB_AD17" />
+         <mux sel="mux5"          signal="SDRAM_D17" />
+         <mux sel="mux6"          signal="EWM_IN" />
+         <mux sel="mux7"          signal="TPM_CLKIN0" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTB17">
+         <mux sel="mux1"          signal="GPIOB_17" />
+         <mux sel="mux2"          signal="SPI1_SIN" />
+         <mux sel="mux3"          signal="LPUART0_TX" />
+         <mux sel="mux4"          signal="FTM_CLKIN1" />
+         <mux sel="mux5"          signal="FB_AD16" />
+         <mux sel="mux5"          signal="SDRAM_D16" />
+         <mux sel="mux6"          signal="EWM_OUT_b" />
+         <mux sel="mux7"          signal="TPM_CLKIN1" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTB18">
+         <mux sel="mux1"          signal="GPIOB_18" />
+         <mux sel="mux3"          signal="FTM2_CH0" />
+         <mux sel="mux4"          signal="I2S0_TX_BCLK" />
+         <mux sel="mux5"          signal="FB_AD15" />
+         <mux sel="mux5"          signal="SDRAM_A23" />
+         <mux sel="mux6"          signal="FTM2_QD_PHA" />
+         <mux sel="mux6"          signal="TPM2_CH0" />
+         <mux sel="mux7"          signal="FXIO0_D6" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTB19">
+         <mux sel="mux1"          signal="GPIOB_19" />
+         <mux sel="mux2"          signal="SDRAM_CKE" />
+         <mux sel="mux3"          signal="FTM2_CH1" />
+         <mux sel="mux4"          signal="I2S0_TX_FS" />
+         <mux sel="mux5"          signal="FB_OE_b" />
+         <mux sel="mux6"          signal="FTM2_QD_PHB" />
+         <mux sel="mux6"          signal="TPM2_CH1" />
+         <mux sel="mux7"          signal="FXIO0_D7" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTB20">
+         <mux sel="mux1"          signal="GPIOB_20" />
+         <mux sel="mux2"          signal="SPI2_PCS0" />
+         <mux sel="mux5"          signal="FB_AD31" />
+         <mux sel="mux5"          signal="SDRAM_D31" />
+         <mux sel="mux6"          signal="CMP0_OUT" />
+         <mux sel="mux7"          signal="FXIO0_D8" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTB21">
+         <mux sel="mux1"          signal="GPIOB_21" />
+         <mux sel="mux2"          signal="SPI2_SCK" />
+         <mux sel="mux5"          signal="FB_AD30" />
+         <mux sel="mux5"          signal="SDRAM_D30" />
+         <mux sel="mux6"          signal="CMP1_OUT" />
+         <mux sel="mux7"          signal="FXIO0_D9" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTB22">
+         <mux sel="mux1"          signal="GPIOB_22" />
+         <mux sel="mux2"          signal="SPI2_SOUT" />
+         <mux sel="mux5"          signal="FB_AD29" />
+         <mux sel="mux5"          signal="SDRAM_D29" />
+         <mux sel="mux7"          signal="FXIO0_D10" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTB23">
+         <mux sel="mux1"          signal="GPIOB_23" />
+         <mux sel="mux2"          signal="SPI2_SIN" />
+         <mux sel="mux3"          signal="SPI0_PCS5" />
+         <mux sel="mux5"          signal="FB_AD28" />
+         <mux sel="mux5"          signal="SDRAM_D28" />
+         <mux sel="mux7"          signal="FXIO0_D11" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTC0">
+         <mux sel="mux0"          signal="ADC0_SE14" />
+         <mux sel="mux1"          signal="GPIOC_0" />
+         <mux sel="mux2"          signal="SPI0_PCS4" />
+         <mux sel="mux3"          signal="PDB0_EXTRG" />
+         <mux sel="mux4"          signal="USB0_SOF_OUT" />
+         <mux sel="mux5"          signal="FB_AD14" />
+         <mux sel="mux5"          signal="SDRAM_A22" />
+         <mux sel="mux6"          signal="I2S0_TXD1" />
+         <mux sel="mux7"          signal="FXIO0_D12" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTC1">
+         <mux sel="mux0"          signal="ADC0_SE15" />
+         <mux sel="mux1"          signal="GPIOC_1" />
+         <mux sel="mux1"          signal="LLWU_P6" />
+         <mux sel="mux2"          signal="SPI0_PCS3" />
+         <mux sel="mux3"          signal="LPUART1_RTS_b" />
+         <mux sel="mux4"          signal="FTM0_CH0" />
+         <mux sel="mux5"          signal="FB_AD13" />
+         <mux sel="mux5"          signal="SDRAM_A21" />
+         <mux sel="mux6"          signal="I2S0_TXD0" />
+         <mux sel="mux7"          signal="FXIO0_D13" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTC2">
+         <mux sel="mux0"          signal="ADC0_SE4b" />
+         <mux sel="mux0"          signal="CMP1_IN0" />
+         <mux sel="mux1"          signal="GPIOC_2" />
+         <mux sel="mux2"          signal="SPI0_PCS2" />
+         <mux sel="mux3"          signal="LPUART1_CTS_b" />
+         <mux sel="mux4"          signal="FTM0_CH1" />
+         <mux sel="mux5"          signal="FB_AD12" />
+         <mux sel="mux5"          signal="SDRAM_A20" />
+         <mux sel="mux6"          signal="I2S0_TX_FS" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTC3">
+         <mux sel="mux0"          signal="CMP1_IN1" />
+         <mux sel="mux1"          signal="GPIOC_3" />
+         <mux sel="mux1"          signal="LLWU_P7" />
+         <mux sel="mux2"          signal="SPI0_PCS1" />
+         <mux sel="mux3"          signal="LPUART1_RX" />
+         <mux sel="mux4"          signal="FTM0_CH2" />
+         <mux sel="mux5"          signal="CLKOUT" />
+         <mux sel="mux6"          signal="I2S0_TX_BCLK" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTC4">
+         <mux sel="mux1"          signal="GPIOC_4" />
+         <mux sel="mux1"          signal="LLWU_P8" />
+         <mux sel="mux2"          signal="SPI0_PCS0" />
+         <mux sel="mux3"          signal="LPUART1_TX" />
+         <mux sel="mux4"          signal="FTM0_CH3" />
+         <mux sel="mux5"          signal="FB_AD11" />
+         <mux sel="mux5"          signal="SDRAM_A19" />
+         <mux sel="mux6"          signal="CMP1_OUT" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTC5">
+         <mux sel="mux1"          signal="GPIOC_5" />
+         <mux sel="mux1"          signal="LLWU_P9" />
+         <mux sel="mux2"          signal="SPI0_SCK" />
+         <mux sel="mux3"          signal="LPTMR0_ALT2" />
+         <mux sel="mux3"          signal="LPTMR1_ALT2" />
+         <mux sel="mux4"          signal="I2S0_RXD0" />
+         <mux sel="mux5"          signal="FB_AD10" />
+         <mux sel="mux5"          signal="SDRAM_A18" />
+         <mux sel="mux6"          signal="CMP0_OUT" />
+         <mux sel="mux7"          signal="FTM0_CH2" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTC6">
+         <mux sel="mux0"          signal="CMP0_IN0" />
+         <mux sel="mux1"          signal="GPIOC_6" />
+         <mux sel="mux1"          signal="LLWU_P10" />
+         <mux sel="mux2"          signal="SPI0_SOUT" />
+         <mux sel="mux3"          signal="PDB0_EXTRG" />
+         <mux sel="mux4"          signal="I2S0_RX_BCLK" />
+         <mux sel="mux5"          signal="FB_AD9" />
+         <mux sel="mux5"          signal="SDRAM_A17" />
+         <mux sel="mux6"          signal="I2S0_MCLK" />
+         <mux sel="mux7"          signal="FXIO0_D14" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTC7">
+         <mux sel="mux0"          signal="CMP0_IN1" />
+         <mux sel="mux1"          signal="GPIOC_7" />
+         <mux sel="mux2"          signal="SPI0_SIN" />
+         <mux sel="mux3"          signal="USB0_SOF_OUT" />
+         <mux sel="mux4"          signal="I2S0_RX_FS" />
+         <mux sel="mux5"          signal="FB_AD8" />
+         <mux sel="mux5"          signal="SDRAM_A16" />
+         <mux sel="mux7"          signal="FXIO0_D15" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTC8">
+         <mux sel="mux0"          signal="CMP0_IN2" />
+         <mux sel="mux1"          signal="GPIOC_8" />
+         <mux sel="mux3"          signal="FTM3_CH4" />
+         <mux sel="mux4"          signal="I2S0_MCLK" />
+         <mux sel="mux5"          signal="FB_AD7" />
+         <mux sel="mux5"          signal="SDRAM_A15" />
+         <mux sel="mux7"          signal="FXIO0_D16" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTC9">
+         <mux sel="mux0"          signal="CMP0_IN3" />
+         <mux sel="mux1"          signal="GPIOC_9" />
+         <mux sel="mux3"          signal="FTM3_CH5" />
+         <mux sel="mux4"          signal="I2S0_RX_BCLK" />
+         <mux sel="mux5"          signal="FB_AD6" />
+         <mux sel="mux5"          signal="SDRAM_A14" />
+         <mux sel="mux6"          signal="FTM2_FLT0" />
+         <mux sel="mux7"          signal="FXIO0_D17" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTC10">
+         <mux sel="mux1"          signal="GPIOC_10" />
+         <mux sel="mux2"          signal="I2C1_SCL" />
+         <mux sel="mux3"          signal="FTM3_CH6" />
+         <mux sel="mux4"          signal="I2S0_RX_FS" />
+         <mux sel="mux5"          signal="FB_AD5" />
+         <mux sel="mux5"          signal="SDRAM_A13" />
+         <mux sel="mux7"          signal="FXIO0_D18" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTC11">
+         <mux sel="mux1"          signal="GPIOC_11" />
+         <mux sel="mux1"          signal="LLWU_P11" />
+         <mux sel="mux2"          signal="I2C1_SDA" />
+         <mux sel="mux3"          signal="FTM3_CH7" />
+         <mux sel="mux4"          signal="I2S0_RXD1" />
+         <mux sel="mux5"          signal="FB_RW_b" />
+         <mux sel="mux7"          signal="FXIO0_D19" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTC12">
+         <mux sel="mux1"          signal="GPIOC_12" />
+         <mux sel="mux3"          signal="LPUART4_RTS_b" />
+         <mux sel="mux4"          signal="FTM_CLKIN0" />
+         <mux sel="mux5"          signal="FB_AD27" />
+         <mux sel="mux5"          signal="SDRAM_D27" />
+         <mux sel="mux6"          signal="FTM3_FLT0" />
+         <mux sel="mux7"          signal="TPM_CLKIN0" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTC13">
+         <mux sel="mux1"          signal="GPIOC_13" />
+         <mux sel="mux3"          signal="LPUART4_CTS_b" />
+         <mux sel="mux4"          signal="FTM_CLKIN1" />
+         <mux sel="mux5"          signal="FB_AD26" />
+         <mux sel="mux5"          signal="SDRAM_D26" />
+         <mux sel="mux7"          signal="TPM_CLKIN1" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTC14">
+         <mux sel="mux1"          signal="GPIOC_14" />
+         <mux sel="mux3"          signal="LPUART4_RX" />
+         <mux sel="mux5"          signal="FB_AD25" />
+         <mux sel="mux5"          signal="SDRAM_D25" />
+         <mux sel="mux7"          signal="FXIO0_D20" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTC15">
+         <mux sel="mux1"          signal="GPIOC_15" />
+         <mux sel="mux3"          signal="LPUART4_TX" />
+         <mux sel="mux5"          signal="FB_AD24" />
+         <mux sel="mux5"          signal="SDRAM_D24" />
+         <mux sel="mux7"          signal="FXIO0_D21" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTC16">
+         <mux sel="mux1"          signal="GPIOC_16" />
+         <mux sel="mux3"          signal="LPUART3_RX" />
+         <mux sel="mux5"          signal="FB_CS5_b" />
+         <mux sel="mux5"          signal="FB_TSIZ1" />
+         <mux sel="mux5"          signal="FB_BE23_16_BLS15_8_b" />
+         <mux sel="mux5"          signal="SDRAM_DQM2" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTC17">
+         <mux sel="mux1"          signal="GPIOC_17" />
+         <mux sel="mux3"          signal="LPUART3_TX" />
+         <mux sel="mux5"          signal="FB_CS4_b" />
+         <mux sel="mux5"          signal="FB_TSIZ0" />
+         <mux sel="mux5"          signal="FB_BE31_24_BLS7_0_b" />
+         <mux sel="mux5"          signal="SDRAM_DQM3" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTC18">
+         <mux sel="mux1"          signal="GPIOC_18" />
+         <mux sel="mux3"          signal="LPUART3_RTS_b" />
+         <mux sel="mux5"          signal="FB_TBST_b" />
+         <mux sel="mux5"          signal="FB_CS2_b" />
+         <mux sel="mux5"          signal="FB_BE15_8_BLS23_16_b" />
+         <mux sel="mux5"          signal="SDRAM_DQM1" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTC19">
+         <mux sel="mux1"          signal="GPIOC_19" />
+         <mux sel="mux3"          signal="LPUART3_CTS_b" />
+         <mux sel="mux5"          signal="FB_CS3_b" />
+         <mux sel="mux5"          signal="FB_BE7_0_BLS31_24_b" />
+         <mux sel="mux5"          signal="SDRAM_DQM0" />
+         <mux sel="mux6"          signal="FB_TA_b" />
+         <mux sel="mux7"          signal="QSPI0A_SS1_b" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTC24">
+         <mux sel="mux1"          signal="GPIOC_24" />
+         <mux sel="mux3"          signal="LPUART0_TX" />
+         <mux sel="mux5"          signal="FB_A5" />
+         <mux sel="mux5"          signal="SDRAM_D5" />
+         <mux sel="mux7"          signal="QSPI0A_DATA3" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTC25">
+         <mux sel="mux1"          signal="GPIOC_25" />
+         <mux sel="mux3"          signal="LPUART0_RX" />
+         <mux sel="mux5"          signal="FB_A4" />
+         <mux sel="mux5"          signal="SDRAM_D4" />
+         <mux sel="mux7"          signal="QSPI0A_SCLK" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTC26">
+         <mux sel="mux1"          signal="GPIOC_26" />
+         <mux sel="mux3"          signal="LPUART0_CTS_b" />
+         <mux sel="mux5"          signal="FB_A3" />
+         <mux sel="mux5"          signal="SDRAM_D3" />
+         <mux sel="mux7"          signal="QSPI0A_DATA0" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTC27">
+         <mux sel="mux1"          signal="GPIOC_27" />
+         <mux sel="mux3"          signal="LPUART0_RTS_b" />
+         <mux sel="mux5"          signal="FB_A2" />
+         <mux sel="mux5"          signal="SDRAM_D2" />
+         <mux sel="mux7"          signal="QSPI0A_DATA2" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTC28">
+         <mux sel="mux1"          signal="GPIOC_28" />
+         <mux sel="mux2"          signal="I2C3_SDA" />
+         <mux sel="mux5"          signal="FB_A1" />
+         <mux sel="mux5"          signal="SDRAM_D1" />
+         <mux sel="mux7"          signal="QSPI0A_DATA1" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTC29">
+         <mux sel="mux1"          signal="GPIOC_29" />
+         <mux sel="mux2"          signal="I2C3_SCL" />
+         <mux sel="mux5"          signal="FB_A0" />
+         <mux sel="mux5"          signal="SDRAM_D0" />
+         <mux sel="mux7"          signal="QSPI0A_SS0_b" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTD0">
+         <mux sel="mux1"          signal="GPIOD_0" />
+         <mux sel="mux1"          signal="LLWU_P12" />
+         <mux sel="mux2"          signal="SPI0_PCS0" />
+         <mux sel="mux3"          signal="LPUART2_RTS_b" />
+         <mux sel="mux4"          signal="FTM3_CH0" />
+         <mux sel="mux5"          signal="FB_ALE" />
+         <mux sel="mux5"          signal="FB_CS1_b" />
+         <mux sel="mux5"          signal="FB_TS_b" />
+         <mux sel="mux7"          signal="FXIO0_D22" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTD1">
+         <mux sel="mux0"          signal="ADC0_SE5b" />
+         <mux sel="mux1"          signal="GPIOD_1" />
+         <mux sel="mux2"          signal="SPI0_SCK" />
+         <mux sel="mux3"          signal="LPUART2_CTS_b" />
+         <mux sel="mux4"          signal="FTM3_CH1" />
+         <mux sel="mux5"          signal="FB_CS0_b" />
+         <mux sel="mux7"          signal="FXIO0_D23" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTD2">
+         <mux sel="mux1"          signal="GPIOD_2" />
+         <mux sel="mux1"          signal="LLWU_P13" />
+         <mux sel="mux2"          signal="SPI0_SOUT" />
+         <mux sel="mux3"          signal="LPUART2_RX" />
+         <mux sel="mux4"          signal="FTM3_CH2" />
+         <mux sel="mux5"          signal="FB_AD4" />
+         <mux sel="mux5"          signal="SDRAM_A12" />
+         <mux sel="mux7"          signal="I2C0_SCL" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTD3">
+         <mux sel="mux1"          signal="GPIOD_3" />
+         <mux sel="mux2"          signal="SPI0_SIN" />
+         <mux sel="mux3"          signal="LPUART2_TX" />
+         <mux sel="mux4"          signal="FTM3_CH3" />
+         <mux sel="mux5"          signal="FB_AD3" />
+         <mux sel="mux5"          signal="SDRAM_A11" />
+         <mux sel="mux7"          signal="I2C0_SDA" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTD4">
+         <mux sel="mux1"          signal="GPIOD_4" />
+         <mux sel="mux1"          signal="LLWU_P14" />
+         <mux sel="mux2"          signal="SPI0_PCS1" />
+         <mux sel="mux3"          signal="LPUART0_RTS_b" />
+         <mux sel="mux4"          signal="FTM0_CH4" />
+         <mux sel="mux5"          signal="FB_AD2" />
+         <mux sel="mux5"          signal="SDRAM_A10" />
+         <mux sel="mux6"          signal="EWM_IN" />
+         <mux sel="mux7"          signal="SPI1_PCS0" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTD5">
+         <mux sel="mux0"          signal="ADC0_SE6b" />
+         <mux sel="mux1"          signal="GPIOD_5" />
+         <mux sel="mux2"          signal="SPI0_PCS2" />
+         <mux sel="mux3"          signal="LPUART0_CTS_b" />
+         <mux sel="mux4"          signal="FTM0_CH5" />
+         <mux sel="mux5"          signal="FB_AD1" />
+         <mux sel="mux5"          signal="SDRAM_A9" />
+         <mux sel="mux6"          signal="EWM_OUT_b" />
+         <mux sel="mux7"          signal="SPI1_SCK" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTD6">
+         <mux sel="mux0"          signal="ADC0_SE7b" />
+         <mux sel="mux1"          signal="GPIOD_6" />
+         <mux sel="mux1"          signal="LLWU_P15" />
+         <mux sel="mux2"          signal="SPI0_PCS3" />
+         <mux sel="mux3"          signal="LPUART0_RX" />
+         <mux sel="mux4"          signal="FTM0_CH6" />
+         <mux sel="mux5"          signal="FB_AD0" />
+         <mux sel="mux6"          signal="FTM0_FLT0" />
+         <mux sel="mux7"          signal="SPI1_SOUT" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTD7">
+         <mux sel="mux1"          signal="GPIOD_7" />
+         <mux sel="mux2"          signal="CMT_IRO" />
+         <mux sel="mux3"          signal="LPUART0_TX" />
+         <mux sel="mux4"          signal="FTM0_CH7" />
+         <mux sel="mux5"          signal="SDRAM_CKE" />
+         <mux sel="mux6"          signal="FTM0_FLT1" />
+         <mux sel="mux7"          signal="SPI1_SIN" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTD8">
+         <mux sel="mux1"          signal="GPIOD_8" />
+         <mux sel="mux1"          signal="LLWU_P24" />
+         <mux sel="mux2"          signal="I2C0_SCL" />
+         <mux sel="mux3"          signal="LPUART1_RX" />
+         <mux sel="mux6"          signal="FB_A16" />
+         <mux sel="mux7"          signal="FXIO0_D24" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTD9">
+         <mux sel="mux1"          signal="GPIOD_9" />
+         <mux sel="mux2"          signal="I2C0_SDA" />
+         <mux sel="mux3"          signal="LPUART1_TX" />
+         <mux sel="mux6"          signal="FB_A17" />
+         <mux sel="mux7"          signal="FXIO0_D25" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTD10">
+         <mux sel="mux1"          signal="GPIOD_10" />
+         <mux sel="mux3"          signal="LPUART1_RTS_b" />
+         <mux sel="mux6"          signal="FB_A18" />
+         <mux sel="mux7"          signal="FXIO0_D26" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTD11">
+         <mux sel="mux1"          signal="GPIOD_11" />
+         <mux sel="mux1"          signal="LLWU_P25" />
+         <mux sel="mux2"          signal="SPI2_PCS0" />
+         <mux sel="mux3"          signal="LPUART1_CTS_b" />
+         <mux sel="mux6"          signal="FB_A19" />
+         <mux sel="mux7"          signal="FXIO0_D27" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTD12">
+         <mux sel="mux1"          signal="GPIOD_12" />
+         <mux sel="mux2"          signal="SPI2_SCK" />
+         <mux sel="mux3"          signal="FTM3_FLT0" />
+         <mux sel="mux6"          signal="FB_A20" />
+         <mux sel="mux7"          signal="FXIO0_D28" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTD13">
+         <mux sel="mux1"          signal="GPIOD_13" />
+         <mux sel="mux2"          signal="SPI2_SOUT" />
+         <mux sel="mux6"          signal="FB_A21" />
+         <mux sel="mux7"          signal="FXIO0_D29" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTD14">
+         <mux sel="mux1"          signal="GPIOD_14" />
+         <mux sel="mux2"          signal="SPI2_SIN" />
+         <mux sel="mux6"          signal="FB_A22" />
+         <mux sel="mux7"          signal="FXIO0_D30" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTD15">
+         <mux sel="mux1"          signal="GPIOD_15" />
+         <mux sel="mux2"          signal="SPI2_PCS1" />
+         <mux sel="mux6"          signal="FB_A23" />
+         <mux sel="mux7"          signal="FXIO0_D31" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTE0">
+         <mux sel="mux1"          signal="GPIOE_0" />
+         <mux sel="mux2"          signal="SPI1_PCS1" />
+         <mux sel="mux3"          signal="LPUART1_TX" />
+         <mux sel="mux4"          signal="SDHC0_D1" />
+         <mux sel="mux5"          signal="QSPI0A_DATA3" />
+         <mux sel="mux6"          signal="I2C1_SDA" />
+         <mux sel="mux7"          signal="RTC_CLKOUT" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTE1">
+         <mux sel="mux1"          signal="GPIOE_1" />
+         <mux sel="mux1"          signal="LLWU_P0" />
+         <mux sel="mux2"          signal="SPI1_SCK" />
+         <mux sel="mux3"          signal="LPUART1_RX" />
+         <mux sel="mux4"          signal="SDHC0_D0" />
+         <mux sel="mux5"          signal="QSPI0A_SCLK" />
+         <mux sel="mux6"          signal="I2C1_SCL" />
+         <mux sel="mux7"          signal="SPI1_SIN" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTE2">
+         <mux sel="mux1"          signal="GPIOE_2" />
+         <mux sel="mux1"          signal="LLWU_P1" />
+         <mux sel="mux2"          signal="SPI1_SOUT" />
+         <mux sel="mux3"          signal="LPUART1_CTS_b" />
+         <mux sel="mux4"          signal="SDHC0_DCLK" />
+         <mux sel="mux5"          signal="QSPI0A_DATA0" />
+         <mux sel="mux6"          signal="FXIO0_D0" />
+         <mux sel="mux7"          signal="SPI1_SCK" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTE3">
+         <mux sel="mux1"          signal="GPIOE_3" />
+         <mux sel="mux2"          signal="SPI1_PCS2" />
+         <mux sel="mux3"          signal="LPUART1_RTS_b" />
+         <mux sel="mux4"          signal="SDHC0_CMD" />
+         <mux sel="mux5"          signal="QSPI0A_DATA2" />
+         <mux sel="mux6"          signal="FXIO0_D1" />
+         <mux sel="mux7"          signal="SPI1_SOUT" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTE4">
+         <mux sel="mux1"          signal="GPIOE_4" />
+         <mux sel="mux1"          signal="LLWU_P2" />
+         <mux sel="mux2"          signal="SPI1_SIN" />
+         <mux sel="mux3"          signal="LPUART3_TX" />
+         <mux sel="mux4"          signal="SDHC0_D3" />
+         <mux sel="mux5"          signal="QSPI0A_DATA1" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTE5">
+         <mux sel="mux1"          signal="GPIOE_5" />
+         <mux sel="mux2"          signal="SPI1_PCS0" />
+         <mux sel="mux3"          signal="LPUART3_RX" />
+         <mux sel="mux4"          signal="SDHC0_D2" />
+         <mux sel="mux5"          signal="QSPI0A_SS0_b" />
+         <mux sel="mux6"          signal="FTM3_CH0" />
+         <mux sel="mux7"          signal="USB0_SOF_OUT" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTE6">
+         <mux sel="mux1"          signal="GPIOE_6" />
+         <mux sel="mux1"          signal="LLWU_P16" />
+         <mux sel="mux2"          signal="FXIO0_D12" />
+         <mux sel="mux3"          signal="LPUART3_CTS_b" />
+         <mux sel="mux4"          signal="I2S0_MCLK" />
+         <mux sel="mux5"          signal="QSPI0B_DATA3" />
+         <mux sel="mux6"          signal="FTM3_CH1" />
+         <mux sel="mux7"          signal="SDHC0_D4" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTE7">
+         <mux sel="mux1"          signal="GPIOE_7" />
+         <mux sel="mux2"          signal="FXIO0_D13" />
+         <mux sel="mux3"          signal="LPUART3_RTS_b" />
+         <mux sel="mux4"          signal="I2S0_RXD0" />
+         <mux sel="mux5"          signal="QSPI0B_SCLK" />
+         <mux sel="mux6"          signal="FTM3_CH2" />
+         <mux sel="mux7"          signal="QSPI0A_SS1_b" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTE8">
+         <mux sel="mux1"          signal="GPIOE_8" />
+         <mux sel="mux2"          signal="I2S0_RXD1" />
+         <mux sel="mux3"          signal="FXIO0_D14" />
+         <mux sel="mux4"          signal="I2S0_RX_FS" />
+         <mux sel="mux5"          signal="QSPI0B_DATA0" />
+         <mux sel="mux6"          signal="FTM3_CH3" />
+         <mux sel="mux7"          signal="SDHC0_D5" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTE9">
+         <mux sel="mux1"          signal="GPIOE_9" />
+         <mux sel="mux1"          signal="LLWU_P17" />
+         <mux sel="mux2"          signal="I2S0_TXD1" />
+         <mux sel="mux3"          signal="FXIO0_D15" />
+         <mux sel="mux4"          signal="I2S0_RX_BCLK" />
+         <mux sel="mux5"          signal="QSPI0B_DATA2" />
+         <mux sel="mux6"          signal="FTM3_CH4" />
+         <mux sel="mux7"          signal="SDHC0_D6" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTE10">
+         <mux sel="mux1"          signal="GPIOE_10" />
+         <mux sel="mux1"          signal="LLWU_P18" />
+         <mux sel="mux2"          signal="I2C3_SDA" />
+         <mux sel="mux3"          signal="FXIO0_D16" />
+         <mux sel="mux4"          signal="I2S0_TXD0" />
+         <mux sel="mux5"          signal="QSPI0B_DATA1" />
+         <mux sel="mux6"          signal="FTM3_CH5" />
+         <mux sel="mux7"          signal="SDHC0_D7" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTE11">
+         <mux sel="mux1"          signal="GPIOE_11" />
+         <mux sel="mux2"          signal="I2C3_SCL" />
+         <mux sel="mux3"          signal="FXIO0_D17" />
+         <mux sel="mux4"          signal="I2S0_TX_FS" />
+         <mux sel="mux5"          signal="QSPI0B_SS0_b" />
+         <mux sel="mux6"          signal="FTM3_CH6" />
+         <mux sel="mux7"          signal="QSPI0A_DQS" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTE12">
+         <mux sel="mux1"          signal="GPIOE_12" />
+         <mux sel="mux3"          signal="LPUART2_TX" />
+         <mux sel="mux4"          signal="I2S0_TX_BCLK" />
+         <mux sel="mux5"          signal="QSPI0B_DQS" />
+         <mux sel="mux6"          signal="FTM3_CH7" />
+         <mux sel="mux7"          signal="FXIO0_D2" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTE13">
+         <mux sel="mux1"          signal="GPIOE_13" />
+         <mux sel="mux3"          signal="LPUART2_RX" />
+         <mux sel="mux4"          signal="I2S1_MCLK" />
+         <mux sel="mux5"          signal="QSPI0B_SS1_b" />
+         <mux sel="mux6"          signal="SDHC0_CLKIN" />
+         <mux sel="mux7"          signal="FXIO0_D3" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTE16">
+         <mux sel="mux0"          signal="ADC0_SE4a" />
+         <mux sel="mux1"          signal="GPIOE_16" />
+         <mux sel="mux2"          signal="SPI0_PCS0" />
+         <mux sel="mux3"          signal="LPUART2_TX" />
+         <mux sel="mux4"          signal="FTM_CLKIN0" />
+         <mux sel="mux5"          signal="I2S1_TX_BCLK" />
+         <mux sel="mux6"          signal="FTM0_FLT3" />
+         <mux sel="mux7"          signal="FXIO0_D4" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTE17">
+         <mux sel="mux0"          signal="ADC0_SE5a" />
+         <mux sel="mux1"          signal="GPIOE_17" />
+         <mux sel="mux1"          signal="LLWU_P19" />
+         <mux sel="mux2"          signal="SPI0_SCK" />
+         <mux sel="mux3"          signal="LPUART2_RX" />
+         <mux sel="mux4"          signal="FTM_CLKIN1" />
+         <mux sel="mux5"          signal="I2S1_TX_FS" />
+         <mux sel="mux6"          signal="LPTMR0_ALT3" />
+         <mux sel="mux7"          signal="FXIO0_D5" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTE18">
+         <mux sel="mux0"          signal="ADC0_SE6a" />
+         <mux sel="mux1"          signal="GPIOE_18" />
+         <mux sel="mux1"          signal="LLWU_P20" />
+         <mux sel="mux2"          signal="SPI0_SOUT" />
+         <mux sel="mux3"          signal="LPUART2_CTS_b" />
+         <mux sel="mux4"          signal="I2C0_SDA" />
+         <mux sel="mux5"          signal="I2S1_TXD0" />
+         <mux sel="mux7"          signal="FXIO0_D6" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTE19">
+         <mux sel="mux0"          signal="ADC0_SE7a" />
+         <mux sel="mux1"          signal="GPIOE_19" />
+         <mux sel="mux2"          signal="SPI0_SIN" />
+         <mux sel="mux3"          signal="LPUART2_RTS_b" />
+         <mux sel="mux4"          signal="I2C0_SCL" />
+         <mux sel="mux5"          signal="I2S1_TXD1" />
+         <mux sel="mux7"          signal="FXIO0_D7" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTE20">
+         <mux sel="mux1"          signal="GPIOE_20" />
+         <mux sel="mux3"          signal="LPUART4_TX" />
+         <mux sel="mux4"          signal="SPI3_PCS0" />
+         <mux sel="mux5"          signal="I2S1_RXD1" />
+         <mux sel="mux7"          signal="FXIO0_D8" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTE21">
+         <mux sel="mux1"          signal="GPIOE_21" />
+         <mux sel="mux3"          signal="LPUART4_RX" />
+         <mux sel="mux4"          signal="SPI3_SCK" />
+         <mux sel="mux5"          signal="I2S1_RXD0" />
+         <mux sel="mux7"          signal="FXIO0_D9" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTE22">
+         <mux sel="mux1"          signal="GPIOE_22" />
+         <mux sel="mux2"          signal="I2C2_SDA" />
+         <mux sel="mux3"          signal="LPUART4_CTS_b" />
+         <mux sel="mux4"          signal="SPI3_SOUT" />
+         <mux sel="mux5"          signal="I2S1_RX_FS" />
+         <mux sel="mux7"          signal="FXIO0_D10" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTE23">
+         <mux sel="mux1"          signal="GPIOE_23" />
+         <mux sel="mux2"          signal="I2C2_SCL" />
+         <mux sel="mux3"          signal="LPUART4_RTS_b" />
+         <mux sel="mux4"          signal="SPI3_SIN" />
+         <mux sel="mux5"          signal="I2S1_RX_BCLK" />
+         <mux sel="mux7"          signal="FXIO0_D11" />
+         <reset sel="unassigned" />
+      </pin>
+   </pins>
+   <packages>
+      <package name="BGA_169">
+         <placement pin="ADC0_DM0"      location="L2" />
+         <placement pin="ADC0_DM1"      location="L1" />
+         <placement pin="ADC0_DM3"      location="N2" />
+         <placement pin="ADC0_DP0"      location="M2" />
+         <placement pin="ADC0_DP1"      location="M1" />
+         <placement pin="ADC0_DP3"      location="N1" />
+         <placement pin="ADC0_SE16"     location="N4" />
+         <placement pin="DAC0_OUT"      location="M4" />
+         <placement pin="EXTAL32"       location="N6" />
+         <placement pin="PTA0"          location="N8" />
+         <placement pin="PTA1"          location="N9" />
+         <placement pin="PTA10"         location="N11" />
+         <placement pin="PTA11"         location="M11" />
+         <placement pin="PTA12"         location="L12" />
+         <placement pin="PTA13"         location="L11" />
+         <placement pin="PTA14"         location="K13" />
+         <placement pin="PTA15"         location="K12" />
+         <placement pin="PTA16"         location="J13" />
+         <placement pin="PTA17"         location="J12" />
+         <placement pin="PTA18"         location="N13" />
+         <placement pin="PTA19"         location="M13" />
+         <placement pin="PTA2"          location="M9" />
+         <placement pin="PTA20"         location="L7" />
+         <placement pin="PTA21"         location="K7" />
+         <placement pin="PTA22"         location="K8" />
+         <placement pin="PTA23"         location="L8" />
+         <placement pin="PTA24"         location="K11" />
+         <placement pin="PTA25"         location="J11" />
+         <placement pin="PTA26"         location="J10" />
+         <placement pin="PTA27"         location="H13" />
+         <placement pin="PTA28"         location="H12" />
+         <placement pin="PTA29"         location="H11" />
+         <placement pin="PTA3"          location="M8" />
+         <placement pin="PTA30"         location="H10" />
+         <placement pin="PTA31"         location="J9" />
+         <placement pin="PTA4"          location="L9" />
+         <placement pin="PTA5"          location="N10" />
+         <placement pin="PTA6"          location="M10" />
+         <placement pin="PTA7"          location="L10" />
+         <placement pin="PTA8"          location="K9" />
+         <placement pin="PTA9"          location="K10" />
+         <placement pin="PTB0"          location="G13" />
+         <placement pin="PTB1"          location="G12" />
+         <placement pin="PTB10"         location="G9" />
+         <placement pin="PTB11"         location="E13" />
+         <placement pin="PTB12"         location="E12" />
+         <placement pin="PTB13"         location="E11" />
+         <placement pin="PTB14"         location="E10" />
+         <placement pin="PTB15"         location="E9" />
+         <placement pin="PTB16"         location="F8" />
+         <placement pin="PTB17"         location="D13" />
+         <placement pin="PTB18"         location="D12" />
+         <placement pin="PTB19"         location="D11" />
+         <placement pin="PTB2"          location="G11" />
+         <placement pin="PTB20"         location="D10" />
+         <placement pin="PTB21"         location="D9" />
+         <placement pin="PTB22"         location="C13" />
+         <placement pin="PTB23"         location="C12" />
+         <placement pin="PTB3"          location="G10" />
+         <placement pin="PTB4"          location="H9" />
+         <placement pin="PTB5"          location="F13" />
+         <placement pin="PTB6"          location="F12" />
+         <placement pin="PTB7"          location="F11" />
+         <placement pin="PTB8"          location="F10" />
+         <placement pin="PTB9"          location="F9" />
+         <placement pin="PTC0"          location="B13" />
+         <placement pin="PTC1"          location="B12" />
+         <placement pin="PTC10"         location="A8" />
+         <placement pin="PTC11"         location="A9" />
+         <placement pin="PTC12"         location="B9" />
+         <placement pin="PTC13"         location="B8" />
+         <placement pin="PTC14"         location="C8" />
+         <placement pin="PTC15"         location="D8" />
+         <placement pin="PTC16"         location="E8" />
+         <placement pin="PTC17"         location="E7" />
+         <placement pin="PTC18"         location="D7" />
+         <placement pin="PTC19"         location="C7" />
+         <placement pin="PTC2"          location="A13" />
+         <placement pin="PTC24"         location="B7" />
+         <placement pin="PTC25"         location="A7" />
+         <placement pin="PTC26"         location="E6" />
+         <placement pin="PTC27"         location="D6" />
+         <placement pin="PTC28"         location="C6" />
+         <placement pin="PTC29"         location="B6" />
+         <placement pin="PTC3"          location="A12" />
+         <placement pin="PTC4"          location="B11" />
+         <placement pin="PTC5"          location="A11" />
+         <placement pin="PTC6"          location="A10" />
+         <placement pin="PTC7"          location="B10" />
+         <placement pin="PTC8"          location="C10" />
+         <placement pin="PTC9"          location="C9" />
+         <placement pin="PTD0"          location="A6" />
+         <placement pin="PTD1"          location="A5" />
+         <placement pin="PTD10"         location="D3" />
+         <placement pin="PTD11"         location="C2" />
+         <placement pin="PTD12"         location="B2" />
+         <placement pin="PTD13"         location="B3" />
+         <placement pin="PTD14"         location="A2" />
+         <placement pin="PTD15"         location="A3" />
+         <placement pin="PTD2"          location="A4" />
+         <placement pin="PTD3"          location="B4" />
+         <placement pin="PTD4"          location="B5" />
+         <placement pin="PTD5"          location="C4" />
+         <placement pin="PTD6"          location="C5" />
+         <placement pin="PTD7"          location="E5" />
+         <placement pin="PTD8"          location="D5" />
+         <placement pin="PTD9"          location="D4" />
+         <placement pin="PTE0"          location="A1" />
+         <placement pin="PTE1"          location="B1" />
+         <placement pin="PTE10"         location="F4" />
+         <placement pin="PTE11"         location="G4" />
+         <placement pin="PTE12"         location="H4" />
+         <placement pin="PTE13"         location="J6" />
+         <placement pin="PTE16"         location="H3" />
+         <placement pin="PTE17"         location="F5" />
+         <placement pin="PTE18"         location="F6" />
+         <placement pin="PTE19"         location="F7" />
+         <placement pin="PTE2"          location="C1" />
+         <placement pin="PTE20"         location="J7" />
+         <placement pin="PTE21"         location="K6" />
+         <placement pin="PTE22"         location="L6" />
+         <placement pin="PTE23"         location="M7" />
+         <placement pin="PTE3"          location="D1" />
+         <placement pin="PTE4"          location="E1" />
+         <placement pin="PTE5"          location="D2" />
+         <placement pin="PTE6"          location="E2" />
+         <placement pin="PTE7"          location="E3" />
+         <placement pin="PTE8"          location="E4" />
+         <placement pin="PTE9"          location="F3" />
+         <placement pin="RESET_b"       location="L13" />
+         <placement pin="RTC_WAKEUP_b"  location="M5" />
+         <placement pin="USB0_DM"       location="F1" />
+         <placement pin="USB0_DP"       location="G1" />
+         <placement pin="USB1_DM"       location="H1" />
+         <placement pin="USB1_DP"       location="J1" />
+         <placement pin="USB1_VBUS"     location="J2" />
+         <placement pin="USB1_VSS"      location="K1" />
+         <placement pin="VBAT"          location="M6" />
+         <placement pin="VDD10"         location="N12" />
+         <placement pin="VDD2"          location="H6" />
+         <placement pin="VDD7"          location="H7" />
+         <placement pin="VDD8"          location="G7" />
+         <placement pin="VDD9"          location="G6" />
+         <placement pin="VDDA"          location="J3" />
+         <placement pin="VDDIO_E"       location="G5" />
+         <placement pin="VDDIO_E1"      location="H5" />
+         <placement pin="VDD_CORE"      location="K5" />
+         <placement pin="VDD_CORE1"     location="L5" />
+         <placement pin="VREFH"         location="K3" />
+         <placement pin="VREFL"         location="K4" />
+         <placement pin="VREF_OUT"      location="N3" />
+         <placement pin="VREG_IN0"      location="F2" />
+         <placement pin="VREG_IN1"      location="H2" />
+         <placement pin="VREG_OUT"      location="G2" />
+         <placement pin="VSS11"         location="J5" />
+         <placement pin="VSS13"         location="G8" />
+         <placement pin="VSS21"         location="G3" />
+         <placement pin="VSS22"         location="J8" />
+         <placement pin="VSS34"         location="N7" />
+         <placement pin="VSS36"         location="H8" />
+         <placement pin="VSS39"         location="L4" />
+         <placement pin="VSS4"          location="C3" />
+         <placement pin="VSS43"         location="M12" />
+         <placement pin="VSS5"          location="C11" />
+         <placement pin="VSSA"          location="L3" />
+         <placement pin="VSSA1"         location="J4" />
+         <placement pin="XTAL32"        location="N5" />
+      </package>
+      <package name="FRDM_K28F">
+         <placement pin="ADC0_DM0"      location="" />
+         <placement pin="ADC0_DM1"      location="ADC0_DM1" />
+         <placement pin="ADC0_DM3"      location="" />
+         <placement pin="ADC0_DP0"      location="" />
+         <placement pin="ADC0_DP1"      location="ADC0_DP1" />
+         <placement pin="ADC0_DP3"      location="" />
+         <placement pin="ADC0_SE16"     location="Light" />
+         <placement pin="DAC0_OUT"      location="DAC0_OUT" />
+         <placement pin="EXTAL32"       location="EXTAL_32kHz" />
+         <placement pin="PTA0"          location="SWD_CLK" />
+         <placement pin="PTA1"          location="" />
+         <placement pin="PTA10"         location="" />
+         <placement pin="PTA11"         location="" />
+         <placement pin="PTA12"         location="" />
+         <placement pin="PTA13"         location="" />
+         <placement pin="PTA14"         location="" />
+         <placement pin="PTA15"         location="" />
+         <placement pin="PTA16"         location="" />
+         <placement pin="PTA17"         location="" />
+         <placement pin="PTA18"         location="EXTAL_12MHz" />
+         <placement pin="PTA19"         location="XTAL_12MHz" />
+         <placement pin="PTA2"          location="" />
+         <placement pin="PTA20"         location="" />
+         <placement pin="PTA21"         location="" />
+         <placement pin="PTA22"         location="" />
+         <placement pin="PTA23"         location="" />
+         <placement pin="PTA24"         location="D1" />
+         <placement pin="PTA25"         location="D0" />
+         <placement pin="PTA26"         location="" />
+         <placement pin="PTA27"         location="" />
+         <placement pin="PTA28"         location="" />
+         <placement pin="PTA29"         location="" />
+         <placement pin="PTA3"          location="SWD_DIO" />
+         <placement pin="PTA30"         location="D16" />
+         <placement pin="PTA31"         location="D17" />
+         <placement pin="PTA4"          location="SW2" />
+         <placement pin="PTA5"          location="" />
+         <placement pin="PTA6"          location="" />
+         <placement pin="PTA7"          location="A0" />
+         <placement pin="PTA8"          location="A1" />
+         <placement pin="PTA9"          location="" />
+         <placement pin="PTB0"          location="" />
+         <placement pin="PTB1"          location="" />
+         <placement pin="PTB10"         location="" />
+         <placement pin="PTB11"         location="" />
+         <placement pin="PTB12"         location="D5" />
+         <placement pin="PTB13"         location="" />
+         <placement pin="PTB14"         location="" />
+         <placement pin="PTB15"         location="" />
+         <placement pin="PTB16"         location="" />
+         <placement pin="PTB17"         location="" />
+         <placement pin="PTB18"         location="" />
+         <placement pin="PTB19"         location="D9" />
+         <placement pin="PTB2"          location="A4_D15" />
+         <placement pin="PTB20"         location="A5_D14" />
+         <placement pin="PTB21"         location="" />
+         <placement pin="PTB22"         location="" />
+         <placement pin="PTB23"         location="" />
+         <placement pin="PTB3"          location="D14" />
+         <placement pin="PTB4"          location="D2" />
+         <placement pin="PTB5"          location="" />
+         <placement pin="PTB6"          location="" />
+         <placement pin="PTB7"          location="" />
+         <placement pin="PTB8"          location="" />
+         <placement pin="PTB9"          location="" />
+         <placement pin="PTC0"          location="" />
+         <placement pin="PTC1"          location="" />
+         <placement pin="PTC10"         location="" />
+         <placement pin="PTC11"         location="D3" />
+         <placement pin="PTC12"         location="" />
+         <placement pin="PTC13"         location="D6" />
+         <placement pin="PTC14"         location="" />
+         <placement pin="PTC15"         location="" />
+         <placement pin="PTC16"         location="" />
+         <placement pin="PTC17"         location="" />
+         <placement pin="PTC18"         location="D7" />
+         <placement pin="PTC19"         location="D8" />
+         <placement pin="PTC2"          location="" />
+         <placement pin="PTC24"         location="Console_Tx" />
+         <placement pin="PTC25"         location="Console_Rx" />
+         <placement pin="PTC26"         location="" />
+         <placement pin="PTC27"         location="" />
+         <placement pin="PTC28"         location="Accel_SDA" />
+         <placement pin="PTC29"         location="Accel_SCL" />
+         <placement pin="PTC3"          location="" />
+         <placement pin="PTC4"          location="" />
+         <placement pin="PTC5"          location="" />
+         <placement pin="PTC6"          location="D4" />
+         <placement pin="PTC7"          location="" />
+         <placement pin="PTC8"          location="" />
+         <placement pin="PTC9"          location="" />
+         <placement pin="PTD0"          location="SW3" />
+         <placement pin="PTD1"          location="A2" />
+         <placement pin="PTD10"         location="" />
+         <placement pin="PTD11"         location="" />
+         <placement pin="PTD12"         location="D13" />
+         <placement pin="PTD13"         location="D11" />
+         <placement pin="PTD14"         location="D12" />
+         <placement pin="PTD15"         location="D10" />
+         <placement pin="PTD2"          location="" />
+         <placement pin="PTD3"          location="" />
+         <placement pin="PTD4"          location="" />
+         <placement pin="PTD5"          location="" />
+         <placement pin="PTD6"          location="A3" />
+         <placement pin="PTD7"          location="" />
+         <placement pin="PTD8"          location="" />
+         <placement pin="PTD9"          location="" />
+         <placement pin="PTE0"          location="" />
+         <placement pin="PTE1"          location="" />
+         <placement pin="PTE10"         location="D18" />
+         <placement pin="PTE11"         location="D17" />
+         <placement pin="PTE12"         location="D16" />
+         <placement pin="PTE13"         location="" />
+         <placement pin="PTE16"         location="" />
+         <placement pin="PTE17"         location="" />
+         <placement pin="PTE18"         location="" />
+         <placement pin="PTE19"         location="" />
+         <placement pin="PTE2"          location="" />
+         <placement pin="PTE20"         location="" />
+         <placement pin="PTE21"         location="" />
+         <placement pin="PTE22"         location="" />
+         <placement pin="PTE23"         location="" />
+         <placement pin="PTE3"          location="" />
+         <placement pin="PTE4"          location="" />
+         <placement pin="PTE5"          location="D21" />
+         <placement pin="PTE6"          location="D19_RED_LED" />
+         <placement pin="PTE7"          location="D23_GREEN_LED" />
+         <placement pin="PTE8"          location="D22_BLUE_LED" />
+         <placement pin="PTE9"          location="D20" />
+         <placement pin="RESET_b"       location="RESET_b" />
+         <placement pin="RTC_WAKEUP_b"  location="RTC_WAKEUP_B" />
+         <placement pin="USB0_DM"       location="USB0_DM" />
+         <placement pin="USB0_DP"       location="USB0_DP" />
+         <placement pin="USB1_DM"       location="" />
+         <placement pin="USB1_DP"       location="" />
+         <placement pin="USB1_VBUS"     location="" />
+         <placement pin="USB1_VSS"      location="" />
+         <placement pin="VBAT"          location="" />
+         <placement pin="VDD"           location="" />
+         <placement pin="VDD1"          location="" />
+         <placement pin="VDD10"         location="" />
+         <placement pin="VDD2"          location="" />
+         <placement pin="VDD3"          location="" />
+         <placement pin="VDD4"          location="" />
+         <placement pin="VDD5"          location="" />
+         <placement pin="VDD6"          location="" />
+         <placement pin="VDD7"          location="" />
+         <placement pin="VDD8"          location="" />
+         <placement pin="VDD9"          location="" />
+         <placement pin="VDDA"          location="" />
+         <placement pin="VDDIO_E"       location="" />
+         <placement pin="VDDIO_E1"      location="" />
+         <placement pin="VDDIO_E2"      location="" />
+         <placement pin="VDD_CORE"      location="" />
+         <placement pin="VDD_CORE1"     location="" />
+         <placement pin="VDD_CORE2"     location="" />
+         <placement pin="VDD_CORE3"     location="" />
+         <placement pin="VREFH"         location="" />
+         <placement pin="VREFL"         location="" />
+         <placement pin="VREF_OUT"      location="" />
+         <placement pin="VREG_IN0"      location="" />
+         <placement pin="VREG_IN1"      location="" />
+         <placement pin="VREG_OUT"      location="" />
+         <placement pin="VSS"           location="" />
+         <placement pin="VSS1"          location="" />
+         <placement pin="VSS10"         location="" />
+         <placement pin="VSS11"         location="" />
+         <placement pin="VSS12"         location="" />
+         <placement pin="VSS13"         location="" />
+         <placement pin="VSS14"         location="" />
+         <placement pin="VSS15"         location="" />
+         <placement pin="VSS16"         location="" />
+         <placement pin="VSS17"         location="" />
+         <placement pin="VSS18"         location="" />
+         <placement pin="VSS19"         location="" />
+         <placement pin="VSS2"          location="" />
+         <placement pin="VSS20"         location="" />
+         <placement pin="VSS21"         location="" />
+         <placement pin="VSS22"         location="" />
+         <placement pin="VSS23"         location="" />
+         <placement pin="VSS24"         location="" />
+         <placement pin="VSS25"         location="" />
+         <placement pin="VSS26"         location="" />
+         <placement pin="VSS27"         location="" />
+         <placement pin="VSS28"         location="" />
+         <placement pin="VSS29"         location="" />
+         <placement pin="VSS3"          location="" />
+         <placement pin="VSS30"         location="" />
+         <placement pin="VSS31"         location="" />
+         <placement pin="VSS32"         location="" />
+         <placement pin="VSS33"         location="" />
+         <placement pin="VSS34"         location="" />
+         <placement pin="VSS35"         location="" />
+         <placement pin="VSS36"         location="" />
+         <placement pin="VSS37"         location="" />
+         <placement pin="VSS38"         location="" />
+         <placement pin="VSS39"         location="" />
+         <placement pin="VSS4"          location="" />
+         <placement pin="VSS40"         location="" />
+         <placement pin="VSS41"         location="" />
+         <placement pin="VSS42"         location="" />
+         <placement pin="VSS43"         location="" />
+         <placement pin="VSS5"          location="" />
+         <placement pin="VSS6"          location="" />
+         <placement pin="VSS7"          location="" />
+         <placement pin="VSS8"          location="" />
+         <placement pin="VSS9"          location="" />
+         <placement pin="VSSA"          location="" />
+         <placement pin="VSSA1"         location="" />
+         <placement pin="XTAL32"        location="XTAL_32kHz" />
+      </package>
+      <package name="WLCSP_210">
+         <placement pin="ADC0_DM0"      location="N13" />
+         <placement pin="ADC0_DM3"      location="P13" />
+         <placement pin="ADC0_DP0"      location="N14" />
+         <placement pin="ADC0_DP3"      location="P14" />
+         <placement pin="ADC0_SE16"     location="M11" />
+         <placement pin="DAC0_OUT"      location="P12" />
+         <placement pin="EXTAL32"       location="P10" />
+         <placement pin="PTA0"          location="M8" />
+         <placement pin="PTA1"          location="N8" />
+         <placement pin="PTA10"         location="P5" />
+         <placement pin="PTA11"         location="N5" />
+         <placement pin="PTA12"         location="M5" />
+         <placement pin="PTA13"         location="L5" />
+         <placement pin="PTA14"         location="P4" />
+         <placement pin="PTA15"         location="N4" />
+         <placement pin="PTA16"         location="P3" />
+         <placement pin="PTA17"         location="N3" />
+         <placement pin="PTA18"         location="P1" />
+         <placement pin="PTA19"         location="N1" />
+         <placement pin="PTA2"          location="P8" />
+         <placement pin="PTA20"         location="P9" />
+         <placement pin="PTA21"         location="N9" />
+         <placement pin="PTA22"         location="M9" />
+         <placement pin="PTA23"         location="L9" />
+         <placement pin="PTA24"         location="M3" />
+         <placement pin="PTA25"         location="M4" />
+         <placement pin="PTA26"         location="L4" />
+         <placement pin="PTA27"         location="L3" />
+         <placement pin="PTA28"         location="L2" />
+         <placement pin="PTA29"         location="L1" />
+         <placement pin="PTA3"          location="M7" />
+         <placement pin="PTA30"         location="K4" />
+         <placement pin="PTA31"         location="K3" />
+         <placement pin="PTA4"          location="N7" />
+         <placement pin="PTA5"          location="P7" />
+         <placement pin="PTA6"          location="P6" />
+         <placement pin="PTA7"          location="N6" />
+         <placement pin="PTA8"          location="M6" />
+         <placement pin="PTA9"          location="L6" />
+         <placement pin="PTB0"          location="K2" />
+         <placement pin="PTB1"          location="K1" />
+         <placement pin="PTB10"         location="G2" />
+         <placement pin="PTB11"         location="G1" />
+         <placement pin="PTB12"         location="F4" />
+         <placement pin="PTB13"         location="F3" />
+         <placement pin="PTB14"         location="F2" />
+         <placement pin="PTB15"         location="F1" />
+         <placement pin="PTB16"         location="E1" />
+         <placement pin="PTB17"         location="E2" />
+         <placement pin="PTB18"         location="E3" />
+         <placement pin="PTB19"         location="E4" />
+         <placement pin="PTB2"          location="J4" />
+         <placement pin="PTB20"         location="D1" />
+         <placement pin="PTB21"         location="D2" />
+         <placement pin="PTB22"         location="D3" />
+         <placement pin="PTB23"         location="D4" />
+         <placement pin="PTB3"          location="J3" />
+         <placement pin="PTB4"          location="J2" />
+         <placement pin="PTB5"          location="J1" />
+         <placement pin="PTB6"          location="H3" />
+         <placement pin="PTB7"          location="H2" />
+         <placement pin="PTB8"          location="H1" />
+         <placement pin="PTB9"          location="G3" />
+         <placement pin="PTC0"          location="C1" />
+         <placement pin="PTC1"          location="C2" />
+         <placement pin="PTC10"         location="A4" />
+         <placement pin="PTC11"         location="D5" />
+         <placement pin="PTC12"         location="C5" />
+         <placement pin="PTC13"         location="B5" />
+         <placement pin="PTC14"         location="A5" />
+         <placement pin="PTC15"         location="C6" />
+         <placement pin="PTC16"         location="A6" />
+         <placement pin="PTC17"         location="B6" />
+         <placement pin="PTC18"         location="C7" />
+         <placement pin="PTC19"         location="B7" />
+         <placement pin="PTC2"          location="B1" />
+         <placement pin="PTC24"         location="A7" />
+         <placement pin="PTC25"         location="A8" />
+         <placement pin="PTC26"         location="B8" />
+         <placement pin="PTC27"         location="A9" />
+         <placement pin="PTC28"         location="B9" />
+         <placement pin="PTC29"         location="A10" />
+         <placement pin="PTC3"          location="B2" />
+         <placement pin="PTC4"          location="A2" />
+         <placement pin="PTC5"          location="C3" />
+         <placement pin="PTC6"          location="B3" />
+         <placement pin="PTC7"          location="A3" />
+         <placement pin="PTC8"          location="C4" />
+         <placement pin="PTC9"          location="B4" />
+         <placement pin="PTD0"          location="B10" />
+         <placement pin="PTD1"          location="C10" />
+         <placement pin="PTD10"         location="A13" />
+         <placement pin="PTD11"         location="B13" />
+         <placement pin="PTD12"         location="C13" />
+         <placement pin="PTD13"         location="A14" />
+         <placement pin="PTD14"         location="B14" />
+         <placement pin="PTD15"         location="A15" />
+         <placement pin="PTD2"          location="A11" />
+         <placement pin="PTD3"          location="B11" />
+         <placement pin="PTD4"          location="C11" />
+         <placement pin="PTD5"          location="D11" />
+         <placement pin="PTD6"          location="A12" />
+         <placement pin="PTD7"          location="B12" />
+         <placement pin="PTD8"          location="C12" />
+         <placement pin="PTD9"          location="D12" />
+         <placement pin="PTE0"          location="B15" />
+         <placement pin="PTE1"          location="C14" />
+         <placement pin="PTE10"         location="F12" />
+         <placement pin="PTE11"         location="F13" />
+         <placement pin="PTE12"         location="F14" />
+         <placement pin="PTE13"         location="F15" />
+         <placement pin="PTE16"         location="G12" />
+         <placement pin="PTE17"         location="G13" />
+         <placement pin="PTE18"         location="G14" />
+         <placement pin="PTE19"         location="G15" />
+         <placement pin="PTE2"          location="C15" />
+         <placement pin="PTE20"         location="H12" />
+         <placement pin="PTE21"         location="H13" />
+         <placement pin="PTE22"         location="H14" />
+         <placement pin="PTE23"         location="J13" />
+         <placement pin="PTE3"          location="D13" />
+         <placement pin="PTE4"          location="D14" />
+         <placement pin="PTE5"          location="D15" />
+         <placement pin="PTE6"          location="E12" />
+         <placement pin="PTE7"          location="E13" />
+         <placement pin="PTE8"          location="E14" />
+         <placement pin="PTE9"          location="E15" />
+         <placement pin="RESET_b"       location="M1" />
+         <placement pin="RTC_WAKEUP_b"  location="N11" />
+         <placement pin="USB0_DM"       location="K15" />
+         <placement pin="USB0_DP"       location="J15" />
+         <placement pin="USB1_DM"       location="N15" />
+         <placement pin="USB1_DP"       location="M15" />
+         <placement pin="USB1_VBUS"     location="M14" />
+         <placement pin="USB1_VSS"      location="L15" />
+         <placement pin="VBAT"          location="N10" />
+         <placement pin="VDD"           location="C9" />
+         <placement pin="VDD1"          location="D9" />
+         <placement pin="VDD10"         location="N2" />
+         <placement pin="VDD2"          location="E6" />
+         <placement pin="VDD3"          location="E7" />
+         <placement pin="VDD4"          location="E9" />
+         <placement pin="VDD5"          location="F6" />
+         <placement pin="VDD6"          location="G4" />
+         <placement pin="VDD7"          location="H4" />
+         <placement pin="VDD8"          location="K11" />
+         <placement pin="VDD9"          location="K7" />
+         <placement pin="VDDA"          location="M13" />
+         <placement pin="VDDIO_E"       location="E11" />
+         <placement pin="VDDIO_E1"      location="F11" />
+         <placement pin="VDDIO_E2"      location="J12" />
+         <placement pin="VDD_CORE"      location="D6" />
+         <placement pin="VDD_CORE1"     location="D7" />
+         <placement pin="VDD_CORE2"     location="M10" />
+         <placement pin="VDD_CORE3"     location="M2" />
+         <placement pin="VREFH"         location="L13" />
+         <placement pin="VREFL"         location="L12" />
+         <placement pin="VREF_OUT"      location="N12" />
+         <placement pin="VREG_IN0"      location="K14" />
+         <placement pin="VREG_IN1"      location="L14" />
+         <placement pin="VREG_OUT"      location="J14" />
+         <placement pin="VSS"           location="A1" />
+         <placement pin="VSS1"          location="C8" />
+         <placement pin="VSS10"         location="F8" />
+         <placement pin="VSS11"         location="F9" />
+         <placement pin="VSS12"         location="G10" />
+         <placement pin="VSS13"         location="G11" />
+         <placement pin="VSS14"         location="G5" />
+         <placement pin="VSS15"         location="G6" />
+         <placement pin="VSS16"         location="G7" />
+         <placement pin="VSS17"         location="G8" />
+         <placement pin="VSS18"         location="G9" />
+         <placement pin="VSS19"         location="H10" />
+         <placement pin="VSS2"          location="D10" />
+         <placement pin="VSS20"         location="H11" />
+         <placement pin="VSS21"         location="H15" />
+         <placement pin="VSS22"         location="H5" />
+         <placement pin="VSS23"         location="H6" />
+         <placement pin="VSS24"         location="H7" />
+         <placement pin="VSS25"         location="H8" />
+         <placement pin="VSS26"         location="H9" />
+         <placement pin="VSS27"         location="J10" />
+         <placement pin="VSS28"         location="J11" />
+         <placement pin="VSS29"         location="J5" />
+         <placement pin="VSS3"          location="D8" />
+         <placement pin="VSS30"         location="J6" />
+         <placement pin="VSS31"         location="J7" />
+         <placement pin="VSS32"         location="J8" />
+         <placement pin="VSS33"         location="J9" />
+         <placement pin="VSS34"         location="K10" />
+         <placement pin="VSS35"         location="K5" />
+         <placement pin="VSS36"         location="K6" />
+         <placement pin="VSS37"         location="K8" />
+         <placement pin="VSS38"         location="K9" />
+         <placement pin="VSS39"         location="L10" />
+         <placement pin="VSS4"          location="E10" />
+         <placement pin="VSS40"         location="L11" />
+         <placement pin="VSS41"         location="L7" />
+         <placement pin="VSS42"         location="L8" />
+         <placement pin="VSS43"         location="P2" />
+         <placement pin="VSS5"          location="E5" />
+         <placement pin="VSS6"          location="E8" />
+         <placement pin="VSS7"          location="F10" />
+         <placement pin="VSS8"          location="F5" />
+         <placement pin="VSS9"          location="F7" />
+         <placement pin="VSSA"          location="K12" />
+         <placement pin="VSSA1"         location="M12" />
+         <placement pin="XTAL32"        location="P11" />
+      </package>
+   </packages>
+</root>
