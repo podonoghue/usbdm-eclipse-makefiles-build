@@ -70,7 +70,8 @@ Devices using this peripheral:
          
       <choiceOption name="sim_sopt2_lpuartsrc" 
          description="LPUART Clock select"
-         toolTip="Selects the clock source for the transmit and receive clock">
+         toolTip="Selects the clock source for the transmit and receive clock\n
+	     This is selection is shared by all LPUARTs">
          <choice value="0"  name="Disabled" />
          <choice value="1"  name="Peripheral Clock" />
          <choice value="2"  name="OSCERCLK clock" />
@@ -136,11 +137,11 @@ Devices using this peripheral:
       \t}\n\n
 
       \t/**
-      \t * Get LPUART0 input clock frequency
+      \t * Get LPUART clock frequency
       \t *
       \t * @return Frequency as a uint32_t in Hz
       \t */
-      \tstatic uint32_t getLpuart0InputClock() {
+      \tstatic uint32_t getLpuartClock() {
       \t   
       \t   switch(sim->SOPT2&SIM_SOPT2_LPUARTSRC_MASK) {
       \t   default:
@@ -150,23 +151,6 @@ Devices using this peripheral:
       \t   case SIM_SOPT2_LPUARTSRC(3): return McgInfo::getMcgIrClock();
       \t   }
       \t}\n\n
-      
-      \t/**
-      \t * Get LPUART0 clock frequency
-      \t *
-      \t * @return Frequency as a uint32_t in Hz
-      \t */
-      \tstatic uint32_t getLpuart0Clock() {
-      \t   
-      \t   switch(sim->SOPT2&SIM_SOPT2_LPUARTSRC_MASK) {
-      \t   default:
-      \t   case SIM_SOPT2_LPUARTSRC(0): return 0;
-      \t   case SIM_SOPT2_LPUARTSRC(1): return getPeripheralClock();
-      \t   case SIM_SOPT2_LPUARTSRC(2): return Osc0Info::getOscerClock();
-      \t   case SIM_SOPT2_LPUARTSRC(3): return McgInfo::getMcgIrClock();
-      \t   }
-      \t}\n\n
-
    ]]></template>
    <category name="SOPT4" description="FTM signals">
       <binaryOption name="sim_sopt4_ftm3trg1src" 
@@ -560,33 +544,34 @@ Devices using this peripheral:
       \t   SIM_SOPT8_FTM0OCH1SRC($(sim_sopt8_ftm0och1src)) |   // FTM0 channel 1 output source
       \t   SIM_SOPT8_FTM0OCH0SRC($(sim_sopt8_ftm0och0src));    // FTM0 channel 0 output source\n\n
    ]]></template>
-   <category name="CLKDIV2" description="USB Clock Dividers">
-      <choiceOption name="sim_clkdiv2_usb"
-         description="USB clock divider" 
-         toolTip="Sets the clock divider when the MCGFLLCLK, MCGPLLCLK, or IRC48M clock\n
-         is the USB clock source.">
-         <choice value="1" name="Multiply by 2 (div=0, frac=1)" />
-         <choice value="0" name="Multiply by 1 (div=0, frac=0)" />
-         <choice value="3" name="Multiply by 1 (div=1, frac=1)" />
-         <choice value="5" name="Divide by 1.5 (div=2, frac=1)" />
-         <choice value="2" name="Divide by 2 (div=1, frac=0)" />
-         <choice value="7" name="Divide by 2 (div=3, frac=1)" />
-         <choice value="9" name="Divide by 2.5 (div=4, frac=1)" />
-         <choice value="4" name="Divide by 3 (div=2, frac=0)" />
-         <choice value="11" name="Divide by 3 (div=5, frac=1)" />
-         <choice value="13" name="Divide by 3.5 (div=6, frac=1)" />
-         <choice value="6" name="Divide by 4 (div=3, frac=0)" />
-         <choice value="15" name="Divide by 4 (div=7, frac=1)" />
-         <choice value="8" name="Divide by 5 (div=4, frac=0)" />
-         <choice value="10" name="Divide by 6 (div=5, frac=0)" />
-         <choice value="12" name="Divide by 7 (div=6, frac=0)" />
-         <choice value="14" name="Divide by 8 (div=7, frac=0)" />
-      </choiceOption>
-   </category>   
+
+   <choiceOption name="sim_clkdiv2_usb"
+      description="USB clock divider" 
+      toolTip="Sets the clock divider when the MCGFLLCLK, MCGPLLCLK, or IRC48M clock\n
+      is the USB clock source.">
+      <choice value="1" name="Multiply by 2 (div=0, frac=1)" />
+      <choice value="0" name="Multiply by 1 (div=0, frac=0)" />
+      <choice value="3" name="Multiply by 1 (div=1, frac=1)" />
+      <choice value="5" name="Divide by 1.5 (div=2, frac=1)" />
+      <choice value="2" name="Divide by 2 (div=1, frac=0)" />
+      <choice value="7" name="Divide by 2 (div=3, frac=1)" />
+      <choice value="9" name="Divide by 2.5 (div=4, frac=1)" />
+      <choice value="4" name="Divide by 3 (div=2, frac=0)" />
+      <choice value="11" name="Divide by 3 (div=5, frac=1)" />
+      <choice value="13" name="Divide by 3.5 (div=6, frac=1)" />
+      <choice value="6" name="Divide by 4 (div=3, frac=0)" />
+      <choice value="15" name="Divide by 4 (div=7, frac=1)" />
+      <choice value="8" name="Divide by 5 (div=4, frac=0)" />
+      <choice value="10" name="Divide by 6 (div=5, frac=0)" />
+      <choice value="12" name="Divide by 7 (div=6, frac=0)" />
+      <choice value="14" name="Divide by 8 (div=7, frac=0)" />
+   </choiceOption>
+   
    <template><![CDATA[
+      \t#ifdef SIM_CLKDIV2_USBDIV_MASK
       \t//! System Clock Divider Register 2
-      \tstatic constexpr uint32_t clkdiv2 = 
-      \t   $(sim_clkdiv2_usb);  // USB clock divider divisor & fraction \n\n
+      \t//! USB clock divider divisor & fraction
+      \tstatic constexpr uint32_t clkdiv2 = $(sim_clkdiv2_usb:0);\n\n
       
       \t/**
       \t * Get USB clock frequency
@@ -597,7 +582,8 @@ Devices using this peripheral:
       \t   return (getPeripheralClock()*
       \t      (((sim->CLKDIV2&SIM_CLKDIV2_USBFRAC_MASK)>>SIM_CLKDIV2_USBFRAC_SHIFT)+1))/
       \t      (((sim->CLKDIV2&SIM_CLKDIV2_USBDIV_MASK)>>SIM_CLKDIV2_USBDIV_SHIFT)+1);
-      \t}\n\n
+      \t}
+      \t#endif\n\n
    ]]></template>
    
    <indexedCategory name="ClockConfig." dim="3" 
@@ -687,6 +673,7 @@ Devices using this peripheral:
                      MCGOUTCLK clock is source. Default /4"
             value="4" offset="-1" min="1" max="16" />
       </category>
+
    </indexedCategory>
    
    <validate
@@ -718,7 +705,9 @@ Devices using this peripheral:
       \t   sim->SOPT7 = sopt7;
       \t   sim->SOPT8 = sopt8;
       \t
+      \t#ifdef SIM_CLKDIV2_USBDIV_MASK
       \t   sim->CLKDIV2 = clkdiv2;
+      \t#endif
       \t}\n\n
    ]]></template>
    

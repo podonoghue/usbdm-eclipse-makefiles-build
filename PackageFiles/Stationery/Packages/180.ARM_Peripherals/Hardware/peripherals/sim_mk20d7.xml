@@ -266,34 +266,34 @@ Devices using this peripheral:
       \t   SIM_SOPT7_ADC0PRETRGSEL($(sim_sopt7_adc0pretrgsel)) |   // ADC0 pretrigger select
       \t   SIM_SOPT7_ADC0TRGSEL($(sim_sopt7_adc0trgsel));       // ADC0 trigger select\n\n
    ]]></template>
-   <category name="CLKDIV2" description="USB Clock Dividers">
-      <choiceOption name="sim_clkdiv2_usb"
-         description="USB clock divider" 
-         toolTip="Sets the clock divider when the MCGFLLCLK, MCGPLLCLK, or IRC48M clock\n
-         is the USB clock source.">
-         <choice value="1" name="Multiply by 2 (div=0, frac=1)" />
-         <choice value="0" name="Multiply by 1 (div=0, frac=0)" />
-         <choice value="3" name="Multiply by 1 (div=1, frac=1)" />
-         <choice value="5" name="Divide by 1.5 (div=2, frac=1)" />
-         <choice value="2" name="Divide by 2 (div=1, frac=0)" />
-         <choice value="7" name="Divide by 2 (div=3, frac=1)" />
-         <choice value="9" name="Divide by 2.5 (div=4, frac=1)" />
-         <choice value="4" name="Divide by 3 (div=2, frac=0)" />
-         <choice value="11" name="Divide by 3 (div=5, frac=1)" />
-         <choice value="13" name="Divide by 3.5 (div=6, frac=1)" />
-         <choice value="6" name="Divide by 4 (div=3, frac=0)" />
-         <choice value="15" name="Divide by 4 (div=7, frac=1)" />
-         <choice value="8" name="Divide by 5 (div=4, frac=0)" />
-         <choice value="10" name="Divide by 6 (div=5, frac=0)" />
-         <choice value="12" name="Divide by 7 (div=6, frac=0)" />
-         <choice value="14" name="Divide by 8 (div=7, frac=0)" />
-      </choiceOption>
-   </category>   
+
+   <choiceOption name="sim_clkdiv2_usb"
+      description="USB clock divider" 
+      toolTip="Sets the clock divider when the MCGFLLCLK, MCGPLLCLK, or IRC48M clock\n
+      is the USB clock source.">
+      <choice value="1" name="Multiply by 2 (div=0, frac=1)" />
+      <choice value="0" name="Multiply by 1 (div=0, frac=0)" />
+      <choice value="3" name="Multiply by 1 (div=1, frac=1)" />
+      <choice value="5" name="Divide by 1.5 (div=2, frac=1)" />
+      <choice value="2" name="Divide by 2 (div=1, frac=0)" />
+      <choice value="7" name="Divide by 2 (div=3, frac=1)" />
+      <choice value="9" name="Divide by 2.5 (div=4, frac=1)" />
+      <choice value="4" name="Divide by 3 (div=2, frac=0)" />
+      <choice value="11" name="Divide by 3 (div=5, frac=1)" />
+      <choice value="13" name="Divide by 3.5 (div=6, frac=1)" />
+      <choice value="6" name="Divide by 4 (div=3, frac=0)" />
+      <choice value="15" name="Divide by 4 (div=7, frac=1)" />
+      <choice value="8" name="Divide by 5 (div=4, frac=0)" />
+      <choice value="10" name="Divide by 6 (div=5, frac=0)" />
+      <choice value="12" name="Divide by 7 (div=6, frac=0)" />
+      <choice value="14" name="Divide by 8 (div=7, frac=0)" />
+   </choiceOption>
+   
    <template><![CDATA[
+      \t#ifdef SIM_CLKDIV2_USBDIV_MASK
       \t//! System Clock Divider Register 2
-      \tstatic constexpr uint32_t clkdiv2 = 
-      \t   $(sim_clkdiv2_usb);  // USB clock divider divisor & fraction \n\n
-      
+      \t//! USB clock divider divisor & fraction
+      \tstatic constexpr uint32_t clkdiv2 = $(sim_clkdiv2_usb:0);\n\n
       \t/**
       \t * Get USB clock frequency
       \t *
@@ -303,7 +303,8 @@ Devices using this peripheral:
       \t   return (getPeripheralClock()*
       \t      (((sim->CLKDIV2&SIM_CLKDIV2_USBFRAC_MASK)>>SIM_CLKDIV2_USBFRAC_SHIFT)+1))/
       \t      (((sim->CLKDIV2&SIM_CLKDIV2_USBDIV_MASK)>>SIM_CLKDIV2_USBDIV_SHIFT)+1);
-      \t}\n\n
+      \t}
+      \t#endif\n\n
    ]]></template>
    
    <indexedCategory name="ClockConfig." dim="3" 
@@ -375,15 +376,16 @@ Devices using this peripheral:
                      MCGOUTCLK clock is source. Default /4"
             value="4" offset="-1" min="1" max="16" />
       </category>
+
    </indexedCategory>
    
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate"
       dim="3">
-      <param type="long" value="$(coreFreq)" />    <!-- Core         -->
-      <param type="long" value="$(busFreq)" />     <!-- Bus          -->
-      <param type="long" value="$(flashFreq)" />   <!-- Flash        -->
-      <param type="long" value="$(flexFreq)" />    <!-- FlexBus      -->
+      <param type="long" value="72MHz" />    <!-- Core         -->
+      <param type="long" value="50MHz" />    <!-- Bus          -->
+      <param type="long" value="25MHz" />    <!-- Flash        -->
+      <param type="long" value="50MHz" />    <!-- FlexBus      -->
    </validate>
 
    <xi:include href="_simFiles-MK.xml"/>
@@ -405,7 +407,9 @@ Devices using this peripheral:
       \t   sim->SOPT5 = sopt5;
       \t   sim->SOPT7 = sopt7;
       \t
+      \t#ifdef SIM_CLKDIV2_USBDIV_MASK
       \t   sim->CLKDIV2 = clkdiv2;
+      \t#endif
       \t}\n\n
    ]]></template>
    
