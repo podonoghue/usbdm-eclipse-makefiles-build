@@ -253,6 +253,7 @@
    <!ATTLIST constant type         (boolean|int|string)  "string" >
    <!ATTLIST constant weak         (true|false)          "false">
    <!ATTLIST constant replace      (true|false)          "false">
+   <!ATTLIST constant derived      (true|false)          "false">
    
 <!ELEMENT divider EMPTY >
    
