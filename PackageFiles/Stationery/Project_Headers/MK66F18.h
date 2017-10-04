@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2017/09
+ * @date     2017/10
  *
  *******************************************************************************************************/
 
@@ -8423,8 +8423,8 @@ typedef struct {                                /*       MPU Structure          
    __IO uint32_t  CESR;                         /**< 0000: Control/Error Status Register                                */
         uint8_t   RESERVED_0[12];              
    struct {
-      __I  uint32_t  EAR;                       /**< 0010: Error Address Register, Slave Port n                         */
-      __I  uint32_t  EDR;                       /**< 0014: Error Detail Register, Slave Port n                          */
+      __I  uint32_t  EAR;                       /**< 0010: Error Address Register, slave port n                         */
+      __I  uint32_t  EDR;                       /**< 0014: Error Detail Register, slave port n                          */
    } SP[5];                                     /**< 0010: (cluster: size=0x0028, 40)                                   */
         uint8_t   RESERVED_2[968];             
    struct {

@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2017/09
+ * @date     2017/10
  *
  *******************************************************************************************************/
 
@@ -4287,7 +4287,7 @@ typedef struct {                                /*       FTM0 Structure         
 */
 
 /* ================================================================================ */
-/* ================           FTM1 (file:FTM1_MK28F15)             ================ */
+/* ================           FTM1 (file:FTM1_8CH_ICRST)           ================ */
 /* ================================================================================ */
 
 /**
@@ -4299,7 +4299,7 @@ typedef struct {                                /*       FTM0 Structure         
 * @{
 */
 typedef struct {                                /*       FTM1 Structure                                               */
-   __IO uint32_t  SC;                           /**< 0000: Status And Control                                           */
+   __IO uint32_t  SC;                           /**< 0000: Status and Control                                           */
    __IO uint32_t  CNT;                          /**< 0004: Counter                                                      */
    __IO uint32_t  MOD;                          /**< 0008: Modulo                                                       */
    struct {
@@ -4308,7 +4308,7 @@ typedef struct {                                /*       FTM1 Structure         
    } CONTROLS[2];                               /**< 000C: (cluster: size=0x0010, 16)                                   */
         uint8_t   RESERVED_1[48];              
    __IO uint32_t  CNTIN;                        /**< 004C: Counter Initial Value                                        */
-   __IO uint32_t  STATUS;                       /**< 0050: Capture And Compare Status                                   */
+   __IO uint32_t  STATUS;                       /**< 0050: Capture and Compare Status                                   */
    __IO uint32_t  MODE;                         /**< 0054: Features Mode Selection                                      */
    __IO uint32_t  SYNC;                         /**< 0058: Synchronization                                              */
    __IO uint32_t  OUTINIT;                      /**< 005C: Initial State for Channels Output                            */
@@ -4320,7 +4320,7 @@ typedef struct {                                /*       FTM1 Structure         
    __IO uint32_t  FMS;                          /**< 0074: Fault Mode Status                                            */
    __IO uint32_t  FILTER;                       /**< 0078: Input Capture Filter Control                                 */
    __IO uint32_t  FLTCTRL;                      /**< 007C: Fault Control                                                */
-   __IO uint32_t  QDCTRL;                       /**< 0080: Quadrature Decoder Control And Status                        */
+   __IO uint32_t  QDCTRL;                       /**< 0080: Quadrature Decoder Control and Status                        */
    __IO uint32_t  CONF;                         /**< 0084: Configuration                                                */
    __IO uint32_t  FLTPOL;                       /**< 0088: FTM Fault Input Polarity                                     */
    __IO uint32_t  SYNCONF;                      /**< 008C: Synchronization Configuration                                */
@@ -7303,7 +7303,7 @@ typedef struct {                                /*       MCM Structure          
 */
 
 /* ================================================================================ */
-/* ================           MPU (file:MPU_MK82F25615)            ================ */
+/* ================           MPU (file:MPU_MK21F12_R12)           ================ */
 /* ================================================================================ */
 
 /**
@@ -7835,7 +7835,7 @@ typedef struct {                                /*       OTFAD Structure        
 */
 
 /* ================================================================================ */
-/* ================           PDB0 (file:PDB0_MK28F15)             ================ */
+/* ================           PDB0 (file:PDB0_1CH_2TRIG_1DAC_2PO)       ================ */
 /* ================================================================================ */
 
 /**
@@ -7858,9 +7858,11 @@ typedef struct {                                /*       PDB0 Structure         
            uint8_t   RESERVED_0[24];           
    } CH[1];                                     /**< 0010: (cluster: size=0x0028, 40)                                   */
         uint8_t   RESERVED_1[280];             
-   __IO uint32_t  INTC;                         /**< 0150: DAC Interval Trigger n Control register                      */
-   __IO uint32_t  INT;                          /**< 0154: DAC Interval n Register                                      */
-        uint8_t   RESERVED_2[56];              
+   struct {
+      __IO uint32_t  INTC;                      /**< 0150: DAC Interval Trigger n Control Register                      */
+      __IO uint32_t  INT;                       /**< 0154: DAC Interval n Register                                      */
+   } DAC[1];                                    /**< 0150: (cluster: size=0x0008, 8)                                    */
+        uint8_t   RESERVED_3[56];              
    __IO uint32_t  POEN;                         /**< 0190: Pulse-Out Enable Register                                    */
    __IO uint32_t  PODLY[2];                     /**< 0194: Pulse-Out  Delay Register                                    */
 } PDB_Type;
@@ -8936,10 +8938,10 @@ typedef struct {                                /*       RCM Structure          
    __I  uint8_t   SRS0;                         /**< 0000: System Reset Status Register 0                               */
    __I  uint8_t   SRS1;                         /**< 0001: System Reset Status Register 1                               */
         uint8_t   RESERVED_0[2];               
-   __IO uint8_t   RPFC;                         /**< 0004: Reset Pin Filter Control register                            */
-   __IO uint8_t   RPFW;                         /**< 0005: Reset Pin Filter Width register                              */
+   __IO uint8_t   RPFC;                         /**< 0004: Reset Pin Filter Control Register                            */
+   __IO uint8_t   RPFW;                         /**< 0005: Reset Pin Filter Width Register                              */
    __IO uint8_t   FM;                           /**< 0006: Force Mode Register                                          */
-   __IO uint8_t   MR;                           /**< 0007: Mode Register                                                */
+   __I  uint8_t   MR;                           /**< 0007: Mode Register                                                */
    __IO uint8_t   SSRS0;                        /**< 0008: Sticky System Reset Status Register 0                        */
    __IO uint8_t   SSRS1;                        /**< 0009: Sticky System Reset Status Register 1                        */
 } RCM_Type;
@@ -10629,10 +10631,13 @@ typedef struct {                                /*       SIM Structure          
 * @{
 */
 typedef struct {                                /*       SMC Structure                                                */
-   __IO uint8_t   PMPROT;                       /**< 0000: Power Mode Protection register                               */
-   __IO uint8_t   PMCTRL;                       /**< 0001: Power Mode Control register                                  */
-   __IO uint8_t   STOPCTRL;                     /**< 0002: Stop Control Register                                        */
-   __I  uint8_t   PMSTAT;                       /**< 0003: Power Mode Status register                                   */
+   __IO uint8_t   PMPROT;                       /**< 0000: Power Mode Protection Register                               */
+   __IO uint8_t   PMCTRL;                       /**< 0001: Power Mode Control Register                                  */
+   union {                                      /**< 0000: (size=0001)                                                  */
+      __IO uint8_t   STOPCTRL;                  /**< 0002: Stop Control Register                                        */
+      __IO uint8_t   VLLSCTRL;                  /**< 0002: VLLS Control Register                                        */
+   };
+   __I  uint8_t   PMSTAT;                       /**< 0003: Power Mode Status Register                                   */
 } SMC_Type;
 
 /**
@@ -10687,6 +10692,22 @@ typedef struct {                                /*       SMC Structure          
 #define SMC_STOPCTRL_PSTOPO_MASK                 (0xC0U)                                             /*!< SMC_STOPCTRL.PSTOPO Mask                */
 #define SMC_STOPCTRL_PSTOPO_SHIFT                (6U)                                                /*!< SMC_STOPCTRL.PSTOPO Position            */
 #define SMC_STOPCTRL_PSTOPO(x)                   (((uint8_t)(((uint8_t)(x))<<6U))&0xC0UL)            /*!< SMC_STOPCTRL.PSTOPO Field               */
+/* ------- VLLSCTRL Bit Fields                      ------ */
+#define SMC_VLLSCTRL_LLSM_MASK                   (0x7U)                                              /*!< SMC_VLLSCTRL.LLSM Mask                  */
+#define SMC_VLLSCTRL_LLSM_SHIFT                  (0U)                                                /*!< SMC_VLLSCTRL.LLSM Position              */
+#define SMC_VLLSCTRL_LLSM(x)                     (((uint8_t)(((uint8_t)(x))<<0U))&0x7UL)             /*!< SMC_VLLSCTRL.LLSM Field                 */
+#define SMC_VLLSCTRL_LPOPO_MASK                  (0x8U)                                              /*!< SMC_VLLSCTRL.LPOPO Mask                 */
+#define SMC_VLLSCTRL_LPOPO_SHIFT                 (3U)                                                /*!< SMC_VLLSCTRL.LPOPO Position             */
+#define SMC_VLLSCTRL_LPOPO(x)                    (((uint8_t)(((uint8_t)(x))<<3U))&0x8UL)             /*!< SMC_VLLSCTRL.LPOPO Field                */
+#define SMC_VLLSCTRL_RAM2PO_MASK                 (0x10U)                                             /*!< SMC_VLLSCTRL.RAM2PO Mask                */
+#define SMC_VLLSCTRL_RAM2PO_SHIFT                (4U)                                                /*!< SMC_VLLSCTRL.RAM2PO Position            */
+#define SMC_VLLSCTRL_RAM2PO(x)                   (((uint8_t)(((uint8_t)(x))<<4U))&0x10UL)            /*!< SMC_VLLSCTRL.RAM2PO Field               */
+#define SMC_VLLSCTRL_PORPO_MASK                  (0x20U)                                             /*!< SMC_VLLSCTRL.PORPO Mask                 */
+#define SMC_VLLSCTRL_PORPO_SHIFT                 (5U)                                                /*!< SMC_VLLSCTRL.PORPO Position             */
+#define SMC_VLLSCTRL_PORPO(x)                    (((uint8_t)(((uint8_t)(x))<<5U))&0x20UL)            /*!< SMC_VLLSCTRL.PORPO Field                */
+#define SMC_VLLSCTRL_PSTOPO_MASK                 (0xC0U)                                             /*!< SMC_VLLSCTRL.PSTOPO Mask                */
+#define SMC_VLLSCTRL_PSTOPO_SHIFT                (6U)                                                /*!< SMC_VLLSCTRL.PSTOPO Position            */
+#define SMC_VLLSCTRL_PSTOPO(x)                   (((uint8_t)(((uint8_t)(x))<<6U))&0xC0UL)            /*!< SMC_VLLSCTRL.PSTOPO Field               */
 /* ------- PMSTAT Bit Fields                        ------ */
 #define SMC_PMSTAT_PMSTAT_MASK                   (0xFFU)                                             /*!< SMC_PMSTAT.PMSTAT Mask                  */
 #define SMC_PMSTAT_PMSTAT_SHIFT                  (0U)                                                /*!< SMC_PMSTAT.PMSTAT Position              */
@@ -11100,7 +11121,7 @@ typedef struct {                                /*       SYST Structure         
 */
 
 /* ================================================================================ */
-/* ================           TPM1 (file:TPM1_MK28F15)             ================ */
+/* ================           TPM1 (file:TPM1_2CH_QUAD)            ================ */
 /* ================================================================================ */
 
 /**
@@ -11116,8 +11137,8 @@ typedef struct {                                /*       TPM1 Structure         
    __IO uint32_t  CNT;                          /**< 0004: Counter                                                      */
    __IO uint32_t  MOD;                          /**< 0008: Modulo                                                       */
    struct {
-      __IO uint32_t  CnSC;                      /**< 000C: Channel (n) Status and Control                               */
-      __IO uint32_t  CnV;                       /**< 0010: Channel (n) Value                                            */
+      __IO uint32_t  CnSC;                      /**< 000C: Channel  Status and Control                                  */
+      __IO uint32_t  CnV;                       /**< 0010: Channel  Value                                               */
    } CONTROLS[2];                               /**< 000C: (cluster: size=0x0010, 16)                                   */
         uint8_t   RESERVED_1[52];              
    __IO uint32_t  STATUS;                       /**< 0050: Capture and Compare Status                                   */
@@ -11130,7 +11151,7 @@ typedef struct {                                /*       TPM1 Structure         
         uint8_t   RESERVED_5[4];               
    __IO uint32_t  QDCTRL;                       /**< 0080: Quadrature Decoder Control and Status                        */
    __IO uint32_t  CONF;                         /**< 0084: Configuration                                                */
-} TPM1_Type;
+} TPM_Type;
 
 /**
  * @} */ /* End group TPM_structs_GROUP 
@@ -11176,12 +11197,18 @@ typedef struct {                                /*       TPM1 Structure         
 #define TPM_CnSC_DMA_MASK                        (0x1U)                                              /*!< TPM1_CnSC.DMA Mask                      */
 #define TPM_CnSC_DMA_SHIFT                       (0U)                                                /*!< TPM1_CnSC.DMA Position                  */
 #define TPM_CnSC_DMA(x)                          (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< TPM1_CnSC.DMA Field                     */
+#define TPM_CnSC_ELS_MASK                        (0xCU)                                              /*!< TPM1_CnSC.ELS Mask                      */
+#define TPM_CnSC_ELS_SHIFT                       (2U)                                                /*!< TPM1_CnSC.ELS Position                  */
+#define TPM_CnSC_ELS(x)                          (((uint32_t)(((uint32_t)(x))<<2U))&0xCUL)           /*!< TPM1_CnSC.ELS Field                     */
 #define TPM_CnSC_ELSA_MASK                       (0x4U)                                              /*!< TPM1_CnSC.ELSA Mask                     */
 #define TPM_CnSC_ELSA_SHIFT                      (2U)                                                /*!< TPM1_CnSC.ELSA Position                 */
 #define TPM_CnSC_ELSA(x)                         (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< TPM1_CnSC.ELSA Field                    */
 #define TPM_CnSC_ELSB_MASK                       (0x8U)                                              /*!< TPM1_CnSC.ELSB Mask                     */
 #define TPM_CnSC_ELSB_SHIFT                      (3U)                                                /*!< TPM1_CnSC.ELSB Position                 */
 #define TPM_CnSC_ELSB(x)                         (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< TPM1_CnSC.ELSB Field                    */
+#define TPM_CnSC_MS_MASK                         (0x30U)                                             /*!< TPM1_CnSC.MS Mask                       */
+#define TPM_CnSC_MS_SHIFT                        (4U)                                                /*!< TPM1_CnSC.MS Position                   */
+#define TPM_CnSC_MS(x)                           (((uint32_t)(((uint32_t)(x))<<4U))&0x30UL)          /*!< TPM1_CnSC.MS Field                      */
 #define TPM_CnSC_MSA_MASK                        (0x10U)                                             /*!< TPM1_CnSC.MSA Mask                      */
 #define TPM_CnSC_MSA_SHIFT                       (4U)                                                /*!< TPM1_CnSC.MSA Position                  */
 #define TPM_CnSC_MSA(x)                          (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< TPM1_CnSC.MSA Field                     */
@@ -11282,7 +11309,7 @@ typedef struct {                                /*       TPM1 Structure         
 
 /* TPM1 - Peripheral instance base addresses */
 #define TPM1_BasePtr                   0x400C9000UL //!< Peripheral base address
-#define TPM1                           ((TPM1_Type *) TPM1_BasePtr) //!< Freescale base pointer
+#define TPM1                           ((TPM_Type *) TPM1_BasePtr) //!< Freescale base pointer
 #define TPM1_BASE_PTR                  (TPM1) //!< Freescale style base pointer
 /**
  * @} */ /* End group TPM_Peripheral_access_layer_GROUP 
@@ -11303,7 +11330,7 @@ typedef struct {                                /*       TPM1 Structure         
 
 /* TPM2 - Peripheral instance base addresses */
 #define TPM2_BasePtr                   0x400CA000UL //!< Peripheral base address
-#define TPM2                           ((TPM1_Type *) TPM2_BasePtr) //!< Freescale base pointer
+#define TPM2                           ((TPM_Type *) TPM2_BasePtr) //!< Freescale base pointer
 #define TPM2_BASE_PTR                  (TPM2) //!< Freescale style base pointer
 /**
  * @} */ /* End group TPM_Peripheral_access_layer_GROUP 
@@ -12515,7 +12542,7 @@ typedef struct {                                /*       USBDCD Structure       
 */
 
 /* ================================================================================ */
-/* ================           VREF (file:VREF_MK28F15)             ================ */
+/* ================           VREF (file:VREF_C)                   ================ */
 /* ================================================================================ */
 
 /**
