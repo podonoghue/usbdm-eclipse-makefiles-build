@@ -5,7 +5,12 @@
  */
 #include <derivative.h>
 #include "hardware.h"
+#if defined(USBDM_UART0_IS_DEFINED) || defined(USBDM_UART1_IS_DEFINED) || defined(USBDM_UART2_IS_DEFINED) || defined(USBDM_UART3_IS_DEFINED) || defined(USBDM_UART4_IS_DEFINED)
 #include "uart.h"
+#endif
+#if defined(USBDM_LPUART0_IS_DEFINED) || defined(USBDM_LPUART1_IS_DEFINED) || defined(USBDM_LPUART2_IS_DEFINED)
+#include "lpuart.h"
+#endif
 
  /*
  * *****************************
@@ -29,7 +34,7 @@ namespace USBDM {
  */
 
 //! Default baud rate for console
-constexpr int defaultBaudRate = $(/Console/defaultBaudRate:USBDM::Uart0);
+constexpr int defaultBaudRate = $(/Console/defaultBaudRate:115200);
 
 //! Maps console to UART used
 using  Console = $(/Console/console_device:USBDM::Uart0);
