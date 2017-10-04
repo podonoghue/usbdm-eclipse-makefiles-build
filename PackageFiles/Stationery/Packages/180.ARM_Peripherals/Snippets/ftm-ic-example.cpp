@@ -107,8 +107,8 @@ int main() {
       disableInterrupts();
       tPeriodInTicks = periodInTicks;
       enableInterrupts();
-      int intervalInMicroseconds = (int)(1000*TimerChannel::convertTicksToSeconds(tPeriodInTicks));
-      console.write("Period = ").write(intervalInMicroseconds).writeln(" us");
+      int intervalInMilliseconds = (int)(1000*TimerChannel::convertTicksToSeconds(tPeriodInTicks));
+      console.write("Period = ").write(intervalInMilliseconds).writeln(" ms");
    }
    return 0;
 }
