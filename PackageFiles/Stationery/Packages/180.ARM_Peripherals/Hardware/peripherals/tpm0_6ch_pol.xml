@@ -3,5 +3,5 @@
 <!-- tpm0_6ch_pol.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="tpm.xml"/>
+<xi:include href="tpm_def.xml"/>
 </fragment>
