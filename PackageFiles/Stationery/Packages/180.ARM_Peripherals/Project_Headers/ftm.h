@@ -1179,6 +1179,8 @@ public:
     *
     * @note This method has the side-effect of clearing the register update synchronisation i.e.
     *       pending CnV register updates are discarded.
+    *
+    * @deprecated
     */
    static void INLINE_RELEASE configure(
          FtmChMode      ftmChMode     = FtmChMode_PwmHighTruePulses,
@@ -1204,16 +1206,6 @@ public:
          }
       }
    }
-   /**
-    * Get channel mode
-    *
-    * @return Current mode of operation for the channel
-    */
-   static INLINE_RELEASE FtmChMode getMode() {
-      return (FtmChMode)(tmr->CONTROLS[channel].CnSC &
-            (FTM_CnSC_MS_MASK|FTM_CnSC_ELS_MASK));
-   }
-
    /**
     * Configure channel\n
     * Doesn't affect shared settings of owning Timer
@@ -1246,6 +1238,16 @@ public:
                Pcr::setPCR(Info::info[channel].pcrValue);
          }
       }
+   }
+
+   /**
+    * Get channel mode
+    *
+    * @return Current mode of operation for the channel
+    */
+   static INLINE_RELEASE FtmChMode getMode() {
+      return (FtmChMode)(tmr->CONTROLS[channel].CnSC &
+            (FTM_CnSC_MS_MASK|FTM_CnSC_ELS_MASK));
    }
 
    /**
