@@ -295,9 +295,6 @@ protected:
    // Pointer to clock register
    static constexpr volatile uint32_t    *clockReg      = Info::clockReg;
 
-   // IRQ Num
-   static constexpr IRQn_Type             irqNum        = DMA0_IRQn;
-
    /** Callback functions for ISRs */
    static DmaCallbackFunction callbacks[Info::NumChannels];
 
@@ -310,8 +307,6 @@ public:
    /** DMA interrupt handler -  Error callback */
    static void irqHandler() {
       // Clear interrupt flag
-//      dmac->CINT = DMA_CINT_CINT(0);
-//      callbacks[0]();
    }
 
    /** DMA interrupt handler -  Calls DMA 0 callback */
@@ -522,7 +517,7 @@ public:
       }
 #endif
 
-      IRQn_Type irqNum = (IRQn_Type)(Info::irqNums[0] + channel);
+      IRQn_Type irqNum = (IRQn_Type)(Info::irqNums[0] + channel&(Info::irqCount-1));
       if (enable) {
          // Enable interrupts
          NVIC_EnableIRQ(irqNum);
