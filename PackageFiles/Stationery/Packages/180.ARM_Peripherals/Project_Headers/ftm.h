@@ -503,7 +503,7 @@ public:
       // Change modulo
       tmr->MOD = period;
 
-      // Restar timer
+      // Restart timer
       tmr->SC  = sc;
 
       // OK period
@@ -1540,7 +1540,7 @@ public:
    /**
     * Clear interrupt flag on channel
     */
-   static void INLINE_RELEASE clearInterruptFlag(void) {
+   static void INLINE_RELEASE clearInterruptFlag() {
       // Note - requires read and write zero to clear flag
       tmr->CONTROLS[channel].CnSC &= ~FTM_CnSC_CHF_MASK;
    }
