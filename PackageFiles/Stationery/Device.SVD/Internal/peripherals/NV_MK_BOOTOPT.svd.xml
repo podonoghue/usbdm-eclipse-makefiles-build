@@ -1,9 +1,10 @@
 <!--
 Devices using this peripheral: 
+      MK28F15
       MK82F25615
 -->
       <peripheral>
-         <?sourceFile "NV_MK82F25615" ?>
+         <?sourceFile "NV_MK_BOOTOPT" ?>
          <name>NV</name>
          <description>Flash configuration field</description>
          <groupName>NV</groupName>
