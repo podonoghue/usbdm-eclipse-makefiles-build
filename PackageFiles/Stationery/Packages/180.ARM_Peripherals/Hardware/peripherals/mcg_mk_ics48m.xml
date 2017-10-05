@@ -374,11 +374,14 @@
          
       <aliasOption key="/SIM/sim_sopt2_pllfllsel." constant="false" />
 
+      <aliasOption key="/SIM/sim_clkdiv3_pllfll." constant="false" optional="true"/>
+      <aliasOption key="/SIM/system_peripheral_postdivider_clock." constant="true"  optional="true"/>
+
       <aliasOption key="/SIM/system_peripheral_clock." />
          
       <aliasOption name="system_mcgirclk_clock." />
       <aliasOption name="system_mcgffclk_clock." />
-      <aliasOption name="system_irc48m_clock" />
+      <aliasOption name="system_irc48m_clock" optional="true" />
       <aliasOption key="/OSC0/system_oscerclk_undiv_clock" optional="true" />
       <aliasOption key="/OSC0/system_oscerclk_clock" />
       <aliasOption key="/SIM/system_erclk32k_clock" />
@@ -557,8 +560,12 @@
       \t   const uint32_t clkdiv3;
       \t#endif\n\n
       
+      \t   //! SIM SOPT2 - Clock selectors for various peripherals
+      \t   const uint32_t sopt2;\n\n
+
       \t   //! Clock Mode
-      \t   const ClockMode clockMode:8;
+      \t   const ClockMode clockMode:8;\n\n
+      
       \t   //! Control Register 1 - FRDIV, IRCLKEN, IREFSTEN, (-CLKS, -IREFS)
       \t   const uint8_t c1;
       \t   //! Control Register 2 - LOCRE0, RANGE0, HGO0, EREFS0, IRCS, (-LP)
@@ -635,16 +642,23 @@
    <template name="McgClockInfoEntries" dim="3" namespace="all" ><![CDATA[
       \t   {  // $(ClockConfig.) ($(clock_mode.))\n
       \t      
-      \t      //! System Clock Divider Register 1
+      \t      //! SIM CLKDIV1 System Clock Divider Register 1
       \t      SIM_CLKDIV1_OUTDIV4($(/SIM/sim_clkdiv1_outdiv4.:0))|  // Flash clock
       \t      SIM_CLKDIV1_OUTDIV3($(/SIM/sim_clkdiv1_outdiv3.:0))|  // FlexBus clock
       \t      SIM_CLKDIV1_OUTDIV2($(/SIM/sim_clkdiv1_outdiv2.:0))|  // Bus clock
       \t      SIM_CLKDIV1_OUTDIV1($(/SIM/sim_clkdiv1_outdiv1.:0)),  // Core/system clock\n\n
               
       \t#ifdef SIM_CLKDIV3_PLLFLLDIV
-      \t      //! System Clock Divider Register 3
+      \t      //! SIM CLKDIV3 System Clock Divider Register 3
       \t      $(/SIM/sim_clkdiv3_pllfll.:0),
       \t#endif\n\n
+      
+      \t      //! SIM SOPT2 System Options Register 2
+      \t      SIM_SOPT2_LPUARTSRC($(/SIM/sim_sopt2_lpuartsrc)) |     // LPUART clock source select
+      \t      SIM_SOPT2_USBSRC($(/SIM/sim_sopt2_usbsrc)) |        // USB clock source select
+      \t      SIM_SOPT2_PLLFLLSEL($(/SIM/sim_sopt2_pllfllsel.)) |     // PLL/FLL clock select
+      \t      SIM_SOPT2_CLKOUTSEL($(/SIM/sim_sopt2_clkoutsel)) |     // CLKOUT pin clock source select
+      \t      SIM_SOPT2_RTCCLKOUTSEL($(/SIM/sim_sopt2_rtcclkoutsel)),   // RTC clock out select\n\n
       
       \t      //! Clock Mode
       \t      $(clock_mode.),\n\n

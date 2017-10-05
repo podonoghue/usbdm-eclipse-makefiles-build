@@ -134,36 +134,6 @@ MCGCallbackFunction Mcg::callback = {0};
 /** Current clock mode (FEI out of reset) */
 McgInfo::ClockMode Mcg::currentClockMode = McgInfo::ClockMode::ClockMode_FEI;
 
-#if defined(SMC_PMPROT_AHSRUN_MASK) && 0
-/**
- * Switch to/from high speed run mode
- * Changes the CPU clock frequency/1, and bus clock frequency /2
- * If the clock is set up for 120 MHz this will be the highest performance possible.
- *
- * This routine assumes that the clock preferences have been set up for the usual RUN mode and only
- * the Core clock divider needs to be changed.
- */
-void Mcg::hsRunMode(bool enable) {
-   SMC->PMPROT = SMC_PMPROT_AHSRUN_MASK;
-
-   if (enable) {
-      SMC->PMCTRL = SMC_PMCTRL_RUNM(3);
-      while ((SMC->PMSTAT & 0x80) == 0) {
-         // Wait for mode change
-         __asm__("nop");
-      }
-      // Set the SIM _CLKDIV dividers (CPU /1, Bus /2)
-      SIM->CLKDIV1 = (SIM_CLKDIV1_OUTDIV1(0))|(SIM_CLKDIV1_OUTDIV2(1))|(SimInfo::clkdiv1 & (SIM_CLKDIV1_OUTDIV3_MASK|SIM_CLKDIV1_OUTDIV4_MASK));
-   }
-   else {
-      // Set the SIM _CLKDIV dividers (CPU normal)
-      SIM->CLKDIV1 = SimInfo::clkdiv1;
-      SMC->PMCTRL = SMC_PMCTRL_RUNM(0);
-   }
-   SystemCoreClockUpdate();
-}
-#endif
-
 constexpr uint8_t clockTransitionTable[8][8] = {
          /*  from                 to =>   ClockMode_FEI,           ClockMode_FEE,           ClockMode_FBI,           ClockMode_BLPI,          ClockMode_FBE,           ClockMode_BLPE,          ClockMode_PBE,           ClockMode_PEE */
          /* ClockMode_FEI,  */ { McgInfo::ClockMode_FEI,  McgInfo::ClockMode_FEE,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBI,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE,  McgInfo::ClockMode_FBE, },
@@ -386,11 +356,17 @@ int Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
          }
       } while (currentClockMode != to);
    }
+
+   // Main clock dividers
    setSysDividers(clockInfo.clkdiv1);
 
 #ifdef SIM_CLKDIV3_PLLFLLDIV
+   // Peripheral clock divider
    SIM->CLKDIV3 = clockInfo.clkdiv3;
 #endif
+
+   // Clock sources
+   SIM->SOPT2 = clockInfo.sopt2;
 
    SystemCoreClockUpdate();
 

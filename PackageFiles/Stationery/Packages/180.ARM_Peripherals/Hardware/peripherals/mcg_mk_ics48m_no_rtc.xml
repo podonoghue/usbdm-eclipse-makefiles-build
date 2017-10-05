@@ -343,10 +343,14 @@
          
       <aliasOption key="/SIM/sim_sopt2_pllfllsel." constant="false" />
 
+      <aliasOption key="/SIM/sim_clkdiv3_pllfll." constant="false" optional="true"/>
+      <aliasOption key="/SIM/system_peripheral_postdivider_clock." constant="true" optional="true"/>
+
       <aliasOption key="/SIM/system_peripheral_clock." />
          
       <aliasOption name="system_mcgirclk_clock." />
       <aliasOption name="system_mcgffclk_clock." />
+      <aliasOption name="system_irc48m_clock" optional="true" />
       <aliasOption key="/OSC0/system_oscerclk_undiv_clock" optional="true" />
       <aliasOption key="/OSC0/system_oscerclk_clock" />
       <aliasOption key="/SIM/system_erclk32k_clock" />
