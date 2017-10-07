@@ -105,12 +105,6 @@
    <item key="/SIM/system_flexbus_clock[0]"                value="60000000" />
    <item key="/SIM/system_flexbus_clock[1]"                value="4000000" />
    <item key="/SIM/system_lpuart_clock"                    value="60000000" />
-   <item key="/SIM/system_peripheral_clock[0]"             value="120000000" />
-   <item key="/SIM/system_peripheral_clock[1]"             value="48000000" />
-   <item key="/SIM/system_peripheral_clock[2]"             value="150000000" />
-   <item key="/SIM/system_peripheral_postdivider_clock[0]" value="60000000" />
-   <item key="/SIM/system_peripheral_postdivider_clock[1]" value="12000000" />
-   <item key="/SIM/system_peripheral_postdivider_clock[2]" value="300000000" />
    <item key="/SIM/system_tpm_clock"                       value="60000000" />
    <item key="/SIM/system_usbfs_clock"                     value="48000000" />
 </section>

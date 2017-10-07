@@ -281,8 +281,6 @@ int Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
             do {
                __asm__("nop");
             } while ((mcg->S & (MCG_S_CLKST_MASK|MCG_S_IREFST_MASK)) != (MCG_S_CLKST(1)|MCG_S_IREFST(1)));
-
-
             break;
 
          case McgInfo::ClockMode_FBE: // from FEI, FEE, FBI, PBE, BLPE
@@ -310,6 +308,7 @@ int Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
             // Clear LP
             mcg->C2 = clockInfo.c2|MCG_C2_LP(0);
             mcg->C5 = clockInfo.c5;
+            // Select PLL as MCG clock source and set VDIV0
             mcg->C6 = clockInfo.c6|MCG_C6_PLLS_MASK;
 
             mcg->C1 =
@@ -317,7 +316,6 @@ int Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
                   MCG_C1_IREFS(0)  | // IREFS    = 1     -> FLL source = External reference clock
                   clockInfo.c1;      // FRDIV, IRCLKEN, IREFSTEN
 
-            // Select PLL as MCG clock source and set VDIV0
             externalClockInUse = true;
             while ((mcg->S&MCG_S_PLLST_MASK) == 0) {
                __asm__("nop");
@@ -330,7 +328,6 @@ int Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
                   MCG_C1_IREFS(0)  | // IREFS    = 0     -> FLL source = External reference clock
                   clockInfo.c1;      // FRDIV, IRCLKEN, IREFSTEN
 
-            // Select PLL as MCG clock source and set VDIV0
             externalClockInUse = true;
             break;
 
