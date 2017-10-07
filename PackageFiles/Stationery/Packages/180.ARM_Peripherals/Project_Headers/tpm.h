@@ -117,10 +117,10 @@ enum TpmPrescale {
  * Enabled Timer interrupt or DMA
  */
 enum TpmChannelAction {
-   TpmChannelAction_None   = FTM_CnSC_CHIE(0)|FTM_CnSC_DMA(0), //!< No action on event
-   TpmChannelAction_Irq    = FTM_CnSC_CHIE(1)|FTM_CnSC_DMA(0), //!< Interrupt on event
-   TpmChannelAction_Dma    = FTM_CnSC_CHIE(0)|FTM_CnSC_DMA(1), //!< Dma on event
-   TpmChannelAction_IrqDma = FTM_CnSC_CHIE(1)|FTM_CnSC_DMA(1), //!< Dma+Interrupt on event
+   TpmChannelAction_None   = TPM_CnSC_CHIE(0)|TPM_CnSC_DMA(0), //!< No action on event
+   TpmChannelAction_Irq    = TPM_CnSC_CHIE(1)|TPM_CnSC_DMA(0), //!< Interrupt on event
+   TpmChannelAction_Dma    = TPM_CnSC_CHIE(0)|TPM_CnSC_DMA(1), //!< Dma on event
+   TpmChannelAction_IrqDma = TPM_CnSC_CHIE(1)|TPM_CnSC_DMA(1), //!< Dma+Interrupt on event
 };
 
 /*
@@ -788,7 +788,7 @@ public:
     * @param[in] dutyCycle  Duty-cycle as percentage (float)
     * @param[in] channel    Timer channel
     *
-    * @note The actual CnV register update may be delayed by the FTM register synchronisation mechanism
+    * @note The actual CnV register update may be delayed by the TPM register synchronisation mechanism
     */
    static void setDutyCycle(float dutyCycle, int channel) {
       if (tmr->SC&TPM_SC_CPWMS_MASK) {
@@ -805,7 +805,7 @@ public:
     * @param[in] dutyCycle  Duty-cycle as percentage
     * @param[in] channel    Timer channel
     *
-    * @note The actual CnV register update may be delayed by the FTM register synchronisation mechanism
+    * @note The actual CnV register update may be delayed by the TPM register synchronisation mechanism
     */
    static void setDutyCycle(int dutyCycle, int channel) {
       if (tmr->SC&TPM_SC_CPWMS_MASK) {
@@ -898,11 +898,11 @@ private:
     * I could use 'using' to hide these functions but the Eclipse
     * indexer gets confused about visibility
     */
-   // Hide these FTM methods as FTM channel methods are preferred
+   // Hide these TPM methods as TPM channel methods are preferred
    static unsigned getAndClearInterruptFlags() {return 0;};
    static unsigned getInterruptFlags()         {return 0;};
 
-   // Hide these PCR methods as they are similar to FTM methods
+   // Hide these PCR methods as they are similar to TPM methods
    static void setCallback(PinCallbackFunction) {} // Use setPinCallback()
    static void setIrq(PinIrq) {}                   // Use setPinIrq()
 
@@ -946,92 +946,55 @@ public:
     * Configure channel and sets mode\n
     * Configures owning TPM with default settings from Configure.usbdmProject if not already enabled.
     *
-    * @param[in] ftmChMode      Mode of operation for TPM e.g.TpmChMode_PwmHighTruePulses
-    * @param[in] ftmChannelIrq  Whether to enable the interrupt function on this channel
-    * @param[in] ftmChannelDma  Whether to enable the DMA function on this channel
+    * @param[in] tpmChMode      Mode of operation for TPM e.g.TpmChMode_PwmHighTruePulses
+    * @param[in] tpmChannelIrq  Whether to enable the interrupt function on this channel
+    * @param[in] tpmChannelDma  Whether to enable the DMA function on this channel
     *
     * @note Enables TPM as well
     * @note This method has the side-effect of clearing the register update synchronisation i.e. 
     *       pending CnV register updates are discarded.
     */
    static void defaultConfigure(
-         TpmChMode      ftmChMode     = TpmChMode_PwmHighTruePulses,
-         TpmChannelIrq  ftmChannelIrq = TpmChannelIrq_Disable,
-         TpmChannelDma  ftmChannelDma = TpmChannelDma_Disable) {
+         TpmChMode      tpmChMode     = TpmChMode_PwmHighTruePulses,
+         TpmChannelIrq  tpmChannelIrq = TpmChannelIrq_Disable,
+         TpmChannelDma  tpmChannelDma = TpmChannelDma_Disable) {
 
       if (!Tpm::isEnabled()) {
          // Enable parent TPM if needed
          Tpm::configure();
       }
-      tmr->CONTROLS[channel].CnSC = ftmChMode|ftmChannelIrq|ftmChannelDma;
+      tmr->CONTROLS[channel].CnSC = tpmChMode|tpmChannelIrq|tpmChannelDma;
    }
 
    /**
     * Configure channel\n
     * Doesn't affect shared settings of owning Timer
     *
-    * @param[in] ftmChMode      Mode of operation for channel
-    * @param[in] ftmChannelIrq  Whether to enable the interrupt function on this channel
-    * @param[in] ftmChannelDma  Whether to enable the DMA function on this channel
-    *
-    * @note This method has the side-effect of clearing the register update synchronisation i.e.
-    *       pending CnV register updates are discarded.
-    *
-    * @deprecated
-    */
-   static void INLINE_RELEASE configure(
-         TpmChMode      ftmChMode     = TpmChMode_PwmHighTruePulses,
-         TpmChannelIrq  ftmChannelIrq = TpmChannelIrq_Disable,
-         TpmChannelDma  ftmChannelDma = TpmChannelDma_Disable) {
-
-#ifdef DEBUG_BUILD
-      // Check that owning FTM has been enabled
-      assert(Tpm::isEnabled());
-#endif
-      tmr->CONTROLS[channel].CnSC = ftmChMode|ftmChannelIrq|ftmChannelDma;
-
-      if (!Info::mapPinsOnEnable) {
-         // Configure pin if used
-         switch (ftmChMode) {
-            case TpmChMode_Disabled :
-            case TpmChMode_OutputCompare :
-               // Don't change pin setting
-               break;
-            default:
-               // Map pin to FTM
-               Pcr::setPCR(Info::info[channel].pcrValue);
-         }
-      }
-   }
-   /**
-    * Configure channel\n
-    * Doesn't affect shared settings of owning Timer
-    *
-    * @param[in] ftmChMode         Mode of operation for channel
-    * @param[in] ftmChannelAction  Whether to enable the interrupt or DMA function on this channel
+    * @param[in] tpmChMode         Mode of operation for channel
+    * @param[in] tpmChannelAction  Whether to enable the interrupt or DMA function on this channel
     *
     * @note This method has the side-effect of clearing the register update synchronisation i.e.
     *       pending CnV register updates are discarded.
     */
    static void INLINE_RELEASE configure(
-         TpmChMode         ftmChMode,
-         TpmChannelAction  ftmChannelAction) {
+         TpmChMode         tpmChMode,
+         TpmChannelAction  tpmChannelAction = TpmChannelAction_None) {
 
 #ifdef DEBUG_BUILD
-      // Check that owning FTM has been enabled
+      // Check that owning TPM has been enabled
       assert(Tpm::isEnabled());
 #endif
-      tmr->CONTROLS[channel].CnSC = ftmChMode|ftmChannelAction;
+      tmr->CONTROLS[channel].CnSC = tpmChMode|tpmChannelAction;
 
       if (!Info::mapPinsOnEnable) {
          // Configure pin if used
-         switch (ftmChMode) {
+         switch (tpmChMode) {
             case TpmChMode_Disabled :
             case TpmChMode_OutputCompare :
                // Don't change pin setting
                break;
             default:
-               // Map pin to FTM
+               // Map pin to TPM
                Pcr::setPCR(Info::info[channel].pcrValue);
          }
       }
@@ -1044,33 +1007,33 @@ public:
     */
    static INLINE_RELEASE TpmChMode getMode() {
       return (TpmChMode)(tmr->CONTROLS[channel].CnSC &
-            (FTM_CnSC_MS_MASK|FTM_CnSC_ELS_MASK));
+            (TPM_CnSC_MS_MASK|TPM_CnSC_ELS_MASK));
    }
 
    /**
     * Set channel mode
     *
-    * @param[in] ftmChMode      Mode of operation for channel
+    * @param[in] tpmChMode      Mode of operation for channel
     *
     * @note This method has the side-effect of clearing the register update synchronisation i.e.
     *       pending CnV register updates are discarded.
     */
-   static void INLINE_RELEASE setMode(TpmChMode ftmChMode) {
+   static void INLINE_RELEASE setMode(TpmChMode tpmChMode) {
       tmr->CONTROLS[channel].CnSC =
-            (tmr->CONTROLS[channel].CnSC & ~(FTM_CnSC_MS_MASK|FTM_CnSC_ELS_MASK))|ftmChMode;
+            (tmr->CONTROLS[channel].CnSC & ~(TPM_CnSC_MS_MASK|TPM_CnSC_ELS_MASK))|tpmChMode;
    }
 
    /**
     * Set channel action on event
     *
-    * @param[in] ftmChannelAction  Whether to enable the interrupt or DMA function on this channel
+    * @param[in] tpmChannelAction  Whether to enable the interrupt or DMA function on this channel
     *
     * @note This method has the side-effect of clearing the register update synchronisation i.e.
     *       pending CnV register updates are discarded.
     */
-   static void INLINE_RELEASE setAction(TpmChannelAction ftmChannelAction) {
+   static void INLINE_RELEASE setAction(TpmChannelAction tpmChannelAction) {
       tmr->CONTROLS[channel].CnSC =
-            (tmr->CONTROLS[channel].CnSC & ~(FTM_CnSC_CHIE_MASK|FTM_CnSC_DMA_MASK))|ftmChannelAction;
+            (tmr->CONTROLS[channel].CnSC & ~(TPM_CnSC_CHIE_MASK|TPM_CnSC_DMA_MASK))|tpmChannelAction;
    }
 
    /**
@@ -1128,7 +1091,7 @@ public:
 
    /**
     * Set Pin Control Register Value. \n
-    * Pin multiplexor value = FTM selection value. \n
+    * Pin multiplexor value = TPM selection value. \n
     * The clock to the port will be enabled before changing the PCR
     *
     * @param[in] pcrValue PCR value to set
@@ -1162,8 +1125,8 @@ public:
    }
 
    /**
-    * Configures Pin Control Register (PCR) value for a FTM input to default values\n
-    * This will map the pin to the FTM function (mux value) \n
+    * Configures Pin Control Register (PCR) value for a TPM input to default values\n
+    * This will map the pin to the TPM function (mux value) \n
     * The clock to the port will be enabled before changing the PCR
     *
     * @note Resets the Pin Control Register value (PCR value).
@@ -1173,8 +1136,8 @@ public:
    }
 
    /**
-    * Configures Pin Control Register (PCR) value for a FTM input to default values\n
-    * This will map the pin to the FTM function (mux value) \n
+    * Configures Pin Control Register (PCR) value for a TPM input to default values\n
+    * This will map the pin to the TPM function (mux value) \n
     * The clock to the port will be enabled before changing the PCR
     *
     * @note Resets the Pin Control Register value (PCR value).
@@ -1185,7 +1148,7 @@ public:
 
    /**
     * Set Pin Control Register (PCR) value \n
-    * This will map the pin to the FTM function (mux value) \n
+    * This will map the pin to the TPM function (mux value) \n
     * The clock to the port will be enabled before changing the PCR
     *
     * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
@@ -1202,7 +1165,7 @@ public:
 
    /**
     * Set Pin Control Register (PCR) value \n
-    * This will map the pin to the FTM function (mux value) \n
+    * This will map the pin to the TPM function (mux value) \n
     * The clock to the port will be enabled before changing the PCR
     *
     * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down

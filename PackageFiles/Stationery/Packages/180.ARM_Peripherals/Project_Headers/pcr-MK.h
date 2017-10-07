@@ -539,7 +539,7 @@ public:
          PinSlewRate       pinSlewRate       = PinSlewRate_Fast) {
 
       *pcrReg =
-            (*pcrReg&~(PORT_PCR_DSE_MASK|PORT_PCR_ODE_MASK|PORT_PCR_SRE_MASK)) |
+            (*pcrReg&~(PORT_PCR_DSE_MASK|PORT_PCR_ODE(1)|PORT_PCR_SRE_MASK)) |
             (pinDriveStrength|pinDriveMode|pinSlewRate);
    }
 

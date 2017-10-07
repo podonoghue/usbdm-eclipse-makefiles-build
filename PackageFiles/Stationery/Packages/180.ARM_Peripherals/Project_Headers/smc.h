@@ -122,8 +122,12 @@ enum SmcPartialStopMode {
  *  This bit controls whether the POR detect circuit is enabled in VLLS0 mode.
  */
 enum SmcPowerOnReset {
+#ifdef SMC_STOPCTRL_PORPO
    SmcPowerOnReset_Disable = SMC_STOPCTRL_PORPO(0),   //!< Power on reset (brown-out detection) in STOP disabled
    SmcPowerOnReset_Enable  = SMC_STOPCTRL_PORPO(1),   //!< Power on reset (brown-out detection) in STOP enabled
+#else
+   SmcPowerOnReset_Disable = 0,   //!< Power on reset (brown-out detection) in STOP not supported
+#endif
 };
 
 /**
@@ -142,12 +146,6 @@ enum SmcSleepOnExit {
  * @note Not all modes are supported on all processors
  */
 enum SmcLowLeakageStopMode {
-#ifdef SMC_STOPCTRL_VLLSM
-   SmcLowLeakageStopMode_VLLS0 = SMC_STOPCTRL_VLLSM(0),  //!< Enter VLLS0 in VLLSx mode
-   SmcLowLeakageStopMode_VLLS1 = SMC_STOPCTRL_VLLSM(1),  //!< Enter VLLS1 in VLLSx mode
-   SmcLowLeakageStopMode_VLLS2 = SMC_STOPCTRL_VLLSM(2),  //!< Enter VLLS2 in VLLSx mode, LLS2 in LLSx mode
-   SmcLowLeakageStopMode_VLLS3 = SMC_STOPCTRL_VLLSM(3),  //!< Enter VLLS3 in VLLSx mode, LLS3 in LLSx mode
-#endif
 #ifdef SMC_STOPCTRL_LLSM
    SmcLowLeakageStopMode_VLLS0 = SMC_STOPCTRL_LLSM(0),  //!< Enter VLLS0 in VLLSx mode
    SmcLowLeakageStopMode_VLLS1 = SMC_STOPCTRL_LLSM(1),  //!< Enter VLLS1 in VLLSx mode
@@ -155,6 +153,11 @@ enum SmcLowLeakageStopMode {
    SmcLowLeakageStopMode_VLLS3 = SMC_STOPCTRL_LLSM(3),  //!< Enter VLLS3 in VLLSx mode, LLS3 in LLSx mode
    SmcLowLeakageStopMode_LLS2  = SMC_STOPCTRL_LLSM(2),  //!< Enter VLLS2 in VLLSx mode, LLS2 in LLSx mode
    SmcLowLeakageStopMode_LLS3  = SMC_STOPCTRL_LLSM(3),  //!< Enter VLLS3 in VLLSx mode, LLS3 in LLSx mode
+#else
+   SmcLowLeakageStopMode_VLLS0 = SMC_STOPCTRL_VLLSM(0),  //!< Enter VLLS0 in VLLSx mode
+   SmcLowLeakageStopMode_VLLS1 = SMC_STOPCTRL_VLLSM(1),  //!< Enter VLLS1 in VLLSx mode
+   SmcLowLeakageStopMode_VLLS2 = SMC_STOPCTRL_VLLSM(2),  //!< Enter VLLS2 in VLLSx mode, LLS2 in LLSx mode
+   SmcLowLeakageStopMode_VLLS3 = SMC_STOPCTRL_VLLSM(3),  //!< Enter VLLS3 in VLLSx mode, LLS3 in LLSx mode
 #endif
 };
 

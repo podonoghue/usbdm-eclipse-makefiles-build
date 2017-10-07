@@ -34,7 +34,7 @@ namespace USBDM {
 typedef void (*PitCallbackFunction)(void);
 
 /**
- * Enable the PIT
+ * Control PIT operation in debug mode (suspended for debugging)
  */
 enum PitDebugMode {
    PitDebugMode_Run  = PIT_MCR_FRZ(0),  //!< PIT continues to run in debug mode
@@ -42,7 +42,7 @@ enum PitDebugMode {
 };
 
 /**
- * Enable the PIT
+ * Enable the PIT interrupts
  */
 enum PitChannelIrq {
    PitChannelIrq_Disable  = PIT_TCTRL_TIE(0),  //!< PIT channel interrupt disabled
@@ -50,7 +50,7 @@ enum PitChannelIrq {
 };
 
 /**
- * Enable the PIT
+ * Enable the PIT channel
  */
 enum PitChannelEnable {
    PitChannelEnable_Disable  = PIT_TCTRL_TEN(0),  //!< PIT channel disabled
@@ -143,8 +143,7 @@ protected:
 
 public:
    /**
-    * Basic enable of PIT\n
-    * Includes configuring all pins
+    * Basic enable of PIT
     */
    static void enable() {
       // Enable clock
@@ -205,8 +204,8 @@ public:
          NVIC_DisableIRQ(Info::irqNums[0]);
       }
    }
-
-    /**
+   
+   /**
     *  Enable/Disable the PIT channel
     *
     *  @param[in]  channel   Channel to enable
@@ -221,7 +220,7 @@ public:
       }
       enableNvicInterrupts(enable);
    }
-  
+
    /**
     *  Configure the PIT channel
     *
@@ -242,6 +241,7 @@ public:
 
       enableNvicInterrupts();
    }
+
    /**
     *  Configure the PIT channel
     *
@@ -280,6 +280,7 @@ public:
    static void setPeriodInTicks(unsigned channel, uint32_t interval) {
       pit->CHANNEL[channel].LDVAL = interval;
    }
+
    /**
     *   Disable the PIT channel
     *
@@ -290,6 +291,7 @@ public:
       // Disable timer channel
       pit->CHANNEL[channel].TCTRL = 0;
    }
+
    /**
     *  Use a PIT channel to implement a busy-wait delay
     *
@@ -305,7 +307,6 @@ public:
       }
       disableChannel(channel);
    }
-
 };
 
 /**
