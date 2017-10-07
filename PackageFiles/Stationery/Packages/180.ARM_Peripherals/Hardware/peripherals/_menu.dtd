@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!ENTITY % gui_items        "(xi:include|category|indexedCategory|constant|floatOption|intOption|bitmaskOption|choiceOption|binaryOption|irqOption|stringOption|numericListOption|pinListOption|aliasOption|signals)" >
-<!ENTITY % structure_items  "(xi:include|section|tab|list)" >
+<!ENTITY % structure_items  "(xi:include|section|list)" >
 <!ENTITY % control_items    "(xi:include|template|validate|projectActionList)" >
 
 <!-- Include another file -->
@@ -24,9 +24,6 @@
 
 <!ELEMENT section (((%structure_items;),(%control_items;)*)|(%gui_items;|%control_items;)*) >
    <!ATTLIST section name         CDATA        #IMPLIED>
-
-<!ELEMENT tab (((%structure_items;),(%control_items;)*)|(%gui_items;|%control_items;)*) >
-   <!ATTLIST tab name         CDATA        #REQUIRED>
 
 <!ELEMENT indexedCategory ((%gui_items;)*) >
    <!ATTLIST indexedCategory xmlns:xi     CDATA        #IMPLIED>

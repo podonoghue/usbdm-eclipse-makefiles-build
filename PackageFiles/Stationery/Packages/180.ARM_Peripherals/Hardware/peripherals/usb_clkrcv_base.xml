@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 
-<!-- usb_clkrcv.xml -->
+<!-- usb_clkrcv_base.xml -->
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
     <category name="Clock Recovery" description="USB clock recovery options">
       <binaryOption 

@@ -11,7 +11,7 @@
       <aliasOption key="/SIM/system_erclk32k_clock" optional="true"/>
    </category>
    
-   <category name="OSC" description="OSC External Reference Clock/Oscillator [OSCCLK]">
+   <category name="OSC" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
       <aliasOption key="/OSC0/osc_input_freq" constant="false" />
       <aliasOption key="/OSC0/erefs0" constant="false" />
    </category>
@@ -436,7 +436,7 @@
       <aliasOption key="/SIM/sim_sopt2_pllfllsel." constant="false" />
 
       <aliasOption key="/SIM/sim_clkdiv3_pllfll." constant="false" optional="true"/>
-      <aliasOption key="/SIM/system_peripheral_postdivider_clock." constant="true"  optional="true"/>
+      <aliasOption key="/SIM/system_peripheral_postdivider_clock." constant="true" optional="true"/>
 
       <aliasOption key="/SIM/system_peripheral_clock." />
          
@@ -462,10 +462,10 @@
                   Derived from slow IRC, fast IRC, ERC, FLL or PLL"
          value="120000000" constant="true" />
    
-      <aliasOption key="/SIM/system_core_clock." constant="false" />
-      <aliasOption key="/SIM/system_bus_clock." constant="false" />
-      <aliasOption key="/SIM/system_flexbus_clock." constant="false" optional="true"/>
-      <aliasOption key="/SIM/system_flash_clock." constant="false" />
+      <aliasOption key="/SIM/system_core_clock."    constant="false" />
+      <aliasOption key="/SIM/system_bus_clock."     constant="false" />
+      <aliasOption key="/SIM/system_flexbus_clock." constant="false"  optional="true" />
+      <aliasOption key="/SIM/system_flash_clock."   constant="false"  optional="true" />
 
       <category name="Device Parameters" description="Register values">
          <category name="MCG_C1" description="MCG Control Register 1">
@@ -580,8 +580,8 @@
    </validate>
 
    <projectActionList id = "mcg_files" >
-      <copy source="Project_Headers/mcg.h"                target="Project_Headers/mcg.h"                 overwrite="true"  derived="true" />
       <copy source="Startup_Code/mcg.cpp"                 target="Startup_Code/mcg.cpp"                  overwrite="true"  derived="true" />
+      <copy source="Project_Headers/mcg.h"                target="Project_Headers/mcg.h"                 overwrite="true"  derived="true" />
       <copy source="Snippets/mcg-test.cpp"                target="Snippets/mcg-test.cpp"                 overwrite="true"  derived="true" />
       <copy source="Snippets/mcg-run-mode-test-mk22f.cpp" target="Snippets/mcg-run-mode-test-mk22f.cpp"  overwrite="true"  derived="true" />
       <copy source="Snippets/mcg-run-mode-test-mk20.cpp"  target="Snippets/mcg-run-mode-test-mk20.cpp"   overwrite="true"  derived="true" />
@@ -728,14 +728,39 @@
       \t#endif\n\n
       
       \t      //! SIM SOPT2 System Options Register 2
-      \t      SIM_SOPT2_SDHCSRC($(/SIM/sim_sopt2_sdhcsrc)) |       // SDHC clock source select
-      \t      SIM_SOPT2_LPUARTSRC($(/SIM/sim_sopt2_lpuartsrc)) |     // LPUART clock source select
-      \t      SIM_SOPT2_TPMSRC($(/SIM/sim_sopt2_tpmsrc)) |        // TPM clock source select
-      \t      SIM_SOPT2_USBSRC($(/SIM/sim_sopt2_usbsrc)) |        // USB clock source select
-      \t      SIM_SOPT2_PLLFLLSEL($(/SIM/sim_sopt2_pllfllsel.)) |     // PLL/FLL clock select
-      \t      SIM_SOPT2_FBSL($(/SIM/sim_sopt2_fbsl)) |          // FlexBus security level
+      \t#ifdef SIM_SOPT2_TRACECLKSEL
+      \t   SIM_SOPT2_TRACECLKSEL($(/SIM/sim_sopt2_traceclksel:0)) |      // Debug trace clock select
+      \t#endif
+      \t#ifdef SIM_SOPT2_TIMESRC
+      \t   SIM_SOPT2_TIMESRC($(/SIM/sim_sopt2_timesrc:0)) |          // IEEE 1588 timestamp clock source select
+      \t#endif
+      \t#ifdef SIM_SOPT2_RMIISRC
+      \t   SIM_SOPT2_RMIISRC($(/SIM/sim_sopt2_rmiisrc:0)) |          // Ethernet RMII clock source select
+      \t#endif
+      \t#ifdef SIM_SOPT2_SDHCSRC
+      \t      SIM_SOPT2_SDHCSRC($(/SIM/sim_sopt2_sdhcsrc:0)) |       // SDHC clock source select
+      \t#endif
+      \t#ifdef SIM_SOPT2_UART0SRC
+      \t   SIM_SOPT2_UART0SRC($(/SIM/sim_sopt2_uart0src:0)) |         // UART0 clock source select
+      \t#endif
+      \t#ifdef SIM_SOPT2_LPUARTSRC
+      \t      SIM_SOPT2_LPUARTSRC($(/SIM/sim_sopt2_lpuartsrc:0)) |     // LPUART clock source select
+      \t#endif
+      \t#ifdef SIM_SOPT2_PTD7PAD
+      \t      SIM_SOPT2_PTD7PAD($(/SIM/sim_sopt2_ptd7pad:0)) |       // PTD7 pad drive strength
+      \t#endif
+      \t#ifdef SIM_SOPT2_TPMSRC
+      \t      SIM_SOPT2_TPMSRC($(/SIM/sim_sopt2_tpmsrc:0)) |        // TPM clock source select
+      \t#endif
+      \t#ifdef SIM_SOPT2_USBSRC
+      \t      SIM_SOPT2_USBSRC($(/SIM/sim_sopt2_usbsrc:0)) |        // USB clock source select
+      \t#endif
+      \t#ifdef SIM_SOPT2_FBSL
+      \t      SIM_SOPT2_FBSL($(/SIM/sim_sopt2_fbsl:0)) |          // FlexBus security level
+      \t#endif
       \t      SIM_SOPT2_CLKOUTSEL($(/SIM/sim_sopt2_clkoutsel)) |     // CLKOUT pin clock source select
-      \t      SIM_SOPT2_RTCCLKOUTSEL($(/SIM/sim_sopt2_rtcclkoutsel)),   // RTC clock out select\n\n
+      \t      SIM_SOPT2_RTCCLKOUTSEL($(/SIM/sim_sopt2_rtcclkoutsel)) |  // RTC clock out select
+      \t      SIM_SOPT2_PLLFLLSEL($(/SIM/sim_sopt2_pllfllsel.)),      // PLL/FLL clock select\n\n
       
       \t      //! Clock Mode
       \t      $(clock_mode.),\n\n

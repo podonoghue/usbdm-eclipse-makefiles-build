@@ -244,110 +244,110 @@
       </peripheral>
    </peripherals>
    <pins>
-      <pin name="ADC0_DM0">
-         <mux sel="mux0"          signal="ADC0_DM0" />
-         <mux sel="mux0"          signal="ADC1_DM3" />
-         <reset sel="mux0" />
+      <pin name="ADC0_DM0"     isFixed="true">
+         <mux sel="fixed"         signal="ADC0_DM0" />
+         <mux sel="fixed"         signal="ADC1_DM3" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="ADC0_DM3">
-         <mux sel="mux0"          signal="ADC1_DM0" />
-         <mux sel="mux0"          signal="ADC0_DM3" />
-         <reset sel="mux0" />
+      <pin name="ADC0_DM3"     isFixed="true">
+         <mux sel="fixed"         signal="ADC1_DM0" />
+         <mux sel="fixed"         signal="ADC0_DM3" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="ADC0_DP0">
-         <mux sel="mux0"          signal="ADC0_DP0" />
-         <mux sel="mux0"          signal="ADC1_DP3" />
-         <reset sel="mux0" />
+      <pin name="ADC0_DP0"     isFixed="true">
+         <mux sel="fixed"         signal="ADC0_DP0" />
+         <mux sel="fixed"         signal="ADC1_DP3" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="ADC0_DP3">
-         <mux sel="mux0"          signal="ADC1_DP0" />
-         <mux sel="mux0"          signal="ADC0_DP3" />
-         <reset sel="mux0" />
+      <pin name="ADC0_DP3"     isFixed="true">
+         <mux sel="fixed"         signal="ADC1_DP0" />
+         <mux sel="fixed"         signal="ADC0_DP3" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="ADC0_SE23">
-         <mux sel="mux0"          signal="DAC0_OUT" />
-         <mux sel="mux0"          signal="CMP1_IN3" />
-         <mux sel="mux0"          signal="ADC0_SE23" />
-         <reset sel="mux0" />
+      <pin name="ADC0_SE23"    isFixed="true">
+         <mux sel="fixed"         signal="DAC0_OUT" />
+         <mux sel="fixed"         signal="CMP1_IN3" />
+         <mux sel="fixed"         signal="ADC0_SE23" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="EXTAL32">
-         <mux sel="mux0"          signal="EXTAL32" />
-         <reset sel="mux0" />
+      <pin name="EXTAL32"      isFixed="true">
+         <mux sel="fixed"         signal="EXTAL32" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="RESET_b">
-         <mux sel="mux0"          signal="RESET_b" />
-         <reset sel="mux0" />
+      <pin name="RESET_b"      isFixed="true">
+         <mux sel="fixed"         signal="RESET_b" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="USB0_DM">
-         <mux sel="mux0"          signal="USB0_DM" />
-         <reset sel="mux0" />
+      <pin name="USB0_DM"      isFixed="true">
+         <mux sel="fixed"         signal="USB0_DM" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="USB0_DP">
-         <mux sel="mux0"          signal="USB0_DP" />
-         <reset sel="mux0" />
+      <pin name="USB0_DP"      isFixed="true">
+         <mux sel="fixed"         signal="USB0_DP" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="VBAT">
-         <mux sel="mux0"          signal="VBAT" />
-         <reset sel="mux0" />
+      <pin name="VBAT"         isFixed="true">
+         <mux sel="fixed"         signal="VBAT" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="VDD1">
-         <mux sel="mux0"          signal="VDD" />
-         <reset sel="mux0" />
+      <pin name="VDD1"         isFixed="true">
+         <mux sel="fixed"         signal="VDD" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="VDD2">
-         <mux sel="mux0"          signal="VDD" />
-         <reset sel="mux0" />
+      <pin name="VDD2"         isFixed="true">
+         <mux sel="fixed"         signal="VDD" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="VDD3">
-         <mux sel="mux0"          signal="VDD" />
-         <reset sel="mux0" />
+      <pin name="VDD3"         isFixed="true">
+         <mux sel="fixed"         signal="VDD" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="VDDA">
-         <mux sel="mux0"          signal="VDDA" />
-         <reset sel="mux0" />
+      <pin name="VDDA"         isFixed="true">
+         <mux sel="fixed"         signal="VDDA" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="VOUT33">
-         <mux sel="mux0"          signal="VOUT33" />
-         <reset sel="mux0" />
+      <pin name="VOUT33"       isFixed="true">
+         <mux sel="fixed"         signal="VOUT33" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="VREFH">
-         <mux sel="mux0"          signal="VREFH" />
-         <reset sel="mux0" />
+      <pin name="VREFH"        isFixed="true">
+         <mux sel="fixed"         signal="VREFH" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="VREFL">
-         <mux sel="mux0"          signal="VREFL" />
-         <reset sel="mux0" />
+      <pin name="VREFL"        isFixed="true">
+         <mux sel="fixed"         signal="VREFL" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="VREF_OUT">
-         <mux sel="mux0"          signal="VREF_OUT" />
-         <mux sel="mux0"          signal="CMP1_IN5" />
-         <mux sel="mux0"          signal="CMP0_IN5" />
-         <mux sel="mux0"          signal="ADC1_SE18" />
-         <reset sel="mux0" />
+      <pin name="VREF_OUT"     isFixed="true">
+         <mux sel="fixed"         signal="VREF_OUT" />
+         <mux sel="fixed"         signal="CMP1_IN5" />
+         <mux sel="fixed"         signal="CMP0_IN5" />
+         <mux sel="fixed"         signal="ADC1_SE18" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="VREGIN">
-         <mux sel="mux0"          signal="VREGIN" />
-         <reset sel="mux0" />
+      <pin name="VREGIN"       isFixed="true">
+         <mux sel="fixed"         signal="VREGIN" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="VSS1">
-         <mux sel="mux0"          signal="VSS" />
-         <reset sel="mux0" />
+      <pin name="VSS1"         isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="VSS2">
-         <mux sel="mux0"          signal="VSS" />
-         <reset sel="mux0" />
+      <pin name="VSS2"         isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="VSS3">
-         <mux sel="mux0"          signal="VSS" />
-         <reset sel="mux0" />
+      <pin name="VSS3"         isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="VSSA">
-         <mux sel="mux0"          signal="VSSA" />
-         <reset sel="mux0" />
+      <pin name="VSSA"         isFixed="true">
+         <mux sel="fixed"         signal="VSSA" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="XTAL32">
-         <mux sel="mux0"          signal="XTAL32" />
-         <reset sel="mux0" />
+      <pin name="XTAL32"       isFixed="true">
+         <mux sel="fixed"         signal="XTAL32" />
+         <reset sel="fixed" />
       </pin>
       <pin name="PTA0">
          <mux sel="mux0"          signal="TSI0_CH1" />

@@ -8,6 +8,7 @@ Devices using this peripheral:
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="USB">
 
    <aliasOption key="/MCG/system_usb_clkin_clock" constant="false" optional="true"/>
+   <aliasOption key="/SIM/system_peripheral_clock" constant="true" optional="true"/>
    <aliasOption key="/SIM/sim_sopt2_usbsrc" constant="false" optional="true"/>
    <aliasOption key="/SIM/sim_clkdiv2_usb" constant="false" optional="true"/>
    <aliasOption key="/SIM/system_usbfs_clock" optional="true"/>
