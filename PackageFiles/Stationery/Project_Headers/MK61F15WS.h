@@ -10853,9 +10853,9 @@ typedef struct {                                /*       SIM Structure          
 #define SIM_CLKDIV1_OUTDIV1_SHIFT                (28U)                                               /*!< SIM_CLKDIV1.OUTDIV1 Position            */
 #define SIM_CLKDIV1_OUTDIV1(x)                   (((uint32_t)(((uint32_t)(x))<<28U))&0xF0000000UL)   /*!< SIM_CLKDIV1.OUTDIV1 Field               */
 /* ------- CLKDIV2 Bit Fields                       ------ */
-#define SIM_CLKDIV2_USBFSFRAC_MASK               (0x1U)                                              /*!< SIM_CLKDIV2.USBFSFRAC Mask              */
-#define SIM_CLKDIV2_USBFSFRAC_SHIFT              (0U)                                                /*!< SIM_CLKDIV2.USBFSFRAC Position          */
-#define SIM_CLKDIV2_USBFSFRAC(x)                 (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< SIM_CLKDIV2.USBFSFRAC Field             */
+#define SIM_CLKDIV2_USBFRAC_MASK                 (0x1U)                                              /*!< SIM_CLKDIV2.USBFRAC Mask                */
+#define SIM_CLKDIV2_USBFRAC_SHIFT                (0U)                                                /*!< SIM_CLKDIV2.USBFRAC Position            */
+#define SIM_CLKDIV2_USBFRAC(x)                   (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< SIM_CLKDIV2.USBFRAC Field               */
 #define SIM_CLKDIV2_USBFSDIV_MASK                (0xEU)                                              /*!< SIM_CLKDIV2.USBFSDIV Mask               */
 #define SIM_CLKDIV2_USBFSDIV_SHIFT               (1U)                                                /*!< SIM_CLKDIV2.USBFSDIV Position           */
 #define SIM_CLKDIV2_USBFSDIV(x)                  (((uint32_t)(((uint32_t)(x))<<1U))&0xEUL)           /*!< SIM_CLKDIV2.USBFSDIV Field              */

@@ -1693,7 +1693,7 @@ This bit controls the clock gate to the I2C2 module</description>
                <addressOffset>0x1048</addressOffset>
                <fields>
                   <field>
-                     <name>USBFSFRAC</name>
+                     <name>USBFRAC</name>
                      <description>USB clock divider fraction\n
 This field sets the fraction multiply value for the fractional clock divider when the MCGFLLCLK/
 MCGPLLCLK clock is the USB clock source (SOPT2[USBSRC] = 1).\n

@@ -1749,7 +1749,7 @@ Devices using this peripheral:
                <addressOffset>0x1048</addressOffset>
                <fields>
                   <field>
-                     <name>USBFSFRAC</name>
+                     <name>USBFRAC</name>
                      <description>USB FS clock divider fraction</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
