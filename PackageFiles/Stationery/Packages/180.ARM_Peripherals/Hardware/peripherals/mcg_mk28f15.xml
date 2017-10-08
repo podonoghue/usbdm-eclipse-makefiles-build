@@ -5,15 +5,15 @@
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="MCG" description="Multipurpose Clock Generator">
 
    <category name="RTC" description="RTC External Reference Clock/Oscillator [ERCLK32K]">
-      <aliasOption key="/RTC/rtc_input_freq"  constant="false"  optional="true"/>
-      <aliasOption key="/RTC/rtcclk_clock"  optional="true"/>
+      <aliasOption key="/RTC/rtc_input_freq"        optional="true" constant="false"  />
+      <aliasOption key="/RTC/rtcclk_clock"          optional="true"/>
       <aliasOption key="/SIM/sim_sopt1_osc32ksel"   optional="true" constant="false" />
       <aliasOption key="/SIM/system_erclk32k_clock" optional="true"/>
    </category>
    
    <category name="OSC" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
       <aliasOption key="/OSC0/osc_input_freq" constant="false" />
-      <aliasOption key="/OSC0/erefs0" constant="false" />
+      <aliasOption key="/OSC0/erefs0"         constant="false" />
    </category>
    
    <category name="Clocks" description="Clock Sources"
@@ -33,27 +33,27 @@
          value="4000000" />
 
       <intOption name="system_low_power_clock"
+         constant="true"
          origin="LPO Clock"
          units="Hz"
          description="Frequency of Internal Low Power Oscillator [LPO] Clock"
          toolTip="Dependent on device. [Typically ~1kHz]" 
-         value="1000"
-         constant="true" />
+         value="1000" />
     
       <intOption name="system_irc48m_clock" 
+         constant="true"  
          units="Hz"
          description="Frequency of Internal 48MHz Clock [IRC48MCLK]"
          toolTip="48 MHz Internal Oscillator [Trimmed against USB bus]"
-         value="48000000" 
-         constant="true" />
+         value="48000000"/>
 
-      <intOption name="system_usb_clkin_clock" 
+      <intOption name="system_usb_clkin_clock"  
+         constant="true" 
          origin="USB Clock In pin"
          units="Hz"
          description="Frequency of External USB Clock"
          toolTip="Externally provided clock for USB on USB_CLKIN" 
-         value="48000000"
-         constant="true" />
+         value="48000000" />
    </category>
    
    <xi:include href="_irqOption.xml"/>
@@ -96,20 +96,20 @@
             <choice value="1" name="Reset request" />
          </binaryOption>
 
-            <binaryOption name="mcg_c9_pll_cme." 
-               description="MCG External PLL Clock Monitor Enable"
-               toolTip="Enables the loss of clock monitoring circuit for the MCG External PLL (EXT_PLL) reference clock">
-               <choice value="0" name="PLL clock monitor disabled" />
-               <choice value="1" name="PLL clock monitor enabled" />
-            </binaryOption>
+         <binaryOption name="mcg_c9_pll_cme." 
+            description="MCG External PLL Clock Monitor Enable"
+            toolTip="Enables the loss of clock monitoring circuit for the MCG External PLL (EXT_PLL) reference clock">
+            <choice value="0" name="PLL clock monitor disabled" />
+            <choice value="1" name="PLL clock monitor enabled" />
+         </binaryOption>
 
-            <binaryOption name="mcg_c9_pll_locre." 
-               description="MCG External PLL Loss of Clock Reset Enable"
-               toolTip="Determines wheather an interrupt or a reset request is made following a loss of the\n
-                        MCG External PLL clock when the MCG is running in PEE mode">
-               <choice value="0" name="Interrupt request" />
-               <choice value="1" name="Reset request" />
-            </binaryOption>
+         <binaryOption name="mcg_c9_pll_locre." 
+            description="MCG External PLL Loss of Clock Reset Enable"
+            toolTip="Determines wheather an interrupt or a reset request is made following a loss of the\n
+                     MCG External PLL clock when the MCG is running in PEE mode">
+            <choice value="0" name="Interrupt request" />
+            <choice value="1" name="Reset request" />
+         </binaryOption>
    
          <binaryOption name="mcg_c6_lolie0." 
             description="Loss of Lock Interrupt Enable"
@@ -164,12 +164,12 @@
          </binaryOption>
    
          <intOption name="system_mcgirclk_clock." 
-            derived="true"
+            derived="true" 
+            constant="true"
             units="Hz"
             description="Frequency of Internal Reference [MCGIRCLK] "
             toolTip="Derived from system_slow_irc_clock or system_fast_irc_clock/fcrdiv"
-            value="48000000" 
-            constant="true" />
+            value="48000000" />
       </category>
    
       <choiceOption name="mcg_c7_oscsel." 
@@ -182,8 +182,8 @@
    
       <intOption name="mcg_erc_clock." 
          derived="true"
-         units="Hz"
          constant="true"  
+         units="Hz"
          description="MCG External Reference Clock [OSCSELCLK]"
          toolTip="External reference clock input to PLL/FLL"
          value="12000000" />
@@ -258,7 +258,7 @@
          constant="true"
          description="Frequency Range Select"
          toolTip="Selects the frequency range for the crystal oscillator\n
-            and/or divider for FLL input clock">
+                  and/or divider for FLL input clock">
          <choice value="0" name="Low range" />
          <choice value="1" name="High range" />
          <choice value="2" name="Very High range" />
@@ -300,7 +300,7 @@
          <binaryOption name="mcg_c4_dmx32."
             description="DMX32 DCO lock range" 
             toolTip="Allows the FLL parameters to be optimised for maximum output frequency\n
-            with a 32.768 kHz FLL input clock" >
+                     with a 32.768 kHz FLL input clock" >
             <choice value="0" name="Wide: [31.25-39.06] kHz" />
             <choice value="1" name="Narrow: 32.768 kHz" />
          </binaryOption>
@@ -319,12 +319,12 @@
    
          <intOption name="system_mcgffclk_clock."
             units="Hz"
+            derived="true"
             constant="true"  
             description="MCG Fixed Frequency Clock [MCGFFCLK]"
             toolTip="Used as input clock to FLL and available to some peripherals\n
-            Derived from External Reference Clock or Slow IRC"
+                     Derived from External Reference Clock or Slow IRC"
             value="12000000" />
-      
       </category>
       
       <category name="USB PLL1 (Not implemented)" description="USB PLL1 Settings">
@@ -391,6 +391,7 @@
          </binaryOption>
    
          <intOption name="pll0InputFrequency." 
+            derived="true"
             constant="true"
             units="Hz"
             description="PLL0 Input clock frequency"
@@ -411,6 +412,7 @@
          </binaryOption>
    
          <intOption name="mcg_c5_prdiv0."
+            derived="true"
             constant="true" 
             description="PLL0 External Reference Divider"
             toolTip="Determines the amount to divide down the external reference clock for PLL0\n
@@ -418,6 +420,7 @@
             value="1" />
             
          <intOption name="mcg_c6_vdiv0." 
+            derived="true"
             constant="true"
             description="PLL0 VCO Divider (VDIV0)"
             toolTip="Determines the multiplication factor for the reference clock for PLL0.\n
@@ -435,8 +438,8 @@
          
       <aliasOption key="/SIM/sim_sopt2_pllfllsel." constant="false" />
 
-      <aliasOption key="/SIM/sim_clkdiv3_pllfll." constant="false" optional="true"/>
-      <aliasOption key="/SIM/system_peripheral_postdivider_clock." constant="true" optional="true"/>
+      <aliasOption key="/SIM/sim_clkdiv3_pllfll."                  constant="false" optional="true"/>
+      <aliasOption key="/SIM/system_peripheral_postdivider_clock." constant="true"  optional="true"/>
 
       <aliasOption key="/SIM/system_peripheral_clock." />
          
@@ -450,17 +453,19 @@
    
       <stringOption name="system_mcgoutclk_clock_source."
          derived="true" 
-         description="System MCG Output Clock source [MCGOUTCLK]" 
          constant="true"
+         description="System MCG Output Clock source [MCGOUTCLK]" 
          toolTip="Source of MCG Output Clock\n
          Determined by current clock mode" />
       
       <intOption name="system_mcgoutclk_clock." 
+         derived="true"
+         constant="true" 
          units="Hz"
          description="System MCG Output Clock [MCGOUTCLK]"
          toolTip="MCG Main clock output\n
                   Derived from slow IRC, fast IRC, ERC, FLL or PLL"
-         value="120000000" constant="true" />
+         value="120000000" />
    
       <aliasOption key="/SIM/system_core_clock."    constant="false" />
       <aliasOption key="/SIM/system_bus_clock."     constant="false" />
@@ -483,6 +488,7 @@
             <aliasOption name="mcg_c1_frdiv." />
       
             <binaryOption name="mcg_c1_irefs."
+               derived="true"
                constant="true"
                description="Internal Reference Select"
                toolTip="Selects the reference clock source for the FLL\n
@@ -566,8 +572,7 @@
    </indexedCategory>
    
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MK_ICS48M"
-      dim="3" >
+      class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MK_ICS48M" dim="3" >
       <param type="long" value="8000000" />        <!-- pllInMin     -->
       <param type="long" value="16000000" />       <!-- pllInMax     -->
       <param type="long" value="90000000" />       <!-- pllOutMin    -->
@@ -594,8 +599,8 @@
       \tstatic constexpr int ERRATA_E2448 = 0;\n\n
       
       \tenum ClockMode {
-      \t   ClockMode_None = -1,
-      \t   ClockMode_FEI  = 0,
+      \t   ClockMode_None     = -1,
+      \t   ClockMode_FEI      = 0,
       \t   ClockMode_FEE,
       \t   ClockMode_FBI,
       \t   ClockMode_BLPI,
@@ -707,10 +712,6 @@
       \t      return 0;
       \t   }
       \t}\n\n
-   ]]></template>
-   
-   <template name="ClockConfig" dim="3" namespace="all" ><![CDATA[
-      \t   $(ClockConfig.://-- missing name for configuration --),
    ]]></template>
    
    <template name="McgClockInfoEntries" dim="3" namespace="all" ><![CDATA[

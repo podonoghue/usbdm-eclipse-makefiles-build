@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Configure.usbdmProject -->
+<!-- FRDM_K66F.usbdmProject -->
 <!-- 
    Settings
 -->
@@ -78,18 +78,7 @@
    <item key="/MCG/clock_mode[0]"                          value="ClockMode_PEE" />
    <item key="/MCG/clock_mode[1]"                          value="ClockMode_BLPE" />
    <item key="/MCG/clock_mode[2]"                          value="ClockMode_PEE" />
-   <item key="/MCG/mcg_c6_vdiv0[0]"                        value="20" />
-   <item key="/MCG/mcg_c6_vdiv0[1]"                        value="20" />
-   <item key="/MCG/mcg_c6_vdiv0[2]"                        value="30" />
-   <item key="/MCG/pll0InputFrequency[0]"                  value="12000000" />
-   <item key="/MCG/pll0InputFrequency[1]"                  value="12000000" />
-   <item key="/MCG/pll0InputFrequency[2]"                  value="12000000" />
    <item key="/MCG/pll0OutputFrequency[2]"                 value="180000000" />
-   <item key="/MCG/system_mcgffclk_clock[0]"               value="46875" />
-   <item key="/MCG/system_mcgffclk_clock[1]"               value="46875" />
-   <item key="/MCG/system_mcgffclk_clock[2]"               value="46875" />
-   <item key="/MCG/system_mcgoutclk_clock[1]"              value="12000000" />
-   <item key="/MCG/system_mcgoutclk_clock[2]"              value="180000000" />
    <item key="/MCG/usbphy_pll_en_usb_clks"                 value="true" />
    <item key="/MCG/usbphy_pll_enable"                      value="true" />
    <item key="/MCG/usbphy_pll_sic_div"                     value="1" />

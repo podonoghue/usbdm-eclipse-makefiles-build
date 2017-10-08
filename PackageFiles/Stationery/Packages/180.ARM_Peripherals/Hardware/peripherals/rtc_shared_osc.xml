@@ -23,13 +23,21 @@
       description="Enable RTC oscillator"
       toolTip="Enable main oscillator as 32kHz RTC oscillator\n
       Note: this disables OSC control by MCG">
-      <choice value="0" name="Disabled" />
-      <choice value="1" name="Enabled" isDefault="true" />
+      <choice value="0" name="Disabled"  isDefault="true" />
+      <choice value="1" name="Enabled" />
    </binaryOption>
    
+   <intOption name="rtcclk_clock"
+      derived="true"
+      constant="true"
+      units="Hz"
+      description="Frequency of RTC Clock"
+      toolTip="RTC Clock only available if enabled"
+      value="32768" />
+
    <binaryOption name="rtc_cr_clko"
-      description="Enable RTC Clock Output"
-      toolTip="Determines if RTC Clock is available to peripherals" >
+      description="Enable RTC 32kHz Clock Output"
+      toolTip="Determines if RTC 32kHz Clock is available to peripherals" >
       <choice value="1" name="Clock not output to peripherals" />
       <choice value="0" name="Clock is output to peripherals" isDefault="true" />
    </binaryOption>
@@ -80,9 +88,10 @@
    </binaryOption>
    
    <intOption name="rtc_1hz_clock" 
+      constant="true"
+      derived="true"
       description="1Hz output from RTC" 
       origin="RTC 1Hz output"
-      constant="true"
       units="Hz"/>
    
    <aliasOption key="/SIM/sim_sopt2_rtcclkoutsel" constant="false" />

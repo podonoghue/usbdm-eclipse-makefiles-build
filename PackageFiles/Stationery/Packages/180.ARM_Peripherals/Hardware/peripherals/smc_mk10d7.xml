@@ -8,22 +8,22 @@
    <binaryOption name="smc_pmprot_avlp" 
       description="Allow very low power modes" 
       toolTip="This write-once bit allows the MCU to enter any very low power modes: VLPR, VLPW, and VLPS" >
-      <choice name="VLPR, VLPW and VLPS are not allowed" value="0" isDefault="true" />
-      <choice name="VLPR, VLPW and VLPS are allowed"     value="1" />
+      <choice name="VLPR, VLPW and VLPS are not allowed" value="0" />
+      <choice name="VLPR, VLPW and VLPS are allowed"     value="1" isDefault="true" />
    </binaryOption>   
    
    <binaryOption name="smc_pmprot_alls" 
       description="Allow low leakage stop mode" 
       toolTip="This write once bit allows the MCU to enter any low leakage stop mode: LLS" >
-      <choice name="LLS is not allowed" value="0" isDefault="true" />
-      <choice name="LLS is allowed"     value="1" />
+      <choice name="LLS is not allowed" value="0" />
+      <choice name="LLS is allowed"     value="1" isDefault="true" />
    </binaryOption>   
    
    <binaryOption name="smc_pmprot_avlls" 
       description="Allow very low leakage stop mode" 
       toolTip="This write once bit allows the MCU to enter any low leakage stop mode: VLLSx" >
-      <choice name="VLLSx is not allowed" value="0" isDefault="true" />
-      <choice name="VLLSx is allowed"     value="1" />
+      <choice name="VLLSx is not allowed" value="0" />
+      <choice name="VLLSx is allowed"     value="1" isDefault="true" />
    </binaryOption>   
    
    <template><![CDATA[

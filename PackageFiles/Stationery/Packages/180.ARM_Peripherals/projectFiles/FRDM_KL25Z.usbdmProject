@@ -49,52 +49,21 @@
    <item key="$signal$PTE25_muxSetting"                    value="mux5" />
    <item key="$signal$USB0_DM_descriptionSetting"          value="USB" />
    <item key="$signal$USB0_DP_descriptionSetting"          value="USB" />
-   <item key="/ADC0/irqLevel"                              value="0" />
-   <item key="/CMP0/irqLevel"                              value="0" />
-   <item key="/DAC0/irqLevel"                              value="0" />
    <item key="/FTFA/peripheral_file"                       value="ftfa" />
    <item key="/FTFA/pflash_phrase_size"                    value="4" />
    <item key="/FTFA/pflash_sector_size"                    value="1024" />
-   <item key="/GPIOA/irqLevel"                             value="0" />
-   <item key="/GPIOB/irqLevel"                             value="0" />
-   <item key="/GPIOC/irqLevel"                             value="0" />
-   <item key="/GPIOD/irqLevel"                             value="0" />
-   <item key="/GPIOE/irqLevel"                             value="0" />
-   <item key="/I2C0/irqLevel"                              value="0" />
-   <item key="/I2C1/irqLevel"                              value="0" />
-   <item key="/LLWU/irqLevel"                              value="0" />
-   <item key="/LPTMR0/irqLevel"                            value="0" />
    <item key="/LPTMR0/lptmr_cmr"                           value="0" />
    <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_PEE_48MHz" />
    <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_BLPE_4MHz" />
-   <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_PEE_40MHz" />
+   <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_FEE_40MHz" />
    <item key="/MCG/clock_mode[0]"                          value="ClockMode_PEE" />
    <item key="/MCG/clock_mode[1]"                          value="ClockMode_BLPE" />
-   <item key="/MCG/clock_mode[2]"                          value="ClockMode_PEE" />
-   <item key="/MCG/irqLevel"                               value="0" />
-   <item key="/MCG/mcg_c5_prdiv0[0]"                       value="2" />
-   <item key="/MCG/mcg_c5_prdiv0[1]"                       value="2" />
-   <item key="/MCG/mcg_c5_prdiv0[2]"                       value="2" />
-   <item key="/MCG/mcg_c6_vdiv0[1]"                        value="30" />
-   <item key="/MCG/mcg_c6_vdiv0[2]"                        value="30" />
-   <item key="/MCG/pll0InputFrequency[0]"                  value="4000000" />
-   <item key="/MCG/pll0InputFrequency[1]"                  value="4000000" />
-   <item key="/MCG/pll0InputFrequency[2]"                  value="4000000" />
+   <item key="/MCG/clock_mode[2]"                          value="ClockMode_FEE" />
    <item key="/MCG/pll0OutputFrequency[0]"                 value="96000000" />
-   <item key="/MCG/system_mcgffclk_clock[0]"               value="31250" />
-   <item key="/MCG/system_mcgffclk_clock[1]"               value="31250" />
-   <item key="/MCG/system_mcgffclk_clock[2]"               value="31250" />
-   <item key="/MCG/system_mcgoutclk_clock[0]"              value="96000000" />
-   <item key="/MCG/system_mcgoutclk_clock[1]"              value="8000000" />
+   <item key="/MCG/system_mcgfllclk_clock[2]"              value="80000000" />
    <item key="/OSC0/osc_cr_scp"                            value="4" />
-   <item key="/PIT/irqLevel"                               value="0" />
    <item key="/PIT/pit_ldval"                              value="10000" />
-   <item key="/RTC/irqLevel"                               value="0" />
-   <item key="/RTC/rtc_1hz_clock"                          value="1" />
-   <item key="/RTC/rtc_cr_osce"                            value="false" />
    <item key="/SIM/rtcSharesPins"                          value="true" />
-   <item key="/SIM/rtc_clkout"                             value="1" />
-   <item key="/SIM/sim_clkdiv2_usb"                        value="0" />
    <item key="/SIM/sim_sopt1_osc32ksel"                    value="2" />
    <item key="/SIM/sim_sopt2_pllfllsel[0]"                 value="1" />
    <item key="/SIM/sim_sopt2_rtcclkoutsel"                 value="false" />
@@ -106,19 +75,6 @@
    <item key="/SIM/system_tpm_clock"                       value="48000000" />
    <item key="/SIM/system_uart0_clock"                     value="48000000" />
    <item key="/SIM/system_usbfs_clock"                     value="48000000" />
-   <item key="/SMC/smc_pmprot_alls"                        value="true" />
-   <item key="/SMC/smc_pmprot_avlls"                       value="true" />
-   <item key="/SMC/smc_pmprot_avlp"                        value="true" />
    <item key="/SMC/smc_stopctrl_porpo"                     value="true" />
    <item key="/SMC/smc_stopctrl_pstopo"                    value="2" />
-   <item key="/SPI0/irqLevel"                              value="0" />
-   <item key="/SPI1/irqLevel"                              value="0" />
-   <item key="/TPM0/irqLevel"                              value="0" />
-   <item key="/TPM1/irqLevel"                              value="0" />
-   <item key="/TPM2/irqLevel"                              value="0" />
-   <item key="/TSI0/irqLevel"                              value="0" />
-   <item key="/UART0/irqLevel"                             value="0" />
-   <item key="/UART1/irqLevel"                             value="0" />
-   <item key="/UART2/irqLevel"                             value="0" />
-   <item key="/USB0/irqLevel"                              value="0" />
 </section>

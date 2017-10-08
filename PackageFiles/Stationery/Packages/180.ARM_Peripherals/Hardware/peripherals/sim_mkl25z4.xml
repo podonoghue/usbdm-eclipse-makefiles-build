@@ -53,11 +53,12 @@ Devices using this peripheral:
          description="RTC clock out select [RTC_CLKOUT pin]"
          toolTip="Clock output on the RTC_CLKOUT pin">
          <choice value="0"  name="RTC 1 Hz clock" />
-         <choice value="1"  name="RTC 32.768kHz clock" isDefault="true" />
+         <choice value="1"  name="OSCERCLK clock" isDefault="true" />
       </binaryOption>
    
       <intOption name="rtc_clkout"
          constant="true"
+	 derived="true"
          units="Hz"
          description="RTC clock out [RTC_CLKOUT pin]"
          toolTip="Clock frequency on the RTC_CLKOUT pin"  />
@@ -65,7 +66,7 @@ Devices using this peripheral:
       <aliasOption key="/SIM/sim_sopt2_pllfllsel." constant="false" />
    
       <aliasOption key="/SIM/system_peripheral_clock." constant="false" />
-         
+   
       <choiceOption name="sim_sopt2_uart0src" 
          description="UART0 Clock select"
          toolTip="Selects the clock source for the transmit and receive clock">
@@ -111,7 +112,7 @@ Devices using this peripheral:
          description="TPM Clock frequency"
          toolTip="Frequency of clock to TPM"
          value="0" />
-
+   
       <choiceOption name="sim_sopt2_clkoutsel" 
          description="CLKOUT select"
          toolTip="Selects the clock to output on the CLKOUT pin." >
@@ -143,7 +144,6 @@ Devices using this peripheral:
       \t   SimPeripheralClockSource_McgPll = SIM_SOPT2_PLLFLLSEL(1), //!< MCG PLL Clock
       \t   SimPeripheralClockSource_Irc48m = SIM_SOPT2_PLLFLLSEL(3), //!< IRC 48MHz clock
       \t};\n\n
-
    ]]></template>
    
    <template><![CDATA[
@@ -263,20 +263,20 @@ Devices using this peripheral:
    <category name="SOPT5" description="UART signals">
       <binaryOption name="sim_sopt5_uart2ode" description="UART2 Open Drain Enable"
          toolTip="Enables Open Drain output">
-         <choice value="0" name="Disabled" />
-         <choice value="1" name="Enabled" />
+         <choice value="0" name="Push-pull" />
+         <choice value="1" name="Open-drain" />
       </binaryOption>
 
       <binaryOption name="sim_sopt5_uart1ode" description="UART1 Open Drain Enable"
          toolTip="Enables Open Drain output">
-         <choice value="0" name="Disabled" />
-         <choice value="1" name="Enabled" />
+         <choice value="0" name="Push-pull" />
+         <choice value="1" name="Open-drain" />
       </binaryOption>
 
       <binaryOption name="sim_sopt5_uart0ode" description="UART0 Open Drain Enable"
          toolTip="Enables Open Drain output">
-         <choice value="0" name="Disabled" />
-         <choice value="1" name="Enabled" />
+         <choice value="0" name="Push-pull" />
+         <choice value="1" name="Open-drain" />
       </binaryOption>
 
       <choiceOption name="sim_sopt5_uart0txsrc" 
@@ -311,6 +311,7 @@ Devices using this peripheral:
          <choice value="1" name="CMP0 output" />
       </choiceOption>
    </category>
+   
    <template><![CDATA[
       \t//! System Options Register 5
       \tstatic constexpr uint32_t sopt5 = 
@@ -322,6 +323,7 @@ Devices using this peripheral:
       \t   SIM_SOPT5_UART1TXSRC($(sim_sopt5_uart1txsrc)) |      // UART 1 transmit data source select
       \t   SIM_SOPT5_UART1RXSRC($(sim_sopt5_uart1rxsrc));       // UART 1 receive data source select\n\n
    ]]></template>
+   
    <category name="SOPT7" description="ADC signals">
       <binaryOption name="sim_sopt7_adc0alttrgen" 
          description="ADC0 alternate trigger enable"
@@ -419,28 +421,6 @@ Devices using this peripheral:
       \t};\n\n
    ]]></template>
 
-   <choiceOption name="sim_clkdiv2_usb"
-      description="USB clock divider" 
-      toolTip="Sets the clock divider when the MCGFLLCLK, MCGPLLCLK, or IRC48M clock\n
-      is the USB clock source.">
-      <choice value="1" name="Multiply by 2 (div=0, frac=1)" />
-      <choice value="0" name="Multiply by 1 (div=0, frac=0)" />
-      <choice value="3" name="Multiply by 1 (div=1, frac=1)" />
-      <choice value="5" name="Divide by 1.5 (div=2, frac=1)" />
-      <choice value="2" name="Divide by 2 (div=1, frac=0)" />
-      <choice value="7" name="Divide by 2 (div=3, frac=1)" />
-      <choice value="9" name="Divide by 2.5 (div=4, frac=1)" />
-      <choice value="4" name="Divide by 3 (div=2, frac=0)" />
-      <choice value="11" name="Divide by 3 (div=5, frac=1)" />
-      <choice value="13" name="Divide by 3.5 (div=6, frac=1)" />
-      <choice value="6" name="Divide by 4 (div=3, frac=0)" />
-      <choice value="15" name="Divide by 4 (div=7, frac=1)" />
-      <choice value="8" name="Divide by 5 (div=4, frac=0)" />
-      <choice value="10" name="Divide by 6 (div=5, frac=0)" />
-      <choice value="12" name="Divide by 7 (div=6, frac=0)" />
-      <choice value="14" name="Divide by 8 (div=7, frac=0)" />
-   </choiceOption>
-   
    <template><![CDATA[
       \t#ifdef SIM_SOPT2_USBSRC_MASK
       \t/**
@@ -490,7 +470,7 @@ Devices using this peripheral:
          units="Hz"
          description="System Bus Clock"
          toolTip="Clocks the bus slaves and peripherals\n
-               Must be &lt;= Core Clock frequency"
+                  Must be &lt;= Core Clock frequency"
          value="24000000" />
 	 
       <category name="CLKDIV1" description="System Clock Dividers">
@@ -514,8 +494,7 @@ Devices using this peripheral:
    </indexedCategory>
    
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidateMKL"
-      dim="3">
+      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidateMKL" dim="3">
       <param type="long" value="48MHz" />    <!-- Core         -->
       <param type="long" value="24MHz" />    <!-- Bus          -->
    </validate>

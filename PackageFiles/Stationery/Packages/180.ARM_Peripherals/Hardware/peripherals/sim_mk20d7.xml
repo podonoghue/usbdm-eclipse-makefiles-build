@@ -54,6 +54,13 @@ Devices using this peripheral:
          <choice value="1"  name="RTC 32.768kHz clock" isDefault="true" />
       </binaryOption>
    
+      <intOption name="rtc_clkout"
+         constant="true"
+	 derived="true"
+         units="Hz"
+         description="RTC clock out [RTC_CLKOUT pin]"
+         toolTip="Clock frequency on the RTC_CLKOUT pin"  />
+
       <aliasOption key="/SIM/sim_sopt2_pllfllsel." constant="false" />
    
       <aliasOption key="/SIM/system_peripheral_clock." />
@@ -163,7 +170,6 @@ Devices using this peripheral:
       \t      case SIM_SOPT2_PLLFLLSEL(1): return SystemMcgPllClock;
       \t   }
       \t}\n\n
-
    ]]></template>
    
    <category name="SOPT4" description="FTM signals">
@@ -639,10 +645,10 @@ Devices using this peripheral:
       \t * Initialise SIM registers
       \t */
       \tstatic void initRegs() {
-      \t   #ifdef SIM_SCGC4_USBOTG_MASK
+      \t#ifdef SIM_SCGC4_USBOTG_MASK
       \t   // The USB interface must be disabled for clock changes to have effect
       \t   sim->SCGC4 &= ~SIM_SCGC4_USBOTG_MASK;
-      \t   #endif
+      \t#endif
       \t
       \t   sim->SOPT1 = sopt1;
       \t   // sopt2 updated by MCG clock code

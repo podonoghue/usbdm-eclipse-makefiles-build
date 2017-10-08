@@ -18,6 +18,7 @@
    </binaryOption>
    
    <intOption name="rtcclk_clock"
+      derived="true"
       constant="true"
       units="Hz"
       description="Frequency of RTC Clock"
@@ -84,6 +85,16 @@
       <choice value="1" name="Wakeup pin is enabled" />
    </binaryOption>
    
+   <intOption name="rtc_1hz_clock" 
+      constant="true"
+      derived="true"
+      description="1Hz output from RTC" 
+      origin="RTC 1Hz output"
+      units="Hz"/>
+   
+   <aliasOption key="/SIM/sim_sopt2_rtcclkoutsel" constant="false" />
+   <aliasOption key="/SIM/rtc_clkout" constant="true" />
+
    <template><![CDATA[
       \t//! Frequency of RTC External Clock or Crystal\n
       \tstatic constexpr uint32_t rtcclk_clock = $(rtcclk_clock)UL;\n\n
@@ -299,15 +310,6 @@
       \t   RTC_RAR_TPRR($(rtc_rar_tprr)) | // Time Prescaler Register Read    
       \t   RTC_RAR_TSRR($(rtc_rar_tsrr));  // Time Seconds Register Read\n\n  
     ]]></template>     
-
-   <aliasOption key="/SIM/sim_sopt2_rtcclkoutsel" constant="false" />
-   
-   <intOption name="rtc_clkout"
-      derived="true"
-      constant="true"
-      units="Hz"
-      description="RTC clock out [RTC_CLKOUT pin]"
-      toolTip="Clock frequency on the RTC_CLKOUT pin"  />
 
    <irqOption name="irqAlarmHandler"  
       description="RTC Alarm interrupt handler"

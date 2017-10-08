@@ -91,19 +91,6 @@
    <item key="/MCG/clock_mode[0]"                          value="ClockMode_PEE" />
    <item key="/MCG/clock_mode[1]"                          value="ClockMode_BLPE" />
    <item key="/MCG/clock_mode[2]"                          value="ClockMode_PEE" />
-   <item key="/MCG/mcg_c5_prdiv0[0]"                       value="20" />
-   <item key="/MCG/mcg_c5_prdiv0[1]"                       value="20" />
-   <item key="/MCG/mcg_c5_prdiv0[2]"                       value="20" />
-   <item key="/MCG/mcg_c6_vdiv0[0]"                        value="48" />
-   <item key="/MCG/mcg_c6_vdiv0[1]"                        value="48" />
-   <item key="/MCG/mcg_c6_vdiv0[2]"                        value="48" />
-   <item key="/MCG/pll0InputFrequency[0]"                  value="2500000" />
-   <item key="/MCG/pll0InputFrequency[1]"                  value="2500000" />
-   <item key="/MCG/pll0InputFrequency[2]"                  value="2500000" />
-   <item key="/MCG/system_mcgffclk_clock[0]"               value="39063" />
-   <item key="/MCG/system_mcgffclk_clock[1]"               value="39063" />
-   <item key="/MCG/system_mcgffclk_clock[2]"               value="39063" />
-   <item key="/MCG/system_mcgoutclk_clock[1]"              value="50000000" />
    <item key="/OSC0/erefs0"                                value="false" />
    <item key="/OSC0/osc_input_freq"                        value="50000000" />
    <item key="/RTC/rtc_cr_scp"                             value="4" />

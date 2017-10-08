@@ -54,6 +54,13 @@ Devices using this peripheral:
          <choice value="1"  name="RTC 32.768kHz clock" isDefault="true" />
       </binaryOption>
    
+      <intOption name="rtc_clkout"
+         constant="true"
+	 derived="true"
+         units="Hz"
+         description="RTC clock out [RTC_CLKOUT pin]"
+         toolTip="Clock frequency on the RTC_CLKOUT pin"  />
+
       <aliasOption key="/SIM/sim_sopt2_pllfllsel." constant="false" />
    
       <aliasOption key="/SIM/system_peripheral_clock." />
@@ -119,7 +126,6 @@ Devices using this peripheral:
       \t   SimPeripheralClockSource_McgPll = SIM_SOPT2_PLLFLLSEL(1), //!< MCG PLL Clock
       \t   SimPeripheralClockSource_Irc48m = SIM_SOPT2_PLLFLLSEL(3), //!< IRC 48MHz clock
       \t};\n\n
-
    ]]></template>
    
    <template><![CDATA[
@@ -157,7 +163,7 @@ Devices using this peripheral:
    ]]></template>
    
    <category name="SOPT4" description="FTM signals">
-   
+
       <binaryOption name="sim_sopt4_ftm0trg0src" 
          description="FlexTimer 0 Hardware Trigger 0 Source Select"
          toolTip="Selects the source of FTM hardware trigger 0" >
@@ -386,7 +392,7 @@ Devices using this peripheral:
    </choiceOption>
    
    <template><![CDATA[
-      \t#ifdef SIM_SOPT2_USBSRC_MASK
+      \t#ifdef SIM_CLKDIV2_USBDIV_MASK
       \t//! System Clock Divider Register 2
       \t//! USB clock divider divisor & fraction
       \tstatic constexpr uint32_t clkdiv2 = $(sim_clkdiv2_usb:0);\n\n
@@ -478,7 +484,6 @@ Devices using this peripheral:
                      MCGOUTCLK clock is source. Default /4"
             value="4" offset="-1" min="1" max="16" />
       </category>
-
    </indexedCategory>
    
    <validate

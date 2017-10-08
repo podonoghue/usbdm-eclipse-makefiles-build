@@ -2,8 +2,9 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- mgc_lite.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="MCG" description="Multipurpose Clock Generator" >
-   <category name="LIRC" description="Low Speed Internal Reference Clock Sources [LIRC]" >
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="MCG" description="Multipurpose Clock Generator">
+   <category name="LIRC" description="Low Speed Internal Reference Clock Sources [LIRC]"
+      toolTip="SLOW_IRC, FAST_IRC, MCGIRCLK" >
       <intOption name="system_slow_irc_clock"
          origin="SLOW IRC"
          units="Hz"
@@ -17,29 +18,106 @@
          description="Frequency of Fast Internal Reference [FIRC] Clock"
          toolTip="Dependent on device and clock Trim. [Typically ~8MHz]"
          value="8000000" />
+   </category>
+   
+   <category name="HIRC" description="High Speed Internal Clock Sources"
+      toolTip="IRCLK48MCLK, USB_CLKIN, LPO" >
 
-      <binaryOption name="mcg_c2_ircs"
+      <intOption name="system_usb_clkin_clock"  
+         constant="true" 
+         origin="USB Clock In pin"
+         units="Hz"
+         description="Frequency of External USB Clock"
+         toolTip="Externally provided clock for USB on USB_CLKIN" 
+         value="48000000" />
+
+      <intOption name="system_irc48m_clock" 
+         units="Hz"
+         description="Frequency of Internal 48MHz Clock"
+         toolTip="48 MHz Internal Oscillator [Trimmed against USB bus]"
+         origin="48MHz clock from IRC48MCLK"
+         value="48000000" />
+   </category>
+   
+   <category name="LPO" description="Internal Clock Sources" >
+      <intOption name="system_low_power_clock"
+         constant="true" 
+         origin="LPO Clock"
+         units="Hz"
+         description="Frequency of Internal Low Power Oscillator [LPO] Clock"
+         toolTip="Dependent on device. [Typically ~1kHz]" 
+         value="1000"/>
+      </category>
+
+      <category name="OSC" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
+         <aliasOption key="/OSC0/osc_input_freq" constant="false" />
+         <aliasOption key="/OSC0/erefs0" constant="false" />
+         <choiceOption name="mcg_c2_range"
+            derived="true"
+            constant="true"
+            description="Frequency Range Select"
+            toolTip="Selects the frequency range for the crystal oscillator">
+            <choice value="0" name="Low range" />
+            <choice value="1" name="High range" />
+            <choice value="2" name="Very High range" />
+            <choice value="0" name="Unused" />
+            </choiceOption>
+      </category>
+
+      <category name="RTC" description="RTC External Reference Clock/Oscillator [ERCLK32K]">
+         <aliasOption key="/SIM/sim_sopt1_osc32ksel"   optional="true" constant="false" />
+         <aliasOption key="/SIM/system_erclk32k_clock" optional="true"/>
+      </category>
+
+   <indexedCategory name="ClockConfig."  dim="3"
+         description="Clock configuration" 
+         toolTip="Clock configurations for different run modes"
+         value="ClockConfig_."  >
+         
+      <choiceOption name="clock_mode." 
+         description="Clock Mode"
+         toolTip="Clock Modes\n
+            No setup     -  No setup done\n
+            LIRC_8MHZ -  8 MHz low power internal reference clock\n
+            LIRC_2MHZ -  2 MHz low power internal reference clock\n
+            HIRC            -  48 MHz high speed internal reference clock\n
+            EXT              -  External reference clock (OSCCLK)" >
+         <choice name="No setup (Reset default)"         value="ClockMode_None" />
+         <choice name="8 MHz low power IRC (LIRC_8MHz)"  value="ClockMode_LIRC_8M" />
+         <choice name="2 MHz low power IRC (LIRC_2MHz)"  value="ClockMode_LIRC_2M" />
+         <choice name="48 MHz IRC (HIRC)"                value="ClockMode_HIRC_48M" />
+         <choice name="External (EXT)"                   value="ClockMode_EXT" />
+      </choiceOption>
+  
+      <binaryOption name="mcg_mc_hircen." 
+         description="High-frequency IRC Clock Enable [MCGPCLK]"
+         toolTip="Enables the HIRC, even when MCG_Lite is not working at HIRC mode.">
+         <choice value="0" name="Enabled as required by MCG mode" />
+         <choice value="1" name="Always enabled" />
+      </binaryOption>
+
+      <binaryOption name="mcg_c2_ircs."
          description="Internal Reference [MCGIRCLK] Clock Source" 
          toolTip="Clock Source for MCGIRCLK" >
          <choice value="0" name="Slow internal reference clock" isDefault="true"/>
          <choice value="1" name="Fast internal reference clock" />
       </binaryOption>
 
-      <binaryOption name="mcg_c1_irclken"
+      <binaryOption name="mcg_c1_irclken."
          description="Internal Reference Clock Enable [MCGIRCLK]"
          toolTip="Enables the LIRC, even when MCG_Lite is not working at LIRC modes.">
          <choice value="0" name="Enabled as required by MCG mode" />
-         <choice value="1" name="Always enabled" isDefault="true"/>
+         <choice value="1" name="Always enabled" isDefault="true" />
       </binaryOption>
 
-      <binaryOption name="mcg_c1_irefsten"
+      <binaryOption name="mcg_c1_irefsten."
          description="Internal Reference Stop Enable [MCGIRCLK]" 
          toolTip="Determines if the LIRC is enabled in Stop mode">
          <choice value="0" name="IR disabled in STOP" />
          <choice value="1" name="IR enabled in STOP" />
       </binaryOption>
 
-      <choiceOption name="mcg_sc_fcrdiv"
+      <choiceOption name="mcg_sc_fcrdiv."
          description="Internal Clock Reference Divider[LIRC_DIV1]"
          toolTip="Selects the amount to divide down the selected internal reference clock\n
             The FIR clock is available for use as MCGOUTCLK and after further division as MCGIRCLK">
@@ -53,21 +131,21 @@
          <choice value="7" name="Divide by 128" />
       </choiceOption>
 
-      <intOption name="system_lirc_clock" 
+      <intOption name="system_lirc_clock."  
+         constant="true" 
          units="Hz"
          description="Frequency of Low Speed Internal Reference [LIRC_CLK] "
          toolTip="Derived from system_slow_irc_clock or system_fast_irc_clock"
-         value="2000000" 
-         constant="true" />
+         value="2000000"/>
 
-      <intOption name="system_lirc_div1_clock" 
+      <intOption name="system_lirc_div1_clock." 
+         constant="true" 
          units="Hz"
          description="Frequency of Low Speed Internal Reference [LIRC_DIV1_CLK] "
          toolTip="Derived from system_slow_irc_clock or system_fast_irc_clock/lirc_div1"
-         value="2000000" 
-         constant="true" />
+         value="2000000" />
 
-      <choiceOption name="mcg_mc_lirc_div2"
+      <choiceOption name="mcg_mc_lirc_div2."
          description="Second Low-frequency Internal Reference Clock Divider"
          toolTip="Selects the factor value to further divide the LIRC source">
          <choice value="0" name="Divide by 1" isDefault="true" />
@@ -80,148 +158,90 @@
          <choice value="7" name="Divide by 128" />
       </choiceOption>
 
-      <intOption name="system_mcgirclk_clock" 
+      <intOption name="system_mcgirclk_clock."  
+         derived="true"
+         constant="true"
          units="Hz"
          description="Frequency of Internal Reference [MCGIRCLK] "
          toolTip="Derived from Slow IRC or Fast IRC/lirc_div1/lirc_div2"
-         value="2000000" 
-         constant="true" />
-   </category>
-   
-   <category name="HIRC" description="High Speed Internal Clock Sources"
-      toolTip="IRCLK48MCLK, USB_CLKIN, LPO" >
+         value="2000000" />
 
-      <intOption name="system_usb_clkin_clock" 
-         origin="USB Clock In pin"
-         units="Hz"
-         description="Frequency of External USB Clock"
-         toolTip="Externally provided clock for USB on USB_CLKIN" 
-         value="48000000" />
-
-      <intOption name="system_irc48m_clock" 
-         units="Hz"
-         description="Frequency of Internal 48MHz Clock"
-         toolTip="48 MHz Internal Oscillator [Trimmed against USB bus]"
-         origin="48MHz clock from IRC48MCLK"
-         value="48000000" />
-
-      <binaryOption name="mcg_mc_hircen" 
-         description="High-frequency IRC Clock Enable [MCGPCLK]"
-         toolTip="Enables the HIRC, even when MCG_Lite is not working at HIRC mode.">
-         <choice value="0" name="Enabled as required by MCG mode" />
-         <choice value="1" name="Always enabled" />
-      </binaryOption>
-      
-      <intOption name="system_mcgpclk_clock" 
+      <intOption name="system_mcgpclk_clock."
+         derived="true" 
          constant="true"
          units="Hz"
          description="MCGPCLK Output clock frequency"
          toolTip="Output of HIRC available as peripheral clock"
          value="48000000" />
-   </category>  
+         
+      <aliasOption key="/OSC0/system_oscerclk_undiv_clock" optional="true" />
+      <aliasOption key="/OSC0/system_oscerclk_clock" constant="true" />
+      <aliasOption key="/SIM/system_erclk32k_clock" constant="true" />
+      <aliasOption name="system_low_power_clock" constant="true" />
    
-   <category name="LPO" description="Internal Clock Sources" >
-      <intOption name="system_low_power_clock"
-         origin="LPO Clock"
+      <stringOption name="system_mcgoutclk_clock_source."
+         derived="true" 
+         constant="true"
+         description="System MCG Output Clock source [MCGOUTCLK]" 
+         toolTip="Source of MCG Output Clock\n
+                  Determined by current clock mode" />
+      
+      <intOption name="system_mcgoutclk_clock." 
+         derived="true" 
+         constant="true"
          units="Hz"
-         description="Frequency of Internal Low Power Oscillator [LPO] Clock"
-         toolTip="Dependent on device. [Typically ~1kHz]" 
-         value="1000"
-         constant="true" />
-   </category>
-
-   <category name="OSC" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
-      <aliasOption key="/OSC0/osc_input_freq" constant="false" />
-      <aliasOption key="/OSC0/erefs0" constant="false" />
-   </category>
-
-   <category name="RTC" description="RTC External Reference Clock/Oscillator [ERCLK32K]">
-      <aliasOption key="/SIM/sim_sopt1_osc32ksel"   optional="true" constant="false" />
-      <aliasOption key="/SIM/system_erclk32k_clock" optional="true"/>
-   </category>
-
-   <choiceOption name="clock_mode" 
-      description="Default Clock Mode"
-      toolTip="Clock Modes\n
-         No setup     -  No setup done\n
-         LIRC_8MHZ -  8 MHz low power internal reference clock\n
-         LIRC_2MHZ -  2 MHz low power internal reference clock\n
-         HIRC            -  48 MHz high speed internal reference clock\n
-         EXT              -  External reference clock (OSCCLK)" >
-      <choice name="No setup (Reset default)"         value="ClockMode_None" />
-      <choice name="8 MHz low power IRC (LIRC_8MHz)"  value="ClockMode_LIRC_8M" />
-      <choice name="2 MHz low power IRC (LIRC_2MHz)"  value="ClockMode_LIRC_2M" />
-      <choice name="48 MHz IRC (HIRC)"                value="ClockMode_HIRC_48M" />
-      <choice name="External (EXT)"                   value="ClockMode_EXT" />
-   </choiceOption>
-  
-   <aliasOption name="system_mcgpclk_clock" />
-   <aliasOption name="system_mcgirclk_clock" />
-   <aliasOption key="/OSC0/system_oscerclk_undiv_clock" optional="true" />
-   <aliasOption key="/OSC0/system_oscerclk_clock" />
-   <aliasOption key="/SIM/system_erclk32k_clock" />
-   <aliasOption name="system_low_power_clock" />
-
-   <stringOption name="system_mcgoutclk_clock_source" 
-      derived="true" 
-      description="System MCG Output Clock source [MCGOUTCLK]" 
-      constant="true"
-      toolTip="Source of MCG Output Clock\n
-      Determined by current clock mode" />
+         description="System MCG Output Clock [MCGOUTCLK]"
+         toolTip="MCG Main clock output\n
+                  Derived from HIRC, LIRC-8M/2M, EXT" />
    
-   <intOption name="system_mcgoutclk_clock" 
-      units="Hz"
-      description="System MCG Output Clock [MCGOUTCLK]"
-      toolTip="MCG Main clock output\n
-               Derived from HIRC, LIRC-8M/2M, EXT"
-      value="48000000" constant="true" />
+      <aliasOption key="/SIM/system_core_clock."    constant="false" />
+      <aliasOption key="/SIM/system_bus_clock."     constant="false" />
 
-   <aliasOption key="/SIM/system_core_clock" constant="false" />
-   <aliasOption key="/SIM/system_bus_clock" constant="false" />
+      <category name="Device Parameters" description="Register values">
+         <category name="MCG_C1" description="MCG Control Register 1">
+            <choiceOption name="mcg_c1_clks."
+               derived="true"
+               constant="true"
+               description="MCGOUTCLK Clock Source Select"
+               toolTip="Selects the clock source for MCGOUTCLK\n
+                        This option is determined by the Clock Mode selection\n" >
+               <choice value="0" name="HIRC clock [HIRC mode]" />
+               <choice value="1" name="LIRC clock [LIRC2M or LIRC8M mode]" />
+               <choice value="2" name="External clock (OSCCLK)[EXT mode]" />
+               <choice value="3" name="Reserved" />
+            </choiceOption>
+            <aliasOption name="mcg_c1_irclken." />
+            <aliasOption name="mcg_c1_irefsten." />
+         </category>
+         
+         <category name="MCG_C2" description="MCG Control Register 2">
+            <aliasOption key="mcg_c2_range" />
+            <aliasOption key="/OSC0/hgo0" />
+            <aliasOption key="/OSC0/erefs0" />
+            <aliasOption name="mcg_c2_ircs." />
+         </category>
+         
+         <category name="MCG_SC" description="MCG Status and Control Register" >
+            <aliasOption name="mcg_sc_fcrdiv." />
+         </category>
 
-   <category name="Device Parameters" description="Register values">
-      <category name="MCG_C1" description="MCG Control Register 1">
-         <choiceOption name="mcg_c1_clks"
-            derived="true"
-            constant="true"
-            description="MCGOUTCLK Clock Source Select"
-            toolTip="Selects the clock source for MCGOUTCLK\n
-                     This option is determined by the Clock Mode selection\n" >
-            <choice value="0" name="HIRC clock [HIRC mode]" />
-            <choice value="1" name="LIRC clock [LIRC2M or LIRC8M mode]" />
-            <choice value="2" name="External clock (OSCCLK)[EXT mode]" />
-            <choice value="3" name="Reserved" />
-         </choiceOption>
-         <aliasOption name="mcg_c1_irclken" />
-         <aliasOption name="mcg_c1_irefsten" />
+         <category name="MCG_MC" description="MCG Miscellaneous Control Register" >
+            <aliasOption name="mcg_mc_hircen." />         
+            <aliasOption name="mcg_mc_lirc_div2." />         
+         </category>
       </category>
-      
-      <category name="MCG_C2" description="MCG Control Register 2">
-         <aliasOption key="/OSC0/range" />
-         <aliasOption key="/OSC0/hgo0" />
-         <aliasOption key="/OSC0/erefs0" />
-         <aliasOption name="mcg_c2_ircs" />
-      </category>
-      
-      <category name="MCG_SC" description="MCG Status and Control Register" >
-         <aliasOption name="mcg_sc_fcrdiv" />
-      </category>
-
-      <category name="MCG_MC" description="MCG Miscellaneous Control Register" >
-         <aliasOption name="mcg_mc_hircen" />         
-         <aliasOption name="mcg_mc_lirc_div2" />         
-      </category>
-
-   </category>
+   </indexedCategory>
    
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MCG_Lite">
+      class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MCG_Lite" dim="3">
    </validate>
 
    <projectActionList id = "mcg_files" >
-      <copy source="Project_Headers/mcg_lite.h"        target="Project_Headers/mcg.h"      overwrite="true"  derived="true" />
-      <copy source="Startup_Code/mcg_lite.cpp"         target="Startup_Code/mcg.cpp"       overwrite="true"  derived="true" />
-      <copy source="Snippets/test-mcgLite.cpp"         target="Snippets/test-mcgLite.cpp"  overwrite="true"  derived="true" />
+      <copy source="Startup_Code/mcg_lite.cpp"            target="Startup_Code/mcg.cpp"                  overwrite="true"  derived="true" />
+      <copy source="Project_Headers/mcg_lite.h"           target="Project_Headers/mcg.h"                 overwrite="true"  derived="true" />
+      <copy source="Snippets/mcg-lite-test.cpp"           target="Snippets/mcg-lite-test.cpp"            overwrite="true"  derived="true" />
+      <copy source="Snippets/mcg-run-mode-test-mk22f.cpp" target="Snippets/mcg-run-mode-test-mk22f.cpp"  overwrite="true"  derived="true" />
+      <copy source="Snippets/mcg-run-mode-test-mk20.cpp"  target="Snippets/mcg-run-mode-test-mk20.cpp"   overwrite="true"  derived="true" />
       <deleteResource target="Project_Headers/clock_configure.h" />
       <deleteResource target="Startup_Code/clock.c" />
    </projectActionList>
@@ -235,30 +255,32 @@
       \t   ClockMode_EXT,
       \t};\n\n
       
-      \tstruct ClockInfo {
-      \t   //! Clock Mode
-      \t   const ClockMode clockMode:8;
-      \t   //! Control Register 1
-      \t   const uint8_t c1;
-      \t   //! Control Register 2
-      \t   const uint8_t c2;
-      \t   //! Status and Control Register
-      \t   const uint8_t sc;
-      \t   //! Miscellaneous Control Register
-      \t   const uint8_t mc;
-      \t};
-      \t
       \t//! Frequency of Slow Internal Reference Clock [~2MHz]
-      \tstatic constexpr uint32_t system_slow_lirc_clock = $(system_slow_irc_clock)UL;
-      \t
+      \tstatic constexpr uint32_t system_slow_lirc_clock = $(system_slow_irc_clock)UL;\n\n
+      
       \t//! Frequency of Fast Internal Reference Clock [~8MHz]
-      \tstatic constexpr uint32_t system_fast_lirc_clock = $(system_fast_irc_clock)UL;
-      \t
+      \tstatic constexpr uint32_t system_fast_lirc_clock = $(system_fast_irc_clock)UL;\n\n
+
       \t//! Frequency of High Speed Internal Reference Clock [~48MHz]
       \tstatic constexpr uint32_t system_hirc_clock      = $(system_irc48m_clock)UL;
-      \t
-      \tstatic const ClockInfo clockInfo[];
-      \t
+      \t//! Structure for clock configurations
+      \tstruct ClockInfo {
+      \t   //! Clock Mode
+      \t   const ClockMode clockMode:8;\n\n
+      
+      \t   //! Control Register 1 - IRCLKEN, IREFSTEN, (-CLKS)
+      \t   const uint8_t c1;
+      \t   //! Control Register 2 - RANGE0, HGO0, EREFS0, IRCS
+      \t   const uint8_t c2;
+      \t   //! Status and Control Register - FCRDIV
+      \t   const uint8_t sc;
+      \t   //! Miscellaneous Control Register - HIRCEN, LIRC_DIV2 (-HIRCLPEN)
+      \t   const uint8_t mc;
+      \t};\n\n
+      
+      \t//! Clock configurations
+      \tstatic const ClockInfo clockInfo[];\n\n
+
       \t/**
       \t * Get HIRC_CLK
       \t *
@@ -271,8 +293,8 @@
       \t   else {
       \t      return 0;
       \t   }
-      \t}
-      \t
+      \t}\n\n
+      
       \t/**
       \t * Get LIRC_CLK
       \t *
@@ -280,7 +302,7 @@
       \t */
       \tstatic uint32_t getLircClk() {
       \t   if ((mcg->C1&MCG_C1_IRCLKEN_MASK) || ((mcg->S&MCG_S_CLKST_MASK) == MCG_S_CLKST(1))) {
-      \t      if (mcg->C2 & MCG_C2_IRCS_MASK) {
+      \t      if (mcg->C2&MCG_C2_IRCS_MASK) {
       \t         return system_fast_lirc_clock;
       \t      }
       \t      else {
@@ -290,8 +312,8 @@
       \t   else {
       \t      return 0;
       \t   }
-      \t}
-      \t
+      \t}\n\n
+      
       \t/**
       \t * Get LIRC_DIV1_CLK
       \t *
@@ -308,8 +330,8 @@
       \t */
       \tstatic uint32_t getMcgIrClock() {
       \t   return getLircDiv1Clk()/(1<<((mcg->MC&MCG_MC_LIRC_DIV2_MASK)>>MCG_MC_LIRC_DIV2_SHIFT));
-      \t}
-      \t
+      \t}\n\n
+
       \t/**
       \t * Get MCGOUTCLK
       \t *
@@ -327,33 +349,86 @@
       \t   case MCG_S_CLKST(3): // Reserved
       \t      return 0;
       \t   }
-      \t}
+      \t}\n\n
    ]]></template>
+   
+   <template name="McgClockInfoEntries" dim="3" namespace="all" ><![CDATA[
+      \t   {  // $(ClockConfig.) ($(clock_mode.))\n
+      \t      
+      \t      //! SIM CLKDIV1 System Clock Divider Register 1
+      \t      SIM_CLKDIV1_OUTDIV4($(/SIM/sim_clkdiv1_outdiv4.:0))|  // Flash clock
+      \t      SIM_CLKDIV1_OUTDIV3($(/SIM/sim_clkdiv1_outdiv3.:0))|  // FlexBus clock
+      \t      SIM_CLKDIV1_OUTDIV2($(/SIM/sim_clkdiv1_outdiv2.:0))|  // Bus clock
+      \t      SIM_CLKDIV1_OUTDIV1($(/SIM/sim_clkdiv1_outdiv1.:0)),  // Core/system clock\n\n
+              
+      \t#ifdef SIM_CLKDIV3_PLLFLLDIV
+      \t      //! SIM CLKDIV3 System Clock Divider Register 3
+      \t      $(/SIM/sim_clkdiv3_pllfll.:0),
+      \t#endif\n\n
       
-   <template name="clockInfo" namespace="all" ><![CDATA[
-      \tconst McgInfo::ClockInfo McgInfo::clockInfo[1] = {
-      \t   {
-      \t   //! Clock Mode
-      \t   $(clock_mode),\n\n
+      \t      //! SIM SOPT2 System Options Register 2
+      \t#ifdef SIM_SOPT2_TRACECLKSEL
+      \t   SIM_SOPT2_TRACECLKSEL($(/SIM/sim_sopt2_traceclksel:0)) |      // Debug trace clock select
+      \t#endif
+      \t#ifdef SIM_SOPT2_TIMESRC
+      \t   SIM_SOPT2_TIMESRC($(/SIM/sim_sopt2_timesrc:0)) |          // IEEE 1588 timestamp clock source select
+      \t#endif
+      \t#ifdef SIM_SOPT2_RMIISRC
+      \t   SIM_SOPT2_RMIISRC($(/SIM/sim_sopt2_rmiisrc:0)) |          // Ethernet RMII clock source select
+      \t#endif
+      \t#ifdef SIM_SOPT2_SDHCSRC
+      \t      SIM_SOPT2_SDHCSRC($(/SIM/sim_sopt2_sdhcsrc:0)) |       // SDHC clock source select
+      \t#endif
+      \t#ifdef SIM_SOPT2_UART0SRC
+      \t   SIM_SOPT2_UART0SRC($(/SIM/sim_sopt2_uart0src:0)) |         // UART0 clock source select
+      \t#endif
+      \t#ifdef SIM_SOPT2_FLEXIOSRC
+      \t      SIM_SOPT2_FLEXIOSRC($(/SIM/sim_sopt2_flexiosrc:0)) |        // FLEXIO clock source select
+      \t#endif
+      \t#ifdef SIM_SOPT2_LPUARTSRC
+      \t      SIM_SOPT2_LPUARTSRC($(/SIM/sim_sopt2_lpuartsrc:0)) |     // LPUART clock source select
+      \t#endif
+      \t#ifdef SIM_SOPT2_LPUART0SRC
+      \t      SIM_SOPT2_LPUART0SRC($(/SIM/sim_sopt2_lpuart0src:0)) |    // LPUART0 clock source select
+      \t#endif
+      \t#ifdef SIM_SOPT2_LPUART1SRC
+      \t      SIM_SOPT2_LPUART1SRC($(/SIM/sim_sopt2_lpuart1src:0)) |    // LPUART1 clock source select
+      \t#endif
+      \t#ifdef SIM_SOPT2_PTD7PAD
+      \t      SIM_SOPT2_PTD7PAD($(/SIM/sim_sopt2_ptd7pad:0)) |       // PTD7 pad drive strength
+      \t#endif
+      \t#ifdef SIM_SOPT2_TPMSRC
+      \t      SIM_SOPT2_TPMSRC($(/SIM/sim_sopt2_tpmsrc:0)) |        // TPM clock source select
+      \t#endif
+      \t#ifdef SIM_SOPT2_USBSRC
+      \t      SIM_SOPT2_USBSRC($(/SIM/sim_sopt2_usbsrc:0)) |        // USB clock source select
+      \t#endif
+      \t#ifdef SIM_SOPT2_FBSL
+      \t      SIM_SOPT2_FBSL($(/SIM/sim_sopt2_fbsl:0)) |          // FlexBus security level
+      \t#endif
+      \t      SIM_SOPT2_CLKOUTSEL($(/SIM/sim_sopt2_clkoutsel)) |     // CLKOUT pin clock source select
+      \t      SIM_SOPT2_RTCCLKOUTSEL($(/SIM/sim_sopt2_rtcclkoutsel)) |  // RTC clock out select
+      \t      SIM_SOPT2_PLLFLLSEL($(/SIM/sim_sopt2_pllfllsel.)),      // PLL/FLL clock select\n\n
       
-      \t   //! Control Register 1
-      \t   MCG_C1_IRCLKEN($(mcg_c1_irclken)) | // IRCLEN   Internal Reference Clock Enable
-      \t   MCG_C1_IREFSTEN($(mcg_c1_irefsten)), // IREFSTEN Internal Reference Stop Enable\n\n
+      \t      //! Clock Mode
+      \t      $(clock_mode.),\n\n
+              
+      \t      //! Control Register 1 - Excluding CLKS
+      \t      MCG_C1_IRCLKEN($(mcg_c1_irclken.)) | // IRCLEN   Internal Reference Clock Enable
+      \t      MCG_C1_IREFSTEN($(mcg_c1_irefsten.)), // IREFSTEN Internal Reference Stop Enable\n\n
+              
+      \t      //! Control Register 2
+      \t      MCG_C2_RANGE0($(mcg_c2_range)) | // RANGE   Frequency Range Select
+      \t      MCG_C2_HGO0($(/OSC0/hgo0))   | // HGO     High Gain Oscillator Select
+      \t      MCG_C2_EREFS0($(/OSC0/erefs0)) | // EREFS   External Reference Select
+      \t      MCG_C2_IRCS($(mcg_c2_ircs.)),    // IRCS    Internal Reference Clock Select\n\n
       
-      \t   //! Control Register 2
-      \t   MCG_C2_RANGE0($(/OSC0/range)) | // RANGE   Frequency Range Select
-      \t   MCG_C2_HGO0($(/OSC0/hgo0))   | // HGO     High Gain Oscillator Select
-      \t   MCG_C2_EREFS0($(/OSC0/erefs0)) | // EREFS   External Reference Select
-      \t   MCG_C2_IRCS($(mcg_c2_ircs)),    // IRCS    Internal Reference Clock Select\n\n
+      \t      //! Status and Control Register
+      \t      MCG_SC_FCRDIV($(mcg_sc_fcrdiv.)), // FCRDIV (LIRC_DIV1) Internal Clock Reference Divider 1\n\n
       
-      \t   //! Status and Control Register
-      \t   MCG_SC_FCRDIV($(mcg_sc_fcrdiv)), // FCRDIV (LIRC_DIV1) Internal Clock Reference Divider 1\n\n
-      
-      \t   //! Miscellaneous Control Register
-      \t   MCG_MC_HIRCEN($(mcg_mc_hircen)) |    // HIRCEN   Internal Reference Clock Enable
-      \t   MCG_MC_LIRC_DIV2($(mcg_mc_lirc_div2)), // LIRC_DIV2 Internal Reference Divider 2\n\n
-      
-      \t   }
-      \t};
+      \t      //! Miscellaneous Control Register - Excluding HIRCLPEN
+      \t      MCG_MC_HIRCEN($(mcg_mc_hircen.)) |    // HIRCEN   Internal Reference Clock Enable
+      \t      MCG_MC_LIRC_DIV2($(mcg_mc_lirc_div2.)), // LIRC_DIV2 Internal Reference Divider 2\n\n
+      \t   },
    ]]></template>
 </peripheralPage>

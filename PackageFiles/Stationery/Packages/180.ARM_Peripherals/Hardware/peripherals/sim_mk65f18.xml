@@ -54,6 +54,13 @@ Devices using this peripheral:
          <choice value="1"  name="RTC 32.768kHz clock" isDefault="true" />
       </binaryOption>
    
+      <intOption name="rtc_clkout"
+         constant="true"
+	 derived="true"
+         units="Hz"
+         description="RTC clock out [RTC_CLKOUT pin]"
+         toolTip="Clock frequency on the RTC_CLKOUT pin"  />
+
       <aliasOption key="/SIM/sim_sopt2_pllfllsel." constant="false" />
    
       <aliasOption key="/SIM/system_peripheral_clock." />
@@ -599,6 +606,7 @@ Devices using this peripheral:
          <choice value="3" name="Reserved" />
       </choiceOption>
    </category>
+   
    <template><![CDATA[
       \t//! System Options Register 5
       \tstatic constexpr uint32_t sopt5 = 
@@ -609,6 +617,7 @@ Devices using this peripheral:
       \t   SIM_SOPT5_LPUART0TXSRC($(sim_sopt5_lpuart0txsrc)) |  // LPUART 0 transmit data source select
       \t   SIM_SOPT5_LPUART0RXSRC($(sim_sopt5_lpuart0rxsrc));   // LPUART 0 receive data source select\n\n
    ]]></template>
+   
    <category name="SOPT7" description="ADC signals">
       <binaryOption name="sim_sopt7_adc0alttrgen" 
          description="ADC0 alternate trigger enable"
@@ -1098,14 +1107,14 @@ Devices using this peripheral:
                MCGOUTCLK clock is source. Default /2"
             value="1" offset="-1" min="1" max="16" />
       
-      <intOption name="sim_clkdiv1_outdiv3." 
-         derived="true"
-         constant="true"
-         description="Flexbus Clock Divider (OUTDIV3) - Divide by [1-16]"
-         toolTip="Clocks the flexbus interface [SIM_CLKDIV1_OUTDIV3]\n
-                  Divides MCGOUT Clock to generate system_flexbus_clock\n
-                  MCGOUTCLK clock is source. Default /2"
-         value="1" offset="-1" min="1" max="16" />
+         <intOption name="sim_clkdiv1_outdiv3." 
+            derived="true"
+            constant="true"
+            description="Flexbus Clock Divider (OUTDIV3) - Divide by [1-16]"
+            toolTip="Clocks the flexbus interface [SIM_CLKDIV1_OUTDIV3]\n
+                     Divides MCGOUT Clock to generate system_flexbus_clock\n
+                     MCGOUTCLK clock is source. Default /2"
+            value="1" offset="-1" min="1" max="16" />
    
          <intOption name="sim_clkdiv1_outdiv4." 
             derived="true"
@@ -1120,8 +1129,7 @@ Devices using this peripheral:
    </indexedCategory>
    
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate"
-      dim="3">
+      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate" dim="3">
       <param type="long" value="180MHz" />    <!-- Core         -->
       <param type="long" value="60MHz" />     <!-- Bus          -->
       <param type="long" value="28MHz" />     <!-- Flash        -->
@@ -1135,11 +1143,6 @@ Devices using this peripheral:
       \t * Initialise SIM registers
       \t */
       \tstatic void initRegs() {
-      \t   #ifdef SIM_SCGC4_USBOTG_MASK
-      \t   // The USB interface must be disabled for clock changes to have effect
-      \t   sim->SCGC4 &= ~SIM_SCGC4_USBOTG_MASK;
-      \t   #endif
-      \t
       \t   sim->SOPT1 = sopt1;
       \t   // sopt2 updated by MCG clock code
       \t   sim->SOPT4 = sopt4;
