@@ -16,7 +16,9 @@
 #include "utilities.h"
 #include "stdbool.h"
 #include "hardware.h"
+#ifdef USBDM_RTC_IS_DEFINED
 #include "rtc.h"
+#endif
 #include "mcg.h"
 #include "osc.h"
  /*
@@ -111,13 +113,6 @@ const char *Mcg::getClockModeName(McgInfo::ClockMode clockMode) {
    }
    return modeNames[clockMode];
 }
-#ifndef SIM_CLKDIV1_OUTDIV3
-#define SIM_CLKDIV1_OUTDIV3(x) 0
-#endif
-
-#ifndef SIM_CLKDIV1_OUTDIV2
-#define SIM_CLKDIV1_OUTDIV2(x) 0
-#endif
 
 /**
  * Transition from current clock mode to mode given
@@ -126,7 +121,7 @@ const char *Mcg::getClockModeName(McgInfo::ClockMode clockMode) {
  *
  * @return E_NO_ERROR on success
  */
-int Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
+ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
    McgInfo::ClockMode to = clockInfo.clockMode;
 
    //TODO move!
@@ -290,7 +285,7 @@ int Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
          currentClockMode = next;
          next = (McgInfo::ClockMode)clockTransitionTable[currentClockMode][to];
          if (transitionCount++>5) {
-            return -1;
+            return setErrorCode(E_CLOCK_INIT_FAILED);
          }
       } while (currentClockMode != to);
    }
@@ -302,7 +297,8 @@ int Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
    SIM->SOPT2 = clockInfo.sopt2;
 
    SystemCoreClockUpdate();
-   return 0;
+
+   return E_NO_ERROR;
 }
 
 /**

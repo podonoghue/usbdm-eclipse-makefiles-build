@@ -6,14 +6,18 @@
 
    <!-- Convenient location for common files -->
    <projectActionList id = "sim_common_files" >
-      <copy source="Project_Headers/USBDM_Documentation.h"   target="Project_Headers/USBDM_Documentation.h" overwrite="true"  derived="true" />
-      <copy source="Project_Headers/hardware.h"              target="Project_Headers/hardware.h"            overwrite="true"  derived="true" />
-      <copy source="Sources/usbdmError.cpp"                  target="Sources/usbdmError.cpp"                overwrite="true"  derived="true" />
+      <copy source="Project_Headers/hardware.h"              target="Project_Headers/hardware.h"             overwrite="true"  derived="true" />
+      <copy source="Project_Headers/system.h"                target="Project_Headers/system.h"               overwrite="true"  derived="true" />
+      <copy source="Project_Headers/USBDM_Documentation.h"   target="Project_Headers/USBDM_Documentation.h"  overwrite="true"  derived="true" />
+      <copy source="Sources/usbdmError.cpp"                  target="Sources/usbdmError.cpp"                 overwrite="true"  derived="true" />
+      <copy source="Startup_Code/console.cpp"                target="Startup_Code/console.cpp"               overwrite="true"  derived="true" />
+      <copy source="Startup_Code/system-gcc.cpp"             target="Startup_Code/system-gcc.cpp"            overwrite="true"  derived="true" />
+      <copy source="Startup_Code/system.cpp"                 target="Startup_Code/system.cpp"                overwrite="true"  derived="true" />
    </projectActionList>
 
    <projectActionList id = "sim_port_files_mkl" >
       <copy source="Project_Headers/pcr-MKL.h"       target="Project_Headers/pcr.h"    overwrite="true"  derived="true" />
       <copy source="Project_Headers/gpio-MKL.h"      target="Project_Headers/gpio.h"   overwrite="true"  derived="true" />
    </projectActionList>
-      
+            
 </fragment>

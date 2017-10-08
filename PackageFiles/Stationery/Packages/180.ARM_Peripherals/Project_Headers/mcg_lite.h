@@ -47,6 +47,14 @@ extern volatile uint32_t SystemLpoClock;
 extern void setSysDividersStub(uint32_t simClkDiv1);
 
 /**
+ * Clock configuration names
+ */
+enum ClockConfig {
+$(/MCG/ClockConfig:// XXXX !!!!!!!ClockConfig - Not found!!!!!!!)
+   ClockConfig_default = 0,
+};
+
+/**
  * Type definition for MCG interrupt call back
  */
 typedef void (*MCGCallbackFunction)(void);
@@ -76,7 +84,7 @@ public:
     *
     * @return E_NO_ERROR on success
     */
-   static int clockTransition(const McgInfo::ClockInfo &to);
+   static ErrorCode clockTransition(const McgInfo::ClockInfo &to);
 
    /**
     * Update SystemCoreClock variable
@@ -94,8 +102,33 @@ public:
       SIM->CLKDIV1 = simClkDiv1;
    }
 
-   /** Current clock mode (FEI out of reset) */
+   /** Current clock mode (LIRC_8M out of reset) */
    static McgInfo::ClockMode currentClockMode;
+
+   /**
+    * Get current clock mode
+    *
+    * @return
+    */
+   static McgInfo::ClockMode getClockMode() {
+      return currentClockMode;
+   }
+
+   /**
+    * Get name for clock mode
+    *
+    * @return Pointer to static string
+    */
+   static const char *getClockModeName(McgInfo::ClockMode);
+
+   /**
+    * Get name for current clock mode
+    *
+    * @return Pointer to static string
+    */
+   static const char *getClockModeName() {
+      return getClockModeName(getClockMode());
+   }
 
    /**
     *  Configure the MCG for given mode
@@ -114,9 +147,17 @@ public:
    }
 
    /**
-    * Sets up the clock out of RESET
+    * Initialise MCG to default settings.
     */
-   static void initialise(void);
+   static void defaultConfigure();
+
+   /**
+    * Set up the OSC out of reset.
+    */
+   static void initialise() {
+      defaultConfigure();
+   }
+
 };
 
 /**

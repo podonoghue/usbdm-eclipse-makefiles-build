@@ -130,8 +130,15 @@
          <clock reg="SCGC6"         mask="SIM_SCGC6_PIT_MASK" />
          <irq num="PIT_IRQn" />
       </peripheral>
+      <peripheral baseName="PMC"      instance=""         version="pmc_mk">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPmc" />
+         <irq num="PMC_IRQn" />
+      </peripheral>
       <peripheral baseName="POWER"    instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPower" />
+      </peripheral>
+      <peripheral baseName="RCM"      instance=""         version="rcm_mkl03z4">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRcm" />
       </peripheral>
       <peripheral baseName="RTC"      instance=""         version="rtc_mkl03z4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRtc" />

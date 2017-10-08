@@ -66,6 +66,7 @@ enum ErrorCode {
    E_NO_ACK,                      //!< No acknowledge (I2C)
    E_LOST_ARBITRATION,            //!< Lost arbitration for bus (I2C)
    E_TERMINATED,                  //!< The program has terminated
+   E_CLOCK_INIT_FAILED,           //!< Clock initialisation failed
 
    E_CMSIS_ERR_OFFSET = 1<<20,    //!< Offset added to CMSIS error codes
 };

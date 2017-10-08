@@ -38,6 +38,7 @@
          <applyWhen >
             <variableRef idRef="projectOptionValue.CPP-abstraction" />
          </applyWhen>
+         <copy source="projectFiles/&DEVICE_SUB_FAMILY;.usbdmProject"  target="Configure.usbdmProject" />
       </projectActionList>
       <xi:include href="shared/CPP-abstraction-Common-MK.xml"/>
    </projectActionList>

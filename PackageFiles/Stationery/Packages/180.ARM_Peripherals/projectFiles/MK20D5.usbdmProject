@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- FRDM_K20D50M.usbdmProject -->
+<!-- 
+   Settings
+-->
+
+<section name="USBDM">
+   <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_K20D5" />
+   <item key="$$DeviceInfo_Target_Device"                  value="FRDM_K20D50M" />
+   <item key="$$Hardware_Source_Filename"                  value="MK20D5.usbdmHardware" />
+   <item key="/DMA0/NumChannels"                           value="4" />
+   <item key="/FTFL/dflash_phrase_size"                    value="4" />
+   <item key="/FTFL/dflash_sector_size"                    value="1024" />
+   <item key="/FTFL/peripheral_file"                       value="ftfl_32k_flexrom" />
+   <item key="/FTFL/pflash_phrase_size"                    value="4" />
+   <item key="/FTFL/pflash_sector_size"                    value="1024" />
+   <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_PEE_48MHz" />
+   <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_BLPE_4MHz" />
+   <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_FEE_40MHz" />
+   <item key="/MCG/clock_mode[0]"                          value="ClockMode_PEE" />
+   <item key="/MCG/clock_mode[1]"                          value="ClockMode_BLPE" />
+   <item key="/MCG/clock_mode[2]"                          value="ClockMode_FEE" />
+   <item key="/MCG/pll0OutputFrequency[0]"                 value="96000000" />
+   <item key="/MCG/system_mcgfllclk_clock[1]"              value="80000000" />
+   <item key="/MCG/system_mcgfllclk_clock[2]"              value="80000000" />
+   <item key="/SIM/sim_clkdiv2_usb"                        value="2" />
+   <item key="/SIM/sim_sopt2_pllfllsel[0]"                 value="1" />
+   <item key="/SIM/system_bus_clock[1]"                    value="4000000" />
+   <item key="/SIM/system_bus_clock[2]"                    value="40000000" />
+   <item key="/SIM/system_core_clock[1]"                   value="4000000" />
+   <item key="/SIM/system_core_clock[2]"                   value="40000000" />
+   <item key="/SIM/system_flash_clock[1]"                  value="4000000" />
+   <item key="/SIM/system_flash_clock[2]"                  value="20000000" />
+   <item key="/SIM/system_usbfs_clock"                     value="48000000" />
+   <item key="/UART0/clockSource"                          value="SystemCoreClock" />
+   <item key="/UART1/clockSource"                          value="SystemCoreClock" />
+   <item key="/UART2/clockSource"                          value="SystemBusClock" />
+</section>

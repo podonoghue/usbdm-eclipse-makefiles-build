@@ -16,12 +16,12 @@
       </applyWhen>
       <copy source="Startup_Code/vectors-cm0.c"         target="Startup_Code/vectors.c"  overwrite="true" />
       <!-- Security -->
-      <copy source="Startup_Code/security-mkm.c"        target="Startup_Code/security.c" />
+      <copy source="Startup_Code/security-mkm.c"        target="Startup_Code/security.c" overwrite="true" />
       <!-- Clock -->
-      <copy source="Startup_Code/clock-MCG-MKMxx.c" target="Startup_Code/clock.c" />
-      <copy source="Project_Headers/clock_configure-MCG-MKMxx.h" target="Project_Headers/clock_configure.h" />
+      <copy source="Startup_Code/clock-MCG-MKMxx.c"              target="Startup_Code/clock.c"              overwrite="true" />
+      <copy source="Project_Headers/clock_configure-MCG-MKMxx.h" target="Project_Headers/clock_configure.h" overwrite="true" />
       <!-- Console -->
-      <copy source="Startup_Code/console-mkm.c"    target="Startup_Code/console.c" />
-      <copy source="Project_Headers/console.h"     target="Project_Headers/console.h" />
+      <copy source="Startup_Code/console-mkm.c"    target="Startup_Code/console.c"    overwrite="true" />
+      <copy source="Project_Headers/console.h"     target="Project_Headers/console.h" overwrite="true" />
    </projectActionList>
 </root>

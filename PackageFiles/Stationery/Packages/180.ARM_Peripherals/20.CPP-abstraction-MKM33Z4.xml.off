@@ -72,5 +72,6 @@
          <copy source="projectFiles/Configure.usbdmProject"                target="Configure.usbdmProject" />
          <excludeSourceFolder target="Snippets" />
       </projectActionList>
+      <xi:include href="shared/CPP-abstraction-Common-MK.xml"/>
    </projectActionList>
 </root>

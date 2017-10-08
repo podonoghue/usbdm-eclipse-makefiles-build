@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- FRDM_KL27Z.usbdmProject -->
+<!-- 
+   Settings
+-->
+
+<section name="USBDM">
+   <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_KL27Z" />
+   <item key="$$DeviceInfo_Target_Device"                  value="FRDM_KL27Z" />
+   <item key="$$Hardware_Source_Filename"                  value="MKL27Z644.usbdmHardware" />
+   <item key="/Console/console_device"                     value="USBDM::Lpuart0" />
+   <item key="/FTFA/peripheral_file"                       value="ftfa" />
+   <item key="/FTFA/pflash_phrase_size"                    value="4" />
+   <item key="/FTFA/pflash_sector_size"                    value="1024" />
+   <item key="/LPTMR0/lptmr_cmr"                           value="0" />
+   <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_HIRC_48MHz" />
+   <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_LIRC_2MHz" />
+   <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_LIRC_8MHz" />
+   <item key="/MCG/clock_mode[0]"                          value="ClockMode_HIRC_48M" />
+   <item key="/MCG/clock_mode[1]"                          value="ClockMode_LIRC_2M" />
+   <item key="/MCG/clock_mode[2]"                          value="ClockMode_LIRC_8M" />
+   <item key="/MCG/mcg_c2_ircs[0]"                         value="true" />
+   <item key="/MCG/mcg_c2_ircs[2]"                         value="true" />
+   <item key="/MCG/system_lirc_clock[0]"                   value="8000000" />
+   <item key="/MCG/system_lirc_clock[2]"                   value="8000000" />
+   <item key="/MCG/system_lirc_div1_clock[0]"              value="8000000" />
+   <item key="/MCG/system_lirc_div1_clock[2]"              value="8000000" />
+   <item key="/OSC0/osc_cr_erclken"                        value="false" />
+   <item key="/OSC0/osc_input_freq"                        value="32768" />
+   <item key="/PIT/pit_ldval"                              value="10000" />
+   <item key="/SIM/rtcSharesPins"                          value="true" />
+   <item key="/SIM/sim_sopt2_lpuart0src"                   value="1" />
+   <item key="/SIM/sim_sopt2_lpuart1src"                   value="1" />
+   <item key="/SIM/sim_sopt2_rtcclkoutsel"                 value="false" />
+   <item key="/SIM/sim_sopt2_tpmsrc"                       value="1" />
+   <item key="/SIM/system_bus_clock[1]"                    value="2000000" />
+   <item key="/SIM/system_bus_clock[2]"                    value="8000000" />
+   <item key="/SIM/system_core_clock[1]"                   value="2000000" />
+   <item key="/SIM/system_core_clock[2]"                   value="8000000" />
+   <item key="/SIM/system_erclk32k_clock"                  value="1000" />
+   <item key="/SIM/system_flexio_clock"                    value="8000000" />
+   <item key="/SIM/system_lpuart0_clock"                   value="48000000" />
+   <item key="/SIM/system_lpuart1_clock"                   value="48000000" />
+   <item key="/SIM/system_tpm_clock"                       value="48000000" />
+   <item key="/SIM/system_usbfs_clock"                     value="48000000" />
+</section>

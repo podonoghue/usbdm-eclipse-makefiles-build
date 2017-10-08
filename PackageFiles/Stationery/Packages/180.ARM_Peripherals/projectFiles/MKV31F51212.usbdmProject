@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- FRDM_KV31F.usbdmProject -->
+<!-- 
+   Settings
+-->
+
+<section name="USBDM">
+   <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_KV31F" />
+   <item key="$$DeviceInfo_Target_Device"                  value="$(targetDevice)" />
+   <item key="$$Hardware_Source_Filename"                  value="MKV31F51212.usbdmHardware" />
+   <item key="/ADC0/irqLevel"                              value="0" />
+   <item key="/ADC1/irqLevel"                              value="0" />
+   <item key="/CMP0/irqLevel"                              value="0" />
+   <item key="/CMP1/irqLevel"                              value="0" />
+   <item key="/DAC0/irqLevel"                              value="0" />
+   <item key="/DAC1/irqLevel"                              value="0" />
+   <item key="/DMA0/NumChannels"                           value="16" />
+   <item key="/FTFA/peripheral_file"                       value="ftfa" />
+   <item key="/FTFA/pflash_phrase_size"                    value="4" />
+   <item key="/FTFA/pflash_sector_size"                    value="2048" />
+   <item key="/FTM0/irqLevel"                              value="0" />
+   <item key="/FTM1/irqLevel"                              value="0" />
+   <item key="/FTM2/irqLevel"                              value="0" />
+   <item key="/FTM3/irqLevel"                              value="0" />
+   <item key="/GPIOA/irqLevel"                             value="0" />
+   <item key="/GPIOB/irqLevel"                             value="0" />
+   <item key="/GPIOC/irqLevel"                             value="0" />
+   <item key="/GPIOD/irqLevel"                             value="0" />
+   <item key="/GPIOE/irqLevel"                             value="0" />
+   <item key="/I2C0/irqLevel"                              value="0" />
+   <item key="/I2C1/irqLevel"                              value="0" />
+   <item key="/LLWU/irqLevel"                              value="0" />
+   <item key="/LPTMR0/irqLevel"                            value="0" />
+   <item key="/LPTMR0/lptmr_cmr"                           value="0" />
+   <item key="/LPUART0/irqLevel"                           value="0" />
+   <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_PEE_120MHz" />
+   <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_BLPE_4MHz" />
+   <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_FEE_80MHz" />
+   <item key="/MCG/clock_mode[0]"                          value="ClockMode_PEE" />
+   <item key="/MCG/clock_mode[1]"                          value="ClockMode_BLPE" />
+   <item key="/MCG/clock_mode[2]"                          value="ClockMode_FEE" />
+   <item key="/MCG/pll0OutputFrequency[2]"                 value="180000000" />
+   <item key="/MCG/system_mcgfllclk_clock[2]"              value="80000000" />
+   <item key="/PDB0/irqLevel"                              value="0" />
+   <item key="/PIT/irqLevel"                               value="0" />
+   <item key="/PIT/pit_ldval"                              value="10000" />
+   <item key="/SIM/busFreq"                                value="50MHz" />
+   <item key="/SIM/coreFreq"                               value="80MHz" />
+   <item key="/SIM/flashFreq"                              value="27MHz" />
+   <item key="/SIM/flexFreq"                               value="30MHz" />
+   <item key="/SIM/system_bus_clock[1]"                    value="4000000" />
+   <item key="/SIM/system_bus_clock[2]"                    value="40000000" />
+   <item key="/SIM/system_core_clock[1]"                   value="4000000" />
+   <item key="/SIM/system_core_clock[2]"                   value="80000000" />
+   <item key="/SIM/system_erclk32k_clock"                  value="1000" />
+   <item key="/SIM/system_flash_clock[1]"                  value="4000000" />
+   <item key="/SIM/system_flash_clock[2]"                  value="26666666" />
+   <item key="/SIM/system_flexbus_clock[1]"                value="4000000" />
+   <item key="/SIM/system_flexbus_clock[2]"                value="26666666" />
+   <item key="/SIM/system_lpuart_clock"                    value="4000000" />
+   <item key="/SMC/smc_pmprot_ahsrun"                      value="false" />
+   <item key="/SMC/smc_pmprot_alls"                        value="false" />
+   <item key="/SMC/smc_pmprot_avlls"                       value="false" />
+   <item key="/SMC/smc_pmprot_avlp"                        value="false" />
+   <item key="/SMC/smc_stopctrl_llsm"                      value="0" />
+   <item key="/SPI0/irqLevel"                              value="0" />
+   <item key="/SPI1/irqLevel"                              value="0" />
+   <item key="/UART0/clockSource"                          value="SystemCoreClock" />
+   <item key="/UART0/irqLevel"                             value="0" />
+   <item key="/UART1/clockSource"                          value="SystemCoreClock" />
+   <item key="/UART1/irqLevel"                             value="0" />
+   <item key="/UART2/clockSource"                          value="SystemBusClock" />
+   <item key="/UART2/irqLevel"                             value="0" />
+</section>

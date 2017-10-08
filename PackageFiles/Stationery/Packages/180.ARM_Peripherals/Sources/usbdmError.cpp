@@ -28,6 +28,7 @@ static const char *messages[] {
       "I2C No acknowledge",
       "I2C Lost arbitration for bus",
       "Program has terminated",
+      "Clock initialisation failed",
 };
 
 /**

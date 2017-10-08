@@ -20,7 +20,8 @@
          name="Base CPP Hardware abstraction (&DEVICE_SUB_FAMILY; family)" 
          description="Adds a CPP abstraction layer for hardware\n(GPIO) - &DEVICE_SUB_FAMILY;"
          checkGroup="group-additional-options" />
-      <projectActionList>
+
+      <projectActionList id="CPP-abstraction-common-&DEVICE_FAMILY;">
          <applyWhen >
             <variableRef idRef="projectOptionValue.CPP-abstraction" />
          </applyWhen>

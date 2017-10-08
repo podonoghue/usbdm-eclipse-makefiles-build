@@ -58,5 +58,6 @@
          <copy source="Sources/main.cpp"                                   target="Sources/main.cpp" overwrite="true" />
          <excludeSourceFolder target="Snippets" />
       </projectActionList>
+      <xi:include href="shared/CPP-abstraction-Common-MK.xml"/>
    </projectActionList>
 </root>

@@ -113,7 +113,11 @@ Devices using this peripheral:
    \t * @return Input clock frequency as a uint32_t in Hz
    \t */
    \tstatic uint32_t getClockFrequency() {
+   \t#ifdef SIM_SOPT2_LPUART$(_instance)SRC_MASK
+   \t   return SimInfo::getLpuart$(_instance)Clock();
+   \t#else
    \t   return SimInfo::getLpuartClock();
+   \t#endif
    \t}\n\n
    ]]></template>
 

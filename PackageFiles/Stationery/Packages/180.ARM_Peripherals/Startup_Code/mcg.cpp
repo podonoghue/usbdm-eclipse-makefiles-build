@@ -33,7 +33,7 @@ extern "C" uint32_t SystemBusClock;
 namespace USBDM {
 
 #ifndef SIM_CLKDIV1_OUTDIV2
-#define SIM_CLKDIV1_OUTDIV2(x) 0
+#define SIM_CLKDIV1_OUTDIV2(x) (0)
 #endif
 
 #ifndef SIM_CLKDIV1_OUTDIV3
@@ -179,7 +179,7 @@ const char *Mcg::getClockModeName(McgInfo::ClockMode clockMode) {
  *
  * @return E_NO_ERROR on success
  */
-int Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
+ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
    McgInfo::ClockMode to = clockInfo.clockMode;
 
    //TODO move!
@@ -349,7 +349,7 @@ int Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
          currentClockMode = next;
          next = (McgInfo::ClockMode)clockTransitionTable[currentClockMode][to];
          if (transitionCount++>5) {
-            return -1;
+            return setErrorCode(E_CLOCK_INIT_FAILED);
          }
       } while (currentClockMode != to);
    }
@@ -369,7 +369,7 @@ int Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
 
    mcg->C8 = clockInfo.c8; // Enable clock monitors
 
-   return 0;
+   return E_NO_ERROR;
 }
 
 /**

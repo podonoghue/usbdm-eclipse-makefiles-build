@@ -26,12 +26,12 @@
          value="4000000" />
 
       <intOption name="system_low_power_clock"
-         constant="true"
+         constant="true" 
          origin="LPO Clock"
          units="Hz"
          description="Frequency of Internal Low Power Oscillator [LPO] Clock"
          toolTip="Dependent on device. [Typically ~1kHz]" 
-         value="1000" />
+         value="1000"/>
     
       <intOption name="system_irc48m_clock" 
          constant="true"  
@@ -55,6 +55,7 @@
          description="Clock configuration" 
          toolTip="Clock configurations for different run modes"
          value="ClockConfig_."  >
+         
       <category name="Clock monitors" 
          description="Clock monitors" >
          <binaryOption name="mcg_c6_cme0."
@@ -196,7 +197,7 @@
          <choice name="Bypassed low power internal (BLPI)"  value="ClockMode_BLPI" />
          <choice name="Bypassed low power external (BLPE)"  value="ClockMode_BLPE" />
       </choiceOption>
-   
+  
       <category name="FLL" description="FLL Settings">
          <binaryOption name="fll_enabled."
             derived="true"
@@ -279,7 +280,6 @@
             toolTip="Used as input clock to FLL and available to some peripherals\n
                      Derived from External Reference Clock or Slow IRC"
             value="12000000" />
-      
       </category>
       
       <category name="PLL0" description="PLL0 Settings">
@@ -365,11 +365,11 @@
          constant="true"
          description="System MCG Output Clock source [MCGOUTCLK]" 
          toolTip="Source of MCG Output Clock\n
-         Determined by current clock mode" />
+                  Determined by current clock mode" />
       
       <intOption name="system_mcgoutclk_clock." 
-         derived="true"
-         constant="true" 
+         derived="true" 
+         constant="true"
          units="Hz"
          description="System MCG Output Clock [MCGOUTCLK]"
          toolTip="MCG Main clock output\n
@@ -603,6 +603,10 @@
       \t}\n\n
    ]]></template>
    
+   <template name="ClockConfig" dim="3" namespace="all" ><![CDATA[
+      \t$(ClockConfig.://-- missing name for configuration --),
+   ]]></template>
+   
    <template name="McgClockInfoEntries" dim="3" namespace="all" ><![CDATA[
       \t   {  // $(ClockConfig.) ($(clock_mode.))\n
       \t      
@@ -648,9 +652,9 @@
       \t#ifdef SIM_SOPT2_FBSL
       \t      SIM_SOPT2_FBSL($(/SIM/sim_sopt2_fbsl:0)) |          // FlexBus security level
       \t#endif
-      \t      SIM_SOPT2_CLKOUTSEL($(/SIM/sim_sopt2_clkoutsel)) |     // CLKOUT pin clock source select
       \t      SIM_SOPT2_RTCCLKOUTSEL($(/SIM/sim_sopt2_rtcclkoutsel)) |  // RTC clock out select
-      \t      SIM_SOPT2_PLLFLLSEL($(/SIM/sim_sopt2_pllfllsel.)),      // PLL/FLL clock select\n\n
+      \t      SIM_SOPT2_PLLFLLSEL($(/SIM/sim_sopt2_pllfllsel.))|      // PLL/FLL clock select
+      \t      SIM_SOPT2_CLKOUTSEL($(/SIM/sim_sopt2_clkoutsel)),      // CLKOUT pin clock source select\n\n
       
       \t      //! Clock Mode
       \t      $(clock_mode.),\n\n

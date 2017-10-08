@@ -16,7 +16,9 @@
 #include "utilities.h"
 #include "stdbool.h"
 #include "hardware.h"
+#ifdef USBDM_RTC_IS_DEFINED
 #include "rtc.h"
+#endif
 #include "mcg.h"
 #include "osc.h"
  /*
@@ -32,7 +34,21 @@ extern "C" uint32_t SystemBusClock;
 
 namespace USBDM {
 
-$(/MCG/clockInfo)
+#ifndef SIM_CLKDIV1_OUTDIV2
+#define SIM_CLKDIV1_OUTDIV2(x) (0)
+#endif
+
+#ifndef SIM_CLKDIV1_OUTDIV3
+#define SIM_CLKDIV1_OUTDIV3(x) (0)
+#endif
+
+   /**
+    * Table of clock settings
+    */
+   const McgInfo::ClockInfo McgInfo::clockInfo[] = {
+$(/MCG/McgClockInfoEntries:!!!!!!!Not found!!!!!!!)
+   };
+
 /** MCGFFCLK - Fixed frequency clock (input to FLL) */
 volatile uint32_t SystemMcgffClock;
 
@@ -60,37 +76,7 @@ MCGCallbackFunction Mcg::callback = {0};
 /** Current clock mode (FEI out of reset) */
 McgInfo::ClockMode Mcg::currentClockMode = McgInfo::ClockMode::ClockMode_LIRC_2M;
 
-#ifdef SMC_PMPROT_AHSRUN_MASK
-/**
- * Switch to/from high speed run mode
- * Changes the CPU clock frequency/1, and bus clock frequency /2
- * If the clock is set up for 120 MHz this will be the highest performance possible.
- *
- * This routine assumes that the clock preferences have been set up for the usual RUN mode and only
- * the Core clock divider needs to be changed.
- */
-void Mcg::hsRunMode(bool enable) {
-   SMC->PMPROT = SMC_PMPROT_AHSRUN_MASK;
-
-   if (enable) {
-      SMC->PMCTRL = SMC_PMCTRL_RUNM(3);
-      while ((SMC->PMSTAT & 0x80) == 0) {
-         // Wait for mode change
-         __asm__("nop");
-      }
-      // Set the SIM _CLKDIV dividers (CPU /1, Bus /2)
-      SIM->CLKDIV1 = (SIM_CLKDIV1_OUTDIV1(0))|(SIM_CLKDIV1_OUTDIV2(1))|(SimInfo::clkdiv1 & (SIM_CLKDIV1_OUTDIV3_MASK|SIM_CLKDIV1_OUTDIV4_MASK));
-   }
-   else {
-      // Set the SIM _CLKDIV dividers (CPU normal)
-      SIM->CLKDIV1 = SimInfo::clkdiv1;
-      SMC->PMCTRL = SMC_PMCTRL_RUNM(0);
-   }
-   SystemCoreClockUpdate();
-}
-#endif
-
-constexpr uint8_t clockTransitionTable[8][8] = {
+constexpr uint8_t clockTransitionTable[4][4] = {
          /*  from                     to =>   ClockMode_LIRC_2M,           ClockMode_LIRC_8M,           ClockMode_HIRC_48M,           ClockMode_EXT,   */
          /* ClockMode_LIRC_2M,  */ { McgInfo::ClockMode_LIRC_2M,  McgInfo::ClockMode_HIRC_48M, McgInfo::ClockMode_HIRC_48M,  McgInfo::ClockMode_EXT,   },
          /* ClockMode_LIRC_8M,  */ { McgInfo::ClockMode_HIRC_48M, McgInfo::ClockMode_LIRC_8M,  McgInfo::ClockMode_HIRC_48M,  McgInfo::ClockMode_EXT,   },
@@ -98,20 +84,36 @@ constexpr uint8_t clockTransitionTable[8][8] = {
          /* ClockMode_EXT,      */ { McgInfo::ClockMode_LIRC_2M,  McgInfo::ClockMode_LIRC_8M,  McgInfo::ClockMode_HIRC_48M,  McgInfo::ClockMode_EXT,   },
    };
 
-#ifndef SIM_CLKDIV1_OUTDIV3
-#define SIM_CLKDIV1_OUTDIV3(x) 0
-#endif
+/**
+ * Get name for clock mode
+ *
+ * @return Pointer to static string
+ */
+const char *Mcg::getClockModeName(McgInfo::ClockMode clockMode) {
+   static const char *modeNames[] {
+         "LIRC_2M",
+         "LIRC_8M",
+         "HIRC_48M",
+         "EXT",
+   };
 
-#ifndef SIM_CLKDIV1_OUTDIV2
-#define SIM_CLKDIV1_OUTDIV2(x) 0
-#endif
+   if (clockMode<0) {
+      return "Not set";
+   }
+   if ((unsigned)clockMode>=(sizeof(modeNames)/sizeof(modeNames[0]))) {
+      return "Illegal";
+   }
+   return modeNames[clockMode];
+}
 
 /**
  * Transition from current clock mode to mode given
  *
  * @param to Clock mode to transition to
+ *
+ * @return E_NO_ERROR on success
  */
-int Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
+ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
    McgInfo::ClockMode to = clockInfo.clockMode;
 
    //TODO move!
@@ -122,6 +124,9 @@ int Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
 //      USB0->CLK_RECOVER_IRC_EN = USB_CLK_RECOVER_IRC_EN_IRC_EN_MASK|USB_CLK_RECOVER_IRC_EN_REG_EN_MASK;
 //   }
 //#endif
+
+   // Set conservative clock dividers
+   setSysDividers(SIM_CLKDIV1_OUTDIV4(5)|SIM_CLKDIV1_OUTDIV3(5)|SIM_CLKDIV1_OUTDIV2(5)|SIM_CLKDIV1_OUTDIV1(5));
 
 #ifdef MCG_C7_OSCSEL
    // Select OSCCLK Source
@@ -223,15 +228,20 @@ int Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
          }
          currentClockMode = next;
          if (transitionCount++>5) {
-            return -1;
+            return setErrorCode(E_CLOCK_INIT_FAILED);
          }
       } while (currentClockMode != to);
-
-      setSysDividers(SimInfo::clkdiv1);
    }
 
+   // Main clock dividers
+   SIM->CLKDIV1 = clockInfo.clkdiv1;
+
+   // Clock sources
+   SIM->SOPT2 = clockInfo.sopt2;
+
    SystemCoreClockUpdate();
-   return 0;
+
+   return E_NO_ERROR;
 }
 
 /**
@@ -253,14 +263,14 @@ void Mcg::SystemCoreClockUpdate(void) {
 }
 
 /**
- * Sets up the clock out of RESET
+ * Initialise MCG to default settings.
  */
-void Mcg::initialise(void) {
+void Mcg::defaultConfigure() {
 
    currentClockMode = McgInfo::ClockMode::ClockMode_None;
 
    // Transition to desired clock mode
-   clockTransition(McgInfo::clockInfo[0]);
+   clockTransition(McgInfo::clockInfo[ClockConfig_default]);
 
    SimInfo::initRegs();
 

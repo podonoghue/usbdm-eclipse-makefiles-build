@@ -50,7 +50,7 @@ extern void setSysDividersStub(uint32_t simClkDiv1);
  * Clock configuration names
  */
 enum ClockConfig {
-$(/MCG/ClockConfig:!!!!!!!Not found!!!!!!!)
+$(/MCG/ClockConfig:// XXXX !!!!!!!ClockConfig - Not found!!!!!!!)
    ClockConfig_default = 0,
 };
 
@@ -84,7 +84,7 @@ public:
     *
     * @return E_NO_ERROR on success
     */
-   static int clockTransition(const McgInfo::ClockInfo &to);
+   static ErrorCode clockTransition(const McgInfo::ClockInfo &to);
 
    /**
     * Update SystemCoreClock variable

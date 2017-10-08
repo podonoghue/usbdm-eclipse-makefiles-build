@@ -12,6 +12,6 @@
       </applyWhen>
       <copy source="Startup_Code/vectors-cm0.c"         target="Startup_Code/vectors.c"  overwrite="true" />
       <!-- Security -->
-      <copy source="Startup_Code/security-mkv10.c"      target="Startup_Code/security.c" />
+      <copy source="Startup_Code/security-mkv10.c"      target="Startup_Code/security.c" overwrite="true" />
    </projectActionList>
 </root>

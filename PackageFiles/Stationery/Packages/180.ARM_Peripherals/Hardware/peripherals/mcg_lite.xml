@@ -265,6 +265,12 @@
       \tstatic constexpr uint32_t system_hirc_clock      = $(system_irc48m_clock)UL;
       \t//! Structure for clock configurations
       \tstruct ClockInfo {
+      \t   //! System Clock Divider Register 1
+      \t   const uint32_t clkdiv1;\n\n
+      
+      \t   //! SIM SOPT2 - Clock selectors for various peripherals
+      \t   const uint32_t sopt2;\n\n
+
       \t   //! Clock Mode
       \t   const ClockMode clockMode:8;\n\n
       
@@ -352,6 +358,10 @@
       \t}\n\n
    ]]></template>
    
+   <template name="ClockConfig" dim="3" namespace="all" ><![CDATA[
+      \t$(ClockConfig.://-- missing name for configuration --),
+   ]]></template>
+   
    <template name="McgClockInfoEntries" dim="3" namespace="all" ><![CDATA[
       \t   {  // $(ClockConfig.) ($(clock_mode.))\n
       \t      
@@ -406,9 +416,8 @@
       \t#ifdef SIM_SOPT2_FBSL
       \t      SIM_SOPT2_FBSL($(/SIM/sim_sopt2_fbsl:0)) |          // FlexBus security level
       \t#endif
-      \t      SIM_SOPT2_CLKOUTSEL($(/SIM/sim_sopt2_clkoutsel)) |     // CLKOUT pin clock source select
       \t      SIM_SOPT2_RTCCLKOUTSEL($(/SIM/sim_sopt2_rtcclkoutsel)) |  // RTC clock out select
-      \t      SIM_SOPT2_PLLFLLSEL($(/SIM/sim_sopt2_pllfllsel.)),      // PLL/FLL clock select\n\n
+      \t      SIM_SOPT2_CLKOUTSEL($(/SIM/sim_sopt2_clkoutsel)),      // CLKOUT pin clock source select\n\n
       
       \t      //! Clock Mode
       \t      $(clock_mode.),\n\n
