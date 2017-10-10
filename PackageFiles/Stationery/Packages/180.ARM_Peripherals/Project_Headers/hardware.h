@@ -75,11 +75,16 @@ enum ErrorCode {
 extern volatile ErrorCode errorCode;
 
 /**
- * Get USBDM error code
+ * Get USBDM error code.
+ * The error code is cleared.
  *
- * @return  Error code
+ * @return  E_NO_ERROR - No error
+ * @return  other      - Error
  */
-ErrorCode getError();
+inline static ErrorCode getError() {
+   ErrorCode tError = errorCode;
+   return tError;
+}
 
 /**
  * Get error message from error code or last error if not provided
