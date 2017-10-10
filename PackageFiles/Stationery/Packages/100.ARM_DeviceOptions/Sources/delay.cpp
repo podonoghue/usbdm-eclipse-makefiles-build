@@ -30,7 +30,7 @@ namespace USBDM {
 /**
  * Simple delay routine
  *
- * @param delayct How many ticks to busy-wait
+ * @param[in] delayct How many ticks to busy-wait
  *
  * @note Does not suspend the thread - this is a busy-wait loop
  */
@@ -52,10 +52,9 @@ static void waitTicks(int64_t delayct) {
 /**
  * Simple delay routine
  *
- * @param usToWait How many microseconds to busy-wait
+ * @param[in] usToWait How many microseconds to busy-wait
  *
- * @note Limited to 2^32 us (4,294 s)
- * @note Uses busy-waiting based on CMSIS kernel timer
+ * @note Uses busy-waiting
  */
 void waitUS(uint32_t usToWait) {
    // Convert duration to ticks
@@ -65,10 +64,9 @@ void waitUS(uint32_t usToWait) {
 /**
  * Simple delay routine
  *
- * @param msToWait How many milliseconds to busy-wait
+ * @param[in]  msToWait How many milliseconds to busy-wait
  *
- * @note Limited to 2^32 ms (71,582 minutes)
- * @note Uses busy-waiting based on CMSIS kernel timer
+ * @note Uses busy-waiting
  */
 void waitMS(uint32_t msToWait) {
    // Convert duration to ticks
@@ -79,7 +77,7 @@ void waitMS(uint32_t msToWait) {
 /**
  * Simple delay routine
  *
- * @param delayct How many ticks to busy-wait
+ * @param[in] delayct How many ticks to busy-wait
  *
  * @note This is a busy-wait loop
  */
@@ -104,10 +102,9 @@ static void waitTicks(int64_t delayct) {
 /**
  * Simple delay routine
  *
- * @param usToWait How many microseconds to busy-wait
+ * @param[in] usToWait How many microseconds to busy-wait
  *
- * @note Limited to 2^32 us (4,294 s)
- * @note Uses busy-waiting based on Systick timer
+ * @note Uses busy-waiting
  */
 void waitUS(uint32_t usToWait) {
    // Convert duration to ticks
@@ -117,10 +114,9 @@ void waitUS(uint32_t usToWait) {
 /**
  * Simple delay routine
  *
- * @param msToWait How many milliseconds to busy-wait
+ * @param[in]  msToWait How many milliseconds to busy-wait
  *
- * @note Limited to 2^32 ms (71,582 minutes)
- * @note Uses busy-waiting based on Systick timer
+ * @note Uses busy-waiting
  */
 void waitMS(uint32_t msToWait) {
    // Convert duration to ticks
@@ -131,10 +127,10 @@ void waitMS(uint32_t msToWait) {
 /**
  * Simple delay routine
  *
- * @param seconds How many seconds to busy-wait
+ * @param[in]  seconds How many seconds to busy-wait
  *
  * @note Limited to 2^32 ms (71,582 minutes)
- * @note Uses busy-waiting based on Systick timer
+ * @note Uses busy-waiting
  */
 void wait(float seconds) {
    // Convert duration to ticks
@@ -147,13 +143,10 @@ void wait(float seconds) {
 /**
  * Routine to wait for an event with timeout
  *
- * @param delayct  How many ticks to busy-wait
- * @param testFn   Polling function indicating if waited for event has occurred
+ * @param[in] delayct  How many ticks to busy-wait
+ * @param[in] testFn   Polling function indicating if waited for event has occurred
  *
  * @return Indicate if event occurred: true=>event, false=>no event
- *
- * @note Limited to 2^32 us (4,294 s)
- * @note Uses busy-waiting
  */
 static bool waitTicks(int64_t delayct, bool testFn(void)) {
    // Get current tick
@@ -176,8 +169,8 @@ static bool waitTicks(int64_t delayct, bool testFn(void)) {
 /**
  * Routine to wait for a condition with timeout
  *
- * @param usToWait How many microseconds to busy-wait
- * @param testFn   Polling function indicating if waited for condition has occurred
+ * @param[in] usToWait How many microseconds to busy-wait
+ * @param[in] testFn   Polling function indicating if waited for condition has occurred
  *
  * @return Indicate if event occurred: true=>event, false=>no event
  *
@@ -190,15 +183,14 @@ bool waitUS(uint32_t usToWait, bool testFn(void)) {
 }
 
 /**
- * Routine to wait for a condition with timeout
+ * Routine to wait for an event with timeout
  *
- * @param msToWait How many milliseconds to busy-wait
- * @param testFn   Polling function indicating if waited for condition has occurred
+ * @param[in] msToWait How many milliseconds to busy-wait
+ * @param[in] testFn   Polling function indicating if waited for event has occurred
  *
  * @return Indicate if event occurred: true=>event, false=>no event
  *
- * @note Limited to 2^32 us (4,294 s)
- * @note Uses busy-waiting
+ * Note: Accuracy is affected by execution time of function.
  */
 bool waitMS(uint32_t msToWait, bool testFn(void)) {
    // Convert duration to ticks
@@ -208,8 +200,8 @@ bool waitMS(uint32_t msToWait, bool testFn(void)) {
 /**
  * Routine to wait for a condition with timeout
  *
- * @param seconds  How many seconds to busy-wait
- * @param testFn   Polling function indicating if waited for condition has occurred
+ * @param[in] seconds  How many seconds to busy-wait
+ * @param[in] testFn   Polling function indicating if waited for condition has occurred
  *
  * @return Indicate if event occurred: true=>event, false=>no event
  *
@@ -224,8 +216,8 @@ bool wait(float seconds, bool testFn(void)) {
 /**
  * Routine to wait for an event with timeout
  *
- * @param delayct  How many ticks to busy-wait
- * @param testFn   Polling function indicating if waited for event has occurred
+ * @param[in] delayct  How many ticks to busy-wait
+ * @param[in] testFn   Polling function indicating if waited for event has occurred
  *
  * @return Indicate if event occurred: true=>event, false=>no event
  */
@@ -254,12 +246,12 @@ static bool waitTicks(int64_t delayct, bool testFn(void)) {
 /**
  * Routine to wait for an event with timeout
  *
- * @param usToWait How many microseconds to busy-wait
- * @param testFn   Polling function indicating if waited for event has occurred
+ * @param[in] usToWait How many microseconds to busy-wait
+ * @param[in] testFn   Polling function indicating if waited for event has occurred
  *
- * @return Indicate if event occurred: true=>event, false=>no event
+ * @return Indicate if event occurred. true=>event, false=>no event
  *
- * Note: Accuracy will be poor as affected by execution time of function.
+ * Note: Accuracy is affected by execution time of function.
  */
 bool waitUS(uint32_t usToWait, bool testFn(void)) {
    // Convert duration to ticks
@@ -269,8 +261,8 @@ bool waitUS(uint32_t usToWait, bool testFn(void)) {
 /**
  * Routine to wait for an event with timeout
  *
- * @param msToWait How many milliseconds to busy-wait
- * @param testFn   Polling function indicating if waited for event has occurred
+ * @param[in] msToWait How many milliseconds to busy-wait
+ * @param[in] testFn   Polling function indicating if waited for event has occurred
  *
  * @return Indicate if event occurred: true=>event, false=>no event
  *
@@ -284,8 +276,8 @@ bool waitMS(uint32_t msToWait, bool testFn(void)) {
 /**
  * Routine to wait for an event with timeout
  *
- * @param seconds  How many seconds to busy-wait
- * @param testFn   Polling function indicating if waited for event has occurred
+ * @param[in] seconds  How many seconds to busy-wait
+ * @param[in] testFn   Polling function indicating if waited for event has occurred
  *
  * @return Indicate if event occurred: true=>event, false=>no event
  *

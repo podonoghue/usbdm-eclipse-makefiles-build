@@ -83,9 +83,8 @@ static __attribute__((always_inline)) inline uint32_t getTicks() {
 /**
  * Simple delay routine
  *
- * @param[in]  usToWait How many microseconds to busy-wait
+ * @param[in] usToWait How many microseconds to busy-wait
  *
- * @note Limited to 2^32 us (4,294 s)
  * @note Uses busy-waiting
  */
 void waitUS(uint32_t usToWait);
@@ -95,7 +94,6 @@ void waitUS(uint32_t usToWait);
  *
  * @param[in]  msToWait How many milliseconds to busy-wait
  *
- * @note Limited to 2^32 ms (71,582 minutes)
  * @note Uses busy-waiting
  */
 void waitMS(uint32_t msToWait);
@@ -111,34 +109,39 @@ void waitMS(uint32_t msToWait);
 void wait(float seconds);
 
 #ifdef __cplusplus
-
 /**
- * Routine to wait for a condition with timeout
+ * Routine to wait for an event with timeout
  *
- * @param[in]  usToWait How many microseconds to busy-wait
- * @param[in]  testFn   Function indicating if waited for condition has occurred
+ * @param[in] usToWait How many microseconds to busy-wait
+ * @param[in] testFn   Polling function indicating if waited for event has occurred
  *
  * @return Indicate if event occurred. true=>event, false=>no event
+ *
+ * Note: Accuracy is affected by execution time of function.
  */
 bool waitUS(uint32_t usToWait, bool testFn(void));
 
 /**
- * Routine to wait for a condition with timeout
+ * Routine to wait for an event with timeout
  *
- * @param[in]  msToWait How many milliseconds to busy-wait
- * @param[in]  testFn   Function indicating if waited for condition has occurred
+ * @param[in] msToWait How many milliseconds to busy-wait
+ * @param[in] testFn   Polling function indicating if waited for event has occurred
  *
- * @return Indicate if event occurred. true=>event, false=>no event
+ * @return Indicate if event occurred: true=>event, false=>no event
+ *
+ * Note: Accuracy is affected by execution time of function.
  */
 bool waitMS(uint32_t msToWait, bool testFn(void));
 
 /**
- * Routine to wait for a condition with timeout
+ * Routine to wait for an event with timeout
  *
- * @param[in]  seconds  How many seconds to busy-wait
- * @param[in]  testFn   Polling function indicating if waited for condition has occurred
+ * @param[in] seconds  How many seconds to busy-wait
+ * @param[in] testFn   Polling function indicating if waited for event has occurred
  *
  * @return Indicate if event occurred: true=>event, false=>no event
+ *
+ * Note: Accuracy is affected by execution time of function.
  */
 bool wait(float seconds, bool testFn(void));
 
