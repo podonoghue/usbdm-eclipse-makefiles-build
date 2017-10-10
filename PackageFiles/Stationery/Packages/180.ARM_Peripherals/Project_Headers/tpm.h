@@ -331,6 +331,8 @@ public:
     * Set timer mode
     *
     * @param[in] tpmMode        Mode of operation
+    *
+    * @note This function will affect all channels of the timer.
     */
    static void setMode(TpmMode tpmMode=TpmMode_LeftAlign) {
       // Disable timer to allow change
@@ -346,6 +348,8 @@ public:
     * Set timer clock source
     *
     * @param[in] tpmClockSource Clock source for timer
+    *
+    * @note This function will affect all channels of the timer.
     */
    static void setClockSource(TpmClockSource tpmClockSource=TpmClockSource_Internal) {
       // Disable timer to allow change
@@ -361,6 +365,8 @@ public:
     *  Set timer prescaler
     *
     * @param[in] tpmPrescale    Clock prescaler. Used to divide clock source before use
+    *
+    * @note This function will affect all channels of the timer.
     */
    static void setPrescaler(TpmPrescale tpmPrescale=TpmPrescale_128) {
       // Disable timer to allow change
@@ -413,6 +419,8 @@ public:
     * This value is write-buffered and updated by MOD synchronisation.
     *
     * @param[in] modulo Modulo value in ticks (<65535)
+    *
+    * @note This function will affect all channels of the timer.
     */
    static void INLINE_RELEASE setMod(uint16_t modulo) {
       tmr->MOD = modulo;
@@ -427,6 +435,7 @@ public:
     * @return E_TOO_LARGE      Failed to find suitable pre-scaler values
     *
     * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
+    * @note This function will affect all channels of the timer.
     */
    static ErrorCode setPeriodInTicks(uint32_t period) {
 
@@ -478,12 +487,12 @@ public:
     *
     * @param[in] period Period in seconds as a float
     *
-    * @note Adjusts Timer pre-scaler to appropriate value.
-    *       This will affect all channels of the timer.
-    *
     * @return E_NO_ERROR  => success
     * @return E_TOO_SMALL => failed to find suitable values
     * @return E_TOO_LARGE => failed to find suitable values
+    *
+    * @note Adjusts Timer pre-scaler to appropriate value.
+    * @note This function will affect all channels of the timer.
     */
    static ErrorCode setPeriod(float period) {
       float inputClock = Info::getInputClockFrequency();
@@ -532,13 +541,13 @@ public:
     *
     * @param[in] period Period in seconds as a float
     *
-    * @note Adjusts Timer pre-scaler to appropriate value.
-    *       Timer period is set to maximum.
-    *       This will affect all channels of the timer.
-    *
     * @return E_NO_ERROR  => success
     * @return E_TOO_SMALL => failed to find suitable values
     * @return E_TOO_LARGE => failed to find suitable values
+    *
+    * @note Adjusts Timer pre-scaler to appropriate value.
+    * @note Timer period is set to maximum.
+    * @note This function will affect all channels of the timer.
     */
    static INLINE_RELEASE ErrorCode setMeasurementPeriod(float period) {
       // Try to set capture period
@@ -568,11 +577,11 @@ public:
     * @param[in] frequency Frequency as a float
     * @param[in] tolerance Tolerance in percent
     *
-    * @note Adjusts Timer pre-scaler to appropriate value.
-    *       This will affect all channels
-    *
     * @return E_NO_ERROR       Success
     * @return E_ILLEGAL_PARAM  Failed to find suitable pre-scaler values
+    *
+    * @note Adjusts Timer pre-scaler to appropriate value.
+    * @note This function will affect all channels of the timer.
     */
    static ErrorCode setTickFrequency(float frequency, float tolerance) {
       float inputClockFrequency = Info::getInputClockFrequency();
@@ -910,10 +919,10 @@ public:
    /**
     * Set callback for Pin IRQ
     *
-    * @note There is a single callback function for all pins on the related port.
-    *
     * @param[in] callback The function to call on Pin interrupt.\n
     *                     nullptr to indicate none
+    *
+    * @note There is a single callback function for all pins on the related port.
     */
    static void INLINE_RELEASE setPinCallback(PinCallbackFunction callback) {
       Pcr::setCallback(callback);
