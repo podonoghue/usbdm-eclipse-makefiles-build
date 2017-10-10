@@ -26,6 +26,7 @@
 #include "delay.h"
 #include "spi.h"
 #include "fonts.h"
+#include "formatted_io.h"
 
 namespace USBDM {
 
@@ -165,7 +166,7 @@ constexpr int DEFAULT_LCD_CONTRAST = 65;
  *
  *  @endcode
  */
-class LcdBase {
+class LcdBase : public FormattedIO {
 
 protected:
    /** SPI interface used to communicate with LCD */
@@ -368,6 +369,50 @@ public:
     */
    void putStr(const char *str, int x, int y, Font &font=smallFont, Colour fColour=DEFAULT_FOREGROUND, Colour bColour=DEFAULT_BACKGROUND);
 
+   int _readChar() override { return -1;}
+   bool _isCharAvailable() override { return false; }
+   void flushInput() override {}
+   void flushOutput() override {}
+
+private:
+   int fX,fY;
+   Font *fFont;
+   Colour fForeground;
+   Colour fBackground;
+
+public:
+   LcdBase &setForeground(Colour foreground) {
+      fForeground = foreground;
+      return *this;
+   }
+
+   LcdBase &setBackground(Colour background) {
+      fBackground = background;
+      return *this;
+   }
+
+   LcdBase &moveXY(int x, int y) {
+      fX = x;
+      fY = y;
+      return *this;
+   }
+
+   LcdBase &setFont(Font &font) {
+      fFont = &font;
+      return *this;
+   }
+
+   void _writeChar(char ch) override {
+      putChar(ch, fX, fY, *fFont, fForeground, fBackground);
+      fX += fFont->width;
+      if (fX >= LCD_X_MAX) {
+         fX = LCD_X_MIN;
+         fY += fFont->height;
+         if (fY >= LCD_Y_MAX) {
+            fY = LCD_Y_MIN;
+         }
+      }
+   }
 };
 
 /**

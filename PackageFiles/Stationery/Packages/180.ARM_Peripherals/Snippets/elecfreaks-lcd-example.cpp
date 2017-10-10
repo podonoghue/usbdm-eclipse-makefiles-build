@@ -80,6 +80,9 @@ int main() {
    int x=0, y=0;
    int xOld=50, yOld=50;
 
+   lcd.setForeground(WHITE).setBackground(BLACK);
+   lcd.moveXY(10, 10).write("Value=").write(123);
+
    for(;;) {
       x = LCD_X_MIN + CIRCLE_RADIUS + rand() % (LCD_WIDTH-2*CIRCLE_RADIUS);
       y = LCD_Y_MIN + CIRCLE_RADIUS + rand() % (LCD_HEIGHT-2*CIRCLE_RADIUS);
