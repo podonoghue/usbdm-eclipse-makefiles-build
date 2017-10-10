@@ -636,6 +636,7 @@ public:
       return writeln((long)value, radix);
    }
 
+#if 0
    /**
     * Transmit a double
     *
@@ -652,17 +653,37 @@ public:
       snprintf(buff, sizeof(buff), "%f", value);
       return write(buff);
    }
-
+#else
+   /**
+    * Transmit a double - Limited to 3 decimal places
+    *
+    * @param[in]  value Double to print
+    *
+    * @return Reference to self
+    */
+   FormattedIO NOINLINE_DEBUG &write(double value) {
+      if (value<0) {
+         write('-');
+         value = -value;
+      }
+      Padding p = fPadding;
+      int     w = fWidth;
+      fPadding = Padding_None;
+      write((int)value).write('.');
+      fPadding = Padding_LeadingZeroes;
+      fWidth   = 3;
+      writeln((int)round(value*1000)%1000).reset();
+      fPadding = p;
+      fWidth   = w;
+      return *this;
+   }
+#endif
    /**
     * Transmit a double with newline
     *
     * @param[in]  value Double to print
     *
     * @return Reference to self
-    *
-    * @note Uses snprintf() which is large.
-    * @note To use this function it is necessary to enable floating point printing\n
-    *       in the linker options (Support %f format in printf -u _print_float).
     */
    FormattedIO NOINLINE_DEBUG &writeln(double value) {
       write(value);
@@ -675,10 +696,6 @@ public:
     * @param[in]  value Float to print
     *
     * @return Reference to self
-    *
-    * @note Uses snprintf() which is large.
-    * @note To use this function it is necessary to enable floating point printing\n
-    *       in the linker options (Support %f format in printf -u _print_float).
     */
    FormattedIO NOINLINE_DEBUG &write(float value) {
       return write((double)value);
@@ -690,10 +707,6 @@ public:
     * @param[in]  value Float to print
     *
     * @return Reference to self
-    *
-    * @note Uses snprintf() which is large.
-    * @note To use this function it is necessary to enable floating point printing\n
-    *       in the linker options (Support %f format in printf -u _print_float)).
     */
    FormattedIO NOINLINE_DEBUG &writeln(float value) {
       return writeln((double)value);
