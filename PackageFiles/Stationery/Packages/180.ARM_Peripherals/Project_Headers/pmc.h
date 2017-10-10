@@ -79,13 +79,25 @@ enum PmcLowVoltageWarningLevel {
 };
 
 /**
- * Controls when Band-gap reference is available to internal devices e.g. CMP etc.
+ * Controls whether the band-gap reference is available to internal devices e.g. CMP etc
  */
-enum PmcBandgapMode {
-   PmcBandgapMode_Off      =                   PMC_REGSC_BGBE(0),//!< Buffer off, band-gap unavailable
-   PmcBandgapMode_On       =                   PMC_REGSC_BGBE(0),//!< Buffer on, band-gap unavailable in VLPx, LLSx and VLLSx
+enum PmcBandgapBuffer {
+   PmcBandgapBuffer_Off   = PMC_REGSC_BGBE(0),  //!< Buffer off, band-gap unavailable to peripherals
+   PmcBandgapBuffer_On    = PMC_REGSC_BGBE(1),  //!< Buffer on, band-gap available to peripherals
+};
+
+/**
+ * Controls operation of the band-gap in low power modes
+ */
+enum PmcBandgapLowPowerEnable {
 #ifdef PMC_REGSC_BGEN
-   PmcBandgapMode_AlwaysOn = PMC_REGSC_BGEN(1)|PMC_REGSC_BGBE(1),//!< Buffer on, band-gap available in VLPx, LLSx and VLLSx
+   PmcBandgapLowPowerEnable_Off       = PMC_REGSC_BGEN(0),                    //!< Band-gap off in VLPx, LLSx and VLLSx
+   PmcBandgapLowPowerEnable_On        = PMC_REGSC_BGEN(1),                    //!< Band-gap on, in VLPx, LLSx and VLLSx
+#ifdef PMC_REGSC_VLPO_MASK
+   PmcBandgapLowPowerEnable_HighSpeed = PMC_REGSC_BGEN(1)|PMC_REGSC_VLPO(1),  //!< High-speed operation with band-gap on in VLPx, LLSx and VLLSx
+#endif
+#else
+   PmcBandgapLowPowerEnable_Off = 0,    //!< Band-gap use unsupported in VLPx, LLSx and VLLSx
 #endif
 };
 
@@ -215,10 +227,13 @@ public:
    /**
     * Determines availability of Band-gap reference
     *
-    * @param[in] pmcBandgapMode   Controls when Band-gap reference is available to internal devices e.g. CMP etc.
+    * @param[in] pmcBandgapBuffer         Controls whether the band-gap reference is available to internal devices e.g. CMP etc
+    * @param[in] pmcBandgapLowPowerEnable Controls operation of the band-gap in low power modes
     */
-   static void setBandgapOperation(PmcBandgapMode pmcBandgapMode=PmcBandgapMode_On) {
-      pmc->REGSC = pmcBandgapMode;
+   static void setBandgapOperation(
+         PmcBandgapBuffer           pmcBandgapBuffer,
+         PmcBandgapLowPowerEnable   pmcBandgapLowPowerEnable=PmcBandgapLowPowerEnable_Off) {
+      pmc->REGSC = pmcBandgapBuffer|pmcBandgapLowPowerEnable;
    }
 
    /**
