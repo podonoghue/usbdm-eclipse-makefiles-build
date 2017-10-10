@@ -174,8 +174,8 @@ public:
    /**
     * Enable/disable an interrupt source
     *
-    * @param[in] uartInterrupt Interrupt source to modify
-    * @param[in] enable        True to enable, false to disable
+    * @param[in] lpuartInterrupt Interrupt source to modify
+    * @param[in] enable          True to enable, false to disable
     *
     * @note Changing the enabled interrupt functions may also affect the DMA settings
     */
@@ -191,8 +191,8 @@ public:
    /**
     * Enable/disable a DMA source
     *
-    * @param[in] uartDma  DMA source to modify
-    * @param[in] enable   True to enable, false to disable
+    * @param[in] lpuartDma  DMA source to modify
+    * @param[in] enable     True to enable, false to disable
     *
     * @note Changing the enabled DMA functions may also affect the interrupt settings
     */
