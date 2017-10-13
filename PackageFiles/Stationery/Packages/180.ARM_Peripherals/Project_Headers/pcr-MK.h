@@ -92,15 +92,42 @@ constexpr   int8_t INVALID_PCR          = 0xA5;
 constexpr   int8_t UNMAPPED_PCR         = 0xA4;
 
 /**
- * Struct for Pin Control Register information
+ * Port information
  * Information required to configure the PCR for a particular function
  */
-struct PcrInfo {
-   uint32_t clockMask;   //!< Clock mask for PORT
-   uint32_t portAddress; //!< PORT address
-   uint32_t gpioAddress; //!< Address of GPIO hardware associated with pin
-   int8_t   gpioBit;     //!< Bit number of pin in GPIO (-ve indicates unmapped/invalid)
-   uint32_t pcrValue;    //!< PCR value including MUX value to select this function
+class PortInfo {
+public:
+   const uint32_t  portAddress;   //!< Port hardware base pointer
+   const uint32_t  clockMask;     //!< Port clock mask
+   const IRQn_Type irqNum;        //!< Port interrupt number
+};
+
+/**
+ * Pin information
+ */
+class PinInfo {
+public:
+   const uint32_t   portAddress;  //!< Port hardware base pointer
+   const uint32_t   clockMask;    //!< Port clock mask
+   const IRQn_Type  irqNum;       //!< Port interrupt number
+   const uint32_t   gpioAddress;  //!< GPIO Hardware base pointer
+   const uint32_t   gpioBit;      //!< Bit number for pin
+   const uint32_t   pcrValue;     //!< Default PCR value for pin
+
+   /**
+    *
+    * @param portInfo      Describes port
+    * @param gpioAddress   Base address of associated GPIO
+    * @param bitNum        Bit number being modified
+    * @param pcrValue      Default PCR value for pin
+    */
+   constexpr PinInfo(
+         const PortInfo &portInfo,
+         uint32_t        gpioAddress,
+         int             gpioBit,
+         uint32_t        pcrValue) :
+                     portAddress(portInfo.portAddress), clockMask(portInfo.clockMask), irqNum(portInfo.irqNum),
+                     gpioAddress(gpioAddress), gpioBit(gpioBit), pcrValue(pcrValue) {}
 };
 
 #ifndef PORT_PCR_DSE

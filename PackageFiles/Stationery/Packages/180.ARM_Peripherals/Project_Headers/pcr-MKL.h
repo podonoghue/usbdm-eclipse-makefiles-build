@@ -105,7 +105,7 @@ constexpr   int8_t UNMAPPED_PCR         = 0xA4;
  */
 struct PcrInfo {
    uint32_t clockMask;   //!< Clock mask for PORT
-   uint32_t portAddress; //!< PORT address
+   uint32_t portAddress; //!< Address of PORT hardware associated with pin
    uint32_t gpioAddress; //!< Address of GPIO hardware associated with pin
    int8_t   gpioBit;     //!< Bit number of pin in GPIO (-ve indicates unmapped/invalid)
    uint32_t pcrValue;    //!< PCR value including MUX value to select this function
