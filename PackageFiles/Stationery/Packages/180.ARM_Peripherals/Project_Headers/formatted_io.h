@@ -66,6 +66,13 @@ enum Padding {
    Padding_TrailingSpaces,//!< Pad with trailing spaces
 };
 
+/**
+ * Width for integers
+ */
+enum Width : int {
+   Width_auto = 0,//!< Width_auto
+};
+
 enum EchoMode {
    /*
     * For use with operator<< and operator>>
@@ -261,14 +268,23 @@ public:
    /**
     * Converts an unsigned long to a string
     *
-    * @param[in] ptr   Buffer to write result (at least 12 characters)
-    * @param[in] value Unsigned long to convert
-    * @param[in] radix Radix for conversion [2..16]
+    * @param[in] ptr      Buffer to write result (at least 32 characters for binary)
+    * @param[in] value    Unsigned long to convert
+    * @param[in] radix    Radix for conversion [2..16]
+    * @param[in] padding  How to pad the number if smaller than field width
+    * @param[in] width    Field width of printed number
     *
     * @return Pointer to '\0' null character at end of converted number\n
     *         May be used for incrementally writing to a buffer.
     */
-   NOINLINE_DEBUG char *ultoa(char *ptr, unsigned long value, Radix radix=Radix_10) {
+   static NOINLINE_DEBUG char *ultoa(
+         char *ptr,
+         unsigned long value,
+         Radix radix=Radix_10,
+         Padding padding=Padding_None,
+         int width=0
+         ) {
+
 #ifdef DEBUG_BUILD
       if (ptr == nullptr) {
          __BKPT();
@@ -286,16 +302,16 @@ public:
       } while (value != 0);
 
       // Add leading padding
-      switch (fPadding) {
+      switch (padding) {
          case Padding_None:
             break;
          case Padding_LeadingSpaces:
-            while ((ptr-beginPtr) < fWidth) {
+            while ((ptr-beginPtr) < width) {
                *ptr++ = ' ';
             }
             break;
          case Padding_LeadingZeroes:
-            while ((ptr-beginPtr) < fWidth) {
+            while ((ptr-beginPtr) < width) {
                *ptr++ = '0';
             }
             break;
@@ -311,8 +327,8 @@ public:
          *endPtr-- = t;
       }
       // Add trailing padding
-      if (fPadding==Padding_TrailingSpaces) {
-         while ((ptr-beginPtr) < fWidth) {
+      if (padding==Padding_TrailingSpaces) {
+         while ((ptr-beginPtr) < width) {
             *ptr++ = ' ';
          }
       }
@@ -324,19 +340,27 @@ public:
    /**
     * Converts a long to a string
     *
-    * @param[in] ptr   Buffer to write result (at least 12 characters)
-    * @param[in] value Long to convert
-    * @param[in] radix Radix for conversion [2..16]
+    * @param[in] ptr      Buffer to write result (at least 32 characters for binary)
+    * @param[in] value    Long to convert
+    * @param[in] radix    Radix for conversion [2..16]
+    * @param[in] padding  How to pad the number if smaller than field width
+    * @param[in] width    Field width of printed number
     *
     * @return Pointer to '\0' null character at end of converted number\n
     *         May be used for incrementally writing to a buffer.
     */
-   NOINLINE_DEBUG char *ltoa(char *ptr, long value, Radix radix=Radix_10) {
+   static NOINLINE_DEBUG char *ltoa(
+         char *ptr,
+         long value,
+         Radix radix=Radix_10,
+         Padding padding=Padding_None,
+         int width=0
+         ) {
       if (value<0) {
          *ptr++ = '-';
          value = -value;
       }
-      return ultoa(ptr, value, radix);
+      return ultoa(ptr, value, radix, padding, width);
    }
 
    /**
@@ -361,7 +385,7 @@ public:
    }
 
    /**
-    * Transmit data
+    * Write data
     *
     * @param[in]  data     Data to transmit
     * @param[in]  size     Size of transmission data
@@ -414,7 +438,7 @@ public:
    }
 
    /**
-    * Transmit a character
+    * Write a character
     *
     * @param[in]  ch - character to send
     *
@@ -439,7 +463,7 @@ public:
    }
 
    /**
-    * Transmit an end-of-line
+    * Write an end-of-line
     *
     * @return Reference to self
     */
@@ -448,7 +472,7 @@ public:
    }
 
    /**
-    * Transmit a character with newline
+    * Write a character with newline
     *
     * @param[in]  ch - character to send
     *
@@ -460,7 +484,7 @@ public:
    }
 
    /**
-    * Transmit a C string
+    * Write a C string
     *
     * @param[in]  str String to print
     *
@@ -474,7 +498,7 @@ public:
    }
 
    /**
-    * Transmit a C string with new line
+    * Write a C string with new line
     *
     * @param[in]  str String to print
     *
@@ -486,7 +510,7 @@ public:
    }
 
    /**
-    * Transmit a boolean value
+    * Write a boolean value
     *
     * @param[in]  b Boolean to print
     *
@@ -497,7 +521,7 @@ public:
    }
 
    /**
-    * Transmit a boolean value with new line
+    * Write a boolean value with new line
     *
     * @param[in]  b Boolean to print
     *
@@ -509,7 +533,7 @@ public:
    }
 
    /**
-    * Transmit an unsigned long integer
+    * Write an unsigned long integer
     *
     * @param[in]  value Unsigned long to print
     * @param[in]  radix Radix for conversion [2..16]
@@ -517,13 +541,13 @@ public:
     * @return Reference to self
     */
    FormattedIO NOINLINE_DEBUG &write(unsigned long value, Radix radix=Radix_10) {
-      static char buff[35];
-      ultoa(buff, value, radix);
+      char buff[35];
+      ultoa(buff, value, radix, fPadding, fWidth);
       return write(buff);
    }
 
    /**
-    * Transmit an unsigned long integer with newline
+    * Write an unsigned long integer with newline
     *
     * @param[in]  value Unsigned long to print
     * @param[in]  radix Radix for conversion [2..16]
@@ -536,7 +560,7 @@ public:
    }
 
    /**
-    * Transmit an pointer value
+    * Write an pointer value
     *
     * @param[in]  value Pointer value to print
     * @param[in]  radix Radix for conversion [2..16]
@@ -548,7 +572,7 @@ public:
    }
 
    /**
-    * Transmit an pointer value with newline
+    * Write an pointer value with newline
     *
     * @param[in]  value Pointer value to print
     * @param[in]  radix Radix for conversion [2..16]
@@ -560,7 +584,7 @@ public:
    }
 
    /**
-    * Transmit a long integer
+    * Write a long integer
     *
     * @param[in]  value Long to print
     * @param[in]  radix Radix for conversion [2..16]
@@ -576,7 +600,7 @@ public:
    }
 
    /**
-    * Transmit a long integer with newline
+    * Write a long integer with newline
     *
     * @param[in]  value Long to print
     * @param[in]  radix Radix for conversion [2..16]
@@ -589,7 +613,7 @@ public:
    }
 
    /**
-    * Transmit an unsigned integer
+    * Write an unsigned integer
     *
     * @param[in]  value Unsigned to print
     * @param[in]  radix Radix for conversion [2..16]
@@ -601,7 +625,7 @@ public:
    }
 
    /**
-    * Transmit an unsigned integer with newline
+    * Write an unsigned integer with newline
     *
     * @param[in]  value Unsigned to print
     * @param[in]  radix Radix for conversion [2..16]
@@ -613,7 +637,7 @@ public:
    }
 
    /**
-    * Transmit an integer
+    * Write an integer
     *
     * @param[in]  value Integer to print
     * @param[in]  radix Radix for conversion [2..16]
@@ -625,7 +649,7 @@ public:
    }
 
    /**
-    * Transmit an integer with newline
+    * Write an integer with newline
     *
     * @param[in]  value Integer to print
     * @param[in]  radix Radix for conversion [2..16]
@@ -638,7 +662,7 @@ public:
 
 #if 0
    /**
-    * Transmit a double
+    * Write a double
     *
     * @param[in]  value Double to print
     *
@@ -655,31 +679,27 @@ public:
    }
 #else
    /**
-    * Transmit a double - Limited to 3 decimal places
+    * Write a double - Limited to 3 decimal places
     *
     * @param[in]  value Double to print
     *
     * @return Reference to self
     */
    FormattedIO NOINLINE_DEBUG &write(double value) {
+      char buff[20];
       if (value<0) {
          write('-');
          value = -value;
       }
-      Padding p = fPadding;
-      int     w = fWidth;
-      fPadding = Padding_None;
-      write((int)value).write('.');
-      fPadding = Padding_LeadingZeroes;
-      fWidth   = 3;
-      writeln((int)round(value*1000)%1000).reset();
-      fPadding = p;
-      fWidth   = w;
+      ultoa(buff, (long)value, Radix_10, Padding_None, 0);
+      write(buff).write('.');
+      ultoa(buff, ((long)round(value*1000))%1000, Radix_10, Padding_LeadingZeroes, 3);
+      write(buff);
       return *this;
    }
 #endif
    /**
-    * Transmit a double with newline
+    * Write a double with newline
     *
     * @param[in]  value Double to print
     *
@@ -691,7 +711,7 @@ public:
    }
 
    /**
-    * Transmit a float
+    * Write a float
     *
     * @param[in]  value Float to print
     *
@@ -702,7 +722,7 @@ public:
    }
 
    /**
-    * Transmit a float with newline
+    * Write a float with newline
     *
     * @param[in]  value Float to print
     *
@@ -713,7 +733,7 @@ public:
    }
 
    /**
-    * Transmit a character
+    * Write a character
     *
     * @param[in]  ch Character to print
     *
@@ -724,7 +744,7 @@ public:
    }
 
    /**
-    * Transmit a boolean value
+    * Write a boolean value
     *
     * @param[in]  b Boolean to print
     *
@@ -735,7 +755,7 @@ public:
    }
 
    /**
-    * Transmit a C string
+    * Write a C string
     *
     * @param[in]  str String to print
     *
@@ -746,7 +766,7 @@ public:
    }
 
    /**
-    * Transmit an unsigned long integer
+    * Write an unsigned long integer
     *
     * @param[in]  value Unsigned long to print
     *
@@ -757,7 +777,7 @@ public:
    }
 
    /**
-    * Transmit a long integer
+    * Write a long integer
     *
     * @param[in]  value Long to print
     *
@@ -768,7 +788,7 @@ public:
    }
 
    /**
-    * Transmit an unsigned integer
+    * Write an unsigned integer
     *
     * @param[in]  value Unsigned to print
     *
@@ -779,7 +799,7 @@ public:
    }
 
    /**
-    * Transmit an integer
+    * Write an integer
     *
     * @param[in]  value Integer to print
     *
@@ -790,7 +810,7 @@ public:
    }
 
    /**
-    * Transmit a pointer value
+    * Write a pointer value
     *
     * @param[in]  value Pointer value to print
     *
@@ -801,30 +821,22 @@ public:
    }
 
    /**
-    * Transmit a float
+    * Write a float
     *
     * @param[in]  value Float to print
     *
     * @return Reference to self
-    *
-    * @note Uses snprintf() which is large.
-    * @note To use this function it is necessary to enable floating point printing\n
-    *       in the linker options (Support %f format in printf -u _print_float)).
     */
    FormattedIO NOINLINE_DEBUG &operator <<(float value) {
       return write((double)value);
    }
 
    /**
-    * Transmit a double
+    * Write a double
     *
     * @param[in]  value Double to print
     *
     * @return Reference to self
-    *
-    * @note Uses snprintf() which is large.
-    * @note To use this function it is necessary to enable floating point printing\n
-    *       in the linker options (Support %f format in printf -u _print_float)).
     */
    FormattedIO NOINLINE_DEBUG &operator <<(double value) {
       return write(value);
@@ -1220,6 +1232,39 @@ public:
     */
    static constexpr Radix NOINLINE_DEBUG radix(unsigned radix) {
       return (Radix)radix;
+   }
+
+   /**
+    * Get field width
+    *
+    * @param[in]  width Integer to convert to width
+    *
+    * @return Width corresponding to width
+    */
+   static constexpr Width NOINLINE_DEBUG width(int width) {
+      return (Width)width;
+   }
+
+   /**
+    *
+    * @param[in] width
+    *
+    * @return
+    */
+   FormattedIO &operator<<(Width width) {
+      setWidth(width);
+      return *this;
+   }
+
+   /**
+    *
+    * @param[in] padding
+    *
+    * @return
+    */
+   FormattedIO &operator<<(Padding padding) {
+      setPadding(padding);
+      return *this;
    }
 
    /**
