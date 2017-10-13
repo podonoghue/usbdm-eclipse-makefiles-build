@@ -100,7 +100,7 @@ The MCG clock monitor must be enabled for a loss of clock to be detected</descri
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Reset by loss of external clock</description>
+                           <description>Reset by loss of clock</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -120,7 +120,7 @@ information on the loss-of-clock event</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Loss of PLL lock</description>
+                           <description>Reset by PLL loss of lock</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
