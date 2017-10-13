@@ -5,6 +5,8 @@
  *
  *  Generic vectors Kinetis Cortex-M0 devices
  *
+ *  Based on Keil Application Note 209
+ *
  *  Created on: 22/05/2017
  *      Author: podonoghue
  */
@@ -87,7 +89,7 @@ void HardFault_Handler(void) {
    __asm__ volatile ("skip1:                                               \n");
    __asm__ volatile ("       mrs r0,psp                                    \n");
    __asm__ volatile ("skip2:                                               \n");
-   __asm__ volatile ("       nop                                           \n");
+   __asm__ volatile ( "      mov   r1, lr                                  \n"); // Get LR=EXC_RETURN in r1
    __asm__ volatile ("       ldr r2, handler_addr_const                    \n"); // Go to C handler
    __asm__ volatile ("       bx r2                                         \n");
    __asm__ volatile ("       handler_addr_const: .word _HardFault_Handler  \n");
@@ -108,7 +110,27 @@ void HardFault_Handler(void) {
  */
 extern "C" {
 __attribute__((__naked__))
-void _HardFault_Handler(volatile ExceptionFrame *exceptionFrame __attribute__((__unused__))) {
+void _HardFault_Handler(
+      volatile ExceptionFrame *exceptionFrame __attribute__((__unused__)),
+      uint32_t execReturn                     __attribute__((__unused__)) ) {
+   using namespace USBDM;
+
+#ifdef DEBUG_BUILD
+   console.setPadding(Padding_LeadingZeroes);
+   console.setWidth(8);
+   console.write("[Hardfault]\n - Stack frame:\n");
+   console.write("R0  = 0x").writeln(exceptionFrame->r0,  Radix_16);
+   console.write("R1  = 0x").writeln(exceptionFrame->r1,  Radix_16);
+   console.write("R2  = 0x").writeln(exceptionFrame->r2,  Radix_16);
+   console.write("R3  = 0x").writeln(exceptionFrame->r3,  Radix_16);
+   console.write("R12 = 0x").writeln(exceptionFrame->r12, Radix_16);
+   console.write("LR  = 0x").writeln((void*)(exceptionFrame->lr),  Radix_16);
+   console.write("PC  = 0x").writeln((void*)(exceptionFrame->pc),  Radix_16);
+   console.write("PSR = 0x").writeln(exceptionFrame->psr, Radix_16);
+   console.writeln("- Misc");
+   console.write(" LR/EXC_RETURN= 0x").writeln(execReturn,  Radix_16);
+#endif
+
    while (1) {
       // Stop here for debugger
       __asm__("bkpt");

@@ -5,6 +5,8 @@
  *
  *  Generic vectors Kinetis Cortex-M4 devices
  *
+ *  Based on Keil Application Note 209
+ *
  *  Created on: 22/05/2017
  *      Author: podonoghue
  */
@@ -82,6 +84,7 @@ void HardFault_Handler(void) {
      __asm__ volatile ( "  ite   eq                  \n");  // Get active SP in r0
      __asm__ volatile ( "  mrseq r0, msp             \n");
      __asm__ volatile ( "  mrsne r0, psp             \n");
+     __asm__ volatile ( "  mov   r1, lr              \n");  // Get LR=EXC_RETURN in r1
      __asm__ volatile ( "  b     _HardFault_Handler  \n");  // Go to C handler
 }
 
@@ -100,7 +103,35 @@ void HardFault_Handler(void) {
  */
 extern "C" {
 __attribute__((__naked__))
-void _HardFault_Handler(volatile ExceptionFrame *exceptionFrame __attribute__((__unused__))) {
+void _HardFault_Handler(
+      volatile ExceptionFrame *exceptionFrame __attribute__((__unused__)),
+      uint32_t execReturn                     __attribute__((__unused__)) ) {
+   using namespace USBDM;
+
+#ifdef DEBUG_BUILD
+   console.setPadding(Padding_LeadingZeroes);
+   console.setWidth(8);
+   console.write("[Hardfault]\n - Stack frame:\n");
+   console.write("R0  = 0x").writeln(exceptionFrame->r0,  Radix_16);
+   console.write("R1  = 0x").writeln(exceptionFrame->r1,  Radix_16);
+   console.write("R2  = 0x").writeln(exceptionFrame->r2,  Radix_16);
+   console.write("R3  = 0x").writeln(exceptionFrame->r3,  Radix_16);
+   console.write("R12 = 0x").writeln(exceptionFrame->r12, Radix_16);
+   console.write("LR  = 0x").writeln((void*)(exceptionFrame->lr),  Radix_16);
+   console.write("PC  = 0x").writeln((void*)(exceptionFrame->pc),  Radix_16);
+   console.write("PSR = 0x").writeln(exceptionFrame->psr, Radix_16);
+   console.write ("- FSR/FAR:\n");
+   uint32_t cfsr = SCB->CFSR;
+   console.write(" CFSR = 0x").writeln(cfsr);
+   console.write(" HFSR = 0x").writeln(SCB->HFSR, Radix_16);
+   console.write(" DFSR = 0x").writeln(SCB->DFSR, Radix_16);
+   console.write(" AFSR = 0x").writeln(SCB->AFSR, Radix_16);
+    if (cfsr & 0x0080) console.write(" MMFAR = 0").writeln(SCB->MMFAR, Radix_16);
+    if (cfsr & 0x8000) console.write(" BFAR = 0x").writeln(SCB->BFAR,  Radix_16);
+    console.writeln("- Misc");
+    console.write(" LR/EXC_RETURN= 0x").writeln(execReturn,  Radix_16);
+#endif
+
    while (1) {
       // Stop here for debugger
       __asm__("bkpt");
