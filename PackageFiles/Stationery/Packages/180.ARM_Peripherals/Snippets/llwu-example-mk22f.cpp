@@ -167,9 +167,10 @@ enum Test {
 void enablePin(Test test, bool enable) {
 
    // Disable filtered pin
-   Llwu::configurePinSource(
+   Llwu::configureFilteredPinSource(
+         FILTER_NUM,
          WAKEUP_PIN,
-         LlwuPinMode_Disabled);
+         LlwuFilterPinMode_Disabled);
 
    // Disable direct pin
    Llwu::configurePinSource(
@@ -249,6 +250,7 @@ void enableTimer(Test test, bool enable) {
             LptmrClockSel_erclk32);
       WakeupTimer::setPeriod(3*seconds);
       WakeupTimer::setCallback(wakeupTimerCallback);
+      WakeupTimer::clearInterruptFlag();
       WakeupTimer::enableNvicInterrupts();
 
       if ((test>=LLS2) && (test<=VLLS3)) {
@@ -382,7 +384,7 @@ int main() {
    );
 
    //Errata e4481 STOP mode recovery unstable
-   Pmc::setBandgapOperation(PmcBandgapMode_AlwaysOn);
+   Pmc::setBandgapOperation(PmcBandgapBuffer_Off, PmcBandgapLowPowerEnable_On);
 
    checkError();
 
@@ -397,12 +399,16 @@ int main() {
    for(;;) {
       SmcStatus smcStatus = Smc::getStatus();
       if (refresh) {
+         console.write("SystemCoreClock  = ").writeln(::SystemCoreClock);
+         console.write("SystemBusClock   = ").writeln(::SystemBusClock);
+         console.write("SystemFlashClock = ").writeln(::SystemFlashClock);
+
          switch(smcStatus) {
             case SmcStatus_hsrun:
                console.write(
                      "\n\nTests\n"
                      "====================================\n"
-                     "R - Select VLPR, RUN, HSRUN mode\n"
+                     "R - Change run mode - VLPR, RUN, HSRUN\n"
                      "T - Toggle LPTMR wake-up source\n"
                      "P - Toggle PIN wake-up source\n"
                      "H - Help\n"
@@ -413,7 +419,7 @@ int main() {
                console.write(
                      "\n\nTests\n"
                      "====================================\n"
-                     "R - Select VLPR, RUN, HSRUN mode\n"
+                     "R - Change run mode - VLPR, RUN, HSRUN\n"
                      "S - Select STOP,VLPS test\n"
                      "W - Select WAIT test\n"
                      "L - Select LLS2, LLS3 test\n"
@@ -427,7 +433,7 @@ int main() {
                console.write(
                      "\n\nTests\n"
                      "====================================\n"
-                     "R - Select VLPR, RUN, HSRUN mode\n"
+                     "R - Change run mode - VLPR, RUN, HSRUN\n"
                      "S - Select VLPS test\n"
                      "W - Select VLPW test\n"
                      "L - Select LLS2, LLS3 test\n"
@@ -481,7 +487,7 @@ int main() {
             }
             break;
          case 'R':
-            console.writeln();
+            console.writeln("\n").flushOutput();
             switch(changeRunMode()) {
                case SmcStatus_hsrun:
                   oldTest = test;

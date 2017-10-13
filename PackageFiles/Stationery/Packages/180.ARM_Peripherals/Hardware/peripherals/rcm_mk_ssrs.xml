@@ -2,48 +2,6 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- rcm_mk10d5.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="RCM" description="Reset Control Module" >
-   <binaryOption name="rcm_rpfc_rstfltss" 
-      description="Reset pin filter select in stop mode"
-      toolTip="Selects how the reset pin filter is enabled in STOP and VLPS modes">
-      <choice value="0" name="All filtering disabled" isDefault="true" />
-      <choice value="1" name="LPO clock filter enabled" />
-   </binaryOption>
-   
-   <choiceOption name="rcm_rpfc_rstfltsrw" 
-      description="Reset pin filter select in run and wait modes"
-      toolTip="Selects how the reset pin filter is enabled in run and wait modes.">
-      <choice value="0" name="All filtering disabled" />
-      <choice value="1" name="Bus clock filter enabled for normal operation" />
-      <choice value="2" name="LPO clock filter enabled for normal operation" />
-      <choice value="3" name="Reserved" />
-   </choiceOption>
-   
-   <template><![CDATA[
-      \t//! Reset Pin Filter Control Register
-      \tstatic constexpr uint8_t rcm_rpfc = 
-      \t   RCM_RPFC_RSTFLTSS($(rcm_rpfc_rstfltss))|   // Reset pin filter select in stop mode
-      \t   RCM_RPFC_RSTFLTSRW($(rcm_rpfc_rstfltsrw));  // Reset pin filter select in run and wait modes\n\n
-   ]]></template>
-
-   <intOption name="rcm_rpfw_rstfltsel" 
-      description="Reset pin filter bus clock select" 
-      toolTip="Selects the reset pin bus clock filter width."
-      value="1" min="1" max="32" offset="-1" />
-
-   <template><![CDATA[
-      \t//! Reset pin filter bus clock select
-      \tstatic constexpr uint8_t rcm_rpfw = 
-      \t   RCM_RPFW_RSTFLTSEL($(rcm_rpfw_rstfltsel)); \n\n
-   ]]></template>
-   
-   <projectActionList id = "rcm_files" >
-      <copy source="Project_Headers/rcm.h"     target="Project_Headers/rcm.h"     overwrite="true"  derived="true" />
-   </projectActionList>
-   
-   <!--  validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator">
-   </validate -->
-
-   
-</peripheralPage>
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="rcm_def.xml"/>
+</fragment>

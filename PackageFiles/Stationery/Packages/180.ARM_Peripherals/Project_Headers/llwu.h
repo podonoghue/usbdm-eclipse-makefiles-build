@@ -48,22 +48,49 @@ enum LlwuPeripheralMode {
  * LLWU pin sources (MK20 & MK22F)
  */
 enum LlwuPin : uint32_t {
-   LlwuPin_pte1,   //!< Wake-up pin LLWU_P0
-   LlwuPin_pte2,   //!< Wake-up pin LLWU_P1
-   LlwuPin_pte4,   //!< Wake-up pin LLWU_P2
-   LlwuPin_pta4,   //!< Wake-up pin LLWU_P3
-   LlwuPin_pta13,  //!< Wake-up pin LLWU_P4
-   LlwuPin_ptb0,   //!< Wake-up pin LLWU_P5
-   LlwuPin_ptc1,   //!< Wake-up pin LLWU_P6
-   LlwuPin_ptc3,   //!< Wake-up pin LLWU_P7
-   LlwuPin_ptc4,   //!< Wake-up pin LLWU_P8
-   LlwuPin_ptc5,   //!< Wake-up pin LLWU_P9
-   LlwuPin_ptc6,   //!< Wake-up pin LLWU_P10
-   LlwuPin_ptc11,  //!< Wake-up pin LLWU_P11
-   LlwuPin_ptd0,   //!< Wake-up pin LLWU_P12
-   LlwuPin_ptd2,   //!< Wake-up pin LLWU_P13
-   LlwuPin_ptd4,   //!< Wake-up pin LLWU_P14
-   LlwuPin_ptd6,   //!< Wake-up pin LLWU_P15
+#if defined(MCU_MKL25Z4)
+   LlwuPin_ptb0  = 5,   //!< Wake-up pin LLWU_P5
+   LlwuPin_ptc1  = 6,   //!< Wake-up pin LLWU_P6
+   LlwuPin_ptc3  = 7,   //!< Wake-up pin LLWU_P7
+   LlwuPin_ptc4  = 8,   //!< Wake-up pin LLWU_P8
+   LlwuPin_ptc5  = 9,   //!< Wake-up pin LLWU_P9
+   LlwuPin_ptc6  = 10,  //!< Wake-up pin LLWU_P10
+   LlwuPin_ptd4  = 14,  //!< Wake-up pin LLWU_P14
+   LlwuPin_ptd6  = 15,  //!< Wake-up pin LLWU_P15
+#elif defined(MCU_MK20D5) || defined(MCU_MK22F51212)
+   LlwuPin_pte1  = 0,   //!< Wake-up pin LLWU_P0
+   LlwuPin_pte2  = 1,   //!< Wake-up pin LLWU_P1
+   LlwuPin_pte4  = 2,   //!< Wake-up pin LLWU_P2
+   LlwuPin_pta4  = 3,   //!< Wake-up pin LLWU_P3
+   LlwuPin_pta13 = 4,   //!< Wake-up pin LLWU_P4
+   LlwuPin_ptb0  = 5,   //!< Wake-up pin LLWU_P5
+   LlwuPin_ptc1  = 6,   //!< Wake-up pin LLWU_P6
+   LlwuPin_ptc3  = 7,   //!< Wake-up pin LLWU_P7
+   LlwuPin_ptc4  = 8,   //!< Wake-up pin LLWU_P8
+   LlwuPin_ptc5  = 9,   //!< Wake-up pin LLWU_P9
+   LlwuPin_ptc6  = 10,  //!< Wake-up pin LLWU_P10
+   LlwuPin_ptc11 = 11,  //!< Wake-up pin LLWU_P11
+   LlwuPin_ptd0  = 12,  //!< Wake-up pin LLWU_P12
+   LlwuPin_ptd2  = 13,  //!< Wake-up pin LLWU_P13
+   LlwuPin_ptd4  = 14,  //!< Wake-up pin LLWU_P14
+   LlwuPin_ptd6  = 15,  //!< Wake-up pin LLWU_P15
+#endif
+   LlwuPin_0     = 0,   //!< Wake-up pin LLWU_P0
+   LlwuPin_1     = 1,   //!< Wake-up pin LLWU_P1
+   LlwuPin_2     = 2,   //!< Wake-up pin LLWU_P2
+   LlwuPin_3     = 3,   //!< Wake-up pin LLWU_P3
+   LlwuPin_4     = 4,   //!< Wake-up pin LLWU_P4
+   LlwuPin_5     = 5,   //!< Wake-up pin LLWU_P5
+   LlwuPin_6     = 6,   //!< Wake-up pin LLWU_P6
+   LlwuPin_7     = 7,   //!< Wake-up pin LLWU_P7
+   LlwuPin_8     = 8,   //!< Wake-up pin LLWU_P8
+   LlwuPin_9     = 9,   //!< Wake-up pin LLWU_P9
+   LlwuPin_10    = 10,  //!< Wake-up pin LLWU_P10
+   LlwuPin_11    = 11,  //!< Wake-up pin LLWU_P11
+   LlwuPin_12    = 12,  //!< Wake-up pin LLWU_P12
+   LlwuPin_13    = 13,  //!< Wake-up pin LLWU_P13
+   LlwuPin_14    = 14,  //!< Wake-up pin LLWU_P14
+   LlwuPin_15    = 15,  //!< Wake-up pin LLWU_P15
 };
 
 /**
@@ -78,6 +105,14 @@ enum LlwuPeripheral : uint8_t {
    LlwuPeripheral_RtcAlarm    = (1<<5),  //!< Wake-up peripheral LLWU_M5IF
    LlwuPeripheral_Reserved6   = (1<<6),  //!< Wake-up peripheral LLWU_M6IF
    LlwuPeripheral_RtcSeconds  = (1<<7),  //!< Wake-up peripheral LLWU_M7IF
+   LlwuPeripheral_0           = (1<<0),  //!< Wake-up peripheral LLWU_M0IF
+   LlwuPeripheral_1           = (1<<1),  //!< Wake-up peripheral LLWU_M1IF
+   LlwuPeripheral_2           = (1<<2),  //!< Wake-up peripheral LLWU_M2IF
+   LlwuPeripheral_3           = (1<<3),  //!< Wake-up peripheral LLWU_M3IF
+   LlwuPeripheral_4           = (1<<4),  //!< Wake-up peripheral LLWU_M4IF
+   LlwuPeripheral_5           = (1<<5),  //!< Wake-up peripheral LLWU_M5IF
+   LlwuPeripheral_6           = (1<<6),  //!< Wake-up peripheral LLWU_M6IF
+   LlwuPeripheral_7           = (1<<7),  //!< Wake-up peripheral LLWU_M7IF
 };
 
 /**

@@ -166,9 +166,10 @@ enum Test {
 void enablePin(Test test, bool enable) {
 
    // Disable filtered pin
-   Llwu::configurePinSource(
+   Llwu::configureFilteredPinSource(
+         FILTER_NUM,
          WAKEUP_PIN,
-         LlwuPinMode_Disabled);
+         LlwuFilterPinMode_Disabled);
 
    // Disable direct pin
    Llwu::configurePinSource(
@@ -248,6 +249,7 @@ void enableTimer(Test test, bool enable) {
             LptmrClockSel_erclk32);
       WakeupTimer::setPeriod(3*seconds);
       WakeupTimer::setCallback(wakeupTimerCallback);
+      WakeupTimer::clearInterruptFlag();
       WakeupTimer::enableNvicInterrupts();
 
       if ((test>=LLS) && (test<=VLLS3)) {
@@ -325,7 +327,7 @@ SmcStatus changeRunMode() {
       Smc::enterRunMode(SmcRunMode_Normal);
       Mcg::clockTransition(McgInfo::clockInfo[ClockConfig_PEE_48MHz]);
       console.setBaudRate(defaultBaudRate);
-      console.writeln("Changed RUN mode").flushOutput();
+      console.writeln("Changed to RUN mode").flushOutput();
    }
    return Smc::getStatus();
 }
@@ -366,7 +368,7 @@ int main() {
          SmcVeryLowLeakageStop_Enable);
 
    //Errata e4481 STOP mode recovery unstable
-   Pmc::setBandgapOperation(PmcBandgapMode_AlwaysOn);
+   Pmc::setBandgapOperation(PmcBandgapBuffer_Off, PmcBandgapLowPowerEnable_On);
 
    checkError();
 
@@ -380,12 +382,16 @@ int main() {
    for(;;) {
       SmcStatus smcStatus = Smc::getStatus();
       if (refresh) {
+         console.write("SystemCoreClock  = ").writeln(::SystemCoreClock);
+         console.write("SystemBusClock   = ").writeln(::SystemBusClock);
+         console.write("SystemFlashClock = ").writeln(::SystemFlashClock);
+
          switch(smcStatus) {
             case SmcStatus_hsrun:
                console.write(
                      "\n\nTests\n"
                      "====================================\n"
-                     "R - Select VLPR, RUN mode\n"
+                     "R - Change run mode - VLPR, RUN\n"
                      "T - Toggle LPTMR wake-up source\n"
                      "P - Toggle PIN wake-up source\n"
                      "H - Help\n"
@@ -396,7 +402,7 @@ int main() {
                console.write(
                      "\n\nTests\n"
                      "====================================\n"
-                     "R - Select VLPR, RUN mode\n"
+                     "R - Change run mode - VLPR, RUN\n"
                      "S - Select STOP,VLPS test\n"
                      "W - Select WAIT test\n"
                      "L - Select LLS test\n"
@@ -410,7 +416,7 @@ int main() {
                console.write(
                      "\n\nTests\n"
                      "====================================\n"
-                     "R - Select VLPR, RUN mode\n"
+                     "R - Change run mode - VLPR, RUN\n"
                      "S - Select VLPS test\n"
                      "W - Select VLPW test\n"
                      "L - Select LLS test\n"
@@ -464,7 +470,7 @@ int main() {
             }
             break;
          case 'R':
-            console.writeln().flushOutput();
+            console.writeln("\n").flushOutput();
             switch(changeRunMode()) {
                default:
                   break;
