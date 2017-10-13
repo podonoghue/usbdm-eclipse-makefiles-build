@@ -20,7 +20,7 @@ static const char *messages[] {
       "Too small",
       "Too large",
       "Illegal parameter",
-      "Interrupt handler not installed",
+      "Call-back not installed",
       "Flash initialisation failed",
       "ADC Calibration failed",
       "Illegal processor run-mode transition",
@@ -52,8 +52,10 @@ const char *getErrorMessage(ErrorCode err) {
 }
 
 #ifdef DEBUG_BUILD
-void abort(const char *msg) {
+void abort(const char *msg __attribute__((unused))) {
+#if USE_CONSOLE
    console.writeln(msg);
+#endif
    while(true) {
       __BKPT();
    }
@@ -65,10 +67,12 @@ void abort(const char *msg) {
  */
 ErrorCode checkError() {
    while (errorCode != E_NO_ERROR) {
+#if USE_CONSOLE
       const char *msg = getErrorMessage();
       __attribute__((unused))
       int cmsisErrorCode = errorCode & ~E_CMSIS_ERR_OFFSET;
       console.writeln(msg);
+#endif
       // If you arrive here then an error has been detected.
       // If a CMSIS error, check the 'cmsisErrorCode' above and refer to the CMSIS error codes
       __BKPT();

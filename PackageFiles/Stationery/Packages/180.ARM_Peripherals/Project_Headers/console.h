@@ -24,6 +24,10 @@
 #ifndef CONSOLE_H_
 #define CONSOLE_H_
 
+#define USE_CONSOLE $(/Console/consoleEnable:0)
+
+#if USE_CONSOLE
+
 #ifdef __cplusplus
 namespace USBDM {
 
@@ -37,7 +41,7 @@ namespace USBDM {
 constexpr int defaultBaudRate = $(/Console/defaultBaudRate:115200);
 
 //! Maps console to UART used
-using  Console = $(/Console/console_device:USBDM::Uart0);
+using  Console = $(/Console/consoleDevice:USBDM::Uart0);
 
 //! Console instance
 extern Console console;
@@ -83,4 +87,7 @@ int  console_rxChar(void);
 #ifdef __cplusplus
 }
 #endif
+
+#endif /* USE_CONSOLE */
+
 #endif /* CONSOLE_H_ */

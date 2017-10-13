@@ -22,6 +22,28 @@ int main() {
 
    console.writeln().writeln("Starting");
 
+   console.writeln(123456.4567f);
+   console.writeln(3.4567f);
+   console.writeln(3.0067f);
+   console.writeln(0.0067f);
+   console.writeln(0.12f);
+   console.writeln(0.0f);
+   console.writeln(-3.4567f);
+   console.writeln(-3.0067f);
+   console.writeln(-0.0067f);
+   console.writeln(-0.12f);
+   console.writeln(-3.4567);
+   console.writeln(-3.0067);
+   console.writeln(-0.0067);
+   console.writeln(-0.12);
+
+   console<<123456.4567f<<EndOfLine;
+   console<<3.4567f<<EndOfLine;
+   console<<3.0067f<<EndOfLine;
+   console<<123456.4567<<EndOfLine;
+   console<<3.4567<<EndOfLine;
+   console<<3.0067<<EndOfLine;
+
    if (console.write("Number: ").readln(integer).isError()) {
       console.writeln("Opps");
    }
@@ -68,6 +90,9 @@ int main() {
    console<<"ULONG_MAX,Radix_10 = "<<Radix_10<<ULONG_MAX<<EndOfLine;
    console<<"ULONG_MAX,Radix_16 = "<<Radix_16<<ULONG_MAX<<EndOfLine;
    console<<"UINT_MAX,Radix_2   = "<<Radix_2<<UINT_MAX<<EndOfLine;
+   console<<"3,Radix_2          = "<<Radix_2<<Padding_LeadingZeroes<<3<<EndOfLine;
+   console<<"3,Radix_2,w=10,p=0 = "<<console.width(10)<<Radix_2<<Padding_LeadingZeroes<<3<<EndOfLine;
+   console.reset();
    console<<"UINT_MAX,Radix_8   = "<<Radix_8<<UINT_MAX<<EndOfLine;
    console<<"UINT_MAX,Radix_10  = "<<Radix_10<<UINT_MAX<<EndOfLine;
    console<<"UINT_MAX,Radix_16  = "<<Radix_16<<UINT_MAX<<EndOfLine;
@@ -77,6 +102,7 @@ int main() {
    console<<"UINT_MAX,radix(2)  = "<<Uart::radix(2)<<UINT_MAX<<EndOfLine;
    console<<Radix_10;
 
+   console.setWidth(10);
    FormattedIO::ultoa(buff, 100);
    console.write("ultoa(100, buff)  = ").writeln(buff);
    FormattedIO::ltoa(buff, -100);
@@ -118,6 +144,7 @@ int main() {
    console.writeln(unsignedInteger);
    console.write("An integer   : ").readln(unsignedLong);
    console.writeln(unsignedLong);
+
 
    console.readChar();
 

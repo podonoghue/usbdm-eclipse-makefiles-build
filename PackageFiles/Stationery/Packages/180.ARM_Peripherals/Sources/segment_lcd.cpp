@@ -65,9 +65,9 @@ static constexpr uint8_t  LCD_CLEAR        = 0x00;
  * @param pinMap  Map of logical pin numbers to physical LCD pins
  * @param pinNum  Logical pin number
  */
-static void pen(const int8_t pinMap[], uint32_t pinNum) {
+void SegmentLcd::pen(const int8_t pinMap[], uint32_t pinNum) {
    const int lcdPin = pinMap[pinNum];
-   LCD->PEN[lcdPin>>5] |= 1UL<<((uint32_t)(lcdPin&0x1F));
+   lcd->PEN[lcdPin>>5] |= 1UL<<((uint32_t)(lcdPin&0x1F));
 };
 
 /*
@@ -79,9 +79,9 @@ static void pen(const int8_t pinMap[], uint32_t pinNum) {
  * @param pinMap  Map of logical pin numbers to physical LCD pins
  * @param pinNum  Logical pin number
  */
-static void bpen(const int8_t pinMap[], uint32_t pinNum) {
+void SegmentLcd::bpen(const int8_t pinMap[], uint32_t pinNum) {
    const int lcdPin = pinMap[pinNum];
-   LCD->BPEN[lcdPin>>5] |= 1UL<<((uint32_t)(lcdPin&0x1F));
+   lcd->BPEN[lcdPin>>5] |= 1UL<<((uint32_t)(lcdPin&0x1F));
 };
 
 /**
@@ -89,7 +89,7 @@ static void bpen(const int8_t pinMap[], uint32_t pinNum) {
  *
  * Assumes use of 32kHz OSCERCLK clock
  */
-void SegmentLcd::enable(void) {
+void SegmentLcd::defaultConfigure(void) {
 
    // Enable Clock to SegLCD Peripheral
    SIM->SCGC5 |=  SIM_SCGC5_SLCD_MASK;

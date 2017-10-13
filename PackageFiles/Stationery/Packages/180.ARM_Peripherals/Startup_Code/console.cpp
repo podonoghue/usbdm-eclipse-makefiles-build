@@ -19,6 +19,8 @@
   * Any manual changes will be lost.
   */
 
+#if USE_CONSOLE
+
 namespace USBDM {
 
 /**
@@ -74,3 +76,5 @@ int console_rxChar(void) {
  */
 
 } // End namespace USBDM
+
+#endif /* USE_CONSOLE */

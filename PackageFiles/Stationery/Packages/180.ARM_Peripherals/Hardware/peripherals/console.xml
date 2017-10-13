@@ -4,7 +4,15 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Inter-Integrated-Circuit">
 
-   <choiceOption name="console_device" 
+   <binaryOption name="consoleEnable" 
+      description="Enable Console I/O"
+      toolTip="Provides basic console I/O for the project\n
+      This is also required for stdio support">
+      <choice value="0" name="Disabled" />
+      <choice value="1" name="Enabled" isDefault="true" />
+   </binaryOption>
+
+   <choiceOption name="consoleDevice" 
       description="UART to use for console"
       toolTip="Not all UARTs listed may be available on a particular device" >
       <choice name="Lpuart 0" value="USBDM::Lpuart0" />

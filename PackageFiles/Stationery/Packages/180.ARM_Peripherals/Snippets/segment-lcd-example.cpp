@@ -17,13 +17,14 @@
 
 using namespace USBDM;
 
-constexpr int DELAY_VALUE = 500;
+constexpr int DELAY_VALUE = 1000; // ms
 
 int main(void) {
+   console.writeln("Starting\n");
+   console.write("SystemCoreClock = ").writeln(::SystemCoreClock);
+   console.write("SystemBusClock  = ").writeln(::SystemBusClock);
 
-//   printf("Starting\n");
-
-   SegmentLcd::enable();
+   SegmentLcd::defaultConfigure();
 
    for(;;) {
       SegmentLcd::displayHex(0x1234);
