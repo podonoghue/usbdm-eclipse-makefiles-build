@@ -18,10 +18,15 @@
       \tstatic constexpr bool mapPinsOnEnable = $(mapPinsOnEnable);\n\n
    ]]></template>
 
-   <intOption name="minimumResolution" description="Minimum resolution for TPM interval"
-      toolTip="This value is used as a minimum value for the timer interval in ticks \n
+   <intOption name="minimumInterval" description="Minimum usable interval in ticks"
+      toolTip="This value is used as a minimum acceptable value for the timer interval in ticks\n
+               when using convertMicrosecondsToTicks() or convertSecondsToTicks()"
+      value="20" min="0" max="65535"/>
+      
+   <intOption name="minimumResolution" description="Minimum resolution for PWM interval"
+      toolTip="This value is used as a minimum value for the timer period in ticks \n
          so that a reasonable resolution is available for PWM duty-cycle"
-      value="100" min="0" />
+      value="100" min="0" max="65535" />
       
    <intOption name="ftmExternalClock" description="FTM External clock"
       toolTip="Clock frequency of external clock supplied to FTM_CLKIN pin"
@@ -152,7 +157,11 @@
    </projectActionList>
          
    <template><![CDATA[
+      \t/** Minimum resolution for PWM interval */
       \tstatic constexpr uint32_t minimumResolution=$(minimumResolution);\n\n
+      
+      \t/** Minimum usable interval in ticks */      
+      \tstatic constexpr uint32_t minimumInterval=$(minimumInterval);\n\n
       
       \t/**
       \t * Get input clock frequency

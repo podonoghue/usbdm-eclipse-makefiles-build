@@ -647,6 +647,7 @@ public:
     * @return Time in ticks
     *
     * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
+    * @note Will set error code if calculated value is less the FTM minimum resolution
     */
    static uint32_t convertMicrosecondsToTicks(int time) {
 
@@ -658,7 +659,7 @@ public:
          // Attempt to set too long a period
          setErrorCode(E_TOO_LARGE);
       }
-      if (rv == 0) {
+      if (rv < Info::minimumInterval) {
          // Attempt to set too short a period
          setErrorCode(E_TOO_SMALL);
       }
@@ -674,7 +675,7 @@ public:
     * @return Time in ticks
     *
     * @note Assumes prescale has been chosen as a appropriate value (see setMeasurementPeriod()). \n
-    *       Only rudimentary range checking is done.
+    * @note Will set error code if calculated value is less the FTM minimum resolution
     */
    static uint32_t convertSecondsToTicks(float time) {
 
@@ -686,7 +687,7 @@ public:
          // Attempt to set too long a period
          setErrorCode(E_TOO_LARGE);
       }
-      if (rv == 0) {
+      if (rv < Info::minimumInterval) {
          // Attempt to set too short a period
          setErrorCode(E_TOO_SMALL);
       }
