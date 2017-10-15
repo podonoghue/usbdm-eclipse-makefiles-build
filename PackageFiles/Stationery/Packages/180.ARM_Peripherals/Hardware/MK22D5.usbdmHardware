@@ -168,23 +168,20 @@
          <clock reg="SCGC6"         mask="SIM_SCGC6_SPI0_MASK" />
          <irq num="SPI0_IRQn" />
       </peripheral>
-      <peripheral baseName="UART"     instance="0"        version="uart0_mk11d5_c7816">
+      <peripheral baseName="UART"     instance="0"        version="uart0_mk10d7_c7816">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUart" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_UART0_MASK" />
          <irq num="UART0_RX_TX_IRQn" />
-         <param key="clockSource"   value="SystemCoreClock" />
       </peripheral>
       <peripheral baseName="UART"     instance="1"        version="uart1_mk10d10">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUart" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_UART1_MASK" />
          <irq num="UART1_RX_TX_IRQn" />
-         <param key="clockSource"   value="SystemCoreClock" />
       </peripheral>
       <peripheral baseName="UART"     instance="2"        version="uart1_mk10d10">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUart" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_UART2_MASK" />
          <irq num="UART2_RX_TX_IRQn" />
-         <param key="clockSource"   value="SystemBusClock" />
       </peripheral>
       <peripheral baseName="USB"      instance="0"        version="usb0_otg_c">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUsb" />
