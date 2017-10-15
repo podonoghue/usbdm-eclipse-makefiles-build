@@ -92,7 +92,7 @@
       <peripheral derivedFrom="TRIAMP0"><name>TRIAMP1</name><baseAddress>0x400F8800</baseAddress></peripheral>
       <xi:include href="peripherals/TSI0_MK_DZ.svd.xml"/>
       <xi:include href="peripherals/UART0_MK10D7_C7816.svd.xml"/>
-      <xi:include href="peripherals/UART1_MK10D5.svd.xml"/>
+      <xi:include href="peripherals/UART1_MK10D10.svd.xml"/>
       <peripheral derivedFrom="UART1"><name>UART2</name><baseAddress>0x4006C000</baseAddress></peripheral>
       <peripheral derivedFrom="UART1"><name>UART3</name><baseAddress>0x4006D000</baseAddress></peripheral>
       <peripheral derivedFrom="UART1"><name>UART4</name><baseAddress>0x400EA000</baseAddress></peripheral>

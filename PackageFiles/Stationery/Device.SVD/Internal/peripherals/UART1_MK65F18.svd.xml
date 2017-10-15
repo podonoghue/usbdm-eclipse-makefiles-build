@@ -480,7 +480,8 @@ RAF is cleared when the receiver detects an idle character</description>
                   <field>
                      <name>LBKDE</name>
                      <description>LIN Break Detection Enable\n
-Enables break character detection</description>
+Enables LIN break character detection.\n
+While LBKDE is set, S1[RDRF], S1[NF], S1[FE], and S1[PF] are prevented from setting</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>

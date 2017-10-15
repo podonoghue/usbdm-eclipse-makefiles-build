@@ -1,6 +1,7 @@
 <!--
 Devices using this peripheral: 
       MKV10Z7
+      MKV11Z7
 -->
       <peripheral>
          <?sourceFile "UART0_MKV10" ?>
@@ -319,9 +320,9 @@ Normally, hardware wakes the receiver by automatically clearing RWU</description
                   <field derivedFrom="RE" > <name>ILIE</name> <description>Idle Line Interrupt Enable\n
 		  Enables the idle line flag, S1[IDLE], to generate interrupt requests , based on the state of C5[ILDMAS]</description> <bitOffset>4</bitOffset> </field>
                   <field derivedFrom="RE" > <name>RIE</name> <description>Receiver Full Interrupt/DMA requests\n
-		  Allows interrupt or DMA requests triggered by RDRF</description> <bitOffset>5</bitOffset> </field>
+                  Allows interrupt or DMA requests triggered by RDRF</description> <bitOffset>5</bitOffset> </field>
                   <field derivedFrom="RE" > <name>TCIE</name> <description>Transmission Complete Interrupt/DMA requests\n
-		  Allows interrupt or DMA requests triggered by TDRE</description> <bitOffset>6</bitOffset> </field>
+                  Allows interrupt or DMA requests triggered by TDRE</description> <bitOffset>6</bitOffset> </field>
                   <field derivedFrom="RE" > <name>TIE</name> <description>Transmitter Interrupt/DMA Transfer Enable</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
@@ -337,7 +338,7 @@ Normally, hardware wakes the receiver by automatically clearing RWU</description
                   <field>
                      <name>PF</name>
                      <description>Parity Error Flag\n
-PF is set when PE is set, S2[LBKDE] is disabled, and the parity of the received data does not match its parity bit.\n
+PF is set when PE is set and the parity of the received data does not match its parity bit.\n
 To clear PF, read S1 with PF set and then read D</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
@@ -363,24 +364,90 @@ To clear NF, read S1 and then read D</description> <bitOffset>2</bitOffset> </fi
                   <field derivedFrom="PF" > <name>OR</name> <description>Receiver Overrun Flag\n
 OR is set when software fails to prevent the receive data register from overflowing with data.\n
 To clear OR, read S1 when OR is set and then read D</description> <bitOffset>3</bitOffset> </field>
-                  <field derivedFrom="PF" > <name>IDLE</name> <description>Idle Line Flag\n
+                  <field>
+                     <name>IDLE</name>
+                     <description>Idle Line Flag\n
 After the IDLE flag is cleared, a frame must be received or a LIN break character must set the S2[LBKDIF] flag before an idle
 condition can set the IDLE flag.\n
-To clear IDLE, read UART status S1 with IDLE set and then read D</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="PF" > <name>RDRF</name> <description>Receive Data Register Full Flag\n
+To clear IDLE, read S1 with IDLE set and then read D</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Not detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Detected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RDRF</name>
+                     <description>Receive Data Register Full Flag\n
 RDRF is set when the number of datawords in the receive buffer is equal to or more than the number indicated by RWFIFO[RXWATER].\n
-To clear RDRF, read S1 when RDRF is set and then read D</description> <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="PF" > <name>TC</name> <description>Transmit Complete Flag\n
-TC is cleared when there is a transmission in progress or when a preamble or break character is loaded.\n
-TC is set when the transmit buffer is empty and no data, preamble, or break character is being transmitted.\n
-TC is cleared by reading S1 with TC set and then doing one of the following:\n
-- Writing to D to transmit new data.\n
-- Queuing a preamble by clearing and then setting C2[TE].\n
-- Queuing a break character by writing 1 to SBK in C2</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="PF" > <name>TDRE</name> <description>Transmit Data Register Empty Flag\n
-TDRE will set when the number of datawords in the transmit buffer (D and C3[T8])is equal to or less than
-the number indicated by TWFIFO[TXWATER].\n
-To clear TDRE, read S1 when TDRE is set and then write to the UART data register</description> <bitOffset>7</bitOffset> </field>
+To clear RDRF, read S1 when RDRF is set and then read D</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Rx FIFO level &lt; RXWATER</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Rx FIFO level &gt;= RXWATER</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TC</name>
+                     <description>Transmit Complete Flag\n
+Set when the transmit buffer is empty and no data, preamble, or break character is being transmitted.\n
+Cleared by reading S1 with TC set and then doing one of the following:\n
+- Write to the data register to transmit new data\n
+- Queue a preamble by changing TE from 0 to 1\n
+- Queue a break character by writing 1 to C2.SBK</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Active</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Idle</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TDRE</name>
+                     <description>Transmit Data Register Empty Flag\n
+Set when the number of words in the transmit buffer is &lt;= TWFIFO[TXWATER]\n
+To clear TDRE, read S1 when TDRE is set and then write to the data register</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Tx FIFO level &gt; TXWATER</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Tx FIFO level &lt;= TXWATER</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
                </fields>
             </register>
             <register>
@@ -414,7 +481,7 @@ RAF is cleared when the receiver detects an idle character</description>
                   <field>
                      <name>LBKDE</name>
                      <description>LIN Break Detection Enable\n
-Enables break character detection.\n
+Enables LIN break character detection.\n
 While LBKDE is set, S1[RDRF], S1[NF], S1[FE], and S1[PF] are prevented from setting</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
@@ -454,13 +521,13 @@ Determines whether the transmit break character is 10, 11, or 12 bits long, or 1
                      <name>RWUID</name>
                      <description>Receive Wakeup Idle Detect\n
 When RWU is set and WAKE is cleared, this field controls whether the idle character that wakes the
-receiver sets S1[IDLE]. This field must be cleared when C7816[ISO7816E] is set/enabled</description>
+receiver sets S1[IDLE]</description>
                      <bitOffset>3</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Idle detect ignored</description>
+                           <description>Idle chars ignored</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -669,7 +736,6 @@ Reads and writes of this register are also involved in the automatic flag cleari
                <description>Control Register 4</description>
                <addressOffset>0xA</addressOffset>
                <size>8</size>
-               <resetValue>0xF</resetValue>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>

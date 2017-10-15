@@ -74,7 +74,7 @@
       <xi:include href="peripherals/SMC_MKV10Z7.svd.xml"/>
       <xi:include href="peripherals/SPI0_MKV_PCSIS5.svd.xml"/>
       <xi:include href="peripherals/SYST.svd.xml"/>
-      <xi:include href="peripherals/UART0_MKV11Z7.svd.xml"/>
+      <xi:include href="peripherals/UART0_MKV10.svd.xml"/>
       <peripheral derivedFrom="UART0"><name>UART1</name><baseAddress>0x4006B000</baseAddress></peripheral>
       <xi:include href="peripherals/WDOG_MK.svd.xml"/>
    </peripherals>

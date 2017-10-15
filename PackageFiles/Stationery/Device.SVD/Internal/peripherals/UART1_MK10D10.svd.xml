@@ -1,11 +1,17 @@
 <!--
 Devices using this peripheral: 
+      MK10D5
+      MK10D7
       MK10D10
+      MK10DZ10
       MK11D5
       MK11DA5
       MK11D5WS
       MK12D5
+      MK20D5
+      MK20D7
       MK20D10
+      MK20DZ10
       MK21D5
       MK21DA5
       MK21D5WS
@@ -17,13 +23,24 @@ Devices using this peripheral:
       MK22F25612
       MK22F51212
       MK22FA12
+      MK30D7
       MK30D10
+      MK30DZ10
+      MK40D7
       MK40D10
+      MK40DZ10
+      MK50D7
       MK50D10
+      MK50DZ10
+      MK51D7
       MK51D10
+      MK51DZ10
       MK52D10
+      MK52DZ10
       MK53D10
+      MK53DZ10
       MK60D10
+      MK60DZ10
       MKV31F12810
       MKV31F25612
       MKV31F51212
@@ -490,18 +507,19 @@ RAF is cleared when the receiver detects an idle character</description>
                   <field>
                      <name>LBKDE</name>
                      <description>LIN Break Detection Enable\n
-Selects a longer break character detection length</description>
+Enables LIN break character detection.\n
+While LBKDE is set, S1[RDRF], S1[NF], S1[FE], and S1[PF] are prevented from setting</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Short Break detection\t- Break length of 10 bit times (C1[M] = 0), 11 (C1[M] = 1 and C4[M10] = 0), or 12 (C1[M] = 1, C4[M10] = 1, and S1[PE] = 1)</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Long Break detection\t- Break length of 11 bits times (if C1[M] = 0 or 12 bits time (if C1[M] = 1)</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

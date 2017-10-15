@@ -5891,7 +5891,7 @@ typedef struct {                                /*       SYST Structure         
 */
 
 /* ================================================================================ */
-/* ================           UART0 (file:UART0_MKV11Z7)           ================ */
+/* ================           UART0 (file:UART0_MKV10)             ================ */
 /* ================================================================================ */
 
 /**
@@ -6104,9 +6104,6 @@ typedef struct {                                /*       UART0 Structure        
 #define UART_C4_MAEN1_SHIFT                      (7U)                                                /*!< UART0_C4.MAEN1 Position                 */
 #define UART_C4_MAEN1(x)                         (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< UART0_C4.MAEN1 Field                    */
 /* ------- C5 Bit Fields                            ------ */
-#define UART_C5_LBKDDMAS_MASK                    (0x8U)                                              /*!< UART0_C5.LBKDDMAS Mask                  */
-#define UART_C5_LBKDDMAS_SHIFT                   (3U)                                                /*!< UART0_C5.LBKDDMAS Position              */
-#define UART_C5_LBKDDMAS(x)                      (((uint8_t)(((uint8_t)(x))<<3U))&0x8UL)             /*!< UART0_C5.LBKDDMAS Field                 */
 #define UART_C5_RDMAS_MASK                       (0x20U)                                             /*!< UART0_C5.RDMAS Mask                     */
 #define UART_C5_RDMAS_SHIFT                      (5U)                                                /*!< UART0_C5.RDMAS Position                 */
 #define UART_C5_RDMAS(x)                         (((uint8_t)(((uint8_t)(x))<<5U))&0x20UL)            /*!< UART0_C5.RDMAS Field                    */

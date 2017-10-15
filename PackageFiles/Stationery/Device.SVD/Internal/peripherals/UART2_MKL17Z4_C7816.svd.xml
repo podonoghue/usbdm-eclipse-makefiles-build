@@ -120,12 +120,12 @@ supply current. When BR is 1 - 8191, the UART baud rate equals BUSCLK/(16xBR)</d
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Parity disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Parity enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -217,7 +217,7 @@ Controls loop mode where transmitter output is internally connected to receiver 
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Loop mode\t output internally connected to input</description>
+                           <description>Loop mode\t where output internally connected to input</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -309,7 +309,7 @@ Normally, hardware wakes the receiver by automatically clearing RWU</description
                   <field>
                      <name>PF</name>
                      <description>Parity Error Flag\n
-PF is set when PE is set, S2[LBKDE] is disabled, and the parity of the received data does not match its parity bit.\n
+PF is set when PE is set and the parity of the received data does not match its parity bit.\n
 To clear PF, read S1 with PF set and then read D</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
@@ -524,6 +524,7 @@ Setting this field reverses the order of the bits that are transmitted and recei
                      <name>RXEDGIF</name>
                      <description>RxD Pin Active Edge Interrupt Flag\n
 RXEDGIF is set when an active edge occurs on the RxD pin.\n
+The active edge is falling if RXINV = 0, and rising if RXINV=1.\n
 RXEDGIF is cleared by writing a 1 to it</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
@@ -590,7 +591,7 @@ RXEDGIF is cleared by writing a 1 to it</description>
                   </field>
                   <field>
                      <name>TXDIR</name>
-                     <description>TxD Pin Direction in Single-Wire Mode</description>
+                     <description>Transmitter Pin Direction in Single-Wire mode</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -660,7 +661,6 @@ Reads and writes of this register are also involved in the automatic flag cleari
                <description>Control Register 4</description>
                <addressOffset>0xA</addressOffset>
                <size>8</size>
-               <resetValue>0xF</resetValue>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>

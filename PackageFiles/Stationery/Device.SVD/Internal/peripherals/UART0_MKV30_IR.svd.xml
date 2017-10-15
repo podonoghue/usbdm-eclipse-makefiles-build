@@ -1,30 +1,15 @@
 <!--
 Devices using this peripheral: 
-      MK10D5
-      MK10D7
-      MK10DZ10
-      MK20D5
-      MK20D7
-      MK20DZ10
-      MK30D7
-      MK30DZ10
-      MK40D7
-      MK40DZ10
-      MK50D7
-      MK50DZ10
-      MK51D7
-      MK51DZ10
-      MK52DZ10
-      MK53DZ10
-      MK60DZ10
+      MK02F12810
+      MKV30F12810
 -->
       <peripheral>
-         <?sourceFile "UART1_MK10D5" ?>
-         <name>UART1</name>
+         <?sourceFile "UART0_MKV30_IR" ?>
+         <name>UART0</name>
          <description>Universal Asynchronous Receiver/Transmitter</description>
          <groupName>UART</groupName>
-         <headerStructName>UART1</headerStructName>
-         <baseAddress>0x4006B000</baseAddress>
+         <headerStructName>UART</headerStructName>
+         <baseAddress>0x4006A000</baseAddress>
          <size>32</size>
          <access>read-write</access>
          <resetValue>0x0</resetValue>
@@ -57,6 +42,25 @@ UART baud rate generator. When BR is cleared, the UART baud rate generator is di
 supply current. When BR is 1 - 8191, the UART baud rate equals BUSCLK/(16xBR)</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>SBNS</name>
+                     <description>Stop Bit Number Select\n
+SBNS selects the number of stop bits present in a data frame</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>One stop bit</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Two stop bit</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>RXEDGIE</name>
@@ -477,7 +481,8 @@ RAF is cleared when the receiver detects an idle character</description>
                   <field>
                      <name>LBKDE</name>
                      <description>LIN Break Detection Enable\n
-Enables break character detection</description>
+Enables LIN break character detection.\n
+While LBKDE is set, S1[RDRF], S1[NF], S1[FE], and S1[PF] are prevented from setting</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>

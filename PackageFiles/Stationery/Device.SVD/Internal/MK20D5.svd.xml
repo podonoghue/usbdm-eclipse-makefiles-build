@@ -73,7 +73,7 @@
       <xi:include href="peripherals/TPIU_0.svd.xml"/>
       <xi:include href="peripherals/TSI0_MK.svd.xml"/>
       <xi:include href="peripherals/UART0_MK10D10_C7816_CEA709.svd.xml"/>
-      <xi:include href="peripherals/UART1_MK10D5.svd.xml"/>
+      <xi:include href="peripherals/UART1_MK10D10.svd.xml"/>
       <peripheral derivedFrom="UART1"><name>UART2</name><baseAddress>0x4006C000</baseAddress></peripheral>
       <xi:include href="peripherals/USB0_OTG_C.svd.xml"/>
       <xi:include href="peripherals/USBDCD_V1_1.svd.xml"/>

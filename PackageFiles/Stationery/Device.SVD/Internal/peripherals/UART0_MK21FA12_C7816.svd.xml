@@ -318,9 +318,9 @@ Normally, hardware wakes the receiver by automatically clearing RWU</description
                   <field derivedFrom="RE" > <name>ILIE</name> <description>Idle Line Interrupt Enable\n
 		  Enables the idle line flag, S1[IDLE], to generate interrupt requests , based on the state of C5[ILDMAS]</description> <bitOffset>4</bitOffset> </field>
                   <field derivedFrom="RE" > <name>RIE</name> <description>Receiver Full Interrupt/DMA requests\n
-		  Allows interrupt or DMA requests triggered by RDRF</description> <bitOffset>5</bitOffset> </field>
+                  Allows interrupt or DMA requests triggered by RDRF</description> <bitOffset>5</bitOffset> </field>
                   <field derivedFrom="RE" > <name>TCIE</name> <description>Transmission Complete Interrupt/DMA requests\n
-		  Allows interrupt or DMA requests triggered by TDRE</description> <bitOffset>6</bitOffset> </field>
+                  Allows interrupt or DMA requests triggered by TDRE</description> <bitOffset>6</bitOffset> </field>
                   <field derivedFrom="RE" > <name>TIE</name> <description>Transmitter Interrupt/DMA Transfer Enable</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
@@ -336,7 +336,7 @@ Normally, hardware wakes the receiver by automatically clearing RWU</description
                   <field>
                      <name>PF</name>
                      <description>Parity Error Flag\n
-PF is set when PE is set, S2[LBKDE] is disabled, and the parity of the received data does not match its parity bit.\n
+PF is set when PE is set and the parity of the received data does not match its parity bit.\n
 To clear PF, read S1 with PF set and then read D</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
@@ -479,7 +479,8 @@ RAF is cleared when the receiver detects an idle character</description>
                   <field>
                      <name>LBKDE</name>
                      <description>LIN Break Detection Enable\n
-Enables break character detection</description>
+Enables LIN break character detection.\n
+While LBKDE is set, S1[RDRF], S1[NF], S1[FE], and S1[PF] are prevented from setting</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -524,7 +525,7 @@ receiver sets S1[IDLE]</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Idle detect doesn&apos;t set S1.IDLE</description>
+                           <description>Idle chars ignored</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
