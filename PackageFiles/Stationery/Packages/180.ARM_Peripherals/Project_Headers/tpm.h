@@ -1145,17 +1145,6 @@ public:
    }
 
    /**
-    * Configures Pin Control Register (PCR) value for a TPM input to default values\n
-    * This will map the pin to the TPM function (mux value) \n
-    * The clock to the port will be enabled before changing the PCR
-    *
-    * @note Resets the Pin Control Register value (PCR value).
-    */
-   static void setInput() {
-      Pcr::setPCR(Info::info[channel].pcrValue);
-   }
-
-   /**
     * Set Pin Control Register (PCR) value \n
     * This will map the pin to the TPM function (mux value) \n
     * The clock to the port will be enabled before changing the PCR
@@ -1170,6 +1159,17 @@ public:
          PinSlewRate       pinSlewRate       = PinSlewRate_Fast
          ) {
       Pcr::setPCR(pinDriveStrength|pinDriveMode|pinSlewRate|(Info::info[channel].pcrValue&PORT_PCR_MUX_MASK));
+   }
+
+   /**
+    * Configures Pin Control Register (PCR) value for a TPM input to default values\n
+    * This will map the pin to the TPM function (mux value) \n
+    * The clock to the port will be enabled before changing the PCR
+    *
+    * @note Resets the Pin Control Register value (PCR value).
+    */
+   static void setInput() {
+      Pcr::setPCR(Info::info[channel].pcrValue);
    }
 
    /**

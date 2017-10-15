@@ -491,13 +491,14 @@ public:
     * @param[in] pinIrq           One of PinIrq_None, etc (defaults to PinIrq_None)
     * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
     */
-   template<LlwuPin pinNum>
-   static void configureInputPin(
+   template<LlwuPin llwuPin>
+   static void setInput(
          PinPull           pinPull,
          PinIrq            pinIrq            = PinIrq_None,
-         PinFilter         pinFilter         = PinFilter_None) {
-      using Pcr = PcrTable_T<Info, pinNum>;
-      Pcr::setPCR(pinPull|pinIrq|pinFilter|(Info::info[pinNum].pcrValue&PORT_PCR_MUX_MASK));
+         PinFilter         pinFilter         = PinFilter_None
+         ) {
+      using Pcr = PcrTable_T<Info, llwuPin>;
+      Pcr::setPCR(pinPull|pinIrq|pinFilter|(Info::info[llwuPin].pcrValue&PORT_PCR_MUX_MASK));
    }
 };
 

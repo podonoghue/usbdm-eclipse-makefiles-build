@@ -79,7 +79,7 @@ namespace USBDM {
  * @tparam bitNum          Bit number within PORT/GPIO
  * @tparam polarity        Polarity of pin. Either ActiveHigh or ActiveLow
  */
-template<uint32_t clockMask, uint32_t portAddress, uint32_t gpioAddress, int bitNum, Polarity polarity>
+template<uint32_t clockMask, uint32_t portAddress, IRQn_Type irqNum, uint32_t gpioAddress, int bitNum, Polarity polarity>
 class GpioBase_T {
 
 private:
@@ -92,7 +92,7 @@ private:
 
 public:
    /** PCR associated with this GPIO pin */
-   using Pcr = Pcr_T<clockMask, portAddress, bitNum, GPIO_DEFAULT_PCR>;
+   using Pcr = Pcr_T<clockMask, portAddress, irqNum, bitNum, GPIO_DEFAULT_PCR>;
 
    /** GPIO associated with this pin */
    static constexpr volatile GPIO_Type *gpio = reinterpret_cast<volatile GPIO_Type *>(gpioAddress);
@@ -585,7 +585,7 @@ public:
  * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
 template<class Info, const int bitNum, Polarity polarity>
-class  Gpio_T : public GpioBase_T<Info::clockMask, Info::portAddress, Info::gpioAddress, bitNum, polarity> {
+class  Gpio_T : public GpioBase_T<Info::pinInfo.clockMask, Info::pinInfo.portAddress, Info::pinInfo.irqNum, Info::pinInfo.gpioAddress, bitNum, polarity> {
 
    static_assert(((bitNum>=0)&&(bitNum<=31)), "Illegal bit number in Gpio");
 
@@ -601,7 +601,7 @@ public:
  * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
 template<class Info, const uint32_t index, Polarity polarity>
-using  GpioTable_T = GpioBase_T<Info::info[index].clockMask, Info::info[index].portAddress, Info::info[index].gpioAddress, Info::info[index].gpioBit, polarity>;
+using  GpioTable_T = GpioBase_T<Info::info[index].clockMask, Info::info[index].portAddress, Info::info[index].irqNum, Info::info[index].gpioAddress, Info::info[index].gpioBit, polarity>;
 
 /**
  * @brief Template representing a field within a port
@@ -884,7 +884,7 @@ public:
  * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
 template<int bitNum, Polarity polarity=ActiveHigh> class GpioA : public Gpio_T<GpioAInfo, bitNum, polarity> {};
-using PortA = PcrBase_T<GpioAInfo::portAddress>;
+using PortA = PcrBase_T<GpioAInfo::pinInfo.portAddress>;
 
 /**
  * @brief Convenience template for GpioA fields. See @ref Field_T
@@ -966,7 +966,7 @@ class GpioAField : public Field_T<GpioAInfo, left, right, polarity> {};
  * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
 template<int bitNum, Polarity polarity=ActiveHigh> class GpioB : public Gpio_T<GpioBInfo, bitNum, polarity> {};
-using PortB = PcrBase_T<GpioBInfo::portAddress>;
+using PortB = PcrBase_T<GpioBInfo::pinInfo.portAddress>;
 
 /**
  * @brief Convenience template for GpioB fields. See @ref Field_T
@@ -1048,7 +1048,7 @@ class GpioBField : public Field_T<GpioBInfo, left, right, polarity> {};
  * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
 template<int bitNum, Polarity polarity=ActiveHigh> class GpioC : public Gpio_T<GpioCInfo, bitNum, polarity> {};
-using PortC = PcrBase_T<GpioCInfo::portAddress>;
+using PortC = PcrBase_T<GpioCInfo::pinInfo.portAddress>;
 
 /**
  * @brief Convenience template for GpioC fields. See @ref Field_T
@@ -1130,7 +1130,7 @@ class GpioCField : public Field_T<GpioCInfo, left, right, polarity> {};
  * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
 template<int bitNum, Polarity polarity=ActiveHigh> class GpioD : public Gpio_T<GpioDInfo, bitNum, polarity> {};
-using PortD = PcrBase_T<GpioDInfo::portAddress>;
+using PortD = PcrBase_T<GpioDInfo::pinInfo.portAddress>;
 
 /**
  * @brief Convenience template for GpioD fields. See @ref Field_T
@@ -1212,7 +1212,7 @@ class GpioDField : public Field_T<GpioDInfo, left, right, polarity> {};
  * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
 template<int bitNum, Polarity polarity=ActiveHigh> class GpioE : public Gpio_T<GpioEInfo, bitNum, polarity> {};
-using PortE = PcrBase_T<GpioEInfo::portAddress>;
+using PortE = PcrBase_T<GpioEInfo::pinInfo.portAddress>;
 
 /**
  * @brief Convenience template for GpioE fields. See @ref Field_T

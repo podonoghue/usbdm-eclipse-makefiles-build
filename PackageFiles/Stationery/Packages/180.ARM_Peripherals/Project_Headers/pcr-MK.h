@@ -446,7 +446,7 @@ public:
  * @tparam bitNum          Bit number e.g. 3
  * @tparam defPcrValue     Default value for PCR (including MUX value)
  */
-template<uint32_t clockMask, uint32_t portAddress, int bitNum, PcrValue defPcrValue>
+template<uint32_t clockMask, uint32_t portAddress, IRQn_Type irqNum, int bitNum, PcrValue defPcrValue>
 class Pcr_T : public PcrBase_T<portAddress> {
 
 #ifdef DEBUG_BUILD
@@ -738,9 +738,7 @@ public:
     * @param[in]  nvicPriority  Interrupt priority
     */
    static NOINLINE_DEBUG void enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
-
-      constexpr IRQn_Type irqNum = (IRQn_Type)(PORTA_IRQn+((portAddress-PORTA_BasePtr)/(PORTB_BasePtr-PORTA_BasePtr)));
-
+      static_assert(irqNum>=0, "Pin does not support interrupts");
       if (enable) {
          // Set priority level
          NVIC_SetPriority(irqNum, nvicPriority);
@@ -870,7 +868,7 @@ void processPcrs(uint32_t pcrValue) {
  * @tparam index         Index of pin in configuration table
  */
 template<class Info, uint8_t index> using PcrTable_T =
-      Pcr_T<Info::info[index].clockMask, Info::info[index].portAddress, Info::info[index].gpioBit, Info::info[index].pcrValue>;
+      Pcr_T<Info::info[index].clockMask, Info::info[index].portAddress, Info::info[index].irqNum, Info::info[index].gpioBit, Info::info[index].pcrValue>;
 
 /**
  * @}

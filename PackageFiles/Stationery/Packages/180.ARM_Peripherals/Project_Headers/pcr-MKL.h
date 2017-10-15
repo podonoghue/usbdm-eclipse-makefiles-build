@@ -100,15 +100,42 @@ constexpr   int8_t INVALID_PCR          = 0xA5;
 constexpr   int8_t UNMAPPED_PCR         = 0xA4;
 
 /**
- * Struct for Pin Control Register information
+ * Port information
  * Information required to configure the PCR for a particular function
  */
-struct PcrInfo {
-   uint32_t clockMask;   //!< Clock mask for PORT
-   uint32_t portAddress; //!< Address of PORT hardware associated with pin
-   uint32_t gpioAddress; //!< Address of GPIO hardware associated with pin
-   int8_t   gpioBit;     //!< Bit number of pin in GPIO (-ve indicates unmapped/invalid)
-   uint32_t pcrValue;    //!< PCR value including MUX value to select this function
+class PortInfo {
+public:
+   const uint32_t  portAddress;   //!< Port hardware base pointer
+   const uint32_t  clockMask;     //!< Port clock mask
+   const IRQn_Type irqNum;        //!< Port interrupt number
+};
+
+/**
+ * Pin information
+ */
+class PinInfo {
+public:
+   const uint32_t   portAddress;  //!< Port hardware base pointer
+   const uint32_t   clockMask;    //!< Port clock mask
+   const IRQn_Type  irqNum;       //!< Port interrupt number
+   const uint32_t   gpioAddress;  //!< GPIO Hardware base pointer
+   const uint32_t   gpioBit;      //!< Bit number for pin
+   const uint32_t   pcrValue;     //!< Default PCR value for pin
+
+   /**
+    *
+    * @param portInfo      Describes port
+    * @param gpioAddress   Base address of associated GPIO
+    * @param bitNum        Bit number being modified
+    * @param pcrValue      Default PCR value for pin
+    */
+   constexpr PinInfo(
+         const PortInfo &portInfo,
+         uint32_t        gpioAddress,
+         int             gpioBit,
+         uint32_t        pcrValue) :
+                     portAddress(portInfo.portAddress), clockMask(portInfo.clockMask), irqNum(portInfo.irqNum),
+                     gpioAddress(gpioAddress), gpioBit(gpioBit), pcrValue(pcrValue) {}
 };
 
 #ifndef PORT_PCR_DSE
@@ -427,7 +454,7 @@ public:
  * @tparam bitNum          Bit number e.g. 3
  * @tparam defPcrValue     Default value for PCR (including MUX value)
  */
-template<uint32_t clockMask, uint32_t portAddress, int bitNum, PcrValue defPcrValue>
+template<uint32_t clockMask, uint32_t portAddress, IRQn_Type irqNum, int bitNum, PcrValue defPcrValue>
 class Pcr_T : public PcrBase_T<portAddress> {
 
 #ifdef DEBUG_BUILD
@@ -535,7 +562,8 @@ public:
    /**
     * @brief
     * Set subset of Pin Control Register Attributes associated with output direction \n
-    * Only specified attributes are changed.
+    * Only specified attributes are changed.\n
+    * Assumes clock to the port has already been enabled
     *
     * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
     * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain (defaults to PinPushPull)
@@ -554,7 +582,8 @@ public:
    /**
     * @brief
     * Set subset of Pin Control Register Attributes associated with input direction \n
-    * Only specified attributes are changed.
+    * Only specified attributes are changed.\n
+    * Assumes clock to the port has already been enabled.
     *
     * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
     * @param[in] pinIrq           One of PinIrq_None, etc (defaults to PinIrq_None)
@@ -747,9 +776,7 @@ public:
     * @param[in]  nvicPriority  Interrupt priority
     */
    static NOINLINE_DEBUG void enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
-
-      constexpr IRQn_Type irqNum = (IRQn_Type)(PORTA_IRQn+((portAddress-PORTA_BasePtr)/(PORTB_BasePtr-PORTA_BasePtr)));
-
+      static_assert(irqNum>=0, "Pin does not support interrupts");
       if (enable) {
          // Set priority level
          NVIC_SetPriority(irqNum, nvicPriority);
@@ -879,7 +906,7 @@ void processPcrs(uint32_t pcrValue) {
  * @tparam index         Index of pin in configuration table
  */
 template<class Info, uint8_t index> using PcrTable_T =
-      Pcr_T<Info::info[index].clockMask, Info::info[index].portAddress, Info::info[index].gpioBit, Info::info[index].pcrValue>;
+      Pcr_T<Info::info[index].clockMask, Info::info[index].portAddress, Info::info[index].irqNum, Info::info[index].gpioBit, Info::info[index].pcrValue>;
 
 /**
  * @}
