@@ -468,16 +468,19 @@ public:
     * Select VLP action on interrupt when in VLP modes (VLPR, VLPW or VLPS).
     *
     * @param[in]  smcExitVeryLowPowerOnInt Whether to exit from any VLP mode to RUN mode on interrupt
+    *
+    * @return E_NO_ERROR                 Success
+    * @return E_ILLEGAL_POWER_TRANSITION If not in RUN mode
     */
-   static void setExitVeryLowPowerOnInterrupt(SmcExitVeryLowPowerOnInt smcExitVeryLowPowerOnInt) {
-      if (smcExitVeryLowPowerOnInt) {
-         smc->PMCTRL |= SMC_PMCTRL_LPWUI_MASK;
+   static ErrorCode setExitVeryLowPowerOnInterrupt(SmcExitVeryLowPowerOnInt smcExitVeryLowPowerOnInt) {
+      if (getStatus() != SmcStatus_run) {
+         // Can only change in RUN mode
+         return setErrorCode(E_ILLEGAL_POWER_TRANSITION);
       }
-      else {
-         smc->PMCTRL &= ~SMC_PMCTRL_LPWUI_MASK;
-      }
+      smc->PMCTRL = (smc->PMCTRL&SMC_PMCTRL_STOPM_MASK) | smcExitVeryLowPowerOnInt;
       // Make sure write completes
       (void)smc->PMCTRL;
+      return E_NO_ERROR;
    }
 #else
    /**
@@ -485,9 +488,9 @@ public:
     *
     * @note Not supported on this target
     */
-   static void setExitVeryLowPowerOnInterrupt(SmcExitVeryLowPowerOnInt) {
+   static ErrorCode setExitVeryLowPowerOnInterrupt(SmcExitVeryLowPowerOnInt) {
+      return E_NO_ERROR;
    }
-
 #endif
 
    /**
