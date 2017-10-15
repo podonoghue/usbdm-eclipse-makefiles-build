@@ -90,4 +90,22 @@ extern "C" void __attribute__((constructor)) cpp_initialise() {
    }
 }
 
+/**
+ * Enable interrupts in NVIC
+ *
+ * @param[in]  irqNum        Interrupt number
+ * @param[in]  nvicPriority  Interrupt priority
+ */
+void enableNvicInterrupt(IRQn_Type irqNum, uint32_t nvicPriority) {
+
+      // Clear Pending interrupts
+      NVIC_ClearPendingIRQ(irqNum);
+
+      // Enable interrupts
+      NVIC_EnableIRQ(irqNum);
+
+      // Set priority level
+      NVIC_SetPriority(irqNum, nvicPriority);
+}
+
 } // end namespace USBDM
