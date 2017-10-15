@@ -44,7 +44,11 @@ int main() {
    RED_LED::setOutput();
 
    // Enable LPTMR in time counting mode
-   Lptmr0::setTimeCountingMode();
+   Lptmr0::configureTimeCountingMode(
+         LptmrResetOn_Compare,
+         LptmrInterrupt_Enable,
+         LptmrClockSel_mcgirclk);
+
    // Set clock source
    Lptmr0::setClock(LptmrClockSel_erclk32);
    // Set period of timer event
@@ -54,7 +58,8 @@ int main() {
    // This handler is set programmatically
    Lptmr0::setCallback(flash);
 #endif
-   Lptmr0::enableInterrupts();
+
+   Lptmr0::enableNvicInterrupts();
 
    // Check for errors so far
    checkError();
