@@ -165,6 +165,8 @@ Devices using this peripheral:
       </choiceOption>
    </category>
     
+   <stringOption name="Uart2Clock" value="SystemBusClock" constant="true" derived="true" />
+
    <template namespace="usbdm"><![CDATA[
       \t/**
       \t * USB full-speed clock sources
@@ -194,6 +196,15 @@ Devices using this peripheral:
       \t   return McgInfo::getMcgPclk();
       \t}\n\n
 
+      \t/** 
+      \t * Get UART2 input clock frequency
+      \t *
+      \t * return Clock frequency in Hz
+      \t */
+      \tstatic inline uint32_t getUart2Clock() {
+      \t   return $(Uart2Clock);
+      \t}\n\n
+   
       \t/**
       \t * Get LPUART0 input clock frequency
       \t *

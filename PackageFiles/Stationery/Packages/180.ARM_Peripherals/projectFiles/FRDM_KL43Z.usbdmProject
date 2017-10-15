@@ -52,7 +52,7 @@
    <item key="$signal$PTE31_muxSetting"                    value="mux1" />
    <item key="$signal$USB0_DM_descriptionSetting"          value="USB" />
    <item key="$signal$USB0_DP_descriptionSetting"          value="USB" />
-   <item key="/Console/console_device"                     value="USBDM::Lpuart0" />
+   <item key="/Console/consoleDevice"                     value="USBDM::Lpuart0" />
    <item key="/FTFA/peripheral_file"                       value="ftfa" />
    <item key="/FTFA/pflash_phrase_size"                    value="4" />
    <item key="/FTFA/pflash_sector_size"                    value="1024" />

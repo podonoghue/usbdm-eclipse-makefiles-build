@@ -579,7 +579,70 @@ Devices using this peripheral:
       \t   sim->SOPT7 = (sim->SOPT7&~(SIM_SOPT7_ADC0TRGSEL_MASK|SIM_SOPT7_ADC0ALTTRGEN_MASK))|simAdc0Trigger|simAdc0AltTrigger;
       \t};\n\n
    ]]></template>
+
+   <stringOption name="Uart0Clock" value="SystemCoreClock" constant="true" derived="true" />
+   <stringOption name="Uart1Clock" value="SystemCoreClock" constant="true" derived="true" />
+   <stringOption name="Uart2Clock" value="SystemBusClock"  constant="true" derived="true" />
+   <stringOption name="Uart3Clock" value="SystemBusClock"  constant="true" derived="true" />
+   <stringOption name="Uart4Clock" value="SystemBusClock"  constant="true" derived="true" />
+   <stringOption name="Uart5Clock" value="SystemBusClock"  constant="true" derived="true" />
    
+   <template><![CDATA[
+   \t/** 
+   \t * Clock frequency for UART 0
+   \t *
+   \t * return Clock frequency in Hz
+   \t */
+   \tstatic inline uint32_t getUart0Clock() {
+   \t   return $(Uart0Clock);
+   \t}\n\n
+   
+   \t/** 
+   \t * Clock frequency for UART 1
+   \t *
+   \t * return Clock frequency in Hz
+   \t */
+   \tstatic inline uint32_t getUart1Clock() {
+   \t   return $(Uart1Clock);
+   \t}\n\n
+   
+   \t/** 
+   \t * Clock frequency for UART 2
+   \t *
+   \t * return Clock frequency in Hz
+   \t */
+   \tstatic inline uint32_t getUart2Clock() {
+   \t   return $(Uart2Clock);
+   \t}\n\n
+
+   \t/** 
+   \t * Clock frequency for UART 3
+   \t *
+   \t * return Clock frequency in Hz
+   \t */
+   \tstatic inline uint32_t getUart3Clock() {
+   \t   return $(Uart3Clock);
+   \t}\n\n
+
+   \t/** 
+   \t * Clock frequency for UART 4
+   \t *
+   \t * return Clock frequency in Hz
+   \t */
+   \tstatic inline uint32_t getUart4Clock() {
+   \t   return $(Uart4Clock);
+   \t}\n\n
+
+   \t/** 
+   \t * Clock frequency for UART 5
+   \t *
+   \t * return Clock frequency in Hz
+   \t */
+   \tstatic inline uint32_t getUart5Clock() {
+   \t   return $(Uart5Clock);
+   \t}\n\n
+   ]]></template>
+
    <template namespace="usbdm"><![CDATA[
       \t/**
       \t * Select the ADC1 Trigger source in STOP and VLPS modes, or when ADC1 Alternative Trigger is active.

@@ -137,29 +137,24 @@ public:
     *
     * @param[in]  baudrate       Interface speed in bits-per-second
     * @param[in]  clockFrequency Frequency of UART clock
+    * @param[in]  oversample     Over-sample ratio to use when calculating divider
     */
-   void __attribute__((noinline)) setBaudRate(uint32_t baudrate, uint32_t clockFrequency) {
-      static constexpr uint32_t overSample = 8;
+   void __attribute__((noinline)) setBaudRate(uint32_t baudrate, uint32_t clockFrequency, uint32_t oversample) {
 
       // Disable UART before changing registers
       uint32_t ctrl = lpuart->CTRL;
-      lpuart->CTRL &= ~(LPUART_CTRL_TE_MASK | LPUART_CTRL_RE_MASK);
+      lpuart->CTRL = 0;
 
-      // Calculate UART clock setting
-      int scaledBaudValue = clockFrequency/(baudrate*overSample);
+      // Calculate UART clock setting with rounding
+      uint32_t divider = (clockFrequency<<1)/(oversample * baudrate);
+      divider = (divider>>1)|(divider&0b1);
 
       // Set Baud rate register
       lpuart->BAUD = (lpuart->BAUD&~(LPUART_BAUD_SBR_MASK|LPUART_BAUD_OSR_MASK))|
-            LPUART_BAUD_SBR(scaledBaudValue)|LPUART_BAUD_OSR(overSample-1);
+            LPUART_BAUD_SBR(divider)|LPUART_BAUD_OSR(oversample-1);
 
-#if USE_IRQ
-      // Enable UART Tx & Rx - with Rx IRQ
-      lpuart->CTRL  = LPUART_CTRL_TE_MASK|LPUART_CTRL_RE_MASK|LPUART_CTRL_RIE_MASK;
-      lpuart->CTRL |= LPUART_CTRL_TE_MASK|LPUART_CTRL_RE_MASK|LPUART_CTRL_RIE_MASK;
-#else
       // Restore configuration
       lpuart->CTRL = ctrl;
-#endif
    }
 
    /**
@@ -174,8 +169,8 @@ public:
    /**
     * Enable/disable an interrupt source
     *
-    * @param[in] lpuartInterrupt Interrupt source to modify
-    * @param[in] enable          True to enable, false to disable
+    * @param[in] uartInterrupt Interrupt source to modify
+    * @param[in] enable        True to enable, false to disable
     *
     * @note Changing the enabled interrupt functions may also affect the DMA settings
     */
@@ -191,8 +186,8 @@ public:
    /**
     * Enable/disable a DMA source
     *
-    * @param[in] lpuartDma  DMA source to modify
-    * @param[in] enable     True to enable, false to disable
+    * @param[in] uartDma  DMA source to modify
+    * @param[in] enable   True to enable, false to disable
     *
     * @note Changing the enabled DMA functions may also affect the interrupt settings
     */
@@ -294,7 +289,10 @@ public:
     * @param[in]  baudrate Interface speed in bits-per-second
     */
    void setBaudRate(unsigned baudrate) {
-      Lpuart::setBaudRate(baudrate, Info::getClockFrequency());
+      // Over-sample ratio
+      static constexpr uint32_t OVER_SAMPLE = Info::oversampleRatio;
+
+      Lpuart::setBaudRate(baudrate, Info::getClockFrequency(), OVER_SAMPLE);
    }
 
 protected:

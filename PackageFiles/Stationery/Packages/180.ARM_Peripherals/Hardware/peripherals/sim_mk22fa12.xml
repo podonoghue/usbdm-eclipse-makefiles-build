@@ -506,7 +506,40 @@ Devices using this peripheral:
       \t   sim->SOPT7 = (sim->SOPT7&~(SIM_SOPT7_ADC0TRGSEL_MASK|SIM_SOPT7_ADC0ALTTRGEN_MASK))|simAdc0Trigger|simAdc0AltTrigger;
       \t};\n\n
    ]]></template>
+
+   <stringOption name="Uart0Clock" value="SystemCoreClock" constant="true" derived="true" />
+   <stringOption name="Uart1Clock" value="SystemCoreClock" constant="true" derived="true" />
+   <stringOption name="Uart2Clock" value="SystemBusClock"  constant="true" derived="true" />
    
+   <template><![CDATA[
+   \t/** 
+   \t * Clock frequency for UART 0
+   \t *
+   \t * return Clock frequency in Hz
+   \t */
+   \tstatic inline uint32_t getUart0Clock() {
+   \t   return $(Uart0Clock);
+   \t}\n\n
+   
+   \t/** 
+   \t * Clock frequency for UART 1
+   \t *
+   \t * return Clock frequency in Hz
+   \t */
+   \tstatic inline uint32_t getUart1Clock() {
+   \t   return $(Uart1Clock);
+   \t}\n\n
+   
+   \t/** 
+   \t * Clock frequency for UART 2
+   \t *
+   \t * return Clock frequency in Hz
+   \t */
+   \tstatic inline uint32_t getUart2Clock() {
+   \t   return $(Uart2Clock);
+   \t}\n\n
+   ]]></template>
+
    <template namespace="usbdm"><![CDATA[
       \t/**
       \t * Select the ADC1 Trigger source in STOP and VLPS modes, or when ADC1 Alternative Trigger is active.
@@ -668,14 +701,14 @@ Devices using this peripheral:
                MCGOUTCLK clock is source. Default /2"
             value="1" offset="-1" min="1" max="16" />
       
-      <intOption name="sim_clkdiv1_outdiv3." 
-         derived="true"
-         constant="true"
-         description="Flexbus Clock Divider (OUTDIV3) - Divide by [1-16]"
-         toolTip="Clocks the flexbus interface [SIM_CLKDIV1_OUTDIV3]\n
-                  Divides MCGOUT Clock to generate system_flexbus_clock\n
-                  MCGOUTCLK clock is source. Default /2"
-         value="1" offset="-1" min="1" max="16" />
+         <intOption name="sim_clkdiv1_outdiv3." 
+            derived="true"
+            constant="true"
+            description="Flexbus Clock Divider (OUTDIV3) - Divide by [1-16]"
+            toolTip="Clocks the flexbus interface [SIM_CLKDIV1_OUTDIV3]\n
+                     Divides MCGOUT Clock to generate system_flexbus_clock\n
+                     MCGOUTCLK clock is source. Default /2"
+            value="1" offset="-1" min="1" max="16" />
    
          <intOption name="sim_clkdiv1_outdiv4." 
             derived="true"

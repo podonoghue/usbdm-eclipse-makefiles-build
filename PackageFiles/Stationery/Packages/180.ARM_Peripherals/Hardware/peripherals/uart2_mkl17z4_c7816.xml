@@ -3,5 +3,5 @@
 <!-- uart1_mkl14z4.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="uart1_mkl.xml"/>
+<xi:include href="uart_mk.xml"/>
 </fragment>

@@ -8,7 +8,7 @@
    <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_K28F" />
    <item key="$$DeviceInfo_Target_Device"                  value="FRDM_K28F" />
    <item key="$$Hardware_Source_Filename"                  value="MK28F15.usbdmHardware" />
-   <item key="/Console/console_device"                     value="USBDM::Lpuart0" />
+   <item key="/Console/consoleDevice"                     value="USBDM::Lpuart0" />
    <item key="/DMA0/NumChannels"                           value="16" />
    <item key="/FTFE/dflash_phrase_size"                    value="8" />
    <item key="/FTFE/dflash_sector_size"                    value="4096" />

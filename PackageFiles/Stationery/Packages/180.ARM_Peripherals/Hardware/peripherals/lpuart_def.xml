@@ -20,12 +20,23 @@ Devices using this peripheral:
       \tstatic constexpr bool mapPinsOnEnable = $(mapPinsOnEnable);\n\n
    ]]></template>
 
-   <aliasOption key="/SIM/sim_sopt2_pllfllsel" constant="false"  optional="true" /> 
-   <aliasOption key="/SIM/sim_sopt2_lpuartsrc" constant="false" optional="true" />
-   <aliasOption key="/SIM/system_lpuart_clock" optional="true"/>
-   <aliasOption key="/SIM/sim_sopt2_lpuart$(_instance)src" constant="false" optional="true" />
-   <aliasOption key="/SIM/sim_clkdiv3_pllfll" optional="true"/>
+   <aliasOption key="/SIM/sim_sopt2_pllfllsel"             optional="true" constant="false" /> 
+   <aliasOption key="/SIM/sim_sopt2_lpuartsrc"             optional="true" constant="false" />
+   <aliasOption key="/SIM/system_lpuart_clock" 	           optional="true" constant="false" />
+   <aliasOption key="/SIM/sim_sopt2_lpuart$(_instance)src" optional="true" constant="false" />
+   <aliasOption key="/SIM/sim_clkdiv3_pllfll"              optional="true"/>
    
+   <intOption name="oversampleRatio" description="Number of samples per bit" 
+      toolTip="This value determines the number of times an Rx bit is sampled.\n
+               This also affects the clock divider and hence the range of baud rates available."
+       value="8" min="4" max="32"
+      />
+
+   <template><![CDATA[
+   \t//! Number of samples per bit
+   \tstatic constexpr uint32_t oversampleRatio = $(oversampleRatio);\n\n
+   ]]></template>
+
    <choiceOption name="defaultBaudRate" 
       description="UART default baud rate"
       toolTip="Used by default UART setup for stdio">

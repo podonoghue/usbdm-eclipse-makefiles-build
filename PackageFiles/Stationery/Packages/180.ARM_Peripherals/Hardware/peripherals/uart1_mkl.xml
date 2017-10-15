@@ -20,13 +20,8 @@ Devices using this peripheral:
       \tstatic constexpr bool mapPinsOnEnable = $(mapPinsOnEnable);\n\n
    ]]></template>
 
-   <stringOption name="clockSource" 
-      description="UART Clock Select"
-      constant="true" 
-      value="SystemBusClock"
-      />
-   
-   <aliasOption key="/SIM/system_bus_clock" />
+   <aliasOption key="/SIM/sim_sopt2_uart$(_instance)src" optional="true" constant="false" />
+   <aliasOption key="/SIM/Uart$(_instance)Clock"         optional="true" />
    
    <choiceOption name="defaultBaudRate" 
       description="UART default baud rate"
@@ -51,8 +46,8 @@ Devices using this peripheral:
       description="Input buffering"
       toolTip="This option determines whether an interrupt-driven driver\n 
                incorporating a queue is used to buffer input data" >
-      <choice name="Unbuffered" value="Uart_T" />
-      <choice name="Buffered"   value="UartBuffered_T" />
+      <choice name="Unbuffered" value="Uart_basic_T" />
+      <choice name="Buffered"   value="UartBuffered_basic_T" />
    </binaryOption>
    
    <intOption name="receiveBufferSize" description="Size of input buffer" 
@@ -96,7 +91,8 @@ Devices using this peripheral:
        
    <intOption name="irqLevel" 
       description="IRQ Level in NVIC [0-15]"
-      toolTip="Sets the priority level used to configure the NVIC"
+      toolTip="Sets the priority level used to configure the NVIC\n
+               Lower numbers represent higher priorities"
       value="7" min="0" max="15" 
    />
 
@@ -132,8 +128,8 @@ Devices using this peripheral:
    \t *
    \t * @return Input clock frequency as a uint32_t in Hz
    \t */
-   \tstatic uint32_t getInputClockFrequency() {
-   \t   return $(clockSource:SystemBusClock);
+   \tstatic inline uint32_t getInputClockFrequency() {
+   \t   return SimInfo::getUart$(_instance)Clock();
    \t}\n\n
    ]]></template>
 

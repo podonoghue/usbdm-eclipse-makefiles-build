@@ -20,9 +20,20 @@ Devices using this peripheral:
       \tstatic constexpr bool mapPinsOnEnable = $(mapPinsOnEnable);\n\n
    ]]></template>
 
-   <aliasOption key="/SIM/sim_sopt2_uart$(_instance)src" optional="true" constant="false"  />
-   <aliasOption key="/SIM/system_uart$(_instance)_clock" optional="true" />
+   <aliasOption key="/SIM/sim_sopt2_uart$(_instance)src" optional="true" constant="false" />
+   <aliasOption key="/SIM/Uart$(_instance)Clock"         optional="true" />
    
+   <intOption name="oversampleRatio" description="Number of samples per bit" 
+      toolTip="This value determines the number of times an Rx bit is sampled.\n
+               This also affects the clock divider and hence the range of baud rates available."
+       value="8" min="4" max="32"
+      />
+
+   <template><![CDATA[
+   \t//! Number of samples per bit
+   \tstatic constexpr uint32_t oversampleRatio = $(oversampleRatio);\n\n
+   ]]></template>
+
    <choiceOption name="defaultBaudRate" 
       description="UART default baud rate"
       toolTip="Used by default UART setup for stdio">
@@ -46,8 +57,8 @@ Devices using this peripheral:
       description="Input buffering"
       toolTip="This option determines whether an interrupt-driven driver\n 
                incorporating a queue is used to buffer input data" >
-      <choice name="Unbuffered" value="Uart_T" />
-      <choice name="Buffered"   value="UartBuffered_T" />
+      <choice name="Unbuffered" value="Uart_osr_T" />
+      <choice name="Buffered"   value="UartBuffered_osr_T" />
    </binaryOption>
    
    <intOption name="receiveBufferSize" description="Size of input buffer" 
@@ -91,7 +102,8 @@ Devices using this peripheral:
        
    <intOption name="irqLevel" 
       description="IRQ Level in NVIC [0-15]"
-      toolTip="Sets the priority level used to configure the NVIC"
+      toolTip="Sets the priority level used to configure the NVIC\n
+               Lower numbers represent higher priorities"
       value="7" min="0" max="15" 
    />
 
@@ -127,8 +139,8 @@ Devices using this peripheral:
    \t *
    \t * @return Input clock frequency as a uint32_t in Hz
    \t */
-   \tstatic uint32_t getInputClockFrequency() {
-   \t   return SimInfo::getUart0Clock();
+   \tstatic inline uint32_t getInputClockFrequency() {
+   \t   return SimInfo::getUart$(_instance)Clock();
    \t}\n\n
    ]]></template>
 

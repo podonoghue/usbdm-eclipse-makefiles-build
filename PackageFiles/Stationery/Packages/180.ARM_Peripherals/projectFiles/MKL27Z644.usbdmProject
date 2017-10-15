@@ -8,7 +8,7 @@
    <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_KL27Z" />
    <item key="$$DeviceInfo_Target_Device"                  value="FRDM_KL27Z" />
    <item key="$$Hardware_Source_Filename"                  value="MKL27Z644.usbdmHardware" />
-   <item key="/Console/console_device"                     value="USBDM::Lpuart0" />
+   <item key="/Console/consoleDevice"                     value="USBDM::Lpuart0" />
    <item key="/FTFA/peripheral_file"                       value="ftfa" />
    <item key="/FTFA/pflash_phrase_size"                    value="4" />
    <item key="/FTFA/pflash_sector_size"                    value="1024" />

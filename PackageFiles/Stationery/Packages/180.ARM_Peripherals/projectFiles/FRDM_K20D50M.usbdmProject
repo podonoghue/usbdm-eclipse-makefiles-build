@@ -80,10 +80,7 @@
    <item key="/SIM/system_bus_clock[2]"                    value="40000000" />
    <item key="/SIM/system_core_clock[1]"                   value="4000000" />
    <item key="/SIM/system_core_clock[2]"                   value="40000000" />
-   <item key="/SIM/system_flash_clock[1]"                  value="4000000" />
+   <item key="/SIM/system_flash_clock[1]"                  value="1000000" />
    <item key="/SIM/system_flash_clock[2]"                  value="20000000" />
    <item key="/SIM/system_usbfs_clock"                     value="48000000" />
-   <item key="/UART0/clockSource"                          value="SystemCoreClock" />
-   <item key="/UART1/clockSource"                          value="SystemCoreClock" />
-   <item key="/UART2/clockSource"                          value="SystemBusClock" />
 </section>

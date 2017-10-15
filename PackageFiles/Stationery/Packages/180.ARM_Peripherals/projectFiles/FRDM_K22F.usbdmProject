@@ -67,7 +67,7 @@
    <item key="$signal$USB0_DM_descriptionSetting"          value="Reserved(USB_DM)" />
    <item key="$signal$USB0_DP_descriptionSetting"          value="Reserved(USB_DP)" />
    <item key="$signal$XTAL32_descriptionSetting"           value="Reserved(Crystal)" />
-   <item key="/Console/console_device"                     value="USBDM::Uart1" />
+   <item key="/Console/consoleDevice"                      value="USBDM::Uart1" />
    <item key="/DMA0/NumChannels"                           value="16" />
    <item key="/FTFA/peripheral_file"                       value="ftfa" />
    <item key="/FTFA/pflash_phrase_size"                    value="4" />

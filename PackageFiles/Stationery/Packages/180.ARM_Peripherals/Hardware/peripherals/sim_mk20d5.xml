@@ -369,6 +369,39 @@ Devices using this peripheral:
       \t};\n\n
    ]]></template>
 
+   <stringOption name="Uart0Clock" value="SystemCoreClock" constant="true" derived="true" />
+   <stringOption name="Uart1Clock" value="SystemCoreClock" constant="true" derived="true" />
+   <stringOption name="Uart2Clock" value="SystemBusClock"  constant="true" derived="true" />
+   
+   <template><![CDATA[
+      \t/** 
+      \t * Get UART0 input clock frequency
+      \t *
+      \t * return Clock frequency in Hz
+      \t */
+      \tstatic inline uint32_t getUart0Clock() {
+      \t   return $(Uart0Clock);
+      \t}\n\n
+      
+      \t/** 
+      \t * Get UART1 input clock frequency
+      \t *
+      \t * return Clock frequency in Hz
+      \t */
+      \tstatic inline uint32_t getUart1Clock() {
+      \t   return $(Uart1Clock);
+      \t}\n\n
+      
+      \t/** 
+      \t * Get UART2 input clock frequency
+      \t *
+      \t * return Clock frequency in Hz
+      \t */
+      \tstatic inline uint32_t getUart2Clock() {
+      \t   return $(Uart2Clock);
+      \t}\n\n
+   ]]></template>
+
    <choiceOption name="sim_clkdiv2_usb"
       description="USB clock divider" 
       toolTip="Sets the clock divider when the MCGFLLCLK, MCGPLLCLK, or IRC48M clock\n

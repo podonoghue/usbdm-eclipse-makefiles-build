@@ -20,7 +20,8 @@ Devices using this peripheral:
       \tstatic constexpr bool mapPinsOnEnable = $(mapPinsOnEnable);\n\n
    ]]></template>
 
-   <aliasOption key="clockSource" />
+   <aliasOption key="/SIM/sim_sopt2_uart$(_instance)src" optional="true" constant="false" />
+   <aliasOption key="/SIM/Uart$(_instance)Clock"         optional="true" />
    
    <choiceOption name="defaultBaudRate" 
       description="UART default baud rate"
@@ -45,8 +46,8 @@ Devices using this peripheral:
       description="Input buffering"
       toolTip="This option determines whether an interrupt-driven driver\n 
                incorporating a queue is used to buffer input data" >
-      <choice name="Unbuffered" value="Uart_T" />
-      <choice name="Buffered"   value="UartBuffered_T" />
+      <choice name="Unbuffered" value="Uart_brfa_T" />
+      <choice name="Buffered"   value="UartBuffered_brfa_T" />
    </binaryOption>
    
    <intOption name="receiveBufferSize" description="Size of input buffer" 
@@ -127,8 +128,8 @@ Devices using this peripheral:
    \t *
    \t * @return Input clock frequency as a uint32_t in Hz
    \t */
-   \tstatic uint32_t getInputClockFrequency() {
-   \t   return $(clockSource:SystemBusClock);
+   \tstatic inline uint32_t getInputClockFrequency() {
+   \t   return SimInfo::getUart$(_instance)Clock();
    \t}\n\n
    ]]></template>
 

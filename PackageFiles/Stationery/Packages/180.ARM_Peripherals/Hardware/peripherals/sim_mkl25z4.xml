@@ -146,6 +146,9 @@ Devices using this peripheral:
       \t};\n\n
    ]]></template>
    
+   <stringOption name="Uart1Clock" value="SystemBusClock" constant="true" derived="true" />
+   <stringOption name="Uart2Clock" value="SystemBusClock"  constant="true" derived="true" />
+   
    <template><![CDATA[
       \t/**
       \t * Set USB Full-speed clock source
@@ -194,6 +197,24 @@ Devices using this peripheral:
       \t   }
       \t}\n\n
 
+      \t/** 
+      \t * Clock frequency for UART 1
+      \t *
+      \t * return Clock frequency in Hz
+      \t */
+      \tstatic inline uint32_t getUart1Clock() {
+      \t   return $(Uart1Clock);
+      \t}\n\n
+   
+      \t/** 
+      \t * Clock frequency for UART 2
+      \t *
+      \t * return Clock frequency in Hz
+      \t */
+      \tstatic inline uint32_t getUart2Clock() {
+      \t   return $(Uart2Clock);
+      \t}\n\n
+   
       \t/**
       \t * Get TPM input clock frequency
       \t *

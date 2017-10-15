@@ -126,7 +126,6 @@ Devices using this peripheral:
       \t   SimPeripheralClockSource_McgPll = SIM_SOPT2_PLLFLLSEL(1), //!< MCG PLL Clock
       \t   SimPeripheralClockSource_Irc48m = SIM_SOPT2_PLLFLLSEL(3), //!< IRC 48MHz clock
       \t};\n\n
-
    ]]></template>
    
    <template><![CDATA[
@@ -407,6 +406,39 @@ Devices using this peripheral:
       \tstatic void setAdc0Triggers(SimAdc0AltTrigger simAdc0AltTrigger, SimAdc0Trigger simAdc0Trigger=SimAdc0Trigger_PdbExTrig) {
       \t   sim->SOPT7 = (sim->SOPT7&~(SIM_SOPT7_ADC0TRGSEL_MASK|SIM_SOPT7_ADC0ALTTRGEN_MASK))|simAdc0Trigger|simAdc0AltTrigger;
       \t};\n\n
+   ]]></template>
+
+   <stringOption name="Uart0Clock" value="SystemCoreClock" constant="true" derived="true" />
+   <stringOption name="Uart1Clock" value="SystemCoreClock" constant="true" derived="true" />
+   <stringOption name="Uart2Clock" value="SystemBusClock"  constant="true" derived="true" />
+   
+   <template><![CDATA[
+   \t/** 
+   \t * Clock frequency for UART 0
+   \t *
+   \t * return Clock frequency in Hz
+   \t */
+   \tstatic inline uint32_t getUart0Clock() {
+   \t   return $(Uart0Clock);
+   \t}\n\n
+   
+   \t/** 
+   \t * Clock frequency for UART 1
+   \t *
+   \t * return Clock frequency in Hz
+   \t */
+   \tstatic inline uint32_t getUart1Clock() {
+   \t   return $(Uart1Clock);
+   \t}\n\n
+   
+   \t/** 
+   \t * Clock frequency for UART 2
+   \t *
+   \t * return Clock frequency in Hz
+   \t */
+   \tstatic inline uint32_t getUart2Clock() {
+   \t   return $(Uart2Clock);
+   \t}\n\n
    ]]></template>
 
    <choiceOption name="sim_clkdiv2_usb"

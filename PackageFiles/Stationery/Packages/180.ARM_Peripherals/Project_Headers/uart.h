@@ -136,35 +136,74 @@ public:
    virtual ~Uart() {
    }
 
+#ifdef UART_C4_BRFA_MASK
    /**
-    * Set baud factor value for interface
+    * Set baud factor value for interface.
+    * For UARTS with baud rate fraction adjust (BRFA) support.
     *
     * This is calculated from baud rate and UART clock frequency
     *
     * @param[in]  baudrate       Interface speed in bits-per-second
     * @param[in]  clockFrequency Frequency of UART clock
     */
-   void __attribute__((noinline)) setBaudRate(uint32_t baudrate, uint32_t clockFrequency) {
+   void __attribute__((noinline)) setBaudRate_brfa(uint32_t baudrate, uint32_t clockFrequency) {
 
+      /*
+       * Baudrate = clockFrequency / (OSR x (SBR + BRFD))
+       * Fixed OSR = 16
+       *
+       * (OSR x (SBR + BRFD/32)) = clockFrequency/Baudrate
+       * (SBR + BRFD/32) = clockFrequency/(Baudrate*OSR)
+       * 32*SBR + BRFD = 2*clockFrequency/Baudrate
+       * SBR  = (2*clockFrequency/Baudrate)>>5
+       * BRFD = (2*clockFrequency/Baudrate)&0x1F
+       */
       // Disable UART before changing registers
       uint8_t c2Value = uart->C2;
       uart->C2 = 0;
 
       // Calculate UART clock setting (5-bit fraction at right)
-      int scaledBaudValue = (2*clockFrequency)/baudrate;
+      int divider = (2*clockFrequency)/baudrate;
 
-#ifdef UART_C4_BRFA_MASK
       // Set Baud rate register
-      uart->BDH = (uart->BDH&~UART_BDH_SBR_MASK) | UART_BDH_SBR((scaledBaudValue>>(8+5)));
-      uart->BDL = UART_BDL_SBR(scaledBaudValue>>5);
+      uart->BDH = (uart->BDH&~UART_BDH_SBR_MASK) | UART_BDH_SBR((divider>>(8+5)));
+      uart->BDL = UART_BDL_SBR(divider>>5);
       // Fractional divider to get closer to the baud rate
-      uart->C4 = (uart->C4&~UART_C4_BRFA_MASK) | UART_C4_BRFA(scaledBaudValue);
-#else
-      scaledBaudValue += 1<<4; // Round value
-      // Set Baud rate register
-      uart->BDH = (uart->BDH&~UART_BDH_SBR_MASK) | UART_BDH_SBR((scaledBaudValue>>(8+5)));
-      uart->BDL = UART_BDL_SBR(scaledBaudValue>>5);
+      uart->C4 = (uart->C4&~UART_C4_BRFA_MASK) | UART_C4_BRFA(divider);
+
+      // Restore UART settings
+      uart->C2 = c2Value;
+   }
 #endif
+
+   /**
+    * Set baud factor value for interface.
+    * For basic UARTS.
+    *
+    * This is calculated from baud rate and UART clock frequency
+    *
+    * @param[in]  baudrate       Interface speed in bits-per-second
+    * @param[in]  clockFrequency Frequency of UART clock
+    * @param[in]  oversample     Over-sample ratio to use when calculating divider
+    */
+   void __attribute__((noinline)) setBaudRate_basic(uint32_t baudrate, uint32_t clockFrequency, uint32_t oversample) {
+
+      /*
+       * Baudrate = ClockFrequency / (OverSample x Divider)
+       * Divider = ClockFrequency / (OverSample x Baudrate)
+       */
+
+      // Disable UART before changing registers
+      uint8_t c2Value = uart->C2;
+      uart->C2 = 0;
+
+      // Calculate UART divider with rounding
+      uint32_t divider = (clockFrequency<<1)/(oversample * baudrate);
+      divider = (divider>>1)|(divider&0b1);
+
+      // Set Baud rate register
+      uart->BDH = (uart->BDH&~UART_BDH_SBR_MASK) | UART_BDH_SBR((divider>>8));
+      uart->BDL = UART_BDL_SBR(divider);
 
       // Restore UART settings
       uart->C2 = c2Value;
@@ -287,18 +326,14 @@ public:
 
    /**
     * Construct UART interface
-    *
-    * @param[in]  baudrate         Interface speed in bits-per-second
     */
-   Uart_T(unsigned baudrate=Info::defaultBaudRate) : Uart(Info::uart) {
+   Uart_T() : Uart(Info::uart) {
       // Enable clock to UART interface
       *Info::clockReg |= Info::clockMask;
 
       if (Info::mapPinsOnEnable) {
          configureAllPins();
       }
-
-      setBaudRate(baudrate);
 
       uart->C2 = UART_C2_TE(1)|UART_C2_RE(1);
    }
@@ -308,22 +343,11 @@ public:
     */
    ~Uart_T() {}
 
-   /**
-    * Set baud factor value for interface
-    *
-    * This is calculated from baud rate and LPUART clock frequency
-    *
-    * @param[in]  baudrate Interface speed in bits-per-second
-    */
-   void INLINE_RELEASE setBaudRate(unsigned baudrate) {
-      Uart::setBaudRate(baudrate, Info::getInputClockFrequency());
-   }
-
 protected:
    /**
     * Clear UART error status
     */
-   virtual void clearError() {
+   virtual void clearError() override {
       if (Info::statusNeedsWrite) {
          uart->S1 = 0xFF;
       }
@@ -399,6 +423,102 @@ public:
 template<class Info> UARTCallbackFunction Uart_T<Info>::rxTxCallback  = unexpectedInterrupt;
 template<class Info> UARTCallbackFunction Uart_T<Info>::errorCallback = unexpectedInterrupt;
 
+#ifdef UART_C4_BRFA_MASK
+template<class Info> class Uart_brfa_T : public Uart_T<Info> {
+public:
+   /**
+    * Construct UART interface
+    *
+    * @param[in]  baudrate         Interface speed in bits-per-second
+    */
+   Uart_brfa_T(unsigned baudrate=Info::defaultBaudRate) : Uart_T<Info>() {
+      setBaudRate(baudrate);
+   }
+   /**
+    * Destructor
+    */
+   virtual ~Uart_brfa_T() {
+   }
+   /**
+    * Set baud factor value for interface
+    *
+    * This is calculated from baud rate and LPUART clock frequency
+    *
+    * @param[in]  baudrate Interface speed in bits-per-second
+    */
+   virtual void setBaudRate(unsigned baudrate) override {
+      Uart::setBaudRate_brfa(baudrate, Info::getInputClockFrequency());
+   }
+};
+#endif
+
+#ifdef UART_C4_OSR_MASK
+template<class Info> class Uart_osr_T : public Uart_T<Info> {
+
+   using Uart_T<Info>::uart;
+
+public:
+   /**
+    * Construct UART interface
+    *
+    * @param[in]  baudrate         Interface speed in bits-per-second
+    */
+   Uart_osr_T(unsigned baudrate=Info::defaultBaudRate) : Uart_T<Info>() {
+      setBaudRate(baudrate);
+   }
+   /**
+    * Destructor
+    */
+   virtual ~Uart_osr_T() {
+   }
+   /**
+    * Set baud factor value for interface
+    *
+    * This is calculated from baud rate and LPUART clock frequency
+    *
+    * @param[in]  baudrate Interface speed in bits-per-second
+    */
+   virtual void setBaudRate(unsigned baudrate) override {
+      static constexpr int OVER_SAMPLE = Info::oversampleRatio;
+
+      // Set oversample ratio
+      uart->C4 = (uart->C4&~UART_C4_OSR_MASK)|(OVER_SAMPLE-1);
+
+      Uart::setBaudRate_basic(baudrate, Info::getInputClockFrequency(), OVER_SAMPLE);
+   }
+};
+#endif
+
+template<class Info> class Uart_basic_T : public Uart_T<Info> {
+public:
+   /**
+    * Construct UART interface
+    *
+    * @param[in]  baudrate         Interface speed in bits-per-second
+    */
+   Uart_basic_T(unsigned baudrate=Info::defaultBaudRate) : Uart_T<Info>() {
+      setBaudRate(baudrate);
+   }
+   /**
+    * Destructor
+    */
+   virtual ~Uart_basic_T() {
+   }
+   /**
+    * Set baud factor value for interface
+    *
+    * This is calculated from baud rate and LPUART clock frequency
+    *
+    * @param[in]  baudrate Interface speed in bits-per-second
+    */
+   virtual void setBaudRate(unsigned baudrate) override {
+      // Over-sample ratio - fixed in hardware
+      static constexpr int OVER_SAMPLE = 16;
+
+      Uart::setBaudRate_basic(baudrate, Info::getInputClockFrequency(), OVER_SAMPLE);
+   }
+};
+
 /**
  * @brief Template class representing an UART interface with buffered reception
  *
@@ -420,7 +540,7 @@ class UartBuffered_T : public Uart_T<Info> {
 public:
    using Uart_T<Info>::uart;
 
-   UartBuffered_T(unsigned baudrate=Info::defaultBaudRate) : Uart_T<Info>(baudrate) {
+   UartBuffered_T() : Uart_T<Info>() {
       Uart::enableInterrupt(UartInterrupt_RxFull);
       Uart_T<Info>::enableNvicInterrupts();
    }
@@ -533,6 +653,105 @@ public:
 
 };
 
+#ifdef UART_C4_BRFA_MASK
+template<class Info, int rxSize=Info::receiveBufferSize, int txSize=Info::transmitBufferSize>
+class UartBuffered_brfa_T : public UartBuffered_T<Info, rxSize, txSize> {
+public:
+   /**
+    * Construct UART interface
+    *
+    * @param[in]  baudrate         Interface speed in bits-per-second
+    */
+   UartBuffered_brfa_T(unsigned baudrate=Info::defaultBaudRate) : UartBuffered_T<Info, rxSize, txSize>() {
+      setBaudRate(baudrate);
+   }
+   /**
+    * Destructor
+    */
+   virtual ~UartBuffered_brfa_T() {
+   }
+   /**
+    * Set baud factor value for interface
+    *
+    * This is calculated from baud rate and LPUART clock frequency
+    *
+    * @param[in]  baudrate Interface speed in bits-per-second
+    */
+   virtual void setBaudRate(unsigned baudrate) override {
+      Uart::setBaudRate_brfa(baudrate, Info::getInputClockFrequency());
+   }
+};
+#endif
+
+#ifdef UART_C4_OSR_MASK
+template<class Info, int rxSize=Info::receiveBufferSize, int txSize=Info::transmitBufferSize>
+class UartBuffered_osr_T : public UartBuffered_T<Info, rxSize, txSize> {
+
+   using UartBuffered_T<Info, rxSize, txSize>::uart;
+
+public:
+   /**
+    * Construct UART interface
+    *
+    * @param[in]  baudrate         Interface speed in bits-per-second
+    */
+   UartBuffered_osr_T(unsigned baudrate=Info::defaultBaudRate) : UartBuffered_T<Info, rxSize, txSize>() {
+      setBaudRate(baudrate);
+   }
+   /**
+    * Destructor
+    */
+   virtual ~UartBuffered_osr_T() {
+   }
+   /**
+    * Set baud factor value for interface
+    *
+    * This is calculated from baud rate and LPUART clock frequency
+    *
+    * @param[in]  baudrate Interface speed in bits-per-second
+    */
+   virtual void setBaudRate(unsigned baudrate) override {
+      static constexpr int OVER_SAMPLE = Info::oversampleRatio;
+
+      // Set oversample ratio
+      uart->C4 = (uart->C4&~UART_C4_OSR_MASK)|(OVER_SAMPLE-1);
+
+      Uart::setBaudRate_basic(baudrate, Info::getInputClockFrequency(), OVER_SAMPLE);
+   }
+};
+#endif
+
+template<class Info, int rxSize=Info::receiveBufferSize, int txSize=Info::transmitBufferSize>
+class UartBuffered_basic_T : public UartBuffered_T<Info, rxSize, txSize> {
+public:
+   /**
+    * Construct UART interface
+    *
+    * @param[in]  baudrate         Interface speed in bits-per-second
+    */
+   UartBuffered_basic_T(unsigned baudrate=Info::defaultBaudRate) : UartBuffered_T<Info, rxSize, txSize>() {
+      setBaudRate(baudrate);
+   }
+   /**
+    * Destructor
+    */
+   virtual ~UartBuffered_basic_T() {
+   }
+   /**
+    * Set baud factor value for interface
+    *
+    * This is calculated from baud rate and LPUART clock frequency
+    *
+    * @param[in]  baudrate Interface speed in bits-per-second
+    */
+   virtual void setBaudRate(unsigned baudrate) override {
+      // Over-sample ratio - fixed in hardware
+      static constexpr int OVER_SAMPLE = 16;
+
+      Uart::setBaudRate_basic(baudrate, Info::getInputClockFrequency(), OVER_SAMPLE);
+   }
+};
+
 template<class Info, int rxSize, int txSize> Queue<char, rxSize> UartBuffered_T<Info, rxSize, txSize>::rxQueue;
 template<class Info, int rxSize, int txSize> Queue<char, txSize> UartBuffered_T<Info, rxSize, txSize>::txQueue;
 
@@ -550,7 +769,7 @@ template<class Info, int rxSize, int txSize> Queue<char, txSize> UartBuffered_T<
  *  }
  *  @endcode
  */
-typedef  $(/UART0/uartClass:Uart_T)<Uart0Info> Uart0;
+typedef  $(/UART0/uartClass)<Uart0Info> Uart0;
 #endif
 
 #ifdef USBDM_UART1_IS_DEFINED
@@ -567,7 +786,7 @@ typedef  $(/UART0/uartClass:Uart_T)<Uart0Info> Uart0;
  *  }
  *  @endcode
  */
-typedef  $(/UART1/uartClass:Uart_T)<Uart1Info> Uart1;
+typedef  $(/UART1/uartClass)<Uart1Info> Uart1;
 #endif
 
 #ifdef USBDM_UART2_IS_DEFINED
@@ -584,7 +803,7 @@ typedef  $(/UART1/uartClass:Uart_T)<Uart1Info> Uart1;
  *  }
  *  @endcode
  */
-typedef  $(/UART2/uartClass:Uart_T)<Uart2Info> Uart2;
+typedef  $(/UART2/uartClass)<Uart2Info> Uart2;
 #endif
 
 #ifdef USBDM_UART3_IS_DEFINED
@@ -601,7 +820,7 @@ typedef  $(/UART2/uartClass:Uart_T)<Uart2Info> Uart2;
  *  }
  *  @endcode
  */
-typedef  $(/UART3/uartClass:Uart_T)<Uart3Info> Uart3;
+typedef  $(/UART3/uartClass)<Uart3Info> Uart3;
 #endif
 
 #ifdef USBDM_UART4_IS_DEFINED
@@ -618,7 +837,24 @@ typedef  $(/UART3/uartClass:Uart_T)<Uart3Info> Uart3;
  *  }
  *  @endcode
  */
-typedef  $(/UART4/uartClass:Uart_T)<Uart4Info> Uart4;
+typedef  $(/UART4/uartClass)<Uart4Info> Uart4;
+#endif
+
+#ifdef USBDM_UART5_IS_DEFINED
+/**
+ * @brief Class representing UART5 interface
+ *
+ * <b>Example</b>
+ * @code
+ *  // Instantiate interface
+ *  USBDM::Uart5 uart;
+ *
+ *  for(int i=0; i++;) {
+ *     uart<<"Hello world, i="<<i<<"\n";
+ *  }
+ *  @endcode
+ */
+typedef  $(/UART5/uartClass)<Uart5Info> Uart5;
 #endif
 
 /**
