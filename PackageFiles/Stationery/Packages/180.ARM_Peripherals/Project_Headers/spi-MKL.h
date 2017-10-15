@@ -143,7 +143,7 @@ public:
     *  Transmit and receive a series of bytes
     *
     *  @param dataSize  Number of bytes to transfer
-    *  @param txData   Transmit bytes (may be NULL for Rx only)
+    *  @param txData    Transmit bytes (may be NULL for Rx only)
     *  @param rxData    Receive byte buffer (may be NULL for Tx only)
     *
     *  Note: rxData may use same buffer as txData
@@ -152,7 +152,7 @@ public:
    /**
     * Transmit and receive an 8-bit value over SPI
     *
-    * @param data - Data to send
+    * @param data Data to send
     *
     * @return Data received
     */

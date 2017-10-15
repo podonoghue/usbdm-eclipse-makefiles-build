@@ -644,21 +644,17 @@ class Field_T {
    static_assert(((left<=31)&&(left>=right)&&(right>=0)), "Illegal bit number for left or right in GpioField");
 
 private:
-   static constexpr volatile GPIO_Type *gpio = reinterpret_cast<volatile GPIO_Type *>(Info::gpioAddress);
+   static constexpr volatile GPIO_Type *gpio = reinterpret_cast<volatile GPIO_Type *>(Info::pinInfo.gpioAddress);
 
 #ifdef PORT_DFCR_CS_MASK
-   static constexpr volatile PORT_DFER_Type *port = reinterpret_cast<volatile PORT_DFER_Type *>(Info::portAddress);
+   static constexpr volatile PORT_DFER_Type *port = reinterpret_cast<volatile PORT_DFER_Type *>(Info::pinInfo.portAddress);
 #else
-   static constexpr volatile PORT_Type *port = reinterpret_cast<volatile PORT_Type *>(Info::portAddress);
+   static constexpr volatile PORT_Type *port = reinterpret_cast<volatile PORT_Type *>(Info::pinInfo.portAddress);
 #endif
    /**
     * Mask for the bits being manipulated
     */
    static constexpr uint32_t MASK = ((1<<(left-right+1))-1)<<right;
-   /**
-    * Clock register
-    */
-   static constexpr volatile uint32_t *clockReg = reinterpret_cast<volatile uint32_t *>(Info::clockReg);
 
 public:
    /**
@@ -668,7 +664,7 @@ public:
     */
    static void setPCRs(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
       // Enable clock to GPCLR & GPCHR
-      *clockReg |= Info::clockMask;
+      enablePortClocks(Info::pinInfo.clockMask);
 
       // Include the if's as I expect one branch to be removed by optimization unless the field spans the boundary
       if ((MASK&0xFFFFUL) != 0) {

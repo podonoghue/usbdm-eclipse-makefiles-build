@@ -24,6 +24,15 @@
  * Default port information
  */
 namespace USBDM {
+
+/**
+ * Enable interrupts in NVIC
+ *
+ * @param[in]  irqNum        Interrupt number
+ * @param[in]  nvicPriority  Interrupt priority
+ */
+void enableNvicInterrupt(IRQn_Type irqNum, uint32_t nvicPriority=NvicPriority_Normal);
+
 /**
  * @addtogroup PeripheralPinTables Peripheral Information Classes
  * @brief Provides information about pins used by a peripheral
@@ -118,7 +127,7 @@ public:
     *
     * @param portInfo      Describes port
     * @param gpioAddress   Base address of associated GPIO
-    * @param bitNum        Bit number being modified
+    * @param gpioBit       Bit number GPIO being modified
     * @param pcrValue      Default PCR value for pin
     */
    constexpr PinInfo(
@@ -554,7 +563,8 @@ public:
    /**
     * @brief
     * Set subset of Pin Control Register Attributes associated with output direction \n
-    * Only specified attributes are changed.
+    * Only specified attributes are changed.\n
+    * Assumes clock to the port has already been enabled
     *
     * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
     * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain (defaults to PinPushPull)
@@ -573,7 +583,8 @@ public:
    /**
     * @brief
     * Set subset of Pin Control Register Attributes associated with input direction \n
-    * Only specified attributes are changed.
+    * Only specified attributes are changed.\n
+    * Assumes clock to the port has already been enabled.
     *
     * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
     * @param[in] pinIrq           One of PinIrq_None, etc (defaults to PinIrq_None)
@@ -740,12 +751,7 @@ public:
    static NOINLINE_DEBUG void enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
       static_assert(irqNum>=0, "Pin does not support interrupts");
       if (enable) {
-         // Set priority level
-         NVIC_SetPriority(irqNum, nvicPriority);
-         // Clear pending interrupts
-         NVIC_ClearPendingIRQ(irqNum);
-         // Enable interrupts
-         NVIC_EnableIRQ(irqNum);
+         enableNvicInterrupt(irqNum, nvicPriority);
       }
       else {
          // Disable interrupts

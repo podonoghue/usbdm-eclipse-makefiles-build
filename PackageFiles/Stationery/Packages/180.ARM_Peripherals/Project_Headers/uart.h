@@ -406,11 +406,7 @@ public:
    static void enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
 
       if (enable) {
-         // Enable interrupts
-         NVIC_EnableIRQ(Info::irqNums[0]);
-
-         // Set priority level
-         NVIC_SetPriority(Info::irqNums[0], nvicPriority);
+         enableNvicInterrupt(Info::irqNums[0], nvicPriority);
       }
       else {
          // Disable interrupts
@@ -442,7 +438,7 @@ public:
    /**
     * Set baud factor value for interface
     *
-    * This is calculated from baud rate and LPUART clock frequency
+    * This is calculated from baud rate and UART clock frequency
     *
     * @param[in]  baudrate Interface speed in bits-per-second
     */
@@ -474,7 +470,7 @@ public:
    /**
     * Set baud factor value for interface
     *
-    * This is calculated from baud rate and LPUART clock frequency
+    * This is calculated from baud rate and UART clock frequency
     *
     * @param[in]  baudrate Interface speed in bits-per-second
     */
@@ -507,7 +503,7 @@ public:
    /**
     * Set baud factor value for interface
     *
-    * This is calculated from baud rate and LPUART clock frequency
+    * This is calculated from baud rate and UART clock frequency
     *
     * @param[in]  baudrate Interface speed in bits-per-second
     */
@@ -525,7 +521,7 @@ public:
  * <b>Example</b>
  * @code
  *  // Instantiate interface
- *  Uart *uart0 = new USBDM::Uart_T<Uart0Info>(115200);
+ *  Uart *uart0 = new USBDM::UartBuffered_T<Uart0Info, 20, 30>(115200);
  *
  *  for(int i=0; i++;) {
  *     uart<<"Hello world, i="<<i<<"\n";

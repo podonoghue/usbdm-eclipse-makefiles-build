@@ -230,16 +230,9 @@ public:
       // Clear pending to avoid POR interrupt
       NVIC_ClearPendingIRQ(Info::irqNums[0]);
       if (enable) {
-         // Enable interrupts
-         NVIC_EnableIRQ(Info::irqNums[0]);
-
-         // Set priority level
-         NVIC_SetPriority(Info::irqNums[0], nvicPriority);
+         enableNvicInterrupt(Info::irqNums[0], nvicPriority);
          if (Info::irqCount>1) {
-            // Enable interrupts
-            NVIC_EnableIRQ(Info::irqNums[1]);
-            // Set priority level
-            NVIC_SetPriority(Info::irqNums[1], nvicPriority);
+            enableNvicInterrupt(Info::irqNums[1], nvicPriority);
          }
       }
       else {

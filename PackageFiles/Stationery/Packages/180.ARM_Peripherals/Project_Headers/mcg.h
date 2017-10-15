@@ -111,11 +111,7 @@ public:
    static void enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
 
       if (enable) {
-         // Enable interrupts
-         NVIC_EnableIRQ(McgInfo::irqNums[0]);
-
-         // Set priority level
-         NVIC_SetPriority(McgInfo::irqNums[0], nvicPriority);
+         enableNvicInterrupt(McgInfo::irqNums[0], nvicPriority);
       }
       else {
          // Disable interrupts

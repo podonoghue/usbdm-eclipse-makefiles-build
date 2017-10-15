@@ -519,11 +519,7 @@ public:
 
       IRQn_Type irqNum = (IRQn_Type)(Info::irqNums[0] + channel&(Info::irqCount-1));
       if (enable) {
-         // Enable interrupts
-         NVIC_EnableIRQ(irqNum);
-
-         // Set priority level
-         NVIC_SetPriority(irqNum, nvicPriority);
+         enableNvicInterrupt(irqNum, nvicPriority);
       }
       else {
          // Disable interrupts

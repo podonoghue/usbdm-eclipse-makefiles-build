@@ -740,12 +740,7 @@ public:
    static NOINLINE_DEBUG void enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
       static_assert(irqNum>=0, "Pin does not support interrupts");
       if (enable) {
-         // Set priority level
-         NVIC_SetPriority(irqNum, nvicPriority);
-         // Clear pending interrupts
-         NVIC_ClearPendingIRQ(irqNum);
-         // Enable interrupts
-         NVIC_EnableIRQ(irqNum);
+         enableNvicInterrupt(irqNum, nvicPriority);
       }
       else {
          // Disable interrupts

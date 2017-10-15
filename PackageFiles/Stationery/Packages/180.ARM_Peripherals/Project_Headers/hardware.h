@@ -238,4 +238,8 @@ enum NvicPriority {
 #include "delay.h"
 #include "console.h"
 
+namespace USBDM {
+
+} // End namespace USBDM
+
 #endif /* PROJECT_HEADERS_HARDWARE_H_ */

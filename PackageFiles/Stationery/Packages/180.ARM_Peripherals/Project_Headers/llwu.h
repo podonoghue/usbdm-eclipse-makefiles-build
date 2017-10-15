@@ -469,12 +469,7 @@ public:
    static void enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
 
       if (enable) {
-         // Set priority level
-         NVIC_SetPriority(Info::irqNums[0], nvicPriority);
-         // Clear pending interrupts
-         NVIC_ClearPendingIRQ(Info::irqNums[0]);
-         // Enable interrupts
-         NVIC_EnableIRQ(Info::irqNums[0]);
+         enableNvicInterrupt(Info::irqNums[0], nvicPriority);
       }
       else {
          // Disable interrupts
