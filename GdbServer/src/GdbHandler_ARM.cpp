@@ -312,7 +312,7 @@ uint32_t GdbHandler_ARM::getCachedR1() {
  */
 USBDM_ErrorCode GdbHandler_ARM::configureKinetisMDM_AP() {
 
-   LOGGING_E;
+   LOGGING;
    USBDM_ErrorCode rc = BDM_RC_OK;
 
    if (isKinetisDevice) {
