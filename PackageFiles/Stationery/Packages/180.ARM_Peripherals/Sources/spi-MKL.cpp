@@ -31,7 +31,7 @@ static const uint16_t sprFactors[]  = {2,4,8,16,32,64,128,256,512};
  *
  * Note: Chooses the highest speed that is not greater than frequency.
  */
-void Spi::setSpeed(uint32_t targetFrequency=Spi0Info::speed) {
+void Spi::setSpeed(uint32_t frequency=Spi0Info::speed) {
 
    int bestSPPR = 0;
    int bestSPR  = 0;
@@ -39,7 +39,7 @@ void Spi::setSpeed(uint32_t targetFrequency=Spi0Info::speed) {
    for (int sppr = (sizeof(spprFactors)/sizeof(spprFactors[0]))-1; sppr >= 0; sppr--) {
       for (int spr = (sizeof(sprFactors)/sizeof(sprFactors[0]))-1; spr >= 0; spr--) {
          uint32_t calculatedFrequency = SystemBusClock/(spprFactors[sppr]*sprFactors[spr]);
-         int32_t difference = targetFrequency-calculatedFrequency;
+         int32_t difference = frequency-calculatedFrequency;
          if (difference < 0) {
             // Too high stop looking here
             break;
@@ -59,7 +59,7 @@ void Spi::setSpeed(uint32_t targetFrequency=Spi0Info::speed) {
 /**
  * Transmit and receive an 8-bit value over SPI
  *
- * @param data - Data to send
+ * @param data Data to send
  *
  * @return Data received
  */
@@ -78,7 +78,7 @@ uint32_t Spi::txRx(uint32_t data) {
  *  Transmit and receive a series of bytes
  *
  *  @param dataSize  Number of bytes to transfer
- *  @param txData   Transmit bytes (may be NULL for Rx only)
+ *  @param txData    Transmit bytes (may be NULL for Rx only)
  *  @param rxData    Receive byte buffer (may be NULL for Tx only)
  *
  *  Note: rxData may use same buffer as txData
