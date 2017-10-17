@@ -84,6 +84,8 @@
       <peripheral baseName="FTFL"     instance=""         version="ftfl">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlash" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_FTFL_MASK" />
+         <irq num="FTF_Command_IRQn" />
+         <irq num="FTF_ReadCollision_IRQn" />
          <param key="dflash_phrase_size" value="4" />
          <param key="pflash_sector_size" value="1024" />
          <param key="dflash_sector_size" value="1024" />

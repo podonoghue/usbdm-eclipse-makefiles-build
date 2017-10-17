@@ -45,6 +45,8 @@
       <peripheral baseName="DAC"      instance="0"        version="dac0_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDac" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_DAC0_MASK" />
+         <irq num="DAC0_IRQn" />
+         <irq num="DAC0_IRQn" />
       </peripheral>
       <peripheral baseName="DMA"      instance="0"        version="dma0_32ch_ears">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDma" />
@@ -89,6 +91,8 @@
       <peripheral baseName="FTFE"     instance=""         version="ftfe_xacch">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlash" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_FTF_MASK" />
+         <irq num="FTF_Command_IRQn" />
+         <irq num="FTF_ReadCollision_IRQn" />
          <param key="dflash_phrase_size" value="8" />
          <param key="pflash_sector_size" value="4096" />
          <param key="dflash_sector_size" value="4096" />
@@ -160,6 +164,7 @@
       <peripheral baseName="I2C"      instance="3"        version="i2c0_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2c" />
          <clock reg="SCGC1"         mask="SIM_SCGC1_I2C3_MASK" />
+         <irq num="I2C3_IRQn" />
       </peripheral>
       <peripheral baseName="I2S"      instance="0"        version="i2s0_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2s" />
@@ -175,6 +180,7 @@
       </peripheral>
       <peripheral baseName="LLWU"     instance=""         version="llwu_pe8_filt4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
+         <irq num="LLWU_IRQn" />
       </peripheral>
       <peripheral baseName="LPTMR"    instance="0"        version="lptmr0_0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />
@@ -245,6 +251,7 @@
       <peripheral baseName="QSPI"     instance="0"        version="qspi0_0x400da000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
          <clock reg="SCGC2"         mask="SIM_SCGC2_QSPI_MASK" />
+         <irq num="QSPI0_IRQn" />
       </peripheral>
       <peripheral baseName="RCM"      instance=""         version="rcm_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRcm" />
@@ -298,10 +305,12 @@
       <peripheral baseName="TPM"      instance="1"        version="tpm1_2ch_quad">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock reg="SCGC2"         mask="SIM_SCGC2_TPM1_MASK" />
+         <irq num="TPM1_IRQn" />
       </peripheral>
       <peripheral baseName="TPM"      instance="2"        version="tpm1_2ch_quad">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock reg="SCGC2"         mask="SIM_SCGC2_TPM2_MASK" />
+         <irq num="TPM2_IRQn" />
       </peripheral>
       <peripheral baseName="TRNG"     instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
@@ -315,6 +324,7 @@
       <peripheral baseName="USBDCD"   instance=""         version="usbdcd_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUsbdcd" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_USBDCD_MASK" />
+         <irq num="USBDCD_IRQn" />
       </peripheral>
       <peripheral baseName="USBHS"    instance=""         version="usbhs_8endpt">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUsbhs" />
