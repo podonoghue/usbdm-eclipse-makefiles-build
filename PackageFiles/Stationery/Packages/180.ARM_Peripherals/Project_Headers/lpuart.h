@@ -73,7 +73,7 @@ protected:
    virtual int _readChar() override {
 
       // Get status from UART
-      uint8_t status;
+      uint32_t status;
       do {
          // Get status from UART
          status = lpuart->STAT;
