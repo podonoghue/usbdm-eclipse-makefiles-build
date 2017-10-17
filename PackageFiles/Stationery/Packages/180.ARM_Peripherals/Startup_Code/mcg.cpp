@@ -359,7 +359,7 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
 
 #ifdef SIM_CLKDIV3_PLLFLLDIV
    // Peripheral clock divider
-   SIM->CLKDIV3 = clockInfo.clkdiv3;
+   SimInfo::setPeripheralClockDivider((SimPeripheralClockDivider)clockInfo.clkdiv3);
 #endif
 
    // Clock sources
