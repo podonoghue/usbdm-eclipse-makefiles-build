@@ -902,27 +902,28 @@ Devices using this peripheral:
          constant="true"
          units="Hz"
          description="Peripheral Post-divider Clock frequency/"
-         toolTip="Frequency of Peripheral Clock available to various peripherals"  />
+         toolTip="Frequency of Peripheral Clock available to various peripherals"  
+         max="75 MHz" />
 	 
       <intOption name="system_core_clock." 
          units="Hz"
          description="System Core Clock"
          toolTip="Clocks the ARM Cortex-M4 core and bus masters"
-         value="150000000" />
+         value="150 MHz" />
    
       <intOption name="system_bus_clock." 
          units="Hz"
          description="System Bus Clock"
          toolTip="Clocks the bus slaves and peripherals\n
                   Must be &lt;= Core Clock frequency and an integer divisor"
-         value="75000000" />
+         value="75 MHz" />
    
       <intOption name="system_flexbus_clock." 
          units="Hz"
          description="System Flexbus Clock"
          toolTip="Clocks the flexbus interface\n
                   Must be &lt;= Bus Clock frequency"
-         value="75000000" />
+         value="75 MHz" />
 
       <intOption name="system_flash_clock." 
          units="Hz"
@@ -930,7 +931,7 @@ Devices using this peripheral:
          toolTip="Clocks the flash memory\n
                   Must be an integer divisor of the Core Clock.\n
                   Must be &lt;= Bus Clock frequency."
-         value="25000000" />
+         value="25 MHz" />
 	 
       <category name="CLKDIV1" description="System Clock Dividers">
          <intOption name="sim_clkdiv1_outdiv1." 
