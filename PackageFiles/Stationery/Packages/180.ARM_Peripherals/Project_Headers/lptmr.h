@@ -511,6 +511,31 @@ template<class Info> LPTMRCallbackFunction LptmrBase_T<Info>::callback = 0;
 using Lptmr0 = LptmrBase_T<Lptmr0Info>;
 #endif
 
+#ifdef LPTMR1
+/**
+ * @brief Class representing LPTMR1
+ *
+ * <b>Example</b>
+ * @code
+ *
+ * // LPTMR callback
+ * void flash(void) {
+ *    RED_LED::toggle();
+ * }
+ *
+ * ...
+ *
+ * // Configure LPTMR
+ * Lptmr1::configure(1000);
+ *
+ * // This handler is set programmatically
+ * Lptmr1::setCallback(flash);
+ *
+ * @endcode
+ */
+using Lptmr1 = LptmrBase_T<Lptmr1Info>;
+#endif
+
 /**
  * End LPTMR_Group
  * @}
