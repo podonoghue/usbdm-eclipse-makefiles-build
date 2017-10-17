@@ -28,18 +28,18 @@
       <choice value="eeprom128Bytes" name="128 bytes" />
       <choice value="eeprom256Bytes" name="256 bytes" />
       <choice value="eeprom512Bytes" name="512 bytes" />
-      <choice value="eeprom1KBytes"  name="1K bytes" />
-      <choice value="eeprom2KBytes"  name="2K bytes" />
-      <choice value="eeprom4KBytes"  name="4K bytes" isDefault="true"/>
+      <choice value="eeprom1KBytes"  name="1 KiB" />
+      <choice value="eeprom2KBytes"  name="2 KiB" />
+      <choice value="eeprom4KBytes"  name="4 KiB" isDefault="true"/>
    </choiceOption>
    
    <choiceOption name="FlashPartition" 
       description="FlexNVM - Flash EEPROM partition"
       toolTip="Selects division of FlexNVM between flash and EEPROM backing storage\n
                The larger the EEPROM backing the better the wear characteristic">
-      <choice value="partition_flash64K_eeprom0K" name="flash=64K eeprom backing=0K" />
-      <choice value="partition_flash32K_eeprom32K" name="flash=32K eeprom backing=32K" />
-      <choice value="partition_flash0K_eeprom64K" name="flash=0K eeprom backing=64K" isDefault="true"/>
+      <choice value="partition_flash64K_eeprom0K" name="flash=64KiB eeprom backing=0B" />
+      <choice value="partition_flash32K_eeprom32K" name="flash=32KiB eeprom backing=32KiB" />
+      <choice value="partition_flash0K_eeprom64K" name="flash=0B eeprom backing=64KiB" isDefault="true"/>
    </choiceOption>
    
    <choiceOption name="FlexNVM_Partition" 
