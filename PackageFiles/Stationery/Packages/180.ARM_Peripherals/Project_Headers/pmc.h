@@ -253,6 +253,16 @@ public:
       }
    }
 
+#ifdef PMC_SRAMCTL_VLLS2PD_MASK
+   /**
+    * Sets which SRAM blocks are powered during LLS2 mode and VLLS2 modes.
+    *
+    * @param blocks Bit mask for the 8 SRAM blocks, 1=> retain, 0=> not powered during LLS2 mode and VLLS2 modes.
+    */
+   static void setVlpRamRetention(uint8_t blocks) {
+      pmc->SRAMCTL = (uint8_t)~blocks;
+   }
+#endif
 };
 
 template<class Info> PMCCallbackFunction PmcBase_T<Info>::callback = PmcBase_T<Info>::illegalInterruptHandler;
