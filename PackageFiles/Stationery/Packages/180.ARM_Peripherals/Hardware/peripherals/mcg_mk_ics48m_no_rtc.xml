@@ -621,40 +621,8 @@
       \t      $(/SIM/sim_clkdiv3_pllfll.:0),
       \t#endif\n\n
       
-      \t      //! SIM SOPT2 System Options Register 2
-      \t#ifdef SIM_SOPT2_TRACECLKSEL
-      \t   SIM_SOPT2_TRACECLKSEL($(/SIM/sim_sopt2_traceclksel:0)) |      // Debug trace clock select
-      \t#endif
-      \t#ifdef SIM_SOPT2_TIMESRC
-      \t   SIM_SOPT2_TIMESRC($(/SIM/sim_sopt2_timesrc:0)) |          // IEEE 1588 timestamp clock source select
-      \t#endif
-      \t#ifdef SIM_SOPT2_RMIISRC
-      \t   SIM_SOPT2_RMIISRC($(/SIM/sim_sopt2_rmiisrc:0)) |          // Ethernet RMII clock source select
-      \t#endif
-      \t#ifdef SIM_SOPT2_SDHCSRC
-      \t      SIM_SOPT2_SDHCSRC($(/SIM/sim_sopt2_sdhcsrc:0)) |       // SDHC clock source select
-      \t#endif
-      \t#ifdef SIM_SOPT2_UART0SRC
-      \t   SIM_SOPT2_UART0SRC($(/SIM/sim_sopt2_uart0src:0)) |         // UART0 clock source select
-      \t#endif
-      \t#ifdef SIM_SOPT2_LPUARTSRC
-      \t      SIM_SOPT2_LPUARTSRC($(/SIM/sim_sopt2_lpuartsrc:0)) |     // LPUART clock source select
-      \t#endif
-      \t#ifdef SIM_SOPT2_PTD7PAD
-      \t      SIM_SOPT2_PTD7PAD($(/SIM/sim_sopt2_ptd7pad:0)) |       // PTD7 pad drive strength
-      \t#endif
-      \t#ifdef SIM_SOPT2_TPMSRC
-      \t      SIM_SOPT2_TPMSRC($(/SIM/sim_sopt2_tpmsrc:0)) |        // TPM clock source select
-      \t#endif
-      \t#ifdef SIM_SOPT2_USBSRC
-      \t      SIM_SOPT2_USBSRC($(/SIM/sim_sopt2_usbsrc:0)) |        // USB clock source select
-      \t#endif
-      \t#ifdef SIM_SOPT2_FBSL
-      \t      SIM_SOPT2_FBSL($(/SIM/sim_sopt2_fbsl:0)) |          // FlexBus security level
-      \t#endif
-      \t      SIM_SOPT2_RTCCLKOUTSEL($(/SIM/sim_sopt2_rtcclkoutsel)) |  // RTC clock out select
-      \t      SIM_SOPT2_PLLFLLSEL($(/SIM/sim_sopt2_pllfllsel.))|      // PLL/FLL clock select
-      \t      SIM_SOPT2_CLKOUTSEL($(/SIM/sim_sopt2_clkoutsel)),      // CLKOUT pin clock source select\n\n
+      \t      //! SIM SOPT2 System Options Register 2 (PLLFLLSEL only)
+      \t      SIM_SOPT2_PLLFLLSEL($(/SIM/sim_sopt2_pllfllsel.)),      // PLL/FLL clock select\n\n
       
       \t      //! Clock Mode
       \t      $(clock_mode.),\n\n
