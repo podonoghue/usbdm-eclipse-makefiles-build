@@ -2482,6 +2482,9 @@ Test Devices:
          <memoryRef ref="FTFE_PFlash1_512K_4KS" />
          <memoryRef ref="FTFE_PFlash2_512K_4KS" />
          <memoryRef ref="FTFE_PFlash3_512K_4KS" />
+         <memory type="ram">
+            <memoryRange start="0x34000000" end="0x3407FFFF" name="ocram" />
+         </memory>
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x28000F80" mask="0xFFF00F80" />
          <tclScriptRef ref="Kinetis-MKxx-Scripts" />
