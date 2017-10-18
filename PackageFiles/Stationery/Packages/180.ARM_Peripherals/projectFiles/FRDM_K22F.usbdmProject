@@ -101,7 +101,4 @@
    <item key="/SIM/system_flexbus_clock[2]"                value="30000000" />
    <item key="/SIM/system_lpuart_clock"                    value="8000000" />
    <item key="/SIM/system_usbfs_clock"                     value="48000000" />
-   <item key="/UART0/clockSource"                          value="SystemCoreClock" />
-   <item key="/UART1/clockSource"                          value="SystemCoreClock" />
-   <item key="/UART2/clockSource"                          value="SystemBusClock" />
 </section>
