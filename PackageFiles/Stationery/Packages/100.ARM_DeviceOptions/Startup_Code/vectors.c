@@ -69,12 +69,12 @@ typedef struct {
  */
 __attribute__((__naked__, __weak__, __interrupt__))
 void HardFault_Handler(void) {
-      /*
-       * Determines the active stack pointer and loads it into r0
-       * This is used as the 1st argument to _HardFault_Handler(volatile ExceptionFrame *exceptionFrame)
-       * and allows access to the saved processor state.
-       * Other registers are unchanged and available in the usual register view
-       */
+   /*
+    * Determines the active stack pointer and loads it into r0
+    * This is used as the 1st argument to _HardFault_Handler(volatile ExceptionFrame *exceptionFrame)
+    * and allows access to the saved processor state.
+    * Other registers are unchanged and available in the usual register view
+    */
    __asm__ volatile ("       mov r0,lr                                     \n"); // Check mode
    __asm__ volatile ("       mov r1,#4                                     \n");
    __asm__ volatile ("       and r0,r1                                     \n");
@@ -137,7 +137,7 @@ void _HardFault_Handler(volatile ExceptionFrame *exceptionFrame __attribute__((_
    }
 }
 
-void __HardReset(void) __attribute__((__interrupt__));
+void Reset_Handler(void) __attribute__((__interrupt__));
 
 extern uint32_t __StackTop;
 
@@ -199,26 +199,26 @@ typedef struct {
 
 __attribute__ ((section(".interrupt_vectors")))
 VectorTable const __vector_table = {
-                                     /*  Vec Irq */
-   &__StackTop,                      /*   0  -16  Initial stack pointer                                                            */
+                                     /*  Exc# Irq# */
+   &__StackTop,                      /*    0   -16  Initial stack pointer                                                            */
    {
-      __HardReset,                   /*   1  -15  Reset Handler                                                                    */
-      NMI_Handler,                   /*   2, -14  Non maskable Interrupt, cannot be stopped or preempted                           */
-      HardFault_Handler,             /*   3, -13  Hard Fault, all classes of Fault                                                 */
-      MemManage_Handler,             /*   4, -12  Memory Management, MPU mismatch, including Access Violation and No Match         */
-      BusFault_Handler,              /*   5, -11  Bus Fault, Pre-Fetch-, Memory Access Fault, other address/memory related Fault   */
-      UsageFault_Handler,            /*   6, -10  Usage Fault, i.e. Undef Instruction, Illegal State Transition                    */
-      0,                             /*   7, -9   Reserved                                                                         */
-      0,                             /*   8, -8   Reserved                                                                         */
-      0,                             /*   9, -7   Reserved                                                                         */
-      0,                             /*  10, -6   Reserved                                                                         */
-      SVC_Handler,                   /*  11, -5   System Service Call via SVC instruction                                          */
-      DebugMon_Handler,              /*  12, -4   Debug Monitor                                                                    */
-      0,                             /*  13, -3   Reserved                                                                         */
-      PendSV_Handler,                /*  14, -2   Pendable request for system service                                              */
-      SysTick_Handler,               /*  15, -1   System Tick Timer                                                                */
+      Reset_Handler,                 /*    1   -15  Reset Handler                                                                    */
+      NMI_Handler,                   /*    2,  -14  Non maskable Interrupt, cannot be stopped or preempted                           */
+      HardFault_Handler,             /*    3,  -13  Hard Fault, all classes of Fault                                                 */
+      MemManage_Handler,             /*    4,  -12  Memory Management, MPU mismatch, including Access Violation and No Match         */
+      BusFault_Handler,              /*    5,  -11  Bus Fault, Pre-Fetch-, Memory Access Fault, other address/memory related Fault   */
+      UsageFault_Handler,            /*    6,  -10  Usage Fault, i.e. Undef Instruction, Illegal State Transition                    */
+      0,                             /*    7,  -9   Reserved                                                                         */
+      0,                             /*    8,  -8   Reserved                                                                         */
+      0,                             /*    9,  -7   Reserved                                                                         */
+      0,                             /*   10,  -6   Reserved                                                                         */
+      SVC_Handler,                   /*   11,  -5   System Service Call via SVC instruction                                          */
+      DebugMon_Handler,              /*   12,  -4   Debug Monitor                                                                    */
+      0,                             /*   13,  -3   Reserved                                                                         */
+      PendSV_Handler,                /*   14,  -2   Pendable request for system service                                              */
+      SysTick_Handler,               /*   15,  -1   System Tick Timer                                                                */
 
-                                     /* External Interrupts */
+                                    /* External Interrupts */
           Int0_Handler,             /* Int #0  */
           Int1_Handler,             /* Int #1  */
           Int2_Handler,             /* Int #2  */

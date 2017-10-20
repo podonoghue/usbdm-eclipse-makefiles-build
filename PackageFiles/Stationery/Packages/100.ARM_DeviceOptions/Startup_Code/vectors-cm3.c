@@ -100,7 +100,7 @@ void _HardFault_Handler(volatile ExceptionFrame *exceptionFrame __attribute__((_
    }
 }
 
-void __HardReset(void) __attribute__((__interrupt__));
+void Reset_Handler(void) __attribute__((__interrupt__));
 
 extern uint32_t __StackTop;
 

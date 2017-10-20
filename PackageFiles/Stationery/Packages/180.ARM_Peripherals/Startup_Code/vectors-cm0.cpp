@@ -113,12 +113,15 @@ __attribute__((__naked__))
 void _HardFault_Handler(
       volatile ExceptionFrame *exceptionFrame __attribute__((__unused__)),
       uint32_t execReturn                     __attribute__((__unused__)) ) {
-   using namespace USBDM;
+
+   __asm__("bkpt");
 
 #ifdef DEBUG_BUILD
+   using namespace USBDM;
+
    console.setPadding(Padding_LeadingZeroes);
    console.setWidth(8);
-   console.write("[Hardfault]\n - Stack frame:\n");
+   console.write("\n[Hardfault]\n - Stack frame:\n");
    console.write("R0  = 0x").writeln(exceptionFrame->r0,  Radix_16);
    console.write("R1  = 0x").writeln(exceptionFrame->r1,  Radix_16);
    console.write("R2  = 0x").writeln(exceptionFrame->r2,  Radix_16);
@@ -128,7 +131,7 @@ void _HardFault_Handler(
    console.write("PC  = 0x").writeln((void*)(exceptionFrame->pc),  Radix_16);
    console.write("PSR = 0x").writeln(exceptionFrame->psr, Radix_16);
    console.writeln("- Misc");
-   console.write(" LR/EXC_RETURN= 0x").writeln(execReturn,  Radix_16);
+   console.write("LR/EXC_RETURN= 0x").writeln(execReturn,  Radix_16);
 #endif
 
    while (1) {
@@ -137,7 +140,7 @@ void _HardFault_Handler(
    }
 }
 
-void __HardReset(void) __attribute__((__interrupt__));
+void Reset_Handler(void) __attribute__((__interrupt__));
 
 extern uint32_t __StackTop;
 }

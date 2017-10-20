@@ -106,12 +106,15 @@ __attribute__((__naked__))
 void _HardFault_Handler(
       volatile ExceptionFrame *exceptionFrame __attribute__((__unused__)),
       uint32_t execReturn                     __attribute__((__unused__)) ) {
-   using namespace USBDM;
+
+   __asm__("bkpt");
 
 #ifdef DEBUG_BUILD
+   using namespace USBDM;
+
    console.setPadding(Padding_LeadingZeroes);
    console.setWidth(8);
-   console.write("[Hardfault]\n - Stack frame:\n");
+   console.write("\n[Hardfault]\n - Stack frame:\n");
    console.write("R0  = 0x").writeln(exceptionFrame->r0,  Radix_16);
    console.write("R1  = 0x").writeln(exceptionFrame->r1,  Radix_16);
    console.write("R2  = 0x").writeln(exceptionFrame->r2,  Radix_16);
@@ -122,14 +125,14 @@ void _HardFault_Handler(
    console.write("PSR = 0x").writeln(exceptionFrame->psr, Radix_16);
    console.write ("- FSR/FAR:\n");
    uint32_t cfsr = SCB->CFSR;
-   console.write(" CFSR = 0x").writeln(cfsr);
-   console.write(" HFSR = 0x").writeln(SCB->HFSR, Radix_16);
-   console.write(" DFSR = 0x").writeln(SCB->DFSR, Radix_16);
-   console.write(" AFSR = 0x").writeln(SCB->AFSR, Radix_16);
-    if (cfsr & 0x0080) console.write(" MMFAR = 0").writeln(SCB->MMFAR, Radix_16);
-    if (cfsr & 0x8000) console.write(" BFAR = 0x").writeln(SCB->BFAR,  Radix_16);
-    console.writeln("- Misc");
-    console.write(" LR/EXC_RETURN= 0x").writeln(execReturn,  Radix_16);
+   console.write("CFSR = 0x").writeln(cfsr);
+   console.write("HFSR = 0x").writeln(SCB->HFSR, Radix_16);
+   console.write("DFSR = 0x").writeln(SCB->DFSR, Radix_16);
+   console.write("AFSR = 0x").writeln(SCB->AFSR, Radix_16);
+   if (cfsr & 0x0080) console.write("MMFAR = 0").writeln(SCB->MMFAR, Radix_16);
+   if (cfsr & 0x8000) console.write("BFAR = 0x").writeln(SCB->BFAR,  Radix_16);
+   console.writeln("- Misc");
+   console.write("LR/EXC_RETURN= 0x").writeln(execReturn,  Radix_16);
 #endif
 
    while (1) {
@@ -138,7 +141,7 @@ void _HardFault_Handler(
    }
 }
 
-void __HardReset(void) __attribute__((__interrupt__));
+void Reset_Handler(void) __attribute__((__interrupt__));
 
 extern uint32_t __StackTop;
 }
