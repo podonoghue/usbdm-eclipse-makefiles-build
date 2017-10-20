@@ -156,47 +156,47 @@ Devices using this vector table:
       <value>29</value>
    </interrupt>
    <interrupt>
-      <name>UART0_LON</name>
+      <name>UART0_Lon</name>
       <description>Serial Communication Interface</description>
       <value>30</value>
    </interrupt>
    <interrupt>
-      <name>UART0_RX_TX</name>
+      <name>UART0_RxTx</name>
       <description>Serial Communication Interface</description>
       <value>31</value>
    </interrupt>
    <interrupt>
-      <name>UART0_ERR</name>
+      <name>UART0_Error</name>
       <description>Serial Communication Interface</description>
       <value>32</value>
    </interrupt>
    <interrupt>
-      <name>UART1_RX_TX</name>
+      <name>UART1_RxTx</name>
       <description>Serial Communication Interface</description>
       <value>33</value>
    </interrupt>
    <interrupt>
-      <name>UART1_ERR</name>
+      <name>UART1_Error</name>
       <description>Serial Communication Interface</description>
       <value>34</value>
    </interrupt>
    <interrupt>
-      <name>UART2_RX_TX</name>
+      <name>UART2_RxTx</name>
       <description>Serial Communication Interface</description>
       <value>35</value>
    </interrupt>
    <interrupt>
-      <name>UART2_ERR</name>
+      <name>UART2_Error</name>
       <description>Serial Communication Interface</description>
       <value>36</value>
    </interrupt>
    <interrupt>
-      <name>UART3_RX_TX</name>
+      <name>UART3_RxTx</name>
       <description>Serial Communication Interface</description>
       <value>37</value>
    </interrupt>
    <interrupt>
-      <name>UART3_ERR</name>
+      <name>UART3_Error</name>
       <description>Serial Communication Interface</description>
       <value>38</value>
    </interrupt>
@@ -331,22 +331,22 @@ Devices using this vector table:
       <value>65</value>
    </interrupt>
    <interrupt>
-      <name>UART4_RX_TX</name>
+      <name>UART4_RxTx</name>
       <description>Serial Communication Interface</description>
       <value>66</value>
    </interrupt>
    <interrupt>
-      <name>UART4_ERR</name>
+      <name>UART4_Error</name>
       <description>Serial Communication Interface</description>
       <value>67</value>
    </interrupt>
    <interrupt>
-      <name>UART5_RX_TX</name>
+      <name>UART5_RxTx</name>
       <description>Serial Communication Interface</description>
       <value>68</value>
    </interrupt>
    <interrupt>
-      <name>UART5_ERR</name>
+      <name>UART5_Error</name>
       <description>Serial Communication Interface</description>
       <value>69</value>
    </interrupt>

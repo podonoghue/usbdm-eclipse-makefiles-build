@@ -102,7 +102,7 @@ Control arbitration for channel selection within each group</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Fixed Priority</description>
+                           <description>Fixed</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -114,18 +114,19 @@ Control arbitration for channel selection within each group</description>
                   </field>
                   <field>
                      <name>ERGA</name>
-                     <description>Enable Round Robin Group Arbitration</description>
+                     <description>Enable Round Robin Group Arbitration\n
+Control arbitration for selection among the groups</description>
                      <bitOffset>3</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Fixed priority arbitration is used for selection among the groups</description>
+                           <description>Fixed</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Round robin arbitration is used for selection among the groups</description>
+                           <description>Round robin</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

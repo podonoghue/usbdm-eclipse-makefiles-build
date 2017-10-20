@@ -366,7 +366,7 @@ Devices using this vector table:
       <value>151</value>
    </interrupt>
    <interrupt>
-      <name>FLEXCAN_ERR</name>
+      <name>FLEXCAN_Error</name>
       <description>FLEXCAN  Error Interrupt</description>
       <value>152</value>
    </interrupt>

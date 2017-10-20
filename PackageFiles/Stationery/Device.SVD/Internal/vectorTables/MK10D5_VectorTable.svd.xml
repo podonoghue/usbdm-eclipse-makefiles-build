@@ -76,37 +76,37 @@ Devices using this vector table:
       <value>14</value>
    </interrupt>
    <interrupt>
-      <name>UART0_LON</name>
+      <name>UART0_Lon</name>
       <description>Serial Communication Interface</description>
       <value>15</value>
    </interrupt>
    <interrupt>
-      <name>UART0_RX_TX</name>
+      <name>UART0_RxTx</name>
       <description>Serial Communication Interface</description>
       <value>16</value>
    </interrupt>
    <interrupt>
-      <name>UART0_ERR</name>
+      <name>UART0_Error</name>
       <description>Serial Communication Interface</description>
       <value>17</value>
    </interrupt>
    <interrupt>
-      <name>UART1_RX_TX</name>
+      <name>UART1_RxTx</name>
       <description>Serial Communication Interface</description>
       <value>18</value>
    </interrupt>
    <interrupt>
-      <name>UART1_ERR</name>
+      <name>UART1_Error</name>
       <description>Serial Communication Interface</description>
       <value>19</value>
    </interrupt>
    <interrupt>
-      <name>UART2_RX_TX</name>
+      <name>UART2_RxTx</name>
       <description>Serial Communication Interface</description>
       <value>20</value>
    </interrupt>
    <interrupt>
-      <name>UART2_ERR</name>
+      <name>UART2_Error</name>
       <description>Serial Communication Interface</description>
       <value>21</value>
    </interrupt>

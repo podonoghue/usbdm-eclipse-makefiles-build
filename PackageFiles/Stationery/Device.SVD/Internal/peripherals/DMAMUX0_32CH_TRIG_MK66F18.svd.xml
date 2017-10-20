@@ -90,12 +90,12 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>10</name>
-                           <description>UART4_Rx</description>
+                           <description>UART4_Rx_Tx</description>
                            <value>0b001010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>11</name>
-                           <description>UART4_Tx</description>
+                           <description>Reserved</description>
                            <value>0b001011</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -180,22 +180,22 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>28</name>
-                           <description>FTM1_Channel0</description>
+                           <description>FTM1_TPM1_Channel0</description>
                            <value>0b011100</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>29</name>
-                           <description>FTM1_Channel1</description>
+                           <description>FTM1_TPM1_Channel1</description>
                            <value>0b011101</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>30</name>
-                           <description>FTM2_Channel0</description>
+                           <description>FTM2_TPM2_Channel0</description>
                            <value>0b011110</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>31</name>
-                           <description>FTM2_Channel1</description>
+                           <description>FTM2_TPM2_Channel1</description>
                            <value>0b011111</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -230,12 +230,12 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>38</name>
-                           <description>FTM3_Channel6</description>
+                           <description>FTM3_Channel6_SPI2_Rx</description>
                            <value>0b100110</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>39</name>
-                           <description>FTM3_Channel7</description>
+                           <description>FTM3_Channel7_SPI2_Tx</description>
                            <value>0b100111</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -260,7 +260,7 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>44</name>
-                           <description>Reserved</description>
+                           <description>CMP2_CMP3</description>
                            <value>0b101100</value>
                         </enumeratedValue>
                         <enumeratedValue>
