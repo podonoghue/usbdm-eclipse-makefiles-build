@@ -2358,7 +2358,7 @@ typedef struct {                                /*       DMA0 Structure         
 */
 
 /* ================================================================================ */
-/* ================           DMAMUX0 (file:DMAMUX0_32CH_TRIG_MK28F15)       ================ */
+/* ================           DMAMUX0 (file:DMAMUX0_32CH_TRIG_SPLIT_MK82F15)       ================ */
 /* ================================================================================ */
 
 /**
@@ -2370,7 +2370,13 @@ typedef struct {                                /*       DMA0 Structure         
 * @{
 */
 typedef struct {                                /*       DMAMUX0 Structure                                            */
-   __IO uint8_t   CHCFG[32];                    /**< 0000: Channel Configuration Register                               */
+   union {                                      /**< 0000: (size=0020)                                                  */
+      __IO uint8_t   CHCFG[32];                 /**< 0000: Channel Configuration Register                               */
+      struct {                                  /**< 0000: (size=0020)                                                  */
+         __IO uint8_t   CHCFG_0_15[16];         /**< 0000: Channel Configuration Register                               */
+         __IO uint8_t   CHCFG_16_32[16];        /**< 0010: Channel Configuration Register                               */
+      };
+   };
 } DMAMUX_Type;
 
 /**
@@ -2396,6 +2402,26 @@ typedef struct {                                /*       DMAMUX0 Structure      
 #define DMAMUX_CHCFG_ENBL_MASK                   (0x80U)                                             /*!< DMAMUX0_CHCFG.ENBL Mask                 */
 #define DMAMUX_CHCFG_ENBL_SHIFT                  (7U)                                                /*!< DMAMUX0_CHCFG.ENBL Position             */
 #define DMAMUX_CHCFG_ENBL(x)                     (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMAMUX0_CHCFG.ENBL Field                */
+/* ------- CHCFG_0_15 Bit Fields                    ------ */
+#define DMAMUX_CHCFG_0_15_SOURCE_MASK            (0x3FU)                                             /*!< DMAMUX0_CHCFG_0_15.SOURCE Mask          */
+#define DMAMUX_CHCFG_0_15_SOURCE_SHIFT           (0U)                                                /*!< DMAMUX0_CHCFG_0_15.SOURCE Position      */
+#define DMAMUX_CHCFG_0_15_SOURCE(x)              (((uint8_t)(((uint8_t)(x))<<0U))&0x3FUL)            /*!< DMAMUX0_CHCFG_0_15.SOURCE Field         */
+#define DMAMUX_CHCFG_0_15_TRIG_MASK              (0x40U)                                             /*!< DMAMUX0_CHCFG_0_15.TRIG Mask            */
+#define DMAMUX_CHCFG_0_15_TRIG_SHIFT             (6U)                                                /*!< DMAMUX0_CHCFG_0_15.TRIG Position        */
+#define DMAMUX_CHCFG_0_15_TRIG(x)                (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMAMUX0_CHCFG_0_15.TRIG Field           */
+#define DMAMUX_CHCFG_0_15_ENBL_MASK              (0x80U)                                             /*!< DMAMUX0_CHCFG_0_15.ENBL Mask            */
+#define DMAMUX_CHCFG_0_15_ENBL_SHIFT             (7U)                                                /*!< DMAMUX0_CHCFG_0_15.ENBL Position        */
+#define DMAMUX_CHCFG_0_15_ENBL(x)                (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMAMUX0_CHCFG_0_15.ENBL Field           */
+/* ------- CHCFG_16_32 Bit Fields                   ------ */
+#define DMAMUX_CHCFG_16_32_SOURCE_MASK           (0x3FU)                                             /*!< DMAMUX0_CHCFG_16_32.SOURCE Mask         */
+#define DMAMUX_CHCFG_16_32_SOURCE_SHIFT          (0U)                                                /*!< DMAMUX0_CHCFG_16_32.SOURCE Position     */
+#define DMAMUX_CHCFG_16_32_SOURCE(x)             (((uint8_t)(((uint8_t)(x))<<0U))&0x3FUL)            /*!< DMAMUX0_CHCFG_16_32.SOURCE Field        */
+#define DMAMUX_CHCFG_16_32_TRIG_MASK             (0x40U)                                             /*!< DMAMUX0_CHCFG_16_32.TRIG Mask           */
+#define DMAMUX_CHCFG_16_32_TRIG_SHIFT            (6U)                                                /*!< DMAMUX0_CHCFG_16_32.TRIG Position       */
+#define DMAMUX_CHCFG_16_32_TRIG(x)               (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMAMUX0_CHCFG_16_32.TRIG Field          */
+#define DMAMUX_CHCFG_16_32_ENBL_MASK             (0x80U)                                             /*!< DMAMUX0_CHCFG_16_32.ENBL Mask           */
+#define DMAMUX_CHCFG_16_32_ENBL_SHIFT            (7U)                                                /*!< DMAMUX0_CHCFG_16_32.ENBL Position       */
+#define DMAMUX_CHCFG_16_32_ENBL(x)               (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMAMUX0_CHCFG_16_32.ENBL Field          */
 /**
  * @} */ /* End group DMAMUX_Register_Masks_GROUP 
  */
