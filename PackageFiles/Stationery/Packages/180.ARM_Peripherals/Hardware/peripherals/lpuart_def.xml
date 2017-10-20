@@ -84,7 +84,7 @@ Devices using this peripheral:
    <irqOption name="txrxHandler"  
       description="LPUART Tx/Rx interrupt handler"
       toolTip="This handler is used for normal communication events"
-      pattern="^LPUART%i(_RX_TX)?$" 
+      pattern="^LPUART%i(_RxTx)?$"
       classHandler="%c%i::irqRxTxHandler" />
    <template><![CDATA[
        \t//! Class based callback handler has been installed in vector table\n

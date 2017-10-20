@@ -68,25 +68,15 @@ Devices using this peripheral:
       <aliasOption key="/SIM/sim_sopt5_uart$(_instance)rxsrc" optional="true" constant="false" />
    </category>
 
-   <irqOption name="txrxHandler"  
-      description="UART Tx/Rx interrupt handler"
-      toolTip="This handler is used for normal communication events"
-      pattern="^UART%i(_RX_TX)?$" 
-      classHandler="%c%i::irqRxTxHandler" />
-   <irqOption name="errorHandler" 
-      description="UART Error interrupt handler"
-      toolTip="This handler is used for communication error events"
-      pattern="^UART%i_ERR$"  
-      classHandler="%c%i::irqErrorHandler"/>
-   <irqOption name="lonHandler"   
-      description="UART LON interrupt handler - not all devices support LON"
-      toolTip="This handler is used for LON related communication events"
-      pattern="^UART%i_LON$"  
-      classHandler="%c%i::irqErrorHandler"/>
+   <irqOption name="irqHandlers"  
+      description="Interrupt handlers"
+      toolTip="This selection allow the interrupt handlers for this peripheral to be installed using several different methods"
+      pattern="^UART%i_?(RxTx|Error|Lon)?$" 
+      classHandler="%c%i::irq$1Handler" />
         
    <template><![CDATA[
        \t//! Class based callback handler has been installed in vector table\n
-       \tstatic constexpr bool irqHandlerInstalled = ($(txrxHandler) == 1);\n\n
+       \tstatic constexpr bool irqHandlerInstalled = ($(irqHandlers) == 1);\n\n
    ]]></template>
        
    <intOption name="irqLevel" 

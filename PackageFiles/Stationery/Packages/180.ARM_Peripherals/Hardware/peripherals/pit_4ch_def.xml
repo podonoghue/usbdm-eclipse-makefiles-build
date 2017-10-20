@@ -45,33 +45,15 @@
      -  %c replaced with peripheral C++ base class name e.g. FTM1 => = Ftm
      -  _IRQHandler is appended to the pattern (only)
      -->
-   <irqOption name="irqHandlerChannel0"  
-      description="Channel 0 interrupt handler"
+   <irqOption name="irqHandlers"  
+      description="Channel interrupt handlers"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
-      pattern="^%b0$" 
-      classHandler="%c%iChannel&lt;0&gt;::irqHandler" />
-      
-   <irqOption name="irqHandlerChannel1"  
-      description="Channel 1 interrupt handler"
-      toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
-      pattern="^%b1$" 
-      classHandler="%c%iChannel&lt;1&gt;::irqHandler" />
-      
-   <irqOption name="irqHandlerChannel2"  
-      description="Channel 2 interrupt handler"
-      toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
-      pattern="^%b2$" 
-      classHandler="%c%iChannel&lt;2&gt;::irqHandler" />
-      
-   <irqOption name="irqHandlerChannel3"  
-      description="Channel 3 interrupt handler"
-      toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
-      pattern="^%b3$" 
-      classHandler="%c%iChannel&lt;3&gt;::irqHandler" />
+      pattern="^%b(\d+)$" 
+      classHandler="%c%iChannel&lt;$1&gt;::irqHandler" />
       
    <template><![CDATA[
        \t//! Class based callback handler has been installed in vector table\n
-       \tstatic constexpr bool irqHandlerInstalled = ($(irqHandlerChannel0) == 1);\n\n
+       \tstatic constexpr bool irqHandlerInstalled = ($(irqHandlers) == 1);\n\n
    ]]></template>
        
    <intOption name="irqLevel" 
