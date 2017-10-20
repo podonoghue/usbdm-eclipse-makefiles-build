@@ -26,10 +26,10 @@
 using namespace USBDM;
 
 // Connection - change as required
-using Led         = GpioA<2, ActiveLow>;  // = PTA2 = D9 = Blue LED
+using Led         = GpioA<2, ActiveLow>;  // = Blue LED
 
 // PIT channel used for throttling
-using PitChannel = PitChannel1;
+using TimerChannel = PitChannel<1>;
 
 // DMA channel number to use (must agree with PIT channel used)
 static constexpr DmaChannelNum DMA_CHANNEL = DmaChannelNum_1;
@@ -44,6 +44,16 @@ volatile bool complete;
  */
 static void dmaCallback() {
    complete = true;
+}
+
+/**
+ * DMA error call back
+ *
+ * @param errorFlags Channel error information (DMA_ES)
+ */
+void dmaErrorCallbackFunction(uint32_t errorFlags) {
+   console.write("DMA error DMA_ES = 0x").writeln(errorFlags, Radix_16);
+   __BKPT();
 }
 
 static const char message[]=
@@ -74,9 +84,9 @@ static const char message[]=
  * | | Minor Loop               | |             NBYTES must be an even multiple of SSIZE and DSIZE in bytes.
  * | | Each transfer            | |
  * | |   SADDR->DADDR           | |            The following are used by the major loop
- * | |   SADDR += SOFF          | |             - SLAST Adjustment applied to SADDR after major loop
- * | |   DADDR += DOFF          | |             - DLAST Adjustment applied to DADDR after major loop
- * | | Total transfer is NBYTES | |             - CITER Major loop counter - counts how many minor loops
+ * | |   SADDR += SOFF          | |             - SLAST Adjustment applied to SADDR at the end of each major loop
+ * | |   DADDR += DOFF          | |             - DLAST Adjustment applied to DADDR at the end of each major loop
+ * | | Total transfer is NBYTES | |             - CITER Major loop counter - counts how many completed major loops
  * | +--------------------------+ |
  * |                              |            SLAST and DLAST may be used to reset the addresses to the initial value or
  * | At end of Major Loop         |            link to the next transfer.
@@ -88,7 +98,7 @@ static const char message[]=
  * +------------------------------+              - DMA_CSR_START    = Start transfer. Used for software transfers. Automatically cleared.
  * @endverbatim
  *
- * Structure to define the DMA transfer
+ * Structure to define a DMA transfer
  */
 static const DmaTcd tcd {
    /* uint32_t  SADDR  Source address        */ (uint32_t)(message),                    // Source array
@@ -110,7 +120,7 @@ static const DmaTcd tcd {
 /**
  * Configure DMA from Memory-to-UART
  */
-static void initDma() {
+static void configureDma() {
 
    // Sequence not complete yet
    complete = false;
@@ -120,7 +130,9 @@ static void initDma() {
 
    // Set callback (Interrupts are enabled in TCD)
    Dma0::setCallback(DMA_CHANNEL, dmaCallback);
+   Dma0::setErrorCallback(dmaErrorCallbackFunction);
    Dma0::enableNvicInterrupts(DMA_CHANNEL);
+   Dma0::enableNvicErrorInterrupt();
 
    // Connect DMA channel to UART but throttle by PIT Channel 1 (matches DMA channel 1)
    DmaMux0::configure(DMA_CHANNEL, DmaSlot_UART0_Transmit, DmaMuxEnable_Triggered);
@@ -130,6 +142,9 @@ static void initDma() {
 
    // Enable hardware requests
    Dma0::enableRequests(DMA_CHANNEL);
+
+   // Enable channel interrupt requests
+   Dma0::enableErrorInterrupts(DMA_CHANNEL);
 }
 
 /**
@@ -150,9 +165,9 @@ static void configurePit() {
    // Configure base PIT
    Pit::configure(PitDebugMode_Stop);
 
-   PitChannel::setCallback(pitCallback);
+   TimerChannel::setCallback(pitCallback);
    // Configure channel
-   PitChannel::configure(100*ms, PitChannelIrq_Enable);
+   TimerChannel::configure(100*ms, PitChannelIrq_Enable);
 }
 
 int main() {
@@ -162,7 +177,7 @@ int main() {
    Led::setOutput();
 
    // Set up DMA transfer from memory -> UART
-   initDma();
+   configureDma();
    configurePit();
 
    // Start the UART DMA requests

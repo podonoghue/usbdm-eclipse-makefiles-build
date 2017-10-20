@@ -30,7 +30,7 @@ using namespace USBDM;
 
 // Using LEDs rather defeats VLLSx mode!
 using GreenLed  = GpioA<2,ActiveLow>;
-using LedRed    = GpioC<3,ActiveLow>;
+using RedLed    = GpioC<3,ActiveLow>;
 
 // Timer to use for timed wake-up
 using WakeupTimer = Lptmr0;
@@ -82,18 +82,18 @@ void llwuCallback() {
    llwuHandlerRan = true;
    if (Llwu::isPeripheralWakeupSource(LlwuPeripheral_Lptmr)) {
       // Wake-up from LPTMR
-      LedRed::toggle();
+      RedLed::toggle();
       WakeupTimer::clearInterruptFlag();
       WakeupTimer::enableInterrupts(false);
    }
    if (Llwu::isPinWakeupSource(WAKEUP_PIN)) {
       // Wake-up from pin
-      LedRed::toggle();
+      RedLed::toggle();
       Llwu::clearPinWakeupFlag(WAKEUP_PIN);
    }
    if (Llwu::isFilteredPinWakeupSource(FILTER_NUM)) {
       // Wake-up from filtered pin
-      LedRed::toggle();
+      RedLed::toggle();
       Llwu::clearFilteredPinWakeupFlag(FILTER_NUM);
    }
    __asm__("nop");
@@ -410,6 +410,10 @@ void help() {
 }
 
 int main() {
+   // Set LPUART (console) clock to clock source available in VLPR mode
+  //SimInfo::setLpuartClock(SimLpuartClockSource_OscerClk);
+   //console.setBaudRate(defaultBaudRate);
+
    console.writeln("\n**************************************");
    console.write("Executing from RESET, SRS=").writeln(Rcm::getResetSourceDescription());
    // Configure LEDs
@@ -417,7 +421,7 @@ int main() {
          PinDriveStrength_High,
          PinDriveMode_PushPull,
          PinSlewRate_Slow);
-   LedRed::setOutput(
+   RedLed::setOutput(
          PinDriveStrength_High,
          PinDriveMode_PushPull,
          PinSlewRate_Slow);
@@ -431,7 +435,10 @@ int main() {
    );
 
    //Errata e4481 STOP mode recovery unstable
-   Pmc::setBandgapOperation(PmcBandgapBuffer_Off, PmcBandgapLowPowerEnable_On);
+//   Pmc::setBandgapOperation(PmcBandgapBuffer_Off, PmcBandgapLowPowerEnable_On);
+
+   // Retain all RAM during LLS2 mode and VLLS2 modes.
+   //Pmc::setVlpRamRetention(0b11111111);
 
    checkError();
 

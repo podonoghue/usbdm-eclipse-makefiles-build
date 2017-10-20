@@ -28,7 +28,7 @@
 using namespace USBDM;
 
 // Using LEDs rather defeats VLLSx mode!
-using LedRed    = GpioB<18,ActiveLow>;
+using RedLed    = GpioB<18,ActiveLow>;
 using GreenLed  = GpioB<19,ActiveLow>;
 
 // Timer to use for timed wake-up
@@ -81,18 +81,18 @@ void llwuCallback() {
    llwuHandlerRan = true;
    if (Llwu::isPeripheralWakeupSource(LlwuPeripheral_Lptmr)) {
       // Wake-up from LPTMR
-      LedRed::toggle();
+      RedLed::toggle();
       WakeupTimer::clearInterruptFlag();
       WakeupTimer::enableInterrupts(false);
    }
    if (Llwu::isPinWakeupSource(WAKEUP_PIN)) {
       // Wake-up from pin
-      LedRed::toggle();
+      RedLed::toggle();
       Llwu::clearPinWakeupFlag(WAKEUP_PIN);
    }
    if (Llwu::isFilteredPinWakeupSource(FILTER_NUM)) {
       // Wake-up from filtered pin
-      LedRed::toggle();
+      RedLed::toggle();
       Llwu::clearFilteredPinWakeupFlag(FILTER_NUM);
    }
    __asm__("nop");
@@ -403,7 +403,7 @@ int main() {
          PinDriveStrength_High,
          PinDriveMode_PushPull,
          PinSlewRate_Slow);
-   LedRed::setOutput(
+   RedLed::setOutput(
          PinDriveStrength_High,
          PinDriveMode_PushPull,
          PinSlewRate_Slow);
