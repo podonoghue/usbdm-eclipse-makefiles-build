@@ -3,6 +3,60 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- dma0_16ch.xml -->
 
-<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="dma0_base.xml"/>
-</fragment>
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flash Memory Module">
+
+   <intOption name="NumChannels" constant="true" derived="true"
+      description="Number of DMA channels" 
+      toolTip="The number of DMA channels available" 
+      value="16" />
+
+   <intOption name="NumVectors" constant="true" derived="true"
+      description="Number of DMA interrupt vectors" 
+      toolTip="Number of DMA interrupt vectors - \n
+               Multiple channels may be mapped to the same vector" 
+      value="16" />
+
+   <irqOption name="irqHandlers"  
+      description="Interrupt handlers"
+      toolTip="This selection allow the interrupt handlers for this peripheral to be installed using several different methods"
+      pattern="^%b_?(\d+|Error)(_DMA.*)?$" 
+      classHandler="%c%i::irq$1Handler" />
+      
+   <template><![CDATA[
+       \t//! Class based callback handler has been installed in vector table\n
+       \tstatic constexpr bool irqHandlerInstalled = ($(irqHandlers) == 1);\n\n
+   ]]></template>
+       
+   <intOption name="irqLevel" 
+      description="IRQ Level in NVIC [0-15]"
+      toolTip="Sets the priority level used to configure the NVIC\n
+               Lower numbers represent higher priorities"
+      value="7" min="0" max="15" 
+   />
+
+   <template><![CDATA[
+       \t//! Default IRQ level\n
+       \tstatic constexpr uint32_t irqLevel =  $(irqLevel);\n\n
+   ]]></template>
+ 
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator">
+   </validate>
+
+   <template><![CDATA[
+      \t//! Number of DMA channels implemented
+      \tstatic constexpr unsigned NumChannels = $(NumChannels);\n\n
+
+      \t//! Number of DMA vectors implemented
+      \tstatic constexpr unsigned NumVectors = $(NumVectors);\n\n
+   ]]></template>
+
+   <projectActionList id = "dma_files" >
+      <copy source="Project_Headers/dma-MK.h"                   target="Project_Headers/dma.h"                      overwrite="true"  derived="true" />
+      <copy source="Snippets/dma-memory-example.cpp"            target="Snippets/dma-memory-example.cpp"            overwrite="true"  derived="true" />
+      <copy source="Snippets/dma-memory-template-example.cpp"   target="Snippets/dma-memory-template-example.cpp"   overwrite="true"  derived="true" />
+      <copy source="Snippets/dma-uart-example.cpp"              target="Snippets/dma-uart-example.cpp"              overwrite="true"  derived="true" />
+      <copy source="Snippets/dma-spi-example.cpp"               target="Snippets/dma-spi-example.cpp"               overwrite="true"  derived="true" />
+   </projectActionList>
+
+</peripheralPage>
