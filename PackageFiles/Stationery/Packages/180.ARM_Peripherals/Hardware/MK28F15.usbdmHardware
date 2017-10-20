@@ -67,9 +67,8 @@
          <irq num="DMA13_DMA29_IRQn" />
          <irq num="DMA14_DMA30_IRQn" />
          <irq num="DMA15_DMA31_IRQn" />
-         <param key="NumChannels"   value="64" />
       </peripheral>
-      <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_32ch_trig_mk28f15">
+      <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_32ch_trig_split_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDmaMux" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_DMAMUX_MASK" />
       </peripheral>

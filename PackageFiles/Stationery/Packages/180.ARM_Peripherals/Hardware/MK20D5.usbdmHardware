@@ -71,7 +71,6 @@
          <irq num="DMA1_IRQn" />
          <irq num="DMA2_IRQn" />
          <irq num="DMA3_IRQn" />
-         <param key="NumChannels"   value="4" />
       </peripheral>
       <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_4ch_trig_mk20d5">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDmaMux" />

@@ -50,7 +50,6 @@
       <peripheral baseName="DMA"      instance="0"        version="dma0_4ch_ears_active">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDma" />
          <clock reg="SCGC7"         mask="SIM_SCGC7_DMA_MASK" />
-         <param key="NumChannels"   value="4" />
       </peripheral>
       <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_4ch_trig">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDmaMux" />

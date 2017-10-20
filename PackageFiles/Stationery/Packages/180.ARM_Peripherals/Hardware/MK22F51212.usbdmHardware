@@ -68,7 +68,6 @@
          <irq num="DMA13_IRQn" />
          <irq num="DMA14_IRQn" />
          <irq num="DMA15_IRQn" />
-         <param key="NumChannels"   value="16" />
       </peripheral>
       <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_16ch_trig">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDmaMux" />
