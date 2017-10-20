@@ -34,6 +34,13 @@ namespace USBDM {
 typedef void (*DmaCallbackFunction)(void);
 
 /**
+ * Type definition for DMA error interrupt call back
+ *
+ * @param errorFlags          Channel error information (DMA_ES)
+ */
+typedef void (*DmaErrorCallbackFunction)(uint32_t errorFlags);
+
+/**
  * Controls operation of DMA-MUX channel
  */
 enum DmaMuxEnable {
@@ -46,8 +53,21 @@ enum DmaMuxEnable {
  * How to arbitrate between requests from different channels
  */
 enum DmaArbitration {
-   DmaArbitration_Fixed       = DMA_CR_ERCA(0), //!< Fixed arbitration between channels
-   DmaArbitration_RoundRobin  = DMA_CR_ERCA(1), //!< Round-robin arbitration between channels
+   DmaArbitration_Fixed       = DMA_CR_ERCA(0), //!< Fixed arbitration between channels within a group
+   DmaArbitration_RoundRobin  = DMA_CR_ERCA(1), //!< Round-robin arbitration between channels within a group
+};
+
+/**
+ * Controls priority of DMA groups
+ */
+enum DmaGroupArbitration {
+#if defined DMA_CR_ERGA
+   DmaGroupArbitration_RoundRobin = DMA_CR_ERGA(1)|DMA_CR_GRP1PRI(0)|DMA_CR_GRP0PRI(1), //!< Round-robin group priority
+   DmaGroupArbitration_01         = DMA_CR_ERGA(0)|DMA_CR_GRP1PRI(0)|DMA_CR_GRP0PRI(1), //!< Group 0 > Group 1
+   DmaGroupArbitration_10         = DMA_CR_ERGA(0)|DMA_CR_GRP1PRI(1)|DMA_CR_GRP0PRI(0), //!< Group 1 > Group 0
+#else
+   DmaGroupArbitration_RoundRobin = 0, //!< Group priority not supported
+#endif
 };
 
 /**
@@ -78,10 +98,38 @@ enum DmaMinorLoopMapping {
  * Channel numbers
  */
 enum DmaChannelNum {
-   DmaChannelNum_0 = 0,     //!< Channel 0
-   DmaChannelNum_1 = 1,     //!< Channel 1
-   DmaChannelNum_2 = 2,     //!< Channel 2
-   DmaChannelNum_3 = 3,     //!< Channel 3
+   DmaChannelNum_0,      //!< Channel  0
+   DmaChannelNum_1,      //!< Channel  1
+   DmaChannelNum_2,      //!< Channel  2
+   DmaChannelNum_3,      //!< Channel  3
+   DmaChannelNum_4,      //!< Channel  4
+   DmaChannelNum_5,      //!< Channel  5
+   DmaChannelNum_6,      //!< Channel  6
+   DmaChannelNum_7,      //!< Channel  7
+   DmaChannelNum_8,      //!< Channel  8
+   DmaChannelNum_9,      //!< Channel  9
+   DmaChannelNum_10,     //!< Channel 10
+   DmaChannelNum_11,     //!< Channel 11
+   DmaChannelNum_12,     //!< Channel 12
+   DmaChannelNum_13,     //!< Channel 13
+   DmaChannelNum_14,     //!< Channel 14
+   DmaChannelNum_15,     //!< Channel 15
+   DmaChannelNum_16,     //!< Channel 16
+   DmaChannelNum_17,     //!< Channel 17
+   DmaChannelNum_18,     //!< Channel 18
+   DmaChannelNum_19,     //!< Channel 19
+   DmaChannelNum_20,     //!< Channel 20
+   DmaChannelNum_21,     //!< Channel 21
+   DmaChannelNum_22,     //!< Channel 22
+   DmaChannelNum_23,     //!< Channel 23
+   DmaChannelNum_24,     //!< Channel 24
+   DmaChannelNum_25,     //!< Channel 25
+   DmaChannelNum_26,     //!< Channel 26
+   DmaChannelNum_27,     //!< Channel 27
+   DmaChannelNum_28,     //!< Channel 28
+   DmaChannelNum_29,     //!< Channel 29
+   DmaChannelNum_30,     //!< Channel 30
+   DmaChannelNum_31,     //!< Channel 31
 
    DmaChannelNum_All = (1<<6),  //!< All channels, some operations may be applied to all channels
 };
@@ -98,7 +146,7 @@ enum DmaSize : uint8_t {
    DmaSize_Illegal = 7,  //!< Illegal transfer
 };
 
-/*
+/**
  * Controls whether a channel can be suspended by a higher priority channel
  */
 enum DmaCanBePreempted {
@@ -106,7 +154,7 @@ enum DmaCanBePreempted {
    DmaCanBePreempted_Enable  = DMA_DCHPRI_ECP(1), //!< Channel N can be temporarily suspended by the service request of a higher priority channel
 };
 
-/*
+/**
  * Controls whether a channel can suspend a lower priority channel
  */
 enum DmaCanPreemptLower {
@@ -197,9 +245,9 @@ static constexpr uint16_t dmaSize(const Ts &sobj, const Td &dobj) {
  * | | Minor Loop               | |             NBYTES must be an even multiple of SSIZE and DSIZE in bytes.
  * | | Each transfer            | |
  * | |   SADDR->DADDR           | |            The following are used by the major loop
- * | |   SADDR += SOFF          | |             - SLAST Adjustment applied to SADDR after major loop
- * | |   DADDR += DOFF          | |             - DLAST Adjustment applied to DADDR after major loop
- * | | Total transfer is NBYTES | |             - CITER Major loop counter - counts how many minor loops
+ * | |   SADDR += SOFF          | |             - SLAST Adjustment applied to SADDR at the end of each major loop
+ * | |   DADDR += DOFF          | |             - DLAST Adjustment applied to DADDR at the end of each major loop
+ * | | Total transfer is NBYTES | |             - CITER Major loop counter - counts how many completed major loops
  * | +--------------------------+ |
  * |                              |            SLAST and DLAST may be used to reset the addresses to the initial value or
  * | At end of Major Loop         |            link to the next transfer.
@@ -229,7 +277,8 @@ struct DmaTcd {
 /**
  * Template class providing interface to DMA Multiplexor
  *
- * @tparam info      Information class for DMAMux
+ * @tparam DmaMuxInfo  Information class for DMAMux
+ * @tparam NumChannels Number of DMA channels in associated DMA controller
  *
  * @code
  * using dmamux = DmaMux_T<DmaMuxInfo>;
@@ -238,7 +287,7 @@ struct DmaTcd {
  *
  * @endcode
  */
-template <class DmaMuxInfo>
+template <class DmaMuxInfo, unsigned NumChannels>
 class DmaMux_T {
 
 public:
@@ -251,19 +300,25 @@ public:
     */
    static void configure(DmaChannelNum dmaChannel, DmaSlot dmaSlot, DmaMuxEnable dmaMuxEnable=DmaMuxEnable_Continuous) {
 #ifdef DEBUG_BUILD
+      if (dmaChannel >= NumChannels) {
+         // Channel doesn't exists
+         setAndCheckErrorCode(E_ILLEGAL_PARAM);
+      }
       if ((dmaMuxEnable == DmaMuxEnable_Triggered) && (dmaChannel>USBDM::PitInfo::irqCount)) {
          // PIT triggering only available on channels corresponding to PIT channels
          setAndCheckErrorCode(E_ILLEGAL_PARAM);
       }
-      if (dmaChannel >= DmaMuxInfo::NumChannels) {
-         // Channel doesn't exists
+      if (((dmaChannel>=16)&&(dmaSlot<64))||((dmaChannel<16)&&(dmaSlot>=64))) {
+         // DmaSlots 0-63 must associate with DMA channels 0-15
+         // DmaSlots 64-128 must associate with DMA channels 15-31
          setAndCheckErrorCode(E_ILLEGAL_PARAM);
       }
 #endif
       // Enable clock to peripheral
       *DmaMuxInfo::clockReg  |= DmaMuxInfo::clockMask;
 
-      // Configure channel
+      // Configure channel - must be disabled to change
+      DmaMuxInfo::dmamux->CHCFG[dmaChannel] = 0;
       DmaMuxInfo::dmamux->CHCFG[dmaChannel] = dmaMuxEnable|DMAMUX_CHCFG_SOURCE(dmaSlot);
    }
    /**
@@ -296,17 +351,32 @@ protected:
    static constexpr volatile uint32_t    *clockReg      = Info::clockReg;
 
    /** Callback functions for ISRs */
-   static DmaCallbackFunction callbacks[Info::NumChannels];
+   static DmaCallbackFunction callbacks[Info::NumVectors];
+
+   /** Callback functions for errors */
+   static DmaErrorCallbackFunction errorCallback;
 
    /** Callback to catch unhandled interrupt */
    static void noHandlerCallback() {
       setAndCheckErrorCode(E_NO_HANDLER);
    }
 
+   /** Callback to catch unhandled error interrupt */
+   static void noHandlerErrorCallback(uint32_t) {
+      setAndCheckErrorCode(E_NO_HANDLER);
+   }
+
 public:
    /** DMA interrupt handler -  Error callback */
-   static void irqHandler() {
-      // Clear interrupt flag
+   static void irqErrorHandler() {
+
+      // Capture error status
+      uint32_t errorFlags = dmac->ES;
+
+      // Clear channel error flag
+      dmac->CERR = DMA_CERR_CERR(dmac->ES>>DMA_ES_ERRCHN_SHIFT);
+
+      errorCallback(errorFlags);
    }
 
    /** DMA interrupt handler -  Calls DMA 0 callback */
@@ -337,25 +407,114 @@ public:
       callbacks[3]();
    }
 
+   /** DMA interrupt handler -  Calls DMA 4 callback */
+   static void irq4Handler() {
+      // Clear interrupt flag
+      dmac->CINT = DMA_CINT_CINT(4);
+      callbacks[4]();
+   }
+
+   /** DMA interrupt handler -  Calls DMA 5 callback */
+   static void irq5Handler() {
+      // Clear interrupt flag
+      dmac->CINT = DMA_CINT_CINT(5);
+      callbacks[5]();
+   }
+
+   /** DMA interrupt handler -  Calls DMA 6 callback */
+   static void irq6Handler() {
+      // Clear interrupt flag
+      dmac->CINT = DMA_CINT_CINT(6);
+      callbacks[6]();
+   }
+
+   /** DMA interrupt handler -  Calls DMA 7 callback */
+   static void irq7Handler() {
+      // Clear interrupt flag
+      dmac->CINT = DMA_CINT_CINT(7);
+      callbacks[7]();
+   }
+
+   /** DMA interrupt handler -  Calls DMA 8 callback */
+   static void irq8Handler() {
+      // Clear interrupt flag
+      dmac->CINT = DMA_CINT_CINT(8);
+      callbacks[8]();
+   }
+
+   /** DMA interrupt handler -  Calls DMA 9 callback */
+   static void irq9Handler() {
+      // Clear interrupt flag
+      dmac->CINT = DMA_CINT_CINT(9);
+      callbacks[9]();
+   }
+
+   /** DMA interrupt handler -  Calls DMA 10 callback */
+   static void irq10Handler() {
+      // Clear interrupt flag
+      dmac->CINT = DMA_CINT_CINT(10);
+      callbacks[10]();
+   }
+
+   /** DMA interrupt handler -  Calls DMA 11 callback */
+   static void irq11Handler() {
+      // Clear interrupt flag
+      dmac->CINT = DMA_CINT_CINT(11);
+      callbacks[11]();
+   }
+
+   /** DMA interrupt handler -  Calls DMA 12 callback */
+   static void irq12Handler() {
+      // Clear interrupt flag
+      dmac->CINT = DMA_CINT_CINT(12);
+      callbacks[12]();
+   }
+
+   /** DMA interrupt handler -  Calls DMA 13 callback */
+   static void irq13Handler() {
+      // Clear interrupt flag
+      dmac->CINT = DMA_CINT_CINT(13);
+      callbacks[13]();
+   }
+
+   /** DMA interrupt handler -  Calls DMA 14 callback */
+   static void irq14Handler() {
+      // Clear interrupt flag
+      dmac->CINT = DMA_CINT_CINT(14);
+      callbacks[14]();
+   }
+
+   /** DMA interrupt handler -  Calls DMA 15 callback */
+   static void irq15Handler() {
+      // Clear interrupt flag
+      dmac->CINT = DMA_CINT_CINT(15);
+      callbacks[15]();
+   }
+
    /**
     * Enable and configure shared DMA settings
     *
-    * @param[in] dmaArbitration        How to arbitrate between requests from different channels
+    * @param[in] dmaArbitration        How to arbitrate between requests from different DMA channels
+    * @param[in] dmaGroupArbitration   How to arbitrate between requests from different DMA groups
     * @param[in] dmaOnError            Whether to halt when a DMA error occurs
     * @param[in] dmaLink               Whether to enable continuous link mode
     * @param[in] dmaMinorLoopMapping   Whether to enable minor loop mapping
     */
    static void configure(
          DmaArbitration       dmaArbitration=DmaArbitration_RoundRobin,
+         DmaGroupArbitration  dmaGroupArbitration=DmaGroupArbitration_RoundRobin,
          DmaOnError           dmaOnError=DmaOnError_Halt,
          DmaLink              dmaLink=DmaLink_Disabled,
-         DmaMinorLoopMapping  dmaMinorLoopMapping=DmaMinorLoopMapping_Disabled) {
-
+         DmaMinorLoopMapping  dmaMinorLoopMapping=DmaMinorLoopMapping_Disabled
+         ) {
       // Enable clock to DMAC
       *clockReg  |= MuxInfo::clockMask;
 
       // Set shared control options
-      dmac->CR = dmaArbitration|dmaOnError|dmaLink|dmaMinorLoopMapping|DMA_CR_EDBG(1);
+      dmac->CR = dmaArbitration|dmaOnError|dmaLink|dmaMinorLoopMapping|dmaGroupArbitration|DMA_CR_EDBG(1);
+      for (unsigned channel=0; channel<Info::NumVectors; channel++) {
+         callbacks[channel] = noHandlerCallback;
+      }
    }
 
    /**
@@ -517,7 +676,28 @@ public:
       }
 #endif
 
-      IRQn_Type irqNum = (IRQn_Type)(Info::irqNums[0] + channel&(Info::irqCount-1));
+      IRQn_Type irqNum = (IRQn_Type)(Info::irqNums[0] + (channel&(Info::irqCount-1)));
+      if (enable) {
+         enableNvicInterrupt(irqNum, nvicPriority);
+      }
+      else {
+         // Disable interrupts
+         NVIC_DisableIRQ(irqNum);
+      }
+      return E_NO_ERROR;
+   }
+
+   /**
+    * Enable/disable error interrupts in NVIC
+    *
+    * @param[in]  channel       Channel being modified
+    * @param[in]  enable        True => enable, False => disable
+    * @param[in]  nvicPriority  Interrupt priority
+
+    * @return E_NO_ERROR on success
+    */
+   static ErrorCode enableNvicErrorInterrupt(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
+      IRQn_Type irqNum = (IRQn_Type)(Info::irqNums[0] + Info::irqCount);
       if (enable) {
          enableNvicInterrupt(irqNum, nvicPriority);
       }
@@ -540,20 +720,32 @@ public:
       }
       callbacks[channel] = callback;
    }
+
+   /**
+    * Set error callback for ISR
+    *
+    * @param[in]  callback The function to call from stub ISR
+    */
+   static void __attribute__((always_inline)) setErrorCallback(DmaErrorCallbackFunction callback) {
+      if (callback == nullptr) {
+         callback = noHandlerErrorCallback;
+      }
+      errorCallback = callback;
+   }
 };
 
 /**
  * Callback table for programmatically set handlers
  */
-template<class Info> DmaCallbackFunction DmaBase_T<Info>::callbacks[] = {
-      noHandlerCallback,
-      noHandlerCallback,
-      noHandlerCallback,
-      noHandlerCallback
-};
+template<class Info> DmaCallbackFunction DmaBase_T<Info>::callbacks[];
+
+/**
+ * Callback table for programmatically set handlers
+ */
+template<class Info> DmaErrorCallbackFunction DmaBase_T<Info>::errorCallback = noHandlerErrorCallback;
 
 #ifdef USBDM_DMAMUX0_IS_DEFINED
-using DmaMux0 = DmaMux_T<Dmamux0Info>;
+using DmaMux0 = DmaMux_T<Dmamux0Info, Dma0Info::NumChannels>;
 #endif
 
 #ifdef USBDM_DMAMUX1_IS_DEFINED
