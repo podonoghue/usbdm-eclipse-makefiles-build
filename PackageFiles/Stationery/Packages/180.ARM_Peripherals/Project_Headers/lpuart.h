@@ -302,7 +302,7 @@ public:
     * Receive/Transmit IRQ handler
     */
    static void irqRxTxHandler() {
-      uint8_t status = Info::lpuart->S1;
+      uint8_t status = Info::lpuart->STAT;
       rxTxCallback(status);
    }
 
@@ -310,7 +310,7 @@ public:
     * Error and LON event IRQ handler
     */
    static void irqErrorHandler() {
-      uint8_t status = Info::lpuart->S1;
+      uint8_t status = Info::lpuart->STAT;
       errorCallback(status);
    }
 
