@@ -314,6 +314,8 @@ protected:
    static UARTCallbackFunction rxTxCallback;
    /** Callback function for Error ISR */
    static UARTCallbackFunction errorCallback;
+   /** Callback function for LON ISR */
+   static UARTCallbackFunction lonCallback;
 
 public:
    /**
@@ -358,7 +360,15 @@ protected:
 
 public:
    /**
-    * Receive/Transmit IRQ handler
+    * Receive/Transmit IRQ handler (MKL)
+    */
+   static void irqHandler() {
+      uint8_t status = Info::uart->S1;
+      rxTxCallback(status);
+   }
+
+   /**
+    * Receive/Transmit IRQ handler (MK)
     */
    static void irqRxTxHandler() {
       uint8_t status = Info::uart->S1;
@@ -366,11 +376,19 @@ public:
    }
 
    /**
-    * Error and LON event IRQ handler
+    * Error and LON event IRQ handler (MK)
     */
    static void irqErrorHandler() {
       uint8_t status = Info::uart->S1;
       errorCallback(status);
+   }
+
+   /**
+    * LON IRQ handler (MK)
+    */
+   static void irqLonHandler() {
+      uint8_t status = Info::uart->S1;
+      lonCallback(status);
    }
 
    /**
@@ -398,6 +416,18 @@ public:
    }
 
    /**
+    * Set LON Callback function
+    *
+    *   @param[in]  callback Callback function to be executed on UART LON interrupt
+    */
+   static void setLonCallback(UARTCallbackFunction callback) {
+      if (callback == nullptr) {
+         errorCallback = unexpectedInterrupt;
+      }
+      lonCallback = callback;
+   }
+
+   /**
     * Enable/disable interrupts in NVIC
     *
     * @param[in]  enable    True => enable, False => disable
@@ -418,6 +448,7 @@ public:
 
 template<class Info> UARTCallbackFunction Uart_T<Info>::rxTxCallback  = unexpectedInterrupt;
 template<class Info> UARTCallbackFunction Uart_T<Info>::errorCallback = unexpectedInterrupt;
+template<class Info> UARTCallbackFunction Uart_T<Info>::lonCallback   = unexpectedInterrupt;
 
 #ifdef UART_C4_BRFA_MASK
 template<class Info> class Uart_brfa_T : public Uart_T<Info> {
@@ -597,7 +628,29 @@ protected:
 
 public:
    /**
-    * Receive/Transmit IRQ handler
+    * Receive/Transmit IRQ handler (MKL)
+    */
+   static void irqHandler()  {
+      uint8_t status = Info::uart->S1;
+      if (status & UART_S1_RDRF_MASK) {
+         // Receive data register full - save data
+         rxQueue.enQueueDiscardOnFull(Info::uart->D);
+      }
+      if (status & UART_S1_TDRE_MASK) {
+         // Transmitter ready
+         if (txQueue.isEmpty()) {
+            // No data available - disable further transmit interrupts
+            Info::uart->C2 &= ~UART_C2_TIE_MASK;
+         }
+         else {
+            // Transmit next byte
+            Info::uart->D = txQueue.deQueue();
+         }
+      }
+   }
+
+   /**
+    * Receive/Transmit IRQ handler (MK)
     */
    static void irqRxTxHandler()  {
       uint8_t status = Info::uart->S1;
@@ -619,7 +672,7 @@ public:
    }
 
    /**
-    * Error and LON event IRQ handler
+    * Error IRQ handler (MK)
     */
    static void irqErrorHandler() {
       // Ignore errors
