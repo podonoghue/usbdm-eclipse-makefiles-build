@@ -71,8 +71,10 @@
       <peripheral baseName="DMA"      instance="0"        version="dma0_16ch">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDma" />
          <clock reg="SCGC7"         mask="SIM_SCGC7_DMA_MASK" />
+         <irq num="DMA0_IRQn" />
+         <irq num="DMA_Error_IRQn" />
       </peripheral>
-      <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_16ch_trig">
+      <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_16ch_trig_mk64f12">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDmaMux" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_DMAMUX0_MASK" />
          <dma>
@@ -318,38 +320,38 @@
       <peripheral baseName="UART"     instance="0"        version="uart0_mk24f12_c7816">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUart" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_UART0_MASK" />
-         <irq num="UART0_RX_TX_IRQn" />
-         <irq num="UART0_ERR_IRQn" />
+         <irq num="UART0_RxTx_IRQn" />
+         <irq num="UART0_Error_IRQn" />
       </peripheral>
       <peripheral baseName="UART"     instance="1"        version="uart1_mk24f12">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUart" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_UART1_MASK" />
-         <irq num="UART1_RX_TX_IRQn" />
-         <irq num="UART1_ERR_IRQn" />
+         <irq num="UART1_RxTx_IRQn" />
+         <irq num="UART1_Error_IRQn" />
       </peripheral>
       <peripheral baseName="UART"     instance="2"        version="uart1_mk24f12">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUart" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_UART2_MASK" />
-         <irq num="UART2_RX_TX_IRQn" />
-         <irq num="UART2_ERR_IRQn" />
+         <irq num="UART2_RxTx_IRQn" />
+         <irq num="UART2_Error_IRQn" />
       </peripheral>
       <peripheral baseName="UART"     instance="3"        version="uart1_mk24f12">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUart" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_UART3_MASK" />
-         <irq num="UART3_RX_TX_IRQn" />
-         <irq num="UART3_ERR_IRQn" />
+         <irq num="UART3_RxTx_IRQn" />
+         <irq num="UART3_Error_IRQn" />
       </peripheral>
       <peripheral baseName="UART"     instance="4"        version="uart1_mk24f12">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUart" />
          <clock reg="SCGC1"         mask="SIM_SCGC1_UART4_MASK" />
-         <irq num="UART4_RX_TX_IRQn" />
-         <irq num="UART4_ERR_IRQn" />
+         <irq num="UART4_RxTx_IRQn" />
+         <irq num="UART4_Error_IRQn" />
       </peripheral>
       <peripheral baseName="UART"     instance="5"        version="uart1_mk24f12">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUart" />
          <clock reg="SCGC1"         mask="SIM_SCGC1_UART5_MASK" />
-         <irq num="UART5_RX_TX_IRQn" />
-         <irq num="UART5_ERR_IRQn" />
+         <irq num="UART5_RxTx_IRQn" />
+         <irq num="UART5_Error_IRQn" />
       </peripheral>
       <peripheral baseName="USB"      instance="0"        version="usb0_otg_clkrcv_b">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUsb" />

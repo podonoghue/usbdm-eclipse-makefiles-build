@@ -67,55 +67,12 @@
       <peripheral baseName="DMA"      instance="0"        version="dma0_16ch_ears4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDma" />
          <clock reg="SCGC7"         mask="SIM_SCGC7_DMA_MASK" />
+         <irq num="DMA0_IRQn" />
+         <irq num="DMA_Error_IRQn" />
       </peripheral>
-      <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_16ch_trig">
+      <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_16ch_trig_mk22fa12">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDmaMux" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_DMAMUX0_MASK" />
-         <dma>
-            <slot source="Disabled"             num="0" />
-            <slot source="UART0_Receive"        num="2" />
-            <slot source="UART0_Transmit"       num="3" />
-            <slot source="UART1_Receive"        num="4" />
-            <slot source="UART1_Transmit"       num="5" />
-            <slot source="UART2_Receive"        num="6" />
-            <slot source="UART2_Transmit"       num="7" />
-            <slot source="I2S0_Receive"         num="12" />
-            <slot source="I2S0_Transmit"        num="13" />
-            <slot source="SPI0_Receive"         num="14" />
-            <slot source="SPI0_Transmit"        num="15" />
-            <slot source="SPI1_TransmitReceive" num="16" />
-            <slot source="I2C0"                 num="18" />
-            <slot source="I2C1"                 num="19" />
-            <slot source="FTM0_Ch_0"            num="20" />
-            <slot source="FTM0_Ch_1"            num="21" />
-            <slot source="FTM0_Ch_2"            num="22" />
-            <slot source="FTM0_Ch_3"            num="23" />
-            <slot source="FTM0_Ch_4"            num="24" />
-            <slot source="FTM0_Ch_5"            num="25" />
-            <slot source="FTM0_Ch_6"            num="26" />
-            <slot source="FTM0_Ch_7"            num="27" />
-            <slot source="FTM1_Ch_0"            num="28" />
-            <slot source="FTM1_Ch_1"            num="29" />
-            <slot source="FTM2_Ch_0"            num="30" />
-            <slot source="FTM2_Ch_1"            num="31" />
-            <slot source="ADC0"                 num="40" />
-            <slot source="ADC1"                 num="41" />
-            <slot source="CMP0"                 num="42" />
-            <slot source="CMP1"                 num="43" />
-            <slot source="DAC0"                 num="45" />
-            <slot source="PDB"                  num="48" />
-            <slot source="PortA"                num="49" />
-            <slot source="PortB"                num="50" />
-            <slot source="PortC"                num="51" />
-            <slot source="PortD"                num="52" />
-            <slot source="PortE"                num="53" />
-            <slot source="LPUART_Receive"       num="58" />
-            <slot source="LPUART_Transmit"      num="59" />
-            <slot source="AlwaysEnabled0"       num="60" />
-            <slot source="AlwaysEnabled1"       num="61" />
-            <slot source="AlwaysEnabled2"       num="62" />
-            <slot source="AlwaysEnabled3"       num="63" />
-         </dma>
       </peripheral>
       <peripheral baseName="EWM"      instance=""         version="ewm_2">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForEwm" />
@@ -262,20 +219,20 @@
       <peripheral baseName="UART"     instance="0"        version="uart0_mk10d7_c7816">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUart" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_UART0_MASK" />
-         <irq num="UART0_RX_TX_IRQn" />
-         <irq num="UART0_ERR_IRQn" />
+         <irq num="UART0_RxTx_IRQn" />
+         <irq num="UART0_Error_IRQn" />
       </peripheral>
       <peripheral baseName="UART"     instance="1"        version="uart1_mk10d10">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUart" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_UART1_MASK" />
-         <irq num="UART1_RX_TX_IRQn" />
-         <irq num="UART1_ERR_IRQn" />
+         <irq num="UART1_RxTx_IRQn" />
+         <irq num="UART1_Error_IRQn" />
       </peripheral>
       <peripheral baseName="UART"     instance="2"        version="uart1_mk10d10">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUart" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_UART2_MASK" />
-         <irq num="UART2_RX_TX_IRQn" />
-         <irq num="UART2_ERR_IRQn" />
+         <irq num="UART2_RxTx_IRQn" />
+         <irq num="UART2_Error_IRQn" />
       </peripheral>
       <peripheral baseName="USB"      instance="0"        version="usb0_otg_c">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUsb" />

@@ -197,7 +197,7 @@
       <peripheral baseName="LPUART"   instance="0"        version="lpuart0_0x4002a000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLpuart" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_LPUART0_MASK" />
-         <irq num="LPUART0_RX_TX_IRQn" />
+         <irq num="LPUART0_RxTx_IRQn" />
       </peripheral>
       <peripheral baseName="MCG"      instance=""         version="mcg_mk_ics48m_no_rtc">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcg" />
@@ -245,19 +245,19 @@
       <peripheral baseName="UART"     instance="0"        version="uart0_mk21fa12_c7816">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUart" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_UART0_MASK" />
-         <irq num="UART0_RX_TX_IRQn" />
+         <irq num="UART0_RxTx_IRQn" />
          <param key="clockSource"   value="SystemCoreClock" />
       </peripheral>
       <peripheral baseName="UART"     instance="1"        version="uart1_mk10d10">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUart" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_UART1_MASK" />
-         <irq num="UART1_RX_TX_IRQn" />
+         <irq num="UART1_RxTx_IRQn" />
          <param key="clockSource"   value="SystemCoreClock" />
       </peripheral>
       <peripheral baseName="UART"     instance="2"        version="uart1_mk10d10">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUart" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_UART2_MASK" />
-         <irq num="UART2_RX_TX_IRQn" />
+         <irq num="UART2_RxTx_IRQn" />
          <param key="clockSource"   value="SystemBusClock" />
       </peripheral>
       <peripheral baseName="VREF"     instance=""         version="vref_c">

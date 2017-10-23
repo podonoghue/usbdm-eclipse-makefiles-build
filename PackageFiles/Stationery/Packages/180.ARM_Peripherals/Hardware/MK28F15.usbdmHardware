@@ -52,21 +52,7 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDma" />
          <clock reg="SCGC7"         mask="SIM_SCGC7_DMA_MASK" />
          <irq num="DMA0_DMA16_IRQn" />
-         <irq num="DMA1_DMA17_IRQn" />
-         <irq num="DMA2_DMA18_IRQn" />
-         <irq num="DMA3_DMA19_IRQn" />
-         <irq num="DMA4_DMA20_IRQn" />
-         <irq num="DMA5_DMA21_IRQn" />
-         <irq num="DMA6_DMA22_IRQn" />
-         <irq num="DMA7_DMA23_IRQn" />
-         <irq num="DMA8_DMA24_IRQn" />
-         <irq num="DMA9_DMA25_IRQn" />
-         <irq num="DMA10_DMA26_IRQn" />
-         <irq num="DMA11_DMA27_IRQn" />
-         <irq num="DMA12_DMA28_IRQn" />
-         <irq num="DMA13_DMA29_IRQn" />
-         <irq num="DMA14_DMA30_IRQn" />
-         <irq num="DMA15_DMA31_IRQn" />
+         <irq num="DMA_Error_IRQn" />
       </peripheral>
       <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_32ch_trig_split_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDmaMux" />
