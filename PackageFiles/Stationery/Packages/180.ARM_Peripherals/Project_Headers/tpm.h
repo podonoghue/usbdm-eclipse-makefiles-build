@@ -71,6 +71,8 @@ enum TpmMode {
    TpmMode_LeftAlign   = 0,
    //! Up-down counter: Used for centre-aligned PWM 
    TpmMode_CentreAlign = TPM_SC_CPWMS_MASK,
+   //! Dummy value: Used for quadrature encoder
+   TpmMode_Quadrature  = 0,
 };
 
 /**
@@ -290,7 +292,7 @@ public:
 
       // Common registers
       tmr->CNT     = 0;
-      tmr->MOD     = Info::period;
+      tmr->MOD     = Info::modulo;
       tmr->SC      = Info::sc;
 
       enableNvicInterrupts();
@@ -314,7 +316,8 @@ public:
       while (tmr->SC) {
          tmr->SC = 0;
       }
-      tmr->SC = tpmMode|tpmClockSource|tpmPrescale;
+      tmr->SC  = tpmMode|tpmClockSource|tpmPrescale;
+      tmr->MOD = Info::modulo;
    }
 
    /**
@@ -509,7 +512,7 @@ public:
          float    clock = inputClock/prescaleFactor;
          uint32_t periodInTicks   = round(period*clock);
          if (periodInTicks < Info::minimumResolution) {
-            // Too short a period for 1% resolution
+            // Too short a period for minimum resolution
             return setErrorCode(E_TOO_SMALL);
          }
          if (periodInTicks <= maxPeriodInTicks) {
@@ -559,12 +562,25 @@ public:
     *
     * @return Timer frequency in Hz
     */
-   static INLINE_RELEASE float getTickFrequency() {
+   static INLINE_RELEASE float getTickFrequencyAsFloat() {
 
       // Calculate timer prescale factor
       int prescaleFactor = 1<<((tmr->SC&TPM_SC_PS_MASK)>>TPM_SC_PS_SHIFT);
 
-      return (float)Info::getInputClockFrequency() / prescaleFactor;
+      return ((float)Info::getInputClockFrequency())/prescaleFactor;
+   }
+
+   /**
+    * Get clock frequency
+    *
+    * @return Frequency as a uint32_t in Hz (may underflow)
+    */
+   static INLINE_RELEASE uint32_t getTickFrequencyAsInt() {
+
+      // Calculate timer prescale factor
+      int prescaleFactor = 1<<((tmr->SC&TPM_SC_PS_MASK)>>TPM_SC_PS_SHIFT);
+
+      return Info::getInputClockFrequency()/prescaleFactor;
    }
 
    /**
@@ -591,6 +607,7 @@ public:
             // Clear SC so immediate effect on prescale change
             uint32_t sc = tmr->SC&~TPM_SC_PS_MASK;
             // Wait for disable so immediate effect
+			// This is necessary due to clock domain crossing
             while (tmr->SC) {
                tmr->SC = 0;
             }
@@ -605,25 +622,26 @@ public:
    }
 
    /**
-    * Converts a time in microseconds to number of ticks
+    * Convert time in microseconds to time in ticks
     *
     * @param[in] time Time in microseconds
     *
     * @return Time in ticks
     *
     * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
+    * @note Will set error code if calculated value is less the TPM minimum resolution
     */
    static uint32_t convertMicrosecondsToTicks(int time) {
 
       // Calculate period
-      uint32_t tickRate = Info::getClockFrequency();
+      uint32_t tickRate = getTickFrequencyAsInt();
       uint64_t rv       = ((uint64_t)time*tickRate)/1000000;
 #ifdef DEBUG_BUILD
       if (rv > 0xFFFFUL) {
          // Attempt to set too long a period
          setErrorCode(E_TOO_LARGE);
       }
-      if (rv == 0) {
+      if (rv < Info::minimumInterval) {
          // Attempt to set too short a period
          setErrorCode(E_TOO_SMALL);
       }
@@ -632,26 +650,26 @@ public:
    }
 
    /**
-    * Converts a time in seconds to number of ticks
+    * Converts time in seconds to time in ticks
     *
     * @param[in] time Time in seconds
     *
     * @return Time in ticks
     *
     * @note Assumes prescale has been chosen as a appropriate value (see setMeasurementPeriod()). \n
-    *       Only rudimentary range checking is done.
+    * @note Will set error code if calculated value is less the TPM minimum resolution
     */
    static uint32_t convertSecondsToTicks(float time) {
 
       // Calculate period
-      float    tickRate = Info::getClockFrequencyF();
+      float    tickRate = getTickFrequencyAsFloat();
       uint64_t rv       = time*tickRate;
 #ifdef DEBUG_BUILD
       if (rv > 0xFFFFUL) {
          // Attempt to set too long a period
          setErrorCode(E_TOO_LARGE);
       }
-      if (rv == 0) {
+      if (rv < Info::minimumInterval) {
          // Attempt to set too short a period
          setErrorCode(E_TOO_SMALL);
       }
@@ -660,7 +678,7 @@ public:
    }
 
    /**
-    * Converts ticks to time in microseconds
+    * Convert time in ticks to time in microseconds
     *
     * @param[in] tickInterval Time in ticks
     *
@@ -671,8 +689,7 @@ public:
    static uint32_t convertTicksToMicroseconds(int tickInterval) {
 
       // Calculate period
-      uint32_t tickRate = Info::getClockFrequency();
-      uint64_t rv       = ((uint64_t)tickInterval*1000000)/tickRate;
+      uint64_t rv = ((uint64_t)tickInterval*1000000)/getTickFrequencyAsInt();
 #ifdef DEBUG_BUILD
       if (rv > 0xFFFFUL) {
          // Attempt to set too long a period
@@ -687,7 +704,7 @@ public:
    }
 
    /**
-    * Converts ticks to time in seconds
+    * Convert ticks in ticks to time in seconds
     *
     * @param[in] tickInterval Time in ticks as float
     *
@@ -695,7 +712,7 @@ public:
     */
    static float INLINE_RELEASE convertTicksToSeconds(int tickInterval) {
       // Calculate period
-      return tickInterval/Info::getClockFrequencyF();
+      return tickInterval/getTickFrequencyAsFloat();
    }
 
    /**
@@ -1389,12 +1406,91 @@ using Tpm2 = TpmBase_T<Tpm2Info>;
 template <int channel>
 class Tpm3Channel : public TpmBase_T<Tpm3Info>, CheckSignal<Tpm2Info, channel> {
 
-   /**
-    * Class representing TPM3
-    */
+/**
+ * Class representing TPM3
+ */
    using Tpm3 = TpmBase_T<Tpm3Info>;
 #endif
 
+#if defined(TPM_QDCTRL_QUADEN_MASK)
+/**
+ * Template class representing a TPM configured as a Quadrature encoder
+ *
+ * @tparam info      Information class for TPM
+ *
+ * @code
+ *  QuadEncoder_T<Tpm0Info> encoder0;
+ *
+ *  for(;;) {
+ *     console.write("Position =").writeln(encoder.getPosition());
+ *  }
+ * @endcode
+ */
+template <class Info>
+class QuadEncoderTpm_T : public TpmBase_T<Info> {
+
+#ifdef DEBUG_BUILD
+   static_assert(Info::InfoQUAD::info[0].gpioBit != UNMAPPED_PCR, "QuadEncoder_T: TPM PHA is not mapped to a pin - Modify Configure.usbdm");
+   static_assert(Info::InfoQUAD::info[1].gpioBit != UNMAPPED_PCR, "QuadEncoder_T: TPM PHB is not mapped to a pin - Modify Configure.usbdm");
+#endif
+
+public:
+   static constexpr volatile TPM_Type *tpm      = Info::tpm;
+   static constexpr volatile uint32_t *clockReg = Info::clockReg;
+
+   /**
+    * Enable with default settings\n
+    * Includes configuring all pins
+    */
+   static void configure() {
+      Info::InfoQUAD::initPCRs();
+
+      // Enable clock to timer
+      *clockReg |= Info::clockMask;
+      __DMB();
+
+      TpmBase_T<Info>::configure(TpmMode_Quadrature);
+
+      tpm->QDCTRL =
+            TPM_QDCTRL_QUADEN_MASK|      // Enable Quadrature encoder
+            TPM_QDCTRL_QUADMODE(0);      // Quadrature mode
+      tpm->CONF   = TPM_CONF_DBGMODE(3);
+   }
+
+   /**
+    * Reset position to zero
+    */
+   static void INLINE_RELEASE resetPosition() {
+      // Note: writing ANY value clears CNT (cannot set value)
+      tpm->CNT = 0;
+   }
+   /**
+    * Get Quadrature encoder position
+    *
+    * @return Signed number representing position relative to reference location
+    */
+   static INLINE_RELEASE int16_t getPosition() {
+      return (int16_t)(tpm->CNT);
+   }
+};
+
+#ifdef USBDM_TPM1_IS_DEFINED
+/**
+ * Class representing TPM1 as Quadrature encoder
+ * Not all TPMs support this mode
+ */
+using TpmQuadEncoder1 = QuadEncoderTpm_T<Tpm1Info>;
+#endif
+
+#ifdef USBDM_TPM2_IS_DEFINED
+/**
+ * Class representing TPM2 as Quadrature encoder
+ * Not all TPMs support this mode
+ */
+using TpmQuadEncoder2 = QuadEncoderTpm_T<Tpm2Info>;
+#endif
+
+#endif // USBDM_TPM3_IS_DEFINED
 
 /**
  * End TPM_Group

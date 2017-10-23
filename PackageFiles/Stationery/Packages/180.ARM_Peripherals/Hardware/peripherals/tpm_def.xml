@@ -22,10 +22,15 @@
    <aliasOption key="/SIM/sim_sopt2_tpmsrc" constant="false" />
    <aliasOption key="/SIM/system_tpm_clock" />
 
-   <intOption name="minimumResolution" description="Minimum resolution for TPM interval"
-      toolTip="This value is used as a minimum value for the timer interval in ticks \n
+   <intOption name="minimumInterval" description="Minimum usable interval in ticks"
+      toolTip="This value is used as a minimum acceptable value for the timer interval in ticks\n
+               when using convertMicrosecondsToTicks() or convertSecondsToTicks()"
+      value="20" min="0" max="65535"/>
+      
+   <intOption name="minimumResolution" description="Minimum resolution for PWM interval"
+      toolTip="This value is used as a minimum value for the timer period in ticks \n
          so that a reasonable resolution is available for PWM duty-cycle"
-      value="100" min="0" />
+      value="100" min="0" max="65535" />
       
    <intOption name="tpmExternalClock" description="TPM External clock "
       toolTip="Clock frequency of external clock supplied to TPM_CLKINx pin"
@@ -34,7 +39,7 @@
       toolTip="Selects the clock source for the module">
       <choice value="0" name="Disabled" />
       <choice value="1" name="System TPM Clock" isDefault="true" />
-      <choice value="2" name="External clock (synchonized to System TPM Clock)" />
+      <choice value="2" name="External clock (synchonized to System Clock)" />
       <choice value="3" name="Reserved" />
    </choiceOption>
    <choiceOption name="tpm_sc_ps" description="Clock prescaler"
@@ -61,15 +66,15 @@
       toolTip="Determined from timer clock source and prescaler"
       derived="true"
       units="s"/>
-   <floatOption name="maximumPeriod" 
-      constant="true"
-      description="Maximum period of timer"
-      toolTip="Determined from timer clock source and prescaler"
-      derived="true"
-      units="s"/>
-   <intOption name="period" description="Period of timer"
+   <intOption name="tpm_mod" description="Modulo of timer"
       toolTip="Default period of the timer"
       value="10000" min="0" max="65535" />     
+   <floatOption name="tpm_mod_period" 
+      description="Period of timer"
+      toolTip="Period of the timer"
+      origin="Clock period * ftm_mod"
+      derived="true"
+      min="0" units="s"/>
    <binaryOption name="tpm_sc_cpwms" 
       description="Center-Aligned PWM Select"
       toolTip="Selects CPWM mode\n
@@ -86,8 +91,8 @@
       \t//! Timer external input frequency \n
       \tstatic constexpr uint32_t tpmExternalClock =  $(tpmExternalClock);\n\n
       
-      \t//! Default Timer Period\n
-      \tstatic constexpr uint32_t period = $(period);\n\n
+      \t//! Default Timer Modulo\n
+      \tstatic constexpr uint32_t modulo =TPM_MOD_MOD($(tpm_mod));\n\n
 
       \t//! Default value for SC register\n
       \tstatic constexpr uint32_t sc  = 
@@ -116,7 +121,11 @@
    </projectActionList>
          
    <template><![CDATA[
+      \t/** Minimum resolution for PWM interval */
       \tstatic constexpr uint32_t minimumResolution=$(minimumResolution);\n\n
+      
+      \t/** Minimum usable interval in ticks */      
+      \tstatic constexpr uint32_t minimumInterval=$(minimumInterval);\n\n
       
       \t/**
       \t * Get input clock frequency
@@ -132,28 +141,6 @@
       \t   case TPM_SC_CMOD(2): return tpmExternalClock;
       \t   case TPM_SC_CMOD(3): return 0;
       \t   }
-      \t}\n\n
-      
-      \t/**
-      \t * Get clock frequency
-      \t *
-      \t * @return Frequency as a float in Hz
-      \t */
-      \tstatic float getClockFrequencyF() {
-      \t
-      \t   float freq = getInputClockFrequency();
-      \t   return freq/(1<<((tpm->SC&TPM_SC_PS_MASK)>>TPM_SC_PS_SHIFT));
-      \t}\n\n
-      
-      \t/**
-      \t * Get clock frequency
-      \t *
-      \t * @return Frequency as a uint32_t in Hz (may underflow)
-      \t */
-      \tstatic uint32_t getClockFrequency() {
-      \t
-      \t   uint32_t freq = getInputClockFrequency();
-      \t   return freq/(1<<((tpm->SC&TPM_SC_PS_MASK)>>TPM_SC_PS_SHIFT));
       \t}\n\n
    ]]></template>
 

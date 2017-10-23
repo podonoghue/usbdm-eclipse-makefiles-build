@@ -36,7 +36,7 @@
       <choice value="0" name="Disabled" />
       <choice value="1" name="System bus clock" isDefault="true" />
       <choice value="2" name="Fixed frequency clock" />
-      <choice value="3" name="External clock" />
+      <choice value="3" name="External clock (synchonized to System Clock)" />
    </choiceOption>
    <choiceOption name="ftm_sc_ps" description="Clock prescaler"
       toolTip="Selects the prescaler for the module">
@@ -63,7 +63,7 @@
       derived="true"
       units="s"/>
    <intOption name="ftm_mod" description="Modulo of timer"
-      toolTip="Period of the timer"
+      toolTip="Default period of the timer"
       value="10000" min="0" max="65535" />     
    <floatOption name="ftm_mod_period" 
       description="Period of timer"
@@ -87,8 +87,8 @@
       \t//! Timer external input frequency \n
       \tstatic constexpr uint32_t ftmExternalClock =  $(ftmExternalClock);\n\n
       
-      \t//! Default Timer Period\n
-      \tstatic constexpr uint32_t mod = FTM_MOD_MOD($(ftm_mod));\n\n
+      \t//! Default Timer Modulo\n
+      \tstatic constexpr uint32_t modulo = FTM_MOD_MOD($(ftm_mod));\n\n
 
       \t//! Default value for SC register\n
       \tstatic constexpr uint32_t sc  = 
@@ -166,7 +166,7 @@
       \t/**
       \t * Get input clock frequency
       \t *
-      \t * @return Input clock frequency as an uint32_t in Hz
+      \t * @return Input clock frequency as a uint32_t in Hz
       \t */
       \tstatic uint32_t getInputClockFrequency() {
       \t
@@ -177,28 +177,6 @@
       \t   case FTM_SC_CLKS(2): return SystemMcgffClock;
       \t   case FTM_SC_CLKS(3): return ftmExternalClock;
       \t   }
-      \t}\n\n
-      
-      \t/**
-      \t * Get clock frequency
-      \t *
-      \t * @return Frequency as a float in Hz
-      \t */
-      \tstatic float getClockFrequencyF() {
-      \t
-      \t   float freq = getInputClockFrequency();
-      \t   return freq/(1<<((ftm->SC&FTM_SC_PS_MASK)>>FTM_SC_PS_SHIFT));
-      \t}\n\n
-      
-      \t/**
-      \t * Get clock frequency
-      \t *
-      \t * @return Frequency as a uint32_t in Hz (may underflow)
-      \t */
-      \tstatic uint32_t getClockFrequency() {
-      \t
-      \t   uint32_t freq = getInputClockFrequency();
-      \t   return freq/(1<<((ftm->SC&FTM_SC_PS_MASK)>>FTM_SC_PS_SHIFT));
       \t}\n\n
    ]]></template>
 

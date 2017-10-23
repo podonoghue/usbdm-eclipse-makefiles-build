@@ -335,7 +335,7 @@ public:
 
       // Common registers
       tmr->CNTIN   = 0;
-      tmr->MOD     = Info::mod;
+      tmr->MOD     = Info::modulo;
       tmr->SC      = Info::sc;
       tmr->EXTTRIG = Info::exttrig;
       //TODO Make configurable
@@ -412,7 +412,7 @@ public:
     * @param[in]  enable        True => enable, False => disable
     * @param[in]  nvicPriority  Interrupt priority
     */
-   static void enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
+   static void INLINE_RELEASE enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
 
       if (enable) {
          enableNvicInterrupt(Info::irqNums[0], nvicPriority);
@@ -548,7 +548,7 @@ public:
          float    clock = inputClock/prescaleFactor;
          uint32_t periodInTicks   = round(period*clock);
          if (periodInTicks < Info::minimumResolution) {
-            // Too short a period for 1% resolution
+            // Too short a period for minimum resolution
             return setErrorCode(E_TOO_SMALL);
          }
          if (periodInTicks <= maxPeriodInTicks) {
@@ -592,12 +592,25 @@ public:
     *
     * @return Timer frequency in Hz
     */
-   static INLINE_RELEASE float getTickFrequency() {
+   static INLINE_RELEASE float getTickFrequencyAsFloat() {
 
       // Calculate timer prescale factor
       int prescaleFactor = 1<<((tmr->SC&FTM_SC_PS_MASK)>>FTM_SC_PS_SHIFT);
 
-      return (float)Info::getInputClockFrequency() / prescaleFactor;
+      return ((float)Info::getInputClockFrequency())/prescaleFactor;
+   }
+
+   /**
+    * Get clock frequency
+    *
+    * @return Frequency as a uint32_t in Hz (may underflow)
+    */
+   static INLINE_RELEASE uint32_t getTickFrequencyAsInt() {
+
+      // Calculate timer prescale factor
+      int prescaleFactor = 1<<((tmr->SC&FTM_SC_PS_MASK)>>FTM_SC_PS_SHIFT);
+
+      return Info::getInputClockFrequency()/prescaleFactor;
    }
 
    /**
@@ -636,7 +649,7 @@ public:
    }
 
    /**
-    * Converts a time in microseconds to number of ticks
+    * Convert time in microseconds to time in ticks
     *
     * @param[in] time Time in microseconds
     *
@@ -648,7 +661,7 @@ public:
    static uint32_t convertMicrosecondsToTicks(int time) {
 
       // Calculate period
-      uint32_t tickRate = Info::getClockFrequency();
+      uint32_t tickRate = getTickFrequencyAsInt();
       uint64_t rv       = ((uint64_t)time*tickRate)/1000000;
 #ifdef DEBUG_BUILD
       if (rv > 0xFFFFUL) {
@@ -664,7 +677,7 @@ public:
    }
 
    /**
-    * Converts a time in seconds to number of ticks
+    * Converts time in seconds to time in ticks
     *
     * @param[in] time Time in seconds
     *
@@ -676,7 +689,7 @@ public:
    static uint32_t convertSecondsToTicks(float time) {
 
       // Calculate period
-      float    tickRate = Info::getClockFrequencyF();
+      float    tickRate = getTickFrequencyAsFloat();
       uint64_t rv       = time*tickRate;
 #ifdef DEBUG_BUILD
       if (rv > 0xFFFFUL) {
@@ -692,7 +705,7 @@ public:
    }
 
    /**
-    * Converts ticks to time in microseconds
+    * Convert time in ticks to time in microseconds
     *
     * @param[in] tickInterval Time in ticks
     *
@@ -703,8 +716,7 @@ public:
    static uint32_t convertTicksToMicroseconds(int tickInterval) {
 
       // Calculate period
-      uint32_t tickRate = Info::getClockFrequency();
-      uint64_t rv       = ((uint64_t)tickInterval*1000000)/tickRate;
+      uint64_t rv = ((uint64_t)tickInterval*1000000)/getTickFrequencyAsInt();
 #ifdef DEBUG_BUILD
       if (rv > 0xFFFFUL) {
          // Attempt to set too long a period
@@ -719,7 +731,7 @@ public:
    }
 
    /**
-    * Converts ticks to time in seconds
+    * Convert ticks in ticks to time in seconds
     *
     * @param[in] tickInterval Time in ticks as float
     *
@@ -727,7 +739,7 @@ public:
     */
    static float INLINE_RELEASE convertTicksToSeconds(int tickInterval) {
       // Calculate period
-      return tickInterval/Info::getClockFrequencyF();
+      return tickInterval/getTickFrequencyAsFloat();
    }
 
    /**
