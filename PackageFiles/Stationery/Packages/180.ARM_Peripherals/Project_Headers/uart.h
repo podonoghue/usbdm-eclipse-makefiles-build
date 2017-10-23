@@ -598,7 +598,7 @@ protected:
          __asm__("nop");
       }
       txQueue.enQueue(ch);
-      uart->C2 |= UART_C2_TE_MASK;
+      uart->C2 |= UART_C2_TIE_MASK;
       if (ch=='\n') {
         _writeChar('\r');
       }
