@@ -125,7 +125,7 @@ typedef enum {
   FLEXCAN_BUF13I_IRQn           = 149,   /**< 149 FLEXCAN Message Buffer 13 Interrupt                                              */
   FLEXCAN_BUF14I_IRQn           = 150,   /**< 150 FLEXCAN Message Buffer 14 Interrupt                                              */
   FLEXCAN_BUF15I_IRQn           = 151,   /**< 151 FLEXCAN Message Buffer 15 Interrupt                                              */
-  FLEXCAN_ERR_IRQn              = 152,   /**< 152 FLEXCAN  Error Interrupt                                                         */
+  FLEXCAN_Error_IRQn            = 152,   /**< 152 FLEXCAN  Error Interrupt                                                         */
   FLEXCAN_BOFF_IRQn             = 153,   /**< 153 FLEXCAN  Bus-Off Interrupt                                                       */
 } IRQn_Type;
 
@@ -229,7 +229,7 @@ extern void FLEXCAN_BUF12I_IRQHandler(void);   /**< FLEXCAN Message Buffer 12 In
 extern void FLEXCAN_BUF13I_IRQHandler(void);   /**< FLEXCAN Message Buffer 13 Interrupt                                              */
 extern void FLEXCAN_BUF14I_IRQHandler(void);   /**< FLEXCAN Message Buffer 14 Interrupt                                              */
 extern void FLEXCAN_BUF15I_IRQHandler(void);   /**< FLEXCAN Message Buffer 15 Interrupt                                              */
-extern void FLEXCAN_ERR_IRQHandler(void);      /**< FLEXCAN  Error Interrupt                                                         */
+extern void FLEXCAN_Error_IRQHandler(void);    /**< FLEXCAN  Error Interrupt                                                         */
 extern void FLEXCAN_BOFF_IRQHandler(void);     /**< FLEXCAN  Bus-Off Interrupt                                                       */
 
 /* ================================================================================ */

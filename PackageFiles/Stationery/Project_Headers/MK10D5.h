@@ -54,13 +54,13 @@ typedef enum {
   SPI0_IRQn                     =  12,   /**<  28 Serial Peripheral Interface                                                      */
   I2S0_Tx_IRQn                  =  13,   /**<  29 Synchronous Serial Interface                                                     */
   I2S0_Rx_IRQn                  =  14,   /**<  30 Synchronous Serial Interface                                                     */
-  UART0_LON_IRQn                =  15,   /**<  31 Serial Communication Interface                                                   */
-  UART0_RX_TX_IRQn              =  16,   /**<  32 Serial Communication Interface                                                   */
-  UART0_ERR_IRQn                =  17,   /**<  33 Serial Communication Interface                                                   */
-  UART1_RX_TX_IRQn              =  18,   /**<  34 Serial Communication Interface                                                   */
-  UART1_ERR_IRQn                =  19,   /**<  35 Serial Communication Interface                                                   */
-  UART2_RX_TX_IRQn              =  20,   /**<  36 Serial Communication Interface                                                   */
-  UART2_ERR_IRQn                =  21,   /**<  37 Serial Communication Interface                                                   */
+  UART0_Lon_IRQn                =  15,   /**<  31 Serial Communication Interface                                                   */
+  UART0_RxTx_IRQn               =  16,   /**<  32 Serial Communication Interface                                                   */
+  UART0_Error_IRQn              =  17,   /**<  33 Serial Communication Interface                                                   */
+  UART1_RxTx_IRQn               =  18,   /**<  34 Serial Communication Interface                                                   */
+  UART1_Error_IRQn              =  19,   /**<  35 Serial Communication Interface                                                   */
+  UART2_RxTx_IRQn               =  20,   /**<  36 Serial Communication Interface                                                   */
+  UART2_Error_IRQn              =  21,   /**<  37 Serial Communication Interface                                                   */
   ADC0_IRQn                     =  22,   /**<  38 Analogue to Digital Converter                                                    */
   CMP0_IRQn                     =  23,   /**<  39 High-Speed Comparator                                                            */
   CMP1_IRQn                     =  24,   /**<  40 High-Speed Comparator                                                            */
@@ -117,13 +117,13 @@ extern void I2C0_IRQHandler(void);             /**< Inter-Integrated Circuit    
 extern void SPI0_IRQHandler(void);             /**< Serial Peripheral Interface                                                      */
 extern void I2S0_Tx_IRQHandler(void);          /**< Synchronous Serial Interface                                                     */
 extern void I2S0_Rx_IRQHandler(void);          /**< Synchronous Serial Interface                                                     */
-extern void UART0_LON_IRQHandler(void);        /**< Serial Communication Interface                                                   */
-extern void UART0_RX_TX_IRQHandler(void);      /**< Serial Communication Interface                                                   */
-extern void UART0_ERR_IRQHandler(void);        /**< Serial Communication Interface                                                   */
-extern void UART1_RX_TX_IRQHandler(void);      /**< Serial Communication Interface                                                   */
-extern void UART1_ERR_IRQHandler(void);        /**< Serial Communication Interface                                                   */
-extern void UART2_RX_TX_IRQHandler(void);      /**< Serial Communication Interface                                                   */
-extern void UART2_ERR_IRQHandler(void);        /**< Serial Communication Interface                                                   */
+extern void UART0_Lon_IRQHandler(void);        /**< Serial Communication Interface                                                   */
+extern void UART0_RxTx_IRQHandler(void);       /**< Serial Communication Interface                                                   */
+extern void UART0_Error_IRQHandler(void);      /**< Serial Communication Interface                                                   */
+extern void UART1_RxTx_IRQHandler(void);       /**< Serial Communication Interface                                                   */
+extern void UART1_Error_IRQHandler(void);      /**< Serial Communication Interface                                                   */
+extern void UART2_RxTx_IRQHandler(void);       /**< Serial Communication Interface                                                   */
+extern void UART2_Error_IRQHandler(void);      /**< Serial Communication Interface                                                   */
 extern void ADC0_IRQHandler(void);             /**< Analogue to Digital Converter                                                    */
 extern void CMP0_IRQHandler(void);             /**< High-Speed Comparator                                                            */
 extern void CMP1_IRQHandler(void);             /**< High-Speed Comparator                                                            */

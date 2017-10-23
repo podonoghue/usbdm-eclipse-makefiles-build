@@ -74,17 +74,17 @@ typedef enum {
   CAN0_WakeUp_IRQn              =  34,   /**<  50 Flex Controller Area Network module                                              */
   I2S0_Tx_IRQn                  =  35,   /**<  51 Synchronous Serial Interface                                                     */
   I2S0_Rx_IRQn                  =  36,   /**<  52 Synchronous Serial Interface                                                     */
-  UART0_LON_IRQn                =  44,   /**<  60 Serial Communication Interface                                                   */
-  UART0_RX_TX_IRQn              =  45,   /**<  61 Serial Communication Interface                                                   */
-  UART0_ERR_IRQn                =  46,   /**<  62 Serial Communication Interface                                                   */
-  UART1_RX_TX_IRQn              =  47,   /**<  63 Serial Communication Interface                                                   */
-  UART1_ERR_IRQn                =  48,   /**<  64 Serial Communication Interface                                                   */
-  UART2_RX_TX_IRQn              =  49,   /**<  65 Serial Communication Interface                                                   */
-  UART2_ERR_IRQn                =  50,   /**<  66 Serial Communication Interface                                                   */
-  UART3_RX_TX_IRQn              =  51,   /**<  67 Serial Communication Interface                                                   */
-  UART3_ERR_IRQn                =  52,   /**<  68 Serial Communication Interface                                                   */
-  UART4_RX_TX_IRQn              =  53,   /**<  69 Serial Communication Interface                                                   */
-  UART4_ERR_IRQn                =  54,   /**<  70 Serial Communication Interface                                                   */
+  UART0_Lon_IRQn                =  44,   /**<  60 Serial Communication Interface                                                   */
+  UART0_RxTx_IRQn               =  45,   /**<  61 Serial Communication Interface                                                   */
+  UART0_Error_IRQn              =  46,   /**<  62 Serial Communication Interface                                                   */
+  UART1_RxTx_IRQn               =  47,   /**<  63 Serial Communication Interface                                                   */
+  UART1_Error_IRQn              =  48,   /**<  64 Serial Communication Interface                                                   */
+  UART2_RxTx_IRQn               =  49,   /**<  65 Serial Communication Interface                                                   */
+  UART2_Error_IRQn              =  50,   /**<  66 Serial Communication Interface                                                   */
+  UART3_RxTx_IRQn               =  51,   /**<  67 Serial Communication Interface                                                   */
+  UART3_Error_IRQn              =  52,   /**<  68 Serial Communication Interface                                                   */
+  UART4_RxTx_IRQn               =  53,   /**<  69 Serial Communication Interface                                                   */
+  UART4_Error_IRQn              =  54,   /**<  70 Serial Communication Interface                                                   */
   ADC0_IRQn                     =  57,   /**<  73 Analogue to Digital Converter                                                    */
   ADC1_IRQn                     =  58,   /**<  74 Analogue to Digital Converter                                                    */
   CMP0_IRQn                     =  59,   /**<  75 High-Speed Comparator                                                            */
@@ -168,17 +168,17 @@ extern void CAN0_Rx_IRQHandler(void);          /**< Flex Controller Area Network
 extern void CAN0_WakeUp_IRQHandler(void);      /**< Flex Controller Area Network module                                              */
 extern void I2S0_Tx_IRQHandler(void);          /**< Synchronous Serial Interface                                                     */
 extern void I2S0_Rx_IRQHandler(void);          /**< Synchronous Serial Interface                                                     */
-extern void UART0_LON_IRQHandler(void);        /**< Serial Communication Interface                                                   */
-extern void UART0_RX_TX_IRQHandler(void);      /**< Serial Communication Interface                                                   */
-extern void UART0_ERR_IRQHandler(void);        /**< Serial Communication Interface                                                   */
-extern void UART1_RX_TX_IRQHandler(void);      /**< Serial Communication Interface                                                   */
-extern void UART1_ERR_IRQHandler(void);        /**< Serial Communication Interface                                                   */
-extern void UART2_RX_TX_IRQHandler(void);      /**< Serial Communication Interface                                                   */
-extern void UART2_ERR_IRQHandler(void);        /**< Serial Communication Interface                                                   */
-extern void UART3_RX_TX_IRQHandler(void);      /**< Serial Communication Interface                                                   */
-extern void UART3_ERR_IRQHandler(void);        /**< Serial Communication Interface                                                   */
-extern void UART4_RX_TX_IRQHandler(void);      /**< Serial Communication Interface                                                   */
-extern void UART4_ERR_IRQHandler(void);        /**< Serial Communication Interface                                                   */
+extern void UART0_Lon_IRQHandler(void);        /**< Serial Communication Interface                                                   */
+extern void UART0_RxTx_IRQHandler(void);       /**< Serial Communication Interface                                                   */
+extern void UART0_Error_IRQHandler(void);      /**< Serial Communication Interface                                                   */
+extern void UART1_RxTx_IRQHandler(void);       /**< Serial Communication Interface                                                   */
+extern void UART1_Error_IRQHandler(void);      /**< Serial Communication Interface                                                   */
+extern void UART2_RxTx_IRQHandler(void);       /**< Serial Communication Interface                                                   */
+extern void UART2_Error_IRQHandler(void);      /**< Serial Communication Interface                                                   */
+extern void UART3_RxTx_IRQHandler(void);       /**< Serial Communication Interface                                                   */
+extern void UART3_Error_IRQHandler(void);      /**< Serial Communication Interface                                                   */
+extern void UART4_RxTx_IRQHandler(void);       /**< Serial Communication Interface                                                   */
+extern void UART4_Error_IRQHandler(void);      /**< Serial Communication Interface                                                   */
 extern void ADC0_IRQHandler(void);             /**< Analogue to Digital Converter                                                    */
 extern void ADC1_IRQHandler(void);             /**< Analogue to Digital Converter                                                    */
 extern void CMP0_IRQHandler(void);             /**< High-Speed Comparator                                                            */

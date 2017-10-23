@@ -65,11 +65,11 @@ typedef enum {
   WDOG_IRQn                     =  22,   /**<  38 External Watchdog Monitor                                                        */
   I2C0_IRQn                     =  24,   /**<  40 Inter-Integrated Circuit                                                         */
   SPI_IRQn                      =  26,   /**<  42 Serial Peripheral Interface                                                      */
-  UART0_RX_TX_IRQn              =  31,   /**<  47 Serial Communication Interface                                                   */
-  UART0_ERR_IRQn                =  32,   /**<  48 Serial Communication Interface                                                   */
-  UART1_RX_TX_IRQn              =  33,   /**<  49 Serial Communication Interface                                                   */
-  UART1_ERR_IRQn                =  34,   /**<  50 Serial Communication Interface                                                   */
-  ADC_ERR_IRQn                  =  38,   /**<  54 Analogue to digital converter                                                    */
+  UART0_RxTx_IRQn               =  31,   /**<  47 Serial Communication Interface                                                   */
+  UART0_Error_IRQn              =  32,   /**<  48 Serial Communication Interface                                                   */
+  UART1_RxTx_IRQn               =  33,   /**<  49 Serial Communication Interface                                                   */
+  UART1_Error_IRQn              =  34,   /**<  50 Serial Communication Interface                                                   */
+  ADC_Error_IRQn                =  38,   /**<  54 Analogue to digital converter                                                    */
   ADCA_IRQn                     =  39,   /**<  55 Analogue to digital converter                                                    */
   CMP0_IRQn                     =  40,   /**<  56 High-Speed Comparator                                                            */
   CMP1_IRQn                     =  41,   /**<  57 High-Speed Comparator                                                            */
@@ -154,11 +154,11 @@ extern void LLWU_IRQHandler(void);             /**< Low Leakage Wakeup          
 extern void WDOG_IRQHandler(void);             /**< External Watchdog Monitor                                                        */
 extern void I2C0_IRQHandler(void);             /**< Inter-Integrated Circuit                                                         */
 extern void SPI_IRQHandler(void);              /**< Serial Peripheral Interface                                                      */
-extern void UART0_RX_TX_IRQHandler(void);      /**< Serial Communication Interface                                                   */
-extern void UART0_ERR_IRQHandler(void);        /**< Serial Communication Interface                                                   */
-extern void UART1_RX_TX_IRQHandler(void);      /**< Serial Communication Interface                                                   */
-extern void UART1_ERR_IRQHandler(void);        /**< Serial Communication Interface                                                   */
-extern void ADC_ERR_IRQHandler(void);          /**< Analogue to digital converter                                                    */
+extern void UART0_RxTx_IRQHandler(void);       /**< Serial Communication Interface                                                   */
+extern void UART0_Error_IRQHandler(void);      /**< Serial Communication Interface                                                   */
+extern void UART1_RxTx_IRQHandler(void);       /**< Serial Communication Interface                                                   */
+extern void UART1_Error_IRQHandler(void);      /**< Serial Communication Interface                                                   */
+extern void ADC_Error_IRQHandler(void);        /**< Analogue to digital converter                                                    */
 extern void ADCA_IRQHandler(void);             /**< Analogue to digital converter                                                    */
 extern void CMP0_IRQHandler(void);             /**< High-Speed Comparator                                                            */
 extern void CMP1_IRQHandler(void);             /**< High-Speed Comparator                                                            */
