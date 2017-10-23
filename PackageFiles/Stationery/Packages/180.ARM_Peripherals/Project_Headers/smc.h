@@ -103,7 +103,7 @@ enum SmcStopMode {
 
 /**
  *  Partial Stop Option\n
- *  This field controls whether a Partial Stop mode is entered when STOPM=STOP\n
+ *  Controls whether a Partial Stop mode is entered when STOPM=STOP\n
  *
  * @note Not supported on all processors
  */
@@ -118,13 +118,28 @@ enum SmcPartialStopMode {
 };
 
 /**
+ *  Stop mode LPO Option\n
+ *  Controls whether the 1 kHz LPO clock is enabled in LLS/VLLSx modes.
+ *
+ * @note Not supported on all processors
+ */
+enum SmcLpoInLowLeakage {
+#ifdef SMC_STOPCTRL_LPOPO
+   SmcLpoInLowLeakage_Enable  = SMC_STOPCTRL_LPOPO(0), //!< LPO clock is enabled in LLS/VLLSx
+   SmcLpoInLowLeakage_Disable = SMC_STOPCTRL_LPOPO(1), //!< LPO clock is disabled in LLS/VLLSx
+#else
+   SmcLpoInLowLeakage_Disable  = 0, //!< LPO clock in STOP option not supported
+#endif
+};
+
+/**
  *  POR Power Option\n
  *  This bit controls whether the POR detect circuit is enabled in VLLS0 mode.
  */
 enum SmcPowerOnReset {
 #ifdef SMC_STOPCTRL_PORPO
-   SmcPowerOnReset_Disable = SMC_STOPCTRL_PORPO(0),   //!< Power on reset (brown-out detection) in STOP disabled
-   SmcPowerOnReset_Enable  = SMC_STOPCTRL_PORPO(1),   //!< Power on reset (brown-out detection) in STOP enabled
+   SmcPowerOnReset_Enable  = SMC_STOPCTRL_PORPO(0),   //!< Power on reset (brown-out detection) in STOP enabled
+   SmcPowerOnReset_Disable = SMC_STOPCTRL_PORPO(1),   //!< Power on reset (brown-out detection) in STOP disabled
 #else
    SmcPowerOnReset_Disable = 0,   //!< Power on reset (brown-out detection) in STOP not supported
 #endif
@@ -166,7 +181,9 @@ enum SmcLowLeakageStopMode {
  */
 enum SmcStatus {
    // Run modes
+#ifdef SMC_PMPROT_AHSRUN
    SmcStatus_hsrun  = SMC_PMSTAT_PMSTAT(1<<7),    //!< Processor is in High Speed Run mode
+#endif
    SmcStatus_run    = SMC_PMSTAT_PMSTAT(1<<0),    //!< Processor is in Normal Run mode
    SmcStatus_vlpr   = SMC_PMSTAT_PMSTAT(1<<2),    //!< Processor is in Very Low Power Run mode
 
@@ -218,9 +235,11 @@ public:
     * @return Pointer to static string
     */
    static const char *getSmcStatusName(SmcStatus status) {
+#ifdef SMC_PMPROT_AHSRUN
       if (status == SmcStatus_hsrun) {
          return "HSRUN";
       }
+#endif
       if (status == SmcStatus_run) {
          return "RUN";
       }
@@ -281,13 +300,15 @@ public:
     * @param[in] smcLowLeakageStopMode  Controls which LLS/VLLS sub-mode to enter if STOPM=LLS/VLLS
     * @param[in] smcPowerOnReset        Controls whether the POR detect circuit is enabled in VLLS0 mode
     * @param[in] smcPartialStopMode     Controls whether a Partial Stop mode is entered when STOPM=STOP (if supported)
+    * @param[in] smcLpoInLowLeakage     Controls whether the 1 kHz LPO clock is enabled in LLS/VLLSx modes (if supported).
     */
    static void setStopOptions(
          SmcLowLeakageStopMode   smcLowLeakageStopMode,
          SmcPowerOnReset         smcPowerOnReset         = SmcPowerOnReset_Disable,
-         SmcPartialStopMode      smcPartialStopMode      = SmcPartialStopMode_Normal) {
+         SmcPartialStopMode      smcPartialStopMode      = SmcPartialStopMode_Normal,
+         SmcLpoInLowLeakage      smcLpoInLowLeakage      = SmcLpoInLowLeakage_Disable) {
 
-      smc->STOPCTRL = smcPartialStopMode|smcPowerOnReset|smcLowLeakageStopMode;
+      smc->STOPCTRL = smcPartialStopMode|smcPowerOnReset|smcLowLeakageStopMode|smcLpoInLowLeakage;
    }
 
    /**
@@ -385,6 +406,7 @@ public:
     * The processor will stop execution and enter the current STOP mode.\n
     * Peripherals affected will depend on the stop mode selected.\n
     * The stop mode to enter may be set by setStopMode().
+    * Other options that affect stop mode may be set by setStopOptions().
     */
    static void enterStopMode() {
       SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
