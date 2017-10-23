@@ -65,16 +65,13 @@
    <item key="$signal$PTE7_muxSetting"                     value="mux1" />
    <item key="$signal$PTE8_muxSetting"                     value="mux1" />
    <item key="$signal$PTE9_muxSetting"                     value="mux1" />
-   <item key="/DMA0/NumChannels"                           value="32" />
    <item key="/FTFE/dflash_phrase_size"                    value="8" />
    <item key="/FTFE/dflash_sector_size"                    value="4096" />
    <item key="/FTFE/peripheral_file"                       value="ftfe_128k_flexrom" />
-   <item key="/FTFE/pflash_phrase_size"                    value="8" />
-   <item key="/FTFE/pflash_sector_size"                    value="4096" />
    <item key="/LPTMR0/lptmr_cmr"                           value="0" />
    <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_PEE_120MHz" />
    <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_BLPE_4MHz" />
-   <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_PEE_180MHz" />
+   <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_PEE_HSRUN_180MHz" />
    <item key="/MCG/clock_mode[0]"                          value="ClockMode_PEE" />
    <item key="/MCG/clock_mode[1]"                          value="ClockMode_BLPE" />
    <item key="/MCG/clock_mode[2]"                          value="ClockMode_PEE" />
@@ -98,7 +95,7 @@
    <item key="/SIM/system_bus_clock[1]"                    value="4000000" />
    <item key="/SIM/system_core_clock[1]"                   value="4000000" />
    <item key="/SIM/system_core_clock[2]"                   value="180000000" />
-   <item key="/SIM/system_flash_clock[1]"                  value="4000000" />
+   <item key="/SIM/system_flash_clock[1]"                  value="800000" />
    <item key="/SIM/system_flash_clock[2]"                  value="25714285" />
    <item key="/SIM/system_flexbus_clock[1]"                value="4000000" />
    <item key="/SIM/system_lpuart_clock"                    value="192000000" />

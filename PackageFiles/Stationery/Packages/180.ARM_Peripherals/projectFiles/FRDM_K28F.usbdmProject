@@ -54,12 +54,9 @@
    <item key="$signal$USB0_DP_descriptionSetting"          value="Reserved(USB_DP)" />
    <item key="$signal$XTAL32_descriptionSetting"           value="Reserved(Crystal)" />
    <item key="/Console/consoleDevice"                      value="USBDM::Lpuart0" />
-   <item key="/DMA0/NumChannels"                           value="16" />
    <item key="/FTFE/dflash_phrase_size"                    value="8" />
    <item key="/FTFE/dflash_sector_size"                    value="4096" />
    <item key="/FTFE/peripheral_file"                       value="ftfa" />
-   <item key="/FTFE/pflash_phrase_size"                    value="4" />
-   <item key="/FTFE/pflash_sector_size"                    value="4096" />
    <item key="/FTM0/irqHandlingMethod"                     value="$ClassMethod" />
    <item key="/LPTMR0/lptmr_cmr"                           value="0" />
    <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_PEE_120MHz" />
@@ -87,7 +84,7 @@
    <item key="/SIM/system_core_clock[0]"                   value="120000000" />
    <item key="/SIM/system_core_clock[1]"                   value="4000000" />
    <item key="/SIM/system_flash_clock[0]"                  value="24000000" />
-   <item key="/SIM/system_flash_clock[1]"                  value="4000000" />
+   <item key="/SIM/system_flash_clock[1]"                  value="800000" />
    <item key="/SIM/system_flexbus_clock[0]"                value="60000000" />
    <item key="/SIM/system_flexbus_clock[1]"                value="4000000" />
    <item key="/SIM/system_lpuart_clock"                    value="60000000" />

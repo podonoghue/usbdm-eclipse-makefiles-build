@@ -8,13 +8,10 @@
    <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_K28F" />
    <item key="$$DeviceInfo_Target_Device"                  value="FRDM_K28F" />
    <item key="$$Hardware_Source_Filename"                  value="MK28F15.usbdmHardware" />
-   <item key="/Console/consoleDevice"                     value="USBDM::Lpuart0" />
-   <item key="/DMA0/NumChannels"                           value="16" />
+   <item key="/Console/consoleDevice"                      value="USBDM::Lpuart0" />
    <item key="/FTFE/dflash_phrase_size"                    value="8" />
    <item key="/FTFE/dflash_sector_size"                    value="4096" />
    <item key="/FTFE/peripheral_file"                       value="ftfa" />
-   <item key="/FTFE/pflash_phrase_size"                    value="4" />
-   <item key="/FTFE/pflash_sector_size"                    value="4096" />
    <item key="/FTM0/irqHandlingMethod"                     value="$ClassMethod" />
    <item key="/LPTMR0/lptmr_cmr"                           value="0" />
    <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_PEE_120MHz" />
@@ -27,17 +24,14 @@
    <item key="/OSC0/osc_cr_scp"                            value="4" />
    <item key="/OSC0/osc_input_freq"                        value="12000000" />
    <item key="/OSC0/system_oscerclk_undiv_clock"           value="12000000" />
-   <item key="/SIM/busFreq"                                value="60MHz" />
-   <item key="/SIM/coreFreq"                               value="120MHz" />
-   <item key="/SIM/flashFreq"                              value="25MHz" />
-   <item key="/SIM/flexFreq"                               value="50MHz" />
    <item key="/SIM/sim_clkdiv2_usb"                        value="9" />
    <item key="/SIM/sim_clkdiv3_pllfll[0]"                  value="7" />
-   <item key="/SIM/sim_clkdiv3_pllfll[1]"                  value="6" />
+   <item key="/SIM/sim_clkdiv3_pllfll[1]"                  value="9" />
+   <item key="/SIM/sim_clkdiv3_pllfll[2]"                  value="7" />
    <item key="/SIM/sim_sopt2_clkoutsel"                    value="6" />
    <item key="/SIM/sim_sopt2_lpuartsrc"                    value="1" />
    <item key="/SIM/sim_sopt2_pllfllsel[0]"                 value="1" />
-   <item key="/SIM/sim_sopt2_pllfllsel[1]"                 value="3" />
+   <item key="/SIM/sim_sopt2_pllfllsel[1]"                 value="2" />
    <item key="/SIM/sim_sopt2_pllfllsel[2]"                 value="1" />
    <item key="/SIM/sim_sopt2_tpmsrc"                       value="1" />
    <item key="/SIM/system_bus_clock[0]"                    value="60000000" />
@@ -45,7 +39,7 @@
    <item key="/SIM/system_core_clock[0]"                   value="120000000" />
    <item key="/SIM/system_core_clock[1]"                   value="4000000" />
    <item key="/SIM/system_flash_clock[0]"                  value="24000000" />
-   <item key="/SIM/system_flash_clock[1]"                  value="4000000" />
+   <item key="/SIM/system_flash_clock[1]"                  value="800000" />
    <item key="/SIM/system_flexbus_clock[0]"                value="60000000" />
    <item key="/SIM/system_flexbus_clock[1]"                value="4000000" />
    <item key="/SIM/system_lpuart_clock"                    value="60000000" />
