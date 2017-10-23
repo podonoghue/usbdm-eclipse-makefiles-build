@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE root SYSTEM "../package.dtd"
 [
-<!ENTITY DEVICE_SUB_FAMILY  "MK22FA12">
+<!ENTITY DEVICE_SUB_FAMILY  "MK22F12810">
 <!ENTITY DEVICE_FAMILY      "MK">
-<!ENTITY DEVICE_FILE        "MK22FA12">
+<!ENTITY DEVICE_FILE        "MK22F12810">
 ]>
 
 <root 
@@ -37,7 +37,7 @@
          <applyWhen >
             <variableRef idRef="projectOptionValue.CPP-abstraction" />
          </applyWhen>
-         <copy source="projectFiles/&DEVICE_SUB_FAMILY;.usbdmProject"  target="Configure.usbdmProject" />
+         <copy source="projectFiles/&DEVICE_SUB_FAMILY;.usbdmProject"  target="Configure.usbdmProject"  overwrite="true" />
       </projectActionList>
       <xi:include href="shared/CPP-abstraction-Common-MK.xml"/>
    </projectActionList>
