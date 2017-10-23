@@ -5,13 +5,14 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flash Memory Module" >
 
-   <!-- Aliases for predefined values -->
-   <aliasOption key="pflash_sector_size" constant="true"
+   <stringOption name="pflash_sector_size" constant="true" derived="true"
       description="Sector size for program flash (minimum erase element)"/>
 
-   <aliasOption key="pflash_phrase_size" constant="true"
+   <stringOption name="pflash_phrase_size" constant="true" derived="true"
       description="Phrase size for program flash (minimum program element)"/>
 
+   <stringOption name="FlashType" key="/Flash/FlashType" value="ftfe" derived="true" />
+   
    <aliasOption key="dflash_sector_size" constant="true"
       description="Sector size for data flash (minimum erase element)"
       toolTip="Only for device with FlexNVM" />
@@ -61,8 +62,6 @@
       <copy source="Snippets/flash_programming_example.cpp"  target="Snippets/flash_programming_example.cpp"  overwrite="true"  derived="true" />
    </projectActionList>
 
-   <constant name="FlashType" key="/Flash/FlashType" value="ftfe" derived="true" />
-   
    <template><![CDATA[
       \t// Sector size for program flash (minimum erase element)
       \tstatic constexpr unsigned programFlashSectorSize = $(pflash_sector_size);\n\n
