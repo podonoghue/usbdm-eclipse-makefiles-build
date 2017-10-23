@@ -8,7 +8,6 @@ Devices using this peripheral:
       MK11DA5
       MK11D5WS
       MK12D5
-      MK20D7
       MK20D10
       MK20DZ10
       MK20F12
@@ -20,8 +19,6 @@ Devices using this peripheral:
       MK22D5
       MK22F12
       MK22F25612
-      MK22F51212
-      MK22FA12
       MK24F12
       MK24F25612
       MK30D7
@@ -47,7 +44,6 @@ Devices using this peripheral:
       MK61F15
       MK61F15WS
       MK63F12
-      MK64F12
       MK70F15
       MK70F15WS
       MKV31F25612

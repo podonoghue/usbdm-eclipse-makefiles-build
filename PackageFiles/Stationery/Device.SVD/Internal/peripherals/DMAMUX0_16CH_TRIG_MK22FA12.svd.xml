@@ -1,9 +1,9 @@
 <!--
 Devices using this peripheral: 
-      MK20D5
+      MK22FA12
 -->
       <peripheral>
-         <?sourceFile "DMAMUX0_4CH_TRIG_MK20D5" ?>
+         <?sourceFile "DMAMUX0_16CH_TRIG_MK22FA12" ?>
          <name>DMAMUX0</name>
          <description>DMA channel multiplexor</description>
          <groupName>DMAMUX</groupName>
@@ -16,14 +16,14 @@ Devices using this peripheral:
          <addressBlock>
             <?width "8" ?>
             <offset>0x0</offset>
-            <size>0x4</size>
+            <size>0x10</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
             <register>
-               <dim>4</dim>
+               <dim>16</dim>
                <dimIncrement>1</dimIncrement>
-               <dimIndex>0,1,2,3</dimIndex>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
                <name>CHCFG%s</name>
                <description>Channel Configuration Register</description>
                <addressOffset>0x0</addressOffset>
@@ -99,142 +99,142 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>12</name>
-                           <description>Reserved</description>
+                           <description>I2S0_Rx</description>
                            <value>0b001100</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>13</name>
-                           <description>Reserved</description>
+                           <description>I2S0_Tx</description>
                            <value>0b001101</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>14</name>
-                           <description>I2S0_Rx</description>
+                           <description>SPI0_Rx</description>
                            <value>0b001110</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>15</name>
-                           <description>I2S0_Tx</description>
+                           <description>SPI0_Tx</description>
                            <value>0b001111</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>16</name>
-                           <description>SPI0_Rx</description>
+                           <description>Reserved</description>
                            <value>0b010000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>17</name>
-                           <description>SPI0_Tx</description>
+                           <description>Reserved</description>
                            <value>0b010001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>18</name>
-                           <description>Reserved</description>
+                           <description>I2C0</description>
                            <value>0b010010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>19</name>
-                           <description>Reserved</description>
+                           <description>I2C1_I2C2</description>
                            <value>0b010011</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>20</name>
-                           <description>Reserved</description>
+                           <description>FTM0_Channel0</description>
                            <value>0b010100</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>21</name>
-                           <description>Reserved</description>
+                           <description>FTM0_Channel1</description>
                            <value>0b010101</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>22</name>
-                           <description>I2C0</description>
+                           <description>FTM0_Channel2</description>
                            <value>0b010110</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>23</name>
-                           <description>Reserved</description>
+                           <description>FTM0_Channel3</description>
                            <value>0b010111</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>24</name>
-                           <description>FTM0_Channel0</description>
+                           <description>FTM0_Channel4</description>
                            <value>0b011000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>25</name>
-                           <description>FTM0_Channel1</description>
+                           <description>FTM0_Channel5</description>
                            <value>0b011001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>26</name>
-                           <description>FTM0_Channel2</description>
+                           <description>FTM0_Channel6</description>
                            <value>0b011010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>27</name>
-                           <description>FTM0_Channel3</description>
+                           <description>FTM0_Channel7</description>
                            <value>0b011011</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>28</name>
-                           <description>FTM0_Channel4</description>
+                           <description>FTM1_Channel0</description>
                            <value>0b011100</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>29</name>
-                           <description>FTM0_Channel5</description>
+                           <description>FTM1_Channel1</description>
                            <value>0b011101</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>30</name>
-                           <description>FTM0_Channel6</description>
+                           <description>FTM2_Channel0</description>
                            <value>0b011110</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>31</name>
-                           <description>FTM0_Channel7</description>
+                           <description>FTM2_Channel1</description>
                            <value>0b011111</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>32</name>
-                           <description>FTM1_Channel0</description>
+                           <description>FTM3_Channel0</description>
                            <value>0b100000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>33</name>
-                           <description>FTM1_Channel1</description>
+                           <description>FTM3_Channel1</description>
                            <value>0b100001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>34</name>
-                           <description>Reserved</description>
+                           <description>FTM3_Channel2</description>
                            <value>0b100010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>35</name>
-                           <description>Reserved</description>
+                           <description>FTM3_Channel3</description>
                            <value>0b100011</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>36</name>
-                           <description>Reserved</description>
+                           <description>FTM3_Channel4</description>
                            <value>0b100100</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>37</name>
-                           <description>Reserved</description>
+                           <description>FTM3_Channel5</description>
                            <value>0b100101</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>38</name>
-                           <description>Reserved</description>
+                           <description>FTM3_Channel6</description>
                            <value>0b100110</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>39</name>
-                           <description>Reserved</description>
+                           <description>FTM3_Channel7</description>
                            <value>0b100111</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -244,7 +244,7 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>41</name>
-                           <description>Reserved</description>
+                           <description>ADC1</description>
                            <value>0b101001</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -259,12 +259,12 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>44</name>
-                           <description>Reserved</description>
+                           <description>CMP2</description>
                            <value>0b101100</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>45</name>
-                           <description>Reserved</description>
+                           <description>DAC0</description>
                            <value>0b101101</value>
                         </enumeratedValue>
                         <enumeratedValue>

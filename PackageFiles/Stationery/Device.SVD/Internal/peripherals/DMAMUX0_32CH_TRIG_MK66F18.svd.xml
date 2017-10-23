@@ -315,7 +315,7 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>55</name>
-                           <description>IEEE1588_Timers1</description>
+                           <description>IEEE1588_Timer1</description>
                            <value>0b110111</value>
                         </enumeratedValue>
                         <enumeratedValue>

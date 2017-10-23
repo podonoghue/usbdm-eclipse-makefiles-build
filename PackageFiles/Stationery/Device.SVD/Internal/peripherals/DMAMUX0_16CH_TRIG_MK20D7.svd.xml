@@ -1,9 +1,9 @@
 <!--
 Devices using this peripheral: 
-      MK20D5
+      MK20D7
 -->
       <peripheral>
-         <?sourceFile "DMAMUX0_4CH_TRIG_MK20D5" ?>
+         <?sourceFile "DMAMUX0_16CH_TRIG_MK20D7" ?>
          <name>DMAMUX0</name>
          <description>DMA channel multiplexor</description>
          <groupName>DMAMUX</groupName>
@@ -16,14 +16,14 @@ Devices using this peripheral:
          <addressBlock>
             <?width "8" ?>
             <offset>0x0</offset>
-            <size>0x4</size>
+            <size>0x10</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
             <register>
-               <dim>4</dim>
+               <dim>16</dim>
                <dimIncrement>1</dimIncrement>
-               <dimIndex>0,1,2,3</dimIndex>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
                <name>CHCFG%s</name>
                <description>Channel Configuration Register</description>
                <addressOffset>0x0</addressOffset>
@@ -79,22 +79,22 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>8</name>
-                           <description>Reserved</description>
+                           <description>UART3_Rx</description>
                            <value>0b001000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>9</name>
-                           <description>Reserved</description>
+                           <description>UART3_Rx</description>
                            <value>0b001001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>10</name>
-                           <description>Reserved</description>
+                           <description>UART4_Rx</description>
                            <value>0b001010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>11</name>
-                           <description>Reserved</description>
+                           <description>UART4_Rx</description>
                            <value>0b001011</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -129,12 +129,12 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>18</name>
-                           <description>Reserved</description>
+                           <description>SPI0_Rx</description>
                            <value>0b010010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>19</name>
-                           <description>Reserved</description>
+                           <description>SPI1_Tx</description>
                            <value>0b010011</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -154,7 +154,7 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>23</name>
-                           <description>Reserved</description>
+                           <description>I2C1</description>
                            <value>0b010111</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -209,12 +209,12 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>34</name>
-                           <description>Reserved</description>
+                           <description>FTM2_Channel0</description>
                            <value>0b100010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>35</name>
-                           <description>Reserved</description>
+                           <description>FTM2_Channel1</description>
                            <value>0b100011</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -244,7 +244,7 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>41</name>
-                           <description>Reserved</description>
+                           <description>ADC1</description>
                            <value>0b101001</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -259,12 +259,12 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>44</name>
-                           <description>Reserved</description>
+                           <description>CMP2</description>
                            <value>0b101100</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>45</name>
-                           <description>Reserved</description>
+                           <description>DAC0</description>
                            <value>0b101101</value>
                         </enumeratedValue>
                         <enumeratedValue>
