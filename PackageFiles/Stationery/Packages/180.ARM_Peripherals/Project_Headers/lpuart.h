@@ -246,8 +246,6 @@ template<class Info> class Lpuart_T : public Lpuart {
 protected:
    /** Callback function for RxTx ISR */
    static LPUARTCallbackFunction rxTxCallback;
-   /** Callback function for Error ISR */
-   static LPUARTCallbackFunction errorCallback;
 
 public:
    /**
@@ -295,23 +293,27 @@ public:
       Lpuart::setBaudRate(baudrate, Info::getClockFrequency(), OVER_SAMPLE);
    }
 
+   /**
+    * Set baud factor value for interface
+    *
+    * This is calculated from baud rate and LPUART clock frequency
+    *
+    * @param[in]  baudrate Interface speed in bits-per-second
+    * @param[in]  osr      Interface over-sample ratio
+    */
+   void setBaudRate(unsigned baudrate, unsigned osr) {
+      Lpuart::setBaudRate(baudrate, Info::getClockFrequency(), osr);
+   }
+
 protected:
 
 public:
    /**
-    * Receive/Transmit IRQ handler
+    * Receive/Transmit/Error IRQ handler
     */
-   static void irqRxTxHandler() {
+   static void irqHandler() {
       uint8_t status = Info::lpuart->STAT;
       rxTxCallback(status);
-   }
-
-   /**
-    * Error and LON event IRQ handler
-    */
-   static void irqErrorHandler() {
-      uint8_t status = Info::lpuart->STAT;
-      errorCallback(status);
    }
 
    /**
@@ -324,18 +326,6 @@ public:
          rxTxCallback = unexpectedInterrupt;
       }
       rxTxCallback = callback;
-   }
-
-   /**
-    * Set Error Callback function
-    *
-    *   @param[in]  callback Callback function to be executed on UART receive or transmit
-    */
-   static void setErrorCallback(LPUARTCallbackFunction callback) {
-      if (callback == nullptr) {
-         errorCallback = unexpectedInterrupt;
-      }
-      errorCallback = callback;
    }
 
    /**
@@ -358,7 +348,6 @@ public:
 };
 
 template<class Info> LPUARTCallbackFunction Lpuart_T<Info>::rxTxCallback  = unexpectedInterrupt;
-template<class Info> LPUARTCallbackFunction Lpuart_T<Info>::errorCallback = unexpectedInterrupt;
 
 /**
  * @brief Template class representing an UART interface with buffered reception
@@ -412,7 +401,7 @@ protected:
          __asm__("nop");
       }
       txQueue.enQueue(ch);
-      lpuart->CTRL |= LPUART_CTRL_TE_MASK;
+      lpuart->CTRL |= LPUART_CTRL_TIE_MASK;
       if (ch=='\n') {
         _writeChar('\r');
       }
@@ -442,9 +431,9 @@ protected:
 
 public:
    /**
-    * Receive/Transmit IRQ handler
+    * Receive/Transmit/Error IRQ handler
     */
-   static void irqRxTxHandler()  {
+   static void irqHandler()  {
       uint8_t status = Info::lpuart->STAT;
       if (status & LPUART_STAT_RDRF_MASK) {
          // Receive data register full - save data
@@ -461,14 +450,6 @@ public:
             Info::lpuart->DATA = txQueue.deQueue();
          }
       }
-   }
-
-   /**
-    * Error and LON event IRQ handler
-    */
-   static void irqErrorHandler() {
-      // Ignore errors
-      clearError();
    }
 
    /**
