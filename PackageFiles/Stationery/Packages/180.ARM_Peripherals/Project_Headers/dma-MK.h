@@ -512,8 +512,12 @@ public:
 
       // Set shared control options
       dmac->CR = dmaArbitration|dmaOnError|dmaLink|dmaMinorLoopMapping|dmaGroupArbitration|DMA_CR_EDBG(1);
+
+      // Clear call-backs and TCDs
       for (unsigned channel=0; channel<Info::NumVectors; channel++) {
+         static const DmaTcd emptyTcd {0,0,0,0,0,0,0,0,0,0};
          callbacks[channel] = noHandlerCallback;
+         configureTransfer((DmaChannelNum)channel, emptyTcd);
       }
    }
 
@@ -621,6 +625,24 @@ public:
       }
    }
 
+#ifdef DMA_EARS_EDREQ_0_MASK
+   /**
+    * Enable/disable DMA asynchronous requests on a channel\n
+    * The channel should be configured beforehand using configureTransfer()
+    *
+    * @param[in]  channel Channel being modified
+    * @param[in]  enable  True => enable, False => disable
+    */
+   static void __attribute__((always_inline)) enableAsynchronousRequests(DmaChannelNum channel, bool enable=true) {
+      if (enable) {
+         dmac->EARS |= (1<<channel);
+      }
+      else {
+         dmac->EARS &= ~(1<<channel);
+      }
+   }
+#endif
+
    /**
     * Enable/disable error interrupts for a channel
     *
@@ -697,13 +719,12 @@ public:
     * @return E_NO_ERROR on success
     */
    static ErrorCode enableNvicErrorInterrupt(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
-      IRQn_Type irqNum = (IRQn_Type)(Info::irqNums[0] + Info::irqCount);
       if (enable) {
-         enableNvicInterrupt(irqNum, nvicPriority);
+         enableNvicInterrupt(Info::irqNums[1], nvicPriority);
       }
       else {
          // Disable interrupts
-         NVIC_DisableIRQ(irqNum);
+         NVIC_DisableIRQ(Info::irqNums[1]);
       }
       return E_NO_ERROR;
    }
