@@ -61,10 +61,10 @@
       <choice value="53" name="Port E" />
       <choice value="58" name="SPI2 Receive" />
       <choice value="59" name="SPI2 Transmit" />
-      <choice value="60" name="Always enabled 0" />
-      <choice value="61" name="Always enabled 1" />
-      <choice value="62" name="Always enabled 2" />
-      <choice value="63" name="Always enabled 3" />
+      <choice value="60" name="Always enabled 60" />
+      <choice value="61" name="Always enabled 61" />
+      <choice value="62" name="Always enabled 62" />
+      <choice value="63" name="Always enabled 63" />
    </choiceOption>
 
    <choiceOption name="dma_chcfg1"  derivedFrom="dma_chcfg0"/>
@@ -110,10 +110,10 @@
       <choice value="56" name="TPM2 Overflow" />
       <choice value="58" name="SPI3 Receive" />
       <choice value="59" name="SPI3 Transmit" />
-      <choice value="60" name="Always enabled 0" />
-      <choice value="61" name="Always enabled 1" />
-      <choice value="62" name="Always enabled 2" />
-      <choice value="63" name="Always enabled 3" />
+      <choice value="60" name="Always enabled 60" />
+      <choice value="61" name="Always enabled 61" />
+      <choice value="62" name="Always enabled 62" />
+      <choice value="63" name="Always enabled 63" />
    </choiceOption>
 
    <choiceOption name="dma_chcfg17" derivedFrom="dma_chcfg16"/>
@@ -138,88 +138,88 @@
       \t */
       \tenum DmaSlot {
       \t // Channels 0-15 only
-      \t   DmaSlot_Disabled            =  0,
-      \t   DmaSlot_LPUART0_Receive     =  2,
-      \t   DmaSlot_LPUART0_Transmit    =  3,
-      \t   DmaSlot_LPUART1_Receive     =  4,
-      \t   DmaSlot_LPUART1_Transmit    =  5,
-      \t   DmaSlot_LPUART2_Receive     =  6,
-      \t   DmaSlot_LPUART2_Transmit    =  7,
-      \t   DmaSlot_LPUART3_Receive     =  8,
-      \t   DmaSlot_LPUART3_Transmit    =  9,
-      \t   DmaSlot_LPUART4_Receive     = 10,
-      \t   DmaSlot_LPUART4_Transmit    = 11,
-      \t   DmaSlot_I2S0_Receive        = 12,
-      \t   DmaSlot_I2S0_Transmit       = 13,
-      \t   DmaSlot_SPI0_Receive        = 14,
-      \t   DmaSlot_SPI0_Transmit       = 15,
-      \t   DmaSlot_SPI1_Receive        = 16,
-      \t   DmaSlot_SPI1_Transmit       = 17,
-      \t   DmaSlot_I2C0_I2C3           = 18,
-      \t   DmaSlot_I2C1_I2C2           = 19,
-      \t   DmaSlot_FTM0_Ch0            = 20,
-      \t   DmaSlot_FTM0_Ch1            = 21,
-      \t   DmaSlot_FTM0_Ch2            = 22,
-      \t   DmaSlot_FTM0_Ch3            = 23,
-      \t   DmaSlot_FTM0_Ch4            = 24,
-      \t   DmaSlot_FTM0_Ch5            = 25,
-      \t   DmaSlot_FTM0_Ch6            = 26,
-      \t   DmaSlot_FTM0_Ch7            = 27,
-      \t   DmaSlot_FTM1_Ch0            = 28,
-      \t   DmaSlot_FTM1_Ch1            = 29,
-      \t   DmaSlot_FTM2_Ch0            = 30,
-      \t   DmaSlot_FTM2_Ch1            = 31,
-      \t   DmaSlot_FTM3_Ch0            = 32,
-      \t   DmaSlot_FTM3_Ch1            = 33,
-      \t   DmaSlot_FTM3_Ch2            = 34,
-      \t   DmaSlot_FTM3_Ch3            = 35,
-      \t   DmaSlot_FTM3_Ch4            = 36,
-      \t   DmaSlot_FTM3_Ch5            = 37,
-      \t   DmaSlot_FTM3_Ch6            = 38,
-      \t   DmaSlot_FTM3_Ch7            = 39,
-      \t   DmaSlot_ADC0                = 40,
-      \t   DmaSlot_CMP0                = 42,
-      \t   DmaSlot_CMP1                = 43,
-      \t   DmaSlot_DAC0                = 45,
-      \t   DmaSlot_CMT                 = 47,
-      \t   DmaSlot_PDB                 = 48,
-      \t   DmaSlot_PortA               = 49,
-      \t   DmaSlot_PortB               = 50,
-      \t   DmaSlot_PortC               = 51,
-      \t   DmaSlot_PortD               = 52,
-      \t   DmaSlot_PortE               = 53,
-      \t   DmaSlot_SPI2_Receive        = 58,
-      \t   DmaSlot_SPI2_Transmit       = 59,
-      \t   DmaSlot_AlwaysEnabled_0     = 60,
-      \t   DmaSlot_AlwaysEnabled_1     = 61,
-      \t   DmaSlot_AlwaysEnabled_2     = 62,
-      \t   DmaSlot_AlwaysEnabled_3     = 63,\n\n
+      \t   DmaSlot_Disabled                      =  0,
+      \t   DmaSlot_LPUART0_Receive               =  2,
+      \t   DmaSlot_LPUART0_Transmit              =  3,
+      \t   DmaSlot_LPUART1_Receive               =  4,
+      \t   DmaSlot_LPUART1_Transmit              =  5,
+      \t   DmaSlot_LPUART2_Receive               =  6,
+      \t   DmaSlot_LPUART2_Transmit              =  7,
+      \t   DmaSlot_LPUART3_Receive               =  8,
+      \t   DmaSlot_LPUART3_Transmit              =  9,
+      \t   DmaSlot_LPUART4_Receive               = 10,
+      \t   DmaSlot_LPUART4_Transmit              = 11,
+      \t   DmaSlot_I2S0_Receive                  = 12,
+      \t   DmaSlot_I2S0_Transmit                 = 13,
+      \t   DmaSlot_SPI0_Receive                  = 14,
+      \t   DmaSlot_SPI0_Transmit                 = 15,
+      \t   DmaSlot_SPI1_Receive                  = 16,
+      \t   DmaSlot_SPI1_Transmit                 = 17,
+      \t   DmaSlot_I2C0_I2C3                     = 18,
+      \t   DmaSlot_I2C1_I2C2                     = 19,
+      \t   DmaSlot_FTM0_Ch0                      = 20,
+      \t   DmaSlot_FTM0_Ch1                      = 21,
+      \t   DmaSlot_FTM0_Ch2                      = 22,
+      \t   DmaSlot_FTM0_Ch3                      = 23,
+      \t   DmaSlot_FTM0_Ch4                      = 24,
+      \t   DmaSlot_FTM0_Ch5                      = 25,
+      \t   DmaSlot_FTM0_Ch6                      = 26,
+      \t   DmaSlot_FTM0_Ch7                      = 27,
+      \t   DmaSlot_FTM1_Ch0                      = 28,
+      \t   DmaSlot_FTM1_Ch1                      = 29,
+      \t   DmaSlot_FTM2_Ch0                      = 30,
+      \t   DmaSlot_FTM2_Ch1                      = 31,
+      \t   DmaSlot_FTM3_Ch0                      = 32,
+      \t   DmaSlot_FTM3_Ch1                      = 33,
+      \t   DmaSlot_FTM3_Ch2                      = 34,
+      \t   DmaSlot_FTM3_Ch3                      = 35,
+      \t   DmaSlot_FTM3_Ch4                      = 36,
+      \t   DmaSlot_FTM3_Ch5                      = 37,
+      \t   DmaSlot_FTM3_Ch6                      = 38,
+      \t   DmaSlot_FTM3_Ch7                      = 39,
+      \t   DmaSlot_ADC0                          = 40,
+      \t   DmaSlot_CMP0                          = 42,
+      \t   DmaSlot_CMP1                          = 43,
+      \t   DmaSlot_DAC0                          = 45,
+      \t   DmaSlot_CMT                           = 47,
+      \t   DmaSlot_PDB                           = 48,
+      \t   DmaSlot_PortA                         = 49,
+      \t   DmaSlot_PortB                         = 50,
+      \t   DmaSlot_PortC                         = 51,
+      \t   DmaSlot_PortD                         = 52,
+      \t   DmaSlot_PortE                         = 53,
+      \t   DmaSlot_SPI2_Receive                  = 58,
+      \t   DmaSlot_SPI2_Transmit                 = 59,
+      \t   DmaSlot_AlwaysEnabled_60              = 60,
+      \t   DmaSlot_AlwaysEnabled_61              = 61,
+      \t   DmaSlot_AlwaysEnabled_62              = 62,
+      \t   DmaSlot_AlwaysEnabled_63              = 63,\n\n
       
-      \t // Channels 17-31 only
-      \t   DmaSlot_FlexIO0_Shifter0    = 64+ 1,
-      \t   DmaSlot_FlexIO0_Shifter1    = 64+ 2,
-      \t   DmaSlot_FlexIO0_Shifter2    = 64+ 3,
-      \t   DmaSlot_FlexIO0_Shifter3    = 64+ 4,
-      \t   DmaSlot_FlexIO0_Shifter4    = 64+ 5,
-      \t   DmaSlot_FlexIO0_Shifter5    = 64+ 6,
-      \t   DmaSlot_FlexIO0_Shifter6    = 64+ 7,
-      \t   DmaSlot_FlexIO0_Shifter7    = 64+ 8,
-      \t   DmaSlot_I2S1_Receive        = 64+12,
-      \t   DmaSlot_I2S1_Transmit       = 64+13,
-      \t   DmaSlot_QSPI_Receive        = 64+24,
-      \t   DmaSlot_QSPI_Transmit       = 64+25,
-      \t   DmaSlot_SPI0_Receive_alt    = 64+28,
-      \t   DmaSlot_SPI0_Transmit_alt   = 64+29,
-      \t   DmaSlot_SPI1_Receive_alt    = 64+30,
-      \t   DmaSlot_SPI1_Transmit_alt   = 64+31,
-      \t   DmaSlot_TPM1_Ch0            = 64+42,
-      \t   DmaSlot_TPM1_Ch1            = 64+43,
-      \t   DmaSlot_TPM2_Ch0            = 64+44,
-      \t   DmaSlot_TPM2_Ch1            = 64+45,
-      \t   DmaSlot_TPM1_Overflow       = 64+55,
-      \t   DmaSlot_TPM2_Overflow       = 64+56,
-      \t   DmaSlot_SPI3_Receive        = 64+58,
-      \t   DmaSlot_SPI3_Transmit       = 64+59,
+      \t // Channels 16-31 only
+      \t   DmaSlot_FlexIO0_Shifter0              = 64+ 1,
+      \t   DmaSlot_FlexIO0_Shifter1              = 64+ 2,
+      \t   DmaSlot_FlexIO0_Shifter2              = 64+ 3,
+      \t   DmaSlot_FlexIO0_Shifter3              = 64+ 4,
+      \t   DmaSlot_FlexIO0_Shifter4              = 64+ 5,
+      \t   DmaSlot_FlexIO0_Shifter5              = 64+ 6,
+      \t   DmaSlot_FlexIO0_Shifter6              = 64+ 7,
+      \t   DmaSlot_FlexIO0_Shifter7              = 64+ 8,
+      \t   DmaSlot_I2S1_Receive                  = 64+12,
+      \t   DmaSlot_I2S1_Transmit                 = 64+13,
+      \t   DmaSlot_QSPI_Receive                  = 64+24,
+      \t   DmaSlot_QSPI_Transmit                 = 64+25,
+      \t   DmaSlot_SPI0_Receive_alt              = 64+28,
+      \t   DmaSlot_SPI0_Transmit_alt             = 64+29,
+      \t   DmaSlot_SPI1_Receive_alt              = 64+30,
+      \t   DmaSlot_SPI1_Transmit_alt             = 64+31,
+      \t   DmaSlot_TPM1_Ch0                      = 64+42,
+      \t   DmaSlot_TPM1_Ch1                      = 64+43,
+      \t   DmaSlot_TPM2_Ch0                      = 64+44,
+      \t   DmaSlot_TPM2_Ch1                      = 64+45,
+      \t   DmaSlot_TPM1_Overflow                 = 64+55,
+      \t   DmaSlot_TPM2_Overflow                 = 64+56,
+      \t   DmaSlot_SPI3_Receive                  = 64+58,
+      \t   DmaSlot_SPI3_Transmit                 = 64+59,
       \t};\n\n
    ]]></template>
 </peripheralPage>

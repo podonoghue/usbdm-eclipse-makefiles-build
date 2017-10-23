@@ -16,30 +16,32 @@
       <choice value="5"  name="UART1 Transmit" />
       <choice value="6"  name="UART2 Receive" />
       <choice value="7"  name="UART2 Transmit" />
-      <choice value="14" name="I2S0 Receive" />
-      <choice value="15" name="I2S0 Transmit" />
-      <choice value="16" name="SPI0 Receive" />
-      <choice value="17" name="SPI0 Transmit" />
-      <choice value="18" name="SPI1 Receive" />
-      <choice value="19" name="SPI1 Transmit" />
-      <choice value="22" name="I2C0" />
-      <choice value="22" name="I2C1" />
-      <choice value="24" name="FTM0 Channel 0" />
-      <choice value="25" name="FTM0 Channel 1" />
-      <choice value="26" name="FTM0 Channel 2" />
-      <choice value="27" name="FTM0 Channel 3" />
-      <choice value="28" name="FTM0 Channel 4" />
-      <choice value="29" name="FTM0 Channel 5" />
-      <choice value="30" name="FTM0 Channel 6" />
-      <choice value="31" name="FTM0 Channel 7" />
-      <choice value="32" name="FTM1 Channel 0" />
-      <choice value="33" name="FTM1 Channel 1" />
+      <choice value="12" name="I2S0 Receive" />
+      <choice value="13" name="I2S0 Transmit" />
+      <choice value="14" name="SPI0 Receive" />
+      <choice value="15" name="SPI0 Transmit" />
+      <choice value="16" name="SPI0 RxTx" />
+      <choice value="18" name="I2C0" />
+      <choice value="19" name="I2C1" />
+      <choice value="20" name="FTM0 Channel 0" />
+      <choice value="21" name="FTM0 Channel 1" />
+      <choice value="22" name="FTM0 Channel 2" />
+      <choice value="23" name="FTM0 Channel 3" />
+      <choice value="24" name="FTM0 Channel 4" />
+      <choice value="25" name="FTM0 Channel 5" />
+      <choice value="26" name="FTM0 Channel 6" />
+      <choice value="27" name="FTM0 Channel 7" />
+      <choice value="28" name="FTM1 Channel 0" />
+      <choice value="29" name="FTM1 Channel 1" />
+      <choice value="30" name="FTM2 Channel 0" />
+      <choice value="31" name="FTM2 Channel 1" />
+      <choice value="32" name="FTM3 Channel 0" />
+      <choice value="33" name="FTM3 Channel 1" />
       <choice value="40" name="ADC0" />
       <choice value="41" name="ADC1" />
       <choice value="42" name="CMP0" />
       <choice value="43" name="CMP1" />
       <choice value="45" name="DAC0" />
-      <choice value="47" name="CMT" />
       <choice value="48" name="PDB" />
       <choice value="49" name="Port A" />
       <choice value="50" name="Port B" />
@@ -85,30 +87,30 @@
       \t   DmaSlot_UART1_Transmit                =  5,
       \t   DmaSlot_UART2_Receive                 =  6,
       \t   DmaSlot_UART2_Transmit                =  7,
-      \t   DmaSlot_I2S0_Receive                  = 14,
-      \t   DmaSlot_I2S0_Transmit                 = 15,
-      \t   DmaSlot_SPI0_Receive                  = 16,
-      \t   DmaSlot_SPI0_Transmit                 = 17,
-      \t   DmaSlot_SPI1_Receive                  = 18,
-      \t   DmaSlot_SPI1_Transmit                 = 19,
-      \t   DmaSlot_I2C0                          = 22,
-      \t   DmaSlot_I2C1                          = 23,
-      \t   DmaSlot_FTM0_Ch0                      = 24,
-      \t   DmaSlot_FTM0_Ch1                      = 25,
-      \t   DmaSlot_FTM0_Ch2                      = 26,
-      \t   DmaSlot_FTM0_Ch3                      = 27,
-      \t   DmaSlot_FTM0_Ch4                      = 28,
-      \t   DmaSlot_FTM0_Ch5                      = 29,
-      \t   DmaSlot_FTM0_Ch6                      = 30,
-      \t   DmaSlot_FTM0_Ch7                      = 31,
-      \t   DmaSlot_FTM1_Ch0                      = 32,
-      \t   DmaSlot_FTM1_Ch1                      = 33,
+      \t   DmaSlot_I2S0_Receive                  = 12,
+      \t   DmaSlot_I2S0_Transmit                 = 13,
+      \t   DmaSlot_SPI0_Receive                  = 14,
+      \t   DmaSlot_SPI0_Transmit                 = 15,
+      \t   DmaSlot_SPI1_RxTx                     = 16,
+      \t   DmaSlot_I2C0                          = 18,
+      \t   DmaSlot_I2C1                          = 19,
+      \t   DmaSlot_FTM0_Ch0                      = 20,
+      \t   DmaSlot_FTM0_Ch1                      = 21,
+      \t   DmaSlot_FTM0_Ch2                      = 22,
+      \t   DmaSlot_FTM0_Ch3                      = 23,
+      \t   DmaSlot_FTM0_Ch4                      = 24,
+      \t   DmaSlot_FTM0_Ch5                      = 25,
+      \t   DmaSlot_FTM0_Ch6                      = 26,
+      \t   DmaSlot_FTM0_Ch7                      = 27,
+      \t   DmaSlot_FTM1_Ch0                      = 28,
+      \t   DmaSlot_FTM1_Ch1                      = 29,
+      \t   DmaSlot_FTM2_Ch0                      = 30,
+      \t   DmaSlot_FTM2_Ch1                      = 31,
       \t   DmaSlot_ADC0                          = 40,
       \t   DmaSlot_ADC1                          = 41,
       \t   DmaSlot_CMP0                          = 42,
       \t   DmaSlot_CMP1                          = 43,
       \t   DmaSlot_DAC0                          = 45,
-      \t   DmaSlot_CMT                           = 47,
       \t   DmaSlot_PDB                           = 48,
       \t   DmaSlot_PortA                         = 49,
       \t   DmaSlot_PortB                         = 50,
