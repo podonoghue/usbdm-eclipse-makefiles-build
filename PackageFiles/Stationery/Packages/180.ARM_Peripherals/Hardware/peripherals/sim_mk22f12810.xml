@@ -868,10 +868,10 @@ Devices using this peripheral:
    
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate" dim="3">
-      <param type="long" value="120MHz" />    <!-- Core         -->
-      <param type="long" value="60MHz" />     <!-- Bus          -->
+      <param type="long" value="100MHz" />    <!-- Core         -->
+      <param type="long" value="50MHz" />     <!-- Bus          -->
       <param type="long" value="27MHz" />     <!-- Flash        -->
-      <param type="long" value="30MHz" />     <!-- FlexBus      -->
+      <param type="long" value="0MHz" />      <!-- No FlexBus      -->
    </validate>
 
    <xi:include href="_simFiles-MK.xml"/>

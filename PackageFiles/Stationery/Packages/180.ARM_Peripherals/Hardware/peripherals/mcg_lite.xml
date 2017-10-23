@@ -237,7 +237,7 @@
    </validate>
 
    <projectActionList id = "mcg_files" >
-      <copy source="Startup_Code/mcg_lite.cpp"            target="Startup_Code/mcg.cpp"                  overwrite="true"  derived="true" />
+      <copy source="Startup_Code/mcg_lite.cpp"            target="Startup_Code/mcg_lite.cpp"             overwrite="true"  derived="true" />
       <copy source="Project_Headers/mcg_lite.h"           target="Project_Headers/mcg.h"                 overwrite="true"  derived="true" />
       <copy source="Snippets/mcg-lite-test.cpp"           target="Snippets/mcg-lite-test.cpp"            overwrite="true"  derived="true" />
       <copy source="Snippets/mcg-run-mode-test-mk22f.cpp" target="Snippets/mcg-run-mode-test-mk22f.cpp"  overwrite="true"  derived="true" />
