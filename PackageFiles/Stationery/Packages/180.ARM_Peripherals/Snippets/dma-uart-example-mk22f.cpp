@@ -1,6 +1,6 @@
 /**
  ============================================================================
- * @file    dma-uart-example.cpp (180.ARM_Peripherals/Snippets)
+ * @file    dma-uart-example-mk22f.cpp (180.ARM_Peripherals/Snippets)
  * @brief   DMA example using UART and PIT throttling
  *
  *  Created on: 10/1/2016
@@ -15,13 +15,24 @@
  * - Arranging SLAST to return the transfer addresses to starting value after each major-loop.
  *
  * This example requires interrupts to be enabled in the USBDM configuration for the following:
- * - DMA error
- * - DMA channel
- * - PIT channel
+ * - DMA
+ * - PIT
+ *
+ * The LED should be assigned to a suitable GPIO
+ *
+ * It may also be necessary to adjust DMA_SLOT for the console UART.
+ *    DmaSlot_UART0_Transmit => DmaSlot_UART?_Transmit
+ * 
+ * If the console uses a LPUART then other changes are necessary:
+ *    DmaSlot_UART0_Transmit => DmaSlot_LPUART?_Transmit
+ *    UartDma_TxHoldingEmpty => LpuartDma_TxHoldingEmpty
+ *    console.uart->D        => console.lpuart->DATA
  */
 #include "hardware.h"
 #include "dma.h"
 #include "pit.h"
+#include "smc.h"
+#include "mcg.h"
 
 using namespace USBDM;
 
@@ -33,6 +44,14 @@ using TimerChannel = PitChannel<1>;
 
 // DMA channel number to use (must agree with PIT channel used)
 static constexpr DmaChannelNum DMA_CHANNEL = DmaChannelNum_1;
+
+// Slot number to use (must agree with console UART)
+static constexpr DmaSlot DMA_SLOT = DmaSlot_UART0_Transmit;
+
+// MCG clocks for various run modes
+static constexpr ClockConfig VLPR_MODE  = ClockConfig_BLPE_4MHz;
+static constexpr ClockConfig RUN_MODE   = ClockConfig_PEE_80MHz;
+static constexpr ClockConfig HSRUN_MODE = ClockConfig_PEE_120MHz;
 
 // Used to indicate complete transfer
 volatile bool complete;
@@ -135,7 +154,7 @@ static void configureDma() {
    Dma0::enableNvicErrorInterrupt();
 
    // Connect DMA channel to UART but throttle by PIT Channel 1 (matches DMA channel 1)
-   DmaMux0::configure(DMA_CHANNEL, DmaSlot_UART0_Transmit, DmaMuxEnable_Triggered);
+   DmaMux0::configure(DMA_CHANNEL, DMA_SLOT, DmaMuxEnable_Triggered);
 
    // Configure the transfer
    Dma0::configureTransfer(DMA_CHANNEL, tcd);
@@ -143,18 +162,13 @@ static void configureDma() {
    // Enable hardware requests
    Dma0::enableRequests(DMA_CHANNEL);
 
+#ifdef DMA_EARS_EDREQ_0_MASK
+   // Enable asynchronous requests (if available)
+   Dma0::enableAsynchronousRequests(DMA_CHANNEL);
+#endif
+
    // Enable channel interrupt requests
    Dma0::enableErrorInterrupts(DMA_CHANNEL);
-}
-
-/**
- * PIT callback
- *
- * Used for debug timing checks.
- * LED toggles on each PIT event
- */
-static void pitCallback() {
-   Led::toggle();
 }
 
 /*
@@ -165,41 +179,139 @@ static void configurePit() {
    // Configure base PIT
    Pit::configure(PitDebugMode_Stop);
 
-   TimerChannel::setCallback(pitCallback);
-   // Configure channel
+   // Configure channel for 100ms + interrupts
    TimerChannel::configure(100*ms, PitChannelIrq_Enable);
+}
+
+/**
+ * Change run mode
+ *
+ * @param[in] Run mode to enter
+ */
+void changeRunMode(SmcRunMode smcRunMode) {
+   // Get current run mode
+   SmcStatus smcStatus = Smc::getStatus();
+
+   // Check if transition needed
+   if (((smcStatus == SmcStatus_hsrun) && (smcRunMode == SmcRunMode_HighSpeed)) ||
+       ((smcStatus == SmcStatus_run) && (smcRunMode == SmcRunMode_Normal)) ||
+       ((smcStatus == SmcStatus_vlpr) && (smcRunMode == SmcRunMode_VeryLowPower))) {
+      return;
+   }
+   // If changing go via RUN
+   if (smcStatus == SmcStatus_hsrun) {
+      // Do HSRUN->RUN
+      Mcg::clockTransition(McgInfo::clockInfo[RUN_MODE]);
+      Smc::enterRunMode(SmcRunMode_Normal);
+      console.setBaudRate(defaultBaudRate);
+      console.write("Changed to RUN mode, ").flushOutput();
+   }
+   else if (smcStatus == SmcStatus_vlpr) {
+      // Do VLPR->RUN mode
+      Smc::enterRunMode(SmcRunMode_Normal);
+      Mcg::clockTransition(McgInfo::clockInfo[RUN_MODE]);
+      console.setBaudRate(defaultBaudRate);
+      console.write("Changed to RUN mode, ").flushOutput();
+   }
+
+   // Now in RUN mode
+   switch(smcRunMode) {
+      case SmcRunMode_HighSpeed:
+         // RUN->HSRUN
+         Smc::enterRunMode(SmcRunMode_HighSpeed);
+         Mcg::clockTransition(McgInfo::clockInfo[HSRUN_MODE]);
+         console.setBaudRate(defaultBaudRate);
+         console.write("Changed to HSRUN mode, ").flushOutput();
+         break;
+
+      case SmcRunMode_Normal:
+         // Complete
+         break;
+
+      case SmcRunMode_VeryLowPower:
+         // RUN->VLPR
+         Mcg::clockTransition(McgInfo::clockInfo[VLPR_MODE]);
+         Smc::enterRunMode(SmcRunMode_VeryLowPower);
+         console.setBaudRate(defaultBaudRate);
+         console.write("Changed to VLPR mode, ").flushOutput();
+         break;
+   }
+
+   console.write(Smc::getSmcStatusName()).
+         write(":").
+         write(Mcg::getClockModeName()).
+         write("@").writeln(::SystemCoreClock);
 }
 
 int main() {
 
-   console.writeln("Starting");
+   console.writeln("\nStarting\n").flushOutput();
 
+   // LED used for debug from DMA loop
    Led::setOutput();
+
+
+   // Allow entry to other RUN modes
+   Smc::enablePowerModes(
+         SmcVeryLowPower_Enable,
+         SmcLowLeakageStop_Enable,
+         SmcVeryLowLeakageStop_Enable,
+         SmcHighSpeedRun_Enable);
 
    // Set up DMA transfer from memory -> UART
    configureDma();
    configurePit();
 
    // Start the UART DMA requests
+   console.writeln("Doing 1 DMA transfer while in RUN").flushOutput();
    console.enableDma(UartDma_TxHoldingEmpty);
 
    // Wait for completion of 1 Major-loop = 1 message
    while (!complete) {
       __asm__("nop");
    }
-
    // Stop the UART DMA requests
    console.enableDma(UartDma_TxHoldingEmpty, false);
+   console.writeln("Done 1st transfer");
+   waitMS(500);
 
-   console.writeln("Done 1st message");
-   wait(4000*ms);
+   // RUN->VLPR
+   changeRunMode(SmcRunMode_VeryLowPower);
+
+   // Re-configure PIT as bus clock may have changed
+   configurePit();
 
    // Start the UART DMA requests again
-   console.writeln("More coming....");
+   complete = false;
+   console.writeln("\nDoing DMA while in VLPR....").flushOutput();
+   console.enableDma(UartDma_TxHoldingEmpty);
+
+   // Wait for completion of 1 Major-loop = 1 message
+   while (!complete) {
+      __asm__("nop");
+   }
+   // Stop the UART DMA requests
+   console.enableDma(UartDma_TxHoldingEmpty, false);
+   console.writeln("Done another transfer");
+   waitMS(500);
+
+   Smc::setStopOptions(
+         SmcLowLeakageStopMode_LLS3,   // Retains RAM
+         SmcPowerOnReset_Enable,       // Brown-out detection
+         SmcPartialStopMode_Partial2,  // Bus clock active (for DMAC)
+         SmcLpoInLowLeakage_Disable);  // LPO stops in LLS/VLLS
+
+   console.writeln("\nDoing DMA while sleeping....").flushOutput();
    console.enableDma(UartDma_TxHoldingEmpty);
 
    for(;;) {
-      __asm__("wfi");
+      Led::toggle();
+      Smc::enterWaitMode();
+      // Will wake up after each transfer due to DMA complete interrupt
+
+//      console.enableDma(UartDma_TxHoldingEmpty, false);
+//      console.writeln("Woke up!");
+//      console.enableDma(UartDma_TxHoldingEmpty);
    }
    return 0;
 }
