@@ -81,14 +81,15 @@ Devices using this peripheral:
       <aliasOption key="/SIM/sim_sopt5_lpuart$(_instance)rxsrc"  constant="false" optional="true" />
    </category>
 
-   <irqOption name="txrxHandler"  
+   <irqOption name="irqHandlers"  
       description="LPUART Tx/Rx interrupt handler"
-      toolTip="This handler is used for normal communication events"
-      pattern="^LPUART%i(_RxTx)?$"
-      classHandler="%c%i::irqRxTxHandler" />
+      toolTip="This selection allow the interrupt handlers for this peripheral to be installed using several different methods"
+      pattern="^LPUART%i_?(RxTx)?$"
+      classHandler="%c%i::irq$1Handler" />
+        
    <template><![CDATA[
        \t//! Class based callback handler has been installed in vector table\n
-       \tstatic constexpr bool irqHandlerInstalled = ($(txrxHandler) == 1);\n\n
+       \tstatic constexpr bool irqHandlerInstalled = ($(irqHandlers) == 1);\n\n
    ]]></template>
        
    <intOption name="irqLevel" 
@@ -103,6 +104,10 @@ Devices using this peripheral:
        \tstatic constexpr uint32_t irqLevel =  $(irqLevel);\n\n
    ]]></template>
       
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.LpuartValidate">
+   </validate>
+
    <projectActionList id = "lpuart_files">
       <copy source="Project_Headers/formatted_io.h"  target="Project_Headers/formatted_io.h"  overwrite="true"  derived="true" />
       <copy source="Project_Headers/lpuart.h"        target="Project_Headers/lpuart.h"        overwrite="true"  derived="true" macroReplace="true" />
