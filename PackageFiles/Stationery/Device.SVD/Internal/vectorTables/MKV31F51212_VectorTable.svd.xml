@@ -146,7 +146,7 @@ Devices using this vector table:
       <value>27</value>
    </interrupt>
    <interrupt>
-      <name>LPUART0_RxTx</name>
+      <name>LPUART0</name>
       <description>Serial Communication Interface</description>
       <value>30</value>
    </interrupt>

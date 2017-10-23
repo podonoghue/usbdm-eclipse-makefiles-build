@@ -146,32 +146,32 @@ Devices using this vector table:
       <value>29</value>
    </interrupt>
    <interrupt>
-      <name>LPUART0_TX</name>
+      <name>LPUART0_Tx</name>
       <description>Universal Asynchronous Receiver/Transmitter</description>
       <value>31</value>
    </interrupt>
    <interrupt>
-      <name>LPUART0_RX</name>
+      <name>LPUART0_Rx</name>
       <description>Universal Asynchronous Receiver/Transmitter</description>
       <value>32</value>
    </interrupt>
    <interrupt>
-      <name>LPUART1_TX</name>
+      <name>LPUART1_Tx</name>
       <description>Universal Asynchronous Receiver/Transmitter</description>
       <value>33</value>
    </interrupt>
    <interrupt>
-      <name>LPUART1_RX</name>
+      <name>LPUART1_Rx</name>
       <description>Universal Asynchronous Receiver/Transmitter</description>
       <value>34</value>
    </interrupt>
    <interrupt>
-      <name>LPUART2_TX</name>
+      <name>LPUART2_Tx</name>
       <description>Universal Asynchronous Receiver/Transmitter</description>
       <value>35</value>
    </interrupt>
    <interrupt>
-      <name>LPUART2_RX</name>
+      <name>LPUART2_Rx</name>
       <description>Universal Asynchronous Receiver/Transmitter</description>
       <value>36</value>
    </interrupt>

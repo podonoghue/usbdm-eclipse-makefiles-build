@@ -412,7 +412,7 @@ Devices using this vector table:
       <value>85</value>
    </interrupt>
    <interrupt>
-      <name>LPUART0_RxTx</name>
+      <name>LPUART0</name>
       <description>Serial Communication Interface</description>
       <value>86</value>
    </interrupt>
