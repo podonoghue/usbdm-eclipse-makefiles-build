@@ -57,7 +57,7 @@ enum LlwuPin : uint32_t {
    LlwuPin_ptc6      = 10,  //!< Wake-up pin LLWU_P10
    LlwuPin_ptd4      = 14,  //!< Wake-up pin LLWU_P14
    LlwuPin_ptd6      = 15,  //!< Wake-up pin LLWU_P15
-#elif defined(MCU_MK20D5) || defined(MCU_MK22F51212) || defined (MCU_MK28F15)
+#elif defined(MCU_MK20D5) || defined(MCU_MK22F51212) || defined (MCU_MK28F15) || defined (MCU_MK66F12) || defined (MCU_MK66F18)
    LlwuPin_pte1      = 0,   //!< Wake-up pin LLWU_P0
    LlwuPin_pte2      = 1,   //!< Wake-up pin LLWU_P1
    LlwuPin_pte4      = 2,   //!< Wake-up pin LLWU_P2
@@ -76,13 +76,18 @@ enum LlwuPin : uint32_t {
    LlwuPin_ptd6      = 15,  //!< Wake-up pin LLWU_P15
 #endif
 
-#if defined (MCU_MK28F15)
+#if defined (MCU_MK28F15) || defined (MCU_MK66F18)
    LlwuPin_pte6      = 16,  //!< Wake-up pin LLWU_P16
    LlwuPin_pte9      = 17,  //!< Wake-up pin LLWU_P17
    LlwuPin_pte10     = 18,  //!< Wake-up pin LLWU_P18
    LlwuPin_pte17     = 19,  //!< Wake-up pin LLWU_P19
    LlwuPin_pte18     = 20,  //!< Wake-up pin LLWU_P20
+#if defined (MCU_MK28F15)
    LlwuPin_pta21     = 21,  //!< Wake-up pin LLWU_P21
+#endif
+#if defined (MCU_MK66F18)
+   LlwuPin_pte25     = 21,  //!< Wake-up pin LLWU_P21
+#endif
    LlwuPin_pta10     = 22,  //!< Wake-up pin LLWU_P22
    LlwuPin_pta11     = 23,  //!< Wake-up pin LLWU_P23
    LlwuPin_ptd8      = 24,  //!< Wake-up pin LLWU_P24
@@ -111,7 +116,7 @@ enum LlwuPin : uint32_t {
    LlwuPin_13        = 13,  //!< Wake-up pin LLWU_P13
    LlwuPin_14        = 14,  //!< Wake-up pin LLWU_P14
    LlwuPin_15        = 15,  //!< Wake-up pin LLWU_P15
-#if defined (MCU_MK28F15)
+#if defined (MCU_MK28F15) || defined (MCU_MK66F18)
    LlwuPin_16        = 16,  //!< Wake-up pin LLWU_P16
    LlwuPin_17        = 17,  //!< Wake-up pin LLWU_P17
    LlwuPin_18        = 18,  //!< Wake-up pin LLWU_P18
@@ -138,11 +143,12 @@ enum LlwuPeripheral : uint8_t {
    LlwuPeripheral_Lptmr       = (1<<0),  //!< Wake-up peripheral LLWU_M0IF
    LlwuPeripheral_Cmp0        = (1<<1),  //!< Wake-up peripheral LLWU_M1IF
    LlwuPeripheral_Cmp1        = (1<<2),  //!< Wake-up peripheral LLWU_M2IF
-   LlwuPeripheral_Reserved3   = (1<<3),  //!< Wake-up peripheral LLWU_M3IF
+   LlwuPeripheral_Cmp2_Cmp3   = (1<<3),  //!< Wake-up peripheral LLWU_M3IF // Not all devices
    LlwuPeripheral_Tsi         = (1<<4),  //!< Wake-up peripheral LLWU_M4IF
    LlwuPeripheral_RtcAlarm    = (1<<5),  //!< Wake-up peripheral LLWU_M5IF
    LlwuPeripheral_Reserved6   = (1<<6),  //!< Wake-up peripheral LLWU_M6IF
    LlwuPeripheral_RtcSeconds  = (1<<7),  //!< Wake-up peripheral LLWU_M7IF
+   
    LlwuPeripheral_0           = (1<<0),  //!< Wake-up peripheral LLWU_M0IF
    LlwuPeripheral_1           = (1<<1),  //!< Wake-up peripheral LLWU_M1IF
    LlwuPeripheral_2           = (1<<2),  //!< Wake-up peripheral LLWU_M2IF
