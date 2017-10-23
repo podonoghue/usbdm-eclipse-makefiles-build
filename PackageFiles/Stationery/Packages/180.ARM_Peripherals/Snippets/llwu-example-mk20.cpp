@@ -36,8 +36,8 @@
 using namespace USBDM;
 
 // Using LEDs rather defeats VLLSx mode!
-using GreenLed  = GpioD<4,ActiveLow>;
 using RedLed    = GpioC<3,ActiveLow>;
+using GreenLed  = GpioD<4,ActiveLow>;
 
 // Timer to use for timed wake-up
 using WakeupTimer = Lptmr0;
@@ -445,16 +445,6 @@ int main() {
          console.write("SystemBusClock   = ").writeln(::SystemBusClock);
 
          switch(smcStatus) {
-            case SmcStatus_hsrun:
-               console.write(
-                     "\n\nTests\n"
-                     "====================================\n"
-                     "R - Change run mode - VLPR, RUN\n"
-                     "T - Toggle LPTMR wake-up source\n"
-                     "P - Toggle PIN wake-up source\n"
-                     "H - Help\n"
-               );
-               break;
             default:
             case SmcStatus_run:
                console.write(
@@ -524,14 +514,10 @@ int main() {
             }
             break;
          case 'L':
-            if (smcStatus!=SmcStatus_hsrun) {
                test = LLS;
-            }
             break;
          case 'V':
-            if (smcStatus!=SmcStatus_hsrun) {
                test = ((test != VLLS0)&&(test != VLLS1)&&(test != VLLS2))?VLLS0:(Test)(test+1);
-            }
             break;
          case 'R':
             console.writeln("\n").flushOutput();

@@ -15,6 +15,14 @@
  * Interrupts must be configured for GPIO pin used, LLWU, LPTMR
  * It will also be necessary to modify the linker memory map so that only
  * lowest 32K of SRAM_U (0x10000000..) is used if testing of LLS2 is intended.
+ *
+ * Note: The STOP mode doesn't seem to work from RUN mode while using the
+ * debugger.  INVSTATE occurs occasionally. Stand-alone it's OK.
+ *
+ * MK20D5 Power transition notes
+ * LLS -> RUN mode on wake-up irrespective of whether it is entered from RUN or VLPR
+ * VLPS -> RUN mode on wake-up if entered from RUN or LPWUI is set
+ * VLPS -> VLPR only if entered from VLPR and LPWUI is not set
  */
 #include "hardware.h"
 #include "mcg.h"
@@ -437,16 +445,6 @@ int main() {
          console.write("SystemBusClock   = ").writeln(::SystemBusClock);
 
          switch(smcStatus) {
-            case SmcStatus_hsrun:
-               console.write(
-                     "\n\nTests\n"
-                     "====================================\n"
-                     "R - Change run mode - VLPR, RUN\n"
-                     "T - Toggle LPTMR wake-up source\n"
-                     "P - Toggle PIN wake-up source\n"
-                     "H - Help\n"
-               );
-               break;
             default:
             case SmcStatus_run:
                console.write(
@@ -516,14 +514,10 @@ int main() {
             }
             break;
          case 'L':
-            if (smcStatus!=SmcStatus_hsrun) {
                test = LLS;
-            }
             break;
          case 'V':
-            if (smcStatus!=SmcStatus_hsrun) {
                test = ((test != VLLS0)&&(test != VLLS1)&&(test != VLLS2))?VLLS0:(Test)(test+1);
-            }
             break;
          case 'R':
             console.writeln("\n").flushOutput();
