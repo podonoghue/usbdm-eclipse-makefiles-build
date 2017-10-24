@@ -643,7 +643,6 @@
       \t      //! Status and Control Register
       \t      MCG_SC_FCRDIV($(mcg_sc_fcrdiv.)), // FCRDIV Internal Clock Reference Divider\n\n
               
-              
       \t      //! Control Register 8
       \t      MCG_C8_LOLRE($(mcg_c8_lolre.)),   // LOLRE  PLL Loss of Lock Reset Enable\n
       \t   },

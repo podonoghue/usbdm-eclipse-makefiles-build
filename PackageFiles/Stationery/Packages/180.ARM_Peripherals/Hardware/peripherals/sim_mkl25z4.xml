@@ -185,6 +185,26 @@ Devices using this peripheral:
       \t   SimPeripheralClockSource_McgPll = SIM_SOPT2_PLLFLLSEL(1), //!< MCG PLL Clock
       \t   SimPeripheralClockSource_Irc48m = SIM_SOPT2_PLLFLLSEL(3), //!< IRC 48MHz clock
       \t};\n\n
+
+      \t/**
+      \t * UART0 Clock sources
+      \t */
+      \tenum SimUartClockSource {
+      \t   SimUartClockSource_Disabled   = SIM_SOPT2_UART0SRC(0), //!< Disabled
+      \t   SimUartClockSource_Peripheral = SIM_SOPT2_UART0SRC(1), //!< Peripheral clock selected by SIM.SOPT2[PLLFLLSEL]
+      \t   SimUartClockSource_OscerClk   = SIM_SOPT2_UART0SRC(2), //!< OSCERCLK clock
+      \t   SimUartClockSource_McgIrClk   = SIM_SOPT2_UART0SRC(3), //!< MCG Internal Reference clock (MCGIRCLK)
+      \t};\n\n
+
+      \t/**
+      \t * TPM Clock sources
+      \t */
+      \tenum SimTpmClockSource {
+      \t   SimTpmClockSource_Disabled   = SIM_SOPT2_TPMSRC(0), //!< Disabled
+      \t   SimTpmClockSource_Peripheral = SIM_SOPT2_TPMSRC(1), //!< Peripheral clock selected by SIM.SOPT2[PLLFLLSEL]
+      \t   SimTpmClockSource_OscerClk   = SIM_SOPT2_TPMSRC(2), //!< OSCERCLK clock
+      \t   SimTpmClockSource_McgIrClk   = SIM_SOPT2_TPMSRC(3), //!< MCG Internal Reference clock (MCGIRCLK)
+      \t};\n\n
    ]]></template>
    
    <template><![CDATA[
@@ -218,6 +238,24 @@ Devices using this peripheral:
       \t      case SIM_SOPT2_PLLFLLSEL(0): return SystemMcgFllClock;
       \t      case SIM_SOPT2_PLLFLLSEL(1): return SystemMcgPllClock/2;
       \t   }
+      \t}\n\n
+
+      \t/**
+      \t * Set UART0 input clock source
+      \t *
+      \t * @param simUartClockSource Clock source for UART
+      \t */
+      \tstatic void setUart0Clock(SimUartClockSource simUartClockSource) {
+      \t   sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_UART0SRC_MASK) | simUartClockSource;
+      \t}\n\n
+
+      \t/**
+      \t * Set TPM input clock source
+      \t *
+      \t * @param simTpmClockSource Clock source for TPM
+      \t */
+      \tstatic void setTpmClock(SimTpmClockSource simTpmClockSource) {
+      \t   sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_TPMSRC_MASK) | simTpmClockSource;
       \t}\n\n
 
       \t/**

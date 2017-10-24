@@ -513,6 +513,19 @@ public:
 
       Uart::setBaudRate_basic(baudrate, Info::getInputClockFrequency(), OVER_SAMPLE);
    }
+
+   /**
+    * Set baud factor value for interface
+    *
+    * This is calculated from baud rate and LPUART clock frequency
+    *
+    * @param[in]  baudrate Interface speed in bits-per-second
+    * @param[in]  osr      Interface over-sample ratio
+    */
+   void setBaudRate(unsigned baudrate, unsigned osr) {
+      Uart::setBaudRate_basic(baudrate, Info::getInputClockFrequency(), osr);
+   }
+
 };
 #endif
 
