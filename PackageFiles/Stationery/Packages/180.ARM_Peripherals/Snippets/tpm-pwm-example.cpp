@@ -1,9 +1,6 @@
 /**
  * @file pwm-example.cpp
  */
-#include <stdio.h>
-#include "system.h"
-#include "derivative.h"
 #include "hardware.h"
 
 using namespace USBDM;
@@ -11,16 +8,8 @@ using namespace USBDM;
 /**
  * Demonstrates use of the PWM outputs
  *
- * Uses PWM to change the brightness of a LED
- *
+ * Uses PWM to change the brightness of an LED
  */
-
-// Simple delay - not for real programs!
-static void delay(void) {
-   for(int i=0; i<400000; i++) {
-      __asm__("nop");
-   }
-}
 
 /*
  * This example is not supported on all targets as PWM feature may not be available
@@ -31,43 +20,42 @@ static void delay(void) {
  *
  */
 // Connection mapping - change as required
-using LED = $(demo.cpp.pwm.led1:Tpm0Channel<1>);
-
-#ifdef MCU_MK64F12
-#error "PWM is not available on LEDs"
-#endif
-
-#if 0
-/**
- * Example showing how to install a custom IRQ handler for a TPM
- */
-namespace USBDM {
-
-template<> void TpmIrq_T<Tpm1Info>::irqHandler() {
-   // Your code
-}
-
-}
-#endif
+using Timer = $(demo.cpp.ftm:Tpm2);
+using Led   = $(demo.cpp.pwm.led1:Tpm2Channel<0>);
 
 int main() {
-   LED::enable();
 
-   // Note changing LED period affects all channels of TPM
-   // Could use Tpm0::setPeriod(100*ms); to make this more obvious
-   LED::setPeriod(100*ms);
+   // Configure base TPM for left-aligned PWM
+   Timer::configure(
+         TpmMode_LeftAlign,
+         TpmClockSource_Internal);
 
-   // Check for errors so far
+   /*
+    * Change PWM period
+    * Note - Setting the period affects all channels of the Timer
+    */
+   Timer::setPeriod(5*us);
+
+   // Configure channel as high-pulses
+   Led::configure(TpmChMode_PwmHighTruePulses);
+
+   // Configure pin associated with channel
+   Led::setDriveStrength(PinDriveStrength_High);
+   Led::setDriveMode(PinDriveMode_PushPull);
+
+   // Check if configuration failed
    checkError();
 
    for(;;) {
-      for (int i=0; i<=100; i++) {
-         LED::setDutyCycle(i);
-         delay();
+      // Using percentage duty-cycle
+      for (int i=1; i<=99; i++) {
+         Led::setDutyCycle(i);
+         waitMS(10);
       }
-      for (int i=100; i>=0; i--) {
-         LED::setDutyCycle(i);
-         delay();
+      // Using high-time
+      for (int i=99; i>0; i--) {
+         Led::setHighTime((i*5*us)/100.0);
+         waitMS(10);
       }
    }
 }
