@@ -293,10 +293,17 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
    // Main clock dividers
    setSysDividers(clockInfo.clkdiv1);
 
+#ifdef SIM_CLKDIV3_PLLFLLDIV
+   // Peripheral clock divider
+   SimInfo::setPeripheralClockDivider((SimPeripheralClockDivider)clockInfo.clkdiv3);
+#endif
+
    // Clock sources
-   SIM->SOPT2 = clockInfo.sopt2;
+   SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_PLLFLLSEL_MASK)|clockInfo.sopt2;
 
    SystemCoreClockUpdate();
+
+   mcg->C8 = clockInfo.c8; // Enable clock monitors
 
    return E_NO_ERROR;
 }

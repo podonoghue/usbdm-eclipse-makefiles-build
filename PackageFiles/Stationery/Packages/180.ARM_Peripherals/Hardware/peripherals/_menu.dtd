@@ -34,7 +34,7 @@
    <!ATTLIST indexedCategory value        CDATA        #IMPLIED>
    <!ATTLIST indexedCategory constant     (false|true) "false">
 
-<!ELEMENT category ((%gui_items;)*) >
+<!ELEMENT category ((%gui_items;|template)*) >
    <!ATTLIST category xmlns:xi     CDATA        #IMPLIED>
    <!ATTLIST category name         CDATA        #REQUIRED>
    <!ATTLIST category description  CDATA        #REQUIRED>
