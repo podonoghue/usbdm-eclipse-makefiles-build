@@ -18,38 +18,38 @@ Devices using this peripheral:
          <choice value="2"  name="RTC_CLKIN pin" />
          <choice value="3"  name="LPO 1kHz clock" isDefault="true" />
       </choiceOption>
-      
+         
       <intOption name="system_erclk32k_clock" 
          units="Hz"
          description="Frequency of External 32k Reference Clock [ERCLK32K]"
          toolTip="External reference clock available to come peripherals (usually ~32kHz)" 
          value="32768"
          constant="true" />
-   </category>
+      
+      <template><![CDATA[
+         \t//! System Options Register 1
+         \tstatic constexpr uint32_t sopt1 = 
+         \t#ifdef SIM_SOPT1_OSC32KOUT
+         \t   SIM_SOPT1_OSC32KOUT($(sim_sopt1_osc32kout:-1)) |    // 32K oscillator clock out pin select
+         \t#endif
+         \t   SIM_SOPT1_OSC32KSEL($(sim_sopt1_osc32ksel));     // 32K oscillator clock select\n\n
    
-   <template><![CDATA[
-      \t//! System Options Register 1
-      \tstatic constexpr uint32_t sopt1 = 
-      \t#ifdef SIM_SOPT1_OSC32KOUT
-      \t   SIM_SOPT1_OSC32KOUT($(sim_sopt1_osc32kout:-1)) |    // 32K oscillator clock out pin select
-      \t#endif
-      \t   SIM_SOPT1_OSC32KSEL($(sim_sopt1_osc32ksel));     // 32K oscillator clock select\n\n
-
-      \t/**
-      \t * Get ERCLK32K clock frequency
-      \t *
-      \t * @return Clock frequency as a uint32_t in Hz
-      \t */
-      \tstatic uint32_t getErc32kClock() {
-      \t
-      \t   switch(sim->SOPT1&SIM_SOPT1_OSC32KSEL_MASK) {
-      \t      default                     : return 0;
-      \t      case SIM_SOPT1_OSC32KSEL(0) : return Osc0Info::getOsc32kClock();
-      \t      case SIM_SOPT1_OSC32KSEL(2) : return RtcInfo::rtcclkin_clock;
-      \t      case SIM_SOPT1_OSC32KSEL(3) : return 1000;
-      \t   }
-      \t}\n\n
-   ]]></template>
+         \t/**
+         \t * Get ERCLK32K clock frequency
+         \t *
+         \t * @return Clock frequency as a uint32_t in Hz
+         \t */
+         \tstatic uint32_t getErc32kClock() {
+         \t
+         \t   switch(sim->SOPT1&SIM_SOPT1_OSC32KSEL_MASK) {
+         \t      default                     : return 0;
+         \t      case SIM_SOPT1_OSC32KSEL(0) : return Osc0Info::getOsc32kClock();
+         \t      case SIM_SOPT1_OSC32KSEL(2) : return RtcInfo::rtcclkin_clock;
+         \t      case SIM_SOPT1_OSC32KSEL(3) : return 1000;
+         \t   }
+         \t}\n\n
+      ]]></template>
+   </category>
    
    <category name="SOPT2" description="Clock Gating">
       <binaryOption name="sim_sopt2_rtcclkoutsel" 
@@ -58,18 +58,54 @@ Devices using this peripheral:
          <choice value="0"  name="RTC 1 Hz clock" />
          <choice value="1"  name="OSCERCLK clock" isDefault="true" />
       </binaryOption>
-   
+      
       <intOption name="rtc_clkout"
          constant="true"
-	 derived="true"
+         derived="true"
          units="Hz"
          description="RTC clock out [RTC_CLKOUT pin]"
          toolTip="Clock frequency on the RTC_CLKOUT pin"  />
-
+      
       <aliasOption key="/SIM/sim_sopt2_pllfllsel." constant="false" />
-   
+      
       <aliasOption key="/SIM/system_peripheral_clock." />
+      
+      <template namespace="usbdm"><![CDATA[
+         \t/**
+         \t * Peripheral Clock sources
+         \t */
+         \tenum SimPeripheralClockSource {
+         \t   SimPeripheralClockSource_McgFll = SIM_SOPT2_PLLFLLSEL(0), //!< MCG FLL Clock
+         \t   SimPeripheralClockSource_McgPll = SIM_SOPT2_PLLFLLSEL(1), //!< MCG PLL Clock
+         \t   SimPeripheralClockSource_Irc48m = SIM_SOPT2_PLLFLLSEL(3), //!< IRC 48MHz clock
+         \t};\n\n
+      ]]></template>
+      
+      <template><![CDATA[
+         \t/**
+         \t * Set Peripheral clock source
+         \t *
+         \t * @param simPeripheralClockSource Clock source for peripheral clock
+         \t */
+         \tstatic void setPeripheralClock(SimPeripheralClockSource simPeripheralClockSource) {
+         \t   sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_PLLFLLSEL_MASK) | simPeripheralClockSource;
+         \t}\n\n
          
+         \t/**
+         \t * Get Peripheral clock frequency
+         \t *
+         \t * @return Frequency as a uint32_t in Hz
+         \t */
+         \tstatic uint32_t getPeripheralClock() {
+         \t   
+         \t   switch(sim->SOPT2&SIM_SOPT2_PLLFLLSEL_MASK) {
+         \t      default:                     return 0;
+         \t      case SIM_SOPT2_PLLFLLSEL(0): return SystemMcgFllClock;
+         \t      case SIM_SOPT2_PLLFLLSEL(1): return SystemMcgPllClock/2;
+         \t   }
+         \t}\n\n
+      ]]></template>
+      
       <choiceOption name="sim_sopt2_uart0src" 
          description="UART0 Clock select"
          toolTip="Selects the clock source for the transmit and receive clock">
@@ -78,28 +114,125 @@ Devices using this peripheral:
          <choice value="2"  name="OSCERCLK clock" />
          <choice value="3"  name="MCGIRCLK clock" />
       </choiceOption>
-   
+      
       <intOption name="system_uart0_clock" 
          constant="true"
          units="Hz"
          description="UART0 Clock frequency"
          toolTip="Frequency of clock to UART0"
          value="0" />
+      
+      <stringOption name="Uart1Clock" value="SystemBusClock"  constant="true" derived="true" />
+      
+      <stringOption name="Uart2Clock" value="SystemBusClock"  constant="true" derived="true" />
+      
+      <template namespace="usbdm"><![CDATA[
+         \t/**
+         \t * UART0 Clock sources
+         \t */
+         \tenum SimUart0ClockSource {
+         \t   SimUart0ClockSource_Disabled   = SIM_SOPT2_UART0SRC(0), //!< Disabled
+         \t   SimUart0ClockSource_Peripheral = SIM_SOPT2_UART0SRC(1), //!< Peripheral clock selected by SIM.SOPT2[PLLFLLSEL]
+         \t   SimUart0ClockSource_OscerClk   = SIM_SOPT2_UART0SRC(2), //!< OSCERCLK clock
+         \t   SimUart0ClockSource_McgIrClk   = SIM_SOPT2_UART0SRC(3), //!< MCG Internal Reference clock
+         \t};\n\n
+      ]]></template>
+      
+      <template><![CDATA[
+         \t/**
+         \t * Set UART0 input clock source
+         \t *
+         \t * @param simUart0ClockSource Clock source for UART
+         \t */
+         \tstatic void setUart0Clock(SimUart0ClockSource simUart0ClockSource) {
+         \t   sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_UART0SRC_MASK) | simUart0ClockSource;
+         \t}\n\n
+         
+         \t/**
+         \t * Get UART0 input clock frequency
+         \t *
+         \t * @return Clock frequency in Hz
+         \t */
+         \tstatic uint32_t getUart0Clock() {
+         \t   
+         \t   switch(sim->SOPT2&SIM_SOPT2_UART0SRC_MASK) {
+         \t      default:
+         \t      case SIM_SOPT2_UART0SRC(0): return 0;
+         \t      case SIM_SOPT2_UART0SRC(1): return getPeripheralClock();
+         \t      case SIM_SOPT2_UART0SRC(2): return Osc0Info::getOscerClock();
+         \t      case SIM_SOPT2_UART0SRC(3): return McgInfo::getMcgIrClock();
+         \t   }
+         \t}\n\n
    
+         \t/** 
+         \t * Get UART1 input clock frequency
+         \t *
+         \t * @return Clock frequency in Hz
+         \t */
+         \tstatic inline uint32_t getUart1Clock() {
+         \t   return $(Uart1Clock);
+         \t}\n\n
+         
+         \t/**
+         \t * Get UART2 input clock frequency
+         \t *
+         \t * @return Clock frequency in Hz
+         \t */
+         \tstatic inline uint32_t getUart2Clock() {
+         \t   return $(Uart2Clock);
+         \t}\n\n
+      ]]></template>
+         
       <choiceOption name="sim_sopt2_usbsrc" 
          description="USB clock source select"
          toolTip="Selects the source for the USB clock">
          <choice value="0"  name="External bypass clock (USB_CLKIN)" />
          <choice value="1"  name="Peripheral Clock" isDefault="true" />
       </choiceOption>
-   
+      
       <intOption name="system_usbfs_clock" 
          constant="true"
          units="Hz"
          description="USB Full Speed Clock"
          toolTip="Frequency of clock to USB full speed controller"
          value="0" />
-   
+      
+      <template namespace="usbdm"><![CDATA[
+         \t/**
+         \t * USB full-speed clock sources
+         \t */
+         \tenum SimUsbFullSpeedClockSource {
+         \t   SimUsbFullSpeedClockSource_External    = SIM_SOPT2_USBSRC(0), //!< External bypass clock (USB_CLKIN)
+         \t   SimUsbFullSpeedClockSource_Peripheral  = SIM_SOPT2_USBSRC(1), //!< Peripheral clock selected by SIM.SOPT2[PLLFLLSEL] divided by SIM.CLKDIV2
+         \t};\n\n
+      ]]></template>
+      
+      <template><![CDATA[
+         \t/**
+         \t * Set USB Full-speed clock source
+         \t *
+         \t * @param simUsbFullSpeedClockSource Clock source for peripheral clock
+         \t */
+         \tstatic void setUsbFullSpeedClock(SimUsbFullSpeedClockSource simUsbFullSpeedClockSource) {
+         \t   sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_USBSRC_MASK) | simUsbFullSpeedClockSource;
+         \t}\n\n
+         
+         \t#ifdef SIM_SOPT2_USBSRC_MASK
+         \t/**
+         \t * Get USB clock frequency
+         \t *
+         \t * @return Clock frequency as a uint32_t in Hz
+         \t */
+         \tstatic uint32_t getUsbClock() {
+         \t   switch ((sim->SOPT2&SIM_SOPT2_USBSRC_MASK)) {
+         \t      default:
+         \t      case SIM_SOPT2_USBSRC(0): return $(/MCG/system_usb_clkin_clock);
+         \t      case SIM_SOPT2_USBSRC(1): return getPeripheralClock();
+         \t   }
+         \t}
+         \t#endif\n\n
+      ]]></template>
+      
       <choiceOption name="sim_sopt2_tpmsrc" 
          description="TPM Clock source"
          toolTip="Selects the clock source for the timer clock">
@@ -108,13 +241,51 @@ Devices using this peripheral:
          <choice value="2"  name="OSCERCLK clock" />
          <choice value="3"  name="MCGIRCLK clock" />
       </choiceOption>
-   
+      
       <intOption name="system_tpm_clock" 
          constant="true"
          units="Hz"
          description="TPM Clock frequency"
          toolTip="Frequency of clock to TPM"
          value="0" />
+      
+      <template namespace="usbdm"><![CDATA[
+         \t/**
+         \t * TPM Clock sources
+         \t */
+         \tenum SimTpmClockSource {
+         \t   SimTpmClockSource_Disabled   = SIM_SOPT2_TPMSRC(0), //!< Disabled
+         \t   SimTpmClockSource_Peripheral = SIM_SOPT2_TPMSRC(1), //!< Peripheral clock selected by SIM.SOPT2[PLLFLLSEL]
+         \t   SimTpmClockSource_OscerClk   = SIM_SOPT2_TPMSRC(2), //!< OSCERCLK clock
+         \t   SimTpmClockSource_McgIrClk   = SIM_SOPT2_TPMSRC(3), //!< MCG Internal Reference clock (MCGIRCLK)
+         \t};\n\n
+      ]]></template>
+      
+      <template><![CDATA[
+         \t/**
+         \t * Set TPM input clock source
+         \t *
+         \t * @param simTpmClockSource Clock source for TPM
+         \t */
+         \tstatic void setTpmClock(SimTpmClockSource simTpmClockSource) {
+         \t   sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_TPMSRC_MASK) | simTpmClockSource;
+         \t}\n\n
+   
+         \t/**
+         \t * Get TPM input clock frequency
+         \t *
+         \t * @return TPM input clock frequency as a uint32_t in Hz
+         \t */
+         \tstatic uint32_t getTpmClock() {
+         \t   switch(sim->SOPT2&SIM_SOPT2_TPMSRC_MASK) {
+         \t      default:
+         \t      case SIM_SOPT2_TPMSRC(0): return 0;
+         \t      case SIM_SOPT2_TPMSRC(1): return getPeripheralClock();
+         \t      case SIM_SOPT2_TPMSRC(2): return Osc0Info::getOscerClock();
+         \t      case SIM_SOPT2_TPMSRC(3): return McgInfo::getMcgIrClock();
+         \t   }
+         \t}\n\n
+      ]]></template>
    
       <choiceOption name="sim_sopt2_clkoutsel" 
          description="CLKOUT select"
@@ -128,137 +299,70 @@ Devices using this peripheral:
          <choice value="6"  name="OSCERCLK0" />
          <choice value="7"  name="Reserved" />
       </choiceOption>
+      
+      <template><![CDATA[
+         \t//! System Options Register 2
+         \tstatic constexpr uint32_t sopt2 = 
+         \t#ifdef SIM_SOPT2_TRACECLKSEL
+         \t   SIM_SOPT2_TRACECLKSEL($(/SIM/sim_sopt2_traceclksel:-1)) |      // Debug trace clock select
+         \t#endif
+         \t#ifdef SIM_SOPT2_TIMESRC
+         \t   SIM_SOPT2_TIMESRC($(/SIM/sim_sopt2_timesrc:-1)) |          // IEEE 1588 timestamp clock source select
+         \t#endif
+         \t#ifdef SIM_SOPT2_RMIISRC
+         \t   SIM_SOPT2_RMIISRC($(/SIM/sim_sopt2_rmiisrc:-1)) |          // Ethernet RMII clock source select
+         \t#endif
+         \t#ifdef SIM_SOPT2_SDHCSRC
+         \t      SIM_SOPT2_SDHCSRC($(/SIM/sim_sopt2_sdhcsrc:-1)) |       // SDHC clock source select
+         \t#endif
+         \t#ifdef SIM_SOPT2_UART0SRC
+         \t   SIM_SOPT2_UART0SRC($(/SIM/sim_sopt2_uart0src:-1)) |         // UART0 clock source select
+         \t#endif
+         \t#ifdef SIM_SOPT2_LPUARTSRC
+         \t      SIM_SOPT2_LPUARTSRC($(/SIM/sim_sopt2_lpuartsrc:-1)) |     // LPUART clock source select
+         \t#endif
+         \t#ifdef SIM_SOPT2_PTD7PAD
+         \t      SIM_SOPT2_PTD7PAD($(/SIM/sim_sopt2_ptd7pad:-1)) |       // PTD7 pad drive strength
+         \t#endif
+         \t#ifdef SIM_SOPT2_TPMSRC
+         \t      SIM_SOPT2_TPMSRC($(/SIM/sim_sopt2_tpmsrc:-1)) |        // TPM clock source select
+         \t#endif
+         \t#ifdef SIM_SOPT2_USBSRC
+         \t      SIM_SOPT2_USBSRC($(/SIM/sim_sopt2_usbsrc:-1)) |        // USB clock source select
+         \t#endif
+         \t#ifdef SIM_SOPT2_FBSL
+         \t      SIM_SOPT2_FBSL($(/SIM/sim_sopt2_fbsl:-1)) |          // FlexBus security level
+         \t#endif
+         \t#ifdef SIM_SOPT2_PLLFLLSEL
+         \t      SIM_SOPT2_PLLFLLSEL($(/SIM/sim_sopt2_pllfllsel[0]:-1))|      // PLL/FLL clock select
+         \t#endif
+         \t      SIM_SOPT2_RTCCLKOUTSEL($(/SIM/sim_sopt2_rtcclkoutsel)) |  // RTC clock out select
+         \t      SIM_SOPT2_CLKOUTSEL($(/SIM/sim_sopt2_clkoutsel));      // CLKOUT pin clock source select\n\n
+      ]]></template>
    </category>
    
-   <template><![CDATA[
-      \t//! System Options Register 2
-      \tstatic constexpr uint32_t sopt2 = 
-      \t#ifdef SIM_SOPT2_TRACECLKSEL
-      \t   SIM_SOPT2_TRACECLKSEL($(/SIM/sim_sopt2_traceclksel:-1)) |      // Debug trace clock select
-      \t#endif
-      \t#ifdef SIM_SOPT2_TIMESRC
-      \t   SIM_SOPT2_TIMESRC($(/SIM/sim_sopt2_timesrc:-1)) |          // IEEE 1588 timestamp clock source select
-      \t#endif
-      \t#ifdef SIM_SOPT2_RMIISRC
-      \t   SIM_SOPT2_RMIISRC($(/SIM/sim_sopt2_rmiisrc:-1)) |          // Ethernet RMII clock source select
-      \t#endif
-      \t#ifdef SIM_SOPT2_SDHCSRC
-      \t      SIM_SOPT2_SDHCSRC($(/SIM/sim_sopt2_sdhcsrc:-1)) |       // SDHC clock source select
-      \t#endif
-      \t#ifdef SIM_SOPT2_UART0SRC
-      \t   SIM_SOPT2_UART0SRC($(/SIM/sim_sopt2_uart0src:-1)) |         // UART0 clock source select
-      \t#endif
-      \t#ifdef SIM_SOPT2_LPUARTSRC
-      \t      SIM_SOPT2_LPUARTSRC($(/SIM/sim_sopt2_lpuartsrc:-1)) |     // LPUART clock source select
-      \t#endif
-      \t#ifdef SIM_SOPT2_PTD7PAD
-      \t      SIM_SOPT2_PTD7PAD($(/SIM/sim_sopt2_ptd7pad:-1)) |       // PTD7 pad drive strength
-      \t#endif
-      \t#ifdef SIM_SOPT2_TPMSRC
-      \t      SIM_SOPT2_TPMSRC($(/SIM/sim_sopt2_tpmsrc:-1)) |        // TPM clock source select
-      \t#endif
-      \t#ifdef SIM_SOPT2_USBSRC
-      \t      SIM_SOPT2_USBSRC($(/SIM/sim_sopt2_usbsrc:-1)) |        // USB clock source select
-      \t#endif
-      \t#ifdef SIM_SOPT2_FBSL
-      \t      SIM_SOPT2_FBSL($(/SIM/sim_sopt2_fbsl:-1)) |          // FlexBus security level
-      \t#endif
-      \t      SIM_SOPT2_RTCCLKOUTSEL($(/SIM/sim_sopt2_rtcclkoutsel)) |  // RTC clock out select
-      \t      SIM_SOPT2_PLLFLLSEL($(/SIM/sim_sopt2_pllfllsel[0]))|      // PLL/FLL clock select
-      \t      SIM_SOPT2_CLKOUTSEL($(/SIM/sim_sopt2_clkoutsel));      // CLKOUT pin clock source select\n\n
-   ]]></template>
-   
-   <template namespace="usbdm"><![CDATA[
-      \t/**
-      \t * USB full-speed clock sources
-      \t */
-      \tenum SimUsbFullSpeedClockSource {
-      \t   SimUsbFullSpeedClockSource_External    = SIM_SOPT2_USBSRC(0), //!< External bypass clock (USB_CLKIN)
-      \t   SimUsbFullSpeedClockSource_Peripheral  = SIM_SOPT2_USBSRC(1), //!< Peripheral clock selected by SIM.SOPT2[PLLFLLSEL] divided by SIM.CLKDIV2
-      \t};\n\n
-
-      \t/**
-      \t * Peripheral Clock sources
-      \t */
-      \tenum SimPeripheralClockSource {
-      \t   SimPeripheralClockSource_McgFll = SIM_SOPT2_PLLFLLSEL(0), //!< MCG FLL Clock
-      \t   SimPeripheralClockSource_McgPll = SIM_SOPT2_PLLFLLSEL(1), //!< MCG PLL Clock
-      \t   SimPeripheralClockSource_Irc48m = SIM_SOPT2_PLLFLLSEL(3), //!< IRC 48MHz clock
-      \t};\n\n
-   ]]></template>
-   
-   <template><![CDATA[
-      \t/**
-      \t * Set USB Full-speed clock source
-      \t *
-      \t * @param simUsbFullSpeedClockSource Clock source for peripheral clock
-      \t */
-      \tstatic void setUsbFullSpeedClock(SimUsbFullSpeedClockSource simUsbFullSpeedClockSource) {
-      \t   sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_USBSRC_MASK) | simUsbFullSpeedClockSource;
-      \t}\n\n
-
-      \t/**
-      \t * Set Peripheral clock source
-      \t *
-      \t * @param simPeripheralClockSource Clock source for peripheral clock
-      \t */
-      \tstatic void setPeripheralClock(SimPeripheralClockSource simPeripheralClockSource) {
-      \t   sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_PLLFLLSEL_MASK) | simPeripheralClockSource;
-      \t}\n\n
-
-      \t/**
-      \t * Get Peripheral clock frequency
-      \t *
-      \t * @return Frequency as a uint32_t in Hz
-      \t */
-      \tstatic uint32_t getPeripheralClock() {
-      \t   
-      \t   switch(sim->SOPT2&SIM_SOPT2_PLLFLLSEL_MASK) {
-      \t      default:                     return 0;
-      \t      case SIM_SOPT2_PLLFLLSEL(0): return SystemMcgFllClock;
-      \t      case SIM_SOPT2_PLLFLLSEL(1): return SystemMcgPllClock/2;
-      \t   }
-      \t}\n\n
-
-      \t/**
-      \t * Get TPM input clock frequency
-      \t *
-      \t * @return TPM input clock frequency as a uint32_t in Hz
-      \t */
-      \tstatic uint32_t getTpmClock() {
-      \t   switch(sim->SOPT2&SIM_SOPT2_TPMSRC_MASK) {
-      \t      default:
-      \t      case SIM_SOPT2_TPMSRC(0): return 0;
-      \t      case SIM_SOPT2_TPMSRC(1): return getPeripheralClock();
-      \t      case SIM_SOPT2_TPMSRC(2): return Osc0Info::getOscerClock();
-      \t      case SIM_SOPT2_TPMSRC(3): return McgInfo::getMcgIrClock();
-      \t   }
-      \t}\n\n
-   ]]></template>
-   
    <category name="SOPT4" description="TPM signals">
-
       <binaryOption name="sim_sopt4_tpm2clksel" 
          description="TPM 2 External Clock Pin Select"
          toolTip="Selects the external pin used to drive the clock to the TPM module.">
          <choice value="0"  name="TPM_CLKIN0 pin" isDefault="true" />
          <choice value="1"  name="TPM_CLKIN1 pin" />
       </binaryOption>
-   
+      
       <binaryOption name="sim_sopt4_tpm1clksel" 
          description="TPM 1 External Clock Pin Select"
          toolTip="Selects the external pin used to drive the clock to the TPM module.">
          <choice value="0"  name="TPM_CLKIN0 pin" isDefault="true" />
          <choice value="1"  name="TPM_CLKIN1 pin" />
       </binaryOption>
-   
+      
       <binaryOption name="sim_sopt4_tpm0clksel" 
          description="TPM 0 External Clock Pin Select"
          toolTip="Selects the external pin used to drive the clock to the TPM module.">
          <choice value="0"  name="TPM_CLKIN0 pin" isDefault="true" />
          <choice value="1"  name="TPM_CLKIN1 pin" />
       </binaryOption>
-   
+      
       <choiceOption name="sim_sopt4_tpm2ch0src" 
          description="TPM 2 channel 0 input capture source select"
          toolTip="Selects the source for TPM channel 0 input capture\n
@@ -266,7 +370,7 @@ Devices using this peripheral:
          <choice value="0" name="TPM2_CH0 signal"  isDefault="true"/>
          <choice value="1" name="CMP0 output" />
       </choiceOption>
-   
+      
       <choiceOption name="sim_sopt4_tpm1ch0src" 
          description="TPM 1 channel 0 input capture source select"
          toolTip="Selects the source for TPM channel 0 input capture\n
@@ -276,17 +380,17 @@ Devices using this peripheral:
          <choice value="2" name="Reserved" />
          <choice value="3" name="USB start of frame pulse" />
       </choiceOption>   
+      
+      <template><![CDATA[
+         \t//! System Options Register 4
+         \tstatic constexpr uint32_t sopt4 = 
+         \t   SIM_SOPT4_TPM2CLKSEL($(sim_sopt4_tpm2clksel))  |   // TPM 2 External Clock Pin Select
+         \t   SIM_SOPT4_TPM1CLKSEL($(sim_sopt4_tpm1clksel))  |   // TPM 1 External Clock Pin Select
+         \t   SIM_SOPT4_TPM0CLKSEL($(sim_sopt4_tpm0clksel))  |   // TPM 0 External Clock Pin Select
+         \t   SIM_SOPT4_TPM2CH0SRC($(sim_sopt4_tpm1ch0src))  |   // TPM 1 channel 0 input capture source select
+         \t   SIM_SOPT4_TPM1CH0SRC($(sim_sopt4_tpm1ch0src));     // TPM 1 channel 0 input capture source select\n\n
+      ]]></template>
    </category>
-   
-   <template><![CDATA[
-      \t//! System Options Register 4
-      \tstatic constexpr uint32_t sopt4 = 
-      \t   SIM_SOPT4_TPM2CLKSEL($(sim_sopt4_tpm2clksel))  |   // TPM 2 External Clock Pin Select
-      \t   SIM_SOPT4_TPM1CLKSEL($(sim_sopt4_tpm1clksel))  |   // TPM 1 External Clock Pin Select
-      \t   SIM_SOPT4_TPM0CLKSEL($(sim_sopt4_tpm0clksel))  |   // TPM 0 External Clock Pin Select
-      \t   SIM_SOPT4_TPM2CH0SRC($(sim_sopt4_tpm1ch0src))  |   // TPM 1 channel 0 input capture source select
-      \t   SIM_SOPT4_TPM1CH0SRC($(sim_sopt4_tpm1ch0src));     // TPM 1 channel 0 input capture source select\n\n
-   ]]></template>
    
    <category name="SOPT5" description="UART signals">
       <binaryOption name="sim_sopt5_uart2ode" description="UART2 Open Drain Enable"
@@ -294,19 +398,19 @@ Devices using this peripheral:
          <choice value="0" name="Push-pull" />
          <choice value="1" name="Open-drain" />
       </binaryOption>
-
+      
       <binaryOption name="sim_sopt5_uart1ode" description="UART1 Open Drain Enable"
          toolTip="Enables Open Drain output">
          <choice value="0" name="Push-pull" />
          <choice value="1" name="Open-drain" />
       </binaryOption>
-
+      
       <binaryOption name="sim_sopt5_uart0ode" description="UART0 Open Drain Enable"
          toolTip="Enables Open Drain output">
          <choice value="0" name="Push-pull" />
          <choice value="1" name="Open-drain" />
       </binaryOption>
-
+      
       <choiceOption name="sim_sopt5_uart0txsrc" 
          description="UART 0 transmit data source select"
          toolTip="Selects the source for the UART 0 transmit data.">
@@ -315,14 +419,14 @@ Devices using this peripheral:
          <choice value="2" name="UART0_TX pin modulated with TPM2 channel 0 output" />
          <choice value="3" name="Reserved" />
       </choiceOption>
-   
+      
       <choiceOption name="sim_sopt5_uart0rxsrc" 
          description="UART 0 receive data source select"
          toolTip="Selects the source for the UART 0 receive data.">
          <choice value="0" name="UART0_RX pin" isDefault="true" />
          <choice value="1" name="CMP0 output" />
       </choiceOption>
-   
+      
       <choiceOption name="sim_sopt5_uart1txsrc" 
          description="UART 1 transmit data source select"
          toolTip="Selects the source for the UART 1 transmit data.">
@@ -331,27 +435,27 @@ Devices using this peripheral:
          <choice value="2" name="UART1_TX pin modulated with TPM2 channel 0 output" />
          <choice value="3" name="Reserved" />
       </choiceOption>
-   
+      
       <choiceOption name="sim_sopt5_uart1rxsrc" 
          description="UART 1 receive data source select"
          toolTip="Selects the source for the UART 1 receive data">
          <choice value="0" name="UART1_RX pin" isDefault="true" />
          <choice value="1" name="CMP0 output" />
       </choiceOption>
+      
+      <template><![CDATA[
+         \t//! System Options Register 5
+         \tstatic constexpr uint32_t sopt5 = 
+         \t   SIM_SOPT5_UART2ODE($(sim_sopt5_uart2ode)) |        // UART 2 Open Drain Enable
+         \t   SIM_SOPT5_UART1ODE($(sim_sopt5_uart1ode)) |        // UART 1 Open Drain Enable
+         \t   SIM_SOPT5_UART0ODE($(sim_sopt5_uart0ode)) |        // UART 0 Open Drain Enable
+         \t   SIM_SOPT5_UART0TXSRC($(sim_sopt5_uart0txsrc)) |      // UART 0 transmit data source select
+         \t   SIM_SOPT5_UART0RXSRC($(sim_sopt5_uart0rxsrc)) |      // UART 0 receive data source select
+         \t   SIM_SOPT5_UART1TXSRC($(sim_sopt5_uart1txsrc)) |      // UART 1 transmit data source select
+         \t   SIM_SOPT5_UART1RXSRC($(sim_sopt5_uart1rxsrc)) |      // UART 1 receive data source select
+         \t   0;\n\n
+      ]]></template>
    </category>
-   
-   <template><![CDATA[
-      \t//! System Options Register 5
-      \tstatic constexpr uint32_t sopt5 = 
-      \t   SIM_SOPT5_UART2ODE($(sim_sopt5_uart2ode)) |        // UART 2 Open Drain Enable
-      \t   SIM_SOPT5_UART1ODE($(sim_sopt5_uart1ode)) |        // UART 1 Open Drain Enable
-      \t   SIM_SOPT5_UART0ODE($(sim_sopt5_uart0ode)) |        // UART 0 Open Drain Enable
-      \t   SIM_SOPT5_UART0TXSRC($(sim_sopt5_uart0txsrc)) |      // UART 0 transmit data source select
-      \t   SIM_SOPT5_UART0RXSRC($(sim_sopt5_uart0rxsrc)) |      // UART 0 receive data source select
-      \t   SIM_SOPT5_UART1TXSRC($(sim_sopt5_uart1txsrc)) |      // UART 1 transmit data source select
-      \t   SIM_SOPT5_UART1RXSRC($(sim_sopt5_uart1rxsrc)) |      // UART 1 receive data source select
-      \t   0;\n\n
-   ]]></template>
    
    <category name="SOPT7" description="ADC signals">
       <binaryOption name="sim_sopt7_adc0alttrgen" 
@@ -360,14 +464,14 @@ Devices using this peripheral:
          <choice value="0" name="TPM1 channel 0 (A) and channel 1 (B) trigger" isDefault="true" />
          <choice value="1" name="Alternate trigger selected" />
       </binaryOption>
-   
+      
       <binaryOption name="sim_sopt7_adc0pretrgsel" 
          description="ADC0 pretrigger select"
          toolTip="Selects the pre-trigger source when alternative triggers are enabled through ADC0ALTTRGEN">
          <choice value="0" name="Pre-trigger 0 (A)" isDefault="true" />
          <choice value="1" name="Pre-trigger 1 (B)" />
       </binaryOption>
-   
+      
       <choiceOption name="sim_sopt7_adc0trgsel" 
          description="ADC0 trigger select"
          toolTip="Selects the trigger source when alternative triggers are functional in stop and VLPS modes">
@@ -388,130 +492,73 @@ Devices using this peripheral:
          <choice value="14" name="Low-power timer trigger" />
          <choice value="15" name="Reserved" />
       </choiceOption>
+      
+      <template namespace="usbdm"><![CDATA[
+         \t/**
+         \t * Select the ADC0 Trigger source in STOP and VLPS modes, or when ADC0 Alternative Trigger is active.
+         \t */
+         \tenum SimAdc0Trigger {
+         \t   SimAdc0Trigger_External     = SIM_SOPT7_ADC0TRGSEL(0),   //!< External Trigger Source
+         \t   SimAdc0Trigger_Cmp0         = SIM_SOPT7_ADC0TRGSEL(1),   //!< Comparator 0
+         \t   SimAdc0Trigger_Cmp1         = SIM_SOPT7_ADC0TRGSEL(2),   //!< Comparator 1 (if present)
+         \t   SimAdc0Trigger_Cmp2         = SIM_SOPT7_ADC0TRGSEL(3),   //!< Comparator 2 (if present)
+         \t   SimAdc0Trigger_PitCh0       = SIM_SOPT7_ADC0TRGSEL(4),   //!< PIT Channel 0
+         \t   SimAdc0Trigger_PitCh1       = SIM_SOPT7_ADC0TRGSEL(5),   //!< PIT Channel 1
+         \t   SimAdc0Trigger_PitCh2       = SIM_SOPT7_ADC0TRGSEL(6),   //!< PIT Channel 2
+         \t   SimAdc0Trigger_PitCh3       = SIM_SOPT7_ADC0TRGSEL(7),   //!< PIT Channel 3
+         \t   SimAdc0Trigger_Tpm0         = SIM_SOPT7_ADC0TRGSEL(8),   //!< TPM0 Init and Ext Trigger Outputs
+         \t   SimAdc0Trigger_Tpm1         = SIM_SOPT7_ADC0TRGSEL(9),   //!< TPM1 Init and Ext Trigger Outputs
+         \t   SimAdc0Trigger_Tpm2         = SIM_SOPT7_ADC0TRGSEL(10),  //!< TPM2 Init and Ext Trigger Outputs (if present)
+         \t   SimAdc0Trigger_Tpm3         = SIM_SOPT7_ADC0TRGSEL(11),  //!< TPM3 Init and Ext Trigger Outputs (if present)
+         \t   SimAdc0Trigger_RtcAlarm     = SIM_SOPT7_ADC0TRGSEL(12),  //!< RTC Alarm
+         \t   SimAdc0Trigger_RtcSeconds   = SIM_SOPT7_ADC0TRGSEL(13),  //!< RTC Seconds
+         \t   SimAdc0Trigger_Lptrm        = SIM_SOPT7_ADC0TRGSEL(14),  //!< LPTMR
+         \t   SimAdc0Trigger_15           = SIM_SOPT7_ADC0TRGSEL(15),  //!< Reserved
+         \t};\n\n
+         
+         \t/**
+         \t * Select the ADC0 Alternative Trigger sources.
+         \t * If PDB is selected then Pre-trigger 0/1 is determined by the PDB setup
+         \t * otherwise Pre-trigger 0/1 is determined by this selection.
+         \t */
+         \tenum SimAdc0AltTrigger {
+         \t   SimAdc0AltTrigger_Tmp           = SIM_SOPT7_ADC0ALTTRGEN(0),                              //!< TPM trigger
+         \t   SimAdc0AltTrigger_PreTrigger_0  = SIM_SOPT7_ADC0ALTTRGEN(1)|SIM_SOPT7_ADC0PRETRGSEL(0),   //!< Pre-trigger 0 = A (SC1[0])
+         \t   SimAdc0AltTrigger_PreTrigger_1  = SIM_SOPT7_ADC0ALTTRGEN(1)|SIM_SOPT7_ADC0PRETRGSEL(1),   //!< Pre-trigger 1 = B (SC1[1])
+         \t};\n\n
+      ]]></template>
+      
+      <template><![CDATA[
+         \t/**
+         \t * Select the ADC0 Trigger source\n
+         \t * 
+         \t * If PDB is selected by SimAdc0Trigger then Pre-trigger 0/1 is determined by the PDB setup,
+         \t * otherwise Pre-trigger 0/1 is determined by this parameter.\n
+         \t * For example, setAdc0Triggers(SimAdc0AltTrigger_PreTrigger_1, SimAdc0Trigger_PitCh0) will set the trigger source\n
+         \t * to PIT channel 0 and conversion will use SC1[1]/R[1]. 
+         \t *
+         \t * @param[in] simAdc0AltTrigger  Select the ADC0 Alternative Trigger sources 
+         \t * @param[in] simAdc0Trigger     Select the ADC0 Trigger source in STOP and VLPS modes, or when ADC0 Alternative Trigger is active.
+         \t */
+         \tstatic void setAdc0Triggers(SimAdc0AltTrigger simAdc0AltTrigger, SimAdc0Trigger simAdc0Trigger=SimAdc0Trigger_External) {
+         \t   sim->SOPT7 = (sim->SOPT7&~(SIM_SOPT7_ADC0TRGSEL_MASK|SIM_SOPT7_ADC0ALTTRGEN_MASK))|simAdc0Trigger|simAdc0AltTrigger;
+         \t};\n\n
+      ]]></template>
+   
+      <template><![CDATA[
+         \t//! System Options Register 7
+         \tstatic constexpr uint32_t sopt7 = 
+         \t   SIM_SOPT7_ADC0ALTTRGEN($(sim_sopt7_adc0alttrgen)) |    // ADC0 alternate trigger enable
+         \t   SIM_SOPT7_ADC0PRETRGSEL($(sim_sopt7_adc0pretrgsel)) |   // ADC0 pretrigger select
+         \t   SIM_SOPT7_ADC0TRGSEL($(sim_sopt7_adc0trgsel));       // ADC0 trigger select\n\n
+      ]]></template>
    </category>
-   
-   <template><![CDATA[
-      \t//! System Options Register 7
-      \tstatic constexpr uint32_t sopt7 = 
-      \t   SIM_SOPT7_ADC0ALTTRGEN($(sim_sopt7_adc0alttrgen)) |    // ADC0 alternate trigger enable
-      \t   SIM_SOPT7_ADC0PRETRGSEL($(sim_sopt7_adc0pretrgsel)) |   // ADC0 pretrigger select
-      \t   SIM_SOPT7_ADC0TRGSEL($(sim_sopt7_adc0trgsel));       // ADC0 trigger select\n\n
-   ]]></template>
-
-   <template namespace="usbdm"><![CDATA[
-      \t/**
-      \t * Select the ADC0 Trigger source in STOP and VLPS modes, or when ADC0 Alternative Trigger is active.
-      \t */
-      \tenum SimAdc0Trigger {
-      \t   SimAdc0Trigger_External     = SIM_SOPT7_ADC0TRGSEL(0),   //!< External Trigger Source
-      \t   SimAdc0Trigger_Cmp0         = SIM_SOPT7_ADC0TRGSEL(1),   //!< Comparator 0
-      \t   SimAdc0Trigger_Cmp1         = SIM_SOPT7_ADC0TRGSEL(2),   //!< Comparator 1 (if present)
-      \t   SimAdc0Trigger_Cmp2         = SIM_SOPT7_ADC0TRGSEL(3),   //!< Comparator 2 (if present)
-      \t   SimAdc0Trigger_PitCh0       = SIM_SOPT7_ADC0TRGSEL(4),   //!< PIT Channel 0
-      \t   SimAdc0Trigger_PitCh1       = SIM_SOPT7_ADC0TRGSEL(5),   //!< PIT Channel 1
-      \t   SimAdc0Trigger_PitCh2       = SIM_SOPT7_ADC0TRGSEL(6),   //!< PIT Channel 2
-      \t   SimAdc0Trigger_PitCh3       = SIM_SOPT7_ADC0TRGSEL(7),   //!< PIT Channel 3
-      \t   SimAdc0Trigger_Tpm0         = SIM_SOPT7_ADC0TRGSEL(8),   //!< TPM0 Init and Ext Trigger Outputs
-      \t   SimAdc0Trigger_Tpm1         = SIM_SOPT7_ADC0TRGSEL(9),   //!< TPM1 Init and Ext Trigger Outputs
-      \t   SimAdc0Trigger_Tpm2         = SIM_SOPT7_ADC0TRGSEL(10),  //!< TPM2 Init and Ext Trigger Outputs (if present)
-      \t   SimAdc0Trigger_Tpm3         = SIM_SOPT7_ADC0TRGSEL(11),  //!< TPM3 Init and Ext Trigger Outputs (if present)
-      \t   SimAdc0Trigger_RtcAlarm     = SIM_SOPT7_ADC0TRGSEL(12),  //!< RTC Alarm
-      \t   SimAdc0Trigger_RtcSeconds   = SIM_SOPT7_ADC0TRGSEL(13),  //!< RTC Seconds
-      \t   SimAdc0Trigger_Lptrm        = SIM_SOPT7_ADC0TRGSEL(14),  //!< LPTMR
-      \t   SimAdc0Trigger_15           = SIM_SOPT7_ADC0TRGSEL(15),  //!< Reserved
-      \t};\n\n
-      
-      \t/**
-      \t * Select the ADC0 Alternative Trigger sources.
-      \t * If PDB is selected then Pre-trigger 0/1 is determined by the PDB setup
-      \t * otherwise Pre-trigger 0/1 is determined by this selection.
-      \t */
-      \tenum SimAdc0AltTrigger {
-      \t   SimAdc0AltTrigger_Tmp           = SIM_SOPT7_ADC0ALTTRGEN(0),                              //!< TPM trigger
-      \t   SimAdc0AltTrigger_PreTrigger_0  = SIM_SOPT7_ADC0ALTTRGEN(1)|SIM_SOPT7_ADC0PRETRGSEL(0),   //!< Pre-trigger 0 = A (SC1[0])
-      \t   SimAdc0AltTrigger_PreTrigger_1  = SIM_SOPT7_ADC0ALTTRGEN(1)|SIM_SOPT7_ADC0PRETRGSEL(1),   //!< Pre-trigger 1 = B (SC1[1])
-      \t};\n\n
-   ]]></template>
-   
-   <template><![CDATA[
-      \t/**
-      \t * Select the ADC0 Trigger source\n
-      \t * 
-      \t * If PDB is selected by SimAdc0Trigger then Pre-trigger 0/1 is determined by the PDB setup,
-      \t * otherwise Pre-trigger 0/1 is determined by this parameter.\n
-      \t * For example, setAdc0Triggers(SimAdc0AltTrigger_PreTrigger_1, SimAdc0Trigger_PitCh0) will set the trigger source\n
-      \t * to PIT channel 0 and conversion will use SC1[1]/R[1]. 
-      \t *
-      \t * @param[in] simAdc0AltTrigger  Select the ADC0 Alternative Trigger sources 
-      \t * @param[in] simAdc0Trigger     Select the ADC0 Trigger source in STOP and VLPS modes, or when ADC0 Alternative Trigger is active.
-      \t */
-      \tstatic void setAdc0Triggers(SimAdc0AltTrigger simAdc0AltTrigger, SimAdc0Trigger simAdc0Trigger=SimAdc0Trigger_External) {
-      \t   sim->SOPT7 = (sim->SOPT7&~(SIM_SOPT7_ADC0TRGSEL_MASK|SIM_SOPT7_ADC0ALTTRGEN_MASK))|simAdc0Trigger|simAdc0AltTrigger;
-      \t};\n\n
-   ]]></template>
-
-   
-   <stringOption name="Uart1Clock" value="SystemBusClock"  constant="true" derived="true" />
-   <stringOption name="Uart2Clock" value="SystemBusClock"  constant="true" derived="true" />
-   
-   <template><![CDATA[
-      \t/** 
-      \t * Get UART0 input clock frequency
-      \t *
-      \t * @return Clock frequency in Hz
-      \t */
-      \tstatic uint32_t getUart0Clock() {
-      \t   switch(sim->SOPT2&SIM_SOPT2_UART0SRC_MASK) {
-      \t      default:
-      \t      case SIM_SOPT2_UART0SRC(0): return 0;
-      \t      case SIM_SOPT2_UART0SRC(1): return getPeripheralClock();
-      \t      case SIM_SOPT2_UART0SRC(2): return Osc0Info::getOscerClock();
-      \t      case SIM_SOPT2_UART0SRC(3): return McgInfo::getMcgIrClock();
-      \t   }
-      \t}\n\n
-      
-      \t/** 
-      \t * Get UART1 input clock frequency
-      \t *
-      \t * @return Clock frequency in Hz
-      \t */
-      \tstatic inline uint32_t getUart1Clock() {
-      \t   return $(Uart1Clock);
-      \t}\n\n
-      
-      \t/** 
-      \t * Get UART2 input clock frequency
-      \t *
-      \t * @return Clock frequency in Hz
-      \t */
-      \tstatic inline uint32_t getUart2Clock() {
-      \t   return $(Uart2Clock);
-      \t}\n\n
-   ]]></template>
-
-   
-   <template><![CDATA[
-      \t#ifdef SIM_SOPT2_USBSRC_MASK
-      \t/**
-      \t * Get USB clock frequency
-      \t *
-      \t * @return Clock frequency as a uint32_t in Hz
-      \t */
-      \tstatic uint32_t getUsbClock() {
-      \t   switch ((sim->SOPT2&SIM_SOPT2_USBSRC_MASK)) {
-      \t      default:
-      \t      case SIM_SOPT2_USBSRC(0): return $(/MCG/system_usb_clkin_clock);
-      \t      case SIM_SOPT2_USBSRC(1): return getPeripheralClock();
-      \t   }
-      \t}
-      \t#endif\n\n
-   ]]></template>
    
    <indexedCategory name="ClockConfig." dim="3" 
         description="Clock configurations" 
         toolTip="Clock configurations for different run modes" 
         value="" >
-         
+      
       <aliasOption key="/MCG/ClockConfig."
         constant="true"/>
       
@@ -534,14 +581,14 @@ Devices using this peripheral:
          description="System Core Clock"
          toolTip="Clocks the ARM Cortex-M4 core and bus masters"
          value="48000000" />
-   
+      
       <intOption name="system_bus_clock." 
          units="Hz"
          description="System Bus Clock"
          toolTip="Clocks the bus slaves and peripherals\n
                   Must be &lt;= Core Clock frequency"
          value="24000000" />
-	 
+	  
       <category name="CLKDIV1" description="System Clock Dividers">
          <intOption name="sim_clkdiv1_outdiv1." 
             derived="true"
@@ -550,7 +597,7 @@ Devices using this peripheral:
             toolTip="Clocks the ARM Cortex-M4 core and bus masters [SIM_CLKDIV1_OUTDIV1]\n
                      Divides MCGOUT Clock to generate system_core_clock"
             value="1" offset="-1" min="1" max="16" />
-      
+         
          <intOption name="sim_clkdiv1_outdiv4." 
             derived="true"
             constant="true"
@@ -567,9 +614,9 @@ Devices using this peripheral:
       <param type="long" value="48MHz" />    <!-- Core         -->
       <param type="long" value="24MHz" />    <!-- Bus          -->
    </validate>
-
+   
    <xi:include href="_simFiles-MKL.xml"/>
-         
+   
    <template><![CDATA[
       \t/**
       \t * Initialise SIM registers
