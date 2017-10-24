@@ -48,7 +48,7 @@ enum LlwuPeripheralMode {
  * LLWU pin sources (MK20 & MK22F)
  */
 enum LlwuPin : uint32_t {
-#if defined(MCU_MKL25Z4)
+#if defined(MCU_MKL25Z4) || defined(MCU_MKL27Z644) || defined(MCU_MKL43Z4) || defined (MCU_MKL46Z4)
    LlwuPin_ptb0      = 5,   //!< Wake-up pin LLWU_P5
    LlwuPin_ptc1      = 6,   //!< Wake-up pin LLWU_P6
    LlwuPin_ptc3      = 7,   //!< Wake-up pin LLWU_P7
@@ -142,9 +142,9 @@ enum LlwuPin : uint32_t {
 enum LlwuPeripheral : uint8_t {
    LlwuPeripheral_Lptmr       = (1<<0),  //!< Wake-up peripheral LLWU_M0IF
    LlwuPeripheral_Cmp0        = (1<<1),  //!< Wake-up peripheral LLWU_M1IF
-   LlwuPeripheral_Cmp1        = (1<<2),  //!< Wake-up peripheral LLWU_M2IF
-   LlwuPeripheral_Cmp2_Cmp3   = (1<<3),  //!< Wake-up peripheral LLWU_M3IF // Not all devices
-   LlwuPeripheral_Tsi         = (1<<4),  //!< Wake-up peripheral LLWU_M4IF
+   LlwuPeripheral_Cmp1        = (1<<2),  //!< Wake-up peripheral LLWU_M2IF // When available
+   LlwuPeripheral_Cmp2_Cmp3   = (1<<3),  //!< Wake-up peripheral LLWU_M3IF // When available
+   LlwuPeripheral_Tsi         = (1<<4),  //!< Wake-up peripheral LLWU_M4IF // When available
    LlwuPeripheral_RtcAlarm    = (1<<5),  //!< Wake-up peripheral LLWU_M5IF
    LlwuPeripheral_Reserved6   = (1<<6),  //!< Wake-up peripheral LLWU_M6IF
    LlwuPeripheral_RtcSeconds  = (1<<7),  //!< Wake-up peripheral LLWU_M7IF

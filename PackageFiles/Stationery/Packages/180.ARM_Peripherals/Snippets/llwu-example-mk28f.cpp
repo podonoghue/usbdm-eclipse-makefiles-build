@@ -25,6 +25,9 @@
 #include "pmc.h"
 #include "rcm.h"
 
+// May need reduced baud rate for slow clocks
+static constexpr int BAUD_RATE = 115200;
+
 // Allow access to USBDM methods without USBDM:: prefix
 using namespace USBDM;
 
@@ -143,7 +146,7 @@ void testStopMode(
     */
    if (Smc::getStatus() == SmcStatus_run) {
       Mcg::clockTransition(McgInfo::clockInfo[ClockConfig_PEE_120MHz]);
-      console.setBaudRate(defaultBaudRate);
+      console.setBaudRate(BAUD_RATE);
       console.writeln("Awake!").flushOutput();
       console.writeln("Restored clock frequency").flushOutput();
    }
@@ -412,7 +415,7 @@ void help() {
 int main() {
    // Set LPUART (console) clock to clock source available in VLPR mode
    SimInfo::setLpuartClock(SimLpuartClockSource_OscerClk);
-   console.setBaudRate(defaultBaudRate);
+   console.setBaudRate(BAUD_RATE);
 
    console.writeln("\n**************************************");
    console.write("Executing from RESET, SRS=").writeln(Rcm::getResetSourceDescription());

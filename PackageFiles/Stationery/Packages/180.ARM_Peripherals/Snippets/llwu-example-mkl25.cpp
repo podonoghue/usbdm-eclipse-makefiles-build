@@ -32,6 +32,9 @@
 #include "pmc.h"
 #include "rcm.h"
 
+// May need reduced baud rate for slow clocks
+static constexpr int BAUD_RATE = 115200;
+
 // Allow access to USBDM methods without USBDM:: prefix
 using namespace USBDM;
 
@@ -150,7 +153,7 @@ void testStopMode(
     */
    if (Smc::getStatus() == SmcStatus_run) {
       Mcg::clockTransition(McgInfo::clockInfo[ClockConfig_PEE_48MHz]);
-      console.setBaudRate(defaultBaudRate);
+      console.setBaudRate(BAUD_RATE);
       console.writeln("Awake!").flushOutput();
       console.writeln("Restored clock frequency").flushOutput();
    }
@@ -367,14 +370,14 @@ SmcStatus changeRunMode() {
       // RUN->VLPR
       Mcg::clockTransition(McgInfo::clockInfo[ClockConfig_BLPE_4MHz]);
       Smc::enterRunMode(SmcRunMode_VeryLowPower);
-      console.setBaudRate(defaultBaudRate);
+      console.setBaudRate(BAUD_RATE);
       console.writeln("Changed to VLPR mode").flushOutput();
    }
    else if (smcStatus == SmcStatus_vlpr) {
       // VLPR->RUN mode
       Smc::enterRunMode(SmcRunMode_Normal);
       Mcg::clockTransition(McgInfo::clockInfo[ClockConfig_PEE_48MHz]);
-      console.setBaudRate(defaultBaudRate);
+      console.setBaudRate(BAUD_RATE);
       console.writeln("Changed to RUN mode").flushOutput();
    }
    return Smc::getStatus();
@@ -404,6 +407,10 @@ void help() {
 }
 
 int main() {
+   // Change UART clock source
+   SimInfo::setUart0Clock(SimUartClockSource_OscerClk);
+   console.setBaudRate(BAUD_RATE);
+
    console.writeln("\n**************************************");
    console.write("Executing from RESET, SRS=").writeln(Rcm::getResetSourceDescription());
    // Configure LEDs
