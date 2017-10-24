@@ -298,8 +298,8 @@ public:
     *
     * This is calculated from baud rate and LPUART clock frequency
     *
-    * @param[in]  baudrate Interface speed in bits-per-second
-    * @param[in]  osr      Interface over-sample ratio
+    * @param[in]  baudrate    Interface speed in bits-per-second
+    * @param[in]  oversample  Over-sample ratio to use when calculating divider
     */
    void setBaudRate(unsigned baudrate, unsigned osr) {
       Lpuart::setBaudRate(baudrate, Info::getClockFrequency(), osr);

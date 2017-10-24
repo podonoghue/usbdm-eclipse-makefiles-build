@@ -508,9 +508,8 @@ public:
    virtual void setBaudRate(unsigned baudrate) override {
       static constexpr int OVER_SAMPLE = Info::oversampleRatio;
 
-      // Set oversample ratio
+      // Set oversample ratio and baud rate
       uart->C4 = (uart->C4&~UART_C4_OSR_MASK)|(OVER_SAMPLE-1);
-
       Uart::setBaudRate_basic(baudrate, Info::getInputClockFrequency(), OVER_SAMPLE);
    }
 
@@ -519,11 +518,14 @@ public:
     *
     * This is calculated from baud rate and LPUART clock frequency
     *
-    * @param[in]  baudrate Interface speed in bits-per-second
-    * @param[in]  osr      Interface over-sample ratio
+    * @param[in]  baudrate    Interface speed in bits-per-second
+    * @param[in]  oversample  Over-sample ratio to use when calculating divider
     */
-   void setBaudRate(unsigned baudrate, unsigned osr) {
-      Uart::setBaudRate_basic(baudrate, Info::getInputClockFrequency(), osr);
+   void setBaudRate(unsigned baudrate, unsigned oversample) {
+
+      // Set oversample ratio and baud rate
+      uart->C4 = (uart->C4&~UART_C4_OSR_MASK)|UART_C4_OSR(oversample-1);
+      Uart::setBaudRate_basic(baudrate, Info::getInputClockFrequency(), oversample);
    }
 
 };
