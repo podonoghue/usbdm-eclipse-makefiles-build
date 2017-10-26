@@ -121,7 +121,7 @@ typedef enum {
   ENET_Transmit_IRQn            =  83,   /**<  99 Ethernet MAC-NET Core                                                            */
   ENET_Receive_IRQn             =  84,   /**< 100 Ethernet MAC-NET Core                                                            */
   ENET_Error_IRQn               =  85,   /**< 101 Ethernet MAC-NET Core                                                            */
-  LPUART0_RxTx_IRQn             =  86,   /**< 102 Serial Communication Interface                                                   */
+  LPUART0_IRQn                  =  86,   /**< 102 Serial Communication Interface                                                   */
   TSI0_IRQn                     =  87,   /**< 103 Touch Sense Input                                                                */
   TPM1_IRQn                     =  88,   /**< 104 Timer/PWM Module                                                                 */
   TPM2_IRQn                     =  89,   /**< 105 Timer/PWM Module                                                                 */
@@ -236,7 +236,7 @@ extern void ENET_1588Timeout_IRQHandler(void);   /**< Ethernet MAC-NET Core     
 extern void ENET_Transmit_IRQHandler(void);    /**< Ethernet MAC-NET Core                                                            */
 extern void ENET_Receive_IRQHandler(void);     /**< Ethernet MAC-NET Core                                                            */
 extern void ENET_Error_IRQHandler(void);       /**< Ethernet MAC-NET Core                                                            */
-extern void LPUART0_RxTx_IRQHandler(void);     /**< Serial Communication Interface                                                   */
+extern void LPUART0_IRQHandler(void);          /**< Serial Communication Interface                                                   */
 extern void TSI0_IRQHandler(void);             /**< Touch Sense Input                                                                */
 extern void TPM1_IRQHandler(void);             /**< Timer/PWM Module                                                                 */
 extern void TPM2_IRQHandler(void);             /**< Timer/PWM Module                                                                 */

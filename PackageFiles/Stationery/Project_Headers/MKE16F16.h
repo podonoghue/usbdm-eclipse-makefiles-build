@@ -68,12 +68,12 @@ typedef enum {
   LPSPI0_IRQn                   =  26,   /**<  42 The LPSPI Memory Map/Register Definition can be found here                       */
   LPSPI1_IRQn                   =  27,   /**<  43 The LPSPI Memory Map/Register Definition can be found here                       */
   PWT_IRQn                      =  29,   /**<  45 Pulse Width Timer                                                                */
-  LPUART0_TX_IRQn               =  31,   /**<  47 Universal Asynchronous Receiver/Transmitter                                      */
-  LPUART0_RX_IRQn               =  32,   /**<  48 Universal Asynchronous Receiver/Transmitter                                      */
-  LPUART1_TX_IRQn               =  33,   /**<  49 Universal Asynchronous Receiver/Transmitter                                      */
-  LPUART1_RX_IRQn               =  34,   /**<  50 Universal Asynchronous Receiver/Transmitter                                      */
-  LPUART2_TX_IRQn               =  35,   /**<  51 Universal Asynchronous Receiver/Transmitter                                      */
-  LPUART2_RX_IRQn               =  36,   /**<  52 Universal Asynchronous Receiver/Transmitter                                      */
+  LPUART0_Tx_IRQn               =  31,   /**<  47 Universal Asynchronous Receiver/Transmitter                                      */
+  LPUART0_Rx_IRQn               =  32,   /**<  48 Universal Asynchronous Receiver/Transmitter                                      */
+  LPUART1_Tx_IRQn               =  33,   /**<  49 Universal Asynchronous Receiver/Transmitter                                      */
+  LPUART1_Rx_IRQn               =  34,   /**<  50 Universal Asynchronous Receiver/Transmitter                                      */
+  LPUART2_Tx_IRQn               =  35,   /**<  51 Universal Asynchronous Receiver/Transmitter                                      */
+  LPUART2_Rx_IRQn               =  36,   /**<  52 Universal Asynchronous Receiver/Transmitter                                      */
   ADC0_IRQn                     =  39,   /**<  55 Analog-to-Digital Converter                                                      */
   CMP0_IRQn                     =  40,   /**<  56 High-Speed Comparator (CMP), Voltage Reference (VREF) Digital-to-Analog Converter (DAC), and Analog Mux */
   CMP1_IRQn                     =  41,   /**<  57 High-Speed Comparator (CMP), Voltage Reference (VREF) Digital-to-Analog Converter (DAC), and Analog Mux */
@@ -154,12 +154,12 @@ extern void LPI2C1_IRQHandler(void);           /**< The LPI2C Memory Map/Registe
 extern void LPSPI0_IRQHandler(void);           /**< The LPSPI Memory Map/Register Definition can be found here                       */
 extern void LPSPI1_IRQHandler(void);           /**< The LPSPI Memory Map/Register Definition can be found here                       */
 extern void PWT_IRQHandler(void);              /**< Pulse Width Timer                                                                */
-extern void LPUART0_TX_IRQHandler(void);       /**< Universal Asynchronous Receiver/Transmitter                                      */
-extern void LPUART0_RX_IRQHandler(void);       /**< Universal Asynchronous Receiver/Transmitter                                      */
-extern void LPUART1_TX_IRQHandler(void);       /**< Universal Asynchronous Receiver/Transmitter                                      */
-extern void LPUART1_RX_IRQHandler(void);       /**< Universal Asynchronous Receiver/Transmitter                                      */
-extern void LPUART2_TX_IRQHandler(void);       /**< Universal Asynchronous Receiver/Transmitter                                      */
-extern void LPUART2_RX_IRQHandler(void);       /**< Universal Asynchronous Receiver/Transmitter                                      */
+extern void LPUART0_Tx_IRQHandler(void);       /**< Universal Asynchronous Receiver/Transmitter                                      */
+extern void LPUART0_Rx_IRQHandler(void);       /**< Universal Asynchronous Receiver/Transmitter                                      */
+extern void LPUART1_Tx_IRQHandler(void);       /**< Universal Asynchronous Receiver/Transmitter                                      */
+extern void LPUART1_Rx_IRQHandler(void);       /**< Universal Asynchronous Receiver/Transmitter                                      */
+extern void LPUART2_Tx_IRQHandler(void);       /**< Universal Asynchronous Receiver/Transmitter                                      */
+extern void LPUART2_Rx_IRQHandler(void);       /**< Universal Asynchronous Receiver/Transmitter                                      */
 extern void ADC0_IRQHandler(void);             /**< Analog-to-Digital Converter                                                      */
 extern void CMP0_IRQHandler(void);             /**< High-Speed Comparator (CMP), Voltage Reference (VREF) Digital-to-Analog Converter (DAC), and Analog Mux */
 extern void CMP1_IRQHandler(void);             /**< High-Speed Comparator (CMP), Voltage Reference (VREF) Digital-to-Analog Converter (DAC), and Analog Mux */

@@ -68,7 +68,7 @@ typedef enum {
   I2C1_IRQn                     =  25,   /**<  41 Inter-Integrated Circuit                                                         */
   SPI0_IRQn                     =  26,   /**<  42 Serial Peripheral Interface                                                      */
   SPI1_IRQn                     =  27,   /**<  43 Serial Peripheral Interface                                                      */
-  LPUART0_RxTx_IRQn             =  30,   /**<  46 Serial Communication Interface                                                   */
+  LPUART0_IRQn                  =  30,   /**<  46 Serial Communication Interface                                                   */
   UART0_RxTx_IRQn               =  31,   /**<  47 Serial Communication Interface                                                   */
   UART0_Error_IRQn              =  32,   /**<  48 Serial Communication Interface                                                   */
   UART1_RxTx_IRQn               =  33,   /**<  49 Serial Communication Interface                                                   */
@@ -145,7 +145,7 @@ extern void I2C0_IRQHandler(void);             /**< Inter-Integrated Circuit    
 extern void I2C1_IRQHandler(void);             /**< Inter-Integrated Circuit                                                         */
 extern void SPI0_IRQHandler(void);             /**< Serial Peripheral Interface                                                      */
 extern void SPI1_IRQHandler(void);             /**< Serial Peripheral Interface                                                      */
-extern void LPUART0_RxTx_IRQHandler(void);     /**< Serial Communication Interface                                                   */
+extern void LPUART0_IRQHandler(void);          /**< Serial Communication Interface                                                   */
 extern void UART0_RxTx_IRQHandler(void);       /**< Serial Communication Interface                                                   */
 extern void UART0_Error_IRQHandler(void);      /**< Serial Communication Interface                                                   */
 extern void UART1_RxTx_IRQHandler(void);       /**< Serial Communication Interface                                                   */
