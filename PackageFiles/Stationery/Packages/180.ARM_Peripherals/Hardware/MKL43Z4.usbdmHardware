@@ -147,7 +147,7 @@
       <peripheral baseName="LCD_POWER" instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPower" />
       </peripheral>
-      <peripheral baseName="LLWU"     instance=""         version="llwu_pe4_filt2">
+      <peripheral baseName="LLWU"     instance=""         version="llwu_pe4_filt2_mkl25z4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
          <irq num="LLWU_IRQn" />
       </peripheral>

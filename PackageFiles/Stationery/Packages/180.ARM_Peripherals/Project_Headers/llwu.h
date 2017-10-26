@@ -45,99 +45,13 @@ enum LlwuPeripheralMode {
 };
 
 /**
- * LLWU pin sources (MK20 & MK22F)
+ * LLWU pin sources
  */
 enum LlwuPin : uint32_t {
-#if defined(MCU_MKL25Z4) || defined(MCU_MKL27Z644) || defined(MCU_MKL43Z4) || defined (MCU_MKL46Z4)
-   LlwuPin_ptb0      = 5,   //!< Wake-up pin LLWU_P5
-   LlwuPin_ptc1      = 6,   //!< Wake-up pin LLWU_P6
-   LlwuPin_ptc3      = 7,   //!< Wake-up pin LLWU_P7
-   LlwuPin_ptc4      = 8,   //!< Wake-up pin LLWU_P8
-   LlwuPin_ptc5      = 9,   //!< Wake-up pin LLWU_P9
-   LlwuPin_ptc6      = 10,  //!< Wake-up pin LLWU_P10
-   LlwuPin_ptd4      = 14,  //!< Wake-up pin LLWU_P14
-   LlwuPin_ptd6      = 15,  //!< Wake-up pin LLWU_P15
-#elif defined(MCU_MK20D5) || defined(MCU_MK22F51212) || defined (MCU_MK28F15) || defined (MCU_MK66F12) || defined (MCU_MK66F18)
-   LlwuPin_pte1      = 0,   //!< Wake-up pin LLWU_P0
-   LlwuPin_pte2      = 1,   //!< Wake-up pin LLWU_P1
-   LlwuPin_pte4      = 2,   //!< Wake-up pin LLWU_P2
-   LlwuPin_pta4      = 3,   //!< Wake-up pin LLWU_P3
-   LlwuPin_pta13     = 4,   //!< Wake-up pin LLWU_P4
-   LlwuPin_ptb0      = 5,   //!< Wake-up pin LLWU_P5
-   LlwuPin_ptc1      = 6,   //!< Wake-up pin LLWU_P6
-   LlwuPin_ptc3      = 7,   //!< Wake-up pin LLWU_P7
-   LlwuPin_ptc4      = 8,   //!< Wake-up pin LLWU_P8
-   LlwuPin_ptc5      = 9,   //!< Wake-up pin LLWU_P9
-   LlwuPin_ptc6      = 10,  //!< Wake-up pin LLWU_P10
-   LlwuPin_ptc11     = 11,  //!< Wake-up pin LLWU_P11
-   LlwuPin_ptd0      = 12,  //!< Wake-up pin LLWU_P12
-   LlwuPin_ptd2      = 13,  //!< Wake-up pin LLWU_P13
-   LlwuPin_ptd4      = 14,  //!< Wake-up pin LLWU_P14
-   LlwuPin_ptd6      = 15,  //!< Wake-up pin LLWU_P15
-#endif
-
-#if defined (MCU_MK28F15) || defined (MCU_MK66F18)
-   LlwuPin_pte6      = 16,  //!< Wake-up pin LLWU_P16
-   LlwuPin_pte9      = 17,  //!< Wake-up pin LLWU_P17
-   LlwuPin_pte10     = 18,  //!< Wake-up pin LLWU_P18
-   LlwuPin_pte17     = 19,  //!< Wake-up pin LLWU_P19
-   LlwuPin_pte18     = 20,  //!< Wake-up pin LLWU_P20
-#if defined (MCU_MK28F15)
-   LlwuPin_pta21     = 21,  //!< Wake-up pin LLWU_P21
-#endif
-#if defined (MCU_MK66F18)
-   LlwuPin_pte25     = 21,  //!< Wake-up pin LLWU_P21
-#endif
-   LlwuPin_pta10     = 22,  //!< Wake-up pin LLWU_P22
-   LlwuPin_pta11     = 23,  //!< Wake-up pin LLWU_P23
-   LlwuPin_ptd8      = 24,  //!< Wake-up pin LLWU_P24
-   LlwuPin_ptd11     = 25,  //!< Wake-up pin LLWU_P25
-   LlwuPin_vregin    = 26,  //!< Wake-up pin LLWU_P26
-   LlwuPin_usb_dp    = 27,  //!< Wake-up pin LLWU_P27
-   LlwuPin_usb_dm    = 28,  //!< Wake-up pin LLWU_P28
-   LlwuPin_usb1_vbus = 29,  //!< Wake-up pin LLWU_P29
-   LlwuPin_usb1_dp   = 30,  //!< Wake-up pin LLWU_P30
-   LlwuPin_usb1_dm   = 31,  //!< Wake-up pin LLWU_P31
-#endif
-
-   LlwuPin_0         = 0,   //!< Wake-up pin LLWU_P0
-   LlwuPin_1         = 1,   //!< Wake-up pin LLWU_P1
-   LlwuPin_2         = 2,   //!< Wake-up pin LLWU_P2
-   LlwuPin_3         = 3,   //!< Wake-up pin LLWU_P3
-   LlwuPin_4         = 4,   //!< Wake-up pin LLWU_P4
-   LlwuPin_5         = 5,   //!< Wake-up pin LLWU_P5
-   LlwuPin_6         = 6,   //!< Wake-up pin LLWU_P6
-   LlwuPin_7         = 7,   //!< Wake-up pin LLWU_P7
-   LlwuPin_8         = 8,   //!< Wake-up pin LLWU_P8
-   LlwuPin_9         = 9,   //!< Wake-up pin LLWU_P9
-   LlwuPin_10        = 10,  //!< Wake-up pin LLWU_P10
-   LlwuPin_11        = 11,  //!< Wake-up pin LLWU_P11
-   LlwuPin_12        = 12,  //!< Wake-up pin LLWU_P12
-   LlwuPin_13        = 13,  //!< Wake-up pin LLWU_P13
-   LlwuPin_14        = 14,  //!< Wake-up pin LLWU_P14
-   LlwuPin_15        = 15,  //!< Wake-up pin LLWU_P15
-#if defined (MCU_MK28F15) || defined (MCU_MK66F18)
-   LlwuPin_16        = 16,  //!< Wake-up pin LLWU_P16
-   LlwuPin_17        = 17,  //!< Wake-up pin LLWU_P17
-   LlwuPin_18        = 18,  //!< Wake-up pin LLWU_P18
-   LlwuPin_19        = 19,  //!< Wake-up pin LLWU_P19
-   LlwuPin_20        = 20,  //!< Wake-up pin LLWU_P20
-   LlwuPin_21        = 21,  //!< Wake-up pin LLWU_P21
-   LlwuPin_22        = 22,  //!< Wake-up pin LLWU_P22
-   LlwuPin_23        = 23,  //!< Wake-up pin LLWU_P23
-   LlwuPin_24        = 24,  //!< Wake-up pin LLWU_P24
-   LlwuPin_25        = 25,  //!< Wake-up pin LLWU_P25
-   LlwuPin_26        = 26,  //!< Wake-up pin LLWU_P26
-   LlwuPin_27        = 27,  //!< Wake-up pin LLWU_P27
-   LlwuPin_28        = 28,  //!< Wake-up pin LLWU_P28
-   LlwuPin_29        = 29,  //!< Wake-up pin LLWU_P29
-   LlwuPin_30        = 30,  //!< Wake-up pin LLWU_P30
-   LlwuPin_31        = 31,  //!< Wake-up pin LLWU_P31
-#endif
-};
+$(/LLWU/llwu_pins:!!!!Not Found!!!!)};
 
 /**
- * LLWU peripheral sources (MK20 & MK22F)
+ * LLWU peripheral sources
  */
 enum LlwuPeripheral : uint8_t {
    LlwuPeripheral_Lptmr       = (1<<0),  //!< Wake-up peripheral LLWU_M0IF

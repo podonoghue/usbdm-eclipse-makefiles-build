@@ -48,6 +48,26 @@
       <choice name="Enabled"   value="1" />
    </binaryOption>   
    
+   <template name="llwu_pins" namespace="all"><![CDATA[
+      \t// llwu_pe4_filt2_rst
+      \tLlwuPin_pte1      = 0,   //!< Wake-up pin LLWU_P0
+      \tLlwuPin_pte2      = 1,   //!< Wake-up pin LLWU_P1
+      \tLlwuPin_pte4      = 2,   //!< Wake-up pin LLWU_P2
+      \tLlwuPin_pta4      = 3,   //!< Wake-up pin LLWU_P3
+      \tLlwuPin_pta13     = 4,   //!< Wake-up pin LLWU_P4
+      \tLlwuPin_ptb0      = 5,   //!< Wake-up pin LLWU_P5
+      \tLlwuPin_ptc1      = 6,   //!< Wake-up pin LLWU_P6
+      \tLlwuPin_ptc3      = 7,   //!< Wake-up pin LLWU_P7
+      \tLlwuPin_ptc4      = 8,   //!< Wake-up pin LLWU_P8
+      \tLlwuPin_ptc5      = 9,   //!< Wake-up pin LLWU_P9
+      \tLlwuPin_ptc6      = 10,  //!< Wake-up pin LLWU_P10
+      \tLlwuPin_ptc11     = 11,  //!< Wake-up pin LLWU_P11
+      \tLlwuPin_ptd0      = 12,  //!< Wake-up pin LLWU_P12
+      \tLlwuPin_ptd2      = 13,  //!< Wake-up pin LLWU_P13
+      \tLlwuPin_ptd4      = 14,  //!< Wake-up pin LLWU_P14
+      \tLlwuPin_ptd6      = 15,  //!< Wake-up pin LLWU_P15
+   ]]></template>
+   
    <template><![CDATA[
       \t// Module wake ups
       \tstatic constexpr uint8_t me =  
