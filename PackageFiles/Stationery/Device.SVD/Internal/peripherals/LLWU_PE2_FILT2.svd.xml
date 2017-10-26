@@ -158,7 +158,7 @@ Enable and selects the internal module flag as a wakeup input source for inputs 
                <fields>
                   <field>
                      <name>WUME0</name>
-                     <description>Wakeup Module Enable For Module 0</description>
+                     <description>Module Enable 0</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -174,13 +174,13 @@ Enable and selects the internal module flag as a wakeup input source for inputs 
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="WUME0" > <name>WUME1</name> <description>Wakeup Module Enable for Module 1</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="WUME0" > <name>WUME2</name> <description>Wakeup Module Enable for Module 2</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="WUME0" > <name>WUME3</name> <description>Wakeup Module Enable for Module 3</description> <bitOffset>3</bitOffset> </field>
-                  <field derivedFrom="WUME0" > <name>WUME4</name> <description>Wakeup Module Enable for Module 4</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="WUME0" > <name>WUME5</name> <description>Wakeup Module Enable for Module 5</description> <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="WUME0" > <name>WUME6</name> <description>Wakeup Module Enable for Module 6</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="WUME0" > <name>WUME7</name> <description>Wakeup Module Enable for Module 7</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="WUME0" > <name>WUME1</name> <description>Module Enable 1</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="WUME0" > <name>WUME2</name> <description>Module Enable 2</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="WUME0" > <name>WUME3</name> <description>Module Enable 3</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="WUME0" > <name>WUME4</name> <description>Module Enable 4</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="WUME0" > <name>WUME5</name> <description>Module Enable 5</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="WUME0" > <name>WUME6</name> <description>Module Enable 6</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="WUME0" > <name>WUME7</name> <description>Module Enable 7</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -194,29 +194,29 @@ Write 1 to clear the flag</description>
                <fields>
                   <field>
                      <name>WUF0</name>
-                     <description>Wakeup Flag For LLWU 0</description>
+                     <description>Wakeup flag for pin 0</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Pin not wakeup source</description>
+                           <description>Not wakeup source</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Pin is wakeup source</description>
+                           <description>Is wakeup source</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="WUF0" > <name>WUF1</name> <description>Wakeup Flag For LLWU 1</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="WUF0" > <name>WUF2</name> <description>Wakeup Flag For LLWU 2</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="WUF0" > <name>WUF3</name> <description>Wakeup Flag For LLWU 3</description> <bitOffset>3</bitOffset> </field>
-                  <field derivedFrom="WUF0" > <name>WUF4</name> <description>Wakeup Flag For LLWU 4</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="WUF0" > <name>WUF5</name> <description>Wakeup Flag For LLWU 5</description> <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="WUF0" > <name>WUF6</name> <description>Wakeup Flag For LLWU 6</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="WUF0" > <name>WUF7</name> <description>Wakeup Flag For LLWU 7</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="WUF0" > <name>WUF1</name> <description>Wakeup flag for pin 1</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="WUF0" > <name>WUF2</name> <description>Wakeup flag for pin 2</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="WUF0" > <name>WUF3</name> <description>Wakeup flag for pin 3</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="WUF0" > <name>WUF4</name> <description>Wakeup flag for pin 4</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="WUF0" > <name>WUF5</name> <description>Wakeup flag for pin 5</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="WUF0" > <name>WUF6</name> <description>Wakeup flag for pin 6</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="WUF0" > <name>WUF7</name> <description>Wakeup flag for pin 7</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -234,29 +234,29 @@ Write 1 to clear the flag</description>
                <fields>
                   <field>
                      <name>WUF0</name>
-                     <description>Wakeup Flag For LLWU 0</description>
+                     <description>Wakeup flag for pin 0</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Pin not wakeup source</description>
+                           <description>Not wakeup source</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Pin is wakeup source</description>
+                           <description>Is wakeup source</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="WUF0" > <name>WUF1</name> <description>Wakeup Flag For LLWU 1</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="WUF0" > <name>WUF2</name> <description>Wakeup Flag For LLWU 2</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="WUF0" > <name>WUF3</name> <description>Wakeup Flag For LLWU 3</description> <bitOffset>3</bitOffset> </field>
-                  <field derivedFrom="WUF0" > <name>WUF4</name> <description>Wakeup Flag For LLWU 4</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="WUF0" > <name>WUF5</name> <description>Wakeup Flag For LLWU 5</description> <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="WUF0" > <name>WUF6</name> <description>Wakeup Flag For LLWU 6</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="WUF0" > <name>WUF7</name> <description>Wakeup Flag For LLWU 7</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="WUF0" > <name>WUF1</name> <description>Wakeup flag for pin 1</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="WUF0" > <name>WUF2</name> <description>Wakeup flag for pin 2</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="WUF0" > <name>WUF3</name> <description>Wakeup flag for pin 3</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="WUF0" > <name>WUF4</name> <description>Wakeup flag for pin 4</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="WUF0" > <name>WUF5</name> <description>Wakeup flag for pin 5</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="WUF0" > <name>WUF6</name> <description>Wakeup flag for pin 6</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="WUF0" > <name>WUF7</name> <description>Wakeup flag for pin 7</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -283,7 +283,7 @@ To clear this flag it is necessary to clear the flag in the peripheral</descript
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Was wakeup source</description>
+                           <description>Is wakeup source</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -321,7 +321,7 @@ To clear this flag it is necessary to clear the flag in the peripheral</descript
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Was wakeup source</description>
+                           <description>Is wakeup source</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

@@ -38,7 +38,7 @@
       <peripheral derivedFrom="GPIOA"><name>GPIOE</name><baseAddress>0x400FF100</baseAddress></peripheral>
       <xi:include href="peripherals/I2C0_MKL17.svd.xml"/>
       <peripheral derivedFrom="I2C0"><name>I2C1</name><baseAddress>0x40067000</baseAddress></peripheral>
-      <xi:include href="peripherals/LLWU_PE4_FILT2.svd.xml"/>
+      <xi:include href="peripherals/LLWU_PE4_FILT2_MKL25Z4.svd.xml"/>
       <xi:include href="peripherals/LPTMR0_0.svd.xml"/>
       <xi:include href="peripherals/LPUART0_MKL03.svd.xml"/>
       <peripheral derivedFrom="LPUART0"><name>LPUART1</name><baseAddress>0x40055000</baseAddress></peripheral>
