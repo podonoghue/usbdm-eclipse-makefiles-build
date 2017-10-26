@@ -112,7 +112,7 @@ Devices using this peripheral:
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b10</name>
+                           <name>0b01</name>
                            <description>Reserved</description>
                            <value>0b01</value>
                         </enumeratedValue>

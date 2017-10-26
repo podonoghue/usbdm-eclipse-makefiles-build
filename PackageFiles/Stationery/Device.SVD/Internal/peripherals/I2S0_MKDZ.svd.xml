@@ -1519,9 +1519,9 @@ Devices using this peripheral:
                            <value>0b1110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b1000</name>
+                           <name>0b11111</name>
                            <description>TFE set when there are more than or equal to 15 empty slots in Transmit FIFO. (default) Transmit FIFO empty is set when TxFIFO &lt;= 0 data</description>
-                           <value>0b1000</value>
+                           <value>0b1111</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>

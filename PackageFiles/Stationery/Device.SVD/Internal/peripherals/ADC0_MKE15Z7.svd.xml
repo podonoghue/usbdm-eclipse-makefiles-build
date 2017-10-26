@@ -46,147 +46,147 @@ Devices using this peripheral:
                      <bitWidth>5</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00000</name>
+                           <name>0b00000</name>
                            <description>AD0 is selected as input</description>
                            <value>0b00000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>00001</name>
+                           <name>0b00001</name>
                            <description>AD1 is selected as input</description>
                            <value>0b00001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>00010</name>
+                           <name>0b00010</name>
                            <description>AD2 is selected as input</description>
                            <value>0b00010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>00011</name>
+                           <name>0b00011</name>
                            <description>AD3 is selected as input</description>
                            <value>0b00011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>00100</name>
+                           <name>0b00100</name>
                            <description>AD4 is selected as input</description>
                            <value>0b00100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>00101</name>
+                           <name>0b00101</name>
                            <description>AD5 is selected as input</description>
                            <value>0b00101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>00110</name>
+                           <name>0b00110</name>
                            <description>AD6 is selected as input</description>
                            <value>0b00110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>00111</name>
+                           <name>0b00111</name>
                            <description>AD7 is selected as input</description>
                            <value>0b00111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01000</name>
+                           <name>0b01000</name>
                            <description>AD8 is selected as input</description>
                            <value>0b01000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01001</name>
+                           <name>0b01001</name>
                            <description>AD9 is selected as input</description>
                            <value>0b01001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01010</name>
+                           <name>0b01010</name>
                            <description>AD10 is selected as input</description>
                            <value>0b01010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01011</name>
+                           <name>0b01011</name>
                            <description>AD11 is selected as input</description>
                            <value>0b01011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01100</name>
+                           <name>0b01100</name>
                            <description>AD12 is selected as input</description>
                            <value>0b01100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01101</name>
+                           <name>0b01101</name>
                            <description>AD13 is selected as input</description>
                            <value>0b01101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01110</name>
+                           <name>0b01110</name>
                            <description>AD14 is selected as input</description>
                            <value>0b01110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01111</name>
+                           <name>0b01111</name>
                            <description>AD15 is selected as input</description>
                            <value>0b01111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10010</name>
+                           <name>0b10010</name>
                            <description>AD18 is selected as input</description>
                            <value>0b10010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10011</name>
+                           <name>0b10011</name>
                            <description>AD19 is selected as input</description>
                            <value>0b10011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10101</name>
+                           <name>0b10101</name>
                            <description>AD21 is selected as input</description>
                            <value>0b10101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10110</name>
+                           <name>0b10110</name>
                            <description>AD22 is selected as input</description>
                            <value>0b10110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10111</name>
+                           <name>0b10111</name>
                            <description>AD23 is selected as input</description>
                            <value>0b10111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b11000</name>
+                           <name>0b0b11000</name>
                            <description>ATX Force</description>
                            <value>0b11000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b11001</name>
+                           <name>0b0b11001</name>
                            <description>ATX Sense</description>
                            <value>0b11001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11010</name>
+                           <name>0b11010</name>
                            <description>Temp Sensor</description>
                            <value>0b11010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11011</name>
+                           <name>0b11011</name>
                            <description>Band Gap</description>
                            <value>0b11011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11100</name>
+                           <name>0b11100</name>
                            <description>AD28 is selected as input</description>
                            <value>0b11100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11101</name>
+                           <name>0b11101</name>
                            <description>VREFSH is selected as input. Voltage reference selected is determined by SC2[REFSEL]</description>
                            <value>0b11101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11110</name>
+                           <name>0b11110</name>
                            <description>VREFSL is selected as input. Voltage reference selected is determined by SC2[REFSEL]</description>
                            <value>0b11110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11111</name>
+                           <name>0b11111</name>
                            <description>Module is disabled</description>
                            <value>0b11111</value>
                         </enumeratedValue>
@@ -199,12 +199,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Conversion complete interrupt is disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Conversion complete interrupt is enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -218,12 +218,12 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Conversion is not completed</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Conversion is completed</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -243,22 +243,22 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>Alternate clock 1 (ADC_ALTCLK1)</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
+                           <name>0b01</name>
                            <description>Alternate clock 2 (ADC_ALTCLK2)</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
+                           <name>0b10</name>
                            <description>Alternate clock 3 (ADC_ALTCLK3)</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
+                           <name>0b11</name>
                            <description>Alternate clock 4 (ADC_ALTCLK4)</description>
                            <value>0b11</value>
                         </enumeratedValue>
@@ -271,17 +271,17 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>8-bit conversion</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
+                           <name>0b01</name>
                            <description>12-bit conversion</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
+                           <name>0b10</name>
                            <description>10-bit conversion</description>
                            <value>0b10</value>
                         </enumeratedValue>
@@ -294,22 +294,22 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>The divide ratio is 1 and the clock rate is input clock</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
+                           <name>0b01</name>
                            <description>The divide ratio is 2 and the clock rate is (input clock)/2</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
+                           <name>0b10</name>
                            <description>The divide ratio is 4 and the clock rate is (input clock)/4</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
+                           <name>0b11</name>
                            <description>The divide ratio is 8 and the clock rate is (input clock)/8</description>
                            <value>0b11</value>
                         </enumeratedValue>
@@ -378,12 +378,12 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>Default voltage reference pin pair, that is, external pins VREFH and VREFL</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
+                           <name>0b01</name>
                            <description>Alternate reference voltage, that is, VALTH. This voltage may be additional external pin or internal source depending on the MCU configuration. See the chip configuration information for details specific to this MCU</description>
                            <value>0b01</value>
                         </enumeratedValue>
@@ -396,12 +396,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>DMA is disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>DMA is enabled and will assert the ADC DMA request during an ADC conversion complete event , which is indicated when any SC1n[COCO] flag is asserted</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -426,12 +426,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Compare function disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Compare function enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -444,12 +444,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Software trigger selected</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Hardware trigger selected</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -463,12 +463,12 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Conversion not in progress</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Conversion in progress</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -488,22 +488,22 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>4 samples averaged</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
+                           <name>0b01</name>
                            <description>8 samples averaged</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
+                           <name>0b10</name>
                            <description>16 samples averaged</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
+                           <name>0b11</name>
                            <description>32 samples averaged</description>
                            <value>0b11</value>
                         </enumeratedValue>
@@ -516,12 +516,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Hardware average function disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Hardware average function enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -534,12 +534,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>One conversion will be performed (or one set of conversions, if AVGE is set) after a conversion is initiated</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Continuous conversions will be performed (or continuous sets of conversions, if AVGE is set) after a conversion is initiated</description>
                            <value>0b1</value>
                         </enumeratedValue>

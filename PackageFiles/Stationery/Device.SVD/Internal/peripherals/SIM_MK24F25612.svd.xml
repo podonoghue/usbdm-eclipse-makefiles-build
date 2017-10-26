@@ -352,7 +352,7 @@ Devices using this peripheral:
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
+                           <name>0b10</name>
                            <description>Reserved</description>
                            <value>0b10</value>
                         </enumeratedValue>
@@ -996,7 +996,7 @@ Devices using this peripheral:
                            <value>0b1100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1101</name>
+                           <name>0b1101</name>
                            <description>Reserved</description>
                            <value>0b1101</value>
                         </enumeratedValue>
@@ -1049,9 +1049,9 @@ Devices using this peripheral:
                            <value>0b101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b111</name>
+                           <name>0b110</name>
                            <description>Reserved</description>
-                           <value>0b111</value>
+                           <value>0b110</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b111</name>

@@ -646,14 +646,14 @@ Devices using this peripheral:
                      <bitOffset>0</bitOffset>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>110000</name>
-                           <description>Program flash memory is divided into 48 segments (768 Kbytes, 1.5 Mbytes)</description>
-                           <value>0b110000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
                            <name>1000000</name>
                            <description>Program flash memory is divided into 64 segments (512 Kbytes, 1 Mbyte, 2 Mbytes)</description>
                            <value>0b1000000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>110000</name>
+                           <description>Program flash memory is divided into 48 segments (768 Kbytes, 1.5 Mbytes)</description>
+                           <value>0b110000</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>

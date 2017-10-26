@@ -598,14 +598,14 @@ Provides the number of program flash segments that are available for XACC and SA
                            <value>0b100000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b101000</name>
-                           <description>Program flash memory is divided into 40 segments (160 Kbytes)</description>
-                           <value>0b101000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
                            <name>0b1000000</name>
                            <description>Program flash memory is divided into 64 segments (256 Kbytes, 512 Kbytes)</description>
                            <value>0b1000000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101000</name>
+                           <description>Program flash memory is divided into 40 segments (160 Kbytes)</description>
+                           <value>0b101000</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>

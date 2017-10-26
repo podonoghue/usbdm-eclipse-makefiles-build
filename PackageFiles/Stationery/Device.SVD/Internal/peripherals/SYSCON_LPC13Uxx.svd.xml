@@ -1315,24 +1315,7 @@ Devices using this peripheral:
                   <field derivedFrom="IRCOUT_PD" > <name>SYSOSC_PD</name> <description>Crystal oscillator wake-up configuration</description> <bitOffset>5</bitOffset> </field>
                   <field derivedFrom="IRCOUT_PD" > <name>WDTOSC_PD</name> <description>Watchdog oscillator wake-up configuration</description> <bitOffset>6</bitOffset> </field>
                   <field derivedFrom="IRCOUT_PD" > <name>SYSPLL_PD</name> <description>System PLL wake-up configuration</description> <bitOffset>7</bitOffset> </field>
-                  <field>
-                     <name>USBPLL_PD</name>
-                     <description>USB PLL wake-up configuration</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>POWERED</name>
-                           <description>Powered</description>
-                           <value>0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>POWERED_DOWN</name>
-                           <description>Powered down</description>
-                           <value>1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="IRCOUT_PD" > <name>USBPLL_PD</name> <description>USB PLL wake-up configuration</description> <bitOffset>8</bitOffset> </field>
                   <field>
                      <name>USBPAD_PD</name>
                      <description>USB transceiver wake-up configuration</description>
@@ -1384,24 +1367,7 @@ Devices using this peripheral:
                   <field derivedFrom="IRCOUT_PD" > <name>SYSOSC_PD</name> <description>Crystal oscillator power-down</description> <bitOffset>5</bitOffset> </field>
                   <field derivedFrom="IRCOUT_PD" > <name>WDTOSC_PD</name> <description>Watchdog oscillator power-down</description> <bitOffset>6</bitOffset> </field>
                   <field derivedFrom="IRCOUT_PD" > <name>SYSPLL_PD</name> <description>System PLL power-down</description> <bitOffset>7</bitOffset> </field>
-                  <field>
-                     <name>USBPLL_PD</name>
-                     <description>USB PLL power-down</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>POWERED</name>
-                           <description>Powered</description>
-                           <value>0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>POWERED_DOWN</name>
-                           <description>Powered down</description>
-                           <value>1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="IRCOUT_PD" > <name>USBPLL_PD</name> <description>USB PLL power-down</description> <bitOffset>8</bitOffset> </field>
                   <field>
                      <name>USBPAD_PD</name>
                      <description>USB transceiver power-down configuration</description>

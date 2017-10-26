@@ -710,14 +710,14 @@ Each FDPROT bit protects 1/8 of the configured Data Flash from program and erase
                      <bitOffset>0</bitOffset>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b110000</name>
-                           <description>Program flash memory is divided into 48 segments (768 Kbytes, 1.5 Mbytes)</description>
-                           <value>0b110000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
                            <name>0b1000000</name>
                            <description>Program flash memory is divided into 64 segments (256 Kbytes, 512 Kbytes, 1 Mbyte, 2 Mbytes)</description>
                            <value>0b1000000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110000</name>
+                           <description>Program flash memory is divided into 48 segments (768 Kbytes, 1.5 Mbytes)</description>
+                           <value>0b110000</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>

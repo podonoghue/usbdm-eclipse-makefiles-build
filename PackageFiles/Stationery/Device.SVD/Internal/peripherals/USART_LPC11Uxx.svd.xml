@@ -1259,12 +1259,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>AUTO_ADDRESS_DETECT_</name>
+                           <name>DISABLE_AUTO_ADDRESS_DETECT</name>
                            <description>Auto Address Detect (AAD) is disabled</description>
                            <value>0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>AUTO_ADDRESS_DETECT_</name>
+                           <name>ENABLE_AUTO_ADDRESS_DETECT</name>
                            <description>Auto Address Detect (AAD) is enabled</description>
                            <value>1</value>
                         </enumeratedValue>

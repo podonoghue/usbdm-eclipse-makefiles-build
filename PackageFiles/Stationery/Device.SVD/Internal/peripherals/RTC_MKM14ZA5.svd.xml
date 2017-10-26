@@ -220,14 +220,14 @@ Same as Seconds Counter Value in SECONDS</description>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
                            <name>0b0</name>
                            <description>Disabled</description>
                            <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -266,39 +266,22 @@ used for matching and generate an alarm</description>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Disabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
                            <name>0b0</name>
                            <description>Enabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Disabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>DST_EN</name>
-                     <description>Daylight Saving Enable.\n
+                  <field derivedFrom="FINEEN" > <name>DST_EN</name> <description>Daylight Saving Enable.\n
 The date and time for daylight saving changes are stored in the Daylight Saving Registers. These
 registers can be changed when this bit is 0. Once this bit is set, those registers cannot be changed and
 when time and date match the values in those registers, daylight adjustment will happen. To disable
-Daylight Saving function, this bit should be set to 0</description>
-                     <bitOffset>6</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+Daylight Saving function, this bit should be set to 0</description> <bitOffset>6</bitOffset> </field>
                   <field>
                      <name>SWR</name>
                      <description>Software Reset bit.\n

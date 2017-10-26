@@ -80,17 +80,17 @@ Devices using this peripheral:
                            <value>0b11111111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>00000000</name>
                            <description>Time Prescaler Register overflows every 32768 clock cycles</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>00000001</name>
                            <description>Time Prescaler Register overflows every 32767 clock cycles</description>
                            <value>0b1</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1111111</name>
+                           <name>01111111</name>
                            <description>Time Prescaler Register overflows every 32641 clock cycles</description>
                            <value>0b1111111</value>
                         </enumeratedValue>

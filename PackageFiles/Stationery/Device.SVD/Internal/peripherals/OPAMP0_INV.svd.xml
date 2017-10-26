@@ -43,14 +43,14 @@ Devices using this peripheral:
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b10</name>
-                           <description>General purpose</description>
-                           <value>0b10</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
                            <name>0b01</name>
                            <description>Inverting PGA</description>
                            <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>General purpose</description>
+                           <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
