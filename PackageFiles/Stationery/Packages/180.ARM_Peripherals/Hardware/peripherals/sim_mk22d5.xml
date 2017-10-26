@@ -56,14 +56,14 @@ Devices using this peripheral:
          <choice value="0"  name="RTC 1 Hz clock" />
          <choice value="1"  name="RTC 32.768kHz clock" isDefault="true" />
       </binaryOption>
-   
+      
       <intOption name="rtc_clkout"
          constant="true"
          derived="true"
          units="Hz"
          description="RTC clock out [RTC_CLKOUT pin]"
          toolTip="Clock frequency on the RTC_CLKOUT pin"  />
-
+      
       <aliasOption key="/SIM/sim_sopt2_pllfllsel." constant="false" />
       
       <aliasOption key="/SIM/system_peripheral_clock." />
@@ -88,7 +88,7 @@ Devices using this peripheral:
          \tstatic void setPeripheralClock(SimPeripheralClockSource simPeripheralClockSource) {
          \t   sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_PLLFLLSEL_MASK) | simPeripheralClockSource;
          \t}\n\n
-   
+         
          \t/**
          \t * Get Peripheral clock frequency
          \t *
@@ -103,14 +103,54 @@ Devices using this peripheral:
          \t   }
          \t}\n\n
       ]]></template>
+      
+      <stringOption name="Uart0Clock" description="Uart 0 clock" value="SystemCoreClock" constant="true" derived="true" />
+      <stringOption name="Uart1Clock" description="Uart 1 clock" value="SystemCoreClock" constant="true" derived="true" />
+      <stringOption name="Uart2Clock" description="Uart 2 clock" value="SystemBusClock"  constant="true" derived="true" />
+      
+      <template><![CDATA[
+         \t/** 
+         \t * Get UART0 input clock frequency
+         \t *
+         \t * @return Clock frequency in Hz
+         \t */
+         \tstatic inline uint32_t getUart0Clock() {
+         \t   return $(Uart0Clock);
+         \t}\n\n
          
+         \t/** 
+         \t * Get UART1 input clock frequency
+         \t *
+         \t * @return Clock frequency in Hz
+         \t */
+         \tstatic inline uint32_t getUart1Clock() {
+         \t   return $(Uart1Clock);
+         \t}\n\n
+         
+         \t/** 
+         \t * Get UART2 input clock frequency
+         \t *
+         \t * @return Clock frequency in Hz
+         \t */
+         \tstatic inline uint32_t getUart2Clock() {
+         \t   return $(Uart2Clock);
+         \t}\n\n
+      ]]></template>
+      
       <choiceOption name="sim_sopt2_usbsrc" 
          description="USB clock source select"
          toolTip="Selects the source for the USB clock">
          <choice value="0"  name="External bypass clock (USB_CLKIN)" />
          <choice value="1"  name="Peripheral Clock divided by SIM_CLKDIV2" isDefault="true" />
       </choiceOption>
-         
+      
+      <intOption name="system_usbfs_clock" 
+         constant="true"
+         units="Hz"
+         description="USB Full Speed Clock"
+         toolTip="Frequency of clock to USB full speed controller"
+         value="0" />
+      
       <template namespace="usbdm"><![CDATA[
          \t/**
          \t * USB full-speed clock sources
@@ -122,6 +162,16 @@ Devices using this peripheral:
       ]]></template>
       
       <template><![CDATA[
+         \t#ifdef SIM_SOPT2_USBSRC_MASK
+         \t/**
+         \t * Set USB Full-speed clock source
+         \t *
+         \t * @param simUsbFullSpeedClockSource Clock source for peripheral clock
+         \t */
+         \tstatic void setUsbFullSpeedClock(SimUsbFullSpeedClockSource simUsbFullSpeedClockSource) {
+         \t   sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_USBSRC_MASK) | simUsbFullSpeedClockSource;
+         \t}\n\n
+         
          \t/**
          \t * Get USB clock frequency
          \t *
@@ -137,24 +187,6 @@ Devices using this peripheral:
          \t   }
          \t}
          \t#endif\n\n
-      ]]></template>
-      
-      <intOption name="system_usbfs_clock" 
-         constant="true"
-         units="Hz"
-         description="USB Full Speed Clock"
-         toolTip="Frequency of clock to USB full speed controller"
-         value="0" />
-      
-      <template><![CDATA[
-         \t/**
-         \t * Set USB Full-speed clock source
-         \t *
-         \t * @param simUsbFullSpeedClockSource Clock source for peripheral clock
-         \t */
-         \tstatic void setUsbFullSpeedClock(SimUsbFullSpeedClockSource simUsbFullSpeedClockSource) {
-         \t   sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_USBSRC_MASK) | simUsbFullSpeedClockSource;
-         \t}\n\n
       ]]></template>
       
       <choiceOption name="sim_sopt2_clkoutsel" 
@@ -185,7 +217,7 @@ Devices using this peripheral:
          <choice value="0"  name="MCGOUTCLK" isDefault="true" />
          <choice value="1"  name="Core/system clock" />
       </binaryOption>   
-         
+      
       <template><![CDATA[
          \t//! System Options Register 2
          \tstatic constexpr uint32_t sopt2 = 
@@ -253,14 +285,14 @@ Devices using this peripheral:
          <choice value="0"  name="FTM_CLKIN0 pin" isDefault="true" />
          <choice value="1"  name="FTM_CLKIN1 pin" />
       </binaryOption>
-   
+      
       <binaryOption name="sim_sopt4_ftm0clksel" 
          description="FlexTimer 0 External Clock Pin Select"
          toolTip="Selects the external pin used to drive the clock to the FTM module.">
          <choice value="0"  name="FTM_CLKIN0 pin" isDefault="true" />
          <choice value="1"  name="FTM_CLKIN1 pin" />
       </binaryOption>
-   
+      
       <choiceOption name="sim_sopt4_ftm2ch0src" 
          description="FlexTimer 2 channel 0 input capture source select"
          toolTip="Selects the source for FTM channel 0 input capture\n
@@ -270,7 +302,7 @@ Devices using this peripheral:
          <choice value="2" name="CMP1 output" />
          <choice value="3" name="Reserved" />
       </choiceOption>
-   
+      
       <choiceOption name="sim_sopt4_ftm1ch0src" 
          description="FlexTimer 1 channel 0 input capture source select"
          toolTip="Selects the source for FTM channel 0 input capture\n
@@ -280,28 +312,28 @@ Devices using this peripheral:
          <choice value="2" name="CMP1 output" />
          <choice value="3" name="USB start of frame pulse" />
       </choiceOption>
-   
+      
       <binaryOption name="sim_sopt4_ftm2flt0" 
          description="FlexTimer 2 Fault 0 Select"
          toolTip="Selects the source of FTM fault input  0" >
          <choice value="0"  name="FTM2_FLT0 pin" isDefault="true" />
          <choice value="1"  name="CMP0 output" />
       </binaryOption>
-   
+      
       <binaryOption name="sim_sopt4_ftm1flt0" 
          description="FlexTimer 1 Fault 0 Select"
          toolTip="Selects the source of FTM fault input 0" >
          <choice value="0"  name="FTM1_FLT0 pin" isDefault="true" />
          <choice value="1"  name="CMP0 output" />
       </binaryOption>
-   
+      
       <binaryOption name="sim_sopt4_ftm0flt1" 
          description="FlexTimer 0 Fault 1 Select"
          toolTip="Selects the source of FTM fault input 1" >
          <choice value="0"  name="FTM0_FLT1 pin" isDefault="true" />
          <choice value="1"  name="CMP1 output" />
       </binaryOption>
-   
+      
       <binaryOption name="sim_sopt4_ftm0flt0" 
          description="FlexTimer 0 Fault 0 Select"
          toolTip="Selects the source of FTM fault input 0" >
@@ -374,7 +406,7 @@ Devices using this peripheral:
          <choice value="2" name="UART0_TX pin modulated with FTM2 channel 0 output" />
          <choice value="3" name="Reserved" />
       </choiceOption>
-   
+      
       <choiceOption name="sim_sopt5_uart0rxsrc" 
          description="UART 0 receive data source select"
          toolTip="Selects the source for the UART 0 receive data.">
@@ -383,7 +415,7 @@ Devices using this peripheral:
          <choice value="2" name="CMP1 output" />
          <choice value="3" name="Reserved" />
       </choiceOption>
-   
+      
       <choiceOption name="sim_sopt5_uart1txsrc" 
          description="UART 1 transmit data source select"
          toolTip="Selects the source for the UART 1 transmit data.">
@@ -392,7 +424,7 @@ Devices using this peripheral:
          <choice value="1" name="UART1_TX pin modulated with FTM2 channel 0 output" />
          <choice value="3" name="Reserved" />
       </choiceOption>
-   
+      
       <choiceOption name="sim_sopt5_uart1rxsrc" 
          description="UART 1 receive data source select"
          toolTip="Selects the source for the UART 1 receive data">
@@ -426,14 +458,14 @@ Devices using this peripheral:
          <choice value="0" name="PDB trigger selected" isDefault="true" />
          <choice value="1" name="Alternate trigger selected" />
       </binaryOption>
-   
+      
       <binaryOption name="sim_sopt7_adc0pretrgsel" 
          description="ADC0 pretrigger select"
          toolTip="Selects the pre-trigger source when alternative triggers are enabled through ADC0ALTTRGEN">
          <choice value="0" name="Pre-trigger 0 (A)" isDefault="true" />
          <choice value="1" name="Pre-trigger 1 (B)" />
       </binaryOption>
-   
+      
       <choiceOption name="sim_sopt7_adc0trgsel" 
          description="ADC0 trigger select"
          toolTip="Selects the trigger source when alternative triggers are functional in stop and VLPS modes">
@@ -454,7 +486,7 @@ Devices using this peripheral:
          <choice value="14" name="Low-power timer trigger" />
          <choice value="15" name="Reserved" />
       </choiceOption>
-         
+      
       <template namespace="usbdm"><![CDATA[
          \t/**
          \t * Select the ADC0 Trigger source in STOP and VLPS modes, or when ADC0 Alternative Trigger is active.
@@ -521,38 +553,6 @@ Devices using this peripheral:
       ]]></template>
    </category>
    
-   <stringOption name="Uart0Clock" value="SystemCoreClock" constant="true" derived="true" />
-   <stringOption name="Uart1Clock" value="SystemCoreClock" constant="true" derived="true" />
-   <stringOption name="Uart2Clock" value="SystemBusClock"  constant="true" derived="true" />
-   
-   <template><![CDATA[
-      \t/** 
-      \t * Get UART0 input clock frequency
-      \t *
-      \t * @return Clock frequency in Hz
-      \t */
-      \tstatic inline uint32_t getUart0Clock() {
-      \t   return $(Uart0Clock);
-      \t}\n\n
-      
-      \t/** 
-      \t * Get UART1 input clock frequency
-      \t *
-      \t * @return Clock frequency in Hz
-      \t */
-      \tstatic inline uint32_t getUart1Clock() {
-      \t   return $(Uart1Clock);
-      \t}\n\n
-      
-      \t/** 
-      \t * Get UART2 input clock frequency
-      \t *
-      \t * @return Clock frequency in Hz
-      \t */
-      \tstatic inline uint32_t getUart2Clock() {
-      \t   return $(Uart2Clock);
-      \t}\n\n
-   ]]></template>
 
    <choiceOption name="sim_clkdiv2_usb"
       description="USB clock divider" 
@@ -581,13 +581,14 @@ Devices using this peripheral:
       \t//! System Clock Divider Register 2
       \t//! USB clock divider divisor & fraction
       \tstatic constexpr uint32_t clkdiv2 = $(sim_clkdiv2_usb:-1);\n\n
+      \t#endif
    ]]></template>
    
    <indexedCategory name="ClockConfig." dim="3" 
         description="Clock configurations" 
         toolTip="Clock configurations for different run modes" 
         value="" >
-         
+      
       <aliasOption key="/MCG/ClockConfig."
         constant="true"/>
       
@@ -610,7 +611,7 @@ Devices using this peripheral:
          description="System Core Clock"
          toolTip="Clocks the ARM Cortex-M4 core and bus masters"
          value="48000000" />
-   
+      
       <intOption name="system_bus_clock." 
          units="Hz"
          description="System Bus Clock"
@@ -625,7 +626,7 @@ Devices using this peripheral:
                   Must be an integer divisor of the Core Clock.\n
                   Must be &lt;= Bus Clock frequency."
          value="24000000" />
-	 
+      
       <category name="CLKDIV1" description="System Clock Dividers">
          <intOption name="sim_clkdiv1_outdiv1." 
             derived="true"
@@ -634,7 +635,7 @@ Devices using this peripheral:
             toolTip="Clocks the ARM Cortex-M4 core and bus masters [SIM_CLKDIV1_OUTDIV1]\n
                      Divides MCGOUT Clock to generate system_core_clock"
             value="1" offset="-1" min="1" max="16" />
-      
+         
          <intOption name="sim_clkdiv1_outdiv2." 
             derived="true"
             constant="true"
@@ -643,7 +644,7 @@ Devices using this peripheral:
                Divides MCGOUT Clock to generate system_bus_clock\n
                MCGOUTCLK clock is source. Default /2"
             value="1" offset="-1" min="1" max="16" />
-      
+         
          <intOption name="sim_clkdiv1_outdiv4." 
             derived="true"
             constant="true"
@@ -662,9 +663,9 @@ Devices using this peripheral:
       <param type="long" value="25MHz" />    <!-- Flash        -->
       <param type="long" value="50MHz" />    <!-- FlexBus      -->
    </validate>
-
+   
    <xi:include href="_simFiles-MK.xml"/>
-         
+   
    <template><![CDATA[
       \t/**
       \t * Initialise SIM registers

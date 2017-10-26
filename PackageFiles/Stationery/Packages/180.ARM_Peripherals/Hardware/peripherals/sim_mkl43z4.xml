@@ -599,7 +599,7 @@ Devices using this peripheral:
          toolTip="Clocks the bus slaves and peripherals\n
                   Must be &lt;= Core Clock frequency"
          value="24000000" />
-	  
+      
       <category name="CLKDIV1" description="System Clock Dividers">
          <intOption name="sim_clkdiv1_outdiv1." 
             derived="true"

@@ -18,7 +18,7 @@ Devices using this peripheral:
          <choice value="2"  name="RTC_CLKIN pin" />
          <choice value="3"  name="LPO 1kHz clock" isDefault="true" />
       </choiceOption>
-         
+      
       <intOption name="system_erclk32k_clock" 
          units="Hz"
          description="Frequency of External 32k Reference Clock [ERCLK32K]"
@@ -148,7 +148,7 @@ Devices using this peripheral:
          \t   sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_UART0SRC_MASK) | simUart0ClockSource;
          \t}\n\n
          
-         \t/**
+         \t/** 
          \t * Get UART0 input clock frequency
          \t *
          \t * @return Clock frequency in Hz
@@ -163,7 +163,7 @@ Devices using this peripheral:
          \t      case SIM_SOPT2_UART0SRC(3): return McgInfo::getMcgIrClock();
          \t   }
          \t}\n\n
-   
+         
          \t/** 
          \t * Get UART1 input clock frequency
          \t *
@@ -173,7 +173,7 @@ Devices using this peripheral:
          \t   return $(Uart1Clock);
          \t}\n\n
          
-         \t/**
+         \t/** 
          \t * Get UART2 input clock frequency
          \t *
          \t * @return Clock frequency in Hz
@@ -182,7 +182,7 @@ Devices using this peripheral:
          \t   return $(Uart2Clock);
          \t}\n\n
       ]]></template>
-         
+      
       <choiceOption name="sim_sopt2_usbsrc" 
          description="USB clock source select"
          toolTip="Selects the source for the USB clock">
@@ -208,6 +208,7 @@ Devices using this peripheral:
       ]]></template>
       
       <template><![CDATA[
+         \t#ifdef SIM_SOPT2_USBSRC_MASK
          \t/**
          \t * Set USB Full-speed clock source
          \t *
@@ -217,7 +218,6 @@ Devices using this peripheral:
          \t   sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_USBSRC_MASK) | simUsbFullSpeedClockSource;
          \t}\n\n
          
-         \t#ifdef SIM_SOPT2_USBSRC_MASK
          \t/**
          \t * Get USB clock frequency
          \t *
@@ -286,7 +286,7 @@ Devices using this peripheral:
          \t   }
          \t}\n\n
       ]]></template>
-   
+      
       <choiceOption name="sim_sopt2_clkoutsel" 
          description="CLKOUT select"
          toolTip="Selects the clock to output on the CLKOUT pin." >
@@ -542,7 +542,7 @@ Devices using this peripheral:
          \t   sim->SOPT7 = (sim->SOPT7&~(SIM_SOPT7_ADC0TRGSEL_MASK|SIM_SOPT7_ADC0ALTTRGEN_MASK))|simAdc0Trigger|simAdc0AltTrigger;
          \t};\n\n
       ]]></template>
-   
+      
       <template><![CDATA[
          \t//! System Options Register 7
          \tstatic constexpr uint32_t sopt7 = 
@@ -586,7 +586,7 @@ Devices using this peripheral:
          toolTip="Clocks the bus slaves and peripherals\n
                   Must be &lt;= Core Clock frequency"
          value="24000000" />
-	  
+      
       <category name="CLKDIV1" description="System Clock Dividers">
          <intOption name="sim_clkdiv1_outdiv1." 
             derived="true"
