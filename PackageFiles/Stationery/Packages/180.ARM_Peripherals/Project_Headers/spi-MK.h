@@ -288,12 +288,12 @@ protected:
     *
     * @param[in]  frequency      => Communication frequency in Hz
     * @param[in]  clockFrequency => Clock frequency of SPI in Hz
-    * @param[in]  ctarNum        => Index of CTAR register to modify
+    * @param[in]  spiCtarSelect  => Index of CTAR register to modify
     *
     * Note: Chooses the highest speed that is not greater than frequency.
     */
-   void setSpeed(uint32_t clockFrequency, uint32_t frequency, SpiCtarSelect ctarNum=SpiCtarSelect_0) {
-      spi->CTAR[ctarNum] = (spi->CTAR[ctarNum] & ~(SPI_CTAR_BR_MASK|SPI_CTAR_PBR_MASK)) | calculateDividers(clockFrequency, frequency);
+   void setSpeed(uint32_t clockFrequency, uint32_t frequency, SpiCtarSelect spiCtarSelect=SpiCtarSelect_0) {
+      spi->CTAR[spiCtarSelect] = (spi->CTAR[spiCtarSelect] & ~(SPI_CTAR_BR_MASK|SPI_CTAR_PBR_MASK)) | calculateDividers(clockFrequency, frequency);
    }
 
    /**
@@ -303,15 +303,15 @@ protected:
     * @param[in]  cssck          => PCS assertion to SCK Delay Scaler
     * @param[in]  asc            => SCK to PCS negation delay
     * @param[in]  dt             => PCS negation to PCS assertion delay between transfers
-    * @param[in]  ctarNum        => Index of CTAR register to modify
+    * @param[in]  spiCtarSelect  => Index of CTAR register to modify
     *
     * Note: Determines values for the smallest delay that is not less than specified delays.
     */
-   void setDelays(uint32_t clockFrequency, float cssck, float asc, float dt, SpiCtarSelect ctarNum=SpiCtarSelect_0) {
+   void setDelays(uint32_t clockFrequency, float cssck, float asc, float dt, SpiCtarSelect spiCtarSelect=SpiCtarSelect_0) {
 
-      uint32_t ctarValue = spi->CTAR[ctarNum] &
+      uint32_t ctarValue = spi->CTAR[spiCtarSelect] &
             ~(SPI_CTAR_ASC_MASK|SPI_CTAR_PASC_MASK|SPI_CTAR_DT_MASK|SPI_CTAR_PDT_MASK|SPI_CTAR_CSSCK_MASK|SPI_CTAR_PCSSCK_MASK);
-      spi->CTAR[ctarNum] = ctarValue|calculateDelays(clockFrequency, cssck, asc, dt);
+      spi->CTAR[spiCtarSelect] = ctarValue|calculateDelays(clockFrequency, cssck, asc, dt);
    }
 
 public:
@@ -381,6 +381,17 @@ public:
 #endif
 
    /**
+    * Set SPI configuration.
+    * Assumes the interface is already acquired through startTransaction
+    *
+    * @param[in] config The configuration values to set for the transaction.
+    */
+   void setConfiguration(SpiConfig &config, int =0) {
+      spi->CTAR[0] = config.ctar;
+      pushrMask    = config.pushr;
+   }
+
+   /**
     * Enable pins used by SPI
     */
    virtual void enablePins() = 0;
@@ -396,32 +407,32 @@ public:
     * @param[in]  cssck          => PCS assertion to SCK Delay Scaler
     * @param[in]  asc            => SCK to PCS negation delay
     * @param[in]  dt             => PCS negation to PCS assertion delay between transfers
-    * @param[in]  ctarNum        => Index of CTAR register to modify
+    * @param[in]  spiCtarSelect  => Index of CTAR register to modify
     *
     * Note: Determines values for the smallest delay that is not less than specified delays.
     */
-   virtual void setDelays(float cssck=1*USBDM::us, float asc=1*USBDM::us, float dt=1*USBDM::us, SpiCtarSelect ctarNum=SpiCtarSelect_0) = 0;
+   virtual void setDelays(float cssck=1*USBDM::us, float asc=1*USBDM::us, float dt=1*USBDM::us, SpiCtarSelect spiCtarSelect=SpiCtarSelect_0) = 0;
 
    /**
     * Sets the CTAR value for a given communication speed
     *
     * @param[in]  frequency => Frequency in Hz (0 => use default value)
-    * @param[in]  ctarNum   => Index of CTAR register to modify
+    * @param[in]  spiCtarSelect   => Index of CTAR register to modify
     *
     * Note: Chooses the highest speed that is not greater than frequency.
     * Note: This will only have effect the next time a CTAR is changed
     */
-   virtual void setSpeed(uint32_t frequency, SpiCtarSelect ctarNum=SpiCtarSelect_0) = 0;
+   virtual void setSpeed(uint32_t frequency, SpiCtarSelect spiCtarSelect=SpiCtarSelect_0) = 0;
 
    /**
     * Sets Communication mode for SPI
     *
     * @param[in]  mode    => SpiModeValue to set. May be calculated using spiModeValue()
-    * @param[in]  ctarNum => Index of CTAR register to modify
+    * @param[in]  spiCtarSelect => Index of CTAR register to modify
     */
-   void setMode(SpiModeValue mode, SpiCtarSelect ctarNum=SpiCtarSelect_0) {
+   void setMode(SpiModeValue mode, SpiCtarSelect spiCtarSelect=SpiCtarSelect_0) {
       // Sets the default CTAR value with 8 bits
-      spi->CTAR[ctarNum] = (spi->CTAR[ctarNum]&~(SPI_CTAR_CPHA_MASK|SPI_CTAR_CPOL_MASK|SPI_CTAR_LSBFE_MASK)) |
+      spi->CTAR[spiCtarSelect] = (spi->CTAR[spiCtarSelect]&~(SPI_CTAR_CPHA_MASK|SPI_CTAR_CPOL_MASK|SPI_CTAR_LSBFE_MASK)) |
             (mode & (SPI_CTAR_CPHA_MASK|SPI_CTAR_CPOL_MASK|SPI_CTAR_LSBFE_MASK));
    }
 
@@ -429,11 +440,11 @@ public:
     * Sets Communication mode for SPI
     *
     * @param[in]  numBits => Number of bits in each transfer
-    * @param[in]  ctarNum => Index of CTAR register to modify
+    * @param[in]  spiCtarSelect => Index of CTAR register to modify
     */
-   void setFrameSize(int numBits, SpiCtarSelect ctarNum=SpiCtarSelect_0) {
+   void setFrameSize(int numBits, SpiCtarSelect spiCtarSelect=SpiCtarSelect_0) {
       // Sets the frame size in CTAR
-      spi->CTAR[ctarNum] = (spi->CTAR[ctarNum]&~(SPI_CTAR_FMSZ_MASK)) |
+      spi->CTAR[spiCtarSelect] = (spi->CTAR[spiCtarSelect]&~(SPI_CTAR_FMSZ_MASK)) |
             SPI_CTAR_FMSZ(numBits-1);
    }
    /**
@@ -443,7 +454,7 @@ public:
     * @param[in]  spiPeripheralSelect  Which peripheral to select using SPI_PCSx signal
     * @param[in]  polarity             Polarity of SPI_PCSx, ActiveHigh or ActiveLow to select device
     * @param[in]  spiSelectMode        Whether SPI_PCSx signal is returned to idle between transfers
-    * @param[in]  spiCtarSelect        Which CTAR to use for transaction
+    * @param[in]  spiCtarSelect  Which CTAR to use for transaction
     */
    void setPeripheralSelect(
          SpiPeripheralSelect spiPeripheralSelect,
@@ -736,14 +747,14 @@ public:
     * This also updates the communication delays based on the frequency.
     *
     * @param[in]  frequency      => Frequency in Hz (0 => use default value)
-    * @param[in]  ctarNum        => Index of CTAR register to modify
+    * @param[in]  spiCtarSelect  => Index of CTAR register to modify
     *
     * Note: Chooses the highest speed that is not greater than frequency.
     */
-   virtual void setSpeed(uint32_t frequency, SpiCtarSelect ctarNum=SpiCtarSelect_0) override {
-      Spi::setSpeed(Info::getClockFrequency(), frequency, ctarNum);
-      float SPI_PADDING2 = 1/(10.0*frequency);
-      setDelays(SPI_PADDING2, SPI_PADDING2, SPI_PADDING2, ctarNum);
+   virtual void setSpeed(uint32_t frequency, SpiCtarSelect spiCtarSelect=SpiCtarSelect_0) override {
+      Spi::setSpeed(Info::getClockFrequency(), frequency, spiCtarSelect);
+      float SPI_PADDING2 = 1/(5.0*frequency);
+      setDelays(SPI_PADDING2, SPI_PADDING2, SPI_PADDING2, spiCtarSelect);
    }
 
    /**
@@ -752,12 +763,12 @@ public:
     * @param[in]  cssck          => PCS assertion to SCK Delay Scaler
     * @param[in]  asc            => SCK to PCS negation delay
     * @param[in]  dt             => PCS negation to PCS assertion delay between transfers
-    * @param[in]  ctarNum        => Index of CTAR register to modify
+    * @param[in]  spiCtarSelect  => Index of CTAR register to modify
     *
     * Note: Determines values for the smallest delay that is not less than specified delays.
     */
-   void setDelays(float cssck=1*USBDM::us, float asc=1*USBDM::us, float dt=1*USBDM::us, SpiCtarSelect ctarNum=SpiCtarSelect_0) override {
-      Spi::setDelays(Info::getClockFrequency(), cssck, asc, dt, ctarNum);
+   void setDelays(float cssck=1*USBDM::us, float asc=1*USBDM::us, float dt=1*USBDM::us, SpiCtarSelect spiCtarSelect=SpiCtarSelect_0) override {
+      Spi::setDelays(Info::getClockFrequency(), cssck, asc, dt, spiCtarSelect);
    }
 
    /**
