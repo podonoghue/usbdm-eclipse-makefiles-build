@@ -1,0 +1,141 @@
+<!--
+Devices using this peripheral: 
+      MKW41Z4
+-->
+      <peripheral>
+         <?sourceFile "BTLE_RF_MKW41Z4" ?>
+         <name>BTLE_RF</name>
+         <description>BLE_RF</description>
+         <groupName>BTLE_RF</groupName>
+         <headerStructName>BTLE_RF</headerStructName>
+         <baseAddress>0x4005B000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <?width "16" ?>
+            <offset>0x600</offset>
+            <size>0x2</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "16" ?>
+            <offset>0x604</offset>
+            <size>0x2</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "16" ?>
+            <offset>0x608</offset>
+            <size>0x2</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>BLE_PART_ID</name>
+               <description>BLUETOOTH LOW ENERGY PART ID</description>
+               <addressOffset>0x600</addressOffset>
+               <size>16</size>
+               <access>read-only</access>
+               <resetValue>0x3</resetValue>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>BLE_PART_ID</name>
+                     <description>BLE Part ID</description>
+                     <bitOffset>0</bitOffset>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Pre-production</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Pre-production</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>2</name>
+                           <description>KW40Z</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>3</name>
+                           <description>KW41Z</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DSM_STATUS</name>
+               <description>BLE DSM STATUS</description>
+               <addressOffset>0x604</addressOffset>
+               <size>16</size>
+               <access>read-only</access>
+               <resetMask>0xFFF8</resetMask>
+               <fields>
+                  <field>
+                     <name>ORF_SYSCLK_REQ</name>
+                     <description>RF Oscillator Requested</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RIF_LL_ACTIVE</name>
+                     <description>Link Layer Active</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>XCVR_BUSY</name>
+                     <description>Transceiver Busy Status Bit</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>RF Channel in available (TSM is idle)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>RF Channel in use (TSM is busy)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MISC_CTRL</name>
+               <description>BLUETOOTH LOW ENERGY MISCELLANEOUS CONTROL</description>
+               <addressOffset>0x608</addressOffset>
+               <size>16</size>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>TSM_INTR_EN</name>
+                     <description>TSM Interrupt Enable</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>a TSM Interrupt during a BLE TX or RX sequence will not set bit [8] of BLE EVENT_STATUS</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>a TSM Interrupt during a BLE TX or RX sequence will set bit [8] of BLE EVENT_STATUS</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

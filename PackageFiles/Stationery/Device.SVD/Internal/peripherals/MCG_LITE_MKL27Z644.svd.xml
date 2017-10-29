@@ -61,7 +61,7 @@ Controls whether or not the internal reference clock remains enabled when the MC
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Enabled</description>
+                           <description>Enabled in STOP</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -182,23 +182,24 @@ Selects the source for the external reference clock</description>
                   </field>
                   <field>
                      <name>RANGE0</name>
-                     <description>Frequency Range Select</description>
+                     <description>Frequency Range Select\n
+Selects the frequency range for the crystal oscillator or external clock source</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>Low frequency range selected for the crystal oscillator</description>
+                           <description>Low frequency range</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>High frequency range selected for the crystal oscillator</description>
+                           <description>High frequency range</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1X</name>
-                           <description>Very high frequency range selected for the crystal oscillator</description>
+                           <description>Very high frequency</description>
                            <value>0b1X</value>
                         </enumeratedValue>
                      </enumeratedValues>

@@ -206,42 +206,42 @@ Configures Interrupt and DMA functions</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0001</name>
-                           <description>DMA Request on rising edge</description>
+                           <description>ISF flag and DMA request on rising edge</description>
                            <value>0b0001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0010</name>
-                           <description>DMA Request on falling edge</description>
+                           <description>ISF flag and DMA request on falling edge</description>
                            <value>0b0010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0011</name>
-                           <description>DMA Request on either edge</description>
+                           <description>ISF flag and DMA request on either edge</description>
                            <value>0b0011</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1000</name>
-                           <description>Interrupt when logic 0</description>
+                           <description>ISF flag and Interrupt when logic 0</description>
                            <value>0b1000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1001</name>
-                           <description>Interrupt on rising edge</description>
+                           <description>ISF flag and Interrupt on rising edge</description>
                            <value>0b1001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1010</name>
-                           <description>Interrupt on falling edge</description>
+                           <description>ISF flag and Interrupt on falling edge</description>
                            <value>0b1010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1011</name>
-                           <description>Interrupt on either edge</description>
+                           <description>ISF flag and Interrupt on either edge</description>
                            <value>0b1011</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1100</name>
-                           <description>Interrupt when logic 1</description>
+                           <description>ISF flag and Interrupt when logic 1</description>
                            <value>0b1100</value>
                         </enumeratedValue>
                         <enumeratedValue>

@@ -7,7 +7,7 @@ Devices using this peripheral:
          <?sourceFile "PORTA_MKL" ?>
          <name>PORTA</name>
          <description>Pin Control and Interrupts</description>
-         <groupName>PORTA</groupName>
+         <groupName>PORT</groupName>
          <headerStructName>PORT</headerStructName>
          <baseAddress>0x40049000</baseAddress>
          <size>32</size>
@@ -225,27 +225,27 @@ Configures Interrupt functions</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1000</name>
-                           <description>Interrupt when logic 0</description>
+                           <description>ISF flag and Interrupt when logic 0</description>
                            <value>0b1000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1001</name>
-                           <description>Interrupt on rising edge</description>
+                           <description>ISF flag and Interrupt on rising edge</description>
                            <value>0b1001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1010</name>
-                           <description>Interrupt on falling edge</description>
+                           <description>ISF flag and Interrupt on falling edge</description>
                            <value>0b1010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1011</name>
-                           <description>Interrupt on either edge</description>
+                           <description>ISF flag and Interrupt on either edge</description>
                            <value>0b1011</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1100</name>
-                           <description>Interrupt when logic 1</description>
+                           <description>ISF flag and Interrupt when logic 1</description>
                            <value>0b1100</value>
                         </enumeratedValue>
                         <enumeratedValue>

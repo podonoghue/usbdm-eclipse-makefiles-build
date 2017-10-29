@@ -1,21 +1,21 @@
 <!--
 Devices using this peripheral: 
-      MKL82Z7
+      MKW41Z4
 -->
       <peripheral>
-         <?sourceFile "TPM0_MKL82Z7" ?>
-         <name>TPM0</name>
+         <?sourceFile "TPM1_MKW41Z4_2CH" ?>
+         <name>TPM1</name>
          <description>Timer/PWM Module</description>
          <groupName>TPM</groupName>
-         <headerStructName>TPM0</headerStructName>
-         <baseAddress>0x40038000</baseAddress>
+         <headerStructName>TPM1</headerStructName>
+         <baseAddress>0x40039000</baseAddress>
          <size>32</size>
          <access>read-write</access>
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
          <addressBlock>
             <offset>0x0</offset>
-            <size>0x3C</size>
+            <size>0x1C</size>
             <usage>registers</usage>
          </addressBlock>
          <addressBlock>
@@ -39,8 +39,8 @@ Devices using this peripheral:
             <usage>registers</usage>
          </addressBlock>
          <addressBlock>
-            <offset>0x84</offset>
-            <size>0x4</size>
+            <offset>0x80</offset>
+            <size>0x8</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
@@ -56,42 +56,42 @@ Devices using this peripheral:
                      <bitWidth>3</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>000</name>
+                           <name>0b000</name>
                            <description>Divide by 1</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>001</name>
+                           <name>0b001</name>
                            <description>Divide by 2</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>010</name>
+                           <name>0b010</name>
                            <description>Divide by 4</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>011</name>
+                           <name>0b011</name>
                            <description>Divide by 8</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>100</name>
+                           <name>0b100</name>
                            <description>Divide by 16</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>101</name>
+                           <name>0b101</name>
                            <description>Divide by 32</description>
                            <value>0b101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>110</name>
+                           <name>0b110</name>
                            <description>Divide by 64</description>
                            <value>0b110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>111</name>
+                           <name>0b111</name>
                            <description>Divide by 128</description>
                            <value>0b111</value>
                         </enumeratedValue>
@@ -104,54 +104,61 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
-                           <description>TPM counter is disabled</description>
+                           <name>0b00</name>
+                           <description>Disabled</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
-                           <description>TPM counter increments on every TPM counter clock</description>
+                           <name>0b01</name>
+                           <description>TPM counter clock</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
-                           <description>TPM counter increments on rising edge of TPM_EXTCLK synchronized to the TPM counter clock</description>
+                           <name>0b10</name>
+                           <description>Rising edge of TPM_EXTCLK</description>
                            <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Reserved</description>
+                           <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>CPWMS</name>
-                     <description>Center-Aligned PWM Select</description>
+                     <description>Centre-Aligned PWM Select\n
+Selects between left and centre-aligned PWM pulse output</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>TPM counter operates in up counting mode</description>
+                           <name>0b0</name>
+                           <description>Left-aligned</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>TPM counter operates in up-down counting mode</description>
+                           <name>0b1</name>
+                           <description>Centre-aligned</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>TOIE</name>
-                     <description>Timer Overflow Interrupt Enable</description>
+                     <description>Timer Overflow Interrupt Enable\n
+An interrupt is generated when TOF equals one</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Disable TOF interrupts. Use software polling or DMA request</description>
+                           <name>0b0</name>
+                           <description>Interrupts disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Enable TOF interrupts. An interrupt is generated when TOF equals one</description>
+                           <name>0b1</name>
+                           <description>Interrupts enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -163,13 +170,13 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>TPM counter has not overflowed</description>
+                           <name>0b0</name>
+                           <description>Not overflowed</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>TPM counter has overflowed</description>
+                           <name>0b1</name>
+                           <description>Overflowed</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -181,12 +188,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Disables DMA transfers</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Enables DMA transfers</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -201,7 +208,7 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>COUNT</name>
-                     <description>Counter value</description>
+                     <description>Counter Value</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>16</bitWidth>
                   </field>
@@ -215,21 +222,21 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>MOD</name>
-                     <description>Modulo value</description>
+                     <description>Modulo Value</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>16</bitWidth>
                   </field>
                </fields>
             </register>
             <cluster>
-               <dim>6</dim>
+               <dim>2</dim>
                <dimIncrement>8</dimIncrement>
-               <dimIndex>0,1,2,3,4,5</dimIndex>
-               <name>CONTROLS,@pC@i@f</name>
+               <dimIndex>0,1</dimIndex>
+               <name>C%sSC</name>
                <addressOffset>0xC</addressOffset>
                <register>
                   <name>CnSC</name>
-                  <description>Channel (n) Status and Control</description>
+                  <description>Channel %s Status and Control</description>
                   <addressOffset>0x0</addressOffset>
                   <fields>
                      <field>
@@ -239,38 +246,98 @@ Devices using this peripheral:
                         <bitWidth>1</bitWidth>
                         <enumeratedValues>
                            <enumeratedValue>
-                              <name>0</name>
+                              <name>0b0</name>
                               <description>Disable DMA transfers</description>
                               <value>0b0</value>
                            </enumeratedValue>
                            <enumeratedValue>
-                              <name>1</name>
+                              <name>0b1</name>
                               <description>Enable DMA transfers</description>
                               <value>0b1</value>
                            </enumeratedValue>
                         </enumeratedValues>
                      </field>
                      <field>
+                        <name>ELS</name>
+                        <?ignoreOverlap?>
+                        <description>Edge or Level Select\n
+Determine edge sensitivity of IC or output action of OC and pulse polarity of PWM\n
+Edge sensitivity/Output polarity/Pulse polarity</description>
+                        <bitOffset>2</bitOffset>
+                        <bitWidth>2</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b00</name>
+                              <description>Inactive</description>
+                              <value>0b00</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b01</name>
+                              <description>Rising/Toggle/Low</description>
+                              <value>0b01</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b10</name>
+                              <description>Falling/Clear/High</description>
+                              <value>0b10</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b11</name>
+                              <description>Either/Set/Low</description>
+                              <value>0b11</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
                         <name>ELSA</name>
-                        <description>Edge or Level Select</description>
+                        <?hide?>
+                        <description>Edge or Level Select A</description>
                         <bitOffset>2</bitOffset>
                         <bitWidth>1</bitWidth>
                      </field>
                      <field>
                         <name>ELSB</name>
-                        <description>Edge or Level Select</description>
+                        <?hide?>
+                        <description>Edge or Level Select B</description>
                         <bitOffset>3</bitOffset>
                         <bitWidth>1</bitWidth>
                      </field>
                      <field>
+                        <name>MS</name>
+                        <?ignoreOverlap?>
+                        <description>Channel Mode Select\n
+Determines Input Capture, Output Compare &amp; Pulse Width Modulation</description>
+                        <bitOffset>4</bitOffset>
+                        <bitWidth>2</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b00</name>
+                              <description>Input capture</description>
+                              <value>0b00</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b01</name>
+                              <description>Output compare</description>
+                              <value>0b01</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1X</name>
+                              <description>Pulse Width Modulation</description>
+                              <value>0b1X</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
                         <name>MSA</name>
-                        <description>Channel Mode Select</description>
+                        <?hide?>
+                        <description>Channel Mode Select A</description>
                         <bitOffset>4</bitOffset>
                         <bitWidth>1</bitWidth>
                      </field>
                      <field>
                         <name>MSB</name>
-                        <description>Channel Mode Select</description>
+                        <?hide?>
+                        <description>Channel Mode Select B</description>
                         <bitOffset>5</bitOffset>
                         <bitWidth>1</bitWidth>
                      </field>
@@ -281,31 +348,31 @@ Devices using this peripheral:
                         <bitWidth>1</bitWidth>
                         <enumeratedValues>
                            <enumeratedValue>
-                              <name>0</name>
-                              <description>Disable channel interrupts</description>
+                              <name>0b0</name>
+                              <description>Interrupts disabled</description>
                               <value>0b0</value>
                            </enumeratedValue>
                            <enumeratedValue>
-                              <name>1</name>
-                              <description>Enable channel interrupts</description>
+                              <name>0b1</name>
+                              <description>Interrupts enabled</description>
                               <value>0b1</value>
                            </enumeratedValue>
                         </enumeratedValues>
                      </field>
                      <field>
                         <name>CHF</name>
-                        <description>Channel Flag</description>
+                        <description>Channel Flag\nSet when a channel event occurs</description>
                         <bitOffset>7</bitOffset>
                         <bitWidth>1</bitWidth>
                         <enumeratedValues>
                            <enumeratedValue>
-                              <name>0</name>
-                              <description>No channel event has occurred</description>
+                              <name>0b0</name>
+                              <description>No channel event</description>
                               <value>0b0</value>
                            </enumeratedValue>
                            <enumeratedValue>
-                              <name>1</name>
-                              <description>A channel event has occurred</description>
+                              <name>0b1</name>
+                              <description>Channel event</description>
                               <value>0b1</value>
                            </enumeratedValue>
                         </enumeratedValues>
@@ -314,7 +381,7 @@ Devices using this peripheral:
                </register>
                <register>
                   <name>CnV</name>
-                  <description>Channel (n) Value</description>
+                  <description>Channel %s Value</description>
                   <addressOffset>0x4</addressOffset>
                   <fields>
                      <field>
@@ -338,13 +405,13 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>No channel event has occurred</description>
+                           <name>0b0</name>
+                           <description>No channel event</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>A channel event has occurred</description>
+                           <name>0b1</name>
+                           <description>Channel event</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -352,22 +419,21 @@ Devices using this peripheral:
                   <field derivedFrom="CH0F" > <name>CH1F</name> <description>Channel 1 Flag</description> <bitOffset>1</bitOffset> </field>
                   <field derivedFrom="CH0F" > <name>CH2F</name> <description>Channel 2 Flag</description> <bitOffset>2</bitOffset> </field>
                   <field derivedFrom="CH0F" > <name>CH3F</name> <description>Channel 3 Flag</description> <bitOffset>3</bitOffset> </field>
-                  <field derivedFrom="CH0F" > <name>CH4F</name> <description>Channel 4 Flag</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="CH0F" > <name>CH5F</name> <description>Channel 5 Flag</description> <bitOffset>5</bitOffset> </field>
                   <field>
                      <name>TOF</name>
-                     <description>Timer Overflow Flag</description>
+                     <description>Timer Overflow Flag\n
+Indicates if the TPM counter has overflowed</description>
                      <bitOffset>8</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>TPM counter has not overflowed</description>
+                           <name>0b0</name>
+                           <description>Not overflowed</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>TPM counter has overflowed</description>
+                           <name>0b1</name>
+                           <description>Overflowed</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -386,12 +452,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Channels 0 and 1 are independent</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Channels 0 and 1 are combined</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -404,12 +470,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Even channel is used for input capture and 1st compare</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Odd channel is used for input capture and 1st compare</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -422,37 +488,18 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Channels 2 and 3 are independent</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Channels 2 and 3 are combined</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field derivedFrom="COMSWAP0" > <name>COMSWAP1</name> <description>Combine Channels 2 and 3 Swap</description> <bitOffset>9</bitOffset> </field>
-                  <field>
-                     <name>COMBINE2</name>
-                     <description>Combine Channels 4 and 5</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Channels 4 and 5 are independent</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Channels 4 and 5 are combined</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field derivedFrom="COMSWAP0" > <name>COMSWAP2</name> <description>Combine Channels 4 and 5 Swap</description> <bitOffset>17</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -467,12 +514,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>The channel polarity is active high</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>The channel polarity is active low</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -481,8 +528,6 @@ Devices using this peripheral:
                   <field derivedFrom="POL0" > <name>POL1</name> <description>Channel 1 Polarity</description> <bitOffset>1</bitOffset> </field>
                   <field derivedFrom="POL0" > <name>POL2</name> <description>Channel 2 Polarity</description> <bitOffset>2</bitOffset> </field>
                   <field derivedFrom="POL0" > <name>POL3</name> <description>Channel 3 Polarity</description> <bitOffset>3</bitOffset> </field>
-                  <field derivedFrom="POL0" > <name>POL4</name> <description>Channel 4 Polarity</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="POL0" > <name>POL5</name> <description>Channel 5 Polarity</description> <bitOffset>5</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -514,23 +559,93 @@ Devices using this peripheral:
                      <bitOffset>12</bitOffset>
                      <bitWidth>4</bitWidth>
                   </field>
+               </fields>
+            </register>
+            <register>
+               <name>QDCTRL</name>
+               <description>Quadrature Decoder Control and Status</description>
+               <addressOffset>0x80</addressOffset>
+               <fields>
                   <field>
-                     <name>CH4FVAL</name>
-                     <description>Channel 4 Filter Value</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>4</bitWidth>
+                     <name>QUADEN</name>
+                     <description>Enables the quadrature decoder mode</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Quadrature decoder mode is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Quadrature decoder mode is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
-                     <name>CH5FVAL</name>
-                     <description>Channel 5 Filter Value</description>
-                     <bitOffset>20</bitOffset>
-                     <bitWidth>4</bitWidth>
+                     <name>TOFDIR</name>
+                     <description>Indicates if the TOF bit was set on the top or the bottom of counting</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>TOF bit was set on the bottom of counting. There was an FTM counter decrement and FTM counter changes from its minimum value (zero) to its maximum value (MOD register)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>TOF bit was set on the top of counting. There was an FTM counter increment and FTM counter changes from its maximum value (MOD register) to its minimum value (zero)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>QUADIR</name>
+                     <description>Counter Direction in Quadrature Decode Mode</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Counter direction is decreasing (counter decrement)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Counter direction is increasing (counter increment)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>QUADMODE</name>
+                     <description>Quadrature Decoder Mode</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Phase encoding mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Count and direction encoding mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                </fields>
             </register>
             <register>
                <name>CONF</name>
-               <description>Configuration</description>
+               <description>Configuration\n
+Action in Doze mode</description>
                <addressOffset>0x84</addressOffset>
                <fields>
                   <field>
@@ -540,13 +655,13 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Internal TPM counter continues in Doze mode</description>
+                           <name>0b0</name>
+                           <description>Continues in Doze mode</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Internal TPM counter is paused and does not increment during Doze mode. Trigger inputs and input capture events are also ignored</description>
+                           <name>0b1</name>
+                           <description>Paused in Doze mode</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -558,13 +673,13 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
-                           <description>TPM counter is paused and does not increment during debug mode. Trigger inputs and input capture events are also ignored</description>
+                           <name>0b00</name>
+                           <description>Paused in debug mode</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
-                           <description>TPM counter continues in debug mode</description>
+                           <name>0b11</name>
+                           <description>Continues in debug mode</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -576,12 +691,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Global timebase synchronization disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Global timebase synchronization enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -589,72 +704,75 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>GTBEEN</name>
-                     <description>Global time base enable</description>
+                     <description>Global time base enable\nSelects the timebase source</description>
                      <bitOffset>9</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>All channels use the internally generated TPM counter as their timebase</description>
+                           <name>0b0</name>
+                           <description>Internally generated TPM counter</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>All channels use an externally generated global timebase as their timebase</description>
+                           <name>0b1</name>
+                           <description>Externally generated timebase</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>CSOT</name>
-                     <description>Counter Start on Trigger</description>
+                     <description>Counter Start on Trigger\n
+Allows the TPM counter to start increment only when it a rising edge on the selected input trigger is detected</description>
                      <bitOffset>16</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>TPM counter starts to increment immediately, once it is enabled</description>
+                           <name>0b0</name>
+                           <description>TPM increments immediately</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>TPM counter only starts to increment when it a rising edge on the selected input trigger is detected, after it has been enabled or after it has stopped due to overflow</description>
+                           <name>0b1</name>
+                           <description>TPM start on input trigger</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>CSOO</name>
-                     <description>Counter Stop On Overflow</description>
+                     <description>Counter Stop On Overflow\n
+Controls whether TPM counter stops incrementing or decrementing after overflow</description>
                      <bitOffset>17</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>TPM counter continues incrementing or decrementing after overflow</description>
+                           <name>0b0</name>
+                           <description>TPM continues</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>TPM counter stops incrementing or decrementing after overflow</description>
+                           <name>0b1</name>
+                           <description>TPM stops on overflow</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>CROT</name>
-                     <description>Counter Reload On Trigger</description>
+                     <description>Counter Reload On Trigger\n
+Controls if the counter is reloaded due to a rising edge on the selected input trigger</description>
                      <bitOffset>18</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Counter is not reloaded due to a rising edge on the selected input trigger</description>
+                           <name>0b0</name>
+                           <description>Not reloaded</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Counter is reloaded when a rising edge is detected on the selected input trigger</description>
+                           <name>0b1</name>
+                           <description>Reloaded on rising edge</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -672,12 +790,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Trigger is active high</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Trigger is active low</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -690,12 +808,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Trigger source selected by TRGSEL is external</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Trigger source selected by TRGSEL is internal (channel pin input capture)</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -706,83 +824,6 @@ Devices using this peripheral:
                      <description>Trigger Select</description>
                      <bitOffset>24</bitOffset>
                      <bitWidth>4</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0001</name>
-                           <description>Channel 0 pin input capture</description>
-                           <value>0b0001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0010</name>
-                           <description>Channel 1 pin input capture</description>
-                           <value>0b0010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0011</name>
-                           <description>Channel 0 or Channel 1 pin input capture</description>
-                           <value>0b0011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0100</name>
-                           <description>Channel 2 pin input capture</description>
-                           <value>0b0100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0101</name>
-                           <description>Channel 0 or Channel 2 pin input capture</description>
-                           <value>0b0101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0110</name>
-                           <description>Channel 1 or Channel 2 pin input capture</description>
-                           <value>0b0110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0111</name>
-                           <description>Channel 0 or Channel 1 or Channel 2 pin input capture</description>
-                           <value>0b0111</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1000</name>
-                           <description>Channel 3 pin input capture</description>
-                           <value>0b1000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1001</name>
-                           <description>Channel 0 or Channel 3 pin input capture</description>
-                           <value>0b1001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1010</name>
-                           <description>Channel 1 or Channel 3 pin input capture</description>
-                           <value>0b1010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1011</name>
-                           <description>Channel 0 or Channel 1 or Channel 3 pin input capture</description>
-                           <value>0b1011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1100</name>
-                           <description>Channel 2 or Channel 3 pin input capture</description>
-                           <value>0b1100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1101</name>
-                           <description>Channel 0 or Channel 2 or Channel 3 pin input capture</description>
-                           <value>0b1101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1110</name>
-                           <description>Channel 1 or Channel 2 or Channel 3 pin input capture</description>
-                           <value>0b1110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1111</name>
-                           <description>Channel 0 or Channel 1 or Channel 2 or Channel 3 pin input capture</description>
-                           <value>0b1111</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
                   </field>
                </fields>
             </register>

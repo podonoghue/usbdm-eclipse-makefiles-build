@@ -5,7 +5,7 @@ Devices using this peripheral:
       <peripheral>
          <?sourceFile "LTC0_MK82F25615" ?>
          <name>LTC0</name>
-         <description>LTC</description>
+         <description>LP Trusted Cryptography</description>
          <groupName>LTC</groupName>
          <headerStructName>LTC</headerStructName>
          <baseAddress>0x400D1000</baseAddress>
@@ -166,12 +166,12 @@ Devices using this peripheral:
          <registers>
             <register>
                <name>MD</name>
-               <description>LTC Mode Register (non-PKHA/non-RNG use)</description>
+               <description>Mode Register (non-PKHA/non-RNG use)</description>
                <addressOffset>0x0</addressOffset>
                <fields>
                   <field>
                      <name>ENC</name>
-                     <description>Encrypt/Decrypt. This bit selects encryption or decryption</description>
+                     <description>This bit selects encryption or decryption</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -254,7 +254,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>MDPK</name>
-               <description>LTC Mode Register (PublicKey)</description>
+               <description>Mode Register (PublicKey)</description>
                <addressOffset>0x0</addressOffset>
                <fields>
                   <field>
@@ -286,7 +286,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>KS</name>
-               <description>LTC Key Size Register</description>
+               <description>Key Size Register</description>
                <addressOffset>0x8</addressOffset>
                <fields>
                   <field>
@@ -299,7 +299,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>DS</name>
-               <description>LTC Data Size Register</description>
+               <description>Data Size Register</description>
                <addressOffset>0x10</addressOffset>
                <fields>
                   <field>
@@ -312,7 +312,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>ICVS</name>
-               <description>LTC ICV Size Register</description>
+               <description>ICV Size Register</description>
                <addressOffset>0x18</addressOffset>
                <fields>
                   <field>
@@ -325,7 +325,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>COM</name>
-               <description>LTC Command Register</description>
+               <description>Command Register</description>
                <addressOffset>0x30</addressOffset>
                <access>write-only</access>
                <fields>
@@ -405,12 +405,12 @@ Devices using this peripheral:
             </register>
             <register>
                <name>CTL</name>
-               <description>LTC Control Register</description>
+               <description>Control Register</description>
                <addressOffset>0x34</addressOffset>
                <fields>
                   <field>
                      <name>IM</name>
-                     <description>Interrupt Mask. Once this bit is set, it can only be cleared by hard reset</description>
+                     <description>Interrupt Mask.\nOnce this bit is set, it can only be cleared by hard reset</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -501,7 +501,8 @@ Devices using this peripheral:
                   <field derivedFrom="IFR" > <name>OFR</name> <description>Output FIFO DMA Request Size</description> <bitOffset>13</bitOffset> </field>
                   <field>
                      <name>IFS</name>
-                     <description>Input FIFO Byte Swap. Byte swap all data that is written to the Input FIFO</description>
+                     <description>Input FIFO Byte Swap.\n
+Byte swap all data that is written to the Input FIFO</description>
                      <bitOffset>16</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -517,7 +518,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="IFS" > <name>OFS</name> <description>Output FIFO Byte Swap. Byte swap all data that is read from the Onput FIFO</description> <bitOffset>17</bitOffset> </field>
+                  <field derivedFrom="IFS" > <name>OFS</name> <description>Output FIFO Byte Swap</description> <bitOffset>17</bitOffset> </field>
                   <field derivedFrom="IFS" > <name>KIS</name> <description>Key Register Input Byte Swap</description> <bitOffset>20</bitOffset> </field>
                   <field derivedFrom="IFS" > <name>KOS</name> <description>Key Register Output Byte Swap</description> <bitOffset>21</bitOffset> </field>
                   <field derivedFrom="IFS" > <name>CIS</name> <description>Context Register Input Byte Swap</description> <bitOffset>22</bitOffset> </field>
@@ -544,7 +545,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>CW</name>
-               <description>LTC Clear Written Register</description>
+               <description>Clear Written Register</description>
                <addressOffset>0x40</addressOffset>
                <access>write-only</access>
                <fields>
@@ -618,7 +619,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>STA</name>
-               <description>LTC Status Register</description>
+               <description>Status Register</description>
                <addressOffset>0x48</addressOffset>
                <fields>
                   <field>
@@ -728,7 +729,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>ESTA</name>
-               <description>LTC Error Status Register</description>
+               <description>Error Status Register</description>
                <addressOffset>0x4C</addressOffset>
                <access>read-only</access>
                <fields>
@@ -807,13 +808,14 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>CL1</name>
-                     <description>algorithms. The algorithms field indicates which algorithm is asserting an error. Others reserved</description>
+                     <description>algorithms.\n
+The algorithms field indicates which algorithm is asserting an error. Others reserved</description>
                      <bitOffset>8</bitOffset>
                      <bitWidth>4</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0000</name>
-                           <description>LTC General Error</description>
+                           <description>General Error</description>
                            <value>0b0000</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -837,7 +839,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>AADSZ</name>
-               <description>LTC AAD Size Register</description>
+               <description>AAD Size Register</description>
                <addressOffset>0x58</addressOffset>
                <fields>
                   <field>
@@ -856,7 +858,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>IVSZ</name>
-               <description>LTC IV Size Register</description>
+               <description>IV Size Register</description>
                <addressOffset>0x60</addressOffset>
                <fields>
                   <field>
@@ -875,7 +877,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>DPAMS</name>
-               <description>LTC DPA Mask Seed Register</description>
+               <description>DPA Mask Seed Register</description>
                <addressOffset>0x68</addressOffset>
                <access>write-only</access>
                <fields>
@@ -888,7 +890,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>PKASZ</name>
-               <description>LTC PKHA A Size Register</description>
+               <description>PKHA A Size Register</description>
                <addressOffset>0x80</addressOffset>
                <fields>
                   <field>
@@ -901,7 +903,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>PKBSZ</name>
-               <description>LTC PKHA B Size Register</description>
+               <description>PKHA B Size Register</description>
                <addressOffset>0x88</addressOffset>
                <fields>
                   <field>
@@ -914,7 +916,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>PKNSZ</name>
-               <description>LTC PKHA N Size Register</description>
+               <description>PKHA N Size Register</description>
                <addressOffset>0x90</addressOffset>
                <fields>
                   <field>
@@ -927,7 +929,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>PKESZ</name>
-               <description>LTC PKHA E Size Register</description>
+               <description>PKHA E Size Register</description>
                <addressOffset>0x98</addressOffset>
                <fields>
                   <field>
@@ -943,8 +945,9 @@ Devices using this peripheral:
                <dimIncrement>4</dimIncrement>
                <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
                <name>CTX%s</name>
-               <description>LTC Context Register</description>
+               <description>Context Register</description>
                <addressOffset>0x100</addressOffset>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>CTX</name>
@@ -958,8 +961,9 @@ Devices using this peripheral:
                <dimIncrement>4</dimIncrement>
                <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
                <name>KEY%s</name>
-               <description>LTC Key</description>
+               <description>Key</description>
                <addressOffset>0x200</addressOffset>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>KEY</name>
@@ -970,7 +974,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>RNG4_DRNG_STATUS</name>
-               <description>LTC RNG4 DRNG Status</description>
+               <description>RNG4 DRNG Status</description>
                <addressOffset>0x300</addressOffset>
                <access>read-only</access>
                <fields>
@@ -1029,7 +1033,7 @@ Devices using this peripheral:
                <dimIncrement>4</dimIncrement>
                <dimIndex>0,1</dimIndex>
                <name>RNG4_DRNG_INTERVAL%s</name>
-               <description>LTC RNG4 DRNG Interval %s Register</description>
+               <description>RNG4 DRNG Interval %s Register</description>
                <addressOffset>0x310</addressOffset>
                <access>read-only</access>
                <fields>
@@ -1042,7 +1046,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>RNG4_DRNG_HASH_CONTROL</name>
-               <description>LTC RNG4 DRNG Hash Control Register</description>
+               <description>RNG4 DRNG Hash Control Register</description>
                <addressOffset>0x340</addressOffset>
                <fields>
                   <field>
@@ -1083,7 +1087,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>RNG4_DRNG_HASH_DIGEST</name>
-               <description>LTC RNG4 DRNG Hash Digest Register</description>
+               <description>RNG4 DRNG Hash Digest Register</description>
                <addressOffset>0x344</addressOffset>
                <access>read-only</access>
                <fields>
@@ -1096,7 +1100,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>RNG4_DRNG_DEBUG_BUFFER</name>
-               <description>LTC RNG4 DRNG Debug Buffer</description>
+               <description>RNG4 DRNG Debug Buffer</description>
                <addressOffset>0x348</addressOffset>
                <access>write-only</access>
                <fields>
@@ -1109,20 +1113,20 @@ Devices using this peripheral:
             </register>
             <register>
                <name>VID1</name>
-               <description>LTC Version ID Register</description>
+               <description>Version ID Register</description>
                <addressOffset>0x4F0</addressOffset>
                <access>read-only</access>
                <resetValue>0x340100</resetValue>
                <fields>
                   <field>
                      <name>MIN_REV</name>
-                     <description>Minor revision number(0x00)</description>
+                     <description>Minor revision number</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>8</bitWidth>
                   </field>
                   <field>
                      <name>MAJ_REV</name>
-                     <description>Major revision number(0x01)</description>
+                     <description>Major revision number</description>
                      <bitOffset>8</bitOffset>
                      <bitWidth>8</bitWidth>
                   </field>
@@ -1136,7 +1140,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>CHAVID</name>
-               <description>LTC CHA Version ID Register</description>
+               <description>CHA Version ID Register</description>
                <addressOffset>0x4F8</addressOffset>
                <access>read-only</access>
                <resetValue>0x440151</resetValue>
@@ -1144,37 +1148,37 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>AESREV</name>
-                     <description>AES Revision Number(0x1)</description>
+                     <description>AES Revision Number</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>4</bitWidth>
                   </field>
                   <field>
                      <name>AESVID</name>
-                     <description>AES Version ID(0x5)</description>
+                     <description>AES Version ID</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>4</bitWidth>
                   </field>
                   <field>
                      <name>DESREV</name>
-                     <description>DES Revision Number(0x1)</description>
+                     <description>DES Revision Number</description>
                      <bitOffset>8</bitOffset>
                      <bitWidth>4</bitWidth>
                   </field>
                   <field>
                      <name>DESVID</name>
-                     <description>DES Version ID(0x0)</description>
+                     <description>DES Version ID(0x0). 0000 - High-performance DESA 0001 - Low-performance DESA</description>
                      <bitOffset>12</bitOffset>
                      <bitWidth>4</bitWidth>
                   </field>
                   <field>
                      <name>PKHAREV</name>
-                     <description>PK Revision Number(0x4)</description>
+                     <description>PK Revision Number</description>
                      <bitOffset>16</bitOffset>
                      <bitWidth>4</bitWidth>
                   </field>
                   <field>
                      <name>PKHAVID</name>
-                     <description>PK Version ID(0x4)</description>
+                     <description>PK Version ID 0001 - 32-bit PKHA-SD 0010 - 64-bit PKHA-SD 0011 - 128-bit PKHA-SD 0100 - 16-bit PKHA-SD</description>
                      <bitOffset>20</bitOffset>
                      <bitWidth>4</bitWidth>
                   </field>
@@ -1182,7 +1186,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>FIFOSTA</name>
-               <description>LTC FIFO Status Register</description>
+               <description>FIFO Status Register</description>
                <addressOffset>0x7C0</addressOffset>
                <access>read-only</access>
                <fields>
@@ -1214,7 +1218,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>IFIFO</name>
-               <description>LTC Input Data FIFO</description>
+               <description>Input Data FIFO</description>
                <addressOffset>0x7E0</addressOffset>
                <access>write-only</access>
                <fields>
@@ -1227,7 +1231,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>OFIFO</name>
-               <description>LTC Output Data FIFO</description>
+               <description>Output Data FIFO</description>
                <addressOffset>0x7F0</addressOffset>
                <access>read-only</access>
                <fields>
@@ -1243,18 +1247,20 @@ Devices using this peripheral:
                <dimIncrement>4</dimIncrement>
                <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63</dimIndex>
                <name>PKA%s</name>
-               <description>LTC PKHA A %s Register</description>
+               <description>PKHA A %s Register</description>
                <addressOffset>0x800</addressOffset>
                <size>32</size>
                <access>read-write</access>
+               <resetMask>0x0</resetMask>
             </register>
             <register>
                <dim>16</dim>
                <dimIncrement>4</dimIncrement>
                <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
                <name>PKA0%s</name>
-               <description>LTC PKHA A0 %s Register</description>
+               <description>PKHA A0 %s Register</description>
                <addressOffset>0x800</addressOffset>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>PKHA_A0</name>
@@ -1268,8 +1274,9 @@ Devices using this peripheral:
                <dimIncrement>4</dimIncrement>
                <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
                <name>PKA1%s</name>
-               <description>LTC PKHA A1 %s Register</description>
+               <description>PKHA A1 %s Register</description>
                <addressOffset>0x840</addressOffset>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>PKHA_A1</name>
@@ -1283,8 +1290,9 @@ Devices using this peripheral:
                <dimIncrement>4</dimIncrement>
                <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
                <name>PKA2%s</name>
-               <description>LTC PKHA A2 %s Register</description>
+               <description>PKHA A2 %s Register</description>
                <addressOffset>0x880</addressOffset>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>PKHA_A2</name>
@@ -1298,8 +1306,9 @@ Devices using this peripheral:
                <dimIncrement>4</dimIncrement>
                <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
                <name>PKA3%s</name>
-               <description>LTC PKHA A3 %s Register</description>
+               <description>PKHA A3 %s Register</description>
                <addressOffset>0x8C0</addressOffset>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>PKHA_A3</name>
@@ -1313,18 +1322,20 @@ Devices using this peripheral:
                <dimIncrement>4</dimIncrement>
                <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63</dimIndex>
                <name>PKB%s</name>
-               <description>LTC PKHA B %s Register</description>
+               <description>PKHA B %s Register</description>
                <addressOffset>0xA00</addressOffset>
                <size>32</size>
                <access>read-write</access>
+               <resetMask>0x0</resetMask>
             </register>
             <register>
                <dim>16</dim>
                <dimIncrement>4</dimIncrement>
                <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
                <name>PKB0%s</name>
-               <description>LTC PKHA B0 %s Register</description>
+               <description>PKHA B0 %s Register</description>
                <addressOffset>0xA00</addressOffset>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>PKHA_B0</name>
@@ -1338,8 +1349,9 @@ Devices using this peripheral:
                <dimIncrement>4</dimIncrement>
                <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
                <name>PKB1%s</name>
-               <description>LTC PKHA B1 %s Register</description>
+               <description>PKHA B1 %s Register</description>
                <addressOffset>0xA40</addressOffset>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>PKHA_B1</name>
@@ -1353,8 +1365,9 @@ Devices using this peripheral:
                <dimIncrement>4</dimIncrement>
                <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
                <name>PKB2%s</name>
-               <description>LTC PKHA B2 %s Register</description>
+               <description>PKHA B2 %s Register</description>
                <addressOffset>0xA80</addressOffset>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>PKHA_B2</name>
@@ -1368,8 +1381,9 @@ Devices using this peripheral:
                <dimIncrement>4</dimIncrement>
                <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
                <name>PKB3%s</name>
-               <description>LTC PKHA B3 %s Register</description>
+               <description>PKHA B3 %s Register</description>
                <addressOffset>0xAC0</addressOffset>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>PKHA_B3</name>
@@ -1383,18 +1397,20 @@ Devices using this peripheral:
                <dimIncrement>4</dimIncrement>
                <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63</dimIndex>
                <name>PKN%s</name>
-               <description>LTC PKHA N %s Register</description>
+               <description>PKHA N %s Register</description>
                <addressOffset>0xC00</addressOffset>
                <size>32</size>
                <access>read-write</access>
+               <resetMask>0x0</resetMask>
             </register>
             <register>
                <dim>16</dim>
                <dimIncrement>4</dimIncrement>
                <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
                <name>PKN0%s</name>
-               <description>LTC PKHA N0 %s Register</description>
+               <description>PKHA N0 %s Register</description>
                <addressOffset>0xC00</addressOffset>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>PKHA_N0</name>
@@ -1408,8 +1424,9 @@ Devices using this peripheral:
                <dimIncrement>4</dimIncrement>
                <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
                <name>PKN1%s</name>
-               <description>LTC PKHA N1 %s Register</description>
+               <description>PKHA N1 %s Register</description>
                <addressOffset>0xC40</addressOffset>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>PKHA_N1</name>
@@ -1423,8 +1440,9 @@ Devices using this peripheral:
                <dimIncrement>4</dimIncrement>
                <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
                <name>PKN2%s</name>
-               <description>LTC PKHA N2 %s Register</description>
+               <description>PKHA N2 %s Register</description>
                <addressOffset>0xC80</addressOffset>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>PKHA_N2</name>
@@ -1438,8 +1456,9 @@ Devices using this peripheral:
                <dimIncrement>4</dimIncrement>
                <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
                <name>PKN3%s</name>
-               <description>LTC PKHA N3 %s Register</description>
+               <description>PKHA N3 %s Register</description>
                <addressOffset>0xCC0</addressOffset>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>PKHA_N3</name>
@@ -1453,18 +1472,20 @@ Devices using this peripheral:
                <dimIncrement>4</dimIncrement>
                <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63</dimIndex>
                <name>PKE%s</name>
-               <description>LTC PKHA E %s Register</description>
+               <description>PKHA E %s Register</description>
                <addressOffset>0xE00</addressOffset>
                <size>32</size>
                <access>read-write</access>
+               <resetMask>0x0</resetMask>
             </register>
             <register>
                <dim>16</dim>
                <dimIncrement>4</dimIncrement>
                <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
                <name>PKE0%s</name>
-               <description>LTC PKHA E0 %s Register</description>
+               <description>PKHA E0 %s Register</description>
                <addressOffset>0xE00</addressOffset>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>PKHA_E0</name>
@@ -1478,8 +1499,9 @@ Devices using this peripheral:
                <dimIncrement>4</dimIncrement>
                <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
                <name>PKE1%s</name>
-               <description>LTC PKHA E1 %s Register</description>
+               <description>PKHA E1 %s Register</description>
                <addressOffset>0xE40</addressOffset>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>PKHA_E1</name>
@@ -1493,8 +1515,9 @@ Devices using this peripheral:
                <dimIncrement>4</dimIncrement>
                <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
                <name>PKE2%s</name>
-               <description>LTC PKHA E2 %s Register</description>
+               <description>PKHA E2 %s Register</description>
                <addressOffset>0xE80</addressOffset>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>PKHA_E2</name>
@@ -1508,8 +1531,9 @@ Devices using this peripheral:
                <dimIncrement>4</dimIncrement>
                <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
                <name>PKE3%s</name>
-               <description>LTC PKHA E3 %s Register</description>
+               <description>PKHA E3 %s Register</description>
                <addressOffset>0xEC0</addressOffset>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>PKHA_E3</name>

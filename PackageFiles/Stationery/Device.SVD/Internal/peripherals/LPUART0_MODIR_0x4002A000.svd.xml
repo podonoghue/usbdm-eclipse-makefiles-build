@@ -1,15 +1,19 @@
 <!--
 Devices using this peripheral: 
-      MK65F18
-      MK66F18
+      MK22F12810
+      MK22F25612
+      MK22F51212
+      MKV31F12810
+      MKV31F25612
+      MKV31F51212
 -->
       <peripheral>
-         <?sourceFile "LPUART0_0x400C4000" ?>
+         <?sourceFile "LPUART0_MODIR_0x4002A000" ?>
          <name>LPUART0</name>
          <description>Universal Asynchronous Receiver/Transmitter</description>
          <groupName>LPUART</groupName>
          <headerStructName>LPUART</headerStructName>
-         <baseAddress>0x400C4000</baseAddress>
+         <baseAddress>0x4002A000</baseAddress>
          <size>32</size>
          <access>read-write</access>
          <resetValue>0x0</resetValue>
@@ -1375,7 +1379,7 @@ The MODEM register controls options for setting the modem configuration</descrip
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>RTS is deasserted if the receiver data register is full or a start bit has been detected that would cause the receiver data register to become full. RTS is asserted if the receiver data register is not full and has not detected a start bit that would cause the receiver data register to become full</description>
+                           <description>RTS is asserted if RDR not full and no start bit leading to RDR full</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

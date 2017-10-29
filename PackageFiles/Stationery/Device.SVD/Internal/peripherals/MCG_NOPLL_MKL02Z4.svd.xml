@@ -1,10 +1,11 @@
 <!--
 Devices using this peripheral: 
-      MKL04Z4
-      MKL05Z4
+      MKL02Z4
+      MKV10Z7
+      MKV11Z7
 -->
       <peripheral>
-         <?sourceFile "MCG_MKL04Z4" ?>
+         <?sourceFile "MCG_NOPLL_MKL02Z4" ?>
          <name>MCG</name>
          <description>Multipurpose Clock Generator module</description>
          <groupName>MCG</groupName>
@@ -17,7 +18,13 @@ Devices using this peripheral:
          <addressBlock>
             <?width "8" ?>
             <offset>0x0</offset>
-            <size>0x7</size>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x5</offset>
+            <size>0x2</size>
             <usage>registers</usage>
          </addressBlock>
          <addressBlock>
@@ -151,7 +158,8 @@ If (RANGE=0 or OSCSEL=1) 1st value is used; else 2nd value</description>
                   </field>
                   <field>
                      <name>CLKS</name>
-                     <description>Clock Source Select</description>
+                     <description>Clock Source Select\n
+Selects the clock source for MCGOUTCLK</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
@@ -184,6 +192,7 @@ If (RANGE=0 or OSCSEL=1) 1st value is used; else 2nd value</description>
                <description>Control 2 Register</description>
                <addressOffset>0x1</addressOffset>
                <size>8</size>
+               <resetValue>0x80</resetValue>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
@@ -229,7 +238,8 @@ In any other MCG mode, LP bit has no affect</description>
                   </field>
                   <field>
                      <name>EREFS0</name>
-                     <description>External Reference Select\nSelects the source for the external reference clock</description>
+                     <description>External Reference Select\n
+Selects the source for the external reference clock</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -286,6 +296,13 @@ Selects the frequency range for the crystal oscillator or external clock source<
                            <value>0b1X</value>
                         </enumeratedValue>
                      </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FCFTRIM</name>
+                     <description>Fast Internal Reference Clock Fine Trim\n
+Controls the smallest adjustment of the fast internal reference clock frequency</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
                   </field>
                   <field>
                      <name>LOCRE0</name>
@@ -416,14 +433,6 @@ The DMX32 bit controls whether the DCO frequency range is narrowed to its maximu
                </fields>
             </register>
             <register>
-               <name>C5</name>
-               <description>Control 5 Register</description>
-               <addressOffset>0x4</addressOffset>
-               <size>8</size>
-               <access>read-write</access>
-               <resetMask>0xFF</resetMask>
-            </register>
-            <register>
                <name>C6</name>
                <description>Control 6 Register</description>
                <addressOffset>0x5</addressOffset>
@@ -431,7 +440,7 @@ The DMX32 bit controls whether the DCO frequency range is narrowed to its maximu
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
-                     <name>CME</name>
+                     <name>CME0</name>
                      <description>Clock Monitor Enable for OSC0\n
 Enables the loss of clock monitoring circuit for the OSC0 external reference mux select.\n
 The LOCRE0 bit will determine if a interrupt or a reset request is generated following a loss of OSC0 indication</description>
@@ -470,19 +479,21 @@ The IRCST bit indicates the current source for the internal reference clock sele
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>IRC is slow clock (32 kHz)</description>
+                           <description>Slow clock (32 kHz)</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>IRC is fast clock (4 MHz)</description>
+                           <description>Fast clock (4 MHz)</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>OSCINIT0</name>
-                     <description>OSC Initialization</description>
+                     <description>OSC Initialization Status\n
+This flag, which resets to 0, is set to 1 after the initialization cycles of the crystal oscillator clock are
+completed. After being set, the bit is cleared to 0 if the OSC is subsequently disabled</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -523,7 +534,7 @@ The CLKST bits do not update immediately due to internal synchronisation between
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>Output of the PLL</description>
+                           <description>Reserved</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -571,7 +582,7 @@ The LOCS0 indicates when a loss of OSC0 reference clock has occurred</descriptio
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Loss has occurred</description>
+                           <description>Loss has occurred\nWrite-1 to clear</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -657,7 +668,7 @@ same during clock mode changes where the FLL/DCO output is still valid</descript
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>ATM failed</description>
+                           <description>ATM failed\nWrite-1 to clear</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

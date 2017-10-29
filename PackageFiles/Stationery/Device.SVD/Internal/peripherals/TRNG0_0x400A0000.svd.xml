@@ -5,7 +5,7 @@ Devices using this peripheral:
       <peripheral>
          <?sourceFile "TRNG0_0x400A0000" ?>
          <name>TRNG0</name>
-         <description>RNG</description>
+         <description>True Random Number Generator</description>
          <groupName>TRNG</groupName>
          <headerStructName>TRNG</headerStructName>
          <baseAddress>0x400A0000</baseAddress>
@@ -31,7 +31,7 @@ Devices using this peripheral:
          <registers>
             <register>
                <name>MCTL</name>
-               <description>RNG Miscellaneous Control Register</description>
+               <description>Miscellaneous Control Register</description>
                <addressOffset>0x0</addressOffset>
                <resetValue>0x12001</resetValue>
                <fields>
@@ -55,6 +55,11 @@ Devices using this peripheral:
                            <name>10</name>
                            <description>use Von Neumann data into Entropy shifter. Use raw data into Statistical Checker</description>
                            <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>11</name>
+                           <description>undefined/reserved</description>
+                           <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -94,7 +99,7 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>TRNG_ACC</name>
-                     <description>TRNG Access Mode</description>
+                     <description>Access Mode</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
                   </field>
@@ -162,7 +167,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>SCMISC</name>
-               <description>RNG Statistical Check Miscellaneous Register</description>
+               <description>Statistical Check Miscellaneous Register</description>
                <addressOffset>0x4</addressOffset>
                <resetValue>0x1001F</resetValue>
                <fields>
@@ -182,7 +187,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>PKRRNG</name>
-               <description>RNG Poker Range Register</description>
+               <description>Poker Range Register</description>
                <addressOffset>0x8</addressOffset>
                <resetValue>0x9A3</resetValue>
                <fields>
@@ -196,7 +201,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>PKRMAX</name>
-               <description>RNG Poker Maximum Limit Register</description>
+               <description>Poker Maximum Limit Register</description>
                <addressOffset>0xC</addressOffset>
                <resetValue>0x6920</resetValue>
                <fields>
@@ -210,7 +215,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>PKRSQ</name>
-               <description>RNG Poker Square Calculation Result Register</description>
+               <description>Poker Square Calculation Result Register</description>
                <addressOffset>0xC</addressOffset>
                <access>read-only</access>
                <fields>
@@ -224,7 +229,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>SDCTL</name>
-               <description>RNG Seed Control Register</description>
+               <description>Seed Control Register</description>
                <addressOffset>0x10</addressOffset>
                <resetValue>0xC8009C4</resetValue>
                <fields>
@@ -244,7 +249,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>SBLIM</name>
-               <description>RNG Sparse Bit Limit Register</description>
+               <description>Sparse Bit Limit Register</description>
                <addressOffset>0x14</addressOffset>
                <resetValue>0x3F</resetValue>
                <fields>
@@ -258,7 +263,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>TOTSAM</name>
-               <description>RNG Total Samples Register</description>
+               <description>Total Samples Register</description>
                <addressOffset>0x14</addressOffset>
                <access>read-only</access>
                <fields>
@@ -272,7 +277,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>FRQMIN</name>
-               <description>RNG Frequency Count Minimum Limit Register</description>
+               <description>Frequency Count Minimum Limit Register</description>
                <addressOffset>0x18</addressOffset>
                <resetValue>0x640</resetValue>
                <fields>
@@ -286,7 +291,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>FRQCNT</name>
-               <description>RNG Frequency Count Register</description>
+               <description>Frequency Count Register</description>
                <addressOffset>0x1C</addressOffset>
                <access>read-only</access>
                <fields>
@@ -300,7 +305,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>FRQMAX</name>
-               <description>RNG Frequency Count Maximum Limit Register</description>
+               <description>Frequency Count Maximum Limit Register</description>
                <addressOffset>0x1C</addressOffset>
                <resetValue>0x6400</resetValue>
                <fields>
@@ -314,7 +319,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>SCMC</name>
-               <description>RNG Statistical Check Monobit Count Register</description>
+               <description>Statistical Check Monobit Count Register</description>
                <addressOffset>0x20</addressOffset>
                <access>read-only</access>
                <fields>
@@ -328,7 +333,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>SCML</name>
-               <description>RNG Statistical Check Monobit Limit Register</description>
+               <description>Statistical Check Monobit Limit Register</description>
                <addressOffset>0x20</addressOffset>
                <resetValue>0x10C0568</resetValue>
                <fields>
@@ -348,7 +353,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>SCR1C</name>
-               <description>RNG Statistical Check Run Length 1 Count Register</description>
+               <description>Statistical Check Run Length 1 Count Register</description>
                <addressOffset>0x24</addressOffset>
                <access>read-only</access>
                <fields>
@@ -368,7 +373,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>SCR1L</name>
-               <description>RNG Statistical Check Run Length 1 Limit Register</description>
+               <description>Statistical Check Run Length 1 Limit Register</description>
                <addressOffset>0x24</addressOffset>
                <resetValue>0xB20195</resetValue>
                <fields>
@@ -388,7 +393,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>SCR2C</name>
-               <description>RNG Statistical Check Run Length 2 Count Register</description>
+               <description>Statistical Check Run Length 2 Count Register</description>
                <addressOffset>0x28</addressOffset>
                <access>read-only</access>
                <fields>
@@ -408,7 +413,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>SCR2L</name>
-               <description>RNG Statistical Check Run Length 2 Limit Register</description>
+               <description>Statistical Check Run Length 2 Limit Register</description>
                <addressOffset>0x28</addressOffset>
                <resetValue>0x7A00DC</resetValue>
                <fields>
@@ -428,7 +433,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>SCR3C</name>
-               <description>RNG Statistical Check Run Length 3 Count Register</description>
+               <description>Statistical Check Run Length 3 Count Register</description>
                <addressOffset>0x2C</addressOffset>
                <access>read-only</access>
                <fields>
@@ -448,7 +453,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>SCR3L</name>
-               <description>RNG Statistical Check Run Length 3 Limit Register</description>
+               <description>Statistical Check Run Length 3 Limit Register</description>
                <addressOffset>0x2C</addressOffset>
                <resetValue>0x58007D</resetValue>
                <fields>
@@ -468,7 +473,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>SCR4C</name>
-               <description>RNG Statistical Check Run Length 4 Count Register</description>
+               <description>Statistical Check Run Length 4 Count Register</description>
                <addressOffset>0x30</addressOffset>
                <access>read-only</access>
                <fields>
@@ -488,7 +493,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>SCR4L</name>
-               <description>RNG Statistical Check Run Length 4 Limit Register</description>
+               <description>Statistical Check Run Length 4 Limit Register</description>
                <addressOffset>0x30</addressOffset>
                <resetValue>0x40004B</resetValue>
                <fields>
@@ -508,7 +513,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>SCR5C</name>
-               <description>RNG Statistical Check Run Length 5 Count Register</description>
+               <description>Statistical Check Run Length 5 Count Register</description>
                <addressOffset>0x34</addressOffset>
                <access>read-only</access>
                <fields>
@@ -528,7 +533,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>SCR5L</name>
-               <description>RNG Statistical Check Run Length 5 Limit Register</description>
+               <description>Statistical Check Run Length 5 Limit Register</description>
                <addressOffset>0x34</addressOffset>
                <resetValue>0x2E002F</resetValue>
                <fields>
@@ -548,7 +553,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>SCR6PC</name>
-               <description>RNG Statistical Check Run Length 6+ Count Register</description>
+               <description>Statistical Check Run Length 6+ Count Register</description>
                <addressOffset>0x38</addressOffset>
                <access>read-only</access>
                <fields>
@@ -568,7 +573,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>SCR6PL</name>
-               <description>RNG Statistical Check Run Length 6+ Limit Register</description>
+               <description>Statistical Check Run Length 6+ Limit Register</description>
                <addressOffset>0x38</addressOffset>
                <resetValue>0x2E002F</resetValue>
                <fields>
@@ -588,7 +593,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>STATUS</name>
-               <description>RNG Status Register</description>
+               <description>Status Register</description>
                <addressOffset>0x3C</addressOffset>
                <access>read-only</access>
                <fields>
@@ -701,7 +706,7 @@ Devices using this peripheral:
                <dimIncrement>4</dimIncrement>
                <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
                <name>ENT%s</name>
-               <description>RNG TRNG Entropy Read Register</description>
+               <description>Entropy Read Register</description>
                <addressOffset>0x40</addressOffset>
                <access>read-only</access>
                <resetMask>0x0</resetMask>
@@ -715,7 +720,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>PKRCNT10</name>
-               <description>RNG Statistical Check Poker Count 1 and 0 Register</description>
+               <description>Statistical Check Poker Count 1 and 0 Register</description>
                <addressOffset>0x80</addressOffset>
                <access>read-only</access>
                <fields>
@@ -735,7 +740,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>PKRCNT32</name>
-               <description>RNG Statistical Check Poker Count 3 and 2 Register</description>
+               <description>Statistical Check Poker Count 3 and 2 Register</description>
                <addressOffset>0x84</addressOffset>
                <access>read-only</access>
                <fields>
@@ -755,7 +760,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>PKRCNT54</name>
-               <description>RNG Statistical Check Poker Count 5 and 4 Register</description>
+               <description>Statistical Check Poker Count 5 and 4 Register</description>
                <addressOffset>0x88</addressOffset>
                <access>read-only</access>
                <fields>
@@ -775,7 +780,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>PKRCNT76</name>
-               <description>RNG Statistical Check Poker Count 7 and 6 Register</description>
+               <description>Statistical Check Poker Count 7 and 6 Register</description>
                <addressOffset>0x8C</addressOffset>
                <access>read-only</access>
                <fields>
@@ -795,7 +800,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>PKRCNT98</name>
-               <description>RNG Statistical Check Poker Count 9 and 8 Register</description>
+               <description>Statistical Check Poker Count 9 and 8 Register</description>
                <addressOffset>0x90</addressOffset>
                <access>read-only</access>
                <fields>
@@ -815,7 +820,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>PKRCNTBA</name>
-               <description>RNG Statistical Check Poker Count B and A Register</description>
+               <description>Statistical Check Poker Count B and A Register</description>
                <addressOffset>0x94</addressOffset>
                <access>read-only</access>
                <fields>
@@ -835,7 +840,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>PKRCNTDC</name>
-               <description>RNG Statistical Check Poker Count D and C Register</description>
+               <description>Statistical Check Poker Count D and C Register</description>
                <addressOffset>0x98</addressOffset>
                <access>read-only</access>
                <fields>
@@ -855,7 +860,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>PKRCNTFE</name>
-               <description>RNG Statistical Check Poker Count F and E Register</description>
+               <description>Statistical Check Poker Count F and E Register</description>
                <addressOffset>0x9C</addressOffset>
                <access>read-only</access>
                <fields>
@@ -875,7 +880,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>SEC_CFG</name>
-               <description>RNG Security Configuration Register</description>
+               <description>Security Configuration Register</description>
                <addressOffset>0xB0</addressOffset>
                <fields>
                   <field>
@@ -898,18 +903,18 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>NO_PRGM</name>
-                     <description>If set the TRNG registers cannot be programmed</description>
+                     <description>If set, the TRNG registers cannot be programmed</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0</name>
-                           <description>Programability of registers controlled only by the RNG Miscellaneous Control Register&apos;s access mode bit</description>
+                           <description>Programability of registers controlled only by the Miscellaneous Control Register&apos;s access mode bit</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>1</name>
-                           <description>Overides RNG Miscellaneous Control Register access mode and prevents TRNG register programming</description>
+                           <description>Overides Miscellaneous Control Register access mode and prevents TRNG register programming</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -919,7 +924,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>INT_CTRL</name>
-               <description>RNG Interrupt Control Register</description>
+               <description>Interrupt Control Register</description>
                <addressOffset>0xB4</addressOffset>
                <resetValue>0xFFFFFFFF</resetValue>
                <fields>
@@ -970,7 +975,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>INT_MASK</name>
-               <description>RNG Mask Register</description>
+               <description>Mask Register</description>
                <addressOffset>0xB8</addressOffset>
                <fields>
                   <field>
@@ -1014,7 +1019,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>INT_STATUS</name>
-               <description>RNG Interrupt Status Register</description>
+               <description>Interrupt Status Register</description>
                <addressOffset>0xBC</addressOffset>
                <fields>
                   <field>
@@ -1077,13 +1082,13 @@ Devices using this peripheral:
             </register>
             <register>
                <name>VID1</name>
-               <description>RNG Version ID Register (MS)</description>
+               <description>Version ID Register (MS)</description>
                <addressOffset>0xF0</addressOffset>
                <access>read-only</access>
                <resetValue>0x300100</resetValue>
                <fields>
                   <field>
-                     <name>RNG_MIN_REV</name>
+                     <name>MIN_REV</name>
                      <description>Shows the Freescale IP&apos;s Minor revision of the TRNG</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>8</bitWidth>
@@ -1096,7 +1101,7 @@ Devices using this peripheral:
                      </enumeratedValues>
                   </field>
                   <field>
-                     <name>RNG_MAJ_REV</name>
+                     <name>MAJ_REV</name>
                      <description>Shows the Freescale IP&apos;s Major revision of the TRNG</description>
                      <bitOffset>8</bitOffset>
                      <bitWidth>8</bitWidth>
@@ -1109,21 +1114,28 @@ Devices using this peripheral:
                      </enumeratedValues>
                   </field>
                   <field>
-                     <name>RNG_IP_ID</name>
+                     <name>IP_ID</name>
                      <description>Shows the Freescale IP ID</description>
                      <bitOffset>16</bitOffset>
                      <bitWidth>16</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0x0030</name>
+                           <description>ID for TRNG</description>
+                           <value>0b110000</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                </fields>
             </register>
             <register>
                <name>VID2</name>
-               <description>RNG Version ID Register (LS)</description>
+               <description>Version ID Register (LS)</description>
                <addressOffset>0xF4</addressOffset>
                <access>read-only</access>
                <fields>
                   <field>
-                     <name>RNG_CONFIG_OPT</name>
+                     <name>CONFIG_OPT</name>
                      <description>Shows the Freescale IP&apos;s Configuaration options for the TRNG</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>8</bitWidth>
@@ -1136,7 +1148,7 @@ Devices using this peripheral:
                      </enumeratedValues>
                   </field>
                   <field>
-                     <name>RNG_ECO_REV</name>
+                     <name>ECO_REV</name>
                      <description>Shows the Freescale IP&apos;s ECO revision of the TRNG</description>
                      <bitOffset>8</bitOffset>
                      <bitWidth>8</bitWidth>
@@ -1149,7 +1161,7 @@ Devices using this peripheral:
                      </enumeratedValues>
                   </field>
                   <field>
-                     <name>RNG_INTG_OPT</name>
+                     <name>INTG_OPT</name>
                      <description>Shows the Freescale integration options for the TRNG</description>
                      <bitOffset>16</bitOffset>
                      <bitWidth>8</bitWidth>
@@ -1162,7 +1174,7 @@ Devices using this peripheral:
                      </enumeratedValues>
                   </field>
                   <field>
-                     <name>RNG_ERA</name>
+                     <name>ERA</name>
                      <description>Shows the Freescale compile options for the TRNG</description>
                      <bitOffset>24</bitOffset>
                      <bitWidth>8</bitWidth>

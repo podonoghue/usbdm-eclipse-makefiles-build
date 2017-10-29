@@ -104,7 +104,7 @@ resource caused by a violation of the command write sequence or issuing an illeg
                   </field>
                   <field>
                      <name>RDCOLERR</name>
-                     <description>FTFE Read Collision Error Flag \n
+                     <description>FTF Read Collision Error Flag \n
 Indicates that the MCU attempted a read from a flash memory resource that was being manipulated by a flash command</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
@@ -566,7 +566,9 @@ Each FDPROT bit protects 1/8 of the configured Data Flash from program and erase
                <dimIncrement>1</dimIncrement>
                <dimIndex>3,2,1,0</dimIndex>
                <name>XACCH%s</name>
-               <description>Execute-only Access</description>
+               <description>Execute-only Access Registers (high)\n
+The XACC registers define which program flash segments are restricted to data read or execute only or both data and instruction fetches.\n
+The eight XACC registers allow up to 64 restricted segments of equal memory size</description>
                <addressOffset>0x18</addressOffset>
                <size>8</size>
                <access>read-only</access>
@@ -574,17 +576,17 @@ Each FDPROT bit protects 1/8 of the configured Data Flash from program and erase
                <fields>
                   <field>
                      <name>XA</name>
-                     <description>Execute-only access control</description>
+                     <description>Execute Access</description>
                      <bitOffset>0</bitOffset>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Associated segment is accessible in execute mode only (as an instruction fetch)</description>
+                           <description>Accessible in execute mode only (as an instruction fetch)</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Associated segment is accessible as data or in execute mode</description>
+                           <description>Accessible as data or in execute mode</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -596,7 +598,9 @@ Each FDPROT bit protects 1/8 of the configured Data Flash from program and erase
                <dimIncrement>1</dimIncrement>
                <dimIndex>3,2,1,0</dimIndex>
                <name>XACCL%s</name>
-               <description>Execute-only Access</description>
+               <description>Execute-only Access Registers (low)\n
+The XACC registers define which program flash segments are restricted to data read or execute only or both data and instruction fetches.\n
+The eight XACC registers allow up to 64 restricted segments of equal memory size</description>
                <addressOffset>0x1C</addressOffset>
                <size>8</size>
                <access>read-only</access>
@@ -604,17 +608,17 @@ Each FDPROT bit protects 1/8 of the configured Data Flash from program and erase
                <fields>
                   <field>
                      <name>XA</name>
-                     <description>Execute-only access control</description>
+                     <description>Execute Access</description>
                      <bitOffset>0</bitOffset>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Associated segment is accessible in execute mode only (as an instruction fetch)</description>
+                           <description>Accessible in execute mode only (as an instruction fetch)</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Associated segment is accessible as data or in execute mode</description>
+                           <description>Accessible as data or in execute mode</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -626,7 +630,9 @@ Each FDPROT bit protects 1/8 of the configured Data Flash from program and erase
                <dimIncrement>1</dimIncrement>
                <dimIndex>3,2,1,0</dimIndex>
                <name>SACCH%s</name>
-               <description>Supervisor-only Access</description>
+               <description>Supervisor-only Access Registers (high)\n
+The SACC registers define which program flash segments are restricted to supervisor only or user and supervisor access.\n
+The eight SACC registers allow up to 64 restricted segments of equal memory size</description>
                <addressOffset>0x20</addressOffset>
                <size>8</size>
                <access>read-only</access>
@@ -656,7 +662,9 @@ Each FDPROT bit protects 1/8 of the configured Data Flash from program and erase
                <dimIncrement>1</dimIncrement>
                <dimIndex>3,2,1,0</dimIndex>
                <name>SACCL%s</name>
-               <description>Supervisor-only Access</description>
+               <description>Supervisor-only Access Registers (low)\n
+The SACC registers define which program flash segments are restricted to supervisor only or user and supervisor access.\n
+The eight SACC registers allow up to 64 restricted segments of equal memory size</description>
                <addressOffset>0x24</addressOffset>
                <size>8</size>
                <access>read-only</access>
@@ -683,7 +691,8 @@ Each FDPROT bit protects 1/8 of the configured Data Flash from program and erase
             </register>
             <register>
                <name>FACSS</name>
-               <description>Flash Access Segment Size Register</description>
+               <description>Flash Access Segment Size Register\n
+Determines which bits in the address are used to index into the SACC and XACC bitmaps to get the appropriate permission flags</description>
                <addressOffset>0x28</addressOffset>
                <size>8</size>
                <access>read-only</access>
@@ -698,7 +707,8 @@ Each FDPROT bit protects 1/8 of the configured Data Flash from program and erase
             </register>
             <register>
                <name>FACSN</name>
-               <description>Flash Access Segment Number Register</description>
+               <description>Flash Access Segment Number Register\n
+Provides the number of program flash segments that are available for XACC and SACC permissions</description>
                <addressOffset>0x2B</addressOffset>
                <size>8</size>
                <access>read-only</access>
@@ -710,14 +720,24 @@ Each FDPROT bit protects 1/8 of the configured Data Flash from program and erase
                      <bitOffset>0</bitOffset>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b1000000</name>
-                           <description>Program flash memory is divided into 64 segments (256 Kbytes, 512 Kbytes, 1 Mbyte, 2 Mbytes)</description>
-                           <value>0b1000000</value>
+                           <name>0b100000</name>
+                           <description>Program flash memory is divided into 32 segments (64 Kbytes, 128 Kbytes)</description>
+                           <value>0b100000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101000</name>
+                           <description>Program flash memory is divided into 40 segments (160 Kbytes)</description>
+                           <value>0b101000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b110000</name>
                            <description>Program flash memory is divided into 48 segments (768 Kbytes, 1.5 Mbytes)</description>
                            <value>0b110000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1000000</name>
+                           <description>Program flash memory is divided into 64 segments (256 Kbytes, 512 Kbytes, 1 Mbyte, 2 Mbytes)</description>
+                           <value>0b1000000</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>

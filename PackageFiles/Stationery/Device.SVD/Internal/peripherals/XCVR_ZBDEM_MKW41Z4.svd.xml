@@ -1,0 +1,282 @@
+<!--
+Devices using this peripheral: 
+      MKW41Z4
+-->
+      <peripheral>
+         <?sourceFile "XCVR_ZBDEM_MKW41Z4" ?>
+         <name>XCVR_ZBDEM</name>
+         <description>XCVR_ZBDEMOD</description>
+         <groupName>XCVR_ZBDEM</groupName>
+         <headerStructName>XCVR_ZBDEM</headerStructName>
+         <baseAddress>0x4005C480</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x1C</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>CORR_CTRL</name>
+               <description>802.15.4 DEMOD CORRELLATOR CONTROL</description>
+               <addressOffset>0x0</addressOffset>
+               <resetValue>0x482</resetValue>
+               <resetMask>0xFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>CORR_VT</name>
+                     <description>CORR_VT</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>CORR_NVAL</name>
+                     <description>CORR_NVAL</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>MAX_CORR_EN</name>
+                     <description>MAX_CORR_EN</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ZBDEM_CLK_ON</name>
+                     <description>Force 802.15.4 Demodulator Clock On</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Normal Operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Force 802.15.4 Demodulator Clock On (debug purposes only)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RX_MAX_CORR</name>
+                     <description>RX_MAX_CORR</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>RX_MAX_PREAMBLE</name>
+                     <description>RX_MAX_PREAMBLE</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PN_TYPE</name>
+               <description>802.15.4 DEMOD PN TYPE</description>
+               <addressOffset>0x4</addressOffset>
+               <resetValue>0x1</resetValue>
+               <fields>
+                  <field>
+                     <name>PN_TYPE</name>
+                     <description>PN_TYPE</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TX_INV</name>
+                     <description>TX_INV</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PN_CODE</name>
+               <description>802.15.4 DEMOD PN CODE</description>
+               <addressOffset>0x8</addressOffset>
+               <resetValue>0x744AC39B</resetValue>
+               <fields>
+                  <field>
+                     <name>PN_LSB</name>
+                     <description>PN_LSB</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>PN_MSB</name>
+                     <description>PN_MSB</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SYNC_CTRL</name>
+               <description>802.15.4 DEMOD SYMBOL SYNC CONTROL</description>
+               <addressOffset>0xC</addressOffset>
+               <resetValue>0x8</resetValue>
+               <fields>
+                  <field>
+                     <name>SYNC_PER</name>
+                     <description>Symbol Sync Tracking Period</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>TRACK_ENABLE</name>
+                     <description>TRACK_ENABLE</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>symbol timing synchronization tracking disabled in Rx frontend</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>symbol timing synchronization tracking enabled in Rx frontend (default)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CCA_LQI_SRC</name>
+               <description>802.15.4 CCA/LQI SOURCE</description>
+               <addressOffset>0x10</addressOffset>
+               <resetValue>0x4</resetValue>
+               <fields>
+                  <field>
+                     <name>CCA1_FROM_RX_DIG</name>
+                     <description>Selects the Source of CCA1 (Clear Channel Assessment Mode 1) Information Provided to the 802.15.4 Link Layer</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Use the CCA1 information computed internally in the 802.15.4 Demod</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Use the CCA1 information computed by the RX Digital</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LQI_FROM_RX_DIG</name>
+                     <description>Selects the Source of LQI (Link Quality Indicator) Information Provided to the 802.15.4 Link Layer</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Use the LQI information computed internally in the 802.15.4 Demod</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Use the LQI information computed by the RX Digital</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LQI_START_AT_SFD</name>
+                     <description>Select Start Point for LQI Computation</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Start LQI computation at Preamble Detection (similar to previous Freescale 802.15.4 products)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Start LQI computation at SFD (Start of Frame Delimiter) Detection</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FAD_THR</name>
+               <description>FAD CORRELATOR THRESHOLD</description>
+               <addressOffset>0x14</addressOffset>
+               <resetValue>0x82</resetValue>
+               <fields>
+                  <field>
+                     <name>FAD_THR</name>
+                     <description>FAD_THR</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ZBDEM_AFC</name>
+               <description>802.15.4 AFC STATUS</description>
+               <addressOffset>0x18</addressOffset>
+               <resetValue>0x1</resetValue>
+               <resetMask>0xFFFFE0FF</resetMask>
+               <fields>
+                  <field>
+                     <name>AFC_EN</name>
+                     <description>AFC_EN</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>AFC is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>AFC is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DCD_EN</name>
+                     <description>DCD_EN</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>NCD Mode (default)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>DCD Mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>AFC_OUT</name>
+                     <description>AFC_OUT</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>5</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

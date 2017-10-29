@@ -1,0 +1,2394 @@
+<!--
+Devices using this peripheral: 
+      MKW41Z4
+-->
+      <peripheral>
+         <?sourceFile "ZLL_MKW41Z4" ?>
+         <name>ZLL</name>
+         <description>ZLL</description>
+         <groupName>ZLL</groupName>
+         <headerStructName>ZLL</headerStructName>
+         <baseAddress>0x4005D000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x48</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x4C</offset>
+            <size>0x3C</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x8C</offset>
+            <size>0x18</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "16" ?>
+            <offset>0x100</offset>
+            <size>0x100</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>IRQSTS</name>
+               <description>INTERRUPT REQUEST STATUS</description>
+               <addressOffset>0x0</addressOffset>
+               <resetValue>0xF00000</resetValue>
+               <resetMask>0x80F00200</resetMask>
+               <fields>
+                  <field>
+                     <name>SEQIRQ</name>
+                     <description>Sequencer IRQ</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>A Sequencer Interrupt has not occurred</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>A Sequencer Interrupt has occurred</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXIRQ</name>
+                     <description>TX IRQ</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>A TX Interrupt has not occurred</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>A TX Interrupt has occurred</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXIRQ</name>
+                     <description>RX IRQ</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>A RX Interrupt has not occurred</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>A RX Interrupt has occurred</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CCAIRQ</name>
+                     <description>CCA IRQ</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>A CCA Interrupt has not occurred</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>A CCA Interrupt has occurred</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXWTRMRKIRQ</name>
+                     <description>Receive Watermark IRQ</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>A Receive Watermark Interrupt has not occurred</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>A Receive Watermark Interrupt has occurred</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FILTERFAIL_IRQ</name>
+                     <description>Filter Fail IRQ</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>A Filter Fail Interrupt has not occurred</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>A Filter Fail Interrupt has occurred</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PLL_UNLOCK_IRQ</name>
+                     <description>PLL Unlock IRQ</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>A PLL Unlock Interrupt has not occurred</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>A PLL Unlock Interrupt has occurred</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RX_FRM_PEND</name>
+                     <description>RX Frame Pending</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>WAKE_IRQ</name>
+                     <description>WAKE Interrupt Request</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>A Wake Interrupt has not occurred</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>A Wake Interrupt has occurred</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TSM_IRQ</name>
+                     <description>TSM IRQ</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>A TSM Interrupt has not occurred</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>A TSM Interrupt has occurred</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ENH_PKT_STATUS</name>
+                     <description>Enhanced Packet Status</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>The last packet received was neither 4e- nor 2015-compliant</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>The last packet received was 4e- or 2015-compliant (RX_FRAME_FILTER register should be queried for additional status bits)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PI</name>
+                     <description>Poll Indication</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>the received packet was not a data request</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>the received packet was a data request, regardless of whether a Source Address table match occurred, or whether Source Address Management is enabled or not</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SRCADDR</name>
+                     <description>Source Address Match Status</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>CCA</name>
+                     <description>CCA Status</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>IDLE</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>BUSY</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CRCVALID</name>
+                     <description>CRC Valid Status</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Rx FCS != calculated CRC (incorrect)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Rx FCS = calculated CRC (correct)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TMR1IRQ</name>
+                     <description>Timer 1 IRQ</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TMR2IRQ</name>
+                     <description>Timer 2 IRQ</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TMR3IRQ</name>
+                     <description>Timer 3 IRQ</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TMR4IRQ</name>
+                     <description>Timer 4 IRQ</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TMR1MSK</name>
+                     <description>Timer Comperator 1 Interrupt Mask bit</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>allows interrupt when comparator matches event timer count</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Interrupt generation is disabled, but a TMR1IRQ flag can be set</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TMR2MSK</name>
+                     <description>Timer Comperator 2 Interrupt Mask bit</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>allows interrupt when comparator matches event timer count</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Interrupt generation is disabled, but a TMR2IRQ flag can be set</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TMR3MSK</name>
+                     <description>Timer Comperator 3 Interrupt Mask bit</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>allows interrupt when comparator matches event timer count</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Interrupt generation is disabled, but a TMR3IRQ flag can be set</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TMR4MSK</name>
+                     <description>Timer Comperator 4 Interrupt Mask bit</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>allows interrupt when comparator matches event timer count</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Interrupt generation is disabled, but a TMR4IRQ flag can be set</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RX_FRAME_LENGTH</name>
+                     <description>Receive Frame Length</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>7</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PHY_CTRL</name>
+               <description>PHY CONTROL</description>
+               <addressOffset>0x4</addressOffset>
+               <resetValue>0x805FF00</resetValue>
+               <fields>
+                  <field>
+                     <name>XCVSEQ</name>
+                     <description>Zigbee Transceiver Sequence Selector</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>I (IDLE)</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>R (RECEIVE)</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>2</name>
+                           <description>T (TRANSMIT)</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>3</name>
+                           <description>C (CCA)</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>4</name>
+                           <description>TR (TRANSMIT/RECEIVE)</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>5</name>
+                           <description>CCCA (CONTINUOUS CCA)</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>AUTOACK</name>
+                     <description>Auto Acknowledge Enable</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>sequence manager will not follow a receive frame with a Tx Ack frame, under any conditions; the autosequence will terminate after the receive frame</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>sequence manager will follow a receive frame with an automatic hardware-generated Tx Ack frame, assuming other necessary conditions are met</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXACKRQD</name>
+                     <description>Receive Acknowledge Frame required</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>An ordinary receive frame (any type of frame) follows the transmit frame</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>A receive Ack frame is expected to follow the transmit frame (non-Ack frames are rejected)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CCABFRTX</name>
+                     <description>CCA Before TX</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>no CCA required, transmit operation begins immediately</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>at least one CCA measurement is required prior to the transmit operation (see also SLOTTED)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SLOTTED</name>
+                     <description>Slotted Mode</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TMRTRIGEN</name>
+                     <description>Timer2 Trigger Enable</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>programmed sequence initiates immediately upon write to XCVSEQ</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>allow timer TC2 (or TC2&apos;) to initiate a preprogrammed sequence (see XCVSEQ register)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SEQMSK</name>
+                     <description>Sequencer Interrupt Mask</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>allows completion of an autosequence to generate a zigbee interrupt</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Completion of an autosequence will set the SEQIRQ status bit, but a zigbee interrupt is not generated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TXMSK</name>
+                     <description>TX Interrupt Mask</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>allows completion of a TX operation to generate a zigbee interrupt</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Completion of a TX operation will set the TXIRQ status bit, but a zigbee interrupt is not generated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RXMSK</name>
+                     <description>RX Interrupt Mask</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>allows completion of a RX operation to generate a zigbee interrupt</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Completion of a RX operation will set the RXIRQ status bit, but a zigbee interrupt is not generated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CCAMSK</name>
+                     <description>CCA Interrupt Mask</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>allows completion of a CCA operation to generate a zigbee interrupt</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Completion of a CCA operation will set the CCA status bit, but a zigbee interrupt is not generated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RX_WMRK_MSK</name>
+                     <description>RX Watermark Interrupt Mask</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>allows a Received Byte Count match to the RX_WTR_MARK threshold register to generate a zigbee interrupt</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>A Received Byte Count match to the RX_WTR_MARK threshold register will set the RXWTRMRKIRQ status bit, but a zigbee interrupt is not generated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FILTERFAIL_MSK</name>
+                     <description>FilterFail Interrupt Mask</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>allows Packet Processor Filtering Failure to generate a zigbee interrupt</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>A Packet Processor Filtering Failure will set the FILTERFAIL_IRQ status bit, but a zigbee interrupt is not generated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PLL_UNLOCK_MSK</name>
+                     <description>PLL Unlock Interrupt Mask</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>allows PLL unlock event to generate a zigbee interrupt</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>A PLL unlock event will set the PLL_UNLOCK_IRQ status bit, but a zigbee interrupt is not generated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CRC_MSK</name>
+                     <description>CRC Mask</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>sequence manager ignores CRCVALID and considers the receive operation complete after the last octet of the frame has been received</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>sequence manager requires CRCVALID=1 at the end of the received frame in order for the receive operation to complete successfully; if CRCVALID=0, sequence manager will return to preamble-detect mode after the last octet of the frame has been received</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WAKE_MSK</name>
+                     <description>no description available</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Allows a wakeup from DSM to generate a zigbee interrupt</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Wakeup from DSM will set the WAKE_IRQ status bit, but a zigbee interrupt is not generated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TSM_MSK</name>
+                     <description>no description available</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>allows assertion of a TSM interrupt to generate a zigbee interrupt</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Assertion of a TSM interrupt will set the TSM_IRQ status bit, but a zigbee interrupt is not generated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TMR1CMP_EN</name>
+                     <description>Timer 1 Compare Enable</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Don&apos;t allow an Event Timer Match to T1CMP to set TMR1IRQ</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Allow an Event Timer Match to T1CMP to set TMR1IRQ</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TMR2CMP_EN</name>
+                     <description>Timer 2 Compare Enable</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Don&apos;t allow an Event Timer Match to T2CMP or T2PRIMECMP to set TMR2IRQ</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Allow an Event Timer Match to T2CMP or T2PRIMECMP to set TMR2IRQ</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TMR3CMP_EN</name>
+                     <description>Timer 3 Compare Enable</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Don&apos;t allow an Event Timer Match to T3CMP to set TMR3IRQ</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Allow an Event Timer Match to T3CMP to set TMR3IRQ</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TMR4CMP_EN</name>
+                     <description>Timer 4 Compare Enable</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Don&apos;t allow an Event Timer Match to T4CMP to set TMR4IRQ</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Allow an Event Timer Match to T4CMP to set TMR4IRQ</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TC2PRIME_EN</name>
+                     <description>Timer 2 Prime Compare Enable</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Don&apos;t allow a match of the lower 16 bits of Event Timer to T2PRIMECMP to set TMR2IRQ</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Allow a match of the lower 16 bits of Event Timer to T2PRIMECMP to set TMR2IRQ</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PROMISCUOUS</name>
+                     <description>Promiscuous Mode Enable</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>normal mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>all packet filtering except frame length checking (FrameLength&gt;=5 and FrameLength&lt;=127) is bypassed</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CCATYPE</name>
+                     <description>Clear Channel Assessment Type</description>
+                     <bitOffset>27</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>ENERGY DETECT</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>CCA MODE 1</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>2</name>
+                           <description>CCA MODE 2</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>3</name>
+                           <description>CCA MODE 3</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PANCORDNTR0</name>
+                     <description>Device is a PAN Coordinator on PAN0</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TC3TMOUT</name>
+                     <description>TMR3 Timeout Enable</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>TMR3 is a software timer only</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Enable TMR3 to abort Rx or CCCA operations</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TRCV_MSK</name>
+                     <description>Transceiver Global Interrupt Mask</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Enable any unmasked interrupt source to assert zigbee interrupt</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Mask all interrupt sources from asserting zigbee interrupt</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EVENT_TMR</name>
+               <description>EVENT TIMER</description>
+               <addressOffset>0x8</addressOffset>
+               <resetMask>0xF</resetMask>
+               <fields>
+                  <field>
+                     <name>EVENT_TMR_LD</name>
+                     <description>Event Timer Load Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                  </field>
+                  <field>
+                     <name>EVENT_TMR_ADD</name>
+                     <description>Event Timer Add Enable</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                  </field>
+                  <field>
+                     <name>EVENT_TMR_FRAC</name>
+                     <description>Event Timer Fractional Component</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>EVENT_TMR</name>
+                     <description>Event Timer Integer Component</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TIMESTAMP</name>
+               <description>TIMESTAMP</description>
+               <addressOffset>0xC</addressOffset>
+               <access>read-only</access>
+               <resetMask>0xFF000000</resetMask>
+               <fields>
+                  <field>
+                     <name>TIMESTAMP</name>
+                     <description>Timestamp</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>T1CMP</name>
+               <description>T1 COMPARE</description>
+               <addressOffset>0x10</addressOffset>
+               <resetValue>0xFFFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>T1CMP</name>
+                     <description>TMR1 Compare Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>T2CMP</name>
+               <description>T2 COMPARE</description>
+               <addressOffset>0x14</addressOffset>
+               <resetValue>0xFFFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>T2CMP</name>
+                     <description>TMR2 Compare Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>T2PRIMECMP</name>
+               <description>T2 PRIME COMPARE</description>
+               <addressOffset>0x18</addressOffset>
+               <resetValue>0xFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>T2PRIMECMP</name>
+                     <description>TMR2 Prime Compare Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>T3CMP</name>
+               <description>T3 COMPARE</description>
+               <addressOffset>0x1C</addressOffset>
+               <resetValue>0xFFFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>T3CMP</name>
+                     <description>TMR3 Compare Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>T4CMP</name>
+               <description>T4 COMPARE</description>
+               <addressOffset>0x20</addressOffset>
+               <resetValue>0xFFFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>T4CMP</name>
+                     <description>TMR4 Compare Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PA_PWR</name>
+               <description>PA POWER</description>
+               <addressOffset>0x24</addressOffset>
+               <fields>
+                  <field>
+                     <name>PA_PWR</name>
+                     <description>PA Power</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CHANNEL_NUM0</name>
+               <description>CHANNEL NUMBER 0</description>
+               <addressOffset>0x28</addressOffset>
+               <resetValue>0x12</resetValue>
+               <fields>
+                  <field>
+                     <name>CHANNEL_NUM0</name>
+                     <description>Channel Number for PAN0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LQI_AND_RSSI</name>
+               <description>LQI AND RSSI</description>
+               <addressOffset>0x2C</addressOffset>
+               <access>read-only</access>
+               <resetMask>0xFF000000</resetMask>
+               <fields>
+                  <field>
+                     <name>LQI_VALUE</name>
+                     <description>LQI Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>RSSI</name>
+                     <description>RSSI Value</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>CCA1_ED_FNL</name>
+                     <description>Final Result for CCA Mode 1 and Energy Detect</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MACSHORTADDRS0</name>
+               <description>MAC SHORT ADDRESS 0</description>
+               <addressOffset>0x30</addressOffset>
+               <resetValue>0xFFFFFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>MACPANID0</name>
+                     <description>MAC PAN ID for PAN0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>MACSHORTADDRS0</name>
+                     <description>MAC SHORT ADDRESS FOR PAN0</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MACLONGADDRS0_LSB</name>
+               <description>MAC LONG ADDRESS 0 LSB</description>
+               <addressOffset>0x34</addressOffset>
+               <resetValue>0xFFFFFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>MACLONGADDRS0_LSB</name>
+                     <description>MAC LONG ADDRESS for PAN0 LSB</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MACLONGADDRS0_MSB</name>
+               <description>MAC LONG ADDRESS 0 MSB</description>
+               <addressOffset>0x38</addressOffset>
+               <resetValue>0xFFFFFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>MACLONGADDRS0_MSB</name>
+                     <description>MAC LONG ADDRESS for PAN0 MSB</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RX_FRAME_FILTER</name>
+               <description>RECEIVE FRAME FILTER</description>
+               <addressOffset>0x3C</addressOffset>
+               <resetValue>0x30F</resetValue>
+               <resetMask>0xFF40FFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>BEACON_FT</name>
+                     <description>Beacon Frame Type Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>reject all Beacon frames</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Beacon frame type enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DATA_FT</name>
+                     <description>Data Frame Type Enable</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>reject all Beacon frames</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Data frame type enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ACK_FT</name>
+                     <description>Ack Frame Type Enable</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>reject all Acknowledge frames</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Acknowledge frame type enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CMD_FT</name>
+                     <description>MAC Command Frame Type Enable</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>reject all MAC Command frames</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>MAC Command frame type enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LLDN_FT</name>
+                     <description>LLDN Frame Type Enable</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>reject all LLDN frames</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>LLDN frame type enabled (Frame Type 4)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MULTIPURPOSE_FT</name>
+                     <description>Multipurpose Frame Type Enable</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>reject all Multipurpose frames</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Multipurpose frame type enabled (Frame Type 5)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>NS_FT</name>
+                     <description>&quot;Not Specified&quot; Frame Type Enable</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>reject all &quot;Not Specified&quot; frames</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Not-specified (reserved) frame type enabled. Applies to Frame Type 6. No packet filtering is performed, except for frame length checking (FrameLength&gt;=5 and FrameLength&lt;=127). No AUTOACK is transmitted for this Frame Type</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>EXTENDED_FT</name>
+                     <description>Extended Frame Type Enable</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>reject all Extended frames</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Extended frame type enabled (Frame Type 7)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FRM_VER_FILTER</name>
+                     <description>Frame Version selector</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>ACTIVE_PROMISCUOUS</name>
+                     <description>Active Promiscuous</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Provide Data Indication on all received packets under the same rules which apply in PROMISCUOUS mode, however acknowledge those packets under rules which apply in non-PROMISCUOUS mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>EXTENDED_FCS_CHK</name>
+                     <description>Verify FCS on Frame Type Extended</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Packet Processor will not check FCS for Frame Type EXTENDED (default)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Packet Processor will check FCS at end-of-packet based on packet length derived from PHR, for Frame Type EXTENDED</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FV2_BEACON_RECD</name>
+                     <description>Frame Version 2 Beacon Packet Received</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>The last packet received was not Frame Type Beacon with Frame Version 2</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>The last packet received was Frame Type Beacon with Frame Version 2, and FRM_VER_FILTER[2]=1 to allow such packets</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FV2_DATA_RECD</name>
+                     <description>Frame Version 2 Data Packet Received</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>The last packet received was not Frame Type Data with Frame Version 2</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>The last packet received was Frame Type Data with Frame Version 2, and FRM_VER_FILTER[2]=1 to allow such packets</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FV2_ACK_RECD</name>
+                     <description>Frame Version 2 Acknowledge Packet Received</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>The last packet received was not Frame Type Ack with Frame Version 2</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>The last packet received was Frame Type Ack with Frame Version 2, and FRM_VER_FILTER[2]=1 to allow such packets</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FV2_CMD_RECD</name>
+                     <description>Frame Version 2 MAC Command Packet Received</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>The last packet received was not Frame Type MAC Command with Frame Version 2</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>The last packet received was Frame Type MAC Command with Frame Version 2, and FRM_VER_FILTER[2]=1 to allow such packets</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LLDN_RECD</name>
+                     <description>LLDN Packet Received</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>The last packet received was not Frame Type LLDN</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>The last packet received was Frame Type LLDN, and LLDN_FT=1 to allow such packets</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MULTIPURPOSE_RECD</name>
+                     <description>Multipurpose Packet Received</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>last packet received was not Frame Type MULTIPURPOSE</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>The last packet received was Frame Type MULTIPURPOSE, and MULTIPURPOSE_FT=1 to allow such packets</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>EXTENDED_RECD</name>
+                     <description>Extended Packet Received</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>The last packet received was not Frame Type EXTENDED</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>The last packet received was Frame Type EXTENDED, and EXTENDED_FT=1 to allow such packets</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CCA_LQI_CTRL</name>
+               <description>CCA AND LQI CONTROL</description>
+               <addressOffset>0x40</addressOffset>
+               <resetValue>0x866004B</resetValue>
+               <fields>
+                  <field>
+                     <name>CCA1_THRESH</name>
+                     <description>CCA Mode 1 Threshold</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>LQI_OFFSET_COMP</name>
+                     <description>LQI Offset Compensation</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>CCA3_AND_NOT_OR</name>
+                     <description>CCA Mode 3 AND not OR</description>
+                     <bitOffset>27</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>CCA1 or CCA2</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>CCA1 and CCA2</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CCA2_CTRL</name>
+               <description>CCA2 CONTROL</description>
+               <addressOffset>0x44</addressOffset>
+               <resetValue>0x8230</resetValue>
+               <resetMask>0xFFFFFFF0</resetMask>
+               <fields>
+                  <field>
+                     <name>CCA2_NUM_CORR_PEAKS</name>
+                     <description>CCA Mode 2 Number of Correlation Peaks Detected</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>CCA2_MIN_NUM_CORR_TH</name>
+                     <description>CCA Mode 2 Threshold Number of Correlation Peaks</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>CCA2_CORR_THRESH</name>
+                     <description>CCA Mode 2 Correlation Threshold</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DSM_CTRL</name>
+               <description>DSM CONTROL</description>
+               <addressOffset>0x4C</addressOffset>
+               <fields>
+                  <field>
+                     <name>ZIGBEE_SLEEP_EN</name>
+                     <description>Zigbee sleep enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>BSM_CTRL</name>
+               <description>BSM CONTROL</description>
+               <addressOffset>0x50</addressOffset>
+               <fields>
+                  <field>
+                     <name>BSM_EN</name>
+                     <description>BSM Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Zigbee Bit Streaming Mode Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Zigbee Bit Streaming Mode Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MACSHORTADDRS1</name>
+               <description>MAC SHORT ADDRESS FOR PAN1</description>
+               <addressOffset>0x54</addressOffset>
+               <resetValue>0xFFFFFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>MACPANID1</name>
+                     <description>MAC PAN ID for PAN1</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>MACSHORTADDRS1</name>
+                     <description>MAC SHORT ADDRESS for PAN1</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MACLONGADDRS1_LSB</name>
+               <description>MAC LONG ADDRESS 1 LSB</description>
+               <addressOffset>0x58</addressOffset>
+               <resetValue>0xFFFFFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>MACLONGADDRS1_LSB</name>
+                     <description>MAC LONG ADDRESS for PAN1 LSB</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MACLONGADDRS1_MSB</name>
+               <description>MAC LONG ADDRESS 1 MSB</description>
+               <addressOffset>0x5C</addressOffset>
+               <resetValue>0xFFFFFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>MACLONGADDRS1_MSB</name>
+                     <description>MAC LONG ADDRESS for PAN1 MSB</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DUAL_PAN_CTRL</name>
+               <description>DUAL PAN CONTROL</description>
+               <addressOffset>0x60</addressOffset>
+               <resetMask>0xFF00FFF7</resetMask>
+               <fields>
+                  <field>
+                     <name>ACTIVE_NETWORK</name>
+                     <description>Active Network Selector</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Select PAN0</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Select PAN1</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DUAL_PAN_AUTO</name>
+                     <description>Activates automatic Dual PAN operating mode</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PANCORDNTR1</name>
+                     <description>Device is a PAN Coordinator on PAN1</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CURRENT_NETWORK</name>
+                     <description>Indicates which PAN is currently selected by hardware</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>PAN0 is selected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>PAN1 is selected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ZB_DP_CHAN_OVRD_EN</name>
+                     <description>Dual PAN Channel Override Enable</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ZB_DP_CHAN_OVRD_SEL</name>
+                     <description>Dual PAN Channel Override Selector</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DUAL_PAN_DWELL</name>
+                     <description>Dual PAN Channel Frequency Dwell Time</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>DUAL_PAN_REMAIN</name>
+                     <description>Time Remaining before next PAN switch in auto Dual PAN mode</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>6</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>RECD_ON_PAN0</name>
+                     <description>Last Packet was Received on PAN0</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>RECD_ON_PAN1</name>
+                     <description>Last Packet was Received on PAN1</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CHANNEL_NUM1</name>
+               <description>CHANNEL NUMBER 1</description>
+               <addressOffset>0x64</addressOffset>
+               <resetValue>0x7F</resetValue>
+               <fields>
+                  <field>
+                     <name>CHANNEL_NUM1</name>
+                     <description>Channel Number for PAN1</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SAM_CTRL</name>
+               <description>SAM CONTROL</description>
+               <addressOffset>0x68</addressOffset>
+               <resetValue>0x80804000</resetValue>
+               <fields>
+                  <field>
+                     <name>SAP0_EN</name>
+                     <description>Enables SAP0 Partition of the SAM Table</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Disables SAP0 Partition</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Enables SAP0 Partition</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SAA0_EN</name>
+                     <description>Enables SAA0 Partition of the SAM Table</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Disables SAA0 Partition</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Enables SAA0 Partition</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SAP1_EN</name>
+                     <description>Enables SAP1 Partition of the SAM Table</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Disables SAP1 Partition</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Enables SAP1 Partition</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SAA1_EN</name>
+                     <description>Enables SAA1 Partition of the SAM Table</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Disables SAA1 Partition</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Enables SAA1 Partition</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SAA0_START</name>
+                     <description>First Index of SAA0 partition</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>SAP1_START</name>
+                     <description>First Index of SAP1 partition</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>SAA1_START</name>
+                     <description>First Index of SAA1 partition</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SAM_TABLE</name>
+               <description>SOURCE ADDRESS MANAGEMENT TABLE</description>
+               <addressOffset>0x6C</addressOffset>
+               <resetMask>0x4C00007F</resetMask>
+               <fields>
+                  <field>
+                     <name>SAM_INDEX</name>
+                     <description>Contains the SAM table index to be enabled or invalidated</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>SAM_INDEX_WR</name>
+                     <description>Enables SAM Table Contents to be updated</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                  </field>
+                  <field>
+                     <name>SAM_CHECKSUM</name>
+                     <description>Software-computed source address checksum, to be installed into a table index</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>SAM_INDEX_INV</name>
+                     <description>Invalidate the SAM table index selected by SAM_INDEX</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                  </field>
+                  <field>
+                     <name>SAM_INDEX_EN</name>
+                     <description>Enable the SAM table index selected by SAM_INDEX</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                  </field>
+                  <field>
+                     <name>ACK_FRM_PND</name>
+                     <description>State of AutoTxAck FramePending field when SAM Accelleration is Disabled</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ACK_FRM_PND_CTRL</name>
+                     <description>Manual Control for AutoTxAck FramePending field</description>
+                     <bitOffset>27</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>the FramePending field of the Frame Control Field of the next automatic TX acknowledge packet is determined by hardware</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>the FramePending field of the Frame Control Field of the next automatic TX acknowledge packet tracks ACK_FRM_PEND</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FIND_FREE_IDX</name>
+                     <description>Find First Free Index</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                  </field>
+                  <field>
+                     <name>INVALIDATE_ALL</name>
+                     <description>Invalidate Entire SAM Table</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                  </field>
+                  <field>
+                     <name>SAM_BUSY</name>
+                     <description>SAM Table Update Status Bit</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SAM_MATCH</name>
+               <description>SOURCE ADDRESS MANAGEMENT MATCH</description>
+               <addressOffset>0x70</addressOffset>
+               <access>read-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>SAP0_MATCH</name>
+                     <description>Index in the SAP0 Partition of the SAM Table corresponding to the first checksum match</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>SAP0_ADDR_PRESENT</name>
+                     <description>A Checksum Match is Present in the SAP0 Partition of the SAM Table</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SAA0_MATCH</name>
+                     <description>Index in the SAA0 Partition of the SAM Table corresponding to the first checksum match</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>SAA0_ADDR_ABSENT</name>
+                     <description>A Checksum Match is Absent in the SAA0 Partition of the SAM Table</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SAP1_MATCH</name>
+                     <description>Index in the SAP1 Partition of the SAM Table corresponding to the first checksum match</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>SAP1_ADDR_PRESENT</name>
+                     <description>A Checksum Match is Present in the SAP1 Partition of the SAM Table</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SAA1_MATCH</name>
+                     <description>Index in the SAA1 Partition of the SAM Table corresponding to the first checksum match</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>SAA1_ADDR_ABSENT</name>
+                     <description>A Checksum Match is Absent in the SAP1 Partition of the SAM Table</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SAM_FREE_IDX</name>
+               <description>SAM FREE INDEX</description>
+               <addressOffset>0x74</addressOffset>
+               <access>read-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>SAP0_1ST_FREE_IDX</name>
+                     <description>First non-enabled (invalid) index in the SAP0 partition</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>SAA0_1ST_FREE_IDX</name>
+                     <description>First non-enabled (invalid) index in the SAA0 partition</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>SAP1_1ST_FREE_IDX</name>
+                     <description>First non-enabled (invalid) index in the SAP1 partition</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>SAA1_1ST_FREE_IDX</name>
+                     <description>First non-enabled (invalid) index in the SAA1 partition</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SEQ_CTRL_STS</name>
+               <description>SEQUENCE CONTROL AND STATUS</description>
+               <addressOffset>0x78</addressOffset>
+               <resetValue>0x8</resetValue>
+               <resetMask>0xF8C000FF</resetMask>
+               <fields>
+                  <field>
+                     <name>CLR_NEW_SEQ_INHIBIT</name>
+                     <description>Overrides the automatic hardware locking of the programmed XCVSEQ while an autosequence is underway</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EVENT_TMR_DO_NOT_LATCH</name>
+                     <description>Overrides the automatic hardware latching of the Event Timer</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>LATCH_PREAMBLE</name>
+                     <description>Stickiness Control for Preamble Detection</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Don&apos;t make PREAMBLE_DET and SFD_DET bits of PHY_STS (SEQ_STATE) Register &quot;sticky&quot;, i.e, these status bits reflect the realtime, dynamic state of preamble_detect and sfd_detect</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Make PREAMBLE_DET and SFD_DET bits of PHY_STS (SEQ_STATE) Register &quot;sticky&quot;, i.e.,occurrences of preamble and SFD detection are latched and held until the start of the next autosequence</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>NO_RX_RECYCLE</name>
+                     <description>Disable Automatic RX Sequence Recycling</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>FORCE_CRC_ERROR</name>
+                     <description>Induce a CRC Error in Transmitted Packets</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Force the next transmitted packet to have a CRC error</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CONTINUOUS_EN</name>
+                     <description>Enable Continuous TX or RX Mode</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Continuous TX or RX mode is enabled (depending on XCVSEQ setting)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>XCVSEQ_ACTUAL</name>
+                     <description>Indicates the programmed sequence that has been recognized by the ZSM Sequence Manager</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>SEQ_IDLE</name>
+                     <description>ZSM Sequence Idle Indicator</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>NEW_SEQ_INHIBIT</name>
+                     <description>New Sequence Inhibit</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>RX_TIMEOUT_PENDING</name>
+                     <description>Indicates a TMR3 RX Timeout is Pending</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>RX_MODE</name>
+                     <description>RX Operation in Progress</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>TMR2_SEQ_TRIG_ARMED</name>
+                     <description>indicates that TMR2 has been programmed and is armed to trigger a new autosequence</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>SEQ_T_STATUS</name>
+                     <description>Status of the just-completed or ongoing Sequence T or Sequence TR</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>6</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>SW_ABORTED</name>
+                     <description>Autosequence has terminated due to a Software abort</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>TC3_ABORTED</name>
+                     <description>autosequence has terminated due to an TMR3 timeout</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>PLL_ABORTED</name>
+                     <description>Autosequence has terminated due to an PLL unlock event</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ACKDELAY</name>
+               <description>ACK DELAY</description>
+               <addressOffset>0x7C</addressOffset>
+               <resetValue>0x7</resetValue>
+               <fields>
+                  <field>
+                     <name>ACKDELAY</name>
+                     <description>ACK Delay</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>TXDELAY</name>
+                     <description>TX Delay</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FILTERFAIL_CODE</name>
+               <description>FILTER FAIL CODE</description>
+               <addressOffset>0x80</addressOffset>
+               <resetMask>0xFFFFFC00</resetMask>
+               <fields>
+                  <field>
+                     <name>FILTERFAIL_CODE</name>
+                     <description>Filter Fail Code</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>FILTERFAIL_PAN_SEL</name>
+                     <description>PAN Selector for Filter Fail Code</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>FILTERFAIL_CODE[9:0] will report the FILTERFAIL status of PAN0</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>FILTERFAIL_CODE[9:0] will report the FILTERFAIL status of PAN1</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RX_WTR_MARK</name>
+               <description>RECEIVE WATER MARK</description>
+               <addressOffset>0x84</addressOffset>
+               <resetValue>0xFF</resetValue>
+               <fields>
+                  <field>
+                     <name>RX_WTR_MARK</name>
+                     <description>RECEIVE WATER MARK</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SLOT_PRELOAD</name>
+               <description>SLOT PRELOAD</description>
+               <addressOffset>0x8C</addressOffset>
+               <resetValue>0x74</resetValue>
+               <fields>
+                  <field>
+                     <name>SLOT_PRELOAD</name>
+                     <description>Slotted Mode Preload</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SEQ_STATE</name>
+               <description>802.15.4 SEQUENCE STATE</description>
+               <addressOffset>0x90</addressOffset>
+               <access>read-only</access>
+               <resetMask>0xC000C0E0</resetMask>
+               <fields>
+                  <field>
+                     <name>SEQ_STATE</name>
+                     <description>ZSM Sequence State</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>PREAMBLE_DET</name>
+                     <description>Preamble Detected</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SFD_DET</name>
+                     <description>SFD Detected</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>FILTERFAIL_FLAG_SEL</name>
+                     <description>Consolidated Filter Fail Flag</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CRCVALID</name>
+                     <description>CRC Valid Indicator</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Rx FCS != calculated CRC (incorrect)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Rx FCS = calculated CRC (correct)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PLL_ABORT</name>
+                     <description>Raw PLL Abort Signal</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PLL_ABORTED</name>
+                     <description>Autosequence has terminated due to an PLL unlock event</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RX_BYTE_COUNT</name>
+                     <description>Realtime Received Byte Count</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>CCCA_BUSY_CNT</name>
+                     <description>Number of CCA Measurements resulting in Busy Channel</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TMR_PRESCALE</name>
+               <description>TIMER PRESCALER</description>
+               <addressOffset>0x94</addressOffset>
+               <resetValue>0x5</resetValue>
+               <fields>
+                  <field>
+                     <name>TMR_PRESCALE</name>
+                     <description>Timer Prescaler</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>010</name>
+                           <description>500kHz (33.55 S)</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>011</name>
+                           <description>250kHz (67.11 S)</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>100</name>
+                           <description>125kHz (134.22 S)</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>101</name>
+                           <description>62.5kHz (268.44 S) -- default</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>110</name>
+                           <description>31.25kHz (536.87 S)</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>111</name>
+                           <description>15.625kHz (1073.74 S)</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LENIENCY_LSB</name>
+               <description>LENIENCY LSB</description>
+               <addressOffset>0x98</addressOffset>
+               <fields>
+                  <field>
+                     <name>LENIENCY_LSB</name>
+                     <description>Leniency LSB Register</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LENIENCY_MSB</name>
+               <description>LENIENCY MSB</description>
+               <addressOffset>0x9C</addressOffset>
+               <fields>
+                  <field>
+                     <name>LENIENCY_MSB</name>
+                     <description>Leniency MSB Register</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PART_ID</name>
+               <description>PART ID</description>
+               <addressOffset>0xA0</addressOffset>
+               <access>read-only</access>
+               <resetValue>0x2</resetValue>
+               <fields>
+                  <field>
+                     <name>PART_ID</name>
+                     <description>802.15.4 Part ID</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>64</dim>
+               <dimIncrement>2</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63</dimIndex>
+               <name>PKT_BUFFER_TX%s</name>
+               <description>Packet Buffer TX</description>
+               <addressOffset>0x100</addressOffset>
+               <size>16</size>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>PKT_BUFFER_TX</name>
+                     <description>Packet Buffer Entry</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>64</dim>
+               <dimIncrement>2</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63</dimIndex>
+               <name>PKT_BUFFER_RX%s</name>
+               <description>Packet Buffer RX</description>
+               <addressOffset>0x180</addressOffset>
+               <size>16</size>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>PKT_BUFFER_RX</name>
+                     <description>Packet Buffer Entry</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

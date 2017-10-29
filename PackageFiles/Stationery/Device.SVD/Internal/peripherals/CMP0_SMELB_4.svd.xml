@@ -220,12 +220,12 @@ Controls availability of the comparator output on the associated CMPO output pin
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Not selected</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Selected</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -357,12 +357,12 @@ Controls availability of the comparator output on the associated CMPO output pin
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Vin1 is reference Vin</description>
+                           <description>Vin1 (usually Vref)</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Vin2 is reference Vin</description>
+                           <description>Vin2 (usually Vdd)</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -437,7 +437,7 @@ Controls availability of the comparator output on the associated CMPO output pin
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b111</name>
-                           <description>IN7</description>
+                           <description>6b DAC0 Reference</description>
                            <value>0b111</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -453,36 +453,19 @@ impedance state</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>MMUX is disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>MMUX is enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>PEN</name>
-                     <description>PMUX Enable
+                  <field derivedFrom="MEN" > <name>PEN</name> <description>PMUX Enable
 This bit is used to enable positive MUX. When the PMUX is disabled, the PMUX output is in a high
-impedance state</description>
-                     <bitOffset>7</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>PMUX is disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>PMUX is enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+impedance state</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
          </registers>

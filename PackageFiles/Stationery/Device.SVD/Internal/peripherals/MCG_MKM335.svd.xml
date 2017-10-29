@@ -71,12 +71,12 @@ Enables the internal reference clock for use as MCGIRCLK</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>MCGIRCLK disabled</description>
+                           <description>MCGIRCLK inactive</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>MCGIRCLK enabled</description>
+                           <description>MCGIRCLK active</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -318,7 +318,7 @@ The LOCRE0 only has an affect when CME0 is set</description>
                <description>Control 3 Register</description>
                <addressOffset>0x2</addressOffset>
                <size>8</size>
-               <resetMask>0xFF</resetMask>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>SCTRIM</name>

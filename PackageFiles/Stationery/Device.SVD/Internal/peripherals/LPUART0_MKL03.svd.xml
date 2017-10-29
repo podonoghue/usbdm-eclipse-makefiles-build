@@ -28,6 +28,7 @@ Devices using this peripheral:
                <name>BAUD</name>
                <description>Baud Rate Register</description>
                <addressOffset>0x0</addressOffset>
+               <resetValue>0xF000004</resetValue>
                <fields>
                   <field>
                      <name>SBR</name>

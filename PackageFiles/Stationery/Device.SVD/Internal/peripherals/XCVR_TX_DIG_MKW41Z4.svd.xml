@@ -1,0 +1,683 @@
+<!--
+Devices using this peripheral: 
+      MKW41Z4
+-->
+      <peripheral>
+         <?sourceFile "XCVR_TX_DIG_MKW41Z4" ?>
+         <name>XCVR_TX_DIG</name>
+         <description>XCVR_TX_DIG</description>
+         <groupName>XCVR_TX_DIG</groupName>
+         <headerStructName>XCVR_TX_DIG</headerStructName>
+         <baseAddress>0x4005C200</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x24</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>CTRL</name>
+               <description>TX Digital Control</description>
+               <addressOffset>0x0</addressOffset>
+               <resetValue>0x140</resetValue>
+               <fields>
+                  <field>
+                     <name>RADIO_DFT_MODE</name>
+                     <description>Radio DFT Modes</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0000</name>
+                           <description>Normal Radio Operation, DFT not engaged</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0001</name>
+                           <description>Carrier Frequency Only</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0010</name>
+                           <description>Pattern Register GFSK</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0011</name>
+                           <description>LFSR GFSK</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0100</name>
+                           <description>Pattern Register FSK</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0101</name>
+                           <description>LFSR FSK</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0110</name>
+                           <description>Pattern Register O-QPSK</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0111</name>
+                           <description>LFSR O-QPSK</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1000</name>
+                           <description>LFSR 802.15.4 Symbols</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1001</name>
+                           <description>PLL Modulation from RAM</description>
+                           <value>0b1001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1010</name>
+                           <description>PLL Coarse Tune BIST</description>
+                           <value>0b1010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1011</name>
+                           <description>PLL Frequency Synthesizer BIST</description>
+                           <value>0b1011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1100</name>
+                           <description>High Port DAC BIST</description>
+                           <value>0b1100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1101</name>
+                           <description>VCO Frequency Meter</description>
+                           <value>0b1101</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LFSR_LENGTH</name>
+                     <description>LFSR Length</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>000</name>
+                           <description>LFSR 9, tap mask 100010000</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>001</name>
+                           <description>LFSR 10, tap mask 1001000000</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>010</name>
+                           <description>LFSR 11, tap mask 11101000000</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>011</name>
+                           <description>LFSR 13, tap mask 1101100000000</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>100</name>
+                           <description>LFSR 15, tap mask 111010000000000</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>101</name>
+                           <description>LFSR 17, tap mask 11110000000000000</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LFSR_EN</name>
+                     <description>LFSR Enable</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DFT_CLK_SEL</name>
+                     <description>DFT Clock Selection</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>000</name>
+                           <description>62.5 kHz</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>001</name>
+                           <description>125 kHz</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>010</name>
+                           <description>250 kHz</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>011</name>
+                           <description>500 kHz</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>100</name>
+                           <description>1 MHz</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>101</name>
+                           <description>2 MHz</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>110</name>
+                           <description>4 MHz</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>111</name>
+                           <description>RF OSC Clock</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TX_DFT_EN</name>
+                     <description>DFT Modulation Enable</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SOC_TEST_SEL</name>
+                     <description>Radio Clock Selector for SoC RF Clock Tests</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>00</name>
+                           <description>No Clock Selected</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01</name>
+                           <description>PLL Sigma Delta Clock, divided by 2</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10</name>
+                           <description>Auxiliary PLL Clock, divided by 2</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>11</name>
+                           <description>RF Ref Osc clock, divided by 2</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TX_CAPTURE_POL</name>
+                     <description>Polarity of the Input Data for the Transmitter</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>FREQ_WORD_ADJ</name>
+                     <description>Frequency Word Adjustment</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DATA_PADDING</name>
+               <description>TX Data Padding</description>
+               <addressOffset>0x4</addressOffset>
+               <resetValue>0x7FFF55AA</resetValue>
+               <fields>
+                  <field>
+                     <name>DATA_PADDING_PAT_0</name>
+                     <description>Data Padding Pattern 0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>DATA_PADDING_PAT_1</name>
+                     <description>Data Padding Pattern 1</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>DFT_LFSR_OUT</name>
+                     <description>LFSR Output</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>15</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>LRM</name>
+                     <description>LFSR Reset Mask</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>GFSK_CTRL</name>
+               <description>TX GFSK Modulator Control</description>
+               <addressOffset>0x8</addressOffset>
+               <resetValue>0x3014000</resetValue>
+               <fields>
+                  <field>
+                     <name>GFSK_MULTIPLY_TABLE_MANUAL</name>
+                     <description>Manual GFSK Multiply Lookup Table Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>GFSK_MI</name>
+                     <description>GFSK Modulation Index</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>00</name>
+                           <description>0.32</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01</name>
+                           <description>0.50</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10</name>
+                           <description>0.70</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>11</name>
+                           <description>1.00</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>GFSK_MLD</name>
+                     <description>Disable GFSK Multiply Lookup Table</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>GFSK_FLD</name>
+                     <description>Disable GFSK Filter Lookup Table</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>GFSK_MOD_INDEX_SCALING</name>
+                     <description>GFSK Modulation Index Scaling Factor</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>000</name>
+                           <description>1</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>001</name>
+                           <description>1 + 1/32</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>010</name>
+                           <description>1 + 1/16</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>011</name>
+                           <description>1 + 1/8</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>100</name>
+                           <description>1 - 1/32</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>101</name>
+                           <description>1 - 1/16</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>110</name>
+                           <description>1 - 1/8</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TX_IMAGE_FILTER_OVRD_EN</name>
+                     <description>TX Image Filter Override Enable</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TX_IMAGE_FILTER_0_OVRD</name>
+                     <description>TX Image Filter 0 Override Control</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TX_IMAGE_FILTER_1_OVRD</name>
+                     <description>TX Image Filter 1 Override Control</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TX_IMAGE_FILTER_2_OVRD</name>
+                     <description>TX Image Filter 2 Override Control</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>GFSK_COEFF2</name>
+               <description>TX GFSK Filter Coefficients 2</description>
+               <addressOffset>0xC</addressOffset>
+               <resetValue>0xC0630401</resetValue>
+               <fields>
+                  <field>
+                     <name>GFSK_FILTER_COEFF_MANUAL2</name>
+                     <description>GFSK Manual Filter Coefficients[63:32]</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>GFSK_COEFF1</name>
+               <description>TX GFSK Filter Coefficients 1</description>
+               <addressOffset>0x10</addressOffset>
+               <resetValue>0xBB29960D</resetValue>
+               <fields>
+                  <field>
+                     <name>GFSK_FILTER_COEFF_MANUAL1</name>
+                     <description>GFSK Manual Filter Coefficient [31:0]</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FSK_SCALE</name>
+               <description>TX FSK Modulation Levels</description>
+               <addressOffset>0x14</addressOffset>
+               <resetValue>0x8001800</resetValue>
+               <fields>
+                  <field>
+                     <name>FSK_MODULATION_SCALE_0</name>
+                     <description>FSK Modulation Scale for a data 0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>13</bitWidth>
+                  </field>
+                  <field>
+                     <name>FSK_MODULATION_SCALE_1</name>
+                     <description>FSK Modulation Scale for a data 1</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>13</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DFT_PATTERN</name>
+               <description>TX DFT Modulation Pattern</description>
+               <addressOffset>0x18</addressOffset>
+               <fields>
+                  <field>
+                     <name>DFT_MOD_PATTERN</name>
+                     <description>DFT Modulation Pattern</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RF_DFT_BIST_1</name>
+               <description>TX DFT Control 1</description>
+               <addressOffset>0x1C</addressOffset>
+               <fields>
+                  <field>
+                     <name>CTUNE_BIST_GO</name>
+                     <description>Start the Coarse Tune BIST</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CTUNE_BIST_FINISHED</name>
+                     <description>Coarse Tune BIST has finished Tuning all Channels</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>CTUNE_BIST_RESULT</name>
+                     <description>Coarse Tune BIST Result</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>CTUNE_BIST_THRSHLD</name>
+                     <description>Maximum Difference Threshold for Coarse Tune BIST</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>CTUNE_MAX_DIFF</name>
+                     <description>Maximum Frequency Count Difference found by the Coarse Tune BIST</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>CTUNE_MAX_DIFF_CH</name>
+                     <description>Maximum Frequency Count Difference Radio Channel</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>7</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>PA_AM_MOD_FREQ</name>
+                     <description>RF Power Amplifier Amplitude Modulation Frequency</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>000</name>
+                           <description>4 MHz</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>001</name>
+                           <description>2 MHz</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>010</name>
+                           <description>1 MHz</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>011</name>
+                           <description>500 kHz</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>100</name>
+                           <description>250 kHz</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>101</name>
+                           <description>125 kHz</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>110</name>
+                           <description>62.5 kHz</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PA_AM_MOD_ENTRIES</name>
+                     <description>RF Power Amplifier Amplitude Modulation Table Entries</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>001</name>
+                           <description>2 entries</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>010</name>
+                           <description>3 entries</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>011</name>
+                           <description>4 entries</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>100</name>
+                           <description>5 entries</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>101</name>
+                           <description>6 entries</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>110</name>
+                           <description>7 entries</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>111</name>
+                           <description>8 entries</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PA_AM_MOD_EN</name>
+                     <description>RF Power Amplifier Amplitude Modulation Enable</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RF_DFT_BIST_2</name>
+               <description>TX DFT Control 2</description>
+               <addressOffset>0x20</addressOffset>
+               <fields>
+                  <field>
+                     <name>SYN_BIST_GO</name>
+                     <description>Start the PLL Frequency Synthesizer BIST</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SYN_BIST_FINISHED</name>
+                     <description>PLL Frequency Synthesizer BIST has finished trying to lock to Radio Channels</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>SYN_BIST_RESULT</name>
+                     <description>PLL Frequency Synthesizer BIST Result</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>SYN_BIST_ALL_CHANNELS</name>
+                     <description>PLL Frequency Synthesizer BIST All Channels</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>FREQ_COUNT_THRESHOLD</name>
+                     <description>Frequency Meter Count Difference Threshold</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>HPM_INL_BIST_GO</name>
+                     <description>Start the High Port Modulator DAC INL BIST</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>HPM_INL_BIST_FINISHED</name>
+                     <description>High Port Modulator DAC INL BIST has finished measuring the INL of the HPM DAC</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>HPM_INL_BIST_RESULT</name>
+                     <description>High Port Modulator DAC INL BIST Result</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>HPM_DNL_BIST_GO</name>
+                     <description>Start the High Port Modulator DAC DNL BIST</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>HPM_DNL_BIST_FINISHED</name>
+                     <description>High Port Modulator DAC DNL BIST has finished measuring the DNL of the HPM DAC</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>HPM_DNL_BIST_RESULT</name>
+                     <description>High Port Modulator DAC DNL BIST Result</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>DFT_MAX_RAM_SIZE</name>
+                     <description>Maximum RAM Address to use as Modulation</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>9</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

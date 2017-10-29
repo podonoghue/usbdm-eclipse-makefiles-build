@@ -74,12 +74,12 @@ Enables the internal reference clock for use as MCGIRCLK</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>MCGIRCLK disabled</description>
+                           <description>MCGIRCLK inactive</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>MCGIRCLK enabled</description>
+                           <description>MCGIRCLK active</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -297,7 +297,7 @@ Selects the frequency range for the crystal oscillator or external clock source<
                   <field>
                      <name>FCFTRIM</name>
                      <description>Fast Internal Reference Clock Fine Trim\n
-FCFTRIM controls the smallest adjustment of the fast internal reference clock frequency</description>
+Controls the smallest adjustment of the fast internal reference clock frequency</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
                   </field>
@@ -350,7 +350,7 @@ Adjusts the slow internal reference clock frequency</description>
                <description>Control 4 Register</description>
                <addressOffset>0x3</addressOffset>
                <size>8</size>
-               <resetMask>0x0</resetMask>
+               <resetMask>0xE0</resetMask>
                <fields>
                   <field>
                      <name>SCFTRIM</name>
@@ -591,12 +591,12 @@ The IRCST bit indicates the current source for the internal reference clock sele
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>IRC is slow clock (32 kHz)</description>
+                           <description>Slow clock (32 kHz)</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>IRC is fast clock (4 MHz)</description>
+                           <description>Fast clock (4 MHz)</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

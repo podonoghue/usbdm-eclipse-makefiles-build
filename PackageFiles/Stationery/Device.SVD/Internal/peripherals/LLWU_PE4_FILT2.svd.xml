@@ -22,6 +22,7 @@ Devices using this peripheral:
       MKV31F25612
       MKV31F51212
       MKW01Z4
+      MKW41Z4
 -->
       <peripheral>
          <?sourceFile "LLWU_PE4_FILT2" ?>
@@ -483,7 +484,7 @@ To clear this flag it is necessary to clear the flag in the peripheral</descript
 Control and status register that is used to enable/disable the digital filter features for an external pin</description>
                <addressOffset>0x8</addressOffset>
                <size>8</size>
-               <resetMask>0xFF</resetMask>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>FILTSEL</name>

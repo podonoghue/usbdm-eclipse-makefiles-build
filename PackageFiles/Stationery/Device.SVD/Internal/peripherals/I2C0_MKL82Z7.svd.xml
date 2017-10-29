@@ -1,6 +1,7 @@
 <!--
 Devices using this peripheral: 
       MKL82Z7
+      MKW41Z4
 -->
       <peripheral>
          <?sourceFile "I2C0_MKL82Z7" ?>

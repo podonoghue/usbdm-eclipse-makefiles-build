@@ -1,0 +1,732 @@
+<!--
+Devices using this peripheral: 
+      MKW41Z4
+-->
+      <peripheral>
+         <?sourceFile "LTC0_MKW41Z4" ?>
+         <name>LTC0</name>
+         <description>LP Trusted Cryptography</description>
+         <groupName>LTC</groupName>
+         <headerStructName>LTC</headerStructName>
+         <baseAddress>0x40058000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x8</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x10</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x18</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x30</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x34</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x40</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x48</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x58</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x100</offset>
+            <size>0x38</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x200</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x4F0</offset>
+            <size>0xC</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x7C0</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x7E0</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x7F0</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>MD</name>
+               <description>Mode Register</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>ENC</name>
+                     <description>EThis bit selects encryption or decryption</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Decrypt</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Encrypt</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ICV_TEST</name>
+                     <description>ICV Checking / Test AES fault detection</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AS</name>
+                     <description>Algorithm State</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>00</name>
+                           <description>Update</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01</name>
+                           <description>Initialize</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10</name>
+                           <description>Finalize</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>11</name>
+                           <description>Initialize/Finalize</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>AAI</name>
+                     <description>Additional Algorithm information</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>9</bitWidth>
+                  </field>
+                  <field>
+                     <name>ALG</name>
+                     <description>Algorithm. This field specifies which algorithm is being selected</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>00010000</name>
+                           <description>AES</description>
+                           <value>0b10000</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>KS</name>
+               <description>Key Size Register</description>
+               <addressOffset>0x8</addressOffset>
+               <access>write-only</access>
+               <resetValue>0x10</resetValue>
+               <fields>
+                  <field>
+                     <name>KS</name>
+                     <description>Key Size</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DS</name>
+               <description>Data Size Register</description>
+               <addressOffset>0x10</addressOffset>
+               <fields>
+                  <field>
+                     <name>DS</name>
+                     <description>Data Size</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ICVS</name>
+               <description>ICV Size Register</description>
+               <addressOffset>0x18</addressOffset>
+               <fields>
+                  <field>
+                     <name>ICVS</name>
+                     <description>ICV Size, in Bytes</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>COM</name>
+               <description>Command Register</description>
+               <addressOffset>0x30</addressOffset>
+               <access>write-only</access>
+               <fields>
+                  <field>
+                     <name>ALL</name>
+                     <description>Reset All Internal Logic</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Do Not Reset</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Reset all CHAs in use by this CCB</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>AES</name>
+                     <description>Reset AESA. Writing a 1 to this bit resets the AES Accelerator core engine</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Do Not Reset</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Reset AES Accelerator</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CTL</name>
+               <description>Control Register</description>
+               <addressOffset>0x34</addressOffset>
+               <fields>
+                  <field>
+                     <name>IM</name>
+                     <description>Interrupt Mask.\nOnce this bit is set, it can only be cleared by hard reset</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Interrupt not masked</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Interrupt masked</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>IFE</name>
+                     <description>Input FIFO DMA Enable</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>DMA Request and Done signals disabled for the Input FIFO</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>DMA Request and Done signals enabled for the Input FIFO</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>IFR</name>
+                     <description>Input FIFO DMA Request Size</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>DMA request size is 1 entry</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>DMA request size is 4 entries</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>OFE</name>
+                     <description>Output FIFO DMA Enable</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>DMA Request and Done signals disabled for the Output FIFO</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>DMA Request and Done signals enabled for the Output FIFO</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="IFR" > <name>OFR</name> <description>Output FIFO DMA Request Size</description> <bitOffset>13</bitOffset> </field>
+                  <field>
+                     <name>IFS</name>
+                     <description>Input FIFO Byte Swap.\n
+Byte swap all data that is written to the Input FIFO</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Do Not Byte Swap Data</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Byte Swap Data</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="IFS" > <name>OFS</name> <description>Output FIFO Byte Swap</description> <bitOffset>17</bitOffset> </field>
+                  <field derivedFrom="IFS" > <name>KIS</name> <description>Key Register Input Byte Swap</description> <bitOffset>20</bitOffset> </field>
+                  <field derivedFrom="IFS" > <name>KOS</name> <description>Key Register Output Byte Swap</description> <bitOffset>21</bitOffset> </field>
+                  <field derivedFrom="IFS" > <name>CIS</name> <description>Context Register Input Byte Swap</description> <bitOffset>22</bitOffset> </field>
+                  <field derivedFrom="IFS" > <name>COS</name> <description>Context Register Output Byte Swap</description> <bitOffset>23</bitOffset> </field>
+                  <field>
+                     <name>KAL</name>
+                     <description>Key Register Access Lock</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Key Register is readable</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Key Register is not readable</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CW</name>
+               <description>Clear Written Register</description>
+               <addressOffset>0x40</addressOffset>
+               <access>write-only</access>
+               <fields>
+                  <field>
+                     <name>CM</name>
+                     <description>Clear the Mode Register. Writing a one to this bit causes the Mode Register to be cleared</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CDS</name>
+                     <description>Clear the Data Size Register</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CICV</name>
+                     <description>Clear the ICV Size Register. Writing a one to this bit causes the ICV Size Register to be cleared</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CCR</name>
+                     <description>Clear the Context Register. Writing a one to this bit causes the Context Register to be cleared</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CKR</name>
+                     <description>Clear the Key Register</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>COF</name>
+                     <description>Clear Output FIFO. Writing a 1 to this bit causes the Output FIFO to be cleared</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CIF</name>
+                     <description>Clear Input FIFO. Writing a 1 to this bit causes the Input Data FIFO</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>STA</name>
+               <description>Status Register</description>
+               <addressOffset>0x48</addressOffset>
+               <fields>
+                  <field>
+                     <name>AB</name>
+                     <description>AESA Busy</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>AESA Idle</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>AESA Busy</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DI</name>
+                     <description>Done Interrupt</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>EI</name>
+                     <description>Error Interrupt</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Not Error</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Error Interrupt</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ESTA</name>
+               <description>Error Status Register</description>
+               <addressOffset>0x4C</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>ERRID1</name>
+                     <description>Error ID 1</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0001</name>
+                           <description>Mode Error</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0010</name>
+                           <description>Data Size Error</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0011</name>
+                           <description>Key Size Error</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0110</name>
+                           <description>Data Arrived out of Sequence Error</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1010</name>
+                           <description>ICV Check Failed</description>
+                           <value>0b1010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1011</name>
+                           <description>Internal Hardware Failure</description>
+                           <value>0b1011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1100</name>
+                           <description>CCM AAD Size Error (either 1. AAD flag in B0 =1 and no AAD type provided, 2. AAD flag in B0 = 0 and AAD povided, or 3. AAD flag in B0 =1 and not enough AAD provided - expecting more based on AAD size.)</description>
+                           <value>0b1100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1111</name>
+                           <description>Invalid Crypto Engine Selected</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CL1</name>
+                     <description>algorithms.\n
+The algorithms field indicates which algorithm is asserting an error. Others reserved</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0000</name>
+                           <description>General Error</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0001</name>
+                           <description>AES</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>AADSZ</name>
+               <description>AAD Size Register</description>
+               <addressOffset>0x58</addressOffset>
+               <fields>
+                  <field>
+                     <name>AADSZ</name>
+                     <description>AAD size in Bytes, mod 16</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>AL</name>
+                     <description>AAD Last</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>14</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13</dimIndex>
+               <name>CTX%s</name>
+               <description>Context Register</description>
+               <addressOffset>0x100</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>CTX</name>
+                     <description>CTX</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>4</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3</dimIndex>
+               <name>KEY%s</name>
+               <description>Key</description>
+               <addressOffset>0x200</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>KEY</name>
+                     <description>KEY</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>VID1</name>
+               <description>Version ID Register</description>
+               <addressOffset>0x4F0</addressOffset>
+               <access>read-only</access>
+               <resetValue>0x340100</resetValue>
+               <fields>
+                  <field>
+                     <name>MIN_REV</name>
+                     <description>Minor revision number</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>MAJ_REV</name>
+                     <description>Major revision number</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>IP_ID</name>
+                     <description>ID(0x0034)</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>VID2</name>
+               <description>Version ID 2 Register</description>
+               <addressOffset>0x4F4</addressOffset>
+               <access>read-only</access>
+               <resetValue>0x101</resetValue>
+               <fields>
+                  <field>
+                     <name>ECO_REV</name>
+                     <description>ECO revision number</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>ARCH_ERA</name>
+                     <description>Architectural ERA</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CHAVID</name>
+               <description>CHA Version ID Register</description>
+               <addressOffset>0x4F8</addressOffset>
+               <access>read-only</access>
+               <resetValue>0x50</resetValue>
+               <fields>
+                  <field>
+                     <name>AESREV</name>
+                     <description>AES Revision Number</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>AESVID</name>
+                     <description>AES Version ID</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FIFOSTA</name>
+               <description>FIFO Status Register</description>
+               <addressOffset>0x7C0</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>IFL</name>
+                     <description>Input FIFO Level. These bits indicate the current number of entries in the Input FIFO</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>IFF</name>
+                     <description>Input FIFO Full. The Input FIFO is full and should not be written to</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>OFL</name>
+                     <description>Output FIFO Level. These bits indicate the current number of entries in the Output FIFO</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>OFF</name>
+                     <description>Output FIFO Full. The Output FIFO is full and should not be written to</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>IFIFO</name>
+               <description>Input Data FIFO</description>
+               <addressOffset>0x7E0</addressOffset>
+               <access>write-only</access>
+               <fields>
+                  <field>
+                     <name>IFIFO</name>
+                     <description>IFIFO</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>OFIFO</name>
+               <description>Output Data FIFO</description>
+               <addressOffset>0x7F0</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>OFIFO</name>
+                     <description>Output FIFO</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

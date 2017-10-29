@@ -886,7 +886,7 @@ Provides a simple memory-mapped mechanism to set the START bit in the TCD of the
                <fields>
                   <field>
                      <name>EDREQ_0</name>
-                     <description>Enable asynchronous DMA request in stop for channel 0</description>
+                     <description>Enable asynchronous DMA request in stop mode for channel 0</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -902,9 +902,9 @@ Provides a simple memory-mapped mechanism to set the START bit in the TCD of the
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="EDREQ_0" > <name>EDREQ_1</name> <description>Enable asynchronous DMA request in stop for channel 1</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="EDREQ_0" > <name>EDREQ_2</name> <description>Enable asynchronous DMA request in stop for channel 2</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="EDREQ_0" > <name>EDREQ_3</name> <description>Enable asynchronous DMA request in stop for channel 3</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="EDREQ_0" > <name>EDREQ_1</name> <description>Enable asynchronous DMA request in stop mode for channel 1</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="EDREQ_0" > <name>EDREQ_2</name> <description>Enable asynchronous DMA request in stop mode for channel 2</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="EDREQ_0" > <name>EDREQ_3</name> <description>Enable asynchronous DMA request in stop mode for channel 3</description> <bitOffset>3</bitOffset> </field>
                </fields>
             </register>
             <register>

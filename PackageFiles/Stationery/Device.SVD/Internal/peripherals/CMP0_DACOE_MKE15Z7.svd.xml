@@ -4,11 +4,11 @@ Devices using this peripheral:
       MKE15Z7
 -->
       <peripheral>
-         <?sourceFile "CMP0_MKE15Z7" ?>
+         <?sourceFile "CMP0_DACOE_MKE15Z7" ?>
          <name>CMP0</name>
-         <description>Comparator</description>
+         <description>Comparator, Voltage Ref, D-to-A Converter and Analog Mux</description>
          <groupName>CMP</groupName>
-         <headerStructName>CMP0</headerStructName>
+         <headerStructName>CMP</headerStructName>
          <baseAddress>0x40073000</baseAddress>
          <size>32</size>
          <access>read-write</access>
@@ -27,28 +27,28 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>HYSTCTR</name>
-                     <description>Comparator hard block hysteresis control. See chip data sheet to get the actual hystersis value with each level</description>
+                     <description>Comparator hard block hysteresis control</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
-                           <description>The hard block output has level 0 hysteresis internally</description>
+                           <name>0b00</name>
+                           <description>Level 0</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
-                           <description>The hard block output has level 1 hysteresis internally</description>
+                           <name>0b01</name>
+                           <description>Level 1</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
-                           <description>The hard block output has level 2 hysteresis internally</description>
+                           <name>0b10</name>
+                           <description>Level 2</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
-                           <description>The hard block output has level 3 hysteresis internally</description>
+                           <name>0b11</name>
+                           <description>Level 3</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -60,12 +60,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>The comparator hard block output has level 0 offset internally</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>The comparator hard block output has level 1 offset internally</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -73,48 +73,49 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>FILTER_CNT</name>
-                     <description>Filter Sample Count</description>
+                     <description>Filter Sample Count\n
+Controls the number of consecutive samples required to agree</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>3</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>000</name>
-                           <description>Filter is disabled. If SE = 1, then COUT is a logic zero (this is not a legal state, and is not recommended). If SE = 0, COUT = COUTA</description>
+                           <name>0b000</name>
+                           <description>Filter is disabled</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>001</name>
-                           <description>1 consecutive sample must agree (comparator output is simply sampled)</description>
+                           <name>0b001</name>
+                           <description>1 sample</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>010</name>
-                           <description>2 consecutive samples must agree</description>
+                           <name>0b010</name>
+                           <description>2 samples</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>011</name>
-                           <description>3 consecutive samples must agree</description>
+                           <name>0b011</name>
+                           <description>3 samples</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>100</name>
-                           <description>4 consecutive samples must agree</description>
+                           <name>0b100</name>
+                           <description>4 samples</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>101</name>
-                           <description>5 consecutive samples must agree</description>
+                           <name>0b101</name>
+                           <description>5 samples</description>
                            <value>0b101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>110</name>
-                           <description>6 consecutive samples must agree</description>
+                           <name>0b110</name>
+                           <description>6 samples</description>
                            <value>0b110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>111</name>
-                           <description>7 consecutive samples must agree</description>
+                           <name>0b111</name>
+                           <description>7 samples</description>
                            <value>0b111</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -126,85 +127,86 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Analog Comparator is disabled</description>
+                           <name>0b0</name>
+                           <description>Comparator disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Analog Comparator is enabled</description>
+                           <name>0b1</name>
+                           <description>Comparator enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>OPE</name>
-                     <description>Comparator Output Pin Enable</description>
+                     <description>Comparator Output Pin Enable\n
+Controls availability of the comparator output on the associated CMPO output pin</description>
                      <bitOffset>9</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>When OPE is 0, the comparator output (after window/filter settings dependent on software configuration) is not available to a packaged pin</description>
+                           <name>0b0</name>
+                           <description>Not available on pin</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>When OPE is 1, and if the software has configured the comparator to own a packaged pin, the comparator is available in a packaged pin</description>
+                           <name>0b1</name>
+                           <description>Available on pin</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>COS</name>
-                     <description>Comparator Output Select</description>
+                     <description>Comparator Output Select\nSelects direct or filtered output for CMPO</description>
                      <bitOffset>10</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Set CMPO to equal COUT (filtered comparator output)</description>
+                           <name>0b0</name>
+                           <description>Filtered output</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Set CMPO to equal COUTA (unfiltered comparator output)</description>
+                           <name>0b1</name>
+                           <description>Unfiltered output</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>INVT</name>
-                     <description>Comparator invert</description>
+                     <description>Comparator output inversion</description>
                      <bitOffset>11</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Does not invert the comparator output</description>
+                           <name>0b0</name>
+                           <description>Normal output</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Inverts the comparator output</description>
+                           <name>0b1</name>
+                           <description>Inverted output</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>PMODE</name>
-                     <description>Power Mode Select</description>
+                     <description>Power Mode Select\Controls comparison speed and power consumption</description>
                      <bitOffset>12</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Low Speed (LS) comparison mode is selected</description>
+                           <name>0b0</name>
+                           <description>Low speed and power</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>High Speed (HS) comparison mode is selected, in VLPx mode, or Stop mode switched to Low Speed (LS) mode</description>
+                           <name>0b1</name>
+                           <description>High speed and power</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -216,35 +218,18 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Windowing mode is not selected</description>
+                           <name>0b0</name>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Windowing mode is selected</description>
+                           <name>0b1</name>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>SE</name>
-                     <description>Sample Enable</description>
-                     <bitOffset>15</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Sampling mode is not selected</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Sampling mode is selected</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="WE" > <name>SE</name> <description>Sample Enable</description> <bitOffset>15</bitOffset> </field>
                   <field>
                      <name>FPR</name>
                      <description>Filter Sample Period</description>
@@ -260,36 +245,36 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>CFF</name>
-                     <description>Analog Comparator Flag Falling</description>
+                     <description>Analog Comparator Flag Falling\nDetects falling edges on COUT</description>
                      <bitOffset>25</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>A falling edge has not been detected on COUT</description>
+                           <name>0b0</name>
+                           <description>No falling-edge</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>A falling edge on COUT has occurred</description>
+                           <name>0b1</name>
+                           <description>Falling-edge occurred</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>CFR</name>
-                     <description>Analog Comparator Flag Rising</description>
+                     <description>Analog Comparator Flag Rising\nDetects rising edges on COUT</description>
                      <bitOffset>26</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>A rising edge has not been detected on COUT</description>
+                           <name>0b0</name>
+                           <description>No rising-edge</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>A rising edge on COUT has occurred</description>
+                           <name>0b1</name>
+                           <description>Rising-edge occurred</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -301,13 +286,13 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Interrupt is disabled</description>
+                           <name>0b0</name>
+                           <description>Interrupt disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Interrupt is enabled</description>
+                           <name>0b1</name>
+                           <description>Interrupt enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -315,18 +300,18 @@ Devices using this peripheral:
                   <field derivedFrom="IEF" > <name>IER</name> <description>Comparator Interrupt Enable Rising</description> <bitOffset>28</bitOffset> </field>
                   <field>
                      <name>DMAEN</name>
-                     <description>DMA Enable</description>
+                     <description>DMA Enable Control</description>
                      <bitOffset>30</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>DMA is disabled</description>
+                           <name>0b0</name>
+                           <description>DMA disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>DMA is enabled</description>
+                           <name>0b1</name>
+                           <description>DMA enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -351,42 +336,42 @@ Devices using this peripheral:
                      <bitWidth>3</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>000</name>
+                           <name>0b000</name>
                            <description>IN0</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>001</name>
+                           <name>0b001</name>
                            <description>IN1</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>010</name>
+                           <name>0b010</name>
                            <description>IN2</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>011</name>
+                           <name>0b011</name>
                            <description>IN3</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>100</name>
+                           <name>0b100</name>
                            <description>IN4</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>101</name>
+                           <name>0b101</name>
                            <description>IN5</description>
                            <value>0b101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>110</name>
+                           <name>0b110</name>
                            <description>IN6</description>
                            <value>0b110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>111</name>
+                           <name>0b111</name>
                            <description>IN7</description>
                            <value>0b111</value>
                         </enumeratedValue>
@@ -400,13 +385,13 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Vin1 is selected as resistor ladder network supply reference Vin</description>
+                           <name>0b0</name>
+                           <description>Vin1 (usually Vref)</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Vin2 is selected as resistor ladder network supply reference Vin</description>
+                           <name>0b1</name>
+                           <description>Vin2 (usually Vdd)</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -418,12 +403,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>DAC is disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>DAC is enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -484,12 +469,12 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>IN0, from the 8-bit DAC output</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
+                           <name>0b01</name>
                            <description>IN1, from the analog 8-1 mux</description>
                            <value>0b01</value>
                         </enumeratedValue>
@@ -503,12 +488,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>DAC output is disabled to go outside</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>DAC output is enabled to go outside</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -534,7 +519,7 @@ Devices using this peripheral:
                      <bitWidth>6</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>000000</name>
+                           <name>0b000000</name>
                            <description>The modulus is set to 64(same with 111111)</description>
                            <value>0b0</value>
                         </enumeratedValue>
@@ -547,22 +532,22 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>The comparison result is sampled as soon as the active channel is scanned in one round-robin clock</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
+                           <name>0b01</name>
                            <description>The sampling takes place 1 round-robin clock cycle after the next cycle of the round-robin clock</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
+                           <name>0b10</name>
                            <description>The sampling takes place 2 round-robin clock cycles after the next cycle of the round-robin clock</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
+                           <name>0b11</name>
                            <description>The sampling takes place 3 round-robin clock cycles after the next cycle of the round-robin clock</description>
                            <value>0b11</value>
                         </enumeratedValue>
@@ -623,43 +608,43 @@ Devices using this peripheral:
                      <bitWidth>3</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>000</name>
-                           <description>Channel 0 is selected as the fixed reference input for the fixed mux port</description>
+                           <name>0b000</name>
+                           <description>IN0</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>001</name>
-                           <description>Channel 1 is selected as the fixed reference input for the fixed mux port</description>
+                           <name>0b001</name>
+                           <description>IN1</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>010</name>
-                           <description>Channel 2 is selected as the fixed reference input for the fixed mux port</description>
+                           <name>0b010</name>
+                           <description>IN2</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>011</name>
-                           <description>Channel 3 is selected as the fixed reference input for the fixed mux port</description>
+                           <name>0b011</name>
+                           <description>IN3</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>100</name>
-                           <description>Channel 4 is selected as the fixed reference input for the fixed mux port</description>
+                           <name>0b100</name>
+                           <description>IN4</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>101</name>
-                           <description>Channel 5 is selected as the fixed reference input for the fixed mux port</description>
+                           <name>0b101</name>
+                           <description>IN5</description>
                            <value>0b101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>110</name>
-                           <description>Channel 6 is selected as the fixed reference input for the fixed mux port</description>
+                           <name>0b110</name>
+                           <description>IN6</description>
                            <value>0b110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>111</name>
-                           <description>Channel 7 is selected as the fixed reference input for the fixed mux port</description>
+                           <name>0b111</name>
+                           <description>6b DAC0 Reference</description>
                            <value>0b111</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -671,12 +656,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>The Plus port is fixed. Only the inputs to the Minus port are swept in each round</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>The Minus port is fixed. Only the inputs to the Plus port are swept in each round</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -689,12 +674,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>The round-robin interrupt is disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>The round-robin interrupt is enabled when a comparison result changes from the last sample</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -707,13 +692,13 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Round-robin operation is disabled</description>
+                           <name>0b0</name>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Round-robin operation is enabled</description>
+                           <name>0b1</name>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

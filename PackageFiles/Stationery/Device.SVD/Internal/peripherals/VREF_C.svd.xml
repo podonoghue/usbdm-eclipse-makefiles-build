@@ -52,6 +52,7 @@ Devices using this peripheral:
       MKV31F12810
       MKV31F25612
       MKV31F51212
+      MKW41Z4
 -->
       <peripheral>
          <?sourceFile "VREF_C" ?>

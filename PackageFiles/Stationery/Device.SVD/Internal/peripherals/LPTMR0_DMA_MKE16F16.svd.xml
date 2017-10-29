@@ -7,7 +7,7 @@ Devices using this peripheral:
       MKE18F16
 -->
       <peripheral>
-         <?sourceFile "LPTMR0_MKE16F16" ?>
+         <?sourceFile "LPTMR0_DMA_MKE16F16" ?>
          <name>LPTMR0</name>
          <description>Low Power Timer</description>
          <groupName>LPTMR</groupName>
@@ -345,7 +345,6 @@ Prescaler division N for the prescaler clock; Glitch Filter recognises change af
                <name>CNR</name>
                <description>Counter Register</description>
                <addressOffset>0xC</addressOffset>
-               <access>read-only</access>
                <fields>
                   <field>
                      <name>COUNTER</name>

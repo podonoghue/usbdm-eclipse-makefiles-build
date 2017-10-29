@@ -1,0 +1,3652 @@
+<!--
+Devices using this peripheral: 
+      MKW41Z4
+-->
+      <peripheral>
+         <?sourceFile "XCVR_RX_DIG_MKW41Z4" ?>
+         <name>XCVR_RX_DIG</name>
+         <description>XCVR_RX_DIG</description>
+         <groupName>XCVR_RX_DIG</groupName>
+         <headerStructName>XCVR_RX_DIG</headerStructName>
+         <baseAddress>0x4005C000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x44</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x48</offset>
+            <size>0x54</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xA0</offset>
+            <size>0x9C</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x168</offset>
+            <size>0x14</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x180</offset>
+            <size>0xC</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x190</offset>
+            <size>0xC</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x1A0</offset>
+            <size>0x60</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>RX_DIG_CTRL</name>
+               <description>RX Digital Control</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>RX_ADC_NEGEDGE</name>
+                     <description>Receive ADC Negative Edge Selection</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Register ADC data on positive edge of clock</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Register ADC data on negative edge of clock</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RX_CH_FILT_BYPASS</name>
+                     <description>Receive Channel Filter Bypass</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Channel filter is enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Disable and bypass channel filter</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RX_ADC_RAW_EN</name>
+                     <description>ADC Raw Mode selection</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>The decimation filter&apos;s 12bit output consists of ADC samples in the 8 LSBs. This is for test purposes only to observe ADC output via XCVR DMA or DTEST</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RX_ADC_POL</name>
+                     <description>Receive ADC Polarity</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>ADC output of 1&apos;b0 maps to -1, 1&apos;b1 maps to +1 (default)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>ADC output of 1&apos;b0 maps to +1, 1&apos;b1 maps to -1</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RX_DEC_FILT_OSR</name>
+                     <description>Decimation Filter Oversampling</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>OSR 4</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>OSR 8</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>2</name>
+                           <description>OSR 16</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>4</name>
+                           <description>OSR 32</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>3</name>
+                           <description>OSR 6</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>5</name>
+                           <description>OSR 12</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>6</name>
+                           <description>OSR 24</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RX_FSK_ZB_SEL</name>
+                     <description>FSK / 802.15.4 demodulator select</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>FSK demodulator</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>802.15.4 demodulator</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RX_NORM_EN</name>
+                     <description>Normalizer Enable</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Normalizer is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Normalizer is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RX_RSSI_EN</name>
+                     <description>RSSI Measurement Enable</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>RSSI measurement is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>RSSI measurement is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RX_AGC_EN</name>
+                     <description>AGC Global Enable</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>AGC is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>AGC is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RX_DCOC_EN</name>
+                     <description>DCOC Enable</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>DCOC is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>DCOC is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RX_DCOC_CAL_EN</name>
+                     <description>DCOC Calibration Enable</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>DCOC calibration is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>DCOC calibration is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RX_IQ_SWAP</name>
+                     <description>RX IQ Swap</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>IQ swap is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>IQ swap is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RX_DC_RESID_EN</name>
+                     <description>DC Residual Enable</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>DC Residual block is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>DC Residual block is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RX_SRC_EN</name>
+                     <description>RX Sample Rate Converter Enable</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>SRC is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>SRC is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RX_SRC_RATE</name>
+                     <description>RX Sample Rate Converter Rate Selections</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>SRC is configured for a First Order Hold rate of 8/13</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>SRC is configured for a Zero Order Hold rate of 12/13</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RX_DMA_DTEST_EN</name>
+                     <description>RX DMA and DTEST enable</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RX_DEC_FILT_GAIN</name>
+                     <description>Decimation Filter Fractional Gain</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>RX_DEC_FILT_HZD_CORR_DIS</name>
+                     <description>Decimator filter hazard correction disable</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RX_DEC_FILT_HAZARD</name>
+                     <description>Decimator output, hazard condition detected</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>A hazard condition has not been detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>A hazard condition has been detected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="RX_DEC_FILT_HAZARD" > <name>RX_RSSI_FILT_HAZARD</name> <description>Decimator output for RSSI, hazard condition detected</description> <bitOffset>29</bitOffset> </field>
+                  <field>
+                     <name>RX_DEC_FILT_SAT_I</name>
+                     <description>Decimator output, saturation detected for I channel</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>A saturation condition has not occurred</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>A saturation condition has occurred</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="RX_DEC_FILT_SAT_I" > <name>RX_DEC_FILT_SAT_Q</name> <description>Decimator output, saturation detected for Q channel</description> <bitOffset>31</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>AGC_CTRL_0</name>
+               <description>AGC Control 0</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>SLOW_AGC_EN</name>
+                     <description>Slow AGC Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SLOW_AGC_SRC</name>
+                     <description>Slow AGC Source Selection</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Access Address match (for active protocol)</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Preamble Detect (for active protocol)</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>2</name>
+                           <description>Fast AGC expire timer</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>AGC_FREEZE_EN</name>
+                     <description>AGC Freeze Enable</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AGC_FREEZE_PRE_OR_AA</name>
+                     <description>AGC Freeze Source Selection</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Access Address match (for active protocol)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Preamble Detect (for active protocol)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>AGC_UP_EN</name>
+                     <description>AGC Up Enable</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AGC_UP_SRC</name>
+                     <description>AGC Up Source</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>PDET LO</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>RSSI</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>AGC_DOWN_BBA_STEP_SZ</name>
+                     <description>AGC_DOWN_BBA_STEP_SZ</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>AGC_DOWN_LNA_STEP_SZ</name>
+                     <description>AGC_DOWN_LNA_STEP_SZ</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>AGC_UP_RSSI_THRESH</name>
+                     <description>AGC UP RSSI Threshold</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>AGC_DOWN_RSSI_THRESH</name>
+                     <description>AGC DOWN RSSI Threshold</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>AGC_CTRL_1</name>
+               <description>AGC Control 1</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>BBA_ALT_CODE</name>
+                     <description>BBA_ALT_CODE</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_ALT_CODE</name>
+                     <description>LNA_ALT_CODE</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_USER_GAIN</name>
+                     <description>LNA_USER_GAIN</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_USER_GAIN</name>
+                     <description>BBA_USER_GAIN</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>USER_LNA_GAIN_EN</name>
+                     <description>User LNA Gain Enable</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>USER_BBA_GAIN_EN</name>
+                     <description>User BBA Gain Enable</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PRESLOW_EN</name>
+                     <description>Pre-slow Enable</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Pre-slow is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Pre-slow is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_SETTLE_TIME</name>
+                     <description>LNA_GAIN_SETTLE_TIME</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>AGC_CTRL_2</name>
+               <description>AGC Control 2</description>
+               <addressOffset>0xC</addressOffset>
+               <resetValue>0xA69000</resetValue>
+               <fields>
+                  <field>
+                     <name>BBA_PDET_RST</name>
+                     <description>BBA PDET Reset</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TZA_PDET_RST</name>
+                     <description>TZA PDET Reset</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>MAN_PDET_RST</name>
+                     <description>MAN PDET Reset</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>The peak detector reset signals are controlled automatically by the AGC</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>The BBA_PDET_RST and TZA_PDET_RST are used to manually control the peak detector reset signals</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BBA_GAIN_SETTLE_TIME</name>
+                     <description>BBA Gain Settle Time</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_PDET_SEL_LO</name>
+                     <description>BBA PDET Threshold Low</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>000</name>
+                           <description>0.600V</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>001</name>
+                           <description>0.615V</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>010</name>
+                           <description>0.630V</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>011</name>
+                           <description>0.645V</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>100</name>
+                           <description>0.660V</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>101</name>
+                           <description>0.675V</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>110</name>
+                           <description>0.690V</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>111</name>
+                           <description>0.705V</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BBA_PDET_SEL_HI</name>
+                     <description>BBA PDET Threshold High</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>000</name>
+                           <description>0.600V</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>001</name>
+                           <description>0.795V</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>010</name>
+                           <description>0.900V</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>011</name>
+                           <description>0.945V</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>100</name>
+                           <description>1.005V</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>101</name>
+                           <description>1.050V</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>110</name>
+                           <description>1.095V</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>111</name>
+                           <description>1.155V</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="BBA_PDET_SEL_LO" > <name>TZA_PDET_SEL_LO</name> <description>TZA PDET Threshold Low</description> <bitOffset>18</bitOffset> </field>
+                  <field>
+                     <name>TZA_PDET_SEL_HI</name>
+                     <description>TZA PDET Threshold High</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>000</name>
+                           <description>0.60V</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>001</name>
+                           <description>0.63V</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>010</name>
+                           <description>0.66V</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>011</name>
+                           <description>0.69V</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>100</name>
+                           <description>0.72V</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>101</name>
+                           <description>0.75V</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>110</name>
+                           <description>0.78V</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>111</name>
+                           <description>0.81V</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>AGC_FAST_EXPIRE</name>
+                     <description>AGC Fast Expire</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_LG_ON_OVR</name>
+                     <description>LNA_LG_ON override</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_HG_ON_OVR</name>
+                     <description>LNA_HG_ON override</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>AGC_CTRL_3</name>
+               <description>AGC Control 3</description>
+               <addressOffset>0x10</addressOffset>
+               <fields>
+                  <field>
+                     <name>AGC_UNFREEZE_TIME</name>
+                     <description>AGC Unfreeze Time</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>13</bitWidth>
+                  </field>
+                  <field>
+                     <name>AGC_PDET_LO_DLY</name>
+                     <description>AGC Peak Detect Low Delay</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>AGC_RSSI_DELT_H2S</name>
+                     <description>AGC_RSSI_DELT_H2S</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>AGC_H2S_STEP_SZ</name>
+                     <description>AGC_H2S_STEP_SZ</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>AGC_UP_STEP_SZ</name>
+                     <description>AGC Up Step Size</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>AGC_STAT</name>
+               <description>AGC Status</description>
+               <addressOffset>0x14</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>BBA_PDET_LO_STAT</name>
+                     <description>BBA Peak Detector Low Status</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_PDET_HI_STAT</name>
+                     <description>BBA Peak Detector High Status</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TZA_PDET_LO_STAT</name>
+                     <description>TZA Peak Detector Low Status</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TZA_PDET_HI_STAT</name>
+                     <description>TZA Peak Detector High Status</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CURR_AGC_IDX</name>
+                     <description>Current AGC Gain Index</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>AGC_FROZEN</name>
+                     <description>AGC Frozen Status</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>AGC is not frozen</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>AGC is frozen</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RSSI_ADC_RAW</name>
+                     <description>ADC RAW RSSI Reading</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RSSI_CTRL_0</name>
+               <description>RSSI Control 0</description>
+               <addressOffset>0x18</addressOffset>
+               <resetValue>0x300000</resetValue>
+               <fields>
+                  <field>
+                     <name>RSSI_USE_VALS</name>
+                     <description>RSSI Values Selection</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RSSI_HOLD_SRC</name>
+                     <description>RSSI Hold Source Selection</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>00</name>
+                           <description>Access Address match</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01</name>
+                           <description>Preamble Detect</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>11</name>
+                           <description>802.15.4 LQI done (1=freeze, 0=run AGC)</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RSSI_HOLD_EN</name>
+                     <description>RSSI Hold Enable</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RSSI_IIR_CW_WEIGHT</name>
+                     <description>RSSI IIR CW Weighting</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Bypass</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>1/8</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>2</name>
+                           <description>1/16</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>3</name>
+                           <description>1/32</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RSSI_N_WINDOW_AVG</name>
+                     <description>RSSI N Window Average</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>No averaging</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Averaging window length is 2 samples</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>2</name>
+                           <description>Averaging window length is 4 samples</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>3</name>
+                           <description>Averaging window length is 8 samples</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RSSI_HOLD_DELAY</name>
+                     <description>RSSI Hold Delay</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>RSSI_IIR_WEIGHT</name>
+                     <description>RSSI IIR Weighting</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Bypass</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>1/2</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>2</name>
+                           <description>1/4</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>3</name>
+                           <description>1/8</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>4</name>
+                           <description>1/16</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>5</name>
+                           <description>1/32</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RSSI_VLD_SETTLE</name>
+                     <description>RSSI Valid Settle</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>RSSI_ADJ</name>
+                     <description>RSSI Adjustment</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RSSI_CTRL_1</name>
+               <description>RSSI Control 1</description>
+               <addressOffset>0x1C</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>RSSI_OUT</name>
+                     <description>RSSI Reading</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RSSI_DFT</name>
+               <description>RSSI DFT</description>
+               <addressOffset>0x20</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>DFT_MAG</name>
+                     <description>RSSI MAG</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>13</bitWidth>
+                  </field>
+                  <field>
+                     <name>DFT_NOISE</name>
+                     <description>RSSI MAG</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>13</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DCOC_CTRL_0</name>
+               <description>DCOC Control 0</description>
+               <addressOffset>0x24</addressOffset>
+               <fields>
+                  <field>
+                     <name>DCOC_MIDPWR_TRK_DIS</name>
+                     <description>DCOC Mid Power Tracking Disable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Tracking corrections are enabled as determined by DCOC_CORRECT_SRC and DCOC_TRK_MIN_AGC_IDX</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Tracking corrections are disabled when either the TZA or BBA lo peak detector asserts</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DCOC_MAN</name>
+                     <description>DCOC Manual Override</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCOC_TRK_EST_OVR</name>
+                     <description>Override for the DCOC tracking estimator</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>The tracking estimator is enabled only as needed by the corrector</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>The tracking estimator remains enabled whenever the DCOC is active</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DCOC_CORRECT_SRC</name>
+                     <description>DCOC Corrector Source</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>If correction is enabled, the DCOC will use only the DCOC calibration table to correct the DC offset</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>If correction is enabled, the DCOC will use the DCOC calibration table and then the tracking estimator to correct the DC offset</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DCOC_CORRECT_EN</name>
+                     <description>DCOC Correction Enable</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Correction disabled. The DCOC will not correct the DC offset</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Correction enabled. The DCOC will use the TZA and BBA DACs, and apply digital corrections (if DCOC_CORRECT_SRC=1) to correct the DC offset</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TRACK_FROM_ZERO</name>
+                     <description>Track from Zero</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Track from current I/Q sample</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Track from zero</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BBA_CORR_POL</name>
+                     <description>BBA Correction Polarity</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Normal polarity</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Negative polarity. This should be set if the ADC output is inverted, or if the BBA DACs were implemented with negative polarity</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TZA_CORR_POL</name>
+                     <description>TZA Correction Polarity</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Normal polarity</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Negative polarity. This should be set if the ADC output is inverted, or if the TZA DACs were implemented with negative polarity</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DCOC_CAL_DURATION</name>
+                     <description>DCOC Calibration Duration</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCOC_CORR_DLY</name>
+                     <description>DCOC Correction Delay</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCOC_CORR_HOLD_TIME</name>
+                     <description>DCOC Correction Hold Time</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>7</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>127</name>
+                           <description>The DC correction is not frozen</description>
+                           <value>0b1111111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DCOC_CTRL_1</name>
+               <description>DCOC Control 1</description>
+               <addressOffset>0x28</addressOffset>
+               <fields>
+                  <field>
+                     <name>DCOC_SIGN_SCALE_IDX</name>
+                     <description>DCOC Sign Scaling</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>00</name>
+                           <description>1/8</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01</name>
+                           <description>1/16</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10</name>
+                           <description>1/32</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>11</name>
+                           <description>1/64</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DCOC_ALPHAC_SCALE_IDX</name>
+                     <description>DCOC Alpha-C Scaling</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>000</name>
+                           <description>1/2</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>001</name>
+                           <description>1/4</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>010</name>
+                           <description>1/8</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>011</name>
+                           <description>1/16</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>100</name>
+                           <description>1/32</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>101</name>
+                           <description>1/64</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DCOC_ALPHA_RADIUS_IDX</name>
+                     <description>Alpha-R Scaling</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>000</name>
+                           <description>1</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>001</name>
+                           <description>1/2</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>010</name>
+                           <description>1/4</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>011</name>
+                           <description>1/8</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>100</name>
+                           <description>1/16</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>101</name>
+                           <description>1/32</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>110</name>
+                           <description>1/64</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DCOC_TRK_EST_GS_CNT</name>
+                     <description>DCOC Tracking Estimator Gearshift Count</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field derivedFrom="DCOC_SIGN_SCALE_IDX" > <name>DCOC_SIGN_SCALE_GS_IDX</name> <description>DCOC Sign Scaling for Gearshift</description> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="DCOC_ALPHAC_SCALE_IDX" > <name>DCOC_ALPHAC_SCALE_GS_IDX</name> <description>DCOC Alpha-C Scaling for Gearshift</description> <bitOffset>18</bitOffset> </field>
+                  <field derivedFrom="DCOC_ALPHA_RADIUS_IDX" > <name>DCOC_ALPHA_RADIUS_GS_IDX</name> <description>Alpha-R Scaling for Gearshift</description> <bitOffset>21</bitOffset> </field>
+                  <field>
+                     <name>DCOC_TRK_MIN_AGC_IDX</name>
+                     <description>DCOC Tracking Minimum AGC Table Index</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DCOC_DAC_INIT</name>
+               <description>DCOC DAC Initialization</description>
+               <addressOffset>0x2C</addressOffset>
+               <resetValue>0x80802020</resetValue>
+               <fields>
+                  <field>
+                     <name>BBA_DCOC_INIT_I</name>
+                     <description>DCOC BBA Init I</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_DCOC_INIT_Q</name>
+                     <description>DCOC BBA Init Q</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>TZA_DCOC_INIT_I</name>
+                     <description>DCOC TZA Init I</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>TZA_DCOC_INIT_Q</name>
+                     <description>DCOC TZA Init Q</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DCOC_DIG_MAN</name>
+               <description>DCOC Digital Correction Manual Override</description>
+               <addressOffset>0x30</addressOffset>
+               <fields>
+                  <field>
+                     <name>DIG_DCOC_INIT_I</name>
+                     <description>DCOC DIG Init I</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+                  <field>
+                     <name>DIG_DCOC_INIT_Q</name>
+                     <description>DCOC DIG Init Q</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DCOC_CAL_GAIN</name>
+               <description>DCOC Calibration Gain</description>
+               <addressOffset>0x34</addressOffset>
+               <fields>
+                  <field>
+                     <name>DCOC_BBA_CAL_GAIN1</name>
+                     <description>DCOC BBA Calibration Gain 1</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCOC_LNA_CAL_GAIN1</name>
+                     <description>DCOC LNA Calibration Gain 1</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCOC_BBA_CAL_GAIN2</name>
+                     <description>DCOC BBA Calibration Gain 2</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCOC_LNA_CAL_GAIN2</name>
+                     <description>DCOC LNA Calibration Gain 2</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCOC_BBA_CAL_GAIN3</name>
+                     <description>DCOC BBA Calibration Gain 3</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCOC_LNA_CAL_GAIN3</name>
+                     <description>DCOC LNA Calibration Gain 3</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DCOC_STAT</name>
+               <description>DCOC Status</description>
+               <addressOffset>0x38</addressOffset>
+               <access>read-only</access>
+               <resetValue>0x80802020</resetValue>
+               <fields>
+                  <field>
+                     <name>BBA_DCOC_I</name>
+                     <description>DCOC BBA DAC I</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_DCOC_Q</name>
+                     <description>DCOC BBA DAC Q</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>TZA_DCOC_I</name>
+                     <description>DCOC TZA DAC I</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>TZA_DCOC_Q</name>
+                     <description>DCOC TZA DAC Q</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DCOC_DC_EST</name>
+               <description>DCOC DC Estimate</description>
+               <addressOffset>0x3C</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>DC_EST_I</name>
+                     <description>DCOC DC Estimate I</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+                  <field>
+                     <name>DC_EST_Q</name>
+                     <description>DCOC DC Estimate Q</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DCOC_CAL_RCP</name>
+               <description>DCOC Calibration Reciprocals</description>
+               <addressOffset>0x40</addressOffset>
+               <fields>
+                  <field>
+                     <name>DCOC_TMP_CALC_RECIP</name>
+                     <description>DCOC Calculation Reciprocal</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>11</bitWidth>
+                  </field>
+                  <field>
+                     <name>ALPHA_CALC_RECIP</name>
+                     <description>Alpha Calculation Reciprocal</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>11</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>IQMC_CTRL</name>
+               <description>IQMC Control</description>
+               <addressOffset>0x48</addressOffset>
+               <resetValue>0x4008000</resetValue>
+               <fields>
+                  <field>
+                     <name>IQMC_CAL_EN</name>
+                     <description>IQ Mismatch Cal Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>IQMC_NUM_ITER</name>
+                     <description>IQ Mismatch Cal Num Iter</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>IQMC_DC_GAIN_ADJ</name>
+                     <description>IQ Mismatch Correction DC Gain Coeff</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>11</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>IQMC_CAL</name>
+               <description>IQMC Calibration</description>
+               <addressOffset>0x4C</addressOffset>
+               <resetValue>0x400</resetValue>
+               <fields>
+                  <field>
+                     <name>IQMC_GAIN_ADJ</name>
+                     <description>IQ Mismatch Correction Gain Coeff</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>11</bitWidth>
+                  </field>
+                  <field>
+                     <name>IQMC_PHASE_ADJ</name>
+                     <description>IQ Mismatch Correction Phase Coeff</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LNA_GAIN_VAL_3_0</name>
+               <description>LNA_GAIN Step Values 3..0</description>
+               <addressOffset>0x50</addressOffset>
+               <resetValue>0x3809321D</resetValue>
+               <fields>
+                  <field>
+                     <name>LNA_GAIN_VAL_0</name>
+                     <description>LNA_GAIN step 0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_VAL_1</name>
+                     <description>LNA_GAIN step 1</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_VAL_2</name>
+                     <description>LNA_GAIN step 2</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_VAL_3</name>
+                     <description>LNA_GAIN step 3</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LNA_GAIN_VAL_7_4</name>
+               <description>LNA_GAIN Step Values 7..4</description>
+               <addressOffset>0x54</addressOffset>
+               <resetValue>0x8B745D4F</resetValue>
+               <fields>
+                  <field>
+                     <name>LNA_GAIN_VAL_4</name>
+                     <description>LNA_GAIN step 4</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_VAL_5</name>
+                     <description>LNA_GAIN step 5</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_VAL_6</name>
+                     <description>LNA_GAIN step 6</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_VAL_7</name>
+                     <description>LNA_GAIN step 7</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LNA_GAIN_VAL_8</name>
+               <description>LNA_GAIN Step Values 8</description>
+               <addressOffset>0x58</addressOffset>
+               <resetValue>0xB6A1</resetValue>
+               <fields>
+                  <field>
+                     <name>LNA_GAIN_VAL_8</name>
+                     <description>LNA_GAIN step 8</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_VAL_9</name>
+                     <description>LNA_GAIN step 9</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>BBA_RES_TUNE_VAL_7_0</name>
+               <description>BBA Resistor Tune Values 7..0</description>
+               <addressOffset>0x5C</addressOffset>
+               <fields>
+                  <field>
+                     <name>BBA_RES_TUNE_VAL_0</name>
+                     <description>BBA Resistor Tune Step 0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_RES_TUNE_VAL_1</name>
+                     <description>BBA Resistor Tune Step 1</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_RES_TUNE_VAL_2</name>
+                     <description>BBA Resistor Tune Step 2</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_RES_TUNE_VAL_3</name>
+                     <description>BBA Resistor Tune Step 3</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_RES_TUNE_VAL_4</name>
+                     <description>BBA Resistor Tune Step 4</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_RES_TUNE_VAL_5</name>
+                     <description>BBA Resistor Tune Step 5</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_RES_TUNE_VAL_6</name>
+                     <description>BBA Resistor Tune Step 6</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_RES_TUNE_VAL_7</name>
+                     <description>BBA Resistor Tune Step 7</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>BBA_RES_TUNE_VAL_10_8</name>
+               <description>BBA Resistor Tune Values 10..8</description>
+               <addressOffset>0x60</addressOffset>
+               <fields>
+                  <field>
+                     <name>BBA_RES_TUNE_VAL_8</name>
+                     <description>BBA Resistor Tune Step 8</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_RES_TUNE_VAL_9</name>
+                     <description>BBA Resistor Tune Step 9</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_RES_TUNE_VAL_10</name>
+                     <description>BBA Resistor Tune Step 10</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LNA_GAIN_LIN_VAL_2_0</name>
+               <description>LNA Linear Gain Values 2..0</description>
+               <addressOffset>0x64</addressOffset>
+               <fields>
+                  <field>
+                     <name>LNA_GAIN_LIN_VAL_0</name>
+                     <description>LNA Linear Gain Step 0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_LIN_VAL_1</name>
+                     <description>LNA Linear Gain Step 1</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_LIN_VAL_2</name>
+                     <description>LNA Linear Gain Step 2</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LNA_GAIN_LIN_VAL_5_3</name>
+               <description>LNA Linear Gain Values 5..3</description>
+               <addressOffset>0x68</addressOffset>
+               <fields>
+                  <field>
+                     <name>LNA_GAIN_LIN_VAL_3</name>
+                     <description>LNA Linear Gain Step 3</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_LIN_VAL_4</name>
+                     <description>LNA Linear Gain Step 4</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_LIN_VAL_5</name>
+                     <description>LNA Linear Gain Step 5</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LNA_GAIN_LIN_VAL_8_6</name>
+               <description>LNA Linear Gain Values 8..6</description>
+               <addressOffset>0x6C</addressOffset>
+               <fields>
+                  <field>
+                     <name>LNA_GAIN_LIN_VAL_6</name>
+                     <description>LNA Linear Gain Step 6</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_LIN_VAL_7</name>
+                     <description>LNA Linear Gain Step 7</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_LIN_VAL_8</name>
+                     <description>LNA Linear Gain Step 8</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LNA_GAIN_LIN_VAL_9</name>
+               <description>LNA Linear Gain Values 9</description>
+               <addressOffset>0x70</addressOffset>
+               <fields>
+                  <field>
+                     <name>LNA_GAIN_LIN_VAL_9</name>
+                     <description>LNA Linear Gain Step 9</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>BBA_RES_TUNE_LIN_VAL_3_0</name>
+               <description>BBA Resistor Tune Values 3..0</description>
+               <addressOffset>0x74</addressOffset>
+               <fields>
+                  <field>
+                     <name>BBA_RES_TUNE_LIN_VAL_0</name>
+                     <description>BBA Resistor Tune Linear Gain Step 0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_RES_TUNE_LIN_VAL_1</name>
+                     <description>BBA Resistor Tune Linear Gain Step 1</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_RES_TUNE_LIN_VAL_2</name>
+                     <description>BBA Resistor Tune Linear Gain Step 2</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_RES_TUNE_LIN_VAL_3</name>
+                     <description>BBA Resistor Tune Linear Gain Step 3</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>BBA_RES_TUNE_LIN_VAL_7_4</name>
+               <description>BBA Resistor Tune Values 7..4</description>
+               <addressOffset>0x78</addressOffset>
+               <fields>
+                  <field>
+                     <name>BBA_RES_TUNE_LIN_VAL_4</name>
+                     <description>BBA Resistor Tune Linear Gain Step 4</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_RES_TUNE_LIN_VAL_5</name>
+                     <description>BBA Resistor Tune Linear Gain Step 5</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_RES_TUNE_LIN_VAL_6</name>
+                     <description>BBA Resistor Tune Linear Gain Step 6</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_RES_TUNE_LIN_VAL_7</name>
+                     <description>BBA Resistor Tune Linear Gain Step 7</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>BBA_RES_TUNE_LIN_VAL_10_8</name>
+               <description>BBA Resistor Tune Values 10..8</description>
+               <addressOffset>0x7C</addressOffset>
+               <fields>
+                  <field>
+                     <name>BBA_RES_TUNE_LIN_VAL_8</name>
+                     <description>BBA Resistor Tune Linear Gain Step 8</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_RES_TUNE_LIN_VAL_9</name>
+                     <description>BBA Resistor Tune Linear Gain Step 9</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_RES_TUNE_LIN_VAL_10</name>
+                     <description>BBA Resistor Tune Linear Gain Step 10</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>AGC_GAIN_TBL_03_00</name>
+               <description>AGC Gain Tables Step 03..00</description>
+               <addressOffset>0x80</addressOffset>
+               <fields>
+                  <field>
+                     <name>BBA_GAIN_00</name>
+                     <description>BBA Gain 00</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_00</name>
+                     <description>LNA Gain 00</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_GAIN_01</name>
+                     <description>BBA Gain 01</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_01</name>
+                     <description>LNA Gain 01</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_GAIN_02</name>
+                     <description>BBA Gain 02</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_02</name>
+                     <description>LNA Gain 02</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_GAIN_03</name>
+                     <description>BBA Gain 03</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_03</name>
+                     <description>LNA Gain 03</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>AGC_GAIN_TBL_07_04</name>
+               <description>AGC Gain Tables Step 07..04</description>
+               <addressOffset>0x84</addressOffset>
+               <fields>
+                  <field>
+                     <name>BBA_GAIN_04</name>
+                     <description>BBA Gain 04</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_04</name>
+                     <description>LNA Gain 04</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_GAIN_05</name>
+                     <description>BBA Gain 05</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_05</name>
+                     <description>LNA Gain 05</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_GAIN_06</name>
+                     <description>BBA Gain 06</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_06</name>
+                     <description>LNA Gain 06</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_GAIN_07</name>
+                     <description>BBA Gain 07</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_07</name>
+                     <description>LNA Gain 07</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>AGC_GAIN_TBL_11_08</name>
+               <description>AGC Gain Tables Step 11..08</description>
+               <addressOffset>0x88</addressOffset>
+               <fields>
+                  <field>
+                     <name>BBA_GAIN_08</name>
+                     <description>BBA Gain 08</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_08</name>
+                     <description>LNA Gain 08</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_GAIN_09</name>
+                     <description>BBA Gain 09</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_09</name>
+                     <description>LNA Gain 09</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_GAIN_10</name>
+                     <description>BBA Gain 10</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_10</name>
+                     <description>LNA Gain 10</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_GAIN_11</name>
+                     <description>BBA Gain 11</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_11</name>
+                     <description>LNA Gain 11</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>AGC_GAIN_TBL_15_12</name>
+               <description>AGC Gain Tables Step 15..12</description>
+               <addressOffset>0x8C</addressOffset>
+               <fields>
+                  <field>
+                     <name>BBA_GAIN_12</name>
+                     <description>BBA Gain 12</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_12</name>
+                     <description>LNA Gain 12</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_GAIN_13</name>
+                     <description>BBA Gain 13</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_13</name>
+                     <description>LNA Gain 13</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_GAIN_14</name>
+                     <description>BBA Gain 14</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_14</name>
+                     <description>LNA Gain 14</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_GAIN_15</name>
+                     <description>BBA Gain 15</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_15</name>
+                     <description>LNA Gain 15</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>AGC_GAIN_TBL_19_16</name>
+               <description>AGC Gain Tables Step 19..16</description>
+               <addressOffset>0x90</addressOffset>
+               <fields>
+                  <field>
+                     <name>BBA_GAIN_16</name>
+                     <description>BBA Gain 16</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_16</name>
+                     <description>LNA Gain 16</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_GAIN_17</name>
+                     <description>BBA Gain 17</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_17</name>
+                     <description>LNA Gain 17</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_GAIN_18</name>
+                     <description>BBA Gain 18</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_18</name>
+                     <description>LNA Gain 18</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_GAIN_19</name>
+                     <description>BBA Gain 193</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_19</name>
+                     <description>LNA Gain 19</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>AGC_GAIN_TBL_23_20</name>
+               <description>AGC Gain Tables Step 23..20</description>
+               <addressOffset>0x94</addressOffset>
+               <fields>
+                  <field>
+                     <name>BBA_GAIN_20</name>
+                     <description>BBA Gain 20</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_20</name>
+                     <description>LNA Gain 20</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_GAIN_21</name>
+                     <description>BBA Gain 21</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_21</name>
+                     <description>LNA Gain 21</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_GAIN_22</name>
+                     <description>BBA Gain 22</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_22</name>
+                     <description>LNA Gain 22</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_GAIN_23</name>
+                     <description>BBA Gain 23</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_23</name>
+                     <description>LNA Gain 23</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>AGC_GAIN_TBL_26_24</name>
+               <description>AGC Gain Tables Step 26..24</description>
+               <addressOffset>0x98</addressOffset>
+               <fields>
+                  <field>
+                     <name>BBA_GAIN_24</name>
+                     <description>BBA Gain 24</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_24</name>
+                     <description>LNA Gain 24</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_GAIN_25</name>
+                     <description>BBA Gain 25</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_25</name>
+                     <description>LNA Gain 25</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_GAIN_26</name>
+                     <description>BBA Gain 26</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>LNA_GAIN_26</name>
+                     <description>LNA Gain 26</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>27</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26</dimIndex>
+               <name>DCOC_OFFSET_%s</name>
+               <description>DCOC Offset</description>
+               <addressOffset>0xA0</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>DCOC_BBA_OFFSET_I</name>
+                     <description>DCOC BBA I-channel offset</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCOC_BBA_OFFSET_Q</name>
+                     <description>DCOC BBA Q-channel offset</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCOC_TZA_OFFSET_I</name>
+                     <description>DCOC TZA I-channel offset</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCOC_TZA_OFFSET_Q</name>
+                     <description>DCOC TZA Q-channel offset</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DCOC_BBA_STEP</name>
+               <description>DCOC BBA DAC Step</description>
+               <addressOffset>0x10C</addressOffset>
+               <fields>
+                  <field>
+                     <name>BBA_DCOC_STEP_RECIP</name>
+                     <description>DCOC BBA Reciprocal of Step Size</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>13</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_DCOC_STEP</name>
+                     <description>DCOC BBA Step Size</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>9</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>7</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6</dimIndex>
+               <name>DCOC_TZA_STEP_%s</name>
+               <description>DCOC TZA DAC Step %s</description>
+               <addressOffset>0x110</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>DCOC_TZA_STEP_RCP_0</name>
+                     <description>DCOC_TZA_STEP_RCP_0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>13</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCOC_TZA_STEP_GAIN_0</name>
+                     <description>DCOC_TZA_STEP_GAIN_0</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DCOC_TZA_STEP_7</name>
+               <description>DCOC TZA DAC Step 7</description>
+               <addressOffset>0x12C</addressOffset>
+               <fields>
+                  <field>
+                     <name>DCOC_TZA_STEP_RCP_7</name>
+                     <description>DCOC_TZA_STEP_RCP_7</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>13</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCOC_TZA_STEP_GAIN_7</name>
+                     <description>DCOC_TZA_STEP_GAIN_7</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>13</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DCOC_TZA_STEP_8</name>
+               <description>DCOC TZA DAC Step 5</description>
+               <addressOffset>0x130</addressOffset>
+               <fields>
+                  <field>
+                     <name>DCOC_TZA_STEP_RCP_8</name>
+                     <description>DCOC_TZA_STEP_RCP_8</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>13</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCOC_TZA_STEP_GAIN_8</name>
+                     <description>DCOC_TZA_STEP_GAIN_8</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>13</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>2</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>9,10</dimIndex>
+               <name>DCOC_TZA_STEP_%s</name>
+               <description>DCOC TZA DAC Step %s</description>
+               <addressOffset>0x134</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>DCOC_TZA_STEP_RCP_9</name>
+                     <description>DCOC_TZA_STEP_RCP_9</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>13</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCOC_TZA_STEP_GAIN_9</name>
+                     <description>DCOC_TZA_STEP_GAIN_9</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>14</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DCOC_CAL_ALPHA</name>
+               <description>DCOC Calibration Alpha</description>
+               <addressOffset>0x168</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>DCOC_CAL_ALPHA_I</name>
+                     <description>DCOC Calibration I-channel ALPHA constant</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>11</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCOC_CAL_ALPHA_Q</name>
+                     <description>DCOC_CAL_ALPHA_Q</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>11</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DCOC_CAL_BETA_Q</name>
+               <description>DCOC Calibration Beta Q</description>
+               <addressOffset>0x16C</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>DCOC_CAL_BETA_Q</name>
+                     <description>DCOC_CAL_BETA_Q</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>17</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DCOC_CAL_BETA_I</name>
+               <description>DCOC Calibration Beta I</description>
+               <addressOffset>0x170</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>DCOC_CAL_BETA_I</name>
+                     <description>DCOC_CAL_BETA_I</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>17</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DCOC_CAL_GAMMA</name>
+               <description>DCOC Calibration Gamma</description>
+               <addressOffset>0x174</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>DCOC_CAL_GAMMA_I</name>
+                     <description>DCOC_CAL_GAMMA_I</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCOC_CAL_GAMMA_Q</name>
+                     <description>DCOC_CAL_GAMMA_Q</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DCOC_CAL_IIR</name>
+               <description>DCOC Calibration IIR</description>
+               <addressOffset>0x178</addressOffset>
+               <fields>
+                  <field>
+                     <name>DCOC_CAL_IIR1A_IDX</name>
+                     <description>DCOC Calibration IIR 1A Index</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>1/1</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>1/4</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>2</name>
+                           <description>1/8</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>3</name>
+                           <description>1/16</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="DCOC_CAL_IIR1A_IDX" > <name>DCOC_CAL_IIR2A_IDX</name> <description>DCOC Calibration IIR 2A Index</description> <bitOffset>2</bitOffset> </field>
+                  <field>
+                     <name>DCOC_CAL_IIR3A_IDX</name>
+                     <description>DCOC Calibration IIR 3A Index</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>1/4</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>1/8</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>2</name>
+                           <description>1/16</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>3</name>
+                           <description>1/32</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>3</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>1,2,3</dimIndex>
+               <name>DCOC_CAL%s</name>
+               <description>DCOC Calibration Result</description>
+               <addressOffset>0x180</addressOffset>
+               <access>read-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>DCOC_CAL_RES_I</name>
+                     <description>DCOC Calibration Result - I Channel</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCOC_CAL_RES_Q</name>
+                     <description>DCOC Calibration Result - Q Channel</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CCA_ED_LQI_CTRL_0</name>
+               <description>RX_DIG CCA ED LQI Control Register 0</description>
+               <addressOffset>0x190</addressOffset>
+               <fields>
+                  <field>
+                     <name>LQI_CORR_THRESH</name>
+                     <description>LQI Correlation Threshold</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>CORR_CNTR_THRESH</name>
+                     <description>Correlation Count Threshold</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>LQI_CNTR</name>
+                     <description>LQI Counter</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>SNR_ADJ</name>
+                     <description>SNR calculation adjustment</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CCA_ED_LQI_CTRL_1</name>
+               <description>RX_DIG CCA ED LQI Control Register 1</description>
+               <addressOffset>0x194</addressOffset>
+               <fields>
+                  <field>
+                     <name>RSSI_NOISE_AVG_DELAY</name>
+                     <description>RSSI Noise Averaging Delay</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>RSSI_NOISE_AVG_FACTOR</name>
+                     <description>RSSI Noise Averaging Factor</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>1</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>64</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>2</name>
+                           <description>70</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>3</name>
+                           <description>128</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>4</name>
+                           <description>139</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>5</name>
+                           <description>256</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>6</name>
+                           <description>277</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>7</name>
+                           <description>512</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LQI_RSSI_WEIGHT</name>
+                     <description>LQI RSSI Weight</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>2.0</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>2.125</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>2</name>
+                           <description>2.25</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>3</name>
+                           <description>2.375</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>4</name>
+                           <description>2.5</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>5</name>
+                           <description>2.625</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>6</name>
+                           <description>2.75</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>7</name>
+                           <description>2.875</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LQI_RSSI_SENS</name>
+                     <description>LQI RSSI Sensitivity</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>SNR_LQI_DIS</name>
+                     <description>SNR LQI Disable</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>The RX_DIG CCA/ED/LQI block ignores the AA match input which starts an LQI measurement</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SEL_SNR_MODE</name>
+                     <description>Select SNR Mode</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>SNR estimate</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Mapped correlation magnitude</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MEAS_TRANS_TO_IDLE</name>
+                     <description>Measurement Transition to IDLE</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Module transitions to RSSI state</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Module transitions to IDLE state</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CCA1_ED_EN_DIS</name>
+                     <description>CCA1_ED_EN Disable</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>CCA1_ED_EN input is disabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MAN_MEAS_COMPLETE</name>
+                     <description>Manual measurement complete</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Manually asserts the measurement complete signal for the RX_DIG CCA/ED/LQI blocks. Intended to be used only for debug</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MAN_AA_MATCH</name>
+                     <description>Manual AA Match</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Manually asserts the AA match signal for the RX_DIG CCA/ED/LQI and AGC blocks. Intended to be used only for debug</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SNR_LQI_WEIGHT</name>
+                     <description>SNR LQI Weight</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>0.0</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>1.0</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>2</name>
+                           <description>1.125</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>3</name>
+                           <description>1.25</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>4</name>
+                           <description>1.375</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>5</name>
+                           <description>1.5</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>6</name>
+                           <description>1.625</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>7</name>
+                           <description>1.75</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>8</name>
+                           <description>1.875</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>9</name>
+                           <description>2.0</description>
+                           <value>0b1001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10</name>
+                           <description>2.125</description>
+                           <value>0b1010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>11</name>
+                           <description>2.25</description>
+                           <value>0b1011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>12</name>
+                           <description>2.375</description>
+                           <value>0b1100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>13</name>
+                           <description>2.5</description>
+                           <value>0b1101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>14</name>
+                           <description>2.625</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>15</name>
+                           <description>2.75</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LQI_BIAS</name>
+                     <description>LQI Bias</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CCA_ED_LQI_STAT_0</name>
+               <description>RX_DIG CCA ED LQI Status Register 0</description>
+               <addressOffset>0x198</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>LQI_OUT</name>
+                     <description>LQI output</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>ED_OUT</name>
+                     <description>ED output</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>SNR_OUT</name>
+                     <description>SNR output</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>CCA1_STATE</name>
+                     <description>CCA1 State</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>MEAS_COMPLETE</name>
+                     <description>Measurement Complete</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>2</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1</dimIndex>
+               <name>RX_CHF_COEF_%s</name>
+               <description>Receive Channel Filter Coefficient %s</description>
+               <addressOffset>0x1A0</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>RX_CH_FILT_H0</name>
+                     <description>RX Channel Filter Coefficient 0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>4</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>2,3,4,5</dimIndex>
+               <name>RX_CHF_COEF_%s</name>
+               <description>Receive Channel Filter Coefficient %s</description>
+               <addressOffset>0x1A8</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>RX_CH_FILT_H2</name>
+                     <description>RX Channel Filter Coefficient 2</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>2</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>6,7</dimIndex>
+               <name>RX_CHF_COEF_%s</name>
+               <description>Receive Channel Filter Coefficient %s</description>
+               <addressOffset>0x1B8</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>RX_CH_FILT_H6</name>
+                     <description>RX Channel Filter Coefficient 6</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>2</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>8,9</dimIndex>
+               <name>RX_CHF_COEF_%s</name>
+               <description>Receive Channel Filter Coefficient %s</description>
+               <addressOffset>0x1C0</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>RX_CH_FILT_H8</name>
+                     <description>RX Channel Filter Coefficient 8</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>9</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>2</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>10,11</dimIndex>
+               <name>RX_CHF_COEF_%s</name>
+               <description>Receive Channel Filter Coefficient %s</description>
+               <addressOffset>0x1C8</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>RX_CH_FILT_H10</name>
+                     <description>RX Channel Filter Coefficient 10</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>AGC_MAN_AGC_IDX</name>
+               <description>AGC Manual AGC Index</description>
+               <addressOffset>0x1D0</addressOffset>
+               <fields>
+                  <field>
+                     <name>AGC_MAN_IDX</name>
+                     <description>AGC Manual Index</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>AGC_MAN_IDX_EN</name>
+                     <description>AGC Manual Index Enable</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AGC_DCOC_START_PT</name>
+                     <description>AGC DCOC Start Point</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DC_RESID_CTRL</name>
+               <description>DC Residual Control</description>
+               <addressOffset>0x1D4</addressOffset>
+               <fields>
+                  <field>
+                     <name>DC_RESID_NWIN</name>
+                     <description>DC Residual NWIN</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>DC_RESID_ITER_FREEZE</name>
+                     <description>DC Residual Iteration Freeze</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>DC_RESID_ALPHA</name>
+                     <description>DC Residual Alpha</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>DC_RESID_DLY</name>
+                     <description>DC Residual Delay</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>DC_RESID_EXT_DC_EN</name>
+                     <description>DC Residual External DC Enable</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DC_RESID_MIN_AGC_IDX</name>
+                     <description>DC Residual Minimum AGC Table Index</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>5</bitWidth>
+                     <access>write-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DC_RESID_EST</name>
+               <description>DC Residual Estimate</description>
+               <addressOffset>0x1D8</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>DC_RESID_OFFSET_I</name>
+                     <description>DC Residual Offset I</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>13</bitWidth>
+                  </field>
+                  <field>
+                     <name>DC_RESID_OFFSET_Q</name>
+                     <description>DC Residual Offset Q</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>13</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RX_RCCAL_CTRL0</name>
+               <description>RX RC Calibration Control0</description>
+               <addressOffset>0x1DC</addressOffset>
+               <fields>
+                  <field>
+                     <name>BBA_RCCAL_OFFSET</name>
+                     <description>BBA RC Calibration value offset</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_RCCAL_MANUAL</name>
+                     <description>BBA RC Calibration manual value</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_RCCAL_DIS</name>
+                     <description>BBA RC Calibration Disable</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>BBA RC Calibration is enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>BBA RC Calibration is disabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RCCAL_SMP_DLY</name>
+                     <description>RC Calibration Sample Delay</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>00</name>
+                           <description>The comp_out signal is sampled 0 clk cycle after sample signal is deasserted</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01</name>
+                           <description>The comp_out signal is sampled 1 clk cycle after sample signal is deasserted</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10</name>
+                           <description>The comp_out signal is sampled 2 clk cycle after sample signal is deasserted</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>11</name>
+                           <description>The comp_out signal is sampled 3 clk cycle after sample signal is deasserted</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RCCAL_COMP_INV</name>
+                     <description>RC Calibration comp_out Invert</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>The comp_out signal polarity is NOT inverted</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>The comp_out signal polarity is inverted</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TZA_RCCAL_OFFSET</name>
+                     <description>TZA RC Calibration value offset</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>TZA_RCCAL_MANUAL</name>
+                     <description>TZA RC Calibration manual value</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>TZA_RCCAL_DIS</name>
+                     <description>TZA RC Calibration Disable</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>TZA RC Calibration is enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>TZA RC Calibration is disabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RX_RCCAL_CTRL1</name>
+               <description>RX RC Calibration Control1</description>
+               <addressOffset>0x1E0</addressOffset>
+               <fields>
+                  <field>
+                     <name>ADC_RCCAL_OFFSET</name>
+                     <description>ADC RC Calibration value offset</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>ADC_RCCAL_MANUAL</name>
+                     <description>ADC RC Calibration manual value</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>ADC_RCCAL_DIS</name>
+                     <description>ADC RC Calibration Disable</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>ADC RC Calibration is enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>ADC RC Calibration is disabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BBA2_RCCAL_OFFSET</name>
+                     <description>BBA2 RC Calibration value offset</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA2_RCCAL_MANUAL</name>
+                     <description>BBA2 RC Calibration manual value</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA2_RCCAL_DIS</name>
+                     <description>BBA2 RC Calibration Disable</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>BBA2 RC Calibration is enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>BBA2 RC Calibration is disabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RX_RCCAL_STAT</name>
+               <description>RX RC Calibration Status</description>
+               <addressOffset>0x1E4</addressOffset>
+               <access>read-only</access>
+               <resetValue>0x2104210</resetValue>
+               <fields>
+                  <field>
+                     <name>RCCAL_CODE</name>
+                     <description>RC Calibration code</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>ADC_RCCAL</name>
+                     <description>ADC RC Calibration</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA2_RCCAL</name>
+                     <description>BBA2 RC Calibration</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>BBA_RCCAL</name>
+                     <description>BBA RC Calibration</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>TZA_RCCAL</name>
+                     <description>TZA RC Calibration</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>AUXPLL_FCAL_CTRL</name>
+               <description>Aux PLL Frequency Calibration Control</description>
+               <addressOffset>0x1E8</addressOffset>
+               <resetValue>0x400000</resetValue>
+               <fields>
+                  <field>
+                     <name>DAC_CAL_ADJUST_MANUAL</name>
+                     <description>Aux PLL Frequency DAC Calibration Adjust Manual value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>AUXPLL_DAC_CAL_ADJUST_DIS</name>
+                     <description>Aux PLL Frequency Calibration Disable</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Calibration is enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Calibration is disabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FCAL_RUN_CNT</name>
+                     <description>Aux PLL Frequency Calibration Run Count</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Run count is 256 clock cycles</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Run count is 512 clock cycles</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FCAL_COMP_INV</name>
+                     <description>Aux PLL Frequency Calibration Comparison Invert</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>(Default) The comparison associated with the count is not inverted</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>The comparison associated with the count is inverted</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FCAL_SMP_DLY</name>
+                     <description>Aux PLL Frequency Calibration Sample Delay</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>00</name>
+                           <description>The count signal is sampled 1 clk cycle after fcal_run signal is deasserted</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01</name>
+                           <description>The count signal is sampled 2 clk cycle after fcal_run signal is deasserted</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10</name>
+                           <description>The count signal is sampled 3 clk cycle after fcal_run signal is deasserted</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>11</name>
+                           <description>The count signal is sampled 4 clk cycle after fcal_run signal is deasserted</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DAC_CAL_ADJUST</name>
+                     <description>Aux PLL DAC Calibration Adjust value</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>7</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>AUXPLL_FCAL_CNT6</name>
+               <description>Aux PLL Frequency Calibration Count 6</description>
+               <addressOffset>0x1EC</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>FCAL_COUNT_6</name>
+                     <description>Aux PLL Frequency Calibration Count 6</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+                  <field>
+                     <name>FCAL_BESTDIFF</name>
+                     <description>Aux PLL Frequency Calibration Best Difference</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>AUXPLL_FCAL_CNT5_4</name>
+               <description>Aux PLL Frequency Calibration Count 5 and 4</description>
+               <addressOffset>0x1F0</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>FCAL_COUNT_4</name>
+                     <description>Aux PLL Frequency Calibration Count 4</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+                  <field>
+                     <name>FCAL_COUNT_5</name>
+                     <description>Aux PLL Frequency Calibration Count 5</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>AUXPLL_FCAL_CNT3_2</name>
+               <description>Aux PLL Frequency Calibration Count 3 and 2</description>
+               <addressOffset>0x1F4</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>FCAL_COUNT_2</name>
+                     <description>Aux PLL Frequency Calibration Count 2</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+                  <field>
+                     <name>FCAL_COUNT_3</name>
+                     <description>Aux PLL Frequency Calibration Count 3</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>AUXPLL_FCAL_CNT1_0</name>
+               <description>Aux PLL Frequency Calibration Count 1 and 0</description>
+               <addressOffset>0x1F8</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>FCAL_COUNT_0</name>
+                     <description>Frequency Calibration Count 0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+                  <field>
+                     <name>FCAL_COUNT_1</name>
+                     <description>Frequency Calibration Count 1</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RXDIG_DFT</name>
+               <description>RXDIG DFT</description>
+               <addressOffset>0x1FC</addressOffset>
+               <fields>
+                  <field>
+                     <name>DFT_TONE_FREQ</name>
+                     <description>DFT Tone Generator Frequency</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>1/64 of the ref osc frequency (500kHz for 32MHz ref osc)</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>1/128 of the ref osc frequency (250kHz for 32MHz ref osc)</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>2</name>
+                           <description>1/256 of the ref osc frequency (125kHz for 32MHz ref osc)</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>3</name>
+                           <description>1/512 of the ref osc frequency (62.5kHz for 32MHz ref osc)</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>4</name>
+                           <description>1/1024 of the ref osc frequency (31.25kHz for 32MHz ref osc)</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DFT_TONE_SCALE</name>
+                     <description>DFT Tone Generator Scale</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>The DFT tone generator uses 3/4 of the DC offset correction DAC range</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>The DFT tone generator uses 1/2 of the DC offset correction DAC range</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DFT_TONE_TZA_EN</name>
+                     <description>DFT Tone Generator TZA Enable</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>The DCOC controls the TZA DC offset correction DACs</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>A tone is generated using the TZA DC offset correction DACs</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DFT_TONE_BBA_EN</name>
+                     <description>DFT Tone Generator BBA Enable</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>The DCOC controls the BBA DC offset correction DACs</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>A tone is generated using the BBA DC offset correction DACs</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

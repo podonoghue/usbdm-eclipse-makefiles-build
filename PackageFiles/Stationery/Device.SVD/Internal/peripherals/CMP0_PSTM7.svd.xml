@@ -230,12 +230,12 @@ Controls availability of the comparator output on the associated CMPO output pin
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Not selected</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Selected</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -315,12 +315,12 @@ Controls availability of the comparator output on the associated CMPO output pin
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Interrupt Disabled</description>
+                           <description>Interrupt disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Interrupt Enabled</description>
+                           <description>Interrupt enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -334,12 +334,12 @@ Controls availability of the comparator output on the associated CMPO output pin
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>DMA Disabled</description>
+                           <description>DMA disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>DMA Enabled</description>
+                           <description>DMA enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -412,37 +412,37 @@ Controls availability of the comparator output on the associated CMPO output pin
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b000</name>
-                           <description>CMP0_IN0</description>
+                           <description>IN0</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b001</name>
-                           <description>CMP0_IN1</description>
+                           <description>IN1</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b010</name>
-                           <description>CMP0_IN2</description>
+                           <description>IN2</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b011</name>
-                           <description>CMP0_IN3</description>
+                           <description>IN3</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b100</name>
-                           <description>CMP0_IN4</description>
+                           <description>IN4</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b101</name>
-                           <description>CMP0_IN5</description>
+                           <description>IN5</description>
                            <value>0b101</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b110</name>
-                           <description>CMP0_IN6</description>
+                           <description>IN6</description>
                            <value>0b110</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -455,18 +455,20 @@ Controls availability of the comparator output on the associated CMPO output pin
                   <field derivedFrom="MSEL" > <name>PSEL</name> <description>Plus Input Mux Control</description> <bitOffset>3</bitOffset> </field>
                   <field>
                      <name>PSTM</name>
-                     <description>Pass Through Mode Enable</description>
+                     <description>Pass Through Mode Enable\n
+This bit is used to enable to MUX pass through mode.\n
+Pass through mode is not available on all devices</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Pass Through Mode is disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Pass Through Mode is enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

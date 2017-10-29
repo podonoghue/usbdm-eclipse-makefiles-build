@@ -2,6 +2,7 @@
 Devices using this peripheral: 
       MKE14Z7
       MKE15Z7
+      MKW41Z4
 -->
       <peripheral>
          <?sourceFile "MTB_MKE15Z7" ?>

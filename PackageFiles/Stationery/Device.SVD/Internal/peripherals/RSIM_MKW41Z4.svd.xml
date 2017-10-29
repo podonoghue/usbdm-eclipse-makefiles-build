@@ -1,0 +1,781 @@
+<!--
+Devices using this peripheral: 
+      MKW41Z4
+-->
+      <peripheral>
+         <?sourceFile "RSIM_MKW41Z4" ?>
+         <name>RSIM</name>
+         <description>RSIM</description>
+         <groupName>RSIM</groupName>
+         <headerStructName>RSIM</headerStructName>
+         <baseAddress>0x40059000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x14</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x100</offset>
+            <size>0x30</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>CONTROL</name>
+               <description>Radio System Control</description>
+               <addressOffset>0x0</addressOffset>
+               <resetValue>0xC00002</resetValue>
+               <fields>
+                  <field>
+                     <name>BLE_RF_OSC_REQ_EN</name>
+                     <description>BLE Ref Osc (Sysclk) Request Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BLE_RF_OSC_REQ_STAT</name>
+                     <description>BLE Ref Osc (Sysclk) Request Status</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>BLE_RF_OSC_REQ_INT_EN</name>
+                     <description>BLE Ref Osc (Sysclk) Request Interrupt Enable</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BLE_RF_OSC_REQ_INT</name>
+                     <description>BLE Ref Osc (Sysclk) Request Interrupt Flag</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RF_OSC_EN</name>
+                     <description>RF Ref Osc Enable Select</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0000</name>
+                           <description>RF Ref Osc will be controlled by the SoC, external pin, or a link layer</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0001</name>
+                           <description>RF Ref Osc on in Run/Wait</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0011</name>
+                           <description>RF Ref Osc on in Stop</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0111</name>
+                           <description>RF Ref Osc on in VLPR/VLPW</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1111</name>
+                           <description>RF Ref Osc on in VLPS</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RADIO_GASKET_BYPASS_OVRD_EN</name>
+                     <description>Radio Gasket Bypass Override Enable</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RADIO_GASKET_BYPASS_OVRD</name>
+                     <description>Radio Gasket Bypass Override</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>IPP_OBE_3V_BLE_ACTIVE_1</name>
+                     <description>IPP_OBE_3V_BLE_ACTIVE_1</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>IPP_OBE_3V_BLE_ACTIVE_2</name>
+                     <description>IPP_OBE_3V_BLE_ACTIVE_2</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RADIO_RAM_ACCESS_OVRD_EN</name>
+                     <description>Radio RAM Access Override Enable</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RADIO_RAM_ACCESS_OVRD</name>
+                     <description>Radio RAM Access Override</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RSIM_DSM_EXIT</name>
+                     <description>BLE Force Deep Sleep Mode Exit</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RSIM_STOP_ACK_OVRD_EN</name>
+                     <description>Stop Acknowledge Override Enable</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RSIM_STOP_ACK_OVRD</name>
+                     <description>Stop Acknowledge Override</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RF_OSC_READY</name>
+                     <description>RF Ref Osc Ready</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>RF_OSC_READY_OVRD_EN</name>
+                     <description>RF Ref Osc Ready Override Enable</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RF_OSC_READY_OVRD</name>
+                     <description>RF Ref Osc Ready Override</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BLOCK_SOC_RESETS</name>
+                     <description>Block SoC Resets of the Radio</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BLOCK_RADIO_OUTPUTS</name>
+                     <description>Block Radio Outputs</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ALLOW_DFT_RESETS</name>
+                     <description>Allow the DFT Reset Pin to Reset the Radio</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RADIO_RESET_BIT</name>
+                     <description>Software Reset for the Radio</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ACTIVE_DELAY</name>
+               <description>Radio Active Early Warning</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>BLE_FINE_DELAY</name>
+                     <description>BLE Active Fine Delay</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>BLE_COARSE_DELAY</name>
+                     <description>BLE Active Coarse Delay</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MAC_MSB</name>
+               <description>Radio MAC Address</description>
+               <addressOffset>0x8</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>MAC_ADDR_MSB</name>
+                     <description>Radio MAC Address MSB</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MAC_LSB</name>
+               <description>Radio MAC Address</description>
+               <addressOffset>0xC</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>MAC_ADDR_LSB</name>
+                     <description>Radio MAC Address LSB</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>MISC</name>
+               <description>Radio Miscellaneous</description>
+               <addressOffset>0x10</addressOffset>
+               <resetValue>0x3000000</resetValue>
+               <fields>
+                  <field>
+                     <name>ANALOG_TEST_EN</name>
+                     <description>RSIM Analog Test Mux Enables</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>RADIO_VERSION</name>
+                     <description>Radio Version ID number</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DSM_TIMER</name>
+               <description>Deep Sleep Timer</description>
+               <addressOffset>0x100</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>DSM_TIMER</name>
+                     <description>Deep Sleep Mode Timer</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DSM_CONTROL</name>
+               <description>Deep Sleep Timer Control</description>
+               <addressOffset>0x104</addressOffset>
+               <fields>
+                  <field>
+                     <name>DSM_ANT_READY</name>
+                     <description>ANT Ready for Deep Sleep Mode</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>ANT_DEEP_SLEEP_STATUS</name>
+                     <description>ANT Link Layer Deep Sleep Mode Status</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>DSM_ANT_FINISHED</name>
+                     <description>ANT Deep Sleep Time Finished</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>ANT_SYSCLK_REQUEST_EN</name>
+                     <description>Enable ANT Link Layer to Request RF OSC</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ANT_SLEEP_REQUEST</name>
+                     <description>ANT Link Layer Deep Sleep Requested</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>ANT_SYSCLK_REQ</name>
+                     <description>ANT Link Layer RF OSC Request Status</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>ANT_SYSCLK_INTERRUPT_EN</name>
+                     <description>ANT Link Layer RF OSC Request Interrupt Enable</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ANT_SYSCLK_REQ_INT</name>
+                     <description>Interrupt Flag from an ANT Link Layer RF OSC Request</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DSM_GEN_READY</name>
+                     <description>Generic FSK Ready for Deep Sleep Mode</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>GEN_DEEP_SLEEP_STATUS</name>
+                     <description>Generic FSK Link Layer Deep Sleep Mode Status</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>DSM_GEN_FINISHED</name>
+                     <description>Generic FSK Deep Sleep Time Finished</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>GEN_SYSCLK_REQUEST_EN</name>
+                     <description>Enable Generic FSK Link Layer to Request RF OSC</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>GEN_SLEEP_REQUEST</name>
+                     <description>Generic FSK Link Layer Deep Sleep Requested</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>GEN_SYSCLK_REQ</name>
+                     <description>Generic FSK Link Layer RF OSC Request Status</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>GEN_SYSCLK_INTERRUPT_EN</name>
+                     <description>Generic FSK Link Layer RF OSC Request Interrupt Enable</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>GEN_SYSCLK_REQ_INT</name>
+                     <description>Interrupt Flag from an Generic FSK Link Layer RF OSC Request</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>DSM_ZIG_READY</name>
+                     <description>802.15.4 Ready for Deep Sleep Mode</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>ZIG_DEEP_SLEEP_STATUS</name>
+                     <description>802.15.4 Link Layer Deep Sleep Mode Status</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>DSM_ZIG_FINISHED</name>
+                     <description>802.15.4 Deep Sleep Time Finished</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>ZIG_SYSCLK_REQUEST_EN</name>
+                     <description>Enable 802.15.4 Link Layer to Request RF OSC</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ZIG_SLEEP_REQUEST</name>
+                     <description>802.15.4 Link Layer Deep Sleep Requested</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>ZIG_SYSCLK_REQ</name>
+                     <description>802.15.4 Link Layer RF OSC Request Status</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>ZIG_SYSCLK_INTERRUPT_EN</name>
+                     <description>802.15.4 Link Layer RF OSC Request Interrupt Enable</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ZIG_SYSCLK_REQ_INT</name>
+                     <description>Interrupt Flag from an 802.15.4 Link Layer RF OSC Request</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>DSM_TIMER_CLR</name>
+                     <description>Deep Sleep Mode Timer Clear</description>
+                     <bitOffset>27</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DSM_TIMER_EN</name>
+                     <description>Deep Sleep Mode Timer Enable</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DSM_OSC_OFFSET</name>
+               <description>Deep Sleep Wakeup Time Offset</description>
+               <addressOffset>0x108</addressOffset>
+               <fields>
+                  <field>
+                     <name>DSM_OSC_STABILIZE_TIME</name>
+                     <description>Deep Sleep Wakeup RF OSC Stabilize Time</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ANT_SLEEP</name>
+               <description>ANT Link Layer Sleep Time</description>
+               <addressOffset>0x10C</addressOffset>
+               <fields>
+                  <field>
+                     <name>ANT_SLEEP_TIME</name>
+                     <description>ANT Link Layer Sleep Time</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ANT_WAKE</name>
+               <description>ANT Link Layer Wake Time</description>
+               <addressOffset>0x110</addressOffset>
+               <fields>
+                  <field>
+                     <name>ANT_WAKE_TIME</name>
+                     <description>ANT Link Layer Wake Time</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ZIG_SLEEP</name>
+               <description>802.15.4 Link Layer Sleep Time</description>
+               <addressOffset>0x114</addressOffset>
+               <fields>
+                  <field>
+                     <name>ZIG_SLEEP_TIME</name>
+                     <description>802.15.4 Link Layer Sleep Time</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ZIG_WAKE</name>
+               <description>802.15.4 Link Layer Wake Time</description>
+               <addressOffset>0x118</addressOffset>
+               <fields>
+                  <field>
+                     <name>ZIG_WAKE_TIME</name>
+                     <description>802.15.4 Link Layer Wake Time</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>GEN_SLEEP</name>
+               <description>Generic FSK Link Layer Sleep Time</description>
+               <addressOffset>0x11C</addressOffset>
+               <fields>
+                  <field>
+                     <name>GEN_SLEEP_TIME</name>
+                     <description>Generic FSK Link Layer Sleep Time</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>GEN_WAKE</name>
+               <description>Generic FSK Link Layer Wake Time</description>
+               <addressOffset>0x120</addressOffset>
+               <fields>
+                  <field>
+                     <name>GEN_WAKE_TIME</name>
+                     <description>Generic FSK Link Layer Wake Time</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RF_OSC_CTRL</name>
+               <description>Radio Oscillator Control</description>
+               <addressOffset>0x124</addressOffset>
+               <resetValue>0x203806</resetValue>
+               <fields>
+                  <field>
+                     <name>BB_XTAL_ALC_COUNT_SEL</name>
+                     <description>rmap_bb_xtal_alc_count_sel_hv[1:0]</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>BB_XTAL_ALC_ON</name>
+                     <description>rmap_bb_xtal_alc_on_hv</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RF_OSC_BYPASS_EN</name>
+                     <description>RF Ref Osc Bypass Enable</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BB_XTAL_COMP_BIAS</name>
+                     <description>rmap_bb_xtal_comp_bias_hv[4:0]</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>BB_XTAL_DC_COUP_MODE_EN</name>
+                     <description>rmap_bb_xtal_dc_coup_mode_en_hv</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BB_XTAL_DIAGSEL</name>
+                     <description>rmap_bb_xtal_diagsel_hv</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BB_XTAL_DIG_CLK_ON</name>
+                     <description>rmap_bb_xtal_dig_clk_on_hv</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BB_XTAL_GM</name>
+                     <description>rmap_bb_xtal_gm_hv[4:0]</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>BB_XTAL_ON_OVRD</name>
+                     <description>rmap_bb_xtal_on_ovrd_hv</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BB_XTAL_ON_OVRD_ON</name>
+                     <description>rmap_bb_xtal_on_ovrd_on_hv</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BB_XTAL_READY_COUNT_SEL</name>
+                     <description>rmap_bb_xtal_ready_count_sel_hv[1:0]</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>RADIO_EXT_OSC_RF_EN_SEL</name>
+                     <description>Radio External Request for RF OSC Select</description>
+                     <bitOffset>27</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RADIO_EXT_OSC_OVRD</name>
+                     <description>Radio External Request for RF OSC Override</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RADIO_EXT_OSC_OVRD_EN</name>
+                     <description>Radio External Request for RF OSC Override Enable</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RADIO_RF_ABORT_OVRD</name>
+                     <description>Radio RF Abort Override</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RADIO_RF_ABORT_OVRD_EN</name>
+                     <description>Radio RF Abort Override Enable</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ANA_TEST</name>
+               <description>Radio Analog Test</description>
+               <addressOffset>0x128</addressOffset>
+               <fields>
+                  <field>
+                     <name>BB_LDO_LS_BYP</name>
+                     <description>rmap_bb_ldo_ls_byp_hv</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BB_LDO_LS_DIAGSEL</name>
+                     <description>rmap_bb_ldo_ls_diagsel_hv</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BB_LDO_XO_BYP_ON</name>
+                     <description>rmap_bb_ldo_xo_byp_on_hv</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BB_LDO_XO_DIAGSEL</name>
+                     <description>rmap_bb_ldo_xo_diagsel_hv</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BB_XTAL_TEST</name>
+                     <description>rmap_bb_xtal_test_en_hv</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BG_DIAGBUF</name>
+                     <description>rmap_bg_diagbuf_hv</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BG_DIAGSEL</name>
+                     <description>rmap_bg_diagsel_hv</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BG_STARTUPFORCE</name>
+                     <description>rmap_bg_startupforce_hv</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DIAG_1234_ON</name>
+                     <description>rmap_diag_1234_on_hv</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DIAG2SOCADC_DEC</name>
+                     <description>rmap_diag2socadc_dec_hv[1:0]</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>DIAG2SOCADC_DEC_ON</name>
+                     <description>rmap_diag2socadc_dec_on_hv</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DIAGCODE</name>
+                     <description>rmap_diagcode_hv[2:0]</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>ANA_TRIM</name>
+               <description>Radio Analog Trim</description>
+               <addressOffset>0x12C</addressOffset>
+               <resetValue>0x784B0000</resetValue>
+               <fields>
+                  <field>
+                     <name>BB_LDO_LS_SPARE</name>
+                     <description>rmap_bb_ldo_ls_spare_hv[1:0]</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>BB_LDO_LS_TRIM</name>
+                     <description>rmap_bb_ldo_ls_trim_hv[2:0]</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>BB_LDO_XO_SPARE</name>
+                     <description>rmap_bb_ldo_xo_spare_hv[1:0]</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>BB_LDO_XO_TRIM</name>
+                     <description>rmap_bb_ldo_xo_trim_hv[2:0]</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>BB_XTAL_SPARE</name>
+                     <description>rmap_bb_xtal_spare_hv[4:0]</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>BB_XTAL_TRIM</name>
+                     <description>rmap_bb_xtal_trim_hv[7:0]</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>BG_1V_TRIM</name>
+                     <description>rmap_bg_1v_trim_hv[3:0]</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>BG_IBIAS_5U_TRIM</name>
+                     <description>rmap_bg_ibias_5u_trim_hv[3:0]</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

@@ -33,7 +33,7 @@ Devices using this peripheral:
       <peripheral>
          <?sourceFile "SCB_CM0" ?>
          <name>SCB</name>
-         <description>System Control</description>
+         <description>System Control Block</description>
          <groupName>SCB</groupName>
          <headerStructName>SCB</headerStructName>
          <baseAddress>0xE000E000</baseAddress>
@@ -86,6 +86,12 @@ Devices using this peripheral:
                      <description>Indicates part number</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>12</bitWidth>
+                  </field>
+                  <field>
+                     <name>ARCHITECTURE</name>
+                     <description>Indicates the architecture</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
                   </field>
                   <field>
                      <name>VARIANT</name>

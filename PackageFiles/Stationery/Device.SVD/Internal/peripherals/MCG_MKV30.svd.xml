@@ -19,7 +19,13 @@ Devices using this peripheral:
          <addressBlock>
             <?width "8" ?>
             <offset>0x0</offset>
-            <size>0x7</size>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x5</offset>
+            <size>0x2</size>
             <usage>registers</usage>
          </addressBlock>
          <addressBlock>
@@ -72,12 +78,12 @@ Enables the internal reference clock for use as MCGIRCLK</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>MCGIRCLK disabled</description>
+                           <description>MCGIRCLK inactive</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>MCGIRCLK enabled</description>
+                           <description>MCGIRCLK active</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -187,7 +193,7 @@ Selects the clock source for MCGOUTCLK</description>
                <description>Control 2 Register</description>
                <addressOffset>0x1</addressOffset>
                <size>8</size>
-               <resetValue>0x80</resetValue>
+               <resetValue>0xC0</resetValue>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
@@ -284,6 +290,11 @@ Selects the frequency range for the crystal oscillator or external clock source<
                            <name>0b01</name>
                            <description>High frequency range</description>
                            <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1X</name>
+                           <description>Very high frequency</description>
+                           <value>0b1X</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -423,14 +434,6 @@ The DMX32 bit controls whether the DCO frequency range is narrowed to its maximu
                </fields>
             </register>
             <register>
-               <name>C5</name>
-               <description>Control 5 Register</description>
-               <addressOffset>0x4</addressOffset>
-               <size>8</size>
-               <access>read-only</access>
-               <resetMask>0xFF</resetMask>
-            </register>
-            <register>
                <name>C6</name>
                <description>Control 6 Register</description>
                <addressOffset>0x5</addressOffset>
@@ -477,12 +480,12 @@ The IRCST bit indicates the current source for the internal reference clock sele
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>IRC is slow clock (32 kHz)</description>
+                           <description>Slow clock (32 kHz)</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>IRC is fast clock (4 MHz)</description>
+                           <description>Fast clock (4 MHz)</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -530,6 +533,11 @@ The CLKST bits do not update immediately due to internal synchronisation between
                            <description>External reference clock</description>
                            <value>0b10</value>
                         </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Reserved</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
@@ -575,8 +583,7 @@ The LOCS0 indicates when a loss of OSC0 reference clock has occurred</descriptio
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Loss has occurred\n
-			   Write-1 to clear</description>
+                           <description>Loss has occurred\nWrite-1 to clear</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -662,8 +669,7 @@ same during clock mode changes where the FLL/DCO output is still valid</descript
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>ATM failed\n
-			   Write-1 to clear</description>
+                           <description>ATM failed\nWrite-1 to clear</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

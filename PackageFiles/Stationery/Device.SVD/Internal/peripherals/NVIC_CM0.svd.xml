@@ -172,7 +172,7 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>CLRPEND0</name>
-                     <description>Interrupt set pending bits</description>
+                     <description>Interrupt clear pending bits</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>

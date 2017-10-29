@@ -49,6 +49,7 @@ Devices using this peripheral:
       MKW21D5
       MKW22D5
       MKW24D5
+      MKW41Z4
 -->
       <peripheral>
          <?sourceFile "ADC0_DIFF_A" ?>

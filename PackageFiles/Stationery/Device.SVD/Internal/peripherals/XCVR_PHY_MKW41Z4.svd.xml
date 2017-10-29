@@ -1,0 +1,481 @@
+<!--
+Devices using this peripheral: 
+      MKW41Z4
+-->
+      <peripheral>
+         <?sourceFile "XCVR_PHY_MKW41Z4" ?>
+         <name>XCVR_PHY</name>
+         <description>XCVR_PHY</description>
+         <groupName>XCVR_PHY</groupName>
+         <headerStructName>XCVR_PHY</headerStructName>
+         <baseAddress>0x4005C400</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0xC</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x20</offset>
+            <size>0x14</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>PHY_PRE_REF0</name>
+               <description>PREAMBLE REFERENCE WAVEFORM 0</description>
+               <addressOffset>0x0</addressOffset>
+               <resetValue>0xFDDDEB39</resetValue>
+               <fields>
+                  <field>
+                     <name>FSK_PREAMBLE_REF0</name>
+                     <description>Base preamble reference waveform containing sixteen 5-bit phase values</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PRE_REF1</name>
+               <description>PREAMBLE REFERENCE WAVEFORM 1</description>
+               <addressOffset>0x4</addressOffset>
+               <resetValue>0xBEFBFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>FSK_PREAMBLE_REF1</name>
+                     <description>Base preamble reference waveform containing sixteen 5-bit phase values</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PRE_REF2</name>
+               <description>PREAMBLE REFERENCE WAVEFORM 2</description>
+               <addressOffset>0x8</addressOffset>
+               <resetValue>0xCE75</resetValue>
+               <fields>
+                  <field>
+                     <name>FSK_PREAMBLE_REF2</name>
+                     <description>Base preamble reference waveform containing sixteen 5-bit phase values</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CFG1</name>
+               <description>PHY CONFIGURATION REGISTER 1</description>
+               <addressOffset>0x20</addressOffset>
+               <resetValue>0x1070CD16</resetValue>
+               <fields>
+                  <field>
+                     <name>AA_PLAYBACK</name>
+                     <description>Access Address Playback</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AA_OUTPUT_SEL</name>
+                     <description>Access Address Output Select</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>demodulated</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>matched</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FSK_BIT_INVERT</name>
+                     <description>FSK Bit Invert</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RFU00</name>
+                     <description>Reserved for future use</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BSM_EN_BLE</name>
+                     <description>BLE Bit Streaming Mode Enable bit</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>BSM for BLE disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>BSM for BLE enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DEMOD_CLK_MODE</name>
+                     <description>Demodulator Clock Mode</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Normal</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Demodulate all samples</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CTS_THRESH</name>
+                     <description>CTS (Coarse Timing Search) Correlation Threshold</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>FSK_FTS_TIMEOUT</name>
+                     <description>FSK FTS Timeout</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>4 symbols</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>5 symbols</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>2</name>
+                           <description>6 symbols</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>3</name>
+                           <description>7 symbols</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>4</name>
+                           <description>8 symbols</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>5</name>
+                           <description>9 symbols</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>6</name>
+                           <description>10 symbols</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>7</name>
+                           <description>11 symbols</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RFU01</name>
+                     <description>Reserved for future use</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RFU02</name>
+                     <description>Reserved for future use</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BLE_NTW_ADR_THR</name>
+                     <description>BLE Network Address Match Bit Error Threshold</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CFG2</name>
+               <description>PHY CONFIGURATION REGISTER 2</description>
+               <addressOffset>0x24</addressOffset>
+               <resetValue>0x1000A48</resetValue>
+               <fields>
+                  <field>
+                     <name>PHY_FIFO_PRECHG</name>
+                     <description>PHY FIFO Precharge Level</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>RFU03</name>
+                     <description>Reserved for future use</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RFU04</name>
+                     <description>Reserved for future use</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RFU05</name>
+                     <description>Reserved for future use</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RFU06</name>
+                     <description>Reserved for future use</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>X2_DEMOD_GAIN</name>
+                     <description>X2_DEMOD_GAIN</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>RFU07</name>
+                     <description>Reserved for future use</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RFU08</name>
+                     <description>Reserved for future use</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RFU09</name>
+                     <description>Reserved for future use</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RFU10</name>
+                     <description>Reserved for future use</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RFU11</name>
+                     <description>Reserved for future use</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RFU12</name>
+                     <description>Reserved for future use</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RFU13</name>
+                     <description>Reserved for future use</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RFU14</name>
+                     <description>Reserved for future use</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RFU15</name>
+                     <description>Reserved for future use</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RFU16</name>
+                     <description>Reserved for future use</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PHY_CLK_ON</name>
+                     <description>Force PHY Clock On (testmode)</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>PHY clock is enabled by TSM output: rx_phy_en</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>PHY clock is forced on at all times</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EL_CFG</name>
+               <description>PHY EARLY/LATE CONFIGURATION REGISTER</description>
+               <addressOffset>0x28</addressOffset>
+               <fields>
+                  <field>
+                     <name>EL_ENABLE</name>
+                     <description>EL_ENABLE</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Disable Early/Late</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Enable Early/Late</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="EL_ENABLE" > <name>EL_ZB_ENABLE</name> <description>EL_ZB_ENABLE</description> <bitOffset>1</bitOffset> </field>
+                  <field>
+                     <name>EL_ZB_WIN_SIZE</name>
+                     <description>EL_ZB_WIN_SIZE</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>2 symbols</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>3 symbols</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>EL_WIN_SIZE</name>
+                     <description>EL_WIN_SIZE</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>EL_INTERVAL</name>
+                     <description>EL_INTERVAL</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>NTW_ADR_BSM</name>
+               <description>PHY NETWORK ADDRESS FOR BSM</description>
+               <addressOffset>0x2C</addressOffset>
+               <fields>
+                  <field>
+                     <name>NTW_ADR_BSM</name>
+                     <description>NTW_ADR_BSM</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>STATUS</name>
+               <description>PHY STATUS REGISTER</description>
+               <addressOffset>0x30</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>PREAMBLE_FOUND</name>
+                     <description>Preamble Found</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AA_SFD_MATCHED</name>
+                     <description>Access Address or SFD Found</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AA_MATCHED</name>
+                     <description>Access Address Matched</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0000</name>
+                           <description>No Network Address has matched</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0001</name>
+                           <description>Network Address 0 has matched</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0010</name>
+                           <description>Network Address 1 has matched</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0100</name>
+                           <description>Network Address 2 has matched</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1000</name>
+                           <description>Network Address 3 has matched</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>HAMMING_DISTANCE</name>
+                     <description>HAMMING DISTANCE</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>DATA_FIFO_DEPTH</name>
+                     <description>DATA FIFO DEPTH</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>CFO_ESTIMATE</name>
+                     <description>Carrier Frequency Offset Estimate</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

@@ -6,7 +6,7 @@ Devices using this peripheral:
       <peripheral>
          <?sourceFile "CMP0_MK22F" ?>
          <name>CMP0</name>
-         <description>High-Speed Comparator (CMP), Voltage Reference (VREF) Digital-to-Analog Converter (DAC), and Analog Mux</description>
+         <description>Comparator, Voltage Ref, D-to-A Converter and Analog Mux</description>
          <groupName>CMP</groupName>
          <headerStructName>CMP</headerStructName>
          <baseAddress>0x40073000</baseAddress>
@@ -213,34 +213,17 @@ Controls availability of the comparator output on the associated CMPO output pin
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Trigger mode is disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Trigger mode is enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>WE</name>
-                     <description>Windowing Enable</description>
-                     <bitOffset>6</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Not selected</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Selected</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="TRIGM" > <name>WE</name> <description>Windowing Enable</description> <bitOffset>6</bitOffset> </field>
                   <field derivedFrom="WE" > <name>SE</name> <description>Sample Enable</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
@@ -316,12 +299,12 @@ Controls availability of the comparator output on the associated CMPO output pin
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Interrupt Disabled</description>
+                           <description>Interrupt disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Interrupt Enabled</description>
+                           <description>Interrupt enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -335,12 +318,12 @@ Controls availability of the comparator output on the associated CMPO output pin
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>DMA Disabled</description>
+                           <description>DMA disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>DMA Enabled</description>
+                           <description>DMA enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -413,32 +396,32 @@ Controls availability of the comparator output on the associated CMPO output pin
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b000</name>
-                           <description>CMP0_IN0</description>
+                           <description>IN0</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b001</name>
-                           <description>CMP0_IN1</description>
+                           <description>IN1</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b010</name>
-                           <description>CMP0_IN2</description>
+                           <description>IN2</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b011</name>
-                           <description>CMP0_IN3</description>
+                           <description>IN3</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b100</name>
-                           <description>CMP0_IN4/12-bit DAC1 Output</description>
+                           <description>IN4/12-bit DAC1 Output</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b101</name>
-                           <description>CMP0_IN5/VREF Output</description>
+                           <description>IN5/VREF Output</description>
                            <value>0b101</value>
                         </enumeratedValue>
                         <enumeratedValue>

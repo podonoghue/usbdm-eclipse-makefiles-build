@@ -1,0 +1,1285 @@
+<!--
+Devices using this peripheral: 
+      MKW41Z4
+-->
+      <peripheral>
+         <?sourceFile "XCVR_MISC_MKW41Z4" ?>
+         <name>XCVR_MISC</name>
+         <description>XCVR_MISC</description>
+         <groupName>XCVR_MISC</groupName>
+         <headerStructName>XCVR_MISC</headerStructName>
+         <baseAddress>0x4005C280</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0xC</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x10</offset>
+            <size>0x2C</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>XCVR_CTRL</name>
+               <description>TRANSCEIVER CONTROL</description>
+               <addressOffset>0x0</addressOffset>
+               <resetValue>0x101000</resetValue>
+               <fields>
+                  <field>
+                     <name>PROTOCOL</name>
+                     <description>Radio Protocol Selection</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0000</name>
+                           <description>BLE</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0001</name>
+                           <description>BLE in MBAN</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0010</name>
+                           <description>BLE overlap MBAN</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0011</name>
+                           <description>ANT</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0100</name>
+                           <description>Zigbee</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0101</name>
+                           <description>802.15.4j</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0110</name>
+                           <description>128 Channel FSK</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0111</name>
+                           <description>128 Channel GFSK</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1000</name>
+                           <description>Generic FSK</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1001</name>
+                           <description>MSK</description>
+                           <value>0b1001</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TGT_PWR_SRC</name>
+                     <description>Target Power Source</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>REF_CLK_FREQ</name>
+                     <description>Radio Reference Clock Frequency</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>00</name>
+                           <description>32 MHz</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01</name>
+                           <description>26 MHz</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SOC_RF_OSC_CLK_GATE_EN</name>
+                     <description>SOC_RF_OSC_CLK_GATE_EN</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DEMOD_SEL</name>
+                     <description>Demodulator Selector</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>00</name>
+                           <description>No demodulator selected</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01</name>
+                           <description>Use Freescale Constant Envelope demodulator</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10</name>
+                           <description>Use Legacy 802.15.4 demodulator</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RADIO0_IRQ_SEL</name>
+                     <description>RADIO0_IRQ_SEL</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>000</name>
+                           <description>Assign Radio #0 Interrupt to BLE</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>001</name>
+                           <description>Assign Radio #0 Interrupt to 802.15.4</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>010</name>
+                           <description>Assign Radio #0 Interrupt to ANT</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>011</name>
+                           <description>Assign Radio #0 Interrupt to GENERIC_FSK</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>100</name>
+                           <description>Radio #0 Interrupt unassigned</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>101</name>
+                           <description>Radio #0 Interrupt unassigned</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>110</name>
+                           <description>Radio #0 Interrupt unassigned</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>111</name>
+                           <description>Radio #0 Interrupt unassigned</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RADIO1_IRQ_SEL</name>
+                     <description>RADIO1_IRQ_SEL</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>000</name>
+                           <description>Assign Radio #1 Interrupt to BLE</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>001</name>
+                           <description>Assign Radio #1 Interrupt to 802.15.4</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>010</name>
+                           <description>Assign Radio #1 Interrupt to ANT</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>011</name>
+                           <description>Assign Radio #1 Interrupt to GENERIC_FSK</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>100</name>
+                           <description>Radio #1 Interrupt unassigned</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>101</name>
+                           <description>Radio #1 Interrupt unassigned</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>110</name>
+                           <description>Radio #1 Interrupt unassigned</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>111</name>
+                           <description>Radio #1 Interrupt unassigned</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>XCVR_STATUS</name>
+               <description>TRANSCEIVER STATUS</description>
+               <addressOffset>0x4</addressOffset>
+               <resetMask>0xFFF0C000</resetMask>
+               <fields>
+                  <field>
+                     <name>TSM_COUNT</name>
+                     <description>TSM_COUNT</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>PLL_SEQ_STATE</name>
+                     <description>PLL Sequence State</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>PLL OFF</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>2</name>
+                           <description>CTUNE</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>3</name>
+                           <description>CTUNE_SETTLE</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>6</name>
+                           <description>HPMCAL1</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>8</name>
+                           <description>HPMCAL1_SETTLE</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10</name>
+                           <description>HPMCAL2</description>
+                           <value>0b1010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>12</name>
+                           <description>HPMCAL2_SETTLE</description>
+                           <value>0b1100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>15</name>
+                           <description>PLLREADY</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RX_MODE</name>
+                     <description>Receive Mode</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>TX_MODE</name>
+                     <description>Transmit Mode</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>BTLE_SYSCLK_REQ</name>
+                     <description>BTLE System Clock Request</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>RIF_LL_ACTIVE</name>
+                     <description>Link Layer Active Indication</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>XTAL_READY</name>
+                     <description>RF Osciallator Xtal Ready</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Indicates that the RF Oscillator is disabled or has not completed its warmup</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Indicates that the RF Oscillator has completed its warmup count and is ready for use</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SOC_USING_RF_OSC_CLK</name>
+                     <description>SOC Using RF Clock Indication</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>TSM_IRQ0</name>
+                     <description>TSM Interrupt #0</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>TSM Interrupt #0 is not asserted</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>TSM Interrupt #0 is asserted. Write &apos;1&apos; to this bit to clear it</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TSM_IRQ1</name>
+                     <description>TSM Interrupt #1</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>TSM Interrupt #1 is not asserted</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>TSM Interrupt #1 is asserted. Write &apos;1&apos; to this bit to clear it</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>BLE_ARB_CTRL</name>
+               <description>BLE ARBITRATION CONTROL</description>
+               <addressOffset>0x8</addressOffset>
+               <fields>
+                  <field>
+                     <name>BLE_RELINQUISH</name>
+                     <description>BLE Relinquish Control</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>XCVR_BUSY</name>
+                     <description>Transceiver Busy Status Bit</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>RF Channel in available (TSM is idle)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>RF Channel in use (TSM is busy)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>OVERWRITE_VER</name>
+               <description>OVERWRITE VERSION</description>
+               <addressOffset>0x10</addressOffset>
+               <fields>
+                  <field>
+                     <name>OVERWRITE_VER</name>
+                     <description>Overwrite Version Number</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DMA_CTRL</name>
+               <description>TRANSCEIVER DMA CONTROL</description>
+               <addressOffset>0x14</addressOffset>
+               <resetValue>0x300</resetValue>
+               <fields>
+                  <field>
+                     <name>DMA_PAGE</name>
+                     <description>Transceiver DMA Page Selector</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0000</name>
+                           <description>DMA Idle</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0001</name>
+                           <description>RX_DIG I and Q</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0010</name>
+                           <description>RX_DIG I Only</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0011</name>
+                           <description>RX_DIG Q Only</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0100</name>
+                           <description>RAW ADC I and Q</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0101</name>
+                           <description>RAW ADC I Only</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0110</name>
+                           <description>RAW ADC Q only</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0111</name>
+                           <description>DC Estimator I and Q</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1000</name>
+                           <description>DC Estimator I Only</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1001</name>
+                           <description>DC Estimator Q only</description>
+                           <value>0b1001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1010</name>
+                           <description>RX_DIG Phase Output</description>
+                           <value>0b1010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1011</name>
+                           <description>Demodulator Hard Decision</description>
+                           <value>0b1011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1100</name>
+                           <description>Demodulator Soft Decision</description>
+                           <value>0b1100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1101</name>
+                           <description>Demodulator Data Output</description>
+                           <value>0b1101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1110</name>
+                           <description>Demodulator CFO Phase Output</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SINGLE_REQ_MODE</name>
+                     <description>DMA Single Request Mode</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Disable Single Request Mode. The transceiver will assert ipd_req_radio_rx whenever it has a new sample ready for transfer</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Enable Single Request Mode. A single initial request by the transceiver will transfer the entire DMA block of data</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BYPASS_DMA_SYNC</name>
+                     <description>Bypass External DMA Synchronization</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Don&apos;t Bypass External Synchronization. Use this setting if SINGLE_REQ_MODE=1</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Bypass External Synchronization. This setting is mandatory if SINGLE_REQ_MODE=0</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DMA_TRIGGERRED</name>
+                     <description>DMA TRIGGERRED</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>DMA_TIMED_OUT</name>
+                     <description>DMA Transfer Timed Out</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>A DMA timeout has not occurred</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>A DMA timeout has occurred in Single Request Mode since the last time this bit was cleared</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DMA_TIMEOUT</name>
+                     <description>DMA Timeout</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DMA_DATA</name>
+               <description>TRANSCEIVER DMA DATA</description>
+               <addressOffset>0x18</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>DMA_DATA</name>
+                     <description>DMA Data Register</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DTEST_CTRL</name>
+               <description>DIGITAL TEST MUX CONTROL</description>
+               <addressOffset>0x1C</addressOffset>
+               <fields>
+                  <field>
+                     <name>DTEST_PAGE</name>
+                     <description>DTEST Page Selector</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>DTEST_EN</name>
+                     <description>DTEST Enable</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Disables DTEST. The DTEST pins assume their mission function</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Enables DTEST. The contents of the selected page (DTEST_PAGE) will appear on the DTEST output pins</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>GPIO0_OVLAY_PIN</name>
+                     <description>GPIO 0 Overlay Pin</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>GPIO1_OVLAY_PIN</name>
+                     <description>GPIO 1 Overlay Pin</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>TSM_GPIO_OVLAY</name>
+                     <description>TSM GPIO Overlay Pin Control</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>00</name>
+                           <description>there is no overlay, and the DTEST Page Table dictates the node that appears on each DTEST pin</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01</name>
+                           <description>the register GPIO0_OVLAY_PIN[3:0] selects the DTEST pin on which GPIO0_TRIG_EN will appear</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DTEST_SHFT</name>
+                     <description>DTEST Shift Control</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>RAW_MODE_I</name>
+                     <description>DTEST Raw Mode Enable for I Channel</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RAW_MODE_Q</name>
+                     <description>DTEST Raw Mode Enable for Q Channel</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PACKET_RAM_CTRL</name>
+               <description>PACKET RAM CONTROL</description>
+               <addressOffset>0x20</addressOffset>
+               <fields>
+                  <field>
+                     <name>DBG_PAGE</name>
+                     <description>Packet RAM Debug Page Selector</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0000</name>
+                           <description>Packet RAM Debug Mode Idle</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0001</name>
+                           <description>RX_DIG I and Q</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0100</name>
+                           <description>RAW ADC I and Q</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0111</name>
+                           <description>DC Estimator I and Q</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1010</name>
+                           <description>RX_DIG Phase Output</description>
+                           <value>0b1010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1011</name>
+                           <description>Demodulator Hard Decision</description>
+                           <value>0b1011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1100</name>
+                           <description>Demodulator Soft Decision</description>
+                           <value>0b1100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1101</name>
+                           <description>Demodulator Data Output</description>
+                           <value>0b1101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1110</name>
+                           <description>Demodulator CFO Phase Output</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PB_PROTECT</name>
+                     <description>Packet Buffer Protect</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Incoming received packets overwrite Packet Buffer RX contents (default)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Incoming received packets are blocked from overwriting Packet Buffer RX contents</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>XCVR_RAM_ALLOW</name>
+                     <description>Allow Packet RAM Transceiver Access</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Protocol Engines, and associated IPS busses, have exclusive access to Packet RAM (mission mode)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Transceiver-space access to Packet RAM, including Packet RAM debug mode, are allowed</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ALL_PROTOCOLS_ALLOW</name>
+                     <description>Allow IPS bus access to Packet RAM for any protocol at any time</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>IPS bus access to Packet RAM is restricted to the protocol engine currently selected by XCVR_CTRL[PROTOCOL]</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>All IPS bus access to Packet RAM permitted, regardless of XCVR_CTRL[PROTOCOL] setting</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DBG_TRIGGERRED</name>
+                     <description>DBG_TRIGGERRED</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>DBG_RAM_FULL</name>
+                     <description>DBG_RAM_FULL[1:0]</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>00</name>
+                           <description>Neither Packet RAM0 nor RAM1 is full</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RAM0_CLK_ON_OVRD_EN</name>
+                     <description>Override control for RAM0 Clock Gate Enable</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Use the state of RAM0_CLK_ON_OVRD to override the RAM0 Clock Gate Enable</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RAM0_CLK_ON_OVRD</name>
+                     <description>Override value for RAM0 Clock Gate Enable</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RAM1_CLK_ON_OVRD_EN</name>
+                     <description>Override control for RAM1 Clock Gate Enable</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Use the state of RAM1_CLK_ON_OVRD to override the RAM1 Clock Gate Enable</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RAM1_CLK_ON_OVRD</name>
+                     <description>Override value for RAM1 Clock Gate Enable</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RAM0_CE_ON_OVRD_EN</name>
+                     <description>Override control for RAM0 CE (Chip Enable)</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Use the state of RAM0_CE_ON_OVRD to override the RAM0 CE</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RAM0_CE_ON_OVRD</name>
+                     <description>Override value for RAM0 CE (Chip Enable)</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RAM1_CE_ON_OVRD_EN</name>
+                     <description>Override control for RAM1 CE (Chip Enable)</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Normal operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Use the state of RAM1_CE_ON_OVRD to override the RAM1 CE</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RAM1_CE_ON_OVRD</name>
+                     <description>Override value for RAM1 CE (Chip Enable)</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FAD_CTRL</name>
+               <description>FAD CONTROL</description>
+               <addressOffset>0x24</addressOffset>
+               <resetValue>0xF080</resetValue>
+               <fields>
+                  <field>
+                     <name>FAD_EN</name>
+                     <description>Fast Antenna Diversity Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Fast Antenna Diversity disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Fast Antenna Diversity enabled for 802.15.4</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ANTX</name>
+                     <description>Antenna Selection State</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ANTX_EN</name>
+                     <description>FAD Antenna Controls Enable</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>00</name>
+                           <description>all disabled (held low)</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01</name>
+                           <description>only RX/TX_SWITCH enabled</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10</name>
+                           <description>only ANT_A/B enabled</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>11</name>
+                           <description>all enabled</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ANTX_HZ</name>
+                     <description>FAD PAD Tristate Control</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>ANT_A, ANT_B, RX_SWITCH and TX_SWITCH are actively driven outputs</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Antenna controls high impedance- Set ANT_A, ANT_B, RX_SWITCH and TX_SWITCH in high impedance</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ANTX_CTRLMODE</name>
+                     <description>Antenna Diversity Control Mode</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ANTX_POL</name>
+                     <description>FAD Antenna Controls Polarity</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>FAD_NOT_GPIO</name>
+                     <description>FAD versus GPIO Mode Selector</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LPPS_CTRL</name>
+               <description>LOW POWER PREAMBLE SEARCH CONTROL</description>
+               <addressOffset>0x28</addressOffset>
+               <resetValue>0x64260000</resetValue>
+               <fields>
+                  <field>
+                     <name>LPPS_ENABLE</name>
+                     <description>LPPS_ENABLE</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>LPPS_TZA_ALLOW</name>
+                     <description>LPPS_TZA_ALLOW</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>LPPS_BBA_ALLOW</name>
+                     <description>LPPS_BBA_ALLOW</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>LPPS_ADC_ALLOW</name>
+                     <description>LPPS_ADC_ALLOW</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>LPPS_DCOC_ALLOW</name>
+                     <description>LPPS_DCOC_ALLOW</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>LPPS_PDET_ALLOW</name>
+                     <description>LPPS_PDET_ALLOW</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>LPPS_SY_LO_ALLOW</name>
+                     <description>LPPS_SY_LO_ALLOW</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>LPPS_SY_LO_BUF_ALLOW</name>
+                     <description>LPPS_SY_LO_BUF_ALLOW</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>LPPS_RX_DIG_ALLOW</name>
+                     <description>LPPS_RX_DIG_ALLOW</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>LPPS_DCOC_DIG_ALLOW</name>
+                     <description>LPPS_DCOC_DIG_ALLOW</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>LPPS_START_RX</name>
+                     <description>LPPS Fast TSM RX Warmup &quot;Jump-from&quot; Point</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>LPPS_DEST_RX</name>
+                     <description>LPPS Fast TSM RX Warmup &quot;Jump-to&quot; Point</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RF_NOT_ALLOWED_CTRL</name>
+               <description>WIFI COEXISTENCE CONTROL</description>
+               <addressOffset>0x2C</addressOffset>
+               <fields>
+                  <field>
+                     <name>RF_NOT_ALLOWED_NO_TX</name>
+                     <description>RF_NOT_ALLOWED_NO_TX</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Assertion on RF_NOT_ALLOWED has no effect on TX</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Assertion on RF_NOT_ALLOWED can abort TX</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RF_NOT_ALLOWED_NO_RX</name>
+                     <description>RF_NOT_ALLOWED_NO_RX</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Assertion on RF_NOT_ALLOWED has no effect on RX</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Assertion on RF_NOT_ALLOWED can abort RX</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RF_NOT_ALLOWED_ASSERTED</name>
+                     <description>RF_NOT_ALLOWED_ASSERTED</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Assertion on RF_NOT_ALLOWED has not occurred</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Assertion on RF_NOT_ALLOWED has occurred since the last time this bit was cleared</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RF_NOT_ALLOWED_TX_ABORT</name>
+                     <description>RF_NOT_ALLOWED_TX_ABORT</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>A TX abort due to assertion on RF_NOT_ALLOWED has not occurred</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>A TX abort due to assertion on RF_NOT_ALLOWED has occurred since the last time this bit was cleared</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RF_NOT_ALLOWED_RX_ABORT</name>
+                     <description>RF_NOT_ALLOWED_RX_ABORT</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>A RX abort due to assertion on RF_NOT_ALLOWED has not occurred</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>A RX abort due to assertion on RF_NOT_ALLOWED has occurred since the last time this bit was cleared</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RF_NOT_ALLOWED</name>
+                     <description>RF_NOT_ALLOWED</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CRCW_CFG</name>
+               <description>CRC/WHITENER CONTROL</description>
+               <addressOffset>0x30</addressOffset>
+               <resetValue>0x1</resetValue>
+               <fields>
+                  <field>
+                     <name>CRCW_EN</name>
+                     <description>CRC calculation enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CRC_ZERO</name>
+                     <description>CRC zero</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>CRC_EARLY_FAIL</name>
+                     <description>CRC error correction fail</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>CRC_RES_OUT_VLD</name>
+                     <description>CRC result output valid</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>CRC_EC_OFFSET</name>
+                     <description>CRC error correction offset</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>11</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>CRC_EC_DONE</name>
+                     <description>CRC error correction done</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>CRC_EC_FAIL</name>
+                     <description>CRC error correction fail</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CRC_EC_MASK</name>
+               <description>CRC ERROR CORRECTION MASK</description>
+               <addressOffset>0x34</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>CRC_EC_MASK</name>
+                     <description>CRC error correction mask</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CRC_RES_OUT</name>
+               <description>CRC RESULT</description>
+               <addressOffset>0x38</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>CRC_RES_OUT</name>
+                     <description>CRC result output</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

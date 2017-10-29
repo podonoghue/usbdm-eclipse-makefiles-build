@@ -1,0 +1,1142 @@
+<!--
+Devices using this peripheral: 
+      MKW41Z4
+-->
+      <peripheral>
+         <?sourceFile "XCVR_PLL_DIG_MKW41Z4" ?>
+         <name>XCVR_PLL_DIG</name>
+         <description>XCVR_PLL_DIG</description>
+         <groupName>XCVR_PLL_DIG</groupName>
+         <headerStructName>XCVR_PLL_DIG</headerStructName>
+         <baseAddress>0x4005C224</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x58</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>HPM_BUMP</name>
+               <description>PLL HPM Analog Bump Control</description>
+               <addressOffset>0x0</addressOffset>
+               <resetValue>0x1010</resetValue>
+               <fields>
+                  <field>
+                     <name>HPM_VCM_TX</name>
+                     <description>rfctrl_tx_dac_bump_vcm[2:0] during Transmission</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>000</name>
+                           <description>432 mV</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>001</name>
+                           <description>328 mV</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>010</name>
+                           <description>456 mV</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>011</name>
+                           <description>473 mV</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>100</name>
+                           <description>488 mV</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>101</name>
+                           <description>408 mV</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>110</name>
+                           <description>392 mV</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>111</name>
+                           <description>376 mV</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="HPM_VCM_TX" > <name>HPM_VCM_CAL</name> <description>rfctrl_tx_dac_bump_vcm[2:0] during Calibration</description> <bitOffset>4</bitOffset> </field>
+                  <field>
+                     <name>HPM_FDB_RES_TX</name>
+                     <description>rfctrl_tx_dac_bump_fdb_res[1:0] during Transmission</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>00</name>
+                           <description>29 kohms</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01</name>
+                           <description>58 kohms(gain of 2)</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10</name>
+                           <description>13 kohms</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>11</name>
+                           <description>23.7 kohms</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="HPM_FDB_RES_TX" > <name>HPM_FDB_RES_CAL</name> <description>rfctrl_tx_dac_bump_fdb_res[1:0] during Calibration</description> <bitOffset>12</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>MOD_CTRL</name>
+               <description>PLL Modulation Control</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>MODULATION_WORD_MANUAL</name>
+                     <description>Manual Modulation Word</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>13</bitWidth>
+                  </field>
+                  <field>
+                     <name>MOD_DISABLE</name>
+                     <description>Disable Modulation Word</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>HPM_MOD_MANUAL</name>
+                     <description>Manual HPM Modulation</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>HPM_MOD_DISABLE</name>
+                     <description>Disable HPM Modulation</description>
+                     <bitOffset>27</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>HPM_SDM_OUT_MANUAL</name>
+                     <description>Manual HPM SDM out</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>HPM_SDM_OUT_DISABLE</name>
+                     <description>Disable HPM SDM out</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CHAN_MAP</name>
+               <description>PLL Channel Mapping</description>
+               <addressOffset>0x8</addressOffset>
+               <resetValue>0x200</resetValue>
+               <fields>
+                  <field>
+                     <name>CHANNEL_NUM</name>
+                     <description>Protocol specific Channel Number for PLL Frequency Mapping</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>BOC</name>
+                     <description>BLE Channel Number Override</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>BLE channel number comes from the BLE Link Layer</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>BLE channel number comes from the CHANNEL_NUM register (BLE protocols 0 and 2)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BMR</name>
+                     <description>BLE MBAN Channel Remap</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>BLE channel 39 is mapped to BLE channel 39, 2.480 GHz</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>BLE channel 39 is mapped to MBAN channel 39, 2.399 GHz</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ZOC</name>
+                     <description>802.15.4 Channel Number Override</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>802.15.4 channel number comes from the 802.15.4 Link Layer</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>802.15.4 channel number comes from the CHANNEL_NUM register (802.15.4 protocols 4 and 5)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LOCK_DETECT</name>
+               <description>PLL Lock Detect Control</description>
+               <addressOffset>0xC</addressOffset>
+               <resetValue>0x606800</resetValue>
+               <fields>
+                  <field>
+                     <name>CT_FAIL</name>
+                     <description>Real time status of Coarse Tune Fail signal</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>CTFF</name>
+                     <description>CTUNE Failure Flag, held until cleared</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CS_FAIL</name>
+                     <description>Real time status of Cycle Slip circuit</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>CSFF</name>
+                     <description>Cycle Slip Failure Flag, held until cleared</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>FT_FAIL</name>
+                     <description>Real time status of Frequency Target Failure</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>FTFF</name>
+                     <description>Frequency Target Failure Flag</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TAFF</name>
+                     <description>TSM Abort Failure Flag</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CTUNE_LDF_LEV</name>
+                     <description>CTUNE Lock Detect Fail Level</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>FTF_RX_THRSH</name>
+                     <description>RX Frequency Target Fail Threshold</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>FTW_RX</name>
+                     <description>RX Frequency Target Window time select</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>4 us</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>8 us</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FTF_TX_THRSH</name>
+                     <description>TX Frequency Target Fail Threshold</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field derivedFrom="FTW_RX" > <name>FTW_TX</name> <description>TX Frequency Target Window time select</description> <bitOffset>27</bitOffset> </field>
+                  <field>
+                     <name>FREQ_COUNT_GO</name>
+                     <description>Start the Frequency Meter</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>FREQ_COUNT_FINISHED</name>
+                     <description>Frequency Meter has finished the Count Time</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>FREQ_COUNT_TIME</name>
+                     <description>Frequency Meter Count Time</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>00</name>
+                           <description>10 us</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01</name>
+                           <description>25 us</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10</name>
+                           <description>50 us</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>11</name>
+                           <description>100 us</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>HPM_CTRL</name>
+               <description>PLL High Port Modulator Control</description>
+               <addressOffset>0x10</addressOffset>
+               <resetValue>0x90840000</resetValue>
+               <fields>
+                  <field>
+                     <name>HPM_SDM_IN_MANUAL</name>
+                     <description>Manual High Port SDM Fractional value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+                  <field>
+                     <name>HPFF</name>
+                     <description>HPM SDM Invalid Flag</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>HPM_SDM_OUT_INVERT</name>
+                     <description>Invert HPM SDM Output</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>HPM_SDM_IN_DISABLE</name>
+                     <description>Disable HPM SDM Input</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>HPM_LFSR_SIZE</name>
+                     <description>HPM LFSR Length</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>000</name>
+                           <description>LFSR 9, tap mask 100010000</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>001</name>
+                           <description>LFSR 10, tap mask 1001000000</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>010</name>
+                           <description>LFSR 11, tap mask 11101000000</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>011</name>
+                           <description>LFSR 13, tap mask 1101100000000</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>100</name>
+                           <description>LFSR 15, tap mask 111010000000000</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>101</name>
+                           <description>LFSR 17, tap mask 11110000000000000</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>HPM_DTH_SCL</name>
+                     <description>HPM Dither Scale</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>HPM_DTH_EN</name>
+                     <description>Dither Enable for HPM LFSR</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>HPM_INTEGER_SCALE</name>
+                     <description>High Port Modulation Integer Scale</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>00</name>
+                           <description>No Scaling</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01</name>
+                           <description>Multiply by 2</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10</name>
+                           <description>Divide by 2</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>HPM_INTEGER_INVERT</name>
+                     <description>Invert High Port Modulation Integer</description>
+                     <bitOffset>27</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>HPM_CAL_INVERT</name>
+                     <description>Invert High Port Modulator Calibration</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>HPM_MOD_IN_INVERT</name>
+                     <description>Invert High Port Modulation</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>HPMCAL_CTRL</name>
+               <description>PLL High Port Calibration Control</description>
+               <addressOffset>0x14</addressOffset>
+               <resetValue>0x40000221</resetValue>
+               <fields>
+                  <field>
+                     <name>HPM_CAL_FACTOR</name>
+                     <description>High Port Modulation Calibration Factor</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>13</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>HPM_CAL_NOT_BUMPED</name>
+                     <description>HPM_CAL_NOT_BUMPED</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>HPM_CAL_COUNT_SCALE</name>
+                     <description>HPM_CAL_COUNT_SCALE</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>HP_CAL_DISABLE</name>
+                     <description>Disable HPM Manual Calibration</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>HPM_CAL_FACTOR_MANUAL</name>
+                     <description>Manual HPM Calibration Factor</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>13</bitWidth>
+                  </field>
+                  <field>
+                     <name>HPM_CAL_ARRAY_SIZE</name>
+                     <description>High Port Modulation Calibration Array Size</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>128</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>256</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>HPM_CAL_TIME</name>
+                     <description>High Port Modulation Calibration Time</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>25 us</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>50 us</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>HPM_CAL1</name>
+               <description>PLL High Port Calibration Result 1</description>
+               <addressOffset>0x18</addressOffset>
+               <resetValue>0x44300000</resetValue>
+               <fields>
+                  <field>
+                     <name>HPM_COUNT_1</name>
+                     <description>High Port Modulation Counter Value 1</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>19</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>CS_WT</name>
+                     <description>Cycle Slip Wait Time</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>000</name>
+                           <description>128 us</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>001</name>
+                           <description>256 us</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>010</name>
+                           <description>384 us</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>011</name>
+                           <description>512 us</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>100</name>
+                           <description>640 us</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>101</name>
+                           <description>768 us</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>110</name>
+                           <description>896 us</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>111</name>
+                           <description>1024 us</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CS_FW</name>
+                     <description>Cycle Slip Flag Window</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>000</name>
+                           <description>8 us</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>001</name>
+                           <description>16 us</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>010</name>
+                           <description>24 us</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>011</name>
+                           <description>32 us</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>100</name>
+                           <description>64 us</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>101</name>
+                           <description>96 us</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>110</name>
+                           <description>128 us</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>111</name>
+                           <description>256 us</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CS_FCNT</name>
+                     <description>Cycle Slip Flag Count</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>HPM_CAL2</name>
+               <description>PLL High Port Calibration Result 2</description>
+               <addressOffset>0x1C</addressOffset>
+               <resetValue>0x2100000</resetValue>
+               <fields>
+                  <field>
+                     <name>HPM_COUNT_2</name>
+                     <description>High Port Modulation Counter Value 2</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>19</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>CS_RC</name>
+                     <description>Cycle Slip Recycle</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CS_FT</name>
+                     <description>Cycle Slip Flag Timeout</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>HPM_SDM_RES</name>
+               <description>PLL High Port Sigma Delta Results</description>
+               <addressOffset>0x20</addressOffset>
+               <resetValue>0x1000000</resetValue>
+               <fields>
+                  <field>
+                     <name>HPM_NUM_SELECTED</name>
+                     <description>High Port Modulator SDM Numerator</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>HPM_DENOM</name>
+                     <description>High Port Modulator SDM Denominator</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+                  <field>
+                     <name>HPM_COUNT_ADJUST</name>
+                     <description>HPM_COUNT_ADJUST</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LPM_CTRL</name>
+               <description>PLL Low Port Modulator Control</description>
+               <addressOffset>0x24</addressOffset>
+               <resetValue>0x8080000</resetValue>
+               <fields>
+                  <field>
+                     <name>PLL_LD_MANUAL</name>
+                     <description>Manual PLL Loop Divider value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>PLL_LD_DISABLE</name>
+                     <description>Disable PLL Loop Divider</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>LPFF</name>
+                     <description>LPM SDM Invalid Flag</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>LPM_SDM_INV</name>
+                     <description>Invert LPM SDM</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>LPM_DISABLE</name>
+                     <description>Disable LPM SDM</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>LPM_DTH_SCL</name>
+                     <description>LPM Dither Scale</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0101</name>
+                           <description>-128 to 96</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0110</name>
+                           <description>-256 to 192</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0111</name>
+                           <description>-512 to 384</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1000</name>
+                           <description>-1024 to 768</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1001</name>
+                           <description>-2048 to 1536</description>
+                           <value>0b1001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1010</name>
+                           <description>-4096 to 3072</description>
+                           <value>0b1010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1011</name>
+                           <description>-8192 to 6144</description>
+                           <value>0b1011</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LPM_D_CTRL</name>
+                     <description>LPM Dither Control in Override Mode</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>LPM_D_OVRD</name>
+                     <description>LPM Dither Override Mode Select</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>LPM_SCALE</name>
+                     <description>LPM Scale Factor</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0000</name>
+                           <description>No Scaling</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0001</name>
+                           <description>Multiply by 2</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0010</name>
+                           <description>Multiply by 4</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0011</name>
+                           <description>Multiply by 8</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0100</name>
+                           <description>Multiply by 16</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0101</name>
+                           <description>Multiply by 32</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0110</name>
+                           <description>Multiply by 64</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0111</name>
+                           <description>Multiply by 128</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1000</name>
+                           <description>Multiply by 256</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1001</name>
+                           <description>Multiply by 512</description>
+                           <value>0b1001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1010</name>
+                           <description>Multiply by 1024</description>
+                           <value>0b1010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1011</name>
+                           <description>Multiply by 2048</description>
+                           <value>0b1011</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LPM_SDM_USE_NEG</name>
+                     <description>Use the Negedge of the Sigma Delta clock</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LPM_SDM_CTRL1</name>
+               <description>PLL Low Port Sigma Delta Control 1</description>
+               <addressOffset>0x28</addressOffset>
+               <resetValue>0x260026</resetValue>
+               <fields>
+                  <field>
+                     <name>LPM_INTG_SELECTED</name>
+                     <description>Low Port Modulation Integer Value Selected</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>HPM_ARRAY_BIAS</name>
+                     <description>Bias value for High Port DAC Array Midpoint</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>LPM_INTG</name>
+                     <description>Manual Low Port Modulation Integer Value</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>SDM_MAP_DISABLE</name>
+                     <description>Disable SDM Mapping</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LPM_SDM_CTRL2</name>
+               <description>PLL Low Port Sigma Delta Control 2</description>
+               <addressOffset>0x2C</addressOffset>
+               <resetValue>0x2000000</resetValue>
+               <fields>
+                  <field>
+                     <name>LPM_NUM</name>
+                     <description>Low Port Modulation Numerator</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>28</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LPM_SDM_CTRL3</name>
+               <description>PLL Low Port Sigma Delta Control 3</description>
+               <addressOffset>0x30</addressOffset>
+               <resetValue>0x4000000</resetValue>
+               <fields>
+                  <field>
+                     <name>LPM_DENOM</name>
+                     <description>Low Port Modulation Denominator</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>28</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LPM_SDM_RES1</name>
+               <description>PLL Low Port Sigma Delta Result 1</description>
+               <addressOffset>0x34</addressOffset>
+               <access>read-only</access>
+               <resetValue>0xE200000</resetValue>
+               <fields>
+                  <field>
+                     <name>LPM_NUM_SELECTED</name>
+                     <description>Low Port Modulation Numerator Applied</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>28</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LPM_SDM_RES2</name>
+               <description>PLL Low Port Sigma Delta Result 2</description>
+               <addressOffset>0x38</addressOffset>
+               <access>read-only</access>
+               <resetValue>0x4000000</resetValue>
+               <fields>
+                  <field>
+                     <name>LPM_DENOM_SELECTED</name>
+                     <description>Low Port Modulation Denominator Selected</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>28</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DELAY_MATCH</name>
+               <description>PLL Delay Matching</description>
+               <addressOffset>0x3C</addressOffset>
+               <resetValue>0x204</resetValue>
+               <fields>
+                  <field>
+                     <name>LPM_SDM_DELAY</name>
+                     <description>Low Port SDM Delay Matching</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>HPM_SDM_DELAY</name>
+                     <description>High Port SDM Delay Matching</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>HPM_INTEGER_DELAY</name>
+                     <description>High Port Integer Delay Matching</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CTUNE_CTRL</name>
+               <description>PLL Coarse Tune Control</description>
+               <addressOffset>0x40</addressOffset>
+               <fields>
+                  <field>
+                     <name>CTUNE_TARGET_MANUAL</name>
+                     <description>Manual Coarse Tune Target</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+                  <field>
+                     <name>CTUNE_TARGET_DISABLE</name>
+                     <description>Disable Coarse Tune Target</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CTUNE_ADJUST</name>
+                     <description>Coarse Tune Count Adjustment</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>CTUNE_MANUAL</name>
+                     <description>Manual Coarse Tune Setting</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>CTUNE_DISABLE</name>
+                     <description>Coarse Tune Disable</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CTUNE_CNT6</name>
+               <description>PLL Coarse Tune Count 6</description>
+               <addressOffset>0x44</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>CTUNE_COUNT_6</name>
+                     <description>CTUNE Count 6</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>13</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CTUNE_CNT5_4</name>
+               <description>PLL Coarse Tune Counts 5 and 4</description>
+               <addressOffset>0x48</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>CTUNE_COUNT_4</name>
+                     <description>CTUNE Count 4</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>13</bitWidth>
+                  </field>
+                  <field>
+                     <name>CTUNE_COUNT_5</name>
+                     <description>CTUNE Count 5</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>13</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CTUNE_CNT3_2</name>
+               <description>PLL Coarse Tune Counts 3 and 2</description>
+               <addressOffset>0x4C</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>CTUNE_COUNT_2</name>
+                     <description>CTUNE Count 2</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>13</bitWidth>
+                  </field>
+                  <field>
+                     <name>CTUNE_COUNT_3</name>
+                     <description>CTUNE Count 3</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>13</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CTUNE_CNT1_0</name>
+               <description>PLL Coarse Tune Counts 1 and 0</description>
+               <addressOffset>0x50</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>CTUNE_COUNT_0</name>
+                     <description>CTUNE Count 0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>13</bitWidth>
+                  </field>
+                  <field>
+                     <name>CTUNE_COUNT_1</name>
+                     <description>CTUNE Count 1</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>13</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CTUNE_RES</name>
+               <description>PLL Coarse Tune Results</description>
+               <addressOffset>0x54</addressOffset>
+               <access>read-only</access>
+               <resetValue>0x9620040</resetValue>
+               <fields>
+                  <field>
+                     <name>CTUNE_SELECTED</name>
+                     <description>Coarse Tune Setting to VCO</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>CTUNE_BEST_DIFF</name>
+                     <description>Coarse Tune Absolute Best Difference</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>CTUNE_FREQ_SELECTED</name>
+                     <description>Coarse Tune Frequency Selected</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

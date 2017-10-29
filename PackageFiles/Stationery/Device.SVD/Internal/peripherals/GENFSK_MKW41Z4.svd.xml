@@ -1,0 +1,1614 @@
+<!--
+Devices using this peripheral: 
+      MKW41Z4
+-->
+      <peripheral>
+         <?sourceFile "GENFSK_MKW41Z4" ?>
+         <name>GENFSK</name>
+         <description>GENERIC_FSK</description>
+         <groupName>GENFSK</groupName>
+         <headerStructName>GENFSK</headerStructName>
+         <baseAddress>0x4005F000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x40</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x40</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x44</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x60</offset>
+            <size>0x30</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>IRQ_CTRL</name>
+               <description>IRQ CONTROL</description>
+               <addressOffset>0x0</addressOffset>
+               <resetMask>0x7FFFFC00</resetMask>
+               <fields>
+                  <field>
+                     <name>SEQ_END_IRQ</name>
+                     <description>Sequence End Interrupt</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Sequence End Interrupt is not asserted</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Sequence End Interrupt is asserted</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TX_IRQ</name>
+                     <description>TX Interrupt</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>TX Interrupt is not asserted</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>TX Interrupt is asserted</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RX_IRQ</name>
+                     <description>RX Interrupt</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>RX Interrupt is not asserted</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>RX Interrupt is asserted</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>NTW_ADR_IRQ</name>
+                     <description>Network Address Match Interrupt</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Network Address Match Interrupt is not asserted</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Network Address Match Interrupt is asserted</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>T1_IRQ</name>
+                     <description>Timer1 (T1) Compare Interrupt</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Timer1 (T1) Compare Interrupt is not asserted</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Timer1 (T1) Compare Interrupt is asserted</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>T2_IRQ</name>
+                     <description>Timer2 (T2) Compare Interrupt</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Timer2 (T2) Compare Interrupt is not asserted</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Timer2 (T2) Compare Interrupt is asserted</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PLL_UNLOCK_IRQ</name>
+                     <description>PLL Unlock Interrupt</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>PLL Unlock Interrupt is not asserted</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>PLL Unlock Interrupt is asserted</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WAKE_IRQ</name>
+                     <description>Wake Interrrupt</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Wake Interrupt is not asserted</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Wake Interrupt is asserted</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RX_WATERMARK_IRQ</name>
+                     <description>RX Watermark Interrupt</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>RX Watermark Interrupt is not asserted</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>RX Watermark Interrupt is asserted</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TSM_IRQ</name>
+                     <description>TSM Interrupt</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>TSM0_IRQ and TSM1_IRQ are both clear</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Indicates TSM0_IRQ or TSM1_IRQ is set in XCVR_STATUS</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SEQ_END_IRQ_EN</name>
+                     <description>SEQ_END_IRQ Enable</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Sequence End Interrupt is not enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Sequence End Interrupt is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TX_IRQ_EN</name>
+                     <description>TX_IRQ Enable</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>TX Interrupt is not enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>TX Interrupt is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RX_IRQ_EN</name>
+                     <description>RX_IRQ Enable</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>RX Interrupt is not enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>RX Interrupt is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>NTW_ADR_IRQ_EN</name>
+                     <description>NTW_ADR_IRQ Enable</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Network Address Match Interrupt is not enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Network Address Match Interrupt is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>T1_IRQ_EN</name>
+                     <description>T1_IRQ Enable</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Timer1 (T1) Compare Interrupt is not enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Timer1 (T1) Compare Interrupt is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>T2_IRQ_EN</name>
+                     <description>T2_IRQ Enable</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Timer1 (T2) Compare Interrupt is not enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Timer1 (T2) Compare Interrupt is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PLL_UNLOCK_IRQ_EN</name>
+                     <description>PLL_UNLOCK_IRQ Enable</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>PLL Unlock Interrupt is not enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>PLL Unlock Interrupt is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WAKE_IRQ_EN</name>
+                     <description>WAKE_IRQ Enable</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Wake Interrupt is not enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Wake Interrupt is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RX_WATERMARK_IRQ_EN</name>
+                     <description>RX_WATERMARK_IRQ Enable</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>RX Watermark Interrupt is not enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>RX Watermark Interrupt is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TSM_IRQ_EN</name>
+                     <description>TSM_IRQ Enable</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>TSM Interrupt is not enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>TSM Interrupt is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>GENERIC_FSK_IRQ_EN</name>
+                     <description>GENERIC_FSK_IRQ Master Enable</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>All GENERIC_FSK Interrupts are disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>All GENERIC_FSK Interrupts can be enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CRC_IGNORE</name>
+                     <description>CRC Ignore</description>
+                     <bitOffset>27</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>RX_IRQ will not be asserted for a received packet which fails CRC verification</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>RX_IRQ will be asserted even for a received packet which fails CRC verification</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CRC_VALID</name>
+                     <description>CRC Valid</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>CRC of RX packet is not valid</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>CRC of RX packet is valid</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EVENT_TMR</name>
+               <description>EVENT TIMER</description>
+               <addressOffset>0x4</addressOffset>
+               <resetMask>0xFF000000</resetMask>
+               <fields>
+                  <field>
+                     <name>EVENT_TMR</name>
+                     <description>Event Timer</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+                  <field>
+                     <name>EVENT_TMR_LD</name>
+                     <description>Event Timer Load</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                  </field>
+                  <field>
+                     <name>EVENT_TMR_ADD</name>
+                     <description>Event Timer Add</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>T1_CMP</name>
+               <description>T1 COMPARE</description>
+               <addressOffset>0x8</addressOffset>
+               <resetValue>0xFFFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>T1_CMP</name>
+                     <description>Timer1 (T1) Compare Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+                  <field>
+                     <name>T1_CMP_EN</name>
+                     <description>Timer1 (T1) Compare Enable</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>T2_CMP</name>
+               <description>T2 COMPARE</description>
+               <addressOffset>0xC</addressOffset>
+               <resetValue>0xFFFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>T2_CMP</name>
+                     <description>Timer2 (T2) Compare Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+                  <field>
+                     <name>T2_CMP_EN</name>
+                     <description>Timer2 (T2) Compare Enable</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TIMESTAMP</name>
+               <description>TIMESTAMP</description>
+               <addressOffset>0x10</addressOffset>
+               <access>read-only</access>
+               <resetMask>0xFF000000</resetMask>
+               <fields>
+                  <field>
+                     <name>TIMESTAMP</name>
+                     <description>Received Packet Timestamp</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>XCVR_CTRL</name>
+               <description>TRANSCEIVER CONTROL</description>
+               <addressOffset>0x14</addressOffset>
+               <resetMask>0x78FFFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>SEQCMD</name>
+                     <description>Sequence Commands</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0x0</name>
+                           <description>No Action</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0x1</name>
+                           <description>TX Start Now</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0x2</name>
+                           <description>TX Start @ T1 Timer Compare Match (EVENT_TMR = T1_CMP)</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0x3</name>
+                           <description>TX Start @ T2 Timer Compare Match (EVENT_TMR = T2_CMP)</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0x4</name>
+                           <description>TX Cancel -- Cancels pending TX events but do not abort a TX-in-progress</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0x5</name>
+                           <description>RX Start Now</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0x6</name>
+                           <description>RX Start @ T1 Timer Compare Match (EVENT_TMR = T1_CMP)</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0x7</name>
+                           <description>RX Start @ T2 Timer Compare Match (EVENT_TMR = T2_CMP)</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0x8</name>
+                           <description>RX Stop @ T1 Timer Compare Match (EVENT_TMR = T1_CMP)</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0x9</name>
+                           <description>RX Stop @ T2 Timer Compare Match (EVENT_TMR = T2_CMP)</description>
+                           <value>0b1001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0xA</name>
+                           <description>RX Cancel -- Cancels pending RX events but do not abort a RX-in-progress</description>
+                           <value>0b1010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0xB</name>
+                           <description>Abort All - Cancels all pending events and abort any sequence-in-progress</description>
+                           <value>0b1011</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CMDDEC_CS</name>
+                     <description>Command Decode</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>XCVR_BUSY</name>
+                     <description>Transceiver Busy</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>IDLE</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>BUSY</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>XCVR_STS</name>
+               <description>TRANSCEIVER STATUS</description>
+               <addressOffset>0x18</addressOffset>
+               <access>read-only</access>
+               <resetMask>0x2000</resetMask>
+               <fields>
+                  <field>
+                     <name>TX_START_T1_PEND</name>
+                     <description>TX T1 Start Pending Status</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TX_START_T2_PEND</name>
+                     <description>TX T2 Start Pending Status</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TX_IN_WARMUP</name>
+                     <description>TX Warmup Status</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TX_IN_PROGRESS</name>
+                     <description>TX in Progress Status</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TX_IN_WARMDN</name>
+                     <description>TX Warmdown Status</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RX_START_T1_PEND</name>
+                     <description>RX T1 Start Pending Status</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RX_START_T2_PEND</name>
+                     <description>RX T2 Start Pending Status</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RX_STOP_T1_PEND</name>
+                     <description>RX T1 Stop Pending Status</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RX_STOP_T2_PEND</name>
+                     <description>RX T2 Start Pending Status</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RX_IN_WARMUP</name>
+                     <description>RX Warmup Status</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RX_IN_SEARCH</name>
+                     <description>RX Search Status</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RX_IN_PROGRESS</name>
+                     <description>RX in Progress Status</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RX_IN_WARMDN</name>
+                     <description>RX Warmdown Status</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>LQI_VALID</name>
+                     <description>LQI Valid Indicator</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>LQI is not yet valid for RX packet</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>LQI is valid for RX packet</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CRC_VALID</name>
+                     <description>CRC Valid Indicator</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>CRC is not valid for RX packet</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>CRC is valid for RX packet</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RSSI</name>
+                     <description>Received Signal Stength Indicator, in dBm</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>LQI</name>
+                     <description>Link Quality Indicator</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>XCVR_CFG</name>
+               <description>TRANSCEIVER CONFIGURATION</description>
+               <addressOffset>0x1C</addressOffset>
+               <resetMask>0xFF0000FF</resetMask>
+               <fields>
+                  <field>
+                     <name>TX_WHITEN_DIS</name>
+                     <description>TX Whitening Disable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RX_DEWHITEN_DIS</name>
+                     <description>RX De-Whitening Disable</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SW_CRC_EN</name>
+                     <description>Software CRC Enable</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PREAMBLE_SZ</name>
+                     <description>Preamble Size</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>TX_WARMUP</name>
+                     <description>Transmit Warmup Time</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>RX_WARMUP</name>
+                     <description>Receive Warmup Time</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CHANNEL_NUM</name>
+               <description>CHANNEL NUMBER</description>
+               <addressOffset>0x20</addressOffset>
+               <fields>
+                  <field>
+                     <name>CHANNEL_NUM</name>
+                     <description>Channel Number</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TX_POWER</name>
+               <description>TRANSMIT POWER</description>
+               <addressOffset>0x24</addressOffset>
+               <fields>
+                  <field>
+                     <name>TX_POWER</name>
+                     <description>Transmit Power</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>NTW_ADR_CTRL</name>
+               <description>NETWORK ADDRESS CONTROL</description>
+               <addressOffset>0x28</addressOffset>
+               <resetValue>0x5500</resetValue>
+               <resetMask>0xFFFFFF0F</resetMask>
+               <fields>
+                  <field>
+                     <name>NTW_ADR_EN</name>
+                     <description>Network Address Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>Enable Network Address 0 for correlation</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>Enable Network Address 1 for correlation</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0100</name>
+                           <description>Enable Network Address 2 for correlation</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1000</name>
+                           <description>Enable Network Address 3 for correlation</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>NTW_ADR_MCH</name>
+                     <description>Network Address Match</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>Network Address 0 has matched</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>Network Address 1 has matched</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0100</name>
+                           <description>Network Address 2 has matched</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1000</name>
+                           <description>Network Address 3 has matched</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>NTW_ADR0_SZ</name>
+                     <description>Network Address 0 Size</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Network Address 0 requires a 8-bit correlation</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Network Address 0 requires a 16-bit correlation</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>2</name>
+                           <description>Network Address 0 requires a 24-bit correlation</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>3</name>
+                           <description>Network Address 0 requires a 32-bit correlation</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>NTW_ADR1_SZ</name>
+                     <description>Network Address 1 Size</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Network Address 1 requires a 8-bit correlation</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Network Address 1 requires a 16-bit correlation</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>2</name>
+                           <description>Network Address 1 requires a 24-bit correlation</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>3</name>
+                           <description>Network Address 1 requires a 32-bit correlation</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>NTW_ADR2_SZ</name>
+                     <description>Network Address 2 Size</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Network Address 2 requires a 8-bit correlation</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Network Address 2 requires a 16-bit correlation</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>2</name>
+                           <description>Network Address 2 requires a 24-bit correlation</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>3</name>
+                           <description>Network Address 2 requires a 32-bit correlation</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>NTW_ADR3_SZ</name>
+                     <description>Network Address 3 Size</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Network Address 3 requires a 8-bit correlation</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Network Address 3 requires a 16-bit correlation</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>2</name>
+                           <description>Network Address 3 requires a 24-bit correlation</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>3</name>
+                           <description>Network Address 3 requires a 32-bit correlation</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>NTW_ADR_THR0</name>
+                     <description>Network Address 0 Threshold</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>NTW_ADR_THR1</name>
+                     <description>Network Address 1 Threshold</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>NTW_ADR_THR2</name>
+                     <description>Network Address 2 Threshold</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>NTW_ADR_THR3</name>
+                     <description>Network Address 3 Threshold</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>4</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3</dimIndex>
+               <name>NTW_ADR_%s</name>
+               <description>NETWORK ADDRESS %s</description>
+               <addressOffset>0x2C</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>NTW_ADR_0</name>
+                     <description>Network Address 0</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RX_WATERMARK</name>
+               <description>RECEIVE WATERMARK</description>
+               <addressOffset>0x3C</addressOffset>
+               <resetValue>0xFFF</resetValue>
+               <resetMask>0xE000FFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RX_WATERMARK</name>
+                     <description>Receive Watermark</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>13</bitWidth>
+                  </field>
+                  <field>
+                     <name>BYTE_COUNTER</name>
+                     <description>Byte Counter</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>13</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DSM_CTRL</name>
+               <description>DSM CONTROL</description>
+               <addressOffset>0x40</addressOffset>
+               <access>write-only</access>
+               <resetMask>0xFFFFFFFE</resetMask>
+               <fields>
+                  <field>
+                     <name>GENERIC_FSK_SLEEP_EN</name>
+                     <description>GENERIC_FSK DSM Sleep Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PART_ID</name>
+               <description>PART ID</description>
+               <addressOffset>0x44</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>PART_ID</name>
+                     <description>Part ID</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PACKET_CFG</name>
+               <description>PACKET CONFIGURATION</description>
+               <addressOffset>0x60</addressOffset>
+               <resetValue>0x40</resetValue>
+               <resetMask>0x7F7F7FFF</resetMask>
+               <fields>
+                  <field>
+                     <name>LENGTH_SZ</name>
+                     <description>LENGTH Size</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>LENGTH_BIT_ORD</name>
+                     <description>LENGTH Bit Order</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>LS Bit First</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>MS Bit First</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SYNC_ADDR_SZ</name>
+                     <description>Sync Address Size</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>LENGTH_ADJ</name>
+                     <description>Length Adjustment</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>LENGTH_FAIL</name>
+                     <description>Maximum Length Violated Status Bit</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>H0_SZ</name>
+                     <description>H0 Size</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>H0_FAIL</name>
+                     <description>H0 Violated Status Bit</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>H1_SZ</name>
+                     <description>H1 Size</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+                  <field>
+                     <name>H1_FAIL</name>
+                     <description>H1 Violated Status Bit</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>H0_CFG</name>
+               <description>H0 CONFIGURATION</description>
+               <addressOffset>0x64</addressOffset>
+               <fields>
+                  <field>
+                     <name>H0_MATCH</name>
+                     <description>H0 Match Register</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>H0_MASK</name>
+                     <description>H0 Mask Register</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>H1_CFG</name>
+               <description>H1 CONFIGURATION</description>
+               <addressOffset>0x68</addressOffset>
+               <fields>
+                  <field>
+                     <name>H1_MATCH</name>
+                     <description>H1 Match Register</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>H1_MASK</name>
+                     <description>H1 Mask Register</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CRC_CFG</name>
+               <description>CRC CONFIGURATION</description>
+               <addressOffset>0x6C</addressOffset>
+               <resetValue>0x2</resetValue>
+               <fields>
+                  <field>
+                     <name>CRC_SZ</name>
+                     <description>CRC Size (in octets)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>CRC_START_BYTE</name>
+                     <description>Configure CRC Start Point</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>CRC_REF_IN</name>
+                     <description>CRC Reflect In</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>do not manipulate input data stream</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>reflect each byte in the input stream bitwise</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CRC_REF_OUT</name>
+                     <description>CRC Reflect Out</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>do not manipulate CRC result</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>CRC result is to be reflected bitwise (operated on entire word)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CRC_BYTE_ORD</name>
+                     <description>CRC Byte Order</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>LS Byte First</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>MS Byte First</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CRC_INIT</name>
+               <description>CRC INITIALIZATION</description>
+               <addressOffset>0x70</addressOffset>
+               <fields>
+                  <field>
+                     <name>CRC_SEED</name>
+                     <description>CRC Seed Value</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CRC_POLY</name>
+               <description>CRC POLYNOMIAL</description>
+               <addressOffset>0x74</addressOffset>
+               <resetValue>0x10210000</resetValue>
+               <fields>
+                  <field>
+                     <name>CRC_POLY</name>
+                     <description>CRC Polynomial</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CRC_XOR_OUT</name>
+               <description>CRC XOR OUT</description>
+               <addressOffset>0x78</addressOffset>
+               <fields>
+                  <field>
+                     <name>CRC_XOR_OUT</name>
+                     <description>CRC XOR OUT Register</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>WHITEN_CFG</name>
+               <description>WHITENER CONFIGURATION</description>
+               <addressOffset>0x7C</addressOffset>
+               <resetValue>0x1FF0918</resetValue>
+               <fields>
+                  <field>
+                     <name>WHITEN_START</name>
+                     <description>Configure Whitener Start Point</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>no whitening</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>start whitening at start-of-H0</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>2</name>
+                           <description>start whitening at start-of-H1 but only if LENGTH &gt; WHITEN_SZ_THR</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>3</name>
+                           <description>start whitening at start-of-payload but only if LENGTH &gt; WHITEN_SZ_THR</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WHITEN_END</name>
+                     <description>Configure end-of-whitening</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>end whiten at end-of-payload</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>end whiten at end-of-crc</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WHITEN_B4_CRC</name>
+                     <description>Congifure for Whitening-before-CRC</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>CRC before whiten/de-whiten</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Whiten/de-whiten before CRC</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WHITEN_POLY_TYPE</name>
+                     <description>Whiten Polynomial Type</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>WHITEN_REF_IN</name>
+                     <description>Whiten Reflect Input</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>WHITEN_PAYLOAD_REINIT</name>
+                     <description>Configure for Whitener re-initialization</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Don&apos;t re-initialize Whitener LFSR at start-of-payload</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Re-initialize Whitener LFSR at start-of-payload</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WHITEN_SIZE</name>
+                     <description>Length of Whitener LFSR</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>MANCHESTER_EN</name>
+                     <description>Configure for Manchester Encoding/Decoding</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disable Manchester encoding (TX) and decoding (RX)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enable Manchester encoding (TX) and decoding (RX)</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MANCHESTER_INV</name>
+                     <description>Configure for Inverted Manchester Encoding</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Manchester coding as per 802.3</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Manchester coding as per 802.3 but with the encoding signal inverted</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MANCHESTER_START</name>
+                     <description>Configure Manchester Encoding Start Point</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Start Manchester coding at start-of-payload</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Start Manchester coding at start-of-header</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WHITEN_INIT</name>
+                     <description>Initialization Value for Whitening/De-whitening</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>9</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>WHITEN_POLY</name>
+               <description>WHITENER POLYNOMIAL</description>
+               <addressOffset>0x80</addressOffset>
+               <resetValue>0x21</resetValue>
+               <fields>
+                  <field>
+                     <name>WHITEN_POLY</name>
+                     <description>Whitener Polynomial</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>9</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>WHITEN_SZ_THR</name>
+               <description>WHITENER SIZE THRESHOLD</description>
+               <addressOffset>0x84</addressOffset>
+               <resetValue>0x800</resetValue>
+               <fields>
+                  <field>
+                     <name>WHITEN_SZ_THR</name>
+                     <description>Whitener Size Threshold</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+                  <field>
+                     <name>LENGTH_MAX</name>
+                     <description>Maximum Length for Received Packets</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>REC_BAD_PKT</name>
+                     <description>Receive Bad Packets</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>packets which fail H0, H1, or LENGTH_MAX result in an automatic recycle after the header is received and parsed</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>packets which fail H0, H1, or LENGTH_MAX are received in their entirety</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>BITRATE</name>
+               <description>BIT RATE</description>
+               <addressOffset>0x88</addressOffset>
+               <fields>
+                  <field>
+                     <name>BITRATE</name>
+                     <description>Bit Rate</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>1Mbit/sec</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>500Kbit/sec</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>2</name>
+                           <description>250Kbit/sec (not supported if WHITEN_CFG[MANCHESTER_EN]=1</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PB_PARTITION</name>
+               <description>PACKET BUFFER PARTITION POINT</description>
+               <addressOffset>0x8C</addressOffset>
+               <resetValue>0x220</resetValue>
+               <fields>
+                  <field>
+                     <name>PB_PARTITION</name>
+                     <description>Packet Buffer Partition Point</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>11</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

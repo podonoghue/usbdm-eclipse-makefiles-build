@@ -1,0 +1,515 @@
+<!--
+Devices using this peripheral: 
+      MKW41Z4
+-->
+      <peripheral>
+         <?sourceFile "NVIC_MKW41Z4" ?>
+         <name>NVIC</name>
+         <description>Nested Vectored Interrupt Controller</description>
+         <groupName>NVIC</groupName>
+         <headerStructName>NVIC</headerStructName>
+         <baseAddress>0xE000E100</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x80</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x100</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x180</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x300</offset>
+            <size>0x20</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>ISER</name>
+               <description>Interrupt Set Enable Register</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>SETENA0</name>
+                     <description>DMA_Ch0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled; Write 0 no effect</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled; Write 1 to enable</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA1</name> <description>DMA_Ch1</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA2</name> <description>DMA_Ch2</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA3</name> <description>DMA_Ch3</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA4</name> <description>MCM_Reserved</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA5</name> <description>FTF</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA6</name> <description>PMC_DCDC</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA7</name> <description>LLWU</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA8</name> <description>I2C0</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA9</name> <description>I2C1</description> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA10</name> <description>SPI0</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA11</name> <description>TSI</description> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA12</name> <description>LPUART0</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA13</name> <description>TRNG0AN</description> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA14</name> <description>CMT</description> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA15</name> <description>ADC0</description> <bitOffset>15</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA16</name> <description>CMP0</description> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA17</name> <description>TPM0</description> <bitOffset>17</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA18</name> <description>TPM1</description> <bitOffset>18</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA19</name> <description>TPM2</description> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA20</name> <description>RTC_Alarm</description> <bitOffset>20</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA21</name> <description>RTC_Seconds</description> <bitOffset>21</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA22</name> <description>PIT</description> <bitOffset>22</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA23</name> <description>LTC</description> <bitOffset>23</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA24</name> <description>Radio_Int0</description> <bitOffset>24</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA25</name> <description>DAC0</description> <bitOffset>25</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA26</name> <description>Radio_Int1</description> <bitOffset>26</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA27</name> <description>MCG</description> <bitOffset>27</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA28</name> <description>LPTMR0</description> <bitOffset>28</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA29</name> <description>SPI1</description> <bitOffset>29</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA30</name> <description>PORTA</description> <bitOffset>30</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA31</name> <description>PORTA_PORTC</description> <bitOffset>31</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>ICER</name>
+               <description>Interrupt Clear Enable Register</description>
+               <addressOffset>0x80</addressOffset>
+               <fields>
+                  <field>
+                     <name>CLRENA0</name>
+                     <description>DMA_Ch0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled; Write 0 no effect</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled; Write 1 to disable</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="CLRENA0" > <name>CLRENA1</name> <description>DMA_Ch1</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="CLRENA0" > <name>CLRENA2</name> <description>DMA_Ch2</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="CLRENA0" > <name>CLRENA3</name> <description>DMA_Ch3</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="CLRENA0" > <name>CLRENA4</name> <description>MCM_Reserved</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="CLRENA0" > <name>CLRENA5</name> <description>FTF</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="CLRENA0" > <name>CLRENA6</name> <description>PMC_DCDC</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="CLRENA0" > <name>CLRENA7</name> <description>LLWU</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="CLRENA0" > <name>CLRENA8</name> <description>I2C0</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="CLRENA0" > <name>CLRENA9</name> <description>I2C1</description> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="CLRENA0" > <name>CLRENA10</name> <description>SPI0</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="CLRENA0" > <name>CLRENA11</name> <description>TSI</description> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="CLRENA0" > <name>CLRENA12</name> <description>LPUART0</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="CLRENA0" > <name>CLRENA13</name> <description>TRNG0AN</description> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="CLRENA0" > <name>CLRENA14</name> <description>CMT</description> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="CLRENA0" > <name>CLRENA15</name> <description>ADC0</description> <bitOffset>15</bitOffset> </field>
+                  <field derivedFrom="CLRENA0" > <name>CLRENA16</name> <description>CMP0</description> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="CLRENA0" > <name>CLRENA17</name> <description>TPM0</description> <bitOffset>17</bitOffset> </field>
+                  <field derivedFrom="CLRENA0" > <name>CLRENA18</name> <description>TPM1</description> <bitOffset>18</bitOffset> </field>
+                  <field derivedFrom="CLRENA0" > <name>CLRENA19</name> <description>TPM2</description> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="CLRENA0" > <name>CLRENA20</name> <description>RTC_Alarm</description> <bitOffset>20</bitOffset> </field>
+                  <field derivedFrom="CLRENA0" > <name>CLRENA21</name> <description>RTC_Seconds</description> <bitOffset>21</bitOffset> </field>
+                  <field derivedFrom="CLRENA0" > <name>CLRENA22</name> <description>PIT</description> <bitOffset>22</bitOffset> </field>
+                  <field derivedFrom="CLRENA0" > <name>CLRENA23</name> <description>LTC</description> <bitOffset>23</bitOffset> </field>
+                  <field derivedFrom="CLRENA0" > <name>CLRENA24</name> <description>Radio_Int0</description> <bitOffset>24</bitOffset> </field>
+                  <field derivedFrom="CLRENA0" > <name>CLRENA25</name> <description>DAC0</description> <bitOffset>25</bitOffset> </field>
+                  <field derivedFrom="CLRENA0" > <name>CLRENA26</name> <description>Radio_Int1</description> <bitOffset>26</bitOffset> </field>
+                  <field derivedFrom="CLRENA0" > <name>CLRENA27</name> <description>MCG</description> <bitOffset>27</bitOffset> </field>
+                  <field derivedFrom="CLRENA0" > <name>CLRENA28</name> <description>LPTMR0</description> <bitOffset>28</bitOffset> </field>
+                  <field derivedFrom="CLRENA0" > <name>CLRENA29</name> <description>SPI1</description> <bitOffset>29</bitOffset> </field>
+                  <field derivedFrom="CLRENA0" > <name>CLRENA30</name> <description>PORTA</description> <bitOffset>30</bitOffset> </field>
+                  <field derivedFrom="CLRENA0" > <name>CLRENA31</name> <description>PORTA_PORTC</description> <bitOffset>31</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>ISPR</name>
+               <description>Interrupt Set Pending Register</description>
+               <addressOffset>0x100</addressOffset>
+               <fields>
+                  <field>
+                     <name>SETPEND0</name>
+                     <description>DMA_Ch0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Not pending; Write 0 no effect</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Pending; Write 1 to set pending</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND1</name> <description>DMA_Ch1</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND2</name> <description>DMA_Ch2</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND3</name> <description>DMA_Ch3</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND4</name> <description>MCM_Reserved</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND5</name> <description>FTF</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND6</name> <description>PMC_DCDC</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND7</name> <description>LLWU</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND8</name> <description>I2C0</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND9</name> <description>I2C1</description> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND10</name> <description>SPI0</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND11</name> <description>TSI</description> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND12</name> <description>LPUART0</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND13</name> <description>TRNG0AN</description> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND14</name> <description>CMT</description> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND15</name> <description>ADC0</description> <bitOffset>15</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND16</name> <description>CMP0</description> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND17</name> <description>TPM0</description> <bitOffset>17</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND18</name> <description>TPM1</description> <bitOffset>18</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND19</name> <description>TPM2</description> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND20</name> <description>RTC_Alarm</description> <bitOffset>20</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND21</name> <description>RTC_Seconds</description> <bitOffset>21</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND22</name> <description>PIT</description> <bitOffset>22</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND23</name> <description>LTC</description> <bitOffset>23</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND24</name> <description>Radio_Int0</description> <bitOffset>24</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND25</name> <description>DAC0</description> <bitOffset>25</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND26</name> <description>Radio_Int1</description> <bitOffset>26</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND27</name> <description>MCG</description> <bitOffset>27</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND28</name> <description>LPTMR0</description> <bitOffset>28</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND29</name> <description>SPI1</description> <bitOffset>29</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND30</name> <description>PORTA</description> <bitOffset>30</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND31</name> <description>PORTA_PORTC</description> <bitOffset>31</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>ICPR</name>
+               <description>Interrupt Clear Pending Register</description>
+               <addressOffset>0x180</addressOffset>
+               <fields>
+                  <field>
+                     <name>CLRPEND0</name>
+                     <description>DMA_Ch0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Not pending; Write 0 no effect</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Pending; Write 1 to clear pending</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND1</name> <description>DMA_Ch1</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND2</name> <description>DMA_Ch2</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND3</name> <description>DMA_Ch3</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND4</name> <description>MCM_Reserved</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND5</name> <description>FTF</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND6</name> <description>PMC_DCDC</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND7</name> <description>LLWU</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND8</name> <description>I2C0</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND9</name> <description>I2C1</description> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND10</name> <description>SPI0</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND11</name> <description>TSI</description> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND12</name> <description>LPUART0</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND13</name> <description>TRNG0AN</description> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND14</name> <description>CMT</description> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND15</name> <description>ADC0</description> <bitOffset>15</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND16</name> <description>CMP0</description> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND17</name> <description>TPM0</description> <bitOffset>17</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND18</name> <description>TPM1</description> <bitOffset>18</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND19</name> <description>TPM2</description> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND20</name> <description>RTC_Alarm</description> <bitOffset>20</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND21</name> <description>RTC_Seconds</description> <bitOffset>21</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND22</name> <description>PIT</description> <bitOffset>22</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND23</name> <description>LTC</description> <bitOffset>23</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND24</name> <description>Radio_Int0</description> <bitOffset>24</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND25</name> <description>DAC0</description> <bitOffset>25</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND26</name> <description>Radio_Int1</description> <bitOffset>26</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND27</name> <description>MCG</description> <bitOffset>27</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND28</name> <description>LPTMR0</description> <bitOffset>28</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND29</name> <description>SPI1</description> <bitOffset>29</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND30</name> <description>PORTA</description> <bitOffset>30</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND31</name> <description>PORTA_PORTC</description> <bitOffset>31</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>IPR0</name>
+               <description>Interrupt Priority Register 0</description>
+               <addressOffset>0x300</addressOffset>
+               <fields>
+                  <field>
+                     <name>PRI_0</name>
+                     <description>DMA_Ch0</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PRI_1</name>
+                     <description>DMA_Ch1</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PRI_2</name>
+                     <description>DMA_Ch2</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PRI_3</name>
+                     <description>DMA_Ch3</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>IPR1</name>
+               <description>Interrupt Priority Register 1</description>
+               <addressOffset>0x304</addressOffset>
+               <fields>
+                  <field>
+                     <name>PRI_4</name>
+                     <description>MCM_Reserved</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PRI_5</name>
+                     <description>FTF</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PRI_6</name>
+                     <description>PMC_DCDC</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PRI_7</name>
+                     <description>LLWU</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>IPR2</name>
+               <description>Interrupt Priority Register 2</description>
+               <addressOffset>0x308</addressOffset>
+               <fields>
+                  <field>
+                     <name>PRI_8</name>
+                     <description>I2C0</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PRI_9</name>
+                     <description>I2C1</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PRI_10</name>
+                     <description>SPI0</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PRI_11</name>
+                     <description>TSI</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>IPR3</name>
+               <description>Interrupt Priority Register 3</description>
+               <addressOffset>0x30C</addressOffset>
+               <fields>
+                  <field>
+                     <name>PRI_12</name>
+                     <description>LPUART0</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PRI_13</name>
+                     <description>TRNG0AN</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PRI_14</name>
+                     <description>CMT</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PRI_15</name>
+                     <description>ADC0</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>IPR4</name>
+               <description>Interrupt Priority Register 4</description>
+               <addressOffset>0x310</addressOffset>
+               <fields>
+                  <field>
+                     <name>PRI_16</name>
+                     <description>CMP0</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PRI_17</name>
+                     <description>TPM0</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PRI_18</name>
+                     <description>TPM1</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PRI_19</name>
+                     <description>TPM2</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>IPR5</name>
+               <description>Interrupt Priority Register 5</description>
+               <addressOffset>0x314</addressOffset>
+               <fields>
+                  <field>
+                     <name>PRI_20</name>
+                     <description>RTC_Alarm</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PRI_21</name>
+                     <description>RTC_Seconds</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PRI_22</name>
+                     <description>PIT</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PRI_23</name>
+                     <description>LTC0</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>IPR6</name>
+               <description>Interrupt Priority Register 6</description>
+               <addressOffset>0x318</addressOffset>
+               <fields>
+                  <field>
+                     <name>PRI_24</name>
+                     <description>Radio_Int0</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PRI_25</name>
+                     <description>DAC0</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PRI_26</name>
+                     <description>Radio_Int1</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PRI_27</name>
+                     <description>MCG</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>IPR7</name>
+               <description>Interrupt Priority Register 7</description>
+               <addressOffset>0x31C</addressOffset>
+               <fields>
+                  <field>
+                     <name>PRI_28</name>
+                     <description>LPTMR0</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PRI_29</name>
+                     <description>SPI1</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PRI_30</name>
+                     <description>Port_A</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>PRI_31</name>
+                     <description>PORTA_PORTC</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

@@ -1,0 +1,1017 @@
+<!--
+Devices using this peripheral: 
+      MKW41Z4
+-->
+      <peripheral>
+         <?sourceFile "ANT_MKW41Z4" ?>
+         <name>ANT</name>
+         <description>ANT</description>
+         <groupName>ANT</groupName>
+         <headerStructName>ANT</headerStructName>
+         <baseAddress>0x4005E000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x40</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x40</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x44</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "16" ?>
+            <offset>0x100</offset>
+            <size>0x80</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>IRQ_CTRL</name>
+               <description>IRQ CONTROL</description>
+               <addressOffset>0x0</addressOffset>
+               <resetMask>0x7FFFFC00</resetMask>
+               <fields>
+                  <field>
+                     <name>SEQ_END_IRQ</name>
+                     <description>Sequence End Interrupt</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Sequence End Interrupt is not asserted</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Sequence End Interrupt is asserted</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TX_IRQ</name>
+                     <description>TX Interrupt</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>TX Interrupt is not asserted</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>TX Interrupt is asserted</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RX_IRQ</name>
+                     <description>RX Interrupt</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>RX Interrupt is not asserted</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>RX Interrupt is asserted</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>NTW_ADR_IRQ</name>
+                     <description>Network Address Match Interrupt</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Network Address Match Interrupt is not asserted</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Network Address Match Interrupt is asserted</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>T1_IRQ</name>
+                     <description>Timer1 (T1) Compare Interrupt</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Timer1 (T1) Compare Interrupt is not asserted</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Timer1 (T1) Compare Interrupt is asserted</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>T2_IRQ</name>
+                     <description>Timer2 (T2) Compare Interrupt</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Timer2 (T2) Compare Interrupt is not asserted</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Timer2 (T2) Compare Interrupt is asserted</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PLL_UNLOCK_IRQ</name>
+                     <description>PLL Unlock Interrupt</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>PLL Unlock Interrupt is not asserted</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>PLL Unlock Interrupt is asserted</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WAKE_IRQ</name>
+                     <description>Wake Interrrupt</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Wake Interrupt is not asserted</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Wake Interrupt is asserted</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RX_WATERMARK_IRQ</name>
+                     <description>RX Watermark Interrupt</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>RX Watermark Interrupt is not asserted</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>RX Watermark Interrupt is asserted</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TSM_IRQ</name>
+                     <description>TSM Interrupt</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>TSM0_IRQ and TSM1_IRQ are both clear</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Indicates TSM0_IRQ or TSM1_IRQ is set in XCVR_STATUS</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SEQ_END_IRQ_EN</name>
+                     <description>SEQ_END_IRQ Enable</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Sequence End Interrupt is not enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Sequence End Interrupt is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TX_IRQ_EN</name>
+                     <description>TX_IRQ Enable</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>TX Interrupt is not enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>TX Interrupt is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RX_IRQ_EN</name>
+                     <description>RX_IRQ Enable</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>RX Interrupt is not enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>RX Interrupt is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>NTW_ADR_IRQ_EN</name>
+                     <description>NTW_ADR_IRQ Enable</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Network Address Match Interrupt is not enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Network Address Match Interrupt is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>T1_IRQ_EN</name>
+                     <description>T1_IRQ Enable</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Timer1 (T1) Compare Interrupt is not enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Timer1 (T1) Compare Interrupt is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>T2_IRQ_EN</name>
+                     <description>T2_IRQ Enable</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Timer1 (T2) Compare Interrupt is not enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Timer1 (T2) Compare Interrupt is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>PLL_UNLOCK_IRQ_EN</name>
+                     <description>PLL_UNLOCK_IRQ Enable</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>PLL Unlock Interrupt is not enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>PLL Unlock Interrupt is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WAKE_IRQ_EN</name>
+                     <description>WAKE_IRQ Enable</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Wake Interrupt is not enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Wake Interrupt is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RX_WATERMARK_IRQ_EN</name>
+                     <description>RX_WATERMARK_IRQ Enable</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>RX Watermark Interrupt is not enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>RX Watermark Interrupt is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TSM_IRQ_EN</name>
+                     <description>TSM_IRQ Enable</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>TSM Interrupt is not enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>TSM Interrupt is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ANT_IRQ_EN</name>
+                     <description>ANT_IRQ Master Enable</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>All ANT Interrupts are disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>All ANT Interrupts can be enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CRC_IGNORE</name>
+                     <description>CRC Ignore</description>
+                     <bitOffset>27</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>RX_IRQ will not be asserted for a received packet which fails CRC verification</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>RX_IRQ will be asserted even for a received packet which fails CRC verification</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CRC_VALID</name>
+                     <description>CRC Valid</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>CRC of RX packet is not valid</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>CRC of RX packet is valid</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EVENT_TMR</name>
+               <description>EVENT TIMER</description>
+               <addressOffset>0x4</addressOffset>
+               <resetMask>0xFF000000</resetMask>
+               <fields>
+                  <field>
+                     <name>EVENT_TMR</name>
+                     <description>Event Timer</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+                  <field>
+                     <name>EVENT_TMR_LD</name>
+                     <description>Event Timer Load</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                  </field>
+                  <field>
+                     <name>EVENT_TMR_ADD</name>
+                     <description>Event Timer Add</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>T1_CMP</name>
+               <description>T1 COMPARE</description>
+               <addressOffset>0x8</addressOffset>
+               <resetValue>0xFFFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>T1_CMP</name>
+                     <description>Timer1 (T1) Compare Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+                  <field>
+                     <name>T1_CMP_EN</name>
+                     <description>Timer1 (T1) Compare Enable</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>T2_CMP</name>
+               <description>T2 COMPARE</description>
+               <addressOffset>0xC</addressOffset>
+               <resetValue>0xFFFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>T2_CMP</name>
+                     <description>Timer2 (T2) Compare Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+                  <field>
+                     <name>T2_CMP_EN</name>
+                     <description>Timer2 (T2) Compare Enable</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TIMESTAMP</name>
+               <description>TIMESTAMP</description>
+               <addressOffset>0x10</addressOffset>
+               <access>read-only</access>
+               <resetMask>0xFF000000</resetMask>
+               <fields>
+                  <field>
+                     <name>TIMESTAMP</name>
+                     <description>Received Packet Timestamp</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>XCVR_CTRL</name>
+               <description>TRANSCEIVER CONTROL</description>
+               <addressOffset>0x14</addressOffset>
+               <resetValue>0x121200</resetValue>
+               <resetMask>0x78FFFFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>SEQCMD</name>
+                     <description>Sequence Commands</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0x0</name>
+                           <description>No Action</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0x1</name>
+                           <description>TX Start Now</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0x2</name>
+                           <description>TX Start @ T1 Timer Compare Match (EVENT_TMR = T1_CMP)</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0x3</name>
+                           <description>TX Start @ T2 Timer Compare Match (EVENT_TMR = T2_CMP)</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0x4</name>
+                           <description>TX Cancel -- Cancels pending TX events but do not abort a TX-in-progress</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0x5</name>
+                           <description>RX Start Now</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0x6</name>
+                           <description>RX Start @ T1 Timer Compare Match (EVENT_TMR = T1_CMP)</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0x7</name>
+                           <description>RX Start @ T2 Timer Compare Match (EVENT_TMR = T2_CMP)</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0x8</name>
+                           <description>RX Stop @ T1 Timer Compare Match (EVENT_TMR = T1_CMP)</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0x9</name>
+                           <description>RX Stop @ T2 Timer Compare Match (EVENT_TMR = T2_CMP)</description>
+                           <value>0b1001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0xA</name>
+                           <description>RX Cancel -- Cancels pending RX events but do not abort a RX-in-progress</description>
+                           <value>0b1010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0xB</name>
+                           <description>Abort All - Cancels all pending events and abort any sequence-in-progress</description>
+                           <value>0b1011</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TX_PKT_LENGTH</name>
+                     <description>Transmit Packet Length</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>RX_PKT_LENGTH</name>
+                     <description>Receive Packet Length</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+                  <field>
+                     <name>CMDDEC_CS</name>
+                     <description>Command Decode</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>XCVR_BUSY</name>
+                     <description>Transceiver Busy</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>IDLE</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>BUSY</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>XCVR_STS</name>
+               <description>TRANSCEIVER STATUS</description>
+               <addressOffset>0x18</addressOffset>
+               <access>read-only</access>
+               <resetMask>0xFF006000</resetMask>
+               <fields>
+                  <field>
+                     <name>TX_START_T1_PEND</name>
+                     <description>TX T1 Start Pending Status</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TX_START_T2_PEND</name>
+                     <description>TX T2 Start Pending Status</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TX_IN_WARMUP</name>
+                     <description>TX Warmup Status</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TX_IN_PROGRESS</name>
+                     <description>TX in Progress Status</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TX_IN_WARMDN</name>
+                     <description>TX Warmdown Status</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RX_START_T1_PEND</name>
+                     <description>RX T1 Start Pending Status</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RX_START_T2_PEND</name>
+                     <description>RX T2 Start Pending Status</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RX_STOP_T1_PEND</name>
+                     <description>RX T1 Stop Pending Status</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RX_STOP_T2_PEND</name>
+                     <description>RX T2 Start Pending Status</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RX_IN_WARMUP</name>
+                     <description>RX Warmup Status</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RX_IN_SEARCH</name>
+                     <description>RX Search Status</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RX_IN_PROGRESS</name>
+                     <description>RX in Progress Status</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RX_IN_WARMDN</name>
+                     <description>RX Warmdown Status</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>CRC_VALID</name>
+                     <description>CRC Valid Indicator</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>CRC is not valid for RX packet</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>CRC is valid for RX packet</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RSSI</name>
+                     <description>Received Signal Stength Indicator</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>XCVR_CFG</name>
+               <description>TRANSCEIVER CONFIGURATION</description>
+               <addressOffset>0x1C</addressOffset>
+               <resetMask>0xFF0000FF</resetMask>
+               <fields>
+                  <field>
+                     <name>TX_WHITEN_DIS</name>
+                     <description>TX Whitening Disable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RX_DEWHITEN_DIS</name>
+                     <description>RX De-Whitening Disable</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>SW_CRC_EN</name>
+                     <description>Software CRC Enable</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PREAMBLE_SZ</name>
+                     <description>Preamble Size</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>TX_WARMUP</name>
+                     <description>Transmit Warmup Time</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>RX_WARMUP</name>
+                     <description>Receive Warmup Time</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CHANNEL_NUM</name>
+               <description>CHANNEL NUMBER</description>
+               <addressOffset>0x20</addressOffset>
+               <fields>
+                  <field>
+                     <name>CHANNEL_NUM</name>
+                     <description>Channel Number</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TX_POWER</name>
+               <description>TRANSMIT POWER</description>
+               <addressOffset>0x24</addressOffset>
+               <fields>
+                  <field>
+                     <name>TX_POWER</name>
+                     <description>Transmit Power</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>NTW_ADR_CTRL</name>
+               <description>NETWORK ADDRESS CONTROL</description>
+               <addressOffset>0x28</addressOffset>
+               <resetValue>0x5500</resetValue>
+               <resetMask>0xFFFFFF0F</resetMask>
+               <fields>
+                  <field>
+                     <name>NTW_ADR_EN</name>
+                     <description>Network Address Match Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>NTW_ADR_MCH</name>
+                     <description>Network Address Match Status</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>NTW_ADR0_SZ</name>
+                     <description>Network Address Match Size</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>1 octet</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>2 octets</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>2</name>
+                           <description>3 octets</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>3</name>
+                           <description>4 octets</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="NTW_ADR0_SZ" > <name>NTW_ADR1_SZ</name> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="NTW_ADR0_SZ" > <name>NTW_ADR2_SZ</name> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="NTW_ADR0_SZ" > <name>NTW_ADR3_SZ</name> <bitOffset>14</bitOffset> </field>
+                  <field>
+                     <name>NTW_ADR_THR0</name>
+                     <description>Network Address Match Bit Error Threshold 0</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>NTW_ADR_THR1</name>
+                     <description>Network Address Match Bit Error Threshold 1</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>NTW_ADR_THR2</name>
+                     <description>Network Address Match Bit Error Threshold 2</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+                  <field>
+                     <name>NTW_ADR_THR3</name>
+                     <description>Network Address Match Bit Error Threshold 3</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>3</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>4</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3</dimIndex>
+               <name>NTW_ADR_%s</name>
+               <description>NETWORK ADDRESS %s</description>
+               <addressOffset>0x2C</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>NTW_ADR_0</name>
+                     <description>Network Address 0</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RX_WATERMARK</name>
+               <description>RX WATERMARK</description>
+               <addressOffset>0x3C</addressOffset>
+               <resetValue>0x7F</resetValue>
+               <resetMask>0xFF80FFFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RX_WATERMARK</name>
+                     <description>RX Watermark</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>BYTE_COUNTER</name>
+                     <description>Byte Counter</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>7</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>First Byte of Network Address</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Second Byte of Network Address</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>DSM_CTRL</name>
+               <description>DSM CONTROL</description>
+               <addressOffset>0x40</addressOffset>
+               <access>write-only</access>
+               <resetMask>0xFFFFFFFE</resetMask>
+               <fields>
+                  <field>
+                     <name>ANT_SLEEP_EN</name>
+                     <description>ANT DSM Sleep Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PART_ID</name>
+               <description>PART ID</description>
+               <addressOffset>0x44</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>PART_ID</name>
+                     <description>Part ID</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>64</dim>
+               <dimIncrement>2</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63</dimIndex>
+               <name>PACKET_BUFFER_%s</name>
+               <description>PACKET BUFFER</description>
+               <addressOffset>0x100</addressOffset>
+               <size>16</size>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>PACKET_BUFFER</name>
+                     <description>PACKET BUFFER RAM</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

@@ -227,12 +227,12 @@ Controls availability of the comparator output on the associated CMPO output pin
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Not selected</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Selected</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -364,12 +364,12 @@ Controls availability of the comparator output on the associated CMPO output pin
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Vin1 is reference Vin</description>
+                           <description>Vin1 (usually Vref)</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Vin2 is reference Vin</description>
+                           <description>Vin2 (usually Vdd)</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -444,7 +444,7 @@ Controls availability of the comparator output on the associated CMPO output pin
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b111</name>
-                           <description>IN7</description>
+                           <description>6b DAC0 Reference</description>
                            <value>0b111</value>
                         </enumeratedValue>
                      </enumeratedValues>

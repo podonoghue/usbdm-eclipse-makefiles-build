@@ -1,11 +1,9 @@
 <!--
 Devices using this peripheral: 
-      MKL02Z4
-      MKV10Z7
-      MKV11Z7
+      MKW41Z4
 -->
       <peripheral>
-         <?sourceFile "MCG_MKL02Z4" ?>
+         <?sourceFile "MCG_NOPLL_NORTC_MKW41Z4" ?>
          <name>MCG</name>
          <description>Multipurpose Clock Generator module</description>
          <groupName>MCG</groupName>
@@ -36,7 +34,7 @@ Devices using this peripheral:
          <addressBlock>
             <?width "8" ?>
             <offset>0xA</offset>
-            <size>0x2</size>
+            <size>0x4</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
@@ -158,7 +156,8 @@ If (RANGE=0 or OSCSEL=1) 1st value is used; else 2nd value</description>
                   </field>
                   <field>
                      <name>CLKS</name>
-                     <description>Clock Source Select</description>
+                     <description>Clock Source Select\n
+Selects the clock source for MCGOUTCLK</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
@@ -191,7 +190,7 @@ If (RANGE=0 or OSCSEL=1) 1st value is used; else 2nd value</description>
                <description>Control 2 Register</description>
                <addressOffset>0x1</addressOffset>
                <size>8</size>
-               <resetValue>0x80</resetValue>
+               <resetValue>0xC0</resetValue>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
@@ -237,7 +236,8 @@ In any other MCG mode, LP bit has no affect</description>
                   </field>
                   <field>
                      <name>EREFS0</name>
-                     <description>External Reference Select\nSelects the source for the external reference clock</description>
+                     <description>External Reference Select\n
+Selects the source for the external reference clock</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -288,12 +288,17 @@ Selects the frequency range for the crystal oscillator or external clock source<
                            <description>High frequency range</description>
                            <value>0b01</value>
                         </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1X</name>
+                           <description>Very high frequency</description>
+                           <value>0b1X</value>
+                        </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>FCFTRIM</name>
                      <description>Fast Internal Reference Clock Fine Trim\n
-FCFTRIM controls the smallest adjustment of the fast internal reference clock frequency</description>
+Controls the smallest adjustment of the fast internal reference clock frequency</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
                   </field>
@@ -346,7 +351,7 @@ Adjusts the slow internal reference clock frequency</description>
                <description>Control 4 Register</description>
                <addressOffset>0x3</addressOffset>
                <size>8</size>
-               <resetMask>0x0</resetMask>
+               <resetMask>0xE0</resetMask>
                <fields>
                   <field>
                      <name>SCFTRIM</name>
@@ -459,6 +464,7 @@ The LOCRE0 bit will determine if a interrupt or a reset request is generated fol
                <description>Status Register</description>
                <addressOffset>0x6</addressOffset>
                <size>8</size>
+               <access>read-only</access>
                <resetValue>0x10</resetValue>
                <resetMask>0xFF</resetMask>
                <fields>
@@ -468,23 +474,24 @@ The LOCRE0 bit will determine if a interrupt or a reset request is generated fol
 The IRCST bit indicates the current source for the internal reference clock select clock (IRCSCLK)</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
-                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>IRC is slow clock (32 kHz)</description>
+                           <description>Slow clock (32 kHz)</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>IRC is fast clock (4 MHz)</description>
+                           <description>Fast clock (4 MHz)</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>OSCINIT0</name>
-                     <description>OSC Initialization</description>
+                     <description>OSC Initialization Status\n
+This flag, which resets to 0, is set to 1 after the initialization cycles of the crystal oscillator clock are
+completed. After being set, the bit is cleared to 0 if the OSC is subsequently disabled</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -507,7 +514,6 @@ These bits indicate the current clock mode.\n
 The CLKST bits do not update immediately due to internal synchronisation between clock domains</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>2</bitWidth>
-                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
@@ -526,7 +532,7 @@ The CLKST bits do not update immediately due to internal synchronisation between
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>Output of the PLL</description>
+                           <description>Reserved</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -537,7 +543,6 @@ The CLKST bits do not update immediately due to internal synchronisation between
 This bit indicates the current source for the FLL reference clock</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>1</bitWidth>
-                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -744,6 +749,102 @@ Values are used by ATM to compare and adjust IRC trim values during ATM SAR conv
                            <name>0bXXXXXXXX</name>
                            <description>Compare value</description>
                            <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>C7</name>
+               <description>Control 7 Register</description>
+               <addressOffset>0xC</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>OSCSEL</name>
+                     <description>OSC Clock Select
+Selects the MCG FLL external reference clock</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>System Oscillator (OSCCLK0)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>32 kHz RTC Oscillator</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>C8</name>
+               <description>Control 8 Register</description>
+               <addressOffset>0xD</addressOffset>
+               <size>8</size>
+               <resetValue>0x80</resetValue>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>LOCS1</name>
+                     <description>RTC Loss of Clock Status\n
+This bit indicates when a loss of clock has occurred\n
+Cleared by writing a logic 1 to it when set</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>RTC loss has not occurred</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>RTC loss has occurred</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CME1</name>
+                     <description>RTC Clock Monitor Enable1\n
+Enables the loss of clock monitoring circuit for the output of the RTC external reference clock</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Clock monitor disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Clock monitor is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LOCRE1</name>
+                     <description>Loss of Clock Reset Enable\n
+Determines if a interrupt or a reset request is made following a loss of RTC external reference clock</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt request</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Reset request</description>
+                           <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>

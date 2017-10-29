@@ -368,7 +368,7 @@ Enables the periodic trigger capability for the triggered DMA channel</descripti
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Request directed routed</description>
+                           <description>Request directly routed</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>

@@ -1,0 +1,1192 @@
+<!--
+Devices using this peripheral: 
+      MKW41Z4
+-->
+      <peripheral>
+         <?sourceFile "TRNG0_0x40029000" ?>
+         <name>TRNG0</name>
+         <description>True Random Number Generator</description>
+         <groupName>TRNG</groupName>
+         <headerStructName>TRNG</headerStructName>
+         <baseAddress>0x40029000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0xA0</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xB0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xF0</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>MCTL</name>
+               <description>Miscellaneous Control Register</description>
+               <addressOffset>0x0</addressOffset>
+               <resetValue>0x12001</resetValue>
+               <fields>
+                  <field>
+                     <name>SAMP_MODE</name>
+                     <description>Sample Mode</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>00</name>
+                           <description>use Von Neumann data into both Entropy shifter and Statistical Checker</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01</name>
+                           <description>use raw data into both Entropy shifter and Statistical Checker</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10</name>
+                           <description>use Von Neumann data into Entropy shifter. Use raw data into Statistical Checker</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>11</name>
+                           <description>undefined/reserved</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>OSC_DIV</name>
+                     <description>Oscillator Divide</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>00</name>
+                           <description>use ring oscillator with no divide</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>01</name>
+                           <description>use ring oscillator divided-by-2</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>10</name>
+                           <description>use ring oscillator divided-by-4</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>11</name>
+                           <description>use ring oscillator divided-by-8</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>UNUSED</name>
+                     <description>This bit is unused but write-able. Must be left as zero</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TRNG_ACC</name>
+                     <description>Access Mode</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RST_DEF</name>
+                     <description>Reset Defaults</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-only</access>
+                  </field>
+                  <field>
+                     <name>FOR_SCLK</name>
+                     <description>Force System Clock</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>FCT_FAIL</name>
+                     <description>Read only: Frequency Count Fail</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>FCT_VAL</name>
+                     <description>Read only: Frequency Count Valid. Indicates that a valid frequency count may be read from FRQCNT</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>ENT_VAL</name>
+                     <description>Read only: Entropy Valid</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>TST_OUT</name>
+                     <description>Read only: Test point inside ring oscillator</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>ERR</name>
+                     <description>Read: Error status</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TSTOP_OK</name>
+                     <description>TRNG_OK_TO_STOP</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>PRGM</name>
+                     <description>Programming Mode Select</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SCMISC</name>
+               <description>Statistical Check Miscellaneous Register</description>
+               <addressOffset>0x4</addressOffset>
+               <resetValue>0x1001F</resetValue>
+               <fields>
+                  <field>
+                     <name>LRUN_MAX</name>
+                     <description>LONG RUN MAX LIMIT</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>RTY_CT</name>
+                     <description>RETRY COUNT</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PKRRNG</name>
+               <description>Poker Range Register</description>
+               <addressOffset>0x8</addressOffset>
+               <resetValue>0x9A3</resetValue>
+               <fields>
+                  <field>
+                     <name>PKR_RNG</name>
+                     <description>Poker Range</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PKRMAX</name>
+               <description>Poker Maximum Limit Register</description>
+               <addressOffset>0xC</addressOffset>
+               <resetValue>0x6920</resetValue>
+               <fields>
+                  <field>
+                     <name>PKR_MAX</name>
+                     <description>Poker Maximum Limit</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PKRSQ</name>
+               <description>Poker Square Calculation Result Register</description>
+               <addressOffset>0xC</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>PKR_SQ</name>
+                     <description>Poker Square Calculation Result</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>24</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SDCTL</name>
+               <description>Seed Control Register</description>
+               <addressOffset>0x10</addressOffset>
+               <resetValue>0xC8009C4</resetValue>
+               <fields>
+                  <field>
+                     <name>SAMP_SIZE</name>
+                     <description>Sample Size</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>ENT_DLY</name>
+                     <description>Entropy Delay</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SBLIM</name>
+               <description>Sparse Bit Limit Register</description>
+               <addressOffset>0x14</addressOffset>
+               <resetValue>0x3F</resetValue>
+               <fields>
+                  <field>
+                     <name>SB_LIM</name>
+                     <description>Sparse Bit Limit</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TOTSAM</name>
+               <description>Total Samples Register</description>
+               <addressOffset>0x14</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>TOT_SAM</name>
+                     <description>Total Samples</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>20</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FRQMIN</name>
+               <description>Frequency Count Minimum Limit Register</description>
+               <addressOffset>0x18</addressOffset>
+               <resetValue>0x640</resetValue>
+               <fields>
+                  <field>
+                     <name>FRQ_MIN</name>
+                     <description>Frequency Count Minimum Limit</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>22</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FRQCNT</name>
+               <description>Frequency Count Register</description>
+               <addressOffset>0x1C</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>FRQ_CT</name>
+                     <description>Frequency Count</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>22</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FRQMAX</name>
+               <description>Frequency Count Maximum Limit Register</description>
+               <addressOffset>0x1C</addressOffset>
+               <resetValue>0x6400</resetValue>
+               <fields>
+                  <field>
+                     <name>FRQ_MAX</name>
+                     <description>Frequency Counter Maximum Limit</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>22</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SCMC</name>
+               <description>Statistical Check Monobit Count Register</description>
+               <addressOffset>0x20</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>MONO_CT</name>
+                     <description>Monobit Count</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SCML</name>
+               <description>Statistical Check Monobit Limit Register</description>
+               <addressOffset>0x20</addressOffset>
+               <resetValue>0x10C0568</resetValue>
+               <fields>
+                  <field>
+                     <name>MONO_MAX</name>
+                     <description>Monobit Maximum Limit</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>MONO_RNG</name>
+                     <description>Monobit Range</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SCR1C</name>
+               <description>Statistical Check Run Length 1 Count Register</description>
+               <addressOffset>0x24</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>R1_0_CT</name>
+                     <description>Runs of Zero, Length 1 Count</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>15</bitWidth>
+                  </field>
+                  <field>
+                     <name>R1_1_CT</name>
+                     <description>Runs of One, Length 1 Count</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>15</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SCR1L</name>
+               <description>Statistical Check Run Length 1 Limit Register</description>
+               <addressOffset>0x24</addressOffset>
+               <resetValue>0xB20195</resetValue>
+               <fields>
+                  <field>
+                     <name>RUN1_MAX</name>
+                     <description>Run Length 1 Maximum Limit</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>15</bitWidth>
+                  </field>
+                  <field>
+                     <name>RUN1_RNG</name>
+                     <description>Run Length 1 Range</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>15</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SCR2C</name>
+               <description>Statistical Check Run Length 2 Count Register</description>
+               <addressOffset>0x28</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>R2_0_CT</name>
+                     <description>Runs of Zero, Length 2 Count</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>14</bitWidth>
+                  </field>
+                  <field>
+                     <name>R2_1_CT</name>
+                     <description>Runs of One, Length 2 Count</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>14</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SCR2L</name>
+               <description>Statistical Check Run Length 2 Limit Register</description>
+               <addressOffset>0x28</addressOffset>
+               <resetValue>0x7A00DC</resetValue>
+               <fields>
+                  <field>
+                     <name>RUN2_MAX</name>
+                     <description>Run Length 2 Maximum Limit</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>14</bitWidth>
+                  </field>
+                  <field>
+                     <name>RUN2_RNG</name>
+                     <description>Run Length 2 Range</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>14</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SCR3C</name>
+               <description>Statistical Check Run Length 3 Count Register</description>
+               <addressOffset>0x2C</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>R3_0_CT</name>
+                     <description>Runs of Zeroes, Length 3 Count</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>13</bitWidth>
+                  </field>
+                  <field>
+                     <name>R3_1_CT</name>
+                     <description>Runs of Ones, Length 3 Count</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>13</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SCR3L</name>
+               <description>Statistical Check Run Length 3 Limit Register</description>
+               <addressOffset>0x2C</addressOffset>
+               <resetValue>0x58007D</resetValue>
+               <fields>
+                  <field>
+                     <name>RUN3_MAX</name>
+                     <description>Run Length 3 Maximum Limit</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>13</bitWidth>
+                  </field>
+                  <field>
+                     <name>RUN3_RNG</name>
+                     <description>Run Length 3 Range</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>13</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SCR4C</name>
+               <description>Statistical Check Run Length 4 Count Register</description>
+               <addressOffset>0x30</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>R4_0_CT</name>
+                     <description>Runs of Zero, Length 4 Count</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+                  <field>
+                     <name>R4_1_CT</name>
+                     <description>Runs of One, Length 4 Count</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SCR4L</name>
+               <description>Statistical Check Run Length 4 Limit Register</description>
+               <addressOffset>0x30</addressOffset>
+               <resetValue>0x40004B</resetValue>
+               <fields>
+                  <field>
+                     <name>RUN4_MAX</name>
+                     <description>Run Length 4 Maximum Limit</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+                  <field>
+                     <name>RUN4_RNG</name>
+                     <description>Run Length 4 Range</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>12</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SCR5C</name>
+               <description>Statistical Check Run Length 5 Count Register</description>
+               <addressOffset>0x34</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>R5_0_CT</name>
+                     <description>Runs of Zero, Length 5 Count</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>11</bitWidth>
+                  </field>
+                  <field>
+                     <name>R5_1_CT</name>
+                     <description>Runs of One, Length 5 Count</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>11</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SCR5L</name>
+               <description>Statistical Check Run Length 5 Limit Register</description>
+               <addressOffset>0x34</addressOffset>
+               <resetValue>0x2E002F</resetValue>
+               <fields>
+                  <field>
+                     <name>RUN5_MAX</name>
+                     <description>Run Length 5 Maximum Limit</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>11</bitWidth>
+                  </field>
+                  <field>
+                     <name>RUN5_RNG</name>
+                     <description>Run Length 5 Range</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>11</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SCR6PC</name>
+               <description>Statistical Check Run Length 6+ Count Register</description>
+               <addressOffset>0x38</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>R6P_0_CT</name>
+                     <description>Runs of Zero, Length 6+ Count</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>11</bitWidth>
+                  </field>
+                  <field>
+                     <name>R6P_1_CT</name>
+                     <description>Runs of One, Length 6+ Count</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>11</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SCR6PL</name>
+               <description>Statistical Check Run Length 6+ Limit Register</description>
+               <addressOffset>0x38</addressOffset>
+               <resetValue>0x2E002F</resetValue>
+               <fields>
+                  <field>
+                     <name>RUN6P_MAX</name>
+                     <description>Run Length 6+ Maximum Limit</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>11</bitWidth>
+                  </field>
+                  <field>
+                     <name>RUN6P_RNG</name>
+                     <description>Run Length 6+ Range</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>11</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>STATUS</name>
+               <description>Status Register</description>
+               <addressOffset>0x3C</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>TF1BR0</name>
+                     <description>Test Fail, 1-Bit Run, Sampling 0s. If TF1BR0=1, the 1-Bit Run, Sampling 0s Test has failed</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TF1BR1</name>
+                     <description>Test Fail, 1-Bit Run, Sampling 1s. If TF1BR1=1, the 1-Bit Run, Sampling 1s Test has failed</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TF2BR0</name>
+                     <description>Test Fail, 2-Bit Run, Sampling 0s. If TF2BR0=1, the 2-Bit Run, Sampling 0s Test has failed</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TF2BR1</name>
+                     <description>Test Fail, 2-Bit Run, Sampling 1s. If TF2BR1=1, the 2-Bit Run, Sampling 1s Test has failed</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TF3BR0</name>
+                     <description>Test Fail, 3-Bit Run, Sampling 0s. If TF3BR0=1, the 3-Bit Run, Sampling 0s Test has failed</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TF3BR1</name>
+                     <description>Test Fail, 3-Bit Run, Sampling 1s. If TF3BR1=1, the 3-Bit Run, Sampling 1s Test has failed</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TF4BR0</name>
+                     <description>Test Fail, 4-Bit Run, Sampling 0s. If TF4BR0=1, the 4-Bit Run, Sampling 0s Test has failed</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TF4BR1</name>
+                     <description>Test Fail, 4-Bit Run, Sampling 1s. If TF4BR1=1, the 4-Bit Run, Sampling 1s Test has failed</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TF5BR0</name>
+                     <description>Test Fail, 5-Bit Run, Sampling 0s. If TF5BR0=1, the 5-Bit Run, Sampling 0s Test has failed</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TF5BR1</name>
+                     <description>Test Fail, 5-Bit Run, Sampling 1s. If TF5BR1=1, the 5-Bit Run, Sampling 1s Test has failed</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TF6PBR0</name>
+                     <description>Test Fail, 6 Plus Bit Run, Sampling 0s</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TF6PBR1</name>
+                     <description>Test Fail, 6 Plus Bit Run, Sampling 1s</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TFSB</name>
+                     <description>Test Fail, Sparse Bit. If TFSB=1, the Sparse Bit Test has failed</description>
+                     <bitOffset>12</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TFLR</name>
+                     <description>Test Fail, Long Run. If TFLR=1, the Long Run Test has failed</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TFP</name>
+                     <description>Test Fail, Poker. If TFP=1, the Poker Test has failed</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>TFMB</name>
+                     <description>Test Fail, Mono Bit. If TFMB=1, the Mono Bit Test has failed</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>RETRY_CT</name>
+                     <description>RETRY COUNT</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <dim>16</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
+               <name>ENT%s</name>
+               <description>Entropy Read Register</description>
+               <addressOffset>0x40</addressOffset>
+               <access>read-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>ENT</name>
+                     <description>Entropy Value</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PKRCNT10</name>
+               <description>Statistical Check Poker Count 1 and 0 Register</description>
+               <addressOffset>0x80</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>PKR_0_CT</name>
+                     <description>Poker 0h Count</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>PKR_1_CT</name>
+                     <description>Poker 1h Count</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PKRCNT32</name>
+               <description>Statistical Check Poker Count 3 and 2 Register</description>
+               <addressOffset>0x84</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>PKR_2_CT</name>
+                     <description>Poker 2h Count</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>PKR_3_CT</name>
+                     <description>Poker 3h Count</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PKRCNT54</name>
+               <description>Statistical Check Poker Count 5 and 4 Register</description>
+               <addressOffset>0x88</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>PKR_4_CT</name>
+                     <description>Poker 4h Count</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>PKR_5_CT</name>
+                     <description>Poker 5h Count</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PKRCNT76</name>
+               <description>Statistical Check Poker Count 7 and 6 Register</description>
+               <addressOffset>0x8C</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>PKR_6_CT</name>
+                     <description>Poker 6h Count</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>PKR_7_CT</name>
+                     <description>Poker 7h Count</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PKRCNT98</name>
+               <description>Statistical Check Poker Count 9 and 8 Register</description>
+               <addressOffset>0x90</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>PKR_8_CT</name>
+                     <description>Poker 8h Count</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>PKR_9_CT</name>
+                     <description>Poker 9h Count</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PKRCNTBA</name>
+               <description>Statistical Check Poker Count B and A Register</description>
+               <addressOffset>0x94</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>PKR_A_CT</name>
+                     <description>Poker Ah Count</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>PKR_B_CT</name>
+                     <description>Poker Bh Count</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PKRCNTDC</name>
+               <description>Statistical Check Poker Count D and C Register</description>
+               <addressOffset>0x98</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>PKR_C_CT</name>
+                     <description>Poker Ch Count</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>PKR_D_CT</name>
+                     <description>Poker Dh Count</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PKRCNTFE</name>
+               <description>Statistical Check Poker Count F and E Register</description>
+               <addressOffset>0x9C</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>PKR_E_CT</name>
+                     <description>Poker Eh Count</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+                  <field>
+                     <name>PKR_F_CT</name>
+                     <description>Poker Fh Count</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SEC_CFG</name>
+               <description>Security Configuration Register</description>
+               <addressOffset>0xB0</addressOffset>
+               <fields>
+                  <field>
+                     <name>SH0</name>
+                     <description>Reserved. DRNG specific, not applicable to this version</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>See DRNG version</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>See DRNG version</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>NO_PRGM</name>
+                     <description>If set, the TRNG registers cannot be programmed</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Programability of registers controlled only by the Miscellaneous Control Register&apos;s access mode bit</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Overides Miscellaneous Control Register access mode and prevents TRNG register programming</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="SH0" > <name>SK_VAL</name> <description>Reserved. DRNG-specific, not applicable to this version</description> <bitOffset>2</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>INT_CTRL</name>
+               <description>Interrupt Control Register</description>
+               <addressOffset>0xB4</addressOffset>
+               <resetValue>0xFFFFFFFF</resetValue>
+               <fields>
+                  <field>
+                     <name>HW_ERR</name>
+                     <description>Bit position that can be cleared if corresponding bit of INT_STATUS has been asserted</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Corresponding bit of INT_STATUS cleared</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Corresponding bit of INT_STATUS active</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ENT_VAL</name>
+                     <description>Same behavior as bit 0 above</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Same behavior as bit 0 above</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Same behavior as bit 0 above</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="ENT_VAL" > <name>FRQ_CT_FAIL</name> <bitOffset>2</bitOffset> </field>
+                  <field>
+                     <name>UNUSED</name>
+                     <description>Reserved but writeable</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>29</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>INT_MASK</name>
+               <description>Mask Register</description>
+               <addressOffset>0xB8</addressOffset>
+               <fields>
+                  <field>
+                     <name>HW_ERR</name>
+                     <description>Bit position that can be cleared if corresponding bit of INT_STATUS has been asserted</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Corresponding interrupt of INT_STATUS is masked</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Corresponding bit of INT_STATUS is active</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ENT_VAL</name>
+                     <description>Same behavior as bit 0 above</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Same behavior as bit 0 above</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Same behavior as bit 0 above</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="ENT_VAL" > <name>FRQ_CT_FAIL</name> <bitOffset>2</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>INT_STATUS</name>
+               <description>Interrupt Status Register</description>
+               <addressOffset>0xBC</addressOffset>
+               <fields>
+                  <field>
+                     <name>HW_ERR</name>
+                     <description>Read: Error status</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>no error</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>error detected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ENT_VAL</name>
+                     <description>Read only: Entropy Valid</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Busy generation entropy. Any value read is invalid</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>TRNG can be stopped and entropy is valid if read</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FRQ_CT_FAIL</name>
+                     <description>Read only: Frequency Count Fail</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>No hardware nor self test frequency errors</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>The frequency counter has detected a failure</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>VID1</name>
+               <description>Version ID Register (MS)</description>
+               <addressOffset>0xF0</addressOffset>
+               <access>read-only</access>
+               <resetValue>0x300100</resetValue>
+               <fields>
+                  <field>
+                     <name>MIN_REV</name>
+                     <description>Shows the Freescale IP&apos;s Minor revision of the TRNG</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0x00</name>
+                           <description>Minor revision number for TRNG</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MAJ_REV</name>
+                     <description>Shows the Freescale IP&apos;s Major revision of the TRNG</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0x01</name>
+                           <description>Major revision number for TRNG</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>IP_ID</name>
+                     <description>Shows the Freescale IP ID</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0x0030</name>
+                           <description>ID for TRNG</description>
+                           <value>0b110000</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>VID2</name>
+               <description>Version ID Register (LS)</description>
+               <addressOffset>0xF4</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>CONFIG_OPT</name>
+                     <description>Shows the Freescale IP&apos;s Configuaration options for the TRNG</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0x00</name>
+                           <description>TRNG_CONFIG_OPT for TRNG</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ECO_REV</name>
+                     <description>Shows the Freescale IP&apos;s ECO revision of the TRNG</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0x00</name>
+                           <description>TRNG_ECO_REV for TRNG</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>INTG_OPT</name>
+                     <description>Shows the Freescale integration options for the TRNG</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0x00</name>
+                           <description>INTG_OPT for TRNG</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ERA</name>
+                     <description>Shows the Freescale compile options for the TRNG</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0x00</name>
+                           <description>COMPILE_OPT for TRNG</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

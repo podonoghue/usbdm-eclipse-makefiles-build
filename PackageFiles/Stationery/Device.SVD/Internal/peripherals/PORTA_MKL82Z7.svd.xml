@@ -243,17 +243,17 @@ Configures Interrupt and DMA functions</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0001</name>
-                           <description>DMA Request on rising edge</description>
+                           <description>ISF flag and DMA request on rising edge</description>
                            <value>0b0001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0010</name>
-                           <description>DMA Request on falling edge</description>
+                           <description>ISF flag and DMA request on falling edge</description>
                            <value>0b0010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0011</name>
-                           <description>DMA Request on either edge</description>
+                           <description>ISF flag and DMA request on either edge</description>
                            <value>0b0011</value>
                         </enumeratedValue>
                         <enumeratedValue>

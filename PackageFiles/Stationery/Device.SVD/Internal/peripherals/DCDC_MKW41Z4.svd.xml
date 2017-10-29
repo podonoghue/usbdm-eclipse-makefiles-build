@@ -1,0 +1,493 @@
+<!--
+Devices using this peripheral: 
+      MKW41Z4
+-->
+      <peripheral>
+         <?sourceFile "DCDC_MKW41Z4" ?>
+         <name>DCDC</name>
+         <description>DC to DC Converter</description>
+         <groupName>DCDC</groupName>
+         <headerStructName>DCDC</headerStructName>
+         <baseAddress>0x4005A000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x14</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x18</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>REG0</name>
+               <description>DCDC REGISTER 0</description>
+               <addressOffset>0x0</addressOffset>
+               <resetValue>0x4180000</resetValue>
+               <fields>
+                  <field>
+                     <name>DCDC_DISABLE_AUTO_CLK_SWITCH</name>
+                     <description>Disable automatic clock switch from internal oscillator to external clock</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCDC_SEL_CLK</name>
+                     <description>Select external clock for DCDC when DCDC_DISABLE_AUTO_CLK_SWITCH is set</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCDC_PWD_OSC_INT</name>
+                     <description>Power down internal oscillator. Only set this bit when 32M crystal oscillator is available</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCDC_LP_DF_CMP_ENABLE</name>
+                     <description>Enable low power differential comparators, to sense lower supply in pulsed mode</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCDC_VBAT_DIV_CTRL</name>
+                     <description>Controls VBAT voltage divider</description>
+                     <bitOffset>10</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCDC_LP_STATE_HYS_L</name>
+                     <description>Configure the hysteretic lower threshold value in low power mode</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Target voltage value - 0 mV</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Target voltage value - 25 mV</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Target voltage value - 50 mV</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Target voltage value - 75 mV</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DCDC_LP_STATE_HYS_H</name>
+                     <description>Configure the hysteretic upper threshold value in low power mode</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Target voltage value + 0 mV</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Target voltage value + 25 mV</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Target voltage value + 50 mV</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Target voltage value + 75 mV</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>HYST_LP_COMP_ADJ</name>
+                     <description>Adjust hysteretic value in low power comparator</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>HYST_LP_CMP_DISABLE</name>
+                     <description>Disable hysteresis in low power comparator</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>OFFSET_RSNS_LP_ADJ</name>
+                     <description>Adjust hysteretic value in low power voltage sense</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>OFFSET_RSNS_LP_DISABLE</name>
+                     <description>Disable hysteresis in low power voltage sense</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCDC_LESS_I</name>
+                     <description>Reduce DCDC current. It will save approximately 20 uA in RUN</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PWD_CMP_OFFSET</name>
+                     <description>Power down output range comparator</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCDC_XTALOK_DISABLE</name>
+                     <description>Disable xtalok detection circuit</description>
+                     <bitOffset>27</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PSWITCH_STATUS</name>
+                     <description>Status register to indicate PSWITCH status</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>VLPS_CONFIG_DCDC_HP</name>
+                     <description>Selects behavior of DCDC in device VLPS low power mode</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>VLPR_VLPW_CONFIG_DCDC_HP</name>
+                     <description>Selects behavior of DCDC in device VLPR and VLPW low power modes</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCDC_STS_DC_OK</name>
+                     <description>Status register to indicate DCDC lock</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>REG1</name>
+               <description>DCDC REGISTER 1</description>
+               <addressOffset>0x4</addressOffset>
+               <resetValue>0x17C21C</resetValue>
+               <fields>
+                  <field>
+                     <name>POSLIMIT_BUCK_IN</name>
+                     <description>Upper limit duty cycle limit in DC-DC converter</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>POSLIMIT_BOOST_IN</name>
+                     <description>Upper limit duty cycle limit in DC-DC converter</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCDC_LOOPCTRL_CM_HST_THRESH</name>
+                     <description>Enable hysteresis in switching converter common mode analog comparators</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCDC_LOOPCTRL_DF_HST_THRESH</name>
+                     <description>Enable hysteresis in switching converter differential mode analog comparators</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCDC_LOOPCTRL_EN_CM_HYST</name>
+                     <description>Enable hysteresis in switching converter common mode analog comparators</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCDC_LOOPCTRL_EN_DF_HYST</name>
+                     <description>Enable hysteresis in switching converter differential mode analog comparators</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>REG2</name>
+               <description>DCDC REGISTER 2</description>
+               <addressOffset>0x8</addressOffset>
+               <resetValue>0x4009</resetValue>
+               <fields>
+                  <field>
+                     <name>DCDC_LOOPCTRL_HYST_SIGN</name>
+                     <description>Invert the sign of the hysteresis in DC-DC analog comparators. This bit is set when in Pulsed mode</description>
+                     <bitOffset>13</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCDC_BATTMONITOR_EN_BATADJ</name>
+                     <description>This bit enables the DC-DC to improve efficiency and minimize ripple using the information from the BATT_VAL field</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCDC_BATTMONITOR_BATT_VAL</name>
+                     <description>Software should be configured to place the battery voltage in this register measured with an 8 mV LSB resolution through the ADC</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>REG3</name>
+               <description>DCDC REGISTER 3</description>
+               <addressOffset>0xC</addressOffset>
+               <resetValue>0xAA46</resetValue>
+               <fields>
+                  <field>
+                     <name>DCDC_VDD1P8CTRL_TRG</name>
+                     <description>Target value of VDD1P8, 25 mV each step in two ranges, from 0x00 to 0x11 and 0x20 to 0x3F</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>1.65 V</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>1.8 V</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10001</name>
+                           <description>2.075 V</description>
+                           <value>0b10001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100000</name>
+                           <description>2.8 V</description>
+                           <value>0b100000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110100</name>
+                           <description>3.3 V</description>
+                           <value>0b110100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111111</name>
+                           <description>3.575 V</description>
+                           <value>0b111111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DCDC_VDD1P5CTRL_TRG_BUCK</name>
+                     <description>Target value of VDD1P5 in buck mode, 25 mV each step from 0x00 to 0x0F</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>5</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>1.65 V</description>
+                           <value>0b01111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1001</name>
+                           <description>1.5 V</description>
+                           <value>0b01001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>1.275 V</description>
+                           <value>0b00000</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DCDC_VDD1P5CTRL_TRG_BOOST</name>
+                     <description>Target value of VDD1P5 in boost mode, 25 mV each step from 0x00 to 0x0F</description>
+                     <bitOffset>11</bitOffset>
+                     <bitWidth>5</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b10101</name>
+                           <description>1.8 V</description>
+                           <value>0b10101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>1.65 V</description>
+                           <value>0b01111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1001</name>
+                           <description>1.5 V</description>
+                           <value>0b01001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>1.275 V</description>
+                           <value>0b00000</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DCDC_VDD1P5CTRL_ADJTN</name>
+                     <description>Adjust value of duty cycle when switching between VDD1P5 and VDD1P8. The unit is 1/32 or 3.125%</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCDC_MINPWR_DC_HALFCLK_PULSED</name>
+                     <description>Set DCDC clock to half frequency for the Pulsed mode</description>
+                     <bitOffset>21</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCDC_MINPWR_DOUBLE_FETS_PULSED</name>
+                     <description>Use double switch FET for the Pulsed mode</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCDC_MINPWR_HALF_FETS_PULSED</name>
+                     <description>Use half switch FET for the Pulsed mode</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCDC_MINPWR_DC_HALFCLK</name>
+                     <description>Set DCDC clock to half frequency for the continuous mode</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCDC_MINPWR_DOUBLE_FETS</name>
+                     <description>Use double switch FET for the continuous mode</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCDC_MINPWR_HALF_FETS</name>
+                     <description>Use half switch FET for the continuous mode</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCDC_VDD1P5CTRL_DISABLE_STEP</name>
+                     <description>Disable stepping for VDD1P5. Must set this bit before enter low power modes</description>
+                     <bitOffset>29</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>DCDC_VDD1P8CTRL_DISABLE_STEP</name>
+                     <description>Disable stepping for VDD1P8. Must set this bit before enter low power modes</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>REG4</name>
+               <description>DCDC REGISTER 4</description>
+               <addressOffset>0x10</addressOffset>
+               <fields>
+                  <field>
+                     <name>DCDC_SW_SHUTDOWN</name>
+                     <description>Shut down DCDC in buck mode. DCDC can be turned on by pulling PSWITCH to high momentarily (min 50 ms).DCDC_SW_SHUTDOWN should not be used in boost mode because when user write this bit, MCU won&apos;t be POR and enters an abnormal state</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>UNLOCK</name>
+                     <description>0x3E77 KEY-Key needed to unlock HW_POWER_RESET register</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>REG6</name>
+               <description>DCDC REGISTER 6</description>
+               <addressOffset>0x18</addressOffset>
+               <fields>
+                  <field>
+                     <name>PSWITCH_INT_RISE_EN</name>
+                     <description>Enable rising edge detect for interrupt</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PSWITCH_INT_FALL_EN</name>
+                     <description>Enable falling edge detect for interrupt</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PSWITCH_INT_CLEAR</name>
+                     <description>Write 1 to clear interrupt. Set to 0 after clear</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PSWITCH_INT_MUTE</name>
+                     <description>Mask interrupt to SoC, edge detection result can be read from PSIWTCH_INT_STS</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PSWITCH_INT_STS</name>
+                     <description>PSWITCH edge detection interrupt status</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>read-only</access>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>REG7</name>
+               <description>DCDC REGISTER 7</description>
+               <addressOffset>0x1C</addressOffset>
+               <fields>
+                  <field>
+                     <name>INTEGRATOR_VALUE</name>
+                     <description>Integrator value which can be loaded in pulsed mode</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>19</bitWidth>
+                  </field>
+                  <field>
+                     <name>INTEGRATOR_VALUE_SEL</name>
+                     <description>Select the integrator value from above register or saved value in hardware</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>PULSE_RUN_SPEEDUP</name>
+                     <description>Enable pulse run speedup</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>
