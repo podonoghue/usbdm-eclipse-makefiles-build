@@ -32,7 +32,7 @@
       </peripheral>
       <xi:include href="peripherals/CMT_0.svd.xml"/>
       <xi:include href="peripherals/CRC0_0x40032000.svd.xml"/>
-      <xi:include href="peripherals/DAC0_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/DAC0_16CH_FIFO16_0x400CC000.svd.xml"/>
       <xi:include href="peripherals/DMA0_32CH_EARS.svd.xml"/>
       <xi:include href="peripherals/DMAMUX0_32CH_TRIG_SPLIT_MK82F15.svd.xml"/>
       <xi:include href="peripherals/EMVSIM0_MK82F25615.svd.xml"/>
@@ -132,7 +132,7 @@
          <interrupt><name>TPM2</name><description>Timer/PWM Module</description><value>89</value></interrupt>
       </peripheral>
       <xi:include href="peripherals/TRNG0_0x400A0000.svd.xml"/>
-      <xi:include href="peripherals/TSI0_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/TSI0_DMA_MK28F15.svd.xml"/>
       <xi:include href="peripherals/USB0_OTG_CLKRCV_D.svd.xml"/>
       <xi:include href="peripherals/USBDCD_MK28F15.svd.xml"/>
       <xi:include href="peripherals/VREF_C.svd.xml"/>

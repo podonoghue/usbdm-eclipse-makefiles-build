@@ -25,7 +25,7 @@
       <peripheral derivedFrom="ADC0"><name>ADC1</name><baseAddress>0x40027000</baseAddress>
          <interrupt><name>ADC1</name><description>Analog-to-Digital Converter</description><value>30</value></interrupt>
       </peripheral>
-      <xi:include href="peripherals/CMP0_MKE15Z7.svd.xml"/>
+      <xi:include href="peripherals/CMP0_DACOE_MKE15Z7.svd.xml"/>
       <peripheral derivedFrom="CMP0"><name>CMP1</name><baseAddress>0x40074000</baseAddress>
          <interrupt><name>CMP1</name><description>Comparator</description><value>21</value></interrupt>
       </peripheral>
@@ -62,7 +62,7 @@
       <peripheral derivedFrom="LPSPI0"><name>LPSPI1</name><baseAddress>0x4002D000</baseAddress>
          <interrupt><name>LPSPI1</name><description>Low power SPI</description><value>11</value></interrupt>
       </peripheral>
-      <xi:include href="peripherals/LPTMR0_MKE16F16.svd.xml"/>
+      <xi:include href="peripherals/LPTMR0_DMA_MKE16F16.svd.xml"/>
       <xi:include href="peripherals/LPUART0_MKE_FIFO.svd.xml"/>
       <peripheral derivedFrom="LPUART0"><name>LPUART1</name><baseAddress>0x4006B000</baseAddress>
          <interrupt><name>LPUART1</name><description>Low Power Universal Asynchronous Receiver/Transmitter</description><value>13</value></interrupt>

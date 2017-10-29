@@ -56,7 +56,7 @@
       <xi:include href="peripherals/ITM_0.svd.xml"/>
       <xi:include href="peripherals/LLWU_PE4_FILT2_MK22F51212.svd.xml"/>
       <xi:include href="peripherals/LPTMR0_0.svd.xml"/>
-      <xi:include href="peripherals/LPUART0_0x4002A000.svd.xml"/>
+      <xi:include href="peripherals/LPUART0_MODIR_0x4002A000.svd.xml"/>
       <xi:include href="peripherals/MCG_MK_ICS48M.svd.xml"/>
       <xi:include href="peripherals/MCM_MK22F51212.svd.xml"/>
       <xi:include href="peripherals/NV_MKV30F12810.svd.xml"/>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE device>
+<device
+   schemaVersion="1.1"
+   xmlns:xi="http://www.w3.org/2001/XInclude"
+   xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd"
+>
+   <name>MKW41Z4</name>
+   <version>1.6</version>
+   <description>MKW41Z4 NXP Microcontroller</description>
+   <cpu>
+      <name>CM0PLUS</name>
+      <revision>r0p0</revision>
+      <endian>little</endian>
+      <mpuPresent>false</mpuPresent>
+      <fpuPresent>false</fpuPresent>
+      <vtorPresent>true</vtorPresent>
+      <nvicPrioBits>2</nvicPrioBits>
+      <vendorSystickConfig>false</vendorSystickConfig>
+   </cpu>
+   <addressUnitBits>8</addressUnitBits>
+   <width>32</width>
+   <peripherals>
+      <xi:include href="peripherals/ADC0_DIFF_A.svd.xml"/>
+      <xi:include href="peripherals/ANT_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/BTLE_RF_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/CMP0_PSTM_TRIGM.svd.xml"/>
+      <xi:include href="peripherals/CMT_0.svd.xml"/>
+      <xi:include href="peripherals/DAC0_2CH_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/DCDC_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/DMA0_4CH_EARS_ACTIVE.svd.xml"/>
+      <xi:include href="peripherals/DMAMUX0_4CH_TRIG_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/FGPIOA_0xF8000000.svd.xml"/>
+      <peripheral derivedFrom="FGPIOA"><name>FGPIOB</name><baseAddress>0xF8000040</baseAddress></peripheral>
+      <peripheral derivedFrom="FGPIOA"><name>FGPIOC</name><baseAddress>0xF8000080</baseAddress></peripheral>
+      <xi:include href="peripherals/FTFA_XACCH.svd.xml"/>
+      <xi:include href="peripherals/GENFSK_MKW41Z4.svd.xml"/>
+      <peripheral derivedFrom="FGPIOA"><name>GPIOA</name>      <groupName>GPIO</groupName><baseAddress>0x400FF000</baseAddress></peripheral>
+      <peripheral derivedFrom="FGPIOA"><name>GPIOB</name>      <groupName>GPIO</groupName><baseAddress>0x400FF040</baseAddress></peripheral>
+      <peripheral derivedFrom="FGPIOA"><name>GPIOC</name>      <groupName>GPIO</groupName><baseAddress>0x400FF080</baseAddress></peripheral>
+      <xi:include href="peripherals/I2C0_MKL82Z7.svd.xml"/>
+      <peripheral derivedFrom="I2C0"><name>I2C1</name><baseAddress>0x40067000</baseAddress></peripheral>
+      <xi:include href="peripherals/LLWU_PE4_FILT2.svd.xml"/>
+      <xi:include href="peripherals/LPTMR0_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/LPUART0_MODIR_0x40054000.svd.xml"/>
+      <xi:include href="peripherals/LTC0_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/MCG_NOPLL_NORTC_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/MCM_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/MTB_MKE15Z7.svd.xml"/>
+      <xi:include href="peripherals/MTBDWT_MKE15Z7.svd.xml"/>
+      <xi:include href="peripherals/FTFA_FlashConfig_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/NVIC_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/PIT_2CH_CHAIN_LTMR.svd.xml"/>
+      <xi:include href="peripherals/PMC_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/PORTA_MKL_DMA.svd.xml"/>
+      <peripheral derivedFrom="PORTA"><name>PORTB</name><baseAddress>0x4004A000</baseAddress></peripheral>
+      <peripheral derivedFrom="PORTA"><name>PORTC</name><baseAddress>0x4004B000</baseAddress></peripheral>
+      <xi:include href="peripherals/RCM_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/RFSYS_0.svd.xml"/>
+      <xi:include href="peripherals/ROM_MKE15Z7.svd.xml"/>
+      <xi:include href="peripherals/RSIM_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/RTC_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/SystemControl_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/SIM_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/SMC_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/SPI0_MKW41Z4.svd.xml"/>
+      <peripheral derivedFrom="SPI0"><name>SPI1</name><baseAddress>0x4002D000</baseAddress></peripheral>
+      <xi:include href="peripherals/SysTick_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/TPM0_MKW41Z4_4CH.svd.xml"/>
+      <xi:include href="peripherals/TPM1_MKW41Z4_2CH.svd.xml"/>
+      <peripheral derivedFrom="TPM1"><name>TPM2</name><baseAddress>0x4003A000</baseAddress></peripheral>
+      <xi:include href="peripherals/TRNG0_0x40029000.svd.xml"/>
+      <xi:include href="peripherals/TSI0_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/VREF_C.svd.xml"/>
+      <xi:include href="peripherals/XCVR_ANA_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/XCVR_MISC_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/XCVR_PHY_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/XCVR_PKT_RAM_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/XCVR_PLL_DIG_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/XCVR_RX_DIG_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/XCVR_TSM_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/XCVR_TX_DIG_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/XCVR_ZBDEM_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/ZLL_MKW41Z4.svd.xml"/>
+   </peripherals>
+   <vendorExtensions>
+   <xi:include href="vectorTables/MKW41Z4_VectorTable.svd.xml"/>
+   </vendorExtensions>
+</device>

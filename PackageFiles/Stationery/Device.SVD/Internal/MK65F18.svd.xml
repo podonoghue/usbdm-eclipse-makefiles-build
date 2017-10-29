@@ -36,7 +36,7 @@
       <xi:include href="peripherals/CMT_0.svd.xml"/>
       <xi:include href="peripherals/CRC0_0x40032000.svd.xml"/>
       <xi:include href="peripherals/CoreDebug.svd.xml"/>
-      <xi:include href="peripherals/DAC0_16CH_0x400CC000.svd.xml"/>
+      <xi:include href="peripherals/DAC0_16CH_FIFO16_0x400CC000.svd.xml"/>
       <peripheral derivedFrom="DAC0"><name>DAC1</name><baseAddress>0x400CD000</baseAddress></peripheral>
       <xi:include href="peripherals/DMA0_32CH_EARS.svd.xml"/>
       <xi:include href="peripherals/DMAMUX0_32CH_TRIG_MK66F18.svd.xml"/>
@@ -69,7 +69,7 @@
       <xi:include href="peripherals/LLWU_PE8_FILT4.svd.xml"/>
       <xi:include href="peripherals/LMEM_1.svd.xml"/>
       <xi:include href="peripherals/LPTMR0_0.svd.xml"/>
-      <xi:include href="peripherals/LPUART0_0x400C4000.svd.xml"/>
+      <xi:include href="peripherals/LPUART0_MODIR_0x400C4000.svd.xml"/>
       <xi:include href="peripherals/MCG_MK28F15.svd.xml"/>
       <xi:include href="peripherals/MCM_MK65F18.svd.xml"/>
       <xi:include href="peripherals/MPU_MK21F12_R12.svd.xml"/>
@@ -100,7 +100,7 @@
       <xi:include href="peripherals/TPIU_0.svd.xml"/>
       <xi:include href="peripherals/TPM1_2CH_QUAD.svd.xml"/>
       <peripheral derivedFrom="TPM1"><name>TPM2</name><baseAddress>0x400CA000</baseAddress></peripheral>
-      <xi:include href="peripherals/TSI0_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/TSI0_DMA_MK28F15.svd.xml"/>
       <xi:include href="peripherals/UART0_MK65F18_C7816.svd.xml"/>
       <xi:include href="peripherals/UART1_MK65F18.svd.xml"/>
       <peripheral derivedFrom="UART1"><name>UART2</name><baseAddress>0x4006C000</baseAddress></peripheral>

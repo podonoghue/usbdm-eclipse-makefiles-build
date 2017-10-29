@@ -258,6 +258,12 @@
       <device name="MKV46F128M16"     svdFileName="MKV46F16"  />
       <device name="MKV46F256M16"     svdFileName="MKV46F16"  />
       
+      <device name="MKW01Z4"          svdFileName="MKW01Z4"  />
+      <device name="MKW21D5"          svdFileName="MKW21D5"  />
+      <device name="MKW22D5"          svdFileName="MKW22D5"  />
+      <device name="MKW24D5"          svdFileName="MKW24D5"  />
+      <device name="MKW41Z4"          svdFileName="MKW41Z4"  />
+      
       <device name="FRDM_K20D50M"     svdFileName="MK20D5"      />
       <device name="FRDM_K22F"        svdFileName="MK22F51212"  />
       <device name="FRDM_K22F1M0"     svdFileName="MK22FA12"    />

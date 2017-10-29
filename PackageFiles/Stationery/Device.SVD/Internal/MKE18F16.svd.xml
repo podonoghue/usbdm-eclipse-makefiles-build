@@ -35,7 +35,7 @@
          <interrupt><name>CMP2</name><description>High-Speed Comparator (CMP), Voltage Reference (VREF) Digital-to-Analog Converter (DAC), and Analog Mux</description><value>70</value></interrupt>
       </peripheral>
       <xi:include href="peripherals/CRC0_0x40032000.svd.xml"/>
-      <xi:include href="peripherals/DAC0_MKE16F16.svd.xml"/>
+      <xi:include href="peripherals/DAC0_8CH_MKE16F16.svd.xml"/>
       <xi:include href="peripherals/DMA_MKE16F16.svd.xml"/>
       <xi:include href="peripherals/DMAMUX_MKE16F16.svd.xml"/>
       <xi:include href="peripherals/EWM_MKE16F16.svd.xml"/>
@@ -56,7 +56,7 @@
       <xi:include href="peripherals/LPIT0_MKE16F16.svd.xml"/>
       <xi:include href="peripherals/LPSPI0_MKE16F16.svd.xml"/>
       <peripheral derivedFrom="LPSPI0"><name>LPSPI1</name><baseAddress>0x4002D000</baseAddress></peripheral>
-      <xi:include href="peripherals/LPTMR0_MKE16F16.svd.xml"/>
+      <xi:include href="peripherals/LPTMR0_DMA_MKE16F16.svd.xml"/>
       <xi:include href="peripherals/LPUART0_MKE_FIFO.svd.xml"/>
       <peripheral derivedFrom="LPUART0"><name>LPUART1</name><baseAddress>0x4006B000</baseAddress></peripheral>
       <peripheral derivedFrom="LPUART0"><name>LPUART2</name><baseAddress>0x4006C000</baseAddress></peripheral>

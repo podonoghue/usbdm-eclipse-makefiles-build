@@ -37,7 +37,7 @@
       <peripheral derivedFrom="CMP0"><name>CMP3</name><baseAddress>0x40073018</baseAddress></peripheral>
       <xi:include href="peripherals/CMT_0.svd.xml"/>
       <xi:include href="peripherals/CRC0_0x40032000.svd.xml"/>
-      <xi:include href="peripherals/DAC0_16CH_0x400CC000.svd.xml"/>
+      <xi:include href="peripherals/DAC0_16CH_FIFO16_0x400CC000.svd.xml"/>
       <peripheral derivedFrom="DAC0"><name>DAC1</name><baseAddress>0x400CD000</baseAddress></peripheral>
       <xi:include href="peripherals/DDR_0.svd.xml"/>
       <xi:include href="peripherals/DMA0_32CH.svd.xml"/>

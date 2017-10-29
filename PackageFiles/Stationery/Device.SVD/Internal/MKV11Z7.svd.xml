@@ -51,7 +51,7 @@
       <xi:include href="peripherals/I2C0_F12.svd.xml"/>
       <xi:include href="peripherals/LLWU_PE4_FILT2.svd.xml"/>
       <xi:include href="peripherals/LPTMR0_0.svd.xml"/>
-      <xi:include href="peripherals/MCG_MKL02Z4.svd.xml"/>
+      <xi:include href="peripherals/MCG_NOPLL_MKL02Z4.svd.xml"/>
       <xi:include href="peripherals/MCM_MKL02Z4.svd.xml"/>
       <xi:include href="peripherals/MMDVSQ_0.svd.xml"/>
       <xi:include href="peripherals/MTB.svd.xml"/>

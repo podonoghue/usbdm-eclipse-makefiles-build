@@ -23,9 +23,9 @@
    <peripherals>
       <xi:include href="peripherals/ADC0_DIFF_A.svd.xml"/>
       <xi:include href="peripherals/AIPS_MKL82Z7.svd.xml"/>
-      <xi:include href="peripherals/CMP0_MKL82Z7.svd.xml"/>
+      <xi:include href="peripherals/CMP0_MKV.svd.xml"/>
       <xi:include href="peripherals/CRC0_0x40032000.svd.xml"/>
-      <xi:include href="peripherals/DAC0_MKL82Z7.svd.xml"/>
+      <xi:include href="peripherals/DAC0_16CH_MKL82Z7.svd.xml"/>
       <xi:include href="peripherals/DMA_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/DMAMUX_MKL82Z7.svd.xml"/>
       <xi:include href="peripherals/EMVSIM0_MKL82Z7.svd.xml"/>
@@ -100,13 +100,13 @@
          <interrupt><name>SPI1</name><description>Serial Peripheral Interface</description><value>36</value></interrupt>
       </peripheral>
       <xi:include href="peripherals/SYST.svd.xml"/>
-      <xi:include href="peripherals/TPM0_MKL82Z7.svd.xml"/>
+      <xi:include href="peripherals/TPM0_MKL82Z7_6CH.svd.xml"/>
       <xi:include href="peripherals/TPM1_MKL82Z7.svd.xml"/>
       <peripheral derivedFrom="TPM1"><name>TPM2</name><baseAddress>0x4003A000</baseAddress>
          <interrupt><name>TPM2</name><description>Timer/PWM Module</description><value>8</value></interrupt>
       </peripheral>
       <xi:include href="peripherals/TRNG0_0x40025000.svd.xml"/>
-      <xi:include href="peripherals/TSI0_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/TSI0_DMA_MK28F15.svd.xml"/>
       <xi:include href="peripherals/USB0_MKL82Z7.svd.xml"/>
       <xi:include href="peripherals/VREF_C.svd.xml"/>
       <xi:include href="peripherals/WDOG_MK.svd.xml"/>
