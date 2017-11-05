@@ -1,0 +1,32 @@
+<!--
+Devices using this peripheral: 
+      MKW41Z4
+-->
+      <peripheral>
+         <?sourceFile "OSC_RF" ?>
+         <name>OSC_RF</name>
+         <description>System Oscillator</description>
+         <groupName>OSC_RF</groupName>
+         <headerStructName>OSC_RF</headerStructName>
+         <baseAddress>0x00000000</baseAddress>
+         <size>8</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x0</offset>
+            <size>0x1</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>Dummy</name>
+               <description>Control Register</description>
+               <addressOffset>0x0</addressOffset>
+               <size>8</size>
+               <access>read-write</access>
+               <resetMask>0xFF</resetMask>
+            </register>
+         </registers>
+      </peripheral>

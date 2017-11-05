@@ -140,7 +140,17 @@ Cortex-M0
          </applyWhen>
          <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-mk.ld"    target="Project_Settings/Linker_Files/Linker-rom.ld" />
          <copy source="Startup_Code/system-kinetis.c"                         target="Startup_Code/system.c" />
-         <copy source="Startup_Code/security-mkv10.c"                           target="Startup_Code/security.c" />
+         <copy source="Startup_Code/security-mkv10.c"                         target="Startup_Code/security.c" />
+      </projectActionList>
+
+      <!-- Base MKW files -->
+      <projectActionList id="Kinetis-MKW-files" >
+         <applyWhen>
+            <deviceSubfamilyMatches>^MKW\d+.*</deviceSubfamilyMatches>
+         </applyWhen>
+         <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-mk.ld"    target="Project_Settings/Linker_Files/Linker-rom.ld" />
+         <copy source="Startup_Code/system-kinetis.c"                         target="Startup_Code/system.c" />
+         <copy source="Startup_Code/security-mkw.c"                           target="Startup_Code/security.c" />
       </projectActionList>
 
       <!-- Base LPC files -->

@@ -11,7 +11,7 @@
    <stringOption name="pflash_phrase_size" constant="true" derived="true"
       description="Phrase size for program flash (minimum program element)"/>
 
-   <stringOption name="FlashType" key="/Flash/FlashType" value="ftfa" derived="true" />
+   <stringOption name="FlashType" key="/Flash/FlashType" constant="true" value="ftfa" derived="true" />
    
    <projectActionList id = "flash_files" >
       <copy source="Project_Headers/flash.h"                 target="Project_Headers/flash.h"                 overwrite="true"  derived="true" />

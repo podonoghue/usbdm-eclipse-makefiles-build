@@ -6,7 +6,16 @@ Devices using this peripheral:
 -->
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="SIM">
    
-   <constant name="rtcSharesPins" value="true" />
+   <!-- Indicates RTC/OSC0 share XTAL/EXTAL pins -->
+   <constant name="rtcSharesPins" value="true"  derived="true"/>
+   
+   <!-- Oscillator used for OSC0 -->
+   <constant name="osc0_peripheral"   value="/OSC0"    derived="true"/>
+   
+   <!-- No OSC1, RTC uses external pin or OSC0 in low range (OSC32KCLK) -->
+   
+   <!-- RTC clock in (EXTAL32K) -->
+   <constant name="rtc_clkin"         value="/RTC/rtcclkin_clock" derived="true"/>
    
    <category name="SOPT1" description="RTC signals">
       <choiceOption name="sim_sopt1_osc32ksel" 
@@ -18,11 +27,12 @@ Devices using this peripheral:
          <choice value="2"  name="RTC_CLKIN pin" />
          <choice value="3"  name="LPO 1kHz clock" isDefault="true" />
       </choiceOption>
-         
+      
       <intOption name="system_erclk32k_clock" 
          units="Hz"
          description="Frequency of External 32k Reference Clock [ERCLK32K]"
-         toolTip="External reference clock available to come peripherals (usually ~32kHz)" 
+         toolTip="External reference clock available to some peripherals (usually ~32kHz)" 
+         origin="Derived from OSC32KCLK, RTCCLK or LPO" 
          value="32768"
          constant="true" />
       
@@ -53,7 +63,7 @@ Devices using this peripheral:
          \t   switch(sim->SOPT1&SIM_SOPT1_OSC32KSEL_MASK) {
          \t      default                     : return 0;
          \t      case SIM_SOPT1_OSC32KSEL(0) : return Osc0Info::getOsc32kClock();
-         \t      case SIM_SOPT1_OSC32KSEL(2) : return RtcInfo::rtcclkin_clock;
+         \t      case SIM_SOPT1_OSC32KSEL(2) : return RtcInfo::rtcclk_clock;
          \t      case SIM_SOPT1_OSC32KSEL(3) : return 1000;
          \t   }
          \t}\n\n
@@ -75,6 +85,17 @@ Devices using this peripheral:
          description="RTC clock out [RTC_CLKOUT pin]"
          toolTip="Clock frequency on the RTC_CLKOUT pin"  />
       
+      <template><![CDATA[
+         \t/**
+         \t * Get Peripheral clock frequency
+         \t *
+         \t * @return Frequency as a uint32_t in Hz
+         \t */
+         \tstatic uint32_t getPeripheralClock() {
+         \t   return McgInfo::getMcgPClk();
+         \t}\n\n
+      ]]></template>
+      
       <choiceOption name="sim_sopt2_lpuart0src" 
          description="LPUART0 Clock select"
          toolTip="Selects the clock source for the transmit and receive clock">
@@ -90,17 +111,6 @@ Devices using this peripheral:
          description="LPUART0 Clock frequency"
          toolTip="Frequency of clock to LPUART"
          value="0" />
-      
-      <template><![CDATA[
-         \t/**
-         \t * Get Peripheral clock frequency
-         \t *
-         \t * @return Frequency as a uint32_t in Hz
-         \t */
-         \tstatic uint32_t getPeripheralClock() {
-         \t   return McgInfo::getMcgPClk();
-         \t}\n\n
-      ]]></template>
       
       <template namespace="usbdm"><![CDATA[
          \t/**
@@ -197,7 +207,7 @@ Devices using this peripheral:
          \t   }
          \t}\n\n
          
-         \t/**
+         \t/** 
          \t * Get UART2 input clock frequency
          \t *
          \t * @return Clock frequency in Hz
@@ -206,7 +216,7 @@ Devices using this peripheral:
          \t   return $(Uart2Clock);
          \t}\n\n
       ]]></template>
-         
+      
       <choiceOption name="sim_sopt2_usbsrc" 
          description="USB clock source select"
          toolTip="Selects the source for the USB clock">
@@ -240,6 +250,19 @@ Devices using this peripheral:
          \tstatic void setUsbFullSpeedClock(SimUsbFullSpeedClockSource simUsbFullSpeedClockSource) {
          \t   sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_USBSRC_MASK) | simUsbFullSpeedClockSource;
          \t}\n\n
+         
+         \t/**
+         \t * Get USB clock frequency
+         \t *
+         \t * @return Clock frequency as a uint32_t in Hz
+         \t */
+         \tstatic uint32_t getUsbClock() {
+         \t   switch ((sim->SOPT2&SIM_SOPT2_USBSRC_MASK)) {
+         \t      default:
+         \t      case SIM_SOPT2_USBSRC(0): return $(/MCG/system_usb_clkin_clock);
+         \t      case SIM_SOPT2_USBSRC(1): return getPeripheralClock();
+         \t   }
+         \t}
       ]]></template>
       
       <choiceOption name="sim_sopt2_tpmsrc" 
@@ -514,17 +537,9 @@ Devices using this peripheral:
          <choice value="11" name="Reserved" />
          <choice value="12" name="RTC alarm" />
          <choice value="13" name="RTC seconds" />
-         <choice value="14" name="Low-power timer trigger" />
+         <choice value="14" name="LPTMR trigger" />
          <choice value="15" name="Reserved" />
       </choiceOption>
-      
-      <template><![CDATA[
-         \t//! System Options Register 7
-         \tstatic constexpr uint32_t sopt7 = 
-         \t   SIM_SOPT7_ADC0ALTTRGEN($(sim_sopt7_adc0alttrgen)) |    // ADC0 alternate trigger enable
-         \t   SIM_SOPT7_ADC0PRETRGSEL($(sim_sopt7_adc0pretrgsel)) |   // ADC0 pretrigger select
-         \t   SIM_SOPT7_ADC0TRGSEL($(sim_sopt7_adc0trgsel));       // ADC0 trigger select\n\n
-      ]]></template>
       
       <template namespace="usbdm"><![CDATA[
          \t/**
@@ -577,6 +592,15 @@ Devices using this peripheral:
          \t   sim->SOPT7 = (sim->SOPT7&~(SIM_SOPT7_ADC0TRGSEL_MASK|SIM_SOPT7_ADC0ALTTRGEN_MASK))|simAdc0Trigger|simAdc0AltTrigger;
          \t};\n\n
       ]]></template>
+      
+      <template><![CDATA[
+         \t//! System Options Register 7
+         \tstatic constexpr uint32_t sopt7 = 
+         \t   SIM_SOPT7_ADC0ALTTRGEN($(sim_sopt7_adc0alttrgen)) |    // ADC0 alternate trigger enable
+         \t   SIM_SOPT7_ADC0PRETRGSEL($(sim_sopt7_adc0pretrgsel)) |   // ADC0 pretrigger select
+         \t   SIM_SOPT7_ADC0TRGSEL($(sim_sopt7_adc0trgsel));       // ADC0 trigger select\n\n
+      ]]></template>
+      
    </category>
    
    <indexedCategory name="ClockConfig." dim="3" 

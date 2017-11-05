@@ -176,7 +176,7 @@ This field is cleared by hardware on any exit to normal RUN mode</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>Reserved</description>
+                           <description>High Speed Run mode (HSRUN)(if available)</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -185,7 +185,9 @@ This field is cleared by hardware on any exit to normal RUN mode</description>
             </register>
             <register>
                <name>STOPCTRL</name>
-               <description>Stop Control Register</description>
+               <description>Stop Control Register\n
+Provides various control bits allowing the user to fine tune
+power consumption during the stop mode selected by the STOPM field</description>
                <addressOffset>0x2</addressOffset>
                <size>8</size>
                <resetValue>0x3</resetValue>
@@ -290,6 +292,9 @@ These bits control whether a Partial Stop mode is entered when STOPM=STOP</descr
                   </field>
                </fields>
             </register>
+            <register derivedFrom="STOPCTRL"> <name>VLLSCTRL</name><?hide?> <?doDerivedMacros?> <description>VLLS Control Register (old name)
+Provides various control bits allowing the user to fine tune
+power consumption during the stop mode selected by the STOPM field</description> </register>
             <register>
                <name>PMSTAT</name>
                <description>Power Mode Status Register</description>

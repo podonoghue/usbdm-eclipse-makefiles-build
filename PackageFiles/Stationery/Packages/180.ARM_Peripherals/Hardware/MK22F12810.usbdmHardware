@@ -130,12 +130,12 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
          <irq num="LLWU_IRQn" />
       </peripheral>
-      <peripheral baseName="LPTMR"    instance="0"        version="lptmr0_0">
+      <peripheral baseName="LPTMR"    instance="0"        version="lptmr0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />
          <clock reg="SCGC5"         mask="SIM_SCGC5_LPTMR_MASK" />
          <irq num="LPTMR0_IRQn" />
       </peripheral>
-      <peripheral baseName="LPUART"   instance="0"        version="lpuart0_0x4002a000">
+      <peripheral baseName="LPUART"   instance="0"        version="lpuart0_modir_0x4002a000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLpuart" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_LPUART0_MASK" />
          <irq num="LPUART0_RxTx_IRQn" />

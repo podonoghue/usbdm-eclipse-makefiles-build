@@ -64,7 +64,7 @@
       <xi:include href="peripherals/I2S0_2CH.svd.xml"/>
       <xi:include href="peripherals/ITM_0.svd.xml"/>
       <xi:include href="peripherals/LLWU_PE4_FILT2_RST_MK20D5.svd.xml"/>
-      <xi:include href="peripherals/LPTMR0_0.svd.xml"/>
+      <xi:include href="peripherals/LPTMR0.svd.xml"/>
       <xi:include href="peripherals/MCG_MK_ICS48M.svd.xml"/>
       <xi:include href="peripherals/MCM_MK21FA12.svd.xml"/>
       <xi:include href="peripherals/MPU_MK21F12_R12.svd.xml"/>

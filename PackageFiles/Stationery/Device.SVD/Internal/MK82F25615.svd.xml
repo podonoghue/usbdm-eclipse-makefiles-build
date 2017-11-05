@@ -78,7 +78,7 @@
       <xi:include href="peripherals/I2S0_MK82F25615.svd.xml"/>
       <xi:include href="peripherals/LLWU_PE8_FILT4.svd.xml"/>
       <xi:include href="peripherals/LMEM_MK28F15.svd.xml"/>
-      <xi:include href="peripherals/LPTMR0_0.svd.xml"/>
+      <xi:include href="peripherals/LPTMR0.svd.xml"/>
       <peripheral derivedFrom="LPTMR0"><name>LPTMR1</name><baseAddress>0x40044000</baseAddress>
          <interrupt><name>LPTMR0_LPTMR1</name><description>Low Power Timer</description><value>58</value></interrupt>
       </peripheral>
@@ -114,7 +114,7 @@
       <xi:include href="peripherals/RCM_MK28F15.svd.xml"/>
       <xi:include href="peripherals/RFSYS_0.svd.xml"/>
       <xi:include href="peripherals/RFVBAT_0.svd.xml"/>
-      <xi:include href="peripherals/RTC_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/RTC_MK22F12810.svd.xml"/>
       <xi:include href="peripherals/SDHC_MK28F15.svd.xml"/>
       <xi:include href="peripherals/SDRAMC_0.svd.xml"/>
       <xi:include href="peripherals/SIM_MK82F25615.svd.xml"/>

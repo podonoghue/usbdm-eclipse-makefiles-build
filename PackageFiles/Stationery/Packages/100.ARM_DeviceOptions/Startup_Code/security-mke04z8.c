@@ -30,6 +30,7 @@ typedef struct {
      <i> and security information that allows the MCU to restrict access to the Flash module.
   </h>
 */
+
 /*
    <h> Program Flash Region Protect
       <i>Allows ranges of the flash to be protected
@@ -37,7 +38,7 @@ typedef struct {
 	  <q0.7>Flash Protection Operation Select
          <i>Determines the protection function.
          <i>The ranges may represent protected or unprotected ranges
-         <info>FPOPEN
+         <info>[7] FPOPEN
          <0=> 0: FPLDIS+FPLS define unprotected ranges
          <1=> 1: FPLDIS+FPLS define protected ranges
 	  <o1>Flash Protection Lower Address Size
@@ -58,25 +59,25 @@ typedef struct {
    <info>NV_FSEC
    <o0> Backdoor Key Security Access Enable
       <i> Controls use of Backdoor Key access to unsecure device
-      <info>KEYEN
+      <info>[7,6] KEYEN
       <2=> 2: Access enabled
       <3=> 3: Access disabled
    <o1> Mass Erase Enable Bits
       <i> Controls mass erase capability of the flash memory module.
       <i> Only relevant when FSEC.SEC is set to secure.
-      <info>MEEN
+      <info>[5,4] MEEN
       <2=> 2: Mass erase disabled
       <3=> 3: Mass erase enabled
    <o2> Freescale Failure Analysis Access
       <i> Controls access to the flash memory contents during returned part failure analysis
-      <info>FSLACC
+      <info>[3,2] FSLACC
       <2=> 2: Factory access denied
       <3=> 3: Factory access granted
    <o3> Flash Security
       <i> Defines the security state of the MCU.
       <i> In the secure state, the MCU limits access to flash memory module resources.
       <i> If the flash memory module is unsecured using backdoor key access, SEC is forced to 10b.
-      <info>SEC
+      <info>[1,0] SEC
       <2=> 2: Unsecured
       <3=> 3: Secured
 </h>

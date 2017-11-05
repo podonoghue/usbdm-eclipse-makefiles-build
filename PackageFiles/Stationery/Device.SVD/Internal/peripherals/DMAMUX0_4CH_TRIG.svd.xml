@@ -2,8 +2,26 @@
 Devices using this peripheral: 
       MK02F12810
       MK10D5
+      MKL04Z4
+      MKL05Z4
+      MKL14Z4
+      MKL15Z4
+      MKL16Z4
+      MKL17Z4
+      MKL24Z4
+      MKL25Z4
+      MKL26Z4
+      MKL27Z4
+      MKL27Z644
+      MKL33Z4
+      MKL34Z4
+      MKL36Z4
+      MKL43Z4
+      MKL46Z4
+      MKV10Z7
       MKV30F12810
       MKV31F12810
+      MKW01Z4
 -->
       <peripheral>
          <?sourceFile "DMAMUX0_4CH_TRIG" ?>

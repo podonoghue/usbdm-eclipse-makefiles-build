@@ -23,12 +23,7 @@
       toolTip="Frequency of external crystal or clock on XTAL/EXTAL"
       value="8000000" />
 
-   <binaryOption name="erefs0"
-      description="External Reference Select" 
-      toolTip="Determines whether a clock or crystal is used for the external reference clock" >
-      <choice value="0" name="External clock" />
-      <choice value="1" name="Oscillator" isDefault="true" />
-   </binaryOption>
+   <aliasOption key="/MCG/mcg_c2_erefs0" constant="false" />
 
    <binaryOption name="osc_cr_erclken"
       description="External Reference Enable"
@@ -38,13 +33,14 @@
       <choice value="1" name="Enabled" isDefault="true" />
    </binaryOption>
    
-   <intOption name="oscclk_clock"
+   <intOption name="osc_clock"
       constant="true"
+      derived="true"
       units="Hz"
       description="Frequency of OSC Clock or Crystal [OSCCLK]"
-      toolTip="Frequency of external crystal or clock on XTAL/EXTAL"
-      derived="true"
-      value="8000000" />
+      toolTip="Frequency of oscillator or external clock"
+      value="8000000"
+      disabledValue="0" />
 
    <choiceOption name="oscillatorRange"
       derived="true"
@@ -58,12 +54,7 @@
       <choice value="0" name="Unconstrained by Oscillator" />
    </choiceOption>
 
-   <binaryOption name="hgo0"
-      description="Oscillator Gain" 
-      toolTip="Controls the crystal oscillator mode of operation">
-      <choice value="0" name="Low power" isDefault="true"/>
-      <choice value="1" name="High gain" />
-   </binaryOption>
+   <aliasOption key="/MCG/mcg_c2_hgo0" />
    
    <choiceOption name="osc_cr_scp"
       description="Oscillator load capacitance"
@@ -93,14 +84,15 @@
       <choice value="1" name="Enabled in Stop mode" />
    </binaryOption>
    
-   <intOption name="system_oscerclk_undiv_clock"  key="/OSC0/system_oscerclk_undiv_clock"
+   <intOption name="oscer_undiv_clock"
       units="Hz"
       description="Oscillator clock to some peripherals [OSCERCLK_UNDIV]"
       toolTip="Generated from OSCCLK without division"
       value="8000000"  
-      constant="true" />
+      constant="true" 
+      disabledValue="0" />
 
-   <choiceOption name="osc_div_erps"   key="/OSC0/osc_div_erps"
+   <choiceOption name="osc_div_erps"
       description="ERCLK prescaler"
       toolTip="Divides down the ERCLK output" >
       <choice value="0"  name="Divide by 1" isDefault="true" />
@@ -109,20 +101,22 @@
       <choice value="3"  name="Divide by 8" />
    </choiceOption>
  
-   <intOption name="system_oscerclk_clock"
+   <intOption name="oscer_clock"
          derived="true"
          units="Hz"
-         description="Oscillator clock to peripherals [OSCERCLK]"
+         description="Oscillator clock [OSCERCLK]"
          toolTip="Generated from OSCCLK"
-         value="8000000"  
+         value="8000000"
+         disabledValue="0"  
          constant="true" />
 
-   <intOption name="osc32kclk_clock"
+   <intOption name="osc32k_clock"
          derived="true"
          units="Hz"
          description="Oscillator low range 32K clock [OSC32KCLK]"
-         toolTip="Generated from OSCCLK. May be used as ERCLK32K"
-         value="8000000"  
+         toolTip="Generated from OSCCLK in low frequency mode only."
+         value="8000000"
+         disabledValue="0"  
          constant="true" />
 
    <validate
@@ -135,10 +129,10 @@
          
    <template><![CDATA[
       \t//! Frequency of OSC Clock or Crystal\n
-      \tstatic constexpr uint32_t oscclk_clock = $(oscclk_clock)UL;\n\n
+      \tstatic constexpr uint32_t osc_clock = $(osc_clock)UL;\n\n
       
       \t//! Frequency of 32K OSC Clock or Crystal (if applicable)
-      \tstatic constexpr uint32_t osc32kclk_clock = $(osc32kclk_clock)UL;\n\n
+      \tstatic constexpr uint32_t osc32k_clock = $(osc32k_clock)UL;\n\n
       
       \t//! Oscillator control register\n
       \tstatic constexpr uint32_t cr =
@@ -155,18 +149,18 @@
       \t *
       \t * @return Clock frequency as uint32_t in Hz
       \t */
-      \tstatic constexpr uint32_t getInternalClock() {
-      \t   return oscclk_clock;
+      \tstatic constexpr uint32_t getOscClock() {
+      \t   return osc_clock;
       \t}\n\n
       
       \t/**
-      \t * Get OSCERCLK clock (external, masked by OSC_CR_ERCLKEN)
+      \t * Get OSC clock (external, gated by OSC_CR_ERCLKEN)
       \t *
       \t * @return Clock frequency as uint32_t in Hz
       \t */
       \tstatic uint32_t getOscerClock() {
       \t   return (osc->CR&OSC_CR_ERCLKEN_MASK)?
-      \t      (getInternalClock()/(1<<((osc->DIV&OSC_DIV_ERPS_MASK)>>OSC_DIV_ERPS_SHIFT))):
+      \t      (osc_clock/(1<<((osc->DIV&OSC_DIV_ERPS_MASK)>>OSC_DIV_ERPS_SHIFT))):
       \t      0;
       \t}\n\n
       
@@ -174,9 +168,11 @@
       \t * Get OSC32KCLK clock
       \t *
       \t * @return Clock frequency as uint32_t in Hz
+      \t
+      \t * @note This clock is only available if a 32kHz crystal or external clock is used 
       \t */
       \tstatic uint32_t getOsc32kClock() {
-      \t   return osc32kclk_clock;
+      \t   return osc32k_clock;
       \t}\n\n
    ]]></template>
 

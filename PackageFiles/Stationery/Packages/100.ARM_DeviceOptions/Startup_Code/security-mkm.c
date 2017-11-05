@@ -76,25 +76,25 @@ typedef struct {
    <info>NV_FSEC
    <o0> Backdoor Key Security Access Enable
       <i> Controls use of Backdoor Key access to unsecure device
-      <info>KEYEN
+      <info>[7,6] KEYEN
       <2=> 2: Access enabled
       <3=> 3: Access disabled
    <o1> Mass Erase Enable Bits
       <i> Controls mass erase capability of the flash memory module.
       <i> Only relevant when FSEC.SEC is set to secure.
-      <info>MEEN
+      <info>[5,4] MEEN
       <2=> 2: Mass erase disabled
       <3=> 3: Mass erase enabled
    <o2> Freescale Failure Analysis Access
       <i> Controls access to the flash memory contents during returned part failure analysis
-      <info>FSLACC
+      <info>[3,2] FSLACC
       <2=> 2: Factory access denied
       <3=> 3: Factory access granted
    <o3> Flash Security
       <i> Defines the security state of the MCU.
       <i> In the secure state, the MCU limits access to flash memory module resources.
       <i> If the flash memory module is unsecured using backdoor key access, SEC is forced to 10b.
-      <info>SEC
+      <info>[1,0] SEC
       <2=> 2: Unsecured
       <3=> 3: Secured
 </h>
@@ -113,26 +113,26 @@ Control extended Boot features on these devices
    <q2.5> Flash clock source
       <i> Selects clock source for flash.
       <i> This bit has effect only in RUN mode boot up. Ignored in VLPR boot.
-	  <info>CLK_SRC
+	  <info>[5] CLK_SRC
       <0=> External clock
       <1=> Internal clock
    <q2.3> Execution mode
       <i> This bit will not change mode for boot automatically and is different from the RTC Boot Override bit.
       <i> This bit is for software so that a startup code can change mode based on setting of this bit
       <i> whenever it is executed on every boot up
-	  <info>EXE_MODE
+	  <info>[3] EXE_MODE
       <0=> RUN mode
       <1=> VLPR mode
    <q2.2> NMI pin control
       <i> Enables or disables control for the NMI function
-      <info>NMI_DIS
+      <info>[2] NMI_DIS
       <0=> NMI interrupts are always blocked.
       <1=> NMI_b interrupts default to enabled
    <q2.0> Low power boot control
       <i> Controls the reset value of the core clock divider SIM_CLKDIV1.SYS_DIV and 
       <i> system clock mode SIM_CLKDIV1.SYSCLKMODE
       <i> May be used to reduce power during start up
-	  <info>LPBOOT
+	  <info>[0] LPBOOT
       <0=> Slow boot: Clock divider (SYS_DIV) /8
       <1=> Fast boot: Clock divider (SYS_DIV) /1
 </h>

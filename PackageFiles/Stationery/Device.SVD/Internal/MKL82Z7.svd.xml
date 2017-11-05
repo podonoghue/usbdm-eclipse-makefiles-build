@@ -61,7 +61,7 @@
       </peripheral>
       <xi:include href="peripherals/INTMUX0_MKL82Z7.svd.xml"/>
       <xi:include href="peripherals/LLWU_PE8_FILT4.svd.xml"/>
-      <xi:include href="peripherals/LPTMR0_0.svd.xml"/>
+      <xi:include href="peripherals/LPTMR0.svd.xml"/>
       <peripheral derivedFrom="LPTMR0"><name>LPTMR1</name><baseAddress>0x40044000</baseAddress>
          <interrupt><name>LPTMR1</name><description>Low Power Timer</description><value>32</value></interrupt>
       </peripheral>
@@ -92,7 +92,7 @@
       <xi:include href="peripherals/RFSYS_MKL82Z7.svd.xml"/>
       <xi:include href="peripherals/RFVBAT_MKL82Z7.svd.xml"/>
       <xi:include href="peripherals/ROM_MKE15Z7.svd.xml"/>
-      <xi:include href="peripherals/RTC_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/RTC_MK22F12810.svd.xml"/>
       <xi:include href="peripherals/SIM_MKL82Z7.svd.xml"/>
       <xi:include href="peripherals/SMC_MKL82Z7.svd.xml"/>
       <xi:include href="peripherals/SPI0_MK_PCSIS6_PCSSE.svd.xml"/>
@@ -100,8 +100,8 @@
          <interrupt><name>SPI1</name><description>Serial Peripheral Interface</description><value>36</value></interrupt>
       </peripheral>
       <xi:include href="peripherals/SYST.svd.xml"/>
-      <xi:include href="peripherals/TPM0_MKL82Z7_6CH.svd.xml"/>
-      <xi:include href="peripherals/TPM1_MKL82Z7.svd.xml"/>
+      <xi:include href="peripherals/TPM0_6CH_MKL82Z7.svd.xml"/>
+      <xi:include href="peripherals/TPM1_2CH_POL_MKL82Z7.svd.xml"/>
       <peripheral derivedFrom="TPM1"><name>TPM2</name><baseAddress>0x4003A000</baseAddress>
          <interrupt><name>TPM2</name><description>Timer/PWM Module</description><value>8</value></interrupt>
       </peripheral>

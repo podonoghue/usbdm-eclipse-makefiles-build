@@ -557,7 +557,8 @@ Controls if the counter is reloaded due to a rising edge on the selected input t
                   </field>
                   <field>
                      <name>TRGSEL</name>
-                     <description>Trigger Select</description>
+                     <description>Trigger Select\n
+Bitmask where each bit indicates an enabled trigger channel</description>
                      <bitOffset>24</bitOffset>
                      <bitWidth>4</bitWidth>
                   </field>

@@ -11,8 +11,7 @@
 #include "console.h"
 
 //#define USE_IRQ
-
-#if defined(MCU_MKL03Z4)
+#if defined(MCU_MKW41Z4)
 //=================================================================================
 // LPUART to use
 //
@@ -22,7 +21,34 @@
 //=================================================================================
 // LPUART Port pin setup
 //
-__attribute__((always_inline))
+inline static void initDefaultUart()  {
+
+   // Enable clock to LPUART
+   // Enable clock to port pins used by LPUART
+   SIM->SCGC5 |= SIM_SCGC5_PORTB_MASK|SIM_SCGC5_LPUART0_MASK;
+
+   // Select Tx & Rx pins to use
+   SIM->SOPT5 &= ~(SIM_SOPT5_LPUART0ODE_MASK|SIM_SOPT5_LPUART0RXSRC_MASK|SIM_SOPT5_LPUART0TXSRC_MASK);
+
+   // Set Tx & Rx Pin function
+   PORTC->PCR[6] = PORT_PCR_MUX(4);
+   PORTC->PCR[7] = PORT_PCR_MUX(4);
+
+#ifdef USE_IRQ
+   // Enable IRQs in NVIC
+   NVIC_EnableIRQ(LPUART0_IRQn);
+#endif
+}
+#elif defined(MCU_MKL03Z4)
+//=================================================================================
+// LPUART to use
+//
+#define LPUART  LPUART0
+#define UART_CLOCK SYSTEM_LPUART0_CLOCK
+
+//=================================================================================
+// LPUART Port pin setup
+//
 inline static void initDefaultUart()  {
 
    // Enable clock to LPUART
@@ -51,7 +77,6 @@ inline static void initDefaultUart()  {
 //=================================================================================
 // LPUART Port pin setup
 //
-__attribute__((always_inline))
 inline static void initDefaultUart()  {
 
    // Enable clock to LPUART
@@ -81,7 +106,6 @@ inline static void initDefaultUart()  {
 //=================================================================================
 // LPUART Port pin setup
 //
-__attribute__((always_inline))
 inline static void initDefaultUart()  {
 
    // Enable clock to LPUART
@@ -105,20 +129,12 @@ inline static void initDefaultUart()  {
 #error "UART_CLOCK not defined"
 #endif
 
-/*
- * Initialises the Console with default settings
- */
-void console_initialise() {
-   initDefaultUart();
-   console_setBaudRate(DEFAULT_BAUD_RATE);
-}
-
 /**
  * Set Console baud rate
  *
  * @param baudRate - the baud rate to use e.g. 19200
  */
-void console_initialise(int baudRate) {
+void console_setBaudRate(int baudRate) {
 
    #define OVERSAMPLE (16)
 
@@ -126,7 +142,7 @@ void console_initialise(int baudRate) {
    LPUART->CTRL &= ~(LPUART_CTRL_RE_MASK|LPUART_CTRL_TE_MASK);
 
    // Calculate LPUART clock setting
-   int baudValue = UART_CLOCK/(OVERSAMPLE*baudrate);
+   int baudValue = UART_CLOCK/(OVERSAMPLE*baudRate);
 
    // Set Baud rate register
    LPUART->BAUD = LPUART_BAUD_SBR(baudValue)|LPUART_BAUD_OSR(OVERSAMPLE-1);
@@ -217,3 +233,12 @@ int console_rxChar(void) {
    return ch;
 }
 #endif
+
+/*
+ * Initialises the Console with default settings
+ */
+void console_initialise() {
+   initDefaultUart();
+   console_setBaudRate(DEFAULT_BAUD_RATE);
+}
+

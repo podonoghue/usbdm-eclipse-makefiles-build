@@ -72,7 +72,7 @@
       <xi:include href="peripherals/RTC_MKM14ZA5.svd.xml"/>
       <xi:include href="peripherals/SIM_MKM33ZA5.svd.xml"/>
       <xi:include href="peripherals/SMC_MKM14ZA5.svd.xml"/>
-      <xi:include href="peripherals/SPI0_MKM.svd.xml"/>
+      <xi:include href="peripherals/SPI0_16Bit_MKM.svd.xml"/>
       <peripheral derivedFrom="SPI0"><name>SPI1</name><baseAddress>0x40076000</baseAddress></peripheral>
       <xi:include href="peripherals/TMR0_MKM.svd.xml"/>
       <xi:include href="peripherals/TMR1_MKM.svd.xml"/>

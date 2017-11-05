@@ -111,25 +111,25 @@ typedef struct {
    <info>NV_FSEC
    <o0> Backdoor Key Security Access Enable
       <i> Controls use of Backdoor Key access to unsecure device
-      <info>KEYEN
+      <info>[7,6] KEYEN
       <2=> 2: Access enabled
       <3=> 3: Access disabled
    <o1> Mass Erase Enable Bits
       <i> Controls mass erase capability of the flash memory module.
       <i> Only relevant when FSEC.SEC is set to secure.
-      <info>MEEN
+      <info>[5,4] MEEN
       <2=> 2: Mass erase disabled
       <3=> 3: Mass erase enabled
    <o2> Freescale Failure Analysis Access
       <i> Controls access to the flash memory contents during returned part failure analysis
-      <info>FSLACC
+      <info>[3,2] FSLACC
       <2=> 2: Factory access denied
       <3=> 3: Factory access granted
    <o3> Flash Security
       <i> Defines the security state of the MCU.
       <i> In the secure state, the MCU limits access to flash memory module resources.
       <i> If the flash memory module is unsecured using backdoor key access, SEC is forced to 10b.
-      <info>SEC
+      <info>[1,0] SEC
       <2=> 2: Unsecured
       <3=> 3: Secured
 </h>
@@ -145,29 +145,30 @@ typedef struct {
 Control extended Boot features on these devices
 <h> Flash boot options
    <info>NV_FOPT
+
    <q2.5> Fast initialisation control
       <i> Selects initialization speed on POR, VLLSx, and system reset.
 	  <i> Not all devices have this feature
-	  <info>FAST_INIT
+	  <info>[5] FAST_INIT
       <0=> Slow - Slower initialization and reduced average current.
       <1=> Fast - Faster initialization and higher average current.
    <q2.2> NMI pin control
       <i> Enables or disables the NMI function
 	  <i> Not all devices have this feature
-      <info>NMI_DIS
+      <info>[2] NMI_DIS
       <0=> NMI interrupts are always blocked.
       <1=> NMI interrupts default to enabled
    <q2.1> EZPORT pin control
       <i> Enables or disables EzPort function
       <i> Disabling EZPORT function avoids inadvertent resets into EzPort mode 
       <i> if the EZP_CS/NMI pin is used for its NMI function 
-      <info>EZPORT_DIS
+      <info>[1] EZPORT_DIS
       <0=> EZP_CSn pin is disabled on reset
       <1=> EZP_CSn pin is enabled on reset
    <q2.0> Low power boot control
       <i> Controls the reset value of SIM_CLKDIV1.OUTDIVx (clock dividers)
       <i> Allows power consumption during reset to be reduced
-      <info>LPBOOT
+      <info>[0] LPBOOT
       <0=> Low Power
       <1=> Normal
 </h>

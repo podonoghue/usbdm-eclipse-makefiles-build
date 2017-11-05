@@ -8,6 +8,7 @@
    <item key="$$DeviceInfo_Device_Variant"                 value="MK22DX128VLF5" />
    <item key="$$DeviceInfo_Target_Device"                  value="MK22DX256M5" />
    <item key="$$Hardware_Source_Filename"                  value="MK22D5.usbdmHardware" />
+   <item key="/FTFL/peripheral_file"                       value="ftfl_64k_flexrom" />
    <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_PEE_48MHz" />
    <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_BLPE_4MHz" />
    <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_FEE_40MHz" />

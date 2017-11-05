@@ -4,36 +4,29 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Real-time Clock">
 
-   <category name="Clock sources" description="Source for the clock used by RTC">
-      <aliasOption key="/OSC0/osc32kclk_clock"        constant="true" />
+   <category name="ERCLK32K Selection" description="Control source of ERCLK32K clock (nominally 32kHz)">
       <intOption name="rtcclkin_clock" 
-         description="RTC_CLKIN"
-         toolTip="One of several sources for the RTC input clock"
-         origin="RTC_CLKIN pin"
          units="Hz"
-         value="32765"
-         min="0"
-         />   
+         description="RTC_CLKIN pin"
+         toolTip="External clock for the RTC (usually 32.768 kHz)"
+         origin="RTC_CLKIN pin"
+         value="32768"
+      min="0" max="33000" />
       <aliasOption key="/MCG/system_low_power_clock"  constant="true" optional="true" />
       <aliasOption key="/SIM/sim_sopt1_osc32ksel"     optional="true" constant="false" />
       <aliasOption key="/SIM/system_erclk32k_clock"   optional="true"/>
    </category>
    
+   <!-- Uses OSC0 EXTAL/XTAL pins -->
+   <aliasOption key="/OSC0/osc_input_freq" constant="false" />
+
    <binaryOption name="rtc_cr_osce"
       description="Enable RTC oscillator"
-      toolTip="Enable main oscillator as 32kHz RTC oscillator\n
-      Note: this disables OSC control by MCG">
-      <choice value="0" name="Disabled"  isDefault="true" />
+      toolTip="Enable 32kHz RTC oscillator">
+      <choice value="0" name="Disabled" isDefault="true" />
       <choice value="1" name="Enabled" />
    </binaryOption>
    
-   <intOption name="rtcclk_clock"
-      derived="true"
-      constant="true"
-      units="Hz"
-      description="Frequency of RTC Clock"
-      toolTip="RTC Clock only available if enabled"
-      value="32768" />
 
    <binaryOption name="rtc_cr_clko"
       description="Enable RTC 32kHz Clock Output"
@@ -41,6 +34,14 @@
       <choice value="1" name="Clock not output to peripherals" />
       <choice value="0" name="Clock is output to peripherals" isDefault="true" />
    </binaryOption>
+      
+   <intOption name="rtcclk_gated_clock"
+      derived="true"
+      constant="true"
+      units="Hz"
+      description="Frequency of RTC Peripheral Clock"
+      toolTip="RTC clock available to peripherals"
+      value="0" />
       
    <choiceOption name="rtc_cr_scp"
       description="Oscillator load capacitance"
@@ -94,12 +95,12 @@
       origin="RTC 1Hz output"
       units="Hz"/>
    
-   <aliasOption key="/SIM/sim_sopt2_rtcclkoutsel" constant="false" />
-   <aliasOption key="/SIM/rtc_clkout" constant="true" />
+   <aliasOption key="/SIM/sim_sopt2_rtcclkoutsel" constant="false" optional="true" />
+   <aliasOption key="/SIM/rtc_clkout" constant="true" optional="true" />
 
    <template><![CDATA[
-      \t//! Frequency of clock supplied to RTC_CLKIN pin
-      \tstatic constexpr uint32_t rtcclkin_clock = $(rtcclkin_clock)UL;\n\n
+      \t//! Frequency of RTC External Clock or Crystal
+      \tstatic constexpr uint32_t rtcclk_clock = $(/OSC0/osc_input_freq)UL;\n\n
       
       \t//! Oscillator control register\n
       \tstatic constexpr uint32_t cr =
@@ -122,7 +123,7 @@
    <intOption name="rtc_tcr_tcr" min="-128" max="127"
       description="Time Compensation Register"
       toolTip="Adjusts the number of 32.768 kHz clock cycles in each second.\n
-         This value+32768 determines the number of clock cycles this makes up a second"
+         This value+32768 determines the number of clock cycles that makes up a second"
       value="0" />
 
    <template><![CDATA[
@@ -171,7 +172,35 @@
       \t   RTC_LR_TCL($(rtc_lr_tcl));  // Time Compensation Lock\n\n
     ]]></template>     
 
-   <xi:include href="_irqOption.xml"/>
+   <irqOption name="irqAlarmHandler"  
+      description="RTC Alarm interrupt handler"
+      toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
+      pattern="^RTC_Alarm$" 
+      classHandler="%c%i::irqAlarmHandler" />
+      
+   <irqOption name="irqSecondsHandler"  
+      description="RTC Seconds interrupt handler"
+      toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
+      pattern="^RTC_Seconds$" 
+      classHandler="%c%i::irqSecondsHandler" />
+      
+   <template><![CDATA[
+       \t//! Class based callback handler has been installed in vector table\n
+       \tstatic constexpr bool irqHandlerInstalled = ($(irqAlarmHandler) == 1);\n\n
+   ]]></template>
+       
+   <intOption name="irqLevel" 
+      description="IRQ Level in NVIC [0-15]"
+      toolTip="Sets the priority level used to configure the NVIC\n
+               Lower numbers represent higher priorities"
+      value="7" min="0" max="15" 
+   />
+
+   <template><![CDATA[
+       \t//! Default IRQ level\n
+       \tstatic constexpr uint32_t irqLevel =  $(irqLevel);\n\n
+   ]]></template>
+ 
 
    <choiceOption name="rtc_year"
       description="Initial Year" 
@@ -246,7 +275,7 @@
    <signals name="OSC0"/>
 
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.RtcSharedOscValidate">
+      class="net.sourceforge.usbdm.deviceEditor.validators.RtcValidate">
    </validate>
 
    <projectActionList id = "rtc_files" >
@@ -254,5 +283,26 @@
       <copy source="Startup_Code/rtc.cpp"        target="Startup_Code/rtc.cpp"       overwrite="true"  derived="true" />
       <copy source="Snippets/rtc-example.cpp"    target="Snippets/rtc-example.cpp"   overwrite="true"  derived="true" />
    </projectActionList>
-         
+
+   <template><![CDATA[
+      \t/**
+      \t * Get RTC clock frequency (internal, not masked by RTC_CR_CLKO)
+      \t *
+      \t * @return Clock frequency as uint32_t
+      \t */
+      \tstatic uint32_t getInternalClock() {
+      \t   // RTC uses OSC0 EXTAL/XTAL clock
+      \t   return (rtc->CR&RTC_CR_OSCE_MASK)?Osc0Info::osc_clock:0;
+      \t}\n\n
+      
+      \t/**
+      \t * Get RTC clock frequency (external, masked by RTC_CR_CLKO)
+      \t *
+      \t * @return Clock frequency as uint32_t
+      \t */
+      \tstatic uint32_t getExternalClock() {
+      \t   return (rtc->CR&RTC_CR_CLKO_MASK)?0:getInternalClock();
+      \t}\n\n
+   ]]></template>
+
 </peripheralPage>

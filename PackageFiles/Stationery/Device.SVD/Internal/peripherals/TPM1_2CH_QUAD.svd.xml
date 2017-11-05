@@ -789,26 +789,10 @@ Controls if the counter is reloaded due to a rising edge on the selected input t
                   </field>
                   <field>
                      <name>TRGSEL</name>
-                     <description>Trigger Select</description>
+                     <description>Trigger Select\n
+Bitmask where each bit indicates an enabled trigger channel</description>
                      <bitOffset>24</bitOffset>
                      <bitWidth>4</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0001</name>
-                           <description>Channel 0 pin input capture</description>
-                           <value>0b0001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0010</name>
-                           <description>Channel 1 pin input capture</description>
-                           <value>0b0010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0011</name>
-                           <description>Channel 0 or Channel 1 pin input capture</description>
-                           <value>0b0011</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
                   </field>
                </fields>
             </register>

@@ -50,7 +50,7 @@
       <peripheral derivedFrom="FGPIOA"><name>GPIOE</name>      <groupName>GPIO</groupName><baseAddress>0x400FF100</baseAddress></peripheral>
       <xi:include href="peripherals/I2C0_F12.svd.xml"/>
       <xi:include href="peripherals/LLWU_PE4_FILT2.svd.xml"/>
-      <xi:include href="peripherals/LPTMR0_0.svd.xml"/>
+      <xi:include href="peripherals/LPTMR0.svd.xml"/>
       <xi:include href="peripherals/MCG_NOPLL_MKL02Z4.svd.xml"/>
       <xi:include href="peripherals/MCM_MKL02Z4.svd.xml"/>
       <xi:include href="peripherals/MMDVSQ_0.svd.xml"/>
@@ -72,7 +72,7 @@
       <xi:include href="peripherals/SCB_CM0.svd.xml"/>
       <xi:include href="peripherals/SIM_MKV11Z7.svd.xml"/>
       <xi:include href="peripherals/SMC_MKV10Z7.svd.xml"/>
-      <xi:include href="peripherals/SPI0_MKV_PCSIS5.svd.xml"/>
+      <xi:include href="peripherals/SPI0_PCSIS6_SREX_MKV.svd.xml"/>
       <xi:include href="peripherals/SYST.svd.xml"/>
       <xi:include href="peripherals/UART0_MKV10.svd.xml"/>
       <peripheral derivedFrom="UART0"><name>UART1</name><baseAddress>0x4006B000</baseAddress></peripheral>

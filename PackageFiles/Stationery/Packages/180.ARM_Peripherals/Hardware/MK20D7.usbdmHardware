@@ -51,7 +51,7 @@
       <peripheral baseName="Console"  instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForConsole" />
       </peripheral>
-      <peripheral baseName="DAC"      instance="0"        version="dac0_16ch_0x400cc000">
+      <peripheral baseName="DAC"      instance="0"        version="dac0_16ch_fifo16_0x400cc000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDac" />
          <clock reg="SCGC2"         mask="SIM_SCGC2_DAC0_MASK" />
          <irq num="DAC0_IRQn" />
@@ -149,7 +149,7 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
          <irq num="LLWU_IRQn" />
       </peripheral>
-      <peripheral baseName="LPTMR"    instance="0"        version="lptmr0_0">
+      <peripheral baseName="LPTMR"    instance="0"        version="lptmr0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />
          <clock reg="SCGC5"         mask="SIM_SCGC5_LPTMR_MASK" />
          <irq num="LPTMR0_IRQn" />

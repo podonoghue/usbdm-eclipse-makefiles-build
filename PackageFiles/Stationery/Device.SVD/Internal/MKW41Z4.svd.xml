@@ -7,7 +7,7 @@
 >
    <name>MKW41Z4</name>
    <version>1.6</version>
-   <description>MKW41Z4 NXP Microcontroller</description>
+   <description>MKW41Z4 Freescale Microcontroller</description>
    <cpu>
       <name>CM0PLUS</name>
       <revision>r0p0</revision>
@@ -41,15 +41,16 @@
       <xi:include href="peripherals/I2C0_MKL82Z7.svd.xml"/>
       <peripheral derivedFrom="I2C0"><name>I2C1</name><baseAddress>0x40067000</baseAddress></peripheral>
       <xi:include href="peripherals/LLWU_PE4_FILT2.svd.xml"/>
-      <xi:include href="peripherals/LPTMR0_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/LPTMR0.svd.xml"/>
       <xi:include href="peripherals/LPUART0_MODIR_0x40054000.svd.xml"/>
       <xi:include href="peripherals/LTC0_MKW41Z4.svd.xml"/>
-      <xi:include href="peripherals/MCG_NOPLL_NORTC_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/MCG_NOPLL_MKW41Z4.svd.xml"/>
       <xi:include href="peripherals/MCM_MKW41Z4.svd.xml"/>
       <xi:include href="peripherals/MTB_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/MTBDWT_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/FTFA_FlashConfig_MKW41Z4.svd.xml"/>
       <xi:include href="peripherals/NVIC_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/OSC_RF.svd.xml"/>
       <xi:include href="peripherals/PIT_2CH_CHAIN_LTMR.svd.xml"/>
       <xi:include href="peripherals/PMC_MKW41Z4.svd.xml"/>
       <xi:include href="peripherals/PORTA_MKL_DMA.svd.xml"/>
@@ -59,15 +60,15 @@
       <xi:include href="peripherals/RFSYS_0.svd.xml"/>
       <xi:include href="peripherals/ROM_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/RSIM_MKW41Z4.svd.xml"/>
-      <xi:include href="peripherals/RTC_MKW41Z4.svd.xml"/>
-      <xi:include href="peripherals/SystemControl_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/RTC_WPS_MKL03Z4.svd.xml"/>
+      <xi:include href="peripherals/SCB_CM0.svd.xml"/>
       <xi:include href="peripherals/SIM_MKW41Z4.svd.xml"/>
-      <xi:include href="peripherals/SMC_MKW41Z4.svd.xml"/>
-      <xi:include href="peripherals/SPI0_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/SMC_RAM2PO_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/SPI0_PCSIS4_MKW41Z4.svd.xml"/>
       <peripheral derivedFrom="SPI0"><name>SPI1</name><baseAddress>0x4002D000</baseAddress></peripheral>
-      <xi:include href="peripherals/SysTick_MKW41Z4.svd.xml"/>
-      <xi:include href="peripherals/TPM0_MKW41Z4_4CH.svd.xml"/>
-      <xi:include href="peripherals/TPM1_MKW41Z4_2CH.svd.xml"/>
+      <xi:include href="peripherals/SYST.svd.xml"/>
+      <xi:include href="peripherals/TPM0_4CH_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/TPM1_2CH_POL_QUAD_MKW41Z4.svd.xml"/>
       <peripheral derivedFrom="TPM1"><name>TPM2</name><baseAddress>0x4003A000</baseAddress></peripheral>
       <xi:include href="peripherals/TRNG0_0x40029000.svd.xml"/>
       <xi:include href="peripherals/TSI0_MKW41Z4.svd.xml"/>

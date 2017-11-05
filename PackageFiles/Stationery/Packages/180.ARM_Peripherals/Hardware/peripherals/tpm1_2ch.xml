@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-<!-- tpm1_6ch.xml -->
+<!-- tpm1_2ch.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 <xi:include href="tpm_def.xml"/>

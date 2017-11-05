@@ -6,6 +6,18 @@ Devices using this peripheral:
 -->
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="SIM">
    
+   <!-- Indicates RTC/OSC0 don't share XTAL/EXTAL pins -->
+   <constant name="rtcSharesPins" value="false"   derived="true" />
+   
+   <!-- Oscillator used for OSC0 -->
+   <constant name="osc0_peripheral"   value="/OSC0"    derived="true"/>
+   
+   <!-- Oscillator used for OSC1 = RTC -->
+   <constant name="osc32k_peripheral" value="/RTC"     derived="true"/>
+   
+   <!-- RTC clock in (EXTAL32K) -->
+   <constant name="rtc_clkin"         value="/RTC/osc_input_freq" derived="true"/>
+   
    <category name="SOPT1" description="RTC signals">
       <choiceOption name="sim_sopt1_osc32ksel" 
          description="ERCLK32K source"
@@ -20,7 +32,8 @@ Devices using this peripheral:
       <intOption name="system_erclk32k_clock" 
          units="Hz"
          description="Frequency of External 32k Reference Clock [ERCLK32K]"
-         toolTip="Derived from OSC32KCLK, RTCCLK or LPO" 
+         toolTip="External reference clock available to some peripherals (usually ~32kHz)" 
+         origin="Derived from OSC32KCLK, RTCCLK or LPO" 
          value="32768"
          constant="true" />
    
@@ -322,7 +335,7 @@ Devices using this peripheral:
          <choice value="0"  name="Reserved" />
          <choice value="1"  name="FTM2 channel match" isDefault="true" />
       </binaryOption>
-   
+      
       <binaryOption name="sim_sopt4_ftm3trg0src" 
          description="FlexTimer 3 Hardware Trigger 0 Source Select"
          toolTip="Selects the source of FTM hardware trigger 0" >
@@ -350,7 +363,7 @@ Devices using this peripheral:
          <choice value="0"  name="FTM_CLKIN0 pin" isDefault="true" />
          <choice value="1"  name="FTM_CLKIN1 pin" />
       </binaryOption>
-   
+      
       <binaryOption name="sim_sopt4_ftm2clksel" 
          description="FlexTimer 2 External Clock Pin Select"
          toolTip="Selects the external pin used to drive the clock to the FTM module.">
@@ -379,7 +392,7 @@ Devices using this peripheral:
          <choice value="0" name="FTM2_CH1 signal"  isDefault="true"/>
          <choice value="2" name="FTM2_CH1 xor FTM2_CH0 xor FTM1_CH1" />
       </binaryOption>
-   
+      
       <choiceOption name="sim_sopt4_ftm2ch0src" 
          description="FlexTimer 2 channel 0 input capture source select"
          toolTip="Selects the source for FTM channel 0 input capture\n
@@ -894,8 +907,8 @@ Devices using this peripheral:
       \t#ifdef SIM_CLKDIV2_USBDIV_MASK
       \t//! System Clock Divider Register 2
       \t//! USB clock divider divisor & fraction
-      \tstatic constexpr uint32_t clkdiv2 = $(sim_clkdiv2_usb:-1);\n\n
-      \t#endif
+      \tstatic constexpr uint32_t clkdiv2 = $(sim_clkdiv2_usb:-1);
+      \t#endif\n\n
    ]]></template>
    
    <indexedCategory name="ClockConfig." dim="3" 

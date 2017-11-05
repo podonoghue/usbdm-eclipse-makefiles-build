@@ -65,7 +65,7 @@
       <peripheral derivedFrom="I2S0"><name>I2S1</name><baseAddress>0x400AF000</baseAddress></peripheral>
       <xi:include href="peripherals/LLWU_PE4_FILT2_RST.svd.xml"/>
       <xi:include href="peripherals/LMEM_0.svd.xml"/>
-      <xi:include href="peripherals/LPTMR0_0.svd.xml"/>
+      <xi:include href="peripherals/LPTMR0.svd.xml"/>
       <xi:include href="peripherals/MCG_MK_DUALPLL.svd.xml"/>
       <xi:include href="peripherals/MCM_MK61F15WS.svd.xml"/>
       <xi:include href="peripherals/MPU_MK10F12_16R.svd.xml"/>

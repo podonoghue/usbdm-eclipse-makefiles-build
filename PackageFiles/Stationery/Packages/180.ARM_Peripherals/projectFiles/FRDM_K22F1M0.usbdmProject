@@ -70,12 +70,7 @@
    <item key="$signal$USB0_DM_descriptionSetting"          value="Reserved(USB_DM)" />
    <item key="$signal$USB0_DP_descriptionSetting"          value="Reserved(USB_DP)" />
    <item key="$signal$XTAL32_descriptionSetting"           value="Reserved(EXTAL32)" />
-   <item key="/DMA0/NumChannels"                           value="16" />
-   <item key="/FTFE/dflash_phrase_size"                    value="8" />
-   <item key="/FTFE/dflash_sector_size"                    value="4096" />
    <item key="/FTFE/peripheral_file"                       value="ftfe_128k_flexrom" />
-   <item key="/FTFE/pflash_phrase_size"                    value="8" />
-   <item key="/FTFE/pflash_sector_size"                    value="4096" />
    <item key="/LLWU/llwu_rst_llrste"                       value="false" />
    <item key="/LPTMR0/lptmr_cmr"                           value="0" />
    <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_PEE_120MHz" />

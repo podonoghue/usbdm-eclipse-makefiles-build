@@ -27,7 +27,7 @@
       <xi:include href="peripherals/CoreDebug.svd.xml"/>
       <xi:include href="peripherals/DAC0_2CH_MKL05.svd.xml"/>
       <xi:include href="peripherals/DMA0_MKL.svd.xml"/>
-      <xi:include href="peripherals/DMAMUX0_4CH.svd.xml"/>
+      <xi:include href="peripherals/DMAMUX0_4CH_TRIG.svd.xml"/>
       <xi:include href="peripherals/DWT_CM0Plus.svd.xml"/>
       <xi:include href="peripherals/FGPIOA_0xF8000000.svd.xml"/>
       <peripheral derivedFrom="FGPIOA"><name>FGPIOB</name><baseAddress>0xF8000040</baseAddress></peripheral>
@@ -44,7 +44,7 @@
       <peripheral derivedFrom="I2C0"><name>I2C1</name><baseAddress>0x40067000</baseAddress></peripheral>
       <xi:include href="peripherals/I2S0_MKL_A.svd.xml"/>
       <xi:include href="peripherals/LLWU_PE4_FILT2.svd.xml"/>
-      <xi:include href="peripherals/LPTMR0_0.svd.xml"/>
+      <xi:include href="peripherals/LPTMR0.svd.xml"/>
       <xi:include href="peripherals/MCG_MKL16Z4.svd.xml"/>
       <xi:include href="peripherals/MCM_MKL02Z4.svd.xml"/>
       <xi:include href="peripherals/MTB.svd.xml"/>
@@ -61,15 +61,15 @@
       <peripheral derivedFrom="PORTA"><name>PORTE</name><baseAddress>0x4004D000</baseAddress></peripheral>
       <xi:include href="peripherals/RCM_MKL14Z4.svd.xml"/>
       <xi:include href="peripherals/ROM_MKL.svd.xml"/>
-      <xi:include href="peripherals/RTC_MKL03Z4.svd.xml"/>
+      <xi:include href="peripherals/RTC_WPS_MKL03Z4.svd.xml"/>
       <xi:include href="peripherals/SCB_CM0.svd.xml"/>
       <xi:include href="peripherals/SIM_MKL26Z4.svd.xml"/>
-      <xi:include href="peripherals/SMC_MKL04Z4.svd.xml"/>
-      <xi:include href="peripherals/SPI0_MKL_16Bit.svd.xml"/>
+      <xi:include href="peripherals/SMC_ALLS_MKL04Z4.svd.xml"/>
+      <xi:include href="peripherals/SPI0_16Bit_MKL.svd.xml"/>
       <peripheral derivedFrom="SPI0"><name>SPI1</name><baseAddress>0x40077000</baseAddress></peripheral>
       <xi:include href="peripherals/SYST.svd.xml"/>
       <xi:include href="peripherals/TPM0_6CH.svd.xml"/>
-      <xi:include href="peripherals/TPM1_6CH.svd.xml"/>
+      <xi:include href="peripherals/TPM1_2CH.svd.xml"/>
       <peripheral derivedFrom="TPM1"><name>TPM2</name><baseAddress>0x4003A000</baseAddress></peripheral>
       <xi:include href="peripherals/TSI0_MKL.svd.xml"/>
       <xi:include href="peripherals/UART0_MKL04Z4.svd.xml"/>

@@ -9,7 +9,7 @@ Devices using this peripheral:
       <peripheral>
          <?sourceFile "TPM1_2CH_POL" ?>
          <name>TPM1</name>
-         <description>Timer/PWM Module</description>
+         <description>Timer/PWM Module (2 channels)</description>
          <groupName>TPM</groupName>
          <headerStructName>TPM1</headerStructName>
          <baseAddress>0x40039000</baseAddress>
@@ -456,10 +456,6 @@ Indicates if the TPM counter has overflowed</description>
                      </enumeratedValues>
                   </field>
                   <field derivedFrom="POL0" > <name>POL1</name> <description>Channel 1 Polarity</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="POL0" > <name>POL2</name> <description>Channel 2 Polarity</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="POL0" > <name>POL3</name> <description>Channel 3 Polarity</description> <bitOffset>3</bitOffset> </field>
-                  <field derivedFrom="POL0" > <name>POL4</name> <description>Channel Polarity 4</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="POL0" > <name>POL5</name> <description>Channel 5 Polarity</description> <bitOffset>5</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -641,7 +637,8 @@ Controls if the counter is reloaded due to a rising edge on the selected input t
                   </field>
                   <field>
                      <name>TRGSEL</name>
-                     <description>Trigger Select</description>
+                     <description>Trigger Select\n
+Bitmask where each bit indicates an enabled trigger channel</description>
                      <bitOffset>24</bitOffset>
                      <bitWidth>4</bitWidth>
                   </field>

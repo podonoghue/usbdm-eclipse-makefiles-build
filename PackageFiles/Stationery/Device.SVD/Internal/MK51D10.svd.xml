@@ -59,7 +59,7 @@
       <xi:include href="peripherals/ITM_0.svd.xml"/>
       <xi:include href="peripherals/LCD_MK.svd.xml"/>
       <xi:include href="peripherals/LLWU_PE4_FILT2_RST.svd.xml"/>
-      <xi:include href="peripherals/LPTMR0_0.svd.xml"/>
+      <xi:include href="peripherals/LPTMR0.svd.xml"/>
       <xi:include href="peripherals/MCG_MK.svd.xml"/>
       <xi:include href="peripherals/MCM_MK10D10.svd.xml"/>
       <xi:include href="peripherals/MPU_MK10D10_12R.svd.xml"/>

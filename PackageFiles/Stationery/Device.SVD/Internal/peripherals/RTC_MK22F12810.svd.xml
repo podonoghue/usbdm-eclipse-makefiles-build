@@ -5,8 +5,11 @@ Devices using this peripheral:
       MK22F51212
       MK24F12
       MK24F25612
+      MK28F15
       MK63F12
       MK64F12
+      MK82F25615
+      MKL82Z7
 -->
       <peripheral>
          <?sourceFile "RTC_MK22F12810" ?>
@@ -198,18 +201,21 @@ Protects the registers when locked</description>
                   </field>
                   <field>
                      <name>WPS</name>
-                     <description>Wakeup Pin Select</description>
+                     <description>Wakeup Pin Select\n
+Selects function of Wakeup pin (if present)\n
+- Asserts if the RTC interrupt asserts or the wakeup pin is turned on\n
+- Outputs the RTC 32kHz clock if wakeup pin is enabled and 32kHz clock available to peripherals</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Wakeup pin asserts (active low, open drain) if the RTC interrupt asserts or the wakeup pin is turned on</description>
+                           <description>RTC interrupt</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Wakeup pin instead outputs the RTC 32kHz clock, provided the wakeup pin is turned on and the 32kHz clock is output to other peripherals</description>
+                           <description>RTC 32kHz clock</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

@@ -48,7 +48,7 @@
       <xi:include href="peripherals/I2S0_2CH.svd.xml"/>
       <xi:include href="peripherals/ITM_0.svd.xml"/>
       <xi:include href="peripherals/LLWU_PE4_FILT2_RST.svd.xml"/>
-      <xi:include href="peripherals/LPTMR0_0.svd.xml"/>
+      <xi:include href="peripherals/LPTMR0.svd.xml"/>
       <xi:include href="peripherals/MCG_MK.svd.xml"/>
       <xi:include href="peripherals/NV_FTFL.svd.xml"/>
       <xi:include href="peripherals/NVIC_CM4.svd.xml"/>

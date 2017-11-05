@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- osc0_mk.xml -->
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Oscillator" >
+   
+   <choiceOption name="osc_input_freq"
+      units="Hz"
+      description="Frequency of External Crystal"
+      toolTip="Frequency of external crystal on RF_XTAL/RF_EXTAL pins">
+         <choice value="26000000"  name="26 MHz" />
+         <choice value="32000000"  name="32 MHz" isDefault="true" />
+      </choiceOption>
+
+   <intOption name="osc_clock"
+      constant="true"
+      derived="true"
+      units="Hz"
+      description="Frequency of RF oscillator"
+      toolTip="Frequency of RF oscillator"
+      value="32000000" />
+
+   <intOption name="oscer_clock"
+         derived="true"
+         units="Hz"
+         description="Oscillator clock [OSCERCLK]"
+         toolTip="Generated from osc_clock, available for peripherals"
+         value="8000000"  
+         constant="true" />
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.OscRfValidate">
+   </validate>
+
+   <template><![CDATA[
+      \t//! Frequency of OSC Clock or Crystal\n
+      \tstatic constexpr uint32_t osc_clock = $(osc_clock)UL;\n\n
+      
+      \t/**
+      \t * Get OSC clock (internal, assumed available)
+      \t *
+      \t * @return Clock frequency as uint32_t in Hz
+      \t */
+      \tstatic constexpr uint32_t getOscClock() {
+      \t   return osc_clock;
+      \t}\n\n
+      
+      \t/**
+      \t * Get OSC clock (external)
+      \t *
+      \t * @return Clock frequency as uint32_t in Hz
+      \t */
+      \tstatic uint32_t getOscerClock() {
+      \t   return osc_clock;
+      \t}\n\n
+      
+      \t/**
+      \t * Get OSC32KCLK clock
+      \t *
+      \t * @return Clock frequency as uint32_t in Hz
+      \t
+      \t * @note Oscillator not operable at 32kHz
+      \t */
+      \tstatic uint32_t getOsc32kClock() {
+      \t   return 0;
+      \t}\n\n
+   ]]></template>
+
+   <signals />
+</peripheralPage>

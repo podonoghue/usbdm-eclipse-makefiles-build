@@ -33,7 +33,7 @@
       <peripheral derivedFrom="FGPIOA"><name>GPIOB</name><baseAddress>0x400FF040</baseAddress></peripheral>
       <xi:include href="peripherals/I2C0_MKL03.svd.xml"/>
       <xi:include href="peripherals/LLWU_PE2_FILT1.svd.xml"/>
-      <xi:include href="peripherals/LPTMR0_0.svd.xml"/>
+      <xi:include href="peripherals/LPTMR0.svd.xml"/>
       <xi:include href="peripherals/LPUART0_MKL03.svd.xml"/>
       <xi:include href="peripherals/MCG_LITE_MKL03.svd.xml"/>
       <xi:include href="peripherals/MCM_MKL03Z4.svd.xml"/>
@@ -48,10 +48,10 @@
       <xi:include href="peripherals/RCM_MKL03Z4.svd.xml"/>
       <xi:include href="peripherals/RFSYS_1.svd.xml"/>
       <xi:include href="peripherals/ROM_MKL.svd.xml"/>
-      <xi:include href="peripherals/RTC_MKL03Z4.svd.xml"/>
+      <xi:include href="peripherals/RTC_WPS_MKL03Z4.svd.xml"/>
       <xi:include href="peripherals/SCB_CM0.svd.xml"/>
       <xi:include href="peripherals/SIM_MKL03Z4.svd.xml"/>
-      <xi:include href="peripherals/SMC_MKL03Z4.svd.xml"/>
+      <xi:include href="peripherals/SMC_LPOPO_MKL03Z4.svd.xml"/>
       <xi:include href="peripherals/SPI0_MKL_8Bit.svd.xml"/>
       <xi:include href="peripherals/SYST.svd.xml"/>
       <xi:include href="peripherals/TPM0_2CH_DMA.svd.xml"/>

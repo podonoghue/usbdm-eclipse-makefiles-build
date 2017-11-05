@@ -51,7 +51,18 @@
 
       <category name="OSC" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
          <aliasOption key="/OSC0/osc_input_freq" constant="false" />
-         <aliasOption key="/OSC0/erefs0" constant="false" />
+         <binaryOption name="mcg_c2_erefs0"
+            description="External Reference Select" 
+            toolTip="Determines whether a clock or crystal is used for the external reference clock" >
+            <choice value="0" name="External clock" />
+            <choice value="1" name="Oscillator" isDefault="true" />
+         </binaryOption>
+         <binaryOption name="mcg_c2_hgo0"
+            description="Oscillator Gain" 
+            toolTip="Controls the crystal oscillator mode of operation">
+            <choice value="0" name="Low power" isDefault="true"/>
+            <choice value="1" name="High gain" />
+         </binaryOption>
          <choiceOption name="mcg_c2_range"
             derived="true"
             constant="true"
@@ -174,8 +185,8 @@
          toolTip="Output of HIRC available as peripheral clock"
          value="48000000" />
          
-      <aliasOption key="/OSC0/system_oscerclk_undiv_clock" optional="true" />
-      <aliasOption key="/OSC0/system_oscerclk_clock" constant="true" />
+      <aliasOption key="/OSC0/osc_undiv_clock" optional="true" />
+      <aliasOption key="/OSC0/osc_clock" constant="true" />
       <aliasOption key="/SIM/system_erclk32k_clock" constant="true" />
       <aliasOption name="system_low_power_clock" constant="true" />
    
@@ -216,8 +227,8 @@
          
          <category name="MCG_C2" description="MCG Control Register 2">
             <aliasOption key="mcg_c2_range" />
-            <aliasOption key="/OSC0/hgo0" />
-            <aliasOption key="/OSC0/erefs0" />
+            <aliasOption key="mcg_c2_hgo0" />
+            <aliasOption key="mcg_c2_erefs0" />
             <aliasOption name="mcg_c2_ircs." />
          </category>
          
@@ -262,7 +273,8 @@
       \tstatic constexpr uint32_t system_fast_lirc_clock = $(system_fast_irc_clock)UL;\n\n
 
       \t//! Frequency of High Speed Internal Reference Clock [~48MHz]
-      \tstatic constexpr uint32_t system_hirc_clock      = $(system_irc48m_clock)UL;
+      \tstatic constexpr uint32_t system_hirc_clock      = $(system_irc48m_clock)UL;\n\n
+
       \t//! Structure for clock configurations
       \tstruct ClockInfo {
       \t   //! System Clock Divider Register 1
@@ -350,7 +362,7 @@
       \t   case MCG_S_CLKST(1): // LIRC (IRC2Mz/IRC8Mz)/DIV1
       \t      return getLircDiv1Clk();
       \t   case MCG_S_CLKST(2): // EXT (IRC48MHz)
-      \t      return Osc0Info::getInternalClock();
+      \t      return system_hirc_clock;
       \t   default:
       \t   case MCG_S_CLKST(3): // Reserved
       \t      return 0;
@@ -428,8 +440,8 @@
               
       \t      //! Control Register 2
       \t      MCG_C2_RANGE0($(mcg_c2_range)) | // RANGE   Frequency Range Select
-      \t      MCG_C2_HGO0($(/OSC0/hgo0))   | // HGO     High Gain Oscillator Select
-      \t      MCG_C2_EREFS0($(/OSC0/erefs0)) | // EREFS   External Reference Select
+      \t      MCG_C2_HGO0($(mcg_c2_hgo0))   | // HGO     High Gain Oscillator Select
+      \t      MCG_C2_EREFS0($(mcg_c2_erefs0)) | // EREFS   External Reference Select
       \t      MCG_C2_IRCS($(mcg_c2_ircs.)),    // IRCS    Internal Reference Clock Select\n\n
       
       \t      //! Status and Control Register

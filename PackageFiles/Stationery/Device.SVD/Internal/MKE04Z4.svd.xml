@@ -47,7 +47,7 @@
       <xi:include href="peripherals/PORT_MKE04.svd.xml"/>
       <xi:include href="peripherals/PWT_MKE.svd.xml"/>
       <xi:include href="peripherals/ROM_0.svd.xml"/>
-      <xi:include href="peripherals/RTC_MKE.svd.xml"/>
+      <xi:include href="peripherals/RTCNTR_MKE.svd.xml"/>
       <xi:include href="peripherals/SCB_CM0.svd.xml"/>
       <xi:include href="peripherals/SIM_MKE04Z4.svd.xml"/>
       <xi:include href="peripherals/SPI0_MKE_8Bit.svd.xml"/>

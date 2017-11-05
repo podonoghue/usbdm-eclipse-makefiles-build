@@ -68,7 +68,7 @@
       <xi:include href="peripherals/ITM_0.svd.xml"/>
       <xi:include href="peripherals/LLWU_PE8_FILT4.svd.xml"/>
       <xi:include href="peripherals/LMEM_1.svd.xml"/>
-      <xi:include href="peripherals/LPTMR0_0.svd.xml"/>
+      <xi:include href="peripherals/LPTMR0.svd.xml"/>
       <xi:include href="peripherals/LPUART0_MODIR_0x400C4000.svd.xml"/>
       <xi:include href="peripherals/MCG_MK28F15.svd.xml"/>
       <xi:include href="peripherals/MCM_MK65F18.svd.xml"/>

@@ -4,16 +4,27 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="MCG" description="Multipurpose Clock Generator">
 
-   <category name="RTC" description="RTC External Reference Clock/Oscillator [ERCLK32K]">
-      <aliasOption key="/RTC/rtc_input_freq"        optional="true" constant="false"  />
-      <aliasOption key="/RTC/rtcclk_clock"          optional="true"/>
-      <aliasOption key="/SIM/sim_sopt1_osc32ksel"   optional="true" constant="false" />
-      <aliasOption key="/SIM/system_erclk32k_clock" optional="true"/>
+   <category name="OSC0 (Main Oscillator)" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
+      <aliasOption key="/OSC0/osc_input_freq" constant="false" />
+      <binaryOption name="mcg_c2_erefs0"
+         description="External Reference Select" 
+         toolTip="Determines whether a clock or crystal is used for the external reference clock" >
+         <choice value="0" name="External clock" />
+         <choice value="1" name="Oscillator" isDefault="true" />
+      </binaryOption>
+      <binaryOption name="mcg_c2_hgo0"
+         description="Oscillator Gain" 
+         toolTip="Controls the crystal oscillator mode of operation">
+         <choice value="0" name="Low power" isDefault="true"/>
+         <choice value="1" name="High gain" />
+      </binaryOption>
    </category>
    
-   <category name="OSC" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
-      <aliasOption key="/OSC0/osc_input_freq" constant="false" />
-      <aliasOption key="/OSC0/erefs0"         constant="false" />
+   <category name="OSC1 (Real Time Clock)" description="RTC External Reference Clock/Oscillator [ERCLK32K]">
+      <aliasOption key="/RTC/rtc_cr_osce"           optional="true" constant="false"/>
+      <aliasOption key="/RTC/osc_clock"             optional="true"/>
+      <aliasOption key="/SIM/sim_sopt1_osc32ksel"   optional="true" constant="false" />
+      <aliasOption key="/SIM/system_erclk32k_clock" optional="true"/>
    </category>
    
    <category name="Clocks" description="Clock Sources"
@@ -66,15 +77,15 @@
       <category name="Clock monitors" 
          description="Clock monitors" >
          <binaryOption name="mcg_c6_cme0."
-            description="Clock Monitor Enable"
+            description="OSC0 Clock Monitor Enable"
             toolTip="Enables the loss of clock monitoring circuit for the OSC0 external reference.\n
                      C2.LOCRE0 determines if an interrupt or a reset request is generated.\n
                      The CME0 bit must only be when using an external clock mode (FEE, FBE, PEE, PBE, or BLPE)." >
-            <choice value="0" name="OSC0 clock monitor disabled" />
-            <choice value="1" name="OSC0 clock monitor enabled" />
+            <choice value="0" name="Clock monitor disabled" />
+            <choice value="1" name="Clock monitor enabled" />
          </binaryOption>
          <binaryOption name="mcg_c2_locre0."
-            description="Action on Loss of Clock" 
+            description="OSC0 Action on Loss of Clock" 
             toolTip="Determines if an Interrupt or Reset occurs on loss of OSC0 external reference\n
                      This option only has effect if the clock monitor is first enabled bye C6.CME0">
             <choice value="0" name="Interrupt request" />
@@ -82,15 +93,15 @@
          </binaryOption>
    
          <binaryOption name="mcg_c8_cme1." 
-            description="RTC Clock Monitor Enable"
+            description="OSC1 (RTC) Clock Monitor Enable"
             toolTip="Determines if the clock monitor is enabled for the RTC external clock.\n
                      CME1 bit must be set to a logic 0 before the MCG enters any Stop mode">
-            <choice value="0" name="RTC clock monitor disabled" />
-            <choice value="1" name="RTC clock monitor enabled" />
+            <choice value="0" name="Clock monitor disabled" />
+            <choice value="1" name="Clock monitor enabled" />
          </binaryOption>
          
          <binaryOption name="mcg_c8_locre1." 
-            description="RTC Loss of Clock Reset Enable"
+            description="OSC1 (RTC) Loss of Clock Reset Enable"
             toolTip="Determines if a interrupt or a reset request is made following a loss of RTC external reference clock.\n 
                      Only has an affect when CME1 is set." >
             <choice value="0" name="Interrupt request" />
@@ -146,9 +157,9 @@
       <choiceOption name="mcg_c7_oscsel." 
          description="MCG External Reference Clock source [OSCSEL]"
          toolTip="Selects the MCG FLL/PLL external reference clock source">
-         <choice value="0" name="Main System Oscillator (OSCCLK0)" />
-         <choice value="1" name="32 kHz RTC Oscillator (RTC_32K)" />
-         <choice value="2" name="48 MHz Internal Oscillator (OSCCLK1 = IRC48MCLK)" />
+         <choice value="0" name="OSC0 - Main System Oscillator (OSCCLK0)" />
+         <choice value="1" name="OSC1 - 32 kHz RTC Oscillator (RTC_32K)" />
+         <choice value="2" name="OSC2 - 48 MHz Internal Oscillator (OSCCLK1 = IRC48MCLK)" />
       </choiceOption>
    
       <intOption name="mcg_erc_clock." 
@@ -253,7 +264,8 @@
             units="Hz"
             description="FLL Output clock frequency"
             toolTip="Used for main MCGOUTCLK system clock if FEI or FEE mode is selected"
-            value="96000000" />
+            value="96000000" 
+            disabledValue="0" />
    
          <binaryOption name="mcg_c4_dmx32."
             description="DMX32 DCO lock range" 
@@ -285,8 +297,6 @@
             value="12000000" />
       </category>
       
-      <aliasOption key="/SIM/sim_sopt2_pllfllsel." constant="false" />
-
       <aliasOption key="/SIM/system_peripheral_postdivider_clock." constant="true"  optional="true"/>
 
       <aliasOption key="/SIM/system_peripheral_clock." />
@@ -294,8 +304,8 @@
       <aliasOption name="system_mcgirclk_clock." />
       <aliasOption name="system_mcgffclk_clock." />
       <aliasOption name="system_irc48m_clock" optional="true" />
-      <aliasOption key="/OSC0/system_oscerclk_undiv_clock" optional="true" />
-      <aliasOption key="/OSC0/system_oscerclk_clock" />
+      <aliasOption key="/OSC0/oscer_undiv_clock" optional="true" />
+      <aliasOption key="/OSC0/oscer_clock" />
       <aliasOption key="/SIM/system_erclk32k_clock" />
       <aliasOption name="system_low_power_clock" />
    
@@ -352,8 +362,8 @@
          <category name="MCG_C2" description="MCG Control Register 2">
             <aliasOption name="mcg_c2_locre0." />
             <aliasOption key="mcg_c2_range." />
-            <aliasOption key="/OSC0/hgo0" />
-            <aliasOption key="/OSC0/erefs0" />
+            <aliasOption key="mcg_c2_hgo0" />
+            <aliasOption key="mcg_c2_erefs0" />
       
             <binaryOption name="mcg_c2_lp."
                derived="true"
@@ -391,9 +401,10 @@
          </category>
       </category>
    </indexedCategory>
-
+   
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MCG_no_pll" dim="3" >
+      <param type="long" value="1" />              <!-- mcg_c4_drst_drs max -->
    </validate>
 
    <projectActionList id = "mcg_files" >
@@ -518,9 +529,6 @@
       \t      SIM_CLKDIV1_OUTDIV2($(/SIM/sim_clkdiv1_outdiv2.:0))|  // Bus clock
       \t      SIM_CLKDIV1_OUTDIV1($(/SIM/sim_clkdiv1_outdiv1.:0)),  // Core/system clock\n\n
               
-      \t      //! SIM SOPT2 System Options Register 2 (PLLFLLSEL only)
-      \t      SIM_SOPT2_PLLFLLSEL($(/SIM/sim_sopt2_pllfllsel.)),      // PLL/FLL clock select\n\n
-      
       \t      //! Clock Mode
       \t      $(clock_mode.),\n\n
               
@@ -530,10 +538,10 @@
       \t      MCG_C1_IREFSTEN($(mcg_c1_irefsten.)), // IREFSTEN Internal Reference Stop Enable\n\n
               
       \t      //! Control Register 2 - Excluding LP
-      \t      MCG_C2_LOCRE0($(mcg_c2_locre0.)) | // LOLCRE0  Loss of lock Reset Enable
+      \t      MCG_C2_LOCRE0($(mcg_c2_locre0.)) | // LOCRE0  Loss of lock Reset Enable
       \t      MCG_C2_RANGE0($(mcg_c2_range.)) | // RANGE   Frequency Range Select
-      \t      MCG_C2_HGO0($(/OSC0/hgo0))   | // HGO     High Gain Oscillator Select
-      \t      MCG_C2_EREFS0($(/OSC0/erefs0)) | // EREFS   External Reference Select
+      \t      MCG_C2_HGO0($(mcg_c2_hgo0))   | // HGO     High Gain Oscillator Select
+      \t      MCG_C2_EREFS0($(mcg_c2_erefs0)) | // EREFS   External Reference Select
       \t      MCG_C2_IRCS($(mcg_c2_ircs.)),    // IRCS    Internal Reference Clock Select\n\n
               
       \t      //! Control Register 4

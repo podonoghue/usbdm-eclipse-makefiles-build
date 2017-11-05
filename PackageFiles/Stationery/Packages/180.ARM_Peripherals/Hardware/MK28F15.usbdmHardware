@@ -42,7 +42,7 @@
       <peripheral baseName="Console"  instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForConsole" />
       </peripheral>
-      <peripheral baseName="DAC"      instance="0"        version="dac0_mk28f15">
+      <peripheral baseName="DAC"      instance="0"        version="dac0_16ch_fifo16_0x400cc000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDac" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_DAC0_MASK" />
          <irq num="DAC0_IRQn" />
@@ -167,12 +167,12 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
          <irq num="LLWU_IRQn" />
       </peripheral>
-      <peripheral baseName="LPTMR"    instance="0"        version="lptmr0_0">
+      <peripheral baseName="LPTMR"    instance="0"        version="lptmr0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />
          <clock reg="SCGC5"         mask="SIM_SCGC5_LPTMR0_MASK" />
          <irq num="LPTMR0_LPTMR1_IRQn" />
       </peripheral>
-      <peripheral baseName="LPTMR"    instance="1"        version="lptmr0_0">
+      <peripheral baseName="LPTMR"    instance="1"        version="lptmr0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />
          <clock reg="SCGC5"         mask="SIM_SCGC5_LPTMR1_MASK" />
          <irq num="LPTMR0_LPTMR1_IRQn" />
@@ -241,7 +241,7 @@
       <peripheral baseName="RCM"      instance=""         version="rcm_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRcm" />
       </peripheral>
-      <peripheral baseName="RTC"      instance=""         version="rtc_mk28f15">
+      <peripheral baseName="RTC"      instance=""         version="rtc_mk22f12810">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRtc" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_RTC_MASK" />
          <irq num="RTC_Alarm_IRQn" />

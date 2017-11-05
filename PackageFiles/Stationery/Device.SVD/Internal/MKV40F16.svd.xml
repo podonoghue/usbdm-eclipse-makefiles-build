@@ -47,7 +47,7 @@
       <peripheral derivedFrom="GPIOA"><name>GPIOE</name><baseAddress>0x400FF100</baseAddress></peripheral>
       <xi:include href="peripherals/I2C0_F12.svd.xml"/>
       <xi:include href="peripherals/LLWU_PE8_FILT2.svd.xml"/>
-      <xi:include href="peripherals/LPTMR0_0.svd.xml"/>
+      <xi:include href="peripherals/LPTMR0.svd.xml"/>
       <xi:include href="peripherals/MCG_MKV40F15.svd.xml"/>
       <xi:include href="peripherals/MCM_MKV40F15.svd.xml"/>
       <xi:include href="peripherals/NV_MKV40.svd.xml"/>
@@ -66,7 +66,7 @@
       <xi:include href="peripherals/SCB_CM4_CPACR.svd.xml"/>
       <xi:include href="peripherals/SIM_MKV40F15.svd.xml"/>
       <xi:include href="peripherals/SMC_MKV40F15.svd.xml"/>
-      <xi:include href="peripherals/SPI0_MKV_PCSIS6_PCSSE.svd.xml"/>
+      <xi:include href="peripherals/SPI0_PCSIS6_SREX_PCSSE_MKV.svd.xml"/>
       <xi:include href="peripherals/SYST.svd.xml"/>
       <xi:include href="peripherals/UART0_MKV40.svd.xml"/>
       <peripheral derivedFrom="UART0"><name>UART1</name><baseAddress>0x4006B000</baseAddress></peripheral>

@@ -210,7 +210,7 @@ This field controls which VLLS sub-mode to enter if STOPM=VLLSx</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b010</name>
-                           <description>Reserved</description>
+                           <description>VLLS2</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -291,6 +291,9 @@ These bits control whether a Partial Stop mode is entered when STOPM=STOP</descr
                   </field>
                </fields>
             </register>
+            <register derivedFrom="STOPCTRL"> <name>VLLSCTRL</name><?hide?> <?doDerivedMacros?> <description>VLLS Control Register (old name)
+Provides various control bits allowing the user to fine tune
+power consumption during the stop mode selected by the STOPM field</description> </register>
             <register>
                <name>PMSTAT</name>
                <description>Power Mode Status Register</description>

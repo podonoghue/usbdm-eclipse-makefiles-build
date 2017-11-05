@@ -29,13 +29,13 @@
    <projectActionList id = "spi_files" >
          <copy source="Project_Headers/spi-MKL.h"       target="Project_Headers/spi.h" overwrite="true"  derived="true" />
          <copy source="Project_Headers/dma-MKL.h"       target="Project_Headers/dma.h" overwrite="true"  derived="true" />
-         <copy source="Sources/spi-MKL.cpp"             target="Sources/spi-MKL.cpp"   overwrite="true"  derived="true" />
+         <copy source="Sources/spi-MKL.cpp"             target="Sources/spi.cpp"       overwrite="true"  derived="true" />
    </projectActionList>
    
    <xi:include href="_irqOption.xml"/>
    
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator">
+      class="net.sourceforge.usbdm.deviceEditor.validators.SpiValidate">
    </validate>
 
    <template><![CDATA[

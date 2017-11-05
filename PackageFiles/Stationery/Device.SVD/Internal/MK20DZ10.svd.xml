@@ -60,7 +60,7 @@
       <xi:include href="peripherals/I2S0_MKDZ.svd.xml"/>
       <xi:include href="peripherals/ITM_0.svd.xml"/>
       <xi:include href="peripherals/LLWU_PE4_MKDZ.svd.xml"/>
-      <xi:include href="peripherals/LPTMR0_0.svd.xml"/>
+      <xi:include href="peripherals/LPTMR0.svd.xml"/>
       <xi:include href="peripherals/MC_0.svd.xml"/>
       <xi:include href="peripherals/MCG_MKDZ.svd.xml"/>
       <xi:include href="peripherals/MCM_MK10DZ10.svd.xml"/>

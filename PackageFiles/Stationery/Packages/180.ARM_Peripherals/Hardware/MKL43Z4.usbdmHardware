@@ -38,7 +38,7 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDma" />
          <clock reg="SCGC7"         mask="SIM_SCGC7_DMA_MASK" />
       </peripheral>
-      <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_4ch">
+      <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_4ch_trig">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDmaMux" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_DMAMUX0_MASK" />
          <dma>
@@ -151,7 +151,7 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
          <irq num="LLWU_IRQn" />
       </peripheral>
-      <peripheral baseName="LPTMR"    instance="0"        version="lptmr0_0">
+      <peripheral baseName="LPTMR"    instance="0"        version="lptmr0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />
          <clock reg="SCGC5"         mask="SIM_SCGC5_LPTMR_MASK" />
          <irq num="LPTMR0_IRQn" />
@@ -187,7 +187,7 @@
       <peripheral baseName="RCM"      instance=""         version="rcm_mkl03z4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRcm" />
       </peripheral>
-      <peripheral baseName="RTC"      instance=""         version="rtc_mkl03z4">
+      <peripheral baseName="RTC"      instance=""         version="rtc_wps_mkl03z4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRtc" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_RTC_MASK" />
          <irq num="RTC_Alarm_IRQn" />
@@ -196,15 +196,15 @@
       <peripheral baseName="SIM"      instance=""         version="sim_mkl43z4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSim" />
       </peripheral>
-      <peripheral baseName="SMC"      instance=""         version="smc_mkl04z4">
+      <peripheral baseName="SMC"      instance=""         version="smc_alls_mkl04z4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSmc" />
       </peripheral>
-      <peripheral baseName="SPI"      instance="0"        version="spi0_mkl_16bit">
+      <peripheral baseName="SPI"      instance="0"        version="spi0_16bit_mkl">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_SPI0_MASK" />
          <irq num="SPI0_IRQn" />
       </peripheral>
-      <peripheral baseName="SPI"      instance="1"        version="spi0_mkl_16bit">
+      <peripheral baseName="SPI"      instance="1"        version="spi0_16bit_mkl">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_SPI1_MASK" />
          <irq num="SPI1_IRQn" />

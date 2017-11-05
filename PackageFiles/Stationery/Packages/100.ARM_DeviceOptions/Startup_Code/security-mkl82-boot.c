@@ -76,25 +76,25 @@ typedef struct {
    <info>NV_FSEC
    <o0> Backdoor Key Security Access Enable
       <i> Controls use of Backdoor Key access to unsecure device
-      <info>KEYEN
+      <info>[7,6] KEYEN
       <2=> 2: Access enabled
       <3=> 3: Access disabled
    <o1> Mass Erase Enable Bits
       <i> Controls mass erase capability of the flash memory module.
       <i> Only relevant when FSEC.SEC is set to secure.
-      <info>MEEN
+      <info>[5,4] MEEN
       <2=> 2: Mass erase disabled
       <3=> 3: Mass erase enabled
    <o2> Freescale Failure Analysis Access
       <i> Controls access to the flash memory contents during returned part failure analysis
-      <info>FSLACC
+      <info>[3,2] FSLACC
       <2=> 2: Factory access denied
       <3=> 3: Factory access granted
    <o3> Flash Security
       <i> Defines the security state of the MCU.
       <i> In the secure state, the MCU limits access to flash memory module resources.
       <i> If the flash memory module is unsecured using backdoor key access, SEC is forced to 10b.
-      <info>SEC
+      <info>[1,0] SEC
       <2=> 2: Unsecured
       <3=> 3: Secured
 </h>
@@ -123,19 +123,19 @@ Control extended Boot features on these devices
       <192=> 3: Boot from ROM
    <q2.1> External pin selects boot options
       <i> Note: RESET pin must be enabled if BOOTCFG0 is used.
-	  <info>BOOTPIN_OPT
+	  <info>[1] BOOTPIN_OPT
       <0=> Boot from ROM if BOOTCFG0 (NMI pin) asserted.
       <1=> Boot source controlled by BOOTSRC_SEL
    </e>
 
    <q2.5> Fast initialisation control
       <i> Selects initialization speed on POR, VLLSx, and system reset.
-	  <info>FAST_INIT
+	  <info>[5] FAST_INIT
       <0=> Slow - Slower initialization and reduced average current.
       <1=> Fast - Faster initialization and higher average current.
    <q2.2> NMI pin control
       <i> Enables or disables the NMI function
-      <info>NMI_DIS
+      <info>[2] NMI_DIS
       <0=> NMI interrupts are always blocked.
       <1=> NMI interrupts default to enabled
    <q2.0> Low power boot control
@@ -144,7 +144,7 @@ Control extended Boot features on these devices
       <i> Larger divide value selections produce lower average power consumption
       <i> during POR and reset sequencing and after reset exit.
       <i> The recovery times are also extended.
-      <info>LPBOOT
+      <info>[0] LPBOOT
       <0=> OUTDIV1 = /8, RUNM = VLPR
       <1=> OUTDIV1 = /1, RUNM = RUN
 </h>
@@ -161,7 +161,7 @@ Control extended Boot features on these devices
 #define FOPT_VALUE (FOPT_RESERVED|FOPT_BOOT_OFF|FOPT_MISC)
 #endif
 
-/*
+/*  
   <h> Backdoor Comparison Key
   <i> The Verify Backdoor Access Key command releases security if user-supplied keys
   <i> matches the Backdoor Comparison Key bytes

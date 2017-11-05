@@ -17,19 +17,13 @@ using namespace USBDM;
  * Uses PWM to change the brightness of an LED
  */
 
-/*
- * This example is not supported on all targets as PWM feature may not be available
- * on the pins connected to the LEDs (e.g. K64F).
- *
- * The mapping of pins in may need to be changed to map PWM to LEDs as
- * preference was given to mapping to external pins on board (e.g. KL25Z).
- *
- */
 // Connection mapping - change as required
 using Timer = $(demo.cpp.ftm:Ftm0);
 using Led   = $(demo.cpp.pwm.led1:Ftm0Channel<7>);
 
 int main() {
+
+   Ftm0::configure(FtmMode_LeftAlign, FtmClockSource_System);
 
    // Configure base FTM for left-aligned PWM
    Timer::configure(

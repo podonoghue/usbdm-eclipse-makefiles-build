@@ -231,6 +231,7 @@ void CR20ADrv::resetModem() {
 
 } /* namespace USBDM */
 
+#if 1
 using namespace USBDM;
 
 Spi0 spi;
@@ -238,7 +239,7 @@ Spi0 spi;
 static CR20ADrv cr20{spi};
 
 bool testDirectRegister() {
-   // 8-bit read/write register
+   // 8-bit read/write direct register
    ModemReg reg = ModemReg_PLL_FRAC0_LSB;
    // Fail test
    //   reg = ModemReg_PLL_INT0;
@@ -264,7 +265,7 @@ bool testDirectRegister() {
 }
 
 bool testIndirectRegister() {
-   // 8-bit read/write register
+   // 8-bit read/write indirect register
    ModemIndirectReg reg = ModemIndirectReg_RX_WTR_MARK;
    // Fail test
    //   reg = ModemIndirectReg_TXDELAY;
@@ -315,8 +316,12 @@ bool testBuffer() {
 }
 
 int main() {
+   BlueLed::setOutput(PinDriveStrength_High, PinDriveMode_PushPull, PinSlewRate_Slow);
 
    for (int i=0;;i++) {
+      if ((i%100) == 0) {
+         BlueLed::toggle();
+      }
       console.write("Test ").writeln(i);
       bool success =
             testDirectRegister() &&
@@ -331,4 +336,4 @@ int main() {
    }
    return 0;
 }
-
+#endif

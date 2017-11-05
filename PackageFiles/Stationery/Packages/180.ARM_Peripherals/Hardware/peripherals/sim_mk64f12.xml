@@ -6,6 +6,18 @@ Devices using this peripheral:
 -->
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="SIM">
    
+   <!-- Indicates RTC/OSC0 don't share XTAL/EXTAL pins -->
+   <constant name="rtcSharesPins" value="false"   derived="true" />
+   
+   <!-- Oscillator used for OSC0 -->
+   <constant name="osc0_peripheral"   value="/OSC0"    derived="true"/>
+   
+   <!-- Oscillator used for OSC1 = RTC -->
+   <constant name="osc32k_peripheral" value="/RTC"     derived="true"/>
+   
+   <!-- RTC clock in (EXTAL32K) -->
+   <constant name="rtc_clkin"         value="/RTC/osc_input_freq" derived="true"/>
+   
    <category name="SOPT1" description="RTC signals">
       <choiceOption name="sim_sopt1_osc32ksel" 
          description="ERCLK32K source"
@@ -20,7 +32,8 @@ Devices using this peripheral:
       <intOption name="system_erclk32k_clock" 
          units="Hz"
          description="Frequency of External 32k Reference Clock [ERCLK32K]"
-         toolTip="Derived from OSC32KCLK, RTCCLK or LPO" 
+         toolTip="External reference clock available to some peripherals (usually ~32kHz)" 
+         origin="Derived from OSC32KCLK, RTCCLK or LPO" 
          value="32768"
          constant="true" />
       
@@ -421,7 +434,7 @@ Devices using this peripheral:
          <choice value="0"  name="FTM_CLKIN0 pin" isDefault="true" />
          <choice value="1"  name="FTM_CLKIN1 pin" />
       </binaryOption>
-   
+      
       <binaryOption name="sim_sopt4_ftm2clksel" 
          description="FlexTimer 2 External Clock Pin Select"
          toolTip="Selects the external pin used to drive the clock to the FTM module.">
@@ -933,10 +946,10 @@ Devices using this peripheral:
    
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate" dim="3">
-      <param type="long" value="120MHz" />   <!-- Core         -->
-      <param type="long" value="60MHz" />    <!-- Bus          -->
-      <param type="long" value="25MHz" />    <!-- Flash        -->
-      <param type="long" value="50MHz" />    <!-- FlexBus      -->
+      <param type="long" value="120MHz" />    <!-- Core         -->
+      <param type="long" value="60MHz" />     <!-- Bus          -->
+      <param type="long" value="25MHz" />     <!-- Flash        -->
+      <param type="long" value="50MHz" />     <!-- FlexBus      -->
    </validate>
    
    <xi:include href="_simFiles-MK.xml"/>

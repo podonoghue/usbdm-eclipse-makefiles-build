@@ -6,6 +6,17 @@ Devices using this peripheral:
 -->
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="SIM">
    
+   <!-- Indicates RTC/OSC0 share XTAL/EXTAL pins -->
+   <constant name="rtcSharesPins" value="true"  derived="true"/>
+   
+   <!-- Oscillator used for OSC0 -->
+   <constant name="osc0_peripheral"   value="/OSC0"    derived="true"/>
+   
+   <!-- No OSC1, RTC uses external pin or OSC0 in low range (OSC32KCLK) -->
+   
+   <!-- RTC clock in (EXTAL32K) -->
+   <constant name="rtc_clkin"         value="/RTC/rtcclkin_clock" derived="true"/>
+   
    <category name="SOPT1" description="RTC signals">
       <choiceOption name="sim_sopt1_osc32ksel" 
          description="ERCLK32K source"

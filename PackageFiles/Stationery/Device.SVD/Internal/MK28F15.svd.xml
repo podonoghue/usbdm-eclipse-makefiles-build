@@ -55,7 +55,7 @@
       <peripheral derivedFrom="I2S0"><name>I2S1</name><baseAddress>0x400AF000</baseAddress></peripheral>
       <xi:include href="peripherals/LLWU_PE8_FILT4.svd.xml"/>
       <xi:include href="peripherals/LMEM_MK28F15.svd.xml"/>
-      <xi:include href="peripherals/LPTMR0_0.svd.xml"/>
+      <xi:include href="peripherals/LPTMR0.svd.xml"/>
       <peripheral derivedFrom="LPTMR0"><name>LPTMR1</name><baseAddress>0x40044000</baseAddress></peripheral>
       <xi:include href="peripherals/LPUART0_FIFO_0x400C4000.svd.xml"/>
       <peripheral derivedFrom="LPUART0"><name>LPUART1</name><baseAddress>0x400C5000</baseAddress></peripheral>
@@ -80,7 +80,7 @@
       <xi:include href="peripherals/RCM_MK28F15.svd.xml"/>
       <xi:include href="peripherals/RFSYS_0.svd.xml"/>
       <xi:include href="peripherals/RFVBAT_0.svd.xml"/>
-      <xi:include href="peripherals/RTC_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/RTC_MK22F12810.svd.xml"/>
       <xi:include href="peripherals/SCB_CM4_CPACR_FPCCR.svd.xml"/>
       <xi:include href="peripherals/SDHC_MK28F15.svd.xml"/>
       <xi:include href="peripherals/SDRAMC_0.svd.xml"/>

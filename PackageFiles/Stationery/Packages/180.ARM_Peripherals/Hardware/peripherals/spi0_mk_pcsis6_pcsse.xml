@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-<!-- spi0_mk21f12.xml.xml -->
+<!-- spi0_mk_pcsis6_pcsse.xml.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 <xi:include href="spi_mk.xml"/>

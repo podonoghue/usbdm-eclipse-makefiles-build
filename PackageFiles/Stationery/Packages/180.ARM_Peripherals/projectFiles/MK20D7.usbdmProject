@@ -8,12 +8,7 @@
    <item key="$$DeviceInfo_Device_Variant"                 value="MK20DX128VLH7" />
    <item key="$$DeviceInfo_Target_Device"                  value="MK20DX128M7" />
    <item key="$$Hardware_Source_Filename"                  value="MK20D7.usbdmHardware" />
-   <item key="/DMA0/NumChannels"                           value="16" />
-   <item key="/FTFL/dflash_phrase_size"                    value="4" />
-   <item key="/FTFL/dflash_sector_size"                    value="1024" />
    <item key="/FTFL/peripheral_file"                       value="ftfl_32k_flexrom" />
-   <item key="/FTFL/pflash_phrase_size"                    value="4" />
-   <item key="/FTFL/pflash_sector_size"                    value="2048" />
    <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_PEE_60MHz" />
    <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_BLPE_4MHz" />
    <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_PEE_72MHz" />
@@ -29,9 +24,6 @@
    <item key="/SIM/system_core_clock[0]"                   value="60000000" />
    <item key="/SIM/system_core_clock[1]"                   value="4000000" />
    <item key="/SIM/system_flash_clock[0]"                  value="20000000" />
-   <item key="/SIM/system_flash_clock[1]"                  value="4000000" />
+   <item key="/SIM/system_flash_clock[1]"                  value="800000" />
    <item key="/SIM/system_usbfs_clock"                     value="48000000" />
-   <item key="/UART0/clockSource"                          value="SystemCoreClock" />
-   <item key="/UART1/clockSource"                          value="SystemCoreClock" />
-   <item key="/UART2/clockSource"                          value="SystemBusClock" />
 </section>

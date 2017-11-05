@@ -6,7 +6,16 @@ Devices using this peripheral:
 -->
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="SIM">
    
-   <constant name="rtcSharesPins" value="true" />
+   <!-- Indicates RTC/OSC0 share XTAL/EXTAL pins -->
+   <constant name="rtcSharesPins" value="true"  derived="true"/>
+   
+   <!-- Oscillator used for OSC0 -->
+   <constant name="osc0_peripheral"   value="/OSC0"    derived="true"/>
+   
+   <!-- No OSC1, RTC uses external pin or OSC0 in low range (OSC32KCLK) -->
+   
+   <!-- RTC clock in (EXTAL32K) -->
+   <constant name="rtc_clkin"         value="/RTC/rtcclkin_clock" derived="true"/>
    
    <category name="SOPT1" description="RTC signals">
       <choiceOption name="sim_sopt1_osc32ksel" 
@@ -22,7 +31,8 @@ Devices using this peripheral:
       <intOption name="system_erclk32k_clock" 
          units="Hz"
          description="Frequency of External 32k Reference Clock [ERCLK32K]"
-         toolTip="External reference clock available to come peripherals (usually ~32kHz)" 
+         toolTip="External reference clock available to some peripherals (usually ~32kHz)" 
+         origin="Derived from OSC32KCLK, RTCCLK or LPO" 
          value="32768"
          constant="true" />
       
@@ -44,7 +54,7 @@ Devices using this peripheral:
          \t   switch(sim->SOPT1&SIM_SOPT1_OSC32KSEL_MASK) {
          \t      default                     : return 0;
          \t      case SIM_SOPT1_OSC32KSEL(0) : return Osc0Info::getOsc32kClock();
-         \t      case SIM_SOPT1_OSC32KSEL(2) : return RtcInfo::rtcclkin_clock;
+         \t      case SIM_SOPT1_OSC32KSEL(2) : return RtcInfo::rtcclk_clock;
          \t      case SIM_SOPT1_OSC32KSEL(3) : return 1000;
          \t   }
          \t}\n\n

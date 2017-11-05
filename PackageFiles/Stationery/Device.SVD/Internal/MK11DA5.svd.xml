@@ -46,7 +46,7 @@
       <peripheral derivedFrom="I2C0"><name>I2C1</name><baseAddress>0x40067000</baseAddress></peripheral>
       <xi:include href="peripherals/I2S0_1CH.svd.xml"/>
       <xi:include href="peripherals/LLWU_PE4_FILT2_RST.svd.xml"/>
-      <xi:include href="peripherals/LPTMR0_0.svd.xml"/>
+      <xi:include href="peripherals/LPTMR0.svd.xml"/>
       <xi:include href="peripherals/MCG_MK.svd.xml"/>
       <xi:include href="peripherals/MCM_MK11D5.svd.xml"/>
       <xi:include href="peripherals/NV_FTFL.svd.xml"/>

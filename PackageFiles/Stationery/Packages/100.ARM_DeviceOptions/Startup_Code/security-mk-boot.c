@@ -110,25 +110,25 @@ typedef struct {
    <info>NV_FSEC
    <o0> Backdoor Key Security Access Enable
       <i> Controls use of Backdoor Key access to unsecure device
-      <info>KEYEN
+      <info>[7,6] KEYEN
       <2=> 2: Access enabled
       <3=> 3: Access disabled
    <o1> Mass Erase Enable Bits
       <i> Controls mass erase capability of the flash memory module.
       <i> Only relevant when FSEC.SEC is set to secure.
-      <info>MEEN
+      <info>[5,4] MEEN
       <2=> 2: Mass erase disabled
       <3=> 3: Mass erase enabled
    <o2> Freescale Failure Analysis Access
       <i> Controls access to the flash memory contents during returned part failure analysis
-      <info>FSLACC
+      <info>[3,2] FSLACC
       <2=> 2: Factory access denied
       <3=> 3: Factory access granted
    <o3> Flash Security
       <i> Defines the security state of the MCU.
       <i> In the secure state, the MCU limits access to flash memory module resources.
       <i> If the flash memory module is unsecured using backdoor key access, SEC is forced to 10b.
-      <info>SEC
+      <info>[1,0] SEC
       <2=> 2: Unsecured
       <3=> 3: Secured
 </h>
@@ -150,14 +150,14 @@ Control extended Boot features on these devices
       <1=> Options Enabled
    <o1> Boot Source Selection
       <i> These bits select the boot sources
-      <info>BOOTSRC_SEL
+      <info>[7,6]BOOTSRC_SEL
       <0=> 0: Boot from Flash
       <64=> 1: Reserved
       <128=> 2: Boot from ROM
       <192=> 3: Boot from ROM
    <q2.1> External pin selects boot options
       <i> Note: RESET pin must be enabled if BOOTCFG0 is used.
-	  <info>BOOTPIN_OPT
+	  <info>[1] BOOTPIN_OPT
       <0=> Boot from ROM if BOOTCFG0 (NMI pin) asserted.
       <1=> Boot source controlled by BOOTSRC_SEL
    </e>
@@ -165,19 +165,19 @@ Control extended Boot features on these devices
    <q2.5> Fast initialisation control
       <i> Selects initialization speed on POR, VLLSx, and system reset.
 	  <i> Not all devices have this feature
-	  <info>FAST_INIT
+	  <info>[5] FAST_INIT
       <0=> Slow - Slower initialization and reduced average current.
       <1=> Fast - Faster initialization and higher average current.
    <q2.2> NMI pin control
       <i> Enables or disables the NMI function
 	  <i> Not all devices have this feature
-      <info>NMI_DIS
+      <info>[2] NMI_DIS
       <0=> NMI interrupts are always blocked.
       <1=> NMI interrupts default to enabled
    <q2.0> Low power boot control
       <i> Controls the reset value of SIM_CLKDIV1.OUTDIVx (clock dividers)
       <i> Allows power consumption during reset to be reduced
-      <info>LPBOOT
+      <info>[0] LPBOOT
       <0=> Low Power (VLPR) - OUTDIV = /8
       <1=> Normal (RUN) - OUTDIV = /1
 </h>

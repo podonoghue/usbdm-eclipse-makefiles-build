@@ -29,7 +29,7 @@
    <xi:include href="_irqOption.xml"/>
    
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator">
+      class="net.sourceforge.usbdm.deviceEditor.validators.I2cValidate">
    </validate>
 
    <projectActionList id = "i2c_files" >

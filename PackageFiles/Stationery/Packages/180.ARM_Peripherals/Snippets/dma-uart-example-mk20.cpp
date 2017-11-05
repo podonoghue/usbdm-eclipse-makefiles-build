@@ -185,7 +185,7 @@ static void configurePit() {
 /**
  * Change run mode
  *
- * @param[in] Run mode to enter
+ * @param[in] smcRunMode Run mode to enter
  */
 void changeRunMode(SmcRunMode smcRunMode) {
    // Get current run mode

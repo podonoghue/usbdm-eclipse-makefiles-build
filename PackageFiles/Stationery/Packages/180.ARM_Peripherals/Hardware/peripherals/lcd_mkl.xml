@@ -105,20 +105,6 @@
       <choice value="0" name="Continue running" />
       <choice value="1" name="Disabled" />
    </binaryOption>
-
-   <pinListOption name="backplanes" 
-      description="Pins used for Backplane" 
-      toolTip="Comma separated list of lcd signal numbers in backplane order e.g. 40,52,19,18\n
-         Number must agree with LCD Duty Select"
-      value="40, 52, 19, 18" 
-      constant="false" />
-
-   <pinListOption name="frontplanes" 
-      description="Pins used for Frontplane" 
-      toolTip="Comma separated list of lcd signal numbers in frontplane order e.g. 37,17,7,8,53,38,10,11"
-      value="37, 17, 7, 8, 53, 38, 10, 11" 
-      constant="false"/>
-
    <choiceOption name="lcd_gcr_duty" 
       description="LCD duty select"
       toolTip="Selects the duty cycle of the LCD controller driver.\n
@@ -132,6 +118,20 @@
       <choice value="6"  name="Reserved"/>
       <choice value="7"  name="Use 8 backplane (1/8 duty cycle)" />
    </choiceOption>
+
+
+   <pinListOption name="backplanes" 
+      description="Pins used for Backplane" 
+      toolTip="Comma separated list of lcd signal numbers in backplane order e.g. 40,52,19,18\n
+         Number must agree with LCD Duty Select"
+      value="40, 52, 19, 18" 
+      constant="false" />
+
+   <pinListOption name="frontplanes" 
+      description="Pins used for Frontplane" 
+      toolTip="Comma separated list of lcd signal numbers in frontplane order e.g. 37,17,7,8,53,38,10,11"
+      value="37, 17, 7, 8, 53, 38, 10, 11" 
+      constant="false"/>
 
    <signals/>
    <signals name="LCD_POWER"/>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- FRDM_KW41Z.usbdmProject -->
+<!-- 
+   Settings
+-->
+
+<section name="USBDM">
+   <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_KW41Z" />
+   <item key="$$DeviceInfo_Target_Device"                  value="$(targetDevice)" />
+   <item key="$$Hardware_Source_Filename"                  value="MKW41Z4.usbdmHardware" />
+   <item key="$signal$ANT_descriptionSetting"              value="Antenna" />
+   <item key="$signal$PSWITCH_descriptionSetting"          value="Power Switch" />
+   <item key="$signal$PTA0_descriptionSetting"             value="SWD_DIO" />
+   <item key="$signal$PTA0_muxSetting"                     value="mux7" />
+   <item key="$signal$PTA16_descriptionSetting"            value="SW4" />
+   <item key="$signal$PTA17_descriptionSetting"            value="SW2" />
+   <item key="$signal$PTA18_descriptionSetting"            value="RGB_BLUE" />
+   <item key="$signal$PTA18_muxSetting"                    value="mux5" />
+   <item key="$signal$PTA19_descriptionSetting"            value="RGB_GREEN" />
+   <item key="$signal$PTA19_muxSetting"                    value="mux5" />
+   <item key="$signal$PTA1_descriptionSetting"             value="SWD_CLK" />
+   <item key="$signal$PTA1_muxSetting"                     value="mux7" />
+   <item key="$signal$PTA2_descriptionSetting"             value="Reset_b" />
+   <item key="$signal$PTB0_descriptionSetting"             value="RED_LED" />
+   <item key="$signal$PTB16_descriptionSetting"            value="EXTAL32K" />
+   <item key="$signal$PTB16_muxSetting"                    value="mux0" />
+   <item key="$signal$PTB17_descriptionSetting"            value="EXTAL32K" />
+   <item key="$signal$PTB17_muxSetting"                    value="mux0" />
+   <item key="$signal$PTB18_muxSetting"                    value="mux0" />
+   <item key="$signal$PTB1_descriptionSetting"             value="IR_LED" />
+   <item key="$signal$PTB1_muxSetting"                     value="mux0" />
+   <item key="$signal$PTB2_muxSetting"                     value="mux0" />
+   <item key="$signal$PTB3_muxSetting"                     value="mux0" />
+   <item key="$signal$PTC1_descriptionSetting"             value="RGB_RED" />
+   <item key="$signal$PTC2_muxSetting"                     value="mux3" />
+   <item key="$signal$PTC3_muxSetting"                     value="mux3" />
+   <item key="$signal$PTC6_descriptionSetting"             value="Console_Rx" />
+   <item key="$signal$PTC6_muxSetting"                     value="mux4" />
+   <item key="$signal$PTC7_descriptionSetting"             value="Console_Tx" />
+   <item key="$signal$PTC7_muxSetting"                     value="mux4" />
+   <item key="$signal$RF_EXTAL_descriptionSetting"         value="RF Crystal" />
+   <item key="$signal$RF_XTAL_descriptionSetting"          value="RF Crystal" />
+   <item key="/Console/consoleDevice"                      value="USBDM::Lpuart0" />
+   <item key="/FTFA/peripheral_file"                       value="ftfa" />
+   <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_FEE_42MHz" />
+   <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_VLPR_BLPI_4MHz" />
+   <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_BLPE_32MHz" />
+   <item key="/MCG/clock_mode[0]"                          value="ClockMode_FEE" />
+   <item key="/MCG/clock_mode[1]"                          value="ClockMode_BLPI" />
+   <item key="/MCG/clock_mode[2]"                          value="ClockMode_BLPE" />
+   <item key="/MCG/mcg_c7_oscsel[0]"                       value="1" />
+   <item key="/MCG/system_mcgfllclk_clock[0]"              value="41943040" />
+   <item key="/SIM/sim_sopt1_osc32ksel"                    value="0" />
+   <item key="/SIM/system_bus_clock[0]"                    value="20971520" />
+   <item key="/SIM/system_bus_clock[1]"                    value="800000" />
+   <item key="/SIM/system_bus_clock[2]"                    value="16000000" />
+   <item key="/SIM/system_core_clock[0]"                   value="41943040" />
+   <item key="/SIM/system_core_clock[1]"                   value="4000000" />
+   <item key="/SIM/system_core_clock[2]"                   value="32000000" />
+</section>

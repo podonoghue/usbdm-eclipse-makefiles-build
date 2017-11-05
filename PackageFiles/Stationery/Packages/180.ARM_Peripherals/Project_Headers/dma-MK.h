@@ -697,8 +697,7 @@ public:
          setAndCheckErrorCode(E_ILLEGAL_PARAM);
       }
 #endif
-
-      IRQn_Type irqNum = (IRQn_Type)(Info::irqNums[0] + (channel&(Info::irqCount-1)));
+      IRQn_Type irqNum = static_cast<IRQn_Type>(Info::irqNums[0] + (channel&(Info::irqCount-1)));
       if (enable) {
          enableNvicInterrupt(irqNum, nvicPriority);
       }
@@ -712,7 +711,6 @@ public:
    /**
     * Enable/disable error interrupts in NVIC
     *
-    * @param[in]  channel       Channel being modified
     * @param[in]  enable        True => enable, False => disable
     * @param[in]  nvicPriority  Interrupt priority
 

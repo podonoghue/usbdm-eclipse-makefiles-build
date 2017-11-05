@@ -50,8 +50,6 @@
    <item key="$signal$USB0_DM_descriptionSetting"          value="USB" />
    <item key="$signal$USB0_DP_descriptionSetting"          value="USB" />
    <item key="/FTFA/peripheral_file"                       value="ftfa" />
-   <item key="/FTFA/pflash_phrase_size"                    value="4" />
-   <item key="/FTFA/pflash_sector_size"                    value="1024" />
    <item key="/LPTMR0/lptmr_cmr"                           value="0" />
    <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_PEE_48MHz" />
    <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_BLPE_4MHz" />
@@ -60,18 +58,15 @@
    <item key="/MCG/clock_mode[1]"                          value="ClockMode_BLPE" />
    <item key="/MCG/clock_mode[2]"                          value="ClockMode_FEE" />
    <item key="/MCG/pll0OutputFrequency[0]"                 value="96000000" />
-   <item key="/MCG/system_mcgfllclk_clock[2]"              value="80000000" />
-   <item key="/OSC0/osc_cr_scp"                            value="4" />
+   <item key="/MCG/system_mcgfllclk_clock[2]"              value="40000000" />
    <item key="/PIT/pit_ldval"                              value="10000" />
-   <item key="/SIM/rtcSharesPins"                          value="true" />
-   <item key="/SIM/sim_sopt1_osc32ksel"                    value="2" />
    <item key="/SIM/sim_sopt2_pllfllsel[0]"                 value="1" />
    <item key="/SIM/sim_sopt2_rtcclkoutsel"                 value="false" />
-   <item key="/SIM/system_bus_clock[1]"                    value="4000000" />
+   <item key="/SIM/system_bus_clock[1]"                    value="800000" />
    <item key="/SIM/system_bus_clock[2]"                    value="20000000" />
    <item key="/SIM/system_core_clock[1]"                   value="4000000" />
    <item key="/SIM/system_core_clock[2]"                   value="40000000" />
-   <item key="/SIM/system_erclk32k_clock"                  value="32765" />
+   <item key="/SIM/system_erclk32k_clock"                  value="1000" />
    <item key="/SIM/system_tpm_clock"                       value="48000000" />
    <item key="/SIM/system_uart0_clock"                     value="48000000" />
    <item key="/SIM/system_usbfs_clock"                     value="48000000" />
