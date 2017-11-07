@@ -206,7 +206,7 @@ Devices using this vector table:
       <value>44</value>
    </interrupt>
    <interrupt>
-      <name>RTC</name>
+      <name>RTC_Alarm</name>
       <description>Secure Real Time Clock</description>
       <value>46</value>
    </interrupt>

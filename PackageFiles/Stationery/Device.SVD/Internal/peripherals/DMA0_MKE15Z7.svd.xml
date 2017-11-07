@@ -5,8 +5,8 @@ Devices using this peripheral:
       MKL82Z7
 -->
       <peripheral>
-         <?sourceFile "DMA_MKE15Z7" ?>
-         <name>DMA</name>
+         <?sourceFile "DMA0_MKE15Z7" ?>
+         <name>DMA0</name>
          <description>Enhanced direct memory access controller</description>
          <groupName>DMA</groupName>
          <headerStructName>DMA</headerStructName>

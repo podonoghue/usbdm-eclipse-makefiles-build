@@ -22,54 +22,32 @@
    <width>32</width>
    <peripherals>
       <xi:include href="peripherals/ADC0_MKE15Z7.svd.xml"/>
-      <peripheral derivedFrom="ADC0"><name>ADC1</name><baseAddress>0x40027000</baseAddress>
-         <interrupt><name>ADC1</name><description>Analog-to-Digital Converter</description><value>30</value></interrupt>
-      </peripheral>
+      <peripheral derivedFrom="ADC0"><name>ADC1</name><baseAddress>0x40027000</baseAddress></peripheral>
       <xi:include href="peripherals/CMP0_DACOE_MKE15Z7.svd.xml"/>
-      <peripheral derivedFrom="CMP0"><name>CMP1</name><baseAddress>0x40074000</baseAddress>
-         <interrupt><name>CMP1</name><description>Comparator</description><value>21</value></interrupt>
-      </peripheral>
+      <peripheral derivedFrom="CMP0"><name>CMP1</name><baseAddress>0x40074000</baseAddress></peripheral>
       <xi:include href="peripherals/CRC0_0x40032000.svd.xml"/>
-      <xi:include href="peripherals/DMA_MKE15Z7.svd.xml"/>
+      <xi:include href="peripherals/DMA0_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/DMAMUX_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/EWM_MKE16F16.svd.xml"/>
-      <xi:include href="peripherals/FLEXIO_MKE15Z7.svd.xml"/>
+      <xi:include href="peripherals/FLEXIO_4SH_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/FTFE_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/FTM0_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/FTM1_MKE15Z7.svd.xml"/>
-      <peripheral derivedFrom="FTM1"><name>FTM2</name><baseAddress>0x4003A000</baseAddress>
-         <interrupt><name>FTM2</name><description>FlexTimer Module</description><value>19</value></interrupt>
-      </peripheral>
+      <peripheral derivedFrom="FTM1"><name>FTM2</name><baseAddress>0x4003A000</baseAddress></peripheral>
       <xi:include href="peripherals/GPIOA_0x400FF000.svd.xml"/>
-      <peripheral derivedFrom="GPIOA"><name>GPIOB</name><baseAddress>0x400FF040</baseAddress>
-         <interrupt><name>PORTBCD</name><description>General Purpose Input/Output</description><value>26</value></interrupt>
-      </peripheral>
-      <peripheral derivedFrom="GPIOA"><name>GPIOC</name><baseAddress>0x400FF080</baseAddress>
-         <interrupt><name>PORTBCD</name><description>General Purpose Input/Output</description><value>26</value></interrupt>
-      </peripheral>
-      <peripheral derivedFrom="GPIOA"><name>GPIOD</name><baseAddress>0x400FF0C0</baseAddress>
-         <interrupt><name>PORTBCD</name><description>General Purpose Input/Output</description><value>26</value></interrupt>
-      </peripheral>
-      <peripheral derivedFrom="GPIOA"><name>GPIOE</name><baseAddress>0x400FF100</baseAddress>
-         <interrupt><name>PORTAE</name><description>General Purpose Input/Output</description><value>7</value></interrupt>
-      </peripheral>
+      <peripheral derivedFrom="GPIOA"><name>GPIOB</name><baseAddress>0x400FF040</baseAddress></peripheral>
+      <peripheral derivedFrom="GPIOA"><name>GPIOC</name><baseAddress>0x400FF080</baseAddress></peripheral>
+      <peripheral derivedFrom="GPIOA"><name>GPIOD</name><baseAddress>0x400FF0C0</baseAddress></peripheral>
+      <peripheral derivedFrom="GPIOA"><name>GPIOE</name><baseAddress>0x400FF100</baseAddress></peripheral>
       <xi:include href="peripherals/LPI2C0_MKE15Z7.svd.xml"/>
-      <peripheral derivedFrom="LPI2C0"><name>LPI2C1</name><baseAddress>0x40067000</baseAddress>
-         <interrupt><name>LPI2C1</name><description>Low power I2C</description><value>9</value></interrupt>
-      </peripheral>
+      <peripheral derivedFrom="LPI2C0"><name>LPI2C1</name><baseAddress>0x40067000</baseAddress></peripheral>
       <xi:include href="peripherals/LPIT0_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/LPSPI0_MKE15Z7.svd.xml"/>
-      <peripheral derivedFrom="LPSPI0"><name>LPSPI1</name><baseAddress>0x4002D000</baseAddress>
-         <interrupt><name>LPSPI1</name><description>Low power SPI</description><value>11</value></interrupt>
-      </peripheral>
+      <peripheral derivedFrom="LPSPI0"><name>LPSPI1</name><baseAddress>0x4002D000</baseAddress></peripheral>
       <xi:include href="peripherals/LPTMR0_DMA_MKE16F16.svd.xml"/>
       <xi:include href="peripherals/LPUART0_MKE_FIFO.svd.xml"/>
-      <peripheral derivedFrom="LPUART0"><name>LPUART1</name><baseAddress>0x4006B000</baseAddress>
-         <interrupt><name>LPUART1</name><description>Low Power Universal Asynchronous Receiver/Transmitter</description><value>13</value></interrupt>
-      </peripheral>
-      <peripheral derivedFrom="LPUART0"><name>LPUART2</name><baseAddress>0x4006C000</baseAddress>
-         <interrupt><name>LPUART2</name><description>Low Power Universal Asynchronous Receiver/Transmitter</description><value>14</value></interrupt>
-      </peripheral>
+      <peripheral derivedFrom="LPUART0"><name>LPUART1</name><baseAddress>0x4006B000</baseAddress></peripheral>
+      <peripheral derivedFrom="LPUART0"><name>LPUART2</name><baseAddress>0x4006C000</baseAddress></peripheral>
       <xi:include href="peripherals/MCM_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/MMDVSQ_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/MTB_MKE15Z7.svd.xml"/>

@@ -9,356 +9,427 @@ Devices using this vector table:
       <name>DMA0</name>
       <description>Direct memory access controller</description>
       <value>0</value>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA1</name>
       <description>Direct memory access controller</description>
       <value>1</value>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA2</name>
       <description>Direct memory access controller</description>
       <value>2</value>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA3</name>
       <description>Direct memory access controller</description>
       <value>3</value>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA4</name>
       <description>Direct memory access controller</description>
       <value>4</value>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA5</name>
       <description>Direct memory access controller</description>
       <value>5</value>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA6</name>
       <description>Direct memory access controller</description>
       <value>6</value>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA7</name>
       <description>Direct memory access controller</description>
       <value>7</value>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA8</name>
       <description>Direct memory access controller</description>
       <value>8</value>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA9</name>
       <description>Direct memory access controller</description>
       <value>9</value>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA10</name>
       <description>Direct memory access controller</description>
       <value>10</value>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA11</name>
       <description>Direct memory access controller</description>
       <value>11</value>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA12</name>
       <description>Direct memory access controller</description>
       <value>12</value>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA13</name>
       <description>Direct memory access controller</description>
       <value>13</value>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA14</name>
       <description>Direct memory access controller</description>
       <value>14</value>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA15</name>
       <description>Direct memory access controller</description>
       <value>15</value>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA_Error</name>
       <description>DMA error interrupt all channels</description>
       <value>16</value>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>FTF_Command</name>
       <description>Flash Memory Interface</description>
       <value>18</value>
+      <peripheral>FTFL</peripheral>
    </interrupt>
    <interrupt>
       <name>FTF_ReadCollision</name>
       <description>Flash Memory Interface</description>
       <value>19</value>
+      <peripheral>FTFL</peripheral>
    </interrupt>
    <interrupt>
       <name>PMC</name>
       <description>Power Management Controller</description>
       <value>20</value>
+      <peripheral>PMC</peripheral>
    </interrupt>
    <interrupt>
       <name>LLWU</name>
       <description>Low Leakage Wakeup</description>
       <value>21</value>
+      <peripheral>LLWU</peripheral>
    </interrupt>
    <interrupt>
       <name>WDOG</name>
       <description>External Watchdog Monitor</description>
       <value>22</value>
+      <peripheral>WDOG</peripheral>
    </interrupt>
    <interrupt>
       <name>I2C0</name>
       <description>Inter-Integrated Circuit</description>
       <value>24</value>
+      <peripheral>I2C0</peripheral>
    </interrupt>
    <interrupt>
       <name>I2C1</name>
       <description>Inter-Integrated Circuit</description>
       <value>25</value>
+      <peripheral>I2C1</peripheral>
    </interrupt>
    <interrupt>
       <name>SPI0</name>
       <description>Serial Peripheral Interface</description>
       <value>26</value>
+      <peripheral>SPI0</peripheral>
    </interrupt>
    <interrupt>
       <name>SPI1</name>
       <description>Serial Peripheral Interface</description>
       <value>27</value>
+      <peripheral>SPI1</peripheral>
    </interrupt>
    <interrupt>
       <name>CAN0_Message</name>
       <description>Flex Controller Area Network module</description>
       <value>29</value>
+      <peripheral>CAN0</peripheral>
    </interrupt>
    <interrupt>
       <name>CAN0_BusOff</name>
       <description>Flex Controller Area Network module</description>
       <value>30</value>
+      <peripheral>CAN0</peripheral>
    </interrupt>
    <interrupt>
       <name>CAN0_Error</name>
       <description>Flex Controller Area Network module</description>
       <value>31</value>
+      <peripheral>CAN0</peripheral>
    </interrupt>
    <interrupt>
       <name>CAN0_Tx</name>
       <description>Flex Controller Area Network module</description>
       <value>32</value>
+      <peripheral>CAN0</peripheral>
    </interrupt>
    <interrupt>
       <name>CAN0_Rx</name>
       <description>Flex Controller Area Network module</description>
       <value>33</value>
+      <peripheral>CAN0</peripheral>
    </interrupt>
    <interrupt>
       <name>CAN0_WakeUp</name>
       <description>Flex Controller Area Network module</description>
       <value>34</value>
+      <peripheral>CAN0</peripheral>
    </interrupt>
    <interrupt>
       <name>I2S0_Tx</name>
       <description>Synchronous Serial Interface</description>
       <value>35</value>
+      <peripheral>I2S0</peripheral>
    </interrupt>
    <interrupt>
       <name>I2S0_Rx</name>
       <description>Synchronous Serial Interface</description>
       <value>36</value>
+      <peripheral>I2S0</peripheral>
    </interrupt>
    <interrupt>
       <name>UART0_Lon</name>
       <description>Serial Communication Interface</description>
       <value>44</value>
+      <peripheral>UART0</peripheral>
    </interrupt>
    <interrupt>
       <name>UART0_RxTx</name>
       <description>Serial Communication Interface</description>
       <value>45</value>
+      <peripheral>UART0</peripheral>
    </interrupt>
    <interrupt>
       <name>UART0_Error</name>
       <description>Serial Communication Interface</description>
       <value>46</value>
+      <peripheral>UART0</peripheral>
    </interrupt>
    <interrupt>
       <name>UART1_RxTx</name>
       <description>Serial Communication Interface</description>
       <value>47</value>
+      <peripheral>UART1</peripheral>
    </interrupt>
    <interrupt>
       <name>UART1_Error</name>
       <description>Serial Communication Interface</description>
       <value>48</value>
+      <peripheral>UART1</peripheral>
    </interrupt>
    <interrupt>
       <name>UART2_RxTx</name>
       <description>Serial Communication Interface</description>
       <value>49</value>
+      <peripheral>UART2</peripheral>
    </interrupt>
    <interrupt>
       <name>UART2_Error</name>
       <description>Serial Communication Interface</description>
       <value>50</value>
+      <peripheral>UART2</peripheral>
    </interrupt>
    <interrupt>
       <name>UART3_RxTx</name>
       <description>Serial Communication Interface</description>
       <value>51</value>
+      <peripheral>UART3</peripheral>
    </interrupt>
    <interrupt>
       <name>UART3_Error</name>
       <description>Serial Communication Interface</description>
       <value>52</value>
+      <peripheral>UART3</peripheral>
    </interrupt>
    <interrupt>
       <name>UART4_RxTx</name>
       <description>Serial Communication Interface</description>
       <value>53</value>
+      <peripheral>UART4</peripheral>
    </interrupt>
    <interrupt>
       <name>UART4_Error</name>
       <description>Serial Communication Interface</description>
       <value>54</value>
+      <peripheral>UART4</peripheral>
    </interrupt>
    <interrupt>
       <name>ADC0</name>
       <description>Analogue to Digital Converter</description>
       <value>57</value>
+      <peripheral>ADC0</peripheral>
    </interrupt>
    <interrupt>
       <name>ADC1</name>
       <description>Analogue to Digital Converter</description>
       <value>58</value>
+      <peripheral>ADC1</peripheral>
    </interrupt>
    <interrupt>
       <name>CMP0</name>
       <description>High-Speed Comparator</description>
       <value>59</value>
+      <peripheral>CMP0</peripheral>
    </interrupt>
    <interrupt>
       <name>CMP1</name>
       <description>High-Speed Comparator</description>
       <value>60</value>
+      <peripheral>CMP1</peripheral>
    </interrupt>
    <interrupt>
       <name>CMP2</name>
       <description>High-Speed Comparator</description>
       <value>61</value>
+      <peripheral>CMP2</peripheral>
    </interrupt>
    <interrupt>
       <name>FTM0</name>
       <description>FlexTimer Module</description>
       <value>62</value>
+      <peripheral>FTM0</peripheral>
    </interrupt>
    <interrupt>
       <name>FTM1</name>
       <description>FlexTimer Module</description>
       <value>63</value>
+      <peripheral>FTM1</peripheral>
    </interrupt>
    <interrupt>
       <name>FTM2</name>
       <description>FlexTimer Module</description>
       <value>64</value>
+      <peripheral>FTM2</peripheral>
    </interrupt>
    <interrupt>
       <name>CMT</name>
       <description>Carrier Modulator Transmitter</description>
       <value>65</value>
+      <peripheral>CMT</peripheral>
    </interrupt>
    <interrupt>
       <name>RTC_Alarm</name>
       <description>Real Time Clock</description>
       <value>66</value>
+      <peripheral>RTC</peripheral>
    </interrupt>
    <interrupt>
       <name>RTC_Seconds</name>
       <description>Real Time Clock</description>
       <value>67</value>
+      <peripheral>RTC</peripheral>
    </interrupt>
    <interrupt>
       <name>PIT0</name>
       <description>Periodic Interrupt Timer</description>
       <value>68</value>
+      <peripheral>PIT</peripheral>
    </interrupt>
    <interrupt>
       <name>PIT1</name>
       <description>Periodic Interrupt Timer</description>
       <value>69</value>
+      <peripheral>PIT</peripheral>
    </interrupt>
    <interrupt>
       <name>PIT2</name>
       <description>Periodic Interrupt Timer</description>
       <value>70</value>
+      <peripheral>PIT</peripheral>
    </interrupt>
    <interrupt>
       <name>PIT3</name>
       <description>Periodic Interrupt Timer</description>
       <value>71</value>
+      <peripheral>PIT</peripheral>
    </interrupt>
    <interrupt>
       <name>PDB0</name>
       <description>Programmable Delay Block</description>
       <value>72</value>
+      <peripheral>PDB0</peripheral>
    </interrupt>
    <interrupt>
       <name>DAC0</name>
       <description>Digital to Analogue Converter</description>
       <value>81</value>
+      <peripheral>DAC0</peripheral>
    </interrupt>
    <interrupt>
       <name>TSI0</name>
       <description>Touch Sense Interface</description>
       <value>83</value>
+      <peripheral>TSI0</peripheral>
    </interrupt>
    <interrupt>
       <name>MCG</name>
       <description>Multipurpose Clock Generator</description>
       <value>84</value>
+      <peripheral>MCG</peripheral>
    </interrupt>
    <interrupt>
       <name>LPTMR0</name>
       <description>Low Power Timer</description>
       <value>85</value>
+      <peripheral>LPTMR0</peripheral>
    </interrupt>
    <interrupt>
       <name>LCD</name>
       <description>Segment Liquid Crystal Display</description>
       <value>86</value>
+      <peripheral>LCD</peripheral>
    </interrupt>
    <interrupt>
       <name>PORTA</name>
       <description>General Purpose Input/Output</description>
       <value>87</value>
+      <peripheral>PORTA</peripheral>
    </interrupt>
    <interrupt>
       <name>PORTB</name>
       <description>General Purpose Input/Output</description>
       <value>88</value>
+      <peripheral>PORTB</peripheral>
    </interrupt>
    <interrupt>
       <name>PORTC</name>
       <description>General Purpose Input/Output</description>
       <value>89</value>
+      <peripheral>PORTC</peripheral>
    </interrupt>
    <interrupt>
       <name>PORTD</name>
       <description>General Purpose Input/Output</description>
       <value>90</value>
+      <peripheral>PORTD</peripheral>
    </interrupt>
    <interrupt>
       <name>PORTE</name>
       <description>General Purpose Input/Output</description>
       <value>91</value>
+      <peripheral>PORTE</peripheral>
    </interrupt>
    <interrupt>
       <name>SWI</name>

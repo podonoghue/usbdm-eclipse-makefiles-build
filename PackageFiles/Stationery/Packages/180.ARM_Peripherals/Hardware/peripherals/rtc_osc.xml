@@ -236,6 +236,7 @@
    </category>   
    
    <template><![CDATA[
+      \t#if RTC_WAR_TSRW
       \t//! RTC Write Access Register\n
       \tstatic constexpr uint32_t war =
       \t   RTC_WAR_IERW($(rtc_war_ierw)) | // Interrupt Enable Register Write
@@ -245,7 +246,8 @@
       \t   RTC_WAR_TCRW($(rtc_war_tcrw)) | // Time Compensation Register Write
       \t   RTC_WAR_TARW($(rtc_war_tarw)) | // Time Alarm Register Write
       \t   RTC_WAR_TPRW($(rtc_war_tprw)) | // Time Prescaler Register Write
-      \t   RTC_WAR_TSRW($(rtc_war_tsrw));  // Time Seconds Register Write\n\n
+      \t   RTC_WAR_TSRW($(rtc_war_tsrw));  // Time Seconds Register Write
+      \t#endif\n\n
     ]]></template>     
 
    <category name="Read Access" description="Controls read access to RTC Registers">
@@ -307,6 +309,7 @@
    </category>
    
    <template><![CDATA[
+      \t#if RTC_RAR_TSRR
       \t//! RTC Read Access Register\n
       \tstatic constexpr uint32_t rar =
       \t   RTC_RAR_IERR($(rtc_rar_ierr)) | // Interrupt Enable Register Read  
@@ -316,7 +319,8 @@
       \t   RTC_RAR_TCRR($(rtc_rar_tcrr)) | // Time Compensation Register Read 
       \t   RTC_RAR_TARR($(rtc_rar_tarr)) | // Time Alarm Register Read        
       \t   RTC_RAR_TPRR($(rtc_rar_tprr)) | // Time Prescaler Register Read    
-      \t   RTC_RAR_TSRR($(rtc_rar_tsrr));  // Time Seconds Register Read\n\n  
+      \t   RTC_RAR_TSRR($(rtc_rar_tsrr));  // Time Seconds Register Read
+      \t#endif\n\n
     ]]></template>     
 
    <irqOption name="irqAlarmHandler"  

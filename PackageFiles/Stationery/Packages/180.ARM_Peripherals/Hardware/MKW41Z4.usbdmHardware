@@ -47,6 +47,10 @@
       <peripheral baseName="DMA"      instance="0"        version="dma0_4ch_ears_active">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDma" />
          <clock reg="SCGC7"         mask="SIM_SCGC7_DMA_MASK" />
+         <irq num="DMA0_IRQn" />
+         <irq num="DMA1_IRQn" />
+         <irq num="DMA2_IRQn" />
+         <irq num="DMA3_IRQn" />
       </peripheral>
       <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_4ch_trig_mkw41z4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDmaMux" />
@@ -58,6 +62,7 @@
       <peripheral baseName="FTFA"     instance=""         version="ftfa_xacch">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlash" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_FTF_MASK" />
+         <irq num="FTFA_IRQn" />
          <param key="pflash_sector_size" value="2048" />
          <param key="pflash_phrase_size" value="4" />
          <param key="peripheral_file" value="ftfa" />
@@ -99,6 +104,7 @@
       <peripheral baseName="LPUART"   instance="0"        version="lpuart0_modir_0x40054000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLpuart" />
          <clock reg="SCGC5"         mask="SIM_SCGC5_LPUART0_MASK" />
+         <irq num="LPUART0_IRQn" />
       </peripheral>
       <peripheral baseName="MCG"      instance=""         version="mcg_nopll_mkw41z4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcg" />
@@ -114,7 +120,7 @@
       </peripheral>
       <peripheral baseName="PMC"      instance=""         version="pmc_mkw41z4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPmc" />
-         <irq num="PMC_IRQn" />
+         <irq num="PMC_DCDC_IRQn" />
       </peripheral>
       <peripheral baseName="POWER"    instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPower" />

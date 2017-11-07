@@ -111,6 +111,7 @@ Devices using this peripheral:
    <projectActionList id = "lpuart_files">
       <copy source="Project_Headers/formatted_io.h"  target="Project_Headers/formatted_io.h"  overwrite="true"  derived="true" />
       <copy source="Project_Headers/lpuart.h"        target="Project_Headers/lpuart.h"        overwrite="true"  derived="true" macroReplace="true" />
+      <copy source="Project_Headers/queue.h"         target="Project_Headers/queue.h"         overwrite="true"  derived="true" />
    </projectActionList>
          
    <template><![CDATA[

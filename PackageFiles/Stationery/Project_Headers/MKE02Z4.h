@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2017/10
+ * @date     2017/11
  *
  *******************************************************************************************************/
 
@@ -69,33 +69,33 @@ typedef enum {
 * @{
 */
 /* -------------------------  Exception Handlers  ------------------------ */
-extern void NMI_Handler(void);                 /**< Non maskable Interrupt, cannot be stopped or preempted                           */
-extern void HardFault_Handler(void);           /**< Hard Fault, all classes of Fault                                                 */
-extern void SVC_Handler(void);                 /**< System Service Call via SVC instruction                                          */
-extern void PendSV_Handler(void);              /**< Pendable request for system service                                              */
-extern void SysTick_Handler(void);             /**< System Tick Timer                                                                */
-extern void FTMRH_IRQHandler(void);            /**< Flash Memory                                                                     */
-extern void PMC_IRQHandler(void);              /**< Power Management Controller                                                      */
-extern void IRQ_IRQHandler(void);              /**< External Interrupt                                                               */
-extern void I2C0_IRQHandler(void);             /**< Inter-Integrated Circuit                                                         */
-extern void SPI0_IRQHandler(void);             /**< Serial Peripheral Interface                                                      */
-extern void SPI1_IRQHandler(void);             /**< Serial Peripheral Interface                                                      */
-extern void UART0_IRQHandler(void);            /**< Serial Communication Interface                                                   */
-extern void UART1_IRQHandler(void);            /**< Serial Communication Interface                                                   */
-extern void UART2_IRQHandler(void);            /**< Serial Communication Interface                                                   */
-extern void ADC0_IRQHandler(void);             /**< Analogue to Digital Converter                                                    */
-extern void ACMP0_IRQHandler(void);            /**< Analogue comparator                                                              */
-extern void FTM0_IRQHandler(void);             /**< FlexTimer Module                                                                 */
-extern void FTM1_IRQHandler(void);             /**< FlexTimer Module                                                                 */
-extern void FTM2_IRQHandler(void);             /**< FlexTimer Module                                                                 */
-extern void RTC_Alarm_IRQHandler(void);        /**< Real Time Clock                                                                  */
-extern void ACMP1_IRQHandler(void);            /**< Analogue comparator                                                              */
-extern void PIT0_IRQHandler(void);             /**< Periodic Interrupt Timer                                                         */
-extern void PIT1_IRQHandler(void);             /**< Periodic Interrupt Timer                                                         */
-extern void KBI0_IRQHandler(void);             /**< Keyboard Interrupt                                                               */
-extern void KBI1_IRQHandler(void);             /**< Keyboard Interrupt                                                               */
-extern void ICS_IRQHandler(void);              /**< Clock Management                                                                 */
-extern void WDOG_IRQHandler(void);             /**< Watchdog Timer                                                                   */
+extern void NMI_Handler(void);                       /**< Non maskable Interrupt, cannot be stopped or preempted                           */
+extern void HardFault_Handler(void);                 /**< Hard Fault, all classes of Fault                                                 */
+extern void SVC_Handler(void);                       /**< System Service Call via SVC instruction                                          */
+extern void PendSV_Handler(void);                    /**< Pendable request for system service                                              */
+extern void SysTick_Handler(void);                   /**< System Tick Timer                                                                */
+extern void FTMRH_IRQHandler(void);                  /**< Flash Memory                                                                     */
+extern void PMC_IRQHandler(void);                    /**< Power Management Controller                                                      */
+extern void IRQ_IRQHandler(void);                    /**< External Interrupt                                                               */
+extern void I2C0_IRQHandler(void);                   /**< Inter-Integrated Circuit                                                         */
+extern void SPI0_IRQHandler(void);                   /**< Serial Peripheral Interface                                                      */
+extern void SPI1_IRQHandler(void);                   /**< Serial Peripheral Interface                                                      */
+extern void UART0_IRQHandler(void);                  /**< Serial Communication Interface                                                   */
+extern void UART1_IRQHandler(void);                  /**< Serial Communication Interface                                                   */
+extern void UART2_IRQHandler(void);                  /**< Serial Communication Interface                                                   */
+extern void ADC0_IRQHandler(void);                   /**< Analogue to Digital Converter                                                    */
+extern void ACMP0_IRQHandler(void);                  /**< Analogue comparator                                                              */
+extern void FTM0_IRQHandler(void);                   /**< FlexTimer Module                                                                 */
+extern void FTM1_IRQHandler(void);                   /**< FlexTimer Module                                                                 */
+extern void FTM2_IRQHandler(void);                   /**< FlexTimer Module                                                                 */
+extern void RTC_Alarm_IRQHandler(void);              /**< Real Time Clock                                                                  */
+extern void ACMP1_IRQHandler(void);                  /**< Analogue comparator                                                              */
+extern void PIT0_IRQHandler(void);                   /**< Periodic Interrupt Timer                                                         */
+extern void PIT1_IRQHandler(void);                   /**< Periodic Interrupt Timer                                                         */
+extern void KBI0_IRQHandler(void);                   /**< Keyboard Interrupt                                                               */
+extern void KBI1_IRQHandler(void);                   /**< Keyboard Interrupt                                                               */
+extern void ICS_IRQHandler(void);                    /**< Clock Management                                                                 */
+extern void WDOG_IRQHandler(void);                   /**< Watchdog Timer                                                                   */
 
 /**
  * @} */ /* End group Interrupt_handler_prototypes_GROUP 
@@ -3002,7 +3002,7 @@ typedef struct {                                /*       ROM Structure          
 */
 
 /* ================================================================================ */
-/* ================           RTC (file:RTC_MKE)                   ================ */
+/* ================           RTC (file:RTCNTR_MKE)                ================ */
 /* ================================================================================ */
 
 /**

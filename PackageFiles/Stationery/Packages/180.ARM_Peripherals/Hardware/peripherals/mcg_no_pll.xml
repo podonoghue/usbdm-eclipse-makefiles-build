@@ -477,7 +477,7 @@
       \t
       \t   switch((mcg->C7&MCG_C7_OSCSEL_MASK)) {
       \t      default               : return 0;
-      \t      case MCG_C7_OSCSEL(0) : return Osc0Info::getInternalClock();
+      \t      case MCG_C7_OSCSEL(0) : return Osc0Info::getOscClock();
       \t      case MCG_C7_OSCSEL(1) : return RtcInfo::getInternalClock();
       \t      case MCG_C7_OSCSEL(2) : return McgInfo::irc48m_clock;
       \t   }

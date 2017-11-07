@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2017/10
+ * @date     2017/11
  *
  *******************************************************************************************************/
 
@@ -40,24 +40,24 @@ typedef enum {
   PendSV_IRQn                   =  -2,   /**<  14 Pendable request for system service                                              */
   SysTick_IRQn                  =  -1,   /**<  15 System Tick Timer                                                                */
 /* ----------------------   MK60F12 VectorTable                      ---------------------- */
-  DMA0_DMA16_IRQn               =   0,   /**<  16 DMA channel 0/16transfer complete interrupt                                      */
-  DMA1_DMA17_IRQn               =   1,   /**<  17 DMA channel 1/17 transfer complete interrupt                                     */
-  DMA2_DMA18_IRQn               =   2,   /**<  18 DMA channel 2/18 transfer complete interrupt                                     */
-  DMA3_DMA19_IRQn               =   3,   /**<  19 DMA channel 3/19 transfer complete interrupt                                     */
-  DMA4_DMA20_IRQn               =   4,   /**<  20 DMA channel 4/20 transfer complete interrupt                                     */
-  DMA5_DMA21_IRQn               =   5,   /**<  21 DMA channel 5/21 transfer complete interrupt                                     */
-  DMA6_DMA22_IRQn               =   6,   /**<  22 DMA channel 6/22 transfer complete interrupt                                     */
-  DMA7_DMA23_IRQn               =   7,   /**<  23 DMA channel 7/23 transfer complete interrupt                                     */
-  DMA8_DMA24_IRQn               =   8,   /**<  24 DMA channel 8/24 transfer complete interrupt                                     */
-  DMA9_DMA25_IRQn               =   9,   /**<  25 DMA channel 9/25 transfer complete interrupt                                     */
-  DMA10_DMA26_IRQn              =  10,   /**<  26 DMA channel 10/26 transfer complete interrupt                                    */
-  DMA11_DMA27_IRQn              =  11,   /**<  27 DMA channel 11/27 transfer complete interrupt                                    */
-  DMA12_DMA28_IRQn              =  12,   /**<  28 DMA channel 12/28 transfer complete interrupt                                    */
-  DMA13_DMA29_IRQn              =  13,   /**<  29 DMA channel 13/29 transfer complete interrupt                                    */
-  DMA14_DMA30_IRQn              =  14,   /**<  30 DMA channel 14/30 transfer complete interrupt                                    */
-  DMA15_DMA31_IRQn              =  15,   /**<  31 DMA channel 15/31 transfer complete interrupt                                    */
-  DMA_Error_IRQn                =  16,   /**<  32 DMA error interrupt all channels                                                 */
-  MCM_IRQn                      =  17,   /**<  33 Normal Interrupt                                                                 */
+  DMA0_DMA16_IRQn               =   0,   /**<  16 Direct memory access controller                                                  */
+  DMA1_DMA17_IRQn               =   1,   /**<  17 Direct memory access controller                                                  */
+  DMA2_DMA18_IRQn               =   2,   /**<  18 Direct memory access controller                                                  */
+  DMA3_DMA19_IRQn               =   3,   /**<  19 Direct memory access controller                                                  */
+  DMA4_DMA20_IRQn               =   4,   /**<  20 Direct memory access controller                                                  */
+  DMA5_DMA21_IRQn               =   5,   /**<  21 Direct memory access controller                                                  */
+  DMA6_DMA22_IRQn               =   6,   /**<  22 Direct memory access controller                                                  */
+  DMA7_DMA23_IRQn               =   7,   /**<  23 Direct memory access controller                                                  */
+  DMA8_DMA24_IRQn               =   8,   /**<  24 Direct memory access controller                                                  */
+  DMA9_DMA25_IRQn               =   9,   /**<  25 Direct memory access controller                                                  */
+  DMA10_DMA26_IRQn              =  10,   /**<  26 Direct memory access controller                                                  */
+  DMA11_DMA27_IRQn              =  11,   /**<  27 Direct memory access controller                                                  */
+  DMA12_DMA28_IRQn              =  12,   /**<  28 Direct memory access controller                                                  */
+  DMA13_DMA29_IRQn              =  13,   /**<  29 Direct memory access controller                                                  */
+  DMA14_DMA30_IRQn              =  14,   /**<  30 Direct memory access controller                                                  */
+  DMA15_DMA31_IRQn              =  15,   /**<  31 Direct memory access controller                                                  */
+  DMA_Error_IRQn                =  16,   /**<  32 Direct memory access controller                                                  */
+  MCM_IRQn                      =  17,   /**<  33 Miscellaneous Control Module                                                     */
   FTF_Command_IRQn              =  18,   /**<  34 Flash Memory Interface                                                           */
   FTF_ReadCollision_IRQn        =  19,   /**<  35 Flash Memory Interface                                                           */
   PMC_IRQn                      =  20,   /**<  36 Power Management Controller                                                      */
@@ -75,8 +75,8 @@ typedef enum {
   CAN0_Tx_IRQn                  =  32,   /**<  48 Flex Controller Area Network module                                              */
   CAN0_Rx_IRQn                  =  33,   /**<  49 Flex Controller Area Network module                                              */
   CAN0_WakeUp_IRQn              =  34,   /**<  50 Flex Controller Area Network module                                              */
-  I2S0_Tx_IRQn                  =  35,   /**<  51 I2S0 Transmit                                                                    */
-  I2S0_Rx_IRQn                  =  36,   /**<  52 I2S0 Receive                                                                     */
+  I2S0_Tx_IRQn                  =  35,   /**<  51 Synchronous Serial Interface                                                     */
+  I2S0_Rx_IRQn                  =  36,   /**<  52 Synchronous Serial Interface                                                     */
   CAN1_Message_IRQn             =  37,   /**<  53 Flex Controller Area Network module                                              */
   CAN1_BusOff_IRQn              =  38,   /**<  54 Flex Controller Area Network module                                              */
   CAN1_Error_IRQn               =  39,   /**<  55 Flex Controller Area Network module                                              */
@@ -87,7 +87,7 @@ typedef enum {
   UART0_RxTx_IRQn               =  45,   /**<  61 Serial Communication Interface                                                   */
   UART0_Error_IRQn              =  46,   /**<  62 Serial Communication Interface                                                   */
   UART1_RxTx_IRQn               =  47,   /**<  63 Serial Communication Interface                                                   */
-  UART1_Error_IRQn              =  48,   /**<  64 Serial Peripheral Interface                                                      */
+  UART1_Error_IRQn              =  48,   /**<  64 Serial Communication Interface                                                   */
   UART2_RxTx_IRQn               =  49,   /**<  65 Serial Communication Interface                                                   */
   UART2_Error_IRQn              =  50,   /**<  66 Serial Communication Interface                                                   */
   UART3_RxTx_IRQn               =  51,   /**<  67 Serial Communication Interface                                                   */
@@ -137,8 +137,8 @@ typedef enum {
   FTM3_IRQn                     = 101,   /**< 117 FlexTimer Module                                                                 */
   ADC2_IRQn                     = 102,   /**< 118 Analogue to Digital Converter                                                    */
   ADC3_IRQn                     = 103,   /**< 119 Analogue to Digital Converter                                                    */
-  I2S1_IRQn                     = 104,   /**< 120 I2S1 interrupt                                                                   */
-  I2S2_IRQn                     = 105,   /**< 121 I2S2 interrupt                                                                   */
+  I2S1_Tx_IRQn                  = 104,   /**< 120 Synchronous Serial Interface                                                     */
+  I2S1_Tx_IRQn                  = 105,   /**< 121 Synchronous Serial Interface                                                     */
 } IRQn_Type;
 
 /**
@@ -150,114 +150,114 @@ typedef enum {
 * @{
 */
 /* -------------------------  Exception Handlers  ------------------------ */
-extern void NMI_Handler(void);                 /**< Non maskable Interrupt, cannot be stopped or preempted                           */
-extern void HardFault_Handler(void);           /**< Hard Fault, all classes of Fault                                                 */
-extern void MemManage_Handler(void);           /**< Memory Management, MPU mismatch, including Access Violation and No Match         */
-extern void BusFault_Handler(void);            /**< Bus Fault, Pre-Fetch-, Memory Access Fault, other address/memory related Fault   */
-extern void UsageFault_Handler(void);          /**< Usage Fault, i.e. Undef Instruction, Illegal State Transition                    */
-extern void SVC_Handler(void);                 /**< System Service Call via SVC instruction                                          */
-extern void DebugMon_Handler(void);            /**< Debug Monitor                                                                    */
-extern void PendSV_Handler(void);              /**< Pendable request for system service                                              */
-extern void SysTick_Handler(void);             /**< System Tick Timer                                                                */
-extern void DMA0_DMA16_IRQHandler(void);       /**< DMA channel 0/16transfer complete interrupt                                      */
-extern void DMA1_DMA17_IRQHandler(void);       /**< DMA channel 1/17 transfer complete interrupt                                     */
-extern void DMA2_DMA18_IRQHandler(void);       /**< DMA channel 2/18 transfer complete interrupt                                     */
-extern void DMA3_DMA19_IRQHandler(void);       /**< DMA channel 3/19 transfer complete interrupt                                     */
-extern void DMA4_DMA20_IRQHandler(void);       /**< DMA channel 4/20 transfer complete interrupt                                     */
-extern void DMA5_DMA21_IRQHandler(void);       /**< DMA channel 5/21 transfer complete interrupt                                     */
-extern void DMA6_DMA22_IRQHandler(void);       /**< DMA channel 6/22 transfer complete interrupt                                     */
-extern void DMA7_DMA23_IRQHandler(void);       /**< DMA channel 7/23 transfer complete interrupt                                     */
-extern void DMA8_DMA24_IRQHandler(void);       /**< DMA channel 8/24 transfer complete interrupt                                     */
-extern void DMA9_DMA25_IRQHandler(void);       /**< DMA channel 9/25 transfer complete interrupt                                     */
-extern void DMA10_DMA26_IRQHandler(void);      /**< DMA channel 10/26 transfer complete interrupt                                    */
-extern void DMA11_DMA27_IRQHandler(void);      /**< DMA channel 11/27 transfer complete interrupt                                    */
-extern void DMA12_DMA28_IRQHandler(void);      /**< DMA channel 12/28 transfer complete interrupt                                    */
-extern void DMA13_DMA29_IRQHandler(void);      /**< DMA channel 13/29 transfer complete interrupt                                    */
-extern void DMA14_DMA30_IRQHandler(void);      /**< DMA channel 14/30 transfer complete interrupt                                    */
-extern void DMA15_DMA31_IRQHandler(void);      /**< DMA channel 15/31 transfer complete interrupt                                    */
-extern void DMA_Error_IRQHandler(void);        /**< DMA error interrupt all channels                                                 */
-extern void MCM_IRQHandler(void);              /**< Normal Interrupt                                                                 */
-extern void FTF_Command_IRQHandler(void);      /**< Flash Memory Interface                                                           */
-extern void FTF_ReadCollision_IRQHandler(void);   /**< Flash Memory Interface                                                           */
-extern void PMC_IRQHandler(void);              /**< Power Management Controller                                                      */
-extern void LLWU_IRQHandler(void);             /**< Low Leakage Wakeup                                                               */
-extern void WDOG_IRQHandler(void);             /**< External Watchdog Monitor                                                        */
-extern void RNG_IRQHandler(void);              /**< Random Number Generator                                                          */
-extern void I2C0_IRQHandler(void);             /**< Inter-Integrated Circuit                                                         */
-extern void I2C1_IRQHandler(void);             /**< Inter-Integrated Circuit                                                         */
-extern void SPI0_IRQHandler(void);             /**< Serial Peripheral Interface                                                      */
-extern void SPI1_IRQHandler(void);             /**< Serial Peripheral Interface                                                      */
-extern void SPI2_IRQHandler(void);             /**< Serial Peripheral Interface                                                      */
-extern void CAN0_Message_IRQHandler(void);     /**< Flex Controller Area Network module                                              */
-extern void CAN0_BusOff_IRQHandler(void);      /**< Flex Controller Area Network module                                              */
-extern void CAN0_Error_IRQHandler(void);       /**< Flex Controller Area Network module                                              */
-extern void CAN0_Tx_IRQHandler(void);          /**< Flex Controller Area Network module                                              */
-extern void CAN0_Rx_IRQHandler(void);          /**< Flex Controller Area Network module                                              */
-extern void CAN0_WakeUp_IRQHandler(void);      /**< Flex Controller Area Network module                                              */
-extern void I2S0_Tx_IRQHandler(void);          /**< I2S0 Transmit                                                                    */
-extern void I2S0_Rx_IRQHandler(void);          /**< I2S0 Receive                                                                     */
-extern void CAN1_Message_IRQHandler(void);     /**< Flex Controller Area Network module                                              */
-extern void CAN1_BusOff_IRQHandler(void);      /**< Flex Controller Area Network module                                              */
-extern void CAN1_Error_IRQHandler(void);       /**< Flex Controller Area Network module                                              */
-extern void CAN1_Tx_IRQHandler(void);          /**< Flex Controller Area Network module                                              */
-extern void CAN1_Rx_IRQHandler(void);          /**< Flex Controller Area Network module                                              */
-extern void CAN1_WakeUp_IRQHandler(void);      /**< Flex Controller Area Network module                                              */
-extern void UART0_Lon_IRQHandler(void);        /**< Serial Communication Interface                                                   */
-extern void UART0_RxTx_IRQHandler(void);       /**< Serial Communication Interface                                                   */
-extern void UART0_Error_IRQHandler(void);      /**< Serial Communication Interface                                                   */
-extern void UART1_RxTx_IRQHandler(void);       /**< Serial Communication Interface                                                   */
-extern void UART1_Error_IRQHandler(void);      /**< Serial Peripheral Interface                                                      */
-extern void UART2_RxTx_IRQHandler(void);       /**< Serial Communication Interface                                                   */
-extern void UART2_Error_IRQHandler(void);      /**< Serial Communication Interface                                                   */
-extern void UART3_RxTx_IRQHandler(void);       /**< Serial Communication Interface                                                   */
-extern void UART3_Error_IRQHandler(void);      /**< Serial Communication Interface                                                   */
-extern void UART4_RxTx_IRQHandler(void);       /**< Serial Communication Interface                                                   */
-extern void UART4_Error_IRQHandler(void);      /**< Serial Communication Interface                                                   */
-extern void UART5_RxTx_IRQHandler(void);       /**< Serial Communication Interface                                                   */
-extern void UART5_Error_IRQHandler(void);      /**< Serial Communication Interface                                                   */
-extern void ADC0_IRQHandler(void);             /**< Analogue to Digital Converter                                                    */
-extern void ADC1_IRQHandler(void);             /**< Analogue to Digital Converter                                                    */
-extern void CMP0_IRQHandler(void);             /**< High-Speed Comparator                                                            */
-extern void CMP1_IRQHandler(void);             /**< High-Speed Comparator                                                            */
-extern void CMP2_IRQHandler(void);             /**< High-Speed Comparator                                                            */
-extern void FTM0_IRQHandler(void);             /**< FlexTimer Module                                                                 */
-extern void FTM1_IRQHandler(void);             /**< FlexTimer Module                                                                 */
-extern void FTM2_IRQHandler(void);             /**< FlexTimer Module                                                                 */
-extern void CMT_IRQHandler(void);              /**< Carrier Modulator Transmitter                                                    */
-extern void RTC_Alarm_IRQHandler(void);        /**< Real Time Clock                                                                  */
-extern void RTC_Seconds_IRQHandler(void);      /**< Real Time Clock                                                                  */
-extern void PIT0_IRQHandler(void);             /**< Periodic Interrupt Timer                                                         */
-extern void PIT1_IRQHandler(void);             /**< Periodic Interrupt Timer                                                         */
-extern void PIT2_IRQHandler(void);             /**< Periodic Interrupt Timer                                                         */
-extern void PIT3_IRQHandler(void);             /**< Periodic Interrupt Timer                                                         */
-extern void PDB0_IRQHandler(void);             /**< Programmable Delay Block                                                         */
-extern void USB0_IRQHandler(void);             /**< Universal Serial Bus                                                             */
-extern void USBDCD_IRQHandler(void);           /**< USB Device Charger Detection                                                     */
-extern void ENET_1588Timeout_IRQHandler(void);   /**< Ethernet MAC-NET Core                                                            */
-extern void ENET_Transmit_IRQHandler(void);    /**< Ethernet MAC-NET Core                                                            */
-extern void ENET_Receive_IRQHandler(void);     /**< Ethernet MAC-NET Core                                                            */
-extern void ENET_Error_IRQHandler(void);       /**< Ethernet MAC-NET Core                                                            */
-extern void SDHC_IRQHandler(void);             /**< Secured Digital Host Controller                                                  */
-extern void DAC0_IRQHandler(void);             /**< Digital to Analogue Converter                                                    */
-extern void DAC1_IRQHandler(void);             /**< Digital to Analogue Converter                                                    */
-extern void TSI0_IRQHandler(void);             /**< Touch Sense Interface                                                            */
-extern void MCG_IRQHandler(void);              /**< Multipurpose Clock Generator                                                     */
-extern void LPTMR0_IRQHandler(void);           /**< Low Power Timer                                                                  */
-extern void PORTA_IRQHandler(void);            /**< General Purpose Input/Output                                                     */
-extern void PORTB_IRQHandler(void);            /**< General Purpose Input/Output                                                     */
-extern void PORTC_IRQHandler(void);            /**< General Purpose Input/Output                                                     */
-extern void PORTD_IRQHandler(void);            /**< General Purpose Input/Output                                                     */
-extern void PORTE_IRQHandler(void);            /**< General Purpose Input/Output                                                     */
-extern void PORTF_IRQHandler(void);            /**< General Purpose Input/Output                                                     */
-extern void SWI_IRQHandler(void);              /**< Software interrupt                                                               */
-extern void NFC_IRQHandler(void);              /**< NAND flash controller                                                            */
-extern void USBHS_IRQHandler(void);            /**< USB High Speed                                                                   */
-extern void CMP3_IRQHandler(void);             /**< High-Speed Comparator                                                            */
-extern void FTM3_IRQHandler(void);             /**< FlexTimer Module                                                                 */
-extern void ADC2_IRQHandler(void);             /**< Analogue to Digital Converter                                                    */
-extern void ADC3_IRQHandler(void);             /**< Analogue to Digital Converter                                                    */
-extern void I2S1_IRQHandler(void);             /**< I2S1 interrupt                                                                   */
-extern void I2S2_IRQHandler(void);             /**< I2S2 interrupt                                                                   */
+extern void NMI_Handler(void);                       /**< Non maskable Interrupt, cannot be stopped or preempted                           */
+extern void HardFault_Handler(void);                 /**< Hard Fault, all classes of Fault                                                 */
+extern void MemManage_Handler(void);                 /**< Memory Management, MPU mismatch, including Access Violation and No Match         */
+extern void BusFault_Handler(void);                  /**< Bus Fault, Pre-Fetch-, Memory Access Fault, other address/memory related Fault   */
+extern void UsageFault_Handler(void);                /**< Usage Fault, i.e. Undef Instruction, Illegal State Transition                    */
+extern void SVC_Handler(void);                       /**< System Service Call via SVC instruction                                          */
+extern void DebugMon_Handler(void);                  /**< Debug Monitor                                                                    */
+extern void PendSV_Handler(void);                    /**< Pendable request for system service                                              */
+extern void SysTick_Handler(void);                   /**< System Tick Timer                                                                */
+extern void DMA0_DMA16_IRQHandler(void);             /**< Direct memory access controller                                                  */
+extern void DMA1_DMA17_IRQHandler(void);             /**< Direct memory access controller                                                  */
+extern void DMA2_DMA18_IRQHandler(void);             /**< Direct memory access controller                                                  */
+extern void DMA3_DMA19_IRQHandler(void);             /**< Direct memory access controller                                                  */
+extern void DMA4_DMA20_IRQHandler(void);             /**< Direct memory access controller                                                  */
+extern void DMA5_DMA21_IRQHandler(void);             /**< Direct memory access controller                                                  */
+extern void DMA6_DMA22_IRQHandler(void);             /**< Direct memory access controller                                                  */
+extern void DMA7_DMA23_IRQHandler(void);             /**< Direct memory access controller                                                  */
+extern void DMA8_DMA24_IRQHandler(void);             /**< Direct memory access controller                                                  */
+extern void DMA9_DMA25_IRQHandler(void);             /**< Direct memory access controller                                                  */
+extern void DMA10_DMA26_IRQHandler(void);            /**< Direct memory access controller                                                  */
+extern void DMA11_DMA27_IRQHandler(void);            /**< Direct memory access controller                                                  */
+extern void DMA12_DMA28_IRQHandler(void);            /**< Direct memory access controller                                                  */
+extern void DMA13_DMA29_IRQHandler(void);            /**< Direct memory access controller                                                  */
+extern void DMA14_DMA30_IRQHandler(void);            /**< Direct memory access controller                                                  */
+extern void DMA15_DMA31_IRQHandler(void);            /**< Direct memory access controller                                                  */
+extern void DMA_Error_IRQHandler(void);              /**< Direct memory access controller                                                  */
+extern void MCM_IRQHandler(void);                    /**< Miscellaneous Control Module                                                     */
+extern void FTF_Command_IRQHandler(void);            /**< Flash Memory Interface                                                           */
+extern void FTF_ReadCollision_IRQHandler(void);      /**< Flash Memory Interface                                                           */
+extern void PMC_IRQHandler(void);                    /**< Power Management Controller                                                      */
+extern void LLWU_IRQHandler(void);                   /**< Low Leakage Wakeup                                                               */
+extern void WDOG_IRQHandler(void);                   /**< External Watchdog Monitor                                                        */
+extern void RNG_IRQHandler(void);                    /**< Random Number Generator                                                          */
+extern void I2C0_IRQHandler(void);                   /**< Inter-Integrated Circuit                                                         */
+extern void I2C1_IRQHandler(void);                   /**< Inter-Integrated Circuit                                                         */
+extern void SPI0_IRQHandler(void);                   /**< Serial Peripheral Interface                                                      */
+extern void SPI1_IRQHandler(void);                   /**< Serial Peripheral Interface                                                      */
+extern void SPI2_IRQHandler(void);                   /**< Serial Peripheral Interface                                                      */
+extern void CAN0_Message_IRQHandler(void);           /**< Flex Controller Area Network module                                              */
+extern void CAN0_BusOff_IRQHandler(void);            /**< Flex Controller Area Network module                                              */
+extern void CAN0_Error_IRQHandler(void);             /**< Flex Controller Area Network module                                              */
+extern void CAN0_Tx_IRQHandler(void);                /**< Flex Controller Area Network module                                              */
+extern void CAN0_Rx_IRQHandler(void);                /**< Flex Controller Area Network module                                              */
+extern void CAN0_WakeUp_IRQHandler(void);            /**< Flex Controller Area Network module                                              */
+extern void I2S0_Tx_IRQHandler(void);                /**< Synchronous Serial Interface                                                     */
+extern void I2S0_Rx_IRQHandler(void);                /**< Synchronous Serial Interface                                                     */
+extern void CAN1_Message_IRQHandler(void);           /**< Flex Controller Area Network module                                              */
+extern void CAN1_BusOff_IRQHandler(void);            /**< Flex Controller Area Network module                                              */
+extern void CAN1_Error_IRQHandler(void);             /**< Flex Controller Area Network module                                              */
+extern void CAN1_Tx_IRQHandler(void);                /**< Flex Controller Area Network module                                              */
+extern void CAN1_Rx_IRQHandler(void);                /**< Flex Controller Area Network module                                              */
+extern void CAN1_WakeUp_IRQHandler(void);            /**< Flex Controller Area Network module                                              */
+extern void UART0_Lon_IRQHandler(void);              /**< Serial Communication Interface                                                   */
+extern void UART0_RxTx_IRQHandler(void);             /**< Serial Communication Interface                                                   */
+extern void UART0_Error_IRQHandler(void);            /**< Serial Communication Interface                                                   */
+extern void UART1_RxTx_IRQHandler(void);             /**< Serial Communication Interface                                                   */
+extern void UART1_Error_IRQHandler(void);            /**< Serial Communication Interface                                                   */
+extern void UART2_RxTx_IRQHandler(void);             /**< Serial Communication Interface                                                   */
+extern void UART2_Error_IRQHandler(void);            /**< Serial Communication Interface                                                   */
+extern void UART3_RxTx_IRQHandler(void);             /**< Serial Communication Interface                                                   */
+extern void UART3_Error_IRQHandler(void);            /**< Serial Communication Interface                                                   */
+extern void UART4_RxTx_IRQHandler(void);             /**< Serial Communication Interface                                                   */
+extern void UART4_Error_IRQHandler(void);            /**< Serial Communication Interface                                                   */
+extern void UART5_RxTx_IRQHandler(void);             /**< Serial Communication Interface                                                   */
+extern void UART5_Error_IRQHandler(void);            /**< Serial Communication Interface                                                   */
+extern void ADC0_IRQHandler(void);                   /**< Analogue to Digital Converter                                                    */
+extern void ADC1_IRQHandler(void);                   /**< Analogue to Digital Converter                                                    */
+extern void CMP0_IRQHandler(void);                   /**< High-Speed Comparator                                                            */
+extern void CMP1_IRQHandler(void);                   /**< High-Speed Comparator                                                            */
+extern void CMP2_IRQHandler(void);                   /**< High-Speed Comparator                                                            */
+extern void FTM0_IRQHandler(void);                   /**< FlexTimer Module                                                                 */
+extern void FTM1_IRQHandler(void);                   /**< FlexTimer Module                                                                 */
+extern void FTM2_IRQHandler(void);                   /**< FlexTimer Module                                                                 */
+extern void CMT_IRQHandler(void);                    /**< Carrier Modulator Transmitter                                                    */
+extern void RTC_Alarm_IRQHandler(void);              /**< Real Time Clock                                                                  */
+extern void RTC_Seconds_IRQHandler(void);            /**< Real Time Clock                                                                  */
+extern void PIT0_IRQHandler(void);                   /**< Periodic Interrupt Timer                                                         */
+extern void PIT1_IRQHandler(void);                   /**< Periodic Interrupt Timer                                                         */
+extern void PIT2_IRQHandler(void);                   /**< Periodic Interrupt Timer                                                         */
+extern void PIT3_IRQHandler(void);                   /**< Periodic Interrupt Timer                                                         */
+extern void PDB0_IRQHandler(void);                   /**< Programmable Delay Block                                                         */
+extern void USB0_IRQHandler(void);                   /**< Universal Serial Bus                                                             */
+extern void USBDCD_IRQHandler(void);                 /**< USB Device Charger Detection                                                     */
+extern void ENET_1588Timeout_IRQHandler(void);       /**< Ethernet MAC-NET Core                                                            */
+extern void ENET_Transmit_IRQHandler(void);          /**< Ethernet MAC-NET Core                                                            */
+extern void ENET_Receive_IRQHandler(void);           /**< Ethernet MAC-NET Core                                                            */
+extern void ENET_Error_IRQHandler(void);             /**< Ethernet MAC-NET Core                                                            */
+extern void SDHC_IRQHandler(void);                   /**< Secured Digital Host Controller                                                  */
+extern void DAC0_IRQHandler(void);                   /**< Digital to Analogue Converter                                                    */
+extern void DAC1_IRQHandler(void);                   /**< Digital to Analogue Converter                                                    */
+extern void TSI0_IRQHandler(void);                   /**< Touch Sense Interface                                                            */
+extern void MCG_IRQHandler(void);                    /**< Multipurpose Clock Generator                                                     */
+extern void LPTMR0_IRQHandler(void);                 /**< Low Power Timer                                                                  */
+extern void PORTA_IRQHandler(void);                  /**< General Purpose Input/Output                                                     */
+extern void PORTB_IRQHandler(void);                  /**< General Purpose Input/Output                                                     */
+extern void PORTC_IRQHandler(void);                  /**< General Purpose Input/Output                                                     */
+extern void PORTD_IRQHandler(void);                  /**< General Purpose Input/Output                                                     */
+extern void PORTE_IRQHandler(void);                  /**< General Purpose Input/Output                                                     */
+extern void PORTF_IRQHandler(void);                  /**< General Purpose Input/Output                                                     */
+extern void SWI_IRQHandler(void);                    /**< Software interrupt                                                               */
+extern void NFC_IRQHandler(void);                    /**< NAND flash controller                                                            */
+extern void USBHS_IRQHandler(void);                  /**< USB High Speed                                                                   */
+extern void CMP3_IRQHandler(void);                   /**< High-Speed Comparator                                                            */
+extern void FTM3_IRQHandler(void);                   /**< FlexTimer Module                                                                 */
+extern void ADC2_IRQHandler(void);                   /**< Analogue to Digital Converter                                                    */
+extern void ADC3_IRQHandler(void);                   /**< Analogue to Digital Converter                                                    */
+extern void I2S1_Tx_IRQHandler(void);                /**< Synchronous Serial Interface                                                     */
+extern void I2S1_Tx_IRQHandler(void);                /**< Synchronous Serial Interface                                                     */
 
 /**
  * @} */ /* End group Interrupt_handler_prototypes_GROUP 
@@ -1825,7 +1825,7 @@ typedef struct {                                /*       CRC0 Structure         
 */
 
 /* ================================================================================ */
-/* ================           DAC0 (file:DAC0_16CH_0x400CC000)       ================ */
+/* ================           DAC0 (file:DAC0_16CH_FIFO16_0x400CC000)       ================ */
 /* ================================================================================ */
 
 /**
@@ -7483,7 +7483,7 @@ typedef struct {                                /*       LMEM Structure         
 */
 
 /* ================================================================================ */
-/* ================           LPTMR0 (file:LPTMR0_0)               ================ */
+/* ================           LPTMR0 (file:LPTMR0)                 ================ */
 /* ================================================================================ */
 
 /**
@@ -7498,7 +7498,7 @@ typedef struct {                                /*       LPTMR0 Structure       
    __IO uint32_t  CSR;                          /**< 0000: Control Status Register                                      */
    __IO uint32_t  PSR;                          /**< 0004: Prescale Register                                            */
    __IO uint32_t  CMR;                          /**< 0008: Compare Register                                             */
-   __I  uint32_t  CNR;                          /**< 000C: Counter Register                                             */
+   __IO uint32_t  CNR;                          /**< 000C: Counter Register                                             */
 } LPTMR_Type;
 
 /**
@@ -10944,7 +10944,7 @@ typedef struct {                                /*       SMC Structure          
    __IO uint8_t   PMCTRL;                       /**< 0001: Power Mode Control Register                                  */
    union {                                      /**< 0000: (size=0001)                                                  */
       __IO uint8_t   STOPCTRL;                  /**< 0002: Stop Control Register                                        */
-      __IO uint8_t   VLLSCTRL;                  /**< 0002: VLLS Control Register                                        */
+      __IO uint8_t   VLLSCTRL;                  /**< 0002: VLLS Control Register (old name)                             */
    };
    __I  uint8_t   PMSTAT;                       /**< 0003: Power Mode Status Register                                   */
 } SMC_Type;

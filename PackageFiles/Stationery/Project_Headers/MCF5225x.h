@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V0.0
- * @date     2017/10
+ * @date     2017/11
  *
  *******************************************************************************************************/
 
@@ -130,107 +130,107 @@ typedef enum {
 } IRQn_Type;
 
 /* -------------------------  Exception Handlers  ------------------------ */
-extern void AccessError_Handler(void);         /**< Access Error                                                                     */
-extern void AddressError_Handler(void);        /**< Address Error                                                                    */
-extern void IllegalInstruction_Handler(void);   /**< Illegal Instruction                                                              */
-extern void DivideBy0_Handler(void);           /**< Divide by Zero                                                                   */
-extern void PrivilegeViolation_Handler(void);   /**< Privilege Violation                                                              */
-extern void Trace_Handler(void);               /**< Trace                                                                            */
-extern void UnimplementedLineA_Handler(void);   /**< Unimplemented Line A                                                             */
-extern void UnimplementedLineF_Handler(void);   /**< Unimplemented Line F                                                             */
-extern void Debug_Handler(void);               /**< Debug                                                                            */
-extern void FormatError_Handler(void);         /**< Format Error                                                                     */
-extern void SpuriousInt_Handler(void);         /**< Spurious Interrupt                                                               */
-extern void Trap0_Handler(void);               /**< Trap # 0                                                                         */
-extern void Trap1_Handler(void);               /**< Trap # 1                                                                         */
-extern void Trap2_Handler(void);               /**< Trap # 2                                                                         */
-extern void Trap3_Handler(void);               /**< Trap # 3                                                                         */
-extern void Trap4_Handler(void);               /**< Trap # 4                                                                         */
-extern void Trap5_Handler(void);               /**< Trap # 5                                                                         */
-extern void Trap6_Handler(void);               /**< Trap # 6                                                                         */
-extern void Trap7_Handler(void);               /**< Trap # 7                                                                         */
-extern void Trap8_Handler(void);               /**< Trap # 8                                                                         */
-extern void Trap9_Handler(void);               /**< Trap # 9                                                                         */
-extern void Trap10_Handler(void);              /**< Trap # 10                                                                        */
-extern void Trap11_Handler(void);              /**< Trap # 11                                                                        */
-extern void Trap12_Handler(void);              /**< Trap # 12                                                                        */
-extern void Trap13_Handler(void);              /**< Trap # 13                                                                        */
-extern void Trap14_Handler(void);              /**< Trap # 14                                                                        */
-extern void Trap15_Handler(void);              /**< Trap # 15                                                                        */
-extern void EPORT1_IRQHandler(void);           /**< Edge port flag 1                                                                 */
-extern void EPORT2_IRQHandler(void);           /**< Edge port flag 2                                                                 */
-extern void EPORT3_IRQHandler(void);           /**< Edge port flag 3                                                                 */
-extern void EPORT4_IRQHandler(void);           /**< Edge port flag 4                                                                 */
-extern void EPORT5_IRQHandler(void);           /**< Edge port flag 5                                                                 */
-extern void EPORT6_IRQHandler(void);           /**< Edge port flag 6                                                                 */
-extern void EPORT7_IRQHandler(void);           /**< Edge port flag 7                                                                 */
-extern void SCM_IRQHandler(void);              /**< Software watchdog timeout                                                        */
-extern void DMA_CH0_IRQHandler(void);          /**< DMA Channel 0 transfer complete                                                  */
-extern void DMA_CH1_IRQHandler(void);          /**< DMA Channel 1 transfer complete                                                  */
-extern void DMA_CH2_IRQHandler(void);          /**< DMA Channel 2 transfer complete                                                  */
-extern void DMA_CH3_IRQHandler(void);          /**< DMA Channel 3 transfer complete                                                  */
-extern void UART0_IRQHandler(void);            /**< UART 0 interrupt                                                                 */
-extern void UART1_IRQHandler(void);            /**< UART 1 interrupt                                                                 */
-extern void UART2_IRQHandler(void);            /**< UART 2 interrupt                                                                 */
-extern void I2C_IRQHandler(void);              /**< I2C interrupt                                                                    */
-extern void QSPI_IRQHandler(void);             /**< QSPI interrupt                                                                   */
-extern void DTIM0_IRQHandler(void);            /**< DMA Timer 0 interrupt                                                            */
-extern void DTIM1_IRQHandler(void);            /**< DMA Timer 1 interrupt                                                            */
-extern void DTIM2_IRQHandler(void);            /**< DMA Timer 2 interrupt                                                            */
-extern void DTIM3_IRQHandler(void);            /**< DMA Timer 3 interrupt                                                            */
-extern void FEC_TF_IRQHandler(void);           /**< Transmit frame interrupt                                                         */
-extern void FEC_TB_IRQHandler(void);           /**< Transmit buffer interrupt                                                        */
-extern void FEC_UN_IRQHandler(void);           /**< Transmit FIFO underrun                                                           */
-extern void FEC_RL_IRQHandler(void);           /**< Collision retry limit                                                            */
-extern void FEC_RF_IRQHandler(void);           /**< Receive frame interrupt                                                          */
-extern void FEC_RB_IRQHandler(void);           /**< Receive buffer interrupt                                                         */
-extern void FEC_MII_IRQHandler(void);          /**< MII interrupt                                                                    */
-extern void FEC_LC_IRQHandler(void);           /**< Late Collision                                                                   */
-extern void FEC_HBERR_IRQHandler(void);        /**< Heart-beat error                                                                 */
-extern void FEC_GRA_IRQHandler(void);          /**< Graceful stop complete                                                           */
-extern void FEC_EBERR_IRQHandler(void);        /**< Ethernet bus error                                                               */
-extern void FEC_BABT_IRQHandler(void);         /**< Babbling transmit error                                                          */
-extern void FEC_BABR_IRQHandler(void);         /**< Babbling receive error                                                           */
-extern void RNGA_IRQHandler(void);             /**< RNGA interrupt                                                                   */
-extern void GPT_TOF_IRQHandler(void);          /**< GPT Timer overflow                                                               */
-extern void GPT_PAIF_IRQHandler(void);         /**< GPT Pulse accumulator input                                                      */
-extern void GPT_PAOVF_IRQHandler(void);        /**< GPT Pulse accumulator overflow                                                   */
-extern void GPT_C0F_IRQHandler(void);          /**< GPT Timer channel 0                                                              */
-extern void GPT_C1F_IRQHandler(void);          /**< GPT Timer channel 1                                                              */
-extern void GPT_C2F_IRQHandler(void);          /**< GPT Timer channel 2                                                              */
-extern void GPT_C3F_IRQHandler(void);          /**< GPT Timer channel 3                                                              */
-extern void PMM_IRQHandler(void);              /**< LVD                                                                              */
-extern void ADC_ADCA_IRQHandler(void);         /**< ADCA conversion complete                                                         */
-extern void ADC_ADCB_IRQHandler(void);         /**< ADCB conversion complete                                                         */
-extern void ADC_ADCINT_IRQHandler(void);       /**< ADC Interrupt                                                                    */
-extern void PWM_IRQHandler(void);              /**< PWM interrupt                                                                    */
-extern void USB_IRQHandler(void);              /**< USB interrupt                                                                    */
-extern void PIT0_IRQHandler(void);             /**< PIT 0 interrupt                                                                  */
-extern void PIT1_IRQHandler(void);             /**< PIT 1 interrupt                                                                  */
-extern void CFM_CBEIF_IRQHandler(void);        /**< CFM SGFM buffer empty                                                            */
-extern void CFM_CCIF_IRQHandler(void);         /**< CFM SGFM command complete                                                        */
-extern void CFM_PVIF_IRQHandler(void);         /**< CFM Protection violation                                                         */
-extern void CFM_AEIF_IRQHandler(void);         /**< CFM Access error                                                                 */
-extern void I2C1_IRQHandler(void);             /**< I2C1 interrupt                                                                   */
-extern void RTC_IRQHandler(void);              /**< RTC interrupt                                                                    */
-extern void FLEXCAN_BUF0I_IRQHandler(void);    /**< FLEXCAN Message Buffer 0 Interrupt                                               */
-extern void FLEXCAN_BUF1I_IRQHandler(void);    /**< FLEXCAN Message Buffer 1 Interrupt                                               */
-extern void FLEXCAN_BUF2I_IRQHandler(void);    /**< FLEXCAN Message Buffer 2 Interrupt                                               */
-extern void FLEXCAN_BUF3I_IRQHandler(void);    /**< FLEXCAN Message Buffer 3 Interrupt                                               */
-extern void FLEXCAN_BUF4I_IRQHandler(void);    /**< FLEXCAN Message Buffer 4 Interrupt                                               */
-extern void FLEXCAN_BUF5I_IRQHandler(void);    /**< FLEXCAN Message Buffer 5 Interrupt                                               */
-extern void FLEXCAN_BUF6I_IRQHandler(void);    /**< FLEXCAN Message Buffer 6 Interrupt                                               */
-extern void FLEXCAN_BUF7I_IRQHandler(void);    /**< FLEXCAN Message Buffer 7 Interrupt                                               */
-extern void FLEXCAN_BUF8I_IRQHandler(void);    /**< FLEXCAN Message Buffer 8 Interrupt                                               */
-extern void FLEXCAN_BUF9I_IRQHandler(void);    /**< FLEXCAN Message Buffer 9 Interrupt                                               */
-extern void FLEXCAN_BUF10I_IRQHandler(void);   /**< FLEXCAN Message Buffer 10 Interrupt                                              */
-extern void FLEXCAN_BUF11I_IRQHandler(void);   /**< FLEXCAN Message Buffer 11 Interrupt                                              */
-extern void FLEXCAN_BUF12I_IRQHandler(void);   /**< FLEXCAN Message Buffer 12 Interrupt                                              */
-extern void FLEXCAN_BUF13I_IRQHandler(void);   /**< FLEXCAN Message Buffer 13 Interrupt                                              */
-extern void FLEXCAN_BUF14I_IRQHandler(void);   /**< FLEXCAN Message Buffer 14 Interrupt                                              */
-extern void FLEXCAN_BUF15I_IRQHandler(void);   /**< FLEXCAN Message Buffer 15 Interrupt                                              */
-extern void FLEXCAN_Error_IRQHandler(void);    /**< FLEXCAN  Error Interrupt                                                         */
-extern void FLEXCAN_BOFF_IRQHandler(void);     /**< FLEXCAN  Bus-Off Interrupt                                                       */
+extern void AccessError_Handler(void);               /**< Access Error                                                                     */
+extern void AddressError_Handler(void);              /**< Address Error                                                                    */
+extern void IllegalInstruction_Handler(void);        /**< Illegal Instruction                                                              */
+extern void DivideBy0_Handler(void);                 /**< Divide by Zero                                                                   */
+extern void PrivilegeViolation_Handler(void);        /**< Privilege Violation                                                              */
+extern void Trace_Handler(void);                     /**< Trace                                                                            */
+extern void UnimplementedLineA_Handler(void);        /**< Unimplemented Line A                                                             */
+extern void UnimplementedLineF_Handler(void);        /**< Unimplemented Line F                                                             */
+extern void Debug_Handler(void);                     /**< Debug                                                                            */
+extern void FormatError_Handler(void);               /**< Format Error                                                                     */
+extern void SpuriousInt_Handler(void);               /**< Spurious Interrupt                                                               */
+extern void Trap0_Handler(void);                     /**< Trap # 0                                                                         */
+extern void Trap1_Handler(void);                     /**< Trap # 1                                                                         */
+extern void Trap2_Handler(void);                     /**< Trap # 2                                                                         */
+extern void Trap3_Handler(void);                     /**< Trap # 3                                                                         */
+extern void Trap4_Handler(void);                     /**< Trap # 4                                                                         */
+extern void Trap5_Handler(void);                     /**< Trap # 5                                                                         */
+extern void Trap6_Handler(void);                     /**< Trap # 6                                                                         */
+extern void Trap7_Handler(void);                     /**< Trap # 7                                                                         */
+extern void Trap8_Handler(void);                     /**< Trap # 8                                                                         */
+extern void Trap9_Handler(void);                     /**< Trap # 9                                                                         */
+extern void Trap10_Handler(void);                    /**< Trap # 10                                                                        */
+extern void Trap11_Handler(void);                    /**< Trap # 11                                                                        */
+extern void Trap12_Handler(void);                    /**< Trap # 12                                                                        */
+extern void Trap13_Handler(void);                    /**< Trap # 13                                                                        */
+extern void Trap14_Handler(void);                    /**< Trap # 14                                                                        */
+extern void Trap15_Handler(void);                    /**< Trap # 15                                                                        */
+extern void EPORT1_IRQHandler(void);                 /**< Edge port flag 1                                                                 */
+extern void EPORT2_IRQHandler(void);                 /**< Edge port flag 2                                                                 */
+extern void EPORT3_IRQHandler(void);                 /**< Edge port flag 3                                                                 */
+extern void EPORT4_IRQHandler(void);                 /**< Edge port flag 4                                                                 */
+extern void EPORT5_IRQHandler(void);                 /**< Edge port flag 5                                                                 */
+extern void EPORT6_IRQHandler(void);                 /**< Edge port flag 6                                                                 */
+extern void EPORT7_IRQHandler(void);                 /**< Edge port flag 7                                                                 */
+extern void SCM_IRQHandler(void);                    /**< Software watchdog timeout                                                        */
+extern void DMA_CH0_IRQHandler(void);                /**< DMA Channel 0 transfer complete                                                  */
+extern void DMA_CH1_IRQHandler(void);                /**< DMA Channel 1 transfer complete                                                  */
+extern void DMA_CH2_IRQHandler(void);                /**< DMA Channel 2 transfer complete                                                  */
+extern void DMA_CH3_IRQHandler(void);                /**< DMA Channel 3 transfer complete                                                  */
+extern void UART0_IRQHandler(void);                  /**< UART 0 interrupt                                                                 */
+extern void UART1_IRQHandler(void);                  /**< UART 1 interrupt                                                                 */
+extern void UART2_IRQHandler(void);                  /**< UART 2 interrupt                                                                 */
+extern void I2C_IRQHandler(void);                    /**< I2C interrupt                                                                    */
+extern void QSPI_IRQHandler(void);                   /**< QSPI interrupt                                                                   */
+extern void DTIM0_IRQHandler(void);                  /**< DMA Timer 0 interrupt                                                            */
+extern void DTIM1_IRQHandler(void);                  /**< DMA Timer 1 interrupt                                                            */
+extern void DTIM2_IRQHandler(void);                  /**< DMA Timer 2 interrupt                                                            */
+extern void DTIM3_IRQHandler(void);                  /**< DMA Timer 3 interrupt                                                            */
+extern void FEC_TF_IRQHandler(void);                 /**< Transmit frame interrupt                                                         */
+extern void FEC_TB_IRQHandler(void);                 /**< Transmit buffer interrupt                                                        */
+extern void FEC_UN_IRQHandler(void);                 /**< Transmit FIFO underrun                                                           */
+extern void FEC_RL_IRQHandler(void);                 /**< Collision retry limit                                                            */
+extern void FEC_RF_IRQHandler(void);                 /**< Receive frame interrupt                                                          */
+extern void FEC_RB_IRQHandler(void);                 /**< Receive buffer interrupt                                                         */
+extern void FEC_MII_IRQHandler(void);                /**< MII interrupt                                                                    */
+extern void FEC_LC_IRQHandler(void);                 /**< Late Collision                                                                   */
+extern void FEC_HBERR_IRQHandler(void);              /**< Heart-beat error                                                                 */
+extern void FEC_GRA_IRQHandler(void);                /**< Graceful stop complete                                                           */
+extern void FEC_EBERR_IRQHandler(void);              /**< Ethernet bus error                                                               */
+extern void FEC_BABT_IRQHandler(void);               /**< Babbling transmit error                                                          */
+extern void FEC_BABR_IRQHandler(void);               /**< Babbling receive error                                                           */
+extern void RNGA_IRQHandler(void);                   /**< RNGA interrupt                                                                   */
+extern void GPT_TOF_IRQHandler(void);                /**< GPT Timer overflow                                                               */
+extern void GPT_PAIF_IRQHandler(void);               /**< GPT Pulse accumulator input                                                      */
+extern void GPT_PAOVF_IRQHandler(void);              /**< GPT Pulse accumulator overflow                                                   */
+extern void GPT_C0F_IRQHandler(void);                /**< GPT Timer channel 0                                                              */
+extern void GPT_C1F_IRQHandler(void);                /**< GPT Timer channel 1                                                              */
+extern void GPT_C2F_IRQHandler(void);                /**< GPT Timer channel 2                                                              */
+extern void GPT_C3F_IRQHandler(void);                /**< GPT Timer channel 3                                                              */
+extern void PMM_IRQHandler(void);                    /**< LVD                                                                              */
+extern void ADC_ADCA_IRQHandler(void);               /**< ADCA conversion complete                                                         */
+extern void ADC_ADCB_IRQHandler(void);               /**< ADCB conversion complete                                                         */
+extern void ADC_ADCINT_IRQHandler(void);             /**< ADC Interrupt                                                                    */
+extern void PWM_IRQHandler(void);                    /**< PWM interrupt                                                                    */
+extern void USB_IRQHandler(void);                    /**< USB interrupt                                                                    */
+extern void PIT0_IRQHandler(void);                   /**< PIT 0 interrupt                                                                  */
+extern void PIT1_IRQHandler(void);                   /**< PIT 1 interrupt                                                                  */
+extern void CFM_CBEIF_IRQHandler(void);              /**< CFM SGFM buffer empty                                                            */
+extern void CFM_CCIF_IRQHandler(void);               /**< CFM SGFM command complete                                                        */
+extern void CFM_PVIF_IRQHandler(void);               /**< CFM Protection violation                                                         */
+extern void CFM_AEIF_IRQHandler(void);               /**< CFM Access error                                                                 */
+extern void I2C1_IRQHandler(void);                   /**< I2C1 interrupt                                                                   */
+extern void RTC_IRQHandler(void);                    /**< RTC interrupt                                                                    */
+extern void FLEXCAN_BUF0I_IRQHandler(void);          /**< FLEXCAN Message Buffer 0 Interrupt                                               */
+extern void FLEXCAN_BUF1I_IRQHandler(void);          /**< FLEXCAN Message Buffer 1 Interrupt                                               */
+extern void FLEXCAN_BUF2I_IRQHandler(void);          /**< FLEXCAN Message Buffer 2 Interrupt                                               */
+extern void FLEXCAN_BUF3I_IRQHandler(void);          /**< FLEXCAN Message Buffer 3 Interrupt                                               */
+extern void FLEXCAN_BUF4I_IRQHandler(void);          /**< FLEXCAN Message Buffer 4 Interrupt                                               */
+extern void FLEXCAN_BUF5I_IRQHandler(void);          /**< FLEXCAN Message Buffer 5 Interrupt                                               */
+extern void FLEXCAN_BUF6I_IRQHandler(void);          /**< FLEXCAN Message Buffer 6 Interrupt                                               */
+extern void FLEXCAN_BUF7I_IRQHandler(void);          /**< FLEXCAN Message Buffer 7 Interrupt                                               */
+extern void FLEXCAN_BUF8I_IRQHandler(void);          /**< FLEXCAN Message Buffer 8 Interrupt                                               */
+extern void FLEXCAN_BUF9I_IRQHandler(void);          /**< FLEXCAN Message Buffer 9 Interrupt                                               */
+extern void FLEXCAN_BUF10I_IRQHandler(void);         /**< FLEXCAN Message Buffer 10 Interrupt                                              */
+extern void FLEXCAN_BUF11I_IRQHandler(void);         /**< FLEXCAN Message Buffer 11 Interrupt                                              */
+extern void FLEXCAN_BUF12I_IRQHandler(void);         /**< FLEXCAN Message Buffer 12 Interrupt                                              */
+extern void FLEXCAN_BUF13I_IRQHandler(void);         /**< FLEXCAN Message Buffer 13 Interrupt                                              */
+extern void FLEXCAN_BUF14I_IRQHandler(void);         /**< FLEXCAN Message Buffer 14 Interrupt                                              */
+extern void FLEXCAN_BUF15I_IRQHandler(void);         /**< FLEXCAN Message Buffer 15 Interrupt                                              */
+extern void FLEXCAN_Error_IRQHandler(void);          /**< FLEXCAN  Error Interrupt                                                         */
+extern void FLEXCAN_BOFF_IRQHandler(void);           /**< FLEXCAN  Bus-Off Interrupt                                                       */
 
 /* ================================================================================ */
 /* ================      Processor and Core Peripheral Section     ================ */

@@ -7,148 +7,179 @@ Devices using this vector table:
    <description>MKL43Z4 VectorTable</description>
    <interrupt>
       <name>DMA0</name>
-      <description>DMA Controller</description>
+      <description>Direct memory access controller</description>
       <value>0</value>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA1</name>
-      <description>DMA Controller</description>
+      <description>Direct memory access controller</description>
       <value>1</value>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA2</name>
-      <description>DMA Controller</description>
+      <description>Direct memory access controller</description>
       <value>2</value>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA3</name>
-      <description>DMA Controller</description>
+      <description>Direct memory access controller</description>
       <value>3</value>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>FTF_Command</name>
       <description>Flash Memory Interface</description>
       <value>5</value>
+      <peripheral>FTFA</peripheral>
    </interrupt>
    <interrupt>
       <name>PMC</name>
       <description>Power Management Controller</description>
       <value>6</value>
+      <peripheral>PMC</peripheral>
    </interrupt>
    <interrupt>
       <name>LLWU</name>
       <description>Low Leakage Wakeup</description>
       <value>7</value>
+      <peripheral>LLWU</peripheral>
    </interrupt>
    <interrupt>
       <name>I2C0</name>
       <description>Inter-Integrated Circuit</description>
       <value>8</value>
+      <peripheral>I2C0</peripheral>
    </interrupt>
    <interrupt>
       <name>I2C1</name>
       <description>Inter-Integrated Circuit</description>
       <value>9</value>
+      <peripheral>I2C1</peripheral>
    </interrupt>
    <interrupt>
       <name>SPI0</name>
       <description>Serial Peripheral Interface</description>
       <value>10</value>
+      <peripheral>SPI0</peripheral>
    </interrupt>
    <interrupt>
       <name>SPI1</name>
       <description>Serial Peripheral Interface</description>
       <value>11</value>
+      <peripheral>SPI1</peripheral>
    </interrupt>
    <interrupt>
       <name>LPUART0</name>
       <description>Serial Communication Interface</description>
       <value>12</value>
+      <peripheral>LPUART0</peripheral>
    </interrupt>
    <interrupt>
       <name>LPUART1</name>
       <description>Serial Communication Interface</description>
       <value>13</value>
+      <peripheral>LPUART1</peripheral>
    </interrupt>
    <interrupt>
       <name>UART2_FLEXIO</name>
       <description>UART2 or FLEXIO Status and error</description>
       <value>14</value>
+      <peripheral>FLEXIO</peripheral>
+      <peripheral>UART2</peripheral>
    </interrupt>
    <interrupt>
       <name>ADC0</name>
       <description>Analogue to Digital Converter</description>
       <value>15</value>
+      <peripheral>ADC0</peripheral>
    </interrupt>
    <interrupt>
       <name>CMP0</name>
       <description>High-Speed Comparator</description>
       <value>16</value>
+      <peripheral>CMP0</peripheral>
    </interrupt>
    <interrupt>
       <name>TPM0</name>
       <description>Timer/PWM Module</description>
       <value>17</value>
+      <peripheral>TPM0</peripheral>
    </interrupt>
    <interrupt>
       <name>TPM1</name>
       <description>Timer/PWM Module</description>
       <value>18</value>
+      <peripheral>TPM1</peripheral>
    </interrupt>
    <interrupt>
       <name>TPM2</name>
       <description>Timer/PWM Module</description>
       <value>19</value>
+      <peripheral>TPM2</peripheral>
    </interrupt>
    <interrupt>
       <name>RTC_Alarm</name>
       <description>Real Time Clock</description>
       <value>20</value>
+      <peripheral>RTC</peripheral>
    </interrupt>
    <interrupt>
       <name>RTC_Seconds</name>
       <description>Real Time Clock</description>
       <value>21</value>
+      <peripheral>RTC</peripheral>
    </interrupt>
    <interrupt>
       <name>PIT</name>
       <description>Periodic Interrupt Timer (All channels)</description>
       <value>22</value>
+      <peripheral>PIT</peripheral>
    </interrupt>
    <interrupt>
       <name>I2S0</name>
       <description>Synchronous Serial Interface</description>
       <value>23</value>
+      <peripheral>I2S0</peripheral>
    </interrupt>
    <interrupt>
       <name>USB0</name>
       <description>Universal Serial Bus</description>
       <value>24</value>
+      <peripheral>USB0</peripheral>
    </interrupt>
    <interrupt>
       <name>DAC0</name>
       <description>Digital to Analogue Converter</description>
       <value>25</value>
+      <peripheral>DAC0</peripheral>
    </interrupt>
    <interrupt>
       <name>LPTMR0</name>
       <description>Low Power Timer</description>
       <value>28</value>
+      <peripheral>LPTMR0</peripheral>
    </interrupt>
    <interrupt>
       <name>LCD</name>
       <description>Segment Liquid Crystal Display</description>
       <value>29</value>
+      <peripheral>LCD</peripheral>
    </interrupt>
    <interrupt>
       <name>PORTA</name>
       <description>General Purpose Input/Output</description>
       <value>30</value>
+      <peripheral>PORTA</peripheral>
    </interrupt>
    <interrupt>
       <name>PORTCD</name>
       <description>General Purpose Input/Output</description>
       <value>31</value>
+      <peripheral>PORTC</peripheral>
+      <peripheral>PORTD</peripheral>
    </interrupt>
 </interrupts>
 

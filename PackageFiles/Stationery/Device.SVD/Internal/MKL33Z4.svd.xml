@@ -26,7 +26,7 @@
       <xi:include href="peripherals/DAC0_2CH_FIFO_MKL17.svd.xml"/>
       <xi:include href="peripherals/DMA0_MKL.svd.xml"/>
       <xi:include href="peripherals/DMAMUX0_4CH_TRIG.svd.xml"/>
-      <xi:include href="peripherals/FLEXIO_0.svd.xml"/>
+      <xi:include href="peripherals/FLEXIO_4SH_0.svd.xml"/>
       <xi:include href="peripherals/FTFA.svd.xml"/>
       <xi:include href="peripherals/GPIOA_0x400FF000.svd.xml"/>
       <peripheral derivedFrom="GPIOA"><name>GPIOB</name><baseAddress>0x400FF040</baseAddress></peripheral>

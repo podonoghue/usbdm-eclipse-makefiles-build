@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V7
- * @date     2017/10
+ * @date     2017/11
  *
  *******************************************************************************************************/
 
@@ -73,37 +73,37 @@ controller                                                                 */
 * @{
 */
 /* -------------------------  Exception Handlers  ------------------------ */
-extern void NMI_Handler(void);                 /**< Non maskable Interrupt, cannot be stopped or preempted                           */
-extern void HardFault_Handler(void);           /**< Hard Fault, all classes of Fault                                                 */
-extern void SVC_Handler(void);                 /**< System Service Call via SVC instruction                                          */
-extern void PendSV_Handler(void);              /**< Pendable request for system service                                              */
-extern void SysTick_Handler(void);             /**< System Tick Timer                                                                */
-extern void PIN_INT0_IRQHandler(void);         /**< GPIO pin interrupt                                                               */
-extern void PIN_INT1_IRQHandler(void);         /**< GPIO pin interrupt                                                               */
-extern void PIN_INT2_IRQHandler(void);         /**< GPIO pin interrupt                                                               */
-extern void PIN_INT3_IRQHandler(void);         /**< GPIO pin interrupt                                                               */
-extern void PIN_INT4_IRQHandler(void);         /**< GPIO pin interrupt                                                               */
-extern void PIN_INT5_IRQHandler(void);         /**< GPIO pin interrupt                                                               */
-extern void PIN_INT6_IRQHandler(void);         /**< GPIO pin interrupt                                                               */
-extern void PIN_INT7_IRQHandler(void);         /**< GPIO pin interrupt                                                               */
-extern void GINT0_IRQHandler(void);            /**< GPIO group interrupt                                                             */
-extern void GINT1_IRQHandler(void);            /**< GPIO group interrupt                                                             */
-extern void SSP1_IRQHandler(void);             /**< SSP/SPI                                                                          */
-extern void I2C_IRQHandler(void);              /**< I2C-bus controller                                                               */
-extern void CT16B0_IRQHandler(void);           /**< 16-bit counter/timers CT16B0                                                     */
-extern void CT16B1_IRQHandler(void);           /**< 16-bit counter/timers CT16B1                                                     */
-extern void CT32B0_IRQHandler(void);           /**< 32-bit counter/timers CT32B0                                                     */
-extern void CT32B1_IRQHandler(void);           /**< 32-bit counter/timers CT32B1                                                     */
-extern void SSP0_IRQHandler(void);             /**< SSP/SPI                                                                          */
-extern void USART_IRQHandler(void);            /**< USART                                                                            */
-extern void USB_IRQ_IRQHandler(void);          /**< USB2.0 device controller                                                         */
-extern void USB_FIQ_IRQHandler(void);          /**< USB2.0 device controller                                                         */
-extern void ADC_IRQHandler(void);              /**< ADC                                                                              */
-extern void WDT_IRQHandler(void);              /**< Windowed Watchdog Timer                                                          */
-extern void BOD_IRQ_IRQHandler(void);          /**< System control block                                                             */
-extern void FLASH_IRQ_IRQHandler(void);        /**< Flash
+extern void NMI_Handler(void);                       /**< Non maskable Interrupt, cannot be stopped or preempted                           */
+extern void HardFault_Handler(void);                 /**< Hard Fault, all classes of Fault                                                 */
+extern void SVC_Handler(void);                       /**< System Service Call via SVC instruction                                          */
+extern void PendSV_Handler(void);                    /**< Pendable request for system service                                              */
+extern void SysTick_Handler(void);                   /**< System Tick Timer                                                                */
+extern void PIN_INT0_IRQHandler(void);               /**< GPIO pin interrupt                                                               */
+extern void PIN_INT1_IRQHandler(void);               /**< GPIO pin interrupt                                                               */
+extern void PIN_INT2_IRQHandler(void);               /**< GPIO pin interrupt                                                               */
+extern void PIN_INT3_IRQHandler(void);               /**< GPIO pin interrupt                                                               */
+extern void PIN_INT4_IRQHandler(void);               /**< GPIO pin interrupt                                                               */
+extern void PIN_INT5_IRQHandler(void);               /**< GPIO pin interrupt                                                               */
+extern void PIN_INT6_IRQHandler(void);               /**< GPIO pin interrupt                                                               */
+extern void PIN_INT7_IRQHandler(void);               /**< GPIO pin interrupt                                                               */
+extern void GINT0_IRQHandler(void);                  /**< GPIO group interrupt                                                             */
+extern void GINT1_IRQHandler(void);                  /**< GPIO group interrupt                                                             */
+extern void SSP1_IRQHandler(void);                   /**< SSP/SPI                                                                          */
+extern void I2C_IRQHandler(void);                    /**< I2C-bus controller                                                               */
+extern void CT16B0_IRQHandler(void);                 /**< 16-bit counter/timers CT16B0                                                     */
+extern void CT16B1_IRQHandler(void);                 /**< 16-bit counter/timers CT16B1                                                     */
+extern void CT32B0_IRQHandler(void);                 /**< 32-bit counter/timers CT32B0                                                     */
+extern void CT32B1_IRQHandler(void);                 /**< 32-bit counter/timers CT32B1                                                     */
+extern void SSP0_IRQHandler(void);                   /**< SSP/SPI                                                                          */
+extern void USART_IRQHandler(void);                  /**< USART                                                                            */
+extern void USB_IRQ_IRQHandler(void);                /**< USB2.0 device controller                                                         */
+extern void USB_FIQ_IRQHandler(void);                /**< USB2.0 device controller                                                         */
+extern void ADC_IRQHandler(void);                    /**< ADC                                                                              */
+extern void WDT_IRQHandler(void);                    /**< Windowed Watchdog Timer                                                          */
+extern void BOD_IRQ_IRQHandler(void);                /**< System control block                                                             */
+extern void FLASH_IRQ_IRQHandler(void);              /**< Flash
 controller                                                                 */
-extern void USBWAKEUP_IRQHandler(void);        /**< USB2.0 device controller                                                         */
+extern void USBWAKEUP_IRQHandler(void);              /**< USB2.0 device controller                                                         */
 
 /**
  * @} */ /* End group Interrupt_handler_prototypes_GROUP 

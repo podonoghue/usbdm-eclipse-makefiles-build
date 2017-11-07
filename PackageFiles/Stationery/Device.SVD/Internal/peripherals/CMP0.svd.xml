@@ -434,12 +434,12 @@ Controls availability of the comparator output on the associated CMPO output pin
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b101</name>
-                           <description>IN5</description>
+                           <description>IN5/VREF Output</description>
                            <value>0b101</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b110</name>
-                           <description>IN6</description>
+                           <description>Bandgap</description>
                            <value>0b110</value>
                         </enumeratedValue>
                         <enumeratedValue>

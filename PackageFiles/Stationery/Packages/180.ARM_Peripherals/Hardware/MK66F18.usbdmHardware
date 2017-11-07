@@ -22,15 +22,27 @@
       <peripheral baseName="ADC"      instance="1"        version="adc0_diff_a">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForAdc" />
          <clock reg="SCGC3"         mask="SIM_SCGC3_ADC1_MASK" />
-         <irq num="ADC0_IRQn" />
+         <irq num="ADC1_IRQn" />
       </peripheral>
       <peripheral baseName="CAN"      instance="0"        version="can0_2mask">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexCan" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_FLEXCAN0_MASK" />
+         <irq num="CAN0_Message_IRQn" />
+         <irq num="CAN0_BusOff_IRQn" />
+         <irq num="CAN0_Error_IRQn" />
+         <irq num="CAN0_Tx_IRQn" />
+         <irq num="CAN0_Rx_IRQn" />
+         <irq num="CAN0_WakeUp_IRQn" />
       </peripheral>
       <peripheral baseName="CAN"      instance="1"        version="can0_2mask">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexCan" />
          <clock reg="SCGC3"         mask="SIM_SCGC3_FLEXCAN1_MASK" />
+         <irq num="CAN1_Message_IRQn" />
+         <irq num="CAN1_BusOff_IRQn" />
+         <irq num="CAN1_Error_IRQn" />
+         <irq num="CAN1_Tx_IRQn" />
+         <irq num="CAN1_Rx_IRQn" />
+         <irq num="CAN1_WakeUp_IRQn" />
       </peripheral>
       <peripheral baseName="CMP"      instance="0"        version="cmp0_pstm_trigm">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCmp" />
@@ -39,16 +51,20 @@
       </peripheral>
       <peripheral baseName="CMP"      instance="1"        version="cmp0_pstm_trigm">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCmp" />
+         <irq num="CMP1_IRQn" />
       </peripheral>
       <peripheral baseName="CMP"      instance="2"        version="cmp0_pstm_trigm">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCmp" />
+         <irq num="CMP2_IRQn" />
       </peripheral>
       <peripheral baseName="CMP"      instance="3"        version="cmp0_pstm_trigm">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCmp" />
+         <irq num="CMP3_IRQn" />
       </peripheral>
       <peripheral baseName="CMT"      instance=""         version="cmt_0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCmt" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_CMT_MASK" />
+         <irq num="CMT_IRQn" />
       </peripheral>
       <peripheral baseName="CONTROL"  instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForControl" />
@@ -64,7 +80,6 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDac" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_DAC0_MASK" />
          <irq num="DAC0_IRQn" />
-         <irq num="DAC0_IRQn" />
       </peripheral>
       <peripheral baseName="DAC"      instance="1"        version="dac0_16ch_fifo16_0x400cc000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDac" />
@@ -75,6 +90,21 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDma" />
          <clock reg="SCGC7"         mask="SIM_SCGC7_DMA_MASK" />
          <irq num="DMA0_DMA16_IRQn" />
+         <irq num="DMA1_DMA17_IRQn" />
+         <irq num="DMA2_DMA18_IRQn" />
+         <irq num="DMA3_DMA19_IRQn" />
+         <irq num="DMA4_DMA20_IRQn" />
+         <irq num="DMA5_DMA21_IRQn" />
+         <irq num="DMA6_DMA22_IRQn" />
+         <irq num="DMA7_DMA23_IRQn" />
+         <irq num="DMA8_DMA24_IRQn" />
+         <irq num="DMA9_DMA25_IRQn" />
+         <irq num="DMA10_DMA26_IRQn" />
+         <irq num="DMA11_DMA27_IRQn" />
+         <irq num="DMA12_DMA28_IRQn" />
+         <irq num="DMA13_DMA29_IRQn" />
+         <irq num="DMA14_DMA30_IRQn" />
+         <irq num="DMA15_DMA31_IRQn" />
          <irq num="DMA_Error_IRQn" />
       </peripheral>
       <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_32ch_trig_mk66f18">
@@ -84,10 +114,10 @@
       <peripheral baseName="ENET"     instance=""         version="enet_c">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForEnet" />
          <clock reg="SCGC2"         mask="SIM_SCGC2_ENET_MASK" />
+         <irq num="ENET_1588Timeout_IRQn" />
          <irq num="ENET_Transmit_IRQn" />
          <irq num="ENET_Receive_IRQn" />
          <irq num="ENET_Error_IRQn" />
-         <irq num="ENET_1588Timeout_IRQn" />
       </peripheral>
       <peripheral baseName="EWM"      instance=""         version="ewm_2">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForEwm" />
@@ -100,6 +130,8 @@
       <peripheral baseName="FTFE"     instance=""         version="ftfe_xacch">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlash" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_FTF_MASK" />
+         <irq num="FTF_Command_IRQn" />
+         <irq num="FTF_ReadCollision_IRQn" />
          <param key="dflash_phrase_size" value="8" />
          <param key="pflash_sector_size" value="4096" />
          <param key="dflash_sector_size" value="4096" />
@@ -122,7 +154,6 @@
       <peripheral baseName="FTM"      instance="2"        version="ftm1_2ch">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_FTM2_MASK" />
-         <irq num="FTM3_IRQn" />
          <irq num="FTM2_IRQn" />
       </peripheral>
       <peripheral baseName="FTM"      instance="3"        version="ftm0_8ch">
@@ -193,7 +224,7 @@
       <peripheral baseName="LPUART"   instance="0"        version="lpuart0_modir_0x400c4000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLpuart" />
          <clock reg="SCGC2"         mask="SIM_SCGC2_LPUART0_MASK" />
-         <irq num="LPUART0_RxTx_IRQn" />
+         <irq num="LPUART0_IRQn" />
       </peripheral>
       <peripheral baseName="MCG"      instance=""         version="mcg_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcg" />
@@ -229,6 +260,7 @@
       <peripheral baseName="RNG"      instance=""         version="rng_0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_RNGA_MASK" />
+         <irq num="RNG_IRQn" />
       </peripheral>
       <peripheral baseName="RTC"      instance=""         version="rtc_tamper_wps">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRtc" />
@@ -291,6 +323,7 @@
       <peripheral baseName="UART"     instance="0"        version="uart0_mk65f18_c7816">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUart" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_UART0_MASK" />
+         <irq num="UART0_Lon_IRQn" />
          <irq num="UART0_RxTx_IRQn" />
          <irq num="UART0_Error_IRQn" />
       </peripheral>

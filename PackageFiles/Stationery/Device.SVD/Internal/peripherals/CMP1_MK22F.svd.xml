@@ -415,7 +415,7 @@ Controls availability of the comparator output on the associated CMPO output pin
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b100</name>
-                           <description>Reserved</description>
+                           <description>IN4</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>

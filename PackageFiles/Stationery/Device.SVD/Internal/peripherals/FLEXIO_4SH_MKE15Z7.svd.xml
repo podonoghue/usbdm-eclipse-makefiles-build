@@ -1,14 +1,15 @@
 <!--
 Devices using this peripheral: 
-      MKL82Z7
+      MKE14Z7
+      MKE15Z7
 -->
       <peripheral>
-         <?sourceFile "FLEXIO0_MKL82Z7" ?>
-         <name>FLEXIO0</name>
-         <description>The FLEXIO Memory Map/Register Definition can be found here</description>
+         <?sourceFile "FLEXIO_4SH_MKE15Z7" ?>
+         <name>FLEXIO</name>
+         <description>Flexible I/O - universal I/O module for communication (UART, SPI, I2C, I2S) and PWM purposes</description>
          <groupName>FLEXIO</groupName>
          <headerStructName>FLEXIO</headerStructName>
-         <baseAddress>0x4005F000</baseAddress>
+         <baseAddress>0x4005A000</baseAddress>
          <size>32</size>
          <access>read-write</access>
          <resetValue>0x0</resetValue>
@@ -29,68 +30,48 @@ Devices using this peripheral:
             <usage>registers</usage>
          </addressBlock>
          <addressBlock>
-            <offset>0x40</offset>
-            <size>0x4</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
             <offset>0x80</offset>
-            <size>0x20</size>
+            <size>0x10</size>
             <usage>registers</usage>
          </addressBlock>
          <addressBlock>
             <offset>0x100</offset>
-            <size>0x20</size>
+            <size>0x10</size>
             <usage>registers</usage>
          </addressBlock>
          <addressBlock>
             <offset>0x200</offset>
-            <size>0x20</size>
+            <size>0x10</size>
             <usage>registers</usage>
          </addressBlock>
          <addressBlock>
             <offset>0x280</offset>
-            <size>0x20</size>
+            <size>0x10</size>
             <usage>registers</usage>
          </addressBlock>
          <addressBlock>
             <offset>0x300</offset>
-            <size>0x20</size>
+            <size>0x10</size>
             <usage>registers</usage>
          </addressBlock>
          <addressBlock>
             <offset>0x380</offset>
-            <size>0x20</size>
+            <size>0x10</size>
             <usage>registers</usage>
          </addressBlock>
          <addressBlock>
             <offset>0x400</offset>
-            <size>0x20</size>
+            <size>0x10</size>
             <usage>registers</usage>
          </addressBlock>
          <addressBlock>
             <offset>0x480</offset>
-            <size>0x20</size>
+            <size>0x10</size>
             <usage>registers</usage>
          </addressBlock>
          <addressBlock>
             <offset>0x500</offset>
-            <size>0x20</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x680</offset>
-            <size>0x20</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x700</offset>
-            <size>0x20</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x780</offset>
-            <size>0x20</size>
+            <size>0x10</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
@@ -99,7 +80,6 @@ Devices using this peripheral:
                <description>Version ID Register</description>
                <addressOffset>0x0</addressOffset>
                <access>read-only</access>
-               <resetValue>0x1010001</resetValue>
                <fields>
                   <field>
                      <name>FEATURE</name>
@@ -108,12 +88,12 @@ Devices using this peripheral:
                      <bitWidth>16</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Standard features implemented</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Supports state, logic and parallel modes</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -138,7 +118,7 @@ Devices using this peripheral:
                <description>Parameter Register</description>
                <addressOffset>0x4</addressOffset>
                <access>read-only</access>
-               <resetValue>0x10200808</resetValue>
+               <resetValue>0x4080404</resetValue>
                <fields>
                   <field>
                      <name>SHIFTER</name>
@@ -178,12 +158,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>FlexIO module is disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>FlexIO module is enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -196,12 +176,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Software reset is disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Software reset is enabled, all FlexIO registers except the Control Register are reset</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -214,12 +194,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Configures for normal register accesses to FlexIO</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Configures for fast register accesses to FlexIO</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -232,12 +212,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>FlexIO is disabled in debug modes</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>FlexIO is enabled in debug modes</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -250,12 +230,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>FlexIO enabled in Doze modes</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>FlexIO disabled in Doze modes</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -273,6 +253,7 @@ Devices using this peripheral:
                      <name>PDI</name>
                      <description>Pin Data Input</description>
                      <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
                   </field>
                </fields>
             </register>
@@ -285,17 +266,17 @@ Devices using this peripheral:
                      <name>SSF</name>
                      <description>Shifter Status Flag</description>
                      <bitOffset>0</bitOffset>
-                     <bitWidth>8</bitWidth>
+                     <bitWidth>4</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Status flag is clear</description>
-                           <value>0b0</value>
+                           <value>0b0000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Status flag is set</description>
-                           <value>0b1</value>
+                           <value>0b0001</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -310,17 +291,17 @@ Devices using this peripheral:
                      <name>SEF</name>
                      <description>Shifter Error Flags</description>
                      <bitOffset>0</bitOffset>
-                     <bitWidth>8</bitWidth>
+                     <bitWidth>4</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Shifter Error Flag is clear</description>
-                           <value>0b0</value>
+                           <value>0b0000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Shifter Error Flag is set</description>
-                           <value>0b1</value>
+                           <value>0b0001</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -335,17 +316,17 @@ Devices using this peripheral:
                      <name>TSF</name>
                      <description>Timer Status Flags</description>
                      <bitOffset>0</bitOffset>
-                     <bitWidth>8</bitWidth>
+                     <bitWidth>4</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Timer Status Flag is clear</description>
-                           <value>0b0</value>
+                           <value>0b0000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Timer Status Flag is set</description>
-                           <value>0b1</value>
+                           <value>0b0001</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -360,17 +341,17 @@ Devices using this peripheral:
                      <name>SSIE</name>
                      <description>Shifter Status Interrupt Enable</description>
                      <bitOffset>0</bitOffset>
-                     <bitWidth>8</bitWidth>
+                     <bitWidth>4</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Shifter Status Flag interrupt disabled</description>
-                           <value>0b0</value>
+                           <value>0b0000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Shifter Status Flag interrupt enabled</description>
-                           <value>0b1</value>
+                           <value>0b0001</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -385,17 +366,17 @@ Devices using this peripheral:
                      <name>SEIE</name>
                      <description>Shifter Error Interrupt Enable</description>
                      <bitOffset>0</bitOffset>
-                     <bitWidth>8</bitWidth>
+                     <bitWidth>4</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Shifter Error Flag interrupt disabled</description>
-                           <value>0b0</value>
+                           <value>0b0000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Shifter Error Flag interrupt enabled</description>
-                           <value>0b1</value>
+                           <value>0b0001</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -410,17 +391,17 @@ Devices using this peripheral:
                      <name>TEIE</name>
                      <description>Timer Status Interrupt Enable</description>
                      <bitOffset>0</bitOffset>
-                     <bitWidth>8</bitWidth>
+                     <bitWidth>4</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Timer Status Flag interrupt is disabled</description>
-                           <value>0b0</value>
+                           <value>0b0000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Timer Status Flag interrupt is enabled</description>
-                           <value>0b1</value>
+                           <value>0b0001</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -435,39 +416,26 @@ Devices using this peripheral:
                      <name>SSDE</name>
                      <description>Shifter Status DMA Enable</description>
                      <bitOffset>0</bitOffset>
-                     <bitWidth>8</bitWidth>
+                     <bitWidth>4</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Shifter Status Flag DMA request is disabled</description>
-                           <value>0b0</value>
+                           <value>0b0000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Shifter Status Flag DMA request is enabled</description>
-                           <value>0b1</value>
+                           <value>0b0001</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                </fields>
             </register>
             <register>
-               <name>SHIFTSTATE</name>
-               <description>Shifter State Register</description>
-               <addressOffset>0x40</addressOffset>
-               <fields>
-                  <field>
-                     <name>STATE</name>
-                     <description>Current State Pointer</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>3</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <dim>8</dim>
+               <dim>4</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
+               <dimIndex>0,1,2,3</dimIndex>
                <name>SHIFTCTL%s</name>
                <description>Shifter Control N Register</description>
                <addressOffset>0x80</addressOffset>
@@ -480,39 +448,29 @@ Devices using this peripheral:
                      <bitWidth>3</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>000</name>
+                           <name>0b000</name>
                            <description>Disabled</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>001</name>
+                           <name>0b001</name>
                            <description>Receive mode. Captures the current Shifter content into the SHIFTBUF on expiration of the Timer</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>010</name>
+                           <name>0b010</name>
                            <description>Transmit mode. Load SHIFTBUF contents into the Shifter on expiration of the Timer</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>100</name>
+                           <name>0b100</name>
                            <description>Match Store mode. Shifter data is compared to SHIFTBUF content on expiration of the Timer</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>101</name>
+                           <name>0b101</name>
                            <description>Match Continuous mode. Shifter data is continuously compared to SHIFTBUF contents</description>
                            <value>0b101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>110</name>
-                           <description>State mode. SHIFTBUF contents are used for storing programmable state attributes</description>
-                           <value>0b110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>111</name>
-                           <description>Logic mode. SHIFTBUF contents are used for implementing programmable logic look up table</description>
-                           <value>0b111</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -523,12 +481,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Pin is active high</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Pin is active low</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -538,7 +496,7 @@ Devices using this peripheral:
                      <name>PINSEL</name>
                      <description>Shifter Pin Select</description>
                      <bitOffset>8</bitOffset>
-                     <bitWidth>5</bitWidth>
+                     <bitWidth>3</bitWidth>
                   </field>
                   <field>
                      <name>PINCFG</name>
@@ -547,22 +505,22 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>Shifter pin output disabled</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
+                           <name>0b01</name>
                            <description>Shifter pin open drain or bidirectional output enable</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
+                           <name>0b10</name>
                            <description>Shifter pin bidirectional output data</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
+                           <name>0b11</name>
                            <description>Shifter pin output</description>
                            <value>0b11</value>
                         </enumeratedValue>
@@ -575,12 +533,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Shift on posedge of Shift clock</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Shift on negedge of Shift clock</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -590,14 +548,14 @@ Devices using this peripheral:
                      <name>TIMSEL</name>
                      <description>Timer Select</description>
                      <bitOffset>24</bitOffset>
-                     <bitWidth>3</bitWidth>
+                     <bitWidth>2</bitWidth>
                   </field>
                </fields>
             </register>
             <register>
-               <dim>8</dim>
+               <dim>4</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
+               <dimIndex>0,1,2,3</dimIndex>
                <name>SHIFTCFG%s</name>
                <description>Shifter Configuration N Register</description>
                <addressOffset>0x100</addressOffset>
@@ -610,22 +568,22 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>Start bit disabled for transmitter/receiver/match store, transmitter loads data on enable</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
+                           <name>0b01</name>
                            <description>Start bit disabled for transmitter/receiver/match store, transmitter loads data on first shift</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
+                           <name>0b10</name>
                            <description>Transmitter outputs start bit value 0 before loading data on first shift, receiver/match store sets error flag if start bit is not 0</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
+                           <name>0b11</name>
                            <description>Transmitter outputs start bit value 1 before loading data on first shift, receiver/match store sets error flag if start bit is not 1</description>
                            <value>0b11</value>
                         </enumeratedValue>
@@ -638,22 +596,22 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>Stop bit disabled for transmitter/receiver/match store</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
+                           <name>0b01</name>
                            <description>Reserved for transmitter/receiver/match store</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
+                           <name>0b10</name>
                            <description>Transmitter outputs stop bit value 0 on store, receiver/match store sets error flag if stop bit is not 0</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
+                           <name>0b11</name>
                            <description>Transmitter outputs stop bit value 1 on store, receiver/match store sets error flag if stop bit is not 1</description>
                            <value>0b11</value>
                         </enumeratedValue>
@@ -666,29 +624,23 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Pin</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Shifter N+1 Output</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>PWIDTH</name>
-                     <description>Parallel Width</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>5</bitWidth>
-                  </field>
                </fields>
             </register>
             <register>
-               <dim>8</dim>
+               <dim>4</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
+               <dimIndex>0,1,2,3</dimIndex>
                <name>SHIFTBUF%s</name>
                <description>Shifter Buffer N Register</description>
                <addressOffset>0x200</addressOffset>
@@ -702,9 +654,9 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>8</dim>
+               <dim>4</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
+               <dimIndex>0,1,2,3</dimIndex>
                <name>SHIFTBUFBIS%s</name>
                <description>Shifter Buffer N Bit Swapped Register</description>
                <addressOffset>0x280</addressOffset>
@@ -718,9 +670,9 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>8</dim>
+               <dim>4</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
+               <dimIndex>0,1,2,3</dimIndex>
                <name>SHIFTBUFBYS%s</name>
                <description>Shifter Buffer N Byte Swapped Register</description>
                <addressOffset>0x300</addressOffset>
@@ -734,9 +686,9 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>8</dim>
+               <dim>4</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
+               <dimIndex>0,1,2,3</dimIndex>
                <name>SHIFTBUFBBS%s</name>
                <description>Shifter Buffer N Bit Byte Swapped Register</description>
                <addressOffset>0x380</addressOffset>
@@ -750,9 +702,9 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>8</dim>
+               <dim>4</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
+               <dimIndex>0,1,2,3</dimIndex>
                <name>TIMCTL%s</name>
                <description>Timer Control N Register</description>
                <addressOffset>0x400</addressOffset>
@@ -765,22 +717,22 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>Timer Disabled</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
+                           <name>0b01</name>
                            <description>Dual 8-bit counters baud/bit mode</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
+                           <name>0b10</name>
                            <description>Dual 8-bit counters PWM mode</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
+                           <name>0b11</name>
                            <description>Single 16-bit counter mode</description>
                            <value>0b11</value>
                         </enumeratedValue>
@@ -793,12 +745,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Pin is active high</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Pin is active low</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -808,7 +760,7 @@ Devices using this peripheral:
                      <name>PINSEL</name>
                      <description>Timer Pin Select</description>
                      <bitOffset>8</bitOffset>
-                     <bitWidth>5</bitWidth>
+                     <bitWidth>3</bitWidth>
                   </field>
                   <field>
                      <name>PINCFG</name>
@@ -817,22 +769,22 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>Timer pin output disabled</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
+                           <name>0b01</name>
                            <description>Timer pin open drain or bidirectional output enable</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
+                           <name>0b10</name>
                            <description>Timer pin bidirectional output data</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
+                           <name>0b11</name>
                            <description>Timer pin output</description>
                            <value>0b11</value>
                         </enumeratedValue>
@@ -845,12 +797,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>External trigger selected</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Internal trigger selected</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -863,12 +815,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Trigger active high</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Trigger active low</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -878,14 +830,14 @@ Devices using this peripheral:
                      <name>TRGSEL</name>
                      <description>Trigger Select</description>
                      <bitOffset>24</bitOffset>
-                     <bitWidth>6</bitWidth>
+                     <bitWidth>4</bitWidth>
                   </field>
                </fields>
             </register>
             <register>
-               <dim>8</dim>
+               <dim>4</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
+               <dimIndex>0,1,2,3</dimIndex>
                <name>TIMCFG%s</name>
                <description>Timer Configuration N Register</description>
                <addressOffset>0x480</addressOffset>
@@ -898,12 +850,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Start bit disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Start bit enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -916,22 +868,22 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>Stop bit disabled</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
+                           <name>0b01</name>
                            <description>Stop bit is enabled on timer compare</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
+                           <name>0b10</name>
                            <description>Stop bit is enabled on timer disable</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
+                           <name>0b11</name>
                            <description>Stop bit is enabled on timer compare and timer disable</description>
                            <value>0b11</value>
                         </enumeratedValue>
@@ -944,42 +896,42 @@ Devices using this peripheral:
                      <bitWidth>3</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>000</name>
+                           <name>0b000</name>
                            <description>Timer always enabled</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>001</name>
+                           <name>0b001</name>
                            <description>Timer enabled on Timer N-1 enable</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>010</name>
+                           <name>0b010</name>
                            <description>Timer enabled on Trigger high</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>011</name>
+                           <name>0b011</name>
                            <description>Timer enabled on Trigger high and Pin high</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>100</name>
+                           <name>0b100</name>
                            <description>Timer enabled on Pin rising edge</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>101</name>
+                           <name>0b101</name>
                            <description>Timer enabled on Pin rising edge and Trigger high</description>
                            <value>0b101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>110</name>
+                           <name>0b110</name>
                            <description>Timer enabled on Trigger rising edge</description>
                            <value>0b110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>111</name>
+                           <name>0b111</name>
                            <description>Timer enabled on Trigger rising or falling edge</description>
                            <value>0b111</value>
                         </enumeratedValue>
@@ -992,37 +944,37 @@ Devices using this peripheral:
                      <bitWidth>3</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>000</name>
+                           <name>0b000</name>
                            <description>Timer never disabled</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>001</name>
+                           <name>0b001</name>
                            <description>Timer disabled on Timer N-1 disable</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>010</name>
+                           <name>0b010</name>
                            <description>Timer disabled on Timer compare</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>011</name>
+                           <name>0b011</name>
                            <description>Timer disabled on Timer compare and Trigger Low</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>100</name>
+                           <name>0b100</name>
                            <description>Timer disabled on Pin rising or falling edge</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>101</name>
+                           <name>0b101</name>
                            <description>Timer disabled on Pin rising or falling edge provided Trigger is high</description>
                            <value>0b101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>110</name>
+                           <name>0b110</name>
                            <description>Timer disabled on Trigger falling edge</description>
                            <value>0b110</value>
                         </enumeratedValue>
@@ -1035,32 +987,32 @@ Devices using this peripheral:
                      <bitWidth>3</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>000</name>
+                           <name>0b000</name>
                            <description>Timer never reset</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>010</name>
+                           <name>0b010</name>
                            <description>Timer reset on Timer Pin equal to Timer Output</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>011</name>
+                           <name>0b011</name>
                            <description>Timer reset on Timer Trigger equal to Timer Output</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>100</name>
+                           <name>0b100</name>
                            <description>Timer reset on Timer Pin rising edge</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>110</name>
+                           <name>0b110</name>
                            <description>Timer reset on Trigger rising edge</description>
                            <value>0b110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>111</name>
+                           <name>0b111</name>
                            <description>Timer reset on Trigger rising or falling edge</description>
                            <value>0b111</value>
                         </enumeratedValue>
@@ -1073,22 +1025,22 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>Decrement counter on FlexIO clock, Shift clock equals Timer output</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
+                           <name>0b01</name>
                            <description>Decrement counter on Trigger input (both edges), Shift clock equals Timer output</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
+                           <name>0b10</name>
                            <description>Decrement counter on Pin input (both edges), Shift clock equals Pin input</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
+                           <name>0b11</name>
                            <description>Decrement counter on Trigger input (both edges), Shift clock equals Trigger input</description>
                            <value>0b11</value>
                         </enumeratedValue>
@@ -1101,22 +1053,22 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>Timer output is logic one when enabled and is not affected by timer reset</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
+                           <name>0b01</name>
                            <description>Timer output is logic zero when enabled and is not affected by timer reset</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
+                           <name>0b10</name>
                            <description>Timer output is logic one when enabled and on timer reset</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
+                           <name>0b11</name>
                            <description>Timer output is logic zero when enabled and on timer reset</description>
                            <value>0b11</value>
                         </enumeratedValue>
@@ -1125,9 +1077,9 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>8</dim>
+               <dim>4</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
+               <dimIndex>0,1,2,3</dimIndex>
                <name>TIMCMP%s</name>
                <description>Timer Compare N Register</description>
                <addressOffset>0x500</addressOffset>
@@ -1138,54 +1090,6 @@ Devices using this peripheral:
                      <description>Timer Compare Value</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>16</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <dim>8</dim>
-               <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
-               <name>SHIFTBUFNBS%s</name>
-               <description>Shifter Buffer N Nibble Byte Swapped Register</description>
-               <addressOffset>0x680</addressOffset>
-               <resetMask>0x0</resetMask>
-               <fields>
-                  <field>
-                     <name>SHIFTBUFNBS</name>
-                     <description>Shift Buffer</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <dim>8</dim>
-               <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
-               <name>SHIFTBUFHWS%s</name>
-               <description>Shifter Buffer N Half Word Swapped Register</description>
-               <addressOffset>0x700</addressOffset>
-               <resetMask>0x0</resetMask>
-               <fields>
-                  <field>
-                     <name>SHIFTBUFHWS</name>
-                     <description>Shift Buffer</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <dim>8</dim>
-               <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
-               <name>SHIFTBUFNIS%s</name>
-               <description>Shifter Buffer N Nibble Swapped Register</description>
-               <addressOffset>0x780</addressOffset>
-               <resetMask>0x0</resetMask>
-               <fields>
-                  <field>
-                     <name>SHIFTBUFNIS</name>
-                     <description>Shift Buffer</description>
-                     <bitOffset>0</bitOffset>
                   </field>
                </fields>
             </register>

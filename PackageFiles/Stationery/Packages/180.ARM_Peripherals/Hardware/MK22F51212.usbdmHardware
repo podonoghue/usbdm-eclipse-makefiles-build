@@ -48,11 +48,27 @@
       </peripheral>
       <peripheral baseName="DAC"      instance="1"        version="dac0_16ch_fifo16">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDac" />
+         <irq num="DAC1_IRQn" />
       </peripheral>
       <peripheral baseName="DMA"      instance="0"        version="dma0_16ch_ears16">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDma" />
          <clock reg="SCGC7"         mask="SIM_SCGC7_DMA_MASK" />
          <irq num="DMA0_IRQn" />
+         <irq num="DMA1_IRQn" />
+         <irq num="DMA2_IRQn" />
+         <irq num="DMA3_IRQn" />
+         <irq num="DMA4_IRQn" />
+         <irq num="DMA5_IRQn" />
+         <irq num="DMA6_IRQn" />
+         <irq num="DMA7_IRQn" />
+         <irq num="DMA8_IRQn" />
+         <irq num="DMA9_IRQn" />
+         <irq num="DMA10_IRQn" />
+         <irq num="DMA11_IRQn" />
+         <irq num="DMA12_IRQn" />
+         <irq num="DMA13_IRQn" />
+         <irq num="DMA14_IRQn" />
+         <irq num="DMA15_IRQn" />
          <irq num="DMA_Error_IRQn" />
       </peripheral>
       <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_16ch_trig_mk22f51212">
@@ -70,6 +86,8 @@
       <peripheral baseName="FTFA"     instance=""         version="ftfa_xacch">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlash" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_FTF_MASK" />
+         <irq num="FTF_Command_IRQn" />
+         <irq num="FTF_ReadCollision_IRQn" />
          <param key="pflash_sector_size" value="2048" />
          <param key="pflash_phrase_size" value="4" />
          <param key="peripheral_file" value="ftfa" />
@@ -94,6 +112,7 @@
       </peripheral>
       <peripheral baseName="FTM"      instance="3"        version="ftm0_8ch_icrst">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
+         <irq num="FTM3_IRQn" />
       </peripheral>
       <peripheral baseName="GPIO"     instance="A"        version="gpioa_0x400ff000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
@@ -148,7 +167,7 @@
       <peripheral baseName="LPUART"   instance="0"        version="lpuart0_modir_0x4002a000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLpuart" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_LPUART0_MASK" />
-         <irq num="LPUART0_RxTx_IRQn" />
+         <irq num="LPUART0_IRQn" />
       </peripheral>
       <peripheral baseName="MCG"      instance=""         version="mcg_mk_ics48m">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcg" />

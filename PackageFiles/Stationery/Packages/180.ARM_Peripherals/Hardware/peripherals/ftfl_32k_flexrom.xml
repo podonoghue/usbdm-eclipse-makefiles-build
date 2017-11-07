@@ -13,11 +13,11 @@
 
    <stringOption name="FlashType" key="/Flash/FlashType" value="ftfl" derived="true" />
    
-   <stringOption key="dflash_sector_size" constant="true" derived="true"
+   <stringOption name="dflash_sector_size" constant="true" derived="true"
       description="Sector size for data flash (minimum erase element)"
       toolTip="Only for device with FlexNVM" />
 
-   <stringOption key="dflash_phrase_size" constant="true" derived="true"
+   <stringOption name="dflash_phrase_size" constant="true" derived="true"
       description="Phrase size for data flash (minimum program element)"
       toolTip="Only for device with FlexNVM" />
       

@@ -41,6 +41,10 @@
       <peripheral baseName="DMA"      instance="0"        version="dma0_mkl">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDma" />
          <clock reg="SCGC7"         mask="SIM_SCGC7_DMA_MASK" />
+         <irq num="DMA0_IRQn" />
+         <irq num="DMA1_IRQn" />
+         <irq num="DMA2_IRQn" />
+         <irq num="DMA3_IRQn" />
       </peripheral>
       <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_4ch_trig">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDmaMux" />
@@ -49,7 +53,7 @@
       <peripheral baseName="ExternalTrigger" instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForShared" />
       </peripheral>
-      <peripheral baseName="FLEXIO"   instance=""         version="flexio_0">
+      <peripheral baseName="FLEXIO"   instance=""         version="flexio_4sh_0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
          <clock reg="SCGC5"         mask="SIM_SCGC5_FLEXIO_MASK" />
          <irq num="UART2_FLEXIO_IRQn" />
@@ -57,6 +61,7 @@
       <peripheral baseName="FTFA"     instance=""         version="ftfa">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlash" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_FTF_MASK" />
+         <irq num="FTF_Command_IRQn" />
          <param key="pflash_sector_size" value="1024" />
          <param key="pflash_phrase_size" value="4" />
          <param key="peripheral_file" value="ftfa" />
@@ -111,16 +116,15 @@
       <peripheral baseName="LPUART"   instance="0"        version="lpuart0_mkl03">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLpuart" />
          <clock reg="SCGC5"         mask="SIM_SCGC5_LPUART0_MASK" />
-         <irq num="LUART0_IRQn" />
+         <irq num="LPUART0_IRQn" />
       </peripheral>
       <peripheral baseName="LPUART"   instance="1"        version="lpuart0_mkl03">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLpuart" />
          <clock reg="SCGC5"         mask="SIM_SCGC5_LPUART1_MASK" />
-         <irq num="LUART1_IRQn" />
+         <irq num="LPUART1_IRQn" />
       </peripheral>
       <peripheral baseName="MCG"      instance=""         version="mcg_lite_mkl17z4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcg" />
-         <irq num="MCG_IRQn" />
       </peripheral>
       <peripheral baseName="OSC"      instance="0"        version="osc0_mk">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForOsc" />
@@ -144,6 +148,7 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRtc" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_RTC_MASK" />
          <irq num="RTC_Alarm_IRQn" />
+         <irq num="RTC_Seconds_IRQn" />
       </peripheral>
       <peripheral baseName="SIM"      instance=""         version="sim_mkl27z4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSim" />
@@ -182,7 +187,7 @@
       <peripheral baseName="UART"     instance="2"        version="uart2_mkl17z4_c7816">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUart" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_UART2_MASK" />
-         <irq num="UART2_IRQn" />
+         <irq num="UART2_FLEXIO_IRQn" />
       </peripheral>
       <peripheral baseName="USB"      instance="0"        version="usb0_clkrcv_a">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUsb" />

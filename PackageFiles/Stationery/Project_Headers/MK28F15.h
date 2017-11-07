@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2017/10
+ * @date     2017/11
  *
  *******************************************************************************************************/
 
@@ -56,7 +56,7 @@ typedef enum {
   DMA13_DMA29_IRQn              =  13,   /**<  29 Direct memory access controller                                                  */
   DMA14_DMA30_IRQn              =  14,   /**<  30 Direct memory access controller                                                  */
   DMA15_DMA31_IRQn              =  15,   /**<  31 Direct memory access controller                                                  */
-  DMA_Error_IRQn                =  16,   /**<  32 DMA error interrupt all channels                                                 */
+  DMA_Error_IRQn                =  16,   /**<  32 DMA0 error interrupt all channels                                                */
   MCM_IRQn                      =  17,   /**<  33 Miscellaneous Control Module                                                     */
   FTF_Command_IRQn              =  18,   /**<  34 Flash Memory Interface                                                           */
   FTF_ReadCollision_IRQn        =  19,   /**<  35 Flash Memory Interface                                                           */
@@ -104,7 +104,7 @@ typedef enum {
   SPI3_IRQn                     =  66,   /**<  82 Serial Peripheral Interface                                                      */
   I2S1_Tx_IRQn                  =  68,   /**<  84 Inter-IC Sound / Synchronous Audio Interface                                     */
   I2S1_Rx_IRQn                  =  69,   /**<  85 Inter-IC Sound / Synchronous Audio Interface                                     */
-  FLEXIO0_IRQn                  =  70,   /**<  86 The FLEXIO Memory Map/Register Definition can be found here                      */
+  FLEXIO_IRQn                   =  70,   /**<  86 The FLEXIO Memory Map/Register Definition can be found here                      */
   FTM3_IRQn                     =  71,   /**<  87 FlexTimer Module                                                                 */
   I2C2_IRQn                     =  74,   /**<  90 Inter-Integrated Circuit                                                         */
   SDHC_IRQn                     =  81,   /**<  97 Secured Digital Host Controller                                                  */
@@ -126,90 +126,90 @@ typedef enum {
 * @{
 */
 /* -------------------------  Exception Handlers  ------------------------ */
-extern void NMI_Handler(void);                 /**< Non maskable Interrupt, cannot be stopped or preempted                           */
-extern void HardFault_Handler(void);           /**< Hard Fault, all classes of Fault                                                 */
-extern void MemManage_Handler(void);           /**< Memory Management, MPU mismatch, including Access Violation and No Match         */
-extern void BusFault_Handler(void);            /**< Bus Fault, Pre-Fetch-, Memory Access Fault, other address/memory related Fault   */
-extern void UsageFault_Handler(void);          /**< Usage Fault, i.e. Undef Instruction, Illegal State Transition                    */
-extern void SVC_Handler(void);                 /**< System Service Call via SVC instruction                                          */
-extern void DebugMon_Handler(void);            /**< Debug Monitor                                                                    */
-extern void PendSV_Handler(void);              /**< Pendable request for system service                                              */
-extern void SysTick_Handler(void);             /**< System Tick Timer                                                                */
-extern void DMA0_DMA16_IRQHandler(void);       /**< Direct memory access controller                                                  */
-extern void DMA1_DMA17_IRQHandler(void);       /**< Direct memory access controller                                                  */
-extern void DMA2_DMA18_IRQHandler(void);       /**< Direct memory access controller                                                  */
-extern void DMA3_DMA19_IRQHandler(void);       /**< Direct memory access controller                                                  */
-extern void DMA4_DMA20_IRQHandler(void);       /**< Direct memory access controller                                                  */
-extern void DMA5_DMA21_IRQHandler(void);       /**< Direct memory access controller                                                  */
-extern void DMA6_DMA22_IRQHandler(void);       /**< Direct memory access controller                                                  */
-extern void DMA7_DMA23_IRQHandler(void);       /**< Direct memory access controller                                                  */
-extern void DMA8_DMA24_IRQHandler(void);       /**< Direct memory access controller                                                  */
-extern void DMA9_DMA25_IRQHandler(void);       /**< Direct memory access controller                                                  */
-extern void DMA10_DMA26_IRQHandler(void);      /**< Direct memory access controller                                                  */
-extern void DMA11_DMA27_IRQHandler(void);      /**< Direct memory access controller                                                  */
-extern void DMA12_DMA28_IRQHandler(void);      /**< Direct memory access controller                                                  */
-extern void DMA13_DMA29_IRQHandler(void);      /**< Direct memory access controller                                                  */
-extern void DMA14_DMA30_IRQHandler(void);      /**< Direct memory access controller                                                  */
-extern void DMA15_DMA31_IRQHandler(void);      /**< Direct memory access controller                                                  */
-extern void DMA_Error_IRQHandler(void);        /**< DMA error interrupt all channels                                                 */
-extern void MCM_IRQHandler(void);              /**< Miscellaneous Control Module                                                     */
-extern void FTF_Command_IRQHandler(void);      /**< Flash Memory Interface                                                           */
-extern void FTF_ReadCollision_IRQHandler(void);   /**< Flash Memory Interface                                                           */
-extern void PMC_IRQHandler(void);              /**< Power Management Controller                                                      */
-extern void LLWU_IRQHandler(void);             /**< Low Leakage Wakeup                                                               */
-extern void WDOG_IRQHandler(void);             /**< External Watchdog Monitor                                                        */
-extern void RNG_IRQHandler(void);              /**< Random Number Generator                                                          */
-extern void I2C0_IRQHandler(void);             /**< Inter-Integrated Circuit                                                         */
-extern void I2C1_IRQHandler(void);             /**< Inter-Integrated Circuit                                                         */
-extern void SPI0_IRQHandler(void);             /**< Serial Peripheral Interface                                                      */
-extern void SPI1_IRQHandler(void);             /**< Serial Peripheral Interface                                                      */
-extern void I2S0_Tx_IRQHandler(void);          /**< Synchronous Serial Interface                                                     */
-extern void I2S0_Rx_IRQHandler(void);          /**< Synchronous Serial Interface                                                     */
-extern void LPUART0_IRQHandler(void);          /**< Universal Asynchronous Receiver/Transmitter                                      */
-extern void LPUART1_IRQHandler(void);          /**< Universal Asynchronous Receiver/Transmitter                                      */
-extern void LPUART2_IRQHandler(void);          /**< Universal Asynchronous Receiver/Transmitter                                      */
-extern void LPUART3_IRQHandler(void);          /**< Universal Asynchronous Receiver/Transmitter                                      */
-extern void LPUART4_IRQHandler(void);          /**< Universal Asynchronous Receiver/Transmitter                                      */
-extern void ADC0_IRQHandler(void);             /**< Analog-to-Digital Converter                                                      */
-extern void CMP0_IRQHandler(void);             /**< High-Speed Comparator                                                            */
-extern void CMP1_IRQHandler(void);             /**< High-Speed Comparator                                                            */
-extern void FTM0_IRQHandler(void);             /**< FlexTimer Module                                                                 */
-extern void FTM1_IRQHandler(void);             /**< FlexTimer Module                                                                 */
-extern void FTM2_IRQHandler(void);             /**< FlexTimer Module                                                                 */
-extern void CMT_IRQHandler(void);              /**< Carrier Modulator Transmitter                                                    */
-extern void RTC_Alarm_IRQHandler(void);        /**< Real Time Clock                                                                  */
-extern void RTC_Seconds_IRQHandler(void);      /**< Real Time Clock                                                                  */
-extern void PIT0_IRQHandler(void);             /**< Periodic Interrupt Timer                                                         */
-extern void PIT1_IRQHandler(void);             /**< Periodic Interrupt Timer                                                         */
-extern void PIT2_IRQHandler(void);             /**< Periodic Interrupt Timer                                                         */
-extern void PIT3_IRQHandler(void);             /**< Periodic Interrupt Timer                                                         */
-extern void PDB0_IRQHandler(void);             /**< Programmable Delay Block                                                         */
-extern void USB0_IRQHandler(void);             /**< Universal Serial Bus                                                             */
-extern void USBDCD_IRQHandler(void);           /**< USB Device Charger Detection                                                     */
-extern void DAC0_IRQHandler(void);             /**< Digital to Analogue Converter                                                    */
-extern void MCG_IRQHandler(void);              /**< Multipurpose Clock Generator                                                     */
-extern void LPTMR0_LPTMR1_IRQHandler(void);    /**< Low Power Timer                                                                  */
-extern void PORTA_IRQHandler(void);            /**< General Purpose Input/Output                                                     */
-extern void PORTB_IRQHandler(void);            /**< General Purpose Input/Output                                                     */
-extern void PORTC_IRQHandler(void);            /**< General Purpose Input/Output                                                     */
-extern void PORTD_IRQHandler(void);            /**< General Purpose Input/Output                                                     */
-extern void PORTE_IRQHandler(void);            /**< General Purpose Input/Output                                                     */
-extern void SWI_IRQHandler(void);              /**< Software interrupt                                                               */
-extern void SPI2_IRQHandler(void);             /**< Serial Peripheral Interface                                                      */
-extern void SPI3_IRQHandler(void);             /**< Serial Peripheral Interface                                                      */
-extern void I2S1_Tx_IRQHandler(void);          /**< Inter-IC Sound / Synchronous Audio Interface                                     */
-extern void I2S1_Rx_IRQHandler(void);          /**< Inter-IC Sound / Synchronous Audio Interface                                     */
-extern void FLEXIO0_IRQHandler(void);          /**< The FLEXIO Memory Map/Register Definition can be found here                      */
-extern void FTM3_IRQHandler(void);             /**< FlexTimer Module                                                                 */
-extern void I2C2_IRQHandler(void);             /**< Inter-Integrated Circuit                                                         */
-extern void SDHC_IRQHandler(void);             /**< Secured Digital Host Controller                                                  */
-extern void TSI0_IRQHandler(void);             /**< Touch sense input                                                                */
-extern void TPM1_IRQHandler(void);             /**< Timer/PWM Module                                                                 */
-extern void TPM2_IRQHandler(void);             /**< Timer/PWM Module                                                                 */
-extern void USBHSDCD_IRQHandler(void);         /**< USB Device Charger Detection module                                              */
-extern void I2C3_IRQHandler(void);             /**< Inter-Integrated Circuit                                                         */
-extern void USBHS_IRQHandler(void);            /**< USB HS/FS/LS OTG Controller                                                      */
-extern void QSPI0_IRQHandler(void);            /**< QuadSPI                                                                          */
+extern void NMI_Handler(void);                       /**< Non maskable Interrupt, cannot be stopped or preempted                           */
+extern void HardFault_Handler(void);                 /**< Hard Fault, all classes of Fault                                                 */
+extern void MemManage_Handler(void);                 /**< Memory Management, MPU mismatch, including Access Violation and No Match         */
+extern void BusFault_Handler(void);                  /**< Bus Fault, Pre-Fetch-, Memory Access Fault, other address/memory related Fault   */
+extern void UsageFault_Handler(void);                /**< Usage Fault, i.e. Undef Instruction, Illegal State Transition                    */
+extern void SVC_Handler(void);                       /**< System Service Call via SVC instruction                                          */
+extern void DebugMon_Handler(void);                  /**< Debug Monitor                                                                    */
+extern void PendSV_Handler(void);                    /**< Pendable request for system service                                              */
+extern void SysTick_Handler(void);                   /**< System Tick Timer                                                                */
+extern void DMA0_DMA16_IRQHandler(void);             /**< Direct memory access controller                                                  */
+extern void DMA1_DMA17_IRQHandler(void);             /**< Direct memory access controller                                                  */
+extern void DMA2_DMA18_IRQHandler(void);             /**< Direct memory access controller                                                  */
+extern void DMA3_DMA19_IRQHandler(void);             /**< Direct memory access controller                                                  */
+extern void DMA4_DMA20_IRQHandler(void);             /**< Direct memory access controller                                                  */
+extern void DMA5_DMA21_IRQHandler(void);             /**< Direct memory access controller                                                  */
+extern void DMA6_DMA22_IRQHandler(void);             /**< Direct memory access controller                                                  */
+extern void DMA7_DMA23_IRQHandler(void);             /**< Direct memory access controller                                                  */
+extern void DMA8_DMA24_IRQHandler(void);             /**< Direct memory access controller                                                  */
+extern void DMA9_DMA25_IRQHandler(void);             /**< Direct memory access controller                                                  */
+extern void DMA10_DMA26_IRQHandler(void);            /**< Direct memory access controller                                                  */
+extern void DMA11_DMA27_IRQHandler(void);            /**< Direct memory access controller                                                  */
+extern void DMA12_DMA28_IRQHandler(void);            /**< Direct memory access controller                                                  */
+extern void DMA13_DMA29_IRQHandler(void);            /**< Direct memory access controller                                                  */
+extern void DMA14_DMA30_IRQHandler(void);            /**< Direct memory access controller                                                  */
+extern void DMA15_DMA31_IRQHandler(void);            /**< Direct memory access controller                                                  */
+extern void DMA_Error_IRQHandler(void);              /**< DMA0 error interrupt all channels                                                */
+extern void MCM_IRQHandler(void);                    /**< Miscellaneous Control Module                                                     */
+extern void FTF_Command_IRQHandler(void);            /**< Flash Memory Interface                                                           */
+extern void FTF_ReadCollision_IRQHandler(void);      /**< Flash Memory Interface                                                           */
+extern void PMC_IRQHandler(void);                    /**< Power Management Controller                                                      */
+extern void LLWU_IRQHandler(void);                   /**< Low Leakage Wakeup                                                               */
+extern void WDOG_IRQHandler(void);                   /**< External Watchdog Monitor                                                        */
+extern void RNG_IRQHandler(void);                    /**< Random Number Generator                                                          */
+extern void I2C0_IRQHandler(void);                   /**< Inter-Integrated Circuit                                                         */
+extern void I2C1_IRQHandler(void);                   /**< Inter-Integrated Circuit                                                         */
+extern void SPI0_IRQHandler(void);                   /**< Serial Peripheral Interface                                                      */
+extern void SPI1_IRQHandler(void);                   /**< Serial Peripheral Interface                                                      */
+extern void I2S0_Tx_IRQHandler(void);                /**< Synchronous Serial Interface                                                     */
+extern void I2S0_Rx_IRQHandler(void);                /**< Synchronous Serial Interface                                                     */
+extern void LPUART0_IRQHandler(void);                /**< Universal Asynchronous Receiver/Transmitter                                      */
+extern void LPUART1_IRQHandler(void);                /**< Universal Asynchronous Receiver/Transmitter                                      */
+extern void LPUART2_IRQHandler(void);                /**< Universal Asynchronous Receiver/Transmitter                                      */
+extern void LPUART3_IRQHandler(void);                /**< Universal Asynchronous Receiver/Transmitter                                      */
+extern void LPUART4_IRQHandler(void);                /**< Universal Asynchronous Receiver/Transmitter                                      */
+extern void ADC0_IRQHandler(void);                   /**< Analog-to-Digital Converter                                                      */
+extern void CMP0_IRQHandler(void);                   /**< High-Speed Comparator                                                            */
+extern void CMP1_IRQHandler(void);                   /**< High-Speed Comparator                                                            */
+extern void FTM0_IRQHandler(void);                   /**< FlexTimer Module                                                                 */
+extern void FTM1_IRQHandler(void);                   /**< FlexTimer Module                                                                 */
+extern void FTM2_IRQHandler(void);                   /**< FlexTimer Module                                                                 */
+extern void CMT_IRQHandler(void);                    /**< Carrier Modulator Transmitter                                                    */
+extern void RTC_Alarm_IRQHandler(void);              /**< Real Time Clock                                                                  */
+extern void RTC_Seconds_IRQHandler(void);            /**< Real Time Clock                                                                  */
+extern void PIT0_IRQHandler(void);                   /**< Periodic Interrupt Timer                                                         */
+extern void PIT1_IRQHandler(void);                   /**< Periodic Interrupt Timer                                                         */
+extern void PIT2_IRQHandler(void);                   /**< Periodic Interrupt Timer                                                         */
+extern void PIT3_IRQHandler(void);                   /**< Periodic Interrupt Timer                                                         */
+extern void PDB0_IRQHandler(void);                   /**< Programmable Delay Block                                                         */
+extern void USB0_IRQHandler(void);                   /**< Universal Serial Bus                                                             */
+extern void USBDCD_IRQHandler(void);                 /**< USB Device Charger Detection                                                     */
+extern void DAC0_IRQHandler(void);                   /**< Digital to Analogue Converter                                                    */
+extern void MCG_IRQHandler(void);                    /**< Multipurpose Clock Generator                                                     */
+extern void LPTMR0_LPTMR1_IRQHandler(void);          /**< Low Power Timer                                                                  */
+extern void PORTA_IRQHandler(void);                  /**< General Purpose Input/Output                                                     */
+extern void PORTB_IRQHandler(void);                  /**< General Purpose Input/Output                                                     */
+extern void PORTC_IRQHandler(void);                  /**< General Purpose Input/Output                                                     */
+extern void PORTD_IRQHandler(void);                  /**< General Purpose Input/Output                                                     */
+extern void PORTE_IRQHandler(void);                  /**< General Purpose Input/Output                                                     */
+extern void SWI_IRQHandler(void);                    /**< Software interrupt                                                               */
+extern void SPI2_IRQHandler(void);                   /**< Serial Peripheral Interface                                                      */
+extern void SPI3_IRQHandler(void);                   /**< Serial Peripheral Interface                                                      */
+extern void I2S1_Tx_IRQHandler(void);                /**< Inter-IC Sound / Synchronous Audio Interface                                     */
+extern void I2S1_Rx_IRQHandler(void);                /**< Inter-IC Sound / Synchronous Audio Interface                                     */
+extern void FLEXIO_IRQHandler(void);                 /**< The FLEXIO Memory Map/Register Definition can be found here                      */
+extern void FTM3_IRQHandler(void);                   /**< FlexTimer Module                                                                 */
+extern void I2C2_IRQHandler(void);                   /**< Inter-Integrated Circuit                                                         */
+extern void SDHC_IRQHandler(void);                   /**< Secured Digital Host Controller                                                  */
+extern void TSI0_IRQHandler(void);                   /**< Touch sense input                                                                */
+extern void TPM1_IRQHandler(void);                   /**< Timer/PWM Module                                                                 */
+extern void TPM2_IRQHandler(void);                   /**< Timer/PWM Module                                                                 */
+extern void USBHSDCD_IRQHandler(void);               /**< USB Device Charger Detection module                                              */
+extern void I2C3_IRQHandler(void);                   /**< Inter-Integrated Circuit                                                         */
+extern void USBHS_IRQHandler(void);                  /**< USB HS/FS/LS OTG Controller                                                      */
+extern void QSPI0_IRQHandler(void);                  /**< QuadSPI                                                                          */
 
 /**
  * @} */ /* End group Interrupt_handler_prototypes_GROUP 
@@ -793,7 +793,7 @@ typedef struct {                                /*       CAU Structure          
 /* ================================================================================ */
 
 /**
- * @brief High-Speed Comparator (CMP), Voltage Reference (VREF) Digital-to-Analog Converter (DAC), and Analog Mux
+ * @brief Comparator, Voltage Ref, D-to-A Converter and Analog Mux
  */
 /**
 * @addtogroup CMP_structs_GROUP CMP struct
@@ -916,7 +916,7 @@ typedef struct {                                /*       CMP0 Structure         
 /* ================================================================================ */
 
 /**
- * @brief High-Speed Comparator (CMP), Voltage Reference (VREF) Digital-to-Analog Converter (DAC), and Analog Mux
+ * @brief Comparator, Voltage Ref, D-to-A Converter and Analog Mux
  */
 
 /* CMP1 - Peripheral instance base addresses */
@@ -1252,7 +1252,7 @@ typedef struct {                                /*       CRC0 Structure         
 */
 
 /* ================================================================================ */
-/* ================           DAC0 (file:DAC0_MK28F15)             ================ */
+/* ================           DAC0 (file:DAC0_16CH_FIFO16_0x400CC000)       ================ */
 /* ================================================================================ */
 
 /**
@@ -1264,10 +1264,13 @@ typedef struct {                                /*       CRC0 Structure         
 * @{
 */
 typedef struct {                                /*       DAC0 Structure                                               */
-   struct {
-      __IO uint8_t   DATL;                      /**< 0000: Data Low Register                                            */
-      __IO uint8_t   DATH;                      /**< 0001: Data High Register                                           */
-   } DAT[16];                                   /**< 0000: (cluster: size=0x0020, 32)                                   */
+   union {                                      /**< 0000: (size=0020)                                                  */
+      struct {
+         __IO uint8_t   DATL;                   /**< 0000: Data Low Register                                            */
+         __IO uint8_t   DATH;                   /**< 0001: Data High Register                                           */
+      } DAT[16];                                /**< 0000: (cluster: size=0x0020, 32)                                   */
+      __IO uint16_t  DATA[16];                  /**< 0000: Data Register                                                */
+   };
    __IO uint8_t   SR;                           /**< 0020: Status Register                                              */
    __IO uint8_t   C0;                           /**< 0021: Control Register 0                                           */
    __IO uint8_t   C1;                           /**< 0022: Control Register 1                                           */
@@ -1295,6 +1298,10 @@ typedef struct {                                /*       DAC0 Structure         
 #define DAC_DATH_DATA_MASK                       (0xFU)                                              /*!< DAC0_DATH.DATA Mask                     */
 #define DAC_DATH_DATA_SHIFT                      (0U)                                                /*!< DAC0_DATH.DATA Position                 */
 #define DAC_DATH_DATA(x)                         (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< DAC0_DATH.DATA Field                    */
+/* ------- DATA Bit Fields                          ------ */
+#define DAC_DATA_DATA_MASK                       (0xFFFU)                                            /*!< DAC0_DATA.DATA Mask                     */
+#define DAC_DATA_DATA_SHIFT                      (0U)                                                /*!< DAC0_DATA.DATA Position                 */
+#define DAC_DATA_DATA(x)                         (((uint16_t)(((uint16_t)(x))<<0U))&0xFFFUL)         /*!< DAC0_DATA.DATA Field                    */
 /* ------- SR Bit Fields                            ------ */
 #define DAC_SR_DACBFRPBF_MASK                    (0x1U)                                              /*!< DAC0_SR.DACBFRPBF Mask                  */
 #define DAC_SR_DACBFRPBF_SHIFT                   (0U)                                                /*!< DAC0_SR.DACBFRPBF Position              */
@@ -2658,11 +2665,11 @@ typedef struct {                                /*       FB Structure           
 */
 
 /* ================================================================================ */
-/* ================           FLEXIO (file:FLEXIO0_MK28F15)        ================ */
+/* ================           FLEXIO (file:FLEXIO_8SH_0x400DF000)       ================ */
 /* ================================================================================ */
 
 /**
- * @brief The FLEXIO Memory Map/Register Definition can be found here
+ * @brief Flexible I/O - universal I/O module for communication (UART, SPI, I2C, I2S) and PWM purposes
  */
 /**
 * @addtogroup FLEXIO_structs_GROUP FLEXIO struct
@@ -3207,22 +3214,22 @@ typedef struct {                                /*       FTFE Structure         
         uint8_t   RESERVED_0[2];               
    __IO uint8_t   FEPROT;                       /**< 0016: EEPROM Protection Register (If EEPROM present)               */
    __IO uint8_t   FDPROT;                       /**< 0017: Data Flash Protection Register  (If Data Flash present)      */
-   __I  uint8_t   XACCH3;                       /**< 0018: Execute-only Access                                          */
-   __I  uint8_t   XACCH2;                       /**< 0019: Execute-only Access                                          */
-   __I  uint8_t   XACCH1;                       /**< 001A: Execute-only Access                                          */
-   __I  uint8_t   XACCH0;                       /**< 001B: Execute-only Access                                          */
-   __I  uint8_t   XACCL3;                       /**< 001C: Execute-only Access                                          */
-   __I  uint8_t   XACCL2;                       /**< 001D: Execute-only Access                                          */
-   __I  uint8_t   XACCL1;                       /**< 001E: Execute-only Access                                          */
-   __I  uint8_t   XACCL0;                       /**< 001F: Execute-only Access                                          */
-   __I  uint8_t   SACCH3;                       /**< 0020: Supervisor-only Access                                       */
-   __I  uint8_t   SACCH2;                       /**< 0021: Supervisor-only Access                                       */
-   __I  uint8_t   SACCH1;                       /**< 0022: Supervisor-only Access                                       */
-   __I  uint8_t   SACCH0;                       /**< 0023: Supervisor-only Access                                       */
-   __I  uint8_t   SACCL3;                       /**< 0024: Supervisor-only Access                                       */
-   __I  uint8_t   SACCL2;                       /**< 0025: Supervisor-only Access                                       */
-   __I  uint8_t   SACCL1;                       /**< 0026: Supervisor-only Access                                       */
-   __I  uint8_t   SACCL0;                       /**< 0027: Supervisor-only Access                                       */
+   __I  uint8_t   XACCH3;                       /**< 0018: Execute-only Access Registers (high)                         */
+   __I  uint8_t   XACCH2;                       /**< 0019: Execute-only Access Registers (high)                         */
+   __I  uint8_t   XACCH1;                       /**< 001A: Execute-only Access Registers (high)                         */
+   __I  uint8_t   XACCH0;                       /**< 001B: Execute-only Access Registers (high)                         */
+   __I  uint8_t   XACCL3;                       /**< 001C: Execute-only Access Registers (low)                          */
+   __I  uint8_t   XACCL2;                       /**< 001D: Execute-only Access Registers (low)                          */
+   __I  uint8_t   XACCL1;                       /**< 001E: Execute-only Access Registers (low)                          */
+   __I  uint8_t   XACCL0;                       /**< 001F: Execute-only Access Registers (low)                          */
+   __I  uint8_t   SACCH3;                       /**< 0020: Supervisor-only Access Registers (high)                      */
+   __I  uint8_t   SACCH2;                       /**< 0021: Supervisor-only Access Registers (high)                      */
+   __I  uint8_t   SACCH1;                       /**< 0022: Supervisor-only Access Registers (high)                      */
+   __I  uint8_t   SACCH0;                       /**< 0023: Supervisor-only Access Registers (high)                      */
+   __I  uint8_t   SACCL3;                       /**< 0024: Supervisor-only Access Registers (low)                       */
+   __I  uint8_t   SACCL2;                       /**< 0025: Supervisor-only Access Registers (low)                       */
+   __I  uint8_t   SACCL1;                       /**< 0026: Supervisor-only Access Registers (low)                       */
+   __I  uint8_t   SACCL0;                       /**< 0027: Supervisor-only Access Registers (low)                       */
    __I  uint8_t   FACSS;                        /**< 0028: Flash Access Segment Size Register                           */
         uint8_t   RESERVED_1[2];               
    __I  uint8_t   FACSN;                        /**< 002B: Flash Access Segment Number Register                         */
@@ -5637,7 +5644,7 @@ typedef struct {                                /*       LMEM Structure         
 */
 
 /* ================================================================================ */
-/* ================           LPTMR0 (file:LPTMR0_0)               ================ */
+/* ================           LPTMR0 (file:LPTMR0)                 ================ */
 /* ================================================================================ */
 
 /**
@@ -5652,7 +5659,7 @@ typedef struct {                                /*       LPTMR0 Structure       
    __IO uint32_t  CSR;                          /**< 0000: Control Status Register                                      */
    __IO uint32_t  PSR;                          /**< 0004: Prescale Register                                            */
    __IO uint32_t  CMR;                          /**< 0008: Compare Register                                             */
-   __I  uint32_t  CNR;                          /**< 000C: Counter Register                                             */
+   __IO uint32_t  CNR;                          /**< 000C: Counter Register                                             */
 } LPTMR_Type;
 
 /**
@@ -8334,7 +8341,7 @@ typedef struct {                                /*       RFVBAT Structure       
 */
 
 /* ================================================================================ */
-/* ================           RTC (file:RTC_MK28F15)               ================ */
+/* ================           RTC (file:RTC_MK22F12810)            ================ */
 /* ================================================================================ */
 
 /**
@@ -9646,9 +9653,9 @@ typedef struct {                                /*       SIM Structure          
 #define SIM_SCGC6_FTF_MASK                       (0x1U)                                              /*!< SIM_SCGC6.FTF Mask                      */
 #define SIM_SCGC6_FTF_SHIFT                      (0U)                                                /*!< SIM_SCGC6.FTF Position                  */
 #define SIM_SCGC6_FTF(x)                         (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< SIM_SCGC6.FTF Field                     */
-#define SIM_SCGC6_DMAMUX_MASK                    (0x2U)                                              /*!< SIM_SCGC6.DMAMUX Mask                   */
-#define SIM_SCGC6_DMAMUX_SHIFT                   (1U)                                                /*!< SIM_SCGC6.DMAMUX Position               */
-#define SIM_SCGC6_DMAMUX(x)                      (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< SIM_SCGC6.DMAMUX Field                  */
+#define SIM_SCGC6_DMAMUX0_MASK                   (0x2U)                                              /*!< SIM_SCGC6.DMAMUX0 Mask                  */
+#define SIM_SCGC6_DMAMUX0_SHIFT                  (1U)                                                /*!< SIM_SCGC6.DMAMUX0 Position              */
+#define SIM_SCGC6_DMAMUX0(x)                     (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< SIM_SCGC6.DMAMUX0 Field                 */
 #define SIM_SCGC6_SPI0_MASK                      (0x1000U)                                           /*!< SIM_SCGC6.SPI0 Mask                     */
 #define SIM_SCGC6_SPI0_SHIFT                     (12U)                                               /*!< SIM_SCGC6.SPI0 Position                 */
 #define SIM_SCGC6_SPI0(x)                        (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< SIM_SCGC6.SPI0 Field                    */
@@ -9817,7 +9824,7 @@ typedef struct {                                /*       SMC Structure          
    __IO uint8_t   PMCTRL;                       /**< 0001: Power Mode Control Register                                  */
    union {                                      /**< 0000: (size=0001)                                                  */
       __IO uint8_t   STOPCTRL;                  /**< 0002: Stop Control Register                                        */
-      __IO uint8_t   VLLSCTRL;                  /**< 0002: VLLS Control Register                                        */
+      __IO uint8_t   VLLSCTRL;                  /**< 0002: VLLS Control Register (old name)                             */
    };
    __I  uint8_t   PMSTAT;                       /**< 0003: Power Mode Status Register                                   */
 } SMC_Type;
@@ -10539,11 +10546,11 @@ typedef struct {                                /*       TPM1 Structure         
 */
 
 /* ================================================================================ */
-/* ================           TRNG0 (file:TRNG0_MK28F15)           ================ */
+/* ================           TRNG0 (file:TRNG0_0x400A0000_MK28F15)       ================ */
 /* ================================================================================ */
 
 /**
- * @brief RNG
+ * @brief True Random Number Generator
  */
 /**
 * @addtogroup TRNG_structs_GROUP TRNG struct
@@ -10551,68 +10558,68 @@ typedef struct {                                /*       TPM1 Structure         
 * @{
 */
 typedef struct {                                /*       TRNG0 Structure                                              */
-   __IO uint32_t  MCTL;                         /**< 0000: RNG Miscellaneous Control Register                           */
-   __IO uint32_t  SCMISC;                       /**< 0004: RNG Statistical Check Miscellaneous Register                 */
-   __IO uint32_t  PKRRNG;                       /**< 0008: RNG Poker Range Register                                     */
+   __IO uint32_t  MCTL;                         /**< 0000: Miscellaneous Control Register                               */
+   __IO uint32_t  SCMISC;                       /**< 0004: Statistical Check Miscellaneous Register                     */
+   __IO uint32_t  PKRRNG;                       /**< 0008: Poker Range Register                                         */
    union {                                      /**< 0000: (size=0004)                                                  */
-      __IO uint32_t  PKRMAX;                    /**< 000C: RNG Poker Maximum Limit Register                             */
-      __I  uint32_t  PKRSQ;                     /**< 000C: RNG Poker Square Calculation Result Register                 */
+      __IO uint32_t  PKRMAX;                    /**< 000C: Poker Maximum Limit Register                                 */
+      __I  uint32_t  PKRSQ;                     /**< 000C: Poker Square Calculation Result Register                     */
    };
-   __IO uint32_t  SDCTL;                        /**< 0010: RNG Seed Control Register                                    */
+   __IO uint32_t  SDCTL;                        /**< 0010: Seed Control Register                                        */
    union {                                      /**< 0000: (size=0004)                                                  */
-      __IO uint32_t  SBLIM;                     /**< 0014: RNG Sparse Bit Limit Register                                */
-      __I  uint32_t  TOTSAM;                    /**< 0014: RNG Total Samples Register                                   */
+      __IO uint32_t  SBLIM;                     /**< 0014: Sparse Bit Limit Register                                    */
+      __I  uint32_t  TOTSAM;                    /**< 0014: Total Samples Register                                       */
    };
-   __IO uint32_t  FRQMIN;                       /**< 0018: RNG Frequency Count Minimum Limit Register                   */
+   __IO uint32_t  FRQMIN;                       /**< 0018: Frequency Count Minimum Limit Register                       */
    union {                                      /**< 0000: (size=0004)                                                  */
-      __I  uint32_t  FRQCNT;                    /**< 001C: RNG Frequency Count Register                                 */
-      __IO uint32_t  FRQMAX;                    /**< 001C: RNG Frequency Count Maximum Limit Register                   */
-   };
-   union {                                      /**< 0000: (size=0004)                                                  */
-      __I  uint32_t  SCMC;                      /**< 0020: RNG Statistical Check Monobit Count Register                 */
-      __IO uint32_t  SCML;                      /**< 0020: RNG Statistical Check Monobit Limit Register                 */
+      __I  uint32_t  FRQCNT;                    /**< 001C: Frequency Count Register                                     */
+      __IO uint32_t  FRQMAX;                    /**< 001C: Frequency Count Maximum Limit Register                       */
    };
    union {                                      /**< 0000: (size=0004)                                                  */
-      __I  uint32_t  SCR1C;                     /**< 0024: RNG Statistical Check Run Length 1 Count Register            */
-      __IO uint32_t  SCR1L;                     /**< 0024: RNG Statistical Check Run Length 1 Limit Register            */
+      __I  uint32_t  SCMC;                      /**< 0020: Statistical Check Monobit Count Register                     */
+      __IO uint32_t  SCML;                      /**< 0020: Statistical Check Monobit Limit Register                     */
    };
    union {                                      /**< 0000: (size=0004)                                                  */
-      __I  uint32_t  SCR2C;                     /**< 0028: RNG Statistical Check Run Length 2 Count Register            */
-      __IO uint32_t  SCR2L;                     /**< 0028: RNG Statistical Check Run Length 2 Limit Register            */
+      __I  uint32_t  SCR1C;                     /**< 0024: Statistical Check Run Length 1 Count Register                */
+      __IO uint32_t  SCR1L;                     /**< 0024: Statistical Check Run Length 1 Limit Register                */
    };
    union {                                      /**< 0000: (size=0004)                                                  */
-      __I  uint32_t  SCR3C;                     /**< 002C: RNG Statistical Check Run Length 3 Count Register            */
-      __IO uint32_t  SCR3L;                     /**< 002C: RNG Statistical Check Run Length 3 Limit Register            */
+      __I  uint32_t  SCR2C;                     /**< 0028: Statistical Check Run Length 2 Count Register                */
+      __IO uint32_t  SCR2L;                     /**< 0028: Statistical Check Run Length 2 Limit Register                */
    };
    union {                                      /**< 0000: (size=0004)                                                  */
-      __I  uint32_t  SCR4C;                     /**< 0030: RNG Statistical Check Run Length 4 Count Register            */
-      __IO uint32_t  SCR4L;                     /**< 0030: RNG Statistical Check Run Length 4 Limit Register            */
+      __I  uint32_t  SCR3C;                     /**< 002C: Statistical Check Run Length 3 Count Register                */
+      __IO uint32_t  SCR3L;                     /**< 002C: Statistical Check Run Length 3 Limit Register                */
    };
    union {                                      /**< 0000: (size=0004)                                                  */
-      __I  uint32_t  SCR5C;                     /**< 0034: RNG Statistical Check Run Length 5 Count Register            */
-      __IO uint32_t  SCR5L;                     /**< 0034: RNG Statistical Check Run Length 5 Limit Register            */
+      __I  uint32_t  SCR4C;                     /**< 0030: Statistical Check Run Length 4 Count Register                */
+      __IO uint32_t  SCR4L;                     /**< 0030: Statistical Check Run Length 4 Limit Register                */
    };
    union {                                      /**< 0000: (size=0004)                                                  */
-      __I  uint32_t  SCR6PC;                    /**< 0038: RNG Statistical Check Run Length 6+ Count Register           */
-      __IO uint32_t  SCR6PL;                    /**< 0038: RNG Statistical Check Run Length 6+ Limit Register           */
+      __I  uint32_t  SCR5C;                     /**< 0034: Statistical Check Run Length 5 Count Register                */
+      __IO uint32_t  SCR5L;                     /**< 0034: Statistical Check Run Length 5 Limit Register                */
    };
-   __I  uint32_t  STATUS;                       /**< 003C: RNG Status Register                                          */
-   __I  uint32_t  ENT[16];                      /**< 0040: RNG TRNG Entropy Read Register                               */
-   __I  uint32_t  PKRCNT10;                     /**< 0080: RNG Statistical Check Poker Count 1 and 0 Register           */
-   __I  uint32_t  PKRCNT32;                     /**< 0084: RNG Statistical Check Poker Count 3 and 2 Register           */
-   __I  uint32_t  PKRCNT54;                     /**< 0088: RNG Statistical Check Poker Count 5 and 4 Register           */
-   __I  uint32_t  PKRCNT76;                     /**< 008C: RNG Statistical Check Poker Count 7 and 6 Register           */
-   __I  uint32_t  PKRCNT98;                     /**< 0090: RNG Statistical Check Poker Count 9 and 8 Register           */
-   __I  uint32_t  PKRCNTBA;                     /**< 0094: RNG Statistical Check Poker Count B and A Register           */
-   __I  uint32_t  PKRCNTDC;                     /**< 0098: RNG Statistical Check Poker Count D and C Register           */
-   __I  uint32_t  PKRCNTFE;                     /**< 009C: RNG Statistical Check Poker Count F and E Register           */
-   __IO uint32_t  SEC_CFG;                      /**< 00A0: RNG Security Configuration Register                          */
-   __IO uint32_t  INT_CTRL;                     /**< 00A4: RNG Interrupt Control Register                               */
-   __IO uint32_t  INT_MASK;                     /**< 00A8: RNG Mask Register                                            */
-   __IO uint32_t  INT_STATUS;                   /**< 00AC: RNG Interrupt Status Register                                */
+   union {                                      /**< 0000: (size=0004)                                                  */
+      __I  uint32_t  SCR6PC;                    /**< 0038: Statistical Check Run Length 6+ Count Register               */
+      __IO uint32_t  SCR6PL;                    /**< 0038: Statistical Check Run Length 6+ Limit Register               */
+   };
+   __I  uint32_t  STATUS;                       /**< 003C: Status Register                                              */
+   __I  uint32_t  ENT[16];                      /**< 0040: Entropy Read Register                                        */
+   __I  uint32_t  PKRCNT10;                     /**< 0080: Statistical Check Poker Count 1 and 0 Register               */
+   __I  uint32_t  PKRCNT32;                     /**< 0084: Statistical Check Poker Count 3 and 2 Register               */
+   __I  uint32_t  PKRCNT54;                     /**< 0088: Statistical Check Poker Count 5 and 4 Register               */
+   __I  uint32_t  PKRCNT76;                     /**< 008C: Statistical Check Poker Count 7 and 6 Register               */
+   __I  uint32_t  PKRCNT98;                     /**< 0090: Statistical Check Poker Count 9 and 8 Register               */
+   __I  uint32_t  PKRCNTBA;                     /**< 0094: Statistical Check Poker Count B and A Register               */
+   __I  uint32_t  PKRCNTDC;                     /**< 0098: Statistical Check Poker Count D and C Register               */
+   __I  uint32_t  PKRCNTFE;                     /**< 009C: Statistical Check Poker Count F and E Register               */
+   __IO uint32_t  SEC_CFG;                      /**< 00A0: Security Configuration Register                              */
+   __IO uint32_t  INT_CTRL;                     /**< 00A4: Interrupt Control Register                                   */
+   __IO uint32_t  INT_MASK;                     /**< 00A8: Mask Register                                                */
+   __IO uint32_t  INT_STATUS;                   /**< 00AC: Interrupt Status Register                                    */
         uint8_t   RESERVED_0[64];              
-   __I  uint32_t  VID1;                         /**< 00F0: RNG Version ID Register (MS)                                 */
-   __I  uint32_t  VID2;                         /**< 00F4: RNG Version ID Register (LS)                                 */
+   __I  uint32_t  VID1;                         /**< 00F0: Version ID Register (MS)                                     */
+   __I  uint32_t  VID2;                         /**< 00F4: Version ID Register (LS)                                     */
 } TRNG_Type;
 
 /**
@@ -10965,28 +10972,28 @@ typedef struct {                                /*       TRNG0 Structure        
 #define TRNG_INT_STATUS_FRQ_CT_FAIL_SHIFT        (2U)                                                /*!< TRNG0_INT_STATUS.FRQ_CT_FAIL Position   */
 #define TRNG_INT_STATUS_FRQ_CT_FAIL(x)           (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< TRNG0_INT_STATUS.FRQ_CT_FAIL Field      */
 /* ------- VID1 Bit Fields                          ------ */
-#define TRNG_VID1_RNG_MIN_REV_MASK               (0xFFU)                                             /*!< TRNG0_VID1.RNG_MIN_REV Mask             */
-#define TRNG_VID1_RNG_MIN_REV_SHIFT              (0U)                                                /*!< TRNG0_VID1.RNG_MIN_REV Position         */
-#define TRNG_VID1_RNG_MIN_REV(x)                 (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< TRNG0_VID1.RNG_MIN_REV Field            */
-#define TRNG_VID1_RNG_MAJ_REV_MASK               (0xFF00U)                                           /*!< TRNG0_VID1.RNG_MAJ_REV Mask             */
-#define TRNG_VID1_RNG_MAJ_REV_SHIFT              (8U)                                                /*!< TRNG0_VID1.RNG_MAJ_REV Position         */
-#define TRNG_VID1_RNG_MAJ_REV(x)                 (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< TRNG0_VID1.RNG_MAJ_REV Field            */
-#define TRNG_VID1_RNG_IP_ID_MASK                 (0xFFFF0000U)                                       /*!< TRNG0_VID1.RNG_IP_ID Mask               */
-#define TRNG_VID1_RNG_IP_ID_SHIFT                (16U)                                               /*!< TRNG0_VID1.RNG_IP_ID Position           */
-#define TRNG_VID1_RNG_IP_ID(x)                   (((uint32_t)(((uint32_t)(x))<<16U))&0xFFFF0000UL)   /*!< TRNG0_VID1.RNG_IP_ID Field              */
+#define TRNG_VID1_MIN_REV_MASK                   (0xFFU)                                             /*!< TRNG0_VID1.MIN_REV Mask                 */
+#define TRNG_VID1_MIN_REV_SHIFT                  (0U)                                                /*!< TRNG0_VID1.MIN_REV Position             */
+#define TRNG_VID1_MIN_REV(x)                     (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< TRNG0_VID1.MIN_REV Field                */
+#define TRNG_VID1_MAJ_REV_MASK                   (0xFF00U)                                           /*!< TRNG0_VID1.MAJ_REV Mask                 */
+#define TRNG_VID1_MAJ_REV_SHIFT                  (8U)                                                /*!< TRNG0_VID1.MAJ_REV Position             */
+#define TRNG_VID1_MAJ_REV(x)                     (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< TRNG0_VID1.MAJ_REV Field                */
+#define TRNG_VID1_IP_ID_MASK                     (0xFFFF0000U)                                       /*!< TRNG0_VID1.IP_ID Mask                   */
+#define TRNG_VID1_IP_ID_SHIFT                    (16U)                                               /*!< TRNG0_VID1.IP_ID Position               */
+#define TRNG_VID1_IP_ID(x)                       (((uint32_t)(((uint32_t)(x))<<16U))&0xFFFF0000UL)   /*!< TRNG0_VID1.IP_ID Field                  */
 /* ------- VID2 Bit Fields                          ------ */
-#define TRNG_VID2_RNG_CONFIG_OPT_MASK            (0xFFU)                                             /*!< TRNG0_VID2.RNG_CONFIG_OPT Mask          */
-#define TRNG_VID2_RNG_CONFIG_OPT_SHIFT           (0U)                                                /*!< TRNG0_VID2.RNG_CONFIG_OPT Position      */
-#define TRNG_VID2_RNG_CONFIG_OPT(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< TRNG0_VID2.RNG_CONFIG_OPT Field         */
-#define TRNG_VID2_RNG_ECO_REV_MASK               (0xFF00U)                                           /*!< TRNG0_VID2.RNG_ECO_REV Mask             */
-#define TRNG_VID2_RNG_ECO_REV_SHIFT              (8U)                                                /*!< TRNG0_VID2.RNG_ECO_REV Position         */
-#define TRNG_VID2_RNG_ECO_REV(x)                 (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< TRNG0_VID2.RNG_ECO_REV Field            */
-#define TRNG_VID2_RNG_INTG_OPT_MASK              (0xFF0000U)                                         /*!< TRNG0_VID2.RNG_INTG_OPT Mask            */
-#define TRNG_VID2_RNG_INTG_OPT_SHIFT             (16U)                                               /*!< TRNG0_VID2.RNG_INTG_OPT Position        */
-#define TRNG_VID2_RNG_INTG_OPT(x)                (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< TRNG0_VID2.RNG_INTG_OPT Field           */
-#define TRNG_VID2_RNG_ERA_MASK                   (0xFF000000U)                                       /*!< TRNG0_VID2.RNG_ERA Mask                 */
-#define TRNG_VID2_RNG_ERA_SHIFT                  (24U)                                               /*!< TRNG0_VID2.RNG_ERA Position             */
-#define TRNG_VID2_RNG_ERA(x)                     (((uint32_t)(((uint32_t)(x))<<24U))&0xFF000000UL)   /*!< TRNG0_VID2.RNG_ERA Field                */
+#define TRNG_VID2_CONFIG_OPT_MASK                (0xFFU)                                             /*!< TRNG0_VID2.CONFIG_OPT Mask              */
+#define TRNG_VID2_CONFIG_OPT_SHIFT               (0U)                                                /*!< TRNG0_VID2.CONFIG_OPT Position          */
+#define TRNG_VID2_CONFIG_OPT(x)                  (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< TRNG0_VID2.CONFIG_OPT Field             */
+#define TRNG_VID2_ECO_REV_MASK                   (0xFF00U)                                           /*!< TRNG0_VID2.ECO_REV Mask                 */
+#define TRNG_VID2_ECO_REV_SHIFT                  (8U)                                                /*!< TRNG0_VID2.ECO_REV Position             */
+#define TRNG_VID2_ECO_REV(x)                     (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< TRNG0_VID2.ECO_REV Field                */
+#define TRNG_VID2_INTG_OPT_MASK                  (0xFF0000U)                                         /*!< TRNG0_VID2.INTG_OPT Mask                */
+#define TRNG_VID2_INTG_OPT_SHIFT                 (16U)                                               /*!< TRNG0_VID2.INTG_OPT Position            */
+#define TRNG_VID2_INTG_OPT(x)                    (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< TRNG0_VID2.INTG_OPT Field               */
+#define TRNG_VID2_ERA_MASK                       (0xFF000000U)                                       /*!< TRNG0_VID2.ERA Mask                     */
+#define TRNG_VID2_ERA_SHIFT                      (24U)                                               /*!< TRNG0_VID2.ERA Position                 */
+#define TRNG_VID2_ERA(x)                         (((uint32_t)(((uint32_t)(x))<<24U))&0xFF000000UL)   /*!< TRNG0_VID2.ERA Field                    */
 /**
  * @} */ /* End group TRNG_Register_Masks_GROUP 
  */
@@ -11005,7 +11012,7 @@ typedef struct {                                /*       TRNG0 Structure        
 */
 
 /* ================================================================================ */
-/* ================           TSI0 (file:TSI0_MK28F15)             ================ */
+/* ================           TSI0 (file:TSI0_DMA_MK28F15)         ================ */
 /* ================================================================================ */
 
 /**

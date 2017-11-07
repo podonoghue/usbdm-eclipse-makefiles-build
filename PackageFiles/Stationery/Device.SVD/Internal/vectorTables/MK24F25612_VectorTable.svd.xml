@@ -9,103 +9,103 @@ Devices using this vector table:
       <name>DMA0</name>
       <description>Direct memory access controller</description>
       <value>0</value>
-      <peripheral>DMA</peripheral>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA1</name>
       <description>Direct memory access controller</description>
       <value>1</value>
-      <peripheral>DMA</peripheral>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA2</name>
       <description>Direct memory access controller</description>
       <value>2</value>
-      <peripheral>DMA</peripheral>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA3</name>
       <description>Direct memory access controller</description>
       <value>3</value>
-      <peripheral>DMA</peripheral>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA4</name>
       <description>Direct memory access controller</description>
       <value>4</value>
-      <peripheral>DMA</peripheral>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA5</name>
       <description>Direct memory access controller</description>
       <value>5</value>
-      <peripheral>DMA</peripheral>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA6</name>
       <description>Direct memory access controller</description>
       <value>6</value>
-      <peripheral>DMA</peripheral>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA7</name>
       <description>Direct memory access controller</description>
       <value>7</value>
-      <peripheral>DMA</peripheral>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA8</name>
       <description>Direct memory access controller</description>
       <value>8</value>
-      <peripheral>DMA</peripheral>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA9</name>
       <description>Direct memory access controller</description>
       <value>9</value>
-      <peripheral>DMA</peripheral>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA10</name>
       <description>Direct memory access controller</description>
       <value>10</value>
-      <peripheral>DMA</peripheral>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA11</name>
       <description>Direct memory access controller</description>
       <value>11</value>
-      <peripheral>DMA</peripheral>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA12</name>
       <description>Direct memory access controller</description>
       <value>12</value>
-      <peripheral>DMA</peripheral>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA13</name>
       <description>Direct memory access controller</description>
       <value>13</value>
-      <peripheral>DMA</peripheral>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA14</name>
       <description>Direct memory access controller</description>
       <value>14</value>
-      <peripheral>DMA</peripheral>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA15</name>
       <description>Direct memory access controller</description>
       <value>15</value>
-      <peripheral>DMA</peripheral>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA_Error</name>
-      <description>DMA error interrupt all channels</description>
+      <description>Direct memory access controller</description>
       <value>16</value>
-      <peripheral>DMA</peripheral>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>MCM</name>
@@ -117,13 +117,13 @@ Devices using this vector table:
       <name>FTF_Command</name>
       <description>Flash Memory Interface</description>
       <value>18</value>
-      <peripheral>FTFE</peripheral>
+      <peripheral>FTFA</peripheral>
    </interrupt>
    <interrupt>
       <name>FTF_ReadCollision</name>
       <description>Flash Memory Interface</description>
       <value>19</value>
-      <peripheral>FTFE</peripheral>
+      <peripheral>FTFA</peripheral>
    </interrupt>
    <interrupt>
       <name>PMC</name>
@@ -141,13 +141,13 @@ Devices using this vector table:
       <name>WDOG</name>
       <description>External Watchdog Monitor</description>
       <value>22</value>
-      <peripheral>EWM</peripheral>
+      <peripheral>WDOG</peripheral>
    </interrupt>
    <interrupt>
       <name>RNG</name>
       <description>Random Number Generator</description>
       <value>23</value>
-      <peripheral>TRNG0</peripheral>
+      <peripheral>RNG</peripheral>
    </interrupt>
    <interrupt>
       <name>I2C0</name>
@@ -189,41 +189,49 @@ Devices using this vector table:
       <name>UART0_RxTx</name>
       <description>Serial Communication Interface</description>
       <value>31</value>
+      <peripheral>UART0</peripheral>
    </interrupt>
    <interrupt>
       <name>UART0_Error</name>
       <description>Serial Communication Interface</description>
       <value>32</value>
+      <peripheral>UART0</peripheral>
    </interrupt>
    <interrupt>
       <name>UART1_RxTx</name>
       <description>Serial Communication Interface</description>
       <value>33</value>
+      <peripheral>UART1</peripheral>
    </interrupt>
    <interrupt>
       <name>UART1_Error</name>
       <description>Serial Communication Interface</description>
       <value>34</value>
+      <peripheral>UART1</peripheral>
    </interrupt>
    <interrupt>
       <name>UART2_RxTx</name>
       <description>Serial Communication Interface</description>
       <value>35</value>
+      <peripheral>UART2</peripheral>
    </interrupt>
    <interrupt>
       <name>UART2_Error</name>
       <description>Serial Communication Interface</description>
       <value>36</value>
+      <peripheral>UART2</peripheral>
    </interrupt>
    <interrupt>
       <name>UART3_RxTx</name>
       <description>Serial Communication Interface</description>
       <value>37</value>
+      <peripheral>UART3</peripheral>
    </interrupt>
    <interrupt>
       <name>UART3_Error</name>
       <description>Serial Communication Interface</description>
       <value>38</value>
+      <peripheral>UART3</peripheral>
    </interrupt>
    <interrupt>
       <name>ADC0</name>
@@ -283,25 +291,25 @@ Devices using this vector table:
       <name>PIT0</name>
       <description>Periodic Interrupt Timer</description>
       <value>48</value>
-      <peripheral>PIT0</peripheral>
+      <peripheral>PIT</peripheral>
    </interrupt>
    <interrupt>
       <name>PIT1</name>
       <description>Periodic Interrupt Timer</description>
       <value>49</value>
-      <peripheral>PIT0</peripheral>
+      <peripheral>PIT</peripheral>
    </interrupt>
    <interrupt>
       <name>PIT2</name>
       <description>Periodic Interrupt Timer</description>
       <value>50</value>
-      <peripheral>PIT0</peripheral>
+      <peripheral>PIT</peripheral>
    </interrupt>
    <interrupt>
       <name>PIT3</name>
       <description>Periodic Interrupt Timer</description>
       <value>51</value>
-      <peripheral>PIT0</peripheral>
+      <peripheral>PIT</peripheral>
    </interrupt>
    <interrupt>
       <name>PDB0</name>
@@ -337,37 +345,37 @@ Devices using this vector table:
       <name>LPTMR0</name>
       <description>Low Power Timer</description>
       <value>58</value>
-      <peripheral>LPTMR1</peripheral>
+      <peripheral>LPTMR0</peripheral>
    </interrupt>
    <interrupt>
       <name>PORTA</name>
       <description>General Purpose Input/Output</description>
       <value>59</value>
-      <peripheral>GPIOA</peripheral>
+      <peripheral>PORTA</peripheral>
    </interrupt>
    <interrupt>
       <name>PORTB</name>
       <description>General Purpose Input/Output</description>
       <value>60</value>
-      <peripheral>GPIOB</peripheral>
+      <peripheral>PORTB</peripheral>
    </interrupt>
    <interrupt>
       <name>PORTC</name>
       <description>General Purpose Input/Output</description>
       <value>61</value>
-      <peripheral>GPIOC</peripheral>
+      <peripheral>PORTC</peripheral>
    </interrupt>
    <interrupt>
       <name>PORTD</name>
       <description>General Purpose Input/Output</description>
       <value>62</value>
-      <peripheral>GPIOD</peripheral>
+      <peripheral>PORTD</peripheral>
    </interrupt>
    <interrupt>
       <name>PORTE</name>
       <description>General Purpose Input/Output</description>
       <value>63</value>
-      <peripheral>GPIOE</peripheral>
+      <peripheral>PORTE</peripheral>
    </interrupt>
    <interrupt>
       <name>SWI</name>
@@ -384,36 +392,43 @@ Devices using this vector table:
       <name>UART4_RxTx</name>
       <description>Serial Communication Interface</description>
       <value>66</value>
+      <peripheral>UART4</peripheral>
    </interrupt>
    <interrupt>
       <name>UART4_Error</name>
       <description>Serial Communication Interface</description>
       <value>67</value>
+      <peripheral>UART4</peripheral>
    </interrupt>
    <interrupt>
       <name>UART5_RxTx</name>
       <description>Serial Communication Interface</description>
       <value>68</value>
+      <peripheral>UART5</peripheral>
    </interrupt>
    <interrupt>
       <name>UART5_Error</name>
       <description>Serial Communication Interface</description>
       <value>69</value>
+      <peripheral>UART5</peripheral>
    </interrupt>
    <interrupt>
       <name>FTM3</name>
       <description>FlexTimer Module</description>
       <value>71</value>
+      <peripheral>FTM3</peripheral>
    </interrupt>
    <interrupt>
       <name>ADC1</name>
       <description>Analogue to Digital Converter</description>
       <value>73</value>
+      <peripheral>ADC1</peripheral>
    </interrupt>
    <interrupt>
       <name>I2C2</name>
       <description>Inter-Integrated Circuit</description>
       <value>74</value>
+      <peripheral>I2C2</peripheral>
    </interrupt>
 </interrupts>
 

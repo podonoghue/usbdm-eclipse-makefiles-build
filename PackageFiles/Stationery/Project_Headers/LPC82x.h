@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V0.4
- * @date     2017/10
+ * @date     2017/11
  *
  *******************************************************************************************************/
 
@@ -76,40 +76,40 @@ typedef enum {
 * @{
 */
 /* -------------------------  Exception Handlers  ------------------------ */
-extern void NMI_Handler(void);                 /**< Non maskable Interrupt, cannot be stopped or preempted                           */
-extern void HardFault_Handler(void);           /**< Hard Fault, all classes of Fault                                                 */
-extern void SVC_Handler(void);                 /**< System Service Call via SVC instruction                                          */
-extern void PendSV_Handler(void);              /**< Pendable request for system service                                              */
-extern void SysTick_Handler(void);             /**< System Tick Timer                                                                */
-extern void SPI0_IRQHandler(void);             /**< SPI0                                                                             */
-extern void SPI1_IRQHandler(void);             /**< SPI1                                                                             */
-extern void UART0_IRQHandler(void);            /**< USART0                                                                           */
-extern void UART1_IRQHandler(void);            /**< USART1                                                                           */
-extern void UART2_IRQHandler(void);            /**< USART2                                                                           */
-extern void I2C1_IRQHandler(void);             /**< I2C1                                                                             */
-extern void I2C0_IRQHandler(void);             /**< I2C0-bus interface                                                               */
-extern void SCT_IRQHandler(void);              /**< State Configurable Timer                                                         */
-extern void MRT_IRQHandler(void);              /**< Multi-Rate Timer                                                                 */
-extern void CMP_IRQHandler(void);              /**< Analog comparator                                                                */
-extern void WDT_IRQHandler(void);              /**< Windowed Watchdog Timer                                                          */
-extern void BOD_IRQHandler(void);              /**< System configuration                                                             */
-extern void FLASH_IRQHandler(void);            /**< Flash controller                                                                 */
-extern void WKT_IRQHandler(void);              /**< Self wake-up timer                                                               */
-extern void ADC_SEQA_IRQHandler(void);         /**< 12-bit Analog-to-Digital Converter                                               */
-extern void ADC_SEQB_IRQHandler(void);         /**< 12-bit Analog-to-Digital Converter                                               */
-extern void ADC_THCMP_IRQHandler(void);        /**< 12-bit Analog-to-Digital Converter                                               */
-extern void ADC_OVR_IRQHandler(void);          /**< 12-bit Analog-to-Digital Converter                                               */
-extern void DMA_IRQHandler(void);              /**< DMA controller                                                                   */
-extern void I2C2_IRQHandler(void);             /**< I2C2                                                                             */
-extern void I2C3_IRQHandler(void);             /**< I2C3                                                                             */
-extern void PIN_INT0_IRQHandler(void);         /**< Pin interrupt and  pattern match engine                                          */
-extern void PIN_INT1_IRQHandler(void);         /**< Pin interrupt and  pattern match engine                                          */
-extern void PIN_INT2_IRQHandler(void);         /**< Pin interrupt and  pattern match engine                                          */
-extern void PIN_INT3_IRQHandler(void);         /**< Pin interrupt and  pattern match engine                                          */
-extern void PIN_INT4_IRQHandler(void);         /**< Pin interrupt and  pattern match engine                                          */
-extern void PIN_INT5_IRQHandler(void);         /**< Pin interrupt and  pattern match engine                                          */
-extern void PIN_INT6_IRQHandler(void);         /**< Pin interrupt and  pattern match engine                                          */
-extern void PIN_INT7_IRQHandler(void);         /**< Pin interrupt and  pattern match engine                                          */
+extern void NMI_Handler(void);                       /**< Non maskable Interrupt, cannot be stopped or preempted                           */
+extern void HardFault_Handler(void);                 /**< Hard Fault, all classes of Fault                                                 */
+extern void SVC_Handler(void);                       /**< System Service Call via SVC instruction                                          */
+extern void PendSV_Handler(void);                    /**< Pendable request for system service                                              */
+extern void SysTick_Handler(void);                   /**< System Tick Timer                                                                */
+extern void SPI0_IRQHandler(void);                   /**< SPI0                                                                             */
+extern void SPI1_IRQHandler(void);                   /**< SPI1                                                                             */
+extern void UART0_IRQHandler(void);                  /**< USART0                                                                           */
+extern void UART1_IRQHandler(void);                  /**< USART1                                                                           */
+extern void UART2_IRQHandler(void);                  /**< USART2                                                                           */
+extern void I2C1_IRQHandler(void);                   /**< I2C1                                                                             */
+extern void I2C0_IRQHandler(void);                   /**< I2C0-bus interface                                                               */
+extern void SCT_IRQHandler(void);                    /**< State Configurable Timer                                                         */
+extern void MRT_IRQHandler(void);                    /**< Multi-Rate Timer                                                                 */
+extern void CMP_IRQHandler(void);                    /**< Analog comparator                                                                */
+extern void WDT_IRQHandler(void);                    /**< Windowed Watchdog Timer                                                          */
+extern void BOD_IRQHandler(void);                    /**< System configuration                                                             */
+extern void FLASH_IRQHandler(void);                  /**< Flash controller                                                                 */
+extern void WKT_IRQHandler(void);                    /**< Self wake-up timer                                                               */
+extern void ADC_SEQA_IRQHandler(void);               /**< 12-bit Analog-to-Digital Converter                                               */
+extern void ADC_SEQB_IRQHandler(void);               /**< 12-bit Analog-to-Digital Converter                                               */
+extern void ADC_THCMP_IRQHandler(void);              /**< 12-bit Analog-to-Digital Converter                                               */
+extern void ADC_OVR_IRQHandler(void);                /**< 12-bit Analog-to-Digital Converter                                               */
+extern void DMA_IRQHandler(void);                    /**< DMA controller                                                                   */
+extern void I2C2_IRQHandler(void);                   /**< I2C2                                                                             */
+extern void I2C3_IRQHandler(void);                   /**< I2C3                                                                             */
+extern void PIN_INT0_IRQHandler(void);               /**< Pin interrupt and  pattern match engine                                          */
+extern void PIN_INT1_IRQHandler(void);               /**< Pin interrupt and  pattern match engine                                          */
+extern void PIN_INT2_IRQHandler(void);               /**< Pin interrupt and  pattern match engine                                          */
+extern void PIN_INT3_IRQHandler(void);               /**< Pin interrupt and  pattern match engine                                          */
+extern void PIN_INT4_IRQHandler(void);               /**< Pin interrupt and  pattern match engine                                          */
+extern void PIN_INT5_IRQHandler(void);               /**< Pin interrupt and  pattern match engine                                          */
+extern void PIN_INT6_IRQHandler(void);               /**< Pin interrupt and  pattern match engine                                          */
+extern void PIN_INT7_IRQHandler(void);               /**< Pin interrupt and  pattern match engine                                          */
 
 /**
  * @} */ /* End group Interrupt_handler_prototypes_GROUP 

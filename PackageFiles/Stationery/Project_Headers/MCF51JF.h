@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V0.0
- * @date     2017/10
+ * @date     2017/11
  *
  *******************************************************************************************************/
 
@@ -116,93 +116,93 @@ typedef enum {
 } IRQn_Type;
 
 /* -------------------------  Exception Handlers  ------------------------ */
-extern void AccessError_Handler(void);         /**< Access Error                                                                     */
-extern void AddressError_Handler(void);        /**< Address Error                                                                    */
-extern void IllegalInstruction_Handler(void);   /**< Illegal Instruction                                                              */
-extern void DivideBy0_Handler(void);           /**< Divide by Zero                                                                   */
-extern void PrivilegeViolation_Handler(void);   /**< Privilege Violation                                                              */
-extern void Trace_Handler(void);               /**< Trace                                                                            */
-extern void UnimplementedLineA_Handler(void);   /**< Unimplemented Line A                                                             */
-extern void UnimplementedLineF_Handler(void);   /**< Unimplemented Line F                                                             */
-extern void NonPCBreakpoint_Handler(void);     /**< Non PC Breakpoint                                                                */
-extern void PCBreakpoint_Handler(void);        /**< PC Breakpoint                                                                    */
-extern void FormatError_Handler(void);         /**< Format Error                                                                     */
-extern void Uninitialized_Handler(void);       /**< Uninitialised Interrupt                                                          */
-extern void SpuriousInt_Handler(void);         /**< Spurious Interrupt                                                               */
-extern void AutoVector1_Handler(void);         /**< Auto vector # 1                                                                  */
-extern void AutoVector2_Handler(void);         /**< Auto vector # 2                                                                  */
-extern void AutoVector3_Handler(void);         /**< Auto vector # 3                                                                  */
-extern void AutoVector4_Handler(void);         /**< Auto vector # 4                                                                  */
-extern void AutoVector5_Handler(void);         /**< Auto vector # 5                                                                  */
-extern void AutoVector6_Handler(void);         /**< Auto vector # 6                                                                  */
-extern void AutoVector7_Handler(void);         /**< Auto vector # 7                                                                  */
-extern void Trap0_Handler(void);               /**< Trap # 0                                                                         */
-extern void Trap1_Handler(void);               /**< Trap # 1                                                                         */
-extern void Trap2_Handler(void);               /**< Trap # 2                                                                         */
-extern void Trap3_Handler(void);               /**< Trap # 3                                                                         */
-extern void Trap4_Handler(void);               /**< Trap # 4                                                                         */
-extern void Trap5_Handler(void);               /**< Trap # 5                                                                         */
-extern void Trap6_Handler(void);               /**< Trap # 6                                                                         */
-extern void Trap7_Handler(void);               /**< Trap # 7                                                                         */
-extern void Trap8_Handler(void);               /**< Trap # 8                                                                         */
-extern void Trap9_Handler(void);               /**< Trap # 9                                                                         */
-extern void Trap10_Handler(void);              /**< Trap # 10                                                                        */
-extern void Trap11_Handler(void);              /**< Trap # 11                                                                        */
-extern void Trap12_Handler(void);              /**< Trap # 12                                                                        */
-extern void Trap13_Handler(void);              /**< Trap # 13                                                                        */
-extern void Trap14_Handler(void);              /**< Trap # 14                                                                        */
-extern void Trap15_Handler(void);              /**< Trap # 15                                                                        */
-extern void IRQ_IRQHandler(void);              /**< IRQ                                                                              */
-extern void LVD_IRQHandler(void);              /**< Low Voltage Detect, Low Voltage Warning interrupt                                */
-extern void LLWU_IRQHandler(void);             /**< Low Leakage Wakeup                                                               */
-extern void LOL_IRQHandler(void);              /**< MCG Loss of Clock                                                                */
-extern void FLASH_IRQHandler(void);            /**< Flash                                                                            */
-extern void DMA_CH0_IRQHandler(void);          /**< DMA Channel 0                                                                    */
-extern void DMA_CH1_IRQHandler(void);          /**< DMA Channel 1                                                                    */
-extern void DMA_CH2_IRQHandler(void);          /**< DMA Channel 2                                                                    */
-extern void DMA_CH3_IRQHandler(void);          /**< DMA Channel 3                                                                    */
-extern void USB0_IRQHandler(void);             /**< USB0 Status                                                                      */
-extern void RNGB_IRQHandler(void);             /**< RNGB                                                                             */
-extern void FTM1FAULT_OVF_IRQHandler(void);    /**< FTM1 Fault & Overflow                                                            */
-extern void FTM1_CH0_IRQHandler(void);         /**< FTM1 Channel 0                                                                   */
-extern void FTM1_CH1_IRQHandler(void);         /**< FTM1 Channel 1                                                                   */
-extern void FTM1_CH2_IRQHandler(void);         /**< FTM1 Channel 2                                                                   */
-extern void FTM1_CH3_IRQHandler(void);         /**< FTM1 Channel 3                                                                   */
-extern void FTM1_CH4_IRQHandler(void);         /**< FTM1 Channel 4                                                                   */
-extern void FTM1_CH5_IRQHandler(void);         /**< FTM1 Channel 5                                                                   */
-extern void CMP0_IRQHandler(void);             /**< CMP0                                                                             */
-extern void FTM0_FAULT_OVF_IRQHandler(void);   /**< FTM0 Fault & Overflow                                                            */
-extern void FTM0_CH0_IRQHandler(void);         /**< FTM0 Channel 0                                                                   */
-extern void FTM0_CH1_IRQHandler(void);         /**< FTM0 Channel 1                                                                   */
-extern void SPI0_IRQHandler(void);             /**< SPI0                                                                             */
-extern void SCI0_IRQHandler(void);             /**< UART0                                                                            */
-extern void SAI_RX_IRQHandler(void);           /**< I2S Receive                                                                      */
-extern void SAI_TX_IRQHandler(void);           /**< I2S Transmit                                                                     */
-extern void IIC0_IRQHandler(void);             /**< I2C0                                                                             */
-extern void IIC2_IRQHandler(void);             /**< I2C2                                                                             */
-extern void SPI1_IRQHandler(void);             /**< SPI1                                                                             */
-extern void SCI1_IRQHandler(void);             /**< UART1                                                                            */
-extern void IIC1_IRQHandler(void);             /**< I2C1                                                                             */
-extern void IIC3_IRQHandler(void);             /**< I2C3                                                                             */
-extern void ADC0_IRQHandler(void);             /**< ADC0                                                                             */
-extern void TSI0_IRQHandler(void);             /**< TSI0                                                                             */
-extern void DAC0_IRQHandler(void);             /**< DAC0                                                                             */
-extern void CMT_IRQHandler(void);              /**< CMT                                                                              */
-extern void PDB0_IRQHandler(void);             /**< PDB0                                                                             */
-extern void LPTMR0_IRQHandler(void);           /**< LPTMR0                                                                           */
-extern void LPTMR1_IRQHandler(void);           /**< LPTMR1                                                                           */
-extern void L7_SWI_IRQHandler(void);           /**< Level 7 Software Interrupt                                                       */
-extern void L6_SWI_IRQHandler(void);           /**< Level 6 Software Interrupt                                                       */
-extern void L5_SWI_IRQHandler(void);           /**< Level 5 Software Interrupt                                                       */
-extern void L4_SWI_IRQHandler(void);           /**< Level 4 Software Interrupt                                                       */
-extern void L3_SWI_IRQHandler(void);           /**< Level 3 Software Interrupt                                                       */
-extern void L2_SWI_IRQHandler(void);           /**< Level 2 Software Interrupt                                                       */
-extern void L1_SWI_IRQHandler(void);           /**< Level 1 Software Interrupt                                                       */
-extern void MTIM0_IRQHandler(void);            /**< MTIM0                                                                            */
-extern void USBDCD_IRQHandler(void);           /**< USBDCD                                                                           */
-extern void PORT_AB_IRQHandler(void);          /**< EGPIO Port A & EGPIO Port B                                                      */
-extern void PORT_CD_IRQHandler(void);          /**< EGPIO Port C & EGPIO Port D                                                      */
-extern void PORT_EF_IRQHandler(void);          /**< EGPIO Port E & EGPIO Port F                                                      */
+extern void AccessError_Handler(void);               /**< Access Error                                                                     */
+extern void AddressError_Handler(void);              /**< Address Error                                                                    */
+extern void IllegalInstruction_Handler(void);        /**< Illegal Instruction                                                              */
+extern void DivideBy0_Handler(void);                 /**< Divide by Zero                                                                   */
+extern void PrivilegeViolation_Handler(void);        /**< Privilege Violation                                                              */
+extern void Trace_Handler(void);                     /**< Trace                                                                            */
+extern void UnimplementedLineA_Handler(void);        /**< Unimplemented Line A                                                             */
+extern void UnimplementedLineF_Handler(void);        /**< Unimplemented Line F                                                             */
+extern void NonPCBreakpoint_Handler(void);           /**< Non PC Breakpoint                                                                */
+extern void PCBreakpoint_Handler(void);              /**< PC Breakpoint                                                                    */
+extern void FormatError_Handler(void);               /**< Format Error                                                                     */
+extern void Uninitialized_Handler(void);             /**< Uninitialised Interrupt                                                          */
+extern void SpuriousInt_Handler(void);               /**< Spurious Interrupt                                                               */
+extern void AutoVector1_Handler(void);               /**< Auto vector # 1                                                                  */
+extern void AutoVector2_Handler(void);               /**< Auto vector # 2                                                                  */
+extern void AutoVector3_Handler(void);               /**< Auto vector # 3                                                                  */
+extern void AutoVector4_Handler(void);               /**< Auto vector # 4                                                                  */
+extern void AutoVector5_Handler(void);               /**< Auto vector # 5                                                                  */
+extern void AutoVector6_Handler(void);               /**< Auto vector # 6                                                                  */
+extern void AutoVector7_Handler(void);               /**< Auto vector # 7                                                                  */
+extern void Trap0_Handler(void);                     /**< Trap # 0                                                                         */
+extern void Trap1_Handler(void);                     /**< Trap # 1                                                                         */
+extern void Trap2_Handler(void);                     /**< Trap # 2                                                                         */
+extern void Trap3_Handler(void);                     /**< Trap # 3                                                                         */
+extern void Trap4_Handler(void);                     /**< Trap # 4                                                                         */
+extern void Trap5_Handler(void);                     /**< Trap # 5                                                                         */
+extern void Trap6_Handler(void);                     /**< Trap # 6                                                                         */
+extern void Trap7_Handler(void);                     /**< Trap # 7                                                                         */
+extern void Trap8_Handler(void);                     /**< Trap # 8                                                                         */
+extern void Trap9_Handler(void);                     /**< Trap # 9                                                                         */
+extern void Trap10_Handler(void);                    /**< Trap # 10                                                                        */
+extern void Trap11_Handler(void);                    /**< Trap # 11                                                                        */
+extern void Trap12_Handler(void);                    /**< Trap # 12                                                                        */
+extern void Trap13_Handler(void);                    /**< Trap # 13                                                                        */
+extern void Trap14_Handler(void);                    /**< Trap # 14                                                                        */
+extern void Trap15_Handler(void);                    /**< Trap # 15                                                                        */
+extern void IRQ_IRQHandler(void);                    /**< IRQ                                                                              */
+extern void LVD_IRQHandler(void);                    /**< Low Voltage Detect, Low Voltage Warning interrupt                                */
+extern void LLWU_IRQHandler(void);                   /**< Low Leakage Wakeup                                                               */
+extern void LOL_IRQHandler(void);                    /**< MCG Loss of Clock                                                                */
+extern void FLASH_IRQHandler(void);                  /**< Flash                                                                            */
+extern void DMA_CH0_IRQHandler(void);                /**< DMA Channel 0                                                                    */
+extern void DMA_CH1_IRQHandler(void);                /**< DMA Channel 1                                                                    */
+extern void DMA_CH2_IRQHandler(void);                /**< DMA Channel 2                                                                    */
+extern void DMA_CH3_IRQHandler(void);                /**< DMA Channel 3                                                                    */
+extern void USB0_IRQHandler(void);                   /**< USB0 Status                                                                      */
+extern void RNGB_IRQHandler(void);                   /**< RNGB                                                                             */
+extern void FTM1FAULT_OVF_IRQHandler(void);          /**< FTM1 Fault & Overflow                                                            */
+extern void FTM1_CH0_IRQHandler(void);               /**< FTM1 Channel 0                                                                   */
+extern void FTM1_CH1_IRQHandler(void);               /**< FTM1 Channel 1                                                                   */
+extern void FTM1_CH2_IRQHandler(void);               /**< FTM1 Channel 2                                                                   */
+extern void FTM1_CH3_IRQHandler(void);               /**< FTM1 Channel 3                                                                   */
+extern void FTM1_CH4_IRQHandler(void);               /**< FTM1 Channel 4                                                                   */
+extern void FTM1_CH5_IRQHandler(void);               /**< FTM1 Channel 5                                                                   */
+extern void CMP0_IRQHandler(void);                   /**< CMP0                                                                             */
+extern void FTM0_FAULT_OVF_IRQHandler(void);         /**< FTM0 Fault & Overflow                                                            */
+extern void FTM0_CH0_IRQHandler(void);               /**< FTM0 Channel 0                                                                   */
+extern void FTM0_CH1_IRQHandler(void);               /**< FTM0 Channel 1                                                                   */
+extern void SPI0_IRQHandler(void);                   /**< SPI0                                                                             */
+extern void SCI0_IRQHandler(void);                   /**< UART0                                                                            */
+extern void SAI_RX_IRQHandler(void);                 /**< I2S Receive                                                                      */
+extern void SAI_TX_IRQHandler(void);                 /**< I2S Transmit                                                                     */
+extern void IIC0_IRQHandler(void);                   /**< I2C0                                                                             */
+extern void IIC2_IRQHandler(void);                   /**< I2C2                                                                             */
+extern void SPI1_IRQHandler(void);                   /**< SPI1                                                                             */
+extern void SCI1_IRQHandler(void);                   /**< UART1                                                                            */
+extern void IIC1_IRQHandler(void);                   /**< I2C1                                                                             */
+extern void IIC3_IRQHandler(void);                   /**< I2C3                                                                             */
+extern void ADC0_IRQHandler(void);                   /**< ADC0                                                                             */
+extern void TSI0_IRQHandler(void);                   /**< TSI0                                                                             */
+extern void DAC0_IRQHandler(void);                   /**< DAC0                                                                             */
+extern void CMT_IRQHandler(void);                    /**< CMT                                                                              */
+extern void PDB0_IRQHandler(void);                   /**< PDB0                                                                             */
+extern void LPTMR0_IRQHandler(void);                 /**< LPTMR0                                                                           */
+extern void LPTMR1_IRQHandler(void);                 /**< LPTMR1                                                                           */
+extern void L7_SWI_IRQHandler(void);                 /**< Level 7 Software Interrupt                                                       */
+extern void L6_SWI_IRQHandler(void);                 /**< Level 6 Software Interrupt                                                       */
+extern void L5_SWI_IRQHandler(void);                 /**< Level 5 Software Interrupt                                                       */
+extern void L4_SWI_IRQHandler(void);                 /**< Level 4 Software Interrupt                                                       */
+extern void L3_SWI_IRQHandler(void);                 /**< Level 3 Software Interrupt                                                       */
+extern void L2_SWI_IRQHandler(void);                 /**< Level 2 Software Interrupt                                                       */
+extern void L1_SWI_IRQHandler(void);                 /**< Level 1 Software Interrupt                                                       */
+extern void MTIM0_IRQHandler(void);                  /**< MTIM0                                                                            */
+extern void USBDCD_IRQHandler(void);                 /**< USBDCD                                                                           */
+extern void PORT_AB_IRQHandler(void);                /**< EGPIO Port A & EGPIO Port B                                                      */
+extern void PORT_CD_IRQHandler(void);                /**< EGPIO Port C & EGPIO Port D                                                      */
+extern void PORT_EF_IRQHandler(void);                /**< EGPIO Port E & EGPIO Port F                                                      */
 
 /* ================================================================================ */
 /* ================      Processor and Core Peripheral Section     ================ */

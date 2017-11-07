@@ -9,246 +9,295 @@ Devices using this vector table:
       <name>DMA0_DMA4</name>
       <description>Enhanced direct memory access controller</description>
       <value>0</value>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA1_DMA5</name>
       <description>Enhanced direct memory access controller</description>
       <value>1</value>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA2_DMA6</name>
       <description>Enhanced direct memory access controller</description>
       <value>2</value>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA3_DMA7</name>
       <description>Enhanced direct memory access controller</description>
       <value>3</value>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA_Error</name>
       <description>Enhanced direct memory access controller</description>
       <value>4</value>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
-      <name>FLEXIO0</name>
+      <name>FLEXIO</name>
       <description>The FLEXIO Memory Map/Register Definition can be found here</description>
       <value>5</value>
+      <peripheral>FLEXIO</peripheral>
    </interrupt>
    <interrupt>
       <name>TPM0</name>
       <description>Timer/PWM Module</description>
       <value>6</value>
+      <peripheral>TPM0</peripheral>
    </interrupt>
    <interrupt>
       <name>TPM1</name>
       <description>Timer/PWM Module</description>
       <value>7</value>
+      <peripheral>TPM1</peripheral>
    </interrupt>
    <interrupt>
       <name>TPM2</name>
       <description>Timer/PWM Module</description>
       <value>8</value>
+      <peripheral>TPM2</peripheral>
    </interrupt>
    <interrupt>
       <name>PIT0</name>
       <description>Periodic Interrupt Timer</description>
       <value>9</value>
+      <peripheral>PIT</peripheral>
    </interrupt>
    <interrupt>
       <name>SPI0</name>
       <description>Serial Peripheral Interface</description>
       <value>10</value>
+      <peripheral>SPI0</peripheral>
    </interrupt>
    <interrupt>
       <name>EMVSIM0</name>
       <description>EMVSIM</description>
       <value>11</value>
+      <peripheral>EMVSIM0</peripheral>
    </interrupt>
    <interrupt>
       <name>LPUART0</name>
       <description>Universal Asynchronous Receiver/Transmitter</description>
       <value>12</value>
+      <peripheral>LPUART0</peripheral>
    </interrupt>
    <interrupt>
       <name>LPUART1</name>
       <description>Universal Asynchronous Receiver/Transmitter</description>
       <value>13</value>
+      <peripheral>LPUART1</peripheral>
    </interrupt>
    <interrupt>
       <name>I2C0</name>
       <description>Inter-Integrated Circuit</description>
       <value>14</value>
+      <peripheral>I2C0</peripheral>
    </interrupt>
    <interrupt>
       <name>QSPI0</name>
       <description>QuadSPI</description>
       <value>15</value>
+      <peripheral>QSPI0</peripheral>
    </interrupt>
    <interrupt>
       <name>PORTA</name>
       <description>General Purpose Input/Output</description>
       <value>17</value>
+      <peripheral>PORTA</peripheral>
    </interrupt>
    <interrupt>
       <name>PORTB</name>
       <description>General Purpose Input/Output</description>
       <value>18</value>
+      <peripheral>PORTB</peripheral>
    </interrupt>
    <interrupt>
       <name>PORTC</name>
       <description>General Purpose Input/Output</description>
       <value>19</value>
+      <peripheral>PORTC</peripheral>
    </interrupt>
    <interrupt>
       <name>PORTD</name>
       <description>General Purpose Input/Output</description>
       <value>20</value>
+      <peripheral>PORTD</peripheral>
    </interrupt>
    <interrupt>
       <name>PORTE</name>
       <description>General Purpose Input/Output</description>
       <value>21</value>
+      <peripheral>PORTE</peripheral>
    </interrupt>
    <interrupt>
       <name>LLWU</name>
       <description>Low leakage wakeup unit</description>
       <value>22</value>
+      <peripheral>LLWU</peripheral>
    </interrupt>
    <interrupt>
       <name>LTC0</name>
       <description>LTC</description>
       <value>23</value>
+      <peripheral>LTC0</peripheral>
    </interrupt>
    <interrupt>
       <name>USB0</name>
       <description>Universal Serial Bus, OTG Capable Controller</description>
       <value>24</value>
+      <peripheral>USB0</peripheral>
    </interrupt>
    <interrupt>
       <name>ADC0</name>
       <description>Analog-to-Digital Converter</description>
       <value>25</value>
+      <peripheral>ADC0</peripheral>
    </interrupt>
    <interrupt>
       <name>LPTMR0</name>
       <description>Low Power Timer</description>
       <value>26</value>
+      <peripheral>LPTMR0</peripheral>
    </interrupt>
    <interrupt>
       <name>RTC_Seconds</name>
       <description>Secure Real Time Clock</description>
       <value>27</value>
+      <peripheral>RTC</peripheral>
    </interrupt>
    <interrupt>
       <name>INTMUX0_0</name>
       <description>Interrupt Multiplexer</description>
       <value>28</value>
+      <peripheral>INTMUX0</peripheral>
    </interrupt>
    <interrupt>
       <name>INTMUX0_1</name>
       <description>Interrupt Multiplexer</description>
       <value>29</value>
+      <peripheral>INTMUX0</peripheral>
    </interrupt>
    <interrupt>
       <name>INTMUX0_2</name>
       <description>Interrupt Multiplexer</description>
       <value>30</value>
+      <peripheral>INTMUX0</peripheral>
    </interrupt>
    <interrupt>
       <name>INTMUX0_3</name>
       <description>Interrupt Multiplexer</description>
       <value>31</value>
+      <peripheral>INTMUX0</peripheral>
    </interrupt>
    <interrupt>
       <name>LPTMR1</name>
       <description>Interrupt Multiplexer</description>
       <value>32</value>
+      <peripheral>LPTMR0</peripheral>
    </interrupt>
    <interrupt>
       <name>SPI1</name>
       <description>Interrupt Multiplexer</description>
       <value>36</value>
+      <peripheral>SPI1</peripheral>
    </interrupt>
    <interrupt>
       <name>LPUART2</name>
       <description>Interrupt Multiplexer</description>
       <value>37</value>
+      <peripheral>LPUART2</peripheral>
    </interrupt>
    <interrupt>
       <name>EMVSIM1</name>
       <description>EMVSIM</description>
       <value>38</value>
+      <peripheral>EMVSIM1</peripheral>
    </interrupt>
    <interrupt>
       <name>I2C1</name>
       <description>Inter-Integrated Circuit</description>
       <value>39</value>
+      <peripheral>I2C1</peripheral>
    </interrupt>
    <interrupt>
       <name>TSI0</name>
       <description>Interrupt Multiplexer</description>
       <value>40</value>
+      <peripheral>TSI0</peripheral>
    </interrupt>
    <interrupt>
       <name>PMC</name>
       <description>Interrupt Multiplexer</description>
       <value>41</value>
+      <peripheral>PMC</peripheral>
    </interrupt>
    <interrupt>
-      <name>FTFA</name>
+      <name>FTF</name>
       <description>Flash Memory Interface</description>
       <value>42</value>
+      <peripheral>FTFA</peripheral>
    </interrupt>
    <interrupt>
       <name>MCG</name>
       <description>Interrupt Multiplexer</description>
       <value>43</value>
+      <peripheral>MCG</peripheral>
    </interrupt>
    <interrupt>
       <name>WDOG_EWM</name>
       <description>External Watchdog Monitor</description>
       <value>44</value>
+      <peripheral>WDOG</peripheral>
    </interrupt>
    <interrupt>
       <name>DAC0</name>
       <description>12-Bit Digital-to-Analog Converter</description>
       <value>45</value>
+      <peripheral>DAC0</peripheral>
    </interrupt>
    <interrupt>
       <name>TRNG0</name>
       <description>Interrupt Multiplexer</description>
       <value>46</value>
+      <peripheral>TRNG0</peripheral>
    </interrupt>
    <interrupt>
       <name>CMP0</name>
       <description>High-Speed Comparator (CMP), Voltage Reference (VREF) Digital-to-Analog Converter (DAC), and Analog Mux</description>
       <value>48</value>
+      <peripheral>CMP0</peripheral>
    </interrupt>
    <interrupt>
       <name>RTC_Alarm</name>
       <description>Interrupt Multiplexer</description>
       <value>50</value>
+      <peripheral>RTC</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA4</name>
       <description>Interrupt Multiplexer</description>
       <value>56</value>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA5</name>
       <description>Interrupt Multiplexer</description>
       <value>57</value>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA6</name>
       <description>Interrupt Multiplexer</description>
       <value>58</value>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA7</name>
       <description>Interrupt Multiplexer</description>
       <value>59</value>
+      <peripheral>DMA0</peripheral>
    </interrupt>
 </interrupts>
 

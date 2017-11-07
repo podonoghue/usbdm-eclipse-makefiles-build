@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1
- * @date     2017/10
+ * @date     2017/11
  *
  *******************************************************************************************************/
 
@@ -108,72 +108,72 @@ typedef enum {
 * @{
 */
 /* -------------------------  Exception Handlers  ------------------------ */
-extern void NMI_Handler(void);                 /**< Non maskable Interrupt, cannot be stopped or preempted                           */
-extern void HardFault_Handler(void);           /**< Hard Fault, all classes of Fault                                                 */
-extern void MemManage_Handler(void);           /**< Memory Management, MPU mismatch, including Access Violation and No Match         */
-extern void BusFault_Handler(void);            /**< Bus Fault, Pre-Fetch-, Memory Access Fault, other address/memory related Fault   */
-extern void UsageFault_Handler(void);          /**< Usage Fault, i.e. Undef Instruction, Illegal State Transition                    */
-extern void SVC_Handler(void);                 /**< System Service Call via SVC instruction                                          */
-extern void DebugMon_Handler(void);            /**< Debug Monitor                                                                    */
-extern void PendSV_Handler(void);              /**< Pendable request for system service                                              */
-extern void SysTick_Handler(void);             /**< System Tick Timer                                                                */
-extern void PIO0_0_IRQHandler(void);           /**< System configuration                                                             */
-extern void PIO0_1_IRQHandler(void);           /**< System configuration                                                             */
-extern void PIO0_2_IRQHandler(void);           /**< System configuration                                                             */
-extern void PIO0_3_IRQHandler(void);           /**< System configuration                                                             */
-extern void PIO0_4_IRQHandler(void);           /**< System configuration                                                             */
-extern void PIO0_5_IRQHandler(void);           /**< System configuration                                                             */
-extern void PIO0_6_IRQHandler(void);           /**< System configuration                                                             */
-extern void PIO0_7_IRQHandler(void);           /**< System configuration                                                             */
-extern void PIO0_8_IRQHandler(void);           /**< System configuration                                                             */
-extern void PIO0_9_IRQHandler(void);           /**< System configuration                                                             */
-extern void PIO0_10_IRQHandler(void);          /**< System configuration                                                             */
-extern void PIO0_11_IRQHandler(void);          /**< System configuration                                                             */
-extern void PIO1_0_IRQHandler(void);           /**< System configuration                                                             */
-extern void PIO1_1_IRQHandler(void);           /**< System configuration                                                             */
-extern void PIO1_2_IRQHandler(void);           /**< System configuration                                                             */
-extern void PIO1_3_IRQHandler(void);           /**< System configuration                                                             */
-extern void PIO1_4_IRQHandler(void);           /**< System configuration                                                             */
-extern void PIO1_5_IRQHandler(void);           /**< System configuration                                                             */
-extern void PIO1_6_IRQHandler(void);           /**< System configuration                                                             */
-extern void PIO1_7_IRQHandler(void);           /**< System configuration                                                             */
-extern void PIO1_8_IRQHandler(void);           /**< System configuration                                                             */
-extern void PIO1_9_IRQHandler(void);           /**< System configuration                                                             */
-extern void PIO1_10_IRQHandler(void);          /**< System configuration                                                             */
-extern void PIO1_11_IRQHandler(void);          /**< System configuration                                                             */
-extern void PIO2_0_IRQHandler(void);           /**< System configuration                                                             */
-extern void PIO2_1_IRQHandler(void);           /**< System configuration                                                             */
-extern void PIO2_2_IRQHandler(void);           /**< System configuration                                                             */
-extern void PIO2_3_IRQHandler(void);           /**< System configuration                                                             */
-extern void PIO2_4_IRQHandler(void);           /**< System configuration                                                             */
-extern void PIO2_5_IRQHandler(void);           /**< System configuration                                                             */
-extern void PIO2_6_IRQHandler(void);           /**< System configuration                                                             */
-extern void PIO2_7_IRQHandler(void);           /**< System configuration                                                             */
-extern void PIO2_8_IRQHandler(void);           /**< System configuration                                                             */
-extern void PIO2_9_IRQHandler(void);           /**< System configuration                                                             */
-extern void PIO2_10_IRQHandler(void);          /**< System configuration                                                             */
-extern void PIO2_11_IRQHandler(void);          /**< System configuration                                                             */
-extern void PIO3_0_IRQHandler(void);           /**< System configuration                                                             */
-extern void PIO3_1_IRQHandler(void);           /**< System configuration                                                             */
-extern void PIO3_2_IRQHandler(void);           /**< System configuration                                                             */
-extern void PIO3_3_IRQHandler(void);           /**< System configuration                                                             */
-extern void I2C0_IRQHandler(void);             /**< I2C-bus controller                                                               */
-extern void CT16B0_IRQHandler(void);           /**< 16-bit timer/counters (CT16B0/1)                                                 */
-extern void CT16B1_IRQHandler(void);           /**< 16-bit timer/counters (CT16B0/1)                                                 */
-extern void CT32B0_IRQHandler(void);           /**< 32-bit timer/counters (CT32B0/1)                                                 */
-extern void CT32B1_IRQHandler(void);           /**< 32-bit timer/counters (CT32B0/1)                                                 */
-extern void SSP0_IRQHandler(void);             /**< SSP0/1                                                                           */
-extern void UART_IRQHandler(void);             /**< UART                                                                             */
-extern void USBIRQ_IRQHandler(void);           /**< USB device controller                                                            */
-extern void USBFIQ_IRQHandler(void);           /**< USB device controller                                                            */
-extern void ADC_IRQHandler(void);              /**< Analog-to-Digital Converter                                                      */
-extern void WDT_IRQHandler(void);              /**< Windowed WatchDog Timer                                                          */
-extern void BOD_IRQHandler(void);              /**< System configuration                                                             */
-extern void PIO_3_IRQHandler(void);            /**< General Purpose I/O                                                              */
-extern void PIO_2_IRQHandler(void);            /**< General Purpose I/O                                                              */
-extern void PIO_1_IRQHandler(void);            /**< General Purpose I/O                                                              */
-extern void PIO_0_IRQHandler(void);            /**< General Purpose I/O                                                              */
-extern void SSP1_IRQHandler(void);             /**< SSP0/1                                                                           */
+extern void NMI_Handler(void);                       /**< Non maskable Interrupt, cannot be stopped or preempted                           */
+extern void HardFault_Handler(void);                 /**< Hard Fault, all classes of Fault                                                 */
+extern void MemManage_Handler(void);                 /**< Memory Management, MPU mismatch, including Access Violation and No Match         */
+extern void BusFault_Handler(void);                  /**< Bus Fault, Pre-Fetch-, Memory Access Fault, other address/memory related Fault   */
+extern void UsageFault_Handler(void);                /**< Usage Fault, i.e. Undef Instruction, Illegal State Transition                    */
+extern void SVC_Handler(void);                       /**< System Service Call via SVC instruction                                          */
+extern void DebugMon_Handler(void);                  /**< Debug Monitor                                                                    */
+extern void PendSV_Handler(void);                    /**< Pendable request for system service                                              */
+extern void SysTick_Handler(void);                   /**< System Tick Timer                                                                */
+extern void PIO0_0_IRQHandler(void);                 /**< System configuration                                                             */
+extern void PIO0_1_IRQHandler(void);                 /**< System configuration                                                             */
+extern void PIO0_2_IRQHandler(void);                 /**< System configuration                                                             */
+extern void PIO0_3_IRQHandler(void);                 /**< System configuration                                                             */
+extern void PIO0_4_IRQHandler(void);                 /**< System configuration                                                             */
+extern void PIO0_5_IRQHandler(void);                 /**< System configuration                                                             */
+extern void PIO0_6_IRQHandler(void);                 /**< System configuration                                                             */
+extern void PIO0_7_IRQHandler(void);                 /**< System configuration                                                             */
+extern void PIO0_8_IRQHandler(void);                 /**< System configuration                                                             */
+extern void PIO0_9_IRQHandler(void);                 /**< System configuration                                                             */
+extern void PIO0_10_IRQHandler(void);                /**< System configuration                                                             */
+extern void PIO0_11_IRQHandler(void);                /**< System configuration                                                             */
+extern void PIO1_0_IRQHandler(void);                 /**< System configuration                                                             */
+extern void PIO1_1_IRQHandler(void);                 /**< System configuration                                                             */
+extern void PIO1_2_IRQHandler(void);                 /**< System configuration                                                             */
+extern void PIO1_3_IRQHandler(void);                 /**< System configuration                                                             */
+extern void PIO1_4_IRQHandler(void);                 /**< System configuration                                                             */
+extern void PIO1_5_IRQHandler(void);                 /**< System configuration                                                             */
+extern void PIO1_6_IRQHandler(void);                 /**< System configuration                                                             */
+extern void PIO1_7_IRQHandler(void);                 /**< System configuration                                                             */
+extern void PIO1_8_IRQHandler(void);                 /**< System configuration                                                             */
+extern void PIO1_9_IRQHandler(void);                 /**< System configuration                                                             */
+extern void PIO1_10_IRQHandler(void);                /**< System configuration                                                             */
+extern void PIO1_11_IRQHandler(void);                /**< System configuration                                                             */
+extern void PIO2_0_IRQHandler(void);                 /**< System configuration                                                             */
+extern void PIO2_1_IRQHandler(void);                 /**< System configuration                                                             */
+extern void PIO2_2_IRQHandler(void);                 /**< System configuration                                                             */
+extern void PIO2_3_IRQHandler(void);                 /**< System configuration                                                             */
+extern void PIO2_4_IRQHandler(void);                 /**< System configuration                                                             */
+extern void PIO2_5_IRQHandler(void);                 /**< System configuration                                                             */
+extern void PIO2_6_IRQHandler(void);                 /**< System configuration                                                             */
+extern void PIO2_7_IRQHandler(void);                 /**< System configuration                                                             */
+extern void PIO2_8_IRQHandler(void);                 /**< System configuration                                                             */
+extern void PIO2_9_IRQHandler(void);                 /**< System configuration                                                             */
+extern void PIO2_10_IRQHandler(void);                /**< System configuration                                                             */
+extern void PIO2_11_IRQHandler(void);                /**< System configuration                                                             */
+extern void PIO3_0_IRQHandler(void);                 /**< System configuration                                                             */
+extern void PIO3_1_IRQHandler(void);                 /**< System configuration                                                             */
+extern void PIO3_2_IRQHandler(void);                 /**< System configuration                                                             */
+extern void PIO3_3_IRQHandler(void);                 /**< System configuration                                                             */
+extern void I2C0_IRQHandler(void);                   /**< I2C-bus controller                                                               */
+extern void CT16B0_IRQHandler(void);                 /**< 16-bit timer/counters (CT16B0/1)                                                 */
+extern void CT16B1_IRQHandler(void);                 /**< 16-bit timer/counters (CT16B0/1)                                                 */
+extern void CT32B0_IRQHandler(void);                 /**< 32-bit timer/counters (CT32B0/1)                                                 */
+extern void CT32B1_IRQHandler(void);                 /**< 32-bit timer/counters (CT32B0/1)                                                 */
+extern void SSP0_IRQHandler(void);                   /**< SSP0/1                                                                           */
+extern void UART_IRQHandler(void);                   /**< UART                                                                             */
+extern void USBIRQ_IRQHandler(void);                 /**< USB device controller                                                            */
+extern void USBFIQ_IRQHandler(void);                 /**< USB device controller                                                            */
+extern void ADC_IRQHandler(void);                    /**< Analog-to-Digital Converter                                                      */
+extern void WDT_IRQHandler(void);                    /**< Windowed WatchDog Timer                                                          */
+extern void BOD_IRQHandler(void);                    /**< System configuration                                                             */
+extern void PIO_3_IRQHandler(void);                  /**< General Purpose I/O                                                              */
+extern void PIO_2_IRQHandler(void);                  /**< General Purpose I/O                                                              */
+extern void PIO_1_IRQHandler(void);                  /**< General Purpose I/O                                                              */
+extern void PIO_0_IRQHandler(void);                  /**< General Purpose I/O                                                              */
+extern void SSP1_IRQHandler(void);                   /**< SSP0/1                                                                           */
 
 /**
  * @} */ /* End group Interrupt_handler_prototypes_GROUP 

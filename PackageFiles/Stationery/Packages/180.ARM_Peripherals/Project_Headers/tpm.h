@@ -704,7 +704,7 @@ public:
    }
 
    /**
-    * Convert ticks in ticks to time in seconds
+    * Convert ticks to time in seconds
     *
     * @param[in] tickInterval Time in ticks as float
     *

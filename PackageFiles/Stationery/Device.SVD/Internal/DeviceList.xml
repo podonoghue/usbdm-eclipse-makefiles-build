@@ -292,6 +292,8 @@
       
       <device name="FRDM_KV10Z"       svdFileName="MKV10Z7"     />
       <device name="FRDM_KV31F"       svdFileName="MKV31F51212" />
+
+      <device name="FRDM_KW41Z"      svdFileName="MKW41Z4"  />
       
       <device name="TWR_K22F120M"    svdFileName="MK22F51212"   />
       <device name="TWR_K24F120M"    svdFileName="MK24F25612"   />

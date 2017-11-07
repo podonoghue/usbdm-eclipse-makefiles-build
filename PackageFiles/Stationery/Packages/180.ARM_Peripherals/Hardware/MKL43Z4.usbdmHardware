@@ -33,10 +33,15 @@
       <peripheral baseName="DAC"      instance="0"        version="dac0_2ch_fifo_mkl17">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDac" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_DAC0_MASK" />
+         <irq num="DAC0_IRQn" />
       </peripheral>
       <peripheral baseName="DMA"      instance="0"        version="dma0_mkl">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDma" />
          <clock reg="SCGC7"         mask="SIM_SCGC7_DMA_MASK" />
+         <irq num="DMA0_IRQn" />
+         <irq num="DMA1_IRQn" />
+         <irq num="DMA2_IRQn" />
+         <irq num="DMA3_IRQn" />
       </peripheral>
       <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_4ch_trig">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDmaMux" />
@@ -89,7 +94,7 @@
       <peripheral baseName="ExternalTrigger" instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForShared" />
       </peripheral>
-      <peripheral baseName="FLEXIO"   instance=""         version="flexio_0">
+      <peripheral baseName="FLEXIO"   instance=""         version="flexio_4sh_0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
          <clock reg="SCGC5"         mask="SIM_SCGC5_FLEXIO_MASK" />
          <irq num="UART2_FLEXIO_IRQn" />
@@ -97,6 +102,7 @@
       <peripheral baseName="FTFA"     instance=""         version="ftfa">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlash" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_FTF_MASK" />
+         <irq num="FTF_Command_IRQn" />
          <param key="pflash_sector_size" value="1024" />
          <param key="pflash_phrase_size" value="4" />
          <param key="peripheral_file" value="ftfa" />

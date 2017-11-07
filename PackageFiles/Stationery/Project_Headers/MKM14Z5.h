@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2017/10
+ * @date     2017/11
  *
  *******************************************************************************************************/
 
@@ -77,41 +77,41 @@ typedef enum {
 * @{
 */
 /* -------------------------  Exception Handlers  ------------------------ */
-extern void NMI_Handler(void);                 /**< Non maskable Interrupt, cannot be stopped or preempted                           */
-extern void HardFault_Handler(void);           /**< Hard Fault, all classes of Fault                                                 */
-extern void SVC_Handler(void);                 /**< System Service Call via SVC instruction                                          */
-extern void PendSV_Handler(void);              /**< Pendable request for system service                                              */
-extern void SysTick_Handler(void);             /**< System Tick Timer                                                                */
-extern void DMA0_IRQHandler(void);             /**< DMA Controller                                                                   */
-extern void DMA1_IRQHandler(void);             /**< DMA Controller                                                                   */
-extern void DMA2_IRQHandler(void);             /**< DMA Controller                                                                   */
-extern void DMA3_IRQHandler(void);             /**< DMA Controller                                                                   */
-extern void SPI0_IRQHandler(void);             /**< Serial Peripheral Interface                                                      */
-extern void SPI1_IRQHandler(void);             /**< Serial Peripheral Interface                                                      */
-extern void PMC_IRQHandler(void);              /**< Power Management Controller                                                      */
-extern void TMR0_IRQHandler(void);             /**< Quad Timer                                                                       */
-extern void TMR1_IRQHandler(void);             /**< Quad Timer                                                                       */
-extern void TMR2_IRQHandler(void);             /**< Quad Timer                                                                       */
-extern void TMR3_IRQHandler(void);             /**< Quad Timer                                                                       */
-extern void PIT0_PIT1_IRQHandler(void);        /**< Periodic Interrupt Timer                                                         */
-extern void LLWU_IRQHandler(void);             /**< Low Leakage Wakeup                                                               */
-extern void FTF_Command_IRQHandler(void);      /**< Flash Memory Interface                                                           */
-extern void CMP0_CMP1_IRQHandler(void);        /**< High-Speed Comparator                                                            */
-extern void ADC_IRQHandler(void);              /**< Analogue to Digital Converter                                                    */
-extern void PTx_IRQHandler(void);              /**< General Purpose Input/Output                                                     */
-extern void UART0_UART1_IRQHandler(void);      /**< Serial Communication Interface                                                   */
-extern void UART2_UART3_IRQHandler(void);      /**< Serial Communication Interface                                                   */
-extern void AFE_CH0_IRQHandler(void);          /**< This section describes the ADC registers                                         */
-extern void AFE_CH1_IRQHandler(void);          /**< This section describes the ADC registers                                         */
-extern void AFE_CH2_IRQHandler(void);          /**< This section describes the ADC registers                                         */
-extern void AFE_CH3_IRQHandler(void);          /**< This section describes the ADC registers                                         */
-extern void RTC_Alarm_IRQHandler(void);        /**< Real Time Clock                                                                  */
-extern void I2C0_I2C1_IRQHandler(void);        /**< Inter-Integrated Circuit                                                         */
-extern void EWM_IRQHandler(void);              /**< External Watchdog Monitor                                                        */
-extern void MCG_IRQHandler(void);              /**< Multipurpose Clock Generator                                                     */
-extern void WDOG_IRQHandler(void);             /**< External Watchdog Monitor                                                        */
-extern void LPTMR_IRQHandler(void);            /**< Low Power Timer                                                                  */
-extern void XBAR_IRQHandler(void);             /**< Crossbar Switch                                                                  */
+extern void NMI_Handler(void);                       /**< Non maskable Interrupt, cannot be stopped or preempted                           */
+extern void HardFault_Handler(void);                 /**< Hard Fault, all classes of Fault                                                 */
+extern void SVC_Handler(void);                       /**< System Service Call via SVC instruction                                          */
+extern void PendSV_Handler(void);                    /**< Pendable request for system service                                              */
+extern void SysTick_Handler(void);                   /**< System Tick Timer                                                                */
+extern void DMA0_IRQHandler(void);                   /**< DMA Controller                                                                   */
+extern void DMA1_IRQHandler(void);                   /**< DMA Controller                                                                   */
+extern void DMA2_IRQHandler(void);                   /**< DMA Controller                                                                   */
+extern void DMA3_IRQHandler(void);                   /**< DMA Controller                                                                   */
+extern void SPI0_IRQHandler(void);                   /**< Serial Peripheral Interface                                                      */
+extern void SPI1_IRQHandler(void);                   /**< Serial Peripheral Interface                                                      */
+extern void PMC_IRQHandler(void);                    /**< Power Management Controller                                                      */
+extern void TMR0_IRQHandler(void);                   /**< Quad Timer                                                                       */
+extern void TMR1_IRQHandler(void);                   /**< Quad Timer                                                                       */
+extern void TMR2_IRQHandler(void);                   /**< Quad Timer                                                                       */
+extern void TMR3_IRQHandler(void);                   /**< Quad Timer                                                                       */
+extern void PIT0_PIT1_IRQHandler(void);              /**< Periodic Interrupt Timer                                                         */
+extern void LLWU_IRQHandler(void);                   /**< Low Leakage Wakeup                                                               */
+extern void FTF_Command_IRQHandler(void);            /**< Flash Memory Interface                                                           */
+extern void CMP0_CMP1_IRQHandler(void);              /**< High-Speed Comparator                                                            */
+extern void ADC_IRQHandler(void);                    /**< Analogue to Digital Converter                                                    */
+extern void PTx_IRQHandler(void);                    /**< General Purpose Input/Output                                                     */
+extern void UART0_UART1_IRQHandler(void);            /**< Serial Communication Interface                                                   */
+extern void UART2_UART3_IRQHandler(void);            /**< Serial Communication Interface                                                   */
+extern void AFE_CH0_IRQHandler(void);                /**< This section describes the ADC registers                                         */
+extern void AFE_CH1_IRQHandler(void);                /**< This section describes the ADC registers                                         */
+extern void AFE_CH2_IRQHandler(void);                /**< This section describes the ADC registers                                         */
+extern void AFE_CH3_IRQHandler(void);                /**< This section describes the ADC registers                                         */
+extern void RTC_Alarm_IRQHandler(void);              /**< Real Time Clock                                                                  */
+extern void I2C0_I2C1_IRQHandler(void);              /**< Inter-Integrated Circuit                                                         */
+extern void EWM_IRQHandler(void);                    /**< External Watchdog Monitor                                                        */
+extern void MCG_IRQHandler(void);                    /**< Multipurpose Clock Generator                                                     */
+extern void WDOG_IRQHandler(void);                   /**< External Watchdog Monitor                                                        */
+extern void LPTMR_IRQHandler(void);                  /**< Low Power Timer                                                                  */
+extern void XBAR_IRQHandler(void);                   /**< Crossbar Switch                                                                  */
 
 /**
  * @} */ /* End group Interrupt_handler_prototypes_GROUP 
@@ -2247,7 +2247,7 @@ typedef struct {                                /*       LPTMR0 Structure       
    __IO uint32_t  CSR;                          /**< 0000: Control Status Register                                      */
    __IO uint32_t  PSR;                          /**< 0004: Prescale Register                                            */
    __IO uint32_t  CMR;                          /**< 0008: Compare Register                                             */
-   __I  uint32_t  CNR;                          /**< 000C: Counter Register                                             */
+   __IO uint32_t  CNR;                          /**< 000C: Counter Register                                             */
 } LPTMR_Type;
 
 /**
@@ -4889,7 +4889,10 @@ typedef struct {                                /*       SIM Structure          
 typedef struct {                                /*       SMC Structure                                                */
    __IO uint8_t   PMPROT;                       /**< 0000: Power Mode Protection Register                               */
    __IO uint8_t   PMCTRL;                       /**< 0001: Power Mode Control Register                                  */
-   __IO uint8_t   STOPCTRL;                     /**< 0002: Stop Control Register                                        */
+   union {                                      /**< 0000: (size=0001)                                                  */
+      __IO uint8_t   STOPCTRL;                  /**< 0002: Stop Control Register                                        */
+      __IO uint8_t   VLLSCTRL;                  /**< 0002: VLLS Control Register (old name)                             */
+   };
    __I  uint8_t   PMSTAT;                       /**< 0003: Power Mode Status Register                                   */
 } SMC_Type;
 
@@ -4933,6 +4936,16 @@ typedef struct {                                /*       SMC Structure          
 #define SMC_STOPCTRL_PSTOPO_MASK                 (0xC0U)                                             /*!< SMC_STOPCTRL.PSTOPO Mask                */
 #define SMC_STOPCTRL_PSTOPO_SHIFT                (6U)                                                /*!< SMC_STOPCTRL.PSTOPO Position            */
 #define SMC_STOPCTRL_PSTOPO(x)                   (((uint8_t)(((uint8_t)(x))<<6U))&0xC0UL)            /*!< SMC_STOPCTRL.PSTOPO Field               */
+/* ------- VLLSCTRL Bit Fields                      ------ */
+#define SMC_VLLSCTRL_VLLSM_MASK                  (0x7U)                                              /*!< SMC_VLLSCTRL.VLLSM Mask                 */
+#define SMC_VLLSCTRL_VLLSM_SHIFT                 (0U)                                                /*!< SMC_VLLSCTRL.VLLSM Position             */
+#define SMC_VLLSCTRL_VLLSM(x)                    (((uint8_t)(((uint8_t)(x))<<0U))&0x7UL)             /*!< SMC_VLLSCTRL.VLLSM Field                */
+#define SMC_VLLSCTRL_PORPO_MASK                  (0x20U)                                             /*!< SMC_VLLSCTRL.PORPO Mask                 */
+#define SMC_VLLSCTRL_PORPO_SHIFT                 (5U)                                                /*!< SMC_VLLSCTRL.PORPO Position             */
+#define SMC_VLLSCTRL_PORPO(x)                    (((uint8_t)(((uint8_t)(x))<<5U))&0x20UL)            /*!< SMC_VLLSCTRL.PORPO Field                */
+#define SMC_VLLSCTRL_PSTOPO_MASK                 (0xC0U)                                             /*!< SMC_VLLSCTRL.PSTOPO Mask                */
+#define SMC_VLLSCTRL_PSTOPO_SHIFT                (6U)                                                /*!< SMC_VLLSCTRL.PSTOPO Position            */
+#define SMC_VLLSCTRL_PSTOPO(x)                   (((uint8_t)(((uint8_t)(x))<<6U))&0xC0UL)            /*!< SMC_VLLSCTRL.PSTOPO Field               */
 /* ------- PMSTAT Bit Fields                        ------ */
 #define SMC_PMSTAT_PMSTAT_MASK                   (0xFFU)                                             /*!< SMC_PMSTAT.PMSTAT Mask                  */
 #define SMC_PMSTAT_PMSTAT_SHIFT                  (0U)                                                /*!< SMC_PMSTAT.PMSTAT Position              */
@@ -4955,7 +4968,7 @@ typedef struct {                                /*       SMC Structure          
 */
 
 /* ================================================================================ */
-/* ================           SPI0 (file:SPI0_MKM)                 ================ */
+/* ================           SPI0 (file:SPI0_16Bit_MKM)           ================ */
 /* ================================================================================ */
 
 /**
