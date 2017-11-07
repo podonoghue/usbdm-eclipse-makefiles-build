@@ -718,11 +718,11 @@ public:
     */
    static ErrorCode enableNvicErrorInterrupt(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
       if (enable) {
-         enableNvicInterrupt(Info::irqNums[1], nvicPriority);
+         enableNvicInterrupt(Info::irqNums[Info::irqCount-1], nvicPriority);
       }
       else {
          // Disable interrupts
-         NVIC_DisableIRQ(Info::irqNums[1]);
+         NVIC_DisableIRQ(Info::irqNums[Info::irqCount-1]);
       }
       return E_NO_ERROR;
    }
