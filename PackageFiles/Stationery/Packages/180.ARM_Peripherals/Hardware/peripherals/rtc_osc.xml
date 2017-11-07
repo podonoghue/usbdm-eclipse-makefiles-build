@@ -236,7 +236,7 @@
    </category>   
    
    <template><![CDATA[
-      \t#if RTC_WAR_TSRW
+      \t#if defined(RTC_WAR_TSRW)
       \t//! RTC Write Access Register\n
       \tstatic constexpr uint32_t war =
       \t   RTC_WAR_IERW($(rtc_war_ierw)) | // Interrupt Enable Register Write
@@ -309,7 +309,7 @@
    </category>
    
    <template><![CDATA[
-      \t#if RTC_RAR_TSRR
+      \t#if defined(RTC_RAR_TSRR)
       \t//! RTC Read Access Register\n
       \tstatic constexpr uint32_t rar =
       \t   RTC_RAR_IERR($(rtc_rar_ierr)) | // Interrupt Enable Register Read  

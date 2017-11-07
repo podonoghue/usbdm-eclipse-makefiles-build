@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-<!-- osc0_mk.xml -->
+<!-- osc0_rf.xml -->
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Oscillator" >
    
    <choiceOption name="osc_input_freq"

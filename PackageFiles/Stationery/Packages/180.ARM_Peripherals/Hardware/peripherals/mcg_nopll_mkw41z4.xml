@@ -274,7 +274,7 @@
       <aliasOption name="system_mcgirclk_clock." />
       <aliasOption name="system_mcgffclk_clock." />
       <aliasOption key="/OSC0/oscer_undiv_clock" optional="true" />
-      <aliasOption key="/OSC0/oscer_clock" optional="true" />
+      <aliasOption key="/OSC0/oscer_clock" />
       <aliasOption key="/SIM/system_erclk32k_clock" />
       <aliasOption name="system_low_power_clock" />
    
@@ -375,7 +375,7 @@
    </validate>
 
    <projectActionList id = "mcg_files" >
-      <copy source="Startup_Code/mcg_no_pll.cpp"          target="Startup_Code/mcg_no_pll.cpp"           overwrite="true"  derived="true" />
+      <copy source="Startup_Code/mcg_no_pll_mkw41z.cpp"   target="Startup_Code/mcg_no_pll_mkw41z.cpp"           overwrite="true"  derived="true" />
       <copy source="Project_Headers/mcg.h"                target="Project_Headers/mcg.h"                 overwrite="true"  derived="true" />
       <copy source="Snippets/mcg-test.cpp"                target="Snippets/mcg-test.cpp"                 overwrite="true"  derived="true" />
       <deleteResource target="Project_Headers/clock_configure.h" />
@@ -407,9 +407,6 @@
       \t   //! System Clock Divider Register 1
       \t   const uint32_t clkdiv1;\n\n
       
-      \t   //! SIM SOPT2 - Clock selectors for various peripherals
-      \t   const uint32_t sopt2;\n\n
-
       \t   //! Clock Mode
       \t   const ClockMode clockMode:8;\n\n
       
@@ -503,8 +500,6 @@
       \t      //! Control Register 2 - Excluding LP
       \t      MCG_C2_LOCRE0($(mcg_c2_locre0.)) | // LOCRE0  Loss of lock Reset Enable
       \t      MCG_C2_RANGE0($(mcg_c2_range.)) | // RANGE   Frequency Range Select
-      \t      MCG_C2_HGO0($(mcg_c2_hgo0))   | // HGO     High Gain Oscillator Select
-      \t      MCG_C2_EREFS0($(mcg_c2_erefs0)) | // EREFS   External Reference Select
       \t      MCG_C2_IRCS($(mcg_c2_ircs.)),    // IRCS    Internal Reference Clock Select\n\n
               
       \t      //! Control Register 4

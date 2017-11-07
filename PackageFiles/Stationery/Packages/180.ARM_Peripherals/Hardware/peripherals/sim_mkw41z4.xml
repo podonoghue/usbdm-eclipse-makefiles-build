@@ -10,7 +10,7 @@ Devices using this peripheral:
    <constant name="rtcSharesPins" value="false"   derived="true" />
    
    <!-- Oscillator used for OSC0 -->
-   <constant name="osc0_peripheral"   value="/OSC_RF0"    derived="true"/>
+   <constant name="osc0_peripheral"   value="/OSC0"    derived="true"/>
    
    <!-- Oscillator used for OSC1 = RTC -->
    <constant name="osc32k_peripheral" value="/RTC"     derived="true"/>
@@ -64,7 +64,7 @@ Devices using this peripheral:
          \t   switch(sim->SOPT1&SIM_SOPT1_OSC32KSEL_MASK) {
          \t      default                     : return 0;
          \t      case SIM_SOPT1_OSC32KSEL(0) : return Osc0Info::getOsc32kClock();
-         \t      case SIM_SOPT1_OSC32KSEL(2) : return RtcInfo::rtcclkin_clock;
+         \t      case SIM_SOPT1_OSC32KSEL(2) : return RtcInfo::getExternalClock();
          \t      case SIM_SOPT1_OSC32KSEL(3) : return 1000;
          \t   }
          \t}\n\n
@@ -243,7 +243,9 @@ Devices using this peripheral:
          \t#ifdef SIM_SOPT2_PLLFLLSEL
          \t      SIM_SOPT2_PLLFLLSEL($(/SIM/sim_sopt2_pllfllsel[0]:-1))|      // PLL/FLL clock select
          \t#endif
-         \t      SIM_SOPT2_RTCCLKOUTSEL($(/SIM/sim_sopt2_rtcclkoutsel)) |  // RTC clock out select
+         \t#ifdef SIM_SOPT2_RTCCLKOUTSEL
+         \t      SIM_SOPT2_RTCCLKOUTSEL($(/SIM/sim_sopt2_rtcclkoutsel:-1)) |  // RTC clock out select
+         \t#endif
          \t      SIM_SOPT2_CLKOUTSEL($(/SIM/sim_sopt2_clkoutsel));      // CLKOUT pin clock source select\n\n
       ]]></template>
    </category>

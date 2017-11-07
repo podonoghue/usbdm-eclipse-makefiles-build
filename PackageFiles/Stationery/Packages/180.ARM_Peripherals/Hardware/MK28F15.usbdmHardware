@@ -70,7 +70,7 @@
       </peripheral>
       <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_32ch_trig_split_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDmaMux" />
-         <clock reg="SCGC6"         mask="SIM_SCGC6_DMAMUX_MASK" />
+         <clock reg="SCGC6"         mask="SIM_SCGC6_DMAMUX0_MASK" />
       </peripheral>
       <peripheral baseName="EWM"      instance=""         version="ewm_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForEwm" />

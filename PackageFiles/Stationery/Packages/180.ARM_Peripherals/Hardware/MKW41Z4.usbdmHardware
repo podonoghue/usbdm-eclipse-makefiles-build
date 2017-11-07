@@ -110,8 +110,8 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcg" />
          <irq num="MCG_IRQn" />
       </peripheral>
-      <peripheral baseName="OSC_RF"   instance="0">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRfOsc" />
+      <peripheral baseName="OSC"      instance="0"        version="osc0_rf">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForOscRf" />
       </peripheral>
       <peripheral baseName="PIT"      instance=""         version="pit_2ch_chain_ltmr">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPit" />
