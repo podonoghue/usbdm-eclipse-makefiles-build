@@ -5,9 +5,9 @@ Devices using this peripheral:
       <peripheral>
          <?sourceFile "TPM0_4CH_MKW41Z4" ?>
          <name>TPM0</name>
-         <description>Timer/PWM Module</description>
+         <description>Timer/PWM Module (4 channels)</description>
          <groupName>TPM</groupName>
-         <headerStructName>TPM0</headerStructName>
+         <headerStructName>TPM</headerStructName>
          <baseAddress>0x40038000</baseAddress>
          <size>32</size>
          <access>read-write</access>
