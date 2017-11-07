@@ -50,7 +50,7 @@
       <xi:include href="peripherals/MTBDWT_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/FTFA_FlashConfig_MKW41Z4.svd.xml"/>
       <xi:include href="peripherals/NVIC_MKW41Z4.svd.xml"/>
-      <xi:include href="peripherals/OSC_RF.svd.xml"/>
+      <xi:include href="peripherals/OSC0_RF.svd.xml"/>
       <xi:include href="peripherals/PIT_2CH_CHAIN_LTMR.svd.xml"/>
       <xi:include href="peripherals/PMC_MKW41Z4.svd.xml"/>
       <xi:include href="peripherals/PORTA_MKL_DMA.svd.xml"/>

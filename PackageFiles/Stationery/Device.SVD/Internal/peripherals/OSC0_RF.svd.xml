@@ -3,11 +3,11 @@ Devices using this peripheral:
       MKW41Z4
 -->
       <peripheral>
-         <?sourceFile "OSC_RF" ?>
-         <name>OSC_RF</name>
+         <?sourceFile "OSC0_RF" ?>
+         <name>OSC0</name>
          <description>System Oscillator</description>
-         <groupName>OSC_RF</groupName>
-         <headerStructName>OSC_RF</headerStructName>
+         <groupName>OSC</groupName>
+         <headerStructName>OSC</headerStructName>
          <baseAddress>0x00000000</baseAddress>
          <size>8</size>
          <access>read-write</access>
