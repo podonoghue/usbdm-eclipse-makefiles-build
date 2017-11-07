@@ -4448,51 +4448,51 @@ typedef struct {                                /*       NV Structure           
  * @} */ /* End group FTFA_FlashConfig_Peripheral_access_layer_GROUP 
  */
 /**
-* @addtogroup OSC_RF_Peripheral_access_layer_GROUP OSC_RF Peripheral Access Layer
-* @brief C Struct for OSC_RF
+* @addtogroup OSC_Peripheral_access_layer_GROUP OSC Peripheral Access Layer
+* @brief C Struct for OSC
 * @{
 */
 
 /* ================================================================================ */
-/* ================           OSC_RF (file:OSC_RF)                 ================ */
+/* ================           OSC0 (file:OSC0_RF)                  ================ */
 /* ================================================================================ */
 
 /**
  * @brief System Oscillator
  */
 /**
-* @addtogroup OSC_RF_structs_GROUP OSC_RF struct
-* @brief Struct for OSC_RF
+* @addtogroup OSC_structs_GROUP OSC struct
+* @brief Struct for OSC
 * @{
 */
-typedef struct {                                /*       OSC_RF Structure                                             */
-   __IO uint8_t   Dummy;                        /**< 0000: Control Register                                             */
-} OSC_RF_Type;
+typedef struct {                                /*       OSC0 Structure                                               */
+   __IO uint8_t   Dummy;                        /**< 0000: Dummy Register                                               */
+} OSC_Type;
 
 /**
- * @} */ /* End group OSC_RF_structs_GROUP 
+ * @} */ /* End group OSC_structs_GROUP 
  */
 
 /* -------------------------------------------------------------------------------- */
-/* -----------     'OSC_RF' Position & Mask macros                      ----------- */
+/* -----------     'OSC0' Position & Mask macros                        ----------- */
 /* -------------------------------------------------------------------------------- */
 
 /**
-* @addtogroup OSC_RF_Register_Masks_GROUP OSC_RF Register Masks
-* @brief Register Masks for OSC_RF
+* @addtogroup OSC_Register_Masks_GROUP OSC Register Masks
+* @brief Register Masks for OSC
 * @{
 */
 /* ------- Dummy Bit Fields                         ------ */
 /**
- * @} */ /* End group OSC_RF_Register_Masks_GROUP 
+ * @} */ /* End group OSC_Register_Masks_GROUP 
  */
 
-/* OSC_RF - Peripheral instance base addresses */
-#define OSC_RF_BasePtr                 0x00000000UL //!< Peripheral base address
-#define OSC_RF                         ((OSC_RF_Type *) OSC_RF_BasePtr) //!< Freescale base pointer
-#define OSC_RF_BASE_PTR                (OSC_RF) //!< Freescale style base pointer
+/* OSC0 - Peripheral instance base addresses */
+#define OSC0_BasePtr                   0x00000000UL //!< Peripheral base address
+#define OSC0                           ((OSC_Type *) OSC0_BasePtr) //!< Freescale base pointer
+#define OSC0_BASE_PTR                  (OSC0) //!< Freescale style base pointer
 /**
- * @} */ /* End group OSC_RF_Peripheral_access_layer_GROUP 
+ * @} */ /* End group OSC_Peripheral_access_layer_GROUP 
  */
 /**
 * @addtogroup PIT_Peripheral_access_layer_GROUP PIT Peripheral Access Layer
@@ -6355,7 +6355,7 @@ typedef struct {                                /*       SYST Structure         
 /* ================================================================================ */
 
 /**
- * @brief Timer/PWM Module
+ * @brief Timer/PWM Module (4 channels)
  */
 /**
 * @addtogroup TPM_structs_GROUP TPM struct
@@ -6381,7 +6381,7 @@ typedef struct {                                /*       TPM0 Structure         
         uint8_t   RESERVED_5[4];               
    __IO uint32_t  QDCTRL;                       /**< 0080: Quadrature Decoder Control and Status                        */
    __IO uint32_t  CONF;                         /**< 0084: Configuration                                                */
-} TPM0_Type;
+} TPM_Type;
 
 /**
  * @} */ /* End group TPM_structs_GROUP 
@@ -6563,7 +6563,7 @@ typedef struct {                                /*       TPM0 Structure         
 
 /* TPM0 - Peripheral instance base addresses */
 #define TPM0_BasePtr                   0x40038000UL //!< Peripheral base address
-#define TPM0                           ((TPM0_Type *) TPM0_BasePtr) //!< Freescale base pointer
+#define TPM0                           ((TPM_Type *) TPM0_BasePtr) //!< Freescale base pointer
 #define TPM0_BASE_PTR                  (TPM0) //!< Freescale style base pointer
 /**
  * @} */ /* End group TPM_Peripheral_access_layer_GROUP 
