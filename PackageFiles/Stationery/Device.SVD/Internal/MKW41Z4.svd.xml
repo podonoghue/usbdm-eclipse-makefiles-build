@@ -73,8 +73,8 @@
       <xi:include href="peripherals/TRNG0_0x40029000.svd.xml"/>
       <xi:include href="peripherals/TSI0_MKW41Z4.svd.xml"/>
       <xi:include href="peripherals/VREF_C.svd.xml"/>
-      <xi:include href="peripherals/XCVR_ANA_MKW41Z4.svd.xml"/>
-      <xi:include href="peripherals/XCVR_MISC_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/XCVR_ANALOG_MKW41Z4.svd.xml"/>
+      <xi:include href="peripherals/XCVR_CTRL_MKW41Z4.svd.xml"/>
       <xi:include href="peripherals/XCVR_PHY_MKW41Z4.svd.xml"/>
       <xi:include href="peripherals/XCVR_PKT_RAM_MKW41Z4.svd.xml"/>
       <xi:include href="peripherals/XCVR_PLL_DIG_MKW41Z4.svd.xml"/>

@@ -27,7 +27,7 @@
       <peripheral derivedFrom="CMP0"><name>CMP1</name><baseAddress>0x40074000</baseAddress></peripheral>
       <xi:include href="peripherals/CRC0_0x40032000.svd.xml"/>
       <xi:include href="peripherals/DMA0_MKE15Z7.svd.xml"/>
-      <xi:include href="peripherals/DMAMUX_MKE15Z7.svd.xml"/>
+      <xi:include href="peripherals/DMAMUX0_8CH_TRIG_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/EWM_MKE16F16.svd.xml"/>
       <xi:include href="peripherals/FLEXIO_4SH_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/FTFE_MKE15Z7.svd.xml"/>

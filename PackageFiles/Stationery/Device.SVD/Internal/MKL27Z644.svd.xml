@@ -27,7 +27,7 @@
       <xi:include href="peripherals/CRC0_0x40032000.svd.xml"/>
       <xi:include href="peripherals/CoreDebug.svd.xml"/>
       <xi:include href="peripherals/DMA0_MKL.svd.xml"/>
-      <xi:include href="peripherals/DMAMUX0_4CH_TRIG.svd.xml"/>
+      <xi:include href="peripherals/DMAMUX0_4CH_TRIG_MKL27Z644.svd.xml"/>
       <xi:include href="peripherals/DWT_CM0Plus.svd.xml"/>
       <xi:include href="peripherals/FLEXIO_4SH_0.svd.xml"/>
       <xi:include href="peripherals/FTFA.svd.xml"/>

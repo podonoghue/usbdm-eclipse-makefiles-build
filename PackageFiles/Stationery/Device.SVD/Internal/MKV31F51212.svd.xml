@@ -29,7 +29,7 @@
       <xi:include href="peripherals/DAC0_16CH_FIFO16.svd.xml"/>
       <peripheral derivedFrom="DAC0"><name>DAC1</name><baseAddress>0x40028000</baseAddress></peripheral>
       <xi:include href="peripherals/DMA0_16CH_EARS16.svd.xml"/>
-      <xi:include href="peripherals/DMAMUX0_16CH_TRIG.svd.xml"/>
+      <xi:include href="peripherals/DMAMUX0_16CH_TRIG_MKV31F51212.svd.xml"/>
       <xi:include href="peripherals/EWM_0.svd.xml"/>
       <xi:include href="peripherals/FB_0.svd.xml"/>
       <xi:include href="peripherals/FMC_MK02F12810.svd.xml"/>

@@ -27,7 +27,7 @@
       <xi:include href="peripherals/CoreDebug.svd.xml"/>
       <xi:include href="peripherals/DAC0_2CH_MKL05.svd.xml"/>
       <xi:include href="peripherals/DMA0_MKL.svd.xml"/>
-      <xi:include href="peripherals/DMAMUX0_4CH_TRIG.svd.xml"/>
+      <xi:include href="peripherals/DMAMUX0_4CH_TRIG_MKL46Z4.svd.xml"/>
       <xi:include href="peripherals/DWT_CM0Plus.svd.xml"/>
       <xi:include href="peripherals/FGPIOA_0xF8000000.svd.xml"/>
       <peripheral derivedFrom="FGPIOA"><name>FGPIOB</name><baseAddress>0xF8000040</baseAddress></peripheral>
