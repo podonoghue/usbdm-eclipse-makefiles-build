@@ -6,7 +6,7 @@
 
 <section name="USBDM">
    <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_K64F" />
-   <item key="$$DeviceInfo_Target_Device"                  value="FRDM_K64F" />
+   <item key="$$DeviceInfo_Target_Device"                  value="$(targetDevice)" />
    <item key="$$Hardware_Source_Filename"                  value="MK64F12.usbdmHardware" />
    <item key="$signal$PTA0_descriptionSetting"             value="Reserved(SWD)" />
    <item key="$signal$PTA0_muxSetting"                     value="mux7" />

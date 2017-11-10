@@ -6,7 +6,7 @@
 
 <section name="USBDM">
    <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_KL46Z4" />
-   <item key="$$DeviceInfo_Target_Device"                  value="FRDM_KL46Z" />
+   <item key="$$DeviceInfo_Target_Device"                  value="$(targetDevice)" />
    <item key="$$Hardware_Source_Filename"                  value="MKL46Z4.usbdmHardware" />
    <item key="/FTFA/peripheral_file"                       value="ftfa" />
    <item key="/FTFA/pflash_phrase_size"                    value="4" />

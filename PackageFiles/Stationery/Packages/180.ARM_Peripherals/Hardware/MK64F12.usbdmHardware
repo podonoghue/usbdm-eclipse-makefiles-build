@@ -98,71 +98,69 @@
       <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_16ch_trig_mk64f12">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDmaMux" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_DMAMUX0_MASK" />
-         <dma>
-            <slot source="Disabled"             num="0" />
-            <slot source="UART0_Receive"        num="2" />
-            <slot source="UART0_Transmit"       num="3" />
-            <slot source="UART1_Receive"        num="4" />
-            <slot source="UART1_Transmit"       num="5" />
-            <slot source="UART2_Receive"        num="6" />
-            <slot source="UART2_Transmit"       num="7" />
-            <slot source="UART3_Receive"        num="8" />
-            <slot source="UART3_Transmit"       num="9" />
-            <slot source="UART4_TransmitReceive" num="10" />
-            <slot source="UART5_TransmitReceive" num="11" />
-            <slot source="I2S0_Receive"         num="12" />
-            <slot source="I2S0_Transmit"        num="13" />
-            <slot source="SPI0_Receive"         num="14" />
-            <slot source="SPI0_Transmit"        num="15" />
-            <slot source="SPI1_TransmitReceive" num="16" />
-            <slot source="SPI2_TransmitReceive" num="17" />
-            <slot source="I2C0"                 num="18" />
-            <slot source="I2C1_I2C2"            num="19" />
-            <slot source="FTM0_Ch_0"            num="20" />
-            <slot source="FTM0_Ch_1"            num="21" />
-            <slot source="FTM0_Ch_2"            num="22" />
-            <slot source="FTM0_Ch_3"            num="23" />
-            <slot source="FTM0_Ch_4"            num="24" />
-            <slot source="FTM0_Ch_5"            num="25" />
-            <slot source="FTM0_Ch_6"            num="26" />
-            <slot source="FTM0_Ch_7"            num="27" />
-            <slot source="FTM1_Ch_0"            num="28" />
-            <slot source="FTM1_Ch_1"            num="29" />
-            <slot source="FTM2_Ch_0"            num="30" />
-            <slot source="FTM2_Ch_1"            num="31" />
-            <slot source="FTM3_Ch_0"            num="32" />
-            <slot source="FTM3_Ch_1"            num="33" />
-            <slot source="FTM3_Ch_2"            num="34" />
-            <slot source="FTM3_Ch_3"            num="35" />
-            <slot source="FTM3_Ch_4"            num="36" />
-            <slot source="FTM3_Ch_5"            num="37" />
-            <slot source="FTM3_Ch_6"            num="38" />
-            <slot source="FTM3_Ch_7"            num="39" />
-            <slot source="ADC0"                 num="40" />
-            <slot source="ADC1"                 num="41" />
-            <slot source="CMP0"                 num="42" />
-            <slot source="CMP1"                 num="43" />
-            <slot source="CMP2"                 num="44" />
-            <slot source="DAC0"                 num="45" />
-            <slot source="DAC1"                 num="46" />
-            <slot source="CMT"                  num="47" />
-            <slot source="PDB"                  num="48" />
-            <slot source="PortA"                num="49" />
-            <slot source="PortB"                num="50" />
-            <slot source="PortC"                num="51" />
-            <slot source="PortD"                num="52" />
-            <slot source="PortE"                num="53" />
-            <slot source="IEEE1588_Timer0"      num="54" />
-            <slot source="IEEE1588_Timer1"      num="55" />
-            <slot source="IEEE1588_Timer2"      num="56" />
-            <slot source="IEEE1588_Timer3"      num="57" />
-            <slot source="AlwaysEnabled0"       num="58" />
-            <slot source="AlwaysEnabled1"       num="59" />
-            <slot source="AlwaysEnabled2"       num="60" />
-            <slot source="AlwaysEnabled3"       num="61" />
-            <slot source="AlwaysEnabled4"       num="62" />
-            <slot source="AlwaysEnabled5"       num="63" />
-         </dma>
+         <dma source="Disable"              num="0" />
+         <dma source="UART0 Receive"        num="2" />
+         <dma source="UART0 Transmit"       num="3" />
+         <dma source="UART1 Receive"        num="4" />
+         <dma source="UART1 Transmit"       num="5" />
+         <dma source="UART2 Receive"        num="6" />
+         <dma source="UART2 Transmit"       num="7" />
+         <dma source="UART3 Receive"        num="8" />
+         <dma source="UART3 Transmit"       num="9" />
+         <dma source="UART4_RxTx"           num="10" />
+         <dma source="UART5_RxTx"           num="11" />
+         <dma source="I2S0 Receive"         num="12" />
+         <dma source="I2S0 Transmit"        num="13" />
+         <dma source="SPI0 Receive"         num="14" />
+         <dma source="SPI0 Transmit"        num="15" />
+         <dma source="SPI1_RxTx"            num="16" />
+         <dma source="SPI2_RxTx"            num="17" />
+         <dma source="I2C0"                 num="18" />
+         <dma source="I2C1_I2C2"            num="19" />
+         <dma source="FTM0 Channel 0"       num="20" />
+         <dma source="FTM0 Channel 1"       num="21" />
+         <dma source="FTM0 Channel 2"       num="22" />
+         <dma source="FTM0 Channel 3"       num="23" />
+         <dma source="FTM0 Channel 4"       num="24" />
+         <dma source="FTM0 Channel 5"       num="25" />
+         <dma source="FTM0 Channel 6"       num="26" />
+         <dma source="FTM0 Channel 7"       num="27" />
+         <dma source="FTM1 Channel 0"       num="28" />
+         <dma source="FTM1 Channel 1"       num="29" />
+         <dma source="FTM2 Channel 0"       num="30" />
+         <dma source="FTM2 Channel 1"       num="31" />
+         <dma source="FTM3 Channel 0"       num="32" />
+         <dma source="FTM3 Channel 1"       num="33" />
+         <dma source="FTM3 Channel 2"       num="34" />
+         <dma source="FTM3 Channel 3"       num="35" />
+         <dma source="FTM3 Channel 4"       num="36" />
+         <dma source="FTM3 Channel 5"       num="37" />
+         <dma source="FTM3 Channel 6"       num="38" />
+         <dma source="FTM3 Channel 7"       num="39" />
+         <dma source="ADC0"                 num="40" />
+         <dma source="ADC1"                 num="41" />
+         <dma source="CMP0"                 num="42" />
+         <dma source="CMP1"                 num="43" />
+         <dma source="CMP2"                 num="44" />
+         <dma source="DAC0"                 num="45" />
+         <dma source="DAC1"                 num="46" />
+         <dma source="CMT"                  num="47" />
+         <dma source="PDB"                  num="48" />
+         <dma source="PortA"                num="49" />
+         <dma source="PortB"                num="50" />
+         <dma source="PortC"                num="51" />
+         <dma source="PortD"                num="52" />
+         <dma source="PortE"                num="53" />
+         <dma source="IEEE1588_Timer0"      num="54" />
+         <dma source="IEEE1588_Timer1"      num="55" />
+         <dma source="IEEE1588_Timer2"      num="56" />
+         <dma source="IEEE1588_Timer3"      num="57" />
+         <dma source="AlwaysEnabled58"      num="58" />
+         <dma source="AlwaysEnabled59"      num="59" />
+         <dma source="AlwaysEnabled60"      num="60" />
+         <dma source="AlwaysEnabled61"      num="61" />
+         <dma source="AlwaysEnabled62"      num="62" />
+         <dma source="AlwaysEnabled63"      num="63" />
       </peripheral>
       <peripheral baseName="ENET"     instance=""         version="enet_c">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForEnet" />

@@ -94,6 +94,62 @@
       <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_16ch_trig_mk22fa12">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDmaMux" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_DMAMUX0_MASK" />
+         <dma source="Disable"              num="0" />
+         <dma source="UART0 Receive"        num="2" />
+         <dma source="UART0 Transmit"       num="3" />
+         <dma source="UART1 Receive"        num="4" />
+         <dma source="UART1 Transmit"       num="5" />
+         <dma source="UART2 Receive"        num="6" />
+         <dma source="UART2 Transmit"       num="7" />
+         <dma source="I2S0 Receive"         num="12" />
+         <dma source="I2S0 Transmit"        num="13" />
+         <dma source="SPI0 Receive"         num="14" />
+         <dma source="SPI0 Transmit"        num="15" />
+         <dma source="I2C0"                 num="18" />
+         <dma source="I2C1_I2C2"            num="19" />
+         <dma source="FTM0 Channel 0"       num="20" />
+         <dma source="FTM0 Channel 1"       num="21" />
+         <dma source="FTM0 Channel 2"       num="22" />
+         <dma source="FTM0 Channel 3"       num="23" />
+         <dma source="FTM0 Channel 4"       num="24" />
+         <dma source="FTM0 Channel 5"       num="25" />
+         <dma source="FTM0 Channel 6"       num="26" />
+         <dma source="FTM0 Channel 7"       num="27" />
+         <dma source="FTM1 Channel 0"       num="28" />
+         <dma source="FTM1 Channel 1"       num="29" />
+         <dma source="FTM2 Channel 0"       num="30" />
+         <dma source="FTM2 Channel 1"       num="31" />
+         <dma source="FTM3 Channel 0"       num="32" />
+         <dma source="FTM3 Channel 1"       num="33" />
+         <dma source="FTM3 Channel 2"       num="34" />
+         <dma source="FTM3 Channel 3"       num="35" />
+         <dma source="FTM3 Channel 4"       num="36" />
+         <dma source="FTM3 Channel 5"       num="37" />
+         <dma source="FTM3 Channel 6"       num="38" />
+         <dma source="FTM3 Channel 7"       num="39" />
+         <dma source="ADC0"                 num="40" />
+         <dma source="ADC1"                 num="41" />
+         <dma source="CMP0"                 num="42" />
+         <dma source="CMP1"                 num="43" />
+         <dma source="CMP2"                 num="44" />
+         <dma source="DAC0"                 num="45" />
+         <dma source="CMT"                  num="47" />
+         <dma source="PDB"                  num="48" />
+         <dma source="PortA"                num="49" />
+         <dma source="PortB"                num="50" />
+         <dma source="PortC"                num="51" />
+         <dma source="PortD"                num="52" />
+         <dma source="PortE"                num="53" />
+         <dma source="AlwaysEnabled54"      num="54" />
+         <dma source="AlwaysEnabled55"      num="55" />
+         <dma source="AlwaysEnabled56"      num="56" />
+         <dma source="AlwaysEnabled57"      num="57" />
+         <dma source="AlwaysEnabled58"      num="58" />
+         <dma source="AlwaysEnabled59"      num="59" />
+         <dma source="AlwaysEnabled60"      num="60" />
+         <dma source="AlwaysEnabled61"      num="61" />
+         <dma source="AlwaysEnabled62"      num="62" />
+         <dma source="AlwaysEnabled63"      num="63" />
       </peripheral>
       <peripheral baseName="EWM"      instance=""         version="ewm_2">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForEwm" />

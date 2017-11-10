@@ -6,7 +6,7 @@
 
 <section name="USBDM">
    <item key="$$DeviceInfo_Device_Variant"                 value="MK20DX128VLH7" />
-   <item key="$$DeviceInfo_Target_Device"                  value="MK20DX128M7" />
+   <item key="$$DeviceInfo_Target_Device"                  value="$(targetDevice)" />
    <item key="$$Hardware_Source_Filename"                  value="MK20D7.usbdmHardware" />
    <item key="/FTFL/peripheral_file"                       value="ftfl_32k_flexrom" />
    <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_PEE_60MHz" />

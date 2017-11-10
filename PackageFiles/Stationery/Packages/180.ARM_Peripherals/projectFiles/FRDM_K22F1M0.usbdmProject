@@ -6,7 +6,7 @@
 
 <section name="USBDM">
    <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_K22F1M0" />
-   <item key="$$DeviceInfo_Target_Device"                  value="FRDM_K22F1M0" />
+   <item key="$$DeviceInfo_Target_Device"                  value="$(targetDevice)" />
    <item key="$$Hardware_Source_Filename"                  value="MK22FA12.usbdmHardware" />
    <item key="$signal$ADC0_DM0_descriptionSetting"         value="Photo-transistor" />
    <item key="$signal$ADC0_DP0_descriptionSetting"         value="Temperature sensor" />

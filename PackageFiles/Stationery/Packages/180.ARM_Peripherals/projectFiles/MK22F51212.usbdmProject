@@ -6,7 +6,7 @@
 
 <section name="USBDM">
    <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_K22F" />
-   <item key="$$DeviceInfo_Target_Device"                  value="FRDM_K22F" />
+   <item key="$$DeviceInfo_Target_Device"                  value="$(targetDevice)" />
    <item key="$$Hardware_Source_Filename"                  value="MK22F51212.usbdmHardware" />
    <item key="/DMA0/NumChannels"                           value="16" />
    <item key="/FTFA/peripheral_file"                       value="ftfa" />

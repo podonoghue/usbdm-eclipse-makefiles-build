@@ -71,6 +71,91 @@
       <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_32ch_trig_split_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDmaMux" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_DMAMUX0_MASK" />
+         <dma source="Disable (Low channels 0-15)" num="0" />
+         <dma source="LPUART0 Receive (Low channels 0-15)" num="2" />
+         <dma source="LPUART0 Transmit (Low channels 0-15)" num="3" />
+         <dma source="LPUART1 Receive (Low channels 0-15)" num="4" />
+         <dma source="LPUART1 Transmit (Low channels 0-15)" num="5" />
+         <dma source="LPUART2 Receive (Low channels 0-15)" num="6" />
+         <dma source="LPUART2 Transmit (Low channels 0-15)" num="7" />
+         <dma source="LPUART3 Receive (Low channels 0-15)" num="8" />
+         <dma source="LPUART3 Transmit (Low channels 0-15)" num="9" />
+         <dma source="LPUART4 Receive (Low channels 0-15)" num="10" />
+         <dma source="LPUART4 Transmit (Low channels 0-15)" num="11" />
+         <dma source="I2S0 Receive (Low channels 0-15)" num="12" />
+         <dma source="I2S0 Transmit (Low channels 0-15)" num="13" />
+         <dma source="SPI0 Receive (Low channels 0-15)" num="14" />
+         <dma source="SPI0 Transmit (Low channels 0-15)" num="15" />
+         <dma source="SPI1 Receive (Low channels 0-15)" num="16" />
+         <dma source="SPI1 Transmit (Low channels 0-15)" num="17" />
+         <dma source="I2C0_I2C3 (Low channels 0-15)" num="18" />
+         <dma source="I2C1_I2C2 (Low channels 0-15)" num="19" />
+         <dma source="FTM0 Channel 0 (Low channels 0-15)" num="20" />
+         <dma source="FTM0 Channel 1 (Low channels 0-15)" num="21" />
+         <dma source="FTM0 Channel 2 (Low channels 0-15)" num="22" />
+         <dma source="FTM0 Channel 3 (Low channels 0-15)" num="23" />
+         <dma source="FTM0 Channel 4 (Low channels 0-15)" num="24" />
+         <dma source="FTM0 Channel 5 (Low channels 0-15)" num="25" />
+         <dma source="FTM0 Channel 6 (Low channels 0-15)" num="26" />
+         <dma source="FTM0 Channel 7 (Low channels 0-15)" num="27" />
+         <dma source="FTM1 Channel 0 (Low channels 0-15)" num="28" />
+         <dma source="FTM1 Channel 1 (Low channels 0-15)" num="29" />
+         <dma source="FTM2 Channel 0 (Low channels 0-15)" num="30" />
+         <dma source="FTM2 Channel 1 (Low channels 0-15)" num="31" />
+         <dma source="FTM3 Channel 0 (Low channels 0-15)" num="32" />
+         <dma source="FTM3 Channel 1 (Low channels 0-15)" num="33" />
+         <dma source="FTM3 Channel 2 (Low channels 0-15)" num="34" />
+         <dma source="FTM3 Channel 3 (Low channels 0-15)" num="35" />
+         <dma source="FTM3 Channel 4 (Low channels 0-15)" num="36" />
+         <dma source="FTM3 Channel 5 (Low channels 0-15)" num="37" />
+         <dma source="FTM3 Channel 6 (Low channels 0-15)" num="38" />
+         <dma source="FTM3 Channel 7 (Low channels 0-15)" num="39" />
+         <dma source="ADC0 (Low channels 0-15)" num="40" />
+         <dma source="CMP0 (Low channels 0-15)" num="42" />
+         <dma source="CMP1 (Low channels 0-15)" num="43" />
+         <dma source="DAC0 (Low channels 0-15)" num="45" />
+         <dma source="CMT (Low channels 0-15)" num="47" />
+         <dma source="PDB (Low channels 0-15)" num="48" />
+         <dma source="PortA (Low channels 0-15)" num="49" />
+         <dma source="PortB (Low channels 0-15)" num="50" />
+         <dma source="PortC (Low channels 0-15)" num="51" />
+         <dma source="PortD (Low channels 0-15)" num="52" />
+         <dma source="PortE (Low channels 0-15)" num="53" />
+         <dma source="SPI2 Receive (Low channels 0-15)" num="58" />
+         <dma source="SPI2 Transmit (Low channels 0-15)" num="59" />
+         <dma source="AlwaysEnabled60 (Low channels 0-15)" num="60" />
+         <dma source="AlwaysEnabled61 (Low channels 0-15)" num="61" />
+         <dma source="AlwaysEnabled62 (Low channels 0-15)" num="62" />
+         <dma source="AlwaysEnabled63 (Low channels 0-15)" num="63" />
+         <dma source="Disable (High channels 16-31)" num="64" />
+         <dma source="FlexIO Shifter 0 (High channels 16-31)" num="65" />
+         <dma source="FlexIO Shifter 1 (High channels 16-31)" num="66" />
+         <dma source="FlexIO Shifter 2 (High channels 16-31)" num="67" />
+         <dma source="FlexIO Shifter 3 (High channels 16-31)" num="68" />
+         <dma source="FlexIO Shifter 4 (High channels 16-31)" num="69" />
+         <dma source="FlexIO Shifter 5 (High channels 16-31)" num="70" />
+         <dma source="FlexIO Shifter 6 (High channels 16-31)" num="71" />
+         <dma source="FlexIO Shifter 7 (High channels 16-31)" num="72" />
+         <dma source="I2S1 Transmit (High channels 16-31)" num="76" />
+         <dma source="I2S1 Receive (High channels 16-31)" num="77" />
+         <dma source="QSPI Receive (High channels 16-31)" num="88" />
+         <dma source="QSPI Transmit (High channels 16-31)" num="89" />
+         <dma source="SPI0 Receive (High channels 16-31)" num="92" />
+         <dma source="SPI0 Transmit (High channels 16-31)" num="93" />
+         <dma source="SPI1 Receive (High channels 16-31)" num="94" />
+         <dma source="SPI1 Transmit (High channels 16-31)" num="95" />
+         <dma source="TPM1 Channel 0 (High channels 16-31)" num="106" />
+         <dma source="TPM1 Channel 1 (High channels 16-31)" num="107" />
+         <dma source="TPM2 Channel 0 (High channels 16-31)" num="108" />
+         <dma source="TPM2 Channel 1 (High channels 16-31)" num="109" />
+         <dma source="TPM1_Overflow (High channels 16-31)" num="119" />
+         <dma source="TPM2_Overflow (High channels 16-31)" num="120" />
+         <dma source="SPI3 Receive (High channels 16-31)" num="122" />
+         <dma source="SPI3 Transmit (High channels 16-31)" num="123" />
+         <dma source="AlwaysEnabled60 (High channels 16-31)" num="124" />
+         <dma source="AlwaysEnabled61 (High channels 16-31)" num="125" />
+         <dma source="AlwaysEnabled62 (High channels 16-31)" num="126" />
+         <dma source="AlwaysEnabled63 (High channels 16-31)" num="127" />
       </peripheral>
       <peripheral baseName="EWM"      instance=""         version="ewm_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForEwm" />

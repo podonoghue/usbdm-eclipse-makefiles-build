@@ -697,7 +697,7 @@ public:
          setAndCheckErrorCode(E_ILLEGAL_PARAM);
       }
 #endif
-      IRQn_Type irqNum = static_cast<IRQn_Type>(Info::irqNums[0] + (channel&(Info::irqCount-1)));
+      IRQn_Type irqNum = static_cast<IRQn_Type>(Info::irqNums[0] + (channel&(Info::NumChannels-1)));
       if (enable) {
          enableNvicInterrupt(irqNum, nvicPriority);
       }

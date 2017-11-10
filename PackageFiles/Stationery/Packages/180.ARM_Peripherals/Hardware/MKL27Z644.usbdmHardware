@@ -45,9 +45,51 @@
          <irq num="DMA2_IRQn" />
          <irq num="DMA3_IRQn" />
       </peripheral>
-      <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_4ch_trig">
+      <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_4ch_trig_mkl27z644">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDmaMux" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_DMAMUX0_MASK" />
+         <dma source="Disabled"             num="0" />
+         <dma source="LPUART0 Receive"      num="2" />
+         <dma source="LPUART0 Transmit"     num="3" />
+         <dma source="LPUART1 Receive"      num="4" />
+         <dma source="LPUART1 Transmit"     num="5" />
+         <dma source="UART2 Receive"        num="6" />
+         <dma source="UART2 Transmit"       num="7" />
+         <dma source="FlexIO Ch0"           num="10" />
+         <dma source="FlexIO Ch1"           num="11" />
+         <dma source="FlexIO Ch2"           num="12" />
+         <dma source="FlexIO Ch3"           num="13" />
+         <dma source="I2S0 Receive"         num="14" />
+         <dma source="I2S0 Transmit"        num="15" />
+         <dma source="SPI0 Receive"         num="16" />
+         <dma source="SPI0 Transmit"        num="17" />
+         <dma source="SPI1 Receive"         num="18" />
+         <dma source="SPI1 Transmit"        num="19" />
+         <dma source="I2C0"                 num="22" />
+         <dma source="I2C1"                 num="23" />
+         <dma source="TPM0 Ch 0"            num="24" />
+         <dma source="TPM0 Ch 1"            num="25" />
+         <dma source="TPM0 Ch 2"            num="26" />
+         <dma source="TPM0 Ch 3"            num="27" />
+         <dma source="TPM0 Ch 4"            num="28" />
+         <dma source="TPM0 Ch 5"            num="29" />
+         <dma source="TPM1 Ch 0"            num="32" />
+         <dma source="TPM1 Ch 1"            num="33" />
+         <dma source="TPM2 Ch 0"            num="34" />
+         <dma source="TPM2 Ch 1"            num="35" />
+         <dma source="ADC0"                 num="40" />
+         <dma source="CMP0"                 num="42" />
+         <dma source="DAC0"                 num="45" />
+         <dma source="PortA"                num="49" />
+         <dma source="PortC"                num="51" />
+         <dma source="PortD"                num="52" />
+         <dma source="TPM0 Overflow"        num="54" />
+         <dma source="TPM1 Overflow"        num="55" />
+         <dma source="TPM2 Overflow"        num="56" />
+         <dma source="AlwaysEnabled60"      num="60" />
+         <dma source="AlwaysEnabled61"      num="61" />
+         <dma source="AlwaysEnabled62"      num="62" />
+         <dma source="AlwaysEnabled63"      num="63" />
       </peripheral>
       <peripheral baseName="ExternalTrigger" instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForShared" />

@@ -6,7 +6,7 @@
 
 <section name="USBDM">
    <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_K20D5" />
-   <item key="$$DeviceInfo_Target_Device"                  value="FRDM_K20D50M" />
+   <item key="$$DeviceInfo_Target_Device"                  value="$(targetDevice)" />
    <item key="$$Hardware_Source_Filename"                  value="MK20D5.usbdmHardware" />
    <item key="$signal$ADC0_DM0_descriptionSetting"         value="Photo-transistor" />
    <item key="$signal$ADC0_DM3_descriptionSetting"         value="Temperature sensor" />

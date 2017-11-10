@@ -6,7 +6,7 @@
 
 <section name="USBDM">
    <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_K66F" />
-   <item key="$$DeviceInfo_Target_Device"                  value="MK66FN2M0M18" />
+   <item key="$$DeviceInfo_Target_Device"                  value="$(targetDevice)" />
    <item key="$$Hardware_Source_Filename"                  value="MK66F18.usbdmHardware" />
    <item key="/DMA0/NumChannels"                           value="32" />
    <item key="/FTFE/dflash_phrase_size"                    value="8" />

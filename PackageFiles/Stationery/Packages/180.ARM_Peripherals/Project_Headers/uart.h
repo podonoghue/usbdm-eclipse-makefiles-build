@@ -437,10 +437,22 @@ public:
 
       if (enable) {
          enableNvicInterrupt(Info::irqNums[0], nvicPriority);
+         if (Info::irqCount>1) {
+             enableNvicInterrupt(Info::irqNums[1], nvicPriority);
+         }
+         if (Info::irqCount>2) {
+             enableNvicInterrupt(Info::irqNums[2], nvicPriority);
+         }
       }
       else {
          // Disable interrupts
          NVIC_DisableIRQ(Info::irqNums[0]);
+         if (Info::irqCount>1) {
+        	 NVIC_DisableIRQ(Info::irqNums[1]);
+         }
+         if (Uart0Info::irqCount>2) {
+        	 NVIC_DisableIRQ(Info::irqNums[2]);
+         }
       }
    }
 

@@ -6,7 +6,7 @@
 
 <section name="USBDM">
    <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_KL43Z4" />
-   <item key="$$DeviceInfo_Target_Device"                  value="FRDM_KL43Z" />
+   <item key="$$DeviceInfo_Target_Device"                  value="$(targetDevice)" />
    <item key="$$Hardware_Source_Filename"                  value="MKL43Z4.usbdmHardware" />
    <item key="$signal$PTA0_descriptionSetting"             value="SWD" />
    <item key="$signal$PTA12_muxSetting"                    value="mux3" />

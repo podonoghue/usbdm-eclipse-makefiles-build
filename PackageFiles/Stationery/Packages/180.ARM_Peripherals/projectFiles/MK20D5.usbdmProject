@@ -6,7 +6,7 @@
 
 <section name="USBDM">
    <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_K20D5" />
-   <item key="$$DeviceInfo_Target_Device"                  value="FRDM_K20D50M" />
+   <item key="$$DeviceInfo_Target_Device"                  value="$(targetDevice)" />
    <item key="$$Hardware_Source_Filename"                  value="MK20D5.usbdmHardware" />
    <item key="/FTFL/peripheral_file"                       value="ftfl_32k_flexrom" />
    <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_PEE_48MHz" />
