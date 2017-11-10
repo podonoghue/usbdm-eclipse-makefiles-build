@@ -3,11 +3,11 @@ Devices using this peripheral:
       MKW41Z4
 -->
       <peripheral>
-         <?sourceFile "XCVR_ANA_MKW41Z4" ?>
-         <name>XCVR_ANA</name>
+         <?sourceFile "XCVR_ANALOG_MKW41Z4" ?>
+         <name>XCVR_ANALOG</name>
          <description>XCVR_ANALOG</description>
-         <groupName>XCVR_ANA</groupName>
-         <headerStructName>XCVR_ANA</headerStructName>
+         <groupName>XCVR_ANALOG</groupName>
+         <headerStructName>XCVR_ANALOG</headerStructName>
          <baseAddress>0x4005C500</baseAddress>
          <size>32</size>
          <access>read-write</access>

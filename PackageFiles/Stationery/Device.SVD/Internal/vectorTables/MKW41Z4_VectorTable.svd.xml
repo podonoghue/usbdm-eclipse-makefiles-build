@@ -147,7 +147,7 @@ Devices using this vector table:
       <name>Radio_0</name>
       <description>Radio 0</description>
       <value>24</value>
-      <peripheral>XCVR_MISC</peripheral>
+      <peripheral>XCVR_CTRL</peripheral>
    </interrupt>
    <interrupt>
       <name>DAC0</name>
@@ -159,7 +159,7 @@ Devices using this vector table:
       <name>Radio_1</name>
       <description>Radio 0</description>
       <value>26</value>
-      <peripheral>XCVR_MISC</peripheral>
+      <peripheral>XCVR_CTRL</peripheral>
    </interrupt>
    <interrupt>
       <name>MCG</name>

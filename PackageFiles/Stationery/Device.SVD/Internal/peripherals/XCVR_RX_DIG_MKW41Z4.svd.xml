@@ -45,7 +45,12 @@ Devices using this peripheral:
          </addressBlock>
          <addressBlock>
             <offset>0x1A0</offset>
-            <size>0x60</size>
+            <size>0x2C</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x1D0</offset>
+            <size>0x30</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
@@ -2302,7 +2307,7 @@ Devices using this peripheral:
                <dim>27</dim>
                <dimIncrement>4</dimIncrement>
                <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26</dimIndex>
-               <name>DCOC_OFFSET_%s</name>
+               <name>DCOC_OFFSET%s</name>
                <description>DCOC Offset</description>
                <addressOffset>0xA0</addressOffset>
                <resetMask>0x0</resetMask>
@@ -2353,10 +2358,10 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>7</dim>
+               <dim>11</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6</dimIndex>
-               <name>DCOC_TZA_STEP_%s</name>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10</dimIndex>
+               <name>DCOC_TZA_STEP%s</name>
                <description>DCOC TZA DAC Step %s</description>
                <addressOffset>0x110</addressOffset>
                <resetMask>0x0</resetMask>
@@ -2372,67 +2377,6 @@ Devices using this peripheral:
                      <description>DCOC_TZA_STEP_GAIN_0</description>
                      <bitOffset>16</bitOffset>
                      <bitWidth>12</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>DCOC_TZA_STEP_7</name>
-               <description>DCOC TZA DAC Step 7</description>
-               <addressOffset>0x12C</addressOffset>
-               <fields>
-                  <field>
-                     <name>DCOC_TZA_STEP_RCP_7</name>
-                     <description>DCOC_TZA_STEP_RCP_7</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>13</bitWidth>
-                  </field>
-                  <field>
-                     <name>DCOC_TZA_STEP_GAIN_7</name>
-                     <description>DCOC_TZA_STEP_GAIN_7</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>13</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>DCOC_TZA_STEP_8</name>
-               <description>DCOC TZA DAC Step 5</description>
-               <addressOffset>0x130</addressOffset>
-               <fields>
-                  <field>
-                     <name>DCOC_TZA_STEP_RCP_8</name>
-                     <description>DCOC_TZA_STEP_RCP_8</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>13</bitWidth>
-                  </field>
-                  <field>
-                     <name>DCOC_TZA_STEP_GAIN_8</name>
-                     <description>DCOC_TZA_STEP_GAIN_8</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>13</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <dim>2</dim>
-               <dimIncrement>4</dimIncrement>
-               <dimIndex>9,10</dimIndex>
-               <name>DCOC_TZA_STEP_%s</name>
-               <description>DCOC TZA DAC Step %s</description>
-               <addressOffset>0x134</addressOffset>
-               <resetMask>0x0</resetMask>
-               <fields>
-                  <field>
-                     <name>DCOC_TZA_STEP_RCP_9</name>
-                     <description>DCOC_TZA_STEP_RCP_9</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>13</bitWidth>
-                  </field>
-                  <field>
-                     <name>DCOC_TZA_STEP_GAIN_9</name>
-                     <description>DCOC_TZA_STEP_GAIN_9</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>14</bitWidth>
                   </field>
                </fields>
             </register>
@@ -2979,10 +2923,10 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>2</dim>
+               <dim>11</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1</dimIndex>
-               <name>RX_CHF_COEF_%s</name>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10</dimIndex>
+               <name>RX_CHF_COEF%s</name>
                <description>Receive Channel Filter Coefficient %s</description>
                <addressOffset>0x1A0</addressOffset>
                <resetMask>0x0</resetMask>
@@ -2992,74 +2936,6 @@ Devices using this peripheral:
                      <description>RX Channel Filter Coefficient 0</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>6</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <dim>4</dim>
-               <dimIncrement>4</dimIncrement>
-               <dimIndex>2,3,4,5</dimIndex>
-               <name>RX_CHF_COEF_%s</name>
-               <description>Receive Channel Filter Coefficient %s</description>
-               <addressOffset>0x1A8</addressOffset>
-               <resetMask>0x0</resetMask>
-               <fields>
-                  <field>
-                     <name>RX_CH_FILT_H2</name>
-                     <description>RX Channel Filter Coefficient 2</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>7</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <dim>2</dim>
-               <dimIncrement>4</dimIncrement>
-               <dimIndex>6,7</dimIndex>
-               <name>RX_CHF_COEF_%s</name>
-               <description>Receive Channel Filter Coefficient %s</description>
-               <addressOffset>0x1B8</addressOffset>
-               <resetMask>0x0</resetMask>
-               <fields>
-                  <field>
-                     <name>RX_CH_FILT_H6</name>
-                     <description>RX Channel Filter Coefficient 6</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <dim>2</dim>
-               <dimIncrement>4</dimIncrement>
-               <dimIndex>8,9</dimIndex>
-               <name>RX_CHF_COEF_%s</name>
-               <description>Receive Channel Filter Coefficient %s</description>
-               <addressOffset>0x1C0</addressOffset>
-               <resetMask>0x0</resetMask>
-               <fields>
-                  <field>
-                     <name>RX_CH_FILT_H8</name>
-                     <description>RX Channel Filter Coefficient 8</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>9</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <dim>2</dim>
-               <dimIncrement>4</dimIncrement>
-               <dimIndex>10,11</dimIndex>
-               <name>RX_CHF_COEF_%s</name>
-               <description>Receive Channel Filter Coefficient %s</description>
-               <addressOffset>0x1C8</addressOffset>
-               <resetMask>0x0</resetMask>
-               <fields>
-                  <field>
-                     <name>RX_CH_FILT_H10</name>
-                     <description>RX Channel Filter Coefficient 10</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>10</bitWidth>
                   </field>
                </fields>
             </register>

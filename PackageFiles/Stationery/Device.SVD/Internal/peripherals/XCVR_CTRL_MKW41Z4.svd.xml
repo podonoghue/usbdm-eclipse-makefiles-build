@@ -3,11 +3,11 @@ Devices using this peripheral:
       MKW41Z4
 -->
       <peripheral>
-         <?sourceFile "XCVR_MISC_MKW41Z4" ?>
-         <name>XCVR_MISC</name>
-         <description>XCVR_MISC</description>
-         <groupName>XCVR_MISC</groupName>
-         <headerStructName>XCVR_MISC</headerStructName>
+         <?sourceFile "XCVR_CTRL_MKW41Z4" ?>
+         <name>XCVR_CTRL</name>
+         <description>XCVR_CTRL</description>
+         <groupName>XCVR_CTRL</groupName>
+         <headerStructName>XCVR_CTRL</headerStructName>
          <baseAddress>0x4005C280</baseAddress>
          <size>32</size>
          <access>read-write</access>

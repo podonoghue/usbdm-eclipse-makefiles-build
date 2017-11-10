@@ -5,7 +5,7 @@ Devices using this peripheral:
       <peripheral>
          <?sourceFile "EMVSIM0_MKL82Z7" ?>
          <name>EMVSIM0</name>
-         <description>EMVSIM</description>
+         <description>Euro/Mastercard/Visa/SIM Serial Interface Module</description>
          <groupName>EMVSIM</groupName>
          <headerStructName>EMVSIM</headerStructName>
          <baseAddress>0x4004E000</baseAddress>
@@ -1122,7 +1122,7 @@ Devices using this peripheral:
                         <enumeratedValue>
                            <name>0</name>
                            <description>FIFO is emtpy</description>
-                           <value>0b0</value>
+                           <value>0b00000000</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -1279,7 +1279,7 @@ Devices using this peripheral:
                         <enumeratedValue>
                            <name>0</name>
                            <description>FIFO is emtpy</description>
-                           <value>0b0</value>
+                           <value>0b00000000</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>

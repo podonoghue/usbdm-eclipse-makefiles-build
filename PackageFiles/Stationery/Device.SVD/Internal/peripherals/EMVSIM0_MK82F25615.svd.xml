@@ -5,7 +5,7 @@ Devices using this peripheral:
       <peripheral>
          <?sourceFile "EMVSIM0_MK82F25615" ?>
          <name>EMVSIM0</name>
-         <description>EMVSIM</description>
+         <description>Euro/Mastercard/Visa/SIM Serial Interface Module</description>
          <groupName>EMVSIM</groupName>
          <headerStructName>EMVSIM</headerStructName>
          <baseAddress>0x400D4000</baseAddress>
@@ -1116,13 +1116,13 @@ Devices using this peripheral:
                      <name>RX_CNT</name>
                      <description>Receive FIFO Byte Count</description>
                      <bitOffset>24</bitOffset>
-                     <bitWidth>5</bitWidth>
+                     <bitWidth>8</bitWidth>
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0</name>
                            <description>FIFO is emtpy</description>
-                           <value>0b00000</value>
+                           <value>0b00000000</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -1273,13 +1273,13 @@ Devices using this peripheral:
                      <name>TX_CNT</name>
                      <description>Transmit FIFO Byte Count</description>
                      <bitOffset>24</bitOffset>
-                     <bitWidth>5</bitWidth>
+                     <bitWidth>8</bitWidth>
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0</name>
                            <description>FIFO is emtpy</description>
-                           <value>0b00000</value>
+                           <value>0b00000000</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
