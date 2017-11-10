@@ -1,9 +1,9 @@
 <!--
 Devices using this peripheral: 
-      MK20D5
+      MKV11Z7
 -->
       <peripheral>
-         <?sourceFile "DMAMUX0_4CH_TRIG_MK20D5" ?>
+         <?sourceFile "DMAMUX0_8CH_TRIG" ?>
          <name>DMAMUX0</name>
          <description>DMA channel multiplexor</description>
          <groupName>DMAMUX</groupName>
@@ -16,19 +16,19 @@ Devices using this peripheral:
          <addressBlock>
             <?width "8" ?>
             <offset>0x0</offset>
-            <size>0x4</size>
+            <size>0x8</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
             <register>
-               <dim>4</dim>
+               <dim>8</dim>
                <dimIncrement>1</dimIncrement>
-               <dimIndex>0,1,2,3</dimIndex>
+               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
                <name>CHCFG%s</name>
                <description>Channel Configuration Register</description>
                <addressOffset>0x0</addressOffset>
                <size>8</size>
-               <resetMask>0xFF</resetMask>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>SOURCE</name>
@@ -43,298 +43,298 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                            <value>0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>Reserved1</name>
-                           <description>Reserved</description>
+                           <name>Slot1</name>
+                           <description>Slot1</description>
                            <value>1</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>UART0_Rx</name>
-                           <description>UART0 Receive</description>
+                           <name>Slot2</name>
+                           <description>Slot2</description>
                            <value>2</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>UART0_Tx</name>
-                           <description>UART0 Transmit</description>
+                           <name>Slot3</name>
+                           <description>Slot3</description>
                            <value>3</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>UART1_Rx</name>
-                           <description>UART1 Receive</description>
+                           <name>Slot4</name>
+                           <description>Slot4</description>
                            <value>4</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>UART1_Tx</name>
-                           <description>UART1 Transmit</description>
+                           <name>Slot5</name>
+                           <description>Slot5</description>
                            <value>5</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>UART2_Rx</name>
-                           <description>UART2 Receive</description>
+                           <name>Slot6</name>
+                           <description>Slot6</description>
                            <value>6</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>UART2_Tx</name>
-                           <description>UART2 Transmit</description>
+                           <name>Slot7</name>
+                           <description>Slot7</description>
                            <value>7</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>Reserved8</name>
-                           <description>Reserved</description>
+                           <name>Slot8</name>
+                           <description>Slot8</description>
                            <value>8</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>Reserved9</name>
-                           <description>Reserved</description>
+                           <name>Slot9</name>
+                           <description>Slot9</description>
                            <value>9</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>Reserved10</name>
-                           <description>Reserved</description>
+                           <name>Slot10</name>
+                           <description>Slot10</description>
                            <value>10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>Reserved11</name>
-                           <description>Reserved</description>
+                           <name>Slot11</name>
+                           <description>Slot11</description>
                            <value>11</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>Reserved12</name>
-                           <description>Reserved</description>
+                           <name>Slot12</name>
+                           <description>Slot12</description>
                            <value>12</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>Reserved13</name>
-                           <description>Reserved</description>
+                           <name>Slot13</name>
+                           <description>Slot13</description>
                            <value>13</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>I2S0_Rx</name>
-                           <description>I2S0 Receive</description>
+                           <name>Slot14</name>
+                           <description>Slot14</description>
                            <value>14</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>I2S0_Tx</name>
-                           <description>I2S0 Transmit</description>
+                           <name>Slot15</name>
+                           <description>Slot15</description>
                            <value>15</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>SPI0_Rx</name>
-                           <description>SPI0 Receive</description>
+                           <name>Slot16</name>
+                           <description>Slot16</description>
                            <value>16</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>SPI0_Tx</name>
-                           <description>SPI0 Transmit</description>
+                           <name>Slot17</name>
+                           <description>Slot17</description>
                            <value>17</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>Reserved18</name>
-                           <description>Reserved</description>
+                           <name>Slot18</name>
+                           <description>Slot18</description>
                            <value>18</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>Reserved19</name>
-                           <description>Reserved</description>
+                           <name>Slot19</name>
+                           <description>Slot19</description>
                            <value>19</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>Reserved20</name>
-                           <description>Reserved</description>
+                           <name>Slot20</name>
+                           <description>Slot20</description>
                            <value>20</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>Reserved21</name>
-                           <description>Reserved</description>
+                           <name>Slot21</name>
+                           <description>Slot21</description>
                            <value>21</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>I2C0</name>
-                           <description>I2C0</description>
+                           <name>Slot22</name>
+                           <description>Slot22</description>
                            <value>22</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>Reserved23</name>
-                           <description>Reserved</description>
+                           <name>Slot23</name>
+                           <description>Slot23</description>
                            <value>23</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>FTM0_Ch0</name>
-                           <description>FTM0 Channel 0</description>
+                           <name>Slot24</name>
+                           <description>Slot24</description>
                            <value>24</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>FTM0_Ch1</name>
-                           <description>FTM0 Channel 1</description>
+                           <name>Slot25</name>
+                           <description>Slot25</description>
                            <value>25</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>FTM0_Ch2</name>
-                           <description>FTM0 Channel 2</description>
+                           <name>Slot26</name>
+                           <description>Slot26</description>
                            <value>26</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>FTM0_Ch3</name>
-                           <description>FTM0 Channel 3</description>
+                           <name>Slot27</name>
+                           <description>Slot27</description>
                            <value>27</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>FTM0_Ch4</name>
-                           <description>FTM0 Channel 4</description>
+                           <name>Slot28</name>
+                           <description>Slot28</description>
                            <value>28</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>FTM0_Ch5</name>
-                           <description>FTM0 Channel 5</description>
+                           <name>Slot29</name>
+                           <description>Slot29</description>
                            <value>29</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>FTM0_Ch6</name>
-                           <description>FTM0 Channel 6</description>
+                           <name>Slot30</name>
+                           <description>Slot30</description>
                            <value>30</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>FTM0_Ch7</name>
-                           <description>FTM0 Channel 7</description>
+                           <name>Slot31</name>
+                           <description>Slot31</description>
                            <value>31</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>FTM1_Ch0</name>
-                           <description>FTM1 Channel 0</description>
+                           <name>Slot32</name>
+                           <description>Slot32</description>
                            <value>32</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>FTM1_Ch2</name>
-                           <description>FTM1 Channel 1</description>
+                           <name>Slot33</name>
+                           <description>Slot33</description>
                            <value>33</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>Reserved34</name>
-                           <description>Reserved</description>
+                           <name>Slot34</name>
+                           <description>Slot34</description>
                            <value>34</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>Reserved35</name>
-                           <description>Reserved</description>
+                           <name>Slot35</name>
+                           <description>Slot35</description>
                            <value>35</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>Reserved36</name>
-                           <description>Reserved</description>
+                           <name>Slot36</name>
+                           <description>Slot36</description>
                            <value>36</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>Reserved37</name>
-                           <description>Reserved</description>
+                           <name>Slot37</name>
+                           <description>Slot37</description>
                            <value>37</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>Reserved38</name>
-                           <description>Reserved</description>
+                           <name>Slot38</name>
+                           <description>Slot38</description>
                            <value>38</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>Reserved39</name>
-                           <description>Reserved</description>
+                           <name>Slot39</name>
+                           <description>Slot39</description>
                            <value>39</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>ADC0</name>
-                           <description>ADC0</description>
+                           <name>Slot40</name>
+                           <description>Slot40</description>
                            <value>40</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>Reserved41</name>
-                           <description>Reserved</description>
+                           <name>Slot41</name>
+                           <description>Slot41</description>
                            <value>41</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>CMP0</name>
-                           <description>CMP0</description>
+                           <name>Slot42</name>
+                           <description>Slot42</description>
                            <value>42</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>CMP1</name>
-                           <description>CMP1</description>
+                           <name>Slot43</name>
+                           <description>Slot43</description>
                            <value>43</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>Reserved44</name>
-                           <description>Reserved</description>
+                           <name>Slot44</name>
+                           <description>Slot44</description>
                            <value>44</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>Reserved45</name>
-                           <description>Reserved</description>
+                           <name>Slot45</name>
+                           <description>Slot45</description>
                            <value>45</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>Reserved46</name>
-                           <description>Reserved</description>
+                           <name>Slot46</name>
+                           <description>Slot46</description>
                            <value>46</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>CMT</name>
-                           <description>CMT</description>
+                           <name>Slot47</name>
+                           <description>Slot47</description>
                            <value>47</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>PDB</name>
-                           <description>PDB</description>
+                           <name>Slot48</name>
+                           <description>Slot48</description>
                            <value>48</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>PortA</name>
-                           <description>PortA</description>
+                           <name>Slot49</name>
+                           <description>Slot49</description>
                            <value>49</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>PortB</name>
-                           <description>PortB</description>
+                           <name>Slot50</name>
+                           <description>Slot50</description>
                            <value>50</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>PortC</name>
-                           <description>PortC</description>
+                           <name>Slot51</name>
+                           <description>Slot51</description>
                            <value>51</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>PortD</name>
-                           <description>PortD</description>
+                           <name>Slot52</name>
+                           <description>Slot52</description>
                            <value>52</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>PortE</name>
-                           <description>PortE</description>
+                           <name>Slot53</name>
+                           <description>Slot53</description>
                            <value>53</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>AlwaysEnabled54</name>
-                           <description>AlwaysEnabled54</description>
+                           <name>Slot54</name>
+                           <description>Slot54</description>
                            <value>54</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>AlwaysEnabled55</name>
-                           <description>AlwaysEnabled55</description>
+                           <name>Slot55</name>
+                           <description>Slot55</description>
                            <value>55</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>AlwaysEnabled56</name>
-                           <description>AlwaysEnabled56</description>
+                           <name>Slot56</name>
+                           <description>Slot56</description>
                            <value>56</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>AlwaysEnabled57</name>
-                           <description>AlwaysEnabled57</description>
+                           <name>Slot57</name>
+                           <description>Slot57</description>
                            <value>57</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>AlwaysEnabled58</name>
-                           <description>AlwaysEnabled58</description>
+                           <name>Slot58</name>
+                           <description>Slot58</description>
                            <value>58</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>AlwaysEnabled59</name>
-                           <description>AlwaysEnabled59</description>
+                           <name>Slot59</name>
+                           <description>Slot59</description>
                            <value>59</value>
                         </enumeratedValue>
                         <enumeratedValue>

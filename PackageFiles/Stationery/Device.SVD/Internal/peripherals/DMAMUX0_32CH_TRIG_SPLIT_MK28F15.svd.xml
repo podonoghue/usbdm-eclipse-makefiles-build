@@ -58,8 +58,8 @@ Usually the Channel enable in the DMA is used in preference to this</description
                <dim>16</dim>
                <dimIncrement>1</dimIncrement>
                <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
-               <name>CHCFG_0_15%s</name>
-               <description>Channel Configuration Register</description>
+               <name>CHCFG_LOW%s</name>
+               <description>Channel Configuration Register (low)</description>
                <addressOffset>0x0</addressOffset>
                <size>8</size>
                <resetMask>0x0</resetMask>
@@ -72,323 +72,323 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                      <bitWidth>6</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>Disabled</name>
                            <description>Disable</description>
                            <value>0b000000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>Reserved1</name>
                            <description>Reserved</description>
                            <value>0b000001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>2</name>
-                           <description>LPUART0_Rx</description>
+                           <name>LPUART0_Rx</name>
+                           <description>LPUART0 Receive</description>
                            <value>0b000010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>3</name>
-                           <description>LPUART0_Tx</description>
+                           <name>LPUART0_Tx</name>
+                           <description>LPUART0 Transmit</description>
                            <value>0b000011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>4</name>
-                           <description>LPUART1_Rx</description>
+                           <name>LPUART1_Rx</name>
+                           <description>LPUART1 Receive</description>
                            <value>0b000100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>5</name>
-                           <description>LPUART1_Tx</description>
+                           <name>LPUART1_Tx</name>
+                           <description>LPUART1 Transmit</description>
                            <value>0b000101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>6</name>
-                           <description>LPUART2_Rx</description>
+                           <name>LPUART2_Rx</name>
+                           <description>LPUART2 Receive</description>
                            <value>0b000110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>7</name>
-                           <description>LPUART2_Tx</description>
+                           <name>LPUART2_Tx</name>
+                           <description>LPUART2 Transmit</description>
                            <value>0b000111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>8</name>
-                           <description>LPUART3_Rx</description>
+                           <name>LPUART3_Rx</name>
+                           <description>LPUART3 Receive</description>
                            <value>0b001000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>9</name>
-                           <description>LPUART3_Tx</description>
+                           <name>LPUART3_Tx</name>
+                           <description>LPUART3 Transmit</description>
                            <value>0b001001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
-                           <description>LPUART4_Rx</description>
+                           <name>LPUART4_Rx</name>
+                           <description>LPUART4 Receive</description>
                            <value>0b001010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
-                           <description>LPUART4_Tx</description>
+                           <name>LPUART4_Tx</name>
+                           <description>LPUART4 Transmit</description>
                            <value>0b001011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>12</name>
-                           <description>I2S0_Rx</description>
+                           <name>I2S0_Rx</name>
+                           <description>I2S0 Receive</description>
                            <value>0b001100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>13</name>
-                           <description>I2S0_Tx</description>
+                           <name>I2S0_Tx</name>
+                           <description>I2S0 Transmit</description>
                            <value>0b001101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>14</name>
-                           <description>SPI0_Rx</description>
+                           <name>SPI0_Rx</name>
+                           <description>SPI0 Receive</description>
                            <value>0b001110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>15</name>
-                           <description>SPI0_Tx</description>
+                           <name>SPI0_Tx</name>
+                           <description>SPI0 Transmit</description>
                            <value>0b001111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>16</name>
-                           <description>SPI1_Rx</description>
+                           <name>SPI1_Rx</name>
+                           <description>SPI1 Receive</description>
                            <value>0b010000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>17</name>
-                           <description>SPI1_Tx</description>
+                           <name>SPI1_Tx</name>
+                           <description>SPI1 Transmit</description>
                            <value>0b010001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>18</name>
+                           <name>I2C0_I2C3</name>
                            <description>I2C0_I2C3</description>
                            <value>0b010010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>19</name>
+                           <name>I2C1_I2C2</name>
                            <description>I2C1_I2C2</description>
                            <value>0b010011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>20</name>
-                           <description>FTM0_Channel0</description>
+                           <name>FTM0_Ch0</name>
+                           <description>FTM0 Channel 0</description>
                            <value>0b010100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>21</name>
-                           <description>FTM0_Channel1</description>
+                           <name>FTM0_Ch1</name>
+                           <description>FTM0 Channel 1</description>
                            <value>0b010101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>22</name>
-                           <description>FTM0_Channel2</description>
+                           <name>FTM0_Ch2</name>
+                           <description>FTM0 Channel 2</description>
                            <value>0b010110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>23</name>
-                           <description>FTM0_Channel3</description>
+                           <name>FTM0_Ch3</name>
+                           <description>FTM0 Channel 3</description>
                            <value>0b010111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>24</name>
-                           <description>FTM0_Channel4</description>
+                           <name>FTM0_Ch4</name>
+                           <description>FTM0 Channel 4</description>
                            <value>0b011000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>25</name>
-                           <description>FTM0_Channel5</description>
+                           <name>FTM0_Ch5</name>
+                           <description>FTM0 Channel 5</description>
                            <value>0b011001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>26</name>
-                           <description>FTM0_Channel6</description>
+                           <name>FTM0_Ch6</name>
+                           <description>FTM0 Channel 6</description>
                            <value>0b011010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>27</name>
-                           <description>FTM0_Channel7</description>
+                           <name>FTM0_Ch7</name>
+                           <description>FTM0 Channel 7</description>
                            <value>0b011011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>28</name>
-                           <description>FTM1_Channel0</description>
+                           <name>FTM1_Ch0</name>
+                           <description>FTM1 Channel 0</description>
                            <value>0b011100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>29</name>
-                           <description>FTM1_Channel1</description>
+                           <name>FTM1_Ch1</name>
+                           <description>FTM1 Channel 1</description>
                            <value>0b011101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>30</name>
-                           <description>FTM2_Channel0</description>
+                           <name>FTM2_Ch0</name>
+                           <description>FTM2 Channel 0</description>
                            <value>0b011110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>31</name>
-                           <description>FTM2_Channel1</description>
+                           <name>FTM2_Ch1</name>
+                           <description>FTM2 Channel 1</description>
                            <value>0b011111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>32</name>
-                           <description>FTM3_Channel0</description>
+                           <name>FTM3_Ch0</name>
+                           <description>FTM3 Channel 0</description>
                            <value>0b100000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>33</name>
-                           <description>FTM3_Channel1</description>
+                           <name>FTM3_Ch1</name>
+                           <description>FTM3 Channel 1</description>
                            <value>0b100001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>34</name>
-                           <description>FTM3_Channel2</description>
+                           <name>FTM3_Ch2</name>
+                           <description>FTM3 Channel 2</description>
                            <value>0b100010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>35</name>
-                           <description>FTM3_Channel3</description>
+                           <name>FTM3_Ch3</name>
+                           <description>FTM3 Channel 3</description>
                            <value>0b100011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>36</name>
-                           <description>FTM3_Channel4</description>
+                           <name>FTM3_Ch4</name>
+                           <description>FTM3 Channel 4</description>
                            <value>0b100100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>37</name>
-                           <description>FTM3_Channel5</description>
+                           <name>FTM3_Ch5</name>
+                           <description>FTM3 Channel 5</description>
                            <value>0b100101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>38</name>
-                           <description>FTM3_Channel6</description>
+                           <name>FTM3_Ch6</name>
+                           <description>FTM3 Channel 6</description>
                            <value>0b100110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>39</name>
-                           <description>FTM3_Channel7</description>
+                           <name>FTM3_Ch7</name>
+                           <description>FTM3 Channel 7</description>
                            <value>0b100111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>40</name>
+                           <name>ADC0</name>
                            <description>ADC0</description>
                            <value>0b101000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>41</name>
+                           <name>Reserved41</name>
                            <description>Reserved</description>
                            <value>0b101001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>42</name>
+                           <name>CMP0</name>
                            <description>CMP0</description>
                            <value>0b101010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>43</name>
+                           <name>CMP1</name>
                            <description>CMP1</description>
                            <value>0b101011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>44</name>
+                           <name>Reserved44</name>
                            <description>Reserved</description>
                            <value>0b101100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>45</name>
+                           <name>DAC0</name>
                            <description>DAC0</description>
                            <value>0b101101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>46</name>
+                           <name>Reserved46</name>
                            <description>Reserved</description>
                            <value>0b101110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>47</name>
+                           <name>CMT</name>
                            <description>CMT</description>
                            <value>0b101111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>48</name>
+                           <name>PDB</name>
                            <description>PDB</description>
                            <value>0b110000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>49</name>
+                           <name>PortA</name>
                            <description>PortA</description>
                            <value>0b110001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>50</name>
+                           <name>PortB</name>
                            <description>PortB</description>
                            <value>0b110010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>51</name>
+                           <name>PortC</name>
                            <description>PortC</description>
                            <value>0b110011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>52</name>
+                           <name>PortD</name>
                            <description>PortD</description>
                            <value>0b110100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>53</name>
+                           <name>PortE</name>
                            <description>PortE</description>
                            <value>0b110101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>54</name>
+                           <name>Reserved54</name>
                            <description>Reserved</description>
                            <value>0b110110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>55</name>
+                           <name>Reserved55</name>
                            <description>Reserved</description>
                            <value>0b110111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>56</name>
+                           <name>Reserved56</name>
                            <description>Reserved</description>
                            <value>0b111000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>57</name>
+                           <name>Reserved57</name>
                            <description>Reserved</description>
                            <value>0b111001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>58</name>
-                           <description>SPI2_Rx</description>
+                           <name>SPI2_Rx</name>
+                           <description>SPI2 Receive</description>
                            <value>0b111010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>59</name>
-                           <description>SPI2_Tx</description>
+                           <name>SPI2_Tx</name>
+                           <description>SPI2 Transmit</description>
                            <value>0b111011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>60</name>
-                           <description>AlwaysOn60</description>
+                           <name>AlwaysEnabled60</name>
+                           <description>AlwaysEnabled60</description>
                            <value>0b111100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>61</name>
-                           <description>AlwaysOn61</description>
+                           <name>AlwaysEnabled61</name>
+                           <description>AlwaysEnabled61</description>
                            <value>0b111101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>62</name>
-                           <description>AlwaysOn62</description>
+                           <name>AlwaysEnabled62</name>
+                           <description>AlwaysEnabled62</description>
                            <value>0b111110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>63</name>
-                           <description>AlwaysOn63</description>
+                           <name>AlwaysEnabled63</name>
+                           <description>AlwaysEnabled63</description>
                            <value>0b111111</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -437,8 +437,8 @@ Usually the Channel enable in the DMA is used in preference to this</description
                <dim>16</dim>
                <dimIncrement>1</dimIncrement>
                <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
-               <name>CHCFG_16_32%s</name>
-               <description>Channel Configuration Register</description>
+               <name>CHCFG_HIGH%s</name>
+               <description>Channel Configuration Register (High)</description>
                <addressOffset>0x10</addressOffset>
                <size>8</size>
                <resetMask>0x0</resetMask>
@@ -451,323 +451,323 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                      <bitWidth>6</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>Disabled</name>
                            <description>Disable</description>
                            <value>0b000000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>FlexIO_Shifter0</name>
                            <description>FlexIO Shifter 0</description>
                            <value>0b000001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>2</name>
+                           <name>FlexIO_Shifter1</name>
                            <description>FlexIO Shifter 1</description>
                            <value>0b000010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>3</name>
+                           <name>FlexIO_Shifter3</name>
                            <description>FlexIO Shifter 2</description>
                            <value>0b000011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>4</name>
+                           <name>FlexIO_Shifter3</name>
                            <description>FlexIO Shifter 3</description>
                            <value>0b000100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>5</name>
+                           <name>FlexIO_Shifter4</name>
                            <description>FlexIO Shifter 4</description>
                            <value>0b000101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>6</name>
+                           <name>FlexIO_Shifter5</name>
                            <description>FlexIO Shifter 5</description>
                            <value>0b000110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>7</name>
+                           <name>FlexIO_Shifter6</name>
                            <description>FlexIO Shifter 6</description>
                            <value>0b000111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>8</name>
+                           <name>FlexIO_Shifter7</name>
                            <description>FlexIO Shifter 7</description>
                            <value>0b001000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>9</name>
+                           <name>Reserved9</name>
                            <description>Reserved</description>
                            <value>0b001001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
+                           <name>Reserved10</name>
                            <description>Reserved</description>
                            <value>0b001010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
+                           <name>Reserved11</name>
                            <description>Reserved</description>
                            <value>0b001011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>12</name>
-                           <description>I2S1_Tx</description>
+                           <name>I2S1_Tx</name>
+                           <description>I2S1 Transmit</description>
                            <value>0b001100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>13</name>
-                           <description>I2S1_Rx</description>
+                           <name>I2S1_Rx13</name>
+                           <description>I2S1 Receive</description>
                            <value>0b001101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>14</name>
+                           <name>Reserved14</name>
                            <description>Reserved</description>
                            <value>0b001110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>15</name>
+                           <name>Reserved15</name>
                            <description>Reserved</description>
                            <value>0b001111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>16</name>
+                           <name>Reserved16</name>
                            <description>Reserved</description>
                            <value>0b010000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>17</name>
+                           <name>Reserved17</name>
                            <description>Reserved</description>
                            <value>0b010001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>18</name>
+                           <name>Reserved18</name>
                            <description>Reserved</description>
                            <value>0b010010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>19</name>
+                           <name>Reserved19</name>
                            <description>Reserved</description>
                            <value>0b010011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>20</name>
+                           <name>Reserved20</name>
                            <description>Reserved</description>
                            <value>0b010100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>21</name>
+                           <name>Reserved21</name>
                            <description>Reserved</description>
                            <value>0b010101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>22</name>
+                           <name>Reserved22</name>
                            <description>Reserved</description>
                            <value>0b010110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>23</name>
+                           <name>Reserved23</name>
                            <description>Reserved</description>
                            <value>0b010111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>24</name>
-                           <description>QSPI_Rx</description>
+                           <name>QSPI_Rx</name>
+                           <description>QSPI Receive</description>
                            <value>0b011000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>25</name>
-                           <description>QSPI_Tx</description>
+                           <name>QSPI_Tx</name>
+                           <description>QSPI Transmit</description>
                            <value>0b011001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>26</name>
+                           <name>Reserved26</name>
                            <description>Reserved</description>
                            <value>0b011010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>27</name>
+                           <name>Reserved27</name>
                            <description>Reserved</description>
                            <value>0b011011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>28</name>
-                           <description>SPI0_Rx</description>
+                           <name>SPI0_Rx</name>
+                           <description>SPI0 Receive</description>
                            <value>0b011100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>29</name>
-                           <description>SPI0_Tx</description>
+                           <name>SPI0_Tx</name>
+                           <description>SPI0 Transmit</description>
                            <value>0b011101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>30</name>
-                           <description>SPI1_Rx</description>
+                           <name>SPI1_Rx</name>
+                           <description>SPI1 Receive</description>
                            <value>0b011110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>31</name>
-                           <description>SPI1_Tx</description>
+                           <name>SPI1_Tx</name>
+                           <description>SPI1 Transmit</description>
                            <value>0b011111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>32</name>
+                           <name>Reserved32</name>
                            <description>Reserved</description>
                            <value>0b100000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>33</name>
+                           <name>Reserved33</name>
                            <description>Reserved</description>
                            <value>0b100001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>34</name>
+                           <name>Reserved34</name>
                            <description>Reserved</description>
                            <value>0b100010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>35</name>
+                           <name>Reserved35</name>
                            <description>Reserved</description>
                            <value>0b100011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>36</name>
+                           <name>Reserved36</name>
                            <description>Reserved</description>
                            <value>0b100100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>37</name>
+                           <name>Reserved37</name>
                            <description>Reserved</description>
                            <value>0b100101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>38</name>
+                           <name>Reserved38</name>
                            <description>Reserved</description>
                            <value>0b100110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>39</name>
+                           <name>Reserved39</name>
                            <description>Reserved</description>
                            <value>0b100111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>40</name>
+                           <name>Reserved40</name>
                            <description>Reserved</description>
                            <value>0b101000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>41</name>
+                           <name>Reserved41</name>
                            <description>Reserved</description>
                            <value>0b101001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>42</name>
-                           <description>TPM1_Channel0</description>
+                           <name>TPM1_Ch0</name>
+                           <description>TPM1 Channel 0</description>
                            <value>0b101010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>43</name>
-                           <description>TPM1_Channel1</description>
+                           <name>TPM1_Ch1</name>
+                           <description>TPM1 Channel 1</description>
                            <value>0b101011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>44</name>
-                           <description>TPM2_Channel0</description>
+                           <name>TPM2_Ch0</name>
+                           <description>TPM2 Channel 0</description>
                            <value>0b101100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>45</name>
-                           <description>TPM2_Channel1</description>
+                           <name>TPM2_Ch1</name>
+                           <description>TPM2 Channel 1</description>
                            <value>0b101101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>46</name>
+                           <name>Reserved46</name>
                            <description>Reserved</description>
                            <value>0b101110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>47</name>
+                           <name>Reserved47</name>
                            <description>Reserved</description>
                            <value>0b101111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>48</name>
+                           <name>Reserved48</name>
                            <description>Reserved</description>
                            <value>0b110000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>49</name>
+                           <name>Reserved49</name>
                            <description>Reserved</description>
                            <value>0b110001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>50</name>
+                           <name>Reserved50</name>
                            <description>Reserved</description>
                            <value>0b110010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>51</name>
+                           <name>Reserved51</name>
                            <description>Reserved</description>
                            <value>0b110011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>52</name>
+                           <name>Reserved52</name>
                            <description>Reserved</description>
                            <value>0b110100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>53</name>
+                           <name>Reserved53</name>
                            <description>Reserved</description>
                            <value>0b110101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>54</name>
+                           <name>Reserved54</name>
                            <description>Reserved</description>
                            <value>0b110110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>55</name>
+                           <name>TPM1_Overflow</name>
                            <description>TPM1_Overflow</description>
                            <value>0b110111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>56</name>
+                           <name>TPM2_Overflow</name>
                            <description>TPM2_Overflow</description>
                            <value>0b111000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>57</name>
+                           <name>Reserved57</name>
                            <description>Reserved</description>
                            <value>0b111001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>58</name>
-                           <description>SPI3_Rx</description>
+                           <name>SPI3_Rx</name>
+                           <description>SPI3 Receive</description>
                            <value>0b111010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>59</name>
-                           <description>SPI3_Tx</description>
+                           <name>SPI3_Tx</name>
+                           <description>SPI3 Transmit</description>
                            <value>0b111011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>60</name>
-                           <description>AlwaysOn60</description>
+                           <name>AlwaysEnabled60</name>
+                           <description>AlwaysEnabled60</description>
                            <value>0b111100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>61</name>
-                           <description>AlwaysOn61</description>
+                           <name>AlwaysEnabled61</name>
+                           <description>AlwaysEnabled61</description>
                            <value>0b111101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>62</name>
-                           <description>AlwaysOn62</description>
+                           <name>AlwaysEnabled62</name>
+                           <description>AlwaysEnabled62</description>
                            <value>0b111110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>63</name>
-                           <description>AlwaysOn63</description>
+                           <name>AlwaysEnabled63</name>
+                           <description>AlwaysEnabled63</description>
                            <value>0b111111</value>
                         </enumeratedValue>
                      </enumeratedValues>
