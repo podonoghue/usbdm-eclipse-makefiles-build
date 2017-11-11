@@ -38,7 +38,7 @@ Cortex-M4
       <copy source="Project_Settings/Linker_Files/MemoryMap-sramu.ld"         target="Project_Settings/Linker_Files/MemoryMap-$(targetDeviceName).ld"  overwrite="true" />
 
       <copy source="Project_Headers/derivative.h"                             target="Project_Headers/derivative.h" />
-      <copy source="Project_Headers/TargetDevice.h"                           target="Project_Headers/$(targetDevice).h" />
+      <copy source="Project_Headers/TargetDevice.h"                           target="Project_Headers/$(targetDeviceSubFamily).h" />
       <copy source="Project_Headers/system.h"                                 target="Project_Headers/system.h" />
       <copy source="Project_Headers/core_cm4.h"                               target="Project_Headers/core_cm4.h" />
       <copy source="Project_Headers/core_cmSimd.h"                            target="Project_Headers/core_cmSimd.h" />
@@ -47,7 +47,7 @@ Cortex-M4
       <copy source="Project_Headers/core_cmInstr.h"                           target="Project_Headers/core_cmInstr.h" />
       <copy source="Project_Headers/utilities-mk.h"                           target="Project_Headers/utilities.h" />
 
-      <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(targetDevice).h" overwrite="true" />
+      <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(targetDeviceSubFamily).h" overwrite="true" />
 
       <projectActionList>
          <applyWhen>
