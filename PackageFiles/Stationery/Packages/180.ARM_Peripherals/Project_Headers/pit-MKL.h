@@ -242,7 +242,7 @@ public:
     *  Configure the PIT channel
     *
     *  @param[in]  channel           Channel to configure
-    *  @param[in]  interval          Interval in timer ticks (usually bus clock period)
+    *  @param[in]  interval          Interval in seconds
     *  @param[in]  pitChannelIrq     Whether to enable interrupts
     *  @param[in]  pitChannelEnable  Whether to enable channel initially
     */
@@ -255,9 +255,8 @@ public:
       pit->CHANNEL[channel].LDVAL = round((interval*PitInfo::getClockFrequency())-1);
       pit->CHANNEL[channel].TCTRL = pitChannelIrq|pitChannelEnable;
       pit->CHANNEL[channel].TFLG  = PIT_TFLG_TIF_MASK;
-
-      enableNvicInterrupts();
    }
+
    /**
     * Set period in seconds
     *
@@ -267,14 +266,15 @@ public:
    static void setPeriod(unsigned channel, float interval) {
       pit->CHANNEL[channel].LDVAL = round((interval*PitInfo::getClockFrequency())-1);
    }
+
    /**
     * Set period in seconds
     *
     * @param[in]  channel Channel being modified
-    * @param[in]  interval Interval in seconds
+    * @param[in]  interval Interval in ticks
     */
    static void setPeriodInTicks(unsigned channel, uint32_t interval) {
-      pit->CHANNEL[channel].LDVAL = interval;
+      pit->CHANNEL[channel].LDVAL = interval-1;
    }
 
    /**
@@ -296,7 +296,23 @@ public:
     *
     *  @note Function doesn't return until interval has expired
     */
-   static void delay(uint8_t channel, uint32_t interval) {
+   static void delayInTicks(uint8_t channel, uint32_t interval) {
+      configureChannelInTicks(channel, interval);
+      while (pit->CHANNEL[channel].TFLG == 0) {
+         __NOP();
+      }
+      disableChannel(channel);
+   }
+
+   /**
+    *  Use a PIT channel to implement a busy-wait delay
+    *
+    *  @param[in]  channel   Channel to use
+    *  @param[in]  interval  Interval to wait as a float
+    *
+    *  @note Function doesn't return until interval has expired
+    */
+   static void delay(uint8_t channel, float interval) {
       configureChannel(channel, interval);
       while (pit->CHANNEL[channel].TFLG == 0) {
          __NOP();
