@@ -7,7 +7,7 @@
 
 <root version="1.2.0">
    <family name="MK20D5">
-      <device name="FRDM_K20D5"   manual="K20P64M50SF0RM" package="FRDM_K20D50M" />
+      <device name="FRDM_K20D50M" manual="K20P64M50SF0RM" package="FRDM_K20D50M" />
       <device name="MK20DN128VFT5" manual="K20P48M50SF0RM" package="QFN_32" />
       <device name="MK20DN128VLF5" manual="K20P48M50SF0RM" package="LQFP_48" />
       <device name="MK20DN128VLH5" manual="K20P64M50SF0RM" package="LQFP_64" />
