@@ -396,9 +396,8 @@
                Description='Add USBDM support to various versions of CodeWarrior software.'
                AllowAdvertise="no"
                Level='1'>
-            <FeatureRef Id='F.CW_FOR_MCU_V10.6'/>
-            <FeatureRef Id='F.CW_FOR_MCU_V10.6.4'/>
             <FeatureRef Id='F.CW_FOR_MCU_V10.7'/>
+            <FeatureRef Id='F.CW_FOR_MCU_V11.0'/>
             <FeatureRef Id='F.CW_FOR_MICROCONTROLLERS_V6_3' />
             <FeatureRef Id='F.CWS12_X_V5_1' />
             <FeatureRef Id='F.CWS12_X_V5_2' />

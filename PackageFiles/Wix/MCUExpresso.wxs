@@ -39,8 +39,10 @@
      
       <!-- Look in likely locations for MCUExpresso and update directory-->
       <Property Id="D.$(var.ECLIPSE_VER)_MCU_EXPRESSO">
-         <DirectorySearch Id='Ds.$(var.ECLIPSE_VER)_DirectorySearch'  Path='nxp\MCUXpressoIDE_10.0.0_344' AssignToProperty="yes" />
+        <DirectorySearch Id='Ds.$(var.ECLIPSE_VER)_DirectorySearch1'  Path='nxp\MCUXpressoIDE_10.0.0_344' AssignToProperty="yes" />
          <DirectorySearch Id='Ds.$(var.ECLIPSE_VER)_DirectorySearch2' Path='Apps\nxp\MCUXpressoIDE_10.0.0_344' AssignToProperty="yes" />
+         <DirectorySearch Id='Ds.$(var.ECLIPSE_VER)_DirectorySearch3'  Path='nxp\MCUXpressoIDE_10.0.2_411' AssignToProperty="yes" />
+         <DirectorySearch Id='Ds.$(var.ECLIPSE_VER)_DirectorySearch4' Path='Apps\nxp\MCUXpressoIDE_10.0.2_411' AssignToProperty="yes" />
       </Property>
       
       <!--=================================================================================

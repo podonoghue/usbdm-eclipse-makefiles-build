@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='windows-1252'?>
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
-   <?define ECLIPSE_VER="CW_10.6.4" ?> 
-   <?define CW_VER_UC="V10.6.4" ?> 
-   <?define CW_Ver="v10.6.4" ?> 
+   <?define ECLIPSE_VER="CW_11.0" ?> 
+   <?define CW_VER_UC="V11.0" ?> 
+   <?define CW_Ver="v11.0" ?> 
 
    <?define Manufacturer="pgo" ?>
    <?define ProductName="USBDM" ?>
@@ -117,7 +117,7 @@
       <CustomAction Id="Ca.UnMergeNewProjectWizardEclipseCommand_$(var.CW_VER_UC)" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
 
 
-      <!-- Ver 10.3 -->
+      <!-- Ver 11.0 -->
       <!-- Patch Eclipse ELF Importer Project Wizard XLM-->
       <CustomAction
          Id="Ca.CreateEclipseMergeElfImporterWizardCommand_$(var.CW_VER_UC)"
@@ -186,14 +186,14 @@
            USBDM Marker
       -->
       <DirectoryRef Id="D.CW_FOR_MCU_$(var.CW_VER_UC)">
-         <Component Id='C.CW_FOR_MCU_$(var.CW_VER_UC).Marker' Guid='530ebd8b-cb9f-486f-ba0b-bbbf4f247824' >
+         <Component Id='C.CW_FOR_MCU_$(var.CW_VER_UC).Marker' Guid='d1abd770-51d1-4fee-a077-66c01f4a37e2' >
             <File Id='CW_FOR_MCU_$(var.CW_VER_UC)_Marker' DiskId='1' Source='USBDM_Installed.txt' KeyPath='yes' />
          </Component>
       </DirectoryRef>
       
       <!-- CW Eclipse RS08/HCS08 support -->
       <DirectoryRef Id="D.CW_FOR_MCU_$(var.CW_VER_UC)_MCU_bin_plugins_support_HC08_gdi">
-         <Component Id='C.CW_FOR_MCU_$(var.CW_VER_UC).HCSFiles' Guid='11309a70-2ab7-41ca-8a56-3c498b105000'>
+         <Component Id='C.CW_FOR_MCU_$(var.CW_VER_UC).HCSFiles' Guid='7bdfb6e9-4428-4911-bc30-90f03bdb81f1'>
             <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_1'   DiskId='1' Source='$(var.SrcDir)\bin\libgcc_s_dw2-1.dll' />
             <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_2'   DiskId='1' Source='$(var.SrcDir)\bin\libstdc++-6.dll' />
             <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_5'   DiskId='1' Source='$(var.SrcDir)\bin\libxerces-c-3-1.dll' />
@@ -232,7 +232,7 @@
 
       <!-- CW Eclipse Coldfire V1/Vx support -->
       <DirectoryRef Id="D.CW_FOR_MCU_$(var.CW_VER_UC)_MCU_bin_plugins_support_Coldfire_gdi">
-         <Component Id='C.CW_FOR_MCU_$(var.CW_VER_UC).CFFiles' Guid='c64a97fe-49d0-4de5-8f69-9436c61a34e2' >
+         <Component Id='C.CW_FOR_MCU_$(var.CW_VER_UC).CFFiles' Guid='d8a7443c-a63f-4829-9e15-aef8219372ee' >
             <File Id='EclipseCFFiles_$(var.CW_VER_UC)_1'   DiskId='1' Source='$(var.SrcDir)\bin\libgcc_s_dw2-1.dll' />
             <File Id='EclipseCFFiles_$(var.CW_VER_UC)_2'   DiskId='1' Source='$(var.SrcDir)\bin\libstdc++-6.dll' />
             <File Id='EclipseCFFiles_$(var.CW_VER_UC)_5'   DiskId='1' Source='$(var.SrcDir)\bin\libxerces-c-3-1.dll' />
@@ -272,7 +272,7 @@
 
       <!-- CW Eclipse ARM support -->
       <DirectoryRef Id="D.CW_FOR_MCU_$(var.CW_VER_UC)_MCU_bin_plugins_support_ARM_gdi">
-         <Component Id='C.CW_FOR_MCU_$(var.CW_VER_UC).ArmFiles' Guid='3c22abc6-67a4-4035-ae8b-4609bbf53baf' >
+         <Component Id='C.CW_FOR_MCU_$(var.CW_VER_UC).ArmFiles' Guid='4d08d194-f997-408e-9da7-cf2b1d158c13' >
             <File Id='EclipseARMFiles_$(var.CW_VER_UC)_1'   DiskId='1' Source='$(var.SrcDir)\bin\libgcc_s_dw2-1.dll' />
             <File Id='EclipseARMFiles_$(var.CW_VER_UC)_2'   DiskId='1' Source='$(var.SrcDir)\bin\libstdc++-6.dll' />
             <File Id='EclipseARMFiles_$(var.CW_VER_UC)_5'   DiskId='1' Source='$(var.SrcDir)\bin\libxerces-c-3-1.dll' />
@@ -306,7 +306,7 @@
 
       <!-- CW Eclipse DSC support V10.2 -->
       <DirectoryRef Id="D.CW_FOR_MCU_$(var.CW_VER_UC)_MCU_bin_plugins_support_DSC_gdi">
-         <Component Id='C.CW_FOR_MCU_$(var.CW_VER_UC).DscFiles' Guid='8838b73b-04f4-45b3-ab23-b17abd21267f' >
+         <Component Id='C.CW_FOR_MCU_$(var.CW_VER_UC).DscFiles' Guid='b305b8ef-2f8e-4bc4-81a7-82f6d2c22867' >
             <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_1'   DiskId='1' Source='$(var.SrcDir)\bin\libgcc_s_dw2-1.dll' />
             <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_2'   DiskId='1' Source='$(var.SrcDir)\bin\libstdc++-6.dll' />
             <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_5'   DiskId='1' Source='$(var.SrcDir)\bin\libxerces-c-3-1.dll' />
@@ -340,7 +340,7 @@
 
       <!-- CW Eclipse S12Z support V10.2 -->
       <DirectoryRef Id="D.CW_FOR_MCU_$(var.CW_VER_UC)_MCU_bin_plugins_support_S12Z_gdi">
-         <Component Id='C.CW_FOR_MCU_$(var.CW_VER_UC).S12ZFiles' Guid='b80c1d66-8999-44fc-8a2d-e5d2c72e1b47' >
+         <Component Id='C.CW_FOR_MCU_$(var.CW_VER_UC).S12ZFiles' Guid='61b33712-04c2-4a83-a6f4-bf3737770dc0' >
             <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_1'   DiskId='1' Source='$(var.SrcDir)\bin\libgcc_s_dw2-1.dll' />
             <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_2'   DiskId='1' Source='$(var.SrcDir)\bin\libstdc++-6.dll' />
             <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_5'   DiskId='1' Source='$(var.SrcDir)\bin\libxerces-c-3-1.dll' />
@@ -374,7 +374,7 @@
 
       <!-- CW Eclipse launch configartions support -->
       <DirectoryRef Id="D.CW_FOR_MCU_$(var.CW_VER_UC)_MCU_lib_wizard_data_launch_config">
-         <Component Id='C.CW_FOR_MCU_$(var.CW_VER_UC).LaunchFiles' Guid='3af1a763-cf1c-49dc-8212-9f79f85ebbbc' >
+         <Component Id='C.CW_FOR_MCU_$(var.CW_VER_UC).LaunchFiles' Guid='f4843212-af5f-4c1a-b8a4-c5aba8692649' >
             <File Id='EclipseLaunchFiles1_$(var.CW_VER_UC)' DiskId='1' Source='$(var.SrcDir)\LaunchConfig\usbdm_arm.xml'     KeyPath='yes' />
             <File Id='EclipseLaunchFiles2_$(var.CW_VER_UC)' DiskId='1' Source='$(var.SrcDir)\LaunchConfig\usbdm_cfv1.xml' />
             <File Id='EclipseLaunchFiles3_$(var.CW_VER_UC)' DiskId='1' Source='$(var.SrcDir)\LaunchConfig\usbdm_cfvx.xml' />
