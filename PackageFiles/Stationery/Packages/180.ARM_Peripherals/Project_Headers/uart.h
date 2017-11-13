@@ -450,7 +450,7 @@ public:
          if (Info::irqCount>1) {
         	 NVIC_DisableIRQ(Info::irqNums[1]);
          }
-         if (Uart0Info::irqCount>2) {
+         if (Info::irqCount>2) {
         	 NVIC_DisableIRQ(Info::irqNums[2]);
          }
       }
