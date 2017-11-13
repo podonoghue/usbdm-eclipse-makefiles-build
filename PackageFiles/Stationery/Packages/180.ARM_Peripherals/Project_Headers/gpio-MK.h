@@ -233,6 +233,7 @@ public:
     * Set pin. Pin will be high if configured as an output.
     *
     * @note Polarity _is_ _not_ significant
+    * @note Don't use this method unless dealing with very low-level I/O
     */
    static void high() {
       gpio->PSOR = MASK;
@@ -241,6 +242,7 @@ public:
     * Clear pin. Pin will be low if configured as an output.
     *
     * @note Polarity _is_ _not_ significant
+    * @note Don't use this method unless dealing with very low-level I/O
     */
    static void low() {
       gpio->PCOR = MASK;
@@ -249,6 +251,7 @@ public:
     * Set pin. Pin will be high if configured as an output.
     *
     * @note Polarity _is_ _not_ significant
+    * @note Don't use this method unless dealing with very low-level I/O
     */
    static void set() {
 	   gpio->PSOR = MASK;
@@ -257,6 +260,7 @@ public:
     * Clear pin. Pin will be low if configured as an output.
     *
     * @note Polarity _is_ _not_ significant
+    * @note Don't use this method unless dealing with very low-level I/O
     */
    static void clear() {
 	   gpio->PCOR = MASK;
@@ -294,19 +298,21 @@ public:
       }
    }
    /**
-    * Set pin to active level (if configured as output)
+    * Set pin to active level (if configured as output).
+    * Convenience method for setActive()
     *
     * @note Polarity _is_ significant
     */
-   static void on() {
+   static void __attribute__((always_inline)) on() {
       setActive();
    }
    /**
-    * Set pin to inactive level (if configured as output)
+    * Set pin to inactive level (if configured as output).
+    * Convenience method for setInactive()
     *
     * @note Polarity _is_ significant
     */
-   static void off() {
+   static void __attribute__((always_inline)) off() {
       setInactive();
    }
    /**
@@ -372,36 +378,28 @@ public:
       }
    }
    /**
-    * Read pin value and return true if active level
+    * Read pin value and return true if active level.
+    * Equivalent to read()
     *
     * @return true/false reflecting if pin is active.
     *
     * @note This reads the PDIR
     * @note Polarity _is_ significant
     */
-   static bool isActive() {
-      if (polarity) {
-         return isHigh();
-      }
-      else {
-         return isLow();
-      }
+   static bool __attribute__((always_inline)) isActive() {
+      return read();
    }
    /**
     * Read pin value and return true if inactive level
+    * Equivalent to !read()
     *
     * @return true/false reflecting if pin is inactive.
     *
     * @note This reads the PDIR
     * @note Polarity _is_ significant
     */
-   static bool isInactive() {
-      if (polarity) {
-         return isLow();
-      }
-      else {
-         return isHigh();
-      }
+   static bool __attribute__((always_inline)) isInactive() {
+      return !read();
    }
    /**
     * Read pin value and return true if active level.\n
@@ -412,31 +410,20 @@ public:
     * @note This reads the PDIR
     * @note Polarity _is_ significant
     */
-   static bool isPressed() {
-      if (polarity) {
-         return isHigh();
-      }
-      else {
-         return isLow();
-      }
+   static bool __attribute__((always_inline)) isPressed() {
+      return isActive();
    }
    /**
     * Read pin value and return true if inactive level.\n
     * Convenience method equivalent to isInactive()
-    *
     *
     * @return true/false reflecting if pin is inactive.
     *
     * @note This reads the PDIR
     * @note Polarity _is_ significant
     */
-   static bool isReleased() {
-      if (polarity) {
-         return isLow();
-      }
-      else {
-         return isHigh();
-      }
+   static bool __attribute__((always_inline)) isReleased() {
+      return isInactive();
    }
    /**
     * Read value being driven to pin (if configured as output)
