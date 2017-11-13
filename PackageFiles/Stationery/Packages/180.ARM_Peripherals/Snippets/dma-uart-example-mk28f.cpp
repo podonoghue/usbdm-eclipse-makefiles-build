@@ -1,6 +1,6 @@
 /**
  ============================================================================
- * @file    dma-uart-mk28f-example.cpp (180.ARM_Peripherals/Snippets)
+ * @file    dma-uart-example-mk28f.cpp (180.ARM_Peripherals/Snippets)
  * @brief   DMA example using UART and PIT throttling
  *
  *  Created on: 10/1/2016
@@ -46,7 +46,7 @@ using TimerChannel = PitChannel<1>;
 static constexpr DmaChannelNum DMA_CHANNEL = DmaChannelNum_1;
 
 // Slot number to use (must agree with console UART)
-static constexpr DmaSlot DMA_SLOT = DmaSlot_LPUART0_Transmit;
+static constexpr DmaSlot DMA_SLOT = Dma0SlotLow_LPUART0_Tx;
 
 // MCG clocks for various run modes
 static constexpr ClockConfig VLPR_MODE  = ClockConfig_BLPE_4MHz;
@@ -313,9 +313,9 @@ int main() {
       Smc::enterStopMode(SmcStopMode_NormalStop);
       // Will wake up after each transfer due to DMA complete interrupt
 
-//      console.enableDma(UartDma_TxHoldingEmpty, false);
-//      console.writeln("Woke up!");
-//      console.enableDma(UartDma_TxHoldingEmpty);
+      console.enableDma(LpuartDma_TxHoldingEmpty, false);
+      console.writeln("Woke up!");
+      console.enableDma(LpuartDma_TxHoldingEmpty);
    }
    return 0;
 }

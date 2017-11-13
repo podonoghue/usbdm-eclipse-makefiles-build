@@ -46,7 +46,7 @@ using TimerChannel = PitChannel<1>;
 static constexpr DmaChannelNum DMA_CHANNEL = DmaChannelNum_1;
 
 // Slot number to use (must agree with console UART)
-static constexpr DmaSlot DMA_SLOT = DmaSlot_UART0_Transmit;
+static constexpr DmaSlot DMA_SLOT = Dma0Slot_UART0_Tx;
 
 // MCG clocks for various run modes
 static constexpr ClockConfig VLPR_MODE  = ClockConfig_BLPE_4MHz;

@@ -26,7 +26,7 @@
 #include "rcm.h"
 
 // May need reduced baud rate for slow clocks
-static constexpr int BAUD_RATE = 115200;
+static constexpr int BAUD_RATE = defaultBaudRate;
 
 // Allow access to USBDM methods without USBDM:: prefix
 using namespace USBDM;

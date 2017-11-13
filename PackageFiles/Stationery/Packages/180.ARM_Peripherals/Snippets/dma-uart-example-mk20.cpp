@@ -46,7 +46,7 @@ using TimerChannel = PitChannel<1>;
 static constexpr DmaChannelNum DMA_CHANNEL = DmaChannelNum_1;
 
 // Slot number to use (must agree with console UART)
-static constexpr DmaSlot DMA_SLOT = DmaSlot_UART0_Transmit;
+static constexpr DmaSlot DMA_SLOT = Dma0Slot_UART0_Tx;
 
 // MCG clocks for various run modes
 static constexpr ClockConfig VLPR_MODE  = ClockConfig_BLPE_4MHz;
@@ -278,7 +278,8 @@ int main() {
    Smc::setStopOptions(
          SmcLowLeakageStopMode_VLLS3,   // Retains RAM
          SmcPowerOnReset_Enable,       // Brown-out detection
-         SmcPartialStopMode_Normal,  // Bus clock active (for DMAC)
+         SmcPartialStopMode_Normal,  // No bus clock in stop!
+         // SmcPartialStopMode_Partial1 - Bus clock active (for DMAC)
          SmcLpoInLowLeakage_Disable);  // LPO stops in LLS/VLLS
 
    console.writeln("\nDoing DMA while sleeping....").flushOutput();
@@ -287,12 +288,12 @@ int main() {
    for(;;) {
       Led::toggle();
       Smc::enterWaitMode();
-//      Smc::enterStopMode(SmcStopMode_NormalStop);
+//      Smc::enterStopMode(SmcStopMode_NormalStop); // Only if chip supports SmcPartialStopMode_Partial1
       // Will wake up after each transfer due to DMA complete interrupt
 
-//      console.enableDma(UartDma_TxHoldingEmpty, false);
-//      console.writeln("Woke up!");
-//      console.enableDma(UartDma_TxHoldingEmpty);
+      console.enableDma(UartDma_TxHoldingEmpty, false);
+      console.writeln("Woke up!");
+      console.enableDma(UartDma_TxHoldingEmpty);
    }
    return 0;
 }
