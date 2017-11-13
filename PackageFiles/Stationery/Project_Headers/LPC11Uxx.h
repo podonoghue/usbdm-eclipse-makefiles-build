@@ -187,7 +187,7 @@ extern void USBWAKEUP_IRQHandler(void);              /**< USB2.0 device controll
 * @brief Struct for ADC
 * @{
 */
-typedef struct {                                /*       LPC_ADC Structure                                            */
+typedef struct LPC_ADC_Type {
    __IO uint32_t  CR;                           /**< 0000: A/D Control Register. The CR register must be written to select the operating mode before A/D conversion can occur */
    __IO uint32_t  GDR;                          /**< 0004: A/D Global Data Register. Contains the result of the most recent A/D conversion */
         uint8_t   RESERVED_0[4];               
@@ -297,7 +297,7 @@ typedef struct {                                /*       LPC_ADC Structure      
 * @brief Struct for CT16B0
 * @{
 */
-typedef struct {                                /*       LPC_CT16B0 Structure                                         */
+typedef struct LPC_CT16B0_Type {
    __IO uint32_t  IR;                           /**< 0000: Interrupt Register. The IR can be written to clear interrupts. The IR can be read to identify which of eight possible interrupt sources are pending */
    __IO uint32_t  TCR;                          /**< 0004: Timer Control Register. The TCR is used to control the Timer Counter functions. The Timer Counter can be disabled or reset through the TCR */
    __IO uint32_t  TC;                           /**< 0008: Timer Counter. The 16-bit TC is incremented every PR+1 cycles of PCLK. The TC is controlled through the TCR */
@@ -515,7 +515,7 @@ typedef struct {                                /*       LPC_CT16B0 Structure   
 * @brief Struct for CT16B
 * @{
 */
-typedef struct {                                /*       LPC_CT16B1 Structure                                         */
+typedef struct LPC_CT16B1_Type {
    __IO uint32_t  IR;                           /**< 0000: Interrupt Register. The IR can be written to clear interrupts. The IR can be read to identify which of eight possible interrupt sources are pending */
    __IO uint32_t  TCR;                          /**< 0004: Timer Control Register. The TCR is used to control the Timer Counter functions. The Timer Counter can be disabled or reset through the TCR */
    __IO uint32_t  TC;                           /**< 0008: Timer Counter. The 16-bit TC is incremented every PR+1 cycles of PCLK. The TC is controlled through the TCR */
@@ -732,7 +732,7 @@ typedef struct {                                /*       LPC_CT16B1 Structure   
 * @brief Struct for CT32B0
 * @{
 */
-typedef struct {                                /*       LPC_CT32B0 Structure                                         */
+typedef struct LPC_CT32B0_Type {
    __IO uint32_t  IR;                           /**< 0000: Interrupt Register. The IR can be written to clear interrupts. The IR can be read to identify which of eight possible interrupt sources are pending */
    __IO uint32_t  TCR;                          /**< 0004: Timer Control Register. The TCR is used to control the Timer Counter functions. The Timer Counter can be disabled or reset through the TCR */
    __IO uint32_t  TC;                           /**< 0008: Timer Counter. The 32-bit TC is incremented every PR+1 cycles of PCLK. The TC is controlled through the TCR */
@@ -950,7 +950,7 @@ typedef struct {                                /*       LPC_CT32B0 Structure   
 * @brief Struct for CT32B
 * @{
 */
-typedef struct {                                /*       LPC_CT32B1 Structure                                         */
+typedef struct LPC_CT32B1_Type {
    __IO uint32_t  IR;                           /**< 0000: Interrupt Register. The IR can be written to clear interrupts. The IR can be read to identify which of eight possible interrupt sources are pending */
    __IO uint32_t  TCR;                          /**< 0004: Timer Control Register. The TCR is used to control the Timer Counter functions. The Timer Counter can be disabled or reset through the TCR */
    __IO uint32_t  TC;                           /**< 0008: Timer Counter. The 32-bit TC is incremented every PR+1 cycles of PCLK. The TC is controlled through the TCR */
@@ -1168,7 +1168,7 @@ controller
 * @brief Struct for FLASHCTRL
 * @{
 */
-typedef struct {                                /*       LPC_FLASHCTRL Structure                                      */
+typedef struct LPC_FLASHCTRL_Type {
         uint8_t   RESERVED_0[16];              
    __IO uint32_t  FLASHCFG;                     /**< 0010: Flash memory access time configuration register              */
         uint8_t   RESERVED_1[12];              
@@ -1291,7 +1291,7 @@ typedef struct {                                /*       LPC_FLASHCTRL Structure
 * @brief Struct for GPIO_GROUP_INT0
 * @{
 */
-typedef struct {                                /*       LPC_GPIO_GROUP_INT0 Structure                                */
+typedef struct LPC_GPIO_GROUP_INT0_Type {
    __IO uint32_t  CTRL;                         /**< 0000: GPIO grouped interrupt control register                      */
         uint8_t   RESERVED_0[28];              
    __IO uint32_t  PORT_POL[2];                  /**< 0020: GPIO grouped interrupt port  polarity register               */
@@ -1566,7 +1566,7 @@ typedef struct {                                /*       LPC_GPIO_GROUP_INT0 Str
 * @brief Struct for GPIO_PIN_INT
 * @{
 */
-typedef struct {                                /*       LPC_GPIO_PIN_INT Structure                                   */
+typedef struct LPC_GPIO_PIN_INT_Type {
    __IO uint32_t  ISEL;                         /**< 0000: Pin Interrupt Mode register                                  */
    __IO uint32_t  IENR;                         /**< 0004: Pin Interrupt Enable (Rising) register                       */
    __O  uint32_t  SIENR;                        /**< 0008: Set Pin Interrupt Enable (Rising) register                   */
@@ -1871,7 +1871,7 @@ typedef struct {                                /*       LPC_GPIO_PIN_INT Struct
 * @brief Struct for GPIO_PORT
 * @{
 */
-typedef struct {                                /*       LPC_GPIO_PORT Structure                                      */
+typedef struct LPC_GPIO_PORT_Type {
    __IO uint8_t   B[32];                        /**< 0000: Byte pin registers port 0; pins PIO0_0 to PIO0_31            */
    __IO uint8_t   B132;                         /**< 0020: Byte pin registers port 1                                    */
    __IO uint8_t   B133;                         /**< 0021: Byte pin registers port 1                                    */
@@ -2686,7 +2686,7 @@ typedef struct {                                /*       LPC_GPIO_PORT Structure
 * @brief Struct for I2C
 * @{
 */
-typedef struct {                                /*       LPC_I2C Structure                                            */
+typedef struct LPC_I2C_Type {
    __IO uint32_t  CONSET;                       /**< 0000: I2C Control Set Register. When a one is written to a bit of this register, the corresponding bit in the I2C control register is set. Writing a zero has no effect on the corresponding bit in the I2C control register */
    __I  uint32_t  STAT;                         /**< 0004: I2C Status Register. During I2C operation, this register provides detailed status codes that allow software to determine the next action needed */
    __IO uint32_t  DAT;                          /**< 0008: I2C Data Register. During master or slave transmit mode, data to be transmitted is written to this register. During master or slave receive mode, data that has been received may be read from this register */
@@ -2850,7 +2850,7 @@ typedef struct {                                /*       LPC_I2C Structure      
 * @brief Struct for IOCON
 * @{
 */
-typedef struct {                                /*       LPC_IOCON Structure                                          */
+typedef struct LPC_IOCON_Type {
    __IO uint32_t  RESET_PIO0_0;                 /**< 0000: I/O configuration for pin RESET/PIO0_0                       */
    __IO uint32_t  PIO0_1;                       /**< 0004: I/O configuration for pin PIO0_1/CLKOUT/CT32B0_MAT2/USB_FTOGGLE */
    __IO uint32_t  PIO0_2;                       /**< 0008: I/O configuration for pin PIO0_2/SSEL0/CT16B0_CAP0           */
@@ -3765,7 +3765,7 @@ typedef struct {                                /*       LPC_IOCON Structure    
 * @brief Struct for PMU
 * @{
 */
-typedef struct {                                /*       LPC_PMU Structure                                            */
+typedef struct LPC_PMU_Type {
    __IO uint32_t  PCON;                         /**< 0000: Power control register                                       */
    __IO uint32_t  GPREG[4];                     /**< 0004: General purpose register                                     */
    __IO uint32_t  GPREG4;                       /**< 0014: General purpose register 4                                   */
@@ -3837,7 +3837,7 @@ typedef struct {                                /*       LPC_PMU Structure      
 * @brief Struct for SSP0
 * @{
 */
-typedef struct {                                /*       LPC_SSP0 Structure                                           */
+typedef struct LPC_SSP0_Type {
    __IO uint32_t  CR0;                          /**< 0000: Control Register 0. Selects the serial clock rate, bus type, and data size */
    __IO uint32_t  CR1;                          /**< 0004: Control Register 1. Selects master/slave and other modes     */
    __IO uint32_t  DR;                           /**< 0008: Data Register. Writes fill the transmit FIFO, and reads empty the receive FIFO */
@@ -4011,7 +4011,7 @@ typedef struct {                                /*       LPC_SSP0 Structure     
 * @brief Struct for SYSCON
 * @{
 */
-typedef struct {                                /*       LPC_SYSCON Structure                                         */
+typedef struct LPC_SYSCON_Type {
    __IO uint32_t  SYSMEMREMAP;                  /**< 0000: System memory remap                                          */
    __IO uint32_t  PRESETCTRL;                   /**< 0004: Peripheral reset control                                     */
    __IO uint32_t  SYSPLLCTRL;                   /**< 0008: System PLL control                                           */
@@ -4474,7 +4474,7 @@ typedef struct {                                /*       LPC_SYSCON Structure   
 * @brief Struct for USART
 * @{
 */
-typedef struct {                                /*       LPC_USART Structure                                          */
+typedef struct LPC_USART_Type {
    union {                                      /**< 0000: (size=0004)                                                  */
       __IO uint32_t  DLL;                       /**< 0000: Divisor Latch LSB. Least significant byte of the baud rate divisor value. The full divisor is used to generate a baud rate from the fractional rate divider. (DLAB=1) */
       __I  uint32_t  RBR;                       /**< 0000: Receiver Buffer Register. Contains the next received character to be read. (DLAB=0) */
@@ -4825,7 +4825,7 @@ typedef struct {                                /*       LPC_USART Structure    
 * @brief Struct for USB
 * @{
 */
-typedef struct {                                /*       LPC_USB Structure                                            */
+typedef struct LPC_USB_Type {
    __IO uint32_t  DEVCMDSTAT;                   /**< 0000: USB Device Command/Status register                           */
    __IO uint32_t  INFO;                         /**< 0004: USB Info register                                            */
    __IO uint32_t  EPLISTSTART;                  /**< 0008: USB EP Command/Status List start address                     */
@@ -5044,7 +5044,7 @@ typedef struct {                                /*       LPC_USB Structure      
 * @brief Struct for WWDT
 * @{
 */
-typedef struct {                                /*       LPC_WWDT Structure                                           */
+typedef struct LPC_WWDT_Type {
    __IO uint32_t  MOD;                          /**< 0000: Watchdog mode register. This register contains the basic mode and status of the Watchdog Timer */
    __IO uint32_t  TC;                           /**< 0004: Watchdog timer constant register. This 24-bit register determines the time-out value */
    __O  uint32_t  FEED;                         /**< 0008: Watchdog feed sequence register. Writing 0xAA followed by 0x55 to this register reloads the Watchdog timer with the value contained in WDTC */

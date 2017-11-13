@@ -257,7 +257,7 @@ extern void SSP1_IRQHandler(void);                   /**< SSP0/1                
 * @brief Struct for ADC
 * @{
 */
-typedef struct {                                /*       LPC_ADC Structure                                            */
+typedef struct LPC_ADC_Type {
    __IO uint32_t  CR;                           /**< 0000: A/D Control Register. The AD0CR register must be written to select the operating mode before A/D conversion can occur */
    __IO uint32_t  GDR;                          /**< 0004: A/D Global Data Register. Contains the result of the most recent A/D conversion */
         uint8_t   RESERVED_0[4];               
@@ -409,6 +409,8 @@ typedef struct {                                /*       LPC_ADC Structure      
 #define LPC_ADC_BasePtr                0x4001C000UL //!< Peripheral base address
 #define LPC_ADC                        ((LPC_ADC_Type *) LPC_ADC_BasePtr) //!< Freescale base pointer
 #define LPC_ADC_BASE_PTR               (LPC_ADC) //!< Freescale style base pointer
+#define LPC_ADC_IRQS { ADC_IRQn,  }
+
 /**
  * @} */ /* End group ADC_Peripheral_access_layer_GROUP 
  */
@@ -430,7 +432,7 @@ typedef struct {                                /*       LPC_ADC Structure      
 * @brief Struct for CT16B0
 * @{
 */
-typedef struct {                                /*       LPC_CT16B0 Structure                                         */
+typedef struct LPC_CT16B0_Type {
    __IO uint32_t  BIR;                          /**< 0000: Interrupt Register (IR). The IR can be written to clear interrupts. The IR can be read to identify which of five possible interrupt sources are pending */
    __IO uint32_t  BTCR;                         /**< 0004: Timer Control Register (TCR). The TCR is used to control the Timer Counter functions. The Timer Counter can be disabled or reset through the TCR */
    __IO uint32_t  BTC;                          /**< 0008: Timer Counter (TC). The 16-bit TC is incremented every PR+1 cycles of PCLK. The TC is controlled through the TCR */
@@ -610,6 +612,8 @@ typedef struct {                                /*       LPC_CT16B0 Structure   
 #define LPC_CT16B0_BasePtr             0x4000C000UL //!< Peripheral base address
 #define LPC_CT16B0                     ((LPC_CT16B0_Type *) LPC_CT16B0_BasePtr) //!< Freescale base pointer
 #define LPC_CT16B0_BASE_PTR            (LPC_CT16B0) //!< Freescale style base pointer
+#define LPC_CT16B0_IRQS { CT16B0_IRQn,  }
+
 /**
  * @} */ /* End group CT16B0_Peripheral_access_layer_GROUP 
  */
@@ -631,6 +635,8 @@ typedef struct {                                /*       LPC_CT16B0 Structure   
 #define LPC_CT16B1_BasePtr             0x40010000UL //!< Peripheral base address
 #define LPC_CT16B1                     ((LPC_CT16B0_Type *) LPC_CT16B1_BasePtr) //!< Freescale base pointer
 #define LPC_CT16B1_BASE_PTR            (LPC_CT16B1) //!< Freescale style base pointer
+#define LPC_CT16B1_IRQS { CT16B1_IRQn,  }
+
 /**
  * @} */ /* End group CT16B0_Peripheral_access_layer_GROUP 
  */
@@ -652,7 +658,7 @@ typedef struct {                                /*       LPC_CT16B0 Structure   
 * @brief Struct for CT32B0
 * @{
 */
-typedef struct {                                /*       LPC_CT32B0 Structure                                         */
+typedef struct LPC_CT32B0_Type {
    __IO uint32_t  BIR;                          /**< 0000: Interrupt Register (IR). The IR can be written to clear interrupts. The IR can be read to identify which of five possible interrupt sources are pending */
    __IO uint32_t  BTCR;                         /**< 0004: Timer Control Register (TCR). The TCR is used to control the Timer Counter functions. The Timer Counter can be disabled or reset through the TCR */
    __IO uint32_t  BTC;                          /**< 0008: Timer Counter (TC). The 32-bit TC is incremented every PR+1 cycles of PCLK. The TC is controlled through the TCR */
@@ -832,6 +838,8 @@ typedef struct {                                /*       LPC_CT32B0 Structure   
 #define LPC_CT32B0_BasePtr             0x40014000UL //!< Peripheral base address
 #define LPC_CT32B0                     ((LPC_CT32B0_Type *) LPC_CT32B0_BasePtr) //!< Freescale base pointer
 #define LPC_CT32B0_BASE_PTR            (LPC_CT32B0) //!< Freescale style base pointer
+#define LPC_CT32B0_IRQS { CT32B0_IRQn,  }
+
 /**
  * @} */ /* End group CT32B0_Peripheral_access_layer_GROUP 
  */
@@ -853,6 +861,8 @@ typedef struct {                                /*       LPC_CT32B0 Structure   
 #define LPC_CT32B1_BasePtr             0x40018000UL //!< Peripheral base address
 #define LPC_CT32B1                     ((LPC_CT32B0_Type *) LPC_CT32B1_BasePtr) //!< Freescale base pointer
 #define LPC_CT32B1_BASE_PTR            (LPC_CT32B1) //!< Freescale style base pointer
+#define LPC_CT32B1_IRQS { CT32B1_IRQn,  }
+
 /**
  * @} */ /* End group CT32B0_Peripheral_access_layer_GROUP 
  */
@@ -874,7 +884,7 @@ typedef struct {                                /*       LPC_CT32B0 Structure   
 * @brief Struct for FMC
 * @{
 */
-typedef struct {                                /*       LPC_FMC Structure                                            */
+typedef struct LPC_FMC_Type {
         uint8_t   RESERVED_0[16];              
    __IO uint32_t  FLASHCFG;                     /**< 0010: Flash configuration register                                 */
         uint8_t   RESERVED_1[12];              
@@ -972,7 +982,7 @@ typedef struct {                                /*       LPC_FMC Structure      
 * @brief Struct for GPIO
 * @{
 */
-typedef struct {                                /*       LPC_GPIO0 Structure                                          */
+typedef struct LPC_GPIO0_Type {
         uint8_t   RESERVED_0[16380];           
    __IO uint32_t  DATA;                         /**< 3FFC: Port n data register for pins PIOn_0 to PIOn_11              */
         uint8_t   RESERVED_1[16384];           
@@ -1340,6 +1350,8 @@ typedef struct {                                /*       LPC_GPIO0 Structure    
 #define LPC_GPIO0_BasePtr              0x50000000UL //!< Peripheral base address
 #define LPC_GPIO0                      ((LPC_GPIO0_Type *) LPC_GPIO0_BasePtr) //!< Freescale base pointer
 #define LPC_GPIO0_BASE_PTR             (LPC_GPIO0) //!< Freescale style base pointer
+#define LPC_GPIO0_IRQS { PIO_0_IRQn,  }
+
 /**
  * @} */ /* End group GPIO_Peripheral_access_layer_GROUP 
  */
@@ -1361,6 +1373,8 @@ typedef struct {                                /*       LPC_GPIO0 Structure    
 #define LPC_GPIO1_BasePtr              0x50010000UL //!< Peripheral base address
 #define LPC_GPIO1                      ((LPC_GPIO0_Type *) LPC_GPIO1_BasePtr) //!< Freescale base pointer
 #define LPC_GPIO1_BASE_PTR             (LPC_GPIO1) //!< Freescale style base pointer
+#define LPC_GPIO1_IRQS { PIO_1_IRQn,  }
+
 /**
  * @} */ /* End group GPIO_Peripheral_access_layer_GROUP 
  */
@@ -1382,6 +1396,8 @@ typedef struct {                                /*       LPC_GPIO0 Structure    
 #define LPC_GPIO2_BasePtr              0x50020000UL //!< Peripheral base address
 #define LPC_GPIO2                      ((LPC_GPIO0_Type *) LPC_GPIO2_BasePtr) //!< Freescale base pointer
 #define LPC_GPIO2_BASE_PTR             (LPC_GPIO2) //!< Freescale style base pointer
+#define LPC_GPIO2_IRQS { PIO_2_IRQn,  }
+
 /**
  * @} */ /* End group GPIO_Peripheral_access_layer_GROUP 
  */
@@ -1403,6 +1419,8 @@ typedef struct {                                /*       LPC_GPIO0 Structure    
 #define LPC_GPIO3_BasePtr              0x50030000UL //!< Peripheral base address
 #define LPC_GPIO3                      ((LPC_GPIO0_Type *) LPC_GPIO3_BasePtr) //!< Freescale base pointer
 #define LPC_GPIO3_BASE_PTR             (LPC_GPIO3) //!< Freescale style base pointer
+#define LPC_GPIO3_IRQS { PIO_3_IRQn,  }
+
 /**
  * @} */ /* End group GPIO_Peripheral_access_layer_GROUP 
  */
@@ -1424,7 +1442,7 @@ typedef struct {                                /*       LPC_GPIO0 Structure    
 * @brief Struct for I2C
 * @{
 */
-typedef struct {                                /*       LPC_I2C Structure                                            */
+typedef struct LPC_I2C_Type {
    __IO uint32_t  CONSET;                       /**< 0000: I2C Control Set Register. When a one is written to a bit of this register, the corresponding bit in the I2C control register is set. Writing a zero has no effect on the corresponding bit in the I2C control register */
    __I  uint32_t  STAT;                         /**< 0004: I2C Status Register. During I2C operation, this register provides detailed status codes that allow software to determine the next action needed */
    __IO uint32_t  DAT;                          /**< 0008: I2C Data Register. During master or slave transmit mode, data to be transmitted is written to this register. During master or slave receive mode, data that has been received may be read from this register */
@@ -1567,6 +1585,8 @@ typedef struct {                                /*       LPC_I2C Structure      
 #define LPC_I2C_BasePtr                0x40000000UL //!< Peripheral base address
 #define LPC_I2C                        ((LPC_I2C_Type *) LPC_I2C_BasePtr) //!< Freescale base pointer
 #define LPC_I2C_BASE_PTR               (LPC_I2C) //!< Freescale style base pointer
+#define LPC_I2C_IRQS { I2C0_IRQn,  }
+
 /**
  * @} */ /* End group I2C_Peripheral_access_layer_GROUP 
  */
@@ -1588,7 +1608,7 @@ typedef struct {                                /*       LPC_I2C Structure      
 * @brief Struct for IOCON
 * @{
 */
-typedef struct {                                /*       LPC_IOCON Structure                                          */
+typedef struct LPC_IOCON_Type {
    __IO uint32_t  PIO2_6;                       /**< 0000: I/O configuration for pin PIO2_6                             */
         uint8_t   RESERVED_0[4];               
    __IO uint32_t  PIO2_0;                       /**< 0008: I/O configuration for pin PIO2_0/DTR/SSEL1                   */
@@ -2255,7 +2275,7 @@ typedef struct {                                /*       LPC_IOCON Structure    
 * @brief Struct for PMU
 * @{
 */
-typedef struct {                                /*       LPC_PMU Structure                                            */
+typedef struct LPC_PMU_Type {
    __IO uint32_t  PCON;                         /**< 0000: Power control register                                       */
    __IO uint32_t  GPREG[4];                     /**< 0004: General purpose register                                     */
    __IO uint32_t  GPREG4;                       /**< 0014: General purpose register 4                                   */
@@ -2324,7 +2344,7 @@ typedef struct {                                /*       LPC_PMU Structure      
 * @brief Struct for SSP0
 * @{
 */
-typedef struct {                                /*       LPC_SSP0 Structure                                           */
+typedef struct LPC_SSP0_Type {
    __IO uint32_t  CR0;                          /**< 0000: Control Register 0. Selects the serial clock rate, bus type, and data size */
    __IO uint32_t  CR1;                          /**< 0004: Control Register 1. Selects master/slave and other modes     */
    __IO uint32_t  DR;                           /**< 0008: Data Register. Writes fill the transmit FIFO, and reads empty the receive FIFO */
@@ -2456,6 +2476,8 @@ typedef struct {                                /*       LPC_SSP0 Structure     
 #define LPC_SSP0_BasePtr               0x40040000UL //!< Peripheral base address
 #define LPC_SSP0                       ((LPC_SSP0_Type *) LPC_SSP0_BasePtr) //!< Freescale base pointer
 #define LPC_SSP0_BASE_PTR              (LPC_SSP0) //!< Freescale style base pointer
+#define LPC_SSP0_IRQS { SSP0_IRQn,  }
+
 /**
  * @} */ /* End group SSP0_Peripheral_access_layer_GROUP 
  */
@@ -2477,6 +2499,8 @@ typedef struct {                                /*       LPC_SSP0 Structure     
 #define LPC_SSP1_BasePtr               0x40058000UL //!< Peripheral base address
 #define LPC_SSP1                       ((LPC_SSP0_Type *) LPC_SSP1_BasePtr) //!< Freescale base pointer
 #define LPC_SSP1_BASE_PTR              (LPC_SSP1) //!< Freescale style base pointer
+#define LPC_SSP1_IRQS { SSP1_IRQn,  }
+
 /**
  * @} */ /* End group SSP0_Peripheral_access_layer_GROUP 
  */
@@ -2498,7 +2522,7 @@ typedef struct {                                /*       LPC_SSP0 Structure     
 * @brief Struct for SYSCON
 * @{
 */
-typedef struct {                                /*       LPC_SYSCON Structure                                         */
+typedef struct LPC_SYSCON_Type {
    __IO uint32_t  SYSMEMREMAP;                  /**< 0000: System memory remap                                          */
    __IO uint32_t  PRESETCTRL;                   /**< 0004: Peripheral reset control                                     */
    __IO uint32_t  SYSPLLCTRL;                   /**< 0008: System PLL control                                           */
@@ -3524,6 +3548,8 @@ typedef struct {                                /*       LPC_SYSCON Structure   
 #define LPC_SYSCON_BasePtr             0x40048000UL //!< Peripheral base address
 #define LPC_SYSCON                     ((LPC_SYSCON_Type *) LPC_SYSCON_BasePtr) //!< Freescale base pointer
 #define LPC_SYSCON_BASE_PTR            (LPC_SYSCON) //!< Freescale style base pointer
+#define LPC_SYSCON_IRQS { PIO0_0_IRQn, PIO0_1_IRQn, PIO0_2_IRQn, PIO0_3_IRQn, PIO0_4_IRQn, PIO0_5_IRQn, PIO0_6_IRQn, PIO0_7_IRQn, PIO0_8_IRQn, PIO0_9_IRQn, PIO0_10_IRQn, PIO0_11_IRQn, PIO1_0_IRQn, PIO1_1_IRQn, PIO1_2_IRQn, PIO1_3_IRQn, PIO1_4_IRQn, PIO1_5_IRQn, PIO1_6_IRQn, PIO1_7_IRQn, PIO1_8_IRQn, PIO1_9_IRQn, PIO1_10_IRQn, PIO1_11_IRQn, PIO2_0_IRQn, PIO2_1_IRQn, PIO2_2_IRQn, PIO2_3_IRQn, PIO2_4_IRQn, PIO2_5_IRQn, PIO2_6_IRQn, PIO2_7_IRQn, PIO2_8_IRQn, PIO2_9_IRQn, PIO2_10_IRQn, PIO2_11_IRQn, PIO3_0_IRQn, PIO3_1_IRQn, PIO3_2_IRQn, PIO3_3_IRQn, BOD_IRQn,  }
+
 /**
  * @} */ /* End group SYSCON_Peripheral_access_layer_GROUP 
  */
@@ -3545,7 +3571,7 @@ typedef struct {                                /*       LPC_SYSCON Structure   
 * @brief Struct for UART
 * @{
 */
-typedef struct {                                /*       LPC_UART Structure                                           */
+typedef struct LPC_UART_Type {
    union {                                      /**< 0000: (size=0004)                                                  */
       __IO uint32_t  DLL;                       /**< 0000: Divisor Latch LSB. Least significant byte of the baud rate divisor value. The full divisor is used to generate a baud rate from the fractional rate divider. When DLAB=1 */
       __I  uint32_t  RBR;                       /**< 0000: Receiver Buffer Register. Contains the next received character to be read. When DLAB=0 */
@@ -3800,6 +3826,8 @@ typedef struct {                                /*       LPC_UART Structure     
 #define LPC_UART_BasePtr               0x40008000UL //!< Peripheral base address
 #define LPC_UART                       ((LPC_UART_Type *) LPC_UART_BasePtr) //!< Freescale base pointer
 #define LPC_UART_BASE_PTR              (LPC_UART) //!< Freescale style base pointer
+#define LPC_UART_IRQS { UART_IRQn,  }
+
 /**
  * @} */ /* End group UART_Peripheral_access_layer_GROUP 
  */
@@ -3821,7 +3849,7 @@ typedef struct {                                /*       LPC_UART Structure     
 * @brief Struct for USB
 * @{
 */
-typedef struct {                                /*       LPC_USB Structure                                            */
+typedef struct LPC_USB_Type {
    __I  uint32_t  DEVINTST;                     /**< 0000: USB Device Interrupt Status                                  */
    __IO uint32_t  DEVINTEN;                     /**< 0004: USB Device Interrupt Enable                                  */
    __O  uint32_t  DEVINTCTRL;                   /**< 0008: USB Device Interrupt Clear                                   */
@@ -4079,6 +4107,8 @@ typedef struct {                                /*       LPC_USB Structure      
 #define LPC_USB_BasePtr                0x40020000UL //!< Peripheral base address
 #define LPC_USB                        ((LPC_USB_Type *) LPC_USB_BasePtr) //!< Freescale base pointer
 #define LPC_USB_BASE_PTR               (LPC_USB) //!< Freescale style base pointer
+#define LPC_USB_IRQS { USBIRQ_IRQn, USBFIQ_IRQn,  }
+
 /**
  * @} */ /* End group USB_Peripheral_access_layer_GROUP 
  */
@@ -4100,7 +4130,7 @@ typedef struct {                                /*       LPC_USB Structure      
 * @brief Struct for WWDT
 * @{
 */
-typedef struct {                                /*       LPC_WWDT Structure                                           */
+typedef struct LPC_WWDT_Type {
    __IO uint32_t  MOD;                          /**< 0000: Watchdog mode register. This register contains the basic mode and status of the Watchdog Timer */
    __IO uint32_t  TC;                           /**< 0004: Watchdog timer constant register. This register determines the time-out value */
    __O  uint32_t  FEED;                         /**< 0008: Watchdog feed sequence register. Writing 0xAA followed by 0x55 to this register reloads the Watchdog timer with the value contained in WDTC */
@@ -4167,6 +4197,8 @@ typedef struct {                                /*       LPC_WWDT Structure     
 #define LPC_WWDT_BasePtr               0x40004000UL //!< Peripheral base address
 #define LPC_WWDT                       ((LPC_WWDT_Type *) LPC_WWDT_BasePtr) //!< Freescale base pointer
 #define LPC_WWDT_BASE_PTR              (LPC_WWDT) //!< Freescale style base pointer
+#define LPC_WWDT_IRQS { WDT_IRQn,  }
+
 /**
  * @} */ /* End group WWDT_Peripheral_access_layer_GROUP 
  */

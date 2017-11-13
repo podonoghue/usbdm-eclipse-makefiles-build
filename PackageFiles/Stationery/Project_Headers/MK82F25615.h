@@ -289,7 +289,7 @@ extern void LTC0_IRQHandler(void);                   /**< LTC                   
 * @brief Struct for ADC
 * @{
 */
-typedef struct {                                /*       ADC0 Structure                                               */
+typedef struct ADC_Type {
    __IO uint32_t  SC1[2];                       /**< 0000: Status and Control Register 1                                */
    __IO uint32_t  CFG1;                         /**< 0008: Configuration Register 1                                     */
    __IO uint32_t  CFG2;                         /**< 000C: Configuration Register 2                                     */
@@ -495,6 +495,8 @@ typedef struct {                                /*       ADC0 Structure         
 #define ADC0_BasePtr                   0x4003B000UL //!< Peripheral base address
 #define ADC0                           ((ADC_Type *) ADC0_BasePtr) //!< Freescale base pointer
 #define ADC0_BASE_PTR                  (ADC0) //!< Freescale style base pointer
+#define ADC0_IRQS { ADC0_IRQn,  }
+
 /**
  * @} */ /* End group ADC_Peripheral_access_layer_GROUP 
  */
@@ -516,7 +518,7 @@ typedef struct {                                /*       ADC0 Structure         
 * @brief Struct for AXBS
 * @{
 */
-typedef struct {                                /*       AXBS Structure                                               */
+typedef struct AXBS_Type {
    struct {
       __IO uint32_t  PRS;                       /**< 0000: Priority Registers Slave                                     */
            uint8_t   RESERVED_0[12];           
@@ -613,7 +615,7 @@ typedef struct {                                /*       AXBS Structure         
 * @brief Struct for CAU
 * @{
 */
-typedef struct {                                /*       CAU Structure                                                */
+typedef struct CAU_Type {
    __O  uint32_t  DIRECT[16];                   /**< 0000: Direct access register                                       */
         uint8_t   RESERVED_0[2048];            
    __O  uint32_t  LDR_CASR;                     /**< 0840: Status register - Load Register command                      */
@@ -788,7 +790,7 @@ typedef struct {                                /*       CAU Structure          
 * @brief Struct for CMP
 * @{
 */
-typedef struct {                                /*       CMP0 Structure                                               */
+typedef struct CMP_Type {
    __IO uint8_t   CR0;                          /**< 0000: CMP Control Register 0                                       */
    __IO uint8_t   CR1;                          /**< 0001: CMP Control Register 1                                       */
    __IO uint8_t   FPR;                          /**< 0002: CMP Filter Period Register                                   */
@@ -890,6 +892,8 @@ typedef struct {                                /*       CMP0 Structure         
 #define CMP0_BasePtr                   0x40073000UL //!< Peripheral base address
 #define CMP0                           ((CMP_Type *) CMP0_BasePtr) //!< Freescale base pointer
 #define CMP0_BASE_PTR                  (CMP0) //!< Freescale style base pointer
+#define CMP0_IRQS { CMP0_IRQn,  }
+
 /**
  * @} */ /* End group CMP_Peripheral_access_layer_GROUP 
  */
@@ -911,6 +915,8 @@ typedef struct {                                /*       CMP0 Structure         
 #define CMP1_BasePtr                   0x40073008UL //!< Peripheral base address
 #define CMP1                           ((CMP_Type *) CMP1_BasePtr) //!< Freescale base pointer
 #define CMP1_BASE_PTR                  (CMP1) //!< Freescale style base pointer
+#define CMP1_IRQS { CMP1_IRQn,  }
+
 /**
  * @} */ /* End group CMP_Peripheral_access_layer_GROUP 
  */
@@ -932,7 +938,7 @@ typedef struct {                                /*       CMP0 Structure         
 * @brief Struct for CMT
 * @{
 */
-typedef struct {                                /*       CMT Structure                                                */
+typedef struct CMT_Type {
    __IO uint8_t   CGH1;                         /**< 0000: Carrier Generator High Data Register 1                       */
    __IO uint8_t   CGL1;                         /**< 0001: Carrier Generator Low Data Register 1                        */
    __IO uint8_t   CGH2;                         /**< 0002: Carrier Generator High Data Register 2                       */
@@ -1040,6 +1046,8 @@ typedef struct {                                /*       CMT Structure          
 #define CMT_BasePtr                    0x40062000UL //!< Peripheral base address
 #define CMT                            ((CMT_Type *) CMT_BasePtr) //!< Freescale base pointer
 #define CMT_BASE_PTR                   (CMT) //!< Freescale style base pointer
+#define CMT_IRQS { CMT_IRQn,  }
+
 /**
  * @} */ /* End group CMT_Peripheral_access_layer_GROUP 
  */
@@ -1061,7 +1069,7 @@ typedef struct {                                /*       CMT Structure          
 * @brief Struct for CRC
 * @{
 */
-typedef struct {                                /*       CRC0 Structure                                               */
+typedef struct CRC_Type {
    union {                                      /**< 0000: (size=0004)                                                  */
       __IO uint32_t  DATA;                      /**< 0000: Data register                                                */
       struct {                                  /**< 0000: (size=0004)                                                  */
@@ -1251,7 +1259,7 @@ typedef struct {                                /*       CRC0 Structure         
 * @brief Struct for DAC
 * @{
 */
-typedef struct {                                /*       DAC0 Structure                                               */
+typedef struct DAC_Type {
    union {                                      /**< 0000: (size=0020)                                                  */
       struct {
          __IO uint8_t   DATL;                   /**< 0000: Data Low Register                                            */
@@ -1353,6 +1361,8 @@ typedef struct {                                /*       DAC0 Structure         
 #define DAC0_BasePtr                   0x400CC000UL //!< Peripheral base address
 #define DAC0                           ((DAC_Type *) DAC0_BasePtr) //!< Freescale base pointer
 #define DAC0_BASE_PTR                  (DAC0) //!< Freescale style base pointer
+#define DAC0_IRQS { DAC0_IRQn,  }
+
 /**
  * @} */ /* End group DAC_Peripheral_access_layer_GROUP 
  */
@@ -1374,7 +1384,7 @@ typedef struct {                                /*       DAC0 Structure         
 * @brief Struct for DMA0
 * @{
 */
-typedef struct {                                /*       DMA0 Structure                                               */
+typedef struct DMA_Type {
    __IO uint32_t  CR;                           /**< 0000: Control Register                                             */
    __I  uint32_t  ES;                           /**< 0004: Error Status Register                                        */
         uint8_t   RESERVED_0[4];               
@@ -2355,6 +2365,8 @@ typedef struct {                                /*       DMA0 Structure         
 #define DMA0_BasePtr                   0x40008000UL //!< Peripheral base address
 #define DMA0                           ((DMA_Type *) DMA0_BasePtr) //!< Freescale base pointer
 #define DMA0_BASE_PTR                  (DMA0) //!< Freescale style base pointer
+#define DMA0_IRQS { DMA0_DMA16_IRQn, DMA1_DMA17_IRQn, DMA2_DMA18_IRQn, DMA3_DMA19_IRQn, DMA4_DMA20_IRQn, DMA5_DMA21_IRQn, DMA6_DMA22_IRQn, DMA7_DMA23_IRQn, DMA8_DMA24_IRQn, DMA9_DMA25_IRQn, DMA10_DMA26_IRQn, DMA11_DMA27_IRQn, DMA12_DMA28_IRQn, DMA13_DMA29_IRQn, DMA14_DMA30_IRQn, DMA15_DMA31_IRQn, DMA_Error_IRQn,  }
+
 /**
  * @} */ /* End group DMA0_Peripheral_access_layer_GROUP 
  */
@@ -2376,12 +2388,12 @@ typedef struct {                                /*       DMA0 Structure         
 * @brief Struct for DMAMUX
 * @{
 */
-typedef struct {                                /*       DMAMUX0 Structure                                            */
+typedef struct DMAMUX_Type {
    union {                                      /**< 0000: (size=0020)                                                  */
       __IO uint8_t   CHCFG[32];                 /**< 0000: Channel Configuration Register                               */
       struct {                                  /**< 0000: (size=0020)                                                  */
-         __IO uint8_t   CHCFG_0_15[16];         /**< 0000: Channel Configuration Register                               */
-         __IO uint8_t   CHCFG_16_32[16];        /**< 0010: Channel Configuration Register                               */
+         __IO uint8_t   CHCFG_LOW[16];          /**< 0000: Channel Configuration Register (low)                         */
+         __IO uint8_t   CHCFG_HIGH[16];         /**< 0010: Channel Configuration Register (High)                        */
       };
    };
 } DMAMUX_Type;
@@ -2409,26 +2421,26 @@ typedef struct {                                /*       DMAMUX0 Structure      
 #define DMAMUX_CHCFG_ENBL_MASK                   (0x80U)                                             /*!< DMAMUX0_CHCFG.ENBL Mask                 */
 #define DMAMUX_CHCFG_ENBL_SHIFT                  (7U)                                                /*!< DMAMUX0_CHCFG.ENBL Position             */
 #define DMAMUX_CHCFG_ENBL(x)                     (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMAMUX0_CHCFG.ENBL Field                */
-/* ------- CHCFG_0_15 Bit Fields                    ------ */
-#define DMAMUX_CHCFG_0_15_SOURCE_MASK            (0x3FU)                                             /*!< DMAMUX0_CHCFG_0_15.SOURCE Mask          */
-#define DMAMUX_CHCFG_0_15_SOURCE_SHIFT           (0U)                                                /*!< DMAMUX0_CHCFG_0_15.SOURCE Position      */
-#define DMAMUX_CHCFG_0_15_SOURCE(x)              (((uint8_t)(((uint8_t)(x))<<0U))&0x3FUL)            /*!< DMAMUX0_CHCFG_0_15.SOURCE Field         */
-#define DMAMUX_CHCFG_0_15_TRIG_MASK              (0x40U)                                             /*!< DMAMUX0_CHCFG_0_15.TRIG Mask            */
-#define DMAMUX_CHCFG_0_15_TRIG_SHIFT             (6U)                                                /*!< DMAMUX0_CHCFG_0_15.TRIG Position        */
-#define DMAMUX_CHCFG_0_15_TRIG(x)                (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMAMUX0_CHCFG_0_15.TRIG Field           */
-#define DMAMUX_CHCFG_0_15_ENBL_MASK              (0x80U)                                             /*!< DMAMUX0_CHCFG_0_15.ENBL Mask            */
-#define DMAMUX_CHCFG_0_15_ENBL_SHIFT             (7U)                                                /*!< DMAMUX0_CHCFG_0_15.ENBL Position        */
-#define DMAMUX_CHCFG_0_15_ENBL(x)                (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMAMUX0_CHCFG_0_15.ENBL Field           */
-/* ------- CHCFG_16_32 Bit Fields                   ------ */
-#define DMAMUX_CHCFG_16_32_SOURCE_MASK           (0x3FU)                                             /*!< DMAMUX0_CHCFG_16_32.SOURCE Mask         */
-#define DMAMUX_CHCFG_16_32_SOURCE_SHIFT          (0U)                                                /*!< DMAMUX0_CHCFG_16_32.SOURCE Position     */
-#define DMAMUX_CHCFG_16_32_SOURCE(x)             (((uint8_t)(((uint8_t)(x))<<0U))&0x3FUL)            /*!< DMAMUX0_CHCFG_16_32.SOURCE Field        */
-#define DMAMUX_CHCFG_16_32_TRIG_MASK             (0x40U)                                             /*!< DMAMUX0_CHCFG_16_32.TRIG Mask           */
-#define DMAMUX_CHCFG_16_32_TRIG_SHIFT            (6U)                                                /*!< DMAMUX0_CHCFG_16_32.TRIG Position       */
-#define DMAMUX_CHCFG_16_32_TRIG(x)               (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMAMUX0_CHCFG_16_32.TRIG Field          */
-#define DMAMUX_CHCFG_16_32_ENBL_MASK             (0x80U)                                             /*!< DMAMUX0_CHCFG_16_32.ENBL Mask           */
-#define DMAMUX_CHCFG_16_32_ENBL_SHIFT            (7U)                                                /*!< DMAMUX0_CHCFG_16_32.ENBL Position       */
-#define DMAMUX_CHCFG_16_32_ENBL(x)               (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMAMUX0_CHCFG_16_32.ENBL Field          */
+/* ------- CHCFG_LOW Bit Fields                     ------ */
+#define DMAMUX_CHCFG_LOW_SOURCE_MASK             (0x3FU)                                             /*!< DMAMUX0_CHCFG_LOW.SOURCE Mask           */
+#define DMAMUX_CHCFG_LOW_SOURCE_SHIFT            (0U)                                                /*!< DMAMUX0_CHCFG_LOW.SOURCE Position       */
+#define DMAMUX_CHCFG_LOW_SOURCE(x)               (((uint8_t)(((uint8_t)(x))<<0U))&0x3FUL)            /*!< DMAMUX0_CHCFG_LOW.SOURCE Field          */
+#define DMAMUX_CHCFG_LOW_TRIG_MASK               (0x40U)                                             /*!< DMAMUX0_CHCFG_LOW.TRIG Mask             */
+#define DMAMUX_CHCFG_LOW_TRIG_SHIFT              (6U)                                                /*!< DMAMUX0_CHCFG_LOW.TRIG Position         */
+#define DMAMUX_CHCFG_LOW_TRIG(x)                 (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMAMUX0_CHCFG_LOW.TRIG Field            */
+#define DMAMUX_CHCFG_LOW_ENBL_MASK               (0x80U)                                             /*!< DMAMUX0_CHCFG_LOW.ENBL Mask             */
+#define DMAMUX_CHCFG_LOW_ENBL_SHIFT              (7U)                                                /*!< DMAMUX0_CHCFG_LOW.ENBL Position         */
+#define DMAMUX_CHCFG_LOW_ENBL(x)                 (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMAMUX0_CHCFG_LOW.ENBL Field            */
+/* ------- CHCFG_HIGH Bit Fields                    ------ */
+#define DMAMUX_CHCFG_HIGH_SOURCE_MASK            (0x3FU)                                             /*!< DMAMUX0_CHCFG_HIGH.SOURCE Mask          */
+#define DMAMUX_CHCFG_HIGH_SOURCE_SHIFT           (0U)                                                /*!< DMAMUX0_CHCFG_HIGH.SOURCE Position      */
+#define DMAMUX_CHCFG_HIGH_SOURCE(x)              (((uint8_t)(((uint8_t)(x))<<0U))&0x3FUL)            /*!< DMAMUX0_CHCFG_HIGH.SOURCE Field         */
+#define DMAMUX_CHCFG_HIGH_TRIG_MASK              (0x40U)                                             /*!< DMAMUX0_CHCFG_HIGH.TRIG Mask            */
+#define DMAMUX_CHCFG_HIGH_TRIG_SHIFT             (6U)                                                /*!< DMAMUX0_CHCFG_HIGH.TRIG Position        */
+#define DMAMUX_CHCFG_HIGH_TRIG(x)                (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMAMUX0_CHCFG_HIGH.TRIG Field           */
+#define DMAMUX_CHCFG_HIGH_ENBL_MASK              (0x80U)                                             /*!< DMAMUX0_CHCFG_HIGH.ENBL Mask            */
+#define DMAMUX_CHCFG_HIGH_ENBL_SHIFT             (7U)                                                /*!< DMAMUX0_CHCFG_HIGH.ENBL Position        */
+#define DMAMUX_CHCFG_HIGH_ENBL(x)                (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMAMUX0_CHCFG_HIGH.ENBL Field           */
 /**
  * @} */ /* End group DMAMUX_Register_Masks_GROUP 
  */
@@ -2437,6 +2449,104 @@ typedef struct {                                /*       DMAMUX0 Structure      
 #define DMAMUX0_BasePtr                0x40021000UL //!< Peripheral base address
 #define DMAMUX0                        ((DMAMUX_Type *) DMAMUX0_BasePtr) //!< Freescale base pointer
 #define DMAMUX0_BASE_PTR               (DMAMUX0) //!< Freescale style base pointer
+
+/**
+ * DMA multiplexor slot (source) numbers
+ */
+typedef enum DmaSlot {
+   Dma0SlotLow_Disabled                =        0, //!<  Disabled - low channels 0-15
+   Dma0SlotLow_TSI0                    =        1, //!<  TSI0 - low channels 0-15
+   Dma0SlotLow_LPUART0_Rx              =        2, //!<  LPUART0 Receive - low channels 0-15
+   Dma0SlotLow_LPUART0_Tx              =        3, //!<  LPUART0 Transmit - low channels 0-15
+   Dma0SlotLow_LPUART1_Rx              =        4, //!<  LPUART1 Receive - low channels 0-15
+   Dma0SlotLow_LPUART1_Tx              =        5, //!<  LPUART1 Transmit - low channels 0-15
+   Dma0SlotLow_LPUART2_Rx              =        6, //!<  LPUART2 Receive - low channels 0-15
+   Dma0SlotLow_LPUART2_Tx              =        7, //!<  LPUART2 Transmit - low channels 0-15
+   Dma0SlotLow_LPUART3_Rx              =        8, //!<  LPUART3 Receive - low channels 0-15
+   Dma0SlotLow_LPUART3_Tx              =        9, //!<  LPUART3 Transmit - low channels 0-15
+   Dma0SlotLow_LPUART4_Rx              =       10, //!<  LPUART4 Receive - low channels 0-15
+   Dma0SlotLow_LPUART4_Tx              =       11, //!<  LPUART4 Transmit - low channels 0-15
+   Dma0SlotLow_I2S0_Rx                 =       12, //!<  I2S0 Receive - low channels 0-15
+   Dma0SlotLow_I2S0_Tx                 =       13, //!<  I2S0 Transmit - low channels 0-15
+   Dma0SlotLow_SPI0_Rx                 =       14, //!<  SPI0 Receive - low channels 0-15
+   Dma0SlotLow_SPI0_Tx                 =       15, //!<  SPI0 Transmit - low channels 0-15
+   Dma0SlotLow_SPI1_Rx                 =       16, //!<  SPI1 Receive - low channels 0-15
+   Dma0SlotLow_SPI1_Tx                 =       17, //!<  SPI1 Transmit - low channels 0-15
+   Dma0SlotLow_I2C0_I2C3               =       18, //!<  I2C0_I2C3 Receive/Transmit - low channels 0-15
+   Dma0SlotLow_I2C1_I2C2               =       19, //!<  I2C1_I2C2 Receive/Transmit - low channels 0-15
+   Dma0SlotLow_FTM0_Ch0                =       20, //!<  FTM0 Channel 0 - low channels 0-15
+   Dma0SlotLow_FTM0_Ch1                =       21, //!<  FTM0 Channel 1 - low channels 0-15
+   Dma0SlotLow_FTM0_Ch2                =       22, //!<  FTM0 Channel 2 - low channels 0-15
+   Dma0SlotLow_FTM0_Ch3                =       23, //!<  FTM0 Channel 3 - low channels 0-15
+   Dma0SlotLow_FTM0_Ch4                =       24, //!<  FTM0 Channel 4 - low channels 0-15
+   Dma0SlotLow_FTM0_Ch5                =       25, //!<  FTM0 Channel 5 - low channels 0-15
+   Dma0SlotLow_FTM0_Ch6                =       26, //!<  FTM0 Channel 6 - low channels 0-15
+   Dma0SlotLow_FTM0_Ch7                =       27, //!<  FTM0 Channel 7 - low channels 0-15
+   Dma0SlotLow_FTM1_Ch0                =       28, //!<  FTM1 Channel 0 - low channels 0-15
+   Dma0SlotLow_FTM1_Ch1                =       29, //!<  FTM1 Channel 1 - low channels 0-15
+   Dma0SlotLow_FTM2_Ch0                =       30, //!<  FTM2 Channel 0 - low channels 0-15
+   Dma0SlotLow_FTM2_Ch1                =       31, //!<  FTM2 Channel 1 - low channels 0-15
+   Dma0SlotLow_FTM3_Ch0                =       32, //!<  FTM3 Channel 0 - low channels 0-15
+   Dma0SlotLow_FTM3_Ch1                =       33, //!<  FTM3 Channel 1 - low channels 0-15
+   Dma0SlotLow_FTM3_Ch2                =       34, //!<  FTM3 Channel 2 - low channels 0-15
+   Dma0SlotLow_FTM3_Ch3                =       35, //!<  FTM3 Channel 3 - low channels 0-15
+   Dma0SlotLow_FTM3_Ch4                =       36, //!<  FTM3 Channel 4 - low channels 0-15
+   Dma0SlotLow_FTM3_Ch5                =       37, //!<  FTM3 Channel 5 - low channels 0-15
+   Dma0SlotLow_FTM3_Ch6                =       38, //!<  FTM3 Channel 6 - low channels 0-15
+   Dma0SlotLow_FTM3_Ch7                =       39, //!<  FTM3 Channel 7 - low channels 0-15
+   Dma0SlotLow_ADC0                    =       40, //!<  ADC0 - low channels 0-15
+   Dma0SlotLow_CMP0                    =       42, //!<  CMP0 - low channels 0-15
+   Dma0SlotLow_CMP1                    =       43, //!<  CMP1 - low channels 0-15
+   Dma0SlotLow_DAC0                    =       45, //!<  DAC0 - low channels 0-15
+   Dma0SlotLow_CMT                     =       47, //!<  CMT - low channels 0-15
+   Dma0SlotLow_PDB                     =       48, //!<  PDB - low channels 0-15
+   Dma0SlotLow_PortA                   =       49, //!<  Port A - low channels 0-15
+   Dma0SlotLow_PortB                   =       50, //!<  Port B - low channels 0-15
+   Dma0SlotLow_PortC                   =       51, //!<  Port C - low channels 0-15
+   Dma0SlotLow_PortD                   =       52, //!<  Port D - low channels 0-15
+   Dma0SlotLow_PortE                   =       53, //!<  Port E - low channels 0-15
+   Dma0SlotLow_SPI2_Rx                 =       58, //!<  SPI2 Receive - low channels 0-15
+   Dma0SlotLow_SPI2_Tx                 =       59, //!<  SPI2 Transmit - low channels 0-15
+   Dma0SlotLow_AlwaysEnabled60         =       60, //!<  AlwaysEnabled60 - low channels 0-15
+   Dma0SlotLow_AlwaysEnabled61         =       61, //!<  AlwaysEnabled61 - low channels 0-15
+   Dma0SlotLow_AlwaysEnabled62         =       62, //!<  AlwaysEnabled62 - low channels 0-15
+   Dma0SlotLow_AlwaysEnabled63         =       63, //!<  AlwaysEnabled63 - low channels 0-15
+   Dma0SlotHigh_Disabled               =  0x800|0, //!<  Disabled - high channels 16-31
+   Dma0SlotHigh_FlexIO_Shifter0        =  0x800|1, //!<  FlexIO Shifter 0 - high channels 16-31
+   Dma0SlotHigh_FlexIO_Shifter1        =  0x800|2, //!<  FlexIO Shifter 1 - high channels 16-31
+   Dma0SlotHigh_FlexIO_Shifter2        =  0x800|3, //!<  FlexIO Shifter 2 - high channels 16-31
+   Dma0SlotHigh_FlexIO_Shifter3        =  0x800|4, //!<  FlexIO Shifter 3 - high channels 16-31
+   Dma0SlotHigh_FlexIO_Shifter4        =  0x800|5, //!<  FlexIO Shifter 4 - high channels 16-31
+   Dma0SlotHigh_FlexIO_Shifter5        =  0x800|6, //!<  FlexIO Shifter 5 - high channels 16-31
+   Dma0SlotHigh_FlexIO_Shifter6        =  0x800|7, //!<  FlexIO Shifter 6 - high channels 16-31
+   Dma0SlotHigh_FlexIO_Shifter7        =  0x800|8, //!<  FlexIO Shifter 7 - high channels 16-31
+   Dma0SlotHigh_LTC0_InFIFO            = 0x800|17, //!<  LTC0 InFIFO - high channels 16-31
+   Dma0SlotHigh_LTC0_OutFIFO           = 0x800|18, //!<  LTC0 OutFIFO - high channels 16-31
+   Dma0SlotHigh_LTC0_PKHA_RAM_Read     = 0x800|19, //!<  LTC0 PKHA RAM Read - high channels 16-31
+   Dma0SlotHigh_EMVSIM0_Rx             = 0x800|20, //!<  EMVSIM0 Receive - high channels 16-31
+   Dma0SlotHigh_EMVSIM0_Tx             = 0x800|21, //!<  EMVSIM0 Transmit - high channels 16-31
+   Dma0SlotHigh_EMVSIM1_Rx             = 0x800|22, //!<  EMVSIM1 Receive - high channels 16-31
+   Dma0SlotHigh_EMVSIM1_Tx             = 0x800|23, //!<  EMVSIM1 Transmit - high channels 16-31
+   Dma0SlotHigh_QSPI0_Rx               = 0x800|24, //!<  QSPI0 Receive - high channels 16-31
+   Dma0SlotHigh_QSPI0_Tx               = 0x800|25, //!<  QSPI0 Transmit - high channels 16-31
+   Dma0SlotHigh_SPI0_Rx                = 0x800|28, //!<  SPI0 Receive - high channels 16-31
+   Dma0SlotHigh_SPI0_Tx                = 0x800|29, //!<  SPI0 Transmit - high channels 16-31
+   Dma0SlotHigh_SPI1_Rx                = 0x800|30, //!<  SPI1 Receive - high channels 16-31
+   Dma0SlotHigh_SPI1_Tx                = 0x800|31, //!<  SPI1 Transmit - high channels 16-31
+   Dma0SlotHigh_TPM1_Ch0               = 0x800|42, //!<  TPM1 Channel 0 - high channels 16-31
+   Dma0SlotHigh_TPM1_Ch1               = 0x800|43, //!<  TPM1 Channel 1 - high channels 16-31
+   Dma0SlotHigh_TPM2_Ch0               = 0x800|44, //!<  TPM2 Channel 0 - high channels 16-31
+   Dma0SlotHigh_TPM2_Ch1               = 0x800|45, //!<  TPM2 Channel 1 - high channels 16-31
+   Dma0SlotHigh_TPM1_Overflow          = 0x800|55, //!<  TPM1 Overflow - high channels 16-31
+   Dma0SlotHigh_TPM2_Overflow          = 0x800|56, //!<  TPM2 Overflow - high channels 16-31
+   Dma0SlotHigh_SPI3_Rx                = 0x800|58, //!<  SPI3 Receive - high channels 16-31
+   Dma0SlotHigh_SPI3_Tx                = 0x800|59, //!<  SPI3 Transmit - high channels 16-31
+   Dma0SlotHigh_AlwaysEnabled60        = 0x800|60, //!<  AlwaysEnabled60 - high channels 16-31
+   Dma0SlotHigh_AlwaysEnabled61        = 0x800|61, //!<  AlwaysEnabled61 - high channels 16-31
+   Dma0SlotHigh_AlwaysEnabled62        = 0x800|62, //!<  AlwaysEnabled62 - high channels 16-31
+   Dma0SlotHigh_AlwaysEnabled63        = 0x800|63, //!<  AlwaysEnabled63 - high channels 16-31
+} DmaSlot;
+
 /**
  * @} */ /* End group DMAMUX_Peripheral_access_layer_GROUP 
  */
@@ -2451,14 +2561,14 @@ typedef struct {                                /*       DMAMUX0 Structure      
 /* ================================================================================ */
 
 /**
- * @brief EMVSIM
+ * @brief Euro/Mastercard/Visa/SIM Serial Interface Module
  */
 /**
 * @addtogroup EMVSIM_structs_GROUP EMVSIM struct
 * @brief Struct for EMVSIM
 * @{
 */
-typedef struct {                                /*       EMVSIM0 Structure                                            */
+typedef struct EMVSIM_Type {
    __I  uint32_t  VER_ID;                       /**< 0000: Version ID Register                                          */
    __I  uint32_t  PARAM;                        /**< 0004: Parameter Register                                           */
    __IO uint32_t  CLKCFG;                       /**< 0008: Clock Configuration Register                                 */
@@ -2688,9 +2798,9 @@ typedef struct {                                /*       EMVSIM0 Structure      
 #define EMVSIM_RX_STATUS_RX_WPTR_MASK            (0xF0000U)                                          /*!< EMVSIM0_RX_STATUS.RX_WPTR Mask          */
 #define EMVSIM_RX_STATUS_RX_WPTR_SHIFT           (16U)                                               /*!< EMVSIM0_RX_STATUS.RX_WPTR Position      */
 #define EMVSIM_RX_STATUS_RX_WPTR(x)              (((uint32_t)(((uint32_t)(x))<<16U))&0xF0000UL)      /*!< EMVSIM0_RX_STATUS.RX_WPTR Field         */
-#define EMVSIM_RX_STATUS_RX_CNT_MASK             (0x1F000000U)                                       /*!< EMVSIM0_RX_STATUS.RX_CNT Mask           */
+#define EMVSIM_RX_STATUS_RX_CNT_MASK             (0xFF000000U)                                       /*!< EMVSIM0_RX_STATUS.RX_CNT Mask           */
 #define EMVSIM_RX_STATUS_RX_CNT_SHIFT            (24U)                                               /*!< EMVSIM0_RX_STATUS.RX_CNT Position       */
-#define EMVSIM_RX_STATUS_RX_CNT(x)               (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< EMVSIM0_RX_STATUS.RX_CNT Field          */
+#define EMVSIM_RX_STATUS_RX_CNT(x)               (((uint32_t)(((uint32_t)(x))<<24U))&0xFF000000UL)   /*!< EMVSIM0_RX_STATUS.RX_CNT Field          */
 /* ------- TX_STATUS Bit Fields                     ------ */
 #define EMVSIM_TX_STATUS_TNTE_MASK               (0x1U)                                              /*!< EMVSIM0_TX_STATUS.TNTE Mask             */
 #define EMVSIM_TX_STATUS_TNTE_SHIFT              (0U)                                                /*!< EMVSIM0_TX_STATUS.TNTE Position         */
@@ -2719,9 +2829,9 @@ typedef struct {                                /*       EMVSIM0 Structure      
 #define EMVSIM_TX_STATUS_TX_RPTR_MASK            (0xF0000U)                                          /*!< EMVSIM0_TX_STATUS.TX_RPTR Mask          */
 #define EMVSIM_TX_STATUS_TX_RPTR_SHIFT           (16U)                                               /*!< EMVSIM0_TX_STATUS.TX_RPTR Position      */
 #define EMVSIM_TX_STATUS_TX_RPTR(x)              (((uint32_t)(((uint32_t)(x))<<16U))&0xF0000UL)      /*!< EMVSIM0_TX_STATUS.TX_RPTR Field         */
-#define EMVSIM_TX_STATUS_TX_CNT_MASK             (0x1F000000U)                                       /*!< EMVSIM0_TX_STATUS.TX_CNT Mask           */
+#define EMVSIM_TX_STATUS_TX_CNT_MASK             (0xFF000000U)                                       /*!< EMVSIM0_TX_STATUS.TX_CNT Mask           */
 #define EMVSIM_TX_STATUS_TX_CNT_SHIFT            (24U)                                               /*!< EMVSIM0_TX_STATUS.TX_CNT Position       */
-#define EMVSIM_TX_STATUS_TX_CNT(x)               (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< EMVSIM0_TX_STATUS.TX_CNT Field          */
+#define EMVSIM_TX_STATUS_TX_CNT(x)               (((uint32_t)(((uint32_t)(x))<<24U))&0xFF000000UL)   /*!< EMVSIM0_TX_STATUS.TX_CNT Field          */
 /* ------- PCSR Bit Fields                          ------ */
 #define EMVSIM_PCSR_SAPD_MASK                    (0x1U)                                              /*!< EMVSIM0_PCSR.SAPD Mask                  */
 #define EMVSIM_PCSR_SAPD_SHIFT                   (0U)                                                /*!< EMVSIM0_PCSR.SAPD Position              */
@@ -2810,7 +2920,7 @@ typedef struct {                                /*       EMVSIM0 Structure      
 /* ================================================================================ */
 
 /**
- * @brief EMVSIM
+ * @brief Euro/Mastercard/Visa/SIM Serial Interface Module
  */
 
 /* EMVSIM1 - Peripheral instance base addresses */
@@ -2838,7 +2948,7 @@ typedef struct {                                /*       EMVSIM0 Structure      
 * @brief Struct for EWM
 * @{
 */
-typedef struct {                                /*       EWM Structure                                                */
+typedef struct EWM_Type {
    __IO uint8_t   CTRL;                         /**< 0000: Control Register                                             */
    __O  uint8_t   SERV;                         /**< 0001: Service Register                                             */
    __IO uint8_t   CMPL;                         /**< 0002: Compare Low Register                                         */
@@ -2901,6 +3011,8 @@ typedef struct {                                /*       EWM Structure          
 #define EWM_BasePtr                    0x40061000UL //!< Peripheral base address
 #define EWM                            ((EWM_Type *) EWM_BasePtr) //!< Freescale base pointer
 #define EWM_BASE_PTR                   (EWM) //!< Freescale style base pointer
+#define EWM_IRQS { WDOG_IRQn,  }
+
 /**
  * @} */ /* End group EWM_Peripheral_access_layer_GROUP 
  */
@@ -2922,7 +3034,7 @@ typedef struct {                                /*       EWM Structure          
 * @brief Struct for FB
 * @{
 */
-typedef struct {                                /*       FB Structure                                                 */
+typedef struct FB_Type {
    struct {
       __IO uint32_t  CSAR;                      /**< 0000: Chip Select Address Register                                 */
       __IO uint32_t  CSMR;                      /**< 0004: Chip Select Mask Register                                    */
@@ -3044,7 +3156,7 @@ typedef struct {                                /*       FB Structure           
 * @brief Struct for FLEXIO
 * @{
 */
-typedef struct {                                /*       FLEXIO Structure                                             */
+typedef struct FLEXIO_Type {
    __I  uint32_t  VERID;                        /**< 0000: Version ID Register                                          */
    __I  uint32_t  PARAM;                        /**< 0004: Parameter Register                                           */
    __IO uint32_t  CTRL;                         /**< 0008: FlexIO Control Register                                      */
@@ -3290,6 +3402,8 @@ typedef struct {                                /*       FLEXIO Structure       
 #define FLEXIO_BasePtr                 0x400DF000UL //!< Peripheral base address
 #define FLEXIO                         ((FLEXIO_Type *) FLEXIO_BasePtr) //!< Freescale base pointer
 #define FLEXIO_BASE_PTR                (FLEXIO) //!< Freescale style base pointer
+#define FLEXIO_IRQS { FLEXIO_IRQn,  }
+
 /**
  * @} */ /* End group FLEXIO_Peripheral_access_layer_GROUP 
  */
@@ -3311,7 +3425,7 @@ typedef struct {                                /*       FLEXIO Structure       
 * @brief Struct for FMC
 * @{
 */
-typedef struct {                                /*       FMC Structure                                                */
+typedef struct FMC_Type {
    __IO uint32_t  PFAPR;                        /**< 0000: Flash Access Protection Register                             */
    __IO uint32_t  PFB0CR;                       /**< 0004: Flash Bank 0 Control Register                                */
    __I  uint32_t  Reserved;                     /**< 0008: Reserved                                                     */
@@ -3519,7 +3633,7 @@ typedef struct {                                /*       FMC Structure          
 * @brief Struct for FTFA
 * @{
 */
-typedef struct {                                /*       FTFA Structure                                               */
+typedef struct FTFA_Type {
    __IO uint8_t   FSTAT;                        /**< 0000: Flash Status Register                                        */
    __IO uint8_t   FCNFG;                        /**< 0001: Flash Configuration Register                                 */
    __I  uint8_t   FSEC;                         /**< 0002: Flash Security Register                                      */
@@ -3661,6 +3775,8 @@ typedef struct {                                /*       FTFA Structure         
 #define FTFA_BasePtr                   0x40020000UL //!< Peripheral base address
 #define FTFA                           ((FTFA_Type *) FTFA_BasePtr) //!< Freescale base pointer
 #define FTFA_BASE_PTR                  (FTFA) //!< Freescale style base pointer
+#define FTFA_IRQS { FTF_Command_IRQn, FTF_ReadCollision_IRQn,  }
+
 /**
  * @} */ /* End group FTFA_Peripheral_access_layer_GROUP 
  */
@@ -3682,7 +3798,7 @@ typedef struct {                                /*       FTFA Structure         
 * @brief Struct for FTM
 * @{
 */
-typedef struct {                                /*       FTM0 Structure                                               */
+typedef struct FTM_Type {
    __IO uint32_t  SC;                           /**< 0000: Status and Control                                           */
    __IO uint32_t  CNT;                          /**< 0004: Counter                                                      */
    __IO uint32_t  MOD;                          /**< 0008: Modulo                                                       */
@@ -4310,6 +4426,8 @@ typedef struct {                                /*       FTM0 Structure         
 #define FTM0_BasePtr                   0x40038000UL //!< Peripheral base address
 #define FTM0                           ((FTM_Type *) FTM0_BasePtr) //!< Freescale base pointer
 #define FTM0_BASE_PTR                  (FTM0) //!< Freescale style base pointer
+#define FTM0_IRQS { FTM0_IRQn,  }
+
 /**
  * @} */ /* End group FTM_Peripheral_access_layer_GROUP 
  */
@@ -4331,7 +4449,7 @@ typedef struct {                                /*       FTM0 Structure         
 * @brief Struct for FTM
 * @{
 */
-typedef struct {                                /*       FTM1 Structure                                               */
+typedef struct FTM1_Type {
    __IO uint32_t  SC;                           /**< 0000: Status and Control                                           */
    __IO uint32_t  CNT;                          /**< 0004: Counter                                                      */
    __IO uint32_t  MOD;                          /**< 0008: Modulo                                                       */
@@ -4408,6 +4526,8 @@ typedef struct {                                /*       FTM1 Structure         
 #define FTM1_BasePtr                   0x40039000UL //!< Peripheral base address
 #define FTM1                           ((FTM1_Type *) FTM1_BasePtr) //!< Freescale base pointer
 #define FTM1_BASE_PTR                  (FTM1) //!< Freescale style base pointer
+#define FTM1_IRQS { FTM1_IRQn,  }
+
 /**
  * @} */ /* End group FTM_Peripheral_access_layer_GROUP 
  */
@@ -4429,6 +4549,8 @@ typedef struct {                                /*       FTM1 Structure         
 #define FTM2_BasePtr                   0x4003A000UL //!< Peripheral base address
 #define FTM2                           ((FTM1_Type *) FTM2_BasePtr) //!< Freescale base pointer
 #define FTM2_BASE_PTR                  (FTM2) //!< Freescale style base pointer
+#define FTM2_IRQS { FTM2_IRQn,  }
+
 /**
  * @} */ /* End group FTM_Peripheral_access_layer_GROUP 
  */
@@ -4450,6 +4572,8 @@ typedef struct {                                /*       FTM1 Structure         
 #define FTM3_BasePtr                   0x400B9000UL //!< Peripheral base address
 #define FTM3                           ((FTM_Type *) FTM3_BasePtr) //!< Freescale base pointer
 #define FTM3_BASE_PTR                  (FTM3) //!< Freescale style base pointer
+#define FTM3_IRQS { FTM3_IRQn,  }
+
 /**
  * @} */ /* End group FTM_Peripheral_access_layer_GROUP 
  */
@@ -4471,7 +4595,7 @@ typedef struct {                                /*       FTM1 Structure         
 * @brief Struct for GPIO
 * @{
 */
-typedef struct {                                /*       GPIOA Structure                                              */
+typedef struct GPIO_Type {
    __IO uint32_t  PDOR;                         /**< 0000: Port Data Output Register                                    */
    __O  uint32_t  PSOR;                         /**< 0004: Port Set Output Register                                     */
    __O  uint32_t  PCOR;                         /**< 0008: Port Clear Output Register                                   */
@@ -4612,7 +4736,7 @@ typedef struct {                                /*       GPIOA Structure        
 * @brief Struct for I2C
 * @{
 */
-typedef struct {                                /*       I2C0 Structure                                               */
+typedef struct I2C_Type {
    __IO uint8_t   A1;                           /**< 0000: Address Register 1                                           */
    __IO uint8_t   F;                            /**< 0001: Frequency Divider register                                   */
    __IO uint8_t   C1;                           /**< 0002: Control Register 1                                           */
@@ -4797,6 +4921,8 @@ typedef struct {                                /*       I2C0 Structure         
 #define I2C0_BasePtr                   0x40066000UL //!< Peripheral base address
 #define I2C0                           ((I2C_Type *) I2C0_BasePtr) //!< Freescale base pointer
 #define I2C0_BASE_PTR                  (I2C0) //!< Freescale style base pointer
+#define I2C0_IRQS { I2C0_IRQn,  }
+
 /**
  * @} */ /* End group I2C_Peripheral_access_layer_GROUP 
  */
@@ -4818,6 +4944,8 @@ typedef struct {                                /*       I2C0 Structure         
 #define I2C1_BasePtr                   0x40067000UL //!< Peripheral base address
 #define I2C1                           ((I2C_Type *) I2C1_BasePtr) //!< Freescale base pointer
 #define I2C1_BASE_PTR                  (I2C1) //!< Freescale style base pointer
+#define I2C1_IRQS { I2C1_IRQn,  }
+
 /**
  * @} */ /* End group I2C_Peripheral_access_layer_GROUP 
  */
@@ -4839,6 +4967,8 @@ typedef struct {                                /*       I2C0 Structure         
 #define I2C2_BasePtr                   0x400E6000UL //!< Peripheral base address
 #define I2C2                           ((I2C_Type *) I2C2_BasePtr) //!< Freescale base pointer
 #define I2C2_BASE_PTR                  (I2C2) //!< Freescale style base pointer
+#define I2C2_IRQS { I2C2_IRQn,  }
+
 /**
  * @} */ /* End group I2C_Peripheral_access_layer_GROUP 
  */
@@ -4860,6 +4990,8 @@ typedef struct {                                /*       I2C0 Structure         
 #define I2C3_BasePtr                   0x400E7000UL //!< Peripheral base address
 #define I2C3                           ((I2C_Type *) I2C3_BasePtr) //!< Freescale base pointer
 #define I2C3_BASE_PTR                  (I2C3) //!< Freescale style base pointer
+#define I2C3_IRQS { I2C3_IRQn,  }
+
 /**
  * @} */ /* End group I2C_Peripheral_access_layer_GROUP 
  */
@@ -4881,7 +5013,7 @@ typedef struct {                                /*       I2C0 Structure         
 * @brief Struct for I2S
 * @{
 */
-typedef struct {                                /*       I2S0 Structure                                               */
+typedef struct I2S_Type {
    __IO uint32_t  TCSR;                         /**< 0000: SAI Transmit Control Register                                */
    __IO uint32_t  TCR1;                         /**< 0004: SAI Transmit Configuration 1 Register                        */
    __IO uint32_t  TCR2;                         /**< 0008: SAI Transmit Configuration 2 Register                        */
@@ -5250,6 +5382,8 @@ typedef struct {                                /*       I2S0 Structure         
 #define I2S0_BasePtr                   0x4002F000UL //!< Peripheral base address
 #define I2S0                           ((I2S_Type *) I2S0_BasePtr) //!< Freescale base pointer
 #define I2S0_BASE_PTR                  (I2S0) //!< Freescale style base pointer
+#define I2S0_IRQS { I2S0_Tx_IRQn, I2S0_Rx_IRQn,  }
+
 /**
  * @} */ /* End group I2S_Peripheral_access_layer_GROUP 
  */
@@ -5271,7 +5405,7 @@ typedef struct {                                /*       I2S0 Structure         
 * @brief Struct for LLWU
 * @{
 */
-typedef struct {                                /*       LLWU Structure                                               */
+typedef struct LLWU_Type {
    union {                                      /**< 0000: (size=0008)                                                  */
       __IO uint8_t   PE[8];                     /**< 0000: Pin Enable  Register                                         */
       struct {                                  /**< 0000: (size=0008)                                                  */
@@ -5630,6 +5764,8 @@ typedef struct {                                /*       LLWU Structure         
 #define LLWU_BasePtr                   0x4007C000UL //!< Peripheral base address
 #define LLWU                           ((LLWU_Type *) LLWU_BasePtr) //!< Freescale base pointer
 #define LLWU_BASE_PTR                  (LLWU) //!< Freescale style base pointer
+#define LLWU_IRQS { LLWU_IRQn,  }
+
 /**
  * @} */ /* End group LLWU_Peripheral_access_layer_GROUP 
  */
@@ -5651,7 +5787,7 @@ typedef struct {                                /*       LLWU Structure         
 * @brief Struct for LMEM
 * @{
 */
-typedef struct {                                /*       LMEM Structure                                               */
+typedef struct LMEM_Type {
    __IO uint32_t  PCCCR;                        /**< 0000: Cache control register                                       */
    __IO uint32_t  PCCLCR;                       /**< 0004: Cache line control register                                  */
    __IO uint32_t  PCCSAR;                       /**< 0008: Cache search address register                                */
@@ -5941,7 +6077,7 @@ typedef struct {                                /*       LMEM Structure         
 * @brief Struct for LPTMR
 * @{
 */
-typedef struct {                                /*       LPTMR0 Structure                                             */
+typedef struct LPTMR_Type {
    __IO uint32_t  CSR;                          /**< 0000: Control Status Register                                      */
    __IO uint32_t  PSR;                          /**< 0004: Prescale Register                                            */
    __IO uint32_t  CMR;                          /**< 0008: Compare Register                                             */
@@ -6030,6 +6166,8 @@ typedef struct {                                /*       LPTMR0 Structure       
 #define LPTMR1_BasePtr                 0x40044000UL //!< Peripheral base address
 #define LPTMR1                         ((LPTMR_Type *) LPTMR1_BasePtr) //!< Freescale base pointer
 #define LPTMR1_BASE_PTR                (LPTMR1) //!< Freescale style base pointer
+#define LPTMR1_IRQS { LPTMR0_LPTMR1_IRQn,  }
+
 /**
  * @} */ /* End group LPTMR_Peripheral_access_layer_GROUP 
  */
@@ -6051,7 +6189,7 @@ typedef struct {                                /*       LPTMR0 Structure       
 * @brief Struct for LPUART
 * @{
 */
-typedef struct {                                /*       LPUART0 Structure                                            */
+typedef struct LPUART_Type {
    __IO uint32_t  BAUD;                         /**< 0000: Baud Rate Register                                           */
    __IO uint32_t  STAT;                         /**< 0004: Status Register                                              */
    __IO uint32_t  CTRL;                         /**< 0008: Control Register                                             */
@@ -6367,6 +6505,8 @@ typedef struct {                                /*       LPUART0 Structure      
 #define LPUART0_BasePtr                0x400C4000UL //!< Peripheral base address
 #define LPUART0                        ((LPUART_Type *) LPUART0_BasePtr) //!< Freescale base pointer
 #define LPUART0_BASE_PTR               (LPUART0) //!< Freescale style base pointer
+#define LPUART0_IRQS { LPUART0_IRQn,  }
+
 /**
  * @} */ /* End group LPUART_Peripheral_access_layer_GROUP 
  */
@@ -6388,6 +6528,8 @@ typedef struct {                                /*       LPUART0 Structure      
 #define LPUART1_BasePtr                0x400C5000UL //!< Peripheral base address
 #define LPUART1                        ((LPUART_Type *) LPUART1_BasePtr) //!< Freescale base pointer
 #define LPUART1_BASE_PTR               (LPUART1) //!< Freescale style base pointer
+#define LPUART1_IRQS { LPUART1_IRQn,  }
+
 /**
  * @} */ /* End group LPUART_Peripheral_access_layer_GROUP 
  */
@@ -6409,6 +6551,8 @@ typedef struct {                                /*       LPUART0 Structure      
 #define LPUART2_BasePtr                0x400C6000UL //!< Peripheral base address
 #define LPUART2                        ((LPUART_Type *) LPUART2_BasePtr) //!< Freescale base pointer
 #define LPUART2_BASE_PTR               (LPUART2) //!< Freescale style base pointer
+#define LPUART2_IRQS { LPUART2_IRQn,  }
+
 /**
  * @} */ /* End group LPUART_Peripheral_access_layer_GROUP 
  */
@@ -6430,6 +6574,8 @@ typedef struct {                                /*       LPUART0 Structure      
 #define LPUART3_BasePtr                0x400C7000UL //!< Peripheral base address
 #define LPUART3                        ((LPUART_Type *) LPUART3_BasePtr) //!< Freescale base pointer
 #define LPUART3_BASE_PTR               (LPUART3) //!< Freescale style base pointer
+#define LPUART3_IRQS { LPUART3_IRQn,  }
+
 /**
  * @} */ /* End group LPUART_Peripheral_access_layer_GROUP 
  */
@@ -6451,6 +6597,8 @@ typedef struct {                                /*       LPUART0 Structure      
 #define LPUART4_BasePtr                0x400D6000UL //!< Peripheral base address
 #define LPUART4                        ((LPUART_Type *) LPUART4_BasePtr) //!< Freescale base pointer
 #define LPUART4_BASE_PTR               (LPUART4) //!< Freescale style base pointer
+#define LPUART4_IRQS { LPUART4_IRQn,  }
+
 /**
  * @} */ /* End group LPUART_Peripheral_access_layer_GROUP 
  */
@@ -6472,7 +6620,7 @@ typedef struct {                                /*       LPUART0 Structure      
 * @brief Struct for LTC
 * @{
 */
-typedef struct {                                /*       LTC0 Structure                                               */
+typedef struct LTC_Type {
    union {                                      /**< 0000: (size=0004)                                                  */
       __IO uint32_t  MD;                        /**< 0000: Mode Register (non-PKHA/non-RNG use)                         */
       __IO uint32_t  MDPK;                      /**< 0000: Mode Register (PublicKey)                                    */
@@ -6981,7 +7129,7 @@ typedef struct {                                /*       LTC0 Structure         
 * @brief Struct for MCG
 * @{
 */
-typedef struct {                                /*       MCG Structure                                                */
+typedef struct MCG_Type {
    __IO uint8_t   C1;                           /**< 0000: Control 1 Register                                           */
    __IO uint8_t   C2;                           /**< 0001: Control 2 Register                                           */
    __IO uint8_t   C3;                           /**< 0002: Control 3 Register                                           */
@@ -7163,6 +7311,8 @@ typedef struct {                                /*       MCG Structure          
 #define MCG_BasePtr                    0x40064000UL //!< Peripheral base address
 #define MCG                            ((MCG_Type *) MCG_BasePtr) //!< Freescale base pointer
 #define MCG_BASE_PTR                   (MCG) //!< Freescale style base pointer
+#define MCG_IRQS { MCG_IRQn,  }
+
 /**
  * @} */ /* End group MCG_Peripheral_access_layer_GROUP 
  */
@@ -7184,7 +7334,7 @@ typedef struct {                                /*       MCG Structure          
 * @brief Struct for MCM
 * @{
 */
-typedef struct {                                /*       MCM Structure                                                */
+typedef struct MCM_Type {
         uint8_t   RESERVED_0[8];               
    __I  uint16_t  PLASC;                        /**< 0008: Crossbar Switch (AXBS) Slave Configuration                   */
    __I  uint16_t  PLAMC;                        /**< 000A: Crossbar Switch (AXBS) Master Configuration                  */
@@ -7326,6 +7476,8 @@ typedef struct {                                /*       MCM Structure          
 #define MCM_BasePtr                    0xE0080000UL //!< Peripheral base address
 #define MCM                            ((MCM_Type *) MCM_BasePtr) //!< Freescale base pointer
 #define MCM_BASE_PTR                   (MCM) //!< Freescale style base pointer
+#define MCM_IRQS { MCM_IRQn,  }
+
 /**
  * @} */ /* End group MCM_Peripheral_access_layer_GROUP 
  */
@@ -7347,7 +7499,7 @@ typedef struct {                                /*       MCM Structure          
 * @brief Struct for MPU
 * @{
 */
-typedef struct {                                /*       MPU Structure                                                */
+typedef struct MPU_Type {
    __IO uint32_t  CESR;                         /**< 0000: Control/Error Status Register                                */
         uint8_t   RESERVED_0[12];              
    struct {
@@ -7583,7 +7735,7 @@ typedef struct {                                /*       MPU Structure          
 * @brief Struct for NV
 * @{
 */
-typedef struct {                                /*       NV Structure                                                 */
+typedef struct NV_Type {
    __I  uint8_t   BACKKEY3;                     /**< 0000: Backdoor Comparison Key 3                                    */
    __I  uint8_t   BACKKEY2;                     /**< 0001: Backdoor Comparison Key 2                                    */
    __I  uint8_t   BACKKEY1;                     /**< 0002: Backdoor Comparison Key 1                                    */
@@ -7679,7 +7831,7 @@ typedef struct {                                /*       NV Structure           
 * @brief Struct for OSC
 * @{
 */
-typedef struct {                                /*       OSC0 Structure                                               */
+typedef struct OSC_Type {
    __IO uint8_t   CR;                           /**< 0000: Control Register                                             */
         uint8_t   RESERVED_0;                  
    __IO uint8_t   DIV;                          /**< 0002: Clock Divider Register                                       */
@@ -7753,7 +7905,7 @@ typedef struct {                                /*       OSC0 Structure         
 * @brief Struct for OTFAD
 * @{
 */
-typedef struct {                                /*       OTFAD Structure                                              */
+typedef struct OTFAD_Type {
    __IO uint32_t  CR;                           /**< 0000: Control Register                                             */
    __I  uint32_t  SR;                           /**< 0004: Status Register                                              */
    __IO uint32_t  CRC;                          /**< 0008: Cyclic Redundancy Check Register                             */
@@ -7879,7 +8031,7 @@ typedef struct {                                /*       OTFAD Structure        
 * @brief Struct for PDB
 * @{
 */
-typedef struct {                                /*       PDB0 Structure                                               */
+typedef struct PDB_Type {
    __IO uint32_t  SC;                           /**< 0000: Status and Control Register                                  */
    __IO uint32_t  MOD;                          /**< 0004: Modulus Register                                             */
    __I  uint32_t  CNT;                          /**< 0008: Counter Register                                             */
@@ -8013,6 +8165,8 @@ typedef struct {                                /*       PDB0 Structure         
 #define PDB0_BasePtr                   0x40036000UL //!< Peripheral base address
 #define PDB0                           ((PDB_Type *) PDB0_BasePtr) //!< Freescale base pointer
 #define PDB0_BASE_PTR                  (PDB0) //!< Freescale style base pointer
+#define PDB0_IRQS { PDB0_IRQn,  }
+
 /**
  * @} */ /* End group PDB_Peripheral_access_layer_GROUP 
  */
@@ -8034,7 +8188,7 @@ typedef struct {                                /*       PDB0 Structure         
 * @brief Struct for PIT
 * @{
 */
-typedef struct {                                /*       PIT Structure                                                */
+typedef struct PIT_Type {
    __IO uint32_t  MCR;                          /**< 0000: Module Control Register                                      */
         uint8_t   RESERVED_0[252];             
    struct {
@@ -8095,6 +8249,8 @@ typedef struct {                                /*       PIT Structure          
 #define PIT_BasePtr                    0x40037000UL //!< Peripheral base address
 #define PIT                            ((PIT_Type *) PIT_BasePtr) //!< Freescale base pointer
 #define PIT_BASE_PTR                   (PIT) //!< Freescale style base pointer
+#define PIT_IRQS { PIT0_IRQn, PIT1_IRQn, PIT2_IRQn, PIT3_IRQn,  }
+
 /**
  * @} */ /* End group PIT_Peripheral_access_layer_GROUP 
  */
@@ -8116,7 +8272,7 @@ typedef struct {                                /*       PIT Structure          
 * @brief Struct for PMC
 * @{
 */
-typedef struct {                                /*       PMC Structure                                                */
+typedef struct PMC_Type {
    __IO uint8_t   LVDSC1;                       /**< 0000: Low Voltage Detect Status And Control 1                      */
    __IO uint8_t   LVDSC2;                       /**< 0001: Low Voltage Status and Control 2                             */
    __IO uint8_t   REGSC;                        /**< 0002: Regulator Status and Control                                 */
@@ -8203,6 +8359,8 @@ typedef struct {                                /*       PMC Structure          
 #define PMC_BasePtr                    0x4007D000UL //!< Peripheral base address
 #define PMC                            ((PMC_Type *) PMC_BasePtr) //!< Freescale base pointer
 #define PMC_BASE_PTR                   (PMC) //!< Freescale style base pointer
+#define PMC_IRQS { PMC_IRQn,  }
+
 /**
  * @} */ /* End group PMC_Peripheral_access_layer_GROUP 
  */
@@ -8224,7 +8382,7 @@ typedef struct {                                /*       PMC Structure          
 * @brief Struct for PORT
 * @{
 */
-typedef struct {                                /*       PORTA Structure                                              */
+typedef struct PORT_Type {
    __IO uint32_t  PCR[32];                      /**< 0000: Pin Control Register                                         */
    __O  uint32_t  GPCLR;                        /**< 0080: Global Pin Control Low Register                              */
    __O  uint32_t  GPCHR;                        /**< 0084: Global Pin Control High Register                             */
@@ -8302,6 +8460,8 @@ typedef struct {                                /*       PORTA Structure        
 #define PORTA_BasePtr                  0x40049000UL //!< Peripheral base address
 #define PORTA                          ((PORT_Type *) PORTA_BasePtr) //!< Freescale base pointer
 #define PORTA_BASE_PTR                 (PORTA) //!< Freescale style base pointer
+#define PORTA_IRQS { PORTA_IRQn,  }
+
 /**
  * @} */ /* End group PORT_Peripheral_access_layer_GROUP 
  */
@@ -8323,6 +8483,8 @@ typedef struct {                                /*       PORTA Structure        
 #define PORTB_BasePtr                  0x4004A000UL //!< Peripheral base address
 #define PORTB                          ((PORT_Type *) PORTB_BasePtr) //!< Freescale base pointer
 #define PORTB_BASE_PTR                 (PORTB) //!< Freescale style base pointer
+#define PORTB_IRQS { PORTB_IRQn,  }
+
 /**
  * @} */ /* End group PORT_Peripheral_access_layer_GROUP 
  */
@@ -8344,6 +8506,8 @@ typedef struct {                                /*       PORTA Structure        
 #define PORTC_BasePtr                  0x4004B000UL //!< Peripheral base address
 #define PORTC                          ((PORT_Type *) PORTC_BasePtr) //!< Freescale base pointer
 #define PORTC_BASE_PTR                 (PORTC) //!< Freescale style base pointer
+#define PORTC_IRQS { PORTC_IRQn,  }
+
 /**
  * @} */ /* End group PORT_Peripheral_access_layer_GROUP 
  */
@@ -8365,7 +8529,7 @@ typedef struct {                                /*       PORTA Structure        
 * @brief Struct for PORT
 * @{
 */
-typedef struct {                                /*       PORTD Structure                                              */
+typedef struct PORT_DFER_Type {
    __IO uint32_t  PCR[32];                      /**< 0000: Pin Control Register                                         */
    __O  uint32_t  GPCLR;                        /**< 0080: Global Pin Control Low Register                              */
    __O  uint32_t  GPCHR;                        /**< 0084: Global Pin Control High Register                             */
@@ -8411,6 +8575,8 @@ typedef struct {                                /*       PORTD Structure        
 #define PORTD_BasePtr                  0x4004C000UL //!< Peripheral base address
 #define PORTD                          ((PORT_DFER_Type *) PORTD_BasePtr) //!< Freescale base pointer
 #define PORTD_BASE_PTR                 (PORTD) //!< Freescale style base pointer
+#define PORTD_IRQS { PORTD_IRQn,  }
+
 /**
  * @} */ /* End group PORT_Peripheral_access_layer_GROUP 
  */
@@ -8432,6 +8598,8 @@ typedef struct {                                /*       PORTD Structure        
 #define PORTE_BasePtr                  0x4004D000UL //!< Peripheral base address
 #define PORTE                          ((PORT_Type *) PORTE_BasePtr) //!< Freescale base pointer
 #define PORTE_BASE_PTR                 (PORTE) //!< Freescale style base pointer
+#define PORTE_IRQS { PORTE_IRQn,  }
+
 /**
  * @} */ /* End group PORT_Peripheral_access_layer_GROUP 
  */
@@ -8453,7 +8621,7 @@ typedef struct {                                /*       PORTD Structure        
 * @brief Struct for QSPI
 * @{
 */
-typedef struct {                                /*       QSPI0 Structure                                              */
+typedef struct QSPI_Type {
    __IO uint32_t  MCR;                          /**< 0000: Module Configuration Register                                */
         uint8_t   RESERVED_0[4];               
    __IO uint32_t  IPCR;                         /**< 0008: IP Configuration Register                                    */
@@ -8946,6 +9114,8 @@ typedef struct {                                /*       QSPI0 Structure        
 #define QSPI0_BasePtr                  0x400DA000UL //!< Peripheral base address
 #define QSPI0                          ((QSPI_Type *) QSPI0_BasePtr) //!< Freescale base pointer
 #define QSPI0_BASE_PTR                 (QSPI0) //!< Freescale style base pointer
+#define QSPI0_IRQS { QSPI0_IRQn,  }
+
 /**
  * @} */ /* End group QSPI_Peripheral_access_layer_GROUP 
  */
@@ -8967,7 +9137,7 @@ typedef struct {                                /*       QSPI0 Structure        
 * @brief Struct for RCM
 * @{
 */
-typedef struct {                                /*       RCM Structure                                                */
+typedef struct RCM_Type {
    __I  uint8_t   SRS0;                         /**< 0000: System Reset Status Register 0                               */
    __I  uint8_t   SRS1;                         /**< 0001: System Reset Status Register 1                               */
         uint8_t   RESERVED_0[2];               
@@ -9116,7 +9286,7 @@ typedef struct {                                /*       RCM Structure          
 * @brief Struct for RFSYS
 * @{
 */
-typedef struct {                                /*       RFSYS Structure                                              */
+typedef struct RFSYS_Type {
    __IO uint32_t  REG[8];                       /**< 0000: Register file register                                       */
 } RFSYS_Type;
 
@@ -9175,7 +9345,7 @@ typedef struct {                                /*       RFSYS Structure        
 * @brief Struct for RFVBAT
 * @{
 */
-typedef struct {                                /*       RFVBAT Structure                                             */
+typedef struct RFVBAT_Type {
    __IO uint32_t  REG[8];                       /**< 0000: VBAT register file register                                  */
 } RFVBAT_Type;
 
@@ -9234,7 +9404,7 @@ typedef struct {                                /*       RFVBAT Structure       
 * @brief Struct for RTC
 * @{
 */
-typedef struct {                                /*       RTC Structure                                                */
+typedef struct RTC_Type {
    __IO uint32_t  TSR;                          /**< 0000: Time Seconds Register                                        */
    __IO uint32_t  TPR;                          /**< 0004: Time Prescaler Register                                      */
    __IO uint32_t  TAR;                          /**< 0008: Time Alarm Register                                          */
@@ -9423,6 +9593,8 @@ typedef struct {                                /*       RTC Structure          
 #define RTC_BasePtr                    0x4003D000UL //!< Peripheral base address
 #define RTC                            ((RTC_Type *) RTC_BasePtr) //!< Freescale base pointer
 #define RTC_BASE_PTR                   (RTC) //!< Freescale style base pointer
+#define RTC_IRQS { RTC_Alarm_IRQn, RTC_Seconds_IRQn,  }
+
 /**
  * @} */ /* End group RTC_Peripheral_access_layer_GROUP 
  */
@@ -9444,7 +9616,7 @@ typedef struct {                                /*       RTC Structure          
 * @brief Struct for SDHC
 * @{
 */
-typedef struct {                                /*       SDHC0 Structure                                              */
+typedef struct SDHC_Type {
    __IO uint32_t  DSADDR;                       /**< 0000: DMA System Address register                                  */
    __IO uint32_t  BLKATTR;                      /**< 0004: Block Attributes register                                    */
    __IO uint32_t  CMDARG;                       /**< 0008: Command Argument register                                    */
@@ -9978,6 +10150,8 @@ typedef struct {                                /*       SDHC0 Structure        
 #define SDHC0_BasePtr                  0x400B1000UL //!< Peripheral base address
 #define SDHC0                          ((SDHC_Type *) SDHC0_BasePtr) //!< Freescale base pointer
 #define SDHC0_BASE_PTR                 (SDHC0) //!< Freescale style base pointer
+#define SDHC0_IRQS { SDHC_IRQn,  }
+
 /**
  * @} */ /* End group SDHC_Peripheral_access_layer_GROUP 
  */
@@ -9999,7 +10173,7 @@ typedef struct {                                /*       SDHC0 Structure        
 * @brief Struct for SDRAMC
 * @{
 */
-typedef struct {                                /*       SDRAMC Structure                                             */
+typedef struct SDRAMC_Type {
         uint8_t   RESERVED_0[66];              
    __IO uint16_t  CTRL;                         /**< 0042: Control Register                                             */
         uint8_t   RESERVED_1[4];               
@@ -10125,7 +10299,7 @@ typedef struct {                                /*       SDRAMC Structure       
 * @brief Struct for SIM
 * @{
 */
-typedef struct {                                /*       SIM Structure                                                */
+typedef struct SIM_Type {
    __IO uint32_t  SOPT1;                        /**< 0000: System Options Register 1                                    */
    __IO uint32_t  SOPT1CFG;                     /**< 0004: SOPT1 Configuration Register                                 */
         uint8_t   RESERVED_0[4092];            
@@ -10663,7 +10837,7 @@ typedef struct {                                /*       SIM Structure          
 * @brief Struct for SMC
 * @{
 */
-typedef struct {                                /*       SMC Structure                                                */
+typedef struct SMC_Type {
    __IO uint8_t   PMPROT;                       /**< 0000: Power Mode Protection Register                               */
    __IO uint8_t   PMCTRL;                       /**< 0001: Power Mode Control Register                                  */
    union {                                      /**< 0000: (size=0001)                                                  */
@@ -10774,7 +10948,7 @@ typedef struct {                                /*       SMC Structure          
 * @brief Struct for SPI
 * @{
 */
-typedef struct {                                /*       SPI0 Structure                                               */
+typedef struct SPI_Type {
    __IO uint32_t  MCR;                          /**< 0000: Module Configuration Register                                */
         uint8_t   RESERVED_0[4];               
    __IO uint32_t  TCR;                          /**< 0008: Transfer Count Register                                      */
@@ -11022,6 +11196,8 @@ typedef struct {                                /*       SPI0 Structure         
 #define SPI0_BasePtr                   0x4002C000UL //!< Peripheral base address
 #define SPI0                           ((SPI_Type *) SPI0_BasePtr) //!< Freescale base pointer
 #define SPI0_BASE_PTR                  (SPI0) //!< Freescale style base pointer
+#define SPI0_IRQS { SPI0_IRQn,  }
+
 /**
  * @} */ /* End group SPI_Peripheral_access_layer_GROUP 
  */
@@ -11043,6 +11219,8 @@ typedef struct {                                /*       SPI0 Structure         
 #define SPI1_BasePtr                   0x4002D000UL //!< Peripheral base address
 #define SPI1                           ((SPI_Type *) SPI1_BasePtr) //!< Freescale base pointer
 #define SPI1_BASE_PTR                  (SPI1) //!< Freescale style base pointer
+#define SPI1_IRQS { SPI1_IRQn,  }
+
 /**
  * @} */ /* End group SPI_Peripheral_access_layer_GROUP 
  */
@@ -11064,6 +11242,8 @@ typedef struct {                                /*       SPI0 Structure         
 #define SPI2_BasePtr                   0x400AC000UL //!< Peripheral base address
 #define SPI2                           ((SPI_Type *) SPI2_BasePtr) //!< Freescale base pointer
 #define SPI2_BASE_PTR                  (SPI2) //!< Freescale style base pointer
+#define SPI2_IRQS { SPI2_IRQn,  }
+
 /**
  * @} */ /* End group SPI_Peripheral_access_layer_GROUP 
  */
@@ -11085,7 +11265,7 @@ typedef struct {                                /*       SPI0 Structure         
 * @brief Struct for SYST
 * @{
 */
-typedef struct {                                /*       SYST Structure                                               */
+typedef struct SYST_Type {
    __IO uint32_t  CSR;                          /**< 0000: Control and Status Register                                  */
    __IO uint32_t  RVR;                          /**< 0004: Reload Value Register                                        */
    __IO uint32_t  CVR;                          /**< 0008: Current Value Register                                       */
@@ -11165,7 +11345,7 @@ typedef struct {                                /*       SYST Structure         
 * @brief Struct for TPM
 * @{
 */
-typedef struct {                                /*       TPM1 Structure                                               */
+typedef struct TPM_Type {
    __IO uint32_t  SC;                           /**< 0000: Status and Control                                           */
    __IO uint32_t  CNT;                          /**< 0004: Counter                                                      */
    __IO uint32_t  MOD;                          /**< 0008: Modulo                                                       */
@@ -11344,6 +11524,8 @@ typedef struct {                                /*       TPM1 Structure         
 #define TPM1_BasePtr                   0x400C9000UL //!< Peripheral base address
 #define TPM1                           ((TPM_Type *) TPM1_BasePtr) //!< Freescale base pointer
 #define TPM1_BASE_PTR                  (TPM1) //!< Freescale style base pointer
+#define TPM1_IRQS { TPM1_IRQn,  }
+
 /**
  * @} */ /* End group TPM_Peripheral_access_layer_GROUP 
  */
@@ -11365,6 +11547,8 @@ typedef struct {                                /*       TPM1 Structure         
 #define TPM2_BasePtr                   0x400CA000UL //!< Peripheral base address
 #define TPM2                           ((TPM_Type *) TPM2_BasePtr) //!< Freescale base pointer
 #define TPM2_BASE_PTR                  (TPM2) //!< Freescale style base pointer
+#define TPM2_IRQS { TPM2_IRQn,  }
+
 /**
  * @} */ /* End group TPM_Peripheral_access_layer_GROUP 
  */
@@ -11386,7 +11570,7 @@ typedef struct {                                /*       TPM1 Structure         
 * @brief Struct for TRNG
 * @{
 */
-typedef struct {                                /*       TRNG0 Structure                                              */
+typedef struct TRNG_Type {
    __IO uint32_t  MCTL;                         /**< 0000: Miscellaneous Control Register                               */
    __IO uint32_t  SCMISC;                       /**< 0004: Statistical Check Miscellaneous Register                     */
    __IO uint32_t  PKRRNG;                       /**< 0008: Poker Range Register                                         */
@@ -11832,6 +12016,8 @@ typedef struct {                                /*       TRNG0 Structure        
 #define TRNG0_BasePtr                  0x400A0000UL //!< Peripheral base address
 #define TRNG0                          ((TRNG_Type *) TRNG0_BasePtr) //!< Freescale base pointer
 #define TRNG0_BASE_PTR                 (TRNG0) //!< Freescale style base pointer
+#define TRNG0_IRQS { RNG_IRQn,  }
+
 /**
  * @} */ /* End group TRNG_Peripheral_access_layer_GROUP 
  */
@@ -11853,7 +12039,7 @@ typedef struct {                                /*       TRNG0 Structure        
 * @brief Struct for TSI
 * @{
 */
-typedef struct {                                /*       TSI0 Structure                                               */
+typedef struct TSI_Type {
    __IO uint32_t  GENCS;                        /**< 0000: General Control and Status Register                          */
    __IO uint32_t  DATA;                         /**< 0004: DATA Register                                                */
    __IO uint32_t  TSHD;                         /**< 0008: Threshold Register                                           */
@@ -11949,6 +12135,8 @@ typedef struct {                                /*       TSI0 Structure         
 #define TSI0_BasePtr                   0x40045000UL //!< Peripheral base address
 #define TSI0                           ((TSI_Type *) TSI0_BasePtr) //!< Freescale base pointer
 #define TSI0_BASE_PTR                  (TSI0) //!< Freescale style base pointer
+#define TSI0_IRQS { TSI0_IRQn,  }
+
 /**
  * @} */ /* End group TSI_Peripheral_access_layer_GROUP 
  */
@@ -11970,7 +12158,7 @@ typedef struct {                                /*       TSI0 Structure         
 * @brief Struct for USB
 * @{
 */
-typedef struct {                                /*       USB0 Structure                                               */
+typedef struct USB_Type {
    __I  uint8_t   PERID;                        /**< 0000: Peripheral ID Register                                       */
         uint8_t   RESERVED_0[3];               
    __I  uint8_t   IDCOMP;                       /**< 0004: Peripheral ID Complement Register                            */
@@ -12436,6 +12624,8 @@ typedef struct {                                /*       USB0 Structure         
 #define USB0_BasePtr                   0x40072000UL //!< Peripheral base address
 #define USB0                           ((USB_Type *) USB0_BasePtr) //!< Freescale base pointer
 #define USB0_BASE_PTR                  (USB0) //!< Freescale style base pointer
+#define USB0_IRQS { USB0_IRQn,  }
+
 /**
  * @} */ /* End group USB_Peripheral_access_layer_GROUP 
  */
@@ -12457,7 +12647,7 @@ typedef struct {                                /*       USB0 Structure         
 * @brief Struct for USBDCD
 * @{
 */
-typedef struct {                                /*       USBDCD Structure                                             */
+typedef struct USBDCD_Type {
    __IO uint32_t  CONTROL;                      /**< 0000: Control register                                             */
    __IO uint32_t  CLOCK;                        /**< 0004: Clock Register                                               */
    __I  uint32_t  STATUS;                       /**< 0008: Status Register                                              */
@@ -12565,6 +12755,8 @@ typedef struct {                                /*       USBDCD Structure       
 #define USBDCD_BasePtr                 0x40035000UL //!< Peripheral base address
 #define USBDCD                         ((USBDCD_Type *) USBDCD_BasePtr) //!< Freescale base pointer
 #define USBDCD_BASE_PTR                (USBDCD) //!< Freescale style base pointer
+#define USBDCD_IRQS { USBDCD_IRQn,  }
+
 /**
  * @} */ /* End group USBDCD_Peripheral_access_layer_GROUP 
  */
@@ -12586,7 +12778,7 @@ typedef struct {                                /*       USBDCD Structure       
 * @brief Struct for VREF
 * @{
 */
-typedef struct {                                /*       VREF Structure                                               */
+typedef struct VREF_Type {
    __IO uint8_t   TRM;                          /**< 0000: Trim Register                                                */
    __IO uint8_t   SC;                           /**< 0001: Status and Control Register                                  */
 } VREF_Type;
@@ -12656,7 +12848,7 @@ typedef struct {                                /*       VREF Structure         
 * @brief Struct for WDOG
 * @{
 */
-typedef struct {                                /*       WDOG Structure                                               */
+typedef struct WDOG_Type {
    __IO uint16_t  STCTRLH;                      /**< 0000: Status and Control Register High                             */
    __IO uint16_t  STCTRLL;                      /**< 0002: Status and Control Register Low                              */
    union {                                      /**< 0000: (size=0004)                                                  */

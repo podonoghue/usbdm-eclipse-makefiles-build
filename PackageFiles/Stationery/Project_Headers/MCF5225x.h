@@ -314,7 +314,7 @@ module
 * @brief Struct for ADC
 * @{
 */
-typedef struct {                                /*       ADC Structure                                                */
+typedef struct ADC_Type {
    __IO uint16_t  CTRL1;                        /**< 0000: Control Register 1                                           */
    __IO uint16_t  CTRL2;                        /**< 0002: Control Register 2                                           */
    __IO uint16_t  ADZCC;                        /**< 0004: Zero Crossing Control Register                               */
@@ -680,7 +680,7 @@ typedef struct {                                /*       ADC Structure          
 * @brief Struct for BWT
 * @{
 */
-typedef struct {                                /*       BWT Structure                                                */
+typedef struct BWT_Type {
    __IO uint16_t  WCR;                          /**< 0000: Backup Watchdog Timer Control Register                       */
    __IO uint16_t  WMR;                          /**< 0002: Backup Watchdog Timer Modulus Register                       */
    __I  uint16_t  WCNTR;                        /**< 0004: Backup Watchdog Timer Count Register                         */
@@ -757,7 +757,7 @@ typedef struct {                                /*       BWT Structure          
 * @brief Struct for CANMB
 * @{
 */
-typedef struct {                                /*       CANMB Structure                                              */
+typedef struct CANMB_Type {
    struct {
       __IO uint8_t   CODE;                      /**< 0000: Message buffer code                                          */
       __IO uint8_t   CTRL;                      /**< 0001: Control values                                               */
@@ -838,7 +838,7 @@ typedef struct {                                /*       CANMB Structure        
 * @brief Struct for CCM
 * @{
 */
-typedef struct {                                /*       CCM Structure                                                */
+typedef struct CCM_Type {
    __IO uint16_t  CCR;                          /**< 0000: Chip Configuration Register                                  */
         uint8_t   RESERVED_0;                  
    __IO uint8_t   LPCR;                         /**< 0003: Low-Power Control Register                                   */
@@ -925,7 +925,7 @@ typedef struct {                                /*       CCM Structure          
 * @brief Struct for CFM
 * @{
 */
-typedef struct {                                /*       CFM Structure                                                */
+typedef struct CFM_Type {
    __IO uint16_t  CFMMCR;                       /**< 0000: Module Configuration Register                                */
    __IO uint8_t   CFMCLKD;                      /**< 0002: Clock Divider Register                                       */
         uint8_t   RESERVED_0[5];               
@@ -1059,7 +1059,7 @@ typedef struct {                                /*       CFM Structure          
 * @brief Struct for CLOCK
 * @{
 */
-typedef struct {                                /*       CLOCK Structure                                              */
+typedef struct CLOCK_Type {
    __IO uint16_t  SYNCR;                        /**< 0000: Synthesizer Control Register                                 */
    __I  uint8_t   SYNSR;                        /**< 0002: Synthesiser Status Register                                  */
         uint8_t   RESERVED_0;                  
@@ -1229,7 +1229,7 @@ typedef struct {                                /*       CLOCK Structure        
 * @brief Struct for DMA
 * @{
 */
-typedef struct {                                /*       DMA Structure                                                */
+typedef struct DMA_Type {
    struct {
       __IO uint32_t  SAR;                       /**< 0000: Source Address Register                                      */
       __IO uint32_t  DAR;                       /**< 0004: Destination Address Register                                 */
@@ -1366,7 +1366,7 @@ typedef struct {                                /*       DMA Structure          
 * @brief Struct for DTIM
 * @{
 */
-typedef struct {                                /*       DTIM Structure                                               */
+typedef struct DTIM_Type {
    struct {
       __IO uint16_t  DTMR;                      /**< 0000: Timer Mode Register                                          */
       __IO uint8_t   DTXMR;                     /**< 0002: Timer Extended Mode                                          */
@@ -1471,7 +1471,7 @@ typedef struct {                                /*       DTIM Structure         
 * @brief Struct for EPORT
 * @{
 */
-typedef struct {                                /*       EPORT0 Structure                                             */
+typedef struct EPORT0_Type {
    __IO uint16_t  EPPAR;                        /**< 0000: Pin Assignment Register                                      */
    __IO uint8_t   EPDDR;                        /**< 0002: Data Direction Register                                      */
    __IO uint8_t   EPIER;                        /**< 0003: Interrupt Enable Register                                    */
@@ -1672,7 +1672,7 @@ typedef struct {                                /*       EPORT0 Structure       
 * @brief Struct for FBCS
 * @{
 */
-typedef struct {                                /*       FBCS Structure                                               */
+typedef struct FBCS_Type {
    struct {
       __IO uint32_t  CSAR;                      /**< 0000: Chip-Select Address Register                                 */
       __IO uint32_t  CSMR;                      /**< 0004: Chip-Select Mask Registers                                   */
@@ -1770,7 +1770,7 @@ typedef struct {                                /*       FBCS Structure         
 * @brief Struct for FEC
 * @{
 */
-typedef struct {                                /*       FEC Structure                                                */
+typedef struct FEC_Type {
    __IO uint32_t  EIR;                          /**< 0000: None                                                         */
    __IO uint32_t  EIMR;                         /**< 0004: None                                                         */
         uint8_t   RESERVED_0[4];               
@@ -2342,7 +2342,7 @@ typedef struct {                                /*       FEC Structure          
 * @brief Struct for FlexCAN
 * @{
 */
-typedef struct {                                /*       FlexCAN Structure                                            */
+typedef struct FlexCAN_Type {
    __IO uint32_t  CANMCR;                       /**< 0000: FlexCAN Configuration                                        */
    __IO uint32_t  CANCTRL;                      /**< 0004: FlexCAN Control                                              */
    __IO uint32_t  TIMER;                        /**< 0008: Free Running Timer                                           */
@@ -2624,7 +2624,7 @@ typedef struct {                                /*       FlexCAN Structure      
 * @brief Struct for GPIO
 * @{
 */
-typedef struct {                                /*       GPIO Structure                                               */
+typedef struct GPIO_Type {
    __IO uint8_t   PORTTE;                       /**< 0000: Data register                                                */
    __IO uint8_t   PORTTF;                       /**< 0001: Data register                                                */
    __IO uint8_t   PORTTG;                       /**< 0002: Data register                                                */
@@ -2929,7 +2929,7 @@ typedef struct {                                /*       GPIO Structure         
 * @brief Struct for GPT
 * @{
 */
-typedef struct {                                /*       GPT Structure                                                */
+typedef struct GPT_Type {
    __IO uint8_t   GPTIOS;                       /**< 0000: None                                                         */
    __IO uint8_t   GPTCFORC;                     /**< 0001: None                                                         */
    __IO uint8_t   GPTOC3M;                      /**< 0002: None                                                         */
@@ -3219,7 +3219,7 @@ typedef struct {                                /*       GPT Structure          
 * @brief Struct for I2C
 * @{
 */
-typedef struct {                                /*       I2C0 Structure                                               */
+typedef struct I2C_Type {
    __IO uint8_t   I2ADR;                        /**< 0000: Address Register                                             */
         uint8_t   RESERVED_0[3];               
    __IO uint8_t   I2FDR;                        /**< 0004: Frequency Divider Register                                   */
@@ -3347,7 +3347,7 @@ typedef struct {                                /*       I2C0 Structure         
 * @brief Struct for INTC
 * @{
 */
-typedef struct {                                /*       INTC0 Structure                                              */
+typedef struct INTC_Type {
    __I  uint32_t  IPRH;                         /**< 0000: Interrupt Pending Register High                              */
    __I  uint32_t  IPRL;                         /**< 0004: Interrupt Pending Register Low                               */
    __IO uint32_t  IMRH;                         /**< 0008: Interrupt Mask Register High                                 */
@@ -4117,7 +4117,7 @@ typedef struct {                                /*       INTC0 Structure        
 * @brief Struct for PAD
 * @{
 */
-typedef struct {                                /*       PAD Structure                                                */
+typedef struct PAD_Type {
    __IO uint32_t  PSRR0;                        /**< 0000: Pin Slew Rate Register 0                                     */
    __IO uint32_t  PDSR0;                        /**< 0004: Pin Drive Strength Register 0                                */
    __IO uint32_t  PSRR1;                        /**< 0008: Pin Slew Rate Register 1                                     */
@@ -4464,7 +4464,7 @@ The timer can count down from the value written in the modulus register or it ca
 * @brief Struct for PIT
 * @{
 */
-typedef struct {                                /*       PIT0 Structure                                               */
+typedef struct PIT_Type {
    __IO uint16_t  PCSR;                         /**< 0000: Control and Status Register                                  */
    __IO uint16_t  PMR;                          /**< 0002: Modulus Register                                             */
    __I  uint16_t  PCNTR;                        /**< 0004: Count Register                                               */
@@ -4568,7 +4568,7 @@ The timer can count down from the value written in the modulus register or it ca
 * @brief Struct for PMM
 * @{
 */
-typedef struct {                                /*       PMM Structure                                                */
+typedef struct PMM_Type {
    __IO uint8_t   LPICR;                        /**< 0000: Low-Power Interrupt Control Register                         */
         uint8_t   RESERVED_0[1114100];         
    __IO uint8_t   LPCR;                         /**< 10FFF5: Low-Power Control Register                                   */
@@ -4633,7 +4633,7 @@ typedef struct {                                /*       PMM Structure          
 * @brief Struct for PWM
 * @{
 */
-typedef struct {                                /*       PWM Structure                                                */
+typedef struct PWM_Type {
    __IO uint8_t   PWME;                         /**< 0000: Enable Register                                              */
    __IO uint8_t   PWMPOL;                       /**< 0001: Polarity Register                                            */
    __IO uint8_t   PWMCLK;                       /**< 0002: Clock Select Register                                        */
@@ -4845,7 +4845,7 @@ typedef struct {                                /*       PWM Structure          
 * @brief Struct for QSPI
 * @{
 */
-typedef struct {                                /*       QSPI Structure                                               */
+typedef struct QSPI_Type {
    __IO uint16_t  QMR;                          /**< 0000: Mode Register                                                */
         uint8_t   RESERVED_0[2];               
    __IO uint16_t  QDLYR;                        /**< 0004: Delay Register                                               */
@@ -5013,7 +5013,7 @@ typedef struct {                                /*       QSPI Structure         
 * @brief Struct for RCM
 * @{
 */
-typedef struct {                                /*       RCM Structure                                                */
+typedef struct RCM_Type {
    __IO uint8_t   RCR;                          /**< 0000: Reset Control Register                                       */
    __I  uint8_t   RSR;                          /**< 0001: Reset Status Register                                        */
 } RCM_Type;
@@ -5104,7 +5104,7 @@ typedef struct {                                /*       RCM Structure          
 * @brief Struct for RNGA
 * @{
 */
-typedef struct {                                /*       RNGA Structure                                               */
+typedef struct RNGA_Type {
    __IO uint32_t  RNGCR;                        /**< 0000: Control Register                                             */
    __I  uint32_t  RNGSR;                        /**< 0004: Status Register                                              */
    __O  uint32_t  RNGER;                        /**< 0008: RNG Entropy Register                                         */
@@ -5199,7 +5199,7 @@ typedef struct {                                /*       RNGA Structure         
 * @brief Struct for RTC
 * @{
 */
-typedef struct {                                /*       RTC Structure                                                */
+typedef struct RTC_Type {
    __IO uint32_t  HOURMIN;                      /**< 0000: Hours and Minutes Counter                                    */
    __IO uint32_t  SECONDS;                      /**< 0004: Seconds Counter                                              */
    __IO uint32_t  ALRM_HM;                      /**< 0008: Hours and Minutes Alarm                                      */
@@ -5340,7 +5340,7 @@ typedef struct {                                /*       RTC Structure          
 * @brief Struct for SCM
 * @{
 */
-typedef struct {                                /*       SCM Structure                                                */
+typedef struct SCM_Type {
    __IO uint32_t  IPSBAR;                       /**< 0000: Peripheral System Base Address Register                      */
         uint8_t   RESERVED_0[4];               
    __IO uint32_t  RAMBAR;                       /**< 0008: Memory Base Address Register                                 */
@@ -5619,7 +5619,7 @@ typedef struct {                                /*       SCM Structure          
 * @brief Struct for UART
 * @{
 */
-typedef struct {                                /*       UART0 Structure                                              */
+typedef struct UART_Type {
    union {                                      /**< 0000: (size=0001)                                                  */
       __IO uint8_t   UMR1;                      /**< 0000: Mode Registers 1                                             */
       __IO uint8_t   UMR2;                      /**< 0000: Mode Registers 2                                             */
@@ -5881,7 +5881,7 @@ typedef struct {                                /*       UART0 Structure        
 * @brief Struct for USB
 * @{
 */
-typedef struct {                                /*       USB0 Structure                                               */
+typedef struct USB_Type {
    __I  uint8_t   PERID;                        /**< 0000: Peripheral ID Register                                       */
         uint8_t   RESERVED_0[3];               
    __I  uint8_t   IDCOMP;                       /**< 0004: Peripheral ID Complement Register                            */

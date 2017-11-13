@@ -197,7 +197,7 @@ extern void PORTB_PORTC_IRQHandler(void);            /**< General Purpose Input/
 * @brief Struct for ADC
 * @{
 */
-typedef struct {                                /*       ADC0 Structure                                               */
+typedef struct ADC_Type {
    __IO uint32_t  SC1[2];                       /**< 0000: Status and Control Register 1                                */
    __IO uint32_t  CFG1;                         /**< 0008: Configuration Register 1                                     */
    __IO uint32_t  CFG2;                         /**< 000C: Configuration Register 2                                     */
@@ -403,6 +403,8 @@ typedef struct {                                /*       ADC0 Structure         
 #define ADC0_BasePtr                   0x4003B000UL //!< Peripheral base address
 #define ADC0                           ((ADC_Type *) ADC0_BasePtr) //!< Freescale base pointer
 #define ADC0_BASE_PTR                  (ADC0) //!< Freescale style base pointer
+#define ADC0_IRQS { ADC0_IRQn,  }
+
 /**
  * @} */ /* End group ADC_Peripheral_access_layer_GROUP 
  */
@@ -424,7 +426,7 @@ typedef struct {                                /*       ADC0 Structure         
 * @brief Struct for ANT
 * @{
 */
-typedef struct {                                /*       ANT Structure                                                */
+typedef struct ANT_Type {
    __IO uint32_t  IRQ_CTRL;                     /**< 0000: IRQ CONTROL                                                  */
    __IO uint32_t  EVENT_TMR;                    /**< 0004: EVENT TIMER                                                  */
    __IO uint32_t  T1_CMP;                       /**< 0008: T1 COMPARE                                                   */
@@ -727,7 +729,7 @@ typedef struct {                                /*       ANT Structure          
 * @brief Struct for BTLE_RF
 * @{
 */
-typedef struct {                                /*       BTLE_RF Structure                                            */
+typedef struct BTLE_RF_Type {
         uint8_t   RESERVED_0[1536];            
    __I  uint16_t  BLE_PART_ID;                  /**< 0600: BLUETOOTH LOW ENERGY PART ID                                 */
         uint8_t   RESERVED_1[2];               
@@ -796,7 +798,7 @@ typedef struct {                                /*       BTLE_RF Structure      
 * @brief Struct for CMP
 * @{
 */
-typedef struct {                                /*       CMP0 Structure                                               */
+typedef struct CMP_Type {
    __IO uint8_t   CR0;                          /**< 0000: CMP Control Register 0                                       */
    __IO uint8_t   CR1;                          /**< 0001: CMP Control Register 1                                       */
    __IO uint8_t   FPR;                          /**< 0002: CMP Filter Period Register                                   */
@@ -901,6 +903,8 @@ typedef struct {                                /*       CMP0 Structure         
 #define CMP0_BasePtr                   0x40073000UL //!< Peripheral base address
 #define CMP0                           ((CMP_Type *) CMP0_BasePtr) //!< Freescale base pointer
 #define CMP0_BASE_PTR                  (CMP0) //!< Freescale style base pointer
+#define CMP0_IRQS { CMP0_IRQn,  }
+
 /**
  * @} */ /* End group CMP_Peripheral_access_layer_GROUP 
  */
@@ -922,7 +926,7 @@ typedef struct {                                /*       CMP0 Structure         
 * @brief Struct for CMT
 * @{
 */
-typedef struct {                                /*       CMT Structure                                                */
+typedef struct CMT_Type {
    __IO uint8_t   CGH1;                         /**< 0000: Carrier Generator High Data Register 1                       */
    __IO uint8_t   CGL1;                         /**< 0001: Carrier Generator Low Data Register 1                        */
    __IO uint8_t   CGH2;                         /**< 0002: Carrier Generator High Data Register 2                       */
@@ -1030,6 +1034,8 @@ typedef struct {                                /*       CMT Structure          
 #define CMT_BasePtr                    0x40062000UL //!< Peripheral base address
 #define CMT                            ((CMT_Type *) CMT_BasePtr) //!< Freescale base pointer
 #define CMT_BASE_PTR                   (CMT) //!< Freescale style base pointer
+#define CMT_IRQS { CMT_IRQn,  }
+
 /**
  * @} */ /* End group CMT_Peripheral_access_layer_GROUP 
  */
@@ -1051,7 +1057,7 @@ typedef struct {                                /*       CMT Structure          
 * @brief Struct for DAC
 * @{
 */
-typedef struct {                                /*       DAC0 Structure                                               */
+typedef struct DAC_Type {
    union {                                      /**< 0000: (size=0004)                                                  */
       struct {
          __IO uint8_t   DATL;                   /**< 0000: Data Low Register                                            */
@@ -1154,6 +1160,8 @@ typedef struct {                                /*       DAC0 Structure         
 #define DAC0_BasePtr                   0x4003F000UL //!< Peripheral base address
 #define DAC0                           ((DAC_Type *) DAC0_BasePtr) //!< Freescale base pointer
 #define DAC0_BASE_PTR                  (DAC0) //!< Freescale style base pointer
+#define DAC0_IRQS { DAC0_IRQn,  }
+
 /**
  * @} */ /* End group DAC_Peripheral_access_layer_GROUP 
  */
@@ -1175,7 +1183,7 @@ typedef struct {                                /*       DAC0 Structure         
 * @brief Struct for DCDC
 * @{
 */
-typedef struct {                                /*       DCDC Structure                                               */
+typedef struct DCDC_Type {
    __IO uint32_t  REG0;                         /**< 0000: DCDC REGISTER 0                                              */
    __IO uint32_t  REG1;                         /**< 0004: DCDC REGISTER 1                                              */
    __IO uint32_t  REG2;                         /**< 0008: DCDC REGISTER 2                                              */
@@ -1382,7 +1390,7 @@ typedef struct {                                /*       DCDC Structure         
 * @brief Struct for DMA0
 * @{
 */
-typedef struct {                                /*       DMA0 Structure                                               */
+typedef struct DMA_Type {
    __IO uint32_t  CR;                           /**< 0000: Control Register                                             */
    __I  uint32_t  ES;                           /**< 0004: Error Status Register                                        */
         uint8_t   RESERVED_0[4];               
@@ -1819,6 +1827,8 @@ typedef struct {                                /*       DMA0 Structure         
 #define DMA0_BasePtr                   0x40008000UL //!< Peripheral base address
 #define DMA0                           ((DMA_Type *) DMA0_BasePtr) //!< Freescale base pointer
 #define DMA0_BASE_PTR                  (DMA0) //!< Freescale style base pointer
+#define DMA0_IRQS { DMA0_IRQn, DMA1_IRQn, DMA2_IRQn, DMA3_IRQn,  }
+
 /**
  * @} */ /* End group DMA0_Peripheral_access_layer_GROUP 
  */
@@ -1840,7 +1850,7 @@ typedef struct {                                /*       DMA0 Structure         
 * @brief Struct for DMAMUX
 * @{
 */
-typedef struct {                                /*       DMAMUX0 Structure                                            */
+typedef struct DMAMUX_Type {
    __IO uint8_t   CHCFG[4];                     /**< 0000: Channel Configuration Register                               */
 } DMAMUX_Type;
 
@@ -1875,6 +1885,48 @@ typedef struct {                                /*       DMAMUX0 Structure      
 #define DMAMUX0_BasePtr                0x40021000UL //!< Peripheral base address
 #define DMAMUX0                        ((DMAMUX_Type *) DMAMUX0_BasePtr) //!< Freescale base pointer
 #define DMAMUX0_BASE_PTR               (DMAMUX0) //!< Freescale style base pointer
+
+/**
+ * DMA multiplexor slot (source) numbers
+ */
+typedef enum DmaSlot {
+   Dma0Slot_Disabled                   =        0, //!<  Disabled
+   Dma0Slot_LPUART0_Rx                 =        2, //!<  LPUART0 Receive
+   Dma0Slot_LPUART0_Tx                 =        3, //!<  LPUART0 Transmit
+   Dma0Slot_Radio                      =       11, //!<  Radio
+   Dma0Slot_SPI0_Rx                    =       16, //!<  SPI0 Receive
+   Dma0Slot_SPI0_Tx                    =       17, //!<  SPI0 Transmit
+   Dma0Slot_SPI1_Rx                    =       18, //!<  SPI1 Receive
+   Dma0Slot_SPI1_Tx                    =       19, //!<  SPI1 Transmit
+   Dma0Slot_LTC0_Input_FIFO            =       20, //!<  LTC0_Input_FIFO
+   Dma0Slot_LTC0_Output_FIFO           =       21, //!<  LTC0_Output_FIFO
+   Dma0Slot_I2C0                       =       22, //!<  I2C0
+   Dma0Slot_I2C1                       =       23, //!<  I2C1
+   Dma0Slot_TPM0_Ch0                   =       24, //!<  TPM0 Channel 0
+   Dma0Slot_TPM0_Ch1                   =       25, //!<  TPM0 Channel 1
+   Dma0Slot_TPM0_Ch2                   =       26, //!<  TPM0 Channel 2
+   Dma0Slot_TPM0_Ch3                   =       27, //!<  TPM0 Channel 3
+   Dma0Slot_TPM1_Ch0                   =       32, //!<  TPM1 Channel 0
+   Dma0Slot_TPM1_Ch1                   =       33, //!<  TPM1 Channel 1
+   Dma0Slot_TPM2_Ch0                   =       34, //!<  TPM2 Channel 0
+   Dma0Slot_TPM2_Ch1                   =       35, //!<  TPM2 Channel 1
+   Dma0Slot_ADC0                       =       40, //!<  ADC0
+   Dma0Slot_CMP0                       =       42, //!<  CMP0
+   Dma0Slot_DAC0                       =       45, //!<  DAC0
+   Dma0Slot_CMT                        =       47, //!<  CMT
+   Dma0Slot_PortA                      =       49, //!<  Port A
+   Dma0Slot_PortB                      =       50, //!<  Port B
+   Dma0Slot_PortC                      =       51, //!<  Port C
+   Dma0Slot_TPM0_Overflow              =       54, //!<  TPM0 Overflow
+   Dma0Slot_TPM1_Overflow              =       55, //!<  TPM1 Overflow
+   Dma0Slot_TPM2_Overflow              =       56, //!<  TPM2 Overflow
+   Dma0Slot_TSI                        =       57, //!<  TSI
+   Dma0Slot_AlwaysEnabled60            =       60, //!<  AlwaysEnabled60
+   Dma0Slot_AlwaysEnabled61            =       61, //!<  AlwaysEnabled61
+   Dma0Slot_AlwaysEnabled62            =       62, //!<  AlwaysEnabled62
+   Dma0Slot_AlwaysEnabled63            =       63, //!<  AlwaysEnabled63
+} DmaSlot;
+
 /**
  * @} */ /* End group DMAMUX_Peripheral_access_layer_GROUP 
  */
@@ -1896,7 +1948,7 @@ typedef struct {                                /*       DMAMUX0 Structure      
 * @brief Struct for FGPIO
 * @{
 */
-typedef struct {                                /*       FGPIOA Structure                                             */
+typedef struct GPIO_Type {
    __IO uint32_t  PDOR;                         /**< 0000: Port Data Output Register                                    */
    __O  uint32_t  PSOR;                         /**< 0004: Port Set Output Register                                     */
    __O  uint32_t  PCOR;                         /**< 0008: Port Clear Output Register                                   */
@@ -1995,7 +2047,7 @@ typedef struct {                                /*       FGPIOA Structure       
 * @brief Struct for FTFA
 * @{
 */
-typedef struct {                                /*       FTFA Structure                                               */
+typedef struct FTFA_Type {
    __IO uint8_t   FSTAT;                        /**< 0000: Flash Status Register                                        */
    __IO uint8_t   FCNFG;                        /**< 0001: Flash Configuration Register                                 */
    __I  uint8_t   FSEC;                         /**< 0002: Flash Security Register                                      */
@@ -2137,6 +2189,8 @@ typedef struct {                                /*       FTFA Structure         
 #define FTFA_BasePtr                   0x40020000UL //!< Peripheral base address
 #define FTFA                           ((FTFA_Type *) FTFA_BasePtr) //!< Freescale base pointer
 #define FTFA_BASE_PTR                  (FTFA) //!< Freescale style base pointer
+#define FTFA_IRQS { FTFA_IRQn,  }
+
 /**
  * @} */ /* End group FTFA_Peripheral_access_layer_GROUP 
  */
@@ -2158,7 +2212,7 @@ typedef struct {                                /*       FTFA Structure         
 * @brief Struct for GENFSK
 * @{
 */
-typedef struct {                                /*       GENFSK Structure                                             */
+typedef struct GENFSK_Type {
    __IO uint32_t  IRQ_CTRL;                     /**< 0000: IRQ CONTROL                                                  */
    __IO uint32_t  EVENT_TMR;                    /**< 0004: EVENT TIMER                                                  */
    __IO uint32_t  T1_CMP;                       /**< 0008: T1 COMPARE                                                   */
@@ -2657,7 +2711,7 @@ typedef struct {                                /*       GENFSK Structure       
 * @brief Struct for I2C
 * @{
 */
-typedef struct {                                /*       I2C0 Structure                                               */
+typedef struct I2C_Type {
    __IO uint8_t   A1;                           /**< 0000: I2C Address Register 1                                       */
    __IO uint8_t   F;                            /**< 0001: I2C Frequency Divider register                               */
    __IO uint8_t   C1;                           /**< 0002: I2C Control Register 1                                       */
@@ -2845,6 +2899,8 @@ typedef struct {                                /*       I2C0 Structure         
 #define I2C0_BasePtr                   0x40066000UL //!< Peripheral base address
 #define I2C0                           ((I2C_Type *) I2C0_BasePtr) //!< Freescale base pointer
 #define I2C0_BASE_PTR                  (I2C0) //!< Freescale style base pointer
+#define I2C0_IRQS { I2C0_IRQn,  }
+
 /**
  * @} */ /* End group I2C_Peripheral_access_layer_GROUP 
  */
@@ -2866,6 +2922,8 @@ typedef struct {                                /*       I2C0 Structure         
 #define I2C1_BasePtr                   0x40067000UL //!< Peripheral base address
 #define I2C1                           ((I2C_Type *) I2C1_BasePtr) //!< Freescale base pointer
 #define I2C1_BASE_PTR                  (I2C1) //!< Freescale style base pointer
+#define I2C1_IRQS { I2C1_IRQn,  }
+
 /**
  * @} */ /* End group I2C_Peripheral_access_layer_GROUP 
  */
@@ -2887,7 +2945,7 @@ typedef struct {                                /*       I2C0 Structure         
 * @brief Struct for LLWU
 * @{
 */
-typedef struct {                                /*       LLWU Structure                                               */
+typedef struct LLWU_Type {
    union {                                      /**< 0000: (size=0004)                                                  */
       __IO uint8_t   PE[4];                     /**< 0000: Pin Enable  Register                                         */
       struct {                                  /**< 0000: (size=0004)                                                  */
@@ -3164,6 +3222,8 @@ typedef struct {                                /*       LLWU Structure         
 #define LLWU_BasePtr                   0x4007C000UL //!< Peripheral base address
 #define LLWU                           ((LLWU_Type *) LLWU_BasePtr) //!< Freescale base pointer
 #define LLWU_BASE_PTR                  (LLWU) //!< Freescale style base pointer
+#define LLWU_IRQS { LLWU_IRQn,  }
+
 /**
  * @} */ /* End group LLWU_Peripheral_access_layer_GROUP 
  */
@@ -3185,7 +3245,7 @@ typedef struct {                                /*       LLWU Structure         
 * @brief Struct for LPTMR
 * @{
 */
-typedef struct {                                /*       LPTMR0 Structure                                             */
+typedef struct LPTMR_Type {
    __IO uint32_t  CSR;                          /**< 0000: Control Status Register                                      */
    __IO uint32_t  PSR;                          /**< 0004: Prescale Register                                            */
    __IO uint32_t  CMR;                          /**< 0008: Compare Register                                             */
@@ -3253,6 +3313,8 @@ typedef struct {                                /*       LPTMR0 Structure       
 #define LPTMR0_BasePtr                 0x40040000UL //!< Peripheral base address
 #define LPTMR0                         ((LPTMR_Type *) LPTMR0_BasePtr) //!< Freescale base pointer
 #define LPTMR0_BASE_PTR                (LPTMR0) //!< Freescale style base pointer
+#define LPTMR0_IRQS { LPTMR0_IRQn,  }
+
 /**
  * @} */ /* End group LPTMR_Peripheral_access_layer_GROUP 
  */
@@ -3274,7 +3336,7 @@ typedef struct {                                /*       LPTMR0 Structure       
 * @brief Struct for LPUART
 * @{
 */
-typedef struct {                                /*       LPUART0 Structure                                            */
+typedef struct LPUART_Type {
    __IO uint32_t  BAUD;                         /**< 0000: Baud Rate Register                                           */
    __IO uint32_t  STAT;                         /**< 0004: Status Register                                              */
    __IO uint32_t  CTRL;                         /**< 0008: Control Register                                             */
@@ -3532,6 +3594,8 @@ typedef struct {                                /*       LPUART0 Structure      
 #define LPUART0_BasePtr                0x40054000UL //!< Peripheral base address
 #define LPUART0                        ((LPUART_Type *) LPUART0_BasePtr) //!< Freescale base pointer
 #define LPUART0_BASE_PTR               (LPUART0) //!< Freescale style base pointer
+#define LPUART0_IRQS { LPUART0_IRQn,  }
+
 /**
  * @} */ /* End group LPUART_Peripheral_access_layer_GROUP 
  */
@@ -3553,7 +3617,7 @@ typedef struct {                                /*       LPUART0 Structure      
 * @brief Struct for LTC
 * @{
 */
-typedef struct {                                /*       LTC0 Structure                                               */
+typedef struct LTC_Type {
    __IO uint32_t  MD;                           /**< 0000: Mode Register                                                */
         uint8_t   RESERVED_0[4];               
    __O  uint32_t  KS;                           /**< 0008: Key Size Register                                            */
@@ -3779,6 +3843,8 @@ typedef struct {                                /*       LTC0 Structure         
 #define LTC0_BasePtr                   0x40058000UL //!< Peripheral base address
 #define LTC0                           ((LTC_Type *) LTC0_BasePtr) //!< Freescale base pointer
 #define LTC0_BASE_PTR                  (LTC0) //!< Freescale style base pointer
+#define LTC0_IRQS { LTC0_IRQn,  }
+
 /**
  * @} */ /* End group LTC_Peripheral_access_layer_GROUP 
  */
@@ -3800,7 +3866,7 @@ typedef struct {                                /*       LTC0 Structure         
 * @brief Struct for MCG
 * @{
 */
-typedef struct {                                /*       MCG Structure                                                */
+typedef struct MCG_Type {
    __IO uint8_t   C1;                           /**< 0000: Control 1 Register                                           */
    __IO uint8_t   C2;                           /**< 0001: Control 2 Register                                           */
    __IO uint8_t   C3;                           /**< 0002: Control 3 Register                                           */
@@ -3951,6 +4017,8 @@ typedef struct {                                /*       MCG Structure          
 #define MCG_BasePtr                    0x40064000UL //!< Peripheral base address
 #define MCG                            ((MCG_Type *) MCG_BasePtr) //!< Freescale base pointer
 #define MCG_BASE_PTR                   (MCG) //!< Freescale style base pointer
+#define MCG_IRQS { MCG_IRQn,  }
+
 /**
  * @} */ /* End group MCG_Peripheral_access_layer_GROUP 
  */
@@ -3972,7 +4040,7 @@ typedef struct {                                /*       MCG Structure          
 * @brief Struct for MCM
 * @{
 */
-typedef struct {                                /*       MCM Structure                                                */
+typedef struct MCM_Type {
         uint8_t   RESERVED_0[8];               
    __I  uint16_t  PLASC;                        /**< 0008: Crossbar Switch (AXBS) Slave Configuration                   */
    __I  uint16_t  PLAMC;                        /**< 000A: Crossbar Switch (AXBS) Master Configuration                  */
@@ -4066,7 +4134,7 @@ typedef struct {                                /*       MCM Structure          
 * @brief Struct for MTB
 * @{
 */
-typedef struct {                                /*       MTB Structure                                                */
+typedef struct MTB_Type {
    __IO uint32_t  POSITION;                     /**< 0000: MTB Position Register                                        */
    __IO uint32_t  MASTER;                       /**< 0004: MTB Master Register                                          */
    __IO uint32_t  FLOW;                         /**< 0008: MTB Flow Register                                            */
@@ -4233,7 +4301,7 @@ typedef struct {                                /*       MTB Structure          
 * @brief Struct for MTBDWT
 * @{
 */
-typedef struct {                                /*       MTBDWT Structure                                             */
+typedef struct MTBDWT_Type {
    __I  uint32_t  CTRL;                         /**< 0000: MTB DWT Control Register                                     */
         uint8_t   RESERVED_0[28];              
    struct {
@@ -4357,7 +4425,7 @@ typedef struct {                                /*       MTBDWT Structure       
 * @brief Struct for FTFA_FlashConfig
 * @{
 */
-typedef struct {                                /*       NV Structure                                                 */
+typedef struct FTFA_FlashConfig_Type {
    __I  uint8_t   BACKKEY3;                     /**< 0000: Backdoor Comparison Key 3                                    */
    __I  uint8_t   BACKKEY2;                     /**< 0001: Backdoor Comparison Key 2                                    */
    __I  uint8_t   BACKKEY1;                     /**< 0002: Backdoor Comparison Key 1                                    */
@@ -4465,7 +4533,7 @@ typedef struct {                                /*       NV Structure           
 * @brief Struct for OSC
 * @{
 */
-typedef struct {                                /*       OSC0 Structure                                               */
+typedef struct OSC_Type {
    __IO uint8_t   Dummy;                        /**< 0000: Dummy Register                                               */
 } OSC_Type;
 
@@ -4512,7 +4580,7 @@ typedef struct {                                /*       OSC0 Structure         
 * @brief Struct for PIT
 * @{
 */
-typedef struct {                                /*       PIT Structure                                                */
+typedef struct PIT_Type {
    __IO uint32_t  MCR;                          /**< 0000: Module Control Register                                      */
         uint8_t   RESERVED_0[220];             
    __I  uint32_t  LTMR64H;                      /**< 00E0: Upper Lifetime Timer Register                                */
@@ -4584,6 +4652,8 @@ typedef struct {                                /*       PIT Structure          
 #define PIT_BasePtr                    0x40037000UL //!< Peripheral base address
 #define PIT                            ((PIT_Type *) PIT_BasePtr) //!< Freescale base pointer
 #define PIT_BASE_PTR                   (PIT) //!< Freescale style base pointer
+#define PIT_IRQS { PIT_IRQn,  }
+
 /**
  * @} */ /* End group PIT_Peripheral_access_layer_GROUP 
  */
@@ -4605,7 +4675,7 @@ typedef struct {                                /*       PIT Structure          
 * @brief Struct for PMC
 * @{
 */
-typedef struct {                                /*       PMC Structure                                                */
+typedef struct PMC_Type {
    __IO uint8_t   LVDSC1;                       /**< 0000: Low Voltage Status and Control 1                             */
    __IO uint8_t   LVDSC2;                       /**< 0001: Low Voltage Status and Control 2                             */
    __IO uint8_t   REGSC;                        /**< 0002: Regulator Status and Control                                 */
@@ -4674,6 +4744,8 @@ typedef struct {                                /*       PMC Structure          
 #define PMC_BasePtr                    0x4007D000UL //!< Peripheral base address
 #define PMC                            ((PMC_Type *) PMC_BasePtr) //!< Freescale base pointer
 #define PMC_BASE_PTR                   (PMC) //!< Freescale style base pointer
+#define PMC_IRQS { PMC_DCDC_IRQn,  }
+
 /**
  * @} */ /* End group PMC_Peripheral_access_layer_GROUP 
  */
@@ -4695,7 +4767,7 @@ typedef struct {                                /*       PMC Structure          
 * @brief Struct for PORT
 * @{
 */
-typedef struct {                                /*       PORTA Structure                                              */
+typedef struct PORT_Type {
    __IO uint32_t  PCR[32];                      /**< 0000: Pin Control Register                                         */
    __O  uint32_t  GPCLR;                        /**< 0080: Global Pin Control Low Register                              */
    __O  uint32_t  GPCHR;                        /**< 0084: Global Pin Control High Register                             */
@@ -4767,6 +4839,8 @@ typedef struct {                                /*       PORTA Structure        
 #define PORTA_BasePtr                  0x40049000UL //!< Peripheral base address
 #define PORTA                          ((PORT_Type *) PORTA_BasePtr) //!< Freescale base pointer
 #define PORTA_BASE_PTR                 (PORTA) //!< Freescale style base pointer
+#define PORTA_IRQS { PORTA_IRQn,  }
+
 /**
  * @} */ /* End group PORT_Peripheral_access_layer_GROUP 
  */
@@ -4788,6 +4862,8 @@ typedef struct {                                /*       PORTA Structure        
 #define PORTB_BasePtr                  0x4004A000UL //!< Peripheral base address
 #define PORTB                          ((PORT_Type *) PORTB_BasePtr) //!< Freescale base pointer
 #define PORTB_BASE_PTR                 (PORTB) //!< Freescale style base pointer
+#define PORTB_IRQS { PORTB_PORTC_IRQn,  }
+
 /**
  * @} */ /* End group PORT_Peripheral_access_layer_GROUP 
  */
@@ -4809,6 +4885,8 @@ typedef struct {                                /*       PORTA Structure        
 #define PORTC_BasePtr                  0x4004B000UL //!< Peripheral base address
 #define PORTC                          ((PORT_Type *) PORTC_BasePtr) //!< Freescale base pointer
 #define PORTC_BASE_PTR                 (PORTC) //!< Freescale style base pointer
+#define PORTC_IRQS { PORTB_PORTC_IRQn,  }
+
 /**
  * @} */ /* End group PORT_Peripheral_access_layer_GROUP 
  */
@@ -4830,7 +4908,7 @@ typedef struct {                                /*       PORTA Structure        
 * @brief Struct for RCM
 * @{
 */
-typedef struct {                                /*       RCM Structure                                                */
+typedef struct RCM_Type {
    __I  uint8_t   SRS0;                         /**< 0000: System Reset Status Register 0                               */
    __I  uint8_t   SRS1;                         /**< 0001: System Reset Status Register 1                               */
         uint8_t   RESERVED_0[2];               
@@ -4923,7 +5001,7 @@ typedef struct {                                /*       RCM Structure          
 * @brief Struct for RFSYS
 * @{
 */
-typedef struct {                                /*       RFSYS Structure                                              */
+typedef struct RFSYS_Type {
    __IO uint32_t  REG[8];                       /**< 0000: Register file register                                       */
 } RFSYS_Type;
 
@@ -4982,7 +5060,7 @@ typedef struct {                                /*       RFSYS Structure        
 * @brief Struct for ROM
 * @{
 */
-typedef struct {                                /*       ROM Structure                                                */
+typedef struct ROM_Type {
    __I  uint32_t  ENTRY[3];                     /**< 0000: Entry                                                        */
    __I  uint32_t  TABLEMARK;                    /**< 000C: End of Table Marker Register                                 */
         uint8_t   RESERVED_0[4028];            
@@ -5060,7 +5138,7 @@ typedef struct {                                /*       ROM Structure          
 * @brief Struct for RSIM
 * @{
 */
-typedef struct {                                /*       RSIM Structure                                               */
+typedef struct RSIM_Type {
    __IO uint32_t  CONTROL;                      /**< 0000: Radio System Control                                         */
    __IO uint32_t  ACTIVE_DELAY;                 /**< 0004: Radio Active Early Warning                                   */
    __I  uint32_t  MAC_MSB;                      /**< 0008: Radio MAC Address                                            */
@@ -5431,7 +5509,7 @@ typedef struct {                                /*       RSIM Structure         
 * @brief Struct for RTC
 * @{
 */
-typedef struct {                                /*       RTC Structure                                                */
+typedef struct RTC_Type {
    __IO uint32_t  TSR;                          /**< 0000: Time Seconds Register                                        */
    __IO uint32_t  TPR;                          /**< 0004: Time Prescaler Register                                      */
    __IO uint32_t  TAR;                          /**< 0008: Time Alarm Register                                          */
@@ -5567,6 +5645,8 @@ typedef struct {                                /*       RTC Structure          
 #define RTC_BasePtr                    0x4003D000UL //!< Peripheral base address
 #define RTC                            ((RTC_Type *) RTC_BasePtr) //!< Freescale base pointer
 #define RTC_BASE_PTR                   (RTC) //!< Freescale style base pointer
+#define RTC_IRQS { RTC_Alarm_IRQn, RTC_Seconds_IRQn,  }
+
 /**
  * @} */ /* End group RTC_Peripheral_access_layer_GROUP 
  */
@@ -5588,7 +5668,7 @@ typedef struct {                                /*       RTC Structure          
 * @brief Struct for SIM
 * @{
 */
-typedef struct {                                /*       SIM Structure                                                */
+typedef struct SIM_Type {
    __IO uint32_t  SOPT1;                        /**< 0000: System Options Register 1                                    */
         uint8_t   RESERVED_0[4096];            
    __IO uint32_t  SOPT2;                        /**< 1004: System Options Register 2                                    */
@@ -5893,7 +5973,7 @@ typedef struct {                                /*       SIM Structure          
 * @brief Struct for SMC
 * @{
 */
-typedef struct {                                /*       SMC Structure                                                */
+typedef struct SMC_Type {
    __IO uint8_t   PMPROT;                       /**< 0000: Power Mode Protection Register                               */
    __IO uint8_t   PMCTRL;                       /**< 0001: Power Mode Control Register                                  */
    union {                                      /**< 0000: (size=0001)                                                  */
@@ -5995,7 +6075,7 @@ typedef struct {                                /*       SMC Structure          
 * @brief Struct for SPI
 * @{
 */
-typedef struct {                                /*       SPI0 Structure                                               */
+typedef struct SPI_Type {
    __IO uint32_t  MCR;                          /**< 0000: Module Configuration Register                                */
         uint8_t   RESERVED_0[4];               
    __IO uint32_t  TCR;                          /**< 0008: Transfer Count Register                                      */
@@ -6240,6 +6320,8 @@ typedef struct {                                /*       SPI0 Structure         
 #define SPI0_BasePtr                   0x4002C000UL //!< Peripheral base address
 #define SPI0                           ((SPI_Type *) SPI0_BasePtr) //!< Freescale base pointer
 #define SPI0_BASE_PTR                  (SPI0) //!< Freescale style base pointer
+#define SPI0_IRQS { SPI0_IRQn,  }
+
 /**
  * @} */ /* End group SPI_Peripheral_access_layer_GROUP 
  */
@@ -6261,6 +6343,8 @@ typedef struct {                                /*       SPI0 Structure         
 #define SPI1_BasePtr                   0x4002D000UL //!< Peripheral base address
 #define SPI1                           ((SPI_Type *) SPI1_BasePtr) //!< Freescale base pointer
 #define SPI1_BASE_PTR                  (SPI1) //!< Freescale style base pointer
+#define SPI1_IRQS { SPI1_IRQn,  }
+
 /**
  * @} */ /* End group SPI_Peripheral_access_layer_GROUP 
  */
@@ -6282,7 +6366,7 @@ typedef struct {                                /*       SPI0 Structure         
 * @brief Struct for SYST
 * @{
 */
-typedef struct {                                /*       SYST Structure                                               */
+typedef struct SYST_Type {
    __IO uint32_t  CSR;                          /**< 0000: Control and Status Register                                  */
    __IO uint32_t  RVR;                          /**< 0004: Reload Value Register                                        */
    __IO uint32_t  CVR;                          /**< 0008: Current Value Register                                       */
@@ -6362,7 +6446,7 @@ typedef struct {                                /*       SYST Structure         
 * @brief Struct for TPM
 * @{
 */
-typedef struct {                                /*       TPM0 Structure                                               */
+typedef struct TPM_Type {
    __IO uint32_t  SC;                           /**< 0000: Status and Control                                           */
    __IO uint32_t  CNT;                          /**< 0004: Counter                                                      */
    __IO uint32_t  MOD;                          /**< 0008: Modulo                                                       */
@@ -6565,6 +6649,8 @@ typedef struct {                                /*       TPM0 Structure         
 #define TPM0_BasePtr                   0x40038000UL //!< Peripheral base address
 #define TPM0                           ((TPM_Type *) TPM0_BasePtr) //!< Freescale base pointer
 #define TPM0_BASE_PTR                  (TPM0) //!< Freescale style base pointer
+#define TPM0_IRQS { TPM0_IRQn,  }
+
 /**
  * @} */ /* End group TPM_Peripheral_access_layer_GROUP 
  */
@@ -6586,7 +6672,7 @@ typedef struct {                                /*       TPM0 Structure         
 * @brief Struct for TPM
 * @{
 */
-typedef struct {                                /*       TPM1 Structure                                               */
+typedef struct TPM1_Type {
    __IO uint32_t  SC;                           /**< 0000: Status and Control                                           */
    __IO uint32_t  CNT;                          /**< 0004: Counter                                                      */
    __IO uint32_t  MOD;                          /**< 0008: Modulo                                                       */
@@ -6639,6 +6725,8 @@ typedef struct {                                /*       TPM1 Structure         
 #define TPM1_BasePtr                   0x40039000UL //!< Peripheral base address
 #define TPM1                           ((TPM1_Type *) TPM1_BasePtr) //!< Freescale base pointer
 #define TPM1_BASE_PTR                  (TPM1) //!< Freescale style base pointer
+#define TPM1_IRQS { TPM1_IRQn,  }
+
 /**
  * @} */ /* End group TPM_Peripheral_access_layer_GROUP 
  */
@@ -6660,6 +6748,8 @@ typedef struct {                                /*       TPM1 Structure         
 #define TPM2_BasePtr                   0x4003A000UL //!< Peripheral base address
 #define TPM2                           ((TPM1_Type *) TPM2_BasePtr) //!< Freescale base pointer
 #define TPM2_BASE_PTR                  (TPM2) //!< Freescale style base pointer
+#define TPM2_IRQS { TPM2_IRQn,  }
+
 /**
  * @} */ /* End group TPM_Peripheral_access_layer_GROUP 
  */
@@ -6681,7 +6771,7 @@ typedef struct {                                /*       TPM1 Structure         
 * @brief Struct for TRNG
 * @{
 */
-typedef struct {                                /*       TRNG0 Structure                                              */
+typedef struct TRNG_Type {
    __IO uint32_t  MCTL;                         /**< 0000: Miscellaneous Control Register                               */
    __IO uint32_t  SCMISC;                       /**< 0004: Statistical Check Miscellaneous Register                     */
    __IO uint32_t  PKRRNG;                       /**< 0008: Poker Range Register                                         */
@@ -7127,6 +7217,8 @@ typedef struct {                                /*       TRNG0 Structure        
 #define TRNG0_BasePtr                  0x40029000UL //!< Peripheral base address
 #define TRNG0                          ((TRNG_Type *) TRNG0_BasePtr) //!< Freescale base pointer
 #define TRNG0_BASE_PTR                 (TRNG0) //!< Freescale style base pointer
+#define TRNG0_IRQS { TRNG0_IRQn,  }
+
 /**
  * @} */ /* End group TRNG_Peripheral_access_layer_GROUP 
  */
@@ -7148,7 +7240,7 @@ typedef struct {                                /*       TRNG0 Structure        
 * @brief Struct for TSI
 * @{
 */
-typedef struct {                                /*       TSI0 Structure                                               */
+typedef struct TSI_Type {
    __IO uint32_t  GENCS;                        /**< 0000: General Control and Status Register                          */
    __IO uint32_t  DATA;                         /**< 0004: DATA Register                                                */
    __IO uint32_t  TSHD;                         /**< 0008: Threshold Register                                           */
@@ -7241,6 +7333,8 @@ typedef struct {                                /*       TSI0 Structure         
 #define TSI0_BasePtr                   0x40045000UL //!< Peripheral base address
 #define TSI0                           ((TSI_Type *) TSI0_BasePtr) //!< Freescale base pointer
 #define TSI0_BASE_PTR                  (TSI0) //!< Freescale style base pointer
+#define TSI0_IRQS { TSI0_IRQn,  }
+
 /**
  * @} */ /* End group TSI_Peripheral_access_layer_GROUP 
  */
@@ -7262,7 +7356,7 @@ typedef struct {                                /*       TSI0 Structure         
 * @brief Struct for VREF
 * @{
 */
-typedef struct {                                /*       VREF Structure                                               */
+typedef struct VREF_Type {
    __IO uint8_t   TRM;                          /**< 0000: Trim Register                                                */
    __IO uint8_t   SC;                           /**< 0001: Status and Control Register                                  */
 } VREF_Type;
@@ -7315,24 +7409,24 @@ typedef struct {                                /*       VREF Structure         
  * @} */ /* End group VREF_Peripheral_access_layer_GROUP 
  */
 /**
-* @addtogroup XCVR_ANA_Peripheral_access_layer_GROUP XCVR_ANA Peripheral Access Layer
-* @brief C Struct for XCVR_ANA
+* @addtogroup XCVR_ANALOG_Peripheral_access_layer_GROUP XCVR_ANALOG Peripheral Access Layer
+* @brief C Struct for XCVR_ANALOG
 * @{
 */
 
 /* ================================================================================ */
-/* ================           XCVR_ANA (file:XCVR_ANA_MKW41Z4)       ================ */
+/* ================           XCVR_ANALOG (file:XCVR_ANALOG_MKW41Z4)       ================ */
 /* ================================================================================ */
 
 /**
  * @brief XCVR_ANALOG
  */
 /**
-* @addtogroup XCVR_ANA_structs_GROUP XCVR_ANA struct
-* @brief Struct for XCVR_ANA
+* @addtogroup XCVR_ANALOG_structs_GROUP XCVR_ANALOG struct
+* @brief Struct for XCVR_ANALOG
 * @{
 */
-typedef struct {                                /*       XCVR_ANA Structure                                           */
+typedef struct XCVR_ANALOG_Type {
    __IO uint32_t  BB_LDO_1;                     /**< 0000: RF Analog Baseband LDO Control 1                             */
    __IO uint32_t  BB_LDO_2;                     /**< 0004: RF Analog Baseband LDO Control 2                             */
    __IO uint32_t  RX_ADC;                       /**< 0008: RF Analog ADC Control                                        */
@@ -7347,371 +7441,371 @@ typedef struct {                                /*       XCVR_ANA Structure     
    __IO uint32_t  BALUN_RX;                     /**< 002C: RF Analog Balun RX Mode Control                              */
    __I  uint32_t  DFT_OBSV_1;                   /**< 0030: RF Analog DFT Observation Register 1                         */
    __IO uint32_t  DFT_OBSV_2;                   /**< 0034: RF Analog DFT Observation Register 2                         */
-} XCVR_ANA_Type;
+} XCVR_ANALOG_Type;
 
 /**
- * @} */ /* End group XCVR_ANA_structs_GROUP 
+ * @} */ /* End group XCVR_ANALOG_structs_GROUP 
  */
 
 /* -------------------------------------------------------------------------------- */
-/* -----------     'XCVR_ANA' Position & Mask macros                    ----------- */
+/* -----------     'XCVR_ANALOG' Position & Mask macros                 ----------- */
 /* -------------------------------------------------------------------------------- */
 
 /**
-* @addtogroup XCVR_ANA_Register_Masks_GROUP XCVR_ANA Register Masks
-* @brief Register Masks for XCVR_ANA
+* @addtogroup XCVR_ANALOG_Register_Masks_GROUP XCVR_ANALOG Register Masks
+* @brief Register Masks for XCVR_ANALOG
 * @{
 */
 /* ------- BB_LDO_1 Bit Fields                      ------ */
-#define XCVR_ANA_BB_LDO_1_BB_LDO_ADCDAC_BYP_MASK (0x1U)                                              /*!< XCVR_ANA_BB_LDO_1.BB_LDO_ADCDAC_BYP Mask*/
-#define XCVR_ANA_BB_LDO_1_BB_LDO_ADCDAC_BYP_SHIFT (0U)                                               /*!< XCVR_ANA_BB_LDO_1.BB_LDO_ADCDAC_BYP Position*/
-#define XCVR_ANA_BB_LDO_1_BB_LDO_ADCDAC_BYP(x)   (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< XCVR_ANA_BB_LDO_1.BB_LDO_ADCDAC_BYP Field*/
-#define XCVR_ANA_BB_LDO_1_BB_LDO_ADCDAC_DIAGSEL_MASK (0x2U)                                          /*!< XCVR_ANA_BB_LDO_1.BB_LDO_ADCDAC_DIAGSEL Mask*/
-#define XCVR_ANA_BB_LDO_1_BB_LDO_ADCDAC_DIAGSEL_SHIFT (1U)                                           /*!< XCVR_ANA_BB_LDO_1.BB_LDO_ADCDAC_DIAGSEL Position*/
-#define XCVR_ANA_BB_LDO_1_BB_LDO_ADCDAC_DIAGSEL(x) (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)         /*!< XCVR_ANA_BB_LDO_1.BB_LDO_ADCDAC_DIAGSEL Field*/
-#define XCVR_ANA_BB_LDO_1_BB_LDO_ADCDAC_SPARE_MASK (0xCU)                                            /*!< XCVR_ANA_BB_LDO_1.BB_LDO_ADCDAC_SPARE Mask*/
-#define XCVR_ANA_BB_LDO_1_BB_LDO_ADCDAC_SPARE_SHIFT (2U)                                             /*!< XCVR_ANA_BB_LDO_1.BB_LDO_ADCDAC_SPARE Position*/
-#define XCVR_ANA_BB_LDO_1_BB_LDO_ADCDAC_SPARE(x) (((uint32_t)(((uint32_t)(x))<<2U))&0xCUL)           /*!< XCVR_ANA_BB_LDO_1.BB_LDO_ADCDAC_SPARE Field*/
-#define XCVR_ANA_BB_LDO_1_BB_LDO_ADCDAC_TRIM_MASK (0x70U)                                            /*!< XCVR_ANA_BB_LDO_1.BB_LDO_ADCDAC_TRIM Mask*/
-#define XCVR_ANA_BB_LDO_1_BB_LDO_ADCDAC_TRIM_SHIFT (4U)                                              /*!< XCVR_ANA_BB_LDO_1.BB_LDO_ADCDAC_TRIM Position*/
-#define XCVR_ANA_BB_LDO_1_BB_LDO_ADCDAC_TRIM(x)  (((uint32_t)(((uint32_t)(x))<<4U))&0x70UL)          /*!< XCVR_ANA_BB_LDO_1.BB_LDO_ADCDAC_TRIM Field*/
-#define XCVR_ANA_BB_LDO_1_BB_LDO_BBA_BYP_MASK    (0x100U)                                            /*!< XCVR_ANA_BB_LDO_1.BB_LDO_BBA_BYP Mask   */
-#define XCVR_ANA_BB_LDO_1_BB_LDO_BBA_BYP_SHIFT   (8U)                                                /*!< XCVR_ANA_BB_LDO_1.BB_LDO_BBA_BYP Position*/
-#define XCVR_ANA_BB_LDO_1_BB_LDO_BBA_BYP(x)      (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< XCVR_ANA_BB_LDO_1.BB_LDO_BBA_BYP Field  */
-#define XCVR_ANA_BB_LDO_1_BB_LDO_BBA_DIAGSEL_MASK (0x200U)                                           /*!< XCVR_ANA_BB_LDO_1.BB_LDO_BBA_DIAGSEL Mask*/
-#define XCVR_ANA_BB_LDO_1_BB_LDO_BBA_DIAGSEL_SHIFT (9U)                                              /*!< XCVR_ANA_BB_LDO_1.BB_LDO_BBA_DIAGSEL Position*/
-#define XCVR_ANA_BB_LDO_1_BB_LDO_BBA_DIAGSEL(x)  (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< XCVR_ANA_BB_LDO_1.BB_LDO_BBA_DIAGSEL Field*/
-#define XCVR_ANA_BB_LDO_1_BB_LDO_BBA_SPARE_MASK  (0xC00U)                                            /*!< XCVR_ANA_BB_LDO_1.BB_LDO_BBA_SPARE Mask */
-#define XCVR_ANA_BB_LDO_1_BB_LDO_BBA_SPARE_SHIFT (10U)                                               /*!< XCVR_ANA_BB_LDO_1.BB_LDO_BBA_SPARE Position*/
-#define XCVR_ANA_BB_LDO_1_BB_LDO_BBA_SPARE(x)    (((uint32_t)(((uint32_t)(x))<<10U))&0xC00UL)        /*!< XCVR_ANA_BB_LDO_1.BB_LDO_BBA_SPARE Field*/
-#define XCVR_ANA_BB_LDO_1_BB_LDO_BBA_TRIM_MASK   (0x7000U)                                           /*!< XCVR_ANA_BB_LDO_1.BB_LDO_BBA_TRIM Mask  */
-#define XCVR_ANA_BB_LDO_1_BB_LDO_BBA_TRIM_SHIFT  (12U)                                               /*!< XCVR_ANA_BB_LDO_1.BB_LDO_BBA_TRIM Position*/
-#define XCVR_ANA_BB_LDO_1_BB_LDO_BBA_TRIM(x)     (((uint32_t)(((uint32_t)(x))<<12U))&0x7000UL)       /*!< XCVR_ANA_BB_LDO_1.BB_LDO_BBA_TRIM Field */
-#define XCVR_ANA_BB_LDO_1_BB_LDO_FDBK_BYP_MASK   (0x10000U)                                          /*!< XCVR_ANA_BB_LDO_1.BB_LDO_FDBK_BYP Mask  */
-#define XCVR_ANA_BB_LDO_1_BB_LDO_FDBK_BYP_SHIFT  (16U)                                               /*!< XCVR_ANA_BB_LDO_1.BB_LDO_FDBK_BYP Position*/
-#define XCVR_ANA_BB_LDO_1_BB_LDO_FDBK_BYP(x)     (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< XCVR_ANA_BB_LDO_1.BB_LDO_FDBK_BYP Field */
-#define XCVR_ANA_BB_LDO_1_BB_LDO_FDBK_DIAGSEL_MASK (0x20000U)                                        /*!< XCVR_ANA_BB_LDO_1.BB_LDO_FDBK_DIAGSEL Mask*/
-#define XCVR_ANA_BB_LDO_1_BB_LDO_FDBK_DIAGSEL_SHIFT (17U)                                            /*!< XCVR_ANA_BB_LDO_1.BB_LDO_FDBK_DIAGSEL Position*/
-#define XCVR_ANA_BB_LDO_1_BB_LDO_FDBK_DIAGSEL(x) (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< XCVR_ANA_BB_LDO_1.BB_LDO_FDBK_DIAGSEL Field*/
-#define XCVR_ANA_BB_LDO_1_BB_LDO_FDBK_SPARE_MASK (0xC0000U)                                          /*!< XCVR_ANA_BB_LDO_1.BB_LDO_FDBK_SPARE Mask*/
-#define XCVR_ANA_BB_LDO_1_BB_LDO_FDBK_SPARE_SHIFT (18U)                                              /*!< XCVR_ANA_BB_LDO_1.BB_LDO_FDBK_SPARE Position*/
-#define XCVR_ANA_BB_LDO_1_BB_LDO_FDBK_SPARE(x)   (((uint32_t)(((uint32_t)(x))<<18U))&0xC0000UL)      /*!< XCVR_ANA_BB_LDO_1.BB_LDO_FDBK_SPARE Field*/
-#define XCVR_ANA_BB_LDO_1_BB_LDO_FDBK_TRIM_MASK  (0x700000U)                                         /*!< XCVR_ANA_BB_LDO_1.BB_LDO_FDBK_TRIM Mask */
-#define XCVR_ANA_BB_LDO_1_BB_LDO_FDBK_TRIM_SHIFT (20U)                                               /*!< XCVR_ANA_BB_LDO_1.BB_LDO_FDBK_TRIM Position*/
-#define XCVR_ANA_BB_LDO_1_BB_LDO_FDBK_TRIM(x)    (((uint32_t)(((uint32_t)(x))<<20U))&0x700000UL)     /*!< XCVR_ANA_BB_LDO_1.BB_LDO_FDBK_TRIM Field*/
-#define XCVR_ANA_BB_LDO_1_BB_LDO_HF_BYP_MASK     (0x1000000U)                                        /*!< XCVR_ANA_BB_LDO_1.BB_LDO_HF_BYP Mask    */
-#define XCVR_ANA_BB_LDO_1_BB_LDO_HF_BYP_SHIFT    (24U)                                               /*!< XCVR_ANA_BB_LDO_1.BB_LDO_HF_BYP Position*/
-#define XCVR_ANA_BB_LDO_1_BB_LDO_HF_BYP(x)       (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< XCVR_ANA_BB_LDO_1.BB_LDO_HF_BYP Field   */
-#define XCVR_ANA_BB_LDO_1_BB_LDO_HF_DIAGSEL_MASK (0x2000000U)                                        /*!< XCVR_ANA_BB_LDO_1.BB_LDO_HF_DIAGSEL Mask*/
-#define XCVR_ANA_BB_LDO_1_BB_LDO_HF_DIAGSEL_SHIFT (25U)                                              /*!< XCVR_ANA_BB_LDO_1.BB_LDO_HF_DIAGSEL Position*/
-#define XCVR_ANA_BB_LDO_1_BB_LDO_HF_DIAGSEL(x)   (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< XCVR_ANA_BB_LDO_1.BB_LDO_HF_DIAGSEL Field*/
-#define XCVR_ANA_BB_LDO_1_BB_LDO_HF_SPARE_MASK   (0xC000000U)                                        /*!< XCVR_ANA_BB_LDO_1.BB_LDO_HF_SPARE Mask  */
-#define XCVR_ANA_BB_LDO_1_BB_LDO_HF_SPARE_SHIFT  (26U)                                               /*!< XCVR_ANA_BB_LDO_1.BB_LDO_HF_SPARE Position*/
-#define XCVR_ANA_BB_LDO_1_BB_LDO_HF_SPARE(x)     (((uint32_t)(((uint32_t)(x))<<26U))&0xC000000UL)    /*!< XCVR_ANA_BB_LDO_1.BB_LDO_HF_SPARE Field */
-#define XCVR_ANA_BB_LDO_1_BB_LDO_HF_TRIM_MASK    (0x70000000U)                                       /*!< XCVR_ANA_BB_LDO_1.BB_LDO_HF_TRIM Mask   */
-#define XCVR_ANA_BB_LDO_1_BB_LDO_HF_TRIM_SHIFT   (28U)                                               /*!< XCVR_ANA_BB_LDO_1.BB_LDO_HF_TRIM Position*/
-#define XCVR_ANA_BB_LDO_1_BB_LDO_HF_TRIM(x)      (((uint32_t)(((uint32_t)(x))<<28U))&0x70000000UL)   /*!< XCVR_ANA_BB_LDO_1.BB_LDO_HF_TRIM Field  */
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_ADCDAC_BYP_MASK (0x1U)                                           /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_ADCDAC_BYP Mask*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_ADCDAC_BYP_SHIFT (0U)                                            /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_ADCDAC_BYP Position*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_ADCDAC_BYP(x) (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)          /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_ADCDAC_BYP Field*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_ADCDAC_DIAGSEL_MASK (0x2U)                                       /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_ADCDAC_DIAGSEL Mask*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_ADCDAC_DIAGSEL_SHIFT (1U)                                        /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_ADCDAC_DIAGSEL Position*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_ADCDAC_DIAGSEL(x) (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)      /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_ADCDAC_DIAGSEL Field*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_ADCDAC_SPARE_MASK (0xCU)                                         /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_ADCDAC_SPARE Mask*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_ADCDAC_SPARE_SHIFT (2U)                                          /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_ADCDAC_SPARE Position*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_ADCDAC_SPARE(x) (((uint32_t)(((uint32_t)(x))<<2U))&0xCUL)        /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_ADCDAC_SPARE Field*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_ADCDAC_TRIM_MASK (0x70U)                                         /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_ADCDAC_TRIM Mask*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_ADCDAC_TRIM_SHIFT (4U)                                           /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_ADCDAC_TRIM Position*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_ADCDAC_TRIM(x) (((uint32_t)(((uint32_t)(x))<<4U))&0x70UL)        /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_ADCDAC_TRIM Field*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_BBA_BYP_MASK (0x100U)                                            /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_BBA_BYP Mask*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_BBA_BYP_SHIFT (8U)                                               /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_BBA_BYP Position*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_BBA_BYP(x)   (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_BBA_BYP Field*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_BBA_DIAGSEL_MASK (0x200U)                                        /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_BBA_DIAGSEL Mask*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_BBA_DIAGSEL_SHIFT (9U)                                           /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_BBA_DIAGSEL Position*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_BBA_DIAGSEL(x) (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)       /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_BBA_DIAGSEL Field*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_BBA_SPARE_MASK (0xC00U)                                          /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_BBA_SPARE Mask*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_BBA_SPARE_SHIFT (10U)                                            /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_BBA_SPARE Position*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_BBA_SPARE(x) (((uint32_t)(((uint32_t)(x))<<10U))&0xC00UL)        /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_BBA_SPARE Field*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_BBA_TRIM_MASK (0x7000U)                                          /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_BBA_TRIM Mask*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_BBA_TRIM_SHIFT (12U)                                             /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_BBA_TRIM Position*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_BBA_TRIM(x)  (((uint32_t)(((uint32_t)(x))<<12U))&0x7000UL)       /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_BBA_TRIM Field*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_FDBK_BYP_MASK (0x10000U)                                         /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_FDBK_BYP Mask*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_FDBK_BYP_SHIFT (16U)                                             /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_FDBK_BYP Position*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_FDBK_BYP(x)  (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_FDBK_BYP Field*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_FDBK_DIAGSEL_MASK (0x20000U)                                     /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_FDBK_DIAGSEL Mask*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_FDBK_DIAGSEL_SHIFT (17U)                                         /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_FDBK_DIAGSEL Position*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_FDBK_DIAGSEL(x) (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)   /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_FDBK_DIAGSEL Field*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_FDBK_SPARE_MASK (0xC0000U)                                       /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_FDBK_SPARE Mask*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_FDBK_SPARE_SHIFT (18U)                                           /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_FDBK_SPARE Position*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_FDBK_SPARE(x) (((uint32_t)(((uint32_t)(x))<<18U))&0xC0000UL)     /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_FDBK_SPARE Field*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_FDBK_TRIM_MASK (0x700000U)                                       /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_FDBK_TRIM Mask*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_FDBK_TRIM_SHIFT (20U)                                            /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_FDBK_TRIM Position*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_FDBK_TRIM(x) (((uint32_t)(((uint32_t)(x))<<20U))&0x700000UL)     /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_FDBK_TRIM Field*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_HF_BYP_MASK  (0x1000000U)                                        /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_HF_BYP Mask */
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_HF_BYP_SHIFT (24U)                                               /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_HF_BYP Position*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_HF_BYP(x)    (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_HF_BYP Field*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_HF_DIAGSEL_MASK (0x2000000U)                                     /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_HF_DIAGSEL Mask*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_HF_DIAGSEL_SHIFT (25U)                                           /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_HF_DIAGSEL Position*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_HF_DIAGSEL(x) (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)   /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_HF_DIAGSEL Field*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_HF_SPARE_MASK (0xC000000U)                                       /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_HF_SPARE Mask*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_HF_SPARE_SHIFT (26U)                                             /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_HF_SPARE Position*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_HF_SPARE(x)  (((uint32_t)(((uint32_t)(x))<<26U))&0xC000000UL)    /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_HF_SPARE Field*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_HF_TRIM_MASK (0x70000000U)                                       /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_HF_TRIM Mask*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_HF_TRIM_SHIFT (28U)                                              /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_HF_TRIM Position*/
+#define XCVR_ANALOG_BB_LDO_1_BB_LDO_HF_TRIM(x)   (((uint32_t)(((uint32_t)(x))<<28U))&0x70000000UL)   /*!< XCVR_ANALOG_BB_LDO_1.BB_LDO_HF_TRIM Field*/
 /* ------- BB_LDO_2 Bit Fields                      ------ */
-#define XCVR_ANA_BB_LDO_2_BB_LDO_PD_BYP_MASK     (0x1U)                                              /*!< XCVR_ANA_BB_LDO_2.BB_LDO_PD_BYP Mask    */
-#define XCVR_ANA_BB_LDO_2_BB_LDO_PD_BYP_SHIFT    (0U)                                                /*!< XCVR_ANA_BB_LDO_2.BB_LDO_PD_BYP Position*/
-#define XCVR_ANA_BB_LDO_2_BB_LDO_PD_BYP(x)       (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< XCVR_ANA_BB_LDO_2.BB_LDO_PD_BYP Field   */
-#define XCVR_ANA_BB_LDO_2_BB_LDO_PD_DIAGSEL_MASK (0x2U)                                              /*!< XCVR_ANA_BB_LDO_2.BB_LDO_PD_DIAGSEL Mask*/
-#define XCVR_ANA_BB_LDO_2_BB_LDO_PD_DIAGSEL_SHIFT (1U)                                               /*!< XCVR_ANA_BB_LDO_2.BB_LDO_PD_DIAGSEL Position*/
-#define XCVR_ANA_BB_LDO_2_BB_LDO_PD_DIAGSEL(x)   (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< XCVR_ANA_BB_LDO_2.BB_LDO_PD_DIAGSEL Field*/
-#define XCVR_ANA_BB_LDO_2_BB_LDO_PD_SPARE_MASK   (0xCU)                                              /*!< XCVR_ANA_BB_LDO_2.BB_LDO_PD_SPARE Mask  */
-#define XCVR_ANA_BB_LDO_2_BB_LDO_PD_SPARE_SHIFT  (2U)                                                /*!< XCVR_ANA_BB_LDO_2.BB_LDO_PD_SPARE Position*/
-#define XCVR_ANA_BB_LDO_2_BB_LDO_PD_SPARE(x)     (((uint32_t)(((uint32_t)(x))<<2U))&0xCUL)           /*!< XCVR_ANA_BB_LDO_2.BB_LDO_PD_SPARE Field */
-#define XCVR_ANA_BB_LDO_2_BB_LDO_PD_TRIM_MASK    (0x70U)                                             /*!< XCVR_ANA_BB_LDO_2.BB_LDO_PD_TRIM Mask   */
-#define XCVR_ANA_BB_LDO_2_BB_LDO_PD_TRIM_SHIFT   (4U)                                                /*!< XCVR_ANA_BB_LDO_2.BB_LDO_PD_TRIM Position*/
-#define XCVR_ANA_BB_LDO_2_BB_LDO_PD_TRIM(x)      (((uint32_t)(((uint32_t)(x))<<4U))&0x70UL)          /*!< XCVR_ANA_BB_LDO_2.BB_LDO_PD_TRIM Field  */
-#define XCVR_ANA_BB_LDO_2_BB_LDO_VCO_SPARE_MASK  (0x300U)                                            /*!< XCVR_ANA_BB_LDO_2.BB_LDO_VCO_SPARE Mask */
-#define XCVR_ANA_BB_LDO_2_BB_LDO_VCO_SPARE_SHIFT (8U)                                                /*!< XCVR_ANA_BB_LDO_2.BB_LDO_VCO_SPARE Position*/
-#define XCVR_ANA_BB_LDO_2_BB_LDO_VCO_SPARE(x)    (((uint32_t)(((uint32_t)(x))<<8U))&0x300UL)         /*!< XCVR_ANA_BB_LDO_2.BB_LDO_VCO_SPARE Field*/
-#define XCVR_ANA_BB_LDO_2_BB_LDO_VCOLO_BYP_MASK  (0x400U)                                            /*!< XCVR_ANA_BB_LDO_2.BB_LDO_VCOLO_BYP Mask */
-#define XCVR_ANA_BB_LDO_2_BB_LDO_VCOLO_BYP_SHIFT (10U)                                               /*!< XCVR_ANA_BB_LDO_2.BB_LDO_VCOLO_BYP Position*/
-#define XCVR_ANA_BB_LDO_2_BB_LDO_VCOLO_BYP(x)    (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< XCVR_ANA_BB_LDO_2.BB_LDO_VCOLO_BYP Field*/
-#define XCVR_ANA_BB_LDO_2_BB_LDO_VCOLO_DIAGSEL_MASK (0x800U)                                         /*!< XCVR_ANA_BB_LDO_2.BB_LDO_VCOLO_DIAGSEL Mask*/
-#define XCVR_ANA_BB_LDO_2_BB_LDO_VCOLO_DIAGSEL_SHIFT (11U)                                           /*!< XCVR_ANA_BB_LDO_2.BB_LDO_VCOLO_DIAGSEL Position*/
-#define XCVR_ANA_BB_LDO_2_BB_LDO_VCOLO_DIAGSEL(x) (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)       /*!< XCVR_ANA_BB_LDO_2.BB_LDO_VCOLO_DIAGSEL Field*/
-#define XCVR_ANA_BB_LDO_2_BB_LDO_VCOLO_TRIM_MASK (0x7000U)                                           /*!< XCVR_ANA_BB_LDO_2.BB_LDO_VCOLO_TRIM Mask*/
-#define XCVR_ANA_BB_LDO_2_BB_LDO_VCOLO_TRIM_SHIFT (12U)                                              /*!< XCVR_ANA_BB_LDO_2.BB_LDO_VCOLO_TRIM Position*/
-#define XCVR_ANA_BB_LDO_2_BB_LDO_VCOLO_TRIM(x)   (((uint32_t)(((uint32_t)(x))<<12U))&0x7000UL)       /*!< XCVR_ANA_BB_LDO_2.BB_LDO_VCOLO_TRIM Field*/
-#define XCVR_ANA_BB_LDO_2_BB_LDO_VTREF_DIAGSEL_MASK (0x10000U)                                       /*!< XCVR_ANA_BB_LDO_2.BB_LDO_VTREF_DIAGSEL Mask*/
-#define XCVR_ANA_BB_LDO_2_BB_LDO_VTREF_DIAGSEL_SHIFT (16U)                                           /*!< XCVR_ANA_BB_LDO_2.BB_LDO_VTREF_DIAGSEL Position*/
-#define XCVR_ANA_BB_LDO_2_BB_LDO_VTREF_DIAGSEL(x) (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)     /*!< XCVR_ANA_BB_LDO_2.BB_LDO_VTREF_DIAGSEL Field*/
-#define XCVR_ANA_BB_LDO_2_BB_LDO_VTREF_TC_MASK   (0x60000U)                                          /*!< XCVR_ANA_BB_LDO_2.BB_LDO_VTREF_TC Mask  */
-#define XCVR_ANA_BB_LDO_2_BB_LDO_VTREF_TC_SHIFT  (17U)                                               /*!< XCVR_ANA_BB_LDO_2.BB_LDO_VTREF_TC Position*/
-#define XCVR_ANA_BB_LDO_2_BB_LDO_VTREF_TC(x)     (((uint32_t)(((uint32_t)(x))<<17U))&0x60000UL)      /*!< XCVR_ANA_BB_LDO_2.BB_LDO_VTREF_TC Field */
+#define XCVR_ANALOG_BB_LDO_2_BB_LDO_PD_BYP_MASK  (0x1U)                                              /*!< XCVR_ANALOG_BB_LDO_2.BB_LDO_PD_BYP Mask */
+#define XCVR_ANALOG_BB_LDO_2_BB_LDO_PD_BYP_SHIFT (0U)                                                /*!< XCVR_ANALOG_BB_LDO_2.BB_LDO_PD_BYP Position*/
+#define XCVR_ANALOG_BB_LDO_2_BB_LDO_PD_BYP(x)    (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< XCVR_ANALOG_BB_LDO_2.BB_LDO_PD_BYP Field*/
+#define XCVR_ANALOG_BB_LDO_2_BB_LDO_PD_DIAGSEL_MASK (0x2U)                                           /*!< XCVR_ANALOG_BB_LDO_2.BB_LDO_PD_DIAGSEL Mask*/
+#define XCVR_ANALOG_BB_LDO_2_BB_LDO_PD_DIAGSEL_SHIFT (1U)                                            /*!< XCVR_ANALOG_BB_LDO_2.BB_LDO_PD_DIAGSEL Position*/
+#define XCVR_ANALOG_BB_LDO_2_BB_LDO_PD_DIAGSEL(x) (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)          /*!< XCVR_ANALOG_BB_LDO_2.BB_LDO_PD_DIAGSEL Field*/
+#define XCVR_ANALOG_BB_LDO_2_BB_LDO_PD_SPARE_MASK (0xCU)                                             /*!< XCVR_ANALOG_BB_LDO_2.BB_LDO_PD_SPARE Mask*/
+#define XCVR_ANALOG_BB_LDO_2_BB_LDO_PD_SPARE_SHIFT (2U)                                              /*!< XCVR_ANALOG_BB_LDO_2.BB_LDO_PD_SPARE Position*/
+#define XCVR_ANALOG_BB_LDO_2_BB_LDO_PD_SPARE(x)  (((uint32_t)(((uint32_t)(x))<<2U))&0xCUL)           /*!< XCVR_ANALOG_BB_LDO_2.BB_LDO_PD_SPARE Field*/
+#define XCVR_ANALOG_BB_LDO_2_BB_LDO_PD_TRIM_MASK (0x70U)                                             /*!< XCVR_ANALOG_BB_LDO_2.BB_LDO_PD_TRIM Mask*/
+#define XCVR_ANALOG_BB_LDO_2_BB_LDO_PD_TRIM_SHIFT (4U)                                               /*!< XCVR_ANALOG_BB_LDO_2.BB_LDO_PD_TRIM Position*/
+#define XCVR_ANALOG_BB_LDO_2_BB_LDO_PD_TRIM(x)   (((uint32_t)(((uint32_t)(x))<<4U))&0x70UL)          /*!< XCVR_ANALOG_BB_LDO_2.BB_LDO_PD_TRIM Field*/
+#define XCVR_ANALOG_BB_LDO_2_BB_LDO_VCO_SPARE_MASK (0x300U)                                          /*!< XCVR_ANALOG_BB_LDO_2.BB_LDO_VCO_SPARE Mask*/
+#define XCVR_ANALOG_BB_LDO_2_BB_LDO_VCO_SPARE_SHIFT (8U)                                             /*!< XCVR_ANALOG_BB_LDO_2.BB_LDO_VCO_SPARE Position*/
+#define XCVR_ANALOG_BB_LDO_2_BB_LDO_VCO_SPARE(x) (((uint32_t)(((uint32_t)(x))<<8U))&0x300UL)         /*!< XCVR_ANALOG_BB_LDO_2.BB_LDO_VCO_SPARE Field*/
+#define XCVR_ANALOG_BB_LDO_2_BB_LDO_VCOLO_BYP_MASK (0x400U)                                          /*!< XCVR_ANALOG_BB_LDO_2.BB_LDO_VCOLO_BYP Mask*/
+#define XCVR_ANALOG_BB_LDO_2_BB_LDO_VCOLO_BYP_SHIFT (10U)                                            /*!< XCVR_ANALOG_BB_LDO_2.BB_LDO_VCOLO_BYP Position*/
+#define XCVR_ANALOG_BB_LDO_2_BB_LDO_VCOLO_BYP(x) (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< XCVR_ANALOG_BB_LDO_2.BB_LDO_VCOLO_BYP Field*/
+#define XCVR_ANALOG_BB_LDO_2_BB_LDO_VCOLO_DIAGSEL_MASK (0x800U)                                      /*!< XCVR_ANALOG_BB_LDO_2.BB_LDO_VCOLO_DIAGSEL Mask*/
+#define XCVR_ANALOG_BB_LDO_2_BB_LDO_VCOLO_DIAGSEL_SHIFT (11U)                                        /*!< XCVR_ANALOG_BB_LDO_2.BB_LDO_VCOLO_DIAGSEL Position*/
+#define XCVR_ANALOG_BB_LDO_2_BB_LDO_VCOLO_DIAGSEL(x) (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)    /*!< XCVR_ANALOG_BB_LDO_2.BB_LDO_VCOLO_DIAGSEL Field*/
+#define XCVR_ANALOG_BB_LDO_2_BB_LDO_VCOLO_TRIM_MASK (0x7000U)                                        /*!< XCVR_ANALOG_BB_LDO_2.BB_LDO_VCOLO_TRIM Mask*/
+#define XCVR_ANALOG_BB_LDO_2_BB_LDO_VCOLO_TRIM_SHIFT (12U)                                           /*!< XCVR_ANALOG_BB_LDO_2.BB_LDO_VCOLO_TRIM Position*/
+#define XCVR_ANALOG_BB_LDO_2_BB_LDO_VCOLO_TRIM(x) (((uint32_t)(((uint32_t)(x))<<12U))&0x7000UL)      /*!< XCVR_ANALOG_BB_LDO_2.BB_LDO_VCOLO_TRIM Field*/
+#define XCVR_ANALOG_BB_LDO_2_BB_LDO_VTREF_DIAGSEL_MASK (0x10000U)                                    /*!< XCVR_ANALOG_BB_LDO_2.BB_LDO_VTREF_DIAGSEL Mask*/
+#define XCVR_ANALOG_BB_LDO_2_BB_LDO_VTREF_DIAGSEL_SHIFT (16U)                                        /*!< XCVR_ANALOG_BB_LDO_2.BB_LDO_VTREF_DIAGSEL Position*/
+#define XCVR_ANALOG_BB_LDO_2_BB_LDO_VTREF_DIAGSEL(x) (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)  /*!< XCVR_ANALOG_BB_LDO_2.BB_LDO_VTREF_DIAGSEL Field*/
+#define XCVR_ANALOG_BB_LDO_2_BB_LDO_VTREF_TC_MASK (0x60000U)                                         /*!< XCVR_ANALOG_BB_LDO_2.BB_LDO_VTREF_TC Mask*/
+#define XCVR_ANALOG_BB_LDO_2_BB_LDO_VTREF_TC_SHIFT (17U)                                             /*!< XCVR_ANALOG_BB_LDO_2.BB_LDO_VTREF_TC Position*/
+#define XCVR_ANALOG_BB_LDO_2_BB_LDO_VTREF_TC(x)  (((uint32_t)(((uint32_t)(x))<<17U))&0x60000UL)      /*!< XCVR_ANALOG_BB_LDO_2.BB_LDO_VTREF_TC Field*/
 /* ------- RX_ADC Bit Fields                        ------ */
-#define XCVR_ANA_RX_ADC_RX_ADC_BUMP_MASK         (0xFFU)                                             /*!< XCVR_ANA_RX_ADC.RX_ADC_BUMP Mask        */
-#define XCVR_ANA_RX_ADC_RX_ADC_BUMP_SHIFT        (0U)                                                /*!< XCVR_ANA_RX_ADC.RX_ADC_BUMP Position    */
-#define XCVR_ANA_RX_ADC_RX_ADC_BUMP(x)           (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< XCVR_ANA_RX_ADC.RX_ADC_BUMP Field       */
-#define XCVR_ANA_RX_ADC_RX_ADC_FS_SEL_MASK       (0x300U)                                            /*!< XCVR_ANA_RX_ADC.RX_ADC_FS_SEL Mask      */
-#define XCVR_ANA_RX_ADC_RX_ADC_FS_SEL_SHIFT      (8U)                                                /*!< XCVR_ANA_RX_ADC.RX_ADC_FS_SEL Position  */
-#define XCVR_ANA_RX_ADC_RX_ADC_FS_SEL(x)         (((uint32_t)(((uint32_t)(x))<<8U))&0x300UL)         /*!< XCVR_ANA_RX_ADC.RX_ADC_FS_SEL Field     */
-#define XCVR_ANA_RX_ADC_RX_ADC_I_DIAGSEL_MASK    (0x400U)                                            /*!< XCVR_ANA_RX_ADC.RX_ADC_I_DIAGSEL Mask   */
-#define XCVR_ANA_RX_ADC_RX_ADC_I_DIAGSEL_SHIFT   (10U)                                               /*!< XCVR_ANA_RX_ADC.RX_ADC_I_DIAGSEL Position*/
-#define XCVR_ANA_RX_ADC_RX_ADC_I_DIAGSEL(x)      (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< XCVR_ANA_RX_ADC.RX_ADC_I_DIAGSEL Field  */
-#define XCVR_ANA_RX_ADC_RX_ADC_Q_DIAGSEL_MASK    (0x800U)                                            /*!< XCVR_ANA_RX_ADC.RX_ADC_Q_DIAGSEL Mask   */
-#define XCVR_ANA_RX_ADC_RX_ADC_Q_DIAGSEL_SHIFT   (11U)                                               /*!< XCVR_ANA_RX_ADC.RX_ADC_Q_DIAGSEL Position*/
-#define XCVR_ANA_RX_ADC_RX_ADC_Q_DIAGSEL(x)      (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< XCVR_ANA_RX_ADC.RX_ADC_Q_DIAGSEL Field  */
-#define XCVR_ANA_RX_ADC_RX_ADC_SPARE_MASK        (0xF000U)                                           /*!< XCVR_ANA_RX_ADC.RX_ADC_SPARE Mask       */
-#define XCVR_ANA_RX_ADC_RX_ADC_SPARE_SHIFT       (12U)                                               /*!< XCVR_ANA_RX_ADC.RX_ADC_SPARE Position   */
-#define XCVR_ANA_RX_ADC_RX_ADC_SPARE(x)          (((uint32_t)(((uint32_t)(x))<<12U))&0xF000UL)       /*!< XCVR_ANA_RX_ADC.RX_ADC_SPARE Field      */
+#define XCVR_ANALOG_RX_ADC_RX_ADC_BUMP_MASK      (0xFFU)                                             /*!< XCVR_ANALOG_RX_ADC.RX_ADC_BUMP Mask     */
+#define XCVR_ANALOG_RX_ADC_RX_ADC_BUMP_SHIFT     (0U)                                                /*!< XCVR_ANALOG_RX_ADC.RX_ADC_BUMP Position */
+#define XCVR_ANALOG_RX_ADC_RX_ADC_BUMP(x)        (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< XCVR_ANALOG_RX_ADC.RX_ADC_BUMP Field    */
+#define XCVR_ANALOG_RX_ADC_RX_ADC_FS_SEL_MASK    (0x300U)                                            /*!< XCVR_ANALOG_RX_ADC.RX_ADC_FS_SEL Mask   */
+#define XCVR_ANALOG_RX_ADC_RX_ADC_FS_SEL_SHIFT   (8U)                                                /*!< XCVR_ANALOG_RX_ADC.RX_ADC_FS_SEL Position*/
+#define XCVR_ANALOG_RX_ADC_RX_ADC_FS_SEL(x)      (((uint32_t)(((uint32_t)(x))<<8U))&0x300UL)         /*!< XCVR_ANALOG_RX_ADC.RX_ADC_FS_SEL Field  */
+#define XCVR_ANALOG_RX_ADC_RX_ADC_I_DIAGSEL_MASK (0x400U)                                            /*!< XCVR_ANALOG_RX_ADC.RX_ADC_I_DIAGSEL Mask*/
+#define XCVR_ANALOG_RX_ADC_RX_ADC_I_DIAGSEL_SHIFT (10U)                                              /*!< XCVR_ANALOG_RX_ADC.RX_ADC_I_DIAGSEL Position*/
+#define XCVR_ANALOG_RX_ADC_RX_ADC_I_DIAGSEL(x)   (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< XCVR_ANALOG_RX_ADC.RX_ADC_I_DIAGSEL Field*/
+#define XCVR_ANALOG_RX_ADC_RX_ADC_Q_DIAGSEL_MASK (0x800U)                                            /*!< XCVR_ANALOG_RX_ADC.RX_ADC_Q_DIAGSEL Mask*/
+#define XCVR_ANALOG_RX_ADC_RX_ADC_Q_DIAGSEL_SHIFT (11U)                                              /*!< XCVR_ANALOG_RX_ADC.RX_ADC_Q_DIAGSEL Position*/
+#define XCVR_ANALOG_RX_ADC_RX_ADC_Q_DIAGSEL(x)   (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< XCVR_ANALOG_RX_ADC.RX_ADC_Q_DIAGSEL Field*/
+#define XCVR_ANALOG_RX_ADC_RX_ADC_SPARE_MASK     (0xF000U)                                           /*!< XCVR_ANALOG_RX_ADC.RX_ADC_SPARE Mask    */
+#define XCVR_ANALOG_RX_ADC_RX_ADC_SPARE_SHIFT    (12U)                                               /*!< XCVR_ANALOG_RX_ADC.RX_ADC_SPARE Position*/
+#define XCVR_ANALOG_RX_ADC_RX_ADC_SPARE(x)       (((uint32_t)(((uint32_t)(x))<<12U))&0xF000UL)       /*!< XCVR_ANALOG_RX_ADC.RX_ADC_SPARE Field   */
 /* ------- RX_BBA Bit Fields                        ------ */
-#define XCVR_ANA_RX_BBA_RX_BBA_BW_SEL_MASK       (0x7U)                                              /*!< XCVR_ANA_RX_BBA.RX_BBA_BW_SEL Mask      */
-#define XCVR_ANA_RX_BBA_RX_BBA_BW_SEL_SHIFT      (0U)                                                /*!< XCVR_ANA_RX_BBA.RX_BBA_BW_SEL Position  */
-#define XCVR_ANA_RX_BBA_RX_BBA_BW_SEL(x)         (((uint32_t)(((uint32_t)(x))<<0U))&0x7UL)           /*!< XCVR_ANA_RX_BBA.RX_BBA_BW_SEL Field     */
-#define XCVR_ANA_RX_BBA_RX_BBA_CUR_BUMP_MASK     (0x8U)                                              /*!< XCVR_ANA_RX_BBA.RX_BBA_CUR_BUMP Mask    */
-#define XCVR_ANA_RX_BBA_RX_BBA_CUR_BUMP_SHIFT    (3U)                                                /*!< XCVR_ANA_RX_BBA.RX_BBA_CUR_BUMP Position*/
-#define XCVR_ANA_RX_BBA_RX_BBA_CUR_BUMP(x)       (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< XCVR_ANA_RX_BBA.RX_BBA_CUR_BUMP Field   */
-#define XCVR_ANA_RX_BBA_RX_BBA_DIAGSEL1_MASK     (0x10U)                                             /*!< XCVR_ANA_RX_BBA.RX_BBA_DIAGSEL1 Mask    */
-#define XCVR_ANA_RX_BBA_RX_BBA_DIAGSEL1_SHIFT    (4U)                                                /*!< XCVR_ANA_RX_BBA.RX_BBA_DIAGSEL1 Position*/
-#define XCVR_ANA_RX_BBA_RX_BBA_DIAGSEL1(x)       (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< XCVR_ANA_RX_BBA.RX_BBA_DIAGSEL1 Field   */
-#define XCVR_ANA_RX_BBA_RX_BBA_DIAGSEL2_MASK     (0x20U)                                             /*!< XCVR_ANA_RX_BBA.RX_BBA_DIAGSEL2 Mask    */
-#define XCVR_ANA_RX_BBA_RX_BBA_DIAGSEL2_SHIFT    (5U)                                                /*!< XCVR_ANA_RX_BBA.RX_BBA_DIAGSEL2 Position*/
-#define XCVR_ANA_RX_BBA_RX_BBA_DIAGSEL2(x)       (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< XCVR_ANA_RX_BBA.RX_BBA_DIAGSEL2 Field   */
-#define XCVR_ANA_RX_BBA_RX_BBA_DIAGSEL3_MASK     (0x40U)                                             /*!< XCVR_ANA_RX_BBA.RX_BBA_DIAGSEL3 Mask    */
-#define XCVR_ANA_RX_BBA_RX_BBA_DIAGSEL3_SHIFT    (6U)                                                /*!< XCVR_ANA_RX_BBA.RX_BBA_DIAGSEL3 Position*/
-#define XCVR_ANA_RX_BBA_RX_BBA_DIAGSEL3(x)       (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< XCVR_ANA_RX_BBA.RX_BBA_DIAGSEL3 Field   */
-#define XCVR_ANA_RX_BBA_RX_BBA_DIAGSEL4_MASK     (0x80U)                                             /*!< XCVR_ANA_RX_BBA.RX_BBA_DIAGSEL4 Mask    */
-#define XCVR_ANA_RX_BBA_RX_BBA_DIAGSEL4_SHIFT    (7U)                                                /*!< XCVR_ANA_RX_BBA.RX_BBA_DIAGSEL4 Position*/
-#define XCVR_ANA_RX_BBA_RX_BBA_DIAGSEL4(x)       (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< XCVR_ANA_RX_BBA.RX_BBA_DIAGSEL4 Field   */
-#define XCVR_ANA_RX_BBA_RX_BBA_SPARE_MASK        (0x3F0000U)                                         /*!< XCVR_ANA_RX_BBA.RX_BBA_SPARE Mask       */
-#define XCVR_ANA_RX_BBA_RX_BBA_SPARE_SHIFT       (16U)                                               /*!< XCVR_ANA_RX_BBA.RX_BBA_SPARE Position   */
-#define XCVR_ANA_RX_BBA_RX_BBA_SPARE(x)          (((uint32_t)(((uint32_t)(x))<<16U))&0x3F0000UL)     /*!< XCVR_ANA_RX_BBA.RX_BBA_SPARE Field      */
-#define XCVR_ANA_RX_BBA_RX_BBA2_BW_SEL_MASK      (0x7000000U)                                        /*!< XCVR_ANA_RX_BBA.RX_BBA2_BW_SEL Mask     */
-#define XCVR_ANA_RX_BBA_RX_BBA2_BW_SEL_SHIFT     (24U)                                               /*!< XCVR_ANA_RX_BBA.RX_BBA2_BW_SEL Position */
-#define XCVR_ANA_RX_BBA_RX_BBA2_BW_SEL(x)        (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< XCVR_ANA_RX_BBA.RX_BBA2_BW_SEL Field    */
-#define XCVR_ANA_RX_BBA_RX_BBA2_SPARE_MASK       (0x70000000U)                                       /*!< XCVR_ANA_RX_BBA.RX_BBA2_SPARE Mask      */
-#define XCVR_ANA_RX_BBA_RX_BBA2_SPARE_SHIFT      (28U)                                               /*!< XCVR_ANA_RX_BBA.RX_BBA2_SPARE Position  */
-#define XCVR_ANA_RX_BBA_RX_BBA2_SPARE(x)         (((uint32_t)(((uint32_t)(x))<<28U))&0x70000000UL)   /*!< XCVR_ANA_RX_BBA.RX_BBA2_SPARE Field     */
+#define XCVR_ANALOG_RX_BBA_RX_BBA_BW_SEL_MASK    (0x7U)                                              /*!< XCVR_ANALOG_RX_BBA.RX_BBA_BW_SEL Mask   */
+#define XCVR_ANALOG_RX_BBA_RX_BBA_BW_SEL_SHIFT   (0U)                                                /*!< XCVR_ANALOG_RX_BBA.RX_BBA_BW_SEL Position*/
+#define XCVR_ANALOG_RX_BBA_RX_BBA_BW_SEL(x)      (((uint32_t)(((uint32_t)(x))<<0U))&0x7UL)           /*!< XCVR_ANALOG_RX_BBA.RX_BBA_BW_SEL Field  */
+#define XCVR_ANALOG_RX_BBA_RX_BBA_CUR_BUMP_MASK  (0x8U)                                              /*!< XCVR_ANALOG_RX_BBA.RX_BBA_CUR_BUMP Mask */
+#define XCVR_ANALOG_RX_BBA_RX_BBA_CUR_BUMP_SHIFT (3U)                                                /*!< XCVR_ANALOG_RX_BBA.RX_BBA_CUR_BUMP Position*/
+#define XCVR_ANALOG_RX_BBA_RX_BBA_CUR_BUMP(x)    (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< XCVR_ANALOG_RX_BBA.RX_BBA_CUR_BUMP Field*/
+#define XCVR_ANALOG_RX_BBA_RX_BBA_DIAGSEL1_MASK  (0x10U)                                             /*!< XCVR_ANALOG_RX_BBA.RX_BBA_DIAGSEL1 Mask */
+#define XCVR_ANALOG_RX_BBA_RX_BBA_DIAGSEL1_SHIFT (4U)                                                /*!< XCVR_ANALOG_RX_BBA.RX_BBA_DIAGSEL1 Position*/
+#define XCVR_ANALOG_RX_BBA_RX_BBA_DIAGSEL1(x)    (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< XCVR_ANALOG_RX_BBA.RX_BBA_DIAGSEL1 Field*/
+#define XCVR_ANALOG_RX_BBA_RX_BBA_DIAGSEL2_MASK  (0x20U)                                             /*!< XCVR_ANALOG_RX_BBA.RX_BBA_DIAGSEL2 Mask */
+#define XCVR_ANALOG_RX_BBA_RX_BBA_DIAGSEL2_SHIFT (5U)                                                /*!< XCVR_ANALOG_RX_BBA.RX_BBA_DIAGSEL2 Position*/
+#define XCVR_ANALOG_RX_BBA_RX_BBA_DIAGSEL2(x)    (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< XCVR_ANALOG_RX_BBA.RX_BBA_DIAGSEL2 Field*/
+#define XCVR_ANALOG_RX_BBA_RX_BBA_DIAGSEL3_MASK  (0x40U)                                             /*!< XCVR_ANALOG_RX_BBA.RX_BBA_DIAGSEL3 Mask */
+#define XCVR_ANALOG_RX_BBA_RX_BBA_DIAGSEL3_SHIFT (6U)                                                /*!< XCVR_ANALOG_RX_BBA.RX_BBA_DIAGSEL3 Position*/
+#define XCVR_ANALOG_RX_BBA_RX_BBA_DIAGSEL3(x)    (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< XCVR_ANALOG_RX_BBA.RX_BBA_DIAGSEL3 Field*/
+#define XCVR_ANALOG_RX_BBA_RX_BBA_DIAGSEL4_MASK  (0x80U)                                             /*!< XCVR_ANALOG_RX_BBA.RX_BBA_DIAGSEL4 Mask */
+#define XCVR_ANALOG_RX_BBA_RX_BBA_DIAGSEL4_SHIFT (7U)                                                /*!< XCVR_ANALOG_RX_BBA.RX_BBA_DIAGSEL4 Position*/
+#define XCVR_ANALOG_RX_BBA_RX_BBA_DIAGSEL4(x)    (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< XCVR_ANALOG_RX_BBA.RX_BBA_DIAGSEL4 Field*/
+#define XCVR_ANALOG_RX_BBA_RX_BBA_SPARE_MASK     (0x3F0000U)                                         /*!< XCVR_ANALOG_RX_BBA.RX_BBA_SPARE Mask    */
+#define XCVR_ANALOG_RX_BBA_RX_BBA_SPARE_SHIFT    (16U)                                               /*!< XCVR_ANALOG_RX_BBA.RX_BBA_SPARE Position*/
+#define XCVR_ANALOG_RX_BBA_RX_BBA_SPARE(x)       (((uint32_t)(((uint32_t)(x))<<16U))&0x3F0000UL)     /*!< XCVR_ANALOG_RX_BBA.RX_BBA_SPARE Field   */
+#define XCVR_ANALOG_RX_BBA_RX_BBA2_BW_SEL_MASK   (0x7000000U)                                        /*!< XCVR_ANALOG_RX_BBA.RX_BBA2_BW_SEL Mask  */
+#define XCVR_ANALOG_RX_BBA_RX_BBA2_BW_SEL_SHIFT  (24U)                                               /*!< XCVR_ANALOG_RX_BBA.RX_BBA2_BW_SEL Position*/
+#define XCVR_ANALOG_RX_BBA_RX_BBA2_BW_SEL(x)     (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< XCVR_ANALOG_RX_BBA.RX_BBA2_BW_SEL Field */
+#define XCVR_ANALOG_RX_BBA_RX_BBA2_SPARE_MASK    (0x70000000U)                                       /*!< XCVR_ANALOG_RX_BBA.RX_BBA2_SPARE Mask   */
+#define XCVR_ANALOG_RX_BBA_RX_BBA2_SPARE_SHIFT   (28U)                                               /*!< XCVR_ANALOG_RX_BBA.RX_BBA2_SPARE Position*/
+#define XCVR_ANALOG_RX_BBA_RX_BBA2_SPARE(x)      (((uint32_t)(((uint32_t)(x))<<28U))&0x70000000UL)   /*!< XCVR_ANALOG_RX_BBA.RX_BBA2_SPARE Field  */
 /* ------- RX_LNA Bit Fields                        ------ */
-#define XCVR_ANA_RX_LNA_RX_LNA_BUMP_MASK         (0xFU)                                              /*!< XCVR_ANA_RX_LNA.RX_LNA_BUMP Mask        */
-#define XCVR_ANA_RX_LNA_RX_LNA_BUMP_SHIFT        (0U)                                                /*!< XCVR_ANA_RX_LNA.RX_LNA_BUMP Position    */
-#define XCVR_ANA_RX_LNA_RX_LNA_BUMP(x)           (((uint32_t)(((uint32_t)(x))<<0U))&0xFUL)           /*!< XCVR_ANA_RX_LNA.RX_LNA_BUMP Field       */
-#define XCVR_ANA_RX_LNA_RX_LNA_HG_DIAGSEL_MASK   (0x10U)                                             /*!< XCVR_ANA_RX_LNA.RX_LNA_HG_DIAGSEL Mask  */
-#define XCVR_ANA_RX_LNA_RX_LNA_HG_DIAGSEL_SHIFT  (4U)                                                /*!< XCVR_ANA_RX_LNA.RX_LNA_HG_DIAGSEL Position*/
-#define XCVR_ANA_RX_LNA_RX_LNA_HG_DIAGSEL(x)     (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< XCVR_ANA_RX_LNA.RX_LNA_HG_DIAGSEL Field */
-#define XCVR_ANA_RX_LNA_RX_LNA_HIZ_ENABLE_MASK   (0x20U)                                             /*!< XCVR_ANA_RX_LNA.RX_LNA_HIZ_ENABLE Mask  */
-#define XCVR_ANA_RX_LNA_RX_LNA_HIZ_ENABLE_SHIFT  (5U)                                                /*!< XCVR_ANA_RX_LNA.RX_LNA_HIZ_ENABLE Position*/
-#define XCVR_ANA_RX_LNA_RX_LNA_HIZ_ENABLE(x)     (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< XCVR_ANA_RX_LNA.RX_LNA_HIZ_ENABLE Field */
-#define XCVR_ANA_RX_LNA_RX_LNA_LG_DIAGSEL_MASK   (0x40U)                                             /*!< XCVR_ANA_RX_LNA.RX_LNA_LG_DIAGSEL Mask  */
-#define XCVR_ANA_RX_LNA_RX_LNA_LG_DIAGSEL_SHIFT  (6U)                                                /*!< XCVR_ANA_RX_LNA.RX_LNA_LG_DIAGSEL Position*/
-#define XCVR_ANA_RX_LNA_RX_LNA_LG_DIAGSEL(x)     (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< XCVR_ANA_RX_LNA.RX_LNA_LG_DIAGSEL Field */
-#define XCVR_ANA_RX_LNA_RX_LNA_SPARE_MASK        (0x300U)                                            /*!< XCVR_ANA_RX_LNA.RX_LNA_SPARE Mask       */
-#define XCVR_ANA_RX_LNA_RX_LNA_SPARE_SHIFT       (8U)                                                /*!< XCVR_ANA_RX_LNA.RX_LNA_SPARE Position   */
-#define XCVR_ANA_RX_LNA_RX_LNA_SPARE(x)          (((uint32_t)(((uint32_t)(x))<<8U))&0x300UL)         /*!< XCVR_ANA_RX_LNA.RX_LNA_SPARE Field      */
-#define XCVR_ANA_RX_LNA_RX_MIXER_BUMP_MASK       (0xF0000U)                                          /*!< XCVR_ANA_RX_LNA.RX_MIXER_BUMP Mask      */
-#define XCVR_ANA_RX_LNA_RX_MIXER_BUMP_SHIFT      (16U)                                               /*!< XCVR_ANA_RX_LNA.RX_MIXER_BUMP Position  */
-#define XCVR_ANA_RX_LNA_RX_MIXER_BUMP(x)         (((uint32_t)(((uint32_t)(x))<<16U))&0xF0000UL)      /*!< XCVR_ANA_RX_LNA.RX_MIXER_BUMP Field     */
-#define XCVR_ANA_RX_LNA_RX_MIXER_SPARE_MASK      (0x100000U)                                         /*!< XCVR_ANA_RX_LNA.RX_MIXER_SPARE Mask     */
-#define XCVR_ANA_RX_LNA_RX_MIXER_SPARE_SHIFT     (20U)                                               /*!< XCVR_ANA_RX_LNA.RX_MIXER_SPARE Position */
-#define XCVR_ANA_RX_LNA_RX_MIXER_SPARE(x)        (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< XCVR_ANA_RX_LNA.RX_MIXER_SPARE Field    */
+#define XCVR_ANALOG_RX_LNA_RX_LNA_BUMP_MASK      (0xFU)                                              /*!< XCVR_ANALOG_RX_LNA.RX_LNA_BUMP Mask     */
+#define XCVR_ANALOG_RX_LNA_RX_LNA_BUMP_SHIFT     (0U)                                                /*!< XCVR_ANALOG_RX_LNA.RX_LNA_BUMP Position */
+#define XCVR_ANALOG_RX_LNA_RX_LNA_BUMP(x)        (((uint32_t)(((uint32_t)(x))<<0U))&0xFUL)           /*!< XCVR_ANALOG_RX_LNA.RX_LNA_BUMP Field    */
+#define XCVR_ANALOG_RX_LNA_RX_LNA_HG_DIAGSEL_MASK (0x10U)                                            /*!< XCVR_ANALOG_RX_LNA.RX_LNA_HG_DIAGSEL Mask*/
+#define XCVR_ANALOG_RX_LNA_RX_LNA_HG_DIAGSEL_SHIFT (4U)                                              /*!< XCVR_ANALOG_RX_LNA.RX_LNA_HG_DIAGSEL Position*/
+#define XCVR_ANALOG_RX_LNA_RX_LNA_HG_DIAGSEL(x)  (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< XCVR_ANALOG_RX_LNA.RX_LNA_HG_DIAGSEL Field*/
+#define XCVR_ANALOG_RX_LNA_RX_LNA_HIZ_ENABLE_MASK (0x20U)                                            /*!< XCVR_ANALOG_RX_LNA.RX_LNA_HIZ_ENABLE Mask*/
+#define XCVR_ANALOG_RX_LNA_RX_LNA_HIZ_ENABLE_SHIFT (5U)                                              /*!< XCVR_ANALOG_RX_LNA.RX_LNA_HIZ_ENABLE Position*/
+#define XCVR_ANALOG_RX_LNA_RX_LNA_HIZ_ENABLE(x)  (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< XCVR_ANALOG_RX_LNA.RX_LNA_HIZ_ENABLE Field*/
+#define XCVR_ANALOG_RX_LNA_RX_LNA_LG_DIAGSEL_MASK (0x40U)                                            /*!< XCVR_ANALOG_RX_LNA.RX_LNA_LG_DIAGSEL Mask*/
+#define XCVR_ANALOG_RX_LNA_RX_LNA_LG_DIAGSEL_SHIFT (6U)                                              /*!< XCVR_ANALOG_RX_LNA.RX_LNA_LG_DIAGSEL Position*/
+#define XCVR_ANALOG_RX_LNA_RX_LNA_LG_DIAGSEL(x)  (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< XCVR_ANALOG_RX_LNA.RX_LNA_LG_DIAGSEL Field*/
+#define XCVR_ANALOG_RX_LNA_RX_LNA_SPARE_MASK     (0x300U)                                            /*!< XCVR_ANALOG_RX_LNA.RX_LNA_SPARE Mask    */
+#define XCVR_ANALOG_RX_LNA_RX_LNA_SPARE_SHIFT    (8U)                                                /*!< XCVR_ANALOG_RX_LNA.RX_LNA_SPARE Position*/
+#define XCVR_ANALOG_RX_LNA_RX_LNA_SPARE(x)       (((uint32_t)(((uint32_t)(x))<<8U))&0x300UL)         /*!< XCVR_ANALOG_RX_LNA.RX_LNA_SPARE Field   */
+#define XCVR_ANALOG_RX_LNA_RX_MIXER_BUMP_MASK    (0xF0000U)                                          /*!< XCVR_ANALOG_RX_LNA.RX_MIXER_BUMP Mask   */
+#define XCVR_ANALOG_RX_LNA_RX_MIXER_BUMP_SHIFT   (16U)                                               /*!< XCVR_ANALOG_RX_LNA.RX_MIXER_BUMP Position*/
+#define XCVR_ANALOG_RX_LNA_RX_MIXER_BUMP(x)      (((uint32_t)(((uint32_t)(x))<<16U))&0xF0000UL)      /*!< XCVR_ANALOG_RX_LNA.RX_MIXER_BUMP Field  */
+#define XCVR_ANALOG_RX_LNA_RX_MIXER_SPARE_MASK   (0x100000U)                                         /*!< XCVR_ANALOG_RX_LNA.RX_MIXER_SPARE Mask  */
+#define XCVR_ANALOG_RX_LNA_RX_MIXER_SPARE_SHIFT  (20U)                                               /*!< XCVR_ANALOG_RX_LNA.RX_MIXER_SPARE Position*/
+#define XCVR_ANALOG_RX_LNA_RX_MIXER_SPARE(x)     (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< XCVR_ANALOG_RX_LNA.RX_MIXER_SPARE Field */
 /* ------- RX_TZA Bit Fields                        ------ */
-#define XCVR_ANA_RX_TZA_RX_TZA_BW_SEL_MASK       (0x7U)                                              /*!< XCVR_ANA_RX_TZA.RX_TZA_BW_SEL Mask      */
-#define XCVR_ANA_RX_TZA_RX_TZA_BW_SEL_SHIFT      (0U)                                                /*!< XCVR_ANA_RX_TZA.RX_TZA_BW_SEL Position  */
-#define XCVR_ANA_RX_TZA_RX_TZA_BW_SEL(x)         (((uint32_t)(((uint32_t)(x))<<0U))&0x7UL)           /*!< XCVR_ANA_RX_TZA.RX_TZA_BW_SEL Field     */
-#define XCVR_ANA_RX_TZA_RX_TZA_CUR_BUMP_MASK     (0x8U)                                              /*!< XCVR_ANA_RX_TZA.RX_TZA_CUR_BUMP Mask    */
-#define XCVR_ANA_RX_TZA_RX_TZA_CUR_BUMP_SHIFT    (3U)                                                /*!< XCVR_ANA_RX_TZA.RX_TZA_CUR_BUMP Position*/
-#define XCVR_ANA_RX_TZA_RX_TZA_CUR_BUMP(x)       (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< XCVR_ANA_RX_TZA.RX_TZA_CUR_BUMP Field   */
-#define XCVR_ANA_RX_TZA_RX_TZA_GAIN_BUMP_MASK    (0x10U)                                             /*!< XCVR_ANA_RX_TZA.RX_TZA_GAIN_BUMP Mask   */
-#define XCVR_ANA_RX_TZA_RX_TZA_GAIN_BUMP_SHIFT   (4U)                                                /*!< XCVR_ANA_RX_TZA.RX_TZA_GAIN_BUMP Position*/
-#define XCVR_ANA_RX_TZA_RX_TZA_GAIN_BUMP(x)      (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< XCVR_ANA_RX_TZA.RX_TZA_GAIN_BUMP Field  */
-#define XCVR_ANA_RX_TZA_RX_TZA_SPARE_MASK        (0x3F0000U)                                         /*!< XCVR_ANA_RX_TZA.RX_TZA_SPARE Mask       */
-#define XCVR_ANA_RX_TZA_RX_TZA_SPARE_SHIFT       (16U)                                               /*!< XCVR_ANA_RX_TZA.RX_TZA_SPARE Position   */
-#define XCVR_ANA_RX_TZA_RX_TZA_SPARE(x)          (((uint32_t)(((uint32_t)(x))<<16U))&0x3F0000UL)     /*!< XCVR_ANA_RX_TZA.RX_TZA_SPARE Field      */
-#define XCVR_ANA_RX_TZA_RX_TZA1_DIAGSEL_MASK     (0x1000000U)                                        /*!< XCVR_ANA_RX_TZA.RX_TZA1_DIAGSEL Mask    */
-#define XCVR_ANA_RX_TZA_RX_TZA1_DIAGSEL_SHIFT    (24U)                                               /*!< XCVR_ANA_RX_TZA.RX_TZA1_DIAGSEL Position*/
-#define XCVR_ANA_RX_TZA_RX_TZA1_DIAGSEL(x)       (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< XCVR_ANA_RX_TZA.RX_TZA1_DIAGSEL Field   */
-#define XCVR_ANA_RX_TZA_RX_TZA2_DIAGSEL_MASK     (0x2000000U)                                        /*!< XCVR_ANA_RX_TZA.RX_TZA2_DIAGSEL Mask    */
-#define XCVR_ANA_RX_TZA_RX_TZA2_DIAGSEL_SHIFT    (25U)                                               /*!< XCVR_ANA_RX_TZA.RX_TZA2_DIAGSEL Position*/
-#define XCVR_ANA_RX_TZA_RX_TZA2_DIAGSEL(x)       (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< XCVR_ANA_RX_TZA.RX_TZA2_DIAGSEL Field   */
-#define XCVR_ANA_RX_TZA_RX_TZA3_DIAGSEL_MASK     (0x4000000U)                                        /*!< XCVR_ANA_RX_TZA.RX_TZA3_DIAGSEL Mask    */
-#define XCVR_ANA_RX_TZA_RX_TZA3_DIAGSEL_SHIFT    (26U)                                               /*!< XCVR_ANA_RX_TZA.RX_TZA3_DIAGSEL Position*/
-#define XCVR_ANA_RX_TZA_RX_TZA3_DIAGSEL(x)       (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< XCVR_ANA_RX_TZA.RX_TZA3_DIAGSEL Field   */
-#define XCVR_ANA_RX_TZA_RX_TZA4_DIAGSEL_MASK     (0x8000000U)                                        /*!< XCVR_ANA_RX_TZA.RX_TZA4_DIAGSEL Mask    */
-#define XCVR_ANA_RX_TZA_RX_TZA4_DIAGSEL_SHIFT    (27U)                                               /*!< XCVR_ANA_RX_TZA.RX_TZA4_DIAGSEL Position*/
-#define XCVR_ANA_RX_TZA_RX_TZA4_DIAGSEL(x)       (((uint32_t)(((uint32_t)(x))<<27U))&0x8000000UL)    /*!< XCVR_ANA_RX_TZA.RX_TZA4_DIAGSEL Field   */
+#define XCVR_ANALOG_RX_TZA_RX_TZA_BW_SEL_MASK    (0x7U)                                              /*!< XCVR_ANALOG_RX_TZA.RX_TZA_BW_SEL Mask   */
+#define XCVR_ANALOG_RX_TZA_RX_TZA_BW_SEL_SHIFT   (0U)                                                /*!< XCVR_ANALOG_RX_TZA.RX_TZA_BW_SEL Position*/
+#define XCVR_ANALOG_RX_TZA_RX_TZA_BW_SEL(x)      (((uint32_t)(((uint32_t)(x))<<0U))&0x7UL)           /*!< XCVR_ANALOG_RX_TZA.RX_TZA_BW_SEL Field  */
+#define XCVR_ANALOG_RX_TZA_RX_TZA_CUR_BUMP_MASK  (0x8U)                                              /*!< XCVR_ANALOG_RX_TZA.RX_TZA_CUR_BUMP Mask */
+#define XCVR_ANALOG_RX_TZA_RX_TZA_CUR_BUMP_SHIFT (3U)                                                /*!< XCVR_ANALOG_RX_TZA.RX_TZA_CUR_BUMP Position*/
+#define XCVR_ANALOG_RX_TZA_RX_TZA_CUR_BUMP(x)    (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< XCVR_ANALOG_RX_TZA.RX_TZA_CUR_BUMP Field*/
+#define XCVR_ANALOG_RX_TZA_RX_TZA_GAIN_BUMP_MASK (0x10U)                                             /*!< XCVR_ANALOG_RX_TZA.RX_TZA_GAIN_BUMP Mask*/
+#define XCVR_ANALOG_RX_TZA_RX_TZA_GAIN_BUMP_SHIFT (4U)                                               /*!< XCVR_ANALOG_RX_TZA.RX_TZA_GAIN_BUMP Position*/
+#define XCVR_ANALOG_RX_TZA_RX_TZA_GAIN_BUMP(x)   (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< XCVR_ANALOG_RX_TZA.RX_TZA_GAIN_BUMP Field*/
+#define XCVR_ANALOG_RX_TZA_RX_TZA_SPARE_MASK     (0x3F0000U)                                         /*!< XCVR_ANALOG_RX_TZA.RX_TZA_SPARE Mask    */
+#define XCVR_ANALOG_RX_TZA_RX_TZA_SPARE_SHIFT    (16U)                                               /*!< XCVR_ANALOG_RX_TZA.RX_TZA_SPARE Position*/
+#define XCVR_ANALOG_RX_TZA_RX_TZA_SPARE(x)       (((uint32_t)(((uint32_t)(x))<<16U))&0x3F0000UL)     /*!< XCVR_ANALOG_RX_TZA.RX_TZA_SPARE Field   */
+#define XCVR_ANALOG_RX_TZA_RX_TZA1_DIAGSEL_MASK  (0x1000000U)                                        /*!< XCVR_ANALOG_RX_TZA.RX_TZA1_DIAGSEL Mask */
+#define XCVR_ANALOG_RX_TZA_RX_TZA1_DIAGSEL_SHIFT (24U)                                               /*!< XCVR_ANALOG_RX_TZA.RX_TZA1_DIAGSEL Position*/
+#define XCVR_ANALOG_RX_TZA_RX_TZA1_DIAGSEL(x)    (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< XCVR_ANALOG_RX_TZA.RX_TZA1_DIAGSEL Field*/
+#define XCVR_ANALOG_RX_TZA_RX_TZA2_DIAGSEL_MASK  (0x2000000U)                                        /*!< XCVR_ANALOG_RX_TZA.RX_TZA2_DIAGSEL Mask */
+#define XCVR_ANALOG_RX_TZA_RX_TZA2_DIAGSEL_SHIFT (25U)                                               /*!< XCVR_ANALOG_RX_TZA.RX_TZA2_DIAGSEL Position*/
+#define XCVR_ANALOG_RX_TZA_RX_TZA2_DIAGSEL(x)    (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< XCVR_ANALOG_RX_TZA.RX_TZA2_DIAGSEL Field*/
+#define XCVR_ANALOG_RX_TZA_RX_TZA3_DIAGSEL_MASK  (0x4000000U)                                        /*!< XCVR_ANALOG_RX_TZA.RX_TZA3_DIAGSEL Mask */
+#define XCVR_ANALOG_RX_TZA_RX_TZA3_DIAGSEL_SHIFT (26U)                                               /*!< XCVR_ANALOG_RX_TZA.RX_TZA3_DIAGSEL Position*/
+#define XCVR_ANALOG_RX_TZA_RX_TZA3_DIAGSEL(x)    (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< XCVR_ANALOG_RX_TZA.RX_TZA3_DIAGSEL Field*/
+#define XCVR_ANALOG_RX_TZA_RX_TZA4_DIAGSEL_MASK  (0x8000000U)                                        /*!< XCVR_ANALOG_RX_TZA.RX_TZA4_DIAGSEL Mask */
+#define XCVR_ANALOG_RX_TZA_RX_TZA4_DIAGSEL_SHIFT (27U)                                               /*!< XCVR_ANALOG_RX_TZA.RX_TZA4_DIAGSEL Position*/
+#define XCVR_ANALOG_RX_TZA_RX_TZA4_DIAGSEL(x)    (((uint32_t)(((uint32_t)(x))<<27U))&0x8000000UL)    /*!< XCVR_ANALOG_RX_TZA.RX_TZA4_DIAGSEL Field*/
 /* ------- RX_AUXPLL Bit Fields                     ------ */
-#define XCVR_ANA_RX_AUXPLL_BIAS_TRIM_MASK        (0x7U)                                              /*!< XCVR_ANA_RX_AUXPLL.BIAS_TRIM Mask       */
-#define XCVR_ANA_RX_AUXPLL_BIAS_TRIM_SHIFT       (0U)                                                /*!< XCVR_ANA_RX_AUXPLL.BIAS_TRIM Position   */
-#define XCVR_ANA_RX_AUXPLL_BIAS_TRIM(x)          (((uint32_t)(((uint32_t)(x))<<0U))&0x7UL)           /*!< XCVR_ANA_RX_AUXPLL.BIAS_TRIM Field      */
-#define XCVR_ANA_RX_AUXPLL_DIAGSEL1_MASK         (0x8U)                                              /*!< XCVR_ANA_RX_AUXPLL.DIAGSEL1 Mask        */
-#define XCVR_ANA_RX_AUXPLL_DIAGSEL1_SHIFT        (3U)                                                /*!< XCVR_ANA_RX_AUXPLL.DIAGSEL1 Position    */
-#define XCVR_ANA_RX_AUXPLL_DIAGSEL1(x)           (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< XCVR_ANA_RX_AUXPLL.DIAGSEL1 Field       */
-#define XCVR_ANA_RX_AUXPLL_DIAGSEL2_MASK         (0x10U)                                             /*!< XCVR_ANA_RX_AUXPLL.DIAGSEL2 Mask        */
-#define XCVR_ANA_RX_AUXPLL_DIAGSEL2_SHIFT        (4U)                                                /*!< XCVR_ANA_RX_AUXPLL.DIAGSEL2 Position    */
-#define XCVR_ANA_RX_AUXPLL_DIAGSEL2(x)           (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< XCVR_ANA_RX_AUXPLL.DIAGSEL2 Field       */
-#define XCVR_ANA_RX_AUXPLL_LF_CNTL_MASK          (0xE0U)                                             /*!< XCVR_ANA_RX_AUXPLL.LF_CNTL Mask         */
-#define XCVR_ANA_RX_AUXPLL_LF_CNTL_SHIFT         (5U)                                                /*!< XCVR_ANA_RX_AUXPLL.LF_CNTL Position     */
-#define XCVR_ANA_RX_AUXPLL_LF_CNTL(x)            (((uint32_t)(((uint32_t)(x))<<5U))&0xE0UL)          /*!< XCVR_ANA_RX_AUXPLL.LF_CNTL Field        */
-#define XCVR_ANA_RX_AUXPLL_SPARE_MASK            (0xF00U)                                            /*!< XCVR_ANA_RX_AUXPLL.SPARE Mask           */
-#define XCVR_ANA_RX_AUXPLL_SPARE_SHIFT           (8U)                                                /*!< XCVR_ANA_RX_AUXPLL.SPARE Position       */
-#define XCVR_ANA_RX_AUXPLL_SPARE(x)              (((uint32_t)(((uint32_t)(x))<<8U))&0xF00UL)         /*!< XCVR_ANA_RX_AUXPLL.SPARE Field          */
-#define XCVR_ANA_RX_AUXPLL_VCO_DAC_REF_ADJUST_MASK (0xF000U)                                         /*!< XCVR_ANA_RX_AUXPLL.VCO_DAC_REF_ADJUST Mask*/
-#define XCVR_ANA_RX_AUXPLL_VCO_DAC_REF_ADJUST_SHIFT (12U)                                            /*!< XCVR_ANA_RX_AUXPLL.VCO_DAC_REF_ADJUST Position*/
-#define XCVR_ANA_RX_AUXPLL_VCO_DAC_REF_ADJUST(x) (((uint32_t)(((uint32_t)(x))<<12U))&0xF000UL)       /*!< XCVR_ANA_RX_AUXPLL.VCO_DAC_REF_ADJUST Field*/
-#define XCVR_ANA_RX_AUXPLL_VTUNE_TESTMODE_MASK   (0x10000U)                                          /*!< XCVR_ANA_RX_AUXPLL.VTUNE_TESTMODE Mask  */
-#define XCVR_ANA_RX_AUXPLL_VTUNE_TESTMODE_SHIFT  (16U)                                               /*!< XCVR_ANA_RX_AUXPLL.VTUNE_TESTMODE Position*/
-#define XCVR_ANA_RX_AUXPLL_VTUNE_TESTMODE(x)     (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< XCVR_ANA_RX_AUXPLL.VTUNE_TESTMODE Field */
-#define XCVR_ANA_RX_AUXPLL_RXTX_BAL_BIAST_MASK   (0x300000U)                                         /*!< XCVR_ANA_RX_AUXPLL.RXTX_BAL_BIAST Mask  */
-#define XCVR_ANA_RX_AUXPLL_RXTX_BAL_BIAST_SHIFT  (20U)                                               /*!< XCVR_ANA_RX_AUXPLL.RXTX_BAL_BIAST Position*/
-#define XCVR_ANA_RX_AUXPLL_RXTX_BAL_BIAST(x)     (((uint32_t)(((uint32_t)(x))<<20U))&0x300000UL)     /*!< XCVR_ANA_RX_AUXPLL.RXTX_BAL_BIAST Field */
-#define XCVR_ANA_RX_AUXPLL_RXTX_BAL_SPARE_MASK   (0x7000000U)                                        /*!< XCVR_ANA_RX_AUXPLL.RXTX_BAL_SPARE Mask  */
-#define XCVR_ANA_RX_AUXPLL_RXTX_BAL_SPARE_SHIFT  (24U)                                               /*!< XCVR_ANA_RX_AUXPLL.RXTX_BAL_SPARE Position*/
-#define XCVR_ANA_RX_AUXPLL_RXTX_BAL_SPARE(x)     (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< XCVR_ANA_RX_AUXPLL.RXTX_BAL_SPARE Field */
-#define XCVR_ANA_RX_AUXPLL_RXTX_RCCAL_DIAGSEL_MASK (0x10000000U)                                     /*!< XCVR_ANA_RX_AUXPLL.RXTX_RCCAL_DIAGSEL Mask*/
-#define XCVR_ANA_RX_AUXPLL_RXTX_RCCAL_DIAGSEL_SHIFT (28U)                                            /*!< XCVR_ANA_RX_AUXPLL.RXTX_RCCAL_DIAGSEL Position*/
-#define XCVR_ANA_RX_AUXPLL_RXTX_RCCAL_DIAGSEL(x) (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< XCVR_ANA_RX_AUXPLL.RXTX_RCCAL_DIAGSEL Field*/
+#define XCVR_ANALOG_RX_AUXPLL_BIAS_TRIM_MASK     (0x7U)                                              /*!< XCVR_ANALOG_RX_AUXPLL.BIAS_TRIM Mask    */
+#define XCVR_ANALOG_RX_AUXPLL_BIAS_TRIM_SHIFT    (0U)                                                /*!< XCVR_ANALOG_RX_AUXPLL.BIAS_TRIM Position*/
+#define XCVR_ANALOG_RX_AUXPLL_BIAS_TRIM(x)       (((uint32_t)(((uint32_t)(x))<<0U))&0x7UL)           /*!< XCVR_ANALOG_RX_AUXPLL.BIAS_TRIM Field   */
+#define XCVR_ANALOG_RX_AUXPLL_DIAGSEL1_MASK      (0x8U)                                              /*!< XCVR_ANALOG_RX_AUXPLL.DIAGSEL1 Mask     */
+#define XCVR_ANALOG_RX_AUXPLL_DIAGSEL1_SHIFT     (3U)                                                /*!< XCVR_ANALOG_RX_AUXPLL.DIAGSEL1 Position */
+#define XCVR_ANALOG_RX_AUXPLL_DIAGSEL1(x)        (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< XCVR_ANALOG_RX_AUXPLL.DIAGSEL1 Field    */
+#define XCVR_ANALOG_RX_AUXPLL_DIAGSEL2_MASK      (0x10U)                                             /*!< XCVR_ANALOG_RX_AUXPLL.DIAGSEL2 Mask     */
+#define XCVR_ANALOG_RX_AUXPLL_DIAGSEL2_SHIFT     (4U)                                                /*!< XCVR_ANALOG_RX_AUXPLL.DIAGSEL2 Position */
+#define XCVR_ANALOG_RX_AUXPLL_DIAGSEL2(x)        (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< XCVR_ANALOG_RX_AUXPLL.DIAGSEL2 Field    */
+#define XCVR_ANALOG_RX_AUXPLL_LF_CNTL_MASK       (0xE0U)                                             /*!< XCVR_ANALOG_RX_AUXPLL.LF_CNTL Mask      */
+#define XCVR_ANALOG_RX_AUXPLL_LF_CNTL_SHIFT      (5U)                                                /*!< XCVR_ANALOG_RX_AUXPLL.LF_CNTL Position  */
+#define XCVR_ANALOG_RX_AUXPLL_LF_CNTL(x)         (((uint32_t)(((uint32_t)(x))<<5U))&0xE0UL)          /*!< XCVR_ANALOG_RX_AUXPLL.LF_CNTL Field     */
+#define XCVR_ANALOG_RX_AUXPLL_SPARE_MASK         (0xF00U)                                            /*!< XCVR_ANALOG_RX_AUXPLL.SPARE Mask        */
+#define XCVR_ANALOG_RX_AUXPLL_SPARE_SHIFT        (8U)                                                /*!< XCVR_ANALOG_RX_AUXPLL.SPARE Position    */
+#define XCVR_ANALOG_RX_AUXPLL_SPARE(x)           (((uint32_t)(((uint32_t)(x))<<8U))&0xF00UL)         /*!< XCVR_ANALOG_RX_AUXPLL.SPARE Field       */
+#define XCVR_ANALOG_RX_AUXPLL_VCO_DAC_REF_ADJUST_MASK (0xF000U)                                      /*!< XCVR_ANALOG_RX_AUXPLL.VCO_DAC_REF_ADJUST Mask*/
+#define XCVR_ANALOG_RX_AUXPLL_VCO_DAC_REF_ADJUST_SHIFT (12U)                                         /*!< XCVR_ANALOG_RX_AUXPLL.VCO_DAC_REF_ADJUST Position*/
+#define XCVR_ANALOG_RX_AUXPLL_VCO_DAC_REF_ADJUST(x) (((uint32_t)(((uint32_t)(x))<<12U))&0xF000UL)    /*!< XCVR_ANALOG_RX_AUXPLL.VCO_DAC_REF_ADJUST Field*/
+#define XCVR_ANALOG_RX_AUXPLL_VTUNE_TESTMODE_MASK (0x10000U)                                         /*!< XCVR_ANALOG_RX_AUXPLL.VTUNE_TESTMODE Mask*/
+#define XCVR_ANALOG_RX_AUXPLL_VTUNE_TESTMODE_SHIFT (16U)                                             /*!< XCVR_ANALOG_RX_AUXPLL.VTUNE_TESTMODE Position*/
+#define XCVR_ANALOG_RX_AUXPLL_VTUNE_TESTMODE(x)  (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< XCVR_ANALOG_RX_AUXPLL.VTUNE_TESTMODE Field*/
+#define XCVR_ANALOG_RX_AUXPLL_RXTX_BAL_BIAST_MASK (0x300000U)                                        /*!< XCVR_ANALOG_RX_AUXPLL.RXTX_BAL_BIAST Mask*/
+#define XCVR_ANALOG_RX_AUXPLL_RXTX_BAL_BIAST_SHIFT (20U)                                             /*!< XCVR_ANALOG_RX_AUXPLL.RXTX_BAL_BIAST Position*/
+#define XCVR_ANALOG_RX_AUXPLL_RXTX_BAL_BIAST(x)  (((uint32_t)(((uint32_t)(x))<<20U))&0x300000UL)     /*!< XCVR_ANALOG_RX_AUXPLL.RXTX_BAL_BIAST Field*/
+#define XCVR_ANALOG_RX_AUXPLL_RXTX_BAL_SPARE_MASK (0x7000000U)                                       /*!< XCVR_ANALOG_RX_AUXPLL.RXTX_BAL_SPARE Mask*/
+#define XCVR_ANALOG_RX_AUXPLL_RXTX_BAL_SPARE_SHIFT (24U)                                             /*!< XCVR_ANALOG_RX_AUXPLL.RXTX_BAL_SPARE Position*/
+#define XCVR_ANALOG_RX_AUXPLL_RXTX_BAL_SPARE(x)  (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< XCVR_ANALOG_RX_AUXPLL.RXTX_BAL_SPARE Field*/
+#define XCVR_ANALOG_RX_AUXPLL_RXTX_RCCAL_DIAGSEL_MASK (0x10000000U)                                  /*!< XCVR_ANALOG_RX_AUXPLL.RXTX_RCCAL_DIAGSEL Mask*/
+#define XCVR_ANALOG_RX_AUXPLL_RXTX_RCCAL_DIAGSEL_SHIFT (28U)                                         /*!< XCVR_ANALOG_RX_AUXPLL.RXTX_RCCAL_DIAGSEL Position*/
+#define XCVR_ANALOG_RX_AUXPLL_RXTX_RCCAL_DIAGSEL(x) (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL) /*!< XCVR_ANALOG_RX_AUXPLL.RXTX_RCCAL_DIAGSEL Field*/
 /* ------- SY_CTRL_1 Bit Fields                     ------ */
-#define XCVR_ANA_SY_CTRL_1_SY_DIVN_SPARE_MASK    (0x1U)                                              /*!< XCVR_ANA_SY_CTRL_1.SY_DIVN_SPARE Mask   */
-#define XCVR_ANA_SY_CTRL_1_SY_DIVN_SPARE_SHIFT   (0U)                                                /*!< XCVR_ANA_SY_CTRL_1.SY_DIVN_SPARE Position*/
-#define XCVR_ANA_SY_CTRL_1_SY_DIVN_SPARE(x)      (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< XCVR_ANA_SY_CTRL_1.SY_DIVN_SPARE Field  */
-#define XCVR_ANA_SY_CTRL_1_SY_FCAL_SPARE_MASK    (0x2U)                                              /*!< XCVR_ANA_SY_CTRL_1.SY_FCAL_SPARE Mask   */
-#define XCVR_ANA_SY_CTRL_1_SY_FCAL_SPARE_SHIFT   (1U)                                                /*!< XCVR_ANA_SY_CTRL_1.SY_FCAL_SPARE Position*/
-#define XCVR_ANA_SY_CTRL_1_SY_FCAL_SPARE(x)      (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< XCVR_ANA_SY_CTRL_1.SY_FCAL_SPARE Field  */
-#define XCVR_ANA_SY_CTRL_1_SY_LO_BUMP_RTLO_FDBK_MASK (0x30U)                                         /*!< XCVR_ANA_SY_CTRL_1.SY_LO_BUMP_RTLO_FDBK Mask*/
-#define XCVR_ANA_SY_CTRL_1_SY_LO_BUMP_RTLO_FDBK_SHIFT (4U)                                           /*!< XCVR_ANA_SY_CTRL_1.SY_LO_BUMP_RTLO_FDBK Position*/
-#define XCVR_ANA_SY_CTRL_1_SY_LO_BUMP_RTLO_FDBK(x) (((uint32_t)(((uint32_t)(x))<<4U))&0x30UL)        /*!< XCVR_ANA_SY_CTRL_1.SY_LO_BUMP_RTLO_FDBK Field*/
-#define XCVR_ANA_SY_CTRL_1_SY_LO_BUMP_RTLO_RX_MASK (0xC0U)                                           /*!< XCVR_ANA_SY_CTRL_1.SY_LO_BUMP_RTLO_RX Mask*/
-#define XCVR_ANA_SY_CTRL_1_SY_LO_BUMP_RTLO_RX_SHIFT (6U)                                             /*!< XCVR_ANA_SY_CTRL_1.SY_LO_BUMP_RTLO_RX Position*/
-#define XCVR_ANA_SY_CTRL_1_SY_LO_BUMP_RTLO_RX(x) (((uint32_t)(((uint32_t)(x))<<6U))&0xC0UL)          /*!< XCVR_ANA_SY_CTRL_1.SY_LO_BUMP_RTLO_RX Field*/
-#define XCVR_ANA_SY_CTRL_1_SY_LO_BUMP_RTLO_TX_MASK (0x300U)                                          /*!< XCVR_ANA_SY_CTRL_1.SY_LO_BUMP_RTLO_TX Mask*/
-#define XCVR_ANA_SY_CTRL_1_SY_LO_BUMP_RTLO_TX_SHIFT (8U)                                             /*!< XCVR_ANA_SY_CTRL_1.SY_LO_BUMP_RTLO_TX Position*/
-#define XCVR_ANA_SY_CTRL_1_SY_LO_BUMP_RTLO_TX(x) (((uint32_t)(((uint32_t)(x))<<8U))&0x300UL)         /*!< XCVR_ANA_SY_CTRL_1.SY_LO_BUMP_RTLO_TX Field*/
-#define XCVR_ANA_SY_CTRL_1_SY_LO_DIAGSEL_MASK    (0x400U)                                            /*!< XCVR_ANA_SY_CTRL_1.SY_LO_DIAGSEL Mask   */
-#define XCVR_ANA_SY_CTRL_1_SY_LO_DIAGSEL_SHIFT   (10U)                                               /*!< XCVR_ANA_SY_CTRL_1.SY_LO_DIAGSEL Position*/
-#define XCVR_ANA_SY_CTRL_1_SY_LO_DIAGSEL(x)      (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< XCVR_ANA_SY_CTRL_1.SY_LO_DIAGSEL Field  */
-#define XCVR_ANA_SY_CTRL_1_SY_LO_SPARE_MASK      (0x7000U)                                           /*!< XCVR_ANA_SY_CTRL_1.SY_LO_SPARE Mask     */
-#define XCVR_ANA_SY_CTRL_1_SY_LO_SPARE_SHIFT     (12U)                                               /*!< XCVR_ANA_SY_CTRL_1.SY_LO_SPARE Position */
-#define XCVR_ANA_SY_CTRL_1_SY_LO_SPARE(x)        (((uint32_t)(((uint32_t)(x))<<12U))&0x7000UL)       /*!< XCVR_ANA_SY_CTRL_1.SY_LO_SPARE Field    */
-#define XCVR_ANA_SY_CTRL_1_SY_LPF_FILT_CTRL_MASK (0x70000U)                                          /*!< XCVR_ANA_SY_CTRL_1.SY_LPF_FILT_CTRL Mask*/
-#define XCVR_ANA_SY_CTRL_1_SY_LPF_FILT_CTRL_SHIFT (16U)                                              /*!< XCVR_ANA_SY_CTRL_1.SY_LPF_FILT_CTRL Position*/
-#define XCVR_ANA_SY_CTRL_1_SY_LPF_FILT_CTRL(x)   (((uint32_t)(((uint32_t)(x))<<16U))&0x70000UL)      /*!< XCVR_ANA_SY_CTRL_1.SY_LPF_FILT_CTRL Field*/
-#define XCVR_ANA_SY_CTRL_1_SY_LPF_SPARE_MASK     (0x80000U)                                          /*!< XCVR_ANA_SY_CTRL_1.SY_LPF_SPARE Mask    */
-#define XCVR_ANA_SY_CTRL_1_SY_LPF_SPARE_SHIFT    (19U)                                               /*!< XCVR_ANA_SY_CTRL_1.SY_LPF_SPARE Position*/
-#define XCVR_ANA_SY_CTRL_1_SY_LPF_SPARE(x)       (((uint32_t)(((uint32_t)(x))<<19U))&0x80000UL)      /*!< XCVR_ANA_SY_CTRL_1.SY_LPF_SPARE Field   */
-#define XCVR_ANA_SY_CTRL_1_SY_PD_DIAGSEL_MASK    (0x100000U)                                         /*!< XCVR_ANA_SY_CTRL_1.SY_PD_DIAGSEL Mask   */
-#define XCVR_ANA_SY_CTRL_1_SY_PD_DIAGSEL_SHIFT   (20U)                                               /*!< XCVR_ANA_SY_CTRL_1.SY_PD_DIAGSEL Position*/
-#define XCVR_ANA_SY_CTRL_1_SY_PD_DIAGSEL(x)      (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< XCVR_ANA_SY_CTRL_1.SY_PD_DIAGSEL Field  */
-#define XCVR_ANA_SY_CTRL_1_SY_PD_PCH_TUNE_MASK   (0x600000U)                                         /*!< XCVR_ANA_SY_CTRL_1.SY_PD_PCH_TUNE Mask  */
-#define XCVR_ANA_SY_CTRL_1_SY_PD_PCH_TUNE_SHIFT  (21U)                                               /*!< XCVR_ANA_SY_CTRL_1.SY_PD_PCH_TUNE Position*/
-#define XCVR_ANA_SY_CTRL_1_SY_PD_PCH_TUNE(x)     (((uint32_t)(((uint32_t)(x))<<21U))&0x600000UL)     /*!< XCVR_ANA_SY_CTRL_1.SY_PD_PCH_TUNE Field */
-#define XCVR_ANA_SY_CTRL_1_SY_PD_PCH_SEL_MASK    (0x800000U)                                         /*!< XCVR_ANA_SY_CTRL_1.SY_PD_PCH_SEL Mask   */
-#define XCVR_ANA_SY_CTRL_1_SY_PD_PCH_SEL_SHIFT   (23U)                                               /*!< XCVR_ANA_SY_CTRL_1.SY_PD_PCH_SEL Position*/
-#define XCVR_ANA_SY_CTRL_1_SY_PD_PCH_SEL(x)      (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< XCVR_ANA_SY_CTRL_1.SY_PD_PCH_SEL Field  */
-#define XCVR_ANA_SY_CTRL_1_SY_PD_SPARE_MASK      (0x3000000U)                                        /*!< XCVR_ANA_SY_CTRL_1.SY_PD_SPARE Mask     */
-#define XCVR_ANA_SY_CTRL_1_SY_PD_SPARE_SHIFT     (24U)                                               /*!< XCVR_ANA_SY_CTRL_1.SY_PD_SPARE Position */
-#define XCVR_ANA_SY_CTRL_1_SY_PD_SPARE(x)        (((uint32_t)(((uint32_t)(x))<<24U))&0x3000000UL)    /*!< XCVR_ANA_SY_CTRL_1.SY_PD_SPARE Field    */
-#define XCVR_ANA_SY_CTRL_1_SY_PD_VTUNE_OVERRIDE_TEST_MODE_MASK (0x10000000U)                         /*!< XCVR_ANA_SY_CTRL_1.SY_PD_VTUNE_OVERRIDE_TEST_MODE Mask*/
-#define XCVR_ANA_SY_CTRL_1_SY_PD_VTUNE_OVERRIDE_TEST_MODE_SHIFT (28U)                                /*!< XCVR_ANA_SY_CTRL_1.SY_PD_VTUNE_OVERRIDE_TEST_MODE Position*/
-#define XCVR_ANA_SY_CTRL_1_SY_PD_VTUNE_OVERRIDE_TEST_MODE(x) (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL) /*!< XCVR_ANA_SY_CTRL_1.SY_PD_VTUNE_OVERRIDE_TEST_MODE Field*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_DIVN_SPARE_MASK (0x1U)                                              /*!< XCVR_ANALOG_SY_CTRL_1.SY_DIVN_SPARE Mask*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_DIVN_SPARE_SHIFT (0U)                                               /*!< XCVR_ANALOG_SY_CTRL_1.SY_DIVN_SPARE Position*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_DIVN_SPARE(x)   (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< XCVR_ANALOG_SY_CTRL_1.SY_DIVN_SPARE Field*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_FCAL_SPARE_MASK (0x2U)                                              /*!< XCVR_ANALOG_SY_CTRL_1.SY_FCAL_SPARE Mask*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_FCAL_SPARE_SHIFT (1U)                                               /*!< XCVR_ANALOG_SY_CTRL_1.SY_FCAL_SPARE Position*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_FCAL_SPARE(x)   (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< XCVR_ANALOG_SY_CTRL_1.SY_FCAL_SPARE Field*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_LO_BUMP_RTLO_FDBK_MASK (0x30U)                                      /*!< XCVR_ANALOG_SY_CTRL_1.SY_LO_BUMP_RTLO_FDBK Mask*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_LO_BUMP_RTLO_FDBK_SHIFT (4U)                                        /*!< XCVR_ANALOG_SY_CTRL_1.SY_LO_BUMP_RTLO_FDBK Position*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_LO_BUMP_RTLO_FDBK(x) (((uint32_t)(((uint32_t)(x))<<4U))&0x30UL)     /*!< XCVR_ANALOG_SY_CTRL_1.SY_LO_BUMP_RTLO_FDBK Field*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_LO_BUMP_RTLO_RX_MASK (0xC0U)                                        /*!< XCVR_ANALOG_SY_CTRL_1.SY_LO_BUMP_RTLO_RX Mask*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_LO_BUMP_RTLO_RX_SHIFT (6U)                                          /*!< XCVR_ANALOG_SY_CTRL_1.SY_LO_BUMP_RTLO_RX Position*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_LO_BUMP_RTLO_RX(x) (((uint32_t)(((uint32_t)(x))<<6U))&0xC0UL)       /*!< XCVR_ANALOG_SY_CTRL_1.SY_LO_BUMP_RTLO_RX Field*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_LO_BUMP_RTLO_TX_MASK (0x300U)                                       /*!< XCVR_ANALOG_SY_CTRL_1.SY_LO_BUMP_RTLO_TX Mask*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_LO_BUMP_RTLO_TX_SHIFT (8U)                                          /*!< XCVR_ANALOG_SY_CTRL_1.SY_LO_BUMP_RTLO_TX Position*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_LO_BUMP_RTLO_TX(x) (((uint32_t)(((uint32_t)(x))<<8U))&0x300UL)      /*!< XCVR_ANALOG_SY_CTRL_1.SY_LO_BUMP_RTLO_TX Field*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_LO_DIAGSEL_MASK (0x400U)                                            /*!< XCVR_ANALOG_SY_CTRL_1.SY_LO_DIAGSEL Mask*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_LO_DIAGSEL_SHIFT (10U)                                              /*!< XCVR_ANALOG_SY_CTRL_1.SY_LO_DIAGSEL Position*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_LO_DIAGSEL(x)   (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< XCVR_ANALOG_SY_CTRL_1.SY_LO_DIAGSEL Field*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_LO_SPARE_MASK   (0x7000U)                                           /*!< XCVR_ANALOG_SY_CTRL_1.SY_LO_SPARE Mask  */
+#define XCVR_ANALOG_SY_CTRL_1_SY_LO_SPARE_SHIFT  (12U)                                               /*!< XCVR_ANALOG_SY_CTRL_1.SY_LO_SPARE Position*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_LO_SPARE(x)     (((uint32_t)(((uint32_t)(x))<<12U))&0x7000UL)       /*!< XCVR_ANALOG_SY_CTRL_1.SY_LO_SPARE Field */
+#define XCVR_ANALOG_SY_CTRL_1_SY_LPF_FILT_CTRL_MASK (0x70000U)                                       /*!< XCVR_ANALOG_SY_CTRL_1.SY_LPF_FILT_CTRL Mask*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_LPF_FILT_CTRL_SHIFT (16U)                                           /*!< XCVR_ANALOG_SY_CTRL_1.SY_LPF_FILT_CTRL Position*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_LPF_FILT_CTRL(x) (((uint32_t)(((uint32_t)(x))<<16U))&0x70000UL)     /*!< XCVR_ANALOG_SY_CTRL_1.SY_LPF_FILT_CTRL Field*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_LPF_SPARE_MASK  (0x80000U)                                          /*!< XCVR_ANALOG_SY_CTRL_1.SY_LPF_SPARE Mask */
+#define XCVR_ANALOG_SY_CTRL_1_SY_LPF_SPARE_SHIFT (19U)                                               /*!< XCVR_ANALOG_SY_CTRL_1.SY_LPF_SPARE Position*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_LPF_SPARE(x)    (((uint32_t)(((uint32_t)(x))<<19U))&0x80000UL)      /*!< XCVR_ANALOG_SY_CTRL_1.SY_LPF_SPARE Field*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_PD_DIAGSEL_MASK (0x100000U)                                         /*!< XCVR_ANALOG_SY_CTRL_1.SY_PD_DIAGSEL Mask*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_PD_DIAGSEL_SHIFT (20U)                                              /*!< XCVR_ANALOG_SY_CTRL_1.SY_PD_DIAGSEL Position*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_PD_DIAGSEL(x)   (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< XCVR_ANALOG_SY_CTRL_1.SY_PD_DIAGSEL Field*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_PD_PCH_TUNE_MASK (0x600000U)                                        /*!< XCVR_ANALOG_SY_CTRL_1.SY_PD_PCH_TUNE Mask*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_PD_PCH_TUNE_SHIFT (21U)                                             /*!< XCVR_ANALOG_SY_CTRL_1.SY_PD_PCH_TUNE Position*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_PD_PCH_TUNE(x)  (((uint32_t)(((uint32_t)(x))<<21U))&0x600000UL)     /*!< XCVR_ANALOG_SY_CTRL_1.SY_PD_PCH_TUNE Field*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_PD_PCH_SEL_MASK (0x800000U)                                         /*!< XCVR_ANALOG_SY_CTRL_1.SY_PD_PCH_SEL Mask*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_PD_PCH_SEL_SHIFT (23U)                                              /*!< XCVR_ANALOG_SY_CTRL_1.SY_PD_PCH_SEL Position*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_PD_PCH_SEL(x)   (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< XCVR_ANALOG_SY_CTRL_1.SY_PD_PCH_SEL Field*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_PD_SPARE_MASK   (0x3000000U)                                        /*!< XCVR_ANALOG_SY_CTRL_1.SY_PD_SPARE Mask  */
+#define XCVR_ANALOG_SY_CTRL_1_SY_PD_SPARE_SHIFT  (24U)                                               /*!< XCVR_ANALOG_SY_CTRL_1.SY_PD_SPARE Position*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_PD_SPARE(x)     (((uint32_t)(((uint32_t)(x))<<24U))&0x3000000UL)    /*!< XCVR_ANALOG_SY_CTRL_1.SY_PD_SPARE Field */
+#define XCVR_ANALOG_SY_CTRL_1_SY_PD_VTUNE_OVERRIDE_TEST_MODE_MASK (0x10000000U)                      /*!< XCVR_ANALOG_SY_CTRL_1.SY_PD_VTUNE_OVERRIDE_TEST_MODE Mask*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_PD_VTUNE_OVERRIDE_TEST_MODE_SHIFT (28U)                             /*!< XCVR_ANALOG_SY_CTRL_1.SY_PD_VTUNE_OVERRIDE_TEST_MODE Position*/
+#define XCVR_ANALOG_SY_CTRL_1_SY_PD_VTUNE_OVERRIDE_TEST_MODE(x) (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL) /*!< XCVR_ANALOG_SY_CTRL_1.SY_PD_VTUNE_OVERRIDE_TEST_MODE Field*/
 /* ------- SY_CTRL_2 Bit Fields                     ------ */
-#define XCVR_ANA_SY_CTRL_2_SY_VCO_BIAS_MASK      (0x7U)                                              /*!< XCVR_ANA_SY_CTRL_2.SY_VCO_BIAS Mask     */
-#define XCVR_ANA_SY_CTRL_2_SY_VCO_BIAS_SHIFT     (0U)                                                /*!< XCVR_ANA_SY_CTRL_2.SY_VCO_BIAS Position */
-#define XCVR_ANA_SY_CTRL_2_SY_VCO_BIAS(x)        (((uint32_t)(((uint32_t)(x))<<0U))&0x7UL)           /*!< XCVR_ANA_SY_CTRL_2.SY_VCO_BIAS Field    */
-#define XCVR_ANA_SY_CTRL_2_SY_VCO_DIAGSEL_MASK   (0x8U)                                              /*!< XCVR_ANA_SY_CTRL_2.SY_VCO_DIAGSEL Mask  */
-#define XCVR_ANA_SY_CTRL_2_SY_VCO_DIAGSEL_SHIFT  (3U)                                                /*!< XCVR_ANA_SY_CTRL_2.SY_VCO_DIAGSEL Position*/
-#define XCVR_ANA_SY_CTRL_2_SY_VCO_DIAGSEL(x)     (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< XCVR_ANA_SY_CTRL_2.SY_VCO_DIAGSEL Field */
-#define XCVR_ANA_SY_CTRL_2_SY_VCO_KV_MASK        (0x70U)                                             /*!< XCVR_ANA_SY_CTRL_2.SY_VCO_KV Mask       */
-#define XCVR_ANA_SY_CTRL_2_SY_VCO_KV_SHIFT       (4U)                                                /*!< XCVR_ANA_SY_CTRL_2.SY_VCO_KV Position   */
-#define XCVR_ANA_SY_CTRL_2_SY_VCO_KV(x)          (((uint32_t)(((uint32_t)(x))<<4U))&0x70UL)          /*!< XCVR_ANA_SY_CTRL_2.SY_VCO_KV Field      */
-#define XCVR_ANA_SY_CTRL_2_SY_VCO_KVM_MASK       (0x700U)                                            /*!< XCVR_ANA_SY_CTRL_2.SY_VCO_KVM Mask      */
-#define XCVR_ANA_SY_CTRL_2_SY_VCO_KVM_SHIFT      (8U)                                                /*!< XCVR_ANA_SY_CTRL_2.SY_VCO_KVM Position  */
-#define XCVR_ANA_SY_CTRL_2_SY_VCO_KVM(x)         (((uint32_t)(((uint32_t)(x))<<8U))&0x700UL)         /*!< XCVR_ANA_SY_CTRL_2.SY_VCO_KVM Field     */
-#define XCVR_ANA_SY_CTRL_2_SY_VCO_PK_DET_ON_MASK (0x1000U)                                           /*!< XCVR_ANA_SY_CTRL_2.SY_VCO_PK_DET_ON Mask*/
-#define XCVR_ANA_SY_CTRL_2_SY_VCO_PK_DET_ON_SHIFT (12U)                                              /*!< XCVR_ANA_SY_CTRL_2.SY_VCO_PK_DET_ON Position*/
-#define XCVR_ANA_SY_CTRL_2_SY_VCO_PK_DET_ON(x)   (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< XCVR_ANA_SY_CTRL_2.SY_VCO_PK_DET_ON Field*/
-#define XCVR_ANA_SY_CTRL_2_SY_VCO_SPARE_MASK     (0x1C000U)                                          /*!< XCVR_ANA_SY_CTRL_2.SY_VCO_SPARE Mask    */
-#define XCVR_ANA_SY_CTRL_2_SY_VCO_SPARE_SHIFT    (14U)                                               /*!< XCVR_ANA_SY_CTRL_2.SY_VCO_SPARE Position*/
-#define XCVR_ANA_SY_CTRL_2_SY_VCO_SPARE(x)       (((uint32_t)(((uint32_t)(x))<<14U))&0x1C000UL)      /*!< XCVR_ANA_SY_CTRL_2.SY_VCO_SPARE Field   */
+#define XCVR_ANALOG_SY_CTRL_2_SY_VCO_BIAS_MASK   (0x7U)                                              /*!< XCVR_ANALOG_SY_CTRL_2.SY_VCO_BIAS Mask  */
+#define XCVR_ANALOG_SY_CTRL_2_SY_VCO_BIAS_SHIFT  (0U)                                                /*!< XCVR_ANALOG_SY_CTRL_2.SY_VCO_BIAS Position*/
+#define XCVR_ANALOG_SY_CTRL_2_SY_VCO_BIAS(x)     (((uint32_t)(((uint32_t)(x))<<0U))&0x7UL)           /*!< XCVR_ANALOG_SY_CTRL_2.SY_VCO_BIAS Field */
+#define XCVR_ANALOG_SY_CTRL_2_SY_VCO_DIAGSEL_MASK (0x8U)                                             /*!< XCVR_ANALOG_SY_CTRL_2.SY_VCO_DIAGSEL Mask*/
+#define XCVR_ANALOG_SY_CTRL_2_SY_VCO_DIAGSEL_SHIFT (3U)                                              /*!< XCVR_ANALOG_SY_CTRL_2.SY_VCO_DIAGSEL Position*/
+#define XCVR_ANALOG_SY_CTRL_2_SY_VCO_DIAGSEL(x)  (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< XCVR_ANALOG_SY_CTRL_2.SY_VCO_DIAGSEL Field*/
+#define XCVR_ANALOG_SY_CTRL_2_SY_VCO_KV_MASK     (0x70U)                                             /*!< XCVR_ANALOG_SY_CTRL_2.SY_VCO_KV Mask    */
+#define XCVR_ANALOG_SY_CTRL_2_SY_VCO_KV_SHIFT    (4U)                                                /*!< XCVR_ANALOG_SY_CTRL_2.SY_VCO_KV Position*/
+#define XCVR_ANALOG_SY_CTRL_2_SY_VCO_KV(x)       (((uint32_t)(((uint32_t)(x))<<4U))&0x70UL)          /*!< XCVR_ANALOG_SY_CTRL_2.SY_VCO_KV Field   */
+#define XCVR_ANALOG_SY_CTRL_2_SY_VCO_KVM_MASK    (0x700U)                                            /*!< XCVR_ANALOG_SY_CTRL_2.SY_VCO_KVM Mask   */
+#define XCVR_ANALOG_SY_CTRL_2_SY_VCO_KVM_SHIFT   (8U)                                                /*!< XCVR_ANALOG_SY_CTRL_2.SY_VCO_KVM Position*/
+#define XCVR_ANALOG_SY_CTRL_2_SY_VCO_KVM(x)      (((uint32_t)(((uint32_t)(x))<<8U))&0x700UL)         /*!< XCVR_ANALOG_SY_CTRL_2.SY_VCO_KVM Field  */
+#define XCVR_ANALOG_SY_CTRL_2_SY_VCO_PK_DET_ON_MASK (0x1000U)                                        /*!< XCVR_ANALOG_SY_CTRL_2.SY_VCO_PK_DET_ON Mask*/
+#define XCVR_ANALOG_SY_CTRL_2_SY_VCO_PK_DET_ON_SHIFT (12U)                                           /*!< XCVR_ANALOG_SY_CTRL_2.SY_VCO_PK_DET_ON Position*/
+#define XCVR_ANALOG_SY_CTRL_2_SY_VCO_PK_DET_ON(x) (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)      /*!< XCVR_ANALOG_SY_CTRL_2.SY_VCO_PK_DET_ON Field*/
+#define XCVR_ANALOG_SY_CTRL_2_SY_VCO_SPARE_MASK  (0x1C000U)                                          /*!< XCVR_ANALOG_SY_CTRL_2.SY_VCO_SPARE Mask */
+#define XCVR_ANALOG_SY_CTRL_2_SY_VCO_SPARE_SHIFT (14U)                                               /*!< XCVR_ANALOG_SY_CTRL_2.SY_VCO_SPARE Position*/
+#define XCVR_ANALOG_SY_CTRL_2_SY_VCO_SPARE(x)    (((uint32_t)(((uint32_t)(x))<<14U))&0x1C000UL)      /*!< XCVR_ANALOG_SY_CTRL_2.SY_VCO_SPARE Field*/
 /* ------- TX_DAC_PA Bit Fields                     ------ */
-#define XCVR_ANA_TX_DAC_PA_TX_DAC_BUMP_CAP_MASK  (0x3U)                                              /*!< XCVR_ANA_TX_DAC_PA.TX_DAC_BUMP_CAP Mask */
-#define XCVR_ANA_TX_DAC_PA_TX_DAC_BUMP_CAP_SHIFT (0U)                                                /*!< XCVR_ANA_TX_DAC_PA.TX_DAC_BUMP_CAP Position*/
-#define XCVR_ANA_TX_DAC_PA_TX_DAC_BUMP_CAP(x)    (((uint32_t)(((uint32_t)(x))<<0U))&0x3UL)           /*!< XCVR_ANA_TX_DAC_PA.TX_DAC_BUMP_CAP Field*/
-#define XCVR_ANA_TX_DAC_PA_TX_DAC_BUMP_IDAC_MASK (0x18U)                                             /*!< XCVR_ANA_TX_DAC_PA.TX_DAC_BUMP_IDAC Mask*/
-#define XCVR_ANA_TX_DAC_PA_TX_DAC_BUMP_IDAC_SHIFT (3U)                                               /*!< XCVR_ANA_TX_DAC_PA.TX_DAC_BUMP_IDAC Position*/
-#define XCVR_ANA_TX_DAC_PA_TX_DAC_BUMP_IDAC(x)   (((uint32_t)(((uint32_t)(x))<<3U))&0x18UL)          /*!< XCVR_ANA_TX_DAC_PA.TX_DAC_BUMP_IDAC Field*/
-#define XCVR_ANA_TX_DAC_PA_TX_DAC_BUMP_RLOAD_MASK (0xC0U)                                            /*!< XCVR_ANA_TX_DAC_PA.TX_DAC_BUMP_RLOAD Mask*/
-#define XCVR_ANA_TX_DAC_PA_TX_DAC_BUMP_RLOAD_SHIFT (6U)                                              /*!< XCVR_ANA_TX_DAC_PA.TX_DAC_BUMP_RLOAD Position*/
-#define XCVR_ANA_TX_DAC_PA_TX_DAC_BUMP_RLOAD(x)  (((uint32_t)(((uint32_t)(x))<<6U))&0xC0UL)          /*!< XCVR_ANA_TX_DAC_PA.TX_DAC_BUMP_RLOAD Field*/
-#define XCVR_ANA_TX_DAC_PA_TX_DAC_DIAGSEL_MASK   (0x200U)                                            /*!< XCVR_ANA_TX_DAC_PA.TX_DAC_DIAGSEL Mask  */
-#define XCVR_ANA_TX_DAC_PA_TX_DAC_DIAGSEL_SHIFT  (9U)                                                /*!< XCVR_ANA_TX_DAC_PA.TX_DAC_DIAGSEL Position*/
-#define XCVR_ANA_TX_DAC_PA_TX_DAC_DIAGSEL(x)     (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< XCVR_ANA_TX_DAC_PA.TX_DAC_DIAGSEL Field */
-#define XCVR_ANA_TX_DAC_PA_TX_DAC_INVERT_CLK_MASK (0x400U)                                           /*!< XCVR_ANA_TX_DAC_PA.TX_DAC_INVERT_CLK Mask*/
-#define XCVR_ANA_TX_DAC_PA_TX_DAC_INVERT_CLK_SHIFT (10U)                                             /*!< XCVR_ANA_TX_DAC_PA.TX_DAC_INVERT_CLK Position*/
-#define XCVR_ANA_TX_DAC_PA_TX_DAC_INVERT_CLK(x)  (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< XCVR_ANA_TX_DAC_PA.TX_DAC_INVERT_CLK Field*/
-#define XCVR_ANA_TX_DAC_PA_TX_DAC_OPAMP_DIAGSEL_MASK (0x800U)                                        /*!< XCVR_ANA_TX_DAC_PA.TX_DAC_OPAMP_DIAGSEL Mask*/
-#define XCVR_ANA_TX_DAC_PA_TX_DAC_OPAMP_DIAGSEL_SHIFT (11U)                                          /*!< XCVR_ANA_TX_DAC_PA.TX_DAC_OPAMP_DIAGSEL Position*/
-#define XCVR_ANA_TX_DAC_PA_TX_DAC_OPAMP_DIAGSEL(x) (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)      /*!< XCVR_ANA_TX_DAC_PA.TX_DAC_OPAMP_DIAGSEL Field*/
-#define XCVR_ANA_TX_DAC_PA_TX_DAC_SPARE_MASK     (0xE000U)                                           /*!< XCVR_ANA_TX_DAC_PA.TX_DAC_SPARE Mask    */
-#define XCVR_ANA_TX_DAC_PA_TX_DAC_SPARE_SHIFT    (13U)                                               /*!< XCVR_ANA_TX_DAC_PA.TX_DAC_SPARE Position*/
-#define XCVR_ANA_TX_DAC_PA_TX_DAC_SPARE(x)       (((uint32_t)(((uint32_t)(x))<<13U))&0xE000UL)       /*!< XCVR_ANA_TX_DAC_PA.TX_DAC_SPARE Field   */
-#define XCVR_ANA_TX_DAC_PA_TX_PA_BUMP_VBIAS_MASK (0xE0000U)                                          /*!< XCVR_ANA_TX_DAC_PA.TX_PA_BUMP_VBIAS Mask*/
-#define XCVR_ANA_TX_DAC_PA_TX_PA_BUMP_VBIAS_SHIFT (17U)                                              /*!< XCVR_ANA_TX_DAC_PA.TX_PA_BUMP_VBIAS Position*/
-#define XCVR_ANA_TX_DAC_PA_TX_PA_BUMP_VBIAS(x)   (((uint32_t)(((uint32_t)(x))<<17U))&0xE0000UL)      /*!< XCVR_ANA_TX_DAC_PA.TX_PA_BUMP_VBIAS Field*/
-#define XCVR_ANA_TX_DAC_PA_TX_PA_DIAGSEL_MASK    (0x200000U)                                         /*!< XCVR_ANA_TX_DAC_PA.TX_PA_DIAGSEL Mask   */
-#define XCVR_ANA_TX_DAC_PA_TX_PA_DIAGSEL_SHIFT   (21U)                                               /*!< XCVR_ANA_TX_DAC_PA.TX_PA_DIAGSEL Position*/
-#define XCVR_ANA_TX_DAC_PA_TX_PA_DIAGSEL(x)      (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< XCVR_ANA_TX_DAC_PA.TX_PA_DIAGSEL Field  */
-#define XCVR_ANA_TX_DAC_PA_TX_PA_SPARE_MASK      (0x3800000U)                                        /*!< XCVR_ANA_TX_DAC_PA.TX_PA_SPARE Mask     */
-#define XCVR_ANA_TX_DAC_PA_TX_PA_SPARE_SHIFT     (23U)                                               /*!< XCVR_ANA_TX_DAC_PA.TX_PA_SPARE Position */
-#define XCVR_ANA_TX_DAC_PA_TX_PA_SPARE(x)        (((uint32_t)(((uint32_t)(x))<<23U))&0x3800000UL)    /*!< XCVR_ANA_TX_DAC_PA.TX_PA_SPARE Field    */
+#define XCVR_ANALOG_TX_DAC_PA_TX_DAC_BUMP_CAP_MASK (0x3U)                                            /*!< XCVR_ANALOG_TX_DAC_PA.TX_DAC_BUMP_CAP Mask*/
+#define XCVR_ANALOG_TX_DAC_PA_TX_DAC_BUMP_CAP_SHIFT (0U)                                             /*!< XCVR_ANALOG_TX_DAC_PA.TX_DAC_BUMP_CAP Position*/
+#define XCVR_ANALOG_TX_DAC_PA_TX_DAC_BUMP_CAP(x) (((uint32_t)(((uint32_t)(x))<<0U))&0x3UL)           /*!< XCVR_ANALOG_TX_DAC_PA.TX_DAC_BUMP_CAP Field*/
+#define XCVR_ANALOG_TX_DAC_PA_TX_DAC_BUMP_IDAC_MASK (0x18U)                                          /*!< XCVR_ANALOG_TX_DAC_PA.TX_DAC_BUMP_IDAC Mask*/
+#define XCVR_ANALOG_TX_DAC_PA_TX_DAC_BUMP_IDAC_SHIFT (3U)                                            /*!< XCVR_ANALOG_TX_DAC_PA.TX_DAC_BUMP_IDAC Position*/
+#define XCVR_ANALOG_TX_DAC_PA_TX_DAC_BUMP_IDAC(x) (((uint32_t)(((uint32_t)(x))<<3U))&0x18UL)         /*!< XCVR_ANALOG_TX_DAC_PA.TX_DAC_BUMP_IDAC Field*/
+#define XCVR_ANALOG_TX_DAC_PA_TX_DAC_BUMP_RLOAD_MASK (0xC0U)                                         /*!< XCVR_ANALOG_TX_DAC_PA.TX_DAC_BUMP_RLOAD Mask*/
+#define XCVR_ANALOG_TX_DAC_PA_TX_DAC_BUMP_RLOAD_SHIFT (6U)                                           /*!< XCVR_ANALOG_TX_DAC_PA.TX_DAC_BUMP_RLOAD Position*/
+#define XCVR_ANALOG_TX_DAC_PA_TX_DAC_BUMP_RLOAD(x) (((uint32_t)(((uint32_t)(x))<<6U))&0xC0UL)        /*!< XCVR_ANALOG_TX_DAC_PA.TX_DAC_BUMP_RLOAD Field*/
+#define XCVR_ANALOG_TX_DAC_PA_TX_DAC_DIAGSEL_MASK (0x200U)                                           /*!< XCVR_ANALOG_TX_DAC_PA.TX_DAC_DIAGSEL Mask*/
+#define XCVR_ANALOG_TX_DAC_PA_TX_DAC_DIAGSEL_SHIFT (9U)                                              /*!< XCVR_ANALOG_TX_DAC_PA.TX_DAC_DIAGSEL Position*/
+#define XCVR_ANALOG_TX_DAC_PA_TX_DAC_DIAGSEL(x)  (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< XCVR_ANALOG_TX_DAC_PA.TX_DAC_DIAGSEL Field*/
+#define XCVR_ANALOG_TX_DAC_PA_TX_DAC_INVERT_CLK_MASK (0x400U)                                        /*!< XCVR_ANALOG_TX_DAC_PA.TX_DAC_INVERT_CLK Mask*/
+#define XCVR_ANALOG_TX_DAC_PA_TX_DAC_INVERT_CLK_SHIFT (10U)                                          /*!< XCVR_ANALOG_TX_DAC_PA.TX_DAC_INVERT_CLK Position*/
+#define XCVR_ANALOG_TX_DAC_PA_TX_DAC_INVERT_CLK(x) (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)      /*!< XCVR_ANALOG_TX_DAC_PA.TX_DAC_INVERT_CLK Field*/
+#define XCVR_ANALOG_TX_DAC_PA_TX_DAC_OPAMP_DIAGSEL_MASK (0x800U)                                     /*!< XCVR_ANALOG_TX_DAC_PA.TX_DAC_OPAMP_DIAGSEL Mask*/
+#define XCVR_ANALOG_TX_DAC_PA_TX_DAC_OPAMP_DIAGSEL_SHIFT (11U)                                       /*!< XCVR_ANALOG_TX_DAC_PA.TX_DAC_OPAMP_DIAGSEL Position*/
+#define XCVR_ANALOG_TX_DAC_PA_TX_DAC_OPAMP_DIAGSEL(x) (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)   /*!< XCVR_ANALOG_TX_DAC_PA.TX_DAC_OPAMP_DIAGSEL Field*/
+#define XCVR_ANALOG_TX_DAC_PA_TX_DAC_SPARE_MASK  (0xE000U)                                           /*!< XCVR_ANALOG_TX_DAC_PA.TX_DAC_SPARE Mask */
+#define XCVR_ANALOG_TX_DAC_PA_TX_DAC_SPARE_SHIFT (13U)                                               /*!< XCVR_ANALOG_TX_DAC_PA.TX_DAC_SPARE Position*/
+#define XCVR_ANALOG_TX_DAC_PA_TX_DAC_SPARE(x)    (((uint32_t)(((uint32_t)(x))<<13U))&0xE000UL)       /*!< XCVR_ANALOG_TX_DAC_PA.TX_DAC_SPARE Field*/
+#define XCVR_ANALOG_TX_DAC_PA_TX_PA_BUMP_VBIAS_MASK (0xE0000U)                                       /*!< XCVR_ANALOG_TX_DAC_PA.TX_PA_BUMP_VBIAS Mask*/
+#define XCVR_ANALOG_TX_DAC_PA_TX_PA_BUMP_VBIAS_SHIFT (17U)                                           /*!< XCVR_ANALOG_TX_DAC_PA.TX_PA_BUMP_VBIAS Position*/
+#define XCVR_ANALOG_TX_DAC_PA_TX_PA_BUMP_VBIAS(x) (((uint32_t)(((uint32_t)(x))<<17U))&0xE0000UL)     /*!< XCVR_ANALOG_TX_DAC_PA.TX_PA_BUMP_VBIAS Field*/
+#define XCVR_ANALOG_TX_DAC_PA_TX_PA_DIAGSEL_MASK (0x200000U)                                         /*!< XCVR_ANALOG_TX_DAC_PA.TX_PA_DIAGSEL Mask*/
+#define XCVR_ANALOG_TX_DAC_PA_TX_PA_DIAGSEL_SHIFT (21U)                                              /*!< XCVR_ANALOG_TX_DAC_PA.TX_PA_DIAGSEL Position*/
+#define XCVR_ANALOG_TX_DAC_PA_TX_PA_DIAGSEL(x)   (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< XCVR_ANALOG_TX_DAC_PA.TX_PA_DIAGSEL Field*/
+#define XCVR_ANALOG_TX_DAC_PA_TX_PA_SPARE_MASK   (0x3800000U)                                        /*!< XCVR_ANALOG_TX_DAC_PA.TX_PA_SPARE Mask  */
+#define XCVR_ANALOG_TX_DAC_PA_TX_PA_SPARE_SHIFT  (23U)                                               /*!< XCVR_ANALOG_TX_DAC_PA.TX_PA_SPARE Position*/
+#define XCVR_ANALOG_TX_DAC_PA_TX_PA_SPARE(x)     (((uint32_t)(((uint32_t)(x))<<23U))&0x3800000UL)    /*!< XCVR_ANALOG_TX_DAC_PA.TX_PA_SPARE Field */
 /* ------- BALUN_TX Bit Fields                      ------ */
-#define XCVR_ANA_BALUN_TX_RXTX_BAL_TX_CODE_MASK  (0xFFFFFFU)                                         /*!< XCVR_ANA_BALUN_TX.RXTX_BAL_TX_CODE Mask */
-#define XCVR_ANA_BALUN_TX_RXTX_BAL_TX_CODE_SHIFT (0U)                                                /*!< XCVR_ANA_BALUN_TX.RXTX_BAL_TX_CODE Position*/
-#define XCVR_ANA_BALUN_TX_RXTX_BAL_TX_CODE(x)    (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFUL)      /*!< XCVR_ANA_BALUN_TX.RXTX_BAL_TX_CODE Field*/
+#define XCVR_ANALOG_BALUN_TX_RXTX_BAL_TX_CODE_MASK (0xFFFFFFU)                                       /*!< XCVR_ANALOG_BALUN_TX.RXTX_BAL_TX_CODE Mask*/
+#define XCVR_ANALOG_BALUN_TX_RXTX_BAL_TX_CODE_SHIFT (0U)                                             /*!< XCVR_ANALOG_BALUN_TX.RXTX_BAL_TX_CODE Position*/
+#define XCVR_ANALOG_BALUN_TX_RXTX_BAL_TX_CODE(x) (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFUL)      /*!< XCVR_ANALOG_BALUN_TX.RXTX_BAL_TX_CODE Field*/
 /* ------- BALUN_RX Bit Fields                      ------ */
-#define XCVR_ANA_BALUN_RX_RXTX_BAL_RX_CODE_MASK  (0xFFFFFFU)                                         /*!< XCVR_ANA_BALUN_RX.RXTX_BAL_RX_CODE Mask */
-#define XCVR_ANA_BALUN_RX_RXTX_BAL_RX_CODE_SHIFT (0U)                                                /*!< XCVR_ANA_BALUN_RX.RXTX_BAL_RX_CODE Position*/
-#define XCVR_ANA_BALUN_RX_RXTX_BAL_RX_CODE(x)    (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFUL)      /*!< XCVR_ANA_BALUN_RX.RXTX_BAL_RX_CODE Field*/
+#define XCVR_ANALOG_BALUN_RX_RXTX_BAL_RX_CODE_MASK (0xFFFFFFU)                                       /*!< XCVR_ANALOG_BALUN_RX.RXTX_BAL_RX_CODE Mask*/
+#define XCVR_ANALOG_BALUN_RX_RXTX_BAL_RX_CODE_SHIFT (0U)                                             /*!< XCVR_ANALOG_BALUN_RX.RXTX_BAL_RX_CODE Position*/
+#define XCVR_ANALOG_BALUN_RX_RXTX_BAL_RX_CODE(x) (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFUL)      /*!< XCVR_ANALOG_BALUN_RX.RXTX_BAL_RX_CODE Field*/
 /* ------- DFT_OBSV_1 Bit Fields                    ------ */
-#define XCVR_ANA_DFT_OBSV_1_DFT_FREQ_COUNTER_MASK (0x7FFFFU)                                         /*!< XCVR_ANA_DFT_OBSV_1.DFT_FREQ_COUNTER Mask*/
-#define XCVR_ANA_DFT_OBSV_1_DFT_FREQ_COUNTER_SHIFT (0U)                                              /*!< XCVR_ANA_DFT_OBSV_1.DFT_FREQ_COUNTER Position*/
-#define XCVR_ANA_DFT_OBSV_1_DFT_FREQ_COUNTER(x)  (((uint32_t)(((uint32_t)(x))<<0U))&0x7FFFFUL)       /*!< XCVR_ANA_DFT_OBSV_1.DFT_FREQ_COUNTER Field*/
-#define XCVR_ANA_DFT_OBSV_1_CTUNE_MAX_DIFF_MASK  (0xFF00000U)                                        /*!< XCVR_ANA_DFT_OBSV_1.CTUNE_MAX_DIFF Mask */
-#define XCVR_ANA_DFT_OBSV_1_CTUNE_MAX_DIFF_SHIFT (20U)                                               /*!< XCVR_ANA_DFT_OBSV_1.CTUNE_MAX_DIFF Position*/
-#define XCVR_ANA_DFT_OBSV_1_CTUNE_MAX_DIFF(x)    (((uint32_t)(((uint32_t)(x))<<20U))&0xFF00000UL)    /*!< XCVR_ANA_DFT_OBSV_1.CTUNE_MAX_DIFF Field*/
+#define XCVR_ANALOG_DFT_OBSV_1_DFT_FREQ_COUNTER_MASK (0x7FFFFU)                                      /*!< XCVR_ANALOG_DFT_OBSV_1.DFT_FREQ_COUNTER Mask*/
+#define XCVR_ANALOG_DFT_OBSV_1_DFT_FREQ_COUNTER_SHIFT (0U)                                           /*!< XCVR_ANALOG_DFT_OBSV_1.DFT_FREQ_COUNTER Position*/
+#define XCVR_ANALOG_DFT_OBSV_1_DFT_FREQ_COUNTER(x) (((uint32_t)(((uint32_t)(x))<<0U))&0x7FFFFUL)     /*!< XCVR_ANALOG_DFT_OBSV_1.DFT_FREQ_COUNTER Field*/
+#define XCVR_ANALOG_DFT_OBSV_1_CTUNE_MAX_DIFF_MASK (0xFF00000U)                                      /*!< XCVR_ANALOG_DFT_OBSV_1.CTUNE_MAX_DIFF Mask*/
+#define XCVR_ANALOG_DFT_OBSV_1_CTUNE_MAX_DIFF_SHIFT (20U)                                            /*!< XCVR_ANALOG_DFT_OBSV_1.CTUNE_MAX_DIFF Position*/
+#define XCVR_ANALOG_DFT_OBSV_1_CTUNE_MAX_DIFF(x) (((uint32_t)(((uint32_t)(x))<<20U))&0xFF00000UL)    /*!< XCVR_ANALOG_DFT_OBSV_1.CTUNE_MAX_DIFF Field*/
 /* ------- DFT_OBSV_2 Bit Fields                    ------ */
-#define XCVR_ANA_DFT_OBSV_2_SYN_BIST_MAX_DIFF_MASK (0x1FFFFU)                                        /*!< XCVR_ANA_DFT_OBSV_2.SYN_BIST_MAX_DIFF Mask*/
-#define XCVR_ANA_DFT_OBSV_2_SYN_BIST_MAX_DIFF_SHIFT (0U)                                             /*!< XCVR_ANA_DFT_OBSV_2.SYN_BIST_MAX_DIFF Position*/
-#define XCVR_ANA_DFT_OBSV_2_SYN_BIST_MAX_DIFF(x) (((uint32_t)(((uint32_t)(x))<<0U))&0x1FFFFUL)       /*!< XCVR_ANA_DFT_OBSV_2.SYN_BIST_MAX_DIFF Field*/
-#define XCVR_ANA_DFT_OBSV_2_SYN_BIST_MAX_DIFF_CH_MASK (0x7F000000U)                                  /*!< XCVR_ANA_DFT_OBSV_2.SYN_BIST_MAX_DIFF_CH Mask*/
-#define XCVR_ANA_DFT_OBSV_2_SYN_BIST_MAX_DIFF_CH_SHIFT (24U)                                         /*!< XCVR_ANA_DFT_OBSV_2.SYN_BIST_MAX_DIFF_CH Position*/
-#define XCVR_ANA_DFT_OBSV_2_SYN_BIST_MAX_DIFF_CH(x) (((uint32_t)(((uint32_t)(x))<<24U))&0x7F000000UL) /*!< XCVR_ANA_DFT_OBSV_2.SYN_BIST_MAX_DIFF_CH Field*/
-#define XCVR_ANA_DFT_OBSV_2_SYN_BIST_IGNORE_FAILS_MASK (0x80000000U)                                 /*!< XCVR_ANA_DFT_OBSV_2.SYN_BIST_IGNORE_FAILS Mask*/
-#define XCVR_ANA_DFT_OBSV_2_SYN_BIST_IGNORE_FAILS_SHIFT (31U)                                        /*!< XCVR_ANA_DFT_OBSV_2.SYN_BIST_IGNORE_FAILS Position*/
-#define XCVR_ANA_DFT_OBSV_2_SYN_BIST_IGNORE_FAILS(x) (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL) /*!< XCVR_ANA_DFT_OBSV_2.SYN_BIST_IGNORE_FAILS Field*/
+#define XCVR_ANALOG_DFT_OBSV_2_SYN_BIST_MAX_DIFF_MASK (0x1FFFFU)                                     /*!< XCVR_ANALOG_DFT_OBSV_2.SYN_BIST_MAX_DIFF Mask*/
+#define XCVR_ANALOG_DFT_OBSV_2_SYN_BIST_MAX_DIFF_SHIFT (0U)                                          /*!< XCVR_ANALOG_DFT_OBSV_2.SYN_BIST_MAX_DIFF Position*/
+#define XCVR_ANALOG_DFT_OBSV_2_SYN_BIST_MAX_DIFF(x) (((uint32_t)(((uint32_t)(x))<<0U))&0x1FFFFUL)    /*!< XCVR_ANALOG_DFT_OBSV_2.SYN_BIST_MAX_DIFF Field*/
+#define XCVR_ANALOG_DFT_OBSV_2_SYN_BIST_MAX_DIFF_CH_MASK (0x7F000000U)                               /*!< XCVR_ANALOG_DFT_OBSV_2.SYN_BIST_MAX_DIFF_CH Mask*/
+#define XCVR_ANALOG_DFT_OBSV_2_SYN_BIST_MAX_DIFF_CH_SHIFT (24U)                                      /*!< XCVR_ANALOG_DFT_OBSV_2.SYN_BIST_MAX_DIFF_CH Position*/
+#define XCVR_ANALOG_DFT_OBSV_2_SYN_BIST_MAX_DIFF_CH(x) (((uint32_t)(((uint32_t)(x))<<24U))&0x7F000000UL) /*!< XCVR_ANALOG_DFT_OBSV_2.SYN_BIST_MAX_DIFF_CH Field*/
+#define XCVR_ANALOG_DFT_OBSV_2_SYN_BIST_IGNORE_FAILS_MASK (0x80000000U)                              /*!< XCVR_ANALOG_DFT_OBSV_2.SYN_BIST_IGNORE_FAILS Mask*/
+#define XCVR_ANALOG_DFT_OBSV_2_SYN_BIST_IGNORE_FAILS_SHIFT (31U)                                     /*!< XCVR_ANALOG_DFT_OBSV_2.SYN_BIST_IGNORE_FAILS Position*/
+#define XCVR_ANALOG_DFT_OBSV_2_SYN_BIST_IGNORE_FAILS(x) (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL) /*!< XCVR_ANALOG_DFT_OBSV_2.SYN_BIST_IGNORE_FAILS Field*/
 /**
- * @} */ /* End group XCVR_ANA_Register_Masks_GROUP 
+ * @} */ /* End group XCVR_ANALOG_Register_Masks_GROUP 
  */
 
-/* XCVR_ANA - Peripheral instance base addresses */
-#define XCVR_ANA_BasePtr               0x4005C500UL //!< Peripheral base address
-#define XCVR_ANA                       ((XCVR_ANA_Type *) XCVR_ANA_BasePtr) //!< Freescale base pointer
-#define XCVR_ANA_BASE_PTR              (XCVR_ANA) //!< Freescale style base pointer
+/* XCVR_ANALOG - Peripheral instance base addresses */
+#define XCVR_ANALOG_BasePtr            0x4005C500UL //!< Peripheral base address
+#define XCVR_ANALOG                    ((XCVR_ANALOG_Type *) XCVR_ANALOG_BasePtr) //!< Freescale base pointer
+#define XCVR_ANALOG_BASE_PTR           (XCVR_ANALOG) //!< Freescale style base pointer
 /**
- * @} */ /* End group XCVR_ANA_Peripheral_access_layer_GROUP 
+ * @} */ /* End group XCVR_ANALOG_Peripheral_access_layer_GROUP 
  */
 /**
-* @addtogroup XCVR_MISC_Peripheral_access_layer_GROUP XCVR_MISC Peripheral Access Layer
-* @brief C Struct for XCVR_MISC
+* @addtogroup XCVR_CTRL_Peripheral_access_layer_GROUP XCVR_CTRL Peripheral Access Layer
+* @brief C Struct for XCVR_CTRL
 * @{
 */
 
 /* ================================================================================ */
-/* ================           XCVR_MISC (file:XCVR_MISC_MKW41Z4)       ================ */
+/* ================           XCVR_CTRL (file:XCVR_CTRL_MKW41Z4)       ================ */
 /* ================================================================================ */
 
 /**
- * @brief XCVR_MISC
+ * @brief XCVR_CTRL
  */
 /**
-* @addtogroup XCVR_MISC_structs_GROUP XCVR_MISC struct
-* @brief Struct for XCVR_MISC
+* @addtogroup XCVR_CTRL_structs_GROUP XCVR_CTRL struct
+* @brief Struct for XCVR_CTRL
 * @{
 */
-typedef struct {                                /*       XCVR_MISC Structure                                          */
+typedef struct XCVR_CTRL_Type {
    __IO uint32_t  XCVR_CTRL;                    /**< 0000: TRANSCEIVER CONTROL                                          */
    __IO uint32_t  XCVR_STATUS;                  /**< 0004: TRANSCEIVER STATUS                                           */
    __IO uint32_t  BLE_ARB_CTRL;                 /**< 0008: BLE ARBITRATION CONTROL                                      */
@@ -7727,294 +7821,296 @@ typedef struct {                                /*       XCVR_MISC Structure    
    __IO uint32_t  CRCW_CFG;                     /**< 0030: CRC/WHITENER CONTROL                                         */
    __I  uint32_t  CRC_EC_MASK;                  /**< 0034: CRC ERROR CORRECTION MASK                                    */
    __I  uint32_t  CRC_RES_OUT;                  /**< 0038: CRC RESULT                                                   */
-} XCVR_MISC_Type;
+} XCVR_CTRL_Type;
 
 /**
- * @} */ /* End group XCVR_MISC_structs_GROUP 
+ * @} */ /* End group XCVR_CTRL_structs_GROUP 
  */
 
 /* -------------------------------------------------------------------------------- */
-/* -----------     'XCVR_MISC' Position & Mask macros                   ----------- */
+/* -----------     'XCVR_CTRL' Position & Mask macros                   ----------- */
 /* -------------------------------------------------------------------------------- */
 
 /**
-* @addtogroup XCVR_MISC_Register_Masks_GROUP XCVR_MISC Register Masks
-* @brief Register Masks for XCVR_MISC
+* @addtogroup XCVR_CTRL_Register_Masks_GROUP XCVR_CTRL Register Masks
+* @brief Register Masks for XCVR_CTRL
 * @{
 */
 /* ------- XCVR_CTRL Bit Fields                     ------ */
-#define XCVR_MISC_XCVR_CTRL_PROTOCOL_MASK        (0xFU)                                              /*!< XCVR_MISC_XCVR_CTRL.PROTOCOL Mask       */
-#define XCVR_MISC_XCVR_CTRL_PROTOCOL_SHIFT       (0U)                                                /*!< XCVR_MISC_XCVR_CTRL.PROTOCOL Position   */
-#define XCVR_MISC_XCVR_CTRL_PROTOCOL(x)          (((uint32_t)(((uint32_t)(x))<<0U))&0xFUL)           /*!< XCVR_MISC_XCVR_CTRL.PROTOCOL Field      */
-#define XCVR_MISC_XCVR_CTRL_TGT_PWR_SRC_MASK     (0x70U)                                             /*!< XCVR_MISC_XCVR_CTRL.TGT_PWR_SRC Mask    */
-#define XCVR_MISC_XCVR_CTRL_TGT_PWR_SRC_SHIFT    (4U)                                                /*!< XCVR_MISC_XCVR_CTRL.TGT_PWR_SRC Position*/
-#define XCVR_MISC_XCVR_CTRL_TGT_PWR_SRC(x)       (((uint32_t)(((uint32_t)(x))<<4U))&0x70UL)          /*!< XCVR_MISC_XCVR_CTRL.TGT_PWR_SRC Field   */
-#define XCVR_MISC_XCVR_CTRL_REF_CLK_FREQ_MASK    (0x300U)                                            /*!< XCVR_MISC_XCVR_CTRL.REF_CLK_FREQ Mask   */
-#define XCVR_MISC_XCVR_CTRL_REF_CLK_FREQ_SHIFT   (8U)                                                /*!< XCVR_MISC_XCVR_CTRL.REF_CLK_FREQ Position*/
-#define XCVR_MISC_XCVR_CTRL_REF_CLK_FREQ(x)      (((uint32_t)(((uint32_t)(x))<<8U))&0x300UL)         /*!< XCVR_MISC_XCVR_CTRL.REF_CLK_FREQ Field  */
-#define XCVR_MISC_XCVR_CTRL_SOC_RF_OSC_CLK_GATE_EN_MASK (0x800U)                                     /*!< XCVR_MISC_XCVR_CTRL.SOC_RF_OSC_CLK_GATE_EN Mask*/
-#define XCVR_MISC_XCVR_CTRL_SOC_RF_OSC_CLK_GATE_EN_SHIFT (11U)                                       /*!< XCVR_MISC_XCVR_CTRL.SOC_RF_OSC_CLK_GATE_EN Position*/
-#define XCVR_MISC_XCVR_CTRL_SOC_RF_OSC_CLK_GATE_EN(x) (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)   /*!< XCVR_MISC_XCVR_CTRL.SOC_RF_OSC_CLK_GATE_EN Field*/
-#define XCVR_MISC_XCVR_CTRL_DEMOD_SEL_MASK       (0x3000U)                                           /*!< XCVR_MISC_XCVR_CTRL.DEMOD_SEL Mask      */
-#define XCVR_MISC_XCVR_CTRL_DEMOD_SEL_SHIFT      (12U)                                               /*!< XCVR_MISC_XCVR_CTRL.DEMOD_SEL Position  */
-#define XCVR_MISC_XCVR_CTRL_DEMOD_SEL(x)         (((uint32_t)(((uint32_t)(x))<<12U))&0x3000UL)       /*!< XCVR_MISC_XCVR_CTRL.DEMOD_SEL Field     */
-#define XCVR_MISC_XCVR_CTRL_RADIO0_IRQ_SEL_MASK  (0x70000U)                                          /*!< XCVR_MISC_XCVR_CTRL.RADIO0_IRQ_SEL Mask */
-#define XCVR_MISC_XCVR_CTRL_RADIO0_IRQ_SEL_SHIFT (16U)                                               /*!< XCVR_MISC_XCVR_CTRL.RADIO0_IRQ_SEL Position*/
-#define XCVR_MISC_XCVR_CTRL_RADIO0_IRQ_SEL(x)    (((uint32_t)(((uint32_t)(x))<<16U))&0x70000UL)      /*!< XCVR_MISC_XCVR_CTRL.RADIO0_IRQ_SEL Field*/
-#define XCVR_MISC_XCVR_CTRL_RADIO1_IRQ_SEL_MASK  (0x700000U)                                         /*!< XCVR_MISC_XCVR_CTRL.RADIO1_IRQ_SEL Mask */
-#define XCVR_MISC_XCVR_CTRL_RADIO1_IRQ_SEL_SHIFT (20U)                                               /*!< XCVR_MISC_XCVR_CTRL.RADIO1_IRQ_SEL Position*/
-#define XCVR_MISC_XCVR_CTRL_RADIO1_IRQ_SEL(x)    (((uint32_t)(((uint32_t)(x))<<20U))&0x700000UL)     /*!< XCVR_MISC_XCVR_CTRL.RADIO1_IRQ_SEL Field*/
+#define XCVR_CTRL_XCVR_CTRL_PROTOCOL_MASK        (0xFU)                                              /*!< XCVR_CTRL_XCVR_CTRL.PROTOCOL Mask       */
+#define XCVR_CTRL_XCVR_CTRL_PROTOCOL_SHIFT       (0U)                                                /*!< XCVR_CTRL_XCVR_CTRL.PROTOCOL Position   */
+#define XCVR_CTRL_XCVR_CTRL_PROTOCOL(x)          (((uint32_t)(((uint32_t)(x))<<0U))&0xFUL)           /*!< XCVR_CTRL_XCVR_CTRL.PROTOCOL Field      */
+#define XCVR_CTRL_XCVR_CTRL_TGT_PWR_SRC_MASK     (0x70U)                                             /*!< XCVR_CTRL_XCVR_CTRL.TGT_PWR_SRC Mask    */
+#define XCVR_CTRL_XCVR_CTRL_TGT_PWR_SRC_SHIFT    (4U)                                                /*!< XCVR_CTRL_XCVR_CTRL.TGT_PWR_SRC Position*/
+#define XCVR_CTRL_XCVR_CTRL_TGT_PWR_SRC(x)       (((uint32_t)(((uint32_t)(x))<<4U))&0x70UL)          /*!< XCVR_CTRL_XCVR_CTRL.TGT_PWR_SRC Field   */
+#define XCVR_CTRL_XCVR_CTRL_REF_CLK_FREQ_MASK    (0x300U)                                            /*!< XCVR_CTRL_XCVR_CTRL.REF_CLK_FREQ Mask   */
+#define XCVR_CTRL_XCVR_CTRL_REF_CLK_FREQ_SHIFT   (8U)                                                /*!< XCVR_CTRL_XCVR_CTRL.REF_CLK_FREQ Position*/
+#define XCVR_CTRL_XCVR_CTRL_REF_CLK_FREQ(x)      (((uint32_t)(((uint32_t)(x))<<8U))&0x300UL)         /*!< XCVR_CTRL_XCVR_CTRL.REF_CLK_FREQ Field  */
+#define XCVR_CTRL_XCVR_CTRL_SOC_RF_OSC_CLK_GATE_EN_MASK (0x800U)                                     /*!< XCVR_CTRL_XCVR_CTRL.SOC_RF_OSC_CLK_GATE_EN Mask*/
+#define XCVR_CTRL_XCVR_CTRL_SOC_RF_OSC_CLK_GATE_EN_SHIFT (11U)                                       /*!< XCVR_CTRL_XCVR_CTRL.SOC_RF_OSC_CLK_GATE_EN Position*/
+#define XCVR_CTRL_XCVR_CTRL_SOC_RF_OSC_CLK_GATE_EN(x) (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)   /*!< XCVR_CTRL_XCVR_CTRL.SOC_RF_OSC_CLK_GATE_EN Field*/
+#define XCVR_CTRL_XCVR_CTRL_DEMOD_SEL_MASK       (0x3000U)                                           /*!< XCVR_CTRL_XCVR_CTRL.DEMOD_SEL Mask      */
+#define XCVR_CTRL_XCVR_CTRL_DEMOD_SEL_SHIFT      (12U)                                               /*!< XCVR_CTRL_XCVR_CTRL.DEMOD_SEL Position  */
+#define XCVR_CTRL_XCVR_CTRL_DEMOD_SEL(x)         (((uint32_t)(((uint32_t)(x))<<12U))&0x3000UL)       /*!< XCVR_CTRL_XCVR_CTRL.DEMOD_SEL Field     */
+#define XCVR_CTRL_XCVR_CTRL_RADIO0_IRQ_SEL_MASK  (0x70000U)                                          /*!< XCVR_CTRL_XCVR_CTRL.RADIO0_IRQ_SEL Mask */
+#define XCVR_CTRL_XCVR_CTRL_RADIO0_IRQ_SEL_SHIFT (16U)                                               /*!< XCVR_CTRL_XCVR_CTRL.RADIO0_IRQ_SEL Position*/
+#define XCVR_CTRL_XCVR_CTRL_RADIO0_IRQ_SEL(x)    (((uint32_t)(((uint32_t)(x))<<16U))&0x70000UL)      /*!< XCVR_CTRL_XCVR_CTRL.RADIO0_IRQ_SEL Field*/
+#define XCVR_CTRL_XCVR_CTRL_RADIO1_IRQ_SEL_MASK  (0x700000U)                                         /*!< XCVR_CTRL_XCVR_CTRL.RADIO1_IRQ_SEL Mask */
+#define XCVR_CTRL_XCVR_CTRL_RADIO1_IRQ_SEL_SHIFT (20U)                                               /*!< XCVR_CTRL_XCVR_CTRL.RADIO1_IRQ_SEL Position*/
+#define XCVR_CTRL_XCVR_CTRL_RADIO1_IRQ_SEL(x)    (((uint32_t)(((uint32_t)(x))<<20U))&0x700000UL)     /*!< XCVR_CTRL_XCVR_CTRL.RADIO1_IRQ_SEL Field*/
 /* ------- XCVR_STATUS Bit Fields                   ------ */
-#define XCVR_MISC_XCVR_STATUS_TSM_COUNT_MASK     (0xFFU)                                             /*!< XCVR_MISC_XCVR_STATUS.TSM_COUNT Mask    */
-#define XCVR_MISC_XCVR_STATUS_TSM_COUNT_SHIFT    (0U)                                                /*!< XCVR_MISC_XCVR_STATUS.TSM_COUNT Position*/
-#define XCVR_MISC_XCVR_STATUS_TSM_COUNT(x)       (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< XCVR_MISC_XCVR_STATUS.TSM_COUNT Field   */
-#define XCVR_MISC_XCVR_STATUS_PLL_SEQ_STATE_MASK (0xF00U)                                            /*!< XCVR_MISC_XCVR_STATUS.PLL_SEQ_STATE Mask*/
-#define XCVR_MISC_XCVR_STATUS_PLL_SEQ_STATE_SHIFT (8U)                                               /*!< XCVR_MISC_XCVR_STATUS.PLL_SEQ_STATE Position*/
-#define XCVR_MISC_XCVR_STATUS_PLL_SEQ_STATE(x)   (((uint32_t)(((uint32_t)(x))<<8U))&0xF00UL)         /*!< XCVR_MISC_XCVR_STATUS.PLL_SEQ_STATE Field*/
-#define XCVR_MISC_XCVR_STATUS_RX_MODE_MASK       (0x1000U)                                           /*!< XCVR_MISC_XCVR_STATUS.RX_MODE Mask      */
-#define XCVR_MISC_XCVR_STATUS_RX_MODE_SHIFT      (12U)                                               /*!< XCVR_MISC_XCVR_STATUS.RX_MODE Position  */
-#define XCVR_MISC_XCVR_STATUS_RX_MODE(x)         (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< XCVR_MISC_XCVR_STATUS.RX_MODE Field     */
-#define XCVR_MISC_XCVR_STATUS_TX_MODE_MASK       (0x2000U)                                           /*!< XCVR_MISC_XCVR_STATUS.TX_MODE Mask      */
-#define XCVR_MISC_XCVR_STATUS_TX_MODE_SHIFT      (13U)                                               /*!< XCVR_MISC_XCVR_STATUS.TX_MODE Position  */
-#define XCVR_MISC_XCVR_STATUS_TX_MODE(x)         (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< XCVR_MISC_XCVR_STATUS.TX_MODE Field     */
-#define XCVR_MISC_XCVR_STATUS_BTLE_SYSCLK_REQ_MASK (0x10000U)                                        /*!< XCVR_MISC_XCVR_STATUS.BTLE_SYSCLK_REQ Mask*/
-#define XCVR_MISC_XCVR_STATUS_BTLE_SYSCLK_REQ_SHIFT (16U)                                            /*!< XCVR_MISC_XCVR_STATUS.BTLE_SYSCLK_REQ Position*/
-#define XCVR_MISC_XCVR_STATUS_BTLE_SYSCLK_REQ(x) (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< XCVR_MISC_XCVR_STATUS.BTLE_SYSCLK_REQ Field*/
-#define XCVR_MISC_XCVR_STATUS_RIF_LL_ACTIVE_MASK (0x20000U)                                          /*!< XCVR_MISC_XCVR_STATUS.RIF_LL_ACTIVE Mask*/
-#define XCVR_MISC_XCVR_STATUS_RIF_LL_ACTIVE_SHIFT (17U)                                              /*!< XCVR_MISC_XCVR_STATUS.RIF_LL_ACTIVE Position*/
-#define XCVR_MISC_XCVR_STATUS_RIF_LL_ACTIVE(x)   (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< XCVR_MISC_XCVR_STATUS.RIF_LL_ACTIVE Field*/
-#define XCVR_MISC_XCVR_STATUS_XTAL_READY_MASK    (0x40000U)                                          /*!< XCVR_MISC_XCVR_STATUS.XTAL_READY Mask   */
-#define XCVR_MISC_XCVR_STATUS_XTAL_READY_SHIFT   (18U)                                               /*!< XCVR_MISC_XCVR_STATUS.XTAL_READY Position*/
-#define XCVR_MISC_XCVR_STATUS_XTAL_READY(x)      (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< XCVR_MISC_XCVR_STATUS.XTAL_READY Field  */
-#define XCVR_MISC_XCVR_STATUS_SOC_USING_RF_OSC_CLK_MASK (0x80000U)                                   /*!< XCVR_MISC_XCVR_STATUS.SOC_USING_RF_OSC_CLK Mask*/
-#define XCVR_MISC_XCVR_STATUS_SOC_USING_RF_OSC_CLK_SHIFT (19U)                                       /*!< XCVR_MISC_XCVR_STATUS.SOC_USING_RF_OSC_CLK Position*/
-#define XCVR_MISC_XCVR_STATUS_SOC_USING_RF_OSC_CLK(x) (((uint32_t)(((uint32_t)(x))<<19U))&0x80000UL) /*!< XCVR_MISC_XCVR_STATUS.SOC_USING_RF_OSC_CLK Field*/
-#define XCVR_MISC_XCVR_STATUS_TSM_IRQ0_MASK      (0x1000000U)                                        /*!< XCVR_MISC_XCVR_STATUS.TSM_IRQ0 Mask     */
-#define XCVR_MISC_XCVR_STATUS_TSM_IRQ0_SHIFT     (24U)                                               /*!< XCVR_MISC_XCVR_STATUS.TSM_IRQ0 Position */
-#define XCVR_MISC_XCVR_STATUS_TSM_IRQ0(x)        (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< XCVR_MISC_XCVR_STATUS.TSM_IRQ0 Field    */
-#define XCVR_MISC_XCVR_STATUS_TSM_IRQ1_MASK      (0x2000000U)                                        /*!< XCVR_MISC_XCVR_STATUS.TSM_IRQ1 Mask     */
-#define XCVR_MISC_XCVR_STATUS_TSM_IRQ1_SHIFT     (25U)                                               /*!< XCVR_MISC_XCVR_STATUS.TSM_IRQ1 Position */
-#define XCVR_MISC_XCVR_STATUS_TSM_IRQ1(x)        (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< XCVR_MISC_XCVR_STATUS.TSM_IRQ1 Field    */
+#define XCVR_CTRL_XCVR_STATUS_TSM_COUNT_MASK     (0xFFU)                                             /*!< XCVR_CTRL_XCVR_STATUS.TSM_COUNT Mask    */
+#define XCVR_CTRL_XCVR_STATUS_TSM_COUNT_SHIFT    (0U)                                                /*!< XCVR_CTRL_XCVR_STATUS.TSM_COUNT Position*/
+#define XCVR_CTRL_XCVR_STATUS_TSM_COUNT(x)       (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< XCVR_CTRL_XCVR_STATUS.TSM_COUNT Field   */
+#define XCVR_CTRL_XCVR_STATUS_PLL_SEQ_STATE_MASK (0xF00U)                                            /*!< XCVR_CTRL_XCVR_STATUS.PLL_SEQ_STATE Mask*/
+#define XCVR_CTRL_XCVR_STATUS_PLL_SEQ_STATE_SHIFT (8U)                                               /*!< XCVR_CTRL_XCVR_STATUS.PLL_SEQ_STATE Position*/
+#define XCVR_CTRL_XCVR_STATUS_PLL_SEQ_STATE(x)   (((uint32_t)(((uint32_t)(x))<<8U))&0xF00UL)         /*!< XCVR_CTRL_XCVR_STATUS.PLL_SEQ_STATE Field*/
+#define XCVR_CTRL_XCVR_STATUS_RX_MODE_MASK       (0x1000U)                                           /*!< XCVR_CTRL_XCVR_STATUS.RX_MODE Mask      */
+#define XCVR_CTRL_XCVR_STATUS_RX_MODE_SHIFT      (12U)                                               /*!< XCVR_CTRL_XCVR_STATUS.RX_MODE Position  */
+#define XCVR_CTRL_XCVR_STATUS_RX_MODE(x)         (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< XCVR_CTRL_XCVR_STATUS.RX_MODE Field     */
+#define XCVR_CTRL_XCVR_STATUS_TX_MODE_MASK       (0x2000U)                                           /*!< XCVR_CTRL_XCVR_STATUS.TX_MODE Mask      */
+#define XCVR_CTRL_XCVR_STATUS_TX_MODE_SHIFT      (13U)                                               /*!< XCVR_CTRL_XCVR_STATUS.TX_MODE Position  */
+#define XCVR_CTRL_XCVR_STATUS_TX_MODE(x)         (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< XCVR_CTRL_XCVR_STATUS.TX_MODE Field     */
+#define XCVR_CTRL_XCVR_STATUS_BTLE_SYSCLK_REQ_MASK (0x10000U)                                        /*!< XCVR_CTRL_XCVR_STATUS.BTLE_SYSCLK_REQ Mask*/
+#define XCVR_CTRL_XCVR_STATUS_BTLE_SYSCLK_REQ_SHIFT (16U)                                            /*!< XCVR_CTRL_XCVR_STATUS.BTLE_SYSCLK_REQ Position*/
+#define XCVR_CTRL_XCVR_STATUS_BTLE_SYSCLK_REQ(x) (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< XCVR_CTRL_XCVR_STATUS.BTLE_SYSCLK_REQ Field*/
+#define XCVR_CTRL_XCVR_STATUS_RIF_LL_ACTIVE_MASK (0x20000U)                                          /*!< XCVR_CTRL_XCVR_STATUS.RIF_LL_ACTIVE Mask*/
+#define XCVR_CTRL_XCVR_STATUS_RIF_LL_ACTIVE_SHIFT (17U)                                              /*!< XCVR_CTRL_XCVR_STATUS.RIF_LL_ACTIVE Position*/
+#define XCVR_CTRL_XCVR_STATUS_RIF_LL_ACTIVE(x)   (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< XCVR_CTRL_XCVR_STATUS.RIF_LL_ACTIVE Field*/
+#define XCVR_CTRL_XCVR_STATUS_XTAL_READY_MASK    (0x40000U)                                          /*!< XCVR_CTRL_XCVR_STATUS.XTAL_READY Mask   */
+#define XCVR_CTRL_XCVR_STATUS_XTAL_READY_SHIFT   (18U)                                               /*!< XCVR_CTRL_XCVR_STATUS.XTAL_READY Position*/
+#define XCVR_CTRL_XCVR_STATUS_XTAL_READY(x)      (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< XCVR_CTRL_XCVR_STATUS.XTAL_READY Field  */
+#define XCVR_CTRL_XCVR_STATUS_SOC_USING_RF_OSC_CLK_MASK (0x80000U)                                   /*!< XCVR_CTRL_XCVR_STATUS.SOC_USING_RF_OSC_CLK Mask*/
+#define XCVR_CTRL_XCVR_STATUS_SOC_USING_RF_OSC_CLK_SHIFT (19U)                                       /*!< XCVR_CTRL_XCVR_STATUS.SOC_USING_RF_OSC_CLK Position*/
+#define XCVR_CTRL_XCVR_STATUS_SOC_USING_RF_OSC_CLK(x) (((uint32_t)(((uint32_t)(x))<<19U))&0x80000UL) /*!< XCVR_CTRL_XCVR_STATUS.SOC_USING_RF_OSC_CLK Field*/
+#define XCVR_CTRL_XCVR_STATUS_TSM_IRQ0_MASK      (0x1000000U)                                        /*!< XCVR_CTRL_XCVR_STATUS.TSM_IRQ0 Mask     */
+#define XCVR_CTRL_XCVR_STATUS_TSM_IRQ0_SHIFT     (24U)                                               /*!< XCVR_CTRL_XCVR_STATUS.TSM_IRQ0 Position */
+#define XCVR_CTRL_XCVR_STATUS_TSM_IRQ0(x)        (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< XCVR_CTRL_XCVR_STATUS.TSM_IRQ0 Field    */
+#define XCVR_CTRL_XCVR_STATUS_TSM_IRQ1_MASK      (0x2000000U)                                        /*!< XCVR_CTRL_XCVR_STATUS.TSM_IRQ1 Mask     */
+#define XCVR_CTRL_XCVR_STATUS_TSM_IRQ1_SHIFT     (25U)                                               /*!< XCVR_CTRL_XCVR_STATUS.TSM_IRQ1 Position */
+#define XCVR_CTRL_XCVR_STATUS_TSM_IRQ1(x)        (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< XCVR_CTRL_XCVR_STATUS.TSM_IRQ1 Field    */
 /* ------- BLE_ARB_CTRL Bit Fields                  ------ */
-#define XCVR_MISC_BLE_ARB_CTRL_BLE_RELINQUISH_MASK (0x1U)                                            /*!< XCVR_MISC_BLE_ARB_CTRL.BLE_RELINQUISH Mask*/
-#define XCVR_MISC_BLE_ARB_CTRL_BLE_RELINQUISH_SHIFT (0U)                                             /*!< XCVR_MISC_BLE_ARB_CTRL.BLE_RELINQUISH Position*/
-#define XCVR_MISC_BLE_ARB_CTRL_BLE_RELINQUISH(x) (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< XCVR_MISC_BLE_ARB_CTRL.BLE_RELINQUISH Field*/
-#define XCVR_MISC_BLE_ARB_CTRL_XCVR_BUSY_MASK    (0x2U)                                              /*!< XCVR_MISC_BLE_ARB_CTRL.XCVR_BUSY Mask   */
-#define XCVR_MISC_BLE_ARB_CTRL_XCVR_BUSY_SHIFT   (1U)                                                /*!< XCVR_MISC_BLE_ARB_CTRL.XCVR_BUSY Position*/
-#define XCVR_MISC_BLE_ARB_CTRL_XCVR_BUSY(x)      (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< XCVR_MISC_BLE_ARB_CTRL.XCVR_BUSY Field  */
+#define XCVR_CTRL_BLE_ARB_CTRL_BLE_RELINQUISH_MASK (0x1U)                                            /*!< XCVR_CTRL_BLE_ARB_CTRL.BLE_RELINQUISH Mask*/
+#define XCVR_CTRL_BLE_ARB_CTRL_BLE_RELINQUISH_SHIFT (0U)                                             /*!< XCVR_CTRL_BLE_ARB_CTRL.BLE_RELINQUISH Position*/
+#define XCVR_CTRL_BLE_ARB_CTRL_BLE_RELINQUISH(x) (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< XCVR_CTRL_BLE_ARB_CTRL.BLE_RELINQUISH Field*/
+#define XCVR_CTRL_BLE_ARB_CTRL_XCVR_BUSY_MASK    (0x2U)                                              /*!< XCVR_CTRL_BLE_ARB_CTRL.XCVR_BUSY Mask   */
+#define XCVR_CTRL_BLE_ARB_CTRL_XCVR_BUSY_SHIFT   (1U)                                                /*!< XCVR_CTRL_BLE_ARB_CTRL.XCVR_BUSY Position*/
+#define XCVR_CTRL_BLE_ARB_CTRL_XCVR_BUSY(x)      (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< XCVR_CTRL_BLE_ARB_CTRL.XCVR_BUSY Field  */
 /* ------- OVERWRITE_VER Bit Fields                 ------ */
-#define XCVR_MISC_OVERWRITE_VER_OVERWRITE_VER_MASK (0xFFU)                                           /*!< XCVR_MISC_OVERWRITE_VER.OVERWRITE_VER Mask*/
-#define XCVR_MISC_OVERWRITE_VER_OVERWRITE_VER_SHIFT (0U)                                             /*!< XCVR_MISC_OVERWRITE_VER.OVERWRITE_VER Position*/
-#define XCVR_MISC_OVERWRITE_VER_OVERWRITE_VER(x) (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< XCVR_MISC_OVERWRITE_VER.OVERWRITE_VER Field*/
+#define XCVR_CTRL_OVERWRITE_VER_OVERWRITE_VER_MASK (0xFFU)                                           /*!< XCVR_CTRL_OVERWRITE_VER.OVERWRITE_VER Mask*/
+#define XCVR_CTRL_OVERWRITE_VER_OVERWRITE_VER_SHIFT (0U)                                             /*!< XCVR_CTRL_OVERWRITE_VER.OVERWRITE_VER Position*/
+#define XCVR_CTRL_OVERWRITE_VER_OVERWRITE_VER(x) (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< XCVR_CTRL_OVERWRITE_VER.OVERWRITE_VER Field*/
 /* ------- DMA_CTRL Bit Fields                      ------ */
-#define XCVR_MISC_DMA_CTRL_DMA_PAGE_MASK         (0xFU)                                              /*!< XCVR_MISC_DMA_CTRL.DMA_PAGE Mask        */
-#define XCVR_MISC_DMA_CTRL_DMA_PAGE_SHIFT        (0U)                                                /*!< XCVR_MISC_DMA_CTRL.DMA_PAGE Position    */
-#define XCVR_MISC_DMA_CTRL_DMA_PAGE(x)           (((uint32_t)(((uint32_t)(x))<<0U))&0xFUL)           /*!< XCVR_MISC_DMA_CTRL.DMA_PAGE Field       */
-#define XCVR_MISC_DMA_CTRL_SINGLE_REQ_MODE_MASK  (0x10U)                                             /*!< XCVR_MISC_DMA_CTRL.SINGLE_REQ_MODE Mask */
-#define XCVR_MISC_DMA_CTRL_SINGLE_REQ_MODE_SHIFT (4U)                                                /*!< XCVR_MISC_DMA_CTRL.SINGLE_REQ_MODE Position*/
-#define XCVR_MISC_DMA_CTRL_SINGLE_REQ_MODE(x)    (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< XCVR_MISC_DMA_CTRL.SINGLE_REQ_MODE Field*/
-#define XCVR_MISC_DMA_CTRL_BYPASS_DMA_SYNC_MASK  (0x20U)                                             /*!< XCVR_MISC_DMA_CTRL.BYPASS_DMA_SYNC Mask */
-#define XCVR_MISC_DMA_CTRL_BYPASS_DMA_SYNC_SHIFT (5U)                                                /*!< XCVR_MISC_DMA_CTRL.BYPASS_DMA_SYNC Position*/
-#define XCVR_MISC_DMA_CTRL_BYPASS_DMA_SYNC(x)    (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< XCVR_MISC_DMA_CTRL.BYPASS_DMA_SYNC Field*/
-#define XCVR_MISC_DMA_CTRL_DMA_TRIGGERRED_MASK   (0x40U)                                             /*!< XCVR_MISC_DMA_CTRL.DMA_TRIGGERRED Mask  */
-#define XCVR_MISC_DMA_CTRL_DMA_TRIGGERRED_SHIFT  (6U)                                                /*!< XCVR_MISC_DMA_CTRL.DMA_TRIGGERRED Position*/
-#define XCVR_MISC_DMA_CTRL_DMA_TRIGGERRED(x)     (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< XCVR_MISC_DMA_CTRL.DMA_TRIGGERRED Field */
-#define XCVR_MISC_DMA_CTRL_DMA_TIMED_OUT_MASK    (0x80U)                                             /*!< XCVR_MISC_DMA_CTRL.DMA_TIMED_OUT Mask   */
-#define XCVR_MISC_DMA_CTRL_DMA_TIMED_OUT_SHIFT   (7U)                                                /*!< XCVR_MISC_DMA_CTRL.DMA_TIMED_OUT Position*/
-#define XCVR_MISC_DMA_CTRL_DMA_TIMED_OUT(x)      (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< XCVR_MISC_DMA_CTRL.DMA_TIMED_OUT Field  */
-#define XCVR_MISC_DMA_CTRL_DMA_TIMEOUT_MASK      (0xF00U)                                            /*!< XCVR_MISC_DMA_CTRL.DMA_TIMEOUT Mask     */
-#define XCVR_MISC_DMA_CTRL_DMA_TIMEOUT_SHIFT     (8U)                                                /*!< XCVR_MISC_DMA_CTRL.DMA_TIMEOUT Position */
-#define XCVR_MISC_DMA_CTRL_DMA_TIMEOUT(x)        (((uint32_t)(((uint32_t)(x))<<8U))&0xF00UL)         /*!< XCVR_MISC_DMA_CTRL.DMA_TIMEOUT Field    */
+#define XCVR_CTRL_DMA_CTRL_DMA_PAGE_MASK         (0xFU)                                              /*!< XCVR_CTRL_DMA_CTRL.DMA_PAGE Mask        */
+#define XCVR_CTRL_DMA_CTRL_DMA_PAGE_SHIFT        (0U)                                                /*!< XCVR_CTRL_DMA_CTRL.DMA_PAGE Position    */
+#define XCVR_CTRL_DMA_CTRL_DMA_PAGE(x)           (((uint32_t)(((uint32_t)(x))<<0U))&0xFUL)           /*!< XCVR_CTRL_DMA_CTRL.DMA_PAGE Field       */
+#define XCVR_CTRL_DMA_CTRL_SINGLE_REQ_MODE_MASK  (0x10U)                                             /*!< XCVR_CTRL_DMA_CTRL.SINGLE_REQ_MODE Mask */
+#define XCVR_CTRL_DMA_CTRL_SINGLE_REQ_MODE_SHIFT (4U)                                                /*!< XCVR_CTRL_DMA_CTRL.SINGLE_REQ_MODE Position*/
+#define XCVR_CTRL_DMA_CTRL_SINGLE_REQ_MODE(x)    (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< XCVR_CTRL_DMA_CTRL.SINGLE_REQ_MODE Field*/
+#define XCVR_CTRL_DMA_CTRL_BYPASS_DMA_SYNC_MASK  (0x20U)                                             /*!< XCVR_CTRL_DMA_CTRL.BYPASS_DMA_SYNC Mask */
+#define XCVR_CTRL_DMA_CTRL_BYPASS_DMA_SYNC_SHIFT (5U)                                                /*!< XCVR_CTRL_DMA_CTRL.BYPASS_DMA_SYNC Position*/
+#define XCVR_CTRL_DMA_CTRL_BYPASS_DMA_SYNC(x)    (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< XCVR_CTRL_DMA_CTRL.BYPASS_DMA_SYNC Field*/
+#define XCVR_CTRL_DMA_CTRL_DMA_TRIGGERRED_MASK   (0x40U)                                             /*!< XCVR_CTRL_DMA_CTRL.DMA_TRIGGERRED Mask  */
+#define XCVR_CTRL_DMA_CTRL_DMA_TRIGGERRED_SHIFT  (6U)                                                /*!< XCVR_CTRL_DMA_CTRL.DMA_TRIGGERRED Position*/
+#define XCVR_CTRL_DMA_CTRL_DMA_TRIGGERRED(x)     (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< XCVR_CTRL_DMA_CTRL.DMA_TRIGGERRED Field */
+#define XCVR_CTRL_DMA_CTRL_DMA_TIMED_OUT_MASK    (0x80U)                                             /*!< XCVR_CTRL_DMA_CTRL.DMA_TIMED_OUT Mask   */
+#define XCVR_CTRL_DMA_CTRL_DMA_TIMED_OUT_SHIFT   (7U)                                                /*!< XCVR_CTRL_DMA_CTRL.DMA_TIMED_OUT Position*/
+#define XCVR_CTRL_DMA_CTRL_DMA_TIMED_OUT(x)      (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< XCVR_CTRL_DMA_CTRL.DMA_TIMED_OUT Field  */
+#define XCVR_CTRL_DMA_CTRL_DMA_TIMEOUT_MASK      (0xF00U)                                            /*!< XCVR_CTRL_DMA_CTRL.DMA_TIMEOUT Mask     */
+#define XCVR_CTRL_DMA_CTRL_DMA_TIMEOUT_SHIFT     (8U)                                                /*!< XCVR_CTRL_DMA_CTRL.DMA_TIMEOUT Position */
+#define XCVR_CTRL_DMA_CTRL_DMA_TIMEOUT(x)        (((uint32_t)(((uint32_t)(x))<<8U))&0xF00UL)         /*!< XCVR_CTRL_DMA_CTRL.DMA_TIMEOUT Field    */
 /* ------- DMA_DATA Bit Fields                      ------ */
-#define XCVR_MISC_DMA_DATA_DMA_DATA_MASK         (0xFFFFFFFFU)                                       /*!< XCVR_MISC_DMA_DATA.DMA_DATA Mask        */
-#define XCVR_MISC_DMA_DATA_DMA_DATA_SHIFT        (0U)                                                /*!< XCVR_MISC_DMA_DATA.DMA_DATA Position    */
-#define XCVR_MISC_DMA_DATA_DMA_DATA(x)           (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< XCVR_MISC_DMA_DATA.DMA_DATA Field       */
+#define XCVR_CTRL_DMA_DATA_DMA_DATA_MASK         (0xFFFFFFFFU)                                       /*!< XCVR_CTRL_DMA_DATA.DMA_DATA Mask        */
+#define XCVR_CTRL_DMA_DATA_DMA_DATA_SHIFT        (0U)                                                /*!< XCVR_CTRL_DMA_DATA.DMA_DATA Position    */
+#define XCVR_CTRL_DMA_DATA_DMA_DATA(x)           (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< XCVR_CTRL_DMA_DATA.DMA_DATA Field       */
 /* ------- DTEST_CTRL Bit Fields                    ------ */
-#define XCVR_MISC_DTEST_CTRL_DTEST_PAGE_MASK     (0x3FU)                                             /*!< XCVR_MISC_DTEST_CTRL.DTEST_PAGE Mask    */
-#define XCVR_MISC_DTEST_CTRL_DTEST_PAGE_SHIFT    (0U)                                                /*!< XCVR_MISC_DTEST_CTRL.DTEST_PAGE Position*/
-#define XCVR_MISC_DTEST_CTRL_DTEST_PAGE(x)       (((uint32_t)(((uint32_t)(x))<<0U))&0x3FUL)          /*!< XCVR_MISC_DTEST_CTRL.DTEST_PAGE Field   */
-#define XCVR_MISC_DTEST_CTRL_DTEST_EN_MASK       (0x80U)                                             /*!< XCVR_MISC_DTEST_CTRL.DTEST_EN Mask      */
-#define XCVR_MISC_DTEST_CTRL_DTEST_EN_SHIFT      (7U)                                                /*!< XCVR_MISC_DTEST_CTRL.DTEST_EN Position  */
-#define XCVR_MISC_DTEST_CTRL_DTEST_EN(x)         (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< XCVR_MISC_DTEST_CTRL.DTEST_EN Field     */
-#define XCVR_MISC_DTEST_CTRL_GPIO0_OVLAY_PIN_MASK (0xF00U)                                           /*!< XCVR_MISC_DTEST_CTRL.GPIO0_OVLAY_PIN Mask*/
-#define XCVR_MISC_DTEST_CTRL_GPIO0_OVLAY_PIN_SHIFT (8U)                                              /*!< XCVR_MISC_DTEST_CTRL.GPIO0_OVLAY_PIN Position*/
-#define XCVR_MISC_DTEST_CTRL_GPIO0_OVLAY_PIN(x)  (((uint32_t)(((uint32_t)(x))<<8U))&0xF00UL)         /*!< XCVR_MISC_DTEST_CTRL.GPIO0_OVLAY_PIN Field*/
-#define XCVR_MISC_DTEST_CTRL_GPIO1_OVLAY_PIN_MASK (0xF000U)                                          /*!< XCVR_MISC_DTEST_CTRL.GPIO1_OVLAY_PIN Mask*/
-#define XCVR_MISC_DTEST_CTRL_GPIO1_OVLAY_PIN_SHIFT (12U)                                             /*!< XCVR_MISC_DTEST_CTRL.GPIO1_OVLAY_PIN Position*/
-#define XCVR_MISC_DTEST_CTRL_GPIO1_OVLAY_PIN(x)  (((uint32_t)(((uint32_t)(x))<<12U))&0xF000UL)       /*!< XCVR_MISC_DTEST_CTRL.GPIO1_OVLAY_PIN Field*/
-#define XCVR_MISC_DTEST_CTRL_TSM_GPIO_OVLAY_MASK (0x30000U)                                          /*!< XCVR_MISC_DTEST_CTRL.TSM_GPIO_OVLAY Mask*/
-#define XCVR_MISC_DTEST_CTRL_TSM_GPIO_OVLAY_SHIFT (16U)                                              /*!< XCVR_MISC_DTEST_CTRL.TSM_GPIO_OVLAY Position*/
-#define XCVR_MISC_DTEST_CTRL_TSM_GPIO_OVLAY(x)   (((uint32_t)(((uint32_t)(x))<<16U))&0x30000UL)      /*!< XCVR_MISC_DTEST_CTRL.TSM_GPIO_OVLAY Field*/
-#define XCVR_MISC_DTEST_CTRL_DTEST_SHFT_MASK     (0x7000000U)                                        /*!< XCVR_MISC_DTEST_CTRL.DTEST_SHFT Mask    */
-#define XCVR_MISC_DTEST_CTRL_DTEST_SHFT_SHIFT    (24U)                                               /*!< XCVR_MISC_DTEST_CTRL.DTEST_SHFT Position*/
-#define XCVR_MISC_DTEST_CTRL_DTEST_SHFT(x)       (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< XCVR_MISC_DTEST_CTRL.DTEST_SHFT Field   */
-#define XCVR_MISC_DTEST_CTRL_RAW_MODE_I_MASK     (0x10000000U)                                       /*!< XCVR_MISC_DTEST_CTRL.RAW_MODE_I Mask    */
-#define XCVR_MISC_DTEST_CTRL_RAW_MODE_I_SHIFT    (28U)                                               /*!< XCVR_MISC_DTEST_CTRL.RAW_MODE_I Position*/
-#define XCVR_MISC_DTEST_CTRL_RAW_MODE_I(x)       (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< XCVR_MISC_DTEST_CTRL.RAW_MODE_I Field   */
-#define XCVR_MISC_DTEST_CTRL_RAW_MODE_Q_MASK     (0x20000000U)                                       /*!< XCVR_MISC_DTEST_CTRL.RAW_MODE_Q Mask    */
-#define XCVR_MISC_DTEST_CTRL_RAW_MODE_Q_SHIFT    (29U)                                               /*!< XCVR_MISC_DTEST_CTRL.RAW_MODE_Q Position*/
-#define XCVR_MISC_DTEST_CTRL_RAW_MODE_Q(x)       (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< XCVR_MISC_DTEST_CTRL.RAW_MODE_Q Field   */
+#define XCVR_CTRL_DTEST_CTRL_DTEST_PAGE_MASK     (0x3FU)                                             /*!< XCVR_CTRL_DTEST_CTRL.DTEST_PAGE Mask    */
+#define XCVR_CTRL_DTEST_CTRL_DTEST_PAGE_SHIFT    (0U)                                                /*!< XCVR_CTRL_DTEST_CTRL.DTEST_PAGE Position*/
+#define XCVR_CTRL_DTEST_CTRL_DTEST_PAGE(x)       (((uint32_t)(((uint32_t)(x))<<0U))&0x3FUL)          /*!< XCVR_CTRL_DTEST_CTRL.DTEST_PAGE Field   */
+#define XCVR_CTRL_DTEST_CTRL_DTEST_EN_MASK       (0x80U)                                             /*!< XCVR_CTRL_DTEST_CTRL.DTEST_EN Mask      */
+#define XCVR_CTRL_DTEST_CTRL_DTEST_EN_SHIFT      (7U)                                                /*!< XCVR_CTRL_DTEST_CTRL.DTEST_EN Position  */
+#define XCVR_CTRL_DTEST_CTRL_DTEST_EN(x)         (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< XCVR_CTRL_DTEST_CTRL.DTEST_EN Field     */
+#define XCVR_CTRL_DTEST_CTRL_GPIO0_OVLAY_PIN_MASK (0xF00U)                                           /*!< XCVR_CTRL_DTEST_CTRL.GPIO0_OVLAY_PIN Mask*/
+#define XCVR_CTRL_DTEST_CTRL_GPIO0_OVLAY_PIN_SHIFT (8U)                                              /*!< XCVR_CTRL_DTEST_CTRL.GPIO0_OVLAY_PIN Position*/
+#define XCVR_CTRL_DTEST_CTRL_GPIO0_OVLAY_PIN(x)  (((uint32_t)(((uint32_t)(x))<<8U))&0xF00UL)         /*!< XCVR_CTRL_DTEST_CTRL.GPIO0_OVLAY_PIN Field*/
+#define XCVR_CTRL_DTEST_CTRL_GPIO1_OVLAY_PIN_MASK (0xF000U)                                          /*!< XCVR_CTRL_DTEST_CTRL.GPIO1_OVLAY_PIN Mask*/
+#define XCVR_CTRL_DTEST_CTRL_GPIO1_OVLAY_PIN_SHIFT (12U)                                             /*!< XCVR_CTRL_DTEST_CTRL.GPIO1_OVLAY_PIN Position*/
+#define XCVR_CTRL_DTEST_CTRL_GPIO1_OVLAY_PIN(x)  (((uint32_t)(((uint32_t)(x))<<12U))&0xF000UL)       /*!< XCVR_CTRL_DTEST_CTRL.GPIO1_OVLAY_PIN Field*/
+#define XCVR_CTRL_DTEST_CTRL_TSM_GPIO_OVLAY_MASK (0x30000U)                                          /*!< XCVR_CTRL_DTEST_CTRL.TSM_GPIO_OVLAY Mask*/
+#define XCVR_CTRL_DTEST_CTRL_TSM_GPIO_OVLAY_SHIFT (16U)                                              /*!< XCVR_CTRL_DTEST_CTRL.TSM_GPIO_OVLAY Position*/
+#define XCVR_CTRL_DTEST_CTRL_TSM_GPIO_OVLAY(x)   (((uint32_t)(((uint32_t)(x))<<16U))&0x30000UL)      /*!< XCVR_CTRL_DTEST_CTRL.TSM_GPIO_OVLAY Field*/
+#define XCVR_CTRL_DTEST_CTRL_DTEST_SHFT_MASK     (0x7000000U)                                        /*!< XCVR_CTRL_DTEST_CTRL.DTEST_SHFT Mask    */
+#define XCVR_CTRL_DTEST_CTRL_DTEST_SHFT_SHIFT    (24U)                                               /*!< XCVR_CTRL_DTEST_CTRL.DTEST_SHFT Position*/
+#define XCVR_CTRL_DTEST_CTRL_DTEST_SHFT(x)       (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< XCVR_CTRL_DTEST_CTRL.DTEST_SHFT Field   */
+#define XCVR_CTRL_DTEST_CTRL_RAW_MODE_I_MASK     (0x10000000U)                                       /*!< XCVR_CTRL_DTEST_CTRL.RAW_MODE_I Mask    */
+#define XCVR_CTRL_DTEST_CTRL_RAW_MODE_I_SHIFT    (28U)                                               /*!< XCVR_CTRL_DTEST_CTRL.RAW_MODE_I Position*/
+#define XCVR_CTRL_DTEST_CTRL_RAW_MODE_I(x)       (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< XCVR_CTRL_DTEST_CTRL.RAW_MODE_I Field   */
+#define XCVR_CTRL_DTEST_CTRL_RAW_MODE_Q_MASK     (0x20000000U)                                       /*!< XCVR_CTRL_DTEST_CTRL.RAW_MODE_Q Mask    */
+#define XCVR_CTRL_DTEST_CTRL_RAW_MODE_Q_SHIFT    (29U)                                               /*!< XCVR_CTRL_DTEST_CTRL.RAW_MODE_Q Position*/
+#define XCVR_CTRL_DTEST_CTRL_RAW_MODE_Q(x)       (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< XCVR_CTRL_DTEST_CTRL.RAW_MODE_Q Field   */
 /* ------- PACKET_RAM_CTRL Bit Fields               ------ */
-#define XCVR_MISC_PACKET_RAM_CTRL_DBG_PAGE_MASK  (0xFU)                                              /*!< XCVR_MISC_PACKET_RAM_CTRL.DBG_PAGE Mask */
-#define XCVR_MISC_PACKET_RAM_CTRL_DBG_PAGE_SHIFT (0U)                                                /*!< XCVR_MISC_PACKET_RAM_CTRL.DBG_PAGE Position*/
-#define XCVR_MISC_PACKET_RAM_CTRL_DBG_PAGE(x)    (((uint32_t)(((uint32_t)(x))<<0U))&0xFUL)           /*!< XCVR_MISC_PACKET_RAM_CTRL.DBG_PAGE Field*/
-#define XCVR_MISC_PACKET_RAM_CTRL_PB_PROTECT_MASK (0x10U)                                            /*!< XCVR_MISC_PACKET_RAM_CTRL.PB_PROTECT Mask*/
-#define XCVR_MISC_PACKET_RAM_CTRL_PB_PROTECT_SHIFT (4U)                                              /*!< XCVR_MISC_PACKET_RAM_CTRL.PB_PROTECT Position*/
-#define XCVR_MISC_PACKET_RAM_CTRL_PB_PROTECT(x)  (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< XCVR_MISC_PACKET_RAM_CTRL.PB_PROTECT Field*/
-#define XCVR_MISC_PACKET_RAM_CTRL_XCVR_RAM_ALLOW_MASK (0x20U)                                        /*!< XCVR_MISC_PACKET_RAM_CTRL.XCVR_RAM_ALLOW Mask*/
-#define XCVR_MISC_PACKET_RAM_CTRL_XCVR_RAM_ALLOW_SHIFT (5U)                                          /*!< XCVR_MISC_PACKET_RAM_CTRL.XCVR_RAM_ALLOW Position*/
-#define XCVR_MISC_PACKET_RAM_CTRL_XCVR_RAM_ALLOW(x) (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)       /*!< XCVR_MISC_PACKET_RAM_CTRL.XCVR_RAM_ALLOW Field*/
-#define XCVR_MISC_PACKET_RAM_CTRL_ALL_PROTOCOLS_ALLOW_MASK (0x40U)                                   /*!< XCVR_MISC_PACKET_RAM_CTRL.ALL_PROTOCOLS_ALLOW Mask*/
-#define XCVR_MISC_PACKET_RAM_CTRL_ALL_PROTOCOLS_ALLOW_SHIFT (6U)                                     /*!< XCVR_MISC_PACKET_RAM_CTRL.ALL_PROTOCOLS_ALLOW Position*/
-#define XCVR_MISC_PACKET_RAM_CTRL_ALL_PROTOCOLS_ALLOW(x) (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)  /*!< XCVR_MISC_PACKET_RAM_CTRL.ALL_PROTOCOLS_ALLOW Field*/
-#define XCVR_MISC_PACKET_RAM_CTRL_DBG_TRIGGERRED_MASK (0x80U)                                        /*!< XCVR_MISC_PACKET_RAM_CTRL.DBG_TRIGGERRED Mask*/
-#define XCVR_MISC_PACKET_RAM_CTRL_DBG_TRIGGERRED_SHIFT (7U)                                          /*!< XCVR_MISC_PACKET_RAM_CTRL.DBG_TRIGGERRED Position*/
-#define XCVR_MISC_PACKET_RAM_CTRL_DBG_TRIGGERRED(x) (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)       /*!< XCVR_MISC_PACKET_RAM_CTRL.DBG_TRIGGERRED Field*/
-#define XCVR_MISC_PACKET_RAM_CTRL_DBG_RAM_FULL_MASK (0x300U)                                         /*!< XCVR_MISC_PACKET_RAM_CTRL.DBG_RAM_FULL Mask*/
-#define XCVR_MISC_PACKET_RAM_CTRL_DBG_RAM_FULL_SHIFT (8U)                                            /*!< XCVR_MISC_PACKET_RAM_CTRL.DBG_RAM_FULL Position*/
-#define XCVR_MISC_PACKET_RAM_CTRL_DBG_RAM_FULL(x) (((uint32_t)(((uint32_t)(x))<<8U))&0x300UL)        /*!< XCVR_MISC_PACKET_RAM_CTRL.DBG_RAM_FULL Field*/
-#define XCVR_MISC_PACKET_RAM_CTRL_RAM0_CLK_ON_OVRD_EN_MASK (0x400U)                                  /*!< XCVR_MISC_PACKET_RAM_CTRL.RAM0_CLK_ON_OVRD_EN Mask*/
-#define XCVR_MISC_PACKET_RAM_CTRL_RAM0_CLK_ON_OVRD_EN_SHIFT (10U)                                    /*!< XCVR_MISC_PACKET_RAM_CTRL.RAM0_CLK_ON_OVRD_EN Position*/
-#define XCVR_MISC_PACKET_RAM_CTRL_RAM0_CLK_ON_OVRD_EN(x) (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL) /*!< XCVR_MISC_PACKET_RAM_CTRL.RAM0_CLK_ON_OVRD_EN Field*/
-#define XCVR_MISC_PACKET_RAM_CTRL_RAM0_CLK_ON_OVRD_MASK (0x800U)                                     /*!< XCVR_MISC_PACKET_RAM_CTRL.RAM0_CLK_ON_OVRD Mask*/
-#define XCVR_MISC_PACKET_RAM_CTRL_RAM0_CLK_ON_OVRD_SHIFT (11U)                                       /*!< XCVR_MISC_PACKET_RAM_CTRL.RAM0_CLK_ON_OVRD Position*/
-#define XCVR_MISC_PACKET_RAM_CTRL_RAM0_CLK_ON_OVRD(x) (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)   /*!< XCVR_MISC_PACKET_RAM_CTRL.RAM0_CLK_ON_OVRD Field*/
-#define XCVR_MISC_PACKET_RAM_CTRL_RAM1_CLK_ON_OVRD_EN_MASK (0x1000U)                                 /*!< XCVR_MISC_PACKET_RAM_CTRL.RAM1_CLK_ON_OVRD_EN Mask*/
-#define XCVR_MISC_PACKET_RAM_CTRL_RAM1_CLK_ON_OVRD_EN_SHIFT (12U)                                    /*!< XCVR_MISC_PACKET_RAM_CTRL.RAM1_CLK_ON_OVRD_EN Position*/
-#define XCVR_MISC_PACKET_RAM_CTRL_RAM1_CLK_ON_OVRD_EN(x) (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL) /*!< XCVR_MISC_PACKET_RAM_CTRL.RAM1_CLK_ON_OVRD_EN Field*/
-#define XCVR_MISC_PACKET_RAM_CTRL_RAM1_CLK_ON_OVRD_MASK (0x2000U)                                    /*!< XCVR_MISC_PACKET_RAM_CTRL.RAM1_CLK_ON_OVRD Mask*/
-#define XCVR_MISC_PACKET_RAM_CTRL_RAM1_CLK_ON_OVRD_SHIFT (13U)                                       /*!< XCVR_MISC_PACKET_RAM_CTRL.RAM1_CLK_ON_OVRD Position*/
-#define XCVR_MISC_PACKET_RAM_CTRL_RAM1_CLK_ON_OVRD(x) (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)  /*!< XCVR_MISC_PACKET_RAM_CTRL.RAM1_CLK_ON_OVRD Field*/
-#define XCVR_MISC_PACKET_RAM_CTRL_RAM0_CE_ON_OVRD_EN_MASK (0x4000U)                                  /*!< XCVR_MISC_PACKET_RAM_CTRL.RAM0_CE_ON_OVRD_EN Mask*/
-#define XCVR_MISC_PACKET_RAM_CTRL_RAM0_CE_ON_OVRD_EN_SHIFT (14U)                                     /*!< XCVR_MISC_PACKET_RAM_CTRL.RAM0_CE_ON_OVRD_EN Position*/
-#define XCVR_MISC_PACKET_RAM_CTRL_RAM0_CE_ON_OVRD_EN(x) (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL) /*!< XCVR_MISC_PACKET_RAM_CTRL.RAM0_CE_ON_OVRD_EN Field*/
-#define XCVR_MISC_PACKET_RAM_CTRL_RAM0_CE_ON_OVRD_MASK (0x8000U)                                     /*!< XCVR_MISC_PACKET_RAM_CTRL.RAM0_CE_ON_OVRD Mask*/
-#define XCVR_MISC_PACKET_RAM_CTRL_RAM0_CE_ON_OVRD_SHIFT (15U)                                        /*!< XCVR_MISC_PACKET_RAM_CTRL.RAM0_CE_ON_OVRD Position*/
-#define XCVR_MISC_PACKET_RAM_CTRL_RAM0_CE_ON_OVRD(x) (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)   /*!< XCVR_MISC_PACKET_RAM_CTRL.RAM0_CE_ON_OVRD Field*/
-#define XCVR_MISC_PACKET_RAM_CTRL_RAM1_CE_ON_OVRD_EN_MASK (0x10000U)                                 /*!< XCVR_MISC_PACKET_RAM_CTRL.RAM1_CE_ON_OVRD_EN Mask*/
-#define XCVR_MISC_PACKET_RAM_CTRL_RAM1_CE_ON_OVRD_EN_SHIFT (16U)                                     /*!< XCVR_MISC_PACKET_RAM_CTRL.RAM1_CE_ON_OVRD_EN Position*/
-#define XCVR_MISC_PACKET_RAM_CTRL_RAM1_CE_ON_OVRD_EN(x) (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL) /*!< XCVR_MISC_PACKET_RAM_CTRL.RAM1_CE_ON_OVRD_EN Field*/
-#define XCVR_MISC_PACKET_RAM_CTRL_RAM1_CE_ON_OVRD_MASK (0x20000U)                                    /*!< XCVR_MISC_PACKET_RAM_CTRL.RAM1_CE_ON_OVRD Mask*/
-#define XCVR_MISC_PACKET_RAM_CTRL_RAM1_CE_ON_OVRD_SHIFT (17U)                                        /*!< XCVR_MISC_PACKET_RAM_CTRL.RAM1_CE_ON_OVRD Position*/
-#define XCVR_MISC_PACKET_RAM_CTRL_RAM1_CE_ON_OVRD(x) (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)  /*!< XCVR_MISC_PACKET_RAM_CTRL.RAM1_CE_ON_OVRD Field*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_DBG_PAGE_MASK  (0xFU)                                              /*!< XCVR_CTRL_PACKET_RAM_CTRL.DBG_PAGE Mask */
+#define XCVR_CTRL_PACKET_RAM_CTRL_DBG_PAGE_SHIFT (0U)                                                /*!< XCVR_CTRL_PACKET_RAM_CTRL.DBG_PAGE Position*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_DBG_PAGE(x)    (((uint32_t)(((uint32_t)(x))<<0U))&0xFUL)           /*!< XCVR_CTRL_PACKET_RAM_CTRL.DBG_PAGE Field*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_PB_PROTECT_MASK (0x10U)                                            /*!< XCVR_CTRL_PACKET_RAM_CTRL.PB_PROTECT Mask*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_PB_PROTECT_SHIFT (4U)                                              /*!< XCVR_CTRL_PACKET_RAM_CTRL.PB_PROTECT Position*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_PB_PROTECT(x)  (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< XCVR_CTRL_PACKET_RAM_CTRL.PB_PROTECT Field*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_XCVR_RAM_ALLOW_MASK (0x20U)                                        /*!< XCVR_CTRL_PACKET_RAM_CTRL.XCVR_RAM_ALLOW Mask*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_XCVR_RAM_ALLOW_SHIFT (5U)                                          /*!< XCVR_CTRL_PACKET_RAM_CTRL.XCVR_RAM_ALLOW Position*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_XCVR_RAM_ALLOW(x) (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)       /*!< XCVR_CTRL_PACKET_RAM_CTRL.XCVR_RAM_ALLOW Field*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_ALL_PROTOCOLS_ALLOW_MASK (0x40U)                                   /*!< XCVR_CTRL_PACKET_RAM_CTRL.ALL_PROTOCOLS_ALLOW Mask*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_ALL_PROTOCOLS_ALLOW_SHIFT (6U)                                     /*!< XCVR_CTRL_PACKET_RAM_CTRL.ALL_PROTOCOLS_ALLOW Position*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_ALL_PROTOCOLS_ALLOW(x) (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)  /*!< XCVR_CTRL_PACKET_RAM_CTRL.ALL_PROTOCOLS_ALLOW Field*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_DBG_TRIGGERRED_MASK (0x80U)                                        /*!< XCVR_CTRL_PACKET_RAM_CTRL.DBG_TRIGGERRED Mask*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_DBG_TRIGGERRED_SHIFT (7U)                                          /*!< XCVR_CTRL_PACKET_RAM_CTRL.DBG_TRIGGERRED Position*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_DBG_TRIGGERRED(x) (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)       /*!< XCVR_CTRL_PACKET_RAM_CTRL.DBG_TRIGGERRED Field*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_DBG_RAM_FULL_MASK (0x300U)                                         /*!< XCVR_CTRL_PACKET_RAM_CTRL.DBG_RAM_FULL Mask*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_DBG_RAM_FULL_SHIFT (8U)                                            /*!< XCVR_CTRL_PACKET_RAM_CTRL.DBG_RAM_FULL Position*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_DBG_RAM_FULL(x) (((uint32_t)(((uint32_t)(x))<<8U))&0x300UL)        /*!< XCVR_CTRL_PACKET_RAM_CTRL.DBG_RAM_FULL Field*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_RAM0_CLK_ON_OVRD_EN_MASK (0x400U)                                  /*!< XCVR_CTRL_PACKET_RAM_CTRL.RAM0_CLK_ON_OVRD_EN Mask*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_RAM0_CLK_ON_OVRD_EN_SHIFT (10U)                                    /*!< XCVR_CTRL_PACKET_RAM_CTRL.RAM0_CLK_ON_OVRD_EN Position*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_RAM0_CLK_ON_OVRD_EN(x) (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL) /*!< XCVR_CTRL_PACKET_RAM_CTRL.RAM0_CLK_ON_OVRD_EN Field*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_RAM0_CLK_ON_OVRD_MASK (0x800U)                                     /*!< XCVR_CTRL_PACKET_RAM_CTRL.RAM0_CLK_ON_OVRD Mask*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_RAM0_CLK_ON_OVRD_SHIFT (11U)                                       /*!< XCVR_CTRL_PACKET_RAM_CTRL.RAM0_CLK_ON_OVRD Position*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_RAM0_CLK_ON_OVRD(x) (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)   /*!< XCVR_CTRL_PACKET_RAM_CTRL.RAM0_CLK_ON_OVRD Field*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_RAM1_CLK_ON_OVRD_EN_MASK (0x1000U)                                 /*!< XCVR_CTRL_PACKET_RAM_CTRL.RAM1_CLK_ON_OVRD_EN Mask*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_RAM1_CLK_ON_OVRD_EN_SHIFT (12U)                                    /*!< XCVR_CTRL_PACKET_RAM_CTRL.RAM1_CLK_ON_OVRD_EN Position*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_RAM1_CLK_ON_OVRD_EN(x) (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL) /*!< XCVR_CTRL_PACKET_RAM_CTRL.RAM1_CLK_ON_OVRD_EN Field*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_RAM1_CLK_ON_OVRD_MASK (0x2000U)                                    /*!< XCVR_CTRL_PACKET_RAM_CTRL.RAM1_CLK_ON_OVRD Mask*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_RAM1_CLK_ON_OVRD_SHIFT (13U)                                       /*!< XCVR_CTRL_PACKET_RAM_CTRL.RAM1_CLK_ON_OVRD Position*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_RAM1_CLK_ON_OVRD(x) (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)  /*!< XCVR_CTRL_PACKET_RAM_CTRL.RAM1_CLK_ON_OVRD Field*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_RAM0_CE_ON_OVRD_EN_MASK (0x4000U)                                  /*!< XCVR_CTRL_PACKET_RAM_CTRL.RAM0_CE_ON_OVRD_EN Mask*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_RAM0_CE_ON_OVRD_EN_SHIFT (14U)                                     /*!< XCVR_CTRL_PACKET_RAM_CTRL.RAM0_CE_ON_OVRD_EN Position*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_RAM0_CE_ON_OVRD_EN(x) (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL) /*!< XCVR_CTRL_PACKET_RAM_CTRL.RAM0_CE_ON_OVRD_EN Field*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_RAM0_CE_ON_OVRD_MASK (0x8000U)                                     /*!< XCVR_CTRL_PACKET_RAM_CTRL.RAM0_CE_ON_OVRD Mask*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_RAM0_CE_ON_OVRD_SHIFT (15U)                                        /*!< XCVR_CTRL_PACKET_RAM_CTRL.RAM0_CE_ON_OVRD Position*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_RAM0_CE_ON_OVRD(x) (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)   /*!< XCVR_CTRL_PACKET_RAM_CTRL.RAM0_CE_ON_OVRD Field*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_RAM1_CE_ON_OVRD_EN_MASK (0x10000U)                                 /*!< XCVR_CTRL_PACKET_RAM_CTRL.RAM1_CE_ON_OVRD_EN Mask*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_RAM1_CE_ON_OVRD_EN_SHIFT (16U)                                     /*!< XCVR_CTRL_PACKET_RAM_CTRL.RAM1_CE_ON_OVRD_EN Position*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_RAM1_CE_ON_OVRD_EN(x) (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL) /*!< XCVR_CTRL_PACKET_RAM_CTRL.RAM1_CE_ON_OVRD_EN Field*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_RAM1_CE_ON_OVRD_MASK (0x20000U)                                    /*!< XCVR_CTRL_PACKET_RAM_CTRL.RAM1_CE_ON_OVRD Mask*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_RAM1_CE_ON_OVRD_SHIFT (17U)                                        /*!< XCVR_CTRL_PACKET_RAM_CTRL.RAM1_CE_ON_OVRD Position*/
+#define XCVR_CTRL_PACKET_RAM_CTRL_RAM1_CE_ON_OVRD(x) (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)  /*!< XCVR_CTRL_PACKET_RAM_CTRL.RAM1_CE_ON_OVRD Field*/
 /* ------- FAD_CTRL Bit Fields                      ------ */
-#define XCVR_MISC_FAD_CTRL_FAD_EN_MASK           (0x1U)                                              /*!< XCVR_MISC_FAD_CTRL.FAD_EN Mask          */
-#define XCVR_MISC_FAD_CTRL_FAD_EN_SHIFT          (0U)                                                /*!< XCVR_MISC_FAD_CTRL.FAD_EN Position      */
-#define XCVR_MISC_FAD_CTRL_FAD_EN(x)             (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< XCVR_MISC_FAD_CTRL.FAD_EN Field         */
-#define XCVR_MISC_FAD_CTRL_ANTX_MASK             (0x2U)                                              /*!< XCVR_MISC_FAD_CTRL.ANTX Mask            */
-#define XCVR_MISC_FAD_CTRL_ANTX_SHIFT            (1U)                                                /*!< XCVR_MISC_FAD_CTRL.ANTX Position        */
-#define XCVR_MISC_FAD_CTRL_ANTX(x)               (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< XCVR_MISC_FAD_CTRL.ANTX Field           */
-#define XCVR_MISC_FAD_CTRL_ANTX_EN_MASK          (0x30U)                                             /*!< XCVR_MISC_FAD_CTRL.ANTX_EN Mask         */
-#define XCVR_MISC_FAD_CTRL_ANTX_EN_SHIFT         (4U)                                                /*!< XCVR_MISC_FAD_CTRL.ANTX_EN Position     */
-#define XCVR_MISC_FAD_CTRL_ANTX_EN(x)            (((uint32_t)(((uint32_t)(x))<<4U))&0x30UL)          /*!< XCVR_MISC_FAD_CTRL.ANTX_EN Field        */
-#define XCVR_MISC_FAD_CTRL_ANTX_HZ_MASK          (0x40U)                                             /*!< XCVR_MISC_FAD_CTRL.ANTX_HZ Mask         */
-#define XCVR_MISC_FAD_CTRL_ANTX_HZ_SHIFT         (6U)                                                /*!< XCVR_MISC_FAD_CTRL.ANTX_HZ Position     */
-#define XCVR_MISC_FAD_CTRL_ANTX_HZ(x)            (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< XCVR_MISC_FAD_CTRL.ANTX_HZ Field        */
-#define XCVR_MISC_FAD_CTRL_ANTX_CTRLMODE_MASK    (0x80U)                                             /*!< XCVR_MISC_FAD_CTRL.ANTX_CTRLMODE Mask   */
-#define XCVR_MISC_FAD_CTRL_ANTX_CTRLMODE_SHIFT   (7U)                                                /*!< XCVR_MISC_FAD_CTRL.ANTX_CTRLMODE Position*/
-#define XCVR_MISC_FAD_CTRL_ANTX_CTRLMODE(x)      (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< XCVR_MISC_FAD_CTRL.ANTX_CTRLMODE Field  */
-#define XCVR_MISC_FAD_CTRL_ANTX_POL_MASK         (0xF00U)                                            /*!< XCVR_MISC_FAD_CTRL.ANTX_POL Mask        */
-#define XCVR_MISC_FAD_CTRL_ANTX_POL_SHIFT        (8U)                                                /*!< XCVR_MISC_FAD_CTRL.ANTX_POL Position    */
-#define XCVR_MISC_FAD_CTRL_ANTX_POL(x)           (((uint32_t)(((uint32_t)(x))<<8U))&0xF00UL)         /*!< XCVR_MISC_FAD_CTRL.ANTX_POL Field       */
-#define XCVR_MISC_FAD_CTRL_FAD_NOT_GPIO_MASK     (0xF000U)                                           /*!< XCVR_MISC_FAD_CTRL.FAD_NOT_GPIO Mask    */
-#define XCVR_MISC_FAD_CTRL_FAD_NOT_GPIO_SHIFT    (12U)                                               /*!< XCVR_MISC_FAD_CTRL.FAD_NOT_GPIO Position*/
-#define XCVR_MISC_FAD_CTRL_FAD_NOT_GPIO(x)       (((uint32_t)(((uint32_t)(x))<<12U))&0xF000UL)       /*!< XCVR_MISC_FAD_CTRL.FAD_NOT_GPIO Field   */
+#define XCVR_CTRL_FAD_CTRL_FAD_EN_MASK           (0x1U)                                              /*!< XCVR_CTRL_FAD_CTRL.FAD_EN Mask          */
+#define XCVR_CTRL_FAD_CTRL_FAD_EN_SHIFT          (0U)                                                /*!< XCVR_CTRL_FAD_CTRL.FAD_EN Position      */
+#define XCVR_CTRL_FAD_CTRL_FAD_EN(x)             (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< XCVR_CTRL_FAD_CTRL.FAD_EN Field         */
+#define XCVR_CTRL_FAD_CTRL_ANTX_MASK             (0x2U)                                              /*!< XCVR_CTRL_FAD_CTRL.ANTX Mask            */
+#define XCVR_CTRL_FAD_CTRL_ANTX_SHIFT            (1U)                                                /*!< XCVR_CTRL_FAD_CTRL.ANTX Position        */
+#define XCVR_CTRL_FAD_CTRL_ANTX(x)               (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< XCVR_CTRL_FAD_CTRL.ANTX Field           */
+#define XCVR_CTRL_FAD_CTRL_ANTX_EN_MASK          (0x30U)                                             /*!< XCVR_CTRL_FAD_CTRL.ANTX_EN Mask         */
+#define XCVR_CTRL_FAD_CTRL_ANTX_EN_SHIFT         (4U)                                                /*!< XCVR_CTRL_FAD_CTRL.ANTX_EN Position     */
+#define XCVR_CTRL_FAD_CTRL_ANTX_EN(x)            (((uint32_t)(((uint32_t)(x))<<4U))&0x30UL)          /*!< XCVR_CTRL_FAD_CTRL.ANTX_EN Field        */
+#define XCVR_CTRL_FAD_CTRL_ANTX_HZ_MASK          (0x40U)                                             /*!< XCVR_CTRL_FAD_CTRL.ANTX_HZ Mask         */
+#define XCVR_CTRL_FAD_CTRL_ANTX_HZ_SHIFT         (6U)                                                /*!< XCVR_CTRL_FAD_CTRL.ANTX_HZ Position     */
+#define XCVR_CTRL_FAD_CTRL_ANTX_HZ(x)            (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< XCVR_CTRL_FAD_CTRL.ANTX_HZ Field        */
+#define XCVR_CTRL_FAD_CTRL_ANTX_CTRLMODE_MASK    (0x80U)                                             /*!< XCVR_CTRL_FAD_CTRL.ANTX_CTRLMODE Mask   */
+#define XCVR_CTRL_FAD_CTRL_ANTX_CTRLMODE_SHIFT   (7U)                                                /*!< XCVR_CTRL_FAD_CTRL.ANTX_CTRLMODE Position*/
+#define XCVR_CTRL_FAD_CTRL_ANTX_CTRLMODE(x)      (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< XCVR_CTRL_FAD_CTRL.ANTX_CTRLMODE Field  */
+#define XCVR_CTRL_FAD_CTRL_ANTX_POL_MASK         (0xF00U)                                            /*!< XCVR_CTRL_FAD_CTRL.ANTX_POL Mask        */
+#define XCVR_CTRL_FAD_CTRL_ANTX_POL_SHIFT        (8U)                                                /*!< XCVR_CTRL_FAD_CTRL.ANTX_POL Position    */
+#define XCVR_CTRL_FAD_CTRL_ANTX_POL(x)           (((uint32_t)(((uint32_t)(x))<<8U))&0xF00UL)         /*!< XCVR_CTRL_FAD_CTRL.ANTX_POL Field       */
+#define XCVR_CTRL_FAD_CTRL_FAD_NOT_GPIO_MASK     (0xF000U)                                           /*!< XCVR_CTRL_FAD_CTRL.FAD_NOT_GPIO Mask    */
+#define XCVR_CTRL_FAD_CTRL_FAD_NOT_GPIO_SHIFT    (12U)                                               /*!< XCVR_CTRL_FAD_CTRL.FAD_NOT_GPIO Position*/
+#define XCVR_CTRL_FAD_CTRL_FAD_NOT_GPIO(x)       (((uint32_t)(((uint32_t)(x))<<12U))&0xF000UL)       /*!< XCVR_CTRL_FAD_CTRL.FAD_NOT_GPIO Field   */
 /* ------- LPPS_CTRL Bit Fields                     ------ */
-#define XCVR_MISC_LPPS_CTRL_LPPS_ENABLE_MASK     (0x1U)                                              /*!< XCVR_MISC_LPPS_CTRL.LPPS_ENABLE Mask    */
-#define XCVR_MISC_LPPS_CTRL_LPPS_ENABLE_SHIFT    (0U)                                                /*!< XCVR_MISC_LPPS_CTRL.LPPS_ENABLE Position*/
-#define XCVR_MISC_LPPS_CTRL_LPPS_ENABLE(x)       (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< XCVR_MISC_LPPS_CTRL.LPPS_ENABLE Field   */
-#define XCVR_MISC_LPPS_CTRL_LPPS_TZA_ALLOW_MASK  (0x2U)                                              /*!< XCVR_MISC_LPPS_CTRL.LPPS_TZA_ALLOW Mask */
-#define XCVR_MISC_LPPS_CTRL_LPPS_TZA_ALLOW_SHIFT (1U)                                                /*!< XCVR_MISC_LPPS_CTRL.LPPS_TZA_ALLOW Position*/
-#define XCVR_MISC_LPPS_CTRL_LPPS_TZA_ALLOW(x)    (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< XCVR_MISC_LPPS_CTRL.LPPS_TZA_ALLOW Field*/
-#define XCVR_MISC_LPPS_CTRL_LPPS_BBA_ALLOW_MASK  (0x4U)                                              /*!< XCVR_MISC_LPPS_CTRL.LPPS_BBA_ALLOW Mask */
-#define XCVR_MISC_LPPS_CTRL_LPPS_BBA_ALLOW_SHIFT (2U)                                                /*!< XCVR_MISC_LPPS_CTRL.LPPS_BBA_ALLOW Position*/
-#define XCVR_MISC_LPPS_CTRL_LPPS_BBA_ALLOW(x)    (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< XCVR_MISC_LPPS_CTRL.LPPS_BBA_ALLOW Field*/
-#define XCVR_MISC_LPPS_CTRL_LPPS_ADC_ALLOW_MASK  (0x8U)                                              /*!< XCVR_MISC_LPPS_CTRL.LPPS_ADC_ALLOW Mask */
-#define XCVR_MISC_LPPS_CTRL_LPPS_ADC_ALLOW_SHIFT (3U)                                                /*!< XCVR_MISC_LPPS_CTRL.LPPS_ADC_ALLOW Position*/
-#define XCVR_MISC_LPPS_CTRL_LPPS_ADC_ALLOW(x)    (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< XCVR_MISC_LPPS_CTRL.LPPS_ADC_ALLOW Field*/
-#define XCVR_MISC_LPPS_CTRL_LPPS_DCOC_ALLOW_MASK (0x10U)                                             /*!< XCVR_MISC_LPPS_CTRL.LPPS_DCOC_ALLOW Mask*/
-#define XCVR_MISC_LPPS_CTRL_LPPS_DCOC_ALLOW_SHIFT (4U)                                               /*!< XCVR_MISC_LPPS_CTRL.LPPS_DCOC_ALLOW Position*/
-#define XCVR_MISC_LPPS_CTRL_LPPS_DCOC_ALLOW(x)   (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< XCVR_MISC_LPPS_CTRL.LPPS_DCOC_ALLOW Field*/
-#define XCVR_MISC_LPPS_CTRL_LPPS_PDET_ALLOW_MASK (0x20U)                                             /*!< XCVR_MISC_LPPS_CTRL.LPPS_PDET_ALLOW Mask*/
-#define XCVR_MISC_LPPS_CTRL_LPPS_PDET_ALLOW_SHIFT (5U)                                               /*!< XCVR_MISC_LPPS_CTRL.LPPS_PDET_ALLOW Position*/
-#define XCVR_MISC_LPPS_CTRL_LPPS_PDET_ALLOW(x)   (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< XCVR_MISC_LPPS_CTRL.LPPS_PDET_ALLOW Field*/
-#define XCVR_MISC_LPPS_CTRL_LPPS_SY_LO_ALLOW_MASK (0x40U)                                            /*!< XCVR_MISC_LPPS_CTRL.LPPS_SY_LO_ALLOW Mask*/
-#define XCVR_MISC_LPPS_CTRL_LPPS_SY_LO_ALLOW_SHIFT (6U)                                              /*!< XCVR_MISC_LPPS_CTRL.LPPS_SY_LO_ALLOW Position*/
-#define XCVR_MISC_LPPS_CTRL_LPPS_SY_LO_ALLOW(x)  (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< XCVR_MISC_LPPS_CTRL.LPPS_SY_LO_ALLOW Field*/
-#define XCVR_MISC_LPPS_CTRL_LPPS_SY_LO_BUF_ALLOW_MASK (0x80U)                                        /*!< XCVR_MISC_LPPS_CTRL.LPPS_SY_LO_BUF_ALLOW Mask*/
-#define XCVR_MISC_LPPS_CTRL_LPPS_SY_LO_BUF_ALLOW_SHIFT (7U)                                          /*!< XCVR_MISC_LPPS_CTRL.LPPS_SY_LO_BUF_ALLOW Position*/
-#define XCVR_MISC_LPPS_CTRL_LPPS_SY_LO_BUF_ALLOW(x) (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)       /*!< XCVR_MISC_LPPS_CTRL.LPPS_SY_LO_BUF_ALLOW Field*/
-#define XCVR_MISC_LPPS_CTRL_LPPS_RX_DIG_ALLOW_MASK (0x100U)                                          /*!< XCVR_MISC_LPPS_CTRL.LPPS_RX_DIG_ALLOW Mask*/
-#define XCVR_MISC_LPPS_CTRL_LPPS_RX_DIG_ALLOW_SHIFT (8U)                                             /*!< XCVR_MISC_LPPS_CTRL.LPPS_RX_DIG_ALLOW Position*/
-#define XCVR_MISC_LPPS_CTRL_LPPS_RX_DIG_ALLOW(x) (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< XCVR_MISC_LPPS_CTRL.LPPS_RX_DIG_ALLOW Field*/
-#define XCVR_MISC_LPPS_CTRL_LPPS_DCOC_DIG_ALLOW_MASK (0x200U)                                        /*!< XCVR_MISC_LPPS_CTRL.LPPS_DCOC_DIG_ALLOW Mask*/
-#define XCVR_MISC_LPPS_CTRL_LPPS_DCOC_DIG_ALLOW_SHIFT (9U)                                           /*!< XCVR_MISC_LPPS_CTRL.LPPS_DCOC_DIG_ALLOW Position*/
-#define XCVR_MISC_LPPS_CTRL_LPPS_DCOC_DIG_ALLOW(x) (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)       /*!< XCVR_MISC_LPPS_CTRL.LPPS_DCOC_DIG_ALLOW Field*/
-#define XCVR_MISC_LPPS_CTRL_LPPS_START_RX_MASK   (0xFF0000U)                                         /*!< XCVR_MISC_LPPS_CTRL.LPPS_START_RX Mask  */
-#define XCVR_MISC_LPPS_CTRL_LPPS_START_RX_SHIFT  (16U)                                               /*!< XCVR_MISC_LPPS_CTRL.LPPS_START_RX Position*/
-#define XCVR_MISC_LPPS_CTRL_LPPS_START_RX(x)     (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< XCVR_MISC_LPPS_CTRL.LPPS_START_RX Field */
-#define XCVR_MISC_LPPS_CTRL_LPPS_DEST_RX_MASK    (0xFF000000U)                                       /*!< XCVR_MISC_LPPS_CTRL.LPPS_DEST_RX Mask   */
-#define XCVR_MISC_LPPS_CTRL_LPPS_DEST_RX_SHIFT   (24U)                                               /*!< XCVR_MISC_LPPS_CTRL.LPPS_DEST_RX Position*/
-#define XCVR_MISC_LPPS_CTRL_LPPS_DEST_RX(x)      (((uint32_t)(((uint32_t)(x))<<24U))&0xFF000000UL)   /*!< XCVR_MISC_LPPS_CTRL.LPPS_DEST_RX Field  */
+#define XCVR_CTRL_LPPS_CTRL_LPPS_ENABLE_MASK     (0x1U)                                              /*!< XCVR_CTRL_LPPS_CTRL.LPPS_ENABLE Mask    */
+#define XCVR_CTRL_LPPS_CTRL_LPPS_ENABLE_SHIFT    (0U)                                                /*!< XCVR_CTRL_LPPS_CTRL.LPPS_ENABLE Position*/
+#define XCVR_CTRL_LPPS_CTRL_LPPS_ENABLE(x)       (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< XCVR_CTRL_LPPS_CTRL.LPPS_ENABLE Field   */
+#define XCVR_CTRL_LPPS_CTRL_LPPS_TZA_ALLOW_MASK  (0x2U)                                              /*!< XCVR_CTRL_LPPS_CTRL.LPPS_TZA_ALLOW Mask */
+#define XCVR_CTRL_LPPS_CTRL_LPPS_TZA_ALLOW_SHIFT (1U)                                                /*!< XCVR_CTRL_LPPS_CTRL.LPPS_TZA_ALLOW Position*/
+#define XCVR_CTRL_LPPS_CTRL_LPPS_TZA_ALLOW(x)    (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< XCVR_CTRL_LPPS_CTRL.LPPS_TZA_ALLOW Field*/
+#define XCVR_CTRL_LPPS_CTRL_LPPS_BBA_ALLOW_MASK  (0x4U)                                              /*!< XCVR_CTRL_LPPS_CTRL.LPPS_BBA_ALLOW Mask */
+#define XCVR_CTRL_LPPS_CTRL_LPPS_BBA_ALLOW_SHIFT (2U)                                                /*!< XCVR_CTRL_LPPS_CTRL.LPPS_BBA_ALLOW Position*/
+#define XCVR_CTRL_LPPS_CTRL_LPPS_BBA_ALLOW(x)    (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< XCVR_CTRL_LPPS_CTRL.LPPS_BBA_ALLOW Field*/
+#define XCVR_CTRL_LPPS_CTRL_LPPS_ADC_ALLOW_MASK  (0x8U)                                              /*!< XCVR_CTRL_LPPS_CTRL.LPPS_ADC_ALLOW Mask */
+#define XCVR_CTRL_LPPS_CTRL_LPPS_ADC_ALLOW_SHIFT (3U)                                                /*!< XCVR_CTRL_LPPS_CTRL.LPPS_ADC_ALLOW Position*/
+#define XCVR_CTRL_LPPS_CTRL_LPPS_ADC_ALLOW(x)    (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< XCVR_CTRL_LPPS_CTRL.LPPS_ADC_ALLOW Field*/
+#define XCVR_CTRL_LPPS_CTRL_LPPS_DCOC_ALLOW_MASK (0x10U)                                             /*!< XCVR_CTRL_LPPS_CTRL.LPPS_DCOC_ALLOW Mask*/
+#define XCVR_CTRL_LPPS_CTRL_LPPS_DCOC_ALLOW_SHIFT (4U)                                               /*!< XCVR_CTRL_LPPS_CTRL.LPPS_DCOC_ALLOW Position*/
+#define XCVR_CTRL_LPPS_CTRL_LPPS_DCOC_ALLOW(x)   (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< XCVR_CTRL_LPPS_CTRL.LPPS_DCOC_ALLOW Field*/
+#define XCVR_CTRL_LPPS_CTRL_LPPS_PDET_ALLOW_MASK (0x20U)                                             /*!< XCVR_CTRL_LPPS_CTRL.LPPS_PDET_ALLOW Mask*/
+#define XCVR_CTRL_LPPS_CTRL_LPPS_PDET_ALLOW_SHIFT (5U)                                               /*!< XCVR_CTRL_LPPS_CTRL.LPPS_PDET_ALLOW Position*/
+#define XCVR_CTRL_LPPS_CTRL_LPPS_PDET_ALLOW(x)   (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< XCVR_CTRL_LPPS_CTRL.LPPS_PDET_ALLOW Field*/
+#define XCVR_CTRL_LPPS_CTRL_LPPS_SY_LO_ALLOW_MASK (0x40U)                                            /*!< XCVR_CTRL_LPPS_CTRL.LPPS_SY_LO_ALLOW Mask*/
+#define XCVR_CTRL_LPPS_CTRL_LPPS_SY_LO_ALLOW_SHIFT (6U)                                              /*!< XCVR_CTRL_LPPS_CTRL.LPPS_SY_LO_ALLOW Position*/
+#define XCVR_CTRL_LPPS_CTRL_LPPS_SY_LO_ALLOW(x)  (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< XCVR_CTRL_LPPS_CTRL.LPPS_SY_LO_ALLOW Field*/
+#define XCVR_CTRL_LPPS_CTRL_LPPS_SY_LO_BUF_ALLOW_MASK (0x80U)                                        /*!< XCVR_CTRL_LPPS_CTRL.LPPS_SY_LO_BUF_ALLOW Mask*/
+#define XCVR_CTRL_LPPS_CTRL_LPPS_SY_LO_BUF_ALLOW_SHIFT (7U)                                          /*!< XCVR_CTRL_LPPS_CTRL.LPPS_SY_LO_BUF_ALLOW Position*/
+#define XCVR_CTRL_LPPS_CTRL_LPPS_SY_LO_BUF_ALLOW(x) (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)       /*!< XCVR_CTRL_LPPS_CTRL.LPPS_SY_LO_BUF_ALLOW Field*/
+#define XCVR_CTRL_LPPS_CTRL_LPPS_RX_DIG_ALLOW_MASK (0x100U)                                          /*!< XCVR_CTRL_LPPS_CTRL.LPPS_RX_DIG_ALLOW Mask*/
+#define XCVR_CTRL_LPPS_CTRL_LPPS_RX_DIG_ALLOW_SHIFT (8U)                                             /*!< XCVR_CTRL_LPPS_CTRL.LPPS_RX_DIG_ALLOW Position*/
+#define XCVR_CTRL_LPPS_CTRL_LPPS_RX_DIG_ALLOW(x) (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< XCVR_CTRL_LPPS_CTRL.LPPS_RX_DIG_ALLOW Field*/
+#define XCVR_CTRL_LPPS_CTRL_LPPS_DCOC_DIG_ALLOW_MASK (0x200U)                                        /*!< XCVR_CTRL_LPPS_CTRL.LPPS_DCOC_DIG_ALLOW Mask*/
+#define XCVR_CTRL_LPPS_CTRL_LPPS_DCOC_DIG_ALLOW_SHIFT (9U)                                           /*!< XCVR_CTRL_LPPS_CTRL.LPPS_DCOC_DIG_ALLOW Position*/
+#define XCVR_CTRL_LPPS_CTRL_LPPS_DCOC_DIG_ALLOW(x) (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)       /*!< XCVR_CTRL_LPPS_CTRL.LPPS_DCOC_DIG_ALLOW Field*/
+#define XCVR_CTRL_LPPS_CTRL_LPPS_START_RX_MASK   (0xFF0000U)                                         /*!< XCVR_CTRL_LPPS_CTRL.LPPS_START_RX Mask  */
+#define XCVR_CTRL_LPPS_CTRL_LPPS_START_RX_SHIFT  (16U)                                               /*!< XCVR_CTRL_LPPS_CTRL.LPPS_START_RX Position*/
+#define XCVR_CTRL_LPPS_CTRL_LPPS_START_RX(x)     (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< XCVR_CTRL_LPPS_CTRL.LPPS_START_RX Field */
+#define XCVR_CTRL_LPPS_CTRL_LPPS_DEST_RX_MASK    (0xFF000000U)                                       /*!< XCVR_CTRL_LPPS_CTRL.LPPS_DEST_RX Mask   */
+#define XCVR_CTRL_LPPS_CTRL_LPPS_DEST_RX_SHIFT   (24U)                                               /*!< XCVR_CTRL_LPPS_CTRL.LPPS_DEST_RX Position*/
+#define XCVR_CTRL_LPPS_CTRL_LPPS_DEST_RX(x)      (((uint32_t)(((uint32_t)(x))<<24U))&0xFF000000UL)   /*!< XCVR_CTRL_LPPS_CTRL.LPPS_DEST_RX Field  */
 /* ------- RF_NOT_ALLOWED_CTRL Bit Fields           ------ */
-#define XCVR_MISC_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED_NO_TX_MASK (0x1U)                               /*!< XCVR_MISC_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED_NO_TX Mask*/
-#define XCVR_MISC_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED_NO_TX_SHIFT (0U)                                /*!< XCVR_MISC_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED_NO_TX Position*/
-#define XCVR_MISC_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED_NO_TX(x) (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL) /*!< XCVR_MISC_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED_NO_TX Field*/
-#define XCVR_MISC_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED_NO_RX_MASK (0x2U)                               /*!< XCVR_MISC_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED_NO_RX Mask*/
-#define XCVR_MISC_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED_NO_RX_SHIFT (1U)                                /*!< XCVR_MISC_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED_NO_RX Position*/
-#define XCVR_MISC_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED_NO_RX(x) (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL) /*!< XCVR_MISC_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED_NO_RX Field*/
-#define XCVR_MISC_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED_ASSERTED_MASK (0x4U)                            /*!< XCVR_MISC_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED_ASSERTED Mask*/
-#define XCVR_MISC_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED_ASSERTED_SHIFT (2U)                             /*!< XCVR_MISC_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED_ASSERTED Position*/
-#define XCVR_MISC_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED_ASSERTED(x) (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL) /*!< XCVR_MISC_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED_ASSERTED Field*/
-#define XCVR_MISC_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED_TX_ABORT_MASK (0x8U)                            /*!< XCVR_MISC_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED_TX_ABORT Mask*/
-#define XCVR_MISC_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED_TX_ABORT_SHIFT (3U)                             /*!< XCVR_MISC_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED_TX_ABORT Position*/
-#define XCVR_MISC_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED_TX_ABORT(x) (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL) /*!< XCVR_MISC_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED_TX_ABORT Field*/
-#define XCVR_MISC_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED_RX_ABORT_MASK (0x10U)                           /*!< XCVR_MISC_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED_RX_ABORT Mask*/
-#define XCVR_MISC_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED_RX_ABORT_SHIFT (4U)                             /*!< XCVR_MISC_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED_RX_ABORT Position*/
-#define XCVR_MISC_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED_RX_ABORT(x) (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL) /*!< XCVR_MISC_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED_RX_ABORT Field*/
-#define XCVR_MISC_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED_MASK (0x20U)                                    /*!< XCVR_MISC_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED Mask*/
-#define XCVR_MISC_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED_SHIFT (5U)                                      /*!< XCVR_MISC_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED Position*/
-#define XCVR_MISC_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED(x) (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)   /*!< XCVR_MISC_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED Field*/
+#define XCVR_CTRL_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED_NO_TX_MASK (0x1U)                               /*!< XCVR_CTRL_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED_NO_TX Mask*/
+#define XCVR_CTRL_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED_NO_TX_SHIFT (0U)                                /*!< XCVR_CTRL_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED_NO_TX Position*/
+#define XCVR_CTRL_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED_NO_TX(x) (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL) /*!< XCVR_CTRL_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED_NO_TX Field*/
+#define XCVR_CTRL_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED_NO_RX_MASK (0x2U)                               /*!< XCVR_CTRL_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED_NO_RX Mask*/
+#define XCVR_CTRL_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED_NO_RX_SHIFT (1U)                                /*!< XCVR_CTRL_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED_NO_RX Position*/
+#define XCVR_CTRL_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED_NO_RX(x) (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL) /*!< XCVR_CTRL_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED_NO_RX Field*/
+#define XCVR_CTRL_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED_ASSERTED_MASK (0x4U)                            /*!< XCVR_CTRL_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED_ASSERTED Mask*/
+#define XCVR_CTRL_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED_ASSERTED_SHIFT (2U)                             /*!< XCVR_CTRL_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED_ASSERTED Position*/
+#define XCVR_CTRL_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED_ASSERTED(x) (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL) /*!< XCVR_CTRL_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED_ASSERTED Field*/
+#define XCVR_CTRL_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED_TX_ABORT_MASK (0x8U)                            /*!< XCVR_CTRL_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED_TX_ABORT Mask*/
+#define XCVR_CTRL_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED_TX_ABORT_SHIFT (3U)                             /*!< XCVR_CTRL_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED_TX_ABORT Position*/
+#define XCVR_CTRL_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED_TX_ABORT(x) (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL) /*!< XCVR_CTRL_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED_TX_ABORT Field*/
+#define XCVR_CTRL_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED_RX_ABORT_MASK (0x10U)                           /*!< XCVR_CTRL_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED_RX_ABORT Mask*/
+#define XCVR_CTRL_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED_RX_ABORT_SHIFT (4U)                             /*!< XCVR_CTRL_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED_RX_ABORT Position*/
+#define XCVR_CTRL_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED_RX_ABORT(x) (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL) /*!< XCVR_CTRL_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED_RX_ABORT Field*/
+#define XCVR_CTRL_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED_MASK (0x20U)                                    /*!< XCVR_CTRL_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED Mask*/
+#define XCVR_CTRL_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED_SHIFT (5U)                                      /*!< XCVR_CTRL_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED Position*/
+#define XCVR_CTRL_RF_NOT_ALLOWED_CTRL_RF_NOT_ALLOWED(x) (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)   /*!< XCVR_CTRL_RF_NOT_ALLOWED_CTRL.RF_NOT_ALLOWED Field*/
 /* ------- CRCW_CFG Bit Fields                      ------ */
-#define XCVR_MISC_CRCW_CFG_CRCW_EN_MASK          (0x1U)                                              /*!< XCVR_MISC_CRCW_CFG.CRCW_EN Mask         */
-#define XCVR_MISC_CRCW_CFG_CRCW_EN_SHIFT         (0U)                                                /*!< XCVR_MISC_CRCW_CFG.CRCW_EN Position     */
-#define XCVR_MISC_CRCW_CFG_CRCW_EN(x)            (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< XCVR_MISC_CRCW_CFG.CRCW_EN Field        */
-#define XCVR_MISC_CRCW_CFG_CRC_ZERO_MASK         (0x2U)                                              /*!< XCVR_MISC_CRCW_CFG.CRC_ZERO Mask        */
-#define XCVR_MISC_CRCW_CFG_CRC_ZERO_SHIFT        (1U)                                                /*!< XCVR_MISC_CRCW_CFG.CRC_ZERO Position    */
-#define XCVR_MISC_CRCW_CFG_CRC_ZERO(x)           (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< XCVR_MISC_CRCW_CFG.CRC_ZERO Field       */
-#define XCVR_MISC_CRCW_CFG_CRC_EARLY_FAIL_MASK   (0x4U)                                              /*!< XCVR_MISC_CRCW_CFG.CRC_EARLY_FAIL Mask  */
-#define XCVR_MISC_CRCW_CFG_CRC_EARLY_FAIL_SHIFT  (2U)                                                /*!< XCVR_MISC_CRCW_CFG.CRC_EARLY_FAIL Position*/
-#define XCVR_MISC_CRCW_CFG_CRC_EARLY_FAIL(x)     (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< XCVR_MISC_CRCW_CFG.CRC_EARLY_FAIL Field */
-#define XCVR_MISC_CRCW_CFG_CRC_RES_OUT_VLD_MASK  (0x8U)                                              /*!< XCVR_MISC_CRCW_CFG.CRC_RES_OUT_VLD Mask */
-#define XCVR_MISC_CRCW_CFG_CRC_RES_OUT_VLD_SHIFT (3U)                                                /*!< XCVR_MISC_CRCW_CFG.CRC_RES_OUT_VLD Position*/
-#define XCVR_MISC_CRCW_CFG_CRC_RES_OUT_VLD(x)    (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< XCVR_MISC_CRCW_CFG.CRC_RES_OUT_VLD Field*/
-#define XCVR_MISC_CRCW_CFG_CRC_EC_OFFSET_MASK    (0x7FF0000U)                                        /*!< XCVR_MISC_CRCW_CFG.CRC_EC_OFFSET Mask   */
-#define XCVR_MISC_CRCW_CFG_CRC_EC_OFFSET_SHIFT   (16U)                                               /*!< XCVR_MISC_CRCW_CFG.CRC_EC_OFFSET Position*/
-#define XCVR_MISC_CRCW_CFG_CRC_EC_OFFSET(x)      (((uint32_t)(((uint32_t)(x))<<16U))&0x7FF0000UL)    /*!< XCVR_MISC_CRCW_CFG.CRC_EC_OFFSET Field  */
-#define XCVR_MISC_CRCW_CFG_CRC_EC_DONE_MASK      (0x10000000U)                                       /*!< XCVR_MISC_CRCW_CFG.CRC_EC_DONE Mask     */
-#define XCVR_MISC_CRCW_CFG_CRC_EC_DONE_SHIFT     (28U)                                               /*!< XCVR_MISC_CRCW_CFG.CRC_EC_DONE Position */
-#define XCVR_MISC_CRCW_CFG_CRC_EC_DONE(x)        (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< XCVR_MISC_CRCW_CFG.CRC_EC_DONE Field    */
-#define XCVR_MISC_CRCW_CFG_CRC_EC_FAIL_MASK      (0x20000000U)                                       /*!< XCVR_MISC_CRCW_CFG.CRC_EC_FAIL Mask     */
-#define XCVR_MISC_CRCW_CFG_CRC_EC_FAIL_SHIFT     (29U)                                               /*!< XCVR_MISC_CRCW_CFG.CRC_EC_FAIL Position */
-#define XCVR_MISC_CRCW_CFG_CRC_EC_FAIL(x)        (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< XCVR_MISC_CRCW_CFG.CRC_EC_FAIL Field    */
+#define XCVR_CTRL_CRCW_CFG_CRCW_EN_MASK          (0x1U)                                              /*!< XCVR_CTRL_CRCW_CFG.CRCW_EN Mask         */
+#define XCVR_CTRL_CRCW_CFG_CRCW_EN_SHIFT         (0U)                                                /*!< XCVR_CTRL_CRCW_CFG.CRCW_EN Position     */
+#define XCVR_CTRL_CRCW_CFG_CRCW_EN(x)            (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< XCVR_CTRL_CRCW_CFG.CRCW_EN Field        */
+#define XCVR_CTRL_CRCW_CFG_CRC_ZERO_MASK         (0x2U)                                              /*!< XCVR_CTRL_CRCW_CFG.CRC_ZERO Mask        */
+#define XCVR_CTRL_CRCW_CFG_CRC_ZERO_SHIFT        (1U)                                                /*!< XCVR_CTRL_CRCW_CFG.CRC_ZERO Position    */
+#define XCVR_CTRL_CRCW_CFG_CRC_ZERO(x)           (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< XCVR_CTRL_CRCW_CFG.CRC_ZERO Field       */
+#define XCVR_CTRL_CRCW_CFG_CRC_EARLY_FAIL_MASK   (0x4U)                                              /*!< XCVR_CTRL_CRCW_CFG.CRC_EARLY_FAIL Mask  */
+#define XCVR_CTRL_CRCW_CFG_CRC_EARLY_FAIL_SHIFT  (2U)                                                /*!< XCVR_CTRL_CRCW_CFG.CRC_EARLY_FAIL Position*/
+#define XCVR_CTRL_CRCW_CFG_CRC_EARLY_FAIL(x)     (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< XCVR_CTRL_CRCW_CFG.CRC_EARLY_FAIL Field */
+#define XCVR_CTRL_CRCW_CFG_CRC_RES_OUT_VLD_MASK  (0x8U)                                              /*!< XCVR_CTRL_CRCW_CFG.CRC_RES_OUT_VLD Mask */
+#define XCVR_CTRL_CRCW_CFG_CRC_RES_OUT_VLD_SHIFT (3U)                                                /*!< XCVR_CTRL_CRCW_CFG.CRC_RES_OUT_VLD Position*/
+#define XCVR_CTRL_CRCW_CFG_CRC_RES_OUT_VLD(x)    (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< XCVR_CTRL_CRCW_CFG.CRC_RES_OUT_VLD Field*/
+#define XCVR_CTRL_CRCW_CFG_CRC_EC_OFFSET_MASK    (0x7FF0000U)                                        /*!< XCVR_CTRL_CRCW_CFG.CRC_EC_OFFSET Mask   */
+#define XCVR_CTRL_CRCW_CFG_CRC_EC_OFFSET_SHIFT   (16U)                                               /*!< XCVR_CTRL_CRCW_CFG.CRC_EC_OFFSET Position*/
+#define XCVR_CTRL_CRCW_CFG_CRC_EC_OFFSET(x)      (((uint32_t)(((uint32_t)(x))<<16U))&0x7FF0000UL)    /*!< XCVR_CTRL_CRCW_CFG.CRC_EC_OFFSET Field  */
+#define XCVR_CTRL_CRCW_CFG_CRC_EC_DONE_MASK      (0x10000000U)                                       /*!< XCVR_CTRL_CRCW_CFG.CRC_EC_DONE Mask     */
+#define XCVR_CTRL_CRCW_CFG_CRC_EC_DONE_SHIFT     (28U)                                               /*!< XCVR_CTRL_CRCW_CFG.CRC_EC_DONE Position */
+#define XCVR_CTRL_CRCW_CFG_CRC_EC_DONE(x)        (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< XCVR_CTRL_CRCW_CFG.CRC_EC_DONE Field    */
+#define XCVR_CTRL_CRCW_CFG_CRC_EC_FAIL_MASK      (0x20000000U)                                       /*!< XCVR_CTRL_CRCW_CFG.CRC_EC_FAIL Mask     */
+#define XCVR_CTRL_CRCW_CFG_CRC_EC_FAIL_SHIFT     (29U)                                               /*!< XCVR_CTRL_CRCW_CFG.CRC_EC_FAIL Position */
+#define XCVR_CTRL_CRCW_CFG_CRC_EC_FAIL(x)        (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< XCVR_CTRL_CRCW_CFG.CRC_EC_FAIL Field    */
 /* ------- CRC_EC_MASK Bit Fields                   ------ */
-#define XCVR_MISC_CRC_EC_MASK_CRC_EC_MASK_MASK   (0xFFFFFFFFU)                                       /*!< XCVR_MISC_CRC_EC_MASK.CRC_EC_MASK Mask  */
-#define XCVR_MISC_CRC_EC_MASK_CRC_EC_MASK_SHIFT  (0U)                                                /*!< XCVR_MISC_CRC_EC_MASK.CRC_EC_MASK Position*/
-#define XCVR_MISC_CRC_EC_MASK_CRC_EC_MASK(x)     (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< XCVR_MISC_CRC_EC_MASK.CRC_EC_MASK Field */
+#define XCVR_CTRL_CRC_EC_MASK_CRC_EC_MASK_MASK   (0xFFFFFFFFU)                                       /*!< XCVR_CTRL_CRC_EC_MASK.CRC_EC_MASK Mask  */
+#define XCVR_CTRL_CRC_EC_MASK_CRC_EC_MASK_SHIFT  (0U)                                                /*!< XCVR_CTRL_CRC_EC_MASK.CRC_EC_MASK Position*/
+#define XCVR_CTRL_CRC_EC_MASK_CRC_EC_MASK(x)     (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< XCVR_CTRL_CRC_EC_MASK.CRC_EC_MASK Field */
 /* ------- CRC_RES_OUT Bit Fields                   ------ */
-#define XCVR_MISC_CRC_RES_OUT_CRC_RES_OUT_MASK   (0xFFFFFFFFU)                                       /*!< XCVR_MISC_CRC_RES_OUT.CRC_RES_OUT Mask  */
-#define XCVR_MISC_CRC_RES_OUT_CRC_RES_OUT_SHIFT  (0U)                                                /*!< XCVR_MISC_CRC_RES_OUT.CRC_RES_OUT Position*/
-#define XCVR_MISC_CRC_RES_OUT_CRC_RES_OUT(x)     (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< XCVR_MISC_CRC_RES_OUT.CRC_RES_OUT Field */
+#define XCVR_CTRL_CRC_RES_OUT_CRC_RES_OUT_MASK   (0xFFFFFFFFU)                                       /*!< XCVR_CTRL_CRC_RES_OUT.CRC_RES_OUT Mask  */
+#define XCVR_CTRL_CRC_RES_OUT_CRC_RES_OUT_SHIFT  (0U)                                                /*!< XCVR_CTRL_CRC_RES_OUT.CRC_RES_OUT Position*/
+#define XCVR_CTRL_CRC_RES_OUT_CRC_RES_OUT(x)     (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< XCVR_CTRL_CRC_RES_OUT.CRC_RES_OUT Field */
 /**
- * @} */ /* End group XCVR_MISC_Register_Masks_GROUP 
+ * @} */ /* End group XCVR_CTRL_Register_Masks_GROUP 
  */
 
-/* XCVR_MISC - Peripheral instance base addresses */
-#define XCVR_MISC_BasePtr              0x4005C280UL //!< Peripheral base address
-#define XCVR_MISC                      ((XCVR_MISC_Type *) XCVR_MISC_BasePtr) //!< Freescale base pointer
-#define XCVR_MISC_BASE_PTR             (XCVR_MISC) //!< Freescale style base pointer
+/* XCVR_CTRL - Peripheral instance base addresses */
+#define XCVR_CTRL_BasePtr              0x4005C280UL //!< Peripheral base address
+#define XCVR_CTRL                      ((XCVR_CTRL_Type *) XCVR_CTRL_BasePtr) //!< Freescale base pointer
+#define XCVR_CTRL_BASE_PTR             (XCVR_CTRL) //!< Freescale style base pointer
+#define XCVR_CTRL_IRQS { Radio_0_IRQn, Radio_1_IRQn,  }
+
 /**
- * @} */ /* End group XCVR_MISC_Peripheral_access_layer_GROUP 
+ * @} */ /* End group XCVR_CTRL_Peripheral_access_layer_GROUP 
  */
 /**
 * @addtogroup XCVR_PHY_Peripheral_access_layer_GROUP XCVR_PHY Peripheral Access Layer
@@ -8034,7 +8130,7 @@ typedef struct {                                /*       XCVR_MISC Structure    
 * @brief Struct for XCVR_PHY
 * @{
 */
-typedef struct {                                /*       XCVR_PHY Structure                                           */
+typedef struct XCVR_PHY_Type {
    __IO uint32_t  PHY_PRE_REF0;                 /**< 0000: PREAMBLE REFERENCE WAVEFORM 0                                */
    __IO uint32_t  PRE_REF1;                     /**< 0004: PREAMBLE REFERENCE WAVEFORM 1                                */
    __IO uint32_t  PRE_REF2;                     /**< 0008: PREAMBLE REFERENCE WAVEFORM 2                                */
@@ -8225,7 +8321,7 @@ typedef struct {                                /*       XCVR_PHY Structure     
 * @brief Struct for XCVR_PKT_RAM
 * @{
 */
-typedef struct {                                /*       XCVR_PKT_RAM Structure                                       */
+typedef struct XCVR_PKT_RAM_Type {
    __IO uint16_t  PACKET_RAM_0[544];            /**< 0000: Shared Packet RAM for multiple Link Layer usage              */
    __IO uint16_t  PACKET_RAM_1[544];            /**< 0440: Shared Packet RAM for multiple Link Layer usage              */
 } XCVR_PKT_RAM_Type;
@@ -8286,7 +8382,7 @@ typedef struct {                                /*       XCVR_PKT_RAM Structure 
 * @brief Struct for XCVR_PLL_DIG
 * @{
 */
-typedef struct {                                /*       XCVR_PLL_DIG Structure                                       */
+typedef struct XCVR_PLL_DIG_Type {
    __IO uint32_t  HPM_BUMP;                     /**< 0000: PLL HPM Analog Bump Control                                  */
    __IO uint32_t  MOD_CTRL;                     /**< 0004: PLL Modulation Control                                       */
    __IO uint32_t  CHAN_MAP;                     /**< 0008: PLL Channel Mapping                                          */
@@ -8654,7 +8750,7 @@ typedef struct {                                /*       XCVR_PLL_DIG Structure 
 * @brief Struct for XCVR_RX_DIG
 * @{
 */
-typedef struct {                                /*       XCVR_RX_DIG Structure                                        */
+typedef struct XCVR_RX_DIG_Type {
    __IO uint32_t  RX_DIG_CTRL;                  /**< 0000: RX Digital Control                                           */
    __IO uint32_t  AGC_CTRL_0;                   /**< 0004: AGC Control 0                                                */
    __IO uint32_t  AGC_CTRL_1;                   /**< 0008: AGC Control 1                                                */
@@ -8695,13 +8791,9 @@ typedef struct {                                /*       XCVR_RX_DIG Structure  
    __IO uint32_t  AGC_GAIN_TBL_23_20;           /**< 0094: AGC Gain Tables Step 23..20                                  */
    __IO uint32_t  AGC_GAIN_TBL_26_24;           /**< 0098: AGC Gain Tables Step 26..24                                  */
         uint8_t   RESERVED_1[4];               
-   __IO uint32_t  DCOC_OFFSET_[27];             /**< 00A0: DCOC Offset                                                  */
+   __IO uint32_t  DCOC_OFFSET[27];              /**< 00A0: DCOC Offset                                                  */
    __IO uint32_t  DCOC_BBA_STEP;                /**< 010C: DCOC BBA DAC Step                                            */
-   __IO uint32_t  DCOC_TZA_STEP_[7];            /**< 0110: DCOC TZA DAC Step                                            */
-   __IO uint32_t  DCOC_TZA_STEP_7;              /**< 012C: DCOC TZA DAC Step 7                                          */
-   __IO uint32_t  DCOC_TZA_STEP_8;              /**< 0130: DCOC TZA DAC Step 5                                          */
-   __IO uint32_t  DCOC_TZA_STEP_9;              /**< 0134: DCOC TZA DAC Step 9                                          */
-   __IO uint32_t  DCOC_TZA_STEP_10;             /**< 0138: DCOC TZA DAC Step 10                                         */
+   __IO uint32_t  DCOC_TZA_STEP[11];            /**< 0110: DCOC TZA DAC Step                                            */
         uint8_t   RESERVED_2[44];              
    __I  uint32_t  DCOC_CAL_ALPHA;               /**< 0168: DCOC Calibration Alpha                                       */
    __I  uint32_t  DCOC_CAL_BETA_Q;              /**< 016C: DCOC Calibration Beta Q                                      */
@@ -8717,17 +8809,8 @@ typedef struct {                                /*       XCVR_RX_DIG Structure  
    __IO uint32_t  CCA_ED_LQI_CTRL_1;            /**< 0194: RX_DIG CCA ED LQI Control Register 1                         */
    __I  uint32_t  CCA_ED_LQI_STAT_0;            /**< 0198: RX_DIG CCA ED LQI Status Register 0                          */
         uint8_t   RESERVED_5[4];               
-   __IO uint32_t  RX_CHF_COEF_[2];              /**< 01A0: Receive Channel Filter Coefficient                           */
-   __IO uint32_t  RX_CHF_COEF_2;                /**< 01A8: Receive Channel Filter Coefficient 2                         */
-   __IO uint32_t  RX_CHF_COEF_3;                /**< 01AC: Receive Channel Filter Coefficient 3                         */
-   __IO uint32_t  RX_CHF_COEF_4;                /**< 01B0: Receive Channel Filter Coefficient 4                         */
-   __IO uint32_t  RX_CHF_COEF_5;                /**< 01B4: Receive Channel Filter Coefficient 5                         */
-   __IO uint32_t  RX_CHF_COEF_6;                /**< 01B8: Receive Channel Filter Coefficient 6                         */
-   __IO uint32_t  RX_CHF_COEF_7;                /**< 01BC: Receive Channel Filter Coefficient 7                         */
-   __IO uint32_t  RX_CHF_COEF_8;                /**< 01C0: Receive Channel Filter Coefficient 8                         */
-   __IO uint32_t  RX_CHF_COEF_9;                /**< 01C4: Receive Channel Filter Coefficient 9                         */
-   __IO uint32_t  RX_CHF_COEF_10;               /**< 01C8: Receive Channel Filter Coefficient 10                        */
-   __IO uint32_t  RX_CHF_COEF_11;               /**< 01CC: Receive Channel Filter Coefficient 11                        */
+   __IO uint32_t  RX_CHF_COEF[11];              /**< 01A0: Receive Channel Filter Coefficient                           */
+        uint8_t   RESERVED_6[4];               
    __IO uint32_t  AGC_MAN_AGC_IDX;              /**< 01D0: AGC Manual AGC Index                                         */
    __IO uint32_t  DC_RESID_CTRL;                /**< 01D4: DC Residual Control                                          */
    __I  uint32_t  DC_RESID_EST;                 /**< 01D8: DC Residual Estimate                                         */
@@ -9438,19 +9521,19 @@ typedef struct {                                /*       XCVR_RX_DIG Structure  
 #define XCVR_RX_DIG_AGC_GAIN_TBL_26_24_LNA_GAIN_26_MASK (0xF00000U)                                  /*!< XCVR_RX_DIG_AGC_GAIN_TBL_26_24.LNA_GAIN_26 Mask*/
 #define XCVR_RX_DIG_AGC_GAIN_TBL_26_24_LNA_GAIN_26_SHIFT (20U)                                       /*!< XCVR_RX_DIG_AGC_GAIN_TBL_26_24.LNA_GAIN_26 Position*/
 #define XCVR_RX_DIG_AGC_GAIN_TBL_26_24_LNA_GAIN_26(x) (((uint32_t)(((uint32_t)(x))<<20U))&0xF00000UL) /*!< XCVR_RX_DIG_AGC_GAIN_TBL_26_24.LNA_GAIN_26 Field*/
-/* ------- DCOC_OFFSET_ Bit Fields                  ------ */
-#define XCVR_RX_DIG_DCOC_OFFSET__DCOC_BBA_OFFSET_I_MASK (0x3FU)                                      /*!< XCVR_RX_DIG_DCOC_OFFSET_.DCOC_BBA_OFFSET_I Mask*/
-#define XCVR_RX_DIG_DCOC_OFFSET__DCOC_BBA_OFFSET_I_SHIFT (0U)                                        /*!< XCVR_RX_DIG_DCOC_OFFSET_.DCOC_BBA_OFFSET_I Position*/
-#define XCVR_RX_DIG_DCOC_OFFSET__DCOC_BBA_OFFSET_I(x) (((uint32_t)(((uint32_t)(x))<<0U))&0x3FUL)     /*!< XCVR_RX_DIG_DCOC_OFFSET_.DCOC_BBA_OFFSET_I Field*/
-#define XCVR_RX_DIG_DCOC_OFFSET__DCOC_BBA_OFFSET_Q_MASK (0x3F00U)                                    /*!< XCVR_RX_DIG_DCOC_OFFSET_.DCOC_BBA_OFFSET_Q Mask*/
-#define XCVR_RX_DIG_DCOC_OFFSET__DCOC_BBA_OFFSET_Q_SHIFT (8U)                                        /*!< XCVR_RX_DIG_DCOC_OFFSET_.DCOC_BBA_OFFSET_Q Position*/
-#define XCVR_RX_DIG_DCOC_OFFSET__DCOC_BBA_OFFSET_Q(x) (((uint32_t)(((uint32_t)(x))<<8U))&0x3F00UL)   /*!< XCVR_RX_DIG_DCOC_OFFSET_.DCOC_BBA_OFFSET_Q Field*/
-#define XCVR_RX_DIG_DCOC_OFFSET__DCOC_TZA_OFFSET_I_MASK (0xFF0000U)                                  /*!< XCVR_RX_DIG_DCOC_OFFSET_.DCOC_TZA_OFFSET_I Mask*/
-#define XCVR_RX_DIG_DCOC_OFFSET__DCOC_TZA_OFFSET_I_SHIFT (16U)                                       /*!< XCVR_RX_DIG_DCOC_OFFSET_.DCOC_TZA_OFFSET_I Position*/
-#define XCVR_RX_DIG_DCOC_OFFSET__DCOC_TZA_OFFSET_I(x) (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL) /*!< XCVR_RX_DIG_DCOC_OFFSET_.DCOC_TZA_OFFSET_I Field*/
-#define XCVR_RX_DIG_DCOC_OFFSET__DCOC_TZA_OFFSET_Q_MASK (0xFF000000U)                                /*!< XCVR_RX_DIG_DCOC_OFFSET_.DCOC_TZA_OFFSET_Q Mask*/
-#define XCVR_RX_DIG_DCOC_OFFSET__DCOC_TZA_OFFSET_Q_SHIFT (24U)                                       /*!< XCVR_RX_DIG_DCOC_OFFSET_.DCOC_TZA_OFFSET_Q Position*/
-#define XCVR_RX_DIG_DCOC_OFFSET__DCOC_TZA_OFFSET_Q(x) (((uint32_t)(((uint32_t)(x))<<24U))&0xFF000000UL) /*!< XCVR_RX_DIG_DCOC_OFFSET_.DCOC_TZA_OFFSET_Q Field*/
+/* ------- DCOC_OFFSET Bit Fields                   ------ */
+#define XCVR_RX_DIG_DCOC_OFFSET_DCOC_BBA_OFFSET_I_MASK (0x3FU)                                       /*!< XCVR_RX_DIG_DCOC_OFFSET.DCOC_BBA_OFFSET_I Mask*/
+#define XCVR_RX_DIG_DCOC_OFFSET_DCOC_BBA_OFFSET_I_SHIFT (0U)                                         /*!< XCVR_RX_DIG_DCOC_OFFSET.DCOC_BBA_OFFSET_I Position*/
+#define XCVR_RX_DIG_DCOC_OFFSET_DCOC_BBA_OFFSET_I(x) (((uint32_t)(((uint32_t)(x))<<0U))&0x3FUL)      /*!< XCVR_RX_DIG_DCOC_OFFSET.DCOC_BBA_OFFSET_I Field*/
+#define XCVR_RX_DIG_DCOC_OFFSET_DCOC_BBA_OFFSET_Q_MASK (0x3F00U)                                     /*!< XCVR_RX_DIG_DCOC_OFFSET.DCOC_BBA_OFFSET_Q Mask*/
+#define XCVR_RX_DIG_DCOC_OFFSET_DCOC_BBA_OFFSET_Q_SHIFT (8U)                                         /*!< XCVR_RX_DIG_DCOC_OFFSET.DCOC_BBA_OFFSET_Q Position*/
+#define XCVR_RX_DIG_DCOC_OFFSET_DCOC_BBA_OFFSET_Q(x) (((uint32_t)(((uint32_t)(x))<<8U))&0x3F00UL)    /*!< XCVR_RX_DIG_DCOC_OFFSET.DCOC_BBA_OFFSET_Q Field*/
+#define XCVR_RX_DIG_DCOC_OFFSET_DCOC_TZA_OFFSET_I_MASK (0xFF0000U)                                   /*!< XCVR_RX_DIG_DCOC_OFFSET.DCOC_TZA_OFFSET_I Mask*/
+#define XCVR_RX_DIG_DCOC_OFFSET_DCOC_TZA_OFFSET_I_SHIFT (16U)                                        /*!< XCVR_RX_DIG_DCOC_OFFSET.DCOC_TZA_OFFSET_I Position*/
+#define XCVR_RX_DIG_DCOC_OFFSET_DCOC_TZA_OFFSET_I(x) (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL) /*!< XCVR_RX_DIG_DCOC_OFFSET.DCOC_TZA_OFFSET_I Field*/
+#define XCVR_RX_DIG_DCOC_OFFSET_DCOC_TZA_OFFSET_Q_MASK (0xFF000000U)                                 /*!< XCVR_RX_DIG_DCOC_OFFSET.DCOC_TZA_OFFSET_Q Mask*/
+#define XCVR_RX_DIG_DCOC_OFFSET_DCOC_TZA_OFFSET_Q_SHIFT (24U)                                        /*!< XCVR_RX_DIG_DCOC_OFFSET.DCOC_TZA_OFFSET_Q Position*/
+#define XCVR_RX_DIG_DCOC_OFFSET_DCOC_TZA_OFFSET_Q(x) (((uint32_t)(((uint32_t)(x))<<24U))&0xFF000000UL) /*!< XCVR_RX_DIG_DCOC_OFFSET.DCOC_TZA_OFFSET_Q Field*/
 /* ------- DCOC_BBA_STEP Bit Fields                 ------ */
 #define XCVR_RX_DIG_DCOC_BBA_STEP_BBA_DCOC_STEP_RECIP_MASK (0x1FFFU)                                 /*!< XCVR_RX_DIG_DCOC_BBA_STEP.BBA_DCOC_STEP_RECIP Mask*/
 #define XCVR_RX_DIG_DCOC_BBA_STEP_BBA_DCOC_STEP_RECIP_SHIFT (0U)                                     /*!< XCVR_RX_DIG_DCOC_BBA_STEP.BBA_DCOC_STEP_RECIP Position*/
@@ -9458,34 +9541,13 @@ typedef struct {                                /*       XCVR_RX_DIG Structure  
 #define XCVR_RX_DIG_DCOC_BBA_STEP_BBA_DCOC_STEP_MASK (0x1FF0000U)                                    /*!< XCVR_RX_DIG_DCOC_BBA_STEP.BBA_DCOC_STEP Mask*/
 #define XCVR_RX_DIG_DCOC_BBA_STEP_BBA_DCOC_STEP_SHIFT (16U)                                          /*!< XCVR_RX_DIG_DCOC_BBA_STEP.BBA_DCOC_STEP Position*/
 #define XCVR_RX_DIG_DCOC_BBA_STEP_BBA_DCOC_STEP(x) (((uint32_t)(((uint32_t)(x))<<16U))&0x1FF0000UL)  /*!< XCVR_RX_DIG_DCOC_BBA_STEP.BBA_DCOC_STEP Field*/
-/* ------- DCOC_TZA_STEP_ Bit Fields                ------ */
-#define XCVR_RX_DIG_DCOC_TZA_STEP__DCOC_TZA_STEP_RCP_0_MASK (0x1FFFU)                                /*!< XCVR_RX_DIG_DCOC_TZA_STEP_.DCOC_TZA_STEP_RCP_0 Mask*/
-#define XCVR_RX_DIG_DCOC_TZA_STEP__DCOC_TZA_STEP_RCP_0_SHIFT (0U)                                    /*!< XCVR_RX_DIG_DCOC_TZA_STEP_.DCOC_TZA_STEP_RCP_0 Position*/
-#define XCVR_RX_DIG_DCOC_TZA_STEP__DCOC_TZA_STEP_RCP_0(x) (((uint32_t)(((uint32_t)(x))<<0U))&0x1FFFUL) /*!< XCVR_RX_DIG_DCOC_TZA_STEP_.DCOC_TZA_STEP_RCP_0 Field*/
-#define XCVR_RX_DIG_DCOC_TZA_STEP__DCOC_TZA_STEP_GAIN_0_MASK (0xFFF0000U)                            /*!< XCVR_RX_DIG_DCOC_TZA_STEP_.DCOC_TZA_STEP_GAIN_0 Mask*/
-#define XCVR_RX_DIG_DCOC_TZA_STEP__DCOC_TZA_STEP_GAIN_0_SHIFT (16U)                                  /*!< XCVR_RX_DIG_DCOC_TZA_STEP_.DCOC_TZA_STEP_GAIN_0 Position*/
-#define XCVR_RX_DIG_DCOC_TZA_STEP__DCOC_TZA_STEP_GAIN_0(x) (((uint32_t)(((uint32_t)(x))<<16U))&0xFFF0000UL) /*!< XCVR_RX_DIG_DCOC_TZA_STEP_.DCOC_TZA_STEP_GAIN_0 Field*/
-/* ------- DCOC_TZA_STEP_7 Bit Fields               ------ */
-#define XCVR_RX_DIG_DCOC_TZA_STEP_7_DCOC_TZA_STEP_RCP_7_MASK (0x1FFFU)                               /*!< XCVR_RX_DIG_DCOC_TZA_STEP_7.DCOC_TZA_STEP_RCP_7 Mask*/
-#define XCVR_RX_DIG_DCOC_TZA_STEP_7_DCOC_TZA_STEP_RCP_7_SHIFT (0U)                                   /*!< XCVR_RX_DIG_DCOC_TZA_STEP_7.DCOC_TZA_STEP_RCP_7 Position*/
-#define XCVR_RX_DIG_DCOC_TZA_STEP_7_DCOC_TZA_STEP_RCP_7(x) (((uint32_t)(((uint32_t)(x))<<0U))&0x1FFFUL) /*!< XCVR_RX_DIG_DCOC_TZA_STEP_7.DCOC_TZA_STEP_RCP_7 Field*/
-#define XCVR_RX_DIG_DCOC_TZA_STEP_7_DCOC_TZA_STEP_GAIN_7_MASK (0x1FFF0000U)                          /*!< XCVR_RX_DIG_DCOC_TZA_STEP_7.DCOC_TZA_STEP_GAIN_7 Mask*/
-#define XCVR_RX_DIG_DCOC_TZA_STEP_7_DCOC_TZA_STEP_GAIN_7_SHIFT (16U)                                 /*!< XCVR_RX_DIG_DCOC_TZA_STEP_7.DCOC_TZA_STEP_GAIN_7 Position*/
-#define XCVR_RX_DIG_DCOC_TZA_STEP_7_DCOC_TZA_STEP_GAIN_7(x) (((uint32_t)(((uint32_t)(x))<<16U))&0x1FFF0000UL) /*!< XCVR_RX_DIG_DCOC_TZA_STEP_7.DCOC_TZA_STEP_GAIN_7 Field*/
-/* ------- DCOC_TZA_STEP_8 Bit Fields               ------ */
-#define XCVR_RX_DIG_DCOC_TZA_STEP_8_DCOC_TZA_STEP_RCP_8_MASK (0x1FFFU)                               /*!< XCVR_RX_DIG_DCOC_TZA_STEP_8.DCOC_TZA_STEP_RCP_8 Mask*/
-#define XCVR_RX_DIG_DCOC_TZA_STEP_8_DCOC_TZA_STEP_RCP_8_SHIFT (0U)                                   /*!< XCVR_RX_DIG_DCOC_TZA_STEP_8.DCOC_TZA_STEP_RCP_8 Position*/
-#define XCVR_RX_DIG_DCOC_TZA_STEP_8_DCOC_TZA_STEP_RCP_8(x) (((uint32_t)(((uint32_t)(x))<<0U))&0x1FFFUL) /*!< XCVR_RX_DIG_DCOC_TZA_STEP_8.DCOC_TZA_STEP_RCP_8 Field*/
-#define XCVR_RX_DIG_DCOC_TZA_STEP_8_DCOC_TZA_STEP_GAIN_8_MASK (0x1FFF0000U)                          /*!< XCVR_RX_DIG_DCOC_TZA_STEP_8.DCOC_TZA_STEP_GAIN_8 Mask*/
-#define XCVR_RX_DIG_DCOC_TZA_STEP_8_DCOC_TZA_STEP_GAIN_8_SHIFT (16U)                                 /*!< XCVR_RX_DIG_DCOC_TZA_STEP_8.DCOC_TZA_STEP_GAIN_8 Position*/
-#define XCVR_RX_DIG_DCOC_TZA_STEP_8_DCOC_TZA_STEP_GAIN_8(x) (((uint32_t)(((uint32_t)(x))<<16U))&0x1FFF0000UL) /*!< XCVR_RX_DIG_DCOC_TZA_STEP_8.DCOC_TZA_STEP_GAIN_8 Field*/
-/* ------- DCOC_TZA_STEP_ Bit Fields                ------ */
-#define XCVR_RX_DIG_DCOC_TZA_STEP__DCOC_TZA_STEP_RCP_9_MASK (0x1FFFU)                                /*!< XCVR_RX_DIG_DCOC_TZA_STEP_.DCOC_TZA_STEP_RCP_9 Mask*/
-#define XCVR_RX_DIG_DCOC_TZA_STEP__DCOC_TZA_STEP_RCP_9_SHIFT (0U)                                    /*!< XCVR_RX_DIG_DCOC_TZA_STEP_.DCOC_TZA_STEP_RCP_9 Position*/
-#define XCVR_RX_DIG_DCOC_TZA_STEP__DCOC_TZA_STEP_RCP_9(x) (((uint32_t)(((uint32_t)(x))<<0U))&0x1FFFUL) /*!< XCVR_RX_DIG_DCOC_TZA_STEP_.DCOC_TZA_STEP_RCP_9 Field*/
-#define XCVR_RX_DIG_DCOC_TZA_STEP__DCOC_TZA_STEP_GAIN_9_MASK (0x3FFF0000U)                           /*!< XCVR_RX_DIG_DCOC_TZA_STEP_.DCOC_TZA_STEP_GAIN_9 Mask*/
-#define XCVR_RX_DIG_DCOC_TZA_STEP__DCOC_TZA_STEP_GAIN_9_SHIFT (16U)                                  /*!< XCVR_RX_DIG_DCOC_TZA_STEP_.DCOC_TZA_STEP_GAIN_9 Position*/
-#define XCVR_RX_DIG_DCOC_TZA_STEP__DCOC_TZA_STEP_GAIN_9(x) (((uint32_t)(((uint32_t)(x))<<16U))&0x3FFF0000UL) /*!< XCVR_RX_DIG_DCOC_TZA_STEP_.DCOC_TZA_STEP_GAIN_9 Field*/
+/* ------- DCOC_TZA_STEP Bit Fields                 ------ */
+#define XCVR_RX_DIG_DCOC_TZA_STEP_DCOC_TZA_STEP_RCP_0_MASK (0x1FFFU)                                 /*!< XCVR_RX_DIG_DCOC_TZA_STEP.DCOC_TZA_STEP_RCP_0 Mask*/
+#define XCVR_RX_DIG_DCOC_TZA_STEP_DCOC_TZA_STEP_RCP_0_SHIFT (0U)                                     /*!< XCVR_RX_DIG_DCOC_TZA_STEP.DCOC_TZA_STEP_RCP_0 Position*/
+#define XCVR_RX_DIG_DCOC_TZA_STEP_DCOC_TZA_STEP_RCP_0(x) (((uint32_t)(((uint32_t)(x))<<0U))&0x1FFFUL) /*!< XCVR_RX_DIG_DCOC_TZA_STEP.DCOC_TZA_STEP_RCP_0 Field*/
+#define XCVR_RX_DIG_DCOC_TZA_STEP_DCOC_TZA_STEP_GAIN_0_MASK (0xFFF0000U)                             /*!< XCVR_RX_DIG_DCOC_TZA_STEP.DCOC_TZA_STEP_GAIN_0 Mask*/
+#define XCVR_RX_DIG_DCOC_TZA_STEP_DCOC_TZA_STEP_GAIN_0_SHIFT (16U)                                   /*!< XCVR_RX_DIG_DCOC_TZA_STEP.DCOC_TZA_STEP_GAIN_0 Position*/
+#define XCVR_RX_DIG_DCOC_TZA_STEP_DCOC_TZA_STEP_GAIN_0(x) (((uint32_t)(((uint32_t)(x))<<16U))&0xFFF0000UL) /*!< XCVR_RX_DIG_DCOC_TZA_STEP.DCOC_TZA_STEP_GAIN_0 Field*/
 /* ------- DCOC_CAL_ALPHA Bit Fields                ------ */
 #define XCVR_RX_DIG_DCOC_CAL_ALPHA_DCOC_CAL_ALPHA_I_MASK (0x7FFU)                                    /*!< XCVR_RX_DIG_DCOC_CAL_ALPHA.DCOC_CAL_ALPHA_I Mask*/
 #define XCVR_RX_DIG_DCOC_CAL_ALPHA_DCOC_CAL_ALPHA_I_SHIFT (0U)                                       /*!< XCVR_RX_DIG_DCOC_CAL_ALPHA.DCOC_CAL_ALPHA_I Position*/
@@ -9591,26 +9653,10 @@ typedef struct {                                /*       XCVR_RX_DIG Structure  
 #define XCVR_RX_DIG_CCA_ED_LQI_STAT_0_MEAS_COMPLETE_MASK (0x2000000U)                                /*!< XCVR_RX_DIG_CCA_ED_LQI_STAT_0.MEAS_COMPLETE Mask*/
 #define XCVR_RX_DIG_CCA_ED_LQI_STAT_0_MEAS_COMPLETE_SHIFT (25U)                                      /*!< XCVR_RX_DIG_CCA_ED_LQI_STAT_0.MEAS_COMPLETE Position*/
 #define XCVR_RX_DIG_CCA_ED_LQI_STAT_0_MEAS_COMPLETE(x) (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL) /*!< XCVR_RX_DIG_CCA_ED_LQI_STAT_0.MEAS_COMPLETE Field*/
-/* ------- RX_CHF_COEF_ Bit Fields                  ------ */
-#define XCVR_RX_DIG_RX_CHF_COEF__RX_CH_FILT_H0_MASK (0x3FU)                                          /*!< XCVR_RX_DIG_RX_CHF_COEF_.RX_CH_FILT_H0 Mask*/
-#define XCVR_RX_DIG_RX_CHF_COEF__RX_CH_FILT_H0_SHIFT (0U)                                            /*!< XCVR_RX_DIG_RX_CHF_COEF_.RX_CH_FILT_H0 Position*/
-#define XCVR_RX_DIG_RX_CHF_COEF__RX_CH_FILT_H0(x) (((uint32_t)(((uint32_t)(x))<<0U))&0x3FUL)         /*!< XCVR_RX_DIG_RX_CHF_COEF_.RX_CH_FILT_H0 Field*/
-/* ------- RX_CHF_COEF_ Bit Fields                  ------ */
-#define XCVR_RX_DIG_RX_CHF_COEF__RX_CH_FILT_H2_MASK (0x7FU)                                          /*!< XCVR_RX_DIG_RX_CHF_COEF_.RX_CH_FILT_H2 Mask*/
-#define XCVR_RX_DIG_RX_CHF_COEF__RX_CH_FILT_H2_SHIFT (0U)                                            /*!< XCVR_RX_DIG_RX_CHF_COEF_.RX_CH_FILT_H2 Position*/
-#define XCVR_RX_DIG_RX_CHF_COEF__RX_CH_FILT_H2(x) (((uint32_t)(((uint32_t)(x))<<0U))&0x7FUL)         /*!< XCVR_RX_DIG_RX_CHF_COEF_.RX_CH_FILT_H2 Field*/
-/* ------- RX_CHF_COEF_ Bit Fields                  ------ */
-#define XCVR_RX_DIG_RX_CHF_COEF__RX_CH_FILT_H6_MASK (0xFFU)                                          /*!< XCVR_RX_DIG_RX_CHF_COEF_.RX_CH_FILT_H6 Mask*/
-#define XCVR_RX_DIG_RX_CHF_COEF__RX_CH_FILT_H6_SHIFT (0U)                                            /*!< XCVR_RX_DIG_RX_CHF_COEF_.RX_CH_FILT_H6 Position*/
-#define XCVR_RX_DIG_RX_CHF_COEF__RX_CH_FILT_H6(x) (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)         /*!< XCVR_RX_DIG_RX_CHF_COEF_.RX_CH_FILT_H6 Field*/
-/* ------- RX_CHF_COEF_ Bit Fields                  ------ */
-#define XCVR_RX_DIG_RX_CHF_COEF__RX_CH_FILT_H8_MASK (0x1FFU)                                         /*!< XCVR_RX_DIG_RX_CHF_COEF_.RX_CH_FILT_H8 Mask*/
-#define XCVR_RX_DIG_RX_CHF_COEF__RX_CH_FILT_H8_SHIFT (0U)                                            /*!< XCVR_RX_DIG_RX_CHF_COEF_.RX_CH_FILT_H8 Position*/
-#define XCVR_RX_DIG_RX_CHF_COEF__RX_CH_FILT_H8(x) (((uint32_t)(((uint32_t)(x))<<0U))&0x1FFUL)        /*!< XCVR_RX_DIG_RX_CHF_COEF_.RX_CH_FILT_H8 Field*/
-/* ------- RX_CHF_COEF_ Bit Fields                  ------ */
-#define XCVR_RX_DIG_RX_CHF_COEF__RX_CH_FILT_H10_MASK (0x3FFU)                                        /*!< XCVR_RX_DIG_RX_CHF_COEF_.RX_CH_FILT_H10 Mask*/
-#define XCVR_RX_DIG_RX_CHF_COEF__RX_CH_FILT_H10_SHIFT (0U)                                           /*!< XCVR_RX_DIG_RX_CHF_COEF_.RX_CH_FILT_H10 Position*/
-#define XCVR_RX_DIG_RX_CHF_COEF__RX_CH_FILT_H10(x) (((uint32_t)(((uint32_t)(x))<<0U))&0x3FFUL)       /*!< XCVR_RX_DIG_RX_CHF_COEF_.RX_CH_FILT_H10 Field*/
+/* ------- RX_CHF_COEF Bit Fields                   ------ */
+#define XCVR_RX_DIG_RX_CHF_COEF_RX_CH_FILT_H0_MASK (0x3FU)                                           /*!< XCVR_RX_DIG_RX_CHF_COEF.RX_CH_FILT_H0 Mask*/
+#define XCVR_RX_DIG_RX_CHF_COEF_RX_CH_FILT_H0_SHIFT (0U)                                             /*!< XCVR_RX_DIG_RX_CHF_COEF.RX_CH_FILT_H0 Position*/
+#define XCVR_RX_DIG_RX_CHF_COEF_RX_CH_FILT_H0(x) (((uint32_t)(((uint32_t)(x))<<0U))&0x3FUL)          /*!< XCVR_RX_DIG_RX_CHF_COEF.RX_CH_FILT_H0 Field*/
 /* ------- AGC_MAN_AGC_IDX Bit Fields               ------ */
 #define XCVR_RX_DIG_AGC_MAN_AGC_IDX_AGC_MAN_IDX_MASK (0x1F0000U)                                     /*!< XCVR_RX_DIG_AGC_MAN_AGC_IDX.AGC_MAN_IDX Mask*/
 #define XCVR_RX_DIG_AGC_MAN_AGC_IDX_AGC_MAN_IDX_SHIFT (16U)                                          /*!< XCVR_RX_DIG_AGC_MAN_AGC_IDX.AGC_MAN_IDX Position*/
@@ -9796,7 +9842,7 @@ typedef struct {                                /*       XCVR_RX_DIG Structure  
 * @brief Struct for XCVR_TSM
 * @{
 */
-typedef struct {                                /*       XCVR_TSM Structure                                           */
+typedef struct XCVR_TSM_Type {
    __IO uint32_t  CTRL;                         /**< 0000: TRANSCEIVER SEQUENCE MANAGER CONTROL                         */
    __IO uint32_t  END_OF_SEQ;                   /**< 0004: TSM END OF SEQUENCE                                          */
    __IO uint32_t  OVRD0;                        /**< 0008: TSM OVERRIDE REGISTER 0                                      */
@@ -11009,7 +11055,7 @@ typedef struct {                                /*       XCVR_TSM Structure     
 * @brief Struct for XCVR_TX_DIG
 * @{
 */
-typedef struct {                                /*       XCVR_TX_DIG Structure                                        */
+typedef struct XCVR_TX_DIG_Type {
    __IO uint32_t  CTRL;                         /**< 0000: TX Digital Control                                           */
    __IO uint32_t  DATA_PADDING;                 /**< 0004: TX Data Padding                                              */
    __IO uint32_t  GFSK_CTRL;                    /**< 0008: TX GFSK Modulator Control                                    */
@@ -11213,7 +11259,7 @@ typedef struct {                                /*       XCVR_TX_DIG Structure  
 * @brief Struct for XCVR_ZBDEM
 * @{
 */
-typedef struct {                                /*       XCVR_ZBDEM Structure                                         */
+typedef struct XCVR_ZBDEM_Type {
    __IO uint32_t  CORR_CTRL;                    /**< 0000: 802.15.4 DEMOD CORRELLATOR CONTROL                           */
    __IO uint32_t  PN_TYPE;                      /**< 0004: 802.15.4 DEMOD PN TYPE                                       */
    __IO uint32_t  PN_CODE;                      /**< 0008: 802.15.4 DEMOD PN CODE                                       */
@@ -11329,7 +11375,7 @@ typedef struct {                                /*       XCVR_ZBDEM Structure   
 * @brief Struct for ZLL
 * @{
 */
-typedef struct {                                /*       ZLL Structure                                                */
+typedef struct ZLL_Type {
    __IO uint32_t  IRQSTS;                       /**< 0000: INTERRUPT REQUEST STATUS                                     */
    __IO uint32_t  PHY_CTRL;                     /**< 0004: PHY CONTROL                                                  */
    __IO uint32_t  EVENT_TMR;                    /**< 0008: EVENT TIMER                                                  */

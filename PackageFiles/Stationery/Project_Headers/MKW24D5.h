@@ -261,7 +261,7 @@ extern void PORTE_IRQHandler(void);                  /**< General Purpose Input/
 * @brief Struct for ADC
 * @{
 */
-typedef struct {                                /*       ADC0 Structure                                               */
+typedef struct ADC_Type {
    __IO uint32_t  SC1[2];                       /**< 0000: Status and Control Register 1                                */
    __IO uint32_t  CFG1;                         /**< 0008: Configuration Register 1                                     */
    __IO uint32_t  CFG2;                         /**< 000C: Configuration Register 2                                     */
@@ -488,7 +488,7 @@ typedef struct {                                /*       ADC0 Structure         
 * @brief Struct for CAU
 * @{
 */
-typedef struct {                                /*       CAU Structure                                                */
+typedef struct CAU_Type {
    __O  uint32_t  DIRECT[16];                   /**< 0000: Direct access register                                       */
         uint8_t   RESERVED_0[2048];            
    __O  uint32_t  LDR_CASR;                     /**< 0840: Status register - Load Register command                      */
@@ -663,7 +663,7 @@ typedef struct {                                /*       CAU Structure          
 * @brief Struct for CMP
 * @{
 */
-typedef struct {                                /*       CMP0 Structure                                               */
+typedef struct CMP_Type {
    __IO uint8_t   CR0;                          /**< 0000: CMP Control Register 0                                       */
    __IO uint8_t   CR1;                          /**< 0001: CMP Control Register 1                                       */
    __IO uint8_t   FPR;                          /**< 0002: CMP Filter Period Register                                   */
@@ -807,7 +807,7 @@ typedef struct {                                /*       CMP0 Structure         
 * @brief Struct for CMT
 * @{
 */
-typedef struct {                                /*       CMT Structure                                                */
+typedef struct CMT_Type {
    __IO uint8_t   CGH1;                         /**< 0000: Carrier Generator High Data Register 1                       */
    __IO uint8_t   CGL1;                         /**< 0001: Carrier Generator Low Data Register 1                        */
    __IO uint8_t   CGH2;                         /**< 0002: Carrier Generator High Data Register 2                       */
@@ -936,7 +936,7 @@ typedef struct {                                /*       CMT Structure          
 * @brief Struct for CRC
 * @{
 */
-typedef struct {                                /*       CRC0 Structure                                               */
+typedef struct CRC_Type {
    union {                                      /**< 0000: (size=0004)                                                  */
       __IO uint32_t  DATA;                      /**< 0000: Data register                                                */
       struct {                                  /**< 0000: (size=0004)                                                  */
@@ -1126,7 +1126,7 @@ typedef struct {                                /*       CRC0 Structure         
 * @brief Struct for DMA0
 * @{
 */
-typedef struct {                                /*       DMA0 Structure                                               */
+typedef struct DMA_Type {
    __IO uint32_t  CR;                           /**< 0000: Control Register                                             */
    __I  uint32_t  ES;                           /**< 0004: Error Status Register                                        */
         uint8_t   RESERVED_0[4];               
@@ -1758,7 +1758,7 @@ typedef struct {                                /*       DMA0 Structure         
 * @brief Struct for DMAMUX
 * @{
 */
-typedef struct {                                /*       DMAMUX0 Structure                                            */
+typedef struct DMAMUX_Type {
    __IO uint8_t   CHCFG[16];                    /**< 0000: Channel Configuration Register                               */
 } DMAMUX_Type;
 
@@ -1793,6 +1793,77 @@ typedef struct {                                /*       DMAMUX0 Structure      
 #define DMAMUX0_BasePtr                0x40021000UL //!< Peripheral base address
 #define DMAMUX0                        ((DMAMUX_Type *) DMAMUX0_BasePtr) //!< Freescale base pointer
 #define DMAMUX0_BASE_PTR               (DMAMUX0) //!< Freescale style base pointer
+
+/**
+ * DMA multiplexor slot (source) numbers
+ */
+typedef enum DmaSlot {
+   Dma0Slot_Disabled                   =        0, //!<  Disabled
+   Dma0Slot_Slot1                      =        1, //!<  Slot1
+   Dma0Slot_Slot2                      =        2, //!<  Slot2
+   Dma0Slot_Slot3                      =        3, //!<  Slot3
+   Dma0Slot_Slot4                      =        4, //!<  Slot4
+   Dma0Slot_Slot5                      =        5, //!<  Slot5
+   Dma0Slot_Slot6                      =        6, //!<  Slot6
+   Dma0Slot_Slot7                      =        7, //!<  Slot7
+   Dma0Slot_Slot8                      =        8, //!<  Slot8
+   Dma0Slot_Slot9                      =        9, //!<  Slot9
+   Dma0Slot_Slot10                     =       10, //!<  Slot10
+   Dma0Slot_Slot11                     =       11, //!<  Slot11
+   Dma0Slot_Slot12                     =       12, //!<  Slot12
+   Dma0Slot_Slot13                     =       13, //!<  Slot13
+   Dma0Slot_Slot14                     =       14, //!<  Slot14
+   Dma0Slot_Slot15                     =       15, //!<  Slot15
+   Dma0Slot_Slot16                     =       16, //!<  Slot16
+   Dma0Slot_Slot17                     =       17, //!<  Slot17
+   Dma0Slot_Slot18                     =       18, //!<  Slot18
+   Dma0Slot_Slot19                     =       19, //!<  Slot19
+   Dma0Slot_Slot20                     =       20, //!<  Slot20
+   Dma0Slot_Slot21                     =       21, //!<  Slot21
+   Dma0Slot_Slot22                     =       22, //!<  Slot22
+   Dma0Slot_Slot23                     =       23, //!<  Slot23
+   Dma0Slot_Slot24                     =       24, //!<  Slot24
+   Dma0Slot_Slot25                     =       25, //!<  Slot25
+   Dma0Slot_Slot26                     =       26, //!<  Slot26
+   Dma0Slot_Slot27                     =       27, //!<  Slot27
+   Dma0Slot_Slot28                     =       28, //!<  Slot28
+   Dma0Slot_Slot29                     =       29, //!<  Slot29
+   Dma0Slot_Slot30                     =       30, //!<  Slot30
+   Dma0Slot_Slot31                     =       31, //!<  Slot31
+   Dma0Slot_Slot32                     =       32, //!<  Slot32
+   Dma0Slot_Slot33                     =       33, //!<  Slot33
+   Dma0Slot_Slot34                     =       34, //!<  Slot34
+   Dma0Slot_Slot35                     =       35, //!<  Slot35
+   Dma0Slot_Slot36                     =       36, //!<  Slot36
+   Dma0Slot_Slot37                     =       37, //!<  Slot37
+   Dma0Slot_Slot38                     =       38, //!<  Slot38
+   Dma0Slot_Slot39                     =       39, //!<  Slot39
+   Dma0Slot_Slot40                     =       40, //!<  Slot40
+   Dma0Slot_Slot41                     =       41, //!<  Slot41
+   Dma0Slot_Slot42                     =       42, //!<  Slot42
+   Dma0Slot_Slot43                     =       43, //!<  Slot43
+   Dma0Slot_Slot44                     =       44, //!<  Slot44
+   Dma0Slot_Slot45                     =       45, //!<  Slot45
+   Dma0Slot_Slot46                     =       46, //!<  Slot46
+   Dma0Slot_Slot47                     =       47, //!<  Slot47
+   Dma0Slot_Slot48                     =       48, //!<  Slot48
+   Dma0Slot_Slot49                     =       49, //!<  Slot49
+   Dma0Slot_Slot50                     =       50, //!<  Slot50
+   Dma0Slot_Slot51                     =       51, //!<  Slot51
+   Dma0Slot_Slot52                     =       52, //!<  Slot52
+   Dma0Slot_Slot53                     =       53, //!<  Slot53
+   Dma0Slot_Slot54                     =       54, //!<  Slot54
+   Dma0Slot_Slot55                     =       55, //!<  Slot55
+   Dma0Slot_Slot56                     =       56, //!<  Slot56
+   Dma0Slot_Slot57                     =       57, //!<  Slot57
+   Dma0Slot_Slot58                     =       58, //!<  Slot58
+   Dma0Slot_Slot59                     =       59, //!<  Slot59
+   Dma0Slot_AlwaysEnabled60            =       60, //!<  AlwaysEnabled60
+   Dma0Slot_AlwaysEnabled61            =       61, //!<  AlwaysEnabled61
+   Dma0Slot_AlwaysEnabled62            =       62, //!<  AlwaysEnabled62
+   Dma0Slot_AlwaysEnabled63            =       63, //!<  AlwaysEnabled63
+} DmaSlot;
+
 /**
  * @} */ /* End group DMAMUX_Peripheral_access_layer_GROUP 
  */
@@ -1814,7 +1885,7 @@ typedef struct {                                /*       DMAMUX0 Structure      
 * @brief Struct for EWM
 * @{
 */
-typedef struct {                                /*       EWM Structure                                                */
+typedef struct EWM_Type {
    __IO uint8_t   CTRL;                         /**< 0000: Control Register                                             */
    __O  uint8_t   SERV;                         /**< 0001: Service Register                                             */
    __IO uint8_t   CMPL;                         /**< 0002: Compare Low Register                                         */
@@ -1888,7 +1959,7 @@ typedef struct {                                /*       EWM Structure          
 * @brief Struct for FMC
 * @{
 */
-typedef struct {                                /*       FMC Structure                                                */
+typedef struct FMC_Type {
    __IO uint32_t  PFAPR;                        /**< 0000: Flash Access Protection Register                             */
    __IO uint32_t  PFB0CR;                       /**< 0004: Flash Bank 0 Control Register                                */
    __IO uint32_t  PFB1CR;                       /**< 0008: Flash Bank 1 Control Register                                */
@@ -2068,7 +2139,7 @@ typedef struct {                                /*       FMC Structure          
 * @brief Struct for FTFL
 * @{
 */
-typedef struct {                                /*       FTFL Structure                                               */
+typedef struct FTFL_Type {
    __IO uint8_t   FSTAT;                        /**< 0000: Flash Status Register                                        */
    __IO uint8_t   FCNFG;                        /**< 0001: Flash Configuration Register                                 */
    __I  uint8_t   FSEC;                         /**< 0002: Flash Security Register                                      */
@@ -2210,7 +2281,7 @@ typedef struct {                                /*       FTFL Structure         
 * @brief Struct for FTM
 * @{
 */
-typedef struct {                                /*       FTM0 Structure                                               */
+typedef struct FTM_Type {
    __IO uint32_t  SC;                           /**< 0000: Status and Control                                           */
    __IO uint32_t  CNT;                          /**< 0004: Counter                                                      */
    __IO uint32_t  MOD;                          /**< 0008: Modulo                                                       */
@@ -2856,7 +2927,7 @@ typedef struct {                                /*       FTM0 Structure         
 * @brief Struct for FTM
 * @{
 */
-typedef struct {                                /*       FTM1 Structure                                               */
+typedef struct FTM1_Type {
    __IO uint32_t  SC;                           /**< 0000: Status and Control                                           */
    __IO uint32_t  CNT;                          /**< 0004: Counter                                                      */
    __IO uint32_t  MOD;                          /**< 0008: Modulo                                                       */
@@ -2975,7 +3046,7 @@ typedef struct {                                /*       FTM1 Structure         
 * @brief Struct for GPIO
 * @{
 */
-typedef struct {                                /*       GPIOA Structure                                              */
+typedef struct GPIO_Type {
    __IO uint32_t  PDOR;                         /**< 0000: Port Data Output Register                                    */
    __O  uint32_t  PSOR;                         /**< 0004: Port Set Output Register                                     */
    __O  uint32_t  PCOR;                         /**< 0008: Port Clear Output Register                                   */
@@ -3116,7 +3187,7 @@ typedef struct {                                /*       GPIOA Structure        
 * @brief Struct for I2C
 * @{
 */
-typedef struct {                                /*       I2C0 Structure                                               */
+typedef struct I2C_Type {
    __IO uint8_t   A1;                           /**< 0000: Address Register 1                                           */
    __IO uint8_t   F;                            /**< 0001: Frequency Divider register                                   */
    __IO uint8_t   C1;                           /**< 0002: Control Register 1                                           */
@@ -3323,7 +3394,7 @@ typedef struct {                                /*       I2C0 Structure         
 * @brief Struct for I2S
 * @{
 */
-typedef struct {                                /*       I2S0 Structure                                               */
+typedef struct I2S_Type {
    __IO uint32_t  TCSR;                         /**< 0000: SAI Transmit Control Register                                */
    __IO uint32_t  TCR1;                         /**< 0004: SAI Transmit Configuration 1 Register                        */
    __IO uint32_t  TCR2;                         /**< 0008: SAI Transmit Configuration 2 Register                        */
@@ -3677,7 +3748,7 @@ typedef struct {                                /*       I2S0 Structure         
 * @brief Struct for LLWU
 * @{
 */
-typedef struct {                                /*       LLWU Structure                                               */
+typedef struct LLWU_Type {
    union {                                      /**< 0000: (size=0004)                                                  */
       __IO uint8_t   PE[4];                     /**< 0000: Pin Enable  Register                                         */
       struct {                                  /**< 0000: (size=0004)                                                  */
@@ -3983,7 +4054,7 @@ typedef struct {                                /*       LLWU Structure         
 * @brief Struct for LPTMR
 * @{
 */
-typedef struct {                                /*       LPTMR0 Structure                                             */
+typedef struct LPTMR_Type {
    __IO uint32_t  CSR;                          /**< 0000: Control Status Register                                      */
    __IO uint32_t  PSR;                          /**< 0004: Prescale Register                                            */
    __IO uint32_t  CMR;                          /**< 0008: Compare Register                                             */
@@ -4072,7 +4143,7 @@ typedef struct {                                /*       LPTMR0 Structure       
 * @brief Struct for MCG
 * @{
 */
-typedef struct {                                /*       MCG Structure                                                */
+typedef struct MCG_Type {
    __IO uint8_t   C1;                           /**< 0000: Control 1 Register                                           */
    __IO uint8_t   C2;                           /**< 0001: Control 2 Register                                           */
    __IO uint8_t   C3;                           /**< 0002: Control 3 Register                                           */
@@ -4272,7 +4343,7 @@ typedef struct {                                /*       MCG Structure          
 * @brief Struct for MCM
 * @{
 */
-typedef struct {                                /*       MCM Structure                                                */
+typedef struct MCM_Type {
         uint8_t   RESERVED_0[8];               
    __I  uint16_t  PLASC;                        /**< 0008: Crossbar Switch (AXBS) Slave Configuration                   */
    __I  uint16_t  PLAMC;                        /**< 000A: Crossbar Switch (AXBS) Master Configuration                  */
@@ -4333,7 +4404,7 @@ typedef struct {                                /*       MCM Structure          
 * @brief Struct for NV
 * @{
 */
-typedef struct {                                /*       NV Structure                                                 */
+typedef struct NV_Type {
    __I  uint8_t   BACKKEY3;                     /**< 0000: Backdoor Comparison Key 3                                    */
    __I  uint8_t   BACKKEY2;                     /**< 0001: Backdoor Comparison Key 2                                    */
    __I  uint8_t   BACKKEY1;                     /**< 0002: Backdoor Comparison Key 1                                    */
@@ -4433,7 +4504,7 @@ typedef struct {                                /*       NV Structure           
 * @brief Struct for OSC
 * @{
 */
-typedef struct {                                /*       OSC0 Structure                                               */
+typedef struct OSC_Type {
    __IO uint8_t   CR;                           /**< 0000: Control Register                                             */
 } OSC_Type;
 
@@ -4501,7 +4572,7 @@ typedef struct {                                /*       OSC0 Structure         
 * @brief Struct for PDB
 * @{
 */
-typedef struct {                                /*       PDB0 Structure                                               */
+typedef struct PDB_Type {
    __IO uint32_t  SC;                           /**< 0000: Status and Control Register                                  */
    __IO uint32_t  MOD;                          /**< 0004: Modulus Register                                             */
    __I  uint32_t  CNT;                          /**< 0008: Counter Register                                             */
@@ -4656,7 +4727,7 @@ typedef struct {                                /*       PDB0 Structure         
 * @brief Struct for PIT
 * @{
 */
-typedef struct {                                /*       PIT Structure                                                */
+typedef struct PIT_Type {
    __IO uint32_t  MCR;                          /**< 0000: Module Control Register                                      */
         uint8_t   RESERVED_0[252];             
    struct {
@@ -4738,7 +4809,7 @@ typedef struct {                                /*       PIT Structure          
 * @brief Struct for PMC
 * @{
 */
-typedef struct {                                /*       PMC Structure                                                */
+typedef struct PMC_Type {
    __IO uint8_t   LVDSC1;                       /**< 0000: Low Voltage Status and Control 1                             */
    __IO uint8_t   LVDSC2;                       /**< 0001: Low Voltage Status and Control 2                             */
    __IO uint8_t   REGSC;                        /**< 0002: Regulator Status and Control                                 */
@@ -4828,7 +4899,7 @@ typedef struct {                                /*       PMC Structure          
 * @brief Struct for PORT
 * @{
 */
-typedef struct {                                /*       PORTA Structure                                              */
+typedef struct PORT_DFER_Type {
    __IO uint32_t  PCR[32];                      /**< 0000: Pin Control Register                                         */
    __O  uint32_t  GPCLR;                        /**< 0080: Global Pin Control Low Register                              */
    __O  uint32_t  GPCHR;                        /**< 0084: Global Pin Control High Register                             */
@@ -5024,7 +5095,7 @@ typedef struct {                                /*       PORTA Structure        
 * @brief Struct for RCM
 * @{
 */
-typedef struct {                                /*       RCM Structure                                                */
+typedef struct RCM_Type {
    __I  uint8_t   SRS0;                         /**< 0000: System Reset Status Register 0                               */
    __I  uint8_t   SRS1;                         /**< 0001: System Reset Status Register 1                               */
         uint8_t   RESERVED_0[2];               
@@ -5132,7 +5203,7 @@ typedef struct {                                /*       RCM Structure          
 * @brief Struct for RFSYS
 * @{
 */
-typedef struct {                                /*       RFSYS Structure                                              */
+typedef struct RFSYS_Type {
    __IO uint32_t  REG[8];                       /**< 0000: Register file register                                       */
 } RFSYS_Type;
 
@@ -5191,7 +5262,7 @@ typedef struct {                                /*       RFSYS Structure        
 * @brief Struct for RFVBAT
 * @{
 */
-typedef struct {                                /*       RFVBAT Structure                                             */
+typedef struct RFVBAT_Type {
    __IO uint32_t  REG[8];                       /**< 0000: VBAT register file register                                  */
 } RFVBAT_Type;
 
@@ -5250,7 +5321,7 @@ typedef struct {                                /*       RFVBAT Structure       
 * @brief Struct for RNG
 * @{
 */
-typedef struct {                                /*       RNG Structure                                                */
+typedef struct RNG_Type {
    __IO uint32_t  CR;                           /**< 0000: RNGA Control Register                                        */
    __I  uint32_t  SR;                           /**< 0004: RNGA Status Register                                         */
    __O  uint32_t  ER;                           /**< 0008: RNGA Entropy Register                                        */
@@ -5345,7 +5416,7 @@ typedef struct {                                /*       RNG Structure          
 * @brief Struct for RTC
 * @{
 */
-typedef struct {                                /*       RTC Structure                                                */
+typedef struct RTC_Type {
    __IO uint32_t  TSR;                          /**< 0000: Time Seconds Register                                        */
    __IO uint32_t  TPR;                          /**< 0004: Time Prescaler Register                                      */
    __IO uint32_t  TAR;                          /**< 0008: Time Alarm Register                                          */
@@ -5617,7 +5688,7 @@ typedef struct {                                /*       RTC Structure          
 * @brief Struct for SIM
 * @{
 */
-typedef struct {                                /*       SIM Structure                                                */
+typedef struct SIM_Type {
    __IO uint32_t  SOPT1;                        /**< 0000: System Options Register 1                                    */
    __IO uint32_t  SOPT1CFG;                     /**< 0004: SOPT1 Configuration Register                                 */
         uint8_t   RESERVED_0[4092];            
@@ -5969,7 +6040,7 @@ typedef struct {                                /*       SIM Structure          
 * @brief Struct for SMC
 * @{
 */
-typedef struct {                                /*       SMC Structure                                                */
+typedef struct SMC_Type {
    __IO uint8_t   PMPROT;                       /**< 0000: Power Mode Protection Register                               */
    __IO uint8_t   PMCTRL;                       /**< 0001: Power Mode Control Register                                  */
    union {                                      /**< 0000: (size=0001)                                                  */
@@ -6074,7 +6145,7 @@ typedef struct {                                /*       SMC Structure          
 * @brief Struct for SPI
 * @{
 */
-typedef struct {                                /*       SPI0 Structure                                               */
+typedef struct SPI_Type {
    __IO uint32_t  MCR;                          /**< 0000: Module Configuration Register                                */
         uint8_t   RESERVED_0[4];               
    __IO uint32_t  TCR;                          /**< 0008: Transfer Count Register                                      */
@@ -6361,7 +6432,7 @@ typedef struct {                                /*       SPI0 Structure         
 * @brief Struct for SYST
 * @{
 */
-typedef struct {                                /*       SYST Structure                                               */
+typedef struct SYST_Type {
    __IO uint32_t  CSR;                          /**< 0000: Control and Status Register                                  */
    __IO uint32_t  RVR;                          /**< 0004: Reload Value Register                                        */
    __IO uint32_t  CVR;                          /**< 0008: Current Value Register                                       */
@@ -6441,7 +6512,7 @@ typedef struct {                                /*       SYST Structure         
 * @brief Struct for UART
 * @{
 */
-typedef struct {                                /*       UART0 Structure                                              */
+typedef struct UART_Type {
    __IO uint8_t   BDH;                          /**< 0000: Baud Rate Register: High                                     */
    __IO uint8_t   BDL;                          /**< 0001: Baud Rate Register: Low                                      */
    __IO uint8_t   C1;                           /**< 0002: Control Register 1                                           */
@@ -6866,7 +6937,7 @@ typedef struct {                                /*       UART0 Structure        
 * @brief Struct for UART
 * @{
 */
-typedef struct {                                /*       UART1 Structure                                              */
+typedef struct UART1_Type {
    __IO uint8_t   BDH;                          /**< 0000: Baud Rate Register: High                                     */
    __IO uint8_t   BDL;                          /**< 0001: Baud Rate Register: Low                                      */
    __IO uint8_t   C1;                           /**< 0002: Control Register 1                                           */
@@ -6976,7 +7047,7 @@ typedef struct {                                /*       UART1 Structure        
 * @brief Struct for USB
 * @{
 */
-typedef struct {                                /*       USB0 Structure                                               */
+typedef struct USB_Type {
    __I  uint8_t   PERID;                        /**< 0000: Peripheral ID Register                                       */
         uint8_t   RESERVED_0[3];               
    __I  uint8_t   IDCOMP;                       /**< 0004: Peripheral ID Complement Register                            */
@@ -7394,7 +7465,7 @@ typedef struct {                                /*       USB0 Structure         
 * @brief Struct for USBDCD
 * @{
 */
-typedef struct {                                /*       USBDCD Structure                                             */
+typedef struct USBDCD_Type {
    __IO uint32_t  CONTROL;                      /**< 0000: Control Register                                             */
    __IO uint32_t  CLOCK;                        /**< 0004: Clock Register                                               */
    __I  uint32_t  STATUS;                       /**< 0008: Status Register                                              */
@@ -7506,7 +7577,7 @@ typedef struct {                                /*       USBDCD Structure       
 * @brief Struct for WDOG
 * @{
 */
-typedef struct {                                /*       WDOG Structure                                               */
+typedef struct WDOG_Type {
    __IO uint16_t  STCTRLH;                      /**< 0000: Status and Control Register High                             */
    __IO uint16_t  STCTRLL;                      /**< 0002: Status and Control Register Low                              */
    union {                                      /**< 0000: (size=0004)                                                  */
