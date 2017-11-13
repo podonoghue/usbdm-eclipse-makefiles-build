@@ -78,13 +78,13 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                            <value>7</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>Reserved8</name>
-                           <description>Reserved</description>
+                           <name>UART3_Rx</name>
+                           <description>UART3 Receive</description>
                            <value>8</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>Reserved9</name>
-                           <description>Reserved</description>
+                           <name>UART3_Tx</name>
+                           <description>UART3 Transmit</description>
                            <value>9</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -128,13 +128,13 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                            <value>17</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>Reserved18</name>
-                           <description>Reserved</description>
+                           <name>SPI1_Rx</name>
+                           <description>SPI0 Receive</description>
                            <value>18</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>Reserved19</name>
-                           <description>Reserved</description>
+                           <name>SPI1_Tx</name>
+                           <description>SPI1 Transmit</description>
                            <value>19</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -153,8 +153,8 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                            <value>22</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>Reserved23</name>
-                           <description>Reserved</description>
+                           <name>I2C1</name>
+                           <description>I2C1</description>
                            <value>23</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -208,13 +208,13 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                            <value>33</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>Reserved34</name>
-                           <description>Reserved</description>
+                           <name>FTM2_Ch0</name>
+                           <description>FTM2 Channel 0</description>
                            <value>34</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>Reserved35</name>
-                           <description>Reserved</description>
+                           <name>FTM2_Ch1</name>
+                           <description>FTM2 Channel 1</description>
                            <value>35</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -263,8 +263,8 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                            <value>44</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>Reserved45</name>
-                           <description>Reserved</description>
+                           <name>DAC0</name>
+                           <description>DAC0</description>
                            <value>45</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -284,27 +284,27 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>PortA</name>
-                           <description>PortA</description>
+                           <description>Port A</description>
                            <value>49</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>PortB</name>
-                           <description>PortB</description>
+                           <description>Port B</description>
                            <value>50</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>PortC</name>
-                           <description>PortC</description>
+                           <description>Port C</description>
                            <value>51</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>PortD</name>
-                           <description>PortD</description>
+                           <description>Port D</description>
                            <value>52</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>PortE</name>
-                           <description>PortE</description>
+                           <description>Port E</description>
                            <value>53</value>
                         </enumeratedValue>
                         <enumeratedValue>

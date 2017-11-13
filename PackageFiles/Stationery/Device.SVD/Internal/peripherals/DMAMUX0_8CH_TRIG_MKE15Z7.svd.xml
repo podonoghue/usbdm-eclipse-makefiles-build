@@ -50,32 +50,32 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>LPUART0_Rx</name>
-                           <description>LPUART0_Rx</description>
+                           <description>LPUART0 Receive</description>
                            <value>2</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>LPUART0_Tx</name>
-                           <description>LPUART0_Tx</description>
+                           <description>LPUART0 Transmit</description>
                            <value>3</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>LPUART1_Rx</name>
-                           <description>LPUART1_Rx</description>
+                           <description>LPUART1 Receive</description>
                            <value>4</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>LPUART1_Tx</name>
-                           <description>LPUART1_Tx</description>
+                           <description>LPUART1 Transmit</description>
                            <value>5</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>LPUART2_Rx</name>
-                           <description>LPUART2_Rx</description>
+                           <description>LPUART2 Receive</description>
                            <value>6</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>LPUART2_Tx</name>
-                           <description>LPUART2_Tx</description>
+                           <description>LPUART2 Transmit</description>
                            <value>7</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -90,122 +90,122 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>FlexIO_Ch0</name>
-                           <description>FlexIO_Channel0</description>
+                           <description>FlexIO Channel 0</description>
                            <value>10</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>FlexIO_Ch1</name>
-                           <description>FlexIO_Channel1</description>
+                           <description>FlexIO Channel 1</description>
                            <value>11</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>FlexIO_Ch2</name>
-                           <description>FlexIO_Channel2</description>
+                           <description>FlexIO Channel 2</description>
                            <value>12</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>FlexIO_Ch3</name>
-                           <description>FlexIO_Channel3</description>
+                           <description>FlexIO Channel 3</description>
                            <value>13</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>LPSPI0_Rx</name>
-                           <description>LPSPI0_Rx</description>
+                           <description>LPSPI0 Receive</description>
                            <value>14</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>LPSPI0_Tx</name>
-                           <description>LPSPI0_Tx</description>
+                           <description>LPSPI0 Transmit</description>
                            <value>15</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>LPSPI1_Rx</name>
-                           <description>LPSPI1_Rx</description>
+                           <description>LPSPI1 Receive</description>
                            <value>16</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>LPSPI1_Tx</name>
-                           <description>LPSPI1_Tx</description>
+                           <description>LPSPI1 Transmit</description>
                            <value>17</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>LPI2C0_Rx</name>
-                           <description>LPI2C0_Rx</description>
+                           <description>LPI2C0 Receive</description>
                            <value>18</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>LPI2C0_Tx</name>
-                           <description>LPI2C0_Tx</description>
+                           <description>LPI2C0 Transmit</description>
                            <value>19</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>FTM0_Ch0</name>
-                           <description>FTM0_Channel0</description>
+                           <description>FTM0 Channel 0</description>
                            <value>20</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>FTM0_Ch1</name>
-                           <description>FTM0_Channel1</description>
+                           <description>FTM0 Channel 1</description>
                            <value>21</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>FTM0_Ch2</name>
-                           <description>FTM0_Channel2</description>
+                           <description>FTM0 Channel 2</description>
                            <value>22</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>FTM0_Ch3</name>
-                           <description>FTM0_Channel3</description>
+                           <description>FTM0 Channel 3</description>
                            <value>23</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>FTM0_Ch4</name>
-                           <description>FTM0_Channel4</description>
+                           <description>FTM0 Channel 4</description>
                            <value>24</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>FTM0_Ch5</name>
-                           <description>FTM0_Channel5</description>
+                           <description>FTM0 Channel 5</description>
                            <value>25</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>FTM0_Ch6</name>
-                           <description>FTM0_Channel6</description>
+                           <description>FTM0 Channel 6</description>
                            <value>26</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>FTM0_Ch7</name>
-                           <description>FTM0_Channel7</description>
+                           <description>FTM0 Channel 7</description>
                            <value>27</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>FTM1_Ch0</name>
-                           <description>FTM1_Channel0</description>
+                           <description>FTM1 Channel 0</description>
                            <value>28</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>FTM1_Ch1</name>
-                           <description>FTM1_Channel1</description>
+                           <description>FTM1 Channel 1</description>
                            <value>29</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>FTM2_Ch0</name>
-                           <description>FTM2_Channel0</description>
+                           <description>FTM2 Channel 0</description>
                            <value>30</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>FTM2_Ch1</name>
-                           <description>FTM2_Channel1</description>
+                           <description>FTM2 Channel 1</description>
                            <value>31</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>LPI2C1_Rx</name>
-                           <description>LPI2C1_Rx</description>
+                           <description>LPI2C1 Receive</description>
                            <value>32</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>LPI2C1_Tx</name>
-                           <description>LPI2C1_Tx</description>
+                           <description>LPI2C1 Transmit</description>
                            <value>33</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -285,27 +285,27 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>PortA</name>
-                           <description>PortA</description>
+                           <description>Port A</description>
                            <value>49</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>PortB</name>
-                           <description>PortB</description>
+                           <description>Port B</description>
                            <value>50</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>PortC</name>
-                           <description>PortC</description>
+                           <description>Port C</description>
                            <value>51</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>PortD</name>
-                           <description>PortD</description>
+                           <description>Port D</description>
                            <value>52</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>PortE</name>
-                           <description>PortE</description>
+                           <description>Port E</description>
                            <value>53</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -325,12 +325,12 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>FTM1_Ch2</name>
-                           <description>FTM1_Channel2</description>
+                           <description>FTM1 Channel 2</description>
                            <value>0b111001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>FTM2_Ch2</name>
-                           <description>FTM2_Channel2</description>
+                           <description>FTM2 Channel 2</description>
                            <value>58</value>
                         </enumeratedValue>
                         <enumeratedValue>

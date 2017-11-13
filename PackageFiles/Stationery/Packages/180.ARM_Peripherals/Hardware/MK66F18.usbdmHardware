@@ -110,7 +110,7 @@
       <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_32ch_trig_mk66f18">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDmaMux" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_DMAMUX0_MASK" />
-         <dma source="Disable"              num="0" />
+         <dma source="Disabled"             num="0" />
          <dma source="TSI0"                 num="1" />
          <dma source="UART0 Receive"        num="2" />
          <dma source="UART0 Transmit"       num="3" />
@@ -120,15 +120,15 @@
          <dma source="UART2 Transmit"       num="7" />
          <dma source="UART3 Receive"        num="8" />
          <dma source="UART3 Transmit"       num="9" />
-         <dma source="UART4_RxTx"           num="10" />
+         <dma source="UART4 Receive/Transmit" num="10" />
          <dma source="I2S0 Receive"         num="12" />
          <dma source="I2S0 Transmit"        num="13" />
          <dma source="SPI0 Receive"         num="14" />
          <dma source="SPI0 Transmit"        num="15" />
          <dma source="SPI1 Receive"         num="16" />
          <dma source="SPI1 Transmit"        num="17" />
-         <dma source="I2C0_I2C3"            num="18" />
-         <dma source="I2C1_I2C2"            num="19" />
+         <dma source="I2C0_I2C3 Receive/Transmit" num="18" />
+         <dma source="I2C1_I2C2 Receive/Transmit" num="19" />
          <dma source="FTM0 Channel 0"       num="20" />
          <dma source="FTM0 Channel 1"       num="21" />
          <dma source="FTM0 Channel 2"       num="22" />
@@ -158,15 +158,15 @@
          <dma source="DAC1"                 num="46" />
          <dma source="CMT"                  num="47" />
          <dma source="PDB"                  num="48" />
-         <dma source="PortA"                num="49" />
-         <dma source="PortB"                num="50" />
-         <dma source="PortC"                num="51" />
-         <dma source="PortD"                num="52" />
-         <dma source="PortE"                num="53" />
-         <dma source="IEEE1588 Timer0"      num="54" />
-         <dma source="IEEE1588 Timer1/TPM1 Overflow" num="55" />
-         <dma source="IEEE1588 Timer2/TPM2 Overflow" num="56" />
-         <dma source="IEEE1588 Timer3"      num="57" />
+         <dma source="Port A"               num="49" />
+         <dma source="Port B"               num="50" />
+         <dma source="Port C"               num="51" />
+         <dma source="Port D"               num="52" />
+         <dma source="Port E"               num="53" />
+         <dma source="IEEE1588 Timer 0"     num="54" />
+         <dma source="IEEE1588 Timer 1/TPM1 Overflow" num="55" />
+         <dma source="IEEE1588 Timer 2/TPM2 Overflow" num="56" />
+         <dma source="IEEE1588 Timer 3"     num="57" />
          <dma source="LPUART0 Receive"      num="58" />
          <dma source="LPUART0 Transmit"     num="59" />
          <dma source="AlwaysEnabled60"      num="60" />

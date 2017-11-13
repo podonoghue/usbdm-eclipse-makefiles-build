@@ -71,7 +71,7 @@
       <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_32ch_trig_split_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDmaMux" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_DMAMUX0_MASK" />
-         <dma source="Disable (Low channels 0-15)" num="0" />
+         <dma source="Disabled (Low channels 0-15)" num="0" />
          <dma source="LPUART0 Receive (Low channels 0-15)" num="2" />
          <dma source="LPUART0 Transmit (Low channels 0-15)" num="3" />
          <dma source="LPUART1 Receive (Low channels 0-15)" num="4" />
@@ -88,8 +88,8 @@
          <dma source="SPI0 Transmit (Low channels 0-15)" num="15" />
          <dma source="SPI1 Receive (Low channels 0-15)" num="16" />
          <dma source="SPI1 Transmit (Low channels 0-15)" num="17" />
-         <dma source="I2C0_I2C3 (Low channels 0-15)" num="18" />
-         <dma source="I2C1_I2C2 (Low channels 0-15)" num="19" />
+         <dma source="I2C0_I2C3 Receive/Transmit (Low channels 0-15)" num="18" />
+         <dma source="I2C1_I2C2 Receive/Transmit (Low channels 0-15)" num="19" />
          <dma source="FTM0 Channel 0 (Low channels 0-15)" num="20" />
          <dma source="FTM0 Channel 1 (Low channels 0-15)" num="21" />
          <dma source="FTM0 Channel 2 (Low channels 0-15)" num="22" />
@@ -116,18 +116,18 @@
          <dma source="DAC0 (Low channels 0-15)" num="45" />
          <dma source="CMT (Low channels 0-15)" num="47" />
          <dma source="PDB (Low channels 0-15)" num="48" />
-         <dma source="PortA (Low channels 0-15)" num="49" />
-         <dma source="PortB (Low channels 0-15)" num="50" />
-         <dma source="PortC (Low channels 0-15)" num="51" />
-         <dma source="PortD (Low channels 0-15)" num="52" />
-         <dma source="PortE (Low channels 0-15)" num="53" />
+         <dma source="Port A (Low channels 0-15)" num="49" />
+         <dma source="Port B (Low channels 0-15)" num="50" />
+         <dma source="Port C (Low channels 0-15)" num="51" />
+         <dma source="Port D (Low channels 0-15)" num="52" />
+         <dma source="Port E (Low channels 0-15)" num="53" />
          <dma source="SPI2 Receive (Low channels 0-15)" num="58" />
          <dma source="SPI2 Transmit (Low channels 0-15)" num="59" />
          <dma source="AlwaysEnabled60 (Low channels 0-15)" num="60" />
          <dma source="AlwaysEnabled61 (Low channels 0-15)" num="61" />
          <dma source="AlwaysEnabled62 (Low channels 0-15)" num="62" />
          <dma source="AlwaysEnabled63 (Low channels 0-15)" num="63" />
-         <dma source="Disable (High channels 16-31)" num="64" />
+         <dma source="Disabled (High channels 16-31)" num="64" />
          <dma source="FlexIO Shifter 0 (High channels 16-31)" num="65" />
          <dma source="FlexIO Shifter 1 (High channels 16-31)" num="66" />
          <dma source="FlexIO Shifter 2 (High channels 16-31)" num="67" />
@@ -148,8 +148,8 @@
          <dma source="TPM1 Channel 1 (High channels 16-31)" num="107" />
          <dma source="TPM2 Channel 0 (High channels 16-31)" num="108" />
          <dma source="TPM2 Channel 1 (High channels 16-31)" num="109" />
-         <dma source="TPM1_Overflow (High channels 16-31)" num="119" />
-         <dma source="TPM2_Overflow (High channels 16-31)" num="120" />
+         <dma source="TPM1 Overflow (High channels 16-31)" num="119" />
+         <dma source="TPM2 Overflow (High channels 16-31)" num="120" />
          <dma source="SPI3 Receive (High channels 16-31)" num="122" />
          <dma source="SPI3 Transmit (High channels 16-31)" num="123" />
          <dma source="AlwaysEnabled60 (High channels 16-31)" num="124" />

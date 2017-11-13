@@ -44,42 +44,42 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>FlexIO0_Ch0</name>
-                           <description>Group1FlexIO0_Channel0</description>
+                           <description>FlexIO0 Channel 0</description>
                            <value>1</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>FlexIO0_Ch1</name>
-                           <description>Group1FlexIO0_Channel1</description>
+                           <description>FlexIO0 Channel 1</description>
                            <value>2</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>FlexIO0_Ch2</name>
-                           <description>Group1FlexIO0_Channel2</description>
+                           <description>FlexIO0 Channel 2</description>
                            <value>3</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>FlexIO0_Ch3</name>
-                           <description>Group1FlexIO0_Channel3</description>
+                           <description>FlexIO0 Channel 3</description>
                            <value>4</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>FlexIO0_Ch4</name>
-                           <description>Group1FlexIO0_Channel4</description>
+                           <description>FlexIO0 Channel 4</description>
                            <value>5</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>FlexIO0_Ch5</name>
-                           <description>Group1FlexIO0_Channel5</description>
+                           <description>FlexIO0 Channel 5</description>
                            <value>6</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>FlexIO0_Ch6</name>
-                           <description>Group1FlexIO0_Channel6</description>
+                           <description>FlexIO0 Channel 6</description>
                            <value>7</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>FlexIO0_Ch7</name>
-                           <description>Group1FlexIO0_Channel7</description>
+                           <description>FlexIO0 Channel 7</description>
                            <value>8</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -114,92 +114,92 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>LPUART0_Rx</name>
-                           <description>LPUART0_Rx</description>
+                           <description>LPUART0 Receive</description>
                            <value>15</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>LPUART0_Tx</name>
-                           <description>LPUART0_Tx</description>
+                           <description>LPUART0 Transmit</description>
                            <value>16</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>LPUART1_Rx</name>
-                           <description>LPUART1_Rx</description>
+                           <description>LPUART1 Receive</description>
                            <value>17</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>LPUART1_Tx</name>
-                           <description>LPUART1_Tx</description>
+                           <description>LPUART1 Transmit</description>
                            <value>18</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>LPUART2_Rx</name>
-                           <description>LPUART2_Rx</description>
+                           <description>LPUART2 Receive</description>
                            <value>19</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>LPUART2_Tx</name>
-                           <description>LPUART2_Tx</description>
+                           <description>LPUART2 Transmit</description>
                            <value>20</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>SPI0_Rx</name>
-                           <description>SPI0_Rx</description>
+                           <description>SPI0 Receive</description>
                            <value>21</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>SPI0_Tx</name>
-                           <description>SPI0_Tx</description>
+                           <description>SPI0 Transmit</description>
                            <value>22</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>SPI1_Rx</name>
-                           <description>SPI1_Rx</description>
+                           <description>SPI1 Receive</description>
                            <value>23</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>SPI1_Tx</name>
-                           <description>SPI1_Tx</description>
+                           <description>SPI1 Transmit</description>
                            <value>24</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>QSPI0_Rx</name>
-                           <description>Group1QSPI0_Rx</description>
+                           <description>QSPI0 Receive</description>
                            <value>25</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>QSPI0_Tx</name>
-                           <description>Group1QSPI0_Tx</description>
+                           <description>QSPI0 Transmit</description>
                            <value>26</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>TPM0_Ch0</name>
-                           <description>TPM0_Channel0</description>
+                           <description>TPM0 Channel 0</description>
                            <value>27</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>TPM0_Ch1</name>
-                           <description>TPM0_Channel1</description>
+                           <description>TPM0 Channel 1</description>
                            <value>28</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>TPM0_Ch2</name>
-                           <description>TPM0_Channel2</description>
+                           <description>TPM0 Channel 2</description>
                            <value>29</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>TPM0_Ch3</name>
-                           <description>TPM0_Channel3</description>
+                           <description>TPM0 Channel 3</description>
                            <value>30</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>TPM0_Ch4</name>
-                           <description>TPM0_Channel4</description>
+                           <description>TPM0 Channel 4</description>
                            <value>31</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>TPM0_Ch5</name>
-                           <description>TPM0_Channel5</description>
+                           <description>TPM0 Channel 5</description>
                            <value>32</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -214,37 +214,37 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>TPM0_Overflow</name>
-                           <description>TPM0_Overflow</description>
+                           <description>TPM0 Overflow</description>
                            <value>35</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>TPM1_Ch0</name>
-                           <description>TPM1_Channel0</description>
+                           <description>TPM1 Channel 0</description>
                            <value>36</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>TPM1_Ch1</name>
-                           <description>TPM1_Channel1</description>
+                           <description>TPM1 Channel 1</description>
                            <value>37</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>TPM1_Overflow</name>
-                           <description>TPM1_Overflow</description>
+                           <description>TPM1 Overflow</description>
                            <value>38</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>TPM2_Ch0</name>
-                           <description>TPM2_Channel0</description>
+                           <description>TPM2 Channel 0</description>
                            <value>39</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>TPM2_Ch1</name>
-                           <description>TPM2_Channel1</description>
+                           <description>TPM2 Channel 1</description>
                            <value>40</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>TPM2_Overflow</name>
-                           <description>TPM2_Overflow</description>
+                           <description>TPM2 Overflow</description>
                            <value>41</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -254,47 +254,47 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>EMVSIM0_Rx</name>
-                           <description>Group1EMVSIM0_Rx</description>
+                           <description>EMVSIM0 Receive</description>
                            <value>43</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>EMVSIM0_Tx</name>
-                           <description>Group1EMVSIM0_Tx</description>
+                           <description>EMVSIM0 Transmit</description>
                            <value>44</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>EMVSIM1_Rx</name>
-                           <description>Group1EMVSIM1_Rx</description>
+                           <description>EMVSIM1 Receive</description>
                            <value>45</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>EMVSIM1_Tx</name>
-                           <description>Group1EMVSIM1_Tx</description>
+                           <description>EMVSIM1 Transmit</description>
                            <value>46</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>PortA</name>
-                           <description>PortA</description>
+                           <description>Port A</description>
                            <value>47</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>PortB</name>
-                           <description>PortB</description>
+                           <description>Port B</description>
                            <value>48</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>PortC</name>
-                           <description>PortC</description>
+                           <description>Port C</description>
                            <value>49</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>PortD</name>
-                           <description>PortD</description>
+                           <description>Port D</description>
                            <value>50</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>PortE</name>
-                           <description>PortE</description>
+                           <description>Port E</description>
                            <value>51</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -314,7 +314,7 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>LTC0_PKHA</name>
-                           <description>LTC0_PKHA</description>
+                           <description>LTC0 PKHA</description>
                            <value>55</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -329,12 +329,12 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>LTC0_Input_FIFO</name>
-                           <description>LTC0_Input_FIFO</description>
+                           <description>LTC0 Input FIFO</description>
                            <value>58</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>LTC0_Output_FIFO</name>
-                           <description>LTC0_Output_FIFO</description>
+                           <description>LTC0 Output FIFO</description>
                            <value>59</value>
                         </enumeratedValue>
                         <enumeratedValue>

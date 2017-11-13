@@ -28,7 +28,7 @@ Devices using this peripheral:
                <description>Channel Configuration Register</description>
                <addressOffset>0x0</addressOffset>
                <size>8</size>
-               <resetMask>0xFF</resetMask>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>SOURCE</name>
@@ -284,27 +284,27 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>PortA</name>
-                           <description>PortA</description>
+                           <description>Port A</description>
                            <value>49</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>PortB</name>
-                           <description>PortB</description>
+                           <description>Port B</description>
                            <value>50</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>PortC</name>
-                           <description>PortC</description>
+                           <description>Port C</description>
                            <value>51</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>PortD</name>
-                           <description>PortD</description>
+                           <description>Port D</description>
                            <value>52</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>PortE</name>
-                           <description>PortE</description>
+                           <description>Port E</description>
                            <value>53</value>
                         </enumeratedValue>
                         <enumeratedValue>

@@ -103,11 +103,11 @@
          <dma source="CMP1"                 num="43" />
          <dma source="CMT"                  num="47" />
          <dma source="PDB"                  num="48" />
-         <dma source="PortA"                num="49" />
-         <dma source="PortB"                num="50" />
-         <dma source="PortC"                num="51" />
-         <dma source="PortD"                num="52" />
-         <dma source="PortE"                num="53" />
+         <dma source="Port A"               num="49" />
+         <dma source="Port B"               num="50" />
+         <dma source="Port C"               num="51" />
+         <dma source="Port D"               num="52" />
+         <dma source="Port E"               num="53" />
          <dma source="AlwaysEnabled54"      num="54" />
          <dma source="AlwaysEnabled55"      num="55" />
          <dma source="AlwaysEnabled56"      num="56" />

@@ -89,32 +89,32 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>FlexIO_Ch0</name>
-                           <description>FlexIO Ch0</description>
+                           <description>FlexIO Channel 0</description>
                            <value>10</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>FlexIO_Ch1</name>
-                           <description>FlexIO Ch1</description>
+                           <description>FlexIO Channel 1</description>
                            <value>11</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>FlexIO_Ch2</name>
-                           <description>FlexIO Ch2</description>
+                           <description>FlexIO Channel 2</description>
                            <value>12</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>FlexIO_Ch3</name>
-                           <description>FlexIO Ch3</description>
+                           <description>FlexIO Channel 3</description>
                            <value>13</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>Reserved14</name>
-                           <description>Reserved</description>
+                           <name>I2S0_Rx</name>
+                           <description>I2S0 Receive</description>
                            <value>14</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>Reserved15</name>
-                           <description>Reserved</description>
+                           <name>I2S0_Tx</name>
+                           <description>I2S0 Transmit</description>
                            <value>15</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -158,33 +158,33 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                            <value>23</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>TPM0_Ch_0</name>
-                           <description>TPM0 Ch 0</description>
+                           <name>TPM0_Ch0</name>
+                           <description>TPM0 Channel 0</description>
                            <value>24</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>TPM0_Ch_1</name>
-                           <description>TPM0 Ch 1</description>
+                           <name>TPM0_Ch1</name>
+                           <description>TPM0 Channel 1</description>
                            <value>25</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>TPM0_Ch_2</name>
-                           <description>TPM0 Ch 2</description>
+                           <name>TPM0_Ch2</name>
+                           <description>TPM0 Channel 2</description>
                            <value>26</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>TPM0_Ch_3</name>
-                           <description>TPM0 Ch 3</description>
+                           <name>TPM0_Ch3</name>
+                           <description>TPM0 Channel 3</description>
                            <value>27</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>TPM0_Ch_4</name>
-                           <description>TPM0 Ch 4</description>
+                           <name>TPM0_Ch4</name>
+                           <description>TPM0 Channel 4</description>
                            <value>28</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>TPM0_Ch_5</name>
-                           <description>TPM0 Ch 5</description>
+                           <name>TPM0_Ch5</name>
+                           <description>TPM0 Channel 5</description>
                            <value>29</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -198,23 +198,23 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                            <value>31</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>TPM1_Ch_0</name>
-                           <description>TPM1 Ch 0</description>
+                           <name>TPM1_Ch0</name>
+                           <description>TPM1 Channel 0</description>
                            <value>32</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>TPM1_Ch_1</name>
-                           <description>TPM1 Ch 1</description>
+                           <name>TPM1_Ch1</name>
+                           <description>TPM1 Channel 1</description>
                            <value>33</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>TPM2_Ch_0</name>
-                           <description>TPM2 Ch 0</description>
+                           <name>TPM2_Ch0</name>
+                           <description>TPM2 Channel 0</description>
                            <value>34</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>TPM2_Ch_1</name>
-                           <description>TPM2 Ch 1</description>
+                           <name>TPM2_Ch1</name>
+                           <description>TPM2 Channel 1</description>
                            <value>35</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -263,8 +263,8 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                            <value>44</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>Reserved45</name>
-                           <description>Reserved</description>
+                           <name>DAC0</name>
+                           <description>DAC0</description>
                            <value>45</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -284,27 +284,27 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>PortA</name>
-                           <description>PortA</description>
+                           <description>Port A</description>
                            <value>49</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>PortB</name>
-                           <description>PortB</description>
+                           <name>Reserved50</name>
+                           <description>Reserved</description>
                            <value>50</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>PortC</name>
-                           <description>PortC</description>
+                           <description>Port C</description>
                            <value>51</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>PortD</name>
-                           <description>PortD</description>
+                           <description>Port D</description>
                            <value>52</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>PortE</name>
-                           <description>PortE</description>
+                           <name>Reserved53</name>
+                           <description>Reserved</description>
                            <value>53</value>
                         </enumeratedValue>
                         <enumeratedValue>
