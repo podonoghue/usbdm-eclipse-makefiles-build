@@ -6,12 +6,9 @@
 
 <section name="USBDM">
    <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_K22F" />
-   <item key="$$DeviceInfo_Target_Device"                  value="$(targetDevice)" />
+   <item key="$$DeviceInfo_SubFamily"                      value="MK22F51212" />
    <item key="$$Hardware_Source_Filename"                  value="MK22F51212.usbdmHardware" />
-   <item key="/DMA0/NumChannels"                           value="16" />
    <item key="/FTFA/peripheral_file"                       value="ftfa" />
-   <item key="/FTFA/pflash_phrase_size"                    value="4" />
-   <item key="/FTFA/pflash_sector_size"                    value="2048" />
    <item key="/LPTMR0/lptmr_cmr"                           value="0" />
    <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_PEE_80MHz" />
    <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_BLPE_4MHz" />
@@ -41,7 +38,4 @@
    <item key="/SIM/system_flexbus_clock[2]"                value="30000000" />
    <item key="/SIM/system_lpuart_clock"                    value="8000000" />
    <item key="/SIM/system_usbfs_clock"                     value="48000000" />
-   <item key="/UART0/clockSource"                          value="SystemCoreClock" />
-   <item key="/UART1/clockSource"                          value="SystemCoreClock" />
-   <item key="/UART2/clockSource"                          value="SystemBusClock" />
 </section>

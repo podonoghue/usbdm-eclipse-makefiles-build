@@ -6,7 +6,7 @@
 
 <section name="USBDM">
    <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_KL46Z4" />
-   <item key="$$DeviceInfo_Target_Device"                  value="$(targetDevice)" />
+   <item key="$$DeviceInfo_SubFamily"                      value="MKL46Z4" />
    <item key="$$Hardware_Source_Filename"                  value="MKL46Z4.usbdmHardware" />
    <item key="$signal$PTA1_descriptionSetting"             value="Console Rx" />
    <item key="$signal$PTA1_muxSetting"                     value="mux2" />

@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Configure.usbdmProject -->
+<!-- 
+   Settings
+-->
+
 <section name="USBDM">
-   <item key="$$DeviceInfo_Target_Device"   value="$(targetDevice)"/>
-   <item key="$$Hardware_Source_Filename"   value="$(cpp.peripheral.subfamily).usbdmHardware" />
+   <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_K20D50M" />
+   <item key="$$DeviceInfo_SubFamily"                      value="MK20D5" />
+   <item key="$$Hardware_Source_Filename"                  value="MK20D5.usbdmHardware" />
+   <item key="/FTFL/peripheral_file"                       value="ftfl_32k_flexrom" />
+   <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_0" />
+   <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_1" />
+   <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_2" />
+   <item key="/SIM/sim_clkdiv2_usb"                        value="2" />
+   <item key="/SIM/system_usbfs_clock"                     value="48000000" />
 </section>

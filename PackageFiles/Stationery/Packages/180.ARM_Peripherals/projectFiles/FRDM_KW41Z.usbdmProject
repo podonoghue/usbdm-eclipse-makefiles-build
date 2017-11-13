@@ -6,7 +6,7 @@
 
 <section name="USBDM">
    <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_KW41Z" />
-   <item key="$$DeviceInfo_Target_Device"                  value="$(targetDevice)" />
+   <item key="$$DeviceInfo_SubFamily"                      value="MKW41Z4" />
    <item key="$$Hardware_Source_Filename"                  value="MKW41Z4.usbdmHardware" />
    <item key="$signal$ANT_descriptionSetting"              value="Antenna" />
    <item key="$signal$PSWITCH_descriptionSetting"          value="Power Switch" />

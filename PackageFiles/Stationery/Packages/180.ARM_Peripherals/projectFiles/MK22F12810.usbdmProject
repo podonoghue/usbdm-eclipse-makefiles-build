@@ -6,7 +6,7 @@
 
 <section name="USBDM">
    <item key="$$DeviceInfo_Device_Variant"                 value="MK22FN128VLH10" />
-   <item key="$$DeviceInfo_Target_Device"                  value="$(targetDevice)" />
+   <item key="$$DeviceInfo_SubFamily"                      value="$(targetDevice)" />
    <item key="$$Hardware_Source_Filename"                  value="MK22F12810.usbdmHardware" />
    <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_FEE_RTC_72MHz" />
    <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_BLPI_4MHz" />

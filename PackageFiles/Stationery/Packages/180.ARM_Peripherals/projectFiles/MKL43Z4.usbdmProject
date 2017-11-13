@@ -6,12 +6,10 @@
 
 <section name="USBDM">
    <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_KL43Z4" />
-   <item key="$$DeviceInfo_Target_Device"                  value="$(targetDevice)" />
+   <item key="$$DeviceInfo_SubFamily"                      value="MKL43Z4" />
    <item key="$$Hardware_Source_Filename"                  value="MKL43Z4.usbdmHardware" />
-   <item key="/Console/consoleDevice"                     value="USBDM::Lpuart0" />
+   <item key="/Console/consoleDevice"                      value="USBDM::Lpuart0" />
    <item key="/FTFA/peripheral_file"                       value="ftfa" />
-   <item key="/FTFA/pflash_phrase_size"                    value="4" />
-   <item key="/FTFA/pflash_sector_size"                    value="1024" />
    <item key="/LCD/backplanes"                             value="59,60,14,15" />
    <item key="/LCD/frontplanes"                            value="20,24,26,27,40,42,43,44" />
    <item key="/LCD/lcdClock"                               value="1000.0" />
@@ -31,7 +29,7 @@
    <item key="/OSC0/osc_cr_erclken"                        value="false" />
    <item key="/OSC0/osc_input_freq"                        value="32768" />
    <item key="/PIT/pit_ldval"                              value="10000" />
-   <item key="/SIM/rtcSharesPins"                          value="true" />
+   <item key="/RTC/rtc_cr_osce"                            value="true" />
    <item key="/SIM/sim_sopt2_lpuart0src"                   value="1" />
    <item key="/SIM/sim_sopt2_lpuart1src"                   value="1" />
    <item key="/SIM/sim_sopt2_rtcclkoutsel"                 value="false" />

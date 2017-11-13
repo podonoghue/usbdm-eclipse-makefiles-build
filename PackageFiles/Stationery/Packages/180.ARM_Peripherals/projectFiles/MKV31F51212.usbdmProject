@@ -6,7 +6,7 @@
 
 <section name="USBDM">
    <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_KV31F" />
-   <item key="$$DeviceInfo_Target_Device"                  value="$(targetDevice)" />
+   <item key="$$DeviceInfo_Target_Device"                  value="MKV31F51212" />
    <item key="$$Hardware_Source_Filename"                  value="MKV31F51212.usbdmHardware" />
    <item key="/ADC0/irqLevel"                              value="0" />
    <item key="/ADC1/irqLevel"                              value="0" />
@@ -14,10 +14,7 @@
    <item key="/CMP1/irqLevel"                              value="0" />
    <item key="/DAC0/irqLevel"                              value="0" />
    <item key="/DAC1/irqLevel"                              value="0" />
-   <item key="/DMA0/NumChannels"                           value="16" />
    <item key="/FTFA/peripheral_file"                       value="ftfa" />
-   <item key="/FTFA/pflash_phrase_size"                    value="4" />
-   <item key="/FTFA/pflash_sector_size"                    value="2048" />
    <item key="/FTM0/irqLevel"                              value="0" />
    <item key="/FTM1/irqLevel"                              value="0" />
    <item key="/FTM2/irqLevel"                              value="0" />
@@ -55,6 +52,7 @@
    <item key="/SIM/system_erclk32k_clock"                  value="1000" />
    <item key="/SIM/system_flash_clock[1]"                  value="4000000" />
    <item key="/SIM/system_flash_clock[2]"                  value="26666666" />
+   <item key="/SIM/system_flexbus_clock[0]"                value="60000000" />
    <item key="/SIM/system_flexbus_clock[1]"                value="4000000" />
    <item key="/SIM/system_flexbus_clock[2]"                value="26666666" />
    <item key="/SIM/system_lpuart_clock"                    value="4000000" />

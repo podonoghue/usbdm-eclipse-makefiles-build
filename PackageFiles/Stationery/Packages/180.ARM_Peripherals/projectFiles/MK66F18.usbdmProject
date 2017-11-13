@@ -6,18 +6,13 @@
 
 <section name="USBDM">
    <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_K66F" />
-   <item key="$$DeviceInfo_Target_Device"                  value="$(targetDevice)" />
+   <item key="$$DeviceInfo_SubFamily"                      value="MK66F18" />
    <item key="$$Hardware_Source_Filename"                  value="MK66F18.usbdmHardware" />
-   <item key="/DMA0/NumChannels"                           value="32" />
-   <item key="/FTFE/dflash_phrase_size"                    value="8" />
-   <item key="/FTFE/dflash_sector_size"                    value="4096" />
    <item key="/FTFE/peripheral_file"                       value="ftfe_128k_flexrom" />
-   <item key="/FTFE/pflash_phrase_size"                    value="8" />
-   <item key="/FTFE/pflash_sector_size"                    value="4096" />
    <item key="/LPTMR0/lptmr_cmr"                           value="0" />
    <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_PEE_120MHz" />
    <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_BLPE_4MHz" />
-   <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_PEE_180MHz" />
+   <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_PEE_HSRUN_180MHz" />
    <item key="/MCG/clock_mode[0]"                          value="ClockMode_PEE" />
    <item key="/MCG/clock_mode[1]"                          value="ClockMode_BLPE" />
    <item key="/MCG/clock_mode[2]"                          value="ClockMode_PEE" />
@@ -28,31 +23,27 @@
    <item key="/MCG/usbphy_power_enable"                    value="true" />
    <item key="/OSC0/osc_cr_scp"                            value="4" />
    <item key="/OSC0/osc_input_freq"                        value="12000000" />
-   <item key="/OSC0/system_oscerclk_undiv_clock"           value="12000000" />
+   <item key="/OSC0/oscer_undiv_clock"                     value="12000000" />
    <item key="/RTC/rtc_cr_scp"                             value="4" />
    <item key="/SIM/busFreq"                                value="60MHz" />
    <item key="/SIM/coreFreq"                               value="180MHz" />
    <item key="/SIM/flashFreq"                              value="28MHz" />
    <item key="/SIM/flexFreq"                               value="60MHz" />
-   <item key="/SIM/sim_clkdiv2_usb"                        value="2" />
+   <item key="/SIM/sim_clkdiv2_usb"                        value="9" />
    <item key="/SIM/sim_sopt2_clkoutsel"                    value="0" />
    <item key="/SIM/sim_sopt2_lpuartsrc"                    value="1" />
+   <item key="/SIM/sim_sopt2_pllfllsel[0]"                 value="1" />
+   <item key="/SIM/sim_sopt2_pllfllsel[1]"                 value="3" />
+   <item key="/SIM/sim_sopt2_pllfllsel[2]"                 value="1" />
    <item key="/SIM/sim_sopt2_tpmsrc"                       value="1" />
    <item key="/SIM/system_bus_clock[1]"                    value="4000000" />
    <item key="/SIM/system_core_clock[1]"                   value="4000000" />
    <item key="/SIM/system_core_clock[2]"                   value="180000000" />
-   <item key="/SIM/system_flash_clock[1]"                  value="4000000" />
+   <item key="/SIM/system_flash_clock[1]"                  value="800000" />
    <item key="/SIM/system_flash_clock[2]"                  value="25714285" />
    <item key="/SIM/system_flexbus_clock[1]"                value="4000000" />
-   <item key="/SIM/system_lpuart_clock"                    value="192000000" />
-   <item key="/SIM/system_tpm_clock"                       value="192000000" />
    <item key="/SIM/system_usbfs_clock"                     value="48000000" />
    <item key="/SPI0/speed"                                 value="100000" />
    <item key="/SPI1/speed"                                 value="100000" />
    <item key="/SPI2/speed"                                 value="100000" />
-   <item key="/UART0/clockSource"                          value="SystemCoreClock" />
-   <item key="/UART1/clockSource"                          value="SystemCoreClock" />
-   <item key="/UART2/clockSource"                          value="SystemBusClock" />
-   <item key="/UART3/clockSource"                          value="SystemBusClock" />
-   <item key="/UART4/clockSource"                          value="SystemBusClock" />
 </section>

@@ -6,7 +6,7 @@
 
 <section name="USBDM">
    <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_KL27Z" />
-   <item key="$$DeviceInfo_Target_Device"                  value="$(targetDevice)" />
+   <item key="$$DeviceInfo_SubFamily"                      value="MKL27Z644" />
    <item key="$$Hardware_Source_Filename"                  value="MKL27Z644.usbdmHardware" />
    <item key="$signal$PTA0_descriptionSetting"             value="SWD" />
    <item key="$signal$PTA12_muxSetting"                    value="mux1" />

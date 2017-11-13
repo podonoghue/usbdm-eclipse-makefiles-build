@@ -6,7 +6,7 @@
 
 <section name="USBDM">
    <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_K28F" />
-   <item key="$$DeviceInfo_Target_Device"                  value="$(targetDevice)" />
+   <item key="$$DeviceInfo_SubFamily"                      value="MK28F15" />
    <item key="$$Hardware_Source_Filename"                  value="MK28F15.usbdmHardware" />
    <item key="$signal$ADC0_SE16_descriptionSetting"        value="Light Sensor" />
    <item key="$signal$EXTAL32_descriptionSetting"          value="Reserved(Crystal)" />
