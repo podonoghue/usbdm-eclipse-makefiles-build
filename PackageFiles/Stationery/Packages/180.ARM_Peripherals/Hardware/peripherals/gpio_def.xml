@@ -37,6 +37,8 @@
    <projectActionList id = "gpio_files" >
       <copy source="Snippets/digital-example1.cpp"  target="Snippets/digital-example1.cpp" overwrite="true" derived="true" />
       <copy source="Snippets/digital-example2.cpp"  target="Snippets/digital-example2.cpp" overwrite="true" derived="true" />
+      <copy source="Snippets/sht10.h"               target="Snippets/sht10.h"              overwrite="true" derived="true" />
+      <copy source="Snippets/sht10-example.cpp"     target="Snippets/sht10-example.cpp"    overwrite="true" derived="true" />
    </projectActionList>
 
    <!--

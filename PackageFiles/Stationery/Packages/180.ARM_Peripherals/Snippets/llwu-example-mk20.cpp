@@ -32,7 +32,7 @@
 #include "pmc.h"
 #include "rcm.h"
 
-// May need reduced baud rate for slow clocks
+// May need to reduce baud rate for slow clocks
 static constexpr int BAUD_RATE = 115200;
 
 // Allow access to USBDM methods without USBDM:: prefix
