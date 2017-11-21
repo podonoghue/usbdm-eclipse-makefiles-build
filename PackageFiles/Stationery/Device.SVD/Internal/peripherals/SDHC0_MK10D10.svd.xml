@@ -884,12 +884,12 @@ Devices using this peripheral:
                         <enumeratedValue>
                            <name>0b0</name>
                            <description>Divisor by 1</description>
-                           <value>0b0</value>
+                           <value>0b0000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
                            <description>Divisor by 2</description>
-                           <value>0b1</value>
+                           <value>0b0001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1110</name>
@@ -1958,13 +1958,15 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>AUTOSABGEN</name>
-                     <description>When boot, enable auto stop at block gap function. This function will be triggered, and host will stop at block gap when received card block cnt is equal to BOOTBLKCNT</description>
+                     <description>When boot, enable auto stop at block gap function.\n
+This function will be triggered, and host will stop at block gap when received card block cnt is equal to BOOTBLKCNT</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
                   </field>
                   <field>
                      <name>BOOTBLKCNT</name>
-                     <description>This value defines the stop at block gap value of automatic mode. When received card block cnt is equal to BOOTBLKCNT and AUTOSABGEN is 1, then stop at block gap</description>
+                     <description>Defines the stop at block gap value of automatic mode.\n
+When received card block cnt is equal to BOOTBLKCNT and AUTOSABGEN is 1, then stop at block gap</description>
                      <bitOffset>16</bitOffset>
                      <bitWidth>16</bitWidth>
                   </field>
@@ -1998,22 +2000,22 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Freescale SDHC version 1.0</description>
+                           <description>SDHC version 1.0</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10000</name>
-                           <description>Freescale SDHC version 2.0</description>
+                           <description>SDHC version 2.0</description>
                            <value>0b10000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10001</name>
-                           <description>Freescale SDHC version 2.1</description>
+                           <description>SDHC version 2.1</description>
                            <value>0b10001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10010</name>
-                           <description>Freescale SDHC version 2.2</description>
+                           <description>SDHC version 2.2</description>
                            <value>0b10010</value>
                         </enumeratedValue>
                      </enumeratedValues>

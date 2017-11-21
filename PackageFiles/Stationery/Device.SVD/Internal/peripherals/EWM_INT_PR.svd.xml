@@ -1,10 +1,31 @@
 <!--
 Devices using this peripheral: 
-      MKV10Z7
-      MKV11Z7
+      MK02F12810
+      MK10D10
+      MK20D10
+      MK22F12810
+      MK22F25612
+      MK22F51212
+      MK30D10
+      MK40D10
+      MK50D10
+      MK51D10
+      MK52D10
+      MK53D10
+      MK60D10
+      MKE14F16
+      MKE14Z7
+      MKE15Z7
+      MKE16F16
+      MKE18F16
+      MKL82Z7
+      MKV30F12810
+      MKV31F12810
+      MKV31F25612
+      MKV31F51212
 -->
       <peripheral>
-         <?sourceFile "EWM_MKV" ?>
+         <?sourceFile "EWM_INT_PR" ?>
          <name>EWM</name>
          <description>External Watchdog Monitor</description>
          <groupName>EWM</groupName>
@@ -29,7 +50,13 @@ Devices using this peripheral:
          <addressBlock>
             <?width "8" ?>
             <offset>0x2</offset>
-            <size>0x4</size>
+            <size>0x2</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x5</offset>
+            <size>0x1</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
@@ -167,21 +194,6 @@ This register can be written only once after a CPU reset</description>
                      <name>COMPAREH</name>
                      <description>Maximum</description>
                      <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>CLKCTRL</name>
-               <description>Clock Control Register</description>
-               <addressOffset>0x4</addressOffset>
-               <size>8</size>
-               <resetMask>0xFF</resetMask>
-               <fields>
-                  <field>
-                     <name>CLKSEL</name>
-                     <description>no description available</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>2</bitWidth>
                   </field>
                </fields>
             </register>

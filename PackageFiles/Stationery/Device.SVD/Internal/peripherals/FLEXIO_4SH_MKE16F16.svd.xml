@@ -277,12 +277,12 @@ Devices using this peripheral:
                         <enumeratedValue>
                            <name>0b0</name>
                            <description>Status flag is clear</description>
-                           <value>0b0000</value>
+                           <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
                            <description>Status flag is set</description>
-                           <value>0b0001</value>
+                           <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -302,12 +302,12 @@ Devices using this peripheral:
                         <enumeratedValue>
                            <name>0b0</name>
                            <description>Shifter Error Flag is clear</description>
-                           <value>0b0000</value>
+                           <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
                            <description>Shifter Error Flag is set</description>
-                           <value>0b0001</value>
+                           <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -327,12 +327,12 @@ Devices using this peripheral:
                         <enumeratedValue>
                            <name>0b0</name>
                            <description>Timer Status Flag is clear</description>
-                           <value>0b0000</value>
+                           <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
                            <description>Timer Status Flag is set</description>
-                           <value>0b0001</value>
+                           <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -352,12 +352,12 @@ Devices using this peripheral:
                         <enumeratedValue>
                            <name>0b0</name>
                            <description>Shifter Status Flag interrupt disabled</description>
-                           <value>0b0000</value>
+                           <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
                            <description>Shifter Status Flag interrupt enabled</description>
-                           <value>0b0001</value>
+                           <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -377,12 +377,12 @@ Devices using this peripheral:
                         <enumeratedValue>
                            <name>0b0</name>
                            <description>Shifter Error Flag interrupt disabled</description>
-                           <value>0b0000</value>
+                           <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
                            <description>Shifter Error Flag interrupt enabled</description>
-                           <value>0b0001</value>
+                           <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -402,12 +402,12 @@ Devices using this peripheral:
                         <enumeratedValue>
                            <name>0b0</name>
                            <description>Timer Status Flag interrupt is disabled</description>
-                           <value>0b0000</value>
+                           <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
                            <description>Timer Status Flag interrupt is enabled</description>
-                           <value>0b0001</value>
+                           <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -427,12 +427,12 @@ Devices using this peripheral:
                         <enumeratedValue>
                            <name>0b0</name>
                            <description>Shifter Status Flag DMA request is disabled</description>
-                           <value>0b0000</value>
+                           <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
                            <description>Shifter Status Flag DMA request is enabled</description>
-                           <value>0b0001</value>
+                           <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>

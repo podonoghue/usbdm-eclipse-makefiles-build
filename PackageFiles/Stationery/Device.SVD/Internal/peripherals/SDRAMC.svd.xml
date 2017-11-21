@@ -6,7 +6,7 @@ Devices using this peripheral:
       MK82F25615
 -->
       <peripheral>
-         <?sourceFile "SDRAMC_0" ?>
+         <?sourceFile "SDRAMC" ?>
          <name>SDRAMC</name>
          <description>Synchronous DRAM Controller</description>
          <groupName>SDRAMC</groupName>

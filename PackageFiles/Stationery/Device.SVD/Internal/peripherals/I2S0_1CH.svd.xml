@@ -320,18 +320,19 @@ This field is ignored and the transmitter is disabled in all low-leakage stop mo
                   </field>
                   <field>
                      <name>TE</name>
-                     <description>Transmitter Enable</description>
+                     <description>Transmitter Enable\nEnables/disables the transmitter.\n
+When software clears this field, the transmitter remains enabled, and this bit remains set, until the end of the current frame</description>
                      <bitOffset>31</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Transmitter disabled\tand last transmission completed</description>
+                           <description>Transmitter is disabled and idle</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Transmitter enabled\tor transmitter has been disabled and has not yet reached end of frame</description>
+                           <description>Transmitter is enabled or busy until end of frame</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1188,12 +1189,12 @@ The value written should be one less than the word number (for example, write ze
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Channel N is disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Channel N is enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1484,7 +1485,7 @@ Updates to the MCLK divider ratio are blocked while this flag remains set</descr
             </register>
             <register>
                <name>MDR</name>
-               <description>SAI MCLK Divide Register\n
+               <description>MCLK Divide Register\n
 Sets the MCLK divide ratio such that: MCLK output = MCLK input * ( (FRACT + 1) / (DIVIDE + 1) ).\n
 FRACT must be set equal or less than the value in the DIVIDE field</description>
                <addressOffset>0x104</addressOffset>

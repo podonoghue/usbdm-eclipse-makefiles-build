@@ -273,6 +273,7 @@ Devices using this peripheral:
                      <name>PDI</name>
                      <description>Pin Data Input</description>
                      <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
                   </field>
                </fields>
             </register>

@@ -1,17 +1,12 @@
 <!--
 Devices using this peripheral: 
-      MK10DZ10
-      MK20DZ10
-      MK30DZ10
-      MK40DZ10
-      MK50DZ10
-      MK51DZ10
-      MK52DZ10
-      MK53DZ10
-      MK60DZ10
+      MK28F15
+      MK82F25615
+      MKV10Z7
+      MKV11Z7
 -->
       <peripheral>
-         <?sourceFile "EWM_4" ?>
+         <?sourceFile "EWM_INT_PR_CLK" ?>
          <name>EWM</name>
          <description>External Watchdog Monitor</description>
          <groupName>EWM</groupName>
@@ -36,7 +31,7 @@ Devices using this peripheral:
          <addressBlock>
             <?width "8" ?>
             <offset>0x2</offset>
-            <size>0x2</size>
+            <size>0x4</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
@@ -105,6 +100,26 @@ This bit when set, enables the EWM_in port</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
+                  <field>
+                     <name>INTEN</name>
+                     <description>Interrupt Enable\n
+This bit when set and EWM_out is asserted, an interrupt request is generated\n
+To clear the interrupt request, user should clear this bit by writing 0</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Interrupt enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Interrupt disabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
                </fields>
             </register>
             <register>
@@ -153,6 +168,38 @@ This register can be written only once after a CPU reset</description>
                   <field>
                      <name>COMPAREH</name>
                      <description>Maximum</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CLKCTRL</name>
+               <description>Clock Control Register</description>
+               <addressOffset>0x4</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>CLKSEL</name>
+                     <description>Selects the low power clock source for EWM counter</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CLKPRESCALER</name>
+               <description>Clock Prescaler Register\n
+Divides the clock for running the EWM counter.\n
+Prescaled clock frequency = low power clock source frequency/(1+CLK_DIV)
+This register can be written only once after a CPU reset</description>
+               <addressOffset>0x5</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>CLK_DIV</name>
+                     <description>Clock divider</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>

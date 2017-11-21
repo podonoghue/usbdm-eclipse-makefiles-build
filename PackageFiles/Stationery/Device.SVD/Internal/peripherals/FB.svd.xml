@@ -45,7 +45,7 @@ Devices using this peripheral:
       MKV31F51212
 -->
       <peripheral>
-         <?sourceFile "FB_0" ?>
+         <?sourceFile "FB" ?>
          <name>FB</name>
          <description>FlexBus external bus interface</description>
          <groupName>FB</groupName>

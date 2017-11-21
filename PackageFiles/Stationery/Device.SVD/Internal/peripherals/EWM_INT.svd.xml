@@ -47,7 +47,7 @@ Devices using this peripheral:
       MKW24D5
 -->
       <peripheral>
-         <?sourceFile "EWM_2" ?>
+         <?sourceFile "EWM_INT" ?>
          <name>EWM</name>
          <description>External Watchdog Monitor</description>
          <groupName>EWM</groupName>

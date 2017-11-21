@@ -1,9 +1,9 @@
 <!--
 Devices using this peripheral: 
-      MK28F15
+      MK82F25615
 -->
       <peripheral>
-         <?sourceFile "I2S0_MK28F15" ?>
+         <?sourceFile "I2S0_2CH_MK82F25615" ?>
          <name>I2S0</name>
          <description>Inter-IC Sound / Synchronous Audio Interface</description>
          <groupName>I2S</groupName>
@@ -310,18 +310,19 @@ This field is ignored and the transmitter is disabled in all low-leakage stop mo
                   </field>
                   <field>
                      <name>TE</name>
-                     <description>Transmitter Enable</description>
+                     <description>Transmitter Enable\nEnables/disables the transmitter.\n
+When software clears this field, the transmitter remains enabled, and this bit remains set, until the end of the current frame</description>
                      <bitOffset>31</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Transmitter disabled\tand last transmission completed</description>
+                           <description>Transmitter is disabled and idle</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Transmitter enabled\tor transmitter has been disabled and has not yet reached end of frame</description>
+                           <description>Transmitter is enabled or busy until end of frame</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -474,6 +475,16 @@ configured for internal bit clock, selects the Audio Master Clock used to genera
                            <name>0b01</name>
                            <description>Synchronous with receiver</description>
                            <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>External SAI transmitter</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>External SAI receiver</description>
+                           <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -830,6 +841,7 @@ FIFO write pointer for transmit data channel</description>
 Configures whether the transmit word is masked (transmit data pin tri-stated and \n
 transmit data not read from FIFO) for the corresponding word in the frame</description>
                      <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -1256,6 +1268,16 @@ When configured for internal bit clock, this field selects the audio master cloc
                            <description>Synchronous with transmitter</description>
                            <value>0b01</value>
                         </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Synchronous with another SAI receiver</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Synchronous with another SAI transmitter</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
                      </enumeratedValues>
                   </field>
                </fields>
@@ -1281,12 +1303,12 @@ The value written should be one less than the word number (for example, write ze
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Channel N is disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Channel N is enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1607,6 +1629,7 @@ FIFO write pointer for receive data channel</description>
 Configures whether the receive word is masked (received data ignored and\n
  not written to receive FIFO) for the corresponding word in the frame</description>
                      <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -1700,7 +1723,7 @@ Updates to the MCLK divider ratio are blocked while this flag remains set</descr
             </register>
             <register>
                <name>MDR</name>
-               <description>SAI MCLK Divide Register\n
+               <description>MCLK Divide Register\n
 Sets the MCLK divide ratio such that: MCLK output = MCLK input * ( (FRACT + 1) / (DIVIDE + 1) ).\n
 FRACT must be set equal or less than the value in the DIVIDE field</description>
                <addressOffset>0x104</addressOffset>

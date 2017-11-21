@@ -1,10 +1,17 @@
 <!--
 Devices using this peripheral: 
-      MK28F15
-      MK82F25615
+      MK10DZ10
+      MK20DZ10
+      MK30DZ10
+      MK40DZ10
+      MK50DZ10
+      MK51DZ10
+      MK52DZ10
+      MK53DZ10
+      MK60DZ10
 -->
       <peripheral>
-         <?sourceFile "EWM_MK28F15" ?>
+         <?sourceFile "EWM" ?>
          <name>EWM</name>
          <description>External Watchdog Monitor</description>
          <groupName>EWM</groupName>
@@ -29,7 +36,7 @@ Devices using this peripheral:
          <addressBlock>
             <?width "8" ?>
             <offset>0x2</offset>
-            <size>0x4</size>
+            <size>0x2</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
@@ -42,33 +49,70 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>EWMEN</name>
-                     <description>EWM enable</description>
+                     <description>EWM enable\n
+This bit when set, enables the EWM module</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>ASSIN</name>
-                     <description>EWM_in&apos;s Assertion State Select</description>
+                     <description>EWM_in&apos;s Assertion State Select\n
+Default assert state of the EWM_in signal is logic zero (active low).\n
+Setting ASSIN bit inverts the assert state to a logic one</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Active low</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Active high</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>INEN</name>
-                     <description>Input Enable</description>
+                     <description>Input Enable\n
+This bit when set, enables the EWM_in port</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>1</bitWidth>
-                  </field>
-                  <field>
-                     <name>INTEN</name>
-                     <description>Interrupt Enable</description>
-                     <bitOffset>3</bitOffset>
-                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Input disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Input enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                </fields>
             </register>
             <register>
                <name>SERV</name>
-               <description>Service Register</description>
+               <description>Service Register\n
+The EWM service mechanism requires the CPU to write two values to the SERV register:
+\t- a first data byte of 0xB4, 
+\t- followed by a second data byte of 0x2C</description>
                <addressOffset>0x1</addressOffset>
                <size>8</size>
                <access>write-only</access>
@@ -76,28 +120,31 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>SERVICE</name>
-                     <description>The EWM service mechanism requires the CPU to write two values to the SERV register: a first data byte of 0xB4, followed by a second data byte of 0x2C</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
             </register>
             <register>
                <name>CMPL</name>
-               <description>Compare Low Register</description>
+               <description>Compare Low Register\n
+Sets the minimum time for the CPU to service the EWM counter.\n
+This register can be written only once after a CPU reset</description>
                <addressOffset>0x2</addressOffset>
                <size>8</size>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
                      <name>COMPAREL</name>
-                     <description>To prevent runaway code from changing this field, software should write to this field after a CPU reset even if the (default) minimum service time is required</description>
+                     <description>Minimum</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
             </register>
             <register>
                <name>CMPH</name>
-               <description>Compare High Register</description>
+               <description>Compare High Register\n
+Sets the maximum time for CPU to service the EWM counter.\n
+This register can be written only once after a CPU reset</description>
                <addressOffset>0x3</addressOffset>
                <size>8</size>
                <resetValue>0xFF</resetValue>
@@ -105,36 +152,7 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>COMPAREH</name>
-                     <description>To prevent runaway code from changing this field, software should write to this field after a CPU reset even if the (default) maximum service time is required</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>CLKCTRL</name>
-               <description>Clock Control Register</description>
-               <addressOffset>0x4</addressOffset>
-               <size>8</size>
-               <resetMask>0xFF</resetMask>
-               <fields>
-                  <field>
-                     <name>CLKSEL</name>
-                     <description>EWM has 4 possible low power clock sources for running EWM counter</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>2</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>CLKPRESCALER</name>
-               <description>Clock Prescaler Register</description>
-               <addressOffset>0x5</addressOffset>
-               <size>8</size>
-               <resetMask>0xFF</resetMask>
-               <fields>
-                  <field>
-                     <name>CLK_DIV</name>
-                     <description>Selected low power clock source for running the EWM counter can be prescaled as below</description>
+                     <description>Maximum</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
