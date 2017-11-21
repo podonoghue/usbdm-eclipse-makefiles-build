@@ -74,7 +74,7 @@ namespace USBDM {
  * @endcode
  *
  * @tparam clockMask       Clock mask for PORT (PCR register) associated with GPIO
- * @tparam portAddress      Address of PORT (PCR register array) associated with GPIO
+ * @tparam portAddress     Address of PORT (PCR register array) associated with GPIO
  * @tparam gpioAddress     GPIO hardware address
  * @tparam bitNum          Bit number within PORT/GPIO
  * @tparam polarity        Polarity of pin. Either ActiveHigh or ActiveLow
@@ -104,15 +104,30 @@ public:
    static constexpr uint32_t MASK   = (1<<bitNum);
 
    /**
-    * Set Pin Control Register (PCR) value
+    * Set pin as digital I/O.
+    * Pin is initially set as an input.
+    * Use SetIn() and SetOut() to change direction.
+    *
+    * @note Resets the Pin Control Register value (PCR value).
+    * @note Resets the pin output value to the inactive state
     *
     * @param[in] pcrValue PCR value to use in configuring pin (excluding MUX value). See pcrValue()
     */
-   static void setPCR(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
+   static void setInOut(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
+      // Make input initially
+      setIn();
+      // Set inactive pin state (if later made output)
+      setInactive();
       Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|PinMux_Gpio);
    }
    /**
-    * Set Pin Control Register (PCR) value
+    * Set pin as digital I/O.
+    * Pin is initially set as an input.
+    * Use SetIn() and SetOut() to change direction.
+    * If open-drain then input function may meaningfully be used while set as output
+    *
+    * @note Resets the Pin Control Register value (PCR value).
+    * @note Resets the pin output value to the inactive state
     *
     * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
     * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High (defaults to PinDriveLow)
@@ -121,7 +136,7 @@ public:
     * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
     * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Fast)
     */
-   static void setPCR(
+   static void setInOut(
          PinPull           pinPull,
          PinDriveStrength  pinDriveStrength  = PinDriveStrength_Low,
          PinDriveMode      pinDriveMode      = PinDriveMode_PushPull,
@@ -129,7 +144,7 @@ public:
          PinFilter         pinFilter         = PinFilter_None,
          PinSlewRate       pinSlewRate       = PinSlewRate_Fast
          ) {
-      Pcr::setPCR(pinPull|pinDriveStrength|pinDriveMode|pinIrq|pinFilter|pinSlewRate|PinMux_Gpio);
+      setInOut(pinPull|pinDriveStrength|pinDriveMode|pinIrq|pinFilter|pinSlewRate|PinMux_Gpio);
    }
    /**
     * Set pin as digital output

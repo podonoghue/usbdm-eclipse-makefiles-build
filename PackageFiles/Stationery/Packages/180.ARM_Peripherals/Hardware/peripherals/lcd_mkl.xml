@@ -3,6 +3,11 @@
 <!-- lcd_mkl.xml -->
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Oscillator">
 
+   <template><![CDATA[
+      \t//! Base value for PCR (excluding MUX value)
+      \tstatic constexpr uint32_t defaultPcrValue  = 0;\n\n
+   ]]></template>
+
    <aliasOption key="/SIM/sim_sopt1_osc32ksel"   constant="false" />
    <aliasOption key="/SIM/system_erclk32k_clock" constant="true"/>
    

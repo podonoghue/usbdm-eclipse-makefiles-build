@@ -5,6 +5,11 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Low Leakage Wakeup Unit">
 
+   <template><![CDATA[
+      \t//! Base value for PCR (excluding MUX value)
+      \tstatic constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;\n\n
+   ]]></template>
+
    <binaryOption name="mapPinsOnEnable" 
       description="Map pins when enabled"
       toolTip="Map all allocated pins on peripheral when the\n
@@ -218,6 +223,8 @@
       <copy source="Project_Headers/llwu.h"           target="Project_Headers/llwu.h"           overwrite="true" derived="true" />
       <copy source="Snippets/llwu-example-mk20.cpp"   target="Snippets/llwu-example-mk20.cpp"   overwrite="true" derived="true" />
       <copy source="Snippets/llwu-example-mk22f.cpp"  target="Snippets/llwu-example-mk22f.cpp"  overwrite="true" derived="true" />
+      <copy source="Snippets/llwu-example-mk28f.cpp"  target="Snippets/llwu-example-mk28f.cpp"  overwrite="true" derived="true" />
+      <copy source="Snippets/llwu-example-mkl25.cpp"  target="Snippets/llwu-example-mkl25.cpp"  overwrite="true" derived="true" />
    </projectActionList>
          
 </peripheralPage>

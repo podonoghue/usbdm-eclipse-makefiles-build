@@ -39,6 +39,9 @@ void enableNvicInterrupt(IRQn_Type irqNum, uint32_t nvicPriority=NvicPriority_No
  * @{
  */
 
+/**
+ * Used to indicate or control the polarity of an I/O with selectable polarity
+ */
 enum Polarity {
    ActiveLow=false,  //!< Signal is active low i.e. Active => Low level, Inactive => High level
    ActiveHigh=true   //!< Signal is active high i.e. Active => High level, Inactive => Low level
@@ -72,7 +75,7 @@ constexpr   uint32_t PORTF_CLOCK_MASK         = SIM_SCGC5_PORTF_MASK;
 #endif
 
 /**
- * Enable clock to ports
+ * Enable clock to selected ports
  *
  * @param[in] clockMask Mask for PORTs to enable
  */
@@ -86,7 +89,7 @@ static inline NOINLINE_DEBUG void enablePortClocks(uint32_t clockMask) {
 };
 
 /**
- * Disable clock to ports
+ * Disable clock to selected ports
  *
  * @param[in] clockMask Mask for PORTs to disable
  */
@@ -192,6 +195,8 @@ public:
 
 /**
  * Pull device modes
+ *
+ * @note Not all pins support this function
  */
 enum PinPull {
    PinPull_None = PORT_PCR_PE(0),                //!< No pull device
@@ -201,7 +206,8 @@ enum PinPull {
 
 /**
  * Pin drive strengths
- * Few pins support this function
+ *
+ * @note Few pins support this function
  */
 enum PinDriveStrength {
    PinDriveStrength_Low  = PORT_PCR_DSE(0), //!< Low drive strength
@@ -210,7 +216,8 @@ enum PinDriveStrength {
 
 /**
  * Pin drive mode
- * Not all pins support this function
+ *
+ * @note Not all pins support this function
  */
 enum PinDriveMode {
    PinDriveMode_PushPull      = PORT_PCR_ODE(0), //!< Push-pull output
@@ -220,7 +227,8 @@ enum PinDriveMode {
 
 /**
  * Pin Slew rate control
- * Not all pins support this function
+ *
+ * @note Few pins support this function
  */
 enum PinSlewRate {
    PinSlewRate_Slow = PORT_PCR_SRE(1),  //!< Slow slew rate on output
@@ -229,7 +237,8 @@ enum PinSlewRate {
 
 /**
  * Pin filter mode
- * Not all pins support this function
+ *
+ * @note Few pins support this function
  */
 enum PinFilter {
    PinFilter_None      = PORT_PCR_PFE(0),  //!< No pin filter
@@ -258,6 +267,8 @@ enum PinMux {
 
 /**
  * Pin interrupt/DMA modes
+ *
+ * @note Not all pins support this function
  */
 enum PinIrq {
    PinIrq_None     = PORT_PCR_IRQC(0),   //!< No interrupt or DMA function
@@ -778,7 +789,7 @@ public:
 #endif
 
    /**
-    * Enable/disable Pin interrupts in NVIC.\n
+    * Enable/disable Pin interrupts in NVIC.
     * Any pending NVIC interrupts are first cleared.
     *
     * @param[in]  enable        True => enable, False => disable

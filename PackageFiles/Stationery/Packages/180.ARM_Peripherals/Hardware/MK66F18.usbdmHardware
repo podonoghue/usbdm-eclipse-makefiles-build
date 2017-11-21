@@ -182,11 +182,11 @@
          <irq num="ENET_Receive_IRQn" />
          <irq num="ENET_Error_IRQn" />
       </peripheral>
-      <peripheral baseName="EWM"      instance=""         version="ewm_2">
+      <peripheral baseName="EWM"      instance=""         version="ewm_int">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForEwm" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_EWM_MASK" />
       </peripheral>
-      <peripheral baseName="FB"       instance=""         version="fb_0">
+      <peripheral baseName="FB"       instance=""         version="fb">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexBus" />
          <clock reg="SCGC7"         mask="SIM_SCGC7_FLEXBUS_MASK" />
       </peripheral>
@@ -331,12 +331,12 @@
          <irq num="RTC_Alarm_IRQn" />
          <irq num="RTC_Seconds_IRQn" />
       </peripheral>
-      <peripheral baseName="SDHC"     instance="0"        version="sdhc0_mk65f18">
+      <peripheral baseName="SDHC"     instance="0"        version="sdhc0_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSdhc" />
          <clock reg="SCGC3"         mask="SIM_SCGC3_SDHC_MASK" />
          <irq num="SDHC_IRQn" />
       </peripheral>
-      <peripheral baseName="SDRAMC"   instance=""         version="sdramc_0">
+      <peripheral baseName="SDRAMC"   instance=""         version="sdramc">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSdramc" />
          <clock reg="SCGC7"         mask="SIM_SCGC7_SDRAMC_MASK" />
       </peripheral>

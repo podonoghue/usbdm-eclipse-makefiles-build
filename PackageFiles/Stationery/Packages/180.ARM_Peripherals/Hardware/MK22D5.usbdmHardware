@@ -116,7 +116,7 @@
          <dma source="AlwaysEnabled62"      num="62" />
          <dma source="AlwaysEnabled63"      num="63" />
       </peripheral>
-      <peripheral baseName="EWM"      instance=""         version="ewm_2">
+      <peripheral baseName="EWM"      instance=""         version="ewm_int">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForEwm" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_EWM_MASK" />
       </peripheral>

@@ -2,7 +2,37 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- osc0_rf.xml -->
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Oscillator" >
+
+   <template><![CDATA[
+      \t//! Base value for PCR (excluding MUX value)
+      \tstatic constexpr uint32_t defaultPcrValue  = 0;\n\n
+   ]]></template>
    
+   <binaryOption name="mapPinsOnEnable" 
+      description="Map pins when enabled"
+      toolTip="Map all allocated pins on peripheral when the\n
+               peripheral is enabled by enable() method etc.">
+      <choice value="false" name="Don't map" />
+      <choice value="true"  name="Map when enabled" isDefault="true"/>
+   </binaryOption>
+   
+   <!-- Template is added to pin_mapping.h -->
+   <template><![CDATA[
+      \t/** Map all allocated pins on peripheral when enabled */
+      \tstatic constexpr bool mapPinsOnEnable = $(mapPinsOnEnable);\n\n
+   ]]></template>
+
+   <choiceOption name="rf_osc_en"
+      description="RF Reference Oscillator Enable Select"
+      toolTip="The oscillator can be enabled by a Radio link layer,\n
+        by an internal SoC clock mode, by an External Pin request, or by this field.">
+         <choice value="0b0000"  name="RF Ref Osc will be controlled by the SoC, external pin, or a link layer" />
+         <choice value="0b0001"  name="RF Ref Osc on in Run/Wait" isDefault="true"/>
+         <choice value="0b0011"  name="RF Ref Osc on in Stop" />
+         <choice value="0b0111"  name="RF Ref Osc on in VLPR/VLPW" />
+         <choice value="0b1111"  name="RF Ref Osc on in VLPS" />
+      </choiceOption>
+
    <choiceOption name="osc_input_freq"
       units="Hz"
       description="Frequency of External Crystal"
@@ -31,7 +61,14 @@
       class="net.sourceforge.usbdm.deviceEditor.validators.OscRfValidate">
    </validate>
 
+   <projectActionList id = "osc_files" >
+      <copy source="Project_Headers/osc_rf.h"  target="Project_Headers/osc_rf.h"  overwrite="true"  derived="true" />
+   </projectActionList>
+         
    <template><![CDATA[
+      \t//! RF Reference Oscillator Enable Select\n
+      \tstatic constexpr uint32_t rf_osc_en = $(rf_osc_en)UL;\n\n
+      
       \t//! Frequency of OSC Clock or Crystal\n
       \tstatic constexpr uint32_t osc_clock = $(osc_clock)UL;\n\n
       
@@ -51,17 +88,6 @@
       \t */
       \tstatic uint32_t getOscerClock() {
       \t   return osc_clock;
-      \t}\n\n
-      
-      \t/**
-      \t * Get OSC32KCLK clock
-      \t *
-      \t * @return Clock frequency as uint32_t in Hz
-      \t
-      \t * @note Oscillator not operable at 32kHz
-      \t */
-      \tstatic uint32_t getOsc32kClock() {
-      \t   return 0;
       \t}\n\n
    ]]></template>
 

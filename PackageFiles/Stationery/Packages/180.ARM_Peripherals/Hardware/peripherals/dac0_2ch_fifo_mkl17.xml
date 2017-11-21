@@ -3,6 +3,11 @@
 <!-- dac0_2ch_mkl05.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Comparitor">
+
+   <template><![CDATA[
+      \t//! Base value for PCR (excluding MUX value)
+      \tstatic constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;\n\n
+   ]]></template>
    
    <binaryOption name="mapPinsOnEnable" 
       description="Map pins when enabled"

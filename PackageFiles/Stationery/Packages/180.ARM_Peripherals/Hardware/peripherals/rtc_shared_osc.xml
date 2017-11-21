@@ -4,6 +4,11 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Real-time Clock">
 
+   <template><![CDATA[
+      \t//! Base value for PCR (excluding MUX value)
+      \tstatic constexpr uint32_t defaultPcrValue  = 0;\n\n
+   ]]></template>
+
    <category name="ERCLK32K Selection" description="Control source of ERCLK32K clock (nominally 32kHz)">
       <intOption name="rtcclkin_clock" 
          units="Hz"

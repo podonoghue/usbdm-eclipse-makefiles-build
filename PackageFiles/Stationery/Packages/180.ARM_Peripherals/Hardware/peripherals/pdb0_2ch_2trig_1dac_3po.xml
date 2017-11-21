@@ -6,6 +6,11 @@ Devices using this peripheral:
 -->
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="PDB">
 
+   <template><![CDATA[
+      \t//! Base value for PCR (excluding MUX value)
+      \tstatic constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;\n\n
+   ]]></template>
+  
    <aliasOption key="/SIM/system_bus_clock" displayName="PDB input clock" constant="true"/>
 
    <choiceOption name="pdb_sc_prescaler" 

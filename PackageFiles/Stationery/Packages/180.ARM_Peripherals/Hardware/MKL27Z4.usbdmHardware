@@ -95,8 +95,8 @@
       <peripheral baseName="ExternalTrigger" instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForShared" />
       </peripheral>
-      <peripheral baseName="FLEXIO"   instance=""         version="flexio_4sh_0">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
+      <peripheral baseName="FLEXIO"   instance=""         version="flexio_4sh">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexio" />
          <clock reg="SCGC5"         mask="SIM_SCGC5_FLEXIO_MASK" />
          <irq num="UART2_FLEXIO_IRQn" />
       </peripheral>

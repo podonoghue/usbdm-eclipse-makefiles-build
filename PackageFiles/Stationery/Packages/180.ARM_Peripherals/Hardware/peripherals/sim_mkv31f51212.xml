@@ -142,6 +142,9 @@ Devices using this peripheral:
          \t#ifdef SIM_SOPT2_LPUARTSRC
          \t      SIM_SOPT2_LPUARTSRC($(/SIM/sim_sopt2_lpuartsrc:-1)) |     // LPUART clock source select
          \t#endif
+         \t#ifdef SIM_SOPT2_LPUART0SRC
+         \t      SIM_SOPT2_LPUART0SRC($(/SIM/sim_sopt2_lpuart0src:-1)) |     // LPUART clock source select
+         \t#endif
          \t#ifdef SIM_SOPT2_PTD7PAD
          \t      SIM_SOPT2_PTD7PAD($(/SIM/sim_sopt2_ptd7pad:-1)) |       // PTD7 pad drive strength
          \t#endif
@@ -154,8 +157,12 @@ Devices using this peripheral:
          \t#ifdef SIM_SOPT2_FBSL
          \t      SIM_SOPT2_FBSL($(/SIM/sim_sopt2_fbsl:-1)) |          // FlexBus security level
          \t#endif
-         \t      SIM_SOPT2_RTCCLKOUTSEL($(/SIM/sim_sopt2_rtcclkoutsel)) |  // RTC clock out select
-         \t      SIM_SOPT2_PLLFLLSEL($(/SIM/sim_sopt2_pllfllsel[0]))|      // PLL/FLL clock select
+         \t#ifdef SIM_SOPT2_PLLFLLSEL
+         \t      SIM_SOPT2_PLLFLLSEL($(/SIM/sim_sopt2_pllfllsel[0]:-1))|      // PLL/FLL clock select
+         \t#endif
+         \t#ifdef SIM_SOPT2_RTCCLKOUTSEL
+         \t      SIM_SOPT2_RTCCLKOUTSEL($(/SIM/sim_sopt2_rtcclkoutsel:-1)) |  // RTC clock out select
+         \t#endif
          \t      SIM_SOPT2_CLKOUTSEL($(/SIM/sim_sopt2_clkoutsel));      // CLKOUT pin clock source select\n\n
       ]]></template>
    

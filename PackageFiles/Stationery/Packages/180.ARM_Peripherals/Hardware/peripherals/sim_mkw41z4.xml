@@ -63,7 +63,7 @@ Devices using this peripheral:
          \t
          \t   switch(sim->SOPT1&SIM_SOPT1_OSC32KSEL_MASK) {
          \t      default                     : return 0;
-         \t      case SIM_SOPT1_OSC32KSEL(0) : return Osc0Info::getOsc32kClock();
+         \t      case SIM_SOPT1_OSC32KSEL(0) : return RtcInfo::getInternalClock();
          \t      case SIM_SOPT1_OSC32KSEL(2) : return RtcInfo::getExternalClock();
          \t      case SIM_SOPT1_OSC32KSEL(3) : return 1000;
          \t   }
@@ -227,6 +227,9 @@ Devices using this peripheral:
          \t#endif
          \t#ifdef SIM_SOPT2_LPUARTSRC
          \t      SIM_SOPT2_LPUARTSRC($(/SIM/sim_sopt2_lpuartsrc:-1)) |     // LPUART clock source select
+         \t#endif
+         \t#ifdef SIM_SOPT2_LPUART0SRC
+         \t      SIM_SOPT2_LPUART0SRC($(/SIM/sim_sopt2_lpuart0src:-1)) |     // LPUART clock source select
          \t#endif
          \t#ifdef SIM_SOPT2_PTD7PAD
          \t      SIM_SOPT2_PTD7PAD($(/SIM/sim_sopt2_ptd7pad:-1)) |       // PTD7 pad drive strength

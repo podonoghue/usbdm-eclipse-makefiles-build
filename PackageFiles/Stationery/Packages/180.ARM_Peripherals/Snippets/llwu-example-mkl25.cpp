@@ -147,9 +147,11 @@ void testStopMode(
    // Make sure handlers have run
    waitMS(10);
 
+#ifdef MCG_C6_PLLS_MASK
    /*
     * If back in RUN mode we need to restore clock as
-    * MCG transitions PEE->PBE when in STOP modes
+    * MCG transitions PEE->PBE when in STOP modes.
+    * This assumes run mode is PEE
     */
    if (Smc::getStatus() == SmcStatus_run) {
       Mcg::clockTransition(McgInfo::clockInfo[ClockConfig_PEE_48MHz]);
@@ -157,7 +159,9 @@ void testStopMode(
       console.writeln("Awake!").flushOutput();
       console.writeln("Restored clock frequency").flushOutput();
    }
-   else {
+   else
+#endif
+   {
       console.writeln("Awake!").flushOutput();
    }
 }
@@ -407,8 +411,8 @@ void help() {
 }
 
 int main() {
-   // Change UART clock source
-   SimInfo::setUart0Clock(SimUartClockSource_OscerClk);
+   // Change UART clock source (assumes console = UART0)
+   SimInfo::setUart0Clock(SimUart0ClockSource_OscerClk);
    console.setBaudRate(BAUD_RATE);
 
    console.writeln("\n**************************************");

@@ -4,6 +4,11 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Analogue to Digital Converter">
 
+   <template><![CDATA[
+      \t//! Base value for PCR (excluding MUX value)
+      \tstatic constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;\n\n
+   ]]></template>
+   
    <binaryOption name="mapPinsOnEnable" 
       description="Map pins when enabled"
       toolTip="Map all allocated pins on a peripheral when the\n
@@ -16,7 +21,6 @@
    <template><![CDATA[
       \t/** Map all allocated pins on a peripheral when enabled */
       \tstatic constexpr bool mapPinsOnEnable = $(mapPinsOnEnable);\n\n
-      
    ]]></template>
 
    <choiceOption name="adc_cfg1_adiclk" description="Clock Source"

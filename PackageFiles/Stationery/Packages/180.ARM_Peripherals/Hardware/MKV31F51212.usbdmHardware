@@ -94,11 +94,11 @@
          <dma source="AlwaysEnabled62"      num="62" />
          <dma source="AlwaysEnabled63"      num="63" />
       </peripheral>
-      <peripheral baseName="EWM"      instance=""         version="ewm_0">
+      <peripheral baseName="EWM"      instance=""         version="ewm_int_pr">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForEwm" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_EWM_MASK" />
       </peripheral>
-      <peripheral baseName="FB"       instance=""         version="fb_0">
+      <peripheral baseName="FB"       instance=""         version="fb">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexBus" />
       </peripheral>
       <peripheral baseName="FLEXBUS"  instance="">

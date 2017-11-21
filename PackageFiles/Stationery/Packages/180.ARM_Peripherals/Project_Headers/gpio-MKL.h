@@ -104,15 +104,30 @@ public:
    static constexpr uint32_t MASK   = (1<<bitNum);
 
    /**
-    * Set Pin Control Register (PCR) value
+    * Set pin as digital I/O.
+    * Pin is initially set as an input.
+    * Use SetIn() and SetOut() to change direction.
+    *
+    * @note Resets the Pin Control Register value (PCR value).
+    * @note Resets the pin output value to the inactive state
     *
     * @param[in] pcrValue PCR value to use in configuring pin (excluding MUX value). See pcrValue()
     */
-   static void setPCR(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
+   static void setInOut(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
+      // Make input initially
+      setIn();
+      // Set inactive pin state (if later made output)
+      setInactive();
       Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|PinMux_Gpio);
    }
    /**
-    * Set Pin Control Register (PCR) value
+    * Set pin as digital I/O.
+    * Pin is initially set as an input.
+    * Use SetIn() and SetOut() to change direction.
+    * If open-drain then input function may meaningfully be used while set as output
+    *
+    * @note Resets the Pin Control Register value (PCR value).
+    * @note Resets the pin output value to the inactive state
     *
     * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
     * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High (defaults to PinDriveLow)
@@ -121,7 +136,7 @@ public:
     * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
     * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Fast)
     */
-   static void setPCR(
+   static void setInOut(
          PinPull           pinPull,
          PinDriveStrength  pinDriveStrength  = PinDriveStrength_Low,
          PinDriveMode      pinDriveMode      = PinDriveMode_PushPull,
@@ -129,7 +144,7 @@ public:
          PinFilter         pinFilter         = PinFilter_None,
          PinSlewRate       pinSlewRate       = PinSlewRate_Fast
          ) {
-      Pcr::setPCR(pinPull|pinDriveStrength|pinDriveMode|pinIrq|pinFilter|pinSlewRate|PinMux_Gpio);
+      setInOut(pinPull|pinDriveStrength|pinDriveMode|pinIrq|pinFilter|pinSlewRate|PinMux_Gpio);
    }
    /**
     * Set pin as digital output
@@ -233,6 +248,7 @@ public:
     * Set pin. Pin will be high if configured as an output.
     *
     * @note Polarity _is_ _not_ significant
+    * @note Don't use this method unless dealing with very low-level I/O
     */
    static void high() {
       gpio->PSOR = MASK;
@@ -241,6 +257,7 @@ public:
     * Clear pin. Pin will be low if configured as an output.
     *
     * @note Polarity _is_ _not_ significant
+    * @note Don't use this method unless dealing with very low-level I/O
     */
    static void low() {
       gpio->PCOR = MASK;
@@ -249,6 +266,7 @@ public:
     * Set pin. Pin will be high if configured as an output.
     *
     * @note Polarity _is_ _not_ significant
+    * @note Don't use this method unless dealing with very low-level I/O
     */
    static void set() {
 	   gpio->PSOR = MASK;
@@ -257,6 +275,7 @@ public:
     * Clear pin. Pin will be low if configured as an output.
     *
     * @note Polarity _is_ _not_ significant
+    * @note Don't use this method unless dealing with very low-level I/O
     */
    static void clear() {
 	   gpio->PCOR = MASK;
@@ -294,19 +313,21 @@ public:
       }
    }
    /**
-    * Set pin to active level (if configured as output)
+    * Set pin to active level (if configured as output).
+    * Convenience method for setActive()
     *
     * @note Polarity _is_ significant
     */
-   static void on() {
+   static void __attribute__((always_inline)) on() {
       setActive();
    }
    /**
-    * Set pin to inactive level (if configured as output)
+    * Set pin to inactive level (if configured as output).
+    * Convenience method for setInactive()
     *
     * @note Polarity _is_ significant
     */
-   static void off() {
+   static void __attribute__((always_inline)) off() {
       setInactive();
    }
    /**
@@ -380,7 +401,8 @@ public:
       }
    }
    /**
-    * Read pin value and return true if active level
+    * Read pin value and return true if active level.
+    * Equivalent to read()
     *
     * @return true/false reflecting if pin is active.
     *
@@ -397,6 +419,7 @@ public:
    }
    /**
     * Read pin value and return true if inactive level
+    * Equivalent to !read()
     *
     * @return true/false reflecting if pin is inactive.
     *
@@ -656,21 +679,17 @@ class Field_T {
    static_assert(((left<=31)&&(left>=right)&&(right>=0)), "Illegal bit number for left or right in GpioField");
 
 private:
-   static constexpr volatile GPIO_Type *gpio = reinterpret_cast<volatile GPIO_Type *>(Info::gpioAddress);
+   static constexpr volatile GPIO_Type *gpio = reinterpret_cast<volatile GPIO_Type *>(Info::pinInfo.gpioAddress);
 
 #ifdef PORT_DFCR_CS_MASK
-   static constexpr volatile PORT_DFER_Type *port = reinterpret_cast<volatile PORT_DFER_Type *>(Info::portAddress);
+   static constexpr volatile PORT_DFER_Type *port = reinterpret_cast<volatile PORT_DFER_Type *>(Info::pinInfo.portAddress);
 #else
-   static constexpr volatile PORT_Type *port = reinterpret_cast<volatile PORT_Type *>(Info::portAddress);
+   static constexpr volatile PORT_Type *port = reinterpret_cast<volatile PORT_Type *>(Info::pinInfo.portAddress);
 #endif
    /**
     * Mask for the bits being manipulated
     */
    static constexpr uint32_t MASK = ((1<<(left-right+1))-1)<<right;
-   /**
-    * Clock register
-    */
-   static constexpr volatile uint32_t *clockReg = reinterpret_cast<volatile uint32_t *>(Info::clockReg);
 
 public:
    /**
@@ -680,7 +699,7 @@ public:
     */
    static void setPCRs(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
       // Enable clock to GPCLR & GPCHR
-      *clockReg |= Info::clockMask;
+      enablePortClocks(Info::pinInfo.clockMask);
 
       // Include the if's as I expect one branch to be removed by optimization unless the field spans the boundary
       if ((MASK&0xFFFFUL) != 0) {
