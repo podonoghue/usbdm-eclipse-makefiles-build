@@ -164,7 +164,7 @@
       </peripheral>
       <peripheral baseName="FB"       instance=""         version="fb">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexBus" />
-         <clock reg="SCGC7"         mask="SIM_SCGC7_FB_MASK" />
+         <clock reg="SCGC7"         mask="SIM_SCGC7_FLEXBUS_MASK" />
       </peripheral>
       <peripheral baseName="FLEXIO"   instance=""         version="flexio_8sh_0x400df000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexio" />
@@ -332,7 +332,7 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPower" />
       </peripheral>
       <peripheral baseName="QSPI"     instance="0"        version="qspi0_0x400da000">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForQspi" />
          <clock reg="SCGC2"         mask="SIM_SCGC2_QSPI_MASK" />
          <irq num="QSPI0_IRQn" />
       </peripheral>
