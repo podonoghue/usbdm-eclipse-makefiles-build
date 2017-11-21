@@ -32,7 +32,7 @@
       <xi:include href="peripherals/DAC0_8CH_MKE16F16.svd.xml"/>
       <xi:include href="peripherals/DMA_MKE16F16.svd.xml"/>
       <xi:include href="peripherals/DMAMUX0_16CH_TRIG.svd.xml"/>
-      <xi:include href="peripherals/EWM_MKE16F16.svd.xml"/>
+      <xi:include href="peripherals/EWM_INT_PR.svd.xml"/>
       <xi:include href="peripherals/FLEXIO_4SH_MKE16F16.svd.xml"/>
       <xi:include href="peripherals/FTFE_MKE16F16.svd.xml"/>
       <xi:include href="peripherals/FTM0_MKE16F16.svd.xml"/>

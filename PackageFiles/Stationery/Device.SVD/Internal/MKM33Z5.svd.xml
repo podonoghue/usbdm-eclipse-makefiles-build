@@ -33,7 +33,7 @@
       <peripheral derivedFrom="DMAMUX0"><name>DMAMUX1</name><baseAddress>0x40022000</baseAddress></peripheral>
       <peripheral derivedFrom="DMAMUX0"><name>DMAMUX2</name><baseAddress>0x40023000</baseAddress></peripheral>
       <peripheral derivedFrom="DMAMUX0"><name>DMAMUX3</name><baseAddress>0x40024000</baseAddress></peripheral>
-      <xi:include href="peripherals/EWM_2.svd.xml"/>
+      <xi:include href="peripherals/EWM_INT.svd.xml"/>
       <xi:include href="peripherals/FTFA.svd.xml"/>
       <xi:include href="peripherals/GPIOA_MKM.svd.xml"/>
       <peripheral derivedFrom="GPIOA"><name>GPIOB</name><baseAddress>0x400FF001</baseAddress></peripheral>

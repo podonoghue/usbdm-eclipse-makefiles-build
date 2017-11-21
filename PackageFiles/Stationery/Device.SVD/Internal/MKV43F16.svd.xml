@@ -34,7 +34,7 @@
       <xi:include href="peripherals/DMA0_16CH_EARS16.svd.xml"/>
       <xi:include href="peripherals/DMAMUX0_16CH_TRIG.svd.xml"/>
       <xi:include href="peripherals/ENC_0.svd.xml"/>
-      <xi:include href="peripherals/EWM_2.svd.xml"/>
+      <xi:include href="peripherals/EWM_INT.svd.xml"/>
       <xi:include href="peripherals/FMC_MKV40F15.svd.xml"/>
       <xi:include href="peripherals/FTFA_XACCH.svd.xml"/>
       <xi:include href="peripherals/GPIOA_0x400FF000.svd.xml"/>

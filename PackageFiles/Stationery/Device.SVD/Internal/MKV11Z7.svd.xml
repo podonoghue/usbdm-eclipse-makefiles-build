@@ -30,7 +30,7 @@
       <xi:include href="peripherals/DAC0_2CH_MKV.svd.xml"/>
       <xi:include href="peripherals/DMA0_4CH_EARS.svd.xml"/>
       <xi:include href="peripherals/DMAMUX0_8CH_TRIG.svd.xml"/>
-      <xi:include href="peripherals/EWM_MKV.svd.xml"/>
+      <xi:include href="peripherals/EWM_INT_PR_CLK.svd.xml"/>
       <xi:include href="peripherals/FGPIOA_0xF8000000.svd.xml"/>
       <peripheral derivedFrom="FGPIOA"><name>FGPIOB</name><baseAddress>0xF8000040</baseAddress></peripheral>
       <peripheral derivedFrom="FGPIOA"><name>FGPIOC</name><baseAddress>0xF8000080</baseAddress></peripheral>

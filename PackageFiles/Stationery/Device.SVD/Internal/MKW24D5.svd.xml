@@ -29,7 +29,7 @@
       <xi:include href="peripherals/CRC0_0x40032000.svd.xml"/>
       <xi:include href="peripherals/DMA0_16CH.svd.xml"/>
       <xi:include href="peripherals/DMAMUX0_16CH_TRIG.svd.xml"/>
-      <xi:include href="peripherals/EWM_2.svd.xml"/>
+      <xi:include href="peripherals/EWM_INT.svd.xml"/>
       <xi:include href="peripherals/FMC_MK11D5.svd.xml"/>
       <xi:include href="peripherals/FTFL.svd.xml"/>
       <xi:include href="peripherals/FTM0_8CH.svd.xml"/>

@@ -33,8 +33,8 @@
       <xi:include href="peripherals/DAC0_16CH_FIFO16_0x400CC000.svd.xml"/>
       <xi:include href="peripherals/DMA0_32CH_EARS.svd.xml"/>
       <xi:include href="peripherals/DMAMUX0_32CH_TRIG_SPLIT_MK28F15.svd.xml"/>
-      <xi:include href="peripherals/EWM_MK28F15.svd.xml"/>
-      <xi:include href="peripherals/FB_0.svd.xml"/>
+      <xi:include href="peripherals/EWM_INT_PR_CLK.svd.xml"/>
+      <xi:include href="peripherals/FB.svd.xml"/>
       <xi:include href="peripherals/FLEXIO_8SH_0x400DF000.svd.xml"/>
       <xi:include href="peripherals/FMC_MK28F15.svd.xml"/>
       <xi:include href="peripherals/FTFE_XACCH.svd.xml"/>
@@ -51,7 +51,7 @@
       <peripheral derivedFrom="I2C0"><name>I2C1</name><baseAddress>0x40067000</baseAddress></peripheral>
       <peripheral derivedFrom="I2C0"><name>I2C2</name><baseAddress>0x400E6000</baseAddress></peripheral>
       <peripheral derivedFrom="I2C0"><name>I2C3</name><baseAddress>0x400E7000</baseAddress></peripheral>
-      <xi:include href="peripherals/I2S0_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/I2S0_2CH_MK28F15.svd.xml"/>
       <peripheral derivedFrom="I2S0"><name>I2S1</name><baseAddress>0x400AF000</baseAddress></peripheral>
       <xi:include href="peripherals/LLWU_PE8_FILT4.svd.xml"/>
       <xi:include href="peripherals/LMEM_MK28F15.svd.xml"/>
@@ -82,8 +82,8 @@
       <xi:include href="peripherals/RFVBAT_0.svd.xml"/>
       <xi:include href="peripherals/RTC_MK22F12810.svd.xml"/>
       <xi:include href="peripherals/SCB_CM4_CPACR_FPCCR.svd.xml"/>
-      <xi:include href="peripherals/SDHC_MK28F15.svd.xml"/>
-      <xi:include href="peripherals/SDRAMC_0.svd.xml"/>
+      <xi:include href="peripherals/SDHC0_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/SDRAMC.svd.xml"/>
       <xi:include href="peripherals/SIM_MK28F15.svd.xml"/>
       <xi:include href="peripherals/SMC_MK28F15.svd.xml"/>
       <xi:include href="peripherals/SPI0_MK_PCSIS6_PCSSE.svd.xml"/>
@@ -96,7 +96,7 @@
       <xi:include href="peripherals/TRNG0_0x400A0000_MK28F15.svd.xml"/>
       <xi:include href="peripherals/TSI0_DMA_MK28F15.svd.xml"/>
       <xi:include href="peripherals/USB0_MK28F15.svd.xml"/>
-      <xi:include href="peripherals/USBDCD_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/USBDCD_V1_2_MK28F15.svd.xml"/>
       <xi:include href="peripherals/USBHS_8ENDPT.svd.xml"/>
       <peripheral derivedFrom="USBDCD"><name>USBHSDCD</name><baseAddress>0x400A3000</baseAddress></peripheral>
       <xi:include href="peripherals/USBPHY_MK28F15.svd.xml"/>

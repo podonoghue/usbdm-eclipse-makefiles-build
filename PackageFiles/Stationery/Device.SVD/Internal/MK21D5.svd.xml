@@ -35,7 +35,7 @@
       <xi:include href="peripherals/DWT_CM4.svd.xml"/>
       <xi:include href="peripherals/ETF_0.svd.xml"/>
       <xi:include href="peripherals/ETM_0.svd.xml"/>
-      <xi:include href="peripherals/EWM_2.svd.xml"/>
+      <xi:include href="peripherals/EWM_INT.svd.xml"/>
       <xi:include href="peripherals/FMC_MK11D5.svd.xml"/>
       <xi:include href="peripherals/FPB.svd.xml"/>
       <xi:include href="peripherals/FTFL.svd.xml"/>

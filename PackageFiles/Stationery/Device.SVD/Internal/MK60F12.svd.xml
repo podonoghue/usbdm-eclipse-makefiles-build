@@ -48,8 +48,8 @@
       <xi:include href="peripherals/ETB_0.svd.xml"/>
       <xi:include href="peripherals/ETF_0.svd.xml"/>
       <xi:include href="peripherals/ETM_0.svd.xml"/>
-      <xi:include href="peripherals/EWM_2.svd.xml"/>
-      <xi:include href="peripherals/FB_0.svd.xml"/>
+      <xi:include href="peripherals/EWM_INT.svd.xml"/>
+      <xi:include href="peripherals/FB.svd.xml"/>
       <xi:include href="peripherals/FMC_MK10F12.svd.xml"/>
       <xi:include href="peripherals/FPB.svd.xml"/>
       <xi:include href="peripherals/FPU.svd.xml"/>

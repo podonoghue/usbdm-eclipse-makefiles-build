@@ -30,7 +30,7 @@
       <xi:include href="peripherals/DAC0_16CH_FIFO16.svd.xml"/>
       <xi:include href="peripherals/DMA0_4CH_EARS_ACTIVE.svd.xml"/>
       <xi:include href="peripherals/DMAMUX0_4CH_TRIG_MK22F12810.svd.xml"/>
-      <xi:include href="peripherals/EWM_0.svd.xml"/>
+      <xi:include href="peripherals/EWM_INT_PR.svd.xml"/>
       <xi:include href="peripherals/FMC_MK02F12810.svd.xml"/>
       <xi:include href="peripherals/FTFA_XACCH.svd.xml"/>
       <xi:include href="peripherals/FTM0_8CH_ICRST.svd.xml"/>

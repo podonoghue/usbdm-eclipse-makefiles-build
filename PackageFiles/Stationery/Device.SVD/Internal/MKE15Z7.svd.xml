@@ -28,7 +28,7 @@
       <xi:include href="peripherals/CRC0_0x40032000.svd.xml"/>
       <xi:include href="peripherals/DMA0_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/DMAMUX0_8CH_TRIG_MKE15Z7.svd.xml"/>
-      <xi:include href="peripherals/EWM_MKE16F16.svd.xml"/>
+      <xi:include href="peripherals/EWM_INT_PR.svd.xml"/>
       <xi:include href="peripherals/FLEXIO_4SH_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/FTFE_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/FTM0_MKE15Z7.svd.xml"/>
