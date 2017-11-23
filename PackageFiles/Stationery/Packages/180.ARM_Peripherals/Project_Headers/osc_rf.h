@@ -26,6 +26,17 @@ namespace USBDM {
  */
 
 /**
+ * Controls the modes in which the oscillator will operate
+ */
+enum OscRunMode {
+   OscRunMode_Soc                             = RSIM_CONTROL_RF_OSC_EN(0b0000), //!< Oscillator will be controlled by the SoC, pin or link layer
+   OscRunMode_Run_Wait                        = RSIM_CONTROL_RF_OSC_EN(0b0001), //!< Oscillator enabled in Run/Wait
+   OscRunMode_Run_Wait_Stop                   = RSIM_CONTROL_RF_OSC_EN(0b0011), //!< Oscillator enabled in Run/Wait/Stop
+   OscRunMode_Run_Wait_Stop_Vlp_Run_Wait      = RSIM_CONTROL_RF_OSC_EN(0b0111), //!< Oscillator enabled in Run/Wait/Stop/VLPR/VLPW
+   OscRunMode_Run_Wait_Stop_Vlp_Run_Wait_Stop = RSIM_CONTROL_RF_OSC_EN(0b1111), //!< Oscillator enabled in Run/Wait/Stop/VLPR/VLPW/VLPS
+};
+
+/**
  * Template class providing interface to OscRfillator
  *
  * @tparam info      Information class for OSC
@@ -71,6 +82,13 @@ public:
       defaultConfigure();
    }
 
+   /**
+    *
+    * @param oscRunMode Modes in which the oscillator will operate
+    */
+   static void setOscillatorRunModes(OscRunMode oscRunMode) {
+      RSIM->CONTROL = (RSIM->CONTROL&~RSIM_CONTROL_RF_OSC_EN_MASK)|oscRunMode;
+   }
 };
 
 #ifdef USBDM_OSC0_IS_DEFINED

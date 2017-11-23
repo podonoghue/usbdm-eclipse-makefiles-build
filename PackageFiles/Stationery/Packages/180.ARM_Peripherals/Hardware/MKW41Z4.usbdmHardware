@@ -16,6 +16,7 @@
       <device name="MKW41Z256VHT4" manual="MKW41Z512RM" package="QFN48" />
       <device name="MKW41Z512CAT4" manual="MKW41Z512RM" package="WLCSP" />
       <device name="MKW41Z512VHT4" manual="MKW41Z512RM" package="QFN48" />
+      <device name="R41Z_EVA"     manual="MKW41Z512RM" package="R41Z_EVA" />
    </family>
    <peripherals>
       <peripheral baseName="ADC"      instance="0"        version="adc0_diff_a">
@@ -127,7 +128,7 @@
          <clock reg="SCGC4"         mask="SIM_SCGC4_I2C1_MASK" />
          <irq num="I2C1_IRQn" />
       </peripheral>
-      <peripheral baseName="LLWU"     instance=""         version="llwu_pe4_filt2">
+      <peripheral baseName="LLWU"     instance=""         version="llwu_pe4_filt2_mkw41z4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
          <irq num="LLWU_IRQn" />
       </peripheral>
@@ -589,8 +590,8 @@
    </pins>
    <packages>
       <package name="FRDM_KW41Z">
-         <placement pin="ADC0_DM0"      location="A0/Therm" />
-         <placement pin="ADC0_DP0"      location="A5/Therm" />
+         <placement pin="ADC0_DM0"      location="A0/Therm-" />
+         <placement pin="ADC0_DP0"      location="A5/Therm+" />
          <placement pin="ANT"           location="ANT" />
          <placement pin="PSWITCH"       location="PSWITCH" />
          <placement pin="PTA0"          location="Reserved(SWD_DIO)" />
@@ -600,7 +601,7 @@
          <placement pin="PTA18"         location="D13/RGB_BLUE" />
          <placement pin="PTA19"         location="D10/RGB_GREEN" />
          <placement pin="PTA2"          location="Reserved(Reset_b)" />
-         <placement pin="PTB0"          location="RED_LED" />
+         <placement pin="PTB0"          location="D7/RED_LED" />
          <placement pin="PTB1"          location="A4/IR_LED" />
          <placement pin="PTB16"         location="EXTAL32K" />
          <placement pin="PTB17"         location="XTAL32K" />
@@ -609,14 +610,14 @@
          <placement pin="PTB3"          location="A3" />
          <placement pin="PTC0"          location="PTC0" />
          <placement pin="PTC1"          location="D9/RGB_RED" />
-         <placement pin="PTC16"         location="D3" />
-         <placement pin="PTC17"         location="D5" />
-         <placement pin="PTC18"         location="D6" />
-         <placement pin="PTC19"         location="D2" />
+         <placement pin="PTC16"         location="D3/FlashSCK/BTN1" />
+         <placement pin="PTC17"         location="D5/FlashSI" />
+         <placement pin="PTC18"         location="D6/FlashSO" />
+         <placement pin="PTC19"         location="D2/FlashCSb/BTN2" />
          <placement pin="PTC2"          location="D15/AccelSCL" />
          <placement pin="PTC3"          location="D14/AccelSDA" />
          <placement pin="PTC4"          location="D4/SW3" />
-         <placement pin="PTC5"          location="SW4" />
+         <placement pin="PTC5"          location="D9/SW4" />
          <placement pin="PTC6"          location="D0/Console_Rx" />
          <placement pin="PTC7"          location="D1/Console_Tx" />
          <placement pin="RF_EXTAL"      location="RF_EXTAL" />
@@ -671,6 +672,40 @@
          <placement pin="VDD_RF3"       location="p32" />
          <placement pin="VREFH"         location="p27" />
          <placement pin="VSSA"          location="p26" />
+      </package>
+      <package name="R41Z_EVA">
+         <placement pin="ADC0_DM0"      location="A0/Therm-" />
+         <placement pin="ADC0_DP0"      location="A5/Therm+" />
+         <placement pin="ANT"           location="ANT" />
+         <placement pin="PSWITCH"       location="PSWITCH" />
+         <placement pin="PTA0"          location="Reserved(SWD_DIO)" />
+         <placement pin="PTA1"          location="Reserved(SWD_CLK)" />
+         <placement pin="PTA16"         location="D11" />
+         <placement pin="PTA17"         location="D12" />
+         <placement pin="PTA18"         location="D13/RGB_BLUE" />
+         <placement pin="PTA19"         location="D10/RGB_GREEN" />
+         <placement pin="PTA2"          location="Reserved(Reset_b)" />
+         <placement pin="PTB0"          location="D7/BLUE_LED" />
+         <placement pin="PTB1"          location="A4/IR_LED" />
+         <placement pin="PTB16"         location="EXTAL32K" />
+         <placement pin="PTB17"         location="XTAL32K" />
+         <placement pin="PTB18"         location="A1" />
+         <placement pin="PTB2"          location="A2" />
+         <placement pin="PTB3"          location="A3" />
+         <placement pin="PTC0"          location="PTC0" />
+         <placement pin="PTC1"          location="D9/RGB_RED" />
+         <placement pin="PTC16"         location="D3/FlashSCK/BTN1" />
+         <placement pin="PTC17"         location="D5/FlashSI" />
+         <placement pin="PTC18"         location="D6/FlashSO" />
+         <placement pin="PTC19"         location="D2/FlashCSb/BTN2" />
+         <placement pin="PTC2"          location="D15/AccelSCL" />
+         <placement pin="PTC3"          location="D14/AccelSDA" />
+         <placement pin="PTC4"          location="D4/BTN3" />
+         <placement pin="PTC5"          location="D9/BTN4" />
+         <placement pin="PTC6"          location="D0/Console_Rx" />
+         <placement pin="PTC7"          location="D1/Console_Tx" />
+         <placement pin="RF_EXTAL"      location="RF_EXTAL" />
+         <placement pin="RF_XTAL"       location="RF_XTAL" />
       </package>
       <package name="WLCSP">
          <placement pin="ADC0_DM0"      location="H1" />

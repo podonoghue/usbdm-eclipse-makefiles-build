@@ -7,7 +7,7 @@
    <irqOption name="irqHandlingMethod"  
       description="Peripheral interrupt handler"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
-      pattern="^PORT%i$" 
+      pattern=".*PORT%i.*" 
       classHandler="%c%i::irqHandler" />
       
    <template><![CDATA[

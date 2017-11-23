@@ -42,6 +42,7 @@
 
 <!ELEMENT intOption EMPTY >
    <!ATTLIST intOption constant     (false|true) "false">
+   <!ATTLIST intOption hidden       (false|true) "false">
    <!ATTLIST intOption name          ID           #REQUIRED>
    <!ATTLIST intOption key           CDATA        #IMPLIED>
    <!ATTLIST intOption origin        CDATA        #IMPLIED>
@@ -63,6 +64,7 @@
   
 <!ELEMENT bitmaskOption EMPTY >
    <!ATTLIST bitmaskOption constant       (false|true) "false">
+   <!ATTLIST bitmaskOption hidden         (false|true) "false">
    <!ATTLIST bitmaskOption name           ID           #REQUIRED>
    <!ATTLIST bitmaskOption key            CDATA        #IMPLIED>
    <!ATTLIST bitmaskOption origin         CDATA        #IMPLIED>
@@ -78,6 +80,7 @@
   
 <!ELEMENT floatOption EMPTY >
    <!ATTLIST floatOption constant      (false|true) "false">
+   <!ATTLIST floatOption hidden       (false|true) "false">
    <!ATTLIST floatOption name          ID           #REQUIRED>
    <!ATTLIST floatOption key           CDATA        #IMPLIED>
    <!ATTLIST floatOption origin        CDATA        #IMPLIED>
@@ -109,6 +112,7 @@
 
 <!ELEMENT stringOption EMPTY >
    <!ATTLIST stringOption constant      (false|true) "false">
+   <!ATTLIST binaryOption hidden       (false|true) "false">
    <!ATTLIST stringOption name          ID           #REQUIRED>
    <!ATTLIST stringOption key           CDATA        #IMPLIED>
    <!ATTLIST stringOption origin        CDATA        #IMPLIED>
@@ -122,6 +126,7 @@
   
 <!ELEMENT numericListOption EMPTY >
    <!ATTLIST numericListOption constant      (false|true) "false">
+   <!ATTLIST numericListOption hidden        (false|true) "false">
    <!ATTLIST numericListOption name          ID           #REQUIRED>
    <!ATTLIST numericListOption key           CDATA        #IMPLIED>
    <!ATTLIST numericListOption origin        CDATA        #IMPLIED>
@@ -138,6 +143,7 @@
   
 <!ELEMENT pinListOption EMPTY >
    <!ATTLIST pinListOption constant      (false|true) "false">
+   <!ATTLIST pinListOption hidden        (false|true) "false">
    <!ATTLIST pinListOption name          ID           #REQUIRED>
    <!ATTLIST pinListOption key           CDATA        #IMPLIED>
    <!ATTLIST pinListOption origin        CDATA        #IMPLIED>
@@ -152,6 +158,7 @@
   
 <!ELEMENT choiceOption (choice)* >
    <!ATTLIST choiceOption constant     (false|true) "false">
+   <!ATTLIST choiceOption hidden       (false|true) "false">
    <!ATTLIST choiceOption name         ID           #REQUIRED>
    <!ATTLIST choiceOption key          CDATA        #IMPLIED>
    <!ATTLIST choiceOption origin       CDATA        #IMPLIED>
@@ -168,8 +175,9 @@
    <!ATTLIST choice name          CDATA        #REQUIRED>
    <!ATTLIST choice isDefault     (false|true) "false">
 
-<!ELEMENT binaryOption (choice, choice) >
+<!ELEMENT binaryOption (choice, choice)? >
    <!ATTLIST binaryOption constant     (false|true) "false">
+   <!ATTLIST binaryOption hidden       (false|true) "false">
    <!ATTLIST binaryOption name         ID           #REQUIRED>
    <!ATTLIST binaryOption key          CDATA        #IMPLIED>
    <!ATTLIST binaryOption origin       CDATA        #IMPLIED>
@@ -181,6 +189,7 @@
 
 <!ELEMENT irqOption EMPTY >
    <!ATTLIST irqOption constant      (false|true) "false">
+   <!ATTLIST irqOption hidden        (false|true) "false">
    <!ATTLIST irqOption name          ID           #REQUIRED>
    <!ATTLIST irqOption key           CDATA        #IMPLIED>
    <!ATTLIST irqOption pattern       CDATA        #REQUIRED>
@@ -207,7 +216,8 @@
    <!ATTLIST param value CDATA         #REQUIRED>
 
 <!ELEMENT signals EMPTY >
-   <!ATTLIST signals name CDATA "" >
+   <!ATTLIST signals name        CDATA "" >
+   <!ATTLIST signals optional    (false|true) "false">
 
 <!-- List of actions to be applied to a project -->
 <!ELEMENT projectActionList ((deleteResource|copy|constant)*) >

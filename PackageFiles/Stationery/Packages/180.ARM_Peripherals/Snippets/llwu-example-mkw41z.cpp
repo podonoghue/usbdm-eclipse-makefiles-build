@@ -1,6 +1,6 @@
 /*
  ============================================================================
- * @file    llwu-example-mk28f.cpp (180.ARM_Peripherals/Snippets/)
+ * @file    llwu-example-mkw41z.cpp (180.ARM_Peripherals/Snippets/)
  * @brief   Basic C++ demo
  *
  *  Created on: 25/09/2017
@@ -9,9 +9,8 @@
  */
 /*
  * This examples assumes that appropriate clock configurations have been created:
- *  - HSRUN_CLOCK_CONFIG = ClockConfig_PEE_120MHz  For HSRUN mode (Core=120MHz, Bus=60MHz, Flash=24MHz)
- *  - RUN_CLOCK_CONFIG   = ClockConfig_PEE_80MHz   For RUN mode (Core=80MHz, Bus=40MHz, Flash=27MHz)
- *  - VLPR_CLOCK_CONFIG  = ClockConfig_BLPE_4MHz   For VLPR (Core/Bus = 4MHz, Flash = 1MHz)
+ *  - RUN_CLOCK_CONFIG  = ClockConfig_PEE_48MHz   For RUN mode (Core=80MHz, Bus=40MHz, Flash=27MHz)
+ *  - VLPR_CLOCK_CONFIG = ClockConfig_BLPE_4MHz   For VLPR (Core/Bus = 4MHz, Flash = 1MHz)
  *
  * Interrupts must be configured for GPIO pin used, LLWU, LPTMR
  * It will also be necessary to modify the linker memory map so that only
@@ -24,21 +23,21 @@
 #include "llwu.h"
 #include "pmc.h"
 #include "rcm.h"
+#include "osc_rf.h"
 
 // Allow access to USBDM methods without USBDM:: prefix
 using namespace USBDM;
 
 // Define clock modes to use
-static ClockConfig HSRUN_CLOCK_CONFIG  = ClockConfig_PEE_150MHz;
-static ClockConfig RUN_CLOCK_CONFIG    = ClockConfig_PEE_120MHz;
-static ClockConfig VLPR_CLOCK_CONFIG   = ClockConfig_BLPE_4MHz;
+static ClockConfig RUN_CLOCK_CONFIG  = ClockConfig_FEE_42MHz;
+static ClockConfig VLPR_CLOCK_CONFIG = ClockConfig_VLPR_BLPI_4MHz;
 
 // May need reduced baud rate for slow clocks
 static constexpr int BAUD_RATE = 115200;
 
 // Using LEDs rather defeats VLLSx mode!
-using GreenLed  = GpioE<7,ActiveLow>;
-using RedLed    = GpioE<6,ActiveLow>;
+using RedLed    = GpioB<18,ActiveLow>;
+using GreenLed  = GpioB<19,ActiveLow>;
 
 // Timer to use for timed wake-up
 using WakeupTimer = Lptmr0;
@@ -47,7 +46,7 @@ using WakeupTimer = Lptmr0;
 static constexpr unsigned FILTER_NUM = 0;
 
 // LLWU Pin to use for wake-up
-static constexpr LlwuPin  WAKEUP_PIN = LlwuPin_ptc11;
+static constexpr LlwuPin  WAKEUP_PIN = LlwuPin_Ptc4;
 
 // LLWU pin configuration
 using WakeupPin = PcrTable_T<LlwuInfo, WAKEUP_PIN>;
@@ -110,7 +109,7 @@ void llwuCallback() {
 /**
  *
  * @param smcStopMode            STOP mode to enter - STOP,VLPS,LLS,VLLS
- * @param smcLowLeakageStopMode  LLS/VLLS mode to enter VLLS0,1,2,3 (in VLLS), LLS2,LLS3 (in LLS)
+ * @param smcLowLeakageStopMode  VLLS mode to enter VLLS0,1,2,3 (for VLLS only)
  */
 void testStopMode(
       SmcStopMode             smcStopMode,
@@ -181,12 +180,12 @@ void testWaitMode(SmcRunMode smcRunMode) {
 
 /** Names of tests */
 static const char *TestNames[] = {
-   "NONE", "STOP ", "VLPS ", "WAIT ", "VLPW ", "LLS2 ", "LLS3 ", "VLLS0", "VLLS1", "VLLS2", "VLLS3",
+   "NONE ", "STOP ", "VLPS ", "WAIT ", "VLPW ", "LLS  ", "VLLS0", "VLLS1", "VLLS2", "VLLS3",
 };
 
 /** Possible tests - must be in this order */
 enum Test {
-   NONE, STOP, VLPS, WAIT, VLPW, LLS2, LLS3, VLLS0, VLLS1, VLLS2, VLLS3,
+   NONE, STOP, VLPS, WAIT, VLPW, LLS, VLLS0, VLLS1, VLLS2, VLLS3,
 };
 
 /**
@@ -214,7 +213,7 @@ void enablePin(Test test, bool enable) {
          PinIrq_None,
          PinFilter_Passive);
 
-   if (enable && (test>=LLS2)) {
+   if (enable && (test>=LLS)) {
 
       // Configure wake-up pin as LLWU input
       Llwu::setInput<WAKEUP_PIN>(
@@ -244,7 +243,7 @@ void enablePin(Test test, bool enable) {
       Llwu::setCallback(llwuCallback);
       Llwu::enableNvicInterrupts();
    }
-   if (enable && (test<LLS2)) {
+   if (enable && (test<LLS)) {
 
       // Enable pin interrupt if not low-leakage mode
       console.writeln("Configuring pin interrupt for wake-up").flushOutput();
@@ -286,7 +285,7 @@ void enableTimer(Test test, bool enable) {
       WakeupTimer::setCallback(wakeupTimerCallback);
       WakeupTimer::enableNvicInterrupts();
 
-      if ((test>=LLS2) && (test<=VLLS3)) {
+      if (test>=LLS) {
 
          // Use LLWU with timer
          Llwu::clearAllFlags();
@@ -343,8 +342,7 @@ void runTest(
       case VLPW:  testWaitMode(SmcRunMode_VeryLowPower);       break;
       case STOP:  testStopMode(SmcStopMode_NormalStop);        break;
       case VLPS:  testStopMode(SmcStopMode_VeryLowPowerStop);  break;
-      case LLS2:  testStopMode(SmcStopMode_LowLeakageStop,     SmcLowLeakageStopMode_LLS2);  break;
-      case LLS3:  testStopMode(SmcStopMode_LowLeakageStop,     SmcLowLeakageStopMode_LLS3);  break;
+      case LLS:   testStopMode(SmcStopMode_LowLeakageStop);    break;
       case VLLS0: testStopMode(SmcStopMode_VeryLowLeakageStop, SmcLowLeakageStopMode_VLLS0); break;
       case VLLS1: testStopMode(SmcStopMode_VeryLowLeakageStop, SmcLowLeakageStopMode_VLLS1); break;
       case VLLS2: testStopMode(SmcStopMode_VeryLowLeakageStop, SmcLowLeakageStopMode_VLLS2); break;
@@ -363,18 +361,13 @@ void runTest(
 
 /**
  * Change run mode
- * VLPR->RUN->HSRUN
+ * VLPR<->RUN
  *
  * @return Run mode entered
  */
 SmcStatus changeRunMode() {
    SmcStatus smcStatus = Smc::getStatus();
-   if (smcStatus == SmcStatus_hsrun) {
-      // HSRUN->RUN
-      Mcg::clockTransition(McgInfo::clockInfo[RUN_CLOCK_CONFIG]);
-      Smc::enterRunMode(SmcRunMode_Normal);
-      console.setBaudRate(defaultBaudRate);
-      console.writeln("Changed to RUN mode").flushOutput();
+   if (smcStatus == SmcStatus_run) {
       // RUN->VLPR
       Mcg::clockTransition(McgInfo::clockInfo[VLPR_CLOCK_CONFIG]);
       Smc::enterRunMode(SmcRunMode_VeryLowPower);
@@ -387,13 +380,6 @@ SmcStatus changeRunMode() {
       Mcg::clockTransition(McgInfo::clockInfo[RUN_CLOCK_CONFIG]);
       console.setBaudRate(BAUD_RATE);
       console.writeln("Changed to RUN mode").flushOutput();
-   }
-   else if (smcStatus == SmcStatus_run) {
-      // RUN->HSRUN
-      Smc::enterRunMode(SmcRunMode_HighSpeed);
-      Mcg::clockTransition(McgInfo::clockInfo[HSRUN_CLOCK_CONFIG]);
-      console.setBaudRate(defaultBaudRate);
-      console.writeln("Changed to HSRUN mode").flushOutput();
    }
    return Smc::getStatus();
 }
@@ -422,8 +408,10 @@ void help() {
 }
 
 int main() {
-   // Set LPUART (console) clock to clock source available in VLPR mode
-   SimInfo::setLpuartClock(SimLpuartClockSource_OscerClk);
+   // Change UART clock source (assumes console = LPUART0)
+   SimInfo::setLpuart0Clock(SimLpuart0ClockSource_OscerClk);
+   // Enable RF osc in all modes (for UART clock)
+   Osc0::setOscillatorRunModes(OscRunMode_Run_Wait_Stop_Vlp_Run_Wait_Stop);
    console.setBaudRate(BAUD_RATE);
 
    console.writeln("\n**************************************");
@@ -442,22 +430,15 @@ int main() {
    Smc::enablePowerModes(
          SmcVeryLowPower_Enable,
          SmcLowLeakageStop_Enable,
-         SmcVeryLowLeakageStop_Enable,
-         SmcHighSpeedRun_Enable
-   );
+         SmcVeryLowLeakageStop_Enable);
 
-   //Errata e4481 STOP mode recovery unstable
-//   Pmc::setBandgapOperation(PmcBandgapBuffer_Off, PmcBandgapLowPowerEnable_On);
-
-   // Retain all RAM during LLS2 mode and VLLS2 modes.
-   Pmc::setVlpRamRetention(0b11111111);
+   Pmc::setBandgapOperation(PmcBandgapBuffer_On);
 
    checkError();
 
    console.setEcho(EchoMode_Off);
 
    Test  test        = STOP;
-   Test  oldTest     = STOP;
    bool  refresh     = true;
    bool  enablePin   = true;
    bool  enableTimer = true;
@@ -473,25 +454,15 @@ int main() {
          console.write("SystemBusClock   = ").writeln(::SystemBusClock);
 
          switch(smcStatus) {
-            case SmcStatus_hsrun:
-               console.write(
-                     "\n\nTests\n"
-                     "====================================\n"
-                     "R - Change run mode - VLPR, RUN, HSRUN\n"
-                     "T - Toggle LPTMR wake-up source\n"
-                     "P - Toggle PIN wake-up source\n"
-                     "H - Help\n"
-               );
-               break;
             default:
             case SmcStatus_run:
                console.write(
                      "\n\nTests\n"
                      "====================================\n"
-                     "R - Change run mode - VLPR, RUN, HSRUN\n"
+                     "R - Change run mode - VLPR, RUN\n"
                      "S - Select STOP,VLPS test\n"
                      "W - Select WAIT test\n"
-                     "L - Select LLS2, LLS3 test\n"
+                     "L - Select LLS test\n"
                      "V - Select VLLS0, VLLS1, VLLS2, VLLS3 test\n"
 #ifdef SMC_PMCTRL_LPWUI_MASK
                      "I - Toggle LPWUI\n"
@@ -505,10 +476,10 @@ int main() {
                console.write(
                      "\n\nTests\n"
                      "====================================\n"
-                     "R - Change run mode - VLPR, RUN, HSRUN\n"
+                     "R - Change run mode - VLPR, RUN\n"
                      "S - Select VLPS test\n"
                      "W - Select VLPW test\n"
-                     "L - Select LLS2, LLS3 test\n"
+                     "L - Select LLS test\n"
                      "V - Select VLLS0, VLLS1, VLLS2, VLLS3 test\n"
                      "T - Toggle LPTMR wake-up (not available in VLLS0)\n"
                      "P - Toggle PIN wake-up\n"
@@ -552,33 +523,17 @@ int main() {
             }
             break;
          case 'L':
-            if (smcStatus!=SmcStatus_hsrun) {
-               test = (test != LLS2)?LLS2:LLS3;
-            }
+               test = LLS;
             break;
          case 'V':
-            if (smcStatus!=SmcStatus_hsrun) {
                test = ((test != VLLS0)&&(test != VLLS1)&&(test != VLLS2))?VLLS0:(Test)(test+1);
-            }
             break;
          case 'R':
             console.writeln("\n").flushOutput();
             switch(changeRunMode()) {
-               case SmcStatus_hsrun:
-                  oldTest = test;
-                  test=NONE;
-                  break;
                default:
-               case SmcStatus_run:
-                  if (test==VLPW) {
-                     test=WAIT;
-                  }
-                  else if (test==VLPS) {
-                     test=STOP;
-                  }
                   break;
                case SmcStatus_vlpr:
-                  test = oldTest;
                   if (test==WAIT) {
                      test=VLPW;
                   }

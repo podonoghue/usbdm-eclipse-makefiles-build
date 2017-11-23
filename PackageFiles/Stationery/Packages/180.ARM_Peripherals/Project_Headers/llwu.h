@@ -44,34 +44,8 @@ enum LlwuPeripheralMode {
    LlwuPeripheralMode_Enabled  = true,  //!< Wake-up by peripheral enabled
 };
 
-/**
- * LLWU pin sources
- */
-enum LlwuPin : uint32_t {
-$(/LLWU/llwu_pins:!!!!Not Found!!!!)};
-
-/**
- * LLWU peripheral sources
- */
-enum LlwuPeripheral : uint8_t {
-   LlwuPeripheral_Lptmr       = (1<<0),  //!< Wake-up peripheral LLWU_M0IF
-   LlwuPeripheral_Cmp0        = (1<<1),  //!< Wake-up peripheral LLWU_M1IF
-   LlwuPeripheral_Cmp1        = (1<<2),  //!< Wake-up peripheral LLWU_M2IF // When available
-   LlwuPeripheral_Cmp2_Cmp3   = (1<<3),  //!< Wake-up peripheral LLWU_M3IF // When available
-   LlwuPeripheral_Tsi         = (1<<4),  //!< Wake-up peripheral LLWU_M4IF // When available
-   LlwuPeripheral_RtcAlarm    = (1<<5),  //!< Wake-up peripheral LLWU_M5IF
-   LlwuPeripheral_Reserved6   = (1<<6),  //!< Wake-up peripheral LLWU_M6IF
-   LlwuPeripheral_RtcSeconds  = (1<<7),  //!< Wake-up peripheral LLWU_M7IF
-   
-   LlwuPeripheral_0           = (1<<0),  //!< Wake-up peripheral LLWU_M0IF
-   LlwuPeripheral_1           = (1<<1),  //!< Wake-up peripheral LLWU_M1IF
-   LlwuPeripheral_2           = (1<<2),  //!< Wake-up peripheral LLWU_M2IF
-   LlwuPeripheral_3           = (1<<3),  //!< Wake-up peripheral LLWU_M3IF
-   LlwuPeripheral_4           = (1<<4),  //!< Wake-up peripheral LLWU_M4IF
-   LlwuPeripheral_5           = (1<<5),  //!< Wake-up peripheral LLWU_M5IF
-   LlwuPeripheral_6           = (1<<6),  //!< Wake-up peripheral LLWU_M6IF
-   LlwuPeripheral_7           = (1<<7),  //!< Wake-up peripheral LLWU_M7IF
-};
+$(/LLWU/LlwuPins)
+$(/LLWU/LlwuPeripherals)
 
 /**
  * LLWU pin wake-up mode

@@ -10,11 +10,11 @@
  ========================================================================================
  */
 #include "hardware.h"
-
 #include "mcg.h"
-#include "llwu.h"
 #include "smc.h"
+#include "llwu.h"
 
+// Allow access to USBDM methods without USBDM:: prefix
 using namespace USBDM;
 
 // LED connection - change as required
@@ -23,8 +23,6 @@ using Led   = GpioC<3>;
 void llwuCallback() {
    __asm__("nop");
 }
-
-using namespace USBDM;
 
 /**
  * Low power clock setting

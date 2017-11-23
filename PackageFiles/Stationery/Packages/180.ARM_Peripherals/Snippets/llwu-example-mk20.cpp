@@ -9,8 +9,8 @@
  */
 /*
  * This examples assumes that appropriate clock configurations have been created:
- *  - ClockConfig_PEE_48MHz   For RUN mode (Core=80MHz, Bus=40MHz, Flash=27MHz)
- *  - ClockConfig_BLPE_4MHz   For VLPR (Core/Bus = 4MHz, Flash = 1MHz)
+ *  - RUN_CLOCK_CONFIG   = ClockConfig_PEE_48MHz   For RUN mode (Core=80MHz, Bus=40MHz, Flash=27MHz)
+ *  - VLPR_CLOCK_CONFIG  = ClockConfig_BLPE_4MHz   For VLPR (Core/Bus = 4MHz, Flash = 1MHz)
  *
  * Interrupts must be configured for GPIO pin used, LLWU, LPTMR
  * It will also be necessary to modify the linker memory map so that only
@@ -32,11 +32,15 @@
 #include "pmc.h"
 #include "rcm.h"
 
-// May need to reduce baud rate for slow clocks
-static constexpr int BAUD_RATE = 115200;
-
 // Allow access to USBDM methods without USBDM:: prefix
 using namespace USBDM;
+
+// Define clock modes to use
+static ClockConfig RUN_CLOCK_CONFIG    = ClockConfig_PEE_48MHz;
+static ClockConfig VLPR_CLOCK_CONFIG   = ClockConfig_BLPE_4MHz;
+
+// May need reduced baud rate for slow clocks
+static constexpr int BAUD_RATE = 115200;
 
 // Using LEDs rather defeats VLLSx mode!
 using RedLed    = GpioC<3,ActiveLow>;
@@ -147,17 +151,21 @@ void testStopMode(
    // Make sure handlers have run
    waitMS(10);
 
+#ifdef MCG_C6_PLLS_MASK
    /*
     * If back in RUN mode we need to restore clock as
-    * MCG transitions PEE->PBE when in STOP modes
+    * MCG transitions PEE->PBE when in STOP modes.
+    * This assumes run mode is PEE
     */
    if (Smc::getStatus() == SmcStatus_run) {
-      Mcg::clockTransition(McgInfo::clockInfo[ClockConfig_PEE_48MHz]);
+      Mcg::clockTransition(McgInfo::clockInfo[RUN_CLOCK_CONFIG]);
       console.setBaudRate(BAUD_RATE);
       console.writeln("Awake!").flushOutput();
       console.writeln("Restored clock frequency").flushOutput();
    }
-   else {
+   else
+#endif
+   {
       console.writeln("Awake!").flushOutput();
    }
 }
@@ -368,7 +376,7 @@ SmcStatus changeRunMode() {
    SmcStatus smcStatus = Smc::getStatus();
    if (smcStatus == SmcStatus_run) {
       // RUN->VLPR
-      Mcg::clockTransition(McgInfo::clockInfo[ClockConfig_BLPE_4MHz]);
+      Mcg::clockTransition(McgInfo::clockInfo[VLPR_CLOCK_CONFIG]);
       Smc::enterRunMode(SmcRunMode_VeryLowPower);
       console.setBaudRate(BAUD_RATE);
       console.writeln("Changed to VLPR mode").flushOutput();
@@ -376,7 +384,7 @@ SmcStatus changeRunMode() {
    else if (smcStatus == SmcStatus_vlpr) {
       // VLPR->RUN mode
       Smc::enterRunMode(SmcRunMode_Normal);
-      Mcg::clockTransition(McgInfo::clockInfo[ClockConfig_PEE_48MHz]);
+      Mcg::clockTransition(McgInfo::clockInfo[RUN_CLOCK_CONFIG]);
       console.setBaudRate(BAUD_RATE);
       console.writeln("Changed to RUN mode").flushOutput();
    }

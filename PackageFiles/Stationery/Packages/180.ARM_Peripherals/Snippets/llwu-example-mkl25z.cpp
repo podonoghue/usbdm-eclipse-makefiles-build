@@ -1,6 +1,6 @@
 /*
  ============================================================================
- * @file    llwu-example-mk20.cpp (180.ARM_Peripherals/Snippets/)
+ * @file    llwu-example-mkl25z.cpp (180.ARM_Peripherals/Snippets/)
  * @brief   Basic C++ demo
  *
  *  Created on: 25/09/2017
@@ -9,21 +9,13 @@
  */
 /*
  * This examples assumes that appropriate clock configurations have been created:
- *  - ClockConfig_PEE_48MHz   For RUN mode (Core=80MHz, Bus=40MHz, Flash=27MHz)
- *  - ClockConfig_BLPE_4MHz   For VLPR (Core/Bus = 4MHz, Flash = 1MHz)
+ *  - RUN_CLOCK_CONFIG   = ClockConfig_PEE_48MHz   For RUN mode (Core=80MHz, Bus=40MHz, Flash=27MHz)
+ *  - VLPR_CLOCK_CONFIG  = ClockConfig_BLPE_4MHz   For VLPR (Core/Bus = 4MHz, Flash = 1MHz)
  *
  * Interrupts must be configured for GPIO pin used, LLWU, LPTMR
  * It will also be necessary to modify the linker memory map so that only
- * lowest 32K of SRAM_U (0x10000000..) is used if testing of LLS2 is intended.
- *
- * Note: The STOP mode doesn't seem to work from RUN mode while using the
- * debugger.  INVSTATE occurs occasionally. Stand-alone it's OK.
- *
- * MK20D5 Power transition notes
- * LLS -> RUN mode on wake-up irrespective of whether it is entered from RUN or VLPR
- * VLPS -> RUN mode on wake-up if entered from RUN or LPWUI is set
- * VLPS -> VLPR only if entered from VLPR and LPWUI is not set
- */
+ * lowest portion of SRAM_U (0x10000000..) is used if testing of LLS2 is intended.
+  */
 #include "hardware.h"
 #include "mcg.h"
 #include "smc.h"
@@ -32,11 +24,15 @@
 #include "pmc.h"
 #include "rcm.h"
 
-// May need reduced baud rate for slow clocks
-static constexpr int BAUD_RATE = 115200;
-
 // Allow access to USBDM methods without USBDM:: prefix
 using namespace USBDM;
+
+// Define clock modes to use
+static ClockConfig RUN_CLOCK_CONFIG    = ClockConfig_PEE_48MHz;
+static ClockConfig VLPR_CLOCK_CONFIG   = ClockConfig_BLPE_4MHz;
+
+// May need reduced baud rate for slow clocks
+static constexpr int BAUD_RATE = 115200;
 
 // Using LEDs rather defeats VLLSx mode!
 using RedLed    = GpioB<18,ActiveLow>;
@@ -154,7 +150,7 @@ void testStopMode(
     * This assumes run mode is PEE
     */
    if (Smc::getStatus() == SmcStatus_run) {
-      Mcg::clockTransition(McgInfo::clockInfo[ClockConfig_PEE_48MHz]);
+      Mcg::clockTransition(McgInfo::clockInfo[RUN_CLOCK_CONFIG]);
       console.setBaudRate(BAUD_RATE);
       console.writeln("Awake!").flushOutput();
       console.writeln("Restored clock frequency").flushOutput();
@@ -372,7 +368,7 @@ SmcStatus changeRunMode() {
    SmcStatus smcStatus = Smc::getStatus();
    if (smcStatus == SmcStatus_run) {
       // RUN->VLPR
-      Mcg::clockTransition(McgInfo::clockInfo[ClockConfig_BLPE_4MHz]);
+      Mcg::clockTransition(McgInfo::clockInfo[VLPR_CLOCK_CONFIG]);
       Smc::enterRunMode(SmcRunMode_VeryLowPower);
       console.setBaudRate(BAUD_RATE);
       console.writeln("Changed to VLPR mode").flushOutput();
@@ -380,7 +376,7 @@ SmcStatus changeRunMode() {
    else if (smcStatus == SmcStatus_vlpr) {
       // VLPR->RUN mode
       Smc::enterRunMode(SmcRunMode_Normal);
-      Mcg::clockTransition(McgInfo::clockInfo[ClockConfig_PEE_48MHz]);
+      Mcg::clockTransition(McgInfo::clockInfo[RUN_CLOCK_CONFIG]);
       console.setBaudRate(BAUD_RATE);
       console.writeln("Changed to RUN mode").flushOutput();
    }
