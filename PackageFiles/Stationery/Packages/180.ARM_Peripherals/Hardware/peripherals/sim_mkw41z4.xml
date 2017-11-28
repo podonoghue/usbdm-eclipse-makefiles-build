@@ -88,8 +88,8 @@ Devices using this peripheral:
          toolTip="Selects the clock source for the transmit and receive clock">
          <choice value="0"  name="Disabled" />
          <choice value="1"  name="MCGFLLCLK Clock" />
-         <choice value="2"  name="OSCERCLK clock" />
-         <choice value="3"  name="MCGIRCLK clock"  isDefault="true" />
+         <choice value="2"  name="OSCERCLK clock"  isDefault="true" />
+         <choice value="3"  name="MCGIRCLK clock" />
       </choiceOption>
       
       <intOption name="system_lpuart0_clock" 
