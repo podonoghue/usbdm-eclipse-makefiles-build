@@ -27,7 +27,21 @@
 
 namespace USBDM {
 
+/**
+ * @addtogroup USBDM_Group USBDM Peripheral Interface
+ * @brief Hardware Peripheral Interface and library
+ * @{
+ */
+/** Dummy port information for pins without an associated PCR */
+constexpr PortInfo  __attribute__((unused)) NoPortInfo {0, 0, (IRQn_Type)-1};
+
 //-------- <<< Use Configuration Wizard in Context Menu >>> -----------------
+
+/** Enables mapping of all allocated pins during startup using mapAllPins() */
+static constexpr bool MAP_ALL_PINS = false;
+
+/** Map all allocated pins on a peripheral when peripheral is enabled */
+static constexpr bool MAP_ALL_PINS_ON_ENABLE = true;
 
 #ifdef FTM0_BASE_PTR
 // <h> Clock settings for FTM0
@@ -157,22 +171,17 @@ namespace USBDM {
  */
 #ifdef SIM_SCGC5_PORTA_MASK
 #define USBDM_GPIOA_IS_DEFINED
+
+/** Port information for PORTA*/
+constexpr PortInfo  __attribute__((unused)) PortAInfo {PORTA_BasePtr, SIM_SCGC5_PORTA_MASK, PORTA_IRQn};
+
 /**
  * Peripheral information for GPIO, Digital Input/Output
  */
 class GpioAInfo {
 public:
-   //! PORT Hardware base pointer
-   static constexpr uint32_t portAddress   = PORTA_BasePtr;
-
-   //! GPIO Hardware base pointer
-   static constexpr uint32_t gpioAddress   = GPIOA_BasePtr;
-
-   //! Value for PCR (including MUX value)
-   static constexpr uint32_t pcrValue  = GPIO_DEFAULT_PCR;
-
-   //! Clock mask for peripheral
-   static constexpr uint32_t clockMask = SIM_SCGC5_PORTA_MASK;
+   //! Describes the port/gpio
+   static constexpr PinInfo pinInfo { PortAInfo, GPIOA_BasePtr, 0, GPIO_DEFAULT_PCR  };
 
    //! Address of clock register for peripheral
    static constexpr uint32_t clockReg  = SIM_BasePtr+offsetof(SIM_Type,SCGC5);
@@ -188,22 +197,17 @@ public:
 
 #ifdef SIM_SCGC5_PORTB_MASK
 #define USBDM_GPIOB_IS_DEFINED
+
+/** Port information for PORTB*/
+constexpr PortInfo  __attribute__((unused)) PortBInfo {PORTB_BasePtr, SIM_SCGC5_PORTB_MASK, PORTB_IRQn};
+
 /**
  * Peripheral information for GPIO, Digital Input/Output
  */
 class GpioBInfo {
 public:
-   //! PORT Hardware base pointer
-   static constexpr uint32_t portAddress   = PORTB_BasePtr;
-
-   //! GPIO Hardware base pointer
-   static constexpr uint32_t gpioAddress   = GPIOB_BasePtr;
-
-   //! Value for PCR (including MUX value)
-   static constexpr uint32_t pcrValue  = GPIO_DEFAULT_PCR;
-
-   //! Clock mask for peripheral
-   static constexpr uint32_t clockMask = SIM_SCGC5_PORTB_MASK;
+   //! Describes the port/gpio
+   static constexpr PinInfo pinInfo { PortBInfo, GPIOB_BasePtr, 0, GPIO_DEFAULT_PCR  };
 
    //! Address of clock register for peripheral
    static constexpr uint32_t clockReg  = SIM_BasePtr+offsetof(SIM_Type,SCGC5);
@@ -219,22 +223,17 @@ public:
 
 #ifdef SIM_SCGC5_PORTC_MASK
 #define USBDM_GPIOC_IS_DEFINED
+
+/** Port information for PORTC*/
+constexpr PortInfo  __attribute__((unused)) PortCInfo {PORTC_BasePtr, SIM_SCGC5_PORTC_MASK, PORTC_IRQn};
+
 /**
  * Peripheral information for GPIO, Digital Input/Output
  */
 class GpioCInfo {
 public:
-   //! PORT Hardware base pointer
-   static constexpr uint32_t portAddress   = PORTC_BasePtr;
-
-   //! GPIO Hardware base pointer
-   static constexpr uint32_t gpioAddress   = GPIOC_BasePtr;
-
-   //! Value for PCR (including MUX value)
-   static constexpr uint32_t pcrValue  = GPIO_DEFAULT_PCR;
-
-   //! Clock mask for peripheral
-   static constexpr uint32_t clockMask = SIM_SCGC5_PORTC_MASK;
+   //! Describes the port/gpio
+   static constexpr PinInfo pinInfo { PortCInfo, GPIOC_BasePtr, 0, GPIO_DEFAULT_PCR  };
 
    //! Address of clock register for peripheral
    static constexpr uint32_t clockReg  = SIM_BasePtr+offsetof(SIM_Type,SCGC5);
@@ -250,22 +249,17 @@ public:
 
 #ifdef SIM_SCGC5_PORTD_MASK
 #define USBDM_GPIOD_IS_DEFINED
+
+/** Port information for PORTD*/
+constexpr PortInfo  __attribute__((unused)) PortDInfo {PORTD_BasePtr, SIM_SCGC5_PORTD_MASK, PORTD_IRQn};
+
 /**
  * Peripheral information for GPIO, Digital Input/Output
  */
 class GpioDInfo {
 public:
-   //! PORT Hardware base pointer
-   static constexpr uint32_t portAddress   = PORTD_BasePtr;
-
-   //! GPIO Hardware base pointer
-   static constexpr uint32_t gpioAddress   = GPIOD_BasePtr;
-
-   //! Value for PCR (including MUX value)
-   static constexpr uint32_t pcrValue  = GPIO_DEFAULT_PCR;
-
-   //! Clock mask for peripheral
-   static constexpr uint32_t clockMask = SIM_SCGC5_PORTD_MASK;
+   //! Describes the port/gpio
+   static constexpr PinInfo pinInfo { PortDInfo, GPIOD_BasePtr, 0, GPIO_DEFAULT_PCR  };
 
    //! Address of clock register for peripheral
    static constexpr uint32_t clockReg  = SIM_BasePtr+offsetof(SIM_Type,SCGC5);
@@ -281,22 +275,17 @@ public:
 
 #ifdef SIM_SCGC5_PORTE_MASK
 #define USBDM_GPIOE_IS_DEFINED
+
+/** Port information for PORTE*/
+constexpr PortInfo  __attribute__((unused)) PortEInfo {PORTE_BasePtr, SIM_SCGC5_PORTE_MASK, PORTE_IRQn};
+
 /**
  * Peripheral information for GPIO, Digital Input/Output
  */
 class GpioEInfo {
 public:
-   //! PORT Hardware base pointer
-   static constexpr uint32_t portAddress   = PORTE_BasePtr;
-
-   //! GPIO Hardware base pointer
-   static constexpr uint32_t gpioAddress   = GPIOE_BasePtr;
-
-   //! Value for PCR (including MUX value)
-   static constexpr uint32_t pcrValue  = GPIO_DEFAULT_PCR;
-
-   //! Clock mask for peripheral
-   static constexpr uint32_t clockMask = SIM_SCGC5_PORTE_MASK;
+   //! Describes the port/gpio
+   static constexpr PinInfo pinInfo { PortDInfo, GPIOD_BasePtr, 0, GPIO_DEFAULT_PCR  };
 
    //! Address of clock register for peripheral
    static constexpr uint32_t clockReg  = SIM_BasePtr+offsetof(SIM_Type,SCGC5);
