@@ -1,5 +1,5 @@
 /**
- * @file     osc.h (180.ARM_Peripherals/Project_Headers/osc.h)
+ * @file     osc_rf.h (180.ARM_Peripherals/Project_Headers/osc_rf.h)
  * @brief    OscRfillator interface
  *
  * @version  V4.12.1.80

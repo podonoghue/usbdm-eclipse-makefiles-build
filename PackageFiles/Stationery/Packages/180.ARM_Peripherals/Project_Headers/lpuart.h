@@ -169,8 +169,8 @@ public:
    /**
     * Enable/disable an interrupt source
     *
-    * @param[in] uartInterrupt Interrupt source to modify
-    * @param[in] enable        True to enable, false to disable
+    * @param[in] lpuartInterrupt Interrupt source to modify
+    * @param[in] enable          True to enable, false to disable
     *
     * @note Changing the enabled interrupt functions may also affect the DMA settings
     */
@@ -186,8 +186,8 @@ public:
    /**
     * Enable/disable a DMA source
     *
-    * @param[in] uartDma  DMA source to modify
-    * @param[in] enable   True to enable, false to disable
+    * @param[in] lpuartDma  DMA source to modify
+    * @param[in] enable     True to enable, false to disable
     *
     * @note Changing the enabled DMA functions may also affect the interrupt settings
     */
@@ -301,8 +301,8 @@ public:
     * @param[in]  baudrate    Interface speed in bits-per-second
     * @param[in]  oversample  Over-sample ratio to use when calculating divider
     */
-   void setBaudRate(unsigned baudrate, unsigned osr) {
-      Lpuart::setBaudRate(baudrate, Info::getClockFrequency(), osr);
+   void setBaudRate(unsigned baudrate, unsigned oversample) {
+      Lpuart::setBaudRate(baudrate, Info::getClockFrequency(), oversample);
    }
 
 protected:

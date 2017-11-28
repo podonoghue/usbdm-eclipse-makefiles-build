@@ -42,11 +42,11 @@
    <signals/>
 
    <projectActionList id = "llwu_files" >
-      <copy source="Project_Headers/llwu.h"           target="Project_Headers/llwu.h"           overwrite="true" derived="true" />
-      <copy source="Snippets/llwu-example-mk20.cpp"   target="Snippets/llwu-example-mk20.cpp"   overwrite="true" derived="true" />
-      <copy source="Snippets/llwu-example-mk22f.cpp"  target="Snippets/llwu-example-mk22f.cpp"  overwrite="true" derived="true" />
-      <copy source="Snippets/llwu-example-mk28f.cpp"  target="Snippets/llwu-example-mk28f.cpp"  overwrite="true" derived="true" />
-      <copy source="Snippets/llwu-example-mkl25.cpp"  target="Snippets/llwu-example-mkl25.cpp"  overwrite="true" derived="true" />
+      <copy source="Project_Headers/llwu.h"            target="Project_Headers/llwu.h"           overwrite="true" derived="true" />
+      <copy source="Snippets/llwu-example-mk20.cpp"    target="Snippets/llwu-example-mk20.cpp"   overwrite="true" derived="true" />
+      <copy source="Snippets/llwu-example-mk22f.cpp"   target="Snippets/llwu-example-mk22f.cpp"  overwrite="true" derived="true" />
+      <copy source="Snippets/llwu-example-mk28f.cpp"   target="Snippets/llwu-example-mk28f.cpp"  overwrite="true" derived="true" />
+      <copy source="Snippets/llwu-example-mkl25z.cpp"  target="Snippets/llwu-example-mkl25z.cpp"  overwrite="true" derived="true" />
    </projectActionList>
          
 </peripheralPage>
