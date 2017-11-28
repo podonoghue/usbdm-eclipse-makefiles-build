@@ -3264,6 +3264,7 @@ Test Devices:
       <device name="FRDM_KV31F"      alias="MKV31F512M12"   hardware="frdmkv31f" />
 
       <device name="FRDM_KW41Z"      alias="MKW41Z512M4"    hardware="frdmk41z" />
+      <device name="R41Z_EVAL"       alias="MKW41Z512M4"    hardware="frdmk41z" />
 
       <device name="TWR_K22F120M"    alias="MK22FN512M12"   hardware="twrk22f120m" /> 
       <device name="TWR_K24F120M"    alias="MK24FN256M12"   hardware="twrk24f120m" /> 

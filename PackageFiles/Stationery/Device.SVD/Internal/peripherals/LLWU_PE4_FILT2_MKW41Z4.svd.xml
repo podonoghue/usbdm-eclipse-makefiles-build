@@ -1,27 +1,5 @@
 <!--
 Devices using this peripheral: 
-      MK02F12810
-      MK22F25612
-      MKL14Z4
-      MKL15Z4
-      MKL16Z4
-      MKL17Z4
-      MKL24Z4
-      MKL26Z4
-      MKL27Z4
-      MKL33Z4
-      MKL34Z4
-      MKL36Z4
-      MKM14Z5
-      MKM33Z5
-      MKM34Z5
-      MKV10Z7
-      MKV11Z7
-      MKV30F12810
-      MKV31F12810
-      MKV31F25612
-      MKV31F51212
-      MKW01Z4
       MKW41Z4
 -->
       <peripheral>

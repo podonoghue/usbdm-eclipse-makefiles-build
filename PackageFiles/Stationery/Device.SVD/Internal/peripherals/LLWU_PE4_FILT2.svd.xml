@@ -22,7 +22,6 @@ Devices using this peripheral:
       MKV31F25612
       MKV31F51212
       MKW01Z4
-      MKW41Z4
 -->
       <peripheral>
          <?sourceFile "LLWU_PE4_FILT2" ?>
