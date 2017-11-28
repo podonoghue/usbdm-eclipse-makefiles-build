@@ -224,6 +224,7 @@ Number of Consecutive Scans Per Electrode</description>
                   </field>
                   <field>
                      <name>EXTCHRG</name>
+                     <?ignoreOverlap?>
                      <description>EXTCHRG</description>
                      <bitOffset>16</bitOffset>
                      <bitWidth>3</bitWidth>
@@ -271,8 +272,194 @@ Number of Consecutive Scans Per Electrode</description>
                      </enumeratedValues>
                   </field>
                   <field>
+                     <name>RS</name>
+                     <?ignoreOverlap?>
+                     <description>Rs Series resistor for noise mode</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>Reserved</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>Reserved</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b010</name>
+                           <description>Reserved</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b011</name>
+                           <description>184kR</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100</name>
+                           <description>77kR</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101</name>
+                           <description>32kR</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>14kR</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>5k5R</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RESISTOR</name>
+                     <?ignoreOverlap?>
+                     <description>Filter</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>32K Series resistor</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>187K Series resistor</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>NOISE_THRESHOLD</name>
+                     <?ignoreOverlap?>
+                     <description>Threholds or noise measurement \tValues vary with device</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>DVpm = 0.038 V, Vp = 0.834 V, Vm = 0.796 V</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>DVpm = 0.050 V, Vp = 0.830 V, Vm = 0.790 V</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>DVpm = 0.066 V, Vp = 0.848 V, Vm = 0.782 V</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0011</name>
+                           <description>DVpm = 0.087 V, Vp = 0.858 V, Vm = 0.772 V</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0100</name>
+                           <description>DVpm = 0.114 V, Vp = 0.872 V, Vm = 0.758 V</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0101</name>
+                           <description>DVpm = 0.150 V, Vp = 0.890 V, Vm = 0.740 V</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0110</name>
+                           <description>DVpm = 0.197 V, Vp = 0.914 V, Vm = 0.716 V</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0111</name>
+                           <description>DVpm = 0.260 V, Vp = 0.945 V, Vm = 0.685 V</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1000</name>
+                           <description>DVpm = 0.342 V, Vp = 0.986 V, Vm = 0.644 V</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1001</name>
+                           <description>DVpm = 0.450 V, Vp = 1.040 V, Vm = 0.590 V</description>
+                           <value>0b1001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1010</name>
+                           <description>DVpm = 0.592 V, Vp = 1.111 V, Vm = 0.519 V</description>
+                           <value>0b1010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1011</name>
+                           <description>DVpm = 0.780 V, Vp = 1.205 V, Vm = 0.425 V</description>
+                           <value>0b1011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1100</name>
+                           <description>DVpm = 1.026 V, Vp = 1.328 V, Vm = 0.302 V</description>
+                           <value>0b1100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1101</name>
+                           <description>DVpm = 1.350 V, Vp = 1.490 V, Vm = 0.140 V</description>
+                           <value>0b1101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>DVpm = 1.630 V, Vp = 1.630 V, Vm = 0 V</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>DVpm = 1.630 V, Vp = 1.630 V, Vm = 0 V</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FILTER</name>
+                     <?ignoreOverlap?>
+                     <description>Filter</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>8 peak increments the count</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>4 peak increments the count</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>2 peak increments the count</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>1 peak increments the count</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
                      <name>DVOLT</name>
-                     <description>DVOLT</description>
+                     <description>DVOLT - delta voltage \tValues vary with device</description>
                      <bitOffset>19</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
