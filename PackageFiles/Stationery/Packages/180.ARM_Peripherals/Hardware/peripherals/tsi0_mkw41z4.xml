@@ -5,12 +5,12 @@
    Devices using this peripheral:
 -->
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="TSI">
-
+   
    <template><![CDATA[
       \t//! Base value for PCR (excluding MUX value)
       \tstatic constexpr uint32_t defaultPcrValue  = 0;\n\n
    ]]></template>
-   
+
    <binaryOption
       name="tsi_gencs_cursw"
       description="Electrode/Reference OSC swap"
@@ -60,7 +60,7 @@
       <choice value="1" name="1 uA" />
       <choice value="2" name="2 uA" />
       <choice value="3" name="4 uA" />
-      <choice value="4" name="8 uA" />
+      <choice value="4" name="8 uA" isDefault="true" />
       <choice value="5" name="16 uA" />
       <choice value="6" name="32 uA" />
       <choice value="7" name="64 uA" />
@@ -79,7 +79,7 @@
       <choice value="1" name="1 uA" />
       <choice value="2" name="2 uA" />
       <choice value="3" name="4 uA" />
-      <choice value="4" name="8 uA" />
+      <choice value="4" name="8 uA" isDefault="true" />
       <choice value="5" name="16 uA" />
       <choice value="6" name="32 uA" />
       <choice value="7" name="64 uA" />

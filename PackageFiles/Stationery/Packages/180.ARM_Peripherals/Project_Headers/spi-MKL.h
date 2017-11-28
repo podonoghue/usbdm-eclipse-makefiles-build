@@ -2,9 +2,11 @@
  * @file     spi.h (180.ARM_Peripherals/Project_Headers/spi-MKL.h)
  * @brief    Serial Peripheral Interface
  *
- * @version  V4.12.1.80
+ * @version  V4.12.1.210
  * @date     13 April 2016
+ *      Author: podonoghue
  */
+
 #ifndef INCLUDE_USBDM_SPI_H_
 #define INCLUDE_USBDM_SPI_H_
 /*
@@ -17,7 +19,6 @@
  */
 #include <stdint.h>
 #include "derivative.h"
-#include "dma.h"
 #include "hardware.h"
 #ifdef __CMSIS_RTOS
 #include "cmsis.h"
@@ -25,39 +26,70 @@
 
 namespace USBDM {
 
-extern "C" void SPI0_IRQHandler(void);
-extern "C" void SPI1_IRQHandler(void);
-extern "C" void SPI2_IRQHandler(void);
-
 /**
  * @addtogroup SPI_Group SPI, Serial Peripheral Interface
  * @brief C++ Class allowing access to SPI interface
  * @{
  */
 
-enum SpiMode {
-   SpiMode_0 = SPI_C1_CPOL(0)|SPI_C1_CPHA(0), // Active-high clock (idles low), Data is captured on leading edge of SCK and changes on the following edge.
-   SpiMode_1 = SPI_C1_CPOL(0)|SPI_C1_CPHA(1), // Active-high clock (idles low), Data is changes on leading edge of SCK and captured on the following edge.
-   SpiMode_2 = SPI_C1_CPOL(1)|SPI_C1_CPHA(0), // Active-low clock (idles high), Data is captured on leading edge of SCK and changes on the following edge.
-   SpiMode_3 = SPI_C1_CPOL(1)|SPI_C1_CPHA(1), // Active-low clock (idles high), Data is changes on leading edge of SCK and captured on the following edge.
-};
-
-enum SpiOrder {
-   SpiOrder_MsbFirst = SPI_C1_LSBFE(0),
-   SpiOrder_LsbFirst = SPI_C1_LSBFE(1),
-};
-
-using SpiModeValue = uint32_t;
+/**
+ * Type definition for interrupt call back
+ * @param status Interrupt status value from SPI->SR
+ */
+typedef void (*SpiCallbackFunction)(uint32_t status);
 
 /**
- * Calculate SPI mode value from components
- *
- * @param spiMode  SPI Mode e.g. SpiMode_0
- * @param spiOrder Bit order e.g. SpiOrder_MsbFirst
+ * SPI mode - Controls clock polarity and the timing relationship between clock and data
  */
-static constexpr SpiModeValue spiModeValue(SpiMode spiMode=SpiMode_0, SpiOrder spiOrder=SpiOrder_MsbFirst) {
-   return spiMode|spiOrder;
-}
+enum SpiMode {
+   SpiMode_0 = SPI_C1_CPOL(0)|SPI_C1_CPHA(0), //!< Active-high clock (idles low), Data is captured on leading edge of SCK and changes on the following edge.
+   SpiMode_1 = SPI_C1_CPOL(0)|SPI_C1_CPHA(1), //!< Active-high clock (idles low), Data is changes on leading edge of SCK and captured on the following edge.
+   SpiMode_2 = SPI_C1_CPOL(1)|SPI_C1_CPHA(0), //!< Active-low clock (idles high), Data is captured on leading edge of SCK and changes on the following edge.
+   SpiMode_3 = SPI_C1_CPOL(1)|SPI_C1_CPHA(1), //!< Active-low clock (idles high), Data is changes on leading edge of SCK and captured on the following edge.
+};
+
+/**
+ * Bit transmission order (LSB/MSB first)
+ */
+enum SpiOrder {
+   SpiOrder_MsbFirst = SPI_C1_LSBFE(0), //!< MSB First
+   SpiOrder_LsbFirst = SPI_C1_LSBFE(1), //!< LSB First
+};
+
+/**
+ * Note on MODFEN/SSOE use
+ *  SSOE  MODFEN     MASTER      SLAVE
+ *   0     0         GPIO        SS-in
+ *   0     1         FAULT-in    SS-in
+ *   1     0         GPIO        SS-in
+ *   1     1         SS-out      SS-in
+ */
+
+/**
+ * Slave Select pin function in master mode
+ */
+enum SpiPinSelect {
+   SpiPinSelect_Disable = SPI_C1_SSOE(0)|SPI_C2_MODFEN(0),  //!< SS pin acts as GPIO when Master
+   SpiPinSelect_FaultIn = SPI_C1_SSOE(0)|SPI_C2_MODFEN(1),  //!< SS pin acts as FAULT in when Master
+   SpiPinSelect_Enable  = SPI_C1_SSOE(1)|SPI_C2_MODFEN(1),  //!< SS pin acts as SlaveSelect when Master
+};
+
+/**
+ * Controls operation in Low Power mode
+ */
+enum SpiLowPower {
+   SpiLowPower_Disable = SPI_C2_SPISWAI(0), //!< SPI disabled in Low Power mode
+   SpiLowPower_Enable  = SPI_C2_SPISWAI(1), //!< SPI enabled in Low Power mode
+};
+
+/**
+ * Used to hold SPI configuration that may commonly be modified for different target peripherals
+ */
+struct SpiConfig {
+   uint8_t br; //!< Baud rate dividers
+   uint8_t c1; //!< CPOL, CPHA, SSOE, LSBFE
+   uint8_t c2; //!< BIDIROE, SPC0
+};
 
 /**
  * @brief Base class for representing an SPI interface
@@ -65,44 +97,127 @@ static constexpr SpiModeValue spiModeValue(SpiMode spiMode=SpiMode_0, SpiOrder s
 class Spi {
 
 protected:
-   ~Spi() {}
+   /** Callback for unhandled interrupt */
+   static void unhandledCallback(uint32_t) {
+   }
 
-   /**
-    * Note on MODFEN/SSOE use
-    *  SSOE  MODFEN     MASTER      SLAVE
-    *   0     0         GPIO        SS-in
-    *   0     1         FAULT       SS-in
-    *   1     0         GPIO        SS-in
-    *   1     1         SS-out      SS-in
-    */
-protected:
-   volatile  SPI_Type  *const spi;           //!< SPI hardware
-   DmaChannel          *dmacTxChannel;       //!< DMA hardware
-   DmaChannel          *dmacRxChannel;       //!< DMA hardware
-   uint8_t              dmaSpiRxSlot;        //!< DMA slot (1st of Tx/Rx pair)
-   uint32_t             interfaceFrequency;  //!< Interface frequency to use
-   uint8_t              spiC1BaseValue;      //!< Base value for spi->C1
+public:
+
+   volatile  SPI_Type * const spi; //!< SPI hardware
 
 protected:
    /**
     * Constructor
     *
-    * @param baseAddress    Base address of SPI
-    * @param dmaTxChannel   DMA Channel for transmission
-    * @param dmaRxChannel   DMA Channel for reception
-    * @param rxMuxSource    Receive Mux value
+    * @param[in]  baseAddress    Base address of SPI
     */
-   Spi(volatile SPI_Type *baseAddress, DmaChannel *dmaTxChannel, DmaChannel *dmaRxChannel, uint8_t rxMuxSource) :
-      spi(baseAddress),
-      dmacTxChannel(dmaTxChannel),
-      dmacRxChannel(dmaRxChannel),
-      dmaSpiRxSlot(rxMuxSource),
-      interfaceFrequency(Spi0Info::speed) {
+   Spi(volatile SPI_Type *baseAddress) :
+      spi(baseAddress) {
+   }
 
-      spiC1BaseValue = SPI_C1_SPE_MASK|SPI_C1_MSTR_MASK;
+   /**
+    * Destructor
+    */
+   virtual ~Spi() {
+   }
+
+   /**
+    * Calculate communication BR value for SPI
+    *
+    * @param[in]  clockFrequency => Clock frequency of SPI in Hz
+    * @param[in]  frequency      => Communication frequency in Hz
+    *
+    * @return BR register value
+    *
+    * Note: Chooses the highest speed that is not greater than frequency.
+    */
+   static uint8_t calculateBr(uint32_t clockFrequency, uint32_t frequency);
+
+   /**
+    * Calculate communication speed from SPI clock frequency and BR
+    *
+    * @param[in]  clockFrequency => Clock frequency of SPI in Hz
+    * @param[in]  br             => BR register value
+    *
+    * @return Clock frequency of SPI in Hz for these factors
+    */
+   static uint32_t calculateSpeed(uint32_t clockFrequency, uint32_t br);
+
+   /**
+    * Sets Communication speed for SPI
+    *
+    * @param[in]  frequency      => Communication frequency in Hz
+    * @param[in]  clockFrequency => Clock frequency of SPI in Hz
+    * @param[in]  spiCtarSelect  => Index of CTAR register to modify
+    *
+    * Note: Chooses the highest speed that is not greater than frequency.
+    */
+   void setSpeed(uint32_t clockFrequency, uint32_t frequency) {
+      spi->BR = calculateBr(clockFrequency, frequency);
    }
 
 public:
+
+#ifdef __CMSIS_RTOS
+   /**
+    * Obtain SPI mutex and set SPI configuration
+    *
+    * @param[in]  configuration  The configuration value to set for the transaction
+    * @param[in]  milliseconds   How long to wait in milliseconds. Use osWaitForever for indefinite wait
+    *
+    * @return osOK: The mutex has been obtain.
+    * @return osErrorTimeoutResource: The mutex could not be obtained in the given time.
+    * @return osErrorResource: The mutex could not be obtained when no timeout was specified.
+    * @return osErrorParameter: The parameter mutex_id is incorrect.
+    * @return osErrorISR: osMutexWait cannot be called from interrupt service routines.
+    */
+   virtual osStatus startTransaction(SpiConfig &configuration, int milliseconds=osWaitForever) = 0;
+
+   /**
+    * Obtain SPI mutex (SPI configuration unchanged)
+    *
+    * @param[in]  milliseconds How long to wait in milliseconds. Use osWaitForever for indefinite wait
+    *
+    * @return osOK: The mutex has been obtain.
+    * @return osErrorTimeoutResource: The mutex could not be obtained in the given time.
+    * @return osErrorResource: The mutex could not be obtained when no timeout was specified.
+    * @return osErrorParameter: The parameter mutex_id is incorrect.
+    * @return osErrorISR: osMutexWait cannot be called from interrupt service routines.
+    */
+   virtual osStatus startTransaction(int milliseconds=osWaitForever) = 0;
+
+   /**
+    * Release SPI mutex
+    *
+    * @return osOK: the mutex has been correctly released.
+    * @return osErrorResource: the mutex was not obtained before.
+    * @return osErrorISR: osMutexRelease cannot be called from interrupt service routines.
+    */
+   virtual osStatus endTransaction() = 0;
+#else
+   /**
+    * Obtain SPI - dummy routine (non RTOS)
+    */
+   int startTransaction(int =0) {
+      return 0;
+   }
+   /**
+    * Obtain SPI and set SPI configuration
+    *
+    * @param[in] configuration The configuration values to set for the transaction.
+    */
+   int startTransaction(SpiConfig &configuration, int =0) {
+      setConfiguration(configuration);
+      return 0;
+   }
+   /**
+    * Release SPI - dummy routine (non RTOS)
+    */
+   int endTransaction() {
+      return 0;
+   }
+#endif
+
    /**
     * Enable pins used by SPI
     */
@@ -114,363 +229,437 @@ public:
    virtual void disablePins() = 0;
 
    /**
-    * Sets Communication speed for SPI
+    * Sets Communication speed
     *
-    * @param frequency => Frequency in Hz (0 => use default value)
+    * @param[in]  frequency => Frequency in Hz (0 => use default value)
     *
     * Note: Chooses the highest speed that is not greater than frequency.
     */
-   void setSpeed(uint32_t frequency);
+   virtual void setSpeed(uint32_t frequency) = 0;
 
    /**
     * Sets Communication mode for SPI
     *
-    * @param mode => Mode to set. Combination of SPI_CPHA, SPI_CPOL and SPI_LSBFE
+    * @param[in] spiMode   Controls clock polarity and the timing relationship between clock and data
+    * @param[in] spiOrder  Bit transmission order (LSB/MSB first)
     */
-   void setMode(uint32_t mode) {
+   void setMode(SpiMode spiMode=SpiMode_0, SpiOrder spiOrder=SpiOrder_MsbFirst) {
       // Note: always master mode
-      spi->C1 = (mode & (SPI_C1_CPHA_MASK|SPI_C1_CPOL_MASK|SPI_C1_LSBFE_MASK))|SPI_C1_SSOE_MASK|SPI_C1_SPE_MASK|SPI_C1_MSTR_MASK;
+      spi->C1 = 
+         (spiMode|spiOrder)|
+         (spi->C1&~(SPI_C1_MODE_MASK|SPI_C1_LSBFE_MASK))|
+         SPI_C1_SSOE_MASK|SPI_C1_SPE_MASK|SPI_C1_MSTR_MASK;
    }
+
    /**
-    * Gets current speed of interface
+    *  Transmit and receive a series of values
     *
-    * @return Speed in Hz
+    *  @tparam T Type for data transfer (may be inferred from parameters)
+    *
+    *  @param[in]  dataSize  Number of values to transfer
+    *  @param[in]  txData    Transmit bytes (may be nullptr for Receive only)
+    *  @param[out] rxData    Receive byte buffer (may be nullptr for Transmit only)
+    *
+    *  @note: rxData may use same buffer as txData
+    *  @note: Size of txData and rxData should be appropriate for transmission size.
     */
-   uint32_t getSpeed(void) {
-      return interfaceFrequency;
-   }
+   virtual void txRx(uint32_t dataSize, const uint8_t *txData, uint8_t *rxData=nullptr) = 0;
+
    /**
-    *  Transmit and receive a series of bytes
+    * Transmit and receive a value over SPI
     *
-    *  @param dataSize  Number of bytes to transfer
-    *  @param txData    Transmit bytes (may be NULL for Rx only)
-    *  @param rxData    Receive byte buffer (may be NULL for Tx only)
-    *
-    *  Note: rxData may use same buffer as txData
-    */
-   virtual void txRxBytes(uint32_t dataSize, const uint8_t *txData, uint8_t *rxData=0);
-   /**
-    * Transmit and receive an 8-bit value over SPI
-    *
-    * @param data Data to send
+    * @param[in] data - Data to send (8/16 bits)
     *
     * @return Data received
     */
-   virtual uint32_t txRx(uint32_t data);
+   uint32_t txRx(uint32_t data);
+
+   /**
+    *  Set Configuration\n
+    *  This includes timing settings, word length and transmit order\n
+    *  Assumes the interface is already acquired through startTransaction
+    *
+    *  @note The SPI is left disabled.
+    *
+    * @param[in]  configuration Configuration value
+    */
+   void setConfiguration(const SpiConfig &configuration) {
+      spi->C1 = configuration.c1|SPI_C1_SPE_MASK;
+      spi->C2 = configuration.c2;
+      spi->BR = configuration.br;
+   }
+
+   /**
+    *  Get SPI configuration\n
+    *  This includes timing settings, word length and transmit order
+    *
+    * @return Configuration value
+    *
+    * @note Typically used with startTransaction()
+    */
+   SpiConfig getConfiguration() {
+      return SpiConfig{spi->BR, spi->C1, spi->C2};
+   }
+
+   /**
+    *  Set SS Pin function
+    *
+    *  @param spiPinSelect Slave Select pin function in master mode
+    */
+   void setSlaveSelect(SpiPinSelect spiPinSelect) {
+      spi->C1 = (spi->C1&~SPI_C1_SSOE_MASK)  |(spiPinSelect&SPI_C1_SSOE_MASK);
+      spi->C2 = (spi->C2&~SPI_C2_MODFEN_MASK)|(spiPinSelect&SPI_C2_MODFEN_MASK);
+   }
+
+   /**
+    * Controls operation in Low Power mode
+    *
+    * @param spiLowPower Options for low power mode
+    */
+   void setLowPowerMode(SpiLowPower spiLowPower) {
+      spi->C2 = (spi->C2&~SPI_C2_SPISWAI_MASK)|(spiLowPower&SPI_C2_SPISWAI_MASK);
+   }
 };
 
 /**
  * @brief Template class representing a SPI interface
  *
- * @tparam  spiBasePtr     Base address of SPI hardware
- * @tparam  spiClockReg    Address of SIM register controlling SPI hardware clock
- * @tparam  spiClockMask   Clock mask for SIM clock register
- * @tparam  SpiSCK         Pcr used for SCK signal
- * @tparam  SpiMISO        Pcr used for MISO signal
- * @tparam  SpiMOSI        Pcr used for MOSI signal
- * @tparam  Rest...        Pcr used for PCSx (These are initialised but not used)
+ * @tparam  Info           Class describing Spi hardware
  */
-template<class Info, typename ... Rest>
-class Spi_T : public Spi {
+template<class Info>
+class SpiBase_T : public Spi {
 
 protected:
-   static constexpr volatile SPI_Type *spi      = Info::spi;
-   static constexpr volatile uint32_t *clockReg = Info::clockReg;
+   /** Callback function for ISR */
+   static SpiCallbackFunction callback;
+
+   static       uint32_t bytesRemaining;
+   static       uint8_t  *rxDataPtr;
+   static const uint8_t  *txDataPtr;
 
 private:
    using SpiSCK   = PcrTable_T<Info, 0>;
    using SpiMISO  = PcrTable_T<Info, 1>;
    using SpiMOSI  = PcrTable_T<Info, 2>;
 
+   static void stopTransaction() {
+      Info::spi->C1 &= ~SPI_C1_SPIE(1);
+      rxDataPtr = nullptr;
+      txDataPtr = nullptr;
+      callback(Info::spi->S);
+   }
 public:
-   virtual void enablePins() {
-      // Configure SPI pins
-      processPcrs<SpiSCK, SpiMISO, SpiMOSI, Rest...>();
+
+   /**
+    *  Transmit and receive a series of bytes
+    *
+    *  @param[in]  dataSize  Number of values to transfer
+    *  @param[in]  txData    Transmit bytes (may be nullptr for Receive only)
+    *  @param[out] rxData    Receive byte buffer (may be nullptr for Transmit only)
+    *
+    *  @note: rxData may use same buffer as txData
+    *  @note: Size of txData and rxData should be appropriate for transmission size.
+    */
+   virtual void txRx(uint32_t dataSize, const uint8_t *txData, uint8_t *rxData=nullptr) override {
+      bytesRemaining = dataSize;
+      txDataPtr      = txData;
+      rxDataPtr      = rxData;
+      Info::spi->C1 |=  SPI_C1_SPE_MASK|SPI_C1_SPIE_MASK;
+      while((Info::spi->C1&SPI_C1_SPE_MASK) == 0){
+      }
+      sendFirstByte();
+      while (bytesRemaining != 0) {
+         __asm__("nop");
+      }
    }
 
-   virtual void disablePins() {
-      // Configure SPI pins
-      processPcrs<SpiSCK, SpiMISO, SpiMOSI, Rest...>(0);
+   static void sendFirstByte() {
+      // Dummy read
+      (void)Info::spi->S;
+      if (bytesRemaining>0) {
+         // Transmit byte
+         if (txDataPtr != nullptr) {
+            Info::spi->D = *txDataPtr++;
+         }
+         else {
+            Info::spi->D = 0xFF;
+         }
+      }
    }
 
+   /**
+    * IRQ handler
+    */
+   static void irqHandler() {
+      if (Info::spi->S&SPI_S_MODF_MASK) {
+         stopTransaction();
+         callback(Info::spi->S);
+         Info::spi->S &= SPI_S_MODF_MASK;
+         return;
+      }
+      // Receive byte
+      if (rxDataPtr != nullptr) {
+         *rxDataPtr++ = Info::spi->D;
+      }
+      else {
+         (void)Info::spi->D;
+      }
+      bytesRemaining--;
+      if (bytesRemaining>0) {
+         // Transmit byte
+         if (txDataPtr != nullptr) {
+            Info::spi->D = *txDataPtr++;
+         }
+         else {
+            Info::spi->D = 0xFF;
+         }
+      }
+      else {
+         stopTransaction();
+         callback(0);
+         return;
+      }
+   }
+
+   /**
+    * Set Callback function\n
+    *
+    * @param[in] theCallback Callback function to execute on interrupt.\n
+    *                        nullptr to indicate none
+    */
+   static __attribute__((always_inline)) void setCallback(SpiCallbackFunction theCallback) {
+      if (theCallback == nullptr) {
+         callback = Spi::unhandledCallback;
+         return;
+      }
+      callback = theCallback;
+   }
+
+
+#ifdef __CMSIS_RTOS
 protected:
    /**
-    * Constructor
+    * Mutex to protect access\n
+    * Using a static accessor function avoids issues with static object initialisation order
     *
-    * @param dmaTxChannel DMA Channel for transmission
-    * @param dmaRxChannel DMA Channel for reception
-    * @param rxMuxSource  Receive Mux value (Tx mux value is assumed to be rxMuxSource+1)
+    * @return mutex
     */
-   Spi_T(USBDM::DmaChannel *dmaTxChannel, USBDM::DmaChannel *dmaRxChannel, uint8_t rxMuxSource) :
-      Spi(spi, dmaTxChannel, dmaRxChannel, rxMuxSource) {
+   static CMSIS::Mutex &mutex() {
+      /** Mutex to protect access - static so per SPI */
+      static CMSIS::Mutex mutex;
+      return mutex;
+   }
+
+public:
+   /**
+    * Obtain SPI mutex and set SPI configuration
+    *
+    * @param[in]  configuration  The configuration to set for the transaction
+    * @param[in]  milliseconds   How long to wait in milliseconds. Use osWaitForever for indefinite wait
+    *
+    * @return osOK: The mutex has been obtain.
+    * @return osErrorTimeoutResource: The mutex could not be obtained in the given time.
+    * @return osErrorResource: The mutex could not be obtained when no timeout was specified.
+    * @return osErrorParameter: The parameter mutex_id is incorrect.
+    * @return osErrorISR: osMutexWait cannot be called from interrupt service routines.
+    */
+   virtual osStatus startTransaction(SpiConfig &configuration, int milliseconds=osWaitForever) override {
+      // Obtain mutex
+      osStatus status = mutex().wait(milliseconds);
+      if (status == osOK) {
+         // Change configuration for this transaction
+         setConfiguration(configuration);
+      }
+      return status;
+   }
+
+   /**
+    * Obtain SPI mutex (SPI configuration unchanged)
+    *
+    * @param[in]  milliseconds How long to wait in milliseconds. Use osWaitForever for indefinite wait
+    *
+    * @return osOK: The mutex has been obtain.
+    * @return osErrorTimeoutResource: The mutex could not be obtained in the given time.
+    * @return osErrorResource: The mutex could not be obtained when no timeout was specified.
+    * @return osErrorParameter: The parameter mutex_id is incorrect.
+    * @return osErrorISR: osMutexWait cannot be called from interrupt service routines.
+    */
+   virtual osStatus startTransaction(int milliseconds=osWaitForever) override {
+      // Obtain mutex
+      osStatus status = mutex().wait(milliseconds);
+      if (status != osOK) {
+         setCmsisErrorCode(status);
+      }
+      else {
+      }
+      return status;
+   }
+
+   /**
+    * Release SPI mutex
+    *
+    * @return osOK: the mutex has been correctly released.
+    * @return osErrorResource: the mutex was not obtained before.
+    * @return osErrorISR: osMutexRelease cannot be called from interrupt service routines.
+    */
+   virtual osStatus endTransaction() override {
+      // Release mutex
+      return mutex().release();
+   }
+#endif
+
+public:
+   static constexpr volatile SPI_Type *SPI = Info::spi;
+
+   // SPI SCK (clock) Pin
+   using sckGpio  = GpioTable_T<Info, 0, ActiveHigh>;
+
+   // SPI SIN (data in = usually MISO) Pin
+   using sinGpio  = GpioTable_T<Info, 1, ActiveHigh>;
+
+   // SPI SOUT (data out = usually MOSI) Pin
+   using soutGpio = GpioTable_T<Info, 2, ActiveHigh>;
+
+   /**
+    * Configures all mapped pins associated with this peripheral
+    */
+   static void __attribute__((always_inline)) configureAllPins() {
+      // Configure pins
+      Info::initPCRs(pcrValue(PinPull_Up, PinDriveStrength_High));
+   }
+
+   virtual void enablePins() override {
+      configureAllPins();
+   }
+
+   virtual void disablePins() override {
+      // Configure SPI pins to mux=0
+      Info::clearPCRs();
+   }
+
+   /**
+    * Sets Communication speed for SPI.
+    * This also updates the communication delays based on the frequency.
+    *
+    * @param[in]  frequency      => Frequency in Hz (0 => use default value)
+    *
+    * Note: Chooses the highest speed that is not greater than frequency.
+    */
+   virtual void setSpeed(uint32_t frequency) override {
+      Spi::setSpeed(Info::getClockFrequency(), frequency);
+   }
+
+   /**
+    * Constructor
+    */
+   SpiBase_T() : Spi(reinterpret_cast<volatile SPI_Type*>(Info::spi)) {
+
+#ifdef DEBUG_BUILD
+      // Check pin assignments
+      static_assert(Info::info[0].gpioBit != UNMAPPED_PCR, "SPIx_SCK has not been assigned to a pin - change in Configure.usbdmProject");
+      static_assert(Info::info[1].gpioBit != UNMAPPED_PCR, "SPIx_SIN has not been assigned to a pin - change in Configure.usbdmProject");
+      static_assert(Info::info[2].gpioBit != UNMAPPED_PCR, "SPIx_SOUT has not been assigned to a pin - change in Configure.usbdmProject");
+
+      // Requires interrupt handler
+      static_assert(Info::irqHandlerInstalled, "IRQ handler must be enabled for SPI - change in Configure.usbdmProject");
+#endif
+
+      if (Info::mapPinsOnEnable) {
+         configureAllPins();
+      }
 
       // Enable SPI module clock
-      *clockReg |= Info::clockMask;
+      *Info::clockReg |= Info::clockMask;
+      __DMB();
 
-      // Configure SPI pins
-      enablePins();
+      spi->C1 =
+            Info::modeValue| // USe default mode
+            SPI_C1_MSTR(1)|
+            SPI_C1_SPIE(1)|
+            SPI_C1_SPIE(0);
 
-      // Use default speed
-      setSpeed();
+      setSpeed(Info::speed);    // Use default speed
+
+      enableNvicInterrupts();
    }
+
+   ~SpiBase_T() override {
+   }
+
+   /**
+    * Gets and clears status flags.
+    *
+    * @return status valkue (SPI->SR)
+    */
+   static uint32_t __attribute__((always_inline)) getStatus() {
+      // Capture interrupt status
+      uint32_t status = Info::spi->SR;
+      // Clear captured flags
+      Info::spi->SR = status;
+      // Return status
+      return status;
+   }
+
+   /**
+    * Enable/disable interrupts in NVIC
+    *
+    * @param[in]  enable        True => enable, False => disable
+    * @param[in]  nvicPriority  Interrupt priority
+    */
+   static void enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
+
+      if (enable) {
+         enableNvicInterrupt(Info::irqNums[0], nvicPriority);
+      }
+      else {
+         // Disable interrupts
+         NVIC_DisableIRQ(Info::irqNums[0]);
+      }
+   }
+
 };
 
-#if defined(USBDM_SPI0_IS_DEFINED) && (SPI0_SCK_PIN_SEL!=0) && (SPI0_MOSI_PIN_SEL!=0) && (SPI0_MISO_PIN_SEL!=0)
-#if (SPI0_PCS0_PIN_SEL!=0)
+template<class Info> SpiCallbackFunction SpiBase_T<Info>::callback    = Spi::unhandledCallback;
+template<class Info>       uint32_t  SpiBase_T<Info>::bytesRemaining  = 0;
+template<class Info> const uint8_t  *SpiBase_T<Info>::txDataPtr       = nullptr;
+template<class Info>       uint8_t  *SpiBase_T<Info>::rxDataPtr       = nullptr;
+
+#if defined(USBDM_SPI0_IS_DEFINED)
 /**
- * @brief Class representing SPI0 interface with hardware PCS
+ * @brief Template class representing a SPI0 interface
  *
+ * <b>Example</b>
  * @code
- * USBDM::Spi *spi = new USBDM::Spi0pcs(new USBDM::DmaChannel0(), new USBDM::DmaChannel1(), USBDM::DMA_SLOT_SPI0_Receive);
+ * USBDM::Spi *spi = new USBDM::Spi0();
  *
- * uint8_t txData[] = {1,2,3,4};
- * uint8_t rxData[sizeof(txData)];
- *
+ * uint8_t txData[] = {1,2,3};
+ * uint8_t rxData[10];
  * spi->txRxBytes(sizeof(txData), txData, rxData);
  * @endcode
+ *
  */
-class Spi0 : public Spi_T<Spi0Info, Spi1_PCS0> {
-
-public:
-   /**
-    * Constructor
-    *
-    * @param dmaTxChannel DMA Channel for transmission
-    * @param dmaRxChannel DMA Channel for reception
-    * @param rxMuxSource  Receive Mux value (Tx mux value is assumed to be rxMuxSource+1)
-    */
-   Spi0(USBDM::DmaChannel *dmaTxChannel, USBDM::DmaChannel *dmaRxChannel, uint8_t rxMuxSource=USBDM::DMA0_SLOT_SPI0_Receive) :
-      Spi_T<Spi0Info, Spi1_PCS0>(dmaTxChannel, dmaRxChannel, rxMuxSource) {
-      NVIC_EnableIRQ(Spi0Info::irqNums[0]);
-      NVIC_SetPriority(Spi0Info::irqNums[0], 2);
-
-      spi->C2 |= SPI_C2_MODFEN_MASK|SPI_C2_TXDMAE_MASK|SPI_C2_RXDMAE_MASK; // Hardware SS output (since SSOE will be set)
-      spiC1BaseValue = SPI_C1_SPE_MASK|SPI_C1_MSTR_MASK|SPI_C1_SSOE_MASK;
-      setMode();
-   }
-};
-#else
-/**
- * @brief Class representing SPI0 interface without hardware PCS
- *
- * @code
- * USBDM::Spi *spi = new USBDM::Spi0(new USBDM::DmaChannel0(), new USBDM::DmaChannel1(), USBDM::DMA_SLOT_SPI0_Receive);
- *
- * uint8_t txData[] = {1,2,3,4};
- * uint8_t rxData[sizeof(txData)];
- *
- * spi->txRxBytes(sizeof(txData), txData, rxData);
- * @endcode
- *
- * @tparam  PCS...        Pcr used for PCSx
- */
-class Spi0 : public Spi_T<Spi0Info> {
-
-public:
-   /**
-    * Constructor
-    *
-    * @param dmaTxChannel DMA Channel for transmission
-    * @param dmaRxChannel DMA Channel for reception
-    * @param rxMuxSource  Receive Mux value (Tx mux value is assumed to be rxMuxSource+1)
-    */
-   Spi0(USBDM::DmaChannel *dmaTxChannel, USBDM::DmaChannel *dmaRxChannel, uint8_t rxMuxSource=USBDM::DMA0_SLOT_SPI0_Receive) :
-      Spi_T<Spi0Info>(dmaTxChannel, dmaRxChannel, rxMuxSource) {
-      NVIC_EnableIRQ(Spi0Info::irqNums[0]);
-      NVIC_SetPriority(Spi0Info::irqNums[0], 2);
-
-      spi->C2 |= SPI_C2_TXDMAE_MASK|SPI_C2_RXDMAE_MASK;
-      spiC1BaseValue = SPI_C1_SPE_MASK|SPI_C1_MSTR_MASK;
-      setMode();
-   }
-};
+class Spi0 : public SpiBase_T<Spi0Info> {};
 #endif
 
+#if defined(USBDM_SPI1_IS_DEFINED)
 /**
- * @brief Template class representing SPI0 interface with GPIO used as select signal
+ * @brief Template class representing a SPI1 interface
  *
+ * <b>Example</b>
  * @code
- * USBDM::Spi *spi = new USBDM::Spi0Gpio_T<USBDM::GpioC<3>, false>(new USBDM::DmaChannel0(), new USBDM::DmaChannel1());
+ * USBDM::Spi *spi = new USBDM::Spi1();
  *
- * uint8_t txData[] = {1,2,3,4};
- * uint8_t rxData[sizeof(txData)];
- *
+ * uint8_t txData[] = {1,2,3};
+ * uint8_t rxData[10];
  * spi->txRxBytes(sizeof(txData), txData, rxData);
  * @endcode
  *
- * @tparam  Gpio        Gpio used as select signal
- * @tparam  enableValue Value used as selected level
  */
-template<typename Gpio, bool enableValue=false>
-class Spi0Gpio_T : public Spi0 {
-public:
-   /**
-    * Constructor
-    *
-    * @param dmaTxChannel DMA Channel for transmission
-    * @param dmaRxChannel DMA Channel for reception
-    */
-   Spi0Gpio_T(USBDM::DmaChannel *dmaTxChannel, USBDM::DmaChannel *dmaRxChannel) :
-      Spi0(dmaTxChannel, dmaRxChannel) {
-   }
-   /**
-    *  Transmit and receive a series of bytes
-    *
-    *  @param dataSize  Number of bytes to transfer
-    *  @param txData   Transmit bytes (may be NULL for Rx only)
-    *  @param rxData    Receive byte buffer (may be NULL for Tx only)
-    *
-    *  Note: rxData may use same buffer as txData
-    */
-   virtual void txRxBytes(uint32_t dataSize, const uint8_t *txData, uint8_t *rxData=0) {
-      Gpio::write(enableValue);
-      Spi::txRxBytes(dataSize, txData, rxData=0);
-      Gpio::write(!enableValue);
-   }
-   /**
-    * Transmit and receive an 8-bit value over SPI
-    *
-    * @param data - Data to send
-    *
-    * @return Data received
-    */
-   virtual uint32_t txRx(uint32_t data) {
-      Gpio::write(enableValue);
-      uint32_t rv = Spi::txRx(data);
-      Gpio::write(!enableValue);
-      return rv;
-   }
-};
-#endif // defined(USBDM_SPI0_IS_DEFINED) && (SPI0_SCK_PIN_SEL!=0) && (SPI0_MOSI_PIN_SEL!=0) && (SPI0_MISO_PIN_SEL!=0)
+class Spi1 : public SpiBase_T<Spi1Info> {};
 
-#if defined(USBDM_SPI1_IS_DEFINED) && (SPI1_SCK_PIN_SEL!=0) && (SPI1_MOSI_PIN_SEL!=0) && (SPI1_MISO_PIN_SEL!=0)
-#if (SPI1_PCS0_PIN_SEL!=0)
-/**
- * @brief Class representing SPI1 interface with hardware PCS
- *
- * @code
- * USBDM::Spi *spi = new USBDM::Spi1pcs(new USBDM::DmaChannel0(), new USBDM::DmaChannel1(), USBDM::DMA_SLOT_SPI1_Receive);
- *
- * uint8_t txData[] = {1,2,3,4};
- * uint8_t rxData[sizeof(txData)];
- *
- * spi->txRxBytes(sizeof(txData), txData, rxData);
- * @endcode
- */
-class Spi1 : public Spi_T<Spi1Info, Spi1_PCS0> {
-
-public:
-   /**
-    * Constructor
-    *
-    * @param dmaTxChannel DMA Channel for transmission
-    * @param dmaRxChannel DMA Channel for reception
-    * @param rxMuxSource  Receive Mux value (Tx mux value is assumed to be rxMuxSource+1)
-    */
-   Spi1(USBDM::DmaChannel *dmaTxChannel, USBDM::DmaChannel *dmaRxChannel, uint8_t rxMuxSource=USBDM::DMA0_SLOT_SPI1_Receive) :
-      Spi_T<Spi1Info, Spi1_PCS0>(dmaTxChannel, dmaRxChannel, rxMuxSource) {
-      NVIC_EnableIRQ(Spi1Info::irqNums[0]);
-      NVIC_SetPriority(Spi1Info::irqNums[0], 2);
-
-      spi->C2 |= SPI_C2_MODFEN_MASK|SPI_C2_TXDMAE_MASK|SPI_C2_RXDMAE_MASK; // Hardware SS output (since SSOE will be set)
-      spiC1BaseValue = SPI_C1_SPE_MASK|SPI_C1_MSTR_MASK|SPI_C1_SSOE_MASK;
-      setMode();
-   }
-};
-#else
-/**
- * @brief Class representing SPI1 interface without hardware PCS
- *
- * @code
- * USBDM::Spi *spi = new USBDM::Spi1(new USBDM::DmaChannel0(), new USBDM::DmaChannel1(), USBDM::DMA_SLOT_SPI1_Receive);
- *
- * uint8_t txData[] = {1,2,3,4};
- * uint8_t rxData[sizeof(txData)];
- *
- * spi->txRxBytes(sizeof(txData), txData, rxData);
- * @endcode
- *
- * @tparam  PCS...        Pcr used for PCSx
- */
-class Spi1 : public Spi_T<Spi1Info> {
-
-public:
-   /**
-    * Constructor
-    *
-    * @param dmaTxChannel DMA Channel for transmission
-    * @param dmaRxChannel DMA Channel for reception
-    * @param rxMuxSource  Receive Mux value (Tx mux value is assumed to be rxMuxSource+1)
-    */
-   Spi1(USBDM::DmaChannel *dmaTxChannel, USBDM::DmaChannel *dmaRxChannel, uint8_t rxMuxSource=USBDM::DMA0_SLOT_SPI1_Receive) :
-      Spi_T<Spi1Info>(dmaTxChannel, dmaRxChannel, rxMuxSource) {
-      NVIC_EnableIRQ(Spi1Info::irqNums[0]);
-      NVIC_SetPriority(Spi1Info::irqNums[0], 2);
-
-      spi->C2 |= SPI_C2_TXDMAE_MASK|SPI_C2_RXDMAE_MASK;
-      spiC1BaseValue = SPI_C1_SPE_MASK|SPI_C1_MSTR_MASK;
-      setMode();
-   }
-};
 #endif
-
 /**
- * @brief Template class representing SPI1 interface with GPIO used as select signal
- *
- * @code
- * USBDM::Spi *spi = new USBDM::Spi1Gpio_T<USBDM::GpioC<3>, false>(new USBDM::DmaChannel0(), new USBDM::DmaChannel1());
- *
- * uint8_t txData[] = {1,2,3,4};
- * uint8_t rxData[sizeof(txData)];
- *
- * spi->txRxBytes(sizeof(txData), txData, rxData);
- * @endcode
- *
- * @tparam  Gpio        Gpio used as select signal
- * @tparam  enableValue Value used as selected level
- */
-template<typename Gpio, bool enableValue=false>
-class Spi1Gpio_T : public Spi1 {
-public:
-   /**
-    * Constructor
-    *
-    * @param dmaTxChannel DMA Channel for transmission
-    * @param dmaRxChannel DMA Channel for reception
-    */
-   Spi1Gpio_T(USBDM::DmaChannel *dmaTxChannel, USBDM::DmaChannel *dmaRxChannel) :
-      Spi1(dmaTxChannel, dmaRxChannel) {
-   }
-   /**
-    *  Transmit and receive a series of bytes
-    *
-    *  @param dataSize  Number of bytes to transfer
-    *  @param txData   Transmit bytes (may be NULL for Rx only)
-    *  @param rxData    Receive byte buffer (may be NULL for Tx only)
-    *
-    *  Note: rxData may use same buffer as txData
-    */
-   virtual void txRxBytes(uint32_t dataSize, const uint8_t *txData, uint8_t *rxData=0) {
-      Gpio::write(enableValue);
-      Spi::txRxBytes(dataSize, txData, rxData=0);
-      Gpio::write(!enableValue);
-   }
-   /**
-    * Transmit and receive an 8-bit value over SPI
-    *
-    * @param data - Data to send
-    *
-    * @return Data received
-    */
-   virtual uint32_t txRx(uint32_t data) {
-      Gpio::write(enableValue);
-      uint32_t rv = Spi::txRx(data);
-      Gpio::write(!enableValue);
-      return rv;
-   }
-};
-#endif // defined(USBDM_SPI1_IS_DEFINED) && (SPI1_SCK_PIN_SEL!=0) && (SPI1_MOSI_PIN_SEL!=0) && (SPI1_MISO_PIN_SEL!=0)
-/**
+ * End SPI_Group
  * @}
  */
 

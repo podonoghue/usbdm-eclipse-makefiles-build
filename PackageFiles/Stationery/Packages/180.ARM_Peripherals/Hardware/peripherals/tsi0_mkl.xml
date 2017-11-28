@@ -60,7 +60,7 @@
       <choice value="1" name="1 uA" />
       <choice value="2" name="2 uA" />
       <choice value="3" name="4 uA" />
-      <choice value="4" name="8 uA" />
+      <choice value="4" name="8 uA" isDefault="true" />
       <choice value="5" name="16 uA" />
       <choice value="6" name="32 uA" />
       <choice value="7" name="64 uA" />
@@ -79,7 +79,7 @@
       <choice value="1" name="1 uA" />
       <choice value="2" name="2 uA" />
       <choice value="3" name="4 uA" />
-      <choice value="4" name="8 uA" />
+      <choice value="4" name="8 uA" isDefault="true" />
       <choice value="5" name="16 uA" />
       <choice value="6" name="32 uA" />
       <choice value="7" name="64 uA" />
