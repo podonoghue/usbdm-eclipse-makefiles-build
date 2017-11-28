@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE root SYSTEM "../package.dtd"
 [
-<!ENTITY DEVICE_NAME  "FRDM_KW41Z">
+<!ENTITY DEVICE_NAME1  "FRDM_KW41Z">
+<!ENTITY DEVICE_NAME2  "R41Z_EVAL">
 ]>
 
 <root version="1.0" >
-   <projectActionList id="CPP-abstraction-&DEVICE_NAME;">
+   <projectActionList id="CPP-abstraction-&DEVICE_NAME1;">
       <applyWhen>
          <and>
-            <deviceNameIs>&DEVICE_NAME;</deviceNameIs>
+	    <or>
+               <deviceNameIs>&DEVICE_NAME1;</deviceNameIs>
+               <deviceNameIs>&DEVICE_NAME2;</deviceNameIs>
+	    </or>
             <variableRef idRef="hasCCNature" condition="isTrue" />
          </and>
       </applyWhen>
@@ -45,7 +49,7 @@
          <constant id="demo.cpp.nrf24l01.ce"        value="GpioD&lt;5&gt;" />   <!-- CE* connection to NRF24101 module -->
          <constant id="demo.cpp.nrf24l01.irq"       value="GpioA&lt;13&gt;" />  <!-- IRQ* connection from NRF24101 module -->
 
-         <copy source="projectFiles/&DEVICE_NAME;.usbdmProject"  target="Configure.usbdmProject"  overwrite="true" />
+         <copy source="projectFiles/&DEVICE_NAME1;.usbdmProject"  target="Configure.usbdmProject"  overwrite="true" />
       </projectActionList>
    </projectActionList>
 </root>
