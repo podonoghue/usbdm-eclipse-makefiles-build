@@ -430,7 +430,6 @@ Devices using this peripheral:
          \t   SIM_SOPT7_ADC0PRETRGSEL($(sim_sopt7_adc0pretrgsel)) |   // ADC0 pretrigger select
          \t   SIM_SOPT7_ADC0TRGSEL($(sim_sopt7_adc0trgsel));       // ADC0 trigger select\n\n
       ]]></template>
-      
    </category>
    
    <indexedCategory name="ClockConfig." dim="3" 
@@ -493,7 +492,6 @@ Devices using this peripheral:
       \t#endif
       \t
       \t   sim->SOPT1 = sopt1;
-      \t   // sim_sopt2_pllfllsel is also altered by MCG clock code
       \t   sim->SOPT2 = sopt2;
       \t   sim->SOPT4 = sopt4;
       \t   sim->SOPT5 = sopt5;

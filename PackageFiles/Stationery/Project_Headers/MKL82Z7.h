@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2017/11
+ * @date     2017/12
  *
  *******************************************************************************************************/
 
@@ -1930,7 +1930,7 @@ typedef struct EMVSIM_Type {
 */
 
 /* ================================================================================ */
-/* ================           EWM (file:EWM_MKE16F16)              ================ */
+/* ================           EWM (file:EWM_INT_PR)                ================ */
 /* ================================================================================ */
 
 /**
@@ -2257,9 +2257,9 @@ typedef struct FLEXIO_Type {
 #define FLEXIO_CTRL_DOZEN_SHIFT                  (31U)                                               /*!< FLEXIO_CTRL.DOZEN Position              */
 #define FLEXIO_CTRL_DOZEN(x)                     (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< FLEXIO_CTRL.DOZEN Field                 */
 /* ------- PIN Bit Fields                           ------ */
-#define FLEXIO_PIN_PDI_MASK                      (0xFFFFFFFFU)                                       /*!< FLEXIO_PIN.PDI Mask                     */
+#define FLEXIO_PIN_PDI_MASK                      (0xFFU)                                             /*!< FLEXIO_PIN.PDI Mask                     */
 #define FLEXIO_PIN_PDI_SHIFT                     (0U)                                                /*!< FLEXIO_PIN.PDI Position                 */
-#define FLEXIO_PIN_PDI(x)                        (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< FLEXIO_PIN.PDI Field                    */
+#define FLEXIO_PIN_PDI(x)                        (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< FLEXIO_PIN.PDI Field                    */
 /* ------- SHIFTSTAT Bit Fields                     ------ */
 #define FLEXIO_SHIFTSTAT_SSF_MASK                (0xFFU)                                             /*!< FLEXIO_SHIFTSTAT.SSF Mask               */
 #define FLEXIO_SHIFTSTAT_SSF_SHIFT               (0U)                                                /*!< FLEXIO_SHIFTSTAT.SSF Position           */

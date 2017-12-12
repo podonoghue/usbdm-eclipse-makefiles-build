@@ -64,7 +64,7 @@
       <xi:include href="peripherals/SIM_MKL27Z644.svd.xml"/>
       <xi:include href="peripherals/SMC_LPOPO_PSTOPO_MKL27Z644.svd.xml"/>
       <xi:include href="peripherals/SPI0_16Bit_MKL.svd.xml"/>
-      <peripheral derivedFrom="SPI0"><name>SPI1</name><baseAddress>0x40077000</baseAddress></peripheral>
+      <peripheral derivedFrom="SPI0"><name>SPI1</name><baseAddress>0x40077000</baseAddress><template>#define %n_HAS_FIFO (1)</template></peripheral>
       <xi:include href="peripherals/SYST.svd.xml"/>
       <xi:include href="peripherals/TPM0_6CH_POL.svd.xml"/>
       <xi:include href="peripherals/TPM1_2CH_POL.svd.xml"/>

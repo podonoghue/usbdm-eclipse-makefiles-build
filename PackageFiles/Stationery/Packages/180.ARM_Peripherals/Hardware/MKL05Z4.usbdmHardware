@@ -1,0 +1,710 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE root SYSTEM "_Hardware.dtd">
+<!-- MKL05Z4.usbdmHardware -->
+<!-- 
+   Generated from MKL05Z4.csv
+-->
+
+<root version="1.2.0">
+   <family name="MKL05Z4">
+      <device name="FRDM_KL05Z"   manual="KL05P48M48SF1RM" package="FRDM_KL05Z" />
+      <device name="MKL05Z16VFK4" manual="KL05P48M48SF1RM" package="QFN24" />
+      <device name="MKL05Z16VFM4" manual="KL05P48M48SF1RM" package="QFN32" />
+      <device name="MKL05Z16VLC4" manual="KL05P48M48SF1RM" package="LQFP32" />
+      <device name="MKL05Z16VLF4" manual="KL05P48M48SF1RM" package="LQFP48" />
+      <device name="MKL05Z32VFK4" manual="KL05P48M48SF1RM" package="QFN24" />
+      <device name="MKL05Z32VFM4" manual="KL05P48M48SF1RM" package="QFN32" />
+      <device name="MKL05Z32VLC4" manual="KL05P48M48SF1RM" package="LQFP32" />
+      <device name="MKL05Z32VLF4" manual="KL05P48M48SF1RM" package="LQFP48" />
+      <device name="MKL05Z8VFK4"  manual="KL05P48M48SF1RM" package="QFN24" />
+      <device name="MKL05Z8VFM4"  manual="KL05P48M48SF1RM" package="QFN32" />
+      <device name="MKL05Z8VLC4"  manual="KL05P48M48SF1RM" package="LQFP32" />
+   </family>
+   <peripherals>
+      <peripheral baseName="ADC"      instance="0"        version="adc0_mkl_dma">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForAdc" />
+         <clock reg="SCGC6"         mask="SIM_SCGC6_ADC0_MASK" />
+         <irq num="ADC0_IRQn" />
+      </peripheral>
+      <peripheral baseName="CMP"      instance="0"        version="cmp0_pstm_trigm">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCmp" />
+         <clock reg="SCGC4"         mask="SIM_SCGC4_CMP_MASK" />
+         <irq num="CMP0_IRQn" />
+      </peripheral>
+      <peripheral baseName="CONTROL"  instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForControl" />
+      </peripheral>
+      <peripheral baseName="Console"  instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForConsole" />
+      </peripheral>
+      <peripheral baseName="DAC"      instance="0"        version="dac0_2ch_mkl05">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDac" />
+         <clock reg="SCGC6"         mask="SIM_SCGC6_DAC0_MASK" />
+         <irq num="DAC0_IRQn" />
+      </peripheral>
+      <peripheral baseName="DMA"      instance="0"        version="dma0_mkl">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDma" />
+         <clock reg="SCGC7"         mask="SIM_SCGC7_DMA_MASK" />
+         <irq num="DMA0_IRQn" />
+         <irq num="DMA1_IRQn" />
+         <irq num="DMA2_IRQn" />
+         <irq num="DMA3_IRQn" />
+      </peripheral>
+      <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_4ch_trig">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDmaMux" />
+         <clock reg="SCGC6"         mask="SIM_SCGC6_DMAMUX0_MASK" />
+         <dma source="Disabled"             num="0" />
+         <dma source="Slot1"                num="1" />
+         <dma source="Slot2"                num="2" />
+         <dma source="Slot3"                num="3" />
+         <dma source="Slot4"                num="4" />
+         <dma source="Slot5"                num="5" />
+         <dma source="Slot6"                num="6" />
+         <dma source="Slot7"                num="7" />
+         <dma source="Slot8"                num="8" />
+         <dma source="Slot9"                num="9" />
+         <dma source="Slot10"               num="10" />
+         <dma source="Slot11"               num="11" />
+         <dma source="Slot12"               num="12" />
+         <dma source="Slot13"               num="13" />
+         <dma source="Slot14"               num="14" />
+         <dma source="Slot15"               num="15" />
+         <dma source="Slot16"               num="16" />
+         <dma source="Slot17"               num="17" />
+         <dma source="Slot18"               num="18" />
+         <dma source="Slot19"               num="19" />
+         <dma source="Slot20"               num="20" />
+         <dma source="Slot21"               num="21" />
+         <dma source="Slot22"               num="22" />
+         <dma source="Slot23"               num="23" />
+         <dma source="Slot24"               num="24" />
+         <dma source="Slot25"               num="25" />
+         <dma source="Slot26"               num="26" />
+         <dma source="Slot27"               num="27" />
+         <dma source="Slot28"               num="28" />
+         <dma source="Slot29"               num="29" />
+         <dma source="Slot30"               num="30" />
+         <dma source="Slot31"               num="31" />
+         <dma source="Slot32"               num="32" />
+         <dma source="Slot33"               num="33" />
+         <dma source="Slot34"               num="34" />
+         <dma source="Slot35"               num="35" />
+         <dma source="Slot36"               num="36" />
+         <dma source="Slot37"               num="37" />
+         <dma source="Slot38"               num="38" />
+         <dma source="Slot39"               num="39" />
+         <dma source="Slot40"               num="40" />
+         <dma source="Slot41"               num="41" />
+         <dma source="Slot42"               num="42" />
+         <dma source="Slot43"               num="43" />
+         <dma source="Slot44"               num="44" />
+         <dma source="Slot45"               num="45" />
+         <dma source="Slot46"               num="46" />
+         <dma source="Slot47"               num="47" />
+         <dma source="Slot48"               num="48" />
+         <dma source="Slot49"               num="49" />
+         <dma source="Slot50"               num="50" />
+         <dma source="Slot51"               num="51" />
+         <dma source="Slot52"               num="52" />
+         <dma source="Slot53"               num="53" />
+         <dma source="Slot54"               num="54" />
+         <dma source="Slot55"               num="55" />
+         <dma source="Slot56"               num="56" />
+         <dma source="Slot57"               num="57" />
+         <dma source="Slot58"               num="58" />
+         <dma source="Slot59"               num="59" />
+         <dma source="AlwaysEnabled60"      num="60" />
+         <dma source="AlwaysEnabled61"      num="61" />
+         <dma source="AlwaysEnabled62"      num="62" />
+         <dma source="AlwaysEnabled63"      num="63" />
+      </peripheral>
+      <peripheral baseName="ExternalTrigger" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForShared" />
+      </peripheral>
+      <peripheral baseName="FTFA"     instance=""         version="ftfa">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlash" />
+         <clock reg="SCGC6"         mask="SIM_SCGC6_FTF_MASK" />
+         <irq num="FTF_Command_IRQn" />
+         <param key="pflash_sector_size" value="1024" />
+         <param key="pflash_phrase_size" value="4" />
+         <param key="peripheral_file" value="ftfa" />
+      </peripheral>
+      <peripheral baseName="GPIO"     instance="A"        version="fgpioa_0xf80ff000">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
+         <clock reg="SCGC5"         mask="SIM_SCGC5_PORTA_MASK" />
+         <irq num="PORTA_IRQn" />
+      </peripheral>
+      <peripheral baseName="GPIO"     instance="B"        version="fgpioa_0xf80ff000">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
+         <clock reg="SCGC5"         mask="SIM_SCGC5_PORTB_MASK" />
+         <irq num="PORTB_IRQn" />
+      </peripheral>
+      <peripheral baseName="I2C"      instance="0"        version="i2c0_mkl04z4">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2c" />
+         <clock reg="SCGC4"         mask="SIM_SCGC4_I2C0_MASK" />
+         <irq num="I2C0_IRQn" />
+      </peripheral>
+      <peripheral baseName="LLWU"     instance=""         version="llwu_pe2_filt2">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
+         <irq num="LLWU_IRQn" />
+      </peripheral>
+      <peripheral baseName="LPTMR"    instance="0"        version="lptmr0">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />
+         <clock reg="SCGC5"         mask="SIM_SCGC5_LPTMR_MASK" />
+         <irq num="LPTMR0_IRQn" />
+      </peripheral>
+      <peripheral baseName="MCG"      instance=""         version="mcg_nopll_mkl04z4">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcg" />
+         <irq num="MCG_IRQn" />
+      </peripheral>
+      <peripheral baseName="OSC"      instance="0"        version="osc0_mk">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForOsc" />
+      </peripheral>
+      <peripheral baseName="PIT"      instance=""         version="pit_2ch_chain_ltmr">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPit" />
+         <clock reg="SCGC6"         mask="SIM_SCGC6_PIT_MASK" />
+         <irq num="PIT_IRQn" />
+      </peripheral>
+      <peripheral baseName="PMC"      instance=""         version="pmc_mk">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPmc" />
+         <irq num="PMC_IRQn" />
+      </peripheral>
+      <peripheral baseName="POWER"    instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPower" />
+      </peripheral>
+      <peripheral baseName="RCM"      instance=""         version="rcm_mkl02z4">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRcm" />
+      </peripheral>
+      <peripheral baseName="RTC"      instance=""         version="rtc_mkl04z4">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRtc" />
+         <clock reg="SCGC6"         mask="SIM_SCGC6_RTC_MASK" />
+         <irq num="RTC_Alarm_IRQn" />
+         <irq num="RTC_Seconds_IRQn" />
+      </peripheral>
+      <peripheral baseName="SIM"      instance=""         version="sim_mkl05z4">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSim" />
+      </peripheral>
+      <peripheral baseName="SMC"      instance=""         version="smc_alls_mkl04z4">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSmc" />
+      </peripheral>
+      <peripheral baseName="SPI"      instance="0"        version="spi0_mkl04z4_dma">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
+         <clock reg="SCGC4"         mask="SIM_SCGC4_SPI0_MASK" />
+         <irq num="SPI0_IRQn" />
+      </peripheral>
+      <peripheral baseName="TPM"      instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForShared" />
+      </peripheral>
+      <peripheral baseName="TPM"      instance="0"        version="tpm0_6ch">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
+         <clock reg="SCGC6"         mask="SIM_SCGC6_TPM0_MASK" />
+         <irq num="TPM0_IRQn" />
+      </peripheral>
+      <peripheral baseName="TPM"      instance="1"        version="tpm1_2ch">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
+         <clock reg="SCGC6"         mask="SIM_SCGC6_TPM1_MASK" />
+         <irq num="TPM1_IRQn" />
+      </peripheral>
+      <peripheral baseName="TSI"      instance="0"        version="tsi0_mkl">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForTsi" />
+         <clock reg="SCGC5"         mask="SIM_SCGC5_TSI0_MASK" />
+         <irq num="TSI0_IRQn" />
+      </peripheral>
+      <peripheral baseName="UART"     instance="0"        version="uart0_mkl04z4">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUart" />
+         <clock reg="SCGC4"         mask="SIM_SCGC4_UART0_MASK" />
+         <irq num="UART0_IRQn" />
+      </peripheral>
+   </peripherals>
+   <pins>
+      <pin name="PTA0">
+         <mux sel="mux0"          signal="ADC0_SE12" />
+         <mux sel="mux0"          signal="CMP0_IN2" />
+         <mux sel="mux1"          signal="GPIOA_0" />
+         <mux sel="mux1"          signal="LLWU_P7" />
+         <mux sel="mux2"          signal="TPM1_CH0" />
+         <mux sel="mux3"          signal="SWD_CLK" />
+         <reset sel="mux3" />
+      </pin>
+      <pin name="PTA1">
+         <mux sel="mux0"          signal="Disabled" />
+         <mux sel="mux1"          signal="GPIOA_1" />
+         <mux sel="mux1"          signal="LPTMR0_ALT1" />
+         <mux sel="mux2"          signal="TPM_CLKIN0" />
+         <mux sel="mux3"          signal="RESET_b" />
+         <reset sel="mux3" />
+      </pin>
+      <pin name="PTA2">
+         <mux sel="mux0"          signal="Disabled" />
+         <mux sel="mux1"          signal="GPIOA_2" />
+         <mux sel="mux2"          signal="CMP0_OUT" />
+         <mux sel="mux3"          signal="SWD_DIO" />
+         <reset sel="mux3" />
+      </pin>
+      <pin name="PTA3">
+         <mux sel="mux0"          signal="EXTAL0" />
+         <mux sel="mux1"          signal="GPIOA_3" />
+         <mux sel="mux2"          signal="I2C0_SCL" />
+         <mux sel="mux3"          signal="I2C0_SDA" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTA4">
+         <mux sel="mux0"          signal="XTAL0" />
+         <mux sel="mux1"          signal="GPIOA_4" />
+         <mux sel="mux1"          signal="LLWU_P0" />
+         <mux sel="mux2"          signal="I2C0_SDA" />
+         <mux sel="mux3"          signal="I2C0_SCL" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTA5">
+         <mux sel="mux0"          signal="Disabled" />
+         <mux sel="mux1"          signal="GPIOA_5" />
+         <mux sel="mux1"          signal="LLWU_P1" />
+         <mux sel="mux1"          signal="RTC_CLKIN" />
+         <mux sel="mux2"          signal="TPM0_CH5" />
+         <mux sel="mux3"          signal="SPI0_PCS" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTA6">
+         <mux sel="mux0"          signal="Disabled" />
+         <mux sel="mux1"          signal="GPIOA_6" />
+         <mux sel="mux1"          signal="LLWU_P2" />
+         <mux sel="mux2"          signal="TPM0_CH4" />
+         <mux sel="mux3"          signal="SPI0_MISO" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTA7">
+         <mux sel="mux0"          signal="ADC0_SE7" />
+         <mux sel="mux0"          signal="TSI0_CH5" />
+         <mux sel="mux1"          signal="GPIOA_7" />
+         <mux sel="mux1"          signal="LLWU_P3" />
+         <mux sel="mux2"          signal="SPI0_MISO" />
+         <mux sel="mux3"          signal="SPI0_MOSI" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTA8">
+         <mux sel="mux0"          signal="ADC0_SE3" />
+         <mux sel="mux0"          signal="TSI0_CH1" />
+         <mux sel="mux1"          signal="GPIOA_8" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTA9">
+         <mux sel="mux0"          signal="ADC0_SE2" />
+         <mux sel="mux0"          signal="TSI0_CH0" />
+         <mux sel="mux1"          signal="GPIOA_9" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTA10">
+         <mux sel="mux0"          signal="TSI0_CH11" />
+         <mux sel="mux1"          signal="GPIOA_10" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTA11">
+         <mux sel="mux0"          signal="TSI0_CH10" />
+         <mux sel="mux1"          signal="GPIOA_11" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTA12">
+         <mux sel="mux0"          signal="ADC0_SE0" />
+         <mux sel="mux0"          signal="CMP0_IN0" />
+         <mux sel="mux1"          signal="GPIOA_12" />
+         <mux sel="mux1"          signal="LPTMR0_ALT2" />
+         <mux sel="mux2"          signal="TPM1_CH0" />
+         <mux sel="mux3"          signal="TPM_CLKIN0" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTA13">
+         <mux sel="mux0"          signal="TSI0_CH9" />
+         <mux sel="mux1"          signal="GPIOA_13" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTA14">
+         <mux sel="mux0"          signal="Disabled" />
+         <mux sel="mux1"          signal="GPIOA_14" />
+         <mux sel="mux3"          signal="TPM_CLKIN0" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTA15">
+         <mux sel="mux0"          signal="Disabled" />
+         <mux sel="mux1"          signal="GPIOA_15" />
+         <mux sel="mux3"          signal="CLKOUT" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTA16">
+         <mux sel="mux0"          signal="Disabled" />
+         <mux sel="mux1"          signal="GPIOA_16" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTA17">
+         <mux sel="mux0"          signal="Disabled" />
+         <mux sel="mux1"          signal="GPIOA_17" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTA18">
+         <mux sel="mux0"          signal="Disabled" />
+         <mux sel="mux1"          signal="GPIOA_18" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTA19">
+         <mux sel="mux0"          signal="Disabled" />
+         <mux sel="mux1"          signal="GPIOA_19" />
+         <mux sel="mux3"          signal="SPI0_PCS" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTB0">
+         <mux sel="mux0"          signal="ADC0_SE6" />
+         <mux sel="mux0"          signal="TSI0_CH4" />
+         <mux sel="mux1"          signal="GPIOB_0" />
+         <mux sel="mux1"          signal="LLWU_P4" />
+         <mux sel="mux2"          signal="EXTRG_IN" />
+         <mux sel="mux3"          signal="SPI0_SCK" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTB1">
+         <mux sel="mux0"          signal="ADC0_SE5" />
+         <mux sel="mux0"          signal="TSI0_CH3" />
+         <mux sel="mux0"          signal="DAC0_OUT" />
+         <mux sel="mux0"          signal="CMP0_IN3" />
+         <mux sel="mux1"          signal="GPIOB_1" />
+         <mux sel="mux2"          signal="UART0_TX" />
+         <mux sel="mux3"          signal="UART0_RX" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTB2">
+         <mux sel="mux0"          signal="ADC0_SE4" />
+         <mux sel="mux0"          signal="TSI0_CH2" />
+         <mux sel="mux1"          signal="GPIOB_2" />
+         <mux sel="mux1"          signal="LLWU_P5" />
+         <mux sel="mux2"          signal="UART0_RX" />
+         <mux sel="mux3"          signal="UART0_TX" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTB3">
+         <mux sel="mux0"          signal="Disabled" />
+         <mux sel="mux1"          signal="GPIOB_3" />
+         <mux sel="mux2"          signal="I2C0_SCL" />
+         <mux sel="mux3"          signal="UART0_TX" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTB4">
+         <mux sel="mux0"          signal="Disabled" />
+         <mux sel="mux1"          signal="GPIOB_4" />
+         <mux sel="mux1"          signal="LLWU_P6" />
+         <mux sel="mux2"          signal="I2C0_SDA" />
+         <mux sel="mux3"          signal="UART0_RX" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTB5">
+         <mux sel="mux0"          signal="ADC0_SE1" />
+         <mux sel="mux0"          signal="CMP0_IN1" />
+         <mux sel="mux1"          signal="GPIOB_5" />
+         <mux sel="mux2"          signal="TPM1_CH1" />
+         <mux sel="mux3"          signal="NMI_b" />
+         <reset sel="mux3" />
+      </pin>
+      <pin name="PTB6">
+         <mux sel="mux0"          signal="Disabled" />
+         <mux sel="mux1"          signal="GPIOB_6" />
+         <mux sel="mux1"          signal="LPTMR0_ALT3" />
+         <mux sel="mux2"          signal="TPM0_CH3" />
+         <mux sel="mux3"          signal="TPM_CLKIN1" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTB7">
+         <mux sel="mux0"          signal="Disabled" />
+         <mux sel="mux1"          signal="GPIOB_7" />
+         <mux sel="mux2"          signal="TPM0_CH2" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTB8">
+         <mux sel="mux0"          signal="ADC0_SE11" />
+         <mux sel="mux1"          signal="GPIOB_8" />
+         <mux sel="mux2"          signal="TPM0_CH3" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTB9">
+         <mux sel="mux0"          signal="ADC0_SE10" />
+         <mux sel="mux1"          signal="GPIOB_9" />
+         <mux sel="mux2"          signal="TPM0_CH2" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTB10">
+         <mux sel="mux0"          signal="ADC0_SE9" />
+         <mux sel="mux0"          signal="TSI0_CH7" />
+         <mux sel="mux1"          signal="GPIOB_10" />
+         <mux sel="mux2"          signal="TPM0_CH1" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTB11">
+         <mux sel="mux0"          signal="ADC0_SE8" />
+         <mux sel="mux0"          signal="TSI0_CH6" />
+         <mux sel="mux1"          signal="GPIOB_11" />
+         <mux sel="mux2"          signal="TPM0_CH0" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTB12">
+         <mux sel="mux0"          signal="TSI0_CH8" />
+         <mux sel="mux1"          signal="GPIOB_12" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTB13">
+         <mux sel="mux0"          signal="ADC0_SE13" />
+         <mux sel="mux1"          signal="GPIOB_13" />
+         <mux sel="mux2"          signal="TPM1_CH1" />
+         <mux sel="mux3"          signal="RTC_CLKOUT" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTB14">
+         <mux sel="mux0"          signal="Disabled" />
+         <mux sel="mux1"          signal="GPIOB_14" />
+         <mux sel="mux2"          signal="EXTRG_IN" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTB15">
+         <mux sel="mux0"          signal="Disabled" />
+         <mux sel="mux1"          signal="GPIOB_15" />
+         <mux sel="mux2"          signal="SPI0_MOSI" />
+         <mux sel="mux3"          signal="SPI0_MISO" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTB16">
+         <mux sel="mux0"          signal="Disabled" />
+         <mux sel="mux1"          signal="GPIOB_16" />
+         <mux sel="mux2"          signal="SPI0_MISO" />
+         <mux sel="mux3"          signal="SPI0_MOSI" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTB17">
+         <mux sel="mux0"          signal="Disabled" />
+         <mux sel="mux1"          signal="GPIOB_17" />
+         <mux sel="mux2"          signal="TPM_CLKIN1" />
+         <mux sel="mux3"          signal="SPI0_SCK" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTB18">
+         <mux sel="mux0"          signal="Disabled" />
+         <mux sel="mux1"          signal="GPIOB_18" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTB19">
+         <mux sel="mux0"          signal="Disabled" />
+         <mux sel="mux1"          signal="GPIOB_19" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="PTB20">
+         <mux sel="mux0"          signal="Disabled" />
+         <mux sel="mux1"          signal="GPIOB_20" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="VDD">
+         <mux sel="mux0"          signal="VDD" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="VDD1">
+         <mux sel="mux0"          signal="VDD" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="VREFH">
+         <mux sel="mux0"          signal="VREFH" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="VREFL">
+         <mux sel="mux0"          signal="VREFL" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="VSS">
+         <mux sel="mux0"          signal="VSS" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="VSS1">
+         <mux sel="mux0"          signal="VSS" />
+         <reset sel="mux0" />
+      </pin>
+      <pin name="VSS2">
+         <mux sel="mux0"          signal="VSS" />
+         <reset sel="mux0" />
+      </pin>
+   </pins>
+   <packages>
+      <package name="FRDM_KL05Z">
+         <placement pin="PTA0"          location="A3" />
+         <placement pin="PTA1"          location="" />
+         <placement pin="PTA10"         location="D4" />
+         <placement pin="PTA11"         location="D2" />
+         <placement pin="PTA12"         location="D5" />
+         <placement pin="PTA13"         location="Touch1" />
+         <placement pin="PTA2"          location="" />
+         <placement pin="PTA3"          location="EXTAL0" />
+         <placement pin="PTA4"          location="XTAL0" />
+         <placement pin="PTA5"          location="D10" />
+         <placement pin="PTA6"          location="D12" />
+         <placement pin="PTA7"          location="D11" />
+         <placement pin="PTA8"          location="A2" />
+         <placement pin="PTA9"          location="A4" />
+         <placement pin="PTB0"          location="D13" />
+         <placement pin="PTB1"          location="D1/ConsoleTx" />
+         <placement pin="PTB10"         location="D8/RGB_Blue" />
+         <placement pin="PTB11"         location="D9" />
+         <placement pin="PTB12"         location="Touch0" />
+         <placement pin="PTB13"         location="A5" />
+         <placement pin="PTB2"          location="D0/ConsoleRx" />
+         <placement pin="PTB3"          location="D15/I2C_SCL" />
+         <placement pin="PTB4"          location="D14/I2C_SDA" />
+         <placement pin="PTB5"          location="D3" />
+         <placement pin="PTB6"          location="D6" />
+         <placement pin="PTB7"          location="D7" />
+         <placement pin="PTB8"          location="A0/RGB_Red" />
+         <placement pin="PTB9"          location="A1/RGB_Green" />
+         <placement pin="VDD"           location="VDD" />
+         <placement pin="VREFH"         location="VREFH" />
+         <placement pin="VREFL"         location="VREFL" />
+         <placement pin="VSS"           location="VSS" />
+      </package>
+      <package name="LQFP32">
+         <placement pin="PTA0"          location="p30" />
+         <placement pin="PTA1"          location="p31" />
+         <placement pin="PTA10"         location="p21" />
+         <placement pin="PTA11"         location="p22" />
+         <placement pin="PTA12"         location="p26" />
+         <placement pin="PTA13"         location="p27" />
+         <placement pin="PTA2"          location="p32" />
+         <placement pin="PTA3"          location="p7" />
+         <placement pin="PTA4"          location="p8" />
+         <placement pin="PTA5"          location="p9" />
+         <placement pin="PTA6"          location="p10" />
+         <placement pin="PTA7"          location="p15" />
+         <placement pin="PTA8"          location="p19" />
+         <placement pin="PTA9"          location="p20" />
+         <placement pin="PTB0"          location="p16" />
+         <placement pin="PTB1"          location="p17" />
+         <placement pin="PTB10"         location="p13" />
+         <placement pin="PTB11"         location="p14" />
+         <placement pin="PTB12"         location="p28" />
+         <placement pin="PTB13"         location="p29" />
+         <placement pin="PTB2"          location="p18" />
+         <placement pin="PTB3"          location="p23" />
+         <placement pin="PTB4"          location="p24" />
+         <placement pin="PTB5"          location="p25" />
+         <placement pin="PTB6"          location="p1" />
+         <placement pin="PTB7"          location="p2" />
+         <placement pin="PTB8"          location="p11" />
+         <placement pin="PTB9"          location="p12" />
+         <placement pin="VDD"           location="p3" />
+         <placement pin="VREFH"         location="p4" />
+         <placement pin="VREFL"         location="p5" />
+         <placement pin="VSS"           location="p6" />
+      </package>
+      <package name="LQFP48">
+         <placement pin="PTA0"          location="p46" />
+         <placement pin="PTA1"          location="p47" />
+         <placement pin="PTA10"         location="p33" />
+         <placement pin="PTA11"         location="p34" />
+         <placement pin="PTA12"         location="p38" />
+         <placement pin="PTA13"         location="p39" />
+         <placement pin="PTA14"         location="p3" />
+         <placement pin="PTA15"         location="p4" />
+         <placement pin="PTA16"         location="p18" />
+         <placement pin="PTA17"         location="p19" />
+         <placement pin="PTA18"         location="p20" />
+         <placement pin="PTA19"         location="p41" />
+         <placement pin="PTA2"          location="p48" />
+         <placement pin="PTA3"          location="p9" />
+         <placement pin="PTA4"          location="p10" />
+         <placement pin="PTA5"          location="p14" />
+         <placement pin="PTA6"          location="p15" />
+         <placement pin="PTA7"          location="p23" />
+         <placement pin="PTA8"          location="p27" />
+         <placement pin="PTA9"          location="p28" />
+         <placement pin="PTB0"          location="p24" />
+         <placement pin="PTB1"          location="p25" />
+         <placement pin="PTB10"         location="p21" />
+         <placement pin="PTB11"         location="p22" />
+         <placement pin="PTB12"         location="p40" />
+         <placement pin="PTB13"         location="p45" />
+         <placement pin="PTB14"         location="p32" />
+         <placement pin="PTB15"         location="p42" />
+         <placement pin="PTB16"         location="p43" />
+         <placement pin="PTB17"         location="p44" />
+         <placement pin="PTB18"         location="p12" />
+         <placement pin="PTB19"         location="p13" />
+         <placement pin="PTB2"          location="p26" />
+         <placement pin="PTB20"         location="p29" />
+         <placement pin="PTB3"          location="p35" />
+         <placement pin="PTB4"          location="p36" />
+         <placement pin="PTB5"          location="p37" />
+         <placement pin="PTB6"          location="p1" />
+         <placement pin="PTB7"          location="p2" />
+         <placement pin="PTB8"          location="p16" />
+         <placement pin="PTB9"          location="p17" />
+         <placement pin="VDD"           location="p5" />
+         <placement pin="VDD1"          location="p31" />
+         <placement pin="VREFH"         location="p6" />
+         <placement pin="VREFL"         location="p7" />
+         <placement pin="VSS"           location="p8" />
+         <placement pin="VSS1"          location="p11" />
+         <placement pin="VSS2"          location="p30" />
+      </package>
+      <package name="QFN24">
+         <placement pin="PTA0"          location="p22" />
+         <placement pin="PTA1"          location="p23" />
+         <placement pin="PTA12"         location="p20" />
+         <placement pin="PTA2"          location="p24" />
+         <placement pin="PTA3"          location="p5" />
+         <placement pin="PTA4"          location="p6" />
+         <placement pin="PTA5"          location="p7" />
+         <placement pin="PTA6"          location="p8" />
+         <placement pin="PTA7"          location="p11" />
+         <placement pin="PTA8"          location="p15" />
+         <placement pin="PTA9"          location="p16" />
+         <placement pin="PTB0"          location="p12" />
+         <placement pin="PTB1"          location="p13" />
+         <placement pin="PTB10"         location="p9" />
+         <placement pin="PTB11"         location="p10" />
+         <placement pin="PTB13"         location="p21" />
+         <placement pin="PTB2"          location="p14" />
+         <placement pin="PTB3"          location="p17" />
+         <placement pin="PTB4"          location="p18" />
+         <placement pin="PTB5"          location="p19" />
+         <placement pin="PTB6"          location="p1" />
+         <placement pin="PTB7"          location="p2" />
+         <placement pin="VDD"           location="p3" />
+         <placement pin="VREFH"         location="p3" />
+         <placement pin="VREFL"         location="p4" />
+         <placement pin="VSS"           location="p4" />
+      </package>
+      <package name="QFN32">
+         <placement pin="PTA0"          location="p30" />
+         <placement pin="PTA1"          location="p31" />
+         <placement pin="PTA10"         location="p21" />
+         <placement pin="PTA11"         location="p22" />
+         <placement pin="PTA12"         location="p26" />
+         <placement pin="PTA13"         location="p27" />
+         <placement pin="PTA2"          location="p32" />
+         <placement pin="PTA3"          location="p7" />
+         <placement pin="PTA4"          location="p8" />
+         <placement pin="PTA5"          location="p9" />
+         <placement pin="PTA6"          location="p10" />
+         <placement pin="PTA7"          location="p15" />
+         <placement pin="PTA8"          location="p19" />
+         <placement pin="PTA9"          location="p20" />
+         <placement pin="PTB0"          location="p16" />
+         <placement pin="PTB1"          location="p17" />
+         <placement pin="PTB10"         location="p13" />
+         <placement pin="PTB11"         location="p14" />
+         <placement pin="PTB12"         location="p28" />
+         <placement pin="PTB13"         location="p29" />
+         <placement pin="PTB2"          location="p18" />
+         <placement pin="PTB3"          location="p23" />
+         <placement pin="PTB4"          location="p24" />
+         <placement pin="PTB5"          location="p25" />
+         <placement pin="PTB6"          location="p1" />
+         <placement pin="PTB7"          location="p2" />
+         <placement pin="PTB8"          location="p11" />
+         <placement pin="PTB9"          location="p12" />
+         <placement pin="VDD"           location="p3" />
+         <placement pin="VREFH"         location="p4" />
+         <placement pin="VREFL"         location="p5" />
+         <placement pin="VSS"           location="p6" />
+      </package>
+   </packages>
+</root>

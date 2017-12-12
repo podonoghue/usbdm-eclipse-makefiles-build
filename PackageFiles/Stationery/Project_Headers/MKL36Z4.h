@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2017/11
+ * @date     2017/12
  *
  *******************************************************************************************************/
 
@@ -1629,7 +1629,7 @@ typedef struct I2S_Type {
    __IO uint32_t  TCR4;                         /**< 0010: SAI Transmit Configuration 4 Register                        */
    __IO uint32_t  TCR5;                         /**< 0014: SAI Transmit Configuration 5 Register                        */
         uint8_t   RESERVED_1[8];               
-   __O  uint32_t  TDR[1];                       /**< 0020: SAI Transmit Data Register                                   */
+   __O  uint32_t  TDR[1];                       /**< 0020: Transmit Data Register                                       */
         uint8_t   RESERVED_2[60];              
    __IO uint32_t  TMR;                          /**< 0060: SAI Transmit Mask Register                                   */
         uint8_t   RESERVED_3[28];              
@@ -5165,6 +5165,18 @@ typedef struct TSI_Type {
 #define TSI_GENCS_EXTCHRG_MASK                   (0x70000U)                                          /*!< TSI0_GENCS.EXTCHRG Mask                 */
 #define TSI_GENCS_EXTCHRG_SHIFT                  (16U)                                               /*!< TSI0_GENCS.EXTCHRG Position             */
 #define TSI_GENCS_EXTCHRG(x)                     (((uint32_t)(((uint32_t)(x))<<16U))&0x70000UL)      /*!< TSI0_GENCS.EXTCHRG Field                */
+#define TSI_GENCS_RS_MASK                        (0x70000U)                                          /*!< TSI0_GENCS.RS Mask                      */
+#define TSI_GENCS_RS_SHIFT                       (16U)                                               /*!< TSI0_GENCS.RS Position                  */
+#define TSI_GENCS_RS(x)                          (((uint32_t)(((uint32_t)(x))<<16U))&0x70000UL)      /*!< TSI0_GENCS.RS Field                     */
+#define TSI_GENCS_RESISTOR_MASK                  (0x10000U)                                          /*!< TSI0_GENCS.RESISTOR Mask                */
+#define TSI_GENCS_RESISTOR_SHIFT                 (16U)                                               /*!< TSI0_GENCS.RESISTOR Position            */
+#define TSI_GENCS_RESISTOR(x)                    (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< TSI0_GENCS.RESISTOR Field               */
+#define TSI_GENCS_NOISE_THRESHOLD_MASK           (0x1E0000U)                                         /*!< TSI0_GENCS.NOISE_THRESHOLD Mask         */
+#define TSI_GENCS_NOISE_THRESHOLD_SHIFT          (17U)                                               /*!< TSI0_GENCS.NOISE_THRESHOLD Position     */
+#define TSI_GENCS_NOISE_THRESHOLD(x)             (((uint32_t)(((uint32_t)(x))<<17U))&0x1E0000UL)     /*!< TSI0_GENCS.NOISE_THRESHOLD Field        */
+#define TSI_GENCS_FILTER_MASK                    (0x60000U)                                          /*!< TSI0_GENCS.FILTER Mask                  */
+#define TSI_GENCS_FILTER_SHIFT                   (17U)                                               /*!< TSI0_GENCS.FILTER Position              */
+#define TSI_GENCS_FILTER(x)                      (((uint32_t)(((uint32_t)(x))<<17U))&0x60000UL)      /*!< TSI0_GENCS.FILTER Field                 */
 #define TSI_GENCS_DVOLT_MASK                     (0x180000U)                                         /*!< TSI0_GENCS.DVOLT Mask                   */
 #define TSI_GENCS_DVOLT_SHIFT                    (19U)                                               /*!< TSI0_GENCS.DVOLT Position               */
 #define TSI_GENCS_DVOLT(x)                       (((uint32_t)(((uint32_t)(x))<<19U))&0x180000UL)     /*!< TSI0_GENCS.DVOLT Field                  */

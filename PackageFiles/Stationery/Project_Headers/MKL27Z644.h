@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2017/11
+ * @date     2017/12
  *
  *******************************************************************************************************/
 
@@ -1059,7 +1059,7 @@ typedef enum DmaSlot {
 */
 
 /* ================================================================================ */
-/* ================           FLEXIO (file:FLEXIO_4SH_0)           ================ */
+/* ================           FLEXIO (file:FLEXIO_4SH)             ================ */
 /* ================================================================================ */
 
 /**
@@ -4552,7 +4552,7 @@ typedef struct SPI_Type {
 /**
  * @brief Serial Peripheral Interface
  */
-
+#define SPI1_HAS_FIFO (1)
 /* SPI1 - Peripheral instance base addresses */
 #define SPI1_BasePtr                   0x40077000UL //!< Peripheral base address
 #define SPI1                           ((SPI_Type *) SPI1_BasePtr) //!< Freescale base pointer

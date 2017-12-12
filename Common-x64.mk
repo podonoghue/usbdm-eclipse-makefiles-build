@@ -16,8 +16,8 @@ ifeq ($(OS),Windows_NT)
     UNAME_M := x86_64
     MULTIARCH := x86_64-win-gnu
 else
-    UNAME_S := $(shell uname -s)
-    UNAME_M := $(shell uname -m)
+    UNAME_S   := $(shell uname -s)
+    UNAME_M   := $(shell uname -m)
     MULTIARCH := $(shell gcc --print-multiarch)
 endif
 

@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2017/11
+ * @date     2017/12
  *
  *******************************************************************************************************/
 
@@ -994,7 +994,7 @@ typedef enum DmaSlot {
 */
 
 /* ================================================================================ */
-/* ================           FLEXIO (file:FLEXIO_4SH_0)           ================ */
+/* ================           FLEXIO (file:FLEXIO_4SH)             ================ */
 /* ================================================================================ */
 
 /**
@@ -1744,7 +1744,7 @@ typedef struct I2S_Type {
    __IO uint32_t  TCR4;                         /**< 0010: SAI Transmit Configuration 4 Register                        */
    __IO uint32_t  TCR5;                         /**< 0014: SAI Transmit Configuration 5 Register                        */
         uint8_t   RESERVED_1[8];               
-   __O  uint32_t  TDR[1];                       /**< 0020: SAI Transmit Data Register                                   */
+   __O  uint32_t  TDR[1];                       /**< 0020: Transmit Data Register                                       */
         uint8_t   RESERVED_2[60];              
    __IO uint32_t  TMR;                          /**< 0060: SAI Transmit Mask Register                                   */
         uint8_t   RESERVED_3[28];              
@@ -4840,7 +4840,7 @@ typedef struct SPI_Type {
 /**
  * @brief Serial Peripheral Interface
  */
-
+#define SPI1_HAS_FIFO (1)
 /* SPI1 - Peripheral instance base addresses */
 #define SPI1_BasePtr                   0x40077000UL //!< Peripheral base address
 #define SPI1                           ((SPI_Type *) SPI1_BasePtr) //!< Freescale base pointer

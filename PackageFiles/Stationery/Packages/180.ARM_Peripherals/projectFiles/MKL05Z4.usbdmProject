@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- FRDM_KL05Z.usbdmProject -->
+<!-- 
+   Settings
+-->
+
+<section name="USBDM">
+   <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_KL05Z" />
+   <item key="$$DeviceInfo_SubFamily"                      value="MKL05Z4" />
+   <item key="$$Hardware_Source_Filename"                  value="MKL05Z4.usbdmHardware" />
+   <item key="/FTFA/peripheral_file"                       value="ftfa" />
+   <item key="/LPTMR0/lptmr_cmr"                           value="0" />
+   <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_PEE_48MHz" />
+   <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_BLPE_4MHz" />
+   <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_FEE_40MHz" />
+   <item key="/MCG/clock_mode[0]"                          value="ClockMode_PEE" />
+   <item key="/MCG/clock_mode[1]"                          value="ClockMode_BLPE" />
+   <item key="/MCG/clock_mode[2]"                          value="ClockMode_FEE" />
+   <item key="/MCG/pll0OutputFrequency[0]"                 value="96000000" />
+   <item key="/MCG/system_mcgfllclk_clock[2]"              value="40000000" />
+   <item key="/PIT/pit_ldval"                              value="10000" />
+   <item key="/SIM/sim_sopt2_pllfllsel[0]"                 value="1" />
+   <item key="/SIM/sim_sopt2_rtcclkoutsel"                 value="false" />
+   <item key="/SIM/system_bus_clock[1]"                    value="800000" />
+   <item key="/SIM/system_bus_clock[2]"                    value="20000000" />
+   <item key="/SIM/system_core_clock[1]"                   value="4000000" />
+   <item key="/SIM/system_core_clock[2]"                   value="40000000" />
+   <item key="/SIM/system_erclk32k_clock"                  value="1000" />
+   <item key="/SIM/system_tpm_clock"                       value="48000000" />
+   <item key="/SIM/system_uart0_clock"                     value="48000000" />
+   <item key="/SIM/system_usbfs_clock"                     value="48000000" />
+   <item key="/SMC/smc_stopctrl_porpo"                     value="true" />
+   <item key="/SMC/smc_stopctrl_pstopo"                    value="2" />
+</section>

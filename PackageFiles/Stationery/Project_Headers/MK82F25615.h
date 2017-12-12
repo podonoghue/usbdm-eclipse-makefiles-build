@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2017/11
+ * @date     2017/12
  *
  *******************************************************************************************************/
 
@@ -2937,7 +2937,7 @@ typedef struct EMVSIM_Type {
 */
 
 /* ================================================================================ */
-/* ================           EWM (file:EWM_MK28F15)               ================ */
+/* ================           EWM (file:EWM_INT_PR_CLK)            ================ */
 /* ================================================================================ */
 
 /**
@@ -3023,7 +3023,7 @@ typedef struct EWM_Type {
 */
 
 /* ================================================================================ */
-/* ================           FB (file:FB_0)                       ================ */
+/* ================           FB (file:FB)                         ================ */
 /* ================================================================================ */
 
 /**
@@ -3251,9 +3251,9 @@ typedef struct FLEXIO_Type {
 #define FLEXIO_CTRL_DOZEN_SHIFT                  (31U)                                               /*!< FLEXIO_CTRL.DOZEN Position              */
 #define FLEXIO_CTRL_DOZEN(x)                     (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< FLEXIO_CTRL.DOZEN Field                 */
 /* ------- PIN Bit Fields                           ------ */
-#define FLEXIO_PIN_PDI_MASK                      (0xFFFFFFFFU)                                       /*!< FLEXIO_PIN.PDI Mask                     */
+#define FLEXIO_PIN_PDI_MASK                      (0xFFU)                                             /*!< FLEXIO_PIN.PDI Mask                     */
 #define FLEXIO_PIN_PDI_SHIFT                     (0U)                                                /*!< FLEXIO_PIN.PDI Position                 */
-#define FLEXIO_PIN_PDI(x)                        (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< FLEXIO_PIN.PDI Field                    */
+#define FLEXIO_PIN_PDI(x)                        (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< FLEXIO_PIN.PDI Field                    */
 /* ------- SHIFTSTAT Bit Fields                     ------ */
 #define FLEXIO_SHIFTSTAT_SSF_MASK                (0xFFU)                                             /*!< FLEXIO_SHIFTSTAT.SSF Mask               */
 #define FLEXIO_SHIFTSTAT_SSF_SHIFT               (0U)                                                /*!< FLEXIO_SHIFTSTAT.SSF Position           */
@@ -5002,7 +5002,7 @@ typedef struct I2C_Type {
 */
 
 /* ================================================================================ */
-/* ================           I2S0 (file:I2S0_MK82F25615)          ================ */
+/* ================           I2S0 (file:I2S0_2CH_MK82F25615)       ================ */
 /* ================================================================================ */
 
 /**
@@ -5041,7 +5041,7 @@ typedef struct I2S_Type {
    __IO uint32_t  RMR;                          /**< 00E0: SAI Receive Mask Register                                    */
         uint8_t   RESERVED_7[28];              
    __IO uint32_t  MCR;                          /**< 0100: SAI MCLK Control Register                                    */
-   __IO uint32_t  MDR;                          /**< 0104: SAI MCLK Divide Register                                     */
+   __IO uint32_t  MDR;                          /**< 0104: MCLK Divide Register                                         */
 } I2S_Type;
 
 /**
@@ -5204,9 +5204,9 @@ typedef struct I2S_Type {
 #define I2S_TFR_WCP_SHIFT                        (31U)                                               /*!< I2S0_TFR.WCP Position                   */
 #define I2S_TFR_WCP(x)                           (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< I2S0_TFR.WCP Field                      */
 /* ------- TMR Bit Fields                           ------ */
-#define I2S_TMR_TWM_MASK                         (0xFFFFFFFFU)                                       /*!< I2S0_TMR.TWM Mask                       */
+#define I2S_TMR_TWM_MASK                         (0xFFFFU)                                           /*!< I2S0_TMR.TWM Mask                       */
 #define I2S_TMR_TWM_SHIFT                        (0U)                                                /*!< I2S0_TMR.TWM Position                   */
-#define I2S_TMR_TWM(x)                           (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< I2S0_TMR.TWM Field                      */
+#define I2S_TMR_TWM(x)                           (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< I2S0_TMR.TWM Field                      */
 /* ------- RCSR Bit Fields                          ------ */
 #define I2S_RCSR_FRDE_MASK                       (0x1U)                                              /*!< I2S0_RCSR.FRDE Mask                     */
 #define I2S_RCSR_FRDE_SHIFT                      (0U)                                                /*!< I2S0_RCSR.FRDE Position                 */
@@ -5354,9 +5354,9 @@ typedef struct I2S_Type {
 #define I2S_RFR_WFP_SHIFT                        (16U)                                               /*!< I2S0_RFR.WFP Position                   */
 #define I2S_RFR_WFP(x)                           (((uint32_t)(((uint32_t)(x))<<16U))&0xF0000UL)      /*!< I2S0_RFR.WFP Field                      */
 /* ------- RMR Bit Fields                           ------ */
-#define I2S_RMR_RWM_MASK                         (0xFFFFFFFFU)                                       /*!< I2S0_RMR.RWM Mask                       */
+#define I2S_RMR_RWM_MASK                         (0xFFFFU)                                           /*!< I2S0_RMR.RWM Mask                       */
 #define I2S_RMR_RWM_SHIFT                        (0U)                                                /*!< I2S0_RMR.RWM Position                   */
-#define I2S_RMR_RWM(x)                           (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< I2S0_RMR.RWM Field                      */
+#define I2S_RMR_RWM(x)                           (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< I2S0_RMR.RWM Field                      */
 /* ------- MCR Bit Fields                           ------ */
 #define I2S_MCR_MICS_MASK                        (0x3000000U)                                        /*!< I2S0_MCR.MICS Mask                      */
 #define I2S_MCR_MICS_SHIFT                       (24U)                                               /*!< I2S0_MCR.MICS Position                  */
@@ -9605,7 +9605,7 @@ typedef struct RTC_Type {
 */
 
 /* ================================================================================ */
-/* ================           SDHC0 (file:SDHC_MK28F15)            ================ */
+/* ================           SDHC0 (file:SDHC0_MK28F15)           ================ */
 /* ================================================================================ */
 
 /**
@@ -9617,28 +9617,28 @@ typedef struct RTC_Type {
 * @{
 */
 typedef struct SDHC_Type {
-   __IO uint32_t  DSADDR;                       /**< 0000: DMA System Address register                                  */
-   __IO uint32_t  BLKATTR;                      /**< 0004: Block Attributes register                                    */
-   __IO uint32_t  CMDARG;                       /**< 0008: Command Argument register                                    */
-   __IO uint32_t  XFERTYP;                      /**< 000C: Transfer Type register                                       */
+   __IO uint32_t  DSADDR;                       /**< 0000: DMA System Address Register                                  */
+   __IO uint32_t  BLKATTR;                      /**< 0004: Block Attributes Register                                    */
+   __IO uint32_t  CMDARG;                       /**< 0008: Command Argument Register                                    */
+   __IO uint32_t  XFERTYP;                      /**< 000C: Transfer Type Register                                       */
    __I  uint32_t  CMDRSP[4];                    /**< 0010: Command Response                                             */
-   __IO uint32_t  DATPORT;                      /**< 0020: Buffer Data Port register                                    */
-   __I  uint32_t  PRSSTAT;                      /**< 0024: Present State register                                       */
-   __IO uint32_t  PROCTL;                       /**< 0028: Protocol Control register                                    */
-   __IO uint32_t  SYSCTL;                       /**< 002C: System Control register                                      */
-   __IO uint32_t  IRQSTAT;                      /**< 0030: Interrupt Status register                                    */
-   __IO uint32_t  IRQSTATEN;                    /**< 0034: Interrupt Status Enable register                             */
-   __IO uint32_t  IRQSIGEN;                     /**< 0038: Interrupt Signal Enable register                             */
+   __IO uint32_t  DATPORT;                      /**< 0020: Buffer Data Port Register                                    */
+   __I  uint32_t  PRSSTAT;                      /**< 0024: Present State Register                                       */
+   __IO uint32_t  PROCTL;                       /**< 0028: Protocol Control Register                                    */
+   __IO uint32_t  SYSCTL;                       /**< 002C: System Control Register                                      */
+   __IO uint32_t  IRQSTAT;                      /**< 0030: Interrupt Status Register                                    */
+   __IO uint32_t  IRQSTATEN;                    /**< 0034: Interrupt Status Enable Register                             */
+   __IO uint32_t  IRQSIGEN;                     /**< 0038: Interrupt Signal Enable Register                             */
    __I  uint32_t  AC12ERR;                      /**< 003C: Auto CMD12 Error Status Register                             */
    __I  uint32_t  HTCAPBLT;                     /**< 0040: Host Controller Capabilities                                 */
    __IO uint32_t  WML;                          /**< 0044: Watermark Level Register                                     */
         uint8_t   RESERVED_0[8];               
-   __O  uint32_t  FEVT;                         /**< 0050: Force Event register                                         */
-   __I  uint32_t  ADMAES;                       /**< 0054: ADMA Error Status register                                   */
-   __IO uint32_t  ADSADDR;                      /**< 0058: ADMA System Addressregister                                  */
+   __O  uint32_t  FEVT;                         /**< 0050: Force Event Register                                         */
+   __I  uint32_t  ADMAES;                       /**< 0054: ADMA Error Status Register                                   */
+   __IO uint32_t  ADSADDR;                      /**< 0058: ADMA System Address Register                                 */
         uint8_t   RESERVED_1[100];             
-   __IO uint32_t  VENDOR;                       /**< 00C0: Vendor Specific register                                     */
-   __IO uint32_t  MMCBOOT;                      /**< 00C4: MMC Boot register                                            */
+   __IO uint32_t  VENDOR;                       /**< 00C0: Vendor Specific Register                                     */
+   __IO uint32_t  MMCBOOT;                      /**< 00C4: MMC Boot Register                                            */
         uint8_t   RESERVED_2[52];              
    __I  uint32_t  HOSTVER;                      /**< 00FC: Host Controller Version                                      */
 } SDHC_Type;
@@ -10162,7 +10162,7 @@ typedef struct SDHC_Type {
 */
 
 /* ================================================================================ */
-/* ================           SDRAMC (file:SDRAMC_0)               ================ */
+/* ================           SDRAMC (file:SDRAMC)                 ================ */
 /* ================================================================================ */
 
 /**
@@ -12636,7 +12636,7 @@ typedef struct USB_Type {
 */
 
 /* ================================================================================ */
-/* ================           USBDCD (file:USBDCD_MK28F15)         ================ */
+/* ================           USBDCD (file:USBDCD_V1_2_MK28F15)       ================ */
 /* ================================================================================ */
 
 /**
@@ -12648,11 +12648,11 @@ typedef struct USB_Type {
 * @{
 */
 typedef struct USBDCD_Type {
-   __IO uint32_t  CONTROL;                      /**< 0000: Control register                                             */
+   __IO uint32_t  CONTROL;                      /**< 0000: Control Register                                             */
    __IO uint32_t  CLOCK;                        /**< 0004: Clock Register                                               */
    __I  uint32_t  STATUS;                       /**< 0008: Status Register                                              */
    __IO uint32_t  SIGNAL_OVERRIDE;              /**< 000C: Signal Override Register                                     */
-   __IO uint32_t  TIMER0;                       /**< 0010: TIMER0 register                                              */
+   __IO uint32_t  TIMER0;                       /**< 0010: TIMER0 Register                                              */
    __IO uint32_t  TIMER1;                       /**< 0014: Timing parameters for USBDCD                                 */
    union {                                      /**< 0000: (size=0004)                                                  */
       __IO uint32_t  TIMER2_BC11;               /**< 0018: Timing parameters for USBDCD v1.1                            */

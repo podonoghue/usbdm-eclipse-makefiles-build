@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2017/11
+ * @date     2017/12
  *
  *******************************************************************************************************/
 
@@ -4319,6 +4319,18 @@ typedef struct TSI_Type {
 #define TSI_GENCS_EXTCHRG_MASK                   (0x70000U)                                          /*!< TSI0_GENCS.EXTCHRG Mask                 */
 #define TSI_GENCS_EXTCHRG_SHIFT                  (16U)                                               /*!< TSI0_GENCS.EXTCHRG Position             */
 #define TSI_GENCS_EXTCHRG(x)                     (((uint32_t)(((uint32_t)(x))<<16U))&0x70000UL)      /*!< TSI0_GENCS.EXTCHRG Field                */
+#define TSI_GENCS_RS_MASK                        (0x70000U)                                          /*!< TSI0_GENCS.RS Mask                      */
+#define TSI_GENCS_RS_SHIFT                       (16U)                                               /*!< TSI0_GENCS.RS Position                  */
+#define TSI_GENCS_RS(x)                          (((uint32_t)(((uint32_t)(x))<<16U))&0x70000UL)      /*!< TSI0_GENCS.RS Field                     */
+#define TSI_GENCS_RESISTOR_MASK                  (0x10000U)                                          /*!< TSI0_GENCS.RESISTOR Mask                */
+#define TSI_GENCS_RESISTOR_SHIFT                 (16U)                                               /*!< TSI0_GENCS.RESISTOR Position            */
+#define TSI_GENCS_RESISTOR(x)                    (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< TSI0_GENCS.RESISTOR Field               */
+#define TSI_GENCS_NOISE_THRESHOLD_MASK           (0x1E0000U)                                         /*!< TSI0_GENCS.NOISE_THRESHOLD Mask         */
+#define TSI_GENCS_NOISE_THRESHOLD_SHIFT          (17U)                                               /*!< TSI0_GENCS.NOISE_THRESHOLD Position     */
+#define TSI_GENCS_NOISE_THRESHOLD(x)             (((uint32_t)(((uint32_t)(x))<<17U))&0x1E0000UL)     /*!< TSI0_GENCS.NOISE_THRESHOLD Field        */
+#define TSI_GENCS_FILTER_MASK                    (0x60000U)                                          /*!< TSI0_GENCS.FILTER Mask                  */
+#define TSI_GENCS_FILTER_SHIFT                   (17U)                                               /*!< TSI0_GENCS.FILTER Position              */
+#define TSI_GENCS_FILTER(x)                      (((uint32_t)(((uint32_t)(x))<<17U))&0x60000UL)      /*!< TSI0_GENCS.FILTER Field                 */
 #define TSI_GENCS_DVOLT_MASK                     (0x180000U)                                         /*!< TSI0_GENCS.DVOLT Mask                   */
 #define TSI_GENCS_DVOLT_SHIFT                    (19U)                                               /*!< TSI0_GENCS.DVOLT Position               */
 #define TSI_GENCS_DVOLT(x)                       (((uint32_t)(((uint32_t)(x))<<19U))&0x180000UL)     /*!< TSI0_GENCS.DVOLT Field                  */

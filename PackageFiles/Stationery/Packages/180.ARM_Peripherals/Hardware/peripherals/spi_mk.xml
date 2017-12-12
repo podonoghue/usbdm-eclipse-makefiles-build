@@ -46,9 +46,9 @@
    </binaryOption>
       
    <projectActionList id = "spi_files" >
-      <copy source="Snippets/spi-example.cpp"   target="Snippets/spi-example.cpp" overwrite="true"  derived="true" />
       <copy source="Project_Headers/spi-MK.h"   target="Project_Headers/spi.h"    overwrite="true"  derived="true" />
       <copy source="Sources/spi-MK.cpp"         target="Sources/spi.cpp"          overwrite="true"  derived="true" />
+      <copy source="Snippets/spi-example.cpp"   target="Snippets/spi-example.cpp" overwrite="true"  derived="true" />
    </projectActionList>
    
    <xi:include href="_irqOption.xml"/>

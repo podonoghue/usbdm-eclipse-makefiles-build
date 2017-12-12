@@ -33,10 +33,11 @@ namespace USBDM {
  */
 
 /**
- * Type definition for interrupt call back
- * @param status Interrupt status value from SPI->SR
+ * Type definition for completion call back
+ *
+ * @param status E_NOERROR on success else error code
  */
-typedef void (*SpiCallbackFunction)(uint32_t status);
+typedef void (*SpiCallbackFunction)(ErrorCode status);
 
 /**
  * SPI mode - Controls clock polarity and the timing relationship between clock and data
@@ -86,9 +87,10 @@ enum SpiLowPower {
  * Used to hold SPI configuration that may commonly be modified for different target peripherals
  */
 struct SpiConfig {
-   uint8_t br; //!< Baud rate dividers
-   uint8_t c1; //!< CPOL, CPHA, SSOE, LSBFE
-   uint8_t c2; //!< BIDIROE, SPC0
+   SpiCallbackFunction callback; //!< Callback on error or completion
+   uint8_t             br;       //!< Baud rate dividers
+   uint8_t             c1;       //!< CPOL, CPHA, SSOE, LSBFE
+   uint8_t             c2;       //!< BIDIROE, SPC0
 };
 
 /**
@@ -97,22 +99,26 @@ struct SpiConfig {
 class Spi {
 
 protected:
-   /** Callback for unhandled interrupt */
-   static void unhandledCallback(uint32_t) {
-   }
-
-public:
-
    volatile  SPI_Type * const spi; //!< SPI hardware
 
-protected:
+   /** Callback function for ISR */
+   SpiCallbackFunction callback;
+
+   volatile uint32_t bytesRemaining;
+            uint8_t  *rxDataPtr;
+   const    uint8_t  *txDataPtr;
+
+   /** Callback for unhandled interrupt */
+   static void unhandledCallback(ErrorCode) {
+   }
+
    /**
     * Constructor
     *
     * @param[in]  baseAddress    Base address of SPI
     */
-   Spi(volatile SPI_Type *baseAddress) :
-      spi(baseAddress) {
+   constexpr Spi(volatile SPI_Type *baseAddress) :
+      spi(baseAddress), callback(unhandledCallback), bytesRemaining(0), rxDataPtr(nullptr), txDataPtr(nullptr) {
    }
 
    /**
@@ -120,6 +126,13 @@ protected:
     */
    virtual ~Spi() {
    }
+
+   /**
+    * Get SPI input clock frequency
+    *
+    * @return Clock frequency in Hz
+    */
+   virtual uint32_t getClockFrequency() = 0;
 
    /**
     * Calculate communication BR value for SPI
@@ -143,26 +156,10 @@ protected:
     */
    static uint32_t calculateSpeed(uint32_t clockFrequency, uint32_t br);
 
+#if defined(__CMSIS_RTOS)
    /**
-    * Sets Communication speed for SPI
+    * Obtain SPI mutex
     *
-    * @param[in]  frequency      => Communication frequency in Hz
-    * @param[in]  clockFrequency => Clock frequency of SPI in Hz
-    * @param[in]  spiCtarSelect  => Index of CTAR register to modify
-    *
-    * Note: Chooses the highest speed that is not greater than frequency.
-    */
-   void setSpeed(uint32_t clockFrequency, uint32_t frequency) {
-      spi->BR = calculateBr(clockFrequency, frequency);
-   }
-
-public:
-
-#ifdef __CMSIS_RTOS
-   /**
-    * Obtain SPI mutex and set SPI configuration
-    *
-    * @param[in]  configuration  The configuration value to set for the transaction
     * @param[in]  milliseconds   How long to wait in milliseconds. Use osWaitForever for indefinite wait
     *
     * @return osOK: The mutex has been obtain.
@@ -171,7 +168,102 @@ public:
     * @return osErrorParameter: The parameter mutex_id is incorrect.
     * @return osErrorISR: osMutexWait cannot be called from interrupt service routines.
     */
-   virtual osStatus startTransaction(SpiConfig &configuration, int milliseconds=osWaitForever) = 0;
+   virtual osStatus getMutex(int milliseconds=osWaitForever) = 0;
+
+   /**
+    * Release SPI mutex
+    *
+    * @return osOK: the mutex has been correctly released.
+    * @return osErrorResource: the mutex was not obtained before.
+    * @return osErrorISR: osMutexRelease cannot be called from interrupt service routines.
+    */
+   virtual osStatus releaseMutex() = 0;
+#endif
+
+   /**
+    * Send 1st byte in a transmission
+    */
+   void sendFirstByte() {
+      // Dummy status read
+      (void)spi->S;
+      if (bytesRemaining>0) {
+         // Transmit byte
+         if (txDataPtr != nullptr) {
+            spi->D = *txDataPtr++;
+         }
+         else {
+            spi->D = 0xFF;
+         }
+      }
+   }
+
+   /**
+    * Stop transmission
+    */
+   void stopTransaction() {
+      spi->C1 &= ~SPI_C1_SPIE(1);
+      rxDataPtr = nullptr;
+      txDataPtr = nullptr;
+   }
+
+   /**
+    * class private IRQ handler\n
+    * Handles receiving/transmitting a value
+    */
+   void _irqHandler() {
+      if (spi->S&SPI_S_MODF_MASK) {
+         stopTransaction();
+         callback(E_LOST_ARBITRATION);
+         return;
+      }
+      // Receive byte
+      if (rxDataPtr != nullptr) {
+         *rxDataPtr++ = spi->D;
+      }
+      else {
+         (void)spi->D;
+      }
+      bytesRemaining--;
+      if (bytesRemaining>0) {
+         // Transmit byte
+         if (txDataPtr != nullptr) {
+            spi->D = *txDataPtr++;
+         }
+         else {
+            spi->D = 0xFF;
+         }
+      }
+      else {
+         stopTransaction();
+         callback(E_NO_ERROR);
+         return;
+      }
+   }
+
+public:
+
+#if defined(__CMSIS_RTOS)
+   /**
+    * Obtain SPI mutex and set SPI configuration
+    *
+    * @param[in]  configuration  The configuration to set for the transaction
+    * @param[in]  milliseconds   How long to wait in milliseconds. Use osWaitForever for indefinite wait
+    *
+    * @return osOK: The mutex has been obtain.
+    * @return osErrorTimeoutResource: The mutex could not be obtained in the given time.
+    * @return osErrorResource: The mutex could not be obtained when no timeout was specified.
+    * @return osErrorParameter: The parameter mutex_id is incorrect.
+    * @return osErrorISR: osMutexWait cannot be called from interrupt service routines.
+    */
+   osStatus startTransaction(SpiConfig &configuration, int milliseconds=osWaitForever) {
+      // Obtain mutex
+      osStatus status = getMutex(milliseconds);
+      if (status == osOK) {
+         // Change configuration for this transaction
+         setConfiguration(configuration);
+      }
+      return status;
+   }
 
    /**
     * Obtain SPI mutex (SPI configuration unchanged)
@@ -184,7 +276,10 @@ public:
     * @return osErrorParameter: The parameter mutex_id is incorrect.
     * @return osErrorISR: osMutexWait cannot be called from interrupt service routines.
     */
-   virtual osStatus startTransaction(int milliseconds=osWaitForever) = 0;
+   osStatus startTransaction(int milliseconds=osWaitForever) {
+      // Obtain mutex
+      return getMutex(milliseconds);
+   }
 
    /**
     * Release SPI mutex
@@ -193,14 +288,11 @@ public:
     * @return osErrorResource: the mutex was not obtained before.
     * @return osErrorISR: osMutexRelease cannot be called from interrupt service routines.
     */
-   virtual osStatus endTransaction() = 0;
-#else
-   /**
-    * Obtain SPI - dummy routine (non RTOS)
-    */
-   int startTransaction(int =0) {
-      return 0;
+   osStatus endTransaction() {
+      // Release mutex
+      return releaseMutex();
    }
+#else
    /**
     * Obtain SPI and set SPI configuration
     *
@@ -208,6 +300,12 @@ public:
     */
    int startTransaction(SpiConfig &configuration, int =0) {
       setConfiguration(configuration);
+      return 0;
+   }
+   /**
+    * Obtain SPI
+    */
+   int startTransaction(int =0) {
       return 0;
    }
    /**
@@ -221,21 +319,27 @@ public:
    /**
     * Enable pins used by SPI
     */
-   virtual void enablePins() = 0;
+   virtual void enablePins(bool enable=true) = 0;
 
    /**
-    * Disable (restore to usual default) pins used by SPI
-    */
-   virtual void disablePins() = 0;
-
-   /**
-    * Sets Communication speed
+    * Sets Communication speed for SPI
     *
-    * @param[in]  frequency => Frequency in Hz (0 => use default value)
+    * @param[in]  frequency      => Communication frequency in Hz
     *
     * Note: Chooses the highest speed that is not greater than frequency.
     */
-   virtual void setSpeed(uint32_t frequency) = 0;
+   void setSpeed(uint32_t frequency) {
+      spi->BR = calculateBr(getClockFrequency(), frequency);
+   }
+
+   /**
+    * Get communication speed of SPI
+    *
+    * @return Frequency in Hz
+    */
+   uint32_t getSpeed() {
+      return calculateSpeed(getClockFrequency(), spi->BR);
+   }
 
    /**
     * Sets Communication mode for SPI
@@ -252,29 +356,6 @@ public:
    }
 
    /**
-    *  Transmit and receive a series of values
-    *
-    *  @tparam T Type for data transfer (may be inferred from parameters)
-    *
-    *  @param[in]  dataSize  Number of values to transfer
-    *  @param[in]  txData    Transmit bytes (may be nullptr for Receive only)
-    *  @param[out] rxData    Receive byte buffer (may be nullptr for Transmit only)
-    *
-    *  @note: rxData may use same buffer as txData
-    *  @note: Size of txData and rxData should be appropriate for transmission size.
-    */
-   virtual void txRx(uint32_t dataSize, const uint8_t *txData, uint8_t *rxData=nullptr) = 0;
-
-   /**
-    * Transmit and receive a value over SPI
-    *
-    * @param[in] data - Data to send (8/16 bits)
-    *
-    * @return Data received
-    */
-   uint32_t txRx(uint32_t data);
-
-   /**
     *  Set Configuration\n
     *  This includes timing settings, word length and transmit order\n
     *  Assumes the interface is already acquired through startTransaction
@@ -284,9 +365,10 @@ public:
     * @param[in]  configuration Configuration value
     */
    void setConfiguration(const SpiConfig &configuration) {
-      spi->C1 = configuration.c1|SPI_C1_SPE_MASK;
-      spi->C2 = configuration.c2;
-      spi->BR = configuration.br;
+      callback = configuration.callback;
+      spi->C1  = configuration.c1|SPI_C1_SPE_MASK;
+      spi->C2  = configuration.c2;
+      spi->BR  = configuration.br;
    }
 
    /**
@@ -298,7 +380,7 @@ public:
     * @note Typically used with startTransaction()
     */
    SpiConfig getConfiguration() {
-      return SpiConfig{spi->BR, spi->C1, spi->C2};
+      return SpiConfig{callback, spi->BR, spi->C1, spi->C2};
    }
 
    /**
@@ -319,36 +401,20 @@ public:
    void setLowPowerMode(SpiLowPower spiLowPower) {
       spi->C2 = (spi->C2&~SPI_C2_SPISWAI_MASK)|(spiLowPower&SPI_C2_SPISWAI_MASK);
    }
-};
 
-/**
- * @brief Template class representing a SPI interface
- *
- * @tparam  Info           Class describing Spi hardware
- */
-template<class Info>
-class SpiBase_T : public Spi {
-
-protected:
-   /** Callback function for ISR */
-   static SpiCallbackFunction callback;
-
-   static       uint32_t bytesRemaining;
-   static       uint8_t  *rxDataPtr;
-   static const uint8_t  *txDataPtr;
-
-private:
-   using SpiSCK   = PcrTable_T<Info, 0>;
-   using SpiMISO  = PcrTable_T<Info, 1>;
-   using SpiMOSI  = PcrTable_T<Info, 2>;
-
-   static void stopTransaction() {
-      Info::spi->C1 &= ~SPI_C1_SPIE(1);
-      rxDataPtr = nullptr;
-      txDataPtr = nullptr;
-      callback(Info::spi->S);
+   /**
+    * Gets and clears status flags.
+    *
+    * @return status valkue (SPI->SR)
+    */
+   uint32_t getStatus() {
+      // Capture interrupt status
+      uint32_t status = spi->S;
+      // Clear captured flags
+      spi->S = status;
+      // Return status
+      return status;
    }
-public:
 
    /**
     *  Transmit and receive a series of bytes
@@ -360,101 +426,84 @@ public:
     *  @note: rxData may use same buffer as txData
     *  @note: Size of txData and rxData should be appropriate for transmission size.
     */
-   virtual void txRx(uint32_t dataSize, const uint8_t *txData, uint8_t *rxData=nullptr) override {
+   void txRx(uint32_t dataSize, const uint8_t *txData, uint8_t *rxData=nullptr) {
+//      assert((txData != nullptr)||(rxData != nullptr));
+
       bytesRemaining = dataSize;
       txDataPtr      = txData;
       rxDataPtr      = rxData;
-      Info::spi->C1 |=  SPI_C1_SPE_MASK|SPI_C1_SPIE_MASK;
-      while((Info::spi->C1&SPI_C1_SPE_MASK) == 0){
-      }
+      spi->C1 |=  SPI_C1_SPE_MASK|SPI_C1_SPIE_MASK;
       sendFirstByte();
-      while (bytesRemaining != 0) {
-         __asm__("nop");
-      }
-   }
-
-   static void sendFirstByte() {
-      // Dummy read
-      (void)Info::spi->S;
-      if (bytesRemaining>0) {
-         // Transmit byte
-         if (txDataPtr != nullptr) {
-            Info::spi->D = *txDataPtr++;
-         }
-         else {
-            Info::spi->D = 0xFF;
+      if (callback == unhandledCallback) {
+         // If call-back not set then wait for completion
+         while (bytesRemaining != 0) {
+            __asm__("nop");
          }
       }
    }
 
    /**
-    * IRQ handler
+    * Transmit and receive a value over SPI
+    *
+    * @param[in] data - Data to send (8/16 bits)
+    *
+    * @return Data received
     */
-   static void irqHandler() {
-      if (Info::spi->S&SPI_S_MODF_MASK) {
-         stopTransaction();
-         callback(Info::spi->S);
-         Info::spi->S &= SPI_S_MODF_MASK;
-         return;
+   uint32_t txRx(uint32_t data) {
+      while ((spi->S & SPI_S_SPTEF_MASK)==0) {
+         __asm__("nop");
       }
-      // Receive byte
-      if (rxDataPtr != nullptr) {
-         *rxDataPtr++ = Info::spi->D;
+      spi->D  = data;
+      while ((spi->S & SPI_S_SPRF_MASK)==0) {
+         __asm__("nop");
       }
-      else {
-         (void)Info::spi->D;
-      }
-      bytesRemaining--;
-      if (bytesRemaining>0) {
-         // Transmit byte
-         if (txDataPtr != nullptr) {
-            Info::spi->D = *txDataPtr++;
-         }
-         else {
-            Info::spi->D = 0xFF;
-         }
-      }
-      else {
-         stopTransaction();
-         callback(0);
-         return;
-      }
+      return spi->D; // Return read data
    }
 
    /**
     * Set Callback function\n
     *
-    * @param[in] theCallback Callback function to execute on interrupt.\n
-    *                        nullptr to indicate none
+    * @param[in] theCallback Callback function to execute on completion.\n
+    *                        nullptr to indicate none (SPI operations will be blocking)
     */
-   static __attribute__((always_inline)) void setCallback(SpiCallbackFunction theCallback) {
+   __attribute__((always_inline)) void setCallback(SpiCallbackFunction theCallback) {
       if (theCallback == nullptr) {
-         callback = Spi::unhandledCallback;
+         callback = unhandledCallback;
          return;
       }
       callback = theCallback;
    }
 
+};
+
+/**
+ * @brief Template class representing a SPI interface
+ *
+ * @tparam  Info  Class describing SPI hardware
+ */
+template<class Info>
+class SpiBase_T : public Spi {
+
+private:
+   static SpiBase_T<Info> *thisPtr;
+#ifdef __CMSIS_RTOS
+   static CMSIS::Mutex mutex;
+#endif
+
+public:
+
+   /**
+    * IRQ handler
+    */
+   static void irqHandler() {
+      thisPtr->_irqHandler();
+   }
 
 #ifdef __CMSIS_RTOS
 protected:
    /**
-    * Mutex to protect access\n
-    * Using a static accessor function avoids issues with static object initialisation order
+    * Obtain SPI mutex
     *
-    * @return mutex
-    */
-   static CMSIS::Mutex &mutex() {
-      /** Mutex to protect access - static so per SPI */
-      static CMSIS::Mutex mutex;
-      return mutex;
-   }
-
-public:
-   /**
-    * Obtain SPI mutex and set SPI configuration
-    *
-    * @param[in]  configuration  The configuration to set for the transaction
     * @param[in]  milliseconds   How long to wait in milliseconds. Use osWaitForever for indefinite wait
     *
     * @return osOK: The mutex has been obtain.
@@ -463,36 +512,8 @@ public:
     * @return osErrorParameter: The parameter mutex_id is incorrect.
     * @return osErrorISR: osMutexWait cannot be called from interrupt service routines.
     */
-   virtual osStatus startTransaction(SpiConfig &configuration, int milliseconds=osWaitForever) override {
-      // Obtain mutex
-      osStatus status = mutex().wait(milliseconds);
-      if (status == osOK) {
-         // Change configuration for this transaction
-         setConfiguration(configuration);
-      }
-      return status;
-   }
-
-   /**
-    * Obtain SPI mutex (SPI configuration unchanged)
-    *
-    * @param[in]  milliseconds How long to wait in milliseconds. Use osWaitForever for indefinite wait
-    *
-    * @return osOK: The mutex has been obtain.
-    * @return osErrorTimeoutResource: The mutex could not be obtained in the given time.
-    * @return osErrorResource: The mutex could not be obtained when no timeout was specified.
-    * @return osErrorParameter: The parameter mutex_id is incorrect.
-    * @return osErrorISR: osMutexWait cannot be called from interrupt service routines.
-    */
-   virtual osStatus startTransaction(int milliseconds=osWaitForever) override {
-      // Obtain mutex
-      osStatus status = mutex().wait(milliseconds);
-      if (status != osOK) {
-         setCmsisErrorCode(status);
-      }
-      else {
-      }
-      return status;
+   virtual osStatus getMutex(int milliseconds=osWaitForever) override {
+      return mutex.wait(milliseconds);
    }
 
    /**
@@ -502,15 +523,21 @@ public:
     * @return osErrorResource: the mutex was not obtained before.
     * @return osErrorISR: osMutexRelease cannot be called from interrupt service routines.
     */
-   virtual osStatus endTransaction() override {
-      // Release mutex
-      return mutex().release();
+   virtual osStatus releaseMutex() override {
+      return mutex.release();
    }
 #endif
 
-public:
-   static constexpr volatile SPI_Type *SPI = Info::spi;
+   /**
+    * Get SPI input clock frequency
+    *
+    * @return Clock frequency in Hz
+    */
+   uint32_t getClockFrequency() override {
+      return Info::getClockFrequency();
+   }
 
+public:
    // SPI SCK (clock) Pin
    using sckGpio  = GpioTable_T<Info, 0, ActiveHigh>;
 
@@ -525,28 +552,23 @@ public:
     */
    static void __attribute__((always_inline)) configureAllPins() {
       // Configure pins
-      Info::initPCRs(pcrValue(PinPull_Up, PinDriveStrength_High));
-   }
-
-   virtual void enablePins() override {
-      configureAllPins();
-   }
-
-   virtual void disablePins() override {
-      // Configure SPI pins to mux=0
-      Info::clearPCRs();
+      Info::initPCRs();
    }
 
    /**
-    * Sets Communication speed for SPI.
-    * This also updates the communication delays based on the frequency.
+    * Map/Unmap pins for peripheral
     *
-    * @param[in]  frequency      => Frequency in Hz (0 => use default value)
-    *
-    * Note: Chooses the highest speed that is not greater than frequency.
+    * @param enable
     */
-   virtual void setSpeed(uint32_t frequency) override {
-      Spi::setSpeed(Info::getClockFrequency(), frequency);
+   virtual void enablePins(bool enable) override {
+      if (enable) {
+         // Configure pins
+         Info::initPCRs();
+      }
+      else {
+         // Configure SPI pins to mux=0
+         Info::clearPCRs();
+      }
    }
 
    /**
@@ -573,31 +595,26 @@ public:
       __DMB();
 
       spi->C1 =
-            Info::modeValue| // USe default mode
+            Info::modeValue| // Use default LSBFE, MODE
             SPI_C1_MSTR(1)|
-            SPI_C1_SPIE(1)|
-            SPI_C1_SPIE(0);
+            SPI_C1_SPIE(0)|
+            SPI_C1_SPE(0)|
+            SPI_C1_SPTIE(0)|
+            SPI_C1_SSOE(0);
 
-      setSpeed(Info::speed);    // Use default speed
+      setSpeed(Info::speed); // Use default speed
 
+      // Record this pointer for IRQ handler
+      thisPtr = this;
+
+      // Enable and configure interrupts
       enableNvicInterrupts();
    }
 
-   ~SpiBase_T() override {
-   }
-
    /**
-    * Gets and clears status flags.
-    *
-    * @return status valkue (SPI->SR)
+    * Destructor
     */
-   static uint32_t __attribute__((always_inline)) getStatus() {
-      // Capture interrupt status
-      uint32_t status = Info::spi->SR;
-      // Clear captured flags
-      Info::spi->SR = status;
-      // Return status
-      return status;
+   ~SpiBase_T() override {
    }
 
    /**
@@ -619,10 +636,10 @@ public:
 
 };
 
-template<class Info> SpiCallbackFunction SpiBase_T<Info>::callback    = Spi::unhandledCallback;
-template<class Info>       uint32_t  SpiBase_T<Info>::bytesRemaining  = 0;
-template<class Info> const uint8_t  *SpiBase_T<Info>::txDataPtr       = nullptr;
-template<class Info>       uint8_t  *SpiBase_T<Info>::rxDataPtr       = nullptr;
+template<class Info> SpiBase_T<Info> *SpiBase_T<Info>::thisPtr = nullptr;
+#ifdef __CMSIS_RTOS
+template<class Info> CMSIS::Mutex     SpiBase_T<Info>::mutex;
+#endif
 
 #if defined(USBDM_SPI0_IS_DEFINED)
 /**
@@ -638,7 +655,7 @@ template<class Info>       uint8_t  *SpiBase_T<Info>::rxDataPtr       = nullptr;
  * @endcode
  *
  */
-class Spi0 : public SpiBase_T<Spi0Info> {};
+using Spi0 = SpiBase_T<Spi0Info>;
 #endif
 
 #if defined(USBDM_SPI1_IS_DEFINED)
@@ -655,7 +672,7 @@ class Spi0 : public SpiBase_T<Spi0Info> {};
  * @endcode
  *
  */
-class Spi1 : public SpiBase_T<Spi1Info> {};
+using Spi1 = SpiBase_T<Spi1Info>;
 
 #endif
 /**

@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2017/11
+ * @date     2017/12
  *
  *******************************************************************************************************/
 
@@ -1844,7 +1844,7 @@ typedef struct ETF_Type {
 */
 
 /* ================================================================================ */
-/* ================           EWM (file:EWM_2)                     ================ */
+/* ================           EWM (file:EWM_INT)                   ================ */
 /* ================================================================================ */
 
 /**
@@ -3451,7 +3451,7 @@ typedef struct I2S_Type {
    __IO uint32_t  RMR;                          /**< 00E0: SAI Receive Mask Register                                    */
         uint8_t   RESERVED_7[28];              
    __IO uint32_t  MCR;                          /**< 0100: SAI MCLK Control Register                                    */
-   __IO uint32_t  MDR;                          /**< 0104: SAI MCLK Divide Register                                     */
+   __IO uint32_t  MDR;                          /**< 0104: MCLK Divide Register                                         */
 } I2S_Type;
 
 /**

@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2017/11
+ * @date     2017/12
  *
  *******************************************************************************************************/
 
@@ -2634,7 +2634,7 @@ typedef struct ETM_Type {
 */
 
 /* ================================================================================ */
-/* ================           EWM (file:EWM_0)                     ================ */
+/* ================           EWM (file:EWM_INT_PR)                ================ */
 /* ================================================================================ */
 
 /**
@@ -2714,7 +2714,7 @@ typedef struct EWM_Type {
 */
 
 /* ================================================================================ */
-/* ================           FB (file:FB_0)                       ================ */
+/* ================           FB (file:FB)                         ================ */
 /* ================================================================================ */
 
 /**
@@ -4551,7 +4551,7 @@ typedef struct I2S_Type {
    __IO uint32_t  RMR;                          /**< 00E0: SAI Receive Mask Register                                    */
         uint8_t   RESERVED_7[28];              
    __IO uint32_t  MCR;                          /**< 0100: SAI MCLK Control Register                                    */
-   __IO uint32_t  MDR;                          /**< 0104: SAI MCLK Divide Register                                     */
+   __IO uint32_t  MDR;                          /**< 0104: MCLK Divide Register                                         */
 } I2S_Type;
 
 /**
@@ -4623,9 +4623,9 @@ typedef struct I2S_Type {
 #define I2S_TCSR_TE_SHIFT                        (31U)                                               /*!< I2S0_TCSR.TE Position                   */
 #define I2S_TCSR_TE(x)                           (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< I2S0_TCSR.TE Field                      */
 /* ------- TCR1 Bit Fields                          ------ */
-#define I2S_TCR1_TFW_MASK                        (0x3U)                                              /*!< I2S0_TCR1.TFW Mask                      */
+#define I2S_TCR1_TFW_MASK                        (0x7U)                                              /*!< I2S0_TCR1.TFW Mask                      */
 #define I2S_TCR1_TFW_SHIFT                       (0U)                                                /*!< I2S0_TCR1.TFW Position                  */
-#define I2S_TCR1_TFW(x)                          (((uint32_t)(((uint32_t)(x))<<0U))&0x3UL)           /*!< I2S0_TCR1.TFW Field                     */
+#define I2S_TCR1_TFW(x)                          (((uint32_t)(((uint32_t)(x))<<0U))&0x7UL)           /*!< I2S0_TCR1.TFW Field                     */
 /* ------- TCR2 Bit Fields                          ------ */
 #define I2S_TCR2_DIV_MASK                        (0xFFU)                                             /*!< I2S0_TCR2.DIV Mask                      */
 #define I2S_TCR2_DIV_SHIFT                       (0U)                                                /*!< I2S0_TCR2.DIV Position                  */
@@ -4705,9 +4705,9 @@ typedef struct I2S_Type {
 #define I2S_TFR_WFP_SHIFT                        (16U)                                               /*!< I2S0_TFR.WFP Position                   */
 #define I2S_TFR_WFP(x)                           (((uint32_t)(((uint32_t)(x))<<16U))&0xF0000UL)      /*!< I2S0_TFR.WFP Field                      */
 /* ------- TMR Bit Fields                           ------ */
-#define I2S_TMR_TWM_MASK                         (0xFFFFFFFFU)                                       /*!< I2S0_TMR.TWM Mask                       */
+#define I2S_TMR_TWM_MASK                         (0xFFFFU)                                           /*!< I2S0_TMR.TWM Mask                       */
 #define I2S_TMR_TWM_SHIFT                        (0U)                                                /*!< I2S0_TMR.TWM Position                   */
-#define I2S_TMR_TWM(x)                           (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< I2S0_TMR.TWM Field                      */
+#define I2S_TMR_TWM(x)                           (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< I2S0_TMR.TWM Field                      */
 /* ------- RCSR Bit Fields                          ------ */
 #define I2S_RCSR_FRDE_MASK                       (0x1U)                                              /*!< I2S0_RCSR.FRDE Mask                     */
 #define I2S_RCSR_FRDE_SHIFT                      (0U)                                                /*!< I2S0_RCSR.FRDE Position                 */

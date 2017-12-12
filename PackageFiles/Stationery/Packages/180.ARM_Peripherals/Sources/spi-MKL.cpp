@@ -74,22 +74,4 @@ uint32_t Spi::calculateSpeed(uint32_t clockFrequency, uint32_t br) {
    return clockFrequency/(spprFactors[sppr]*sprFactors[spr]);
 }
 
-/**
- * Transmit and receive a value over SPI
- *
- * @param[in] data - Data to send (8/16 bits)
- *
- * @return Data received
- */
-uint32_t Spi::txRx(uint32_t data) {
-   while ((spi->S & SPI_S_SPTEF_MASK)==0) {
-      __asm__("nop");
-   }
-   spi->D  = data;
-   while ((spi->S & SPI_S_SPRF_MASK)==0) {
-      __asm__("nop");
-   }
-   return spi->D; // Return read data
-}
-
 } // End namespace USBDM

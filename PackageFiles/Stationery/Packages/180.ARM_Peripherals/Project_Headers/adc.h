@@ -489,17 +489,17 @@ public:
 
       // Calibration factor
       uint16_t calib;
-
       calib = adc->CLPS + adc->CLP4 + adc->CLP3 + adc->CLP2 + adc->CLP1 + adc->CLP0;
       calib /= 2;
       calib |= (1<<15);  // Set MSB
       adc->PG = calib;
 
-      calib = 0;
-      calib += adc->CLMS + adc->CLM4 + adc->CLM3 + adc->CLM2 + adc->CLM1 + adc->CLM0;
+#ifdef ADC_MG_MG_MASK
+      calib = adc->CLMS + adc->CLM4 + adc->CLM3 + adc->CLM2 + adc->CLM1 + adc->CLM0;
       calib /= 2;
       calib |= (1<<15);  // Set MSB
       adc->MG = calib;
+#endif
 
       return E_NO_ERROR;
    }
@@ -591,7 +591,7 @@ protected:
    static uint16_t readAnalogue(const int sc1Value) {
 
       // Trigger conversion
-      adc->SC1[0] = (sc1Value&(ADC_SC1_ADCH_MASK|ADC_SC1_AIEN_MASK|ADC_SC1_DIFF_MASK));
+      adc->SC1[0] = sc1Value;
 
       while ((adc->SC1[0]&ADC_SC1_COCO_MASK) == 0) {
          __asm__("nop");
@@ -676,6 +676,7 @@ public:
    };
 };
 
+#ifdef ADC_SC1_DIFF_MASK
 /**
  * Template class representing an ADC differential channel
  *
@@ -753,6 +754,7 @@ public:
       return (int32_t)(int16_t)AdcBase_T<Info>::readAnalogue(channel|ADC_SC1_DIFF_MASK);
    };
 };
+#endif
 
 #ifdef USBDM_ADC0_IS_DEFINED
 /**
@@ -776,6 +778,7 @@ template<int channel>
 class Adc0Channel : public AdcChannel_T<Adc0Info, channel> {};
 //template<int channel> using Adc0Channel = AdcChannel_T<Adc0Info, channel>;
 
+#ifdef ADC_SC1_DIFF_MASK
 /**
  * Template class representing an ADC0 differential channel
  *
@@ -796,6 +799,7 @@ class Adc0Channel : public AdcChannel_T<Adc0Info, channel> {};
 template<int channel>
 class Adc0DiffChannel : public AdcDiffChannel_T<Adc0Info, channel> {};
 //template<int channel> using Adc0DiffChannel = AdcDiffChannel_T<Adc0Info, channel>;
+#endif
 
 /**
  * Class representing ADC0
@@ -826,6 +830,7 @@ template<int channel>
 class Adc1Channel : public AdcChannel_T<Adc1Info, channel> {};
 //template<int channel> using Adc1Channel = AdcChannel_T<Adc1Info, channel>;
 
+#ifdef ADC_SC1_DIFF_MASK
 /**
  * Template class representing an ADC1 differential channel
  *
@@ -846,6 +851,7 @@ class Adc1Channel : public AdcChannel_T<Adc1Info, channel> {};
 template<int channel>
 class Adc1DiffChannel : public AdcDiffChannel_T<Adc1Info, channel> {};
 //template<int channel> using Adc1DiffChannel = AdcDiffChannel_T<Adc01Info, channel>;
+#endif
 
 /**
  * Class representing ADC1

@@ -32,7 +32,7 @@ Devices using this peripheral:
                <dimIncrement>4</dimIncrement>
                <dimIndex>0,1</dimIndex>
                <name>SC1%s</name>
-               <description>Status and Control Registers 1</description>
+               <description>Status and Control Register 1</description>
                <addressOffset>0x0</addressOffset>
                <resetValue>0x1F</resetValue>
                <fields>
@@ -535,7 +535,7 @@ Controls whether the Asynchronous clock output is always enabled or only as requ
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Enabled</description>
+                           <description>Enabled\t Request will be asserted when conversion completes</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -728,18 +728,18 @@ Enables continuous conversions or sets of conversions (when averaging) after an 
                   <field>
                      <name>CAL</name>
                      <description>Calibration\n
-Begins the calibration sequence when set</description>
+Write 1 to begin the calibration sequence, clears when complete</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Calibration busy</description>
+                           <description>Calibration idle</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Calibration idle</description>
+                           <description>Calibration busy</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

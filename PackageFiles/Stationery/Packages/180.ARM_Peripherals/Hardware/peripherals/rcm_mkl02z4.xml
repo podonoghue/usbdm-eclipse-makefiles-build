@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-<!-- spi0_mkl_16bit.xml.xml -->
+<!-- rcm_mkl02z4.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="spi_mkl_16bit.xml"/>
+<xi:include href="rcm_def.xml"/>
 </fragment>

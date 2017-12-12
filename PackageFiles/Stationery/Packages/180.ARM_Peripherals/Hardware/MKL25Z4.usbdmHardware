@@ -826,8 +826,8 @@
          <placement pin="PTD5"          location="D9" />
          <placement pin="PTD6"          location="D32" />
          <placement pin="PTD7"          location="D33" />
-         <placement pin="PTE0"          location="D15" />
-         <placement pin="PTE1"          location="D14" />
+         <placement pin="PTE0"          location="D14" />
+         <placement pin="PTE1"          location="D15" />
          <placement pin="PTE2"          location="A16" />
          <placement pin="PTE20"         location="A6" />
          <placement pin="PTE21"         location="A7" />
