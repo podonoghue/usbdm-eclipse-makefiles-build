@@ -73,7 +73,7 @@ Test Devices:
       -->
       <securityEntry id="Kinetis-KE-security">
          <securityDescription id="Kinetis-KE-security-description">
-            BACKDOOR\t= 0x%8X\n*\t\t= 0x%4X\nEEPROT\t\t= [DPOPEN=%b, *=%4b, DPS=%3b]\tFPROT\t\t= [OP=%b,*=%b,HDIS=%b,HS=%2b,LDIS=%b,LS=%2b]\nFSEC\t\t= [KEYEN=%2b, *=%4b, SEC=%2b]\nFOPT\t\t= [-=%6b, EZPORT_DIS=%b, LPBOOT=%b]\n\t
+            BACKDOOR\t= 0x%8X\n*\t\t= 0x%4X\nEEPROT\t\t= [DPOPEN=%b, *=%4b, DPS=%3b]\nFPROT\t\t= [OP=%b,*=%b,HDIS=%b,HS=%2b,LDIS=%b,LS=%2b]\nFSEC\t\t= [KEYEN=%2b, *=%4b, SEC=%2b]\nFOPT\t\t= [-=%6b, EZPORT_DIS=%b, LPBOOT=%b]\n\t
          </securityDescription>
          <!-- Kinetis Unsecured value -->
          <securityInfo size="16" type="unsecure" id="Kinetis-KE-security-off">
