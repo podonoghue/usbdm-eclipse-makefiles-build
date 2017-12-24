@@ -260,9 +260,11 @@ This field controls which VLLS sub-mode to enter if STOPM=VLLSx</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
+                  <field derivedFrom="LLSM" > <name>VLLSM</name> <bitOffset>0</bitOffset> <?ignoreOverlap?> <?hide?> </field>
                   <field>
                      <name>LPOPO</name>
-                     <description>LPO Power Option</description>
+                     <description>LPO Power Option\n
+Controls whether the 1 kHz LPO clock is enabled in VLLSx modes</description>
                      <bitOffset>3</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>

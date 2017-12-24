@@ -464,13 +464,13 @@ Selects the ADC0 pretrigger source when alternative triggers are enabled through
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Pretrigger ADHDWTSA is selected\n
+                           <description>Pretrigger A\n
 ADC0 will use ADC0_SC1A configuration for the next ADC conversion and store the result in ADC0_RA register</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Pretrigger ADHDWTSB is selected\n
+                           <description>Pretrigger B\n
 ADC0 will use ADC0_SC1B configuration for the next ADC conversion and store the result in ADC0_RB register</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -485,7 +485,7 @@ Enables alternative conversion triggers for ADC0</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>ADC ADHWT trigger comes from TPM1 channel 0 and channel1</description>
+                           <description>TPM1 channel 0 (A) and channel 1 (B) triggers selected for ADC0</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -673,7 +673,7 @@ Enables alternative conversion triggers for ADC0</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0010</name>
-                           <description>KLx2 Subfamily</description>
+                           <description>KLx2 Subfamily (low end)</description>
                            <value>0b0010</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -683,17 +683,17 @@ Enables alternative conversion triggers for ADC0</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0100</name>
-                           <description>KLx4 Subfamily</description>
+                           <description>KLx4 Subfamily (basic analog)</description>
                            <value>0b0100</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0101</name>
-                           <description>KLx5 Subfamily</description>
+                           <description>KLx5 Subfamily (advanced analog)</description>
                            <value>0b0101</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0110</name>
-                           <description>KLx6 Subfamily</description>
+                           <description>KLx6 Subfamily (advanced analog with I2S)</description>
                            <value>0b0110</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -1289,7 +1289,7 @@ This write-once field selects the clock source of the COP watchdog</description>
             </register>
             <register>
                <name>SRVCOP</name>
-               <description>Service COP Register</description>
+               <description>Service COP</description>
                <addressOffset>0x1104</addressOffset>
                <access>write-only</access>
                <fields>

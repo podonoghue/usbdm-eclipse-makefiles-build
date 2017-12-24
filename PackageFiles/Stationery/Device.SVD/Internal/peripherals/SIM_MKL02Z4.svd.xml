@@ -533,6 +533,11 @@ Devices using this peripheral:
                            <value>0b0010</value>
                         </enumeratedValue>
                         <enumeratedValue>
+                           <name>0b0011</name>
+                           <description>KLx3 Subfamily</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
                            <name>0b0100</name>
                            <description>KLx4 Subfamily (basic analog)</description>
                            <value>0b0100</value>
@@ -546,6 +551,11 @@ Devices using this peripheral:
                            <name>0b0110</name>
                            <description>KLx6 Subfamily (advanced analog with I2S)</description>
                            <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0111</name>
+                           <description>KLx7 Subfamily</description>
+                           <value>0b0111</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -1019,7 +1029,9 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>COPT</name>
-                     <description>COP Watchdog Timeout</description>
+                     <description>COP Watchdog Timeout\n
+This write-once field selects the timeout period of the COP. COPT along with the COPCLKS field define
+the COP timeout period</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
@@ -1030,17 +1042,17 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>COP timeout after 25 LPO cycles or 213 bus clock cycles</description>
+                           <description>COP timeout after 2^5 LPO cycles or 2^13 bus clock cycles</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>COP timeout after 28 LPO cycles or 216 bus clock cycles</description>
+                           <description>COP timeout after 2^8 LPO cycles or 2^16 bus clock cycles</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>COP timeout after 210 LPO cycles or 218 bus clock cycles</description>
+                           <description>COP timeout after 2^10 LPO cycles or 2^18 bus clock cycles</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1049,13 +1061,15 @@ Devices using this peripheral:
             </register>
             <register>
                <name>SRVCOP</name>
-               <description>Service COP Register</description>
+               <description>Service COP</description>
                <addressOffset>0x1104</addressOffset>
                <access>write-only</access>
                <fields>
                   <field>
                      <name>SRVCOP</name>
-                     <description>Sevice COP Register</description>
+                     <description>Sevice COP Register\n
+Write 0x55 and then 0xAA (in that order) to reset the COP timeout counter, writing any other value will
+generate a system reset</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>8</bitWidth>
                   </field>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-<!-- sim_mk20d5.xml -->
+<!-- sim_mkl27z644.xml -->
 <!--
 Devices using this peripheral: 
 -->
@@ -41,7 +41,7 @@ Devices using this peripheral:
          toolTip="Outputs the ERCLK32K on the selected pin in all modes of operation">
          <choice value="0"  name="ERCLK32K is not output" isDefault="true" />
          <choice value="1"  name="ERCLK32K is output on PTE0" />
-         <choice value="2"  name="ERCLK32K is output on PTE26" />
+         <choice value="2"  name="Reserved" />
          <choice value="3"  name="Reserved" />
       </choiceOption>
       
@@ -441,7 +441,7 @@ Devices using this peripheral:
          \t   SIM_SOPT4_TPM1CLKSEL($(sim_sopt4_tpm1clksel))  |   // TPM 1 External Clock Pin Select
          \t   SIM_SOPT4_TPM0CLKSEL($(sim_sopt4_tpm0clksel))  |   // TPM 0 External Clock Pin Select
          \t   SIM_SOPT4_TPM2CH0SRC($(sim_sopt4_tpm1ch0src))  |   // TPM 1 channel 0 input capture source select
-         \t   SIM_SOPT4_TPM1CH0SRC($(sim_sopt4_tpm1ch0src));     // TPM 1 channel 0 input capture source select\n\n
+         \t   SIM_SOPT4_TPM1CH0SRC($(sim_sopt4_tpm2ch0src));     // TPM 2 channel 0 input capture source select\n\n
       ]]></template>
    </category>
    
@@ -553,16 +553,16 @@ Devices using this peripheral:
          \tenum SimAdc0Trigger {
          \t   SimAdc0Trigger_External     = SIM_SOPT7_ADC0TRGSEL(0),   //!< External Trigger Source
          \t   SimAdc0Trigger_Cmp0         = SIM_SOPT7_ADC0TRGSEL(1),   //!< Comparator 0
-         \t   SimAdc0Trigger_Cmp1         = SIM_SOPT7_ADC0TRGSEL(2),   //!< Comparator 1 (if present)
-         \t   SimAdc0Trigger_Cmp2         = SIM_SOPT7_ADC0TRGSEL(3),   //!< Comparator 2 (if present)
+         \t   SimAdc0Trigger_2            = SIM_SOPT7_ADC0TRGSEL(2),   //!< Reserved
+         \t   SimAdc0Trigger_3            = SIM_SOPT7_ADC0TRGSEL(3),   //!< Reserved
          \t   SimAdc0Trigger_PitCh0       = SIM_SOPT7_ADC0TRGSEL(4),   //!< PIT Channel 0
          \t   SimAdc0Trigger_PitCh1       = SIM_SOPT7_ADC0TRGSEL(5),   //!< PIT Channel 1
-         \t   SimAdc0Trigger_PitCh2       = SIM_SOPT7_ADC0TRGSEL(6),   //!< PIT Channel 2
-         \t   SimAdc0Trigger_PitCh3       = SIM_SOPT7_ADC0TRGSEL(7),   //!< PIT Channel 3
+         \t   SimAdc0Trigger_6            = SIM_SOPT7_ADC0TRGSEL(6),   //!< Reserved
+         \t   SimAdc0Trigger_7            = SIM_SOPT7_ADC0TRGSEL(7),   //!< Reserved
          \t   SimAdc0Trigger_Tpm0         = SIM_SOPT7_ADC0TRGSEL(8),   //!< TPM0 Init and Ext Trigger Outputs
          \t   SimAdc0Trigger_Tpm1         = SIM_SOPT7_ADC0TRGSEL(9),   //!< TPM1 Init and Ext Trigger Outputs
          \t   SimAdc0Trigger_Tpm2         = SIM_SOPT7_ADC0TRGSEL(10),  //!< TPM2 Init and Ext Trigger Outputs (if present)
-         \t   SimAdc0Trigger_Tpm3         = SIM_SOPT7_ADC0TRGSEL(11),  //!< TPM3 Init and Ext Trigger Outputs (if present)
+         \t   SimAdc0Trigger_11           = SIM_SOPT7_ADC0TRGSEL(11),  //!< Reserved
          \t   SimAdc0Trigger_RtcAlarm     = SIM_SOPT7_ADC0TRGSEL(12),  //!< RTC Alarm
          \t   SimAdc0Trigger_RtcSeconds   = SIM_SOPT7_ADC0TRGSEL(13),  //!< RTC Seconds
          \t   SimAdc0Trigger_Lptrm        = SIM_SOPT7_ADC0TRGSEL(14),  //!< LPTMR

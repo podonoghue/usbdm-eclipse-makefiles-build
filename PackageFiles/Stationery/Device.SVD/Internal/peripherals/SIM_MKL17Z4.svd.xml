@@ -73,7 +73,9 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>OSC32KOUT</name>
-                     <description>32 kHz oscillator clock output</description>
+                     <description>32 kHz oscillator clock output\n
+Outputs the ERCLK32K on the selected pin in all modes of operation (including VLLS and System Reset),
+overriding the existing pin mux configuration for that pin. This field is reset only on POR/LVD</description>
                      <bitOffset>16</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
@@ -92,11 +94,17 @@ Devices using this peripheral:
                            <description>ERCLK32K is output on PTE26</description>
                            <value>0b10</value>
                         </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Reserved</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>OSC32KSEL</name>
-                     <description>32 kHz Oscillator</description>
+                     <description>32 kHz Oscillator\n
+Selects the 32 kHz clock source (ERCLK32K) for RTC and LPTMR. This field is reset only on POR/LVD</description>
                      <bitOffset>18</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
@@ -104,6 +112,11 @@ Devices using this peripheral:
                            <name>0b00</name>
                            <description>System oscillator (OSC32KCLK)</description>
                            <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Reserved</description>
+                           <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
@@ -155,6 +168,16 @@ Devices using this peripheral:
                      <bitOffset>5</bitOffset>
                      <bitWidth>3</bitWidth>
                      <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b000</name>
+                           <description>Reserved</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b001</name>
+                           <description>Reserved</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
                         <enumeratedValue>
                            <name>0b010</name>
                            <description>Bus clock</description>
@@ -500,6 +523,16 @@ Devices using this peripheral:
                            <value>0b0001</value>
                         </enumeratedValue>
                         <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>Reserved</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0011</name>
+                           <description>Reserved</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
                            <name>0b0100</name>
                            <description>PIT trigger 0</description>
                            <value>0b0100</value>
@@ -508,6 +541,16 @@ Devices using this peripheral:
                            <name>0b0101</name>
                            <description>PIT trigger 1</description>
                            <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0110</name>
+                           <description>Reserved</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0111</name>
+                           <description>Reserved</description>
+                           <value>0b0111</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1000</name>
@@ -525,6 +568,11 @@ Devices using this peripheral:
                            <value>0b1010</value>
                         </enumeratedValue>
                         <enumeratedValue>
+                           <name>0b1011</name>
+                           <description>Reserved</description>
+                           <value>0b1011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
                            <name>0b1100</name>
                            <description>RTC alarm</description>
                            <value>0b1100</value>
@@ -539,40 +587,49 @@ Devices using this peripheral:
                            <description>LPTMR0 trigger</description>
                            <value>0b1110</value>
                         </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Reserved</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>ADC0PRETRGSEL</name>
-                     <description>ADC0 PreTrigger Select</description>
+                     <description>ADC0 PreTrigger Select\n
+Selects the ADC0 pretrigger source when alternative triggers are enabled through ADC0ALTTRGEN</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Pretrigger ADHDWTSA is selected, thus ADC0 will use ADC0_SC1A configuration for the next ADC conversion and store the result in ADC0_RA register</description>
+                           <description>Pretrigger ADHDWTSA is selected\n
+ADC0 will use ADC0_SC1A configuration for the next ADC conversion and store the result in ADC0_RA register</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Pretrigger ADHDWTSB is selected, thus ADC0 will use ADC0_SC1B configuration for the next ADC conversion and store the result in ADC0_RB register</description>
+                           <description>Pretrigger ADHDWTSB is selected\n
+ADC0 will use ADC0_SC1B configuration for the next ADC conversion and store the result in ADC0_RB register</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>ADC0ALTTRGEN</name>
-                     <description>ADC0 Alternate Trigger Enable</description>
+                     <description>ADC0 Alternate Trigger Enable\n
+Enables alternative conversion triggers for ADC0</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>ADC ADHWT trigger comes from TPM1 channel 0 and channel1. Prior to the assertion of TPM1 channel 0, a pretrigger pulse will be sent to ADHWTSA to initiate an ADC acquisition using ADCx_SC1A configuration and store ADC conversion in ADCx_RA Register. Prior to the assertion of TPM1 channel 1 a pretrigger pulse will be sent to ADHWTSB to initiate an ADC acquisition using ADCx_SC1Bconfiguration and store ADC conversion in ADCx_RB Register</description>
+                           <description>ADC ADHWT trigger comes from TPM1 channel 0 and channel1</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>ADC ADHWT trigger comes from a peripheral event selected by ADC0TRGSEL bits.ADC0PRETRGSEL bit will select the optional ADHWTSA or ADHWTSB select lines for choosing the ADCx_SC1x config and ADCx_Rx result regsiter to store the ADC conversion</description>
+                           <description>ADC ADHWT trigger comes from a peripheral event selected by ADC0TRGSEL bits</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -658,36 +715,66 @@ Devices using this peripheral:
                      <bitWidth>4</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>KLx2 Subfamily</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
                            <name>0b0011</name>
                            <description>KLx3 Subfamily</description>
                            <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0100</name>
+                           <description>KLx4 Subfamily</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0101</name>
+                           <description>KLx5 Subfamily</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0110</name>
+                           <description>KLx6 Subfamily</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0111</name>
+                           <description>KLx7 Subfamily</description>
+                           <value>0b0111</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>FAMID</name>
-                     <description>no description available</description>
+                     <description>Kinetis family ID</description>
                      <bitOffset>28</bitOffset>
                      <bitWidth>4</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>KL0x Family (low end)</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
                            <name>0b0001</name>
-                           <description>KL17</description>
+                           <description>KL1x Family (basic)</description>
                            <value>0b0001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0010</name>
-                           <description>KL27</description>
+                           <description>KL2x Family (USB)</description>
                            <value>0b0010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0011</name>
-                           <description>KL33</description>
+                           <description>KL3x Family (Segment LCD)</description>
                            <value>0b0011</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0100</name>
-                           <description>KL43</description>
+                           <description>KL4x Family (USB and Segment LCD)</description>
                            <value>0b0100</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1104,7 +1191,7 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>MAXADDR0</name>
-                     <description>Max Address lock</description>
+                     <description>Max address block</description>
                      <bitOffset>24</bitOffset>
                      <bitWidth>7</bitWidth>
                   </field>
@@ -1194,7 +1281,9 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>COPT</name>
-                     <description>COP Watchdog Timeout</description>
+                     <description>COP Watchdog Timeout\n
+This write-once field selects the timeout period of the COP. COPT along with the COPCLKS field define
+the COP timeout period</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
@@ -1205,17 +1294,17 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>COP timeout after 25 cycles for short timeout or 213 cycles for long timeout</description>
+                           <description>COP timeout after 2^5 cycles for short timeout or 2^13 cycles for long timeout</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>COP timeout after 28 cycles for short timeout or 216 cycles for long timeout</description>
+                           <description>COP timeout after 2^8 cycles for short timeout or 2^16 cycles for long timeout</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>COP timeout after 210 cycles for short timeout or 218 cycles for long timeout</description>
+                           <description>COP timeout after 2^10 cycles for short timeout or 2^18 cycles for long timeout</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1258,7 +1347,8 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>COPCLKSEL</name>
-                     <description>COP Clock Select</description>
+                     <description>COP Clock Select\n
+This write-once field selects the clock source of the COP watchdog</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
@@ -1294,7 +1384,9 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>SRVCOP</name>
-                     <description>Service COP Register</description>
+                     <description>Sevice COP Register\n
+Write 0x55 and then 0xAA (in that order) to reset the COP timeout counter, writing any other value will
+generate a system reset</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>8</bitWidth>
                   </field>

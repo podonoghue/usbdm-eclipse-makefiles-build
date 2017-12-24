@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"
+?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- llwu_pe2_filt2_mkl05z4..xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Low Leakage Wakeup Unit">
+
+   <binaryOption name="llwu_me_wume_t" hidden="true"
+      toolTip="Enables this peripheral to wakeup the processor">
+      <choice name="Disabled" value="0" isDefault="true" />
+      <choice name="Enabled"  value="1" />
+   </binaryOption>   
+   <binaryOption name="llwu_me_wume0" description="LPTMR"         derivedFrom="llwu_me_wume_t" />
+   <binaryOption name="llwu_me_wume1" description="CMP0"          derivedFrom="llwu_me_wume_t" />
+   <binaryOption name="llwu_me_wume4" description="TSI0"          derivedFrom="llwu_me_wume_t" />
+   <binaryOption name="llwu_me_wume5" description="RTC Alarm"     derivedFrom="llwu_me_wume_t" />
+   <binaryOption name="llwu_me_wume7" description="RTC Seconds"   derivedFrom="llwu_me_wume_t" />
+
+   <template><![CDATA[
+      \t// Module wake ups
+      \tstatic constexpr uint8_t me =  
+      \t   LLWU_ME_WUME0($(llwu_me_wume0:0)) |  // LPTMR
+      \t   LLWU_ME_WUME1($(llwu_me_wume1:0)) |  // CMP0
+      \t   LLWU_ME_WUME4($(llwu_me_wume4:0)) |  // TSI0 (if present)
+      \t   LLWU_ME_WUME5($(llwu_me_wume5:0)) |  // RTC Alarm
+      \t   LLWU_ME_WUME6($(llwu_me_wume6:0)) |  //
+      \t   LLWU_ME_WUME7($(llwu_me_wume7:0));   // RTC Seconds\n\n
+   ]]></template>
+      
+   <xi:include href="llwu_pe2_filt1_base.xml"/>
+      
+   <xi:include href="_irqOption.xml"/>
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.LlwuValidate">
+   </validate>
+
+   <signals/>
+
+   <projectActionList id = "llwu_files" >
+      <copy source="Project_Headers/llwu.h"           target="Project_Headers/llwu.h"           overwrite="true" derived="true" />
+      <copy source="Snippets/llwu-example-mkl25z.cpp" target="Snippets/llwu-example-mkl25z.cpp"  overwrite="true" derived="true" />
+   </projectActionList>
+   
+</peripheralPage>

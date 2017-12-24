@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-<!-- i2c0_mkl82z7.xml -->
+<!-- spi0_mkl_8bit.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="i2c_def.xml"/>
+<xi:include href="spi_mkl.xml"/>
 </fragment>

@@ -151,8 +151,6 @@ protected:
       setAndCheckErrorCode(E_NO_HANDLER);
    }
 
-   ~Spi() {}
-
 public:
 
    volatile  SPI_Type * const spi; //!< SPI hardware
@@ -711,8 +709,6 @@ public:
    // SPI SOUT (data out = usually MOSI) Pin
    using soutGpio = GpioTable_T<Info, 2, ActiveHigh>;
 
-   virtual ~SpiBase_T() {}
-
    /**
     * Configures all mapped pins associated with this peripheral
     */
@@ -796,6 +792,9 @@ public:
       setMode(Info::modeValue); // Use default mode
    }
 
+   /**
+    * Destructor
+    */
    ~SpiBase_T() override {
    }
 

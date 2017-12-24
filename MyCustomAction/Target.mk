@@ -26,24 +26,17 @@ CFLAGS +=
 
 # Extra C Definitions
 DEFS += $(CDEFS)  # From command line
-DEFS += $(WXWIDGETS_DEFS)
+DEFS +=
 
 # Look for include files in each of the modules
 INCS := $(patsubst %,-I%,$(SOURCEDIRS))
-INCS += $(WXWIDGETS_INC)
+INCS += $(WIN_XML_INSTALLER_INC)
 
 # Extra Library dirs
-LIBDIRS += $(WXWIDGETS_LIBDIRS)
+LIBDIRS += $(WIN_XML_INSTALLER_LIBDIRS)
 
 # Extra libraries
-LIBS += $(USBDM_LIBS) 
-LIBS += $(USBDM_SYSTEM_LIBS)
-LIBS += $(WXWIDGETS_LIBS)
-#LIBS += $(USBDM_DSC_LIBS)
-#LIBS += $(USBDM_WX_LIBS)
-
-# Extra libraries for EXE only
-EXELIBS += $(USBDM_DYNAMIC_LIBS)
+LIBS += $(WIN_XML_INSTALLER_LIBS)
 
 # Each module will add to this
 SRC :=
@@ -90,8 +83,8 @@ $(BUILDDIR)/%.o : %.cpp
 #==============================================
 $(BUILDDIR)/$(TARGET_EXE): $(OBJ) $(RESOURCE_OBJ)
 	@echo --
-	@echo -- Linking Executable $@
-	$(CC) -o $@ $(GUI_OPTS) $(LDFLAGS) $(OBJ) $(RESOURCE_OBJ) $(LIBDIRS) $(LIBS) $(EXELIBS)
+	@echo -- Linking Target $@
+	$(CC) -o $@ $(LDFLAGS) $(OBJ) $(RESOURCE_OBJ) $(LIBDIRS) $(LIBS) 
 
 # How to copy EXE to target directory
 #==============================================
@@ -105,8 +98,8 @@ $(TARGET_BINDIR)/$(TARGET_EXE): $(BUILDDIR)/$(TARGET_EXE)
 #==============================================
 $(BUILDDIR)/$(TARGET_DLL): $(OBJ) $(RESOURCE_OBJ)
 	@echo --
-	@echo -- Linking Library $@
-	$(CC) -shared -o $@ -Wl,-soname,$(basename $(notdir $@)) $(LDFLAGS) $(OBJ) $(RESOURCE_OBJ) $(LIBDIRS) $(LIBS)
+	@echo -- Linking Target $@
+	$(CC) -shared -o $@ -Wl,-soname,$(basename $(notdir $@)) $(LDFLAGS) ${STATIC_GCC_OPTION} $(OBJ) $(RESOURCE_OBJ) $(LIBDIRS) $(LIBS) 
 
 # How to copy LIBRARY to target directory
 #==============================================

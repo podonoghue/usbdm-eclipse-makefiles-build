@@ -250,12 +250,12 @@ Controls whether the 1 kHz LPO clock is enabled in VLLSx modes</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>LPO clock is enabled in VLLSx</description>
+                           <description>LPO clock is enabled in LLS/VLLSx</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>LPO clock is disabled in VLLSx</description>
+                           <description>LPO clock is disabled in LLS/VLLSx</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -310,6 +310,10 @@ These bits control whether a Partial Stop mode is entered when STOPM=STOP</descr
                   </field>
                </fields>
             </register>
+            <register derivedFrom="STOPCTRL"> <name>VLLSCTRL</name><?hide?> <?doDerivedMacros?> <description>VLLS Control Register
+Provides various control bits allowing the user to fine tune
+power consumption during the stop mode selected by the STOPM field
+(Freescale old name)</description> </register>
             <register>
                <name>PMSTAT</name>
                <description>Power Mode Status Register</description>
