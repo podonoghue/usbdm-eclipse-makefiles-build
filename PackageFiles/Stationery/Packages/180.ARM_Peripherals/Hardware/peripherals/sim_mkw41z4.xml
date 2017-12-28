@@ -31,6 +31,7 @@ Devices using this peripheral:
       
       <intOption name="system_erclk32k_clock" 
          units="Hz"
+	 derived="true"
          description="Frequency of External 32k Reference Clock [ERCLK32K]"
          toolTip="External reference clock available to some peripherals (usually ~32kHz)" 
          origin="Derived from OSC32KCLK, RTCCLK or LPO" 
@@ -309,13 +310,6 @@ Devices using this peripheral:
          <choice value="1" name="Open-drain" />
       </binaryOption>
       
-      <choiceOption name="sim_sopt5_lpuart0rxsrc" 
-         description="UART 0 receive data source select"
-         toolTip="Selects the source for the UART 0 receive data.">
-         <choice value="0" name="LPUART0_RX pin" isDefault="true" />
-         <choice value="1" name="CMP0 output" />
-      </choiceOption>
-      
       <choiceOption name="sim_sopt5_lpuart0txsrc" 
          description="UART 0 transmit data source select"
          toolTip="Selects the source for the UART 0 transmit data.">
@@ -325,12 +319,19 @@ Devices using this peripheral:
          <choice value="3" name="Reserved" />
       </choiceOption>
       
+      <choiceOption name="sim_sopt5_lpuart0rxsrc" 
+         description="UART 0 receive data source select"
+         toolTip="Selects the source for the UART 0 receive data.">
+         <choice value="0" name="LPUART0_RX pin" isDefault="true" />
+         <choice value="1" name="CMP0 output" />
+      </choiceOption>
+      
       <template><![CDATA[
          \t//! System Options Register 5
          \tstatic constexpr uint32_t sopt5 = 
          \t   SIM_SOPT5_LPUART0ODE($(sim_sopt5_lpuart0ode)) |        // LPUART 0 Open Drain Enable
-         \t   SIM_SOPT5_LPUART0RXSRC($(sim_sopt5_lpuart0rxsrc)) |      // LPUART 0 receive data source select
          \t   SIM_SOPT5_LPUART0TXSRC($(sim_sopt5_lpuart0txsrc)) |      // LPUART 0 transmit data source select
+         \t   SIM_SOPT5_LPUART0RXSRC($(sim_sopt5_lpuart0rxsrc)) |      // LPUART 0 receive data source select
          \t   0;\n\n
       ]]></template>
    </category>
@@ -396,11 +397,11 @@ Devices using this peripheral:
          
          \t/**
          \t * Select the ADC0 Alternative Trigger sources.
-         \t * If PDB is selected then Pre-trigger 0/1 is determined by the PDB setup
+         \t * If TPM is selected then Pre-triggers are TPM channel 0 (A) and channel 1 (B)
          \t * otherwise Pre-trigger 0/1 is determined by this selection.
          \t */
          \tenum SimAdc0AltTrigger {
-         \t   SimAdc0AltTrigger_Tmp           = SIM_SOPT7_ADC0ALTTRGEN(0),                              //!< TPM trigger
+         \t   SimAdc0AltTrigger_Tpm           = SIM_SOPT7_ADC0ALTTRGEN(0),                              //!< TPM trigger
          \t   SimAdc0AltTrigger_PreTrigger_0  = SIM_SOPT7_ADC0ALTTRGEN(1)|SIM_SOPT7_ADC0PRETRGSEL(0),   //!< Pre-trigger 0 = A (SC1[0])
          \t   SimAdc0AltTrigger_PreTrigger_1  = SIM_SOPT7_ADC0ALTTRGEN(1)|SIM_SOPT7_ADC0PRETRGSEL(1),   //!< Pre-trigger 1 = B (SC1[1])
          \t};\n\n
@@ -410,7 +411,7 @@ Devices using this peripheral:
          \t/**
          \t * Select the ADC0 Trigger source\n
          \t * 
-         \t * If PDB is selected by SimAdc0Trigger then Pre-trigger 0/1 is determined by the PDB setup,
+         \t * If TPM is selected by SimAdc0Trigger then Pre-triggers are TPM channel 0 (A) and channel 1 (B),
          \t * otherwise Pre-trigger 0/1 is determined by this parameter.\n
          \t * For example, setAdc0Triggers(SimAdc0AltTrigger_PreTrigger_1, SimAdc0Trigger_PitCh0) will set the trigger source\n
          \t * to PIT channel 0 and conversion will use SC1[1]/R[1]. 
@@ -492,6 +493,7 @@ Devices using this peripheral:
       \t#endif
       \t
       \t   sim->SOPT1 = sopt1;
+      \t   // sim_sopt2_pllfllsel may also be altered by MCG clock code
       \t   sim->SOPT2 = sopt2;
       \t   sim->SOPT4 = sopt4;
       \t   sim->SOPT5 = sopt5;

@@ -185,6 +185,7 @@ Devices using this peripheral:
       
       <intOption name="system_usbfs_clock" 
          constant="true"
+         derived="true"
          units="Hz"
          description="USB Full Speed Clock"
          toolTip="Frequency of clock to USB full speed controller"
@@ -1108,10 +1109,10 @@ Devices using this peripheral:
    
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate" dim="3">
-      <param type="long" value="150MHz" />   <!-- Core         -->
-      <param type="long" value="75MHz" />    <!-- Bus          -->
-      <param type="long" value="25MHz" />    <!-- Flash        -->
-      <param type="long" value="75MHz" />    <!-- FlexBus      -->
+      <param type="long" value="150MHz" />    <!-- Core         -->
+      <param type="long" value="75MHz" />     <!-- Bus          -->
+      <param type="long" value="25MHz" />     <!-- Flash        -->
+      <param type="long" value="75MHz" />     <!-- FlexBus      -->
    </validate>
    
    <xi:include href="_simFiles-MK.xml"/>

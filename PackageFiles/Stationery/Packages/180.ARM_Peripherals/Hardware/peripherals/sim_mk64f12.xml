@@ -190,6 +190,7 @@ Devices using this peripheral:
       
       <intOption name="system_usbfs_clock" 
          constant="true"
+	 derived="true"
          units="Hz"
          description="USB Full Speed Clock"
          toolTip="Frequency of clock to USB full speed controller"
@@ -608,7 +609,7 @@ Devices using this peripheral:
          <choice value="1" name="UART1_TX pin modulated with FTM2 channel 0 output" />
          <choice value="3" name="Reserved" />
       </choiceOption>
-      
+   
       <choiceOption name="sim_sopt5_uart1rxsrc" 
          description="UART 1 receive data source select"
          toolTip="Selects the source for the UART 1 receive data">
