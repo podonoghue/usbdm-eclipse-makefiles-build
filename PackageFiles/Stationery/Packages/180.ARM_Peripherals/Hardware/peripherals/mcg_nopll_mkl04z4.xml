@@ -390,7 +390,6 @@
       \t   //! System Clock Divider Register 1
       \t   const uint32_t clkdiv1;\n\n
       
-      
       \t   //! Clock Mode
       \t   const ClockMode clockMode:8;\n\n
       
@@ -406,9 +405,6 @@
       \t   const uint8_t sc;
       \t};\n\n
       
-      \t//! Clock configurations
-      \tstatic const ClockInfo clockInfo[];\n\n
-
       \t/**
       \t * Get MCGERCLK
       \t *
@@ -465,7 +461,7 @@
       \t      SIM_CLKDIV1_OUTDIV1($(/SIM/sim_clkdiv1_outdiv1.:0)),  // Core/system clock\n\n
               
       \t      //! Clock Mode
-      \t      $(clock_mode.),\n\n
+      \t      McgInfo::$(clock_mode.),\n\n
               
       \t      //! Control Register 1 - Excluding CLKS, IREFS
       \t      MCG_C1_FRDIV($(mcg_c1_frdiv.))   | // FRDIV    FLL External Reference Divider

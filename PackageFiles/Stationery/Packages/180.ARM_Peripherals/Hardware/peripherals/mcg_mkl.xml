@@ -561,9 +561,6 @@
       \t   //! Control Register 8 - LOCRE1, LOLRE, CME1
       \t   const uint8_t c8;
       \t};\n\n
-      
-      \t//! Clock configurations
-      \tstatic const ClockInfo clockInfo[];\n\n
 
       \t/**
       \t * Get MCGERCLK
@@ -629,7 +626,7 @@
       \t      SIM_SOPT2_PLLFLLSEL($(/SIM/sim_sopt2_pllfllsel.)),      // PLL/FLL clock select\n\n
       
       \t      //! Clock Mode
-      \t      $(clock_mode.),\n\n
+      \t      McgInfo::$(clock_mode.),\n\n
               
       \t      //! Control Register 1 - Excluding CLKS, IREFS
       \t      MCG_C1_FRDIV($(mcg_c1_frdiv.))   | // FRDIV    FLL External Reference Divider

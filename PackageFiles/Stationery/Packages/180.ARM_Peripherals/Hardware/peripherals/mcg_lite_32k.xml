@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-<!-- mcg_lite_mkl17z4.xml -->
+<!-- mcg_lite_32k.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 <xi:include href="mcg_lite.xml"/>

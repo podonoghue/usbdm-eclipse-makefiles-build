@@ -260,8 +260,8 @@
    <template><![CDATA[
       \tenum ClockMode {
       \t   ClockMode_None     = -1,
-      \t   ClockMode_LIRC_8M  = 0,
-      \t   ClockMode_LIRC_2M,
+      \t   ClockMode_LIRC_2M  = 0,
+      \t   ClockMode_LIRC_8M,
       \t   ClockMode_HIRC_48M,
       \t   ClockMode_EXT,
       \t};\n\n
@@ -295,9 +295,6 @@
       \t   //! Miscellaneous Control Register - HIRCEN, LIRC_DIV2 (-HIRCLPEN)
       \t   const uint8_t mc;
       \t};\n\n
-      
-      \t//! Clock configurations
-      \tstatic const ClockInfo clockInfo[];\n\n
 
       \t/**
       \t * Get HIRC_CLK
@@ -432,7 +429,7 @@
       \t      SIM_SOPT2_CLKOUTSEL($(/SIM/sim_sopt2_clkoutsel)),      // CLKOUT pin clock source select\n\n
       
       \t      //! Clock Mode
-      \t      $(clock_mode.),\n\n
+      \t      McgInfo::$(clock_mode.),\n\n
               
       \t      //! Control Register 1 - Excluding CLKS
       \t      MCG_C1_IRCLKEN($(mcg_c1_irclken.)) | // IRCLEN   Internal Reference Clock Enable
@@ -443,10 +440,10 @@
       \t      MCG_C2_HGO0($(mcg_c2_hgo0))   | // HGO     High Gain Oscillator Select
       \t      MCG_C2_EREFS0($(mcg_c2_erefs0)) | // EREFS   External Reference Select
       \t      MCG_C2_IRCS($(mcg_c2_ircs.)),    // IRCS    Internal Reference Clock Select\n\n
-      
+              
       \t      //! Status and Control Register
       \t      MCG_SC_FCRDIV($(mcg_sc_fcrdiv.)), // FCRDIV (LIRC_DIV1) Internal Clock Reference Divider 1\n\n
-      
+              
       \t      //! Miscellaneous Control Register - Excluding HIRCLPEN
       \t      MCG_MC_HIRCEN($(mcg_mc_hircen.)) |    // HIRCEN   Internal Reference Clock Enable
       \t      MCG_MC_LIRC_DIV2($(mcg_mc_lirc_div2.)), // LIRC_DIV2 Internal Reference Divider 2\n\n

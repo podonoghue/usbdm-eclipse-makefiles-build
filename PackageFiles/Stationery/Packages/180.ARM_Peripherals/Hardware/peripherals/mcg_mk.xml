@@ -604,9 +604,6 @@
       \t   //! Control Register 8 - LOCRE1, LOLRE, CME1
       \t   const uint8_t c8;
       \t};\n\n
-      
-      \t//! Clock configurations
-      \tstatic const ClockInfo clockInfo[];\n\n
 
       \t/**
       \t * Get MCGERCLK
@@ -677,7 +674,7 @@
       \t      SIM_SOPT2_PLLFLLSEL($(/SIM/sim_sopt2_pllfllsel.)),      // PLL/FLL clock select\n\n
       
       \t      //! Clock Mode
-      \t      $(clock_mode.),\n\n
+      \t      McgInfo::$(clock_mode.),\n\n
               
       \t      //! Control Register 1 - Excluding CLKS, IREFS
       \t      MCG_C1_FRDIV($(mcg_c1_frdiv.))   | // FRDIV    FLL External Reference Divider
@@ -685,7 +682,7 @@
       \t      MCG_C1_IREFSTEN($(mcg_c1_irefsten.)), // IREFSTEN Internal Reference Stop Enable\n\n
               
       \t      //! Control Register 2 - Excluding LP
-      \t      MCG_C2_LOCRE0($(mcg_c2_locre0.)) | // LOLRE0  Loss of Clock Reset Enable
+      \t      MCG_C2_LOCRE0($(mcg_c2_locre0.)) | // LOCRE0  Loss of Clock Reset Enable
       \t      MCG_C2_RANGE0($(mcg_c2_range.)) | // RANGE   Frequency Range Select
       \t      MCG_C2_HGO0($(mcg_c2_hgo0))   | // HGO     High Gain Oscillator Select
       \t      MCG_C2_EREFS0($(mcg_c2_erefs0)) | // EREFS   External Reference Select
