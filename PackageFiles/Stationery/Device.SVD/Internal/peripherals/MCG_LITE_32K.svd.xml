@@ -1,9 +1,9 @@
 <!--
 Devices using this peripheral: 
-      MKL27Z644
+      MKL03Z4
 -->
       <peripheral>
-         <?sourceFile "MCG_LITE_MKL27Z644" ?>
+         <?sourceFile "MCG_LITE_32K" ?>
          <name>MCG</name>
          <description>Multipurpose Clock Generator Lite</description>
          <groupName>MCG</groupName>
@@ -33,8 +33,14 @@ Devices using this peripheral:
          </addressBlock>
          <addressBlock>
             <?width "8" ?>
+            <offset>0x14</offset>
+            <size>0x3</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
             <offset>0x18</offset>
-            <size>0x1</size>
+            <size>0x4</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
@@ -49,8 +55,7 @@ Devices using this peripheral:
                   <field>
                      <name>IREFSTEN</name>
                      <description>Internal Reference Stop Enable\n
-Controls whether or not the internal reference clock remains enabled when the MCG enters Stop mode.\n
-(only if IRCLKEN is set or if MCG is in FEI, FBI, or BLPI modes before entering Stop mode)</description>
+Controls whether or not the internal reference clock remains enabled when the MCG enters Stop mode</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -61,7 +66,7 @@ Controls whether or not the internal reference clock remains enabled when the MC
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Enabled in STOP</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -159,48 +164,6 @@ Selects the source for the external reference clock</description>
                            <name>0b1</name>
                            <description>Oscillator</description>
                            <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>HGO0</name>
-                     <description>Crystal Oscillator Operation Mode Select</description>
-                     <bitOffset>3</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Configure crystal oscillator for low-power operation</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Configure crystal oscillator for high-gain operation</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>RANGE0</name>
-                     <description>Frequency Range Select\n
-Selects the frequency range for the crystal oscillator or external clock source</description>
-                     <bitOffset>4</bitOffset>
-                     <bitWidth>2</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b00</name>
-                           <description>Low frequency range</description>
-                           <value>0b00</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b01</name>
-                           <description>High frequency range</description>
-                           <value>0b01</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1X</name>
-                           <description>Very high frequency</description>
-                           <value>0b1X</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -326,6 +289,54 @@ Selects the factor value to divide the LIRC source</description>
                </fields>
             </register>
             <register>
+               <name>HCTRIM</name>
+               <description>High-frequency IRC Coarse Trim Register</description>
+               <addressOffset>0x14</addressOffset>
+               <size>8</size>
+               <access>read-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>COARSE_TRIM</name>
+                     <description>High-frequency IRC Coarse Trim</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>HTTRIM</name>
+               <description>High-frequency IRC Tempco (Temperature Coefficient) Trim Register</description>
+               <addressOffset>0x15</addressOffset>
+               <size>8</size>
+               <access>read-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>TEMPCO_TRIM</name>
+                     <description>High-frequency IRC Tempco Trim</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>5</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>HFTRIM</name>
+               <description>High-frequency IRC Fine Trim Register</description>
+               <addressOffset>0x16</addressOffset>
+               <size>8</size>
+               <access>read-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>FINE_TRIM</name>
+                     <description>High-frequency IRC Fine Trim</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
                <name>MC</name>
                <description>Miscellaneous Control Register</description>
                <addressOffset>0x18</addressOffset>
@@ -382,10 +393,10 @@ Selects the factor value to further divide the LIRC source</description>
                      </enumeratedValues>
                   </field>
                   <field>
-                     <name>HIRCLPEN</name>
-                     <description>High-frequency IRC Low-power Mode Enable\n
-Enables the HIRC when in Low-power mode (Stop/VLPR/VLPW/VLPS)</description>
-                     <bitOffset>6</bitOffset>
+                     <name>HIRCEN</name>
+                     <description>High-frequency IRC Enable\n
+Enables the HIRC, even when not working at HIRC mode</description>
+                     <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
@@ -400,8 +411,77 @@ Enables the HIRC when in Low-power mode (Stop/VLPR/VLPW/VLPS)</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="HIRCLPEN" > <name>HIRCEN</name> <description>High-frequency IRC Enable\n
-Enables the HIRC, even when not working at HIRC mode</description> <bitOffset>7</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>LTRIMRNG</name>
+               <description>Low-frequency IRC Trim Range Register</description>
+               <addressOffset>0x19</addressOffset>
+               <size>8</size>
+               <access>read-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>STRIMRNG</name>
+                     <description>LIRC Slow TRIM (2 MHz) Range</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Frequency shift by 10%</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>No frequency shift</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>No frequency shift</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Frequency shift by -10%</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="STRIMRNG" > <name>FTRIMRNG</name> <description>LIRC Fast TRIM (8 MHz) Range</description> <bitOffset>2</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>LFTRIM</name>
+               <description>Low-frequency IRC8M Trim Register</description>
+               <addressOffset>0x1A</addressOffset>
+               <size>8</size>
+               <access>read-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>LIRC_FTRIM</name>
+                     <description>LIRC8M TRIM</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>LSTRIM</name>
+               <description>Low-frequency IRC2M Trim Register</description>
+               <addressOffset>0x1B</addressOffset>
+               <size>8</size>
+               <access>read-only</access>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>LIRC_STRIM</name>
+                     <description>LIRC2M TRIM</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
                </fields>
             </register>
          </registers>

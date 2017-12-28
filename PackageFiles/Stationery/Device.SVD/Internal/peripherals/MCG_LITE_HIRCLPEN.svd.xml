@@ -1,12 +1,10 @@
 <!--
 Devices using this peripheral: 
       MKL17Z4
-      MKL27Z4
-      MKL33Z4
-      MKL43Z4
+      MKL27Z644
 -->
       <peripheral>
-         <?sourceFile "MCG_LITE_MKL17Z4" ?>
+         <?sourceFile "MCG_LITE_HIRCLPEN" ?>
          <name>MCG</name>
          <description>Multipurpose Clock Generator Lite</description>
          <groupName>MCG</groupName>
@@ -58,8 +56,7 @@ Devices using this peripheral:
                   <field>
                      <name>IREFSTEN</name>
                      <description>Internal Reference Stop Enable\n
-Controls whether or not the internal reference clock remains enabled when the MCG enters Stop mode.\n
-(only if IRCLKEN is set or if MCG is in FEI, FBI, or BLPI modes before entering Stop mode)</description>
+Controls whether or not the internal reference clock remains enabled when the MCG enters Stop mode</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -191,23 +188,24 @@ Selects the source for the external reference clock</description>
                   </field>
                   <field>
                      <name>RANGE0</name>
-                     <description>Frequency Range Select</description>
+                     <description>Frequency Range Select\n
+Selects the frequency range for the crystal oscillator or external clock source</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>Low frequency range selected for the crystal oscillator</description>
+                           <description>Low frequency range</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>High frequency range selected for the crystal oscillator</description>
+                           <description>High frequency range</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1X</name>
-                           <description>Very high frequency range selected for the crystal oscillator</description>
+                           <description>Very high frequency</description>
                            <value>0b1X</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -434,6 +432,25 @@ Selects the factor value to further divide the LIRC source</description>
                            <name>0b111</name>
                            <description>Division factor is 128</description>
                            <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>HIRCLPEN</name>
+                     <description>High-frequency IRC Low-power Mode Enable\n
+Enables the HIRC when in Low-power mode (Stop/VLPR/VLPW/VLPS)</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disabled in low power</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enabled in low power</description>
+                           <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>

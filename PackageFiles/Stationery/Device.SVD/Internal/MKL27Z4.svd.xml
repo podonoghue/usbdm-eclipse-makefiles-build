@@ -43,7 +43,7 @@
       <xi:include href="peripherals/LPTMR0.svd.xml"/>
       <xi:include href="peripherals/LPUART0_MKL03.svd.xml"/>
       <peripheral derivedFrom="LPUART0"><name>LPUART1</name><baseAddress>0x40055000</baseAddress></peripheral>
-      <xi:include href="peripherals/MCG_LITE_MKL17Z4.svd.xml"/>
+      <xi:include href="peripherals/MCG_LITE.svd.xml"/>
       <xi:include href="peripherals/MCM_MKL02Z4.svd.xml"/>
       <xi:include href="peripherals/MTB.svd.xml"/>
       <xi:include href="peripherals/MTBDWT_MKL.svd.xml"/>

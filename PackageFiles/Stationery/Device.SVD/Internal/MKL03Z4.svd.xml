@@ -35,7 +35,7 @@
       <xi:include href="peripherals/LLWU_PE2_FILT1.svd.xml"/>
       <xi:include href="peripherals/LPTMR0.svd.xml"/>
       <xi:include href="peripherals/LPUART0_MKL03.svd.xml"/>
-      <xi:include href="peripherals/MCG_LITE_MKL03.svd.xml"/>
+      <xi:include href="peripherals/MCG_LITE_32K.svd.xml"/>
       <xi:include href="peripherals/MCM_MKL03Z4.svd.xml"/>
       <xi:include href="peripherals/MTB.svd.xml"/>
       <xi:include href="peripherals/MTBDWT_MKL.svd.xml"/>

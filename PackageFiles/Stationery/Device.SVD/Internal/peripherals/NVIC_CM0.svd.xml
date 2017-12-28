@@ -92,15 +92,15 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="SETENA0" > <name>SETENA1</name>  <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="SETENA0" > <name>SETENA2</name>  <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="SETENA0" > <name>SETENA3</name>  <bitOffset>3</bitOffset> </field>
-                  <field derivedFrom="SETENA0" > <name>SETENA4</name>  <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="SETENA0" > <name>SETENA5</name>  <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="SETENA0" > <name>SETENA6</name>  <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="SETENA0" > <name>SETENA7</name>  <bitOffset>7</bitOffset> </field>
-                  <field derivedFrom="SETENA0" > <name>SETENA8</name>  <bitOffset>8</bitOffset> </field>
-                  <field derivedFrom="SETENA0" > <name>SETENA9</name>  <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA7</name> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA8</name> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="SETENA0" > <name>SETENA9</name> <bitOffset>9</bitOffset> </field>
                   <field derivedFrom="SETENA0" > <name>SETENA10</name> <bitOffset>10</bitOffset> </field>
                   <field derivedFrom="SETENA0" > <name>SETENA11</name> <bitOffset>11</bitOffset> </field>
                   <field derivedFrom="SETENA0" > <name>SETENA12</name> <bitOffset>12</bitOffset> </field>
@@ -148,15 +148,15 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="CLREN0" > <name>CLREN1</name>  <bitOffset>1</bitOffset></field>
-                  <field derivedFrom="CLREN0" > <name>CLREN2</name>  <bitOffset>2</bitOffset></field>
-                  <field derivedFrom="CLREN0" > <name>CLREN3</name>  <bitOffset>3</bitOffset></field>
-                  <field derivedFrom="CLREN0" > <name>CLREN4</name>  <bitOffset>4</bitOffset></field>
-                  <field derivedFrom="CLREN0" > <name>CLREN5</name>  <bitOffset>5</bitOffset></field>
-                  <field derivedFrom="CLREN0" > <name>CLREN6</name>  <bitOffset>6</bitOffset></field>
-                  <field derivedFrom="CLREN0" > <name>CLREN7</name>  <bitOffset>7</bitOffset></field>
-                  <field derivedFrom="CLREN0" > <name>CLREN8</name>  <bitOffset>8</bitOffset></field>
-                  <field derivedFrom="CLREN0" > <name>CLREN9</name>  <bitOffset>9</bitOffset></field>
+                  <field derivedFrom="CLREN0" > <name>CLREN1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="CLREN0" > <name>CLREN2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="CLREN0" > <name>CLREN3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="CLREN0" > <name>CLREN4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="CLREN0" > <name>CLREN5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="CLREN0" > <name>CLREN6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="CLREN0" > <name>CLREN7</name> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="CLREN0" > <name>CLREN8</name> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="CLREN0" > <name>CLREN9</name> <bitOffset>9</bitOffset> </field>
                   <field derivedFrom="CLREN0" > <name>CLREN10</name> <bitOffset>10</bitOffset> </field>
                   <field derivedFrom="CLREN0" > <name>CLREN11</name> <bitOffset>11</bitOffset> </field>
                   <field derivedFrom="CLREN0" > <name>CLREN12</name> <bitOffset>12</bitOffset> </field>
@@ -204,15 +204,15 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="SETPEND0" > <name>SETPEND1</name>  <bitOffset>1</bitOffset></field>
-                  <field derivedFrom="SETPEND0" > <name>SETPEND2</name>  <bitOffset>2</bitOffset></field>
-                  <field derivedFrom="SETPEND0" > <name>SETPEND3</name>  <bitOffset>3</bitOffset></field>
-                  <field derivedFrom="SETPEND0" > <name>SETPEND4</name>  <bitOffset>4</bitOffset></field>
-                  <field derivedFrom="SETPEND0" > <name>SETPEND5</name>  <bitOffset>5</bitOffset></field>
-                  <field derivedFrom="SETPEND0" > <name>SETPEND6</name>  <bitOffset>6</bitOffset></field>
-                  <field derivedFrom="SETPEND0" > <name>SETPEND7</name>  <bitOffset>7</bitOffset></field>
-                  <field derivedFrom="SETPEND0" > <name>SETPEND8</name>  <bitOffset>8</bitOffset></field>
-                  <field derivedFrom="SETPEND0" > <name>SETPEND9</name>  <bitOffset>9</bitOffset></field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND7</name> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND8</name> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="SETPEND0" > <name>SETPEND9</name> <bitOffset>9</bitOffset> </field>
                   <field derivedFrom="SETPEND0" > <name>SETPEND10</name> <bitOffset>10</bitOffset> </field>
                   <field derivedFrom="SETPEND0" > <name>SETPEND11</name> <bitOffset>11</bitOffset> </field>
                   <field derivedFrom="SETPEND0" > <name>SETPEND12</name> <bitOffset>12</bitOffset> </field>
@@ -260,15 +260,15 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="CLRPEND0" > <name>CLRPEND1</name>  <bitOffset>1</bitOffset></field>
-                  <field derivedFrom="CLRPEND0" > <name>CLRPEND2</name>  <bitOffset>2</bitOffset></field>
-                  <field derivedFrom="CLRPEND0" > <name>CLRPEND3</name>  <bitOffset>3</bitOffset></field>
-                  <field derivedFrom="CLRPEND0" > <name>CLRPEND4</name>  <bitOffset>4</bitOffset></field>
-                  <field derivedFrom="CLRPEND0" > <name>CLRPEND5</name>  <bitOffset>5</bitOffset></field>
-                  <field derivedFrom="CLRPEND0" > <name>CLRPEND6</name>  <bitOffset>6</bitOffset></field>
-                  <field derivedFrom="CLRPEND0" > <name>CLRPEND7</name>  <bitOffset>7</bitOffset></field>
-                  <field derivedFrom="CLRPEND0" > <name>CLRPEND8</name>  <bitOffset>8</bitOffset></field>
-                  <field derivedFrom="CLRPEND0" > <name>CLRPEND9</name>  <bitOffset>9</bitOffset></field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND1</name> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND2</name> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND3</name> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND4</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND5</name> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND6</name> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND7</name> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND8</name> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="CLRPEND0" > <name>CLRPEND9</name> <bitOffset>9</bitOffset> </field>
                   <field derivedFrom="CLRPEND0" > <name>CLRPEND10</name> <bitOffset>10</bitOffset> </field>
                   <field derivedFrom="CLRPEND0" > <name>CLRPEND11</name> <bitOffset>11</bitOffset> </field>
                   <field derivedFrom="CLRPEND0" > <name>CLRPEND12</name> <bitOffset>12</bitOffset> </field>
