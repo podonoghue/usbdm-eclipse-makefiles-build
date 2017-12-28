@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- FRDM_KL03Z.usbdmProject -->
+<!-- 
+   Settings
+-->
+
+<section name="USBDM">
+   <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_KL03Z" />
+   <item key="$$DeviceInfo_SubFamily"                      value="MKL03Z4" />
+   <item key="$$Hardware_Source_Filename"                  value="MKL03Z4.usbdmHardware" />
+   <item key="$signal$PTA0_descriptionSetting"             value="SWDCLK" />
+   <item key="$signal$PTA0_muxSetting"                     value="mux3" />
+   <item key="$signal$PTA12_muxSetting"                    value="mux0" />
+   <item key="$signal$PTA1_descriptionSetting"             value="RESET_b" />
+   <item key="$signal$PTA1_muxSetting"                     value="mux3" />
+   <item key="$signal$PTA2_descriptionSetting"             value="SWDIO" />
+   <item key="$signal$PTA2_muxSetting"                     value="mux3" />
+   <item key="$signal$PTA3_descriptionSetting"             value="EXTAL0" />
+   <item key="$signal$PTA3_muxSetting"                     value="mux0" />
+   <item key="$signal$PTA4_descriptionSetting"             value="EXTAL1" />
+   <item key="$signal$PTA4_muxSetting"                     value="mux0" />
+   <item key="$signal$PTA8_muxSetting"                     value="mux0" />
+   <item key="$signal$PTA9_muxSetting"                     value="mux0" />
+   <item key="$signal$PTB10_descriptionSetting"            value="RGB_Red" />
+   <item key="$signal$PTB10_muxSetting"                    value="mux2" />
+   <item key="$signal$PTB11_descriptionSetting"            value="RGB_Green" />
+   <item key="$signal$PTB11_muxSetting"                    value="mux2" />
+   <item key="$signal$PTB13_descriptionSetting"            value="RGB_Blue" />
+   <item key="$signal$PTB13_muxSetting"                    value="mux2" />
+   <item key="$signal$PTB1_descriptionSetting"             value="ConsoleTx" />
+   <item key="$signal$PTB1_muxSetting"                     value="mux2" />
+   <item key="$signal$PTB2_descriptionSetting"             value="ConsoleRx" />
+   <item key="$signal$PTB2_muxSetting"                     value="mux2" />
+   <item key="$signal$PTB3_descriptionSetting"             value="Accel_SCL" />
+   <item key="$signal$PTB3_muxSetting"                     value="mux2" />
+   <item key="$signal$PTB4_descriptionSetting"             value="Accel_SDA" />
+   <item key="$signal$PTB4_muxSetting"                     value="mux2" />
+   <item key="/Console/consoleDevice"                      value="USBDM::Lpuart0" />
+   <item key="/FTFA/peripheral_file"                       value="ftfa" />
+   <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_HIRC_48MHz" />
+   <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_LIRC_2MHz" />
+   <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_LIRC_8MHz" />
+   <item key="/MCG/clock_mode[0]"                          value="ClockMode_HIRC_48M" />
+   <item key="/MCG/clock_mode[1]"                          value="ClockMode_LIRC_2M" />
+   <item key="/MCG/clock_mode[2]"                          value="ClockMode_LIRC_8M" />
+   <item key="/MCG/mcg_c2_ircs[0]"                         value="true" />
+   <item key="/MCG/mcg_c2_ircs[2]"                         value="true" />
+   <item key="/MCG/mcg_mc_hircen[0]"                       value="true" />
+   <item key="/MCG/mcg_mc_hircen[1]"                       value="true" />
+   <item key="/MCG/mcg_mc_hircen[2]"                       value="true" />
+   <item key="/MCG/system_lirc_clock[0]"                   value="8000000" />
+   <item key="/MCG/system_lirc_clock[2]"                   value="8000000" />
+   <item key="/MCG/system_lirc_div1_clock[0]"              value="8000000" />
+   <item key="/MCG/system_lirc_div1_clock[2]"              value="8000000" />
+   <item key="/OSC0/osc_cr_erclken"                        value="false" />
+   <item key="/OSC0/osc_input_freq"                        value="32768" />
+   <item key="/SIM/sim_sopt1_osc32ksel"                    value="0" />
+   <item key="/SIM/sim_sopt2_lpuart0src"                   value="1" />
+   <item key="/SIM/sim_sopt2_tpmsrc"                       value="1" />
+   <item key="/SIM/system_bus_clock[1]"                    value="2000000" />
+   <item key="/SIM/system_bus_clock[2]"                    value="8000000" />
+   <item key="/SIM/system_core_clock[1]"                   value="2000000" />
+   <item key="/SIM/system_core_clock[2]"                   value="8000000" />
+</section>

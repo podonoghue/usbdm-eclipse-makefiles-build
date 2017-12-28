@@ -45,7 +45,7 @@ namespace USBDM {
    /**
     * Table of clock settings
     */
-   const McgInfo::ClockInfo McgInfo::clockInfo[] = {
+   const McgInfo::ClockInfo Mcg::clockInfo[] = {
 $(/MCG/McgClockInfoEntries:!!!!!!!Not found!!!!!!!)
    };
 
@@ -385,7 +385,7 @@ void Mcg::defaultConfigure() {
    currentClockMode = McgInfo::ClockMode::ClockMode_None;
 
    // Transition to desired clock mode
-   clockTransition(McgInfo::clockInfo[ClockConfig_default]);
+   clockTransition(clockInfo[ClockConfig_default]);
 
    SimInfo::initRegs();
 

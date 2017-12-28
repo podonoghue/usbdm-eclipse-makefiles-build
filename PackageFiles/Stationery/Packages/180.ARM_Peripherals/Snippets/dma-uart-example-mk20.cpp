@@ -199,7 +199,7 @@ void changeRunMode(SmcRunMode smcRunMode) {
    if (smcStatus == SmcStatus_vlpr) {
       // Do VLPR->RUN mode
       Smc::enterRunMode(SmcRunMode_Normal);
-      Mcg::clockTransition(McgInfo::clockInfo[RUN_MODE]);
+      Mcg::configure(RUN_MODE);
       console.setBaudRate(defaultBaudRate);
       console.write("Changed to RUN mode, ").flushOutput();
    }
@@ -212,7 +212,7 @@ void changeRunMode(SmcRunMode smcRunMode) {
 
       case SmcRunMode_VeryLowPower:
          // RUN->VLPR
-         Mcg::clockTransition(McgInfo::clockInfo[VLPR_MODE]);
+         Mcg::configure(VLPR_MODE);
          Smc::enterRunMode(SmcRunMode_VeryLowPower);
          console.setBaudRate(defaultBaudRate);
          console.write("Changed to VLPR mode, ").flushOutput();

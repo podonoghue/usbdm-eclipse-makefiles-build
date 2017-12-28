@@ -106,12 +106,6 @@
       <choice value="3" name="Reserved" />
    </choiceOption>
 
-   <binaryOption name="adc_sc2_dmaen" description="DMA Enable"
-      toolTip="Enables use of DMA with ADC">
-      <choice value="0" name="Disabled" isDefault="true" />
-      <choice value="1" name="Enabled" />
-   </binaryOption>
-
    <choiceOption name="adc_sc2_compare" description="Compare function"
       toolTip="Enables comparison of ADC result with CV1 and CV2" >
       <choice value="0" name="Disabled" isDefault="true" />
@@ -206,7 +200,6 @@
      \t    ADC_SC2_ACFGT($(adc_sc2_acfgt))|
      \t    ADC_SC2_ACREN($(adc_sc2_acren))|
      \t    ADC_SC2_REFSEL($(adc_sc2_refsel))|
-     \t    ADC_SC2_DMAEN($(adc_sc2_dmaen))|
      \t    ADC_SC2_ADTRG($(adc_sc2_adtrg));\n\n
      
      \t//! Default value for ADCx_CV1 register

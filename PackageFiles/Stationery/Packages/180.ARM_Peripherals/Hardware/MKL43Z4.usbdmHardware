@@ -169,7 +169,7 @@
          <clock reg="SCGC5"         mask="SIM_SCGC5_LPUART1_MASK" />
          <irq num="LPUART1_IRQn" />
       </peripheral>
-      <peripheral baseName="MCG"      instance=""         version="mcg_lite_mkl17z4">
+      <peripheral baseName="MCG"      instance=""         version="mcg_lite">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcg" />
       </peripheral>
       <peripheral baseName="OSC"      instance="0"        version="osc0_mk">

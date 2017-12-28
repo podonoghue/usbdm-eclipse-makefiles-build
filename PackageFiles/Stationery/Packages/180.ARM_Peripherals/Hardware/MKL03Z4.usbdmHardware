@@ -7,11 +7,12 @@
 
 <root version="1.2.0">
    <family name="MKL03Z4">
+      <device name="FRDM_KL03Z"   manual="KL03P24M48SF0RM" package="FRDM_KL03Z" />
       <device name="MKL03Z16VFG4" manual="KL03P24M48SF0RM" package="QFN16" />
       <device name="MKL03Z16VFK4" manual="KL03P24M48SF0RM" package="QFN24" />
       <device name="MKL03Z32CAF4" manual="KL03P24M48SF0RM" package="WLCP20" />
       <device name="MKL03Z32VFG4" manual="KL03P24M48SF0RM" package="QFN16" />
-      <device name="MKL03Z32VFK4" manual="KL03P24M48SF0RM" package="FRDM_KL03Z" />
+      <device name="MKL03Z32VFK4" manual="KL03P24M48SF0RM" package="QFN24" />
       <device name="MKL03Z8VFG4"  manual="KL03P24M48SF0RM" package="QFN16" />
       <device name="MKL03Z8VFK4"  manual="KL03P24M48SF0RM" package="QFN24" />
    </family>
@@ -23,7 +24,7 @@
       </peripheral>
       <peripheral baseName="CMP"      instance="0"        version="cmp0_trigm">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCmp" />
-         <clock reg="SCGC4"         mask="SIM_SCGC4_CMP_MASK" />
+         <clock reg="SCGC4"         mask="SIM_SCGC4_CMP0_MASK" />
          <irq num="CMP0_IRQn" />
       </peripheral>
       <peripheral baseName="CONTROL"  instance="">
@@ -58,42 +59,6 @@
          <clock reg="SCGC4"         mask="SIM_SCGC4_I2C0_MASK" />
          <irq num="I2C0_IRQn" />
       </peripheral>
-      <peripheral baseName="IRQ_0"    instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
-      </peripheral>
-      <peripheral baseName="IRQ_1"    instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
-      </peripheral>
-      <peripheral baseName="IRQ_10"   instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
-      </peripheral>
-      <peripheral baseName="IRQ_11"   instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
-      </peripheral>
-      <peripheral baseName="IRQ_12"   instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
-      </peripheral>
-      <peripheral baseName="IRQ_13"   instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
-      </peripheral>
-      <peripheral baseName="IRQ_2"    instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
-      </peripheral>
-      <peripheral baseName="IRQ_3"    instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
-      </peripheral>
-      <peripheral baseName="IRQ_4"    instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
-      </peripheral>
-      <peripheral baseName="IRQ_5"    instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
-      </peripheral>
-      <peripheral baseName="IRQ_6"    instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
-      </peripheral>
-      <peripheral baseName="IRQ_7"    instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
-      </peripheral>
       <peripheral baseName="LLWU"     instance=""         version="llwu_pe2_filt1">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
          <irq num="LLWU_IRQn" />
@@ -108,7 +73,7 @@
          <clock reg="SCGC5"         mask="SIM_SCGC5_LPUART0_MASK" />
          <irq num="LPUART0_IRQn" />
       </peripheral>
-      <peripheral baseName="MCG"      instance=""         version="mcg_lite_mkl03">
+      <peripheral baseName="MCG"      instance=""         version="mcg_lite_32k">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcg" />
       </peripheral>
       <peripheral baseName="OSC"      instance="0"        version="osc0_mk">
@@ -130,9 +95,6 @@
          <irq num="RTC_Alarm_IRQn" />
          <irq num="RTC_Seconds_IRQn" />
       </peripheral>
-      <peripheral baseName="RTC_CLK_IN" instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
-      </peripheral>
       <peripheral baseName="SIM"      instance=""         version="sim_mkl03z4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSim" />
       </peripheral>
@@ -143,9 +105,6 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_SPI0_MASK" />
          <irq num="SPI0_IRQn" />
-      </peripheral>
-      <peripheral baseName="SPI0_SS_b" instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
       </peripheral>
       <peripheral baseName="TPM"      instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForShared" />
@@ -170,7 +129,6 @@
          <mux sel="mux0"          signal="ADC0_SE15" />
          <mux sel="mux0"          signal="CMP0_IN2" />
          <mux sel="mux1"          signal="GPIOA_0" />
-         <mux sel="mux1"          signal="IRQ_0" />
          <mux sel="mux1"          signal="LLWU_P7" />
          <mux sel="mux2"          signal="TPM1_CH0" />
          <mux sel="mux3"          signal="SWD_CLK" />
@@ -178,7 +136,6 @@
       </pin>
       <pin name="PTA1">
          <mux sel="mux1"          signal="GPIOA_1" />
-         <mux sel="mux1"          signal="IRQ_1" />
          <mux sel="mux1"          signal="LPTMR0_ALT1" />
          <mux sel="mux2"          signal="TPM_CLKIN0" />
          <mux sel="mux3"          signal="RESET_b" />
@@ -209,7 +166,7 @@
       </pin>
       <pin name="PTA5">
          <mux sel="mux1"          signal="GPIOA_5" />
-         <mux sel="mux1"          signal="RTC_CLK_IN" />
+         <mux sel="mux1"          signal="RTC_CLKIN" />
          <mux sel="mux2"          signal="TPM0_CH1" />
          <mux sel="mux3"          signal="SPI0_SS_b" />
          <reset sel="unassigned" />
@@ -222,7 +179,6 @@
       </pin>
       <pin name="PTA7">
          <mux sel="mux1"          signal="GPIOA_7" />
-         <mux sel="mux1"          signal="IRQ_4" />
          <mux sel="mux2"          signal="SPI0_MISO" />
          <mux sel="mux3"          signal="SPI0_MOSI" />
          <reset sel="unassigned" />
@@ -245,7 +201,6 @@
          <mux sel="mux0"          signal="ADC0_SE0" />
          <mux sel="mux0"          signal="CMP0_IN0" />
          <mux sel="mux1"          signal="GPIOA_12" />
-         <mux sel="mux1"          signal="IRQ_13" />
          <mux sel="mux1"          signal="LPTMR0_ALT2" />
          <mux sel="mux2"          signal="TPM1_CH0" />
          <mux sel="mux3"          signal="TPM_CLKIN0" />
@@ -255,7 +210,6 @@
       <pin name="PTB0">
          <mux sel="mux0"          signal="ADC0_SE9" />
          <mux sel="mux1"          signal="GPIOB_0" />
-         <mux sel="mux1"          signal="IRQ_5" />
          <mux sel="mux1"          signal="LLWU_P4" />
          <mux sel="mux2"          signal="EXTRG_IN" />
          <mux sel="mux3"          signal="SPI0_SCK" />
@@ -266,7 +220,6 @@
          <mux sel="mux0"          signal="ADC0_SE8" />
          <mux sel="mux0"          signal="CMP0_IN3" />
          <mux sel="mux1"          signal="GPIOB_1" />
-         <mux sel="mux1"          signal="IRQ_6" />
          <mux sel="mux2"          signal="LPUART0_TX" />
          <mux sel="mux3"          signal="LPUART0_RX" />
          <mux sel="mux4"          signal="I2C0_SDA" />
@@ -276,21 +229,18 @@
          <mux sel="mux0"          signal="VREF_OUT" />
          <mux sel="mux0"          signal="CMP0_IN5" />
          <mux sel="mux1"          signal="GPIOB_2" />
-         <mux sel="mux1"          signal="IRQ_7" />
          <mux sel="mux2"          signal="LPUART0_RX" />
          <mux sel="mux3"          signal="LPUART0_TX" />
          <reset sel="mux0" />
       </pin>
       <pin name="PTB3">
          <mux sel="mux1"          signal="GPIOB_3" />
-         <mux sel="mux1"          signal="IRQ_10" />
          <mux sel="mux2"          signal="I2C0_SCL" />
          <mux sel="mux3"          signal="LPUART0_TX" />
          <reset sel="unassigned" />
       </pin>
       <pin name="PTB4">
          <mux sel="mux1"          signal="GPIOB_4" />
-         <mux sel="mux1"          signal="IRQ_11" />
          <mux sel="mux2"          signal="I2C0_SDA" />
          <mux sel="mux3"          signal="LPUART0_RX" />
          <reset sel="unassigned" />
@@ -299,14 +249,12 @@
          <mux sel="mux0"          signal="ADC0_SE1" />
          <mux sel="mux0"          signal="CMP0_IN1" />
          <mux sel="mux1"          signal="GPIOB_5" />
-         <mux sel="mux1"          signal="IRQ_12" />
          <mux sel="mux2"          signal="TPM1_CH1" />
          <mux sel="mux3"          signal="NMI_b" />
          <reset sel="mux3" />
       </pin>
       <pin name="PTB6">
          <mux sel="mux1"          signal="GPIOB_6" />
-         <mux sel="mux1"          signal="IRQ_2" />
          <mux sel="mux1"          signal="LPTMR0_ALT3" />
          <mux sel="mux2"          signal="TPM1_CH1" />
          <mux sel="mux3"          signal="TPM_CLKIN1" />
@@ -314,7 +262,6 @@
       </pin>
       <pin name="PTB7">
          <mux sel="mux1"          signal="GPIOB_7" />
-         <mux sel="mux1"          signal="IRQ_3" />
          <mux sel="mux2"          signal="TPM1_CH0" />
          <reset sel="unassigned" />
       </pin>
@@ -348,30 +295,30 @@
    </pins>
    <packages>
       <package name="FRDM_KL03Z">
-         <placement pin="PTA0"          location="" />
-         <placement pin="PTA1"          location="" />
-         <placement pin="PTA12"         location="" />
-         <placement pin="PTA2"          location="" />
-         <placement pin="PTA3"          location="" />
-         <placement pin="PTA4"          location="" />
-         <placement pin="PTA5"          location="" />
-         <placement pin="PTA6"          location="" />
-         <placement pin="PTA7"          location="" />
-         <placement pin="PTA8"          location="" />
-         <placement pin="PTA9"          location="" />
-         <placement pin="PTB0"          location="" />
-         <placement pin="PTB1"          location="" />
-         <placement pin="PTB10"         location="" />
-         <placement pin="PTB11"         location="" />
-         <placement pin="PTB13"         location="" />
-         <placement pin="PTB2"          location="" />
-         <placement pin="PTB3"          location="" />
-         <placement pin="PTB4"          location="" />
-         <placement pin="PTB5"          location="" />
-         <placement pin="PTB6"          location="" />
-         <placement pin="PTB7"          location="" />
-         <placement pin="VDD"           location="" />
-         <placement pin="VSS"           location="" />
+         <placement pin="PTA0"          location="D7/SWDCLK" />
+         <placement pin="PTA1"          location="RESET_b" />
+         <placement pin="PTA12"         location="A2" />
+         <placement pin="PTA2"          location="A3/SWDIO" />
+         <placement pin="PTA3"          location="EXTAL0" />
+         <placement pin="PTA4"          location="XTAL0" />
+         <placement pin="PTA5"          location="D10" />
+         <placement pin="PTA6"          location="D12" />
+         <placement pin="PTA7"          location="D11" />
+         <placement pin="PTA8"          location="A1" />
+         <placement pin="PTA9"          location="A0" />
+         <placement pin="PTB0"          location="D13" />
+         <placement pin="PTB1"          location="D1/ConsoleTx" />
+         <placement pin="PTB10"         location="D8" />
+         <placement pin="PTB11"         location="D9" />
+         <placement pin="PTB13"         location="A4" />
+         <placement pin="PTB2"          location="D0/ConsoleRx" />
+         <placement pin="PTB3"          location="D15" />
+         <placement pin="PTB4"          location="D14" />
+         <placement pin="PTB5"          location="D6" />
+         <placement pin="PTB6"          location="D3" />
+         <placement pin="PTB7"          location="D5" />
+         <placement pin="VDD"           location="VDD" />
+         <placement pin="VSS"           location="VSS" />
       </package>
       <package name="QFN16">
          <placement pin="PTA0"          location="p14" />

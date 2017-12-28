@@ -42,10 +42,18 @@ namespace USBDM {
 #define SIM_CLKDIV1_OUTDIV3(x) (0)
 #endif
 
+#ifndef MCG_C2_RANGE0
+#define MCG_C2_RANGE0(x) (0)
+#endif
+
+#ifndef MCG_C2_HGO0
+#define MCG_C2_HGO0(x) (0)
+#endif
+
    /**
     * Table of clock settings
     */
-   const McgInfo::ClockInfo McgInfo::clockInfo[] = {
+   const McgInfo::ClockInfo Mcg::clockInfo[] = {
 $(/MCG/McgClockInfoEntries:!!!!!!!Not found!!!!!!!)
    };
 
@@ -270,7 +278,7 @@ void Mcg::defaultConfigure() {
    currentClockMode = McgInfo::ClockMode::ClockMode_None;
 
    // Transition to desired clock mode
-   clockTransition(McgInfo::clockInfo[ClockConfig_default]);
+   clockTransition(clockInfo[ClockConfig_default]);
 
    SimInfo::initRegs();
 

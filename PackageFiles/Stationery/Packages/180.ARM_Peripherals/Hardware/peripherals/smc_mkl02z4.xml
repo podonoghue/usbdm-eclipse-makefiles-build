@@ -12,13 +12,6 @@
       <choice name="VLPR, VLPW and VLPS are allowed"     value="1" isDefault="true" />
    </binaryOption>   
    
-   <binaryOption name="smc_pmprot_alls" 
-      description="Allow low leakage stop mode" 
-      toolTip="This write once bit allows the MCU to enter any low leakage stop mode: LLS" >
-      <choice name="LLS is not allowed" value="0" />
-      <choice name="LLS is allowed"     value="1" isDefault="true" />
-   </binaryOption>   
-   
    <binaryOption name="smc_pmprot_avlls" 
       description="Allow very low leakage stop mode" 
       toolTip="This write once bit allows the MCU to enter any low leakage stop mode: VLLSx" >
@@ -30,7 +23,6 @@
       \t// Power Mode Protection Register
       \tstatic constexpr uint8_t pmprot =  
       \t   SMC_PMPROT_AVLP($(smc_pmprot_avlp:0)) |  // Allow very low power modes
-      \t   SMC_PMPROT_ALLS($(smc_pmprot_alls:0)) |  // Allow low leakage stop mode
       \t   SMC_PMPROT_AVLLS($(smc_pmprot_avlls:0));  // Allow very low leakage stop mode\n\n
    ]]></template>
       

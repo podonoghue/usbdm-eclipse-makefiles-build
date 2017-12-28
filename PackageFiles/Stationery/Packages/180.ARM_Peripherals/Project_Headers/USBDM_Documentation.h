@@ -124,7 +124,9 @@ This is a template class with static methods.\n
  - @ref dma-memory-example.cpp
  - @ref dma-memory-template-example.cpp
  - @ref dma-spi-example.cpp
- - @ref dma-uart-example.cpp
+ - @ref dma-uart-example-mk20.cpp
+ - @ref dma-uart-example-mk22f.cpp
+ - @ref dma-uart-example-mk28f.cpp
 
  @page GPIOExamples  General Purpose Input Output
 
@@ -311,14 +313,20 @@ This is a template class with static methods.\n
    // This allows access to USBDM classes and methods without the USBDM:: prefix.
    using namespace USBDM;
 
+   // ADC being used (for shared settings)
+   using Adc         = Adc0;
+
    // Use ADC0 channel 6 as ADC input (ADC_IN6)
    using AdcChannel = USBDM::Adc0Channel<6>;
 
-   // Set ADC resolution to 16 bits
-   AdcChannel::setResolution(AdcResolution_16bit_se);
+   // Initially configure ADC for resolution of 16 bits with default settings
+   Adc::configure(AdcResolution_16bit_se);
 
+   // Calibrate before use
+   Adc::calibrate();
+   
    // Set ADC averaging to 4 samples
-   AdcChannel::setAveraging(AdcAveraging_4);
+   Adc::setAveraging(AdcAveraging_4);
 
    // Read ADC value
    uint32_t value = AdcChannel::readAnalogue();
@@ -332,14 +340,20 @@ This is a template class with static methods.\n
    // This allows access to USBDM classes and methods without the USBDM:: prefix.
    using namespace USBDM;
 
+   // ADC being used (for shared settings)
+   using Adc         = Adc0;
+
    // Use channel 0 as ADC differential input (ADC_DM0, ADC_DP0)
    using Adc1_diff0 = USBDM::Adc0DiffChannel<0>;
 
-   // Set ADC resolution to 11 bits differential
-   Adc1_diff0::setResolution(AdcResolution_11bit_diff);
+   // Initially configure ADC for resolution of 11 bits differential with default settings
+   Adc::configure(AdcResolution_11bit_diff);
 
+   // Calibrate before use
+   Adc::calibrate();
+   
    // Set ADC averaging to 4 samples
-   Adc1_diff0::setAveraging(AdcAveraging_4);
+   Adc::setAveraging(AdcAveraging_4);
 
    // Read signed differential ADC value
    int32_t value = Adc1_diff0::readAnalogue();
@@ -560,7 +574,9 @@ This is a template class with static methods.\n
 @example dma-memory-example.cpp
 @example dma-memory-template-example.cpp
 @example dma-spi-example.cpp
-@example dma-uart-example.cpp
+@example dma-uart-example-mk20.cpp
+@example dma-uart-example-mk22f.cpp
+@example dma-uart-example-mk28f.cpp
 @example flash_programming_example.cpp
 @example ftm-ic-example.cpp
 @example ftm-oc-example.cpp

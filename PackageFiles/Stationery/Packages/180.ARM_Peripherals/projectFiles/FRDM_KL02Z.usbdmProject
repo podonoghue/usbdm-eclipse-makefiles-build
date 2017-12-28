@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- FRDM_KL02Z.usbdmProject -->
+<!-- 
+   Settings
+-->
+
+<section name="USBDM">
+   <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_KL02Z" />
+   <item key="$$DeviceInfo_SubFamily"                      value="MKL02Z4" />
+   <item key="$$Hardware_Source_Filename"                  value="MKL02Z4.usbdmHardware" />
+   <item key="$signal$PTA0_muxSetting"                     value="mux3" />
+   <item key="$signal$PTA1_muxSetting"                     value="mux3" />
+   <item key="$signal$PTA2_muxSetting"                     value="mux3" />
+   <item key="$signal$PTA3_muxSetting"                     value="mux0" />
+   <item key="$signal$PTA4_muxSetting"                     value="mux0" />
+   <item key="$signal$PTA6_muxSetting"                     value="mux3" />
+   <item key="$signal$PTA7_muxSetting"                     value="mux3" />
+   <item key="$signal$PTA8_muxSetting"                     value="mux0" />
+   <item key="$signal$PTA9_muxSetting"                     value="mux0" />
+   <item key="$signal$PTB0_muxSetting"                     value="mux3" />
+   <item key="$signal$PTB10_muxSetting"                    value="mux2" />
+   <item key="$signal$PTB13_muxSetting"                    value="mux0" />
+   <item key="$signal$PTB1_muxSetting"                     value="mux2" />
+   <item key="$signal$PTB2_muxSetting"                     value="mux2" />
+   <item key="$signal$PTB3_muxSetting"                     value="mux2" />
+   <item key="$signal$PTB4_muxSetting"                     value="mux2" />
+   <item key="$signal$PTB8_muxSetting"                     value="mux0" />
+   <item key="$signal$PTB9_muxSetting"                     value="mux0" />
+   <item key="/FTFA/peripheral_file"                       value="ftfa" />
+   <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_FEE_48MHz" />
+   <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_BLPI_4MHz" />
+   <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_BLPE_32kHz" />
+   <item key="/MCG/clock_mode[0]"                          value="ClockMode_FEE" />
+   <item key="/MCG/clock_mode[1]"                          value="ClockMode_BLPI" />
+   <item key="/MCG/clock_mode[2]"                          value="ClockMode_BLPE" />
+   <item key="/MCG/mcg_c4_dmx32[0]"                        value="true" />
+   <item key="/MCG/system_mcgfllclk_clock[0]"              value="47967960" />
+   <item key="/OSC0/osc_input_freq"                        value="32765" />
+   <item key="/SIM/system_bus_clock[0]"                    value="23983980" />
+   <item key="/SIM/system_bus_clock[1]"                    value="4000000" />
+   <item key="/SIM/system_bus_clock[2]"                    value="32765" />
+   <item key="/SIM/system_core_clock[0]"                   value="47967960" />
+   <item key="/SIM/system_core_clock[1]"                   value="4000000" />
+   <item key="/SIM/system_core_clock[2]"                   value="32765" />
+</section>

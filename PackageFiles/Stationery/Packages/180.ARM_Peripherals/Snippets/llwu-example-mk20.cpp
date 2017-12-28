@@ -9,7 +9,7 @@
  */
 /*
  * This examples assumes that appropriate clock configurations have been created:
- *  - RUN_CLOCK_CONFIG   = ClockConfig_PEE_48MHz   For RUN mode (Core=80MHz, Bus=40MHz, Flash=27MHz)
+ *  - RUN_CLOCK_CONFIG   = ClockConfig_PEE_48MHz   For RUN mode (Core=48MHz, Bus=24MHz, Flash=27MHz)
  *  - VLPR_CLOCK_CONFIG  = ClockConfig_BLPE_4MHz   For VLPR (Core/Bus = 4MHz, Flash = 1MHz)
  *
  * Interrupts must be configured for GPIO pin used, LLWU, LPTMR

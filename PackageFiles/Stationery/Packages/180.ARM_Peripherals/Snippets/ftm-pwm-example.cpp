@@ -23,8 +23,6 @@ using Led   = $(demo.cpp.pwm.led1:Ftm0Channel<7>);
 
 int main() {
 
-   Ftm0::configure(FtmMode_LeftAlign, FtmClockSource_System);
-
    // Configure base FTM for left-aligned PWM
    Timer::configure(
          FtmMode_LeftAlign,
@@ -38,7 +36,7 @@ int main() {
     */
    Timer::setPeriod(5*us);
 
-   // Configure channel as high-pulses
+   // Configure channel as PWM high-pulses
    Led::configure(FtmChMode_PwmHighTruePulses);
 
    // Configure pin associated with channel

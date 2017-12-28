@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd"
+[
+<!ENTITY DEVICE_SUB_FAMILY  "MKL03Z4">
+<!ENTITY DEVICE_FAMILY      "MKL">
+<!ENTITY DEVICE_FILE        "MKL03Z4">
+]>
+
+<root 
+   version="1.0"
+   xmlns:xi="http://www.w3.org/2001/XInclude"
+   >
+   <projectActionList id="CPP-abstraction-&DEVICE_SUB_FAMILY;">
+      <applyWhen>
+         <and>
+            <deviceSubfamilyIs>&DEVICE_SUB_FAMILY;</deviceSubfamilyIs>
+            <variableRef idRef="hasCCNature" condition="isTrue" />
+         </and>
+      </applyWhen>
+
+      <!-- Affects later CPP peripheral options -->
+      <constant id="cpp.peripheral.subfamily"       value="&DEVICE_SUB_FAMILY;" />
+      
+      <!-- These constants enable peripheral features -->
+      <constant id="cpp.peripheral.internal.adc"    value="true" />
+      <constant id="cpp.peripheral.internal.tpm"    value="true" />
+      <constant id="cpp.peripheral.internal.i2c"    value="true" />
+      <constant id="cpp.peripheral.internal.lptmr"  value="true" />
+      <constant id="cpp.peripheral.internal.pit"    value="true" />
+      <constant id="cpp.peripheral.internal.spi"    value="true" />
+
+      <variable id="projectOptionValue.CPP-abstraction" 
+         name="CPP Hardware abstraction" 
+         description="Adds a CPP abstraction layer for hardware\n(GPIO, ADC, PWM) - &DEVICE_SUB_FAMILY;"
+         checkGroup="group-additional-options" />
+      <projectActionList>
+         <applyWhen >
+            <variableRef idRef="projectOptionValue.CPP-abstraction" />
+         </applyWhen>
+         <copy source="projectFiles/&DEVICE_SUB_FAMILY;.usbdmProject"  target="Configure.usbdmProject" />
+      </projectActionList>
+      <xi:include href="shared/CPP-abstraction-Common-MKL.xml"/>
+   </projectActionList>
+</root>

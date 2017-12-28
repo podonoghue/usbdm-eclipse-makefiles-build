@@ -140,7 +140,7 @@
 
    <binaryOption name="cmp_scr_dmaen" 
       description="DMA Enable Control"
-      toolTip="Enables the DMA transfer triggered from the CMP module\n
+      toolTip="Enables the DMA transfer triggered from the CMP module\n(If DMA supported by device)\n
          When this field is set, a DMA request is asserted when CFR or CFF is set">
       <choice value="0" name="Disabled" />
       <choice value="1" name="Enabled" />
@@ -165,7 +165,9 @@
    <template><![CDATA[
       \t//! CMP Status and Control Register
       \tstatic constexpr uint32_t scr =
-      \t   CMP_SCR_DMAEN($(cmp_scr_dmaen)) | // DMA Enable Control
+      \t#ifdef CMP_SCR_DMAEN
+      \t   CMP_SCR_DMAEN($(cmp_scr_dmaen:0)) | // DMA Enable Control
+      \t#endif
       \t   CMP_SCR_IER($(cmp_scr_ier)) | // Comparator Interrupt Enable Rising
       \t   CMP_SCR_IEF($(cmp_scr_ief));  // Comparator Interrupt Enable Falling\n\n
    ]]></template>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- MKL03Z4.usbdmProject -->
+<!-- 
+   Settings
+-->
+
+<section name="USBDM">
+   <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_KL03Z" />
+   <item key="$$DeviceInfo_SubFamily"                      value="MKL03Z4" />
+   <item key="$$Hardware_Source_Filename"                  value="MKL03Z4.usbdmHardware" />
+   <item key="/Console/consoleDevice"                      value="USBDM::Lpuart0" />
+   <item key="/FTFA/peripheral_file"                       value="ftfa" />
+   <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_HIRC_48MHz" />
+   <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_LIRC_2MHz" />
+   <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_LIRC_8MHz" />
+   <item key="/MCG/clock_mode[0]"                          value="ClockMode_HIRC_48M" />
+   <item key="/MCG/clock_mode[1]"                          value="ClockMode_LIRC_2M" />
+   <item key="/MCG/clock_mode[2]"                          value="ClockMode_LIRC_8M" />
+   <item key="/MCG/mcg_c2_ircs[0]"                         value="true" />
+   <item key="/MCG/mcg_c2_ircs[2]"                         value="true" />
+   <item key="/MCG/mcg_mc_hircen[0]"                       value="true" />
+   <item key="/MCG/mcg_mc_hircen[1]"                       value="true" />
+   <item key="/MCG/mcg_mc_hircen[2]"                       value="true" />
+   <item key="/MCG/system_lirc_clock[0]"                   value="8000000" />
+   <item key="/MCG/system_lirc_clock[2]"                   value="8000000" />
+   <item key="/MCG/system_lirc_div1_clock[0]"              value="8000000" />
+   <item key="/MCG/system_lirc_div1_clock[2]"              value="8000000" />
+   <item key="/OSC0/osc_cr_erclken"                        value="false" />
+   <item key="/OSC0/osc_input_freq"                        value="32768" />
+   <item key="/SIM/sim_sopt1_osc32ksel"                    value="0" />
+   <item key="/SIM/sim_sopt2_lpuart0src"                   value="1" />
+   <item key="/SIM/sim_sopt2_tpmsrc"                       value="1" />
+   <item key="/SIM/system_bus_clock[1]"                    value="2000000" />
+   <item key="/SIM/system_bus_clock[2]"                    value="8000000" />
+   <item key="/SIM/system_core_clock[1]"                   value="2000000" />
+   <item key="/SIM/system_core_clock[2]"                   value="8000000" />
+</section>

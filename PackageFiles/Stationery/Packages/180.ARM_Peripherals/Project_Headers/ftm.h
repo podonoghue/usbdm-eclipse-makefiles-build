@@ -1169,63 +1169,24 @@ public:
     * Configure channel and sets mode\n
     * Configures owning FTM with default settings from Configure.usbdmProject if not already enabled.
     *
-    * @param[in] ftmChMode      Mode of operation for FTM e.g.FtmChMode_PwmHighTruePulses
-    * @param[in] ftmChannelIrq  Whether to enable the interrupt function on this channel
-    * @param[in] ftmChannelDma  Whether to enable the DMA function on this channel
+    * @param[in] ftmChMode         Mode of operation for FTM e.g.FtmChMode_PwmHighTruePulses
+    * @param[in] ftmChannelAction  Whether to enable the interrupt or DMA function on this channel
     *
     * @note Enables FTM as well
     * @note This method has the side-effect of clearing the register update synchronisation i.e. 
     *       pending CnV register updates are discarded.
     */
    static void defaultConfigure(
-         FtmChMode      ftmChMode     = FtmChMode_PwmHighTruePulses,
-         FtmChannelIrq  ftmChannelIrq = FtmChannelIrq_Disable,
-         FtmChannelDma  ftmChannelDma = FtmChannelDma_Disable) {
+         FtmChMode         ftmChMode        = FtmChMode_PwmHighTruePulses,
+         FtmChannelAction  ftmChannelAction = FtmChannelAction_None) {
             
       if (!Ftm::isEnabled()) {
          // Enable parent FTM if needed
          Ftm::defaultConfigure();
       }
-      tmr->CONTROLS[channel].CnSC = ftmChMode|ftmChannelIrq|ftmChannelDma;
+      tmr->CONTROLS[channel].CnSC = ftmChMode|ftmChannelAction;
    }
 
-   /**
-    * Configure channel\n
-    * Doesn't affect shared settings of owning Timer
-    *
-    * @param[in] ftmChMode      Mode of operation for channel
-    * @param[in] ftmChannelIrq  Whether to enable the interrupt function on this channel
-    * @param[in] ftmChannelDma  Whether to enable the DMA function on this channel
-    *
-    * @note This method has the side-effect of clearing the register update synchronisation i.e.
-    *       pending CnV register updates are discarded.
-    *
-    * @deprecated
-    */
-   static void INLINE_RELEASE configure(
-         FtmChMode      ftmChMode     = FtmChMode_PwmHighTruePulses,
-         FtmChannelIrq  ftmChannelIrq = FtmChannelIrq_Disable,
-         FtmChannelDma  ftmChannelDma = FtmChannelDma_Disable) {
-
-#ifdef DEBUG_BUILD
-      // Check that owning FTM has been enabled
-      assert(Ftm::isEnabled());
-#endif
-      tmr->CONTROLS[channel].CnSC = ftmChMode|ftmChannelIrq|ftmChannelDma;
-
-      if (!Info::mapPinsOnEnable) {
-         // Configure pin if used
-         switch (ftmChMode) {
-            case FtmChMode_Disabled :
-            case FtmChMode_OutputCompare :
-               // Don't change pin setting
-               break;
-            default:
-               // Map pin to FTM
-               Pcr::setPCR(Info::info[channel].pcrValue);
-         }
-      }
-   }
    /**
     * Configure channel\n
     * Doesn't affect shared settings of owning Timer
@@ -1238,7 +1199,7 @@ public:
     */
    static void INLINE_RELEASE configure(
          FtmChMode         ftmChMode,
-         FtmChannelAction  ftmChannelAction) {
+         FtmChannelAction  ftmChannelAction = FtmChannelAction_None) {
 
 #ifdef DEBUG_BUILD
       // Check that owning FTM has been enabled

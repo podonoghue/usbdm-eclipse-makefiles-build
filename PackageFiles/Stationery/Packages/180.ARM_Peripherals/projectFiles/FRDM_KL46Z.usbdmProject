@@ -13,25 +13,25 @@
    <item key="$signal$PTA2_descriptionSetting"             value="Console Tx" />
    <item key="$signal$PTA2_muxSetting"                     value="mux2" />
    <item key="$signal$PTB10_descriptionSetting"            value="LCD(4D/4E/4G/4F)" />
-   <item key="$signal$PTB10_muxSetting"                    value="mux7" />
+   <item key="$signal$PTB10_muxSetting"                    value="mux0" />
    <item key="$signal$PTB11_descriptionSetting"            value="LCD(COL/4C/4B/4A)" />
    <item key="$signal$PTB11_muxSetting"                    value="mux0" />
    <item key="$signal$PTB19_muxSetting"                    value="mux0" />
    <item key="$signal$PTB21_descriptionSetting"            value="LCD(DP1/1C/1B/1A)" />
-   <item key="$signal$PTB21_muxSetting"                    value="mux7" />
+   <item key="$signal$PTB21_muxSetting"                    value="mux0" />
    <item key="$signal$PTB22_descriptionSetting"            value="LCD(COM3)" />
-   <item key="$signal$PTB22_muxSetting"                    value="mux7" />
+   <item key="$signal$PTB22_muxSetting"                    value="mux0" />
    <item key="$signal$PTB23_descriptionSetting"            value="LCD(COM2)" />
-   <item key="$signal$PTB23_muxSetting"                    value="mux7" />
+   <item key="$signal$PTB23_muxSetting"                    value="mux0" />
    <item key="$signal$PTB7_descriptionSetting"             value="LCD(2D/2E/2G/2F)" />
    <item key="$signal$PTB7_muxSetting"                     value="mux0" />
    <item key="$signal$PTB8_descriptionSetting"             value="LCD(DP2/2C/2B/2A)" />
-   <item key="$signal$PTB8_muxSetting"                     value="mux7" />
-   <item key="$signal$PTB9_muxSetting"                     value="mux0" />
+   <item key="$signal$PTB8_muxSetting"                     value="mux0" />
    <item key="$signal$PTC17_descriptionSetting"            value="LCD(1D/1E/1G/1F)" />
    <item key="$signal$PTC17_muxSetting"                    value="mux0" />
    <item key="$signal$PTC18_descriptionSetting"            value="LCD(DP3/3C/3B/3A)" />
    <item key="$signal$PTC18_muxSetting"                    value="mux0" />
+   <item key="$signal$PTC1_muxSetting"                     value="mux0" />
    <item key="$signal$PTC4_muxSetting"                     value="mux0" />
    <item key="$signal$PTC5_muxSetting"                     value="mux0" />
    <item key="$signal$PTC6_muxSetting"                     value="mux0" />
@@ -75,13 +75,10 @@
    <item key="/SIM/sim_sopt1_osc32ksel"                    value="2" />
    <item key="/SIM/sim_sopt2_pllfllsel[0]"                 value="1" />
    <item key="/SIM/sim_sopt2_rtcclkoutsel"                 value="false" />
-   <item key="/SIM/system_bus_clock[1]"                    value="4000000" />
+   <item key="/SIM/system_bus_clock[1]"                    value="800000" />
    <item key="/SIM/system_bus_clock[2]"                    value="20000000" />
    <item key="/SIM/system_core_clock[1]"                   value="4000000" />
    <item key="/SIM/system_core_clock[2]"                   value="40000000" />
-   <item key="/SIM/system_tpm_clock"                       value="48000000" />
-   <item key="/SIM/system_uart0_clock"                     value="48000000" />
-   <item key="/SIM/system_usbfs_clock"                     value="48000000" />
    <item key="/SMC/smc_stopctrl_porpo"                     value="true" />
    <item key="/SMC/smc_stopctrl_pstopo"                    value="2" />
    <item key="/TSI0/tsi_gencs_extchrg"                     value="5" />

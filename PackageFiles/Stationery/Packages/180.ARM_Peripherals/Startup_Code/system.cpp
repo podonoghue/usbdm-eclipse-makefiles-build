@@ -49,6 +49,7 @@ void software_init_hook () {
 
 #ifdef __NO_STARTFILES__
 #warning Due to limited RAM the C library standard initialisation is not called - BSS and DATA are still initialised
+void* __dso_handle;
 #endif
 
 /**

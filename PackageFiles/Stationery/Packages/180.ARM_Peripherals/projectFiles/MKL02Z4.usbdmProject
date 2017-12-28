@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- FRDM_KL05Z.usbdmProject -->
+<!-- 
+   Settings
+-->
+
+<section name="USBDM">
+   <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_KL02Z" />
+   <item key="$$DeviceInfo_SubFamily"                      value="MKL02Z4" />
+   <item key="$$Hardware_Source_Filename"                  value="MKL02Z4.usbdmHardware" />
+   <item key="/FTFA/peripheral_file"                       value="ftfa" />
+   <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_FEE_48MHz" />
+   <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_BLPI_4MHz" />
+   <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_BLPE_32kHz" />
+   <item key="/MCG/clock_mode[0]"                          value="ClockMode_FEE" />
+   <item key="/MCG/clock_mode[1]"                          value="ClockMode_BLPI" />
+   <item key="/MCG/clock_mode[2]"                          value="ClockMode_BLPE" />
+   <item key="/MCG/mcg_c4_dmx32[0]"                        value="true" />
+   <item key="/MCG/system_mcgfllclk_clock[0]"              value="47967960" />
+   <item key="/OSC0/osc_input_freq"                        value="32765" />
+   <item key="/SIM/system_bus_clock[0]"                    value="23983980" />
+   <item key="/SIM/system_bus_clock[1]"                    value="4000000" />
+   <item key="/SIM/system_bus_clock[2]"                    value="32765" />
+   <item key="/SIM/system_core_clock[0]"                   value="47967960" />
+   <item key="/SIM/system_core_clock[1]"                   value="4000000" />
+   <item key="/SIM/system_core_clock[2]"                   value="32765" />
+</section>

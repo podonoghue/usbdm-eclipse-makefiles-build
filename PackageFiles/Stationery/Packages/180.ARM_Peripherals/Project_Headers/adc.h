@@ -128,6 +128,7 @@ enum AdcPretrigger {
    AdcPretrigger_1  = 1, //!< Use pretrigger B = SC1[1]/R[1]
 };
 
+#ifdef ADC_SC2_DMAEN
 /**
  * Select the pretrigger
  */
@@ -135,6 +136,7 @@ enum AdcDma {
    AdcDma_Disable = ADC_SC2_DMAEN(0), //!< DMA disabled
    AdcDma_Enable  = ADC_SC2_DMAEN(1), //!< DMA enabled
 };
+#endif
 
 /**
  *  Input sample interval. Long sample times allow the use of higher input impedance sources
@@ -546,6 +548,21 @@ protected:
     * @param[in] sc1Value        SC1 register value including the ADC channel, Differential mode and interrupt enable
     * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel\n
     *                            This corresponds to pre-triggers in the PDB channels and SC1[n] register setups
+    */
+   static void enableHardwareConversion(int sc1Value, AdcPretrigger adcPretrigger) {
+      // Set hardware triggers
+      adc->SC2 = (adc->SC2)|ADC_SC2_ADTRG(1);
+      // Configure channel for hardware trigger input
+      adc->SC1[adcPretrigger] = sc1Value;
+   }
+
+#ifdef ADC_SC2_DMAEN
+   /**
+    * Enables hardware trigger mode of operation and configures the channel.
+    *
+    * @param[in] sc1Value        SC1 register value including the ADC channel, Differential mode and interrupt enable
+    * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel\n
+    *                            This corresponds to pre-triggers in the PDB channels and SC1[n] register setups
     * @param[in] adcDma          Whether to generate a DMA request when each conversion completes
     */
    static void enableHardwareConversion(int sc1Value, AdcPretrigger adcPretrigger, AdcDma adcDma) {
@@ -554,6 +571,7 @@ protected:
       // Configure channel for hardware trigger input
       adc->SC1[adcPretrigger] = sc1Value;
    }
+#endif
 
    /**
     * Initiates a conversion but does not wait for it to complete.
@@ -648,11 +666,24 @@ public:
     * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel\n
     *                            This corresponds to pre-triggers in the PDB channels and SC1[n]/R[n] register selection
     * @param[in] enableInterrupt Whether to generate an interrupt when each conversion completes
+    */
+   static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt enableInterrupt=AdcInterrupt_disable) {
+      AdcBase_T<Info>::enableHardwareConversion(channel|enableInterrupt, adcPretrigger);
+   }
+
+#ifdef ADC_SC2_DMAEN
+   /**
+    * Enables hardware trigger mode of operation and configures a channel.
+    *
+    * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel\n
+    *                            This corresponds to pre-triggers in the PDB channels and SC1[n]/R[n] register selection
+    * @param[in] enableInterrupt Whether to generate an interrupt when each conversion completes
     * @param[in] adcDma          Whether to generate a DMA request when each conversion completes
     */
-   static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt enableInterrupt=AdcInterrupt_disable, AdcDma adcDma=AdcDma_Disable) {
+   static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt enableInterrupt, AdcDma adcDma) {
       AdcBase_T<Info>::enableHardwareConversion(channel|enableInterrupt, adcPretrigger, adcDma);
    }
+#endif
 
    /**
     * Initiates a conversion but does not wait for it to complete.

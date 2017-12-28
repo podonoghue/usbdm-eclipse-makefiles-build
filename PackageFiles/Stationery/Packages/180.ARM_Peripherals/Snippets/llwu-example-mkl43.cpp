@@ -1,6 +1,6 @@
 /*
  ============================================================================
- * @file    llwu-example-mkl25z.cpp (180.ARM_Peripherals/Snippets/)
+ * @file    llwu-example-mkl43z.cpp (180.ARM_Peripherals/Snippets/)
  * @brief   Basic C++ demo
  *
  *  Created on: 25/09/2017
@@ -35,8 +35,8 @@ static ClockConfig VLPR_CLOCK_CONFIG   = ClockConfig_BLPE_4MHz;
 static constexpr int BAUD_RATE = 115200;
 
 // Using LEDs rather defeats VLLSx mode!
-using RedLed    = GpioB<18,ActiveLow>;
-using GreenLed  = GpioB<19,ActiveLow>;
+using RedLed    = GpioC<3,ActiveLow>;
+using GreenLed  = GpioA<2,ActiveLow>;
 
 // Timer to use for timed wake-up
 using WakeupTimer = Lptmr0;
@@ -45,7 +45,7 @@ using WakeupTimer = Lptmr0;
 static constexpr unsigned FILTER_NUM = 0;
 
 // LLWU Pin to use for wake-up
-static constexpr LlwuPin  WAKEUP_PIN = LlwuPin_Ptd4;
+static constexpr LlwuPin  WAKEUP_PIN = LlwuPin_Ptc1;
 
 // LLWU pin configuration
 using WakeupPin = PcrTable_T<LlwuInfo, WAKEUP_PIN>;

@@ -789,7 +789,7 @@ public:
       setCTAR1Value(0);         // Clear
       setFrameSize(8);          // Default 8-bit transfers
       setSpeed(Info::speed);    // Use default speed
-      setMode(Info::modeValue); // Use default mode
+      setMode((SpiMode)Info::mode, (SpiOrder)Info::lsbfe); // Use default mode and order
    }
 
    /**

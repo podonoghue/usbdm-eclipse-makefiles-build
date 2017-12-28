@@ -19,6 +19,9 @@ using namespace USBDM;
 int main() {
    Spi0 spi{};
 
+
+   spi.startTransaction();
+
    // Configure SPI
    spi.setSpeed(10*MHz);
    spi.setMode(SpiMode_0);
@@ -26,7 +29,7 @@ int main() {
    spi.setFrameSize(8);
 
    // Save configuration
-   SpiConfig configuration1 = spi.getConfig();
+   SpiConfig configuration1 = spi.getConfiguration();
 
    // Configure SPI
    spi.setSpeed(24.0*MHz);
@@ -35,7 +38,9 @@ int main() {
    spi.setFrameSize(12);
 
    // Save configuration
-   SpiConfig configuration2 = spi.getConfig();
+   SpiConfig configuration2 = spi.getConfiguration();
+
+   spi.endTransaction();
 
    for(;;) {
       {

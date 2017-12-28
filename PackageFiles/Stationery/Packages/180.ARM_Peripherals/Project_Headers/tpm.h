@@ -119,10 +119,12 @@ enum TpmPrescale {
  * Enabled Timer interrupt or DMA
  */
 enum TpmChannelAction {
-   TpmChannelAction_None   = TPM_CnSC_CHIE(0)|TPM_CnSC_DMA(0), //!< No action on event
-   TpmChannelAction_Irq    = TPM_CnSC_CHIE(1)|TPM_CnSC_DMA(0), //!< Interrupt on event
+   TpmChannelAction_None   = TPM_CnSC_CHIE(0), //!< No action on event
+   TpmChannelAction_Irq    = TPM_CnSC_CHIE(1), //!< Interrupt on event
+#ifdef TPM_CnSC_DMA
    TpmChannelAction_Dma    = TPM_CnSC_CHIE(0)|TPM_CnSC_DMA(1), //!< Dma on event
    TpmChannelAction_IrqDma = TPM_CnSC_CHIE(1)|TPM_CnSC_DMA(1), //!< Dma+Interrupt on event
+#endif
 };
 
 /*
@@ -133,6 +135,7 @@ enum TpmChannelIrq {
    TpmChannelIrq_Enable  = TPM_CnSC_CHIE(1), //!< Enable interrupts from this channel
 };
 
+#ifdef TPM_CnSC_DMA
 /*
  * Enabled Timer DMA
  */
@@ -140,6 +143,7 @@ enum TpmChannelDma {
    TpmChannelDma_Disable = TPM_CnSC_DMA(0), //!< Disable DMA requests from this channel
    TpmChannelDma_Enable  = TPM_CnSC_DMA(1), //!< Enable DMA requests from this channel
 };
+#endif
 
 /**
  * Type definition for TPM timer overflow interrupt call back
@@ -968,24 +972,22 @@ public:
     * Configure channel and sets mode\n
     * Configures owning TPM with default settings from Configure.usbdmProject if not already enabled.
     *
-    * @param[in] tpmChMode      Mode of operation for TPM e.g.TpmChMode_PwmHighTruePulses
-    * @param[in] tpmChannelIrq  Whether to enable the interrupt function on this channel
-    * @param[in] tpmChannelDma  Whether to enable the DMA function on this channel
+    * @param[in] tpmChMode         Mode of operation for TPM e.g.TpmChMode_PwmHighTruePulses
+    * @param[in] tpmChannelAction  Whether to enable the interrupt or DMA function on this channel
     *
     * @note Enables TPM as well
     * @note This method has the side-effect of clearing the register update synchronisation i.e. 
     *       pending CnV register updates are discarded.
     */
    static void defaultConfigure(
-         TpmChMode      tpmChMode     = TpmChMode_PwmHighTruePulses,
-         TpmChannelIrq  tpmChannelIrq = TpmChannelIrq_Disable,
-         TpmChannelDma  tpmChannelDma = TpmChannelDma_Disable) {
+         TpmChMode         tpmChMode        = TpmChMode_PwmHighTruePulses,
+         TpmChannelAction  tpmChannelAction = TpmChannelAction_None) {
 
       if (!Tpm::isEnabled()) {
          // Enable parent TPM if needed
          Tpm::configure();
       }
-      tmr->CONTROLS[channel].CnSC = tpmChMode|tpmChannelIrq|tpmChannelDma;
+      tmr->CONTROLS[channel].CnSC = tpmChMode|TpmChannelAction_None;
    }
 
    /**
@@ -1054,8 +1056,13 @@ public:
     *       pending CnV register updates are discarded.
     */
    static void INLINE_RELEASE setAction(TpmChannelAction tpmChannelAction) {
+#ifdef TPM_CnSC_DMA
       tmr->CONTROLS[channel].CnSC =
             (tmr->CONTROLS[channel].CnSC & ~(TPM_CnSC_CHIE_MASK|TPM_CnSC_DMA_MASK))|tpmChannelAction;
+#else
+      tmr->CONTROLS[channel].CnSC =
+            (tmr->CONTROLS[channel].CnSC & ~TPM_CnSC_CHIE_MASK)|tpmChannelAction;
+#endif
    }
 
    /**
@@ -1076,6 +1083,7 @@ public:
       }
    }
 
+#ifdef TPM_CnSC_DMA
    /**
     * Enable or disable DMA requests from this channel\n
     *
@@ -1092,6 +1100,7 @@ public:
          tmr->CONTROLS[channel].CnSC &= ~TPM_CnSC_DMA_MASK;
       }
    }
+#endif
 
    /**
     * Enable/disable interrupts in NVIC

@@ -42,33 +42,37 @@ void report(MMA845x &accelerometer) {
    int16_t accelX,accelY,accelZ;
 
    accelerometer.readAccelerometerXYZ(accelStatus, accelX, accelY, accelZ);
-   printf("s=0x%02X, aX=%10d, aY=%10d, aZ=%10d\n", accelStatus, accelX, accelY, accelZ);
+   console.setPadding(Padding_LeadingZeroes).setWidth(2).
+         write("s=0x").write(accelStatus,Radix_16).
+         setPadding(Padding_LeadingSpaces).setWidth(10).
+         write(", aX=").write(accelX).
+         write(", aY=").write(accelY).
+         write(", aZ=").writeln(accelZ);
 }
 
 int main() {
-   printf("Starting\n");
+   console.writeln("Starting\n");
 
-   uint8_t id = accelerometer.readID();
-   printf("Device ID = 0x%02X (should be 0x1A)\n", id);
+   console.write("Device ID = 0x").write(accelerometer.readID(), Radix_16).writeln("(should be 0x1A)");
 
    // Check if any USBDM error yet (constructors)
    checkError();
 
    report(accelerometer);
 
-   printf("Doing simple calibration\n"
-          "Make sure the device is level!\n");
+   console.write("Doing simple calibration\n"
+         "Make sure the device is level!\n");
    waitMS(2000);
 
    if (accelerometer.calibrateAccelerometer() != E_NO_ERROR) {
-      printf("Calibration failed!\n");
+      console.write("Calibration failed!\n");
       __asm__("bkpt");
    }
 
    // Make sure we have new values
    waitMS(100);
 
-   printf("After calibration\n");
+   console.write("After calibration\n");
    for(;;) {
       report(accelerometer);
       waitMS(400);

@@ -186,7 +186,7 @@ static void configurePit() {
 /**
  * Change run mode
  *
- * @param[in] Run mode to enter
+ * @param[in] smcRunMode Run mode to enter
  */
 void changeRunMode(SmcRunMode smcRunMode) {
    // Get current run mode
@@ -201,7 +201,7 @@ void changeRunMode(SmcRunMode smcRunMode) {
    // If changing go via RUN
    if (smcStatus == SmcStatus_hsrun) {
       // Do HSRUN->RUN
-      Mcg::clockTransition(McgInfo::clockInfo[RUN_MODE]);
+      Mcg::configure(RUN_MODE);
       Smc::enterRunMode(SmcRunMode_Normal);
       console.setBaudRate(defaultBaudRate);
       console.write("Changed to RUN mode, ").flushOutput();
@@ -209,7 +209,7 @@ void changeRunMode(SmcRunMode smcRunMode) {
    else if (smcStatus == SmcStatus_vlpr) {
       // Do VLPR->RUN mode
       Smc::enterRunMode(SmcRunMode_Normal);
-      Mcg::clockTransition(McgInfo::clockInfo[RUN_MODE]);
+      Mcg::configure(RUN_MODE);
       console.setBaudRate(defaultBaudRate);
       console.write("Changed to RUN mode, ").flushOutput();
    }
@@ -219,7 +219,7 @@ void changeRunMode(SmcRunMode smcRunMode) {
       case SmcRunMode_HighSpeed:
          // RUN->HSRUN
          Smc::enterRunMode(SmcRunMode_HighSpeed);
-         Mcg::clockTransition(McgInfo::clockInfo[HSRUN_MODE]);
+         Mcg::configure(HSRUN_MODE);
          console.setBaudRate(defaultBaudRate);
          console.write("Changed to HSRUN mode, ").flushOutput();
          break;
@@ -230,7 +230,7 @@ void changeRunMode(SmcRunMode smcRunMode) {
 
       case SmcRunMode_VeryLowPower:
          // RUN->VLPR
-         Mcg::clockTransition(McgInfo::clockInfo[VLPR_MODE]);
+         Mcg::configure(VLPR_MODE);
          Smc::enterRunMode(SmcRunMode_VeryLowPower);
          console.setBaudRate(defaultBaudRate);
          console.write("Changed to VLPR mode, ").flushOutput();

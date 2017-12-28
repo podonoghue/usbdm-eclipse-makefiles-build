@@ -57,6 +57,7 @@
    <item key="/FTFE/peripheral_file"                       value="ftfa" />
    <item key="/FTM0/irqHandlingMethod"                     value="$ClassMethod" />
    <item key="/LPTMR0/lptmr_cmr"                           value="0" />
+   <item key="/LPUART0/oversampleRatio"                    value="4" />
    <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_PEE_120MHz" />
    <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_BLPE_4MHz" />
    <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_PEE_150MHz" />

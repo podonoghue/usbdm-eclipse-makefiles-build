@@ -76,6 +76,11 @@ private:
    /** Pointer to hardware */
    static constexpr volatile MCG_Type *mcg = McgInfo::mcg;
 
+   /**
+    * Table of clock settings
+    */
+   static const McgInfo::ClockInfo clockInfo[];
+
 public:
    /**
     * Transition from current clock mode to mode given
@@ -135,15 +140,15 @@ public:
     *
     *  @param[in]  settingNumber CLock setting number
     */
-   static void configure(int settingNumber=0) {
-      clockTransition(McgInfo::clockInfo[settingNumber]);
+   static void configure(ClockConfig settingNumber=ClockConfig_default) {
+      clockTransition(clockInfo[settingNumber]);
    }
 
    /**
-    *   Disable the MCG channel
+    *   Finalise the MCG
     */
    static void finalise() {
-      clockTransition(McgInfo::clockInfo[0]);
+      clockTransition(clockInfo[ClockConfig_default]);
    }
 
    /**

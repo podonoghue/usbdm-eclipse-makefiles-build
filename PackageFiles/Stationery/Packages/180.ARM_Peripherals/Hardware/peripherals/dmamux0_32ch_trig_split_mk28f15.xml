@@ -114,7 +114,7 @@
       <choice name="Always Enabled 61"  value="125" />
       <choice name="Always Enabled 62"  value="126" />
       <choice name="Always Enabled 63"  value="127" />
-   </choiceOption>`
+   </choiceOption>
 
    <choiceOption name="dma_chcfg17" derivedFrom="dma_chcfg16"/>
    <choiceOption name="dma_chcfg18" derivedFrom="dma_chcfg16"/>

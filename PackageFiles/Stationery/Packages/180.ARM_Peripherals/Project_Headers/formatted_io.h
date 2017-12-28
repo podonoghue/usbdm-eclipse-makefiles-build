@@ -268,21 +268,23 @@ public:
    /**
     * Converts an unsigned long to a string
     *
-    * @param[in] ptr      Buffer to write result (at least 32 characters for binary)
-    * @param[in] value    Unsigned long to convert
-    * @param[in] radix    Radix for conversion [2..16]
-    * @param[in] padding  How to pad the number if smaller than field width
-    * @param[in] width    Field width of printed number
+    * @param[in] ptr        Buffer to write result (at least 32 characters for binary)
+    * @param[in] value      Unsigned long to convert
+    * @param[in] radix      Radix for conversion [2..16]
+    * @param[in] padding    How to pad the number if smaller than field width
+    * @param[in] width      Field width of printed number
+    * @param[in] isNegative Write leading '-'
     *
     * @return Pointer to '\0' null character at end of converted number\n
     *         May be used for incrementally writing to a buffer.
     */
    static NOINLINE_DEBUG char *ultoa(
-         char *ptr,
-         unsigned long value,
-         Radix radix=Radix_10,
-         Padding padding=Padding_None,
-         int width=0
+         char          *ptr,
+         unsigned long  value,
+         Radix          radix,
+         Padding        padding,
+         int            width,
+         bool           isNegative
          ) {
 
 #ifdef DEBUG_BUILD
@@ -306,12 +308,21 @@ public:
          case Padding_None:
             break;
          case Padding_LeadingSpaces:
+            if (isNegative) {
+               *ptr++ = '-';
+            }
             while ((ptr-beginPtr) < width) {
                *ptr++ = ' ';
             }
             break;
          case Padding_LeadingZeroes:
-            while ((ptr-beginPtr) < width) {
+            while ((ptr-beginPtr) < (width-1)) {
+               *ptr++ = '0';
+            }
+            if (isNegative) {
+               *ptr++ = '-';
+            }
+            if ((ptr-beginPtr) < width) {
                *ptr++ = '0';
             }
             break;
@@ -338,6 +349,28 @@ public:
    }
 
    /**
+    * Converts an unsigned long to a string
+    *
+    * @param[in] ptr      Buffer to write result (at least 32 characters for binary)
+    * @param[in] value    Unsigned long to convert
+    * @param[in] radix    Radix for conversion [2..16]
+    * @param[in] padding  How to pad the number if smaller than field width
+    * @param[in] width    Field width of printed number
+    *
+    * @return Pointer to '\0' null character at end of converted number\n
+    *         May be used for incrementally writing to a buffer.
+    */
+   static NOINLINE_DEBUG char *ultoa(
+         char *ptr,
+         unsigned long value,
+         Radix radix=Radix_10,
+         Padding padding=Padding_None,
+         int width=0
+         ) {
+      return ultoa(ptr, value, radix, padding, width, false);
+}
+
+   /**
     * Converts a long to a string
     *
     * @param[in] ptr      Buffer to write result (at least 32 characters for binary)
@@ -356,11 +389,11 @@ public:
          Padding padding=Padding_None,
          int width=0
          ) {
-      if (value<0) {
-         *ptr++ = '-';
+      bool isNegative = value<0;
+      if (isNegative) {
          value = -value;
       }
-      return ultoa(ptr, value, radix, padding, width);
+      return ultoa(ptr, value, radix, padding, width, isNegative);
    }
 
    /**
@@ -542,7 +575,25 @@ public:
     */
    FormattedIO NOINLINE_DEBUG &write(unsigned long value, Radix radix=Radix_10) {
       char buff[35];
-      ultoa(buff, value, radix, fPadding, fWidth);
+      ultoa(buff, value, radix, fPadding, fWidth, false);
+      return write(buff);
+   }
+
+   /**
+    * Write a long integer
+    *
+    * @param[in]  value Long to print
+    * @param[in]  radix Radix for conversion [2..16]
+    *
+    * @return Reference to self
+    */
+   FormattedIO NOINLINE_DEBUG &write(long value, Radix radix=Radix_10) {
+      char buff[35];
+      bool isNegative = value < 0;
+      if (isNegative) {
+         value = -value;
+      }
+      ultoa(buff, (unsigned long)value, radix, fPadding, fWidth, isNegative);
       return write(buff);
    }
 
@@ -581,22 +632,6 @@ public:
     */
    FormattedIO NOINLINE_DEBUG &writeln(const void *value, Radix radix=Radix_10) {
       return writeln((unsigned long) value, radix);
-   }
-
-   /**
-    * Write a long integer
-    *
-    * @param[in]  value Long to print
-    * @param[in]  radix Radix for conversion [2..16]
-    *
-    * @return Reference to self
-    */
-   FormattedIO NOINLINE_DEBUG &write(long value, Radix radix=Radix_10) {
-      if (value<0) {
-         write('-');
-         value = -value;
-      }
-      return write((unsigned long) value, radix);
    }
 
    /**

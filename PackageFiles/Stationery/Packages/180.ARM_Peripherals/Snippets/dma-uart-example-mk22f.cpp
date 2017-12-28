@@ -9,7 +9,7 @@
  */
 /**
  * This example uses DMA to transfer characters from a string to the UART for transmission.
- * The speed of transmission is throttled by the use of PIT triggering on the DMA channel (DmaMux).
+ * The speed of transmission is throttled by the use of PIT triggering the DMA channel (DmaMux).
  * The transmission is made continuous by setting up the TCD appropriately:
  * - Not clearing the DREQ on transfer complete
  * - Arranging SLAST to return the transfer addresses to starting value after each major-loop.
@@ -46,7 +46,7 @@ using TimerChannel = PitChannel<1>;
 static constexpr DmaChannelNum DMA_CHANNEL = DmaChannelNum_1;
 
 // Slot number to use (must agree with console UART)
-static constexpr DmaSlot DMA_SLOT = Dma0Slot_UART0_Tx;
+static constexpr DmaSlot DMA_SLOT = Dma0Slot_UART1_Tx;
 
 // MCG clocks for various run modes
 static constexpr ClockConfig VLPR_MODE  = ClockConfig_BLPE_4MHz;
@@ -186,7 +186,7 @@ static void configurePit() {
 /**
  * Change run mode
  *
- * @param[in] Run mode to enter
+ * @param[in] smcRunMode Run mode to enter
  */
 void changeRunMode(SmcRunMode smcRunMode) {
    // Get current run mode
@@ -201,7 +201,7 @@ void changeRunMode(SmcRunMode smcRunMode) {
    // If changing go via RUN
    if (smcStatus == SmcStatus_hsrun) {
       // Do HSRUN->RUN
-      Mcg::clockTransition(McgInfo::clockInfo[RUN_MODE]);
+      Mcg::configure(RUN_MODE);
       Smc::enterRunMode(SmcRunMode_Normal);
       console.setBaudRate(defaultBaudRate);
       console.write("Changed to RUN mode, ").flushOutput();
@@ -209,7 +209,7 @@ void changeRunMode(SmcRunMode smcRunMode) {
    else if (smcStatus == SmcStatus_vlpr) {
       // Do VLPR->RUN mode
       Smc::enterRunMode(SmcRunMode_Normal);
-      Mcg::clockTransition(McgInfo::clockInfo[RUN_MODE]);
+      Mcg::configure(RUN_MODE);
       console.setBaudRate(defaultBaudRate);
       console.write("Changed to RUN mode, ").flushOutput();
    }
@@ -219,7 +219,7 @@ void changeRunMode(SmcRunMode smcRunMode) {
       case SmcRunMode_HighSpeed:
          // RUN->HSRUN
          Smc::enterRunMode(SmcRunMode_HighSpeed);
-         Mcg::clockTransition(McgInfo::clockInfo[HSRUN_MODE]);
+         Mcg::configure(HSRUN_MODE);
          console.setBaudRate(defaultBaudRate);
          console.write("Changed to HSRUN mode, ").flushOutput();
          break;
@@ -230,7 +230,7 @@ void changeRunMode(SmcRunMode smcRunMode) {
 
       case SmcRunMode_VeryLowPower:
          // RUN->VLPR
-         Mcg::clockTransition(McgInfo::clockInfo[VLPR_MODE]);
+         Mcg::configure(VLPR_MODE);
          Smc::enterRunMode(SmcRunMode_VeryLowPower);
          console.setBaudRate(defaultBaudRate);
          console.write("Changed to VLPR mode, ").flushOutput();
@@ -249,7 +249,6 @@ int main() {
 
    // LED used for debug from DMA loop
    Led::setOutput();
-
 
    // Allow entry to other RUN modes
    Smc::enablePowerModes(

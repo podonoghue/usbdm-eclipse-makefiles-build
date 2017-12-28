@@ -29,10 +29,10 @@
    <item key="$signal$PTB1_muxSetting"                     value="mux0" />
    <item key="$signal$PTC0_muxSetting"                     value="mux0" />
    <item key="$signal$PTC3_muxSetting"                     value="mux5" />
-   <item key="$signal$PTC4_muxSetting"                     value="mux1" />
-   <item key="$signal$PTC5_muxSetting"                     value="mux1" />
-   <item key="$signal$PTC6_muxSetting"                     value="mux1" />
-   <item key="$signal$PTC7_muxSetting"                     value="mux1" />
+   <item key="$signal$PTC4_muxSetting"                     value="mux2" />
+   <item key="$signal$PTC5_muxSetting"                     value="mux2" />
+   <item key="$signal$PTC6_muxSetting"                     value="mux2" />
+   <item key="$signal$PTC7_muxSetting"                     value="mux2" />
    <item key="$signal$PTC8_muxSetting"                     value="mux1" />
    <item key="$signal$PTC9_muxSetting"                     value="mux1" />
    <item key="$signal$PTD6_muxSetting"                     value="mux4" />
