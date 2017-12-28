@@ -164,8 +164,7 @@ extern void PORTB_IRQHandler(void);                  /**< General Purpose Input/
 * @{
 */
 typedef struct ADC_Type {
-   __IO uint32_t  SC1A;                         /**< 0000: Status and Control Registers 1                               */
-   __IO uint32_t  SC1B;                         /**< 0004: Status and Control Registers 1                               */
+   __IO uint32_t  SC1[2];                       /**< 0000: Status and Control Register 1                                */
    __IO uint32_t  CFG1;                         /**< 0008: Configuration Register 1                                     */
    __IO uint32_t  CFG2;                         /**< 000C: Configuration Register 2                                     */
    __I  uint32_t  R[2];                         /**< 0010: Data Result Register                                         */
@@ -2173,7 +2172,7 @@ typedef struct SIM_Type {
    __I  uint32_t  UIDL;                         /**< 1060: Unique Identification Register Low                           */
         uint8_t   RESERVED_8[156];             
    __IO uint32_t  COPC;                         /**< 1100: COP Control Register                                         */
-   __O  uint32_t  SRVCOP;                       /**< 1104: Service COP Register                                         */
+   __O  uint32_t  SRVCOP;                       /**< 1104: Service COP                                                  */
 } SIM_Type;
 
 /**
@@ -2368,7 +2367,7 @@ typedef struct SMC_Type {
    __IO uint8_t   PMCTRL;                       /**< 0001: Power Mode Control Register                                  */
    union {                                      /**< 0000: (size=0001)                                                  */
       __IO uint8_t   STOPCTRL;                  /**< 0002: Stop Control Register                                        */
-      __IO uint8_t   VLLSCTRL;                  /**< 0002: VLLS Control Register (old name)                             */
+      __IO uint8_t   VLLSCTRL;                  /**< 0002: VLLS Control Register                                        */
    };
    __I  uint8_t   PMSTAT;                       /**< 0003: Power Mode Status Register                                   */
 } SMC_Type;

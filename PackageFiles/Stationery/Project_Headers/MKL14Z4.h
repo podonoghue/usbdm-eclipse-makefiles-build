@@ -188,7 +188,7 @@ extern void PORTD_IRQHandler(void);                  /**< General Purpose Input/
 * @{
 */
 typedef struct ADC_Type {
-   __IO uint32_t  SC1[2];                       /**< 0000: Status and Control Registers 1                               */
+   __IO uint32_t  SC1[2];                       /**< 0000: Status and Control Register 1                                */
    __IO uint32_t  CFG1;                         /**< 0008: Configuration Register 1                                     */
    __IO uint32_t  CFG2;                         /**< 000C: Configuration Register 2                                     */
    __I  uint32_t  R[2];                         /**< 0010: Data Result Register                                         */
@@ -3567,7 +3567,7 @@ typedef struct SMC_Type {
    __IO uint8_t   PMCTRL;                       /**< 0001: Power Mode Control Register                                  */
    union {                                      /**< 0000: (size=0001)                                                  */
       __IO uint8_t   STOPCTRL;                  /**< 0002: Stop Control Register                                        */
-      __IO uint8_t   VLLSCTRL;                  /**< 0002: VLLS Control Register (old name)                             */
+      __IO uint8_t   VLLSCTRL;                  /**< 0002: VLLS Control Register                                        */
    };
    __I  uint8_t   PMSTAT;                       /**< 0003: Power Mode Status Register                                   */
 } SMC_Type;
@@ -3609,6 +3609,9 @@ typedef struct SMC_Type {
 #define SMC_STOPCTRL_LLSM_MASK                   (0x7U)                                              /*!< SMC_STOPCTRL.LLSM Mask                  */
 #define SMC_STOPCTRL_LLSM_SHIFT                  (0U)                                                /*!< SMC_STOPCTRL.LLSM Position              */
 #define SMC_STOPCTRL_LLSM(x)                     (((uint8_t)(((uint8_t)(x))<<0U))&0x7UL)             /*!< SMC_STOPCTRL.LLSM Field                 */
+#define SMC_STOPCTRL_VLLSM_MASK                  (0x7U)                                              /*!< SMC_STOPCTRL.VLLSM Mask                 */
+#define SMC_STOPCTRL_VLLSM_SHIFT                 (0U)                                                /*!< SMC_STOPCTRL.VLLSM Position             */
+#define SMC_STOPCTRL_VLLSM(x)                    (((uint8_t)(((uint8_t)(x))<<0U))&0x7UL)             /*!< SMC_STOPCTRL.VLLSM Field                */
 #define SMC_STOPCTRL_PORPO_MASK                  (0x20U)                                             /*!< SMC_STOPCTRL.PORPO Mask                 */
 #define SMC_STOPCTRL_PORPO_SHIFT                 (5U)                                                /*!< SMC_STOPCTRL.PORPO Position             */
 #define SMC_STOPCTRL_PORPO(x)                    (((uint8_t)(((uint8_t)(x))<<5U))&0x20UL)            /*!< SMC_STOPCTRL.PORPO Field                */
@@ -3616,6 +3619,9 @@ typedef struct SMC_Type {
 #define SMC_VLLSCTRL_LLSM_MASK                   (0x7U)                                              /*!< SMC_VLLSCTRL.LLSM Mask                  */
 #define SMC_VLLSCTRL_LLSM_SHIFT                  (0U)                                                /*!< SMC_VLLSCTRL.LLSM Position              */
 #define SMC_VLLSCTRL_LLSM(x)                     (((uint8_t)(((uint8_t)(x))<<0U))&0x7UL)             /*!< SMC_VLLSCTRL.LLSM Field                 */
+#define SMC_VLLSCTRL_VLLSM_MASK                  (0x7U)                                              /*!< SMC_VLLSCTRL.VLLSM Mask                 */
+#define SMC_VLLSCTRL_VLLSM_SHIFT                 (0U)                                                /*!< SMC_VLLSCTRL.VLLSM Position             */
+#define SMC_VLLSCTRL_VLLSM(x)                    (((uint8_t)(((uint8_t)(x))<<0U))&0x7UL)             /*!< SMC_VLLSCTRL.VLLSM Field                */
 #define SMC_VLLSCTRL_PORPO_MASK                  (0x20U)                                             /*!< SMC_VLLSCTRL.PORPO Mask                 */
 #define SMC_VLLSCTRL_PORPO_SHIFT                 (5U)                                                /*!< SMC_VLLSCTRL.PORPO Position             */
 #define SMC_VLLSCTRL_PORPO(x)                    (((uint8_t)(((uint8_t)(x))<<5U))&0x20UL)            /*!< SMC_VLLSCTRL.PORPO Field                */
