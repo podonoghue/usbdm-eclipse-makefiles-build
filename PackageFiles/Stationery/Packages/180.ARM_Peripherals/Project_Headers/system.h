@@ -54,6 +54,22 @@ extern void disableInterrupts();
  */
 extern int enableInterrupts();
 
+/**
+ * Obtain lock
+ *
+ * @param addr Locking variable to use
+ *
+ * @note This is a spin-lock
+ */
+void lock(volatile uint32_t *addr);
+
+/**
+ * Release lock
+ *
+ * @param addr Locking variable to use
+ */
+void unlock(volatile uint32_t *addr);
+
 #ifdef __cplusplus
 /**
  * Class used to protect a block of C++ code from interrupts

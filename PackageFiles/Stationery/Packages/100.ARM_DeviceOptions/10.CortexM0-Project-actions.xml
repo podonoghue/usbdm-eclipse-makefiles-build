@@ -84,9 +84,8 @@ Cortex-M0
          <applyWhen>
             <and>
                <variableRef idRef="linkerRamSize" condition="lessThanOrEqual" value="2048" />
-               <not>
-                  <variableRef idRef="projectOptionValue.Kinetis-SDK-enable" condition="isTrue" />
-               </not>
+               <not><variableRef idRef="projectOptionValue.Kinetis-SDK-enable" condition="isTrue" /></not>
+               <not><variableRef idRef="hasCCNature" condition="isTrue" /></not>
             </and>
          </applyWhen>
          <projectOption id="gnu.c.link.option.nostart">

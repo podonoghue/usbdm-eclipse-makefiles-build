@@ -9,6 +9,7 @@
 #define PROJECT_HEADERS_QUEUE_H_
 
 #include <assert.h>
+#include "system.h"
 
 /**
  * Simple queue implementation
@@ -21,6 +22,7 @@ class Queue {
    T        fBuff[QUEUE_SIZE];
    T        *fHead, *fTail;
    int      fNumberOfElements;
+//   uint32_t fLock;
 
 public:
    /*
@@ -33,9 +35,11 @@ public:
     * Clear queue i.e. make empty
     */
    void clear() {
+//      lock(&fLock);
       fHead             = fBuff;
       fTail             = fBuff;
       fNumberOfElements = 0;
+//      unlock(&fLock);
    }
    /*
     * Check if empty
@@ -59,12 +63,8 @@ public:
     * @param[in]  element Element to add
     */
    void enQueue(T element) {
-      assert(!isFull());
-      *fTail++ = element;
-      fNumberOfElements++;
-      if (fTail>=(fBuff+QUEUE_SIZE)) {
-         fTail = fBuff;
-      }
+      bool success = enQueueDiscardOnFull(element);
+      assert(success);
    }
    /*
     * Add element to queue. Discards on full.
@@ -72,14 +72,20 @@ public:
     * @param[in]  element Element to add
     *
     * @return true  => Element enqueued
-    * @return false => Queue full, element discarded
+    * @return false => Queue full, element not added
     */
    bool enQueueDiscardOnFull(T element) {
-      if (isFull()) {
-         return false;
+//      lock(&fLock);
+      bool hasSpace = !isFull();
+      if (hasSpace) {
+         *fTail++ = element;
+         fNumberOfElements++;
+         if (fTail>=(fBuff+QUEUE_SIZE)) {
+            fTail = fBuff;
+         }
       }
-      enQueue(element);
-      return true;
+//      unlock(&fLock);
+      return hasSpace;
    }
    /*
     * Remove & return element from queue
@@ -87,12 +93,14 @@ public:
     * @param[in]  element Element to add
     */
    T deQueue() {
+//      lock(&fLock);
       assert(!isEmpty());
       uint8_t t = *fHead++;
       fNumberOfElements--;
       if (fHead>=(fBuff+QUEUE_SIZE)) {
          fHead = fBuff;
       }
+//      unlock(&fLock);
       return t;
    }
 

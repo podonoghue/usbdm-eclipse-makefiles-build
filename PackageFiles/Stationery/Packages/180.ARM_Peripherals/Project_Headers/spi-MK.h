@@ -155,24 +155,6 @@ public:
 
    volatile  SPI_Type * const spi; //!< SPI hardware
 
-protected:
-   uint32_t  pushrMask;            //!< Value to combine with data
-
-   /**
-    * Constructor
-    *
-    * @param[in]  baseAddress    Base address of SPI
-    */
-   Spi(volatile SPI_Type *baseAddress) :
-      spi(baseAddress), pushrMask(0) {
-   }
-
-   /**
-    * Destructor
-    */
-   virtual ~Spi() {
-   }
-
    /**
     * Calculate communication speed factors for SPI
     *
@@ -194,6 +176,24 @@ protected:
     * @return Clock frequency of SPI in Hz for these factors
     */
    static uint32_t calculateSpeed(uint32_t clockFrequency, uint32_t clockFactors);
+
+protected:
+   uint32_t  pushrMask;            //!< Value to combine with data
+
+   /**
+    * Constructor
+    *
+    * @param[in]  baseAddress    Base address of SPI
+    */
+   Spi(volatile SPI_Type *baseAddress) :
+      spi(baseAddress), pushrMask(0) {
+   }
+
+   /**
+    * Destructor
+    */
+   virtual ~Spi() {
+   }
 
    /**
     * Calculate Delay factors
@@ -416,7 +416,7 @@ public:
     */
    void setMode(SpiMode spiMode=SpiMode_0, SpiOrder spiOrder=SpiOrder_MsbFirst, SpiCtarSelect spiCtarSelect=SpiCtarSelect_0) {
       // Sets the default CTAR value with 8 bits
-      spi->CTAR[spiCtarSelect] = 
+      spi->CTAR[spiCtarSelect] =
          (spiMode|spiOrder)|
          (spi->CTAR[spiCtarSelect]&~(SPI_CTAR_MODE_MASK|SPI_CTAR_LSBFE_MASK));
    }

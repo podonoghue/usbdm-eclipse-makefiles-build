@@ -86,10 +86,20 @@ enum CmpHysteresis {
  * Comparator interrupt selection
  */
 enum CmpInterrupt {
-   CmpInterrupt_None    = CMP_SCR_IER(0)|CMP_SCR_IEF(0),  //!< Rising edge
+   CmpInterrupt_None    = CMP_SCR_IER(0)|CMP_SCR_IEF(0),  //!< Neither edge
    CmpInterrupt_Rising  = CMP_SCR_IER(1)|CMP_SCR_IEF(0),  //!< Rising edge
    CmpInterrupt_Falling = CMP_SCR_IER(0)|CMP_SCR_IEF(1),  //!< Falling edge
    CmpInterrupt_Both    = CMP_SCR_IER(1)|CMP_SCR_IEF(1),  //!< Rising or falling edge
+};
+
+/**
+ * Comparator event identification
+ */
+enum CmpEvent {
+   CmpEvent_None    = CMP_SCR_CFR(0)|CMP_SCR_CFF(0),  //!< Neither edge
+   CmpEvent_Rising  = CMP_SCR_CFR(1)|CMP_SCR_CFF(0),  //!< Rising edge
+   CmpEvent_Falling = CMP_SCR_CFR(0)|CMP_SCR_CFF(1),  //!< Falling edge
+   CmpEvent_Both    = CMP_SCR_CFR(1)|CMP_SCR_CFF(1),  //!< Rising or falling edge
 };
 
 /**
@@ -154,9 +164,9 @@ enum CmpDacSource {
 /**
  * Type definition for CMP interrupt call back
  *
- * @param[in]  status Flags indicating interrupt source (CMP_SCR_CFR_MASK, CMP_SCR_CFF_MASK)
+ * @param[in]  status Flags indicating interrupt source (CmpEvent_Rising, CmpEvent_Falling or CmpEvent_Both)
  */
-typedef void (*CMPCallbackFunction)(int status);
+typedef void (*CMPCallbackFunction)(CmpEvent status);
 
 /**
  * Template class representing a Voltage Reference
@@ -193,7 +203,7 @@ public:
       // Clear interrupt
       CmpBase_T<Info>::cmp->SCR |= status;
       if (callback != 0) {
-         callback(status);
+         callback((CmpEvent)status);
       }
       else {
          setAndCheckErrorCode(E_NO_HANDLER);
@@ -209,7 +219,6 @@ public:
       callback = theCallback;
    }
 
-protected:
    static constexpr volatile CMP_Type *cmp      = Info::cmp;
    static constexpr volatile uint32_t *clockReg = Info::clockReg;
 
@@ -423,7 +432,7 @@ public:
     * @param[in]  positiveInput (0..7) (7 => DAC)
     * @param[in]  negativeInput (0..7) (7 => DAC)
     */
-   static void selectInputs(int positiveInput, int negativeInput) {
+   static void selectInputs(Cmp0Input positiveInput, Cmp1Input negativeInput) {
       //! MUX Control Register
       cmp->MUXCR =
          CMP_MUXCR_PSEL(positiveInput)| // Plus Input Mux Control

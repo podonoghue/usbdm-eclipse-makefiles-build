@@ -605,6 +605,13 @@ public:
    }
 
 protected:
+
+   /** Lock variable for writes */
+   static volatile uint32_t fWriteLock;
+
+   /** Lock variable for reads */
+   static volatile uint32_t fReadLock;
+
    /**
     * Queue for Buffered reception (if used)
     */
@@ -620,27 +627,30 @@ protected:
     * @param[in]  ch - character to send
     */
    virtual void _writeChar(char ch) override {
-      // Wait for space in buffer
-      while (txQueue.isFull()) {
-         __asm__("nop");
+      lock(&fWriteLock);
+      // Add character to buffer
+      while (!txQueue.enQueueDiscardOnFull(ch)) {
       }
-      txQueue.enQueue(ch);
       uart->C2 |= UART_C2_TIE_MASK;
+      unlock(&fWriteLock);
       if (ch=='\n') {
         _writeChar('\r');
       }
    }
 
    /**
-    * Receives a single character (blocking)
+    * Receives a single character (blocking on queue empty)
     *
     * @return Character received
     */
    virtual int _readChar() override {
+      lock(&fReadLock);
       while (rxQueue.isEmpty()) {
          __asm__("nop");
       }
-      return rxQueue.deQueue();
+      char t = rxQueue.deQueue();
+      unlock(&fReadLock);
+      return t;
    }
 
    /**
@@ -830,6 +840,8 @@ public:
 
 template<class Info, int rxSize, int txSize> Queue<char, rxSize> UartBuffered_T<Info, rxSize, txSize>::rxQueue;
 template<class Info, int rxSize, int txSize> Queue<char, txSize> UartBuffered_T<Info, rxSize, txSize>::txQueue;
+template<class Info, int rxSize, int txSize> volatile uint32_t UartBuffered_T<Info, rxSize, txSize>::fReadLock = 0;
+template<class Info, int rxSize, int txSize> volatile uint32_t UartBuffered_T<Info, rxSize, txSize>::fWriteLock = 0;
 
 #ifdef USBDM_UART0_IS_DEFINED
 /**

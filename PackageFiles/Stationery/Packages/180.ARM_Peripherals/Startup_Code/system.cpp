@@ -206,3 +206,34 @@ int enableInterrupts() {
    return 0;
 }
 
+/**
+ * Obtain lock
+ *
+ * @param addr Locking variable to use
+ *
+ * @note This is a spin-lock
+ */
+void lock(volatile uint32_t *addr) {
+   do {
+      // If not locked
+      if (__LDREXW(addr) == 0) {
+         // Try to obtain lock by writing 1
+         if (__STREXW(1, addr) == 0) {
+            // Succeeded
+            __DMB();
+            return;
+         }
+      }
+   } while (1);
+}
+
+/**
+ * Release lock
+ *
+ * @param addr Locking variable to use
+ */
+void unlock(volatile uint32_t *addr) {
+   __DMB();
+   *addr = 0;
+}
+

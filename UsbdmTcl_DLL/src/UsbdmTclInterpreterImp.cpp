@@ -577,6 +577,16 @@ static int checkUsbdmRC(Tcl_Interp *interp, USBDM_ErrorCode errorCode) {
    return TCL_OK;
 }
 
+//! Quietly report BDM status
+static void reportBdmStatus(Tcl_Interp *interp) {
+   USBDMStatus_t usbdmStatus;
+   if (bdmInterface->getBDMStatus(&usbdmStatus) != BDM_RC_OK) {
+      PRINT("BDM status => failed read\n");
+      return;
+   }
+   PRINT("BDM status => %s\n", getBDMStatusName(&usbdmStatus));
+}
+
 //! Report Target status
 static int reportState(Tcl_Interp *interp) {
    USBDMStatus_t usbdmStatus;
@@ -1013,13 +1023,16 @@ static int getPinControlValue(const char *ch) {
    default  : return 0;
    }
 }
-//! Connect to target
+
+//! Control interface pins
 static int cmd_pinSet(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    uint32_t value = 0;
 
    if (argc == 1) {
-      if (checkUsbdmRC(interp, bdmInterface->controlPins(PIN_RELEASE, NULL)))
+      if (checkUsbdmRC(interp, bdmInterface->controlPins(PIN_RELEASE, NULL))) {
          return TCL_ERROR;
+      }
+      reportBdmStatus(interp);
       PRINT(":pinSet - all released\n");
       return (TCL_OK);
    }
@@ -1054,6 +1067,7 @@ static int cmd_pinSet(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *
    if (checkUsbdmRC(interp, bdmInterface->controlPins(value, NULL))) {
       return TCL_ERROR;
    }
+   reportBdmStatus(interp);
    PRINT(":pinSet %s\n", getPinLevelName((PinLevelMasks_t)value));
    return TCL_OK;
 }
@@ -1152,6 +1166,11 @@ static int cmd_status(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *
       return TCL_ERROR;
    }
    TargetType_t targetType = bdmInterface->getBdmOptions().targetType;
+   USBDMStatus_t status;
+   bdmInterface->getBDMStatus(&status);
+
+   PRINT("POWER          => %s\n", getVoltageStatusName((TargetVddState_t)(status.power_state)));
+
    if (targetType == T_ARM) {
       uint8_t  value[4];
       uint32_t data;
@@ -1204,6 +1223,7 @@ static int cmd_status(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *
          data = getData16(value);
          PRINT("WDOG_RSTCNT    => 0x%8.4X\n", data);
       }
+      reportState(interp);
       Tcl_SetObjResult(interp, Tcl_NewIntObj(0));
       return TCL_OK;
    }
