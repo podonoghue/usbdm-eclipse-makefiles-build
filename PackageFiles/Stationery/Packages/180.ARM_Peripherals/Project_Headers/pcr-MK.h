@@ -430,19 +430,30 @@ public:
    }
 
    /**
-    * Set callback for Pin IRQ
-    *
-    * @note There is a single callback function for all pins on the related port.
+    * Set callback for Pin interrupts
     *
     * @param[in] callback The function to call on Pin interrupt. \n
     *                     nullptr to indicate none
+    *
+    * @return E_NO_ERROR            No error
+    * @return E_HANDLER_ALREADY_SET Handler already set
+    *
+    * @note There is a single callback function for all pins on the related port.
+    *       It is necessary to identify the originating pin in the callback
     */
-   static NOINLINE_DEBUG void setCallback(PinCallbackFunction callback) {
+   static NOINLINE_DEBUG ErrorCode setCallback(PinCallbackFunction callback) {
       if (callback == nullptr) {
          fCallback = PcrBase::unhandledCallback;
-         return;
+         return E_NO_ERROR;
       }
+#ifdef DEBUG_BUILD
+      // Callback is shared across all port pins. Check if callback already assigned
+      if ((fCallback != PcrBase::unhandledCallback) && (fCallback != callback)) {
+         return setErrorCode(ErrorCode::E_HANDLER_ALREADY_SET);
+      }
+#endif
       fCallback = callback;
+      return E_NO_ERROR;
    }
 };
 

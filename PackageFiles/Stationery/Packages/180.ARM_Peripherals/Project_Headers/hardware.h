@@ -67,6 +67,7 @@ enum ErrorCode {
    E_LOST_ARBITRATION,            //!< Lost arbitration for bus (I2C)
    E_TERMINATED,                  //!< The program has terminated
    E_CLOCK_INIT_FAILED,           //!< Clock initialisation failed
+   E_HANDLER_ALREADY_SET,         //!< Handler (callback) already installed
 
    E_CMSIS_ERR_OFFSET = 1<<20,    //!< Offset added to CMSIS error codes
 };
