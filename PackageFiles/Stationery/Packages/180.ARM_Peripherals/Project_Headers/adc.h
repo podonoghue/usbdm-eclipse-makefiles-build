@@ -258,7 +258,7 @@ private:
 
 protected:
    /** Callback function for ISR */
-   static ADCCallbackFunction callback;
+   static ADCCallbackFunction fCallback;
 
 public:
 
@@ -270,25 +270,38 @@ public:
     */
    static void irqHandler() {
       if (adc->SC1[0] & ADC_SC1_COCO_MASK) {
-         callback(adc->R[0], adc->SC1[0]&ADC_SC1_ADCH_MASK);
+         fCallback(adc->R[0], adc->SC1[0]&ADC_SC1_ADCH_MASK);
       }
       if (adc->SC1[1] & ADC_SC1_COCO_MASK) {
-         callback(adc->R[1], adc->SC1[1]&ADC_SC1_ADCH_MASK);
+         fCallback(adc->R[1], adc->SC1[1]&ADC_SC1_ADCH_MASK);
       }
    }
 
    /**
-    * Set Callback function
+    * Set callback for conversion complete interrupts
     *
-    * @param[in] theCallback Callback function to execute on interrupt.\n
-    *            nullptr to remove handler
+    * @param[in] callback The function to call on conversion interrupt. \n
+    *                     nullptr to indicate none
+    *
+    * @return E_NO_ERROR            No error
+    * @return E_HANDLER_ALREADY_SET Handler already set
+    *
+    * @note There is a single callback function for all channels of the ADC.\n
+    *       It is necessary to identify the originating channel in the callback
     */
-   static void setCallback(ADCCallbackFunction theCallback) {
-      if (theCallback == nullptr) {
-         callback = AdcBase::unhandledCallback;
-         return;
+   static ErrorCode setCallback(ADCCallbackFunction callback) {
+      if (callback == nullptr) {
+         fCallback = AdcBase::unhandledCallback;
+         return E_NO_ERROR;
       }
-      callback = theCallback;
+#ifdef DEBUG_BUILD
+      // Callback is shared across all port pins. Check if callback already assigned
+      if ((fCallback != AdcBase::unhandledCallback) && (fCallback != callback)) {
+         return setErrorCode(ErrorCode::E_HANDLER_ALREADY_SET);
+      }
+#endif
+      fCallback = callback;
+      return E_NO_ERROR;
    }
 
 protected:
@@ -619,7 +632,7 @@ protected:
 
 };
 
-template<class Info> ADCCallbackFunction AdcBase_T<Info>::callback = AdcBase::unhandledCallback;
+template<class Info> ADCCallbackFunction AdcBase_T<Info>::fCallback = AdcBase::unhandledCallback;
 
 /**
  * Template class representing an ADC channel.

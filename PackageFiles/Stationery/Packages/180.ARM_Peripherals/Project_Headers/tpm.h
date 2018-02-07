@@ -64,19 +64,19 @@ namespace USBDM {
  */
 
 /**
- * Control mode of operation of shared TPM counter
+ *  Control mode of operation of shared timer counter
  */
 enum TpmMode {
    //! Up counter: Used for left-aligned PWM, input capture and output compare modes
    TpmMode_LeftAlign   = 0,
-   //! Up-down counter: Used for centre-aligned PWM 
+   //! Up-down counter: Used for centre-aligned PWM
    TpmMode_CentreAlign = TPM_SC_CPWMS_MASK,
    //! Dummy value: Used for quadrature encoder
    TpmMode_Quadrature  = 0,
 };
 
 /**
- * Controls basic operation of channel
+ * Controls basic operation of PWM/Input capture/Output compare
  */
 enum TpmChMode {
    TpmChMode_Disabled                = TPM_CnSC_MS(0)|TPM_CnSC_ELS(0), //!< Channel disabled
@@ -146,11 +146,11 @@ enum TpmChannelDma {
 #endif
 
 /**
- * Type definition for TPM timer overflow interrupt call back
+ * Type definition for timer overflow interrupt call back
  */
 typedef void (*TpmCallbackFunction)();
 /**
- * Type definition for TPM channel interrupt call back
+ * Type definition for channel interrupt call back
  *
  * @param[in] status Flags indicating interrupt source channel(s)
  */
@@ -162,18 +162,24 @@ typedef void (*TpmChannelCallbackFunction)(uint8_t status);
 class TpmBase {
 
 protected:
-   /** Callback to catch unhandled interrupt */
+   /**
+    * Callback to catch unhandled interrupt
+    *
+    * @param mask Mask identifying channel
+    */
    static void unhandledCallback(uint8_t) {
       setAndCheckErrorCode(E_NO_HANDLER);
    }
-   /** Callback to catch unhandled interrupt */
+   /**
+    * Callback to catch unhandled interrupt
+    */
    static void unhandledCallback() {
       setAndCheckErrorCode(E_NO_HANDLER);
    }
 };
 
 /**
- * Base class representing an TPM
+ * Base class representing a TPM
  *
  * Example
  * @code
@@ -201,11 +207,13 @@ private:
    TpmBase_T(TpmBase_T&&) = delete;
 
    /** Callback function for TOI ISR */
-   static TpmCallbackFunction toiCallback;
-   /** Callback function for Channel ISR */
-   static TpmChannelCallbackFunction callback;
+   static TpmCallbackFunction sToiCallback;
+
    /** Callback function for Channel Fault */
    static TpmCallbackFunction faultCallback;
+
+   /** Callback function for Channel ISR */
+   static TpmChannelCallbackFunction sChannelCallback;
 
 public:
    /**
@@ -215,13 +223,13 @@ public:
       if ((tmr->SC&(TPM_SC_TOF_MASK|TPM_SC_TOIE_MASK)) == (TPM_SC_TOF_MASK|TPM_SC_TOIE_MASK)) {
          // Clear TOI flag (w1c)
          tmr->SC |= TPM_SC_TOF_MASK;
-         toiCallback();
+         sToiCallback();
       }
       uint8_t status = tmr->STATUS;
       if (status) {
          // Clear flags for channel events being handled (w1c register if read)
          tmr->STATUS = status;
-         callback(status);
+         sChannelCallback(status);
       }
    }
 
@@ -229,15 +237,15 @@ public:
     * Set TOI Callback function\n
     * Note that one callback is shared by all channels of the TPM
     *
-    * @param[in] theCallback Callback function to execute on overflow interrupt.\n
+    * @param[in] theCallback Callback function to execute when timer overflows. \n
     *                        nullptr to indicate none
     */
    static void INLINE_RELEASE setTimerOverflowCallback(TpmCallbackFunction theCallback) {
       if (theCallback == nullptr) {
-         toiCallback = unhandledCallback;
+         sToiCallback = unhandledCallback;
          return;
       }
-      toiCallback = theCallback;
+      sToiCallback = theCallback;
    }
    /**
     * Set channel Callback function\n
@@ -245,13 +253,26 @@ public:
     *
     * @param[in] theCallback Callback function to execute on channel interrupt.\n
     *                        nullptr to indicate none
+    *
+    * @return E_NO_ERROR            No error
+    * @return E_HANDLER_ALREADY_SET Handler already set
+    *
+    * @note One channel event callback is shared by all channels of the timer.
+    *       It is necessary to identify the originating channel in the callback
     */
-   static void INLINE_RELEASE setChannelCallback(TpmChannelCallbackFunction theCallback) {
+   static ErrorCode INLINE_RELEASE setChannelCallback(TpmChannelCallbackFunction theCallback) {
       if (theCallback == nullptr) {
-         callback = unhandledCallback;
-         return;
+         sChannelCallback = unhandledChannelCallback;
+         return E_NO_ERROR;
       }
-      callback = theCallback;
+#ifdef DEBUG_BUILD
+      // Callback is shared across all channels. Check if callback already assigned
+      if ((sChannelCallback != unhandledChannelCallback) && (sChannelCallback != theCallback)) {
+         return setErrorCode(ErrorCode::E_HANDLER_ALREADY_SET);
+      }
+#endif
+      sChannelCallback = theCallback;
+      return E_NO_ERROR;
    }
 
 public:
@@ -306,7 +327,7 @@ public:
     * Enables clock to peripheral and configures all pins
     * Configures main operating settings for timer
     *
-    * @param[in] tpmMode        Mode of operation see USBDM::TpmMode
+    * @param[in] tpmMode        Mode of operation
     * @param[in] tpmClockSource Clock source for timer
     * @param[in] tpmPrescale    Clock prescaler. Used to divide clock source before use
     */
@@ -881,8 +902,8 @@ public:
 
 };
 
-template<class Info> TpmCallbackFunction         TpmBase_T<Info>::toiCallback = TpmBase_T<Info>::unhandledCallback;
-template<class Info> TpmChannelCallbackFunction  TpmBase_T<Info>::callback    = TpmBase_T<Info>::unhandledCallback;
+template<class Info> TpmCallbackFunction         TpmBase_T<Info>::sToiCallback     = TpmBase_T<Info>::unhandledCallback;
+template<class Info> TpmChannelCallbackFunction  TpmBase_T<Info>::sChannelCallback = TpmBase_T<Info>::unhandledCallback;
 
 /**
  * Template class representing a timer channel
