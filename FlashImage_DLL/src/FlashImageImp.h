@@ -160,6 +160,8 @@ protected:
    USBDM_ErrorCode         loadElfFile(const std::string &fileName);
    USBDM_ErrorCode         checkTargetType(Elf32_Half e_machine, TargetType_t targetType);
    USBDM_ErrorCode         loadS1S9File(const std::string &fileName);
+   USBDM_ErrorCode         loadAbsoluteFile(const std::string &fileName);
+
    static void             addressToPageOffset(uint32_t address, uint16_t &pageNum, uint16_t &offset);
    static uint32_t         pageOffsetToAddress(uint16_t pageNum, uint16_t offset);
    void                    writeSrec(uint8_t *buffer, uint32_t address, unsigned size);

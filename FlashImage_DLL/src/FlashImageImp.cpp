@@ -508,8 +508,12 @@ USBDM_ErrorCode  FlashImageImp::loadFile(const string &filePath, bool clearBuffe
    // Try ELF Format
    USBDM_ErrorCode rc = loadElfFile(filePath);
    if (rc == SFILE_RC_UNKNOWN_FILE_FORMAT) {
-      // Try SREC Format if not recognized as ELF
+      // Try SREC Format if not recognized
       rc = loadS1S9File(filePath);
+   }
+   if (rc != SFILE_RC_OK) {
+      // Try absolute binary image format if not recognized as ELF
+      rc = loadAbsoluteFile(filePath);
    }
 
    if (rc == SFILE_RC_OK) {
@@ -958,6 +962,65 @@ int16_t FlashImageImp::targetToNative(int16_t &value) {
       return value;
    }
    return ((value<<8)&0xFF00) + ((value>>8)&0x00FF);
+}
+
+/**
+ * Checks if a string ends with another string
+ *
+ * @param value
+ * @param ending
+ * @return
+ *
+ * from https://stackoverflow.com/questions/874134/find-if-string-ends-with-another-string-in-c
+ *
+ */
+inline bool ends_with(std::string const & value, std::string const & ending) {
+    if (ending.size() > value.size()) return false;
+    return std::equal(ending.rbegin(), ending.rend(), value.rbegin());
+}
+
+/*
+ *  Load a Absolute binary image file into the buffer. \n
+ *
+ *  The buffer is cleared to 0xFFFF before loading.  Modified locations will
+ *  have a non-0xFF upper byte so used locations can be differentiated. \n
+ *
+ *  @param fileName Path of file to load
+ *
+ *  @return Error code
+ */
+USBDM_ErrorCode FlashImageImp::loadAbsoluteFile(const string &fileName) {
+   LOGGING_Q;
+   char         buffer[1024];
+   uint32_t     addr = 0;
+   uint32_t     size;
+
+   // Bit dopey but check if it is likely to be a binary file and reject otherwise -
+   if (!ends_with(fileName, ".abs") && !ends_with(fileName, ".bin")) {
+      return SFILE_RC_UNKNOWN_FILE_FORMAT;
+   }
+
+   Openfile file(fileName.c_str(), "rb");
+   fp = file.getfp();
+
+   if (fp == NULL) {
+      log.print(" - Failed to open input file\n", fileName.c_str());
+      return SFILE_RC_FILE_OPEN_FAILED;
+   }
+   log.print("filename = \"%s\"\n", fileName.c_str());
+
+   while ((size = fread(buffer, 1, sizeof(buffer), fp)) != 0) {
+      for (unsigned index=0; index<size; index++) {
+         if (this->isValid(addr) && !allowOverwrite) {
+            // Occupied address
+            log.print("Memory image overlaps @0x%X\n", addr);
+         }
+         this->setValue(addr++, (uint8_t)buffer[index]);
+      }
+   }
+   log.print("FlashImageImp::MemorySpace::loadS1S9File()\n");
+   printMemoryMap();
+   return SFILE_RC_OK;
 }
 
 /*
