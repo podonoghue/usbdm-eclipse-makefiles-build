@@ -566,15 +566,19 @@ public:
    }
 
    /**
-    * Set callback for ISR
+    * Set callback for Pin interrupts
     *
-    * @note There is a single callback function for all pins on this port.
-    *
-    * @param[in] callback The function to call on pin interrupt. \n
+    * @param[in] callback The function to call on Pin interrupt. \n
     *                     nullptr to indicate none
+    *
+    * @return E_NO_ERROR            No error
+    * @return E_HANDLER_ALREADY_SET Handler already set
+    *
+    * @note There is a single callback function for all pins on the related port.
+    *       It is necessary to identify the originating pin in the callback
     */
-   static void setCallback(PinCallbackFunction callback) {
-      Pcr::setCallback(callback);
+   static ErrorCode setCallback(PinCallbackFunction callback) {
+      return Pcr::setCallback(callback);
    }
 
 };

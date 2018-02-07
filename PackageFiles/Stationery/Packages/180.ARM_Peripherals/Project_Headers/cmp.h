@@ -28,7 +28,7 @@ namespace USBDM {
  */
 
 /**
- * Select comparator 1 inputs
+ * Select CMP0 inputs
  */
 enum Cmp0Input {
    Cmp0Input_CmpIn0  = 0, //!< Cmp external pin 0
@@ -42,7 +42,7 @@ enum Cmp0Input {
 };
 
 /**
- * Select comparator 2 inputs
+ * Select CMP2 inputs
  */
 enum Cmp1Input {
    Cmp1Input_CmpIn0  = 0, //!< Cmp external pin 0
@@ -432,7 +432,7 @@ public:
     * @param[in]  positiveInput (0..7) (7 => DAC)
     * @param[in]  negativeInput (0..7) (7 => DAC)
     */
-   static void selectInputs(Cmp0Input positiveInput, Cmp1Input negativeInput) {
+   static void selectInputs(Cmp0Input positiveInput, Cmp0Input negativeInput) {
       //! MUX Control Register
       cmp->MUXCR =
          CMP_MUXCR_PSEL(positiveInput)| // Plus Input Mux Control

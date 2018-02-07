@@ -63,7 +63,7 @@ public:
       spi.setFrameSize(8);
 
       // Record configuration in case SPI is shared
-      spiConfig = spi.getConfig();
+      spiConfig = spi.getConfiguration();
 
       spi.endTransaction();
       }

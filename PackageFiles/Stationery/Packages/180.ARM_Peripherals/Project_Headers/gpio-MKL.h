@@ -74,7 +74,7 @@ namespace USBDM {
  * @endcode
  *
  * @tparam clockMask       Clock mask for PORT (PCR register) associated with GPIO
- * @tparam portAddress      Address of PORT (PCR register array) associated with GPIO
+ * @tparam portAddress     Address of PORT (PCR register array) associated with GPIO
  * @tparam gpioAddress     GPIO hardware address
  * @tparam bitNum          Bit number within PORT/GPIO
  * @tparam polarity        Polarity of pin. Either ActiveHigh or ActiveLow
@@ -409,13 +409,8 @@ public:
     * @note This reads the PDIR
     * @note Polarity _is_ significant
     */
-   static bool isActive() {
-      if (polarity) {
-         return isHigh();
-      }
-      else {
-         return isLow();
-      }
+   static bool __attribute__((always_inline)) isActive() {
+      return read();
    }
    /**
     * Read pin value and return true if inactive level
@@ -426,13 +421,8 @@ public:
     * @note This reads the PDIR
     * @note Polarity _is_ significant
     */
-   static bool isInactive() {
-      if (polarity) {
-         return isLow();
-      }
-      else {
-         return isHigh();
-      }
+   static bool __attribute__((always_inline)) isInactive() {
+      return !read();
    }
    /**
     * Read pin value and return true if active level.\n
@@ -443,31 +433,20 @@ public:
     * @note This reads the PDIR
     * @note Polarity _is_ significant
     */
-   static bool isPressed() {
-      if (polarity) {
-         return isHigh();
-      }
-      else {
-         return isLow();
-      }
+   static bool __attribute__((always_inline)) isPressed() {
+      return isActive();
    }
    /**
     * Read pin value and return true if inactive level.\n
     * Convenience method equivalent to isInactive()
-    *
     *
     * @return true/false reflecting if pin is inactive.
     *
     * @note This reads the PDIR
     * @note Polarity _is_ significant
     */
-   static bool isReleased() {
-      if (polarity) {
-         return isLow();
-      }
-      else {
-         return isHigh();
-      }
+   static bool __attribute__((always_inline)) isReleased() {
+      return isInactive();
    }
    /**
     * Read value being driven to pin (if configured as output)
@@ -599,15 +578,19 @@ public:
    }
 
    /**
-    * Set callback for ISR
+    * Set callback for Pin interrupts
     *
-    * @note There is a single callback function for all pins on this port.
-    *
-    * @param[in] callback The function to call on pin interrupt. \n
+    * @param[in] callback The function to call on Pin interrupt. \n
     *                     nullptr to indicate none
+    *
+    * @return E_NO_ERROR            No error
+    * @return E_HANDLER_ALREADY_SET Handler already set
+    *
+    * @note There is a single callback function for all pins on the related port.
+    *       It is necessary to identify the originating pin in the callback
     */
-   static void setCallback(PinCallbackFunction callback) {
-      Pcr::setCallback(callback);
+   static ErrorCode setCallback(PinCallbackFunction callback) {
+      return Pcr::setCallback(callback);
    }
 
 };

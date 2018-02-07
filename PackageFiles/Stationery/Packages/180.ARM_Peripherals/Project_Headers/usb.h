@@ -60,9 +60,37 @@ public:
    };
 
    /**
-    * Type definition for USB SOF call back
+    * Events for user callback
     */
-   typedef void (*SOFCallbackFunction)();
+   enum UserEvents {
+      USER_SUSPEND,  //!< USB has been suspended
+      USER_RESUME,   //!< USB has been resumed
+      USER_RESET,    //!< USB has been reset
+   };
+
+   /**
+    * Type definition for user call back\n
+    * This function is called whenever the 'user' code needs to be notified of an event
+    *
+    *  @param[in]  event Reason for callback
+    *
+    *  @return Error code
+    */
+   typedef ErrorCode (*UserCallbackFunction)(const UserEvents event);
+
+   /**
+    * Type definition for USB SOF call back\n
+    * This function is call for SOF transactions
+    */
+   typedef ErrorCode (*SOFCallbackFunction)();
+
+   /**
+    * Type definition for user call back\n
+    * This function is called whenever the 'user' code needs to be notified of an event
+    *
+    *  @param[in]  event Reason for callback
+    */
+   typedef void (*SetupCompleteCallbackFunction)();
 
    /**
     * Type definition for USB SETUP call back\n
@@ -70,20 +98,21 @@ public:
     *
     *  @param[in]  setup SETUP packet information
     */
-   typedef void (*SetupCallbackFunction)(const SetupPacket &setup);
+   typedef ErrorCode (*SetupCallbackFunction)(const SetupPacket &setup);
 
-   enum UserEvents {
-      USER_SUSPEND,  // USB has been suspended
-      USER_RESUME,   // USB has been resumed
-      USER_RESET,    // USB has been reset
-   };
    /**
-    * Type definition for user call back\n
-    * This function is called whenever the 'user' code needs to be notified of an event
-    *
-    *  @param[in]  event Reason for callback
+    * Dummy callback used to catch use of unset required callback
     */
-   typedef void (*UserCallbackFunction)(const UserEvents event);
+   static ErrorCode unsetHandlerCallback() {
+      return setAndCheckErrorCode(E_NO_HANDLER);
+   }
+
+   /**
+    * Dummy callback used catch use of unset optional callback
+    */
+   static ErrorCode unsetOptionalHandlerCallback() {
+      return E_NO_HANDLER;
+   }
 
    /**
     * Get name of USB token
@@ -121,6 +150,13 @@ public:
    static void reportBdt(const char *name, BdtEntry *bdt);
 
    /**
+    * Report contents of LineCodingStructure to stdout
+    *
+    * @param lineCodingStructure
+    */
+   void reportLineCoding(const LineCodingStructure *lineCodingStructure);
+
+   /**
     * Format SETUP packet as string
     *
     * @param[in]  p SETUP packet
@@ -128,6 +164,13 @@ public:
     * @return Pointer to static buffer
     */
    static const char *reportSetupPacket(SetupPacket *p);
+
+   /**
+    * Report line state value to stdout
+    *
+    * @param value
+    */
+   void reportLineState(uint8_t value);
 
    /**
     *  Creates a valid string descriptor in UTF-16-LE from a limited UTF-8 string
@@ -195,29 +238,37 @@ protected:
    /** USB activity indicator */
    static volatile bool activityFlag;
 
-   /** SOF callback */
-   static SOFCallbackFunction sofCallbackFunction;
-
-   /** Used to record Suspend/Resume events */
-   static int suspendCounter;
-   
    /**
     * Unhandled SETUP callback \n
-    * Called for unhandled SETUP transactions
+    * This function is called for unhandled SETUP transactions
     */
-   static SetupCallbackFunction unhandledSetupCallback;
+   static SetupCallbackFunction fUnhandledSetupCallback;
 
    /**
     * User event callback \n
     * This function is called whenever the 'user' code needs to be notified of an event
     *
     *  @param[in]  event Reason for callback
+    *  @return     E_NOERROR if handled
+    *  @return     Else stalls endpoint
     */
-   static UserCallbackFunction userCallbackFunction;
+   static UserCallbackFunction fUserCallbackFunction;
 
-   /** Function to call when SETUP transaction is complete */
-   static void (*setupCompleteCallback)();
+   /**
+    * SETUP complete callback\n
+    * This function is called when SETUP transaction is complete
+    */
+   static SetupCompleteCallbackFunction fSetupCompleteCallback;
 
+   /**
+    * Start-of-frame callback \n
+    * This function is called when SOF transaction is complete
+    */
+   static SOFCallbackFunction fSofCallbackFunction;
+
+   /** Used to record Suspend/Resume events */
+   static int suspendCounter;
+   
 public:
    /**
     * Configures all mapped pins associated with this peripheral
@@ -323,7 +374,10 @@ protected:
     *  @param[in]  callback User callback function
     */
    static void setUserCallback(UserCallbackFunction callback) {
-      userCallbackFunction = callback;
+      if (callback == nullptr) {
+         callback = unsetHandlerCallback;
+      }
+      fUserCallbackFunction = callback;
    }
 
    /**
@@ -332,25 +386,36 @@ protected:
     * @param[in]  callback The call-back function to execute
     */
    static void setUnhandledSetupCallback(SetupCallbackFunction callback) {
-      unhandledSetupCallback = callback;
+      if (callback == nullptr) {
+         callback = (SetupCallbackFunction)unsetHandlerCallback;
+      }
+      fUnhandledSetupCallback = callback;
    }
 
    /**
     *  Sets the function to call when SETUP transaction is complete
     *
-    * @param[in]  callback The call-back function to execute
+    * @param[in]  callback The call-back function to execute\n
+    *                      May be nullptr to remove callback
     */
-   static void setSetupCompleteCallback(void (*callback)()) {
-      setupCompleteCallback = callback;
+   static void setSetupCompleteCallback(SetupCompleteCallbackFunction callback) {
+      if (callback == nullptr) {
+         callback = (SetupCompleteCallbackFunction)unsetOptionalHandlerCallback;
+      }
+      fSetupCompleteCallback = callback;
    }
 
    /**
     * Set callback for SOF transactions
     *
-    * @param[in]  callback The call-back function to execute
+    * @param[in]  callback The call-back function to execute\n
+    *                      May be nullptr to remove callback
     */
    static void setSOFCallback(SOFCallbackFunction callback) {
-      sofCallbackFunction = callback;
+      if (callback == nullptr) {
+         callback = unsetOptionalHandlerCallback;
+      }
+      fSofCallbackFunction = callback;
    }
 
    /**
@@ -469,9 +534,7 @@ protected:
     * Handler for Start of Frame Token interrupt (~1ms interval)
     */
    static void handleSOFToken() {
-      if (sofCallbackFunction != nullptr) {
-         sofCallbackFunction();
-      }
+      fSofCallbackFunction();
    }
 
    /**
@@ -492,15 +555,12 @@ protected:
    static void handleUSBResume();
 
    /**
-    * Handles unexpected SETUP requests on EP0\n
-    * May call unhandledSetupCallback() if initialised \n
-    * otherwise stalls EP0
+    * Handles unexpected SETUP requests on EP0 \n
+    * Call unhandledSetupCallback() if initialised \n
     */
-   static void handleUnexpected() {
-      if (unhandledSetupCallback != nullptr) {
-         unhandledSetupCallback(ep0SetupBuffer);
-      }
-      else {
+   static void handleUnexpectedSetup() {
+      if (fUnhandledSetupCallback(ep0SetupBuffer) != E_NO_ERROR) {
+         PRINTF("handleUnexpectedSetup(%s)\n", reportSetupPacket(&ep0SetupBuffer));
          controlEndpoint.stall();
       }
    }
@@ -512,9 +572,7 @@ protected:
     *  @param[in]  event Reason for callback
     */
    static void handleUserCallback(UserEvents event) {
-      if (userCallbackFunction != nullptr) {
-         userCallbackFunction(event);
-      }
+      fUserCallbackFunction(event);
    }
 
    /**
@@ -604,13 +662,16 @@ public:
 
 };
 
-/** SOF callback */
-template<class Info, int EP0_SIZE>
-UsbBase::SOFCallbackFunction UsbBase_T<Info, EP0_SIZE>::sofCallbackFunction = nullptr;
-
 /** Suspend/resume callback */
 template<class Info, int EP0_SIZE>
 int UsbBase_T<Info, EP0_SIZE>::suspendCounter = 0;
+
+/**
+ * Start-of-frame callback \n
+ * This function is called when SOF transaction is complete
+ */
+template<class Info, int EP0_SIZE>
+UsbBase::SOFCallbackFunction UsbBase_T<Info, EP0_SIZE>::fSofCallbackFunction = nullptr;
 
 /**
  * User event callback \n
@@ -619,18 +680,21 @@ int UsbBase_T<Info, EP0_SIZE>::suspendCounter = 0;
  *  @param[in]  event Reason for callback
  */
 template<class Info, int EP0_SIZE>
-UsbBase::UserCallbackFunction UsbBase_T<Info, EP0_SIZE>::userCallbackFunction = nullptr;
+UsbBase::UserCallbackFunction UsbBase_T<Info, EP0_SIZE>::fUserCallbackFunction = nullptr;
 
 /**
  * Unhandled SETUP callback \n
- * Called for unhandled SETUP transactions
+ * This function is called for unhandled SETUP transactions
  */
 template<class Info, int EP0_SIZE>
-UsbBase::SetupCallbackFunction UsbBase_T<Info, EP0_SIZE>::unhandledSetupCallback = nullptr;
+UsbBase::SetupCallbackFunction UsbBase_T<Info, EP0_SIZE>::fUnhandledSetupCallback = nullptr;
 
-/** Function to call when SETUP transaction is complete */
+/**
+ * SETUP complete callback \n
+ * This function is called when SETUP transaction is complete
+ */
 template <class Info, int EP0_SIZE>
-void (*UsbBase_T<Info, EP0_SIZE>::setupCompleteCallback)();
+UsbBase::SetupCompleteCallbackFunction UsbBase_T<Info, EP0_SIZE>::fSetupCompleteCallback = nullptr;
 
 /** USB connection state */
 template<class Info, int EP0_SIZE>
@@ -722,6 +786,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleSetupToken() {
    // Save data from SETUP packet
    memcpy(&ep0SetupBuffer, controlEndpoint.getBuffer(), sizeof(ep0SetupBuffer));
 
+   // Tell endpoint about the SETUP pkt
    controlEndpoint.setupReceived();
 
    // Call-backs only persist during a SETUP transaction
@@ -744,13 +809,13 @@ void UsbBase_T<Info, EP0_SIZE>::handleSetupToken() {
             case GET_INTERFACE :       handleGetInterface();         break;
             case SET_DESCRIPTOR :
             case SYNCH_FRAME :
-            default :                  handleUnexpected();           break;
+            default :                  handleUnexpectedSetup();           break;
          }
          break;
 
       case REQ_TYPE_CLASS :
          // Class requests
-         handleUnexpected();
+         handleUnexpectedSetup();
          break;
 
       case REQ_TYPE_VENDOR :
@@ -768,19 +833,19 @@ void UsbBase_T<Info, EP0_SIZE>::handleSetupToken() {
                   ep0StartTxTransaction(sizeof(MS_PropertiesFeatureDescriptor), (const uint8_t *)&msPropertiesFeatureDescriptor);
                }
                else {
-                  handleUnexpected();
+                  handleUnexpectedSetup();
                }
                break;
 #endif
 
             default :
-               handleUnexpected();
+               handleUnexpectedSetup();
                break;
          }
       break;
 
       case REQ_TYPE_OTHER :
-         handleUnexpected();
+         handleUnexpectedSetup();
          break;
    }
    // In case another SETUP packet
@@ -794,8 +859,8 @@ void UsbBase_T<Info, EP0_SIZE>::handleSetupToken() {
  * Handler for Token Complete USB interrupt for EP0\n
  * Handles controlEndpoint [SETUP, IN & OUT]
  *
- * @return true indicates token has been processed.\n
- * false token still needs processing
+ * @return true   Token has been processed (control endpoint).\n
+ * @return false  Token still needs processing (data endpoint).
  */
 template<class Info, int EP0_SIZE>
 bool UsbBase_T<Info, EP0_SIZE>::handleTokenComplete() {
@@ -803,7 +868,7 @@ bool UsbBase_T<Info, EP0_SIZE>::handleTokenComplete() {
    uint8_t usbStat  = usb->STAT;
 
    // Endpoint number
-   uint8_t   endPoint = ((uint8_t)usbStat)>>4;
+   uint8_t endPoint = ((uint8_t)usbStat)>>4;
 
    if (endPoint != CONTROL_ENDPOINT) {
       // Hasn't been processed
@@ -967,10 +1032,8 @@ void UsbBase_T<Info, EP0_SIZE>::ep0TransactionCallback(EndpointState state) {
       case EPStatusIn:
          // Just completed an IN transaction acknowledging a series of OUT transfers -
          // SETUP transaction is complete
-         if (setupCompleteCallback != nullptr) {
-            // Do SETUP transaction complete callback
-            setupCompleteCallback();
-         }
+         // Do SETUP transaction complete callback
+         fSetupCompleteCallback();
          break;
       case EPStatusOut:
          // Just completed an OUT transaction acknowledging a series of IN transfers -
@@ -993,7 +1056,10 @@ template<class Info, int EP0_SIZE>
 void UsbBase_T<Info, EP0_SIZE>::initialise() {
    enable();
 
-   sofCallbackFunction = nullptr;
+   fSofCallbackFunction    = unsetOptionalHandlerCallback;
+   fSetupCompleteCallback  = (SetupCompleteCallbackFunction)unsetHandlerCallback;
+   fUnhandledSetupCallback = (SetupCallbackFunction)unsetOptionalHandlerCallback;
+   fUserCallbackFunction   = (UserCallbackFunction)unsetHandlerCallback;
 
    // Make sure no interrupt during setup
    enableNvicInterrupts(false);
@@ -1039,7 +1105,7 @@ void UsbBase_T<Info, EP0_SIZE>::initialise() {
 #if 0
    // Removed due to errata e5928: USBOTG: USBx_USBTRC0[USBRESET] bit does not operate as expected in all cases
    // Reset USB H/W
-   USB0_USBTRC0 = 0x40|USB_USBTRC0_USBRESET_MASK;
+   USB0_USBTRC0 |= USB_USBTRC0_USBRESET_MASK;
    while ((USB0_USBTRC0&USB_USBTRC0_USBRESET_MASK) != 0) {
    }
 #endif
@@ -1173,7 +1239,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleClearFeature() {
             break;
          }
          deviceStatus.remoteWakeup = 0;
-         okResponse                      = true;
+         okResponse                = true;
          break;
 
       case RT_INTERFACE : // Interface Feature

@@ -203,7 +203,7 @@ InEndpoint  <Usb0Info, Usb0::CDC_DATA_IN_ENDPOINT,      CDC_DATA_IN_EP_MAXSIZE> 
 /**
  * Handler for Start of Frame Token interrupt (~1ms interval)
  */
-void Usb0::sofCallback() {
+ErrorCode Usb0::sofCallback() {
    // Activity LED
    // Off                     - no USB activity, not connected
    // On                      - no USB activity, connected
@@ -236,6 +236,7 @@ void Usb0::sofCallback() {
    }
    // Check CDC status
    epCdcSendNotification();
+   return E_NO_ERROR;
 }
 
 /**
@@ -371,15 +372,15 @@ bool Usb0::notify() {
  *  @note Assumes clock set up for USB operation (48MHz)
  */
 void Usb0::initialise() {
-   UsbBase_T::initialise();
-
    // Add extra handling of CDC packets directed to EP0
    setUnhandledSetupCallback(handleUserEp0SetupRequests);
 
    setSOFCallback(sofCallback);
 
-   cdcInterface::initialise();
+   UsbBase_T::initialise();
+
    cdcInterface::setUsbInNotifyCallback(notify);
+   cdcInterface::initialise();
    /*
     * TODO Additional initialisation
     */
@@ -441,7 +442,7 @@ void Usb0::handleSendBreak() {
  *
  * @note Provides CDC extensions
  */
-void Usb0::handleUserEp0SetupRequests(const SetupPacket &setup) {
+ErrorCode Usb0::handleUserEp0SetupRequests(const SetupPacket &setup) {
    //PRINTF("handleUserEp0SetupRequests()\n");
    switch(REQ_TYPE(setup.bmRequestType)) {
       case REQ_TYPE_CLASS :
@@ -451,13 +452,12 @@ void Usb0::handleUserEp0SetupRequests(const SetupPacket &setup) {
             case GET_LINE_CODING :       handleGetLineCoding();       break;
             case SET_CONTROL_LINE_STATE: handleSetControlLineState(); break;
             case SEND_BREAK:             handleSendBreak();           break;
-            default :                    controlEndpoint.stall();     break;
+            default : return E_NO_HANDLER;
          }
          break;
-      default:
-         controlEndpoint.stall();
-         break;
+            default : return E_NO_HANDLER;
    }
+   return E_NO_ERROR;
 }
 
 } // End namespace USBDM

@@ -64,7 +64,7 @@ namespace USBDM {
  */
 
 /**
- *  Control mode of operation of shared FTM counter
+ *  Control mode of operation of shared timer counter
  */
 enum FtmMode {
    //! Up counter: Used for left-aligned PWM, input capture and output compare modes
@@ -76,7 +76,7 @@ enum FtmMode {
 };
 
 /**
- * Controls basic operation of PWM/Input capture
+ * Controls basic operation of PWM/Input capture/Output compare
  */
 enum FtmChMode {
    FtmChMode_Disabled                              = FTM_CnSC_MS(0)|FTM_CnSC_ELS(0), //!< Channel disabled
@@ -171,11 +171,11 @@ enum FtmChannelPair {
    FtmChannelPair_6_7 = (1<<3),//!< Channel Pair select for channels 6 adn 6
 };
 /**
- * Type definition for FTM timer overflow interrupt call back
+ * Type definition for timer overflow interrupt call back
  */
 typedef void (*FtmCallbackFunction)();
 /**
- * Type definition for FTM channel interrupt call back
+ * Type definition for channel interrupt call back
  *
  * @param[in] status Flags indicating interrupt source channel(s)
  */
@@ -265,7 +265,8 @@ public:
    }
 
    /**
-    * Set TOI Callback function
+    * Set TOI Callback function\n
+    * Note that one callback is shared by all channels of the TPM
     *
     * @param[in] theCallback Callback function to execute when timer overflows. \n
     *                        nullptr to indicate none
@@ -278,21 +279,8 @@ public:
       sToiCallback = theCallback;
    }
    /**
-    * Set fault callback function
-    *
-    * @param[in] theCallback Callback function to execute on fault interrupt.\n
-    *                        nullptr to indicate none
-    */
-   static void INLINE_RELEASE setFaultCallback(FtmCallbackFunction theCallback) {
-      if (theCallback == nullptr) {
-         sFaultCallback = unhandledCallback;
-         return;
-      }
-      sFaultCallback = theCallback;
-      return;
-   }
-   /**
-    * Set channel event callback function
+    * Set channel Callback function\n
+    * Note that one callback is shared by all channels of the TPM
     *
     * @param[in] theCallback Callback function to execute on channel interrupt.\n
     *                        nullptr to indicate none
@@ -316,6 +304,20 @@ public:
 #endif
       sChannelCallback = theCallback;
       return E_NO_ERROR;
+   }
+   /**
+    * Set fault callback function
+    *
+    * @param[in] theCallback Callback function to execute on fault interrupt.\n
+    *                        nullptr to indicate none
+    */
+   static void INLINE_RELEASE setFaultCallback(FtmCallbackFunction theCallback) {
+      if (theCallback == nullptr) {
+         sFaultCallback = unhandledCallback;
+         return;
+      }
+      sFaultCallback = theCallback;
+      return;
    }
 
 public:
@@ -522,7 +524,6 @@ public:
          }
 #endif
       }
-
       // Disable timer so register changes are immediate
       uint8_t sc = tmr->SC;
       tmr->SC = FTM_SC_CLKS(0);
@@ -1098,9 +1099,9 @@ public:
 
 };
 
-template<class Info> FtmCallbackFunction           FtmBase_T<Info>::sToiCallback     = FtmBase_T<Info>::unhandledCallback;
-template<class Info> FtmChannelCallbackFunction    FtmBase_T<Info>::sChannelCallback = FtmBase_T<Info>::unhandledCallback;
-template<class Info> FtmCallbackFunction           FtmBase_T<Info>::sFaultCallback   = FtmBase_T<Info>::unhandledCallback;
+template<class Info> FtmCallbackFunction         FtmBase_T<Info>::sToiCallback     = FtmBase_T<Info>::unhandledCallback;
+template<class Info> FtmChannelCallbackFunction  FtmBase_T<Info>::sChannelCallback = FtmBase_T<Info>::unhandledChannelCallback;
+template<class Info> FtmCallbackFunction         FtmBase_T<Info>::sFaultCallback   = FtmBase_T<Info>::unhandledCallback;
 
 /**
  * Template class representing a timer channel

@@ -57,7 +57,7 @@ void LCD_ST7920::initialise() {
    spi.setFrameSize(8);
 
    // Record SPI configuration as shared
-   spiConfig = spi.getConfig();
+   spiConfig = spi.getConfiguration();
    spi.endTransaction();
 
    writeCommand(0b00111000); // Function set(DL=1, RE=0)

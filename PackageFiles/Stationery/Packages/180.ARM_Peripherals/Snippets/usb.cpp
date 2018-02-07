@@ -136,27 +136,6 @@ const char *UsbBase::getTokenName(unsigned token) {
 }
 
 /**
- * Get name of USB state
- *
- * @param  state USB state
- *
- * @return Pointer to static string
- */
-const char *UsbBase::getStateName(EndpointState state){
-   switch (state) {
-      default         : return "Unknown";
-      case EPIdle     : return "EPIdle";
-      case EPDataIn   : return "EPDataIn";
-      case EPDataOut  : return "EPDataOut,";
-      case EPStatusIn : return "EPStatusIn";
-      case EPStatusOut: return "EPStatusOut";
-      case EPThrottle : return "EPThrottle";
-      case EPStall    : return "EPStall";
-      case EPComplete : return "EPComplete";
-   }
-}
-
-/**
  * Get name of USB request
  *
  * @param  reqType Request type
@@ -217,7 +196,12 @@ void UsbBase::reportBdt(const char *name, BdtEntry *bdt) {
    }
 }
 
-void reportLineCoding(const LineCodingStructure *lineCodingStructure) {
+/**
+ * Report contents of LineCodingStructure to stdout
+ *
+ * @param lineCodingStructure
+ */
+void UsbBase::reportLineCoding(const LineCodingStructure *lineCodingStructure) {
    (void)lineCodingStructure;
    PRINTF("rate   = %ld bps\n", lineCodingStructure->dwDTERate);
    PRINTF("format = %d\n", lineCodingStructure->bCharFormat);
@@ -234,9 +218,10 @@ void reportLineCoding(const LineCodingStructure *lineCodingStructure) {
  */
 const char *UsbBase::reportSetupPacket(SetupPacket *p) {
    static char buff[100];
-   snprintf(buff, sizeof(buff), "[%2X,%s,%d,%d,%d]",
+   snprintf(buff, sizeof(buff), "[0x%02X,%s(0x%02X),%d,%d,%d]",
          p->bmRequestType,
          getRequestName(p->bRequest),
+         p->bRequest,
          (int)(p->wValue),
          (int)(p->wIndex),
          (int)(p->wLength)
@@ -244,7 +229,12 @@ const char *UsbBase::reportSetupPacket(SetupPacket *p) {
    return buff;
 }
 
-void reportLineState(uint8_t value) {
+/**
+ * Report line state value to stdout
+ *
+ * @param value
+ */
+void UsbBase::reportLineState(uint8_t value) {
    (void)value;
    PRINTF("Line state: RTS=%d, DTR=%d\n", (value&(1<<1))?1:0, (value&(1<<0))?1:0);
 }

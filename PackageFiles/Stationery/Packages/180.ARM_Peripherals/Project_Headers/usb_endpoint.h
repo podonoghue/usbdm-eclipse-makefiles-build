@@ -51,6 +51,28 @@ enum EndpointState {
  */
 class Endpoint {
 
+public:
+   /**
+    * Get name of USB state
+    *
+    * @param  state USB state
+    *
+    * @return Pointer to static string
+    */
+   static const char *getStateName(EndpointState state){
+      switch (state) {
+         default         : return "Unknown";
+         case EPIdle     : return "EPIdle";
+         case EPDataIn   : return "EPDataIn";
+         case EPDataOut  : return "EPDataOut,";
+         case EPStatusIn : return "EPStatusIn";
+         case EPStatusOut: return "EPStatusOut";
+         case EPThrottle : return "EPThrottle";
+         case EPStall    : return "EPStall";
+         case EPComplete : return "EPComplete";
+      }
+   }
+
 protected:
    /** Data 0/1 Transmit flag */
    volatile Data0_1 txData1;
@@ -115,7 +137,7 @@ public:
     */
    virtual void stall() = 0;
 
-   /*
+   /**
     * Clear Stall on endpoint
     */
    virtual void clearStall() = 0;
@@ -142,14 +164,6 @@ protected:
    /** Buffer for Transmit & Receive data */
    uint8_t fDataBuffer[EP_MAXSIZE];
 
-   /** Callback used on completion of transaction
-    *
-    * @param[in]  endpointState State of endpoint before completion \n
-    * e.g. EPDataOut, EPStatusIn, EPLastIn, EPStatusOut\n
-    * The endpoint is in EPIdle state now.
-    */
-   void (*fCallback)(EndpointState endpointState);
-
    /** Pointer to external data buffer for transmit/receive */
    volatile uint8_t* fDataPtr;
 
@@ -164,6 +178,24 @@ protected:
     *  terminated with ZLP if size is a multiple of EP_MAXSIZE
     */
    volatile bool fNeedZLP;
+
+   /**
+    *  Callback used on completion of transaction
+    *
+    * @param[in]  endpointState State of endpoint before completion \n
+    * e.g. EPDataOut, EPStatusIn, EPLastIn, EPStatusOut\n
+    * The endpoint is in EPIdle state now.
+    */
+   void (*fCallback)(EndpointState endpointState);
+
+   /**
+    *  Dummy callback used catch used of unset callback
+    *
+    * @param[in]  endpointState State of endpoint before completion
+    */
+   static void unsetHandlerCallback(EndpointState) {
+      setAndCheckErrorCode(E_NO_HANDLER);
+   }
 
 public:
    /**
@@ -201,21 +233,14 @@ public:
    /**
     * Set callback to execute at end of transaction
     *
-    * @param[in]  callback The call-back function to execute
+    * @param[in]  callback The call-back function to execute\n
+    *                      May be nullptr to remove callback
     */
     void setCallback(void (*callback)(EndpointState)) {
+       if (callback == nullptr) {
+          callback = unsetHandlerCallback;
+       }
       fCallback = callback;
-   }
-
-   /**
-    * Do callback if set
-    *
-    * @param[in]  state State of Endpoint
-    */
-    void doCallback(EndpointState state) {
-      if (fCallback != nullptr) {
-         fCallback(state);
-      }
    }
 
    /**
@@ -264,7 +289,7 @@ public:
       fDataTransferred  = 0;
       fDataRemaining    = 0;
       fNeedZLP          = false;
-      fCallback         = nullptr;
+      fCallback         = unsetHandlerCallback;
 
       // Assumes single buffer
       endPointBdts[ENDPOINT_NUM].rxEven.addr = nativeToLe32((uint32_t)fDataBuffer);
@@ -438,7 +463,7 @@ public:
             if ((transferSize < EP_MAXSIZE) || (fDataRemaining == 0)) {
                // Now idle
                state = EPIdle;
-               doCallback(EPDataOut);
+               fCallback(EPDataOut);
             }
             else {
                // Set up for next OUT packet
@@ -449,7 +474,7 @@ public:
          case EPStatusOut:       // Done OUT packet as a status handshake from host (IN CONTROL transfer)
             // No action
             state = EPIdle;
-            doCallback(EPStatusOut);
+            fCallback(EPStatusOut);
             break;
 
          // We don't expect an OUT token while in the following states
@@ -459,11 +484,12 @@ public:
          case EPComplete:  // Not used
          case EPStall:     // Not used
          case EPThrottle:  // Not used
-            PRINTF("Unexpected OUT, s = %d\n", state);
+            PRINTF("Unexpected OUT, ep=%d, s=%s\n", ENDPOINT_NUM, getStateName(state));
             state = EPIdle;
             break;
       }
    }
+
    /**
     * Handle IN token [Transmit, device -> host]
     */
@@ -483,7 +509,7 @@ public:
             else {
                state = EPIdle;
                // Execute callback function to process previous OUT data
-               doCallback(EPDataIn);
+               fCallback(EPDataIn);
             }
             break;
 
@@ -492,7 +518,7 @@ public:
             // Now Idle
             state = EPIdle;
             // Execute callback function to process previous OUT data
-            doCallback(EPStatusIn);
+            fCallback(EPStatusIn);
             break;
 
             // We don't expect an IN token while in the following states
@@ -500,7 +526,7 @@ public:
          case EPDataOut:   // Doing a sequence of OUT packets (until data count <= EP_MAXSIZE)
          case EPStatusOut: // Doing an OUT packet as a status handshake
          default:
-            PRINTF("Unexpected IN, %d\n", state);
+            PRINTF("Unexpected IN, ep=%d, s=%s\n", ENDPOINT_NUM, getStateName(state));
             state = EPIdle;
             break;
       }
@@ -550,16 +576,19 @@ public:
     * This stall is cleared on the next transmission
     */
    virtual void stall() {
+      // TODO - consider removing (use usual stall handling)
+
 //      PRINTF("stall\n");
       // Stall Transmit only
       BdtEntry *bdt = txOdd?&endPointBdts[0].txOdd:&endPointBdts[0].txEven;
       bdt->u.bits = BDTEntry_OWN_MASK|BDTEntry_STALL_MASK|BDTEntry_DTS_MASK;
    }
 
-   /*
+   /**
     * Clear Stall on endpoint
     */
    virtual void clearStall() {
+      // TODO - consider removing (use usual stall handling)
 //      PRINTF("clearStall\n");
       // Release BDT as SIE doesn't
       BdtEntry *bdt = txOdd?&endPointBdts[0].txOdd:&endPointBdts[0].txEven;
