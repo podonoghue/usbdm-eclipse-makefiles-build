@@ -152,8 +152,8 @@ void Usb0::sofCallback() {
    // On                      - no USB activity, connected
    // Off, flash briefly on   - USB activity, not connected
    // On,  flash briefly off  - USB activity, connected
-   if (usb->FRMNUML==0) { // Every ~256 ms
-      switch (usb->FRMNUMH&0x03) {
+   if (fUsb->FRMNUML==0) { // Every ~256 ms
+      switch (fUsb->FRMNUMH&0x03) {
          case 0:
             if (connectionState == USBconfigured) {
                // Activity LED on when USB connection established
@@ -186,12 +186,12 @@ void Usb0::sofCallback() {
 void Usb0::handleTokenComplete() {
 
    // Status from Token
-   uint8_t   usbStat  = usb->STAT;
+   uint8_t   usbStat  = fUsb->STAT;
 
    // Endpoint number
    uint8_t   endPoint = ((uint8_t)usbStat)>>4;
 
-   endPoints[endPoint]->flipOddEven(usbStat);
+   fEndPoints[endPoint]->flipOddEven(usbStat);
    switch (endPoint) {
       case BULK_OUT_ENDPOINT: // Accept OUT token
          setActive();
