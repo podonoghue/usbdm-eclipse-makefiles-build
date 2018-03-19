@@ -2,6 +2,7 @@
 <!DOCTYPE root SYSTEM "usbdmDeviceSchema.dtd" >
 
 <!-- 
+      V4.12.1.210  - Added S32K144
       V4.12.1.210  - Added MKW41Z4 family (untested)
       V4.12.1.180  - Reviewed and rationalised TCL scripts
       V4.12.1.180  - Fixes for MKE1x etc
@@ -114,6 +115,44 @@ Test Devices:
       <!-- 
             FlexNVM Partition Tables 
       -->
+      <!-- Single (up to) 2K EEPROM with 24K/32K EEPROM backing, EEERST=1 -->
+      <memory id="FTFC_DFlash0_32K_2KS" type="flexNVM" registerAddress="0x40020000"  sectorSize="2048" alignment="8">
+         <memoryRange start="0x10000000" size="32K" />
+         <flexNVMInfo id="kinetis32K_FlexPartitionInfoEERST_Single" backingRatio="16">
+            <eeepromEntry   description="Unchanged/None"         eeeSize="0"     value="0xFF" /> 
+            <eeepromEntry   description="Up to 2048"             eeeSize="2048"  value="0xF3" /> 
+            <eeepromEntry   description="Up to 1024"             eeeSize="1024"  value="0xF3" />  <!-- Size is not limited by hardware -->
+            <eeepromEntry   description="Up to 512"              eeeSize="512"   value="0xF3" />  <!-- Size is not limited by hardware -->
+            <partitionEntry description="DFlash=64, No EEPROM"   eeSize="0K"     value="0x00" />
+            <partitionEntry description="DFlash=8, EEPROM=24"    eeSize="24K"    value="0x09" />
+            <partitionEntry description="No DFlash, EEPROM=32"   eeSize="32K"    value="0x08" />
+         </flexNVMInfo>
+      </memory>
+      <!-- Single (up to) 4K EEPROM with 32K/48K/64K EEPROM backing, EEERST=1 -->
+      <memory id="FTFC_DFlash0_64K_2KS" type="flexNVM" registerAddress="0x40020000"  sectorSize="2048" alignment="8">
+         <memoryRange start="0x10000000" size="64K" />
+         <flexNVMInfo id="kinetis64K_FlexPartitionInfoEERST_Single" backingRatio="16">
+            <eeepromEntry   description="Unchanged/None"         eeeSize="0"     value="0xFF" /> 
+            <eeepromEntry   description="Up to 4096"             eeeSize="4096"  value="0xF2" /> 
+            <eeepromEntry   description="Up to 2048"             eeeSize="2048"  value="0xF2" /> <!-- Size is not limited by hardware -->
+            <eeepromEntry   description="Up to 1024"             eeeSize="1024"  value="0xF2" /> <!-- Size is not limited by hardware -->
+            <partitionEntry description="DFlash=64, No EEPROM"   eeSize="0K"     value="0x00" />
+            <partitionEntry description="DFlash=32, EEPROM=32"   eeSize="32K"    value="0x03" />
+            <partitionEntry description="DFlash=16, EEPROM=48"   eeSize="48K"    value="0x0A" />
+            <partitionEntry description="No DFlash, EEPROM=64"   eeSize="64K"    value="0x08" />
+         </flexNVMInfo>
+      </memory>
+      <!-- Single (up to) 4K EEPROM with 64K EEPROM backing as part of 512K block, EEERST=1 -->
+      <memory id="FTFC_DFlash0_512K_4KS" type="flexNVM" registerAddress="0x40020000"  sectorSize="4096" alignment="8">
+         <memoryRange start="0x10000000" size="512K" />
+         <flexNVMInfo id="kinetis512K_64K_FlexPartitionInfoEERST_Single" backingRatio="16">
+            <eeepromEntry   description="Unchanged/None"         eeeSize="0"     value="0xFF" /> 
+            <eeepromEntry   description="4096"                   eeeSize="4096"  value="0xF2" /> 
+            <partitionEntry description="DFlash=512, No EEPROM"  eeSize="0K"     value="0x00" />
+            <partitionEntry description="DFlash=448, EEPROM=64"  eeSize="64K"    value="0x04" />
+         </flexNVMInfo>
+      </memory>
+      <!-- Single 2K EEPROM with 32K/48K/64K EEPROM backing, EEERST=1 -->
       <flexNVMInfo id="kinetis32K_FlexPartitionInfoEERST" backingRatio="16"> <!-- EEERST=1 -->
          <eeepromEntry   description="Unchanged/None"         eeeSize="0"     value="0xFF" /> 
          <eeepromEntry   description="32"                     eeeSize="32"    value="0x79" /> 
@@ -855,6 +894,63 @@ Test Devices:
                0100 Kx7x Family
                
          mask 0xFFFF0F80
+	 
+      // S32 K devices
+      SDID[31..28] = S32K product series generation 
+      SDID[27..24] = Sub-series
+        4 S32K14x 
+        1 S32K11x
+      SDID[23..20] = Derivate
+        8 S32K148 
+        6 S32K146 
+        4 S32K144 
+        2 S32K142 
+        8 S32118
+        6 S32K116
+      SDID[19..16] = RAM size
+         0000b - Reserved
+         0001b - Reserved
+         0010b - Reserved
+         0011b - Reserved
+         0100b - Reserved
+         0101b - Reserved
+         0110b - Reserved
+         0111b - Reserved
+         1000b - Reserved
+         1001b - Reserved
+         1010b - Reserved
+         1011b - 192 KB (S32K148), 96 KB (S32K146), Reserved (others)
+         1100b - Reserved
+         1101b - 48 KB (S32K144), Reserved (others)
+         1110b - Reserved
+         1111b - 256KB(S32K148),128KB(S32K146),64KB(S32K144),32KB(S32K142),25KB(S32K118),17KB(S32K116)
+      SDID[15..12] = Device revision number
+      SDID[11..9]  = Package
+         0000b - Reserved
+         0001b - Reserved
+         0010b - 48 LQFP
+         0011b - 64 LQFP
+         0100b - 100 LQFP
+         0101b - Reserved
+         0110b - 144 LQFP
+         0111b - 176 LQFP
+         1000b - 100 MAP BGA
+         1001b - Reserved
+         1010b - Reserved
+         1011b - Reserved
+         1100b - Reserved
+         1101b - Reserved
+         1110b - Reserved
+         1111b - Reserved
+      SDID[7..0] = FEATURES
+         7: Security
+         6: ISO CAN-FD
+         5: FlexIO
+         4: QuadSPI
+         3: ENET
+         2: Reserved
+         1: SAI
+         0: Reserved
          -->
    
    <deviceList>
@@ -873,6 +969,71 @@ Test Devices:
          <note>Default ARM Device</note>
       </device>
 	  
+<!-- ===================================================================================== -->
+<!-- S32K14 -->
+      <device name="S32K142" family="CortexM4F" subfamily="S32K14">
+	 <!-- 28KB RAM, 4KB FlexRAM, 256KB PFlash, 64KB DFlash/FlexNVM -->
+         <memory type="ram">
+            <memoryRange start="0x1FFFC000" end="0x20002FFF" name="ram" />
+         </memory>
+         <memoryRef ref="kinetis4K_FlexRam" />
+         <memoryRef ref="FTFE_PFlash0_SEC_256K_2KS" /> <!-- Non-interleaved 256K => 2K sector -->
+         <memoryRef ref="FTFC_DFlash0_64K_2KS" />      <!-- Non-interleaved 64K => 2K sector -->
+         <memoryRef ref="kinetisIO_MKE1xF" />
+         <sdid value="0x14200000" mask="0xFFF00000" />
+         <tclScriptRef ref="Kinetis-MKxx-Scripts" />
+         <flashProgramRef ref="Kinetis-FTFE-MKE18-flash-program" />
+         <registerDescriptionRef ref="CortexM4F-register-description" />
+         <note>S32K1XXRM</note>
+      </device>
+      <device name="S32K144" family="CortexM4F" subfamily="S32K14">
+	 <!-- 60KB RAM, 4KB FlexRAM 512KB PFlash, 64KB DFlash/FlexNVM -->
+         <memory type="ram">
+            <memoryRange start="0x1FFF8000" end="0x20006FFF" name="ram" />
+         </memory>
+         <memoryRef ref="kinetis4K_FlexRam" />
+         <memoryRef ref="FTFE_PFlash0_SEC_512K_4KS" /> <!-- Interleaved 2x256K => 4K sector -->
+         <memoryRef ref="FTFC_DFlash0_64K_2KS" />      <!-- Non-interleaved 64K => 2K sector -->
+         <memoryRef ref="kinetisIO_MKE1xF" />
+         <sdid value="0x14400000" mask="0xFFF00000" />
+         <tclScriptRef ref="Kinetis-MKxx-Scripts" />
+         <flashProgramRef ref="Kinetis-FTFE-MKE18-flash-program" />
+         <registerDescriptionRef ref="CortexM4F-register-description" />
+         <note>S32K1XXRM</note>
+      </device>
+      <device name="S32K146" family="CortexM4F" subfamily="S32K14">
+	 <!-- 124KB RAM, 4KB FlexRAM, 1MB PFlash, 64KB DFlash/FlexNVM -->
+         <memory type="ram">
+            <memoryRange start="0x1FFF0000" end="0x2000EFFF" name="ram" />
+         </memory>
+         <memoryRef ref="kinetis4K_FlexRam" />
+         <memoryRef ref="FTFE_PFlash0_SEC_512K_4KS" /> <!-- Interleaved 2x256K => 4K sector -->
+         <memoryRef ref="FTFE_PFlash1_512K_4KS" />     <!-- Interleaved 2x256K => 4K sector -->
+         <memoryRef ref="FTFC_DFlash0_64K_2KS" />      <!-- Non-interleaved 64K => 2K sector -->
+         <memoryRef ref="kinetisIO_MKE1xF" />
+         <sdid value="0x14600000" mask="0xFFF00000" />
+         <tclScriptRef ref="Kinetis-MKxx-Scripts" />
+         <flashProgramRef ref="Kinetis-FTFE-MKE18-flash-program" />
+         <registerDescriptionRef ref="CortexM4F-register-description" />
+         <note>S32K1XXRM</note>
+      </device>
+      <device name="S32K148" family="CortexM4F" subfamily="S32K14">
+	 <!-- 252KB RAM, 4KB FlexRAM, 1.5MB PFlash, 512KB DFlash/64K FlexNVM -->
+         <memory type="ram">
+            <memoryRange start="0x1FFE0000" end="0x2001EFFF" name="ram" />
+         </memory>
+         <memoryRef ref="kinetis4K_FlexRam" />
+         <memoryRef ref="FTFE_PFlash0_SEC_512K_4KS" /> <!-- Interleaved 2x256K => 4K sector -->
+         <memoryRef ref="FTFE_PFlash1_512K_4KS" />     <!-- Interleaved 2x256K => 4K sector -->
+         <memoryRef ref="FTFE_PFlash2_512K_4KS" />     <!-- Interleaved 2x256K => 4K sector -->
+         <memoryRef ref="FTFC_DFlash0_512K_4KS" />     <!-- Interleaved 2x256K => 4K sector -->
+         <memoryRef ref="kinetisIO_MKE1xF" />
+         <sdid value="0x14800000" mask="0xFFF00000" />
+         <tclScriptRef ref="Kinetis-MKxx-Scripts" />
+         <flashProgramRef ref="Kinetis-FTFE-MKE18-flash-program" />
+         <registerDescriptionRef ref="CortexM4F-register-description" />
+         <note>S32K1XXRM</note>
+      </device>
 <!-- ===================================================================================== -->
 <!-- MKE02Z2 -->
       <device name="MKE02Z16M2" family="CortexM0plus" subfamily="MKE02Z2">
