@@ -972,12 +972,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0</name>
-                           <description>Slow IRC is disabled in supported Stop modes</description>
+                           <description>Slow IRC is disabled in Stop modes</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>1</name>
-                           <description>Slow IRC is enabled in supported Stop modes</description>
+                           <description>Slow IRC is enabled in Stop modes</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1286,7 +1286,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>1</name>
-                           <description>Fast IRC is enabled and output clock is valid. The clock is valid once there is an output clock from the FIRC analog</description>
+                           <description>Fast IRC is enabled and output clock is valid</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

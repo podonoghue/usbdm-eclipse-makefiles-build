@@ -1,0 +1,136 @@
+<!--
+Devices using this peripheral: 
+      S32K142
+      S32K144
+      S32K146
+      S32K148
+-->
+      <peripheral>
+         <?sourceFile "EWM_S32K14x" ?>
+         <name>EWM</name>
+         <description>External Watchdog Monitor</description>
+         <groupName>EWM</groupName>
+         <headerStructName>EWM</headerStructName>
+         <baseAddress>0x40061000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x0</offset>
+            <size>0x1</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x1</offset>
+            <size>0x3</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x5</offset>
+            <size>0x1</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>CTRL</name>
+               <description>Control Register</description>
+               <addressOffset>0x0</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>EWMEN</name>
+                     <description>EWM enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-once</access>
+                  </field>
+                  <field>
+                     <name>ASSIN</name>
+                     <description>EWM_in&apos;s Assertion State Select</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-once</access>
+                  </field>
+                  <field>
+                     <name>INEN</name>
+                     <description>Input Enable</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <access>write-once</access>
+                  </field>
+                  <field>
+                     <name>INTEN</name>
+                     <description>Interrupt Enable</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>SERV</name>
+               <description>Service Register</description>
+               <addressOffset>0x1</addressOffset>
+               <size>8</size>
+               <access>write-only</access>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>SERVICE</name>
+                     <description>SERVICE</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CMPL</name>
+               <description>Compare Low Register</description>
+               <addressOffset>0x2</addressOffset>
+               <size>8</size>
+               <access>write-once</access>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>COMPAREL</name>
+                     <description>COMPAREL</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CMPH</name>
+               <description>Compare High Register</description>
+               <addressOffset>0x3</addressOffset>
+               <size>8</size>
+               <access>write-once</access>
+               <resetValue>0xFF</resetValue>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>COMPAREH</name>
+                     <description>COMPAREH</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CLKPRESCALER</name>
+               <description>Clock Prescaler Register</description>
+               <addressOffset>0x5</addressOffset>
+               <size>8</size>
+               <access>write-once</access>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>CLK_DIV</name>
+                     <description>CLK_DIV</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

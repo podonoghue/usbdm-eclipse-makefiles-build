@@ -1,0 +1,777 @@
+<!--
+Devices using this vector table: 
+   S32K148
+-->
+<interrupts>
+   <name>S32K148_VectorTable</name>
+   <description>S32K148 VectorTable</description>
+   <interrupt>
+      <name>DMA0</name>
+      <description>Enhanced Direct Memory Access</description>
+      <value>0</value>
+      <peripheral>DMA</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>DMA1</name>
+      <description>Enhanced Direct Memory Access</description>
+      <value>1</value>
+      <peripheral>DMA</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>DMA2</name>
+      <description>Enhanced Direct Memory Access</description>
+      <value>2</value>
+      <peripheral>DMA</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>DMA3</name>
+      <description>Enhanced Direct Memory Access</description>
+      <value>3</value>
+      <peripheral>DMA</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>DMA4</name>
+      <description>Enhanced Direct Memory Access</description>
+      <value>4</value>
+      <peripheral>DMA</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>DMA5</name>
+      <description>Enhanced Direct Memory Access</description>
+      <value>5</value>
+      <peripheral>DMA</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>DMA6</name>
+      <description>Enhanced Direct Memory Access</description>
+      <value>6</value>
+      <peripheral>DMA</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>DMA7</name>
+      <description>Enhanced Direct Memory Access</description>
+      <value>7</value>
+      <peripheral>DMA</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>DMA8</name>
+      <description>Enhanced Direct Memory Access</description>
+      <value>8</value>
+      <peripheral>DMA</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>DMA9</name>
+      <description>Enhanced Direct Memory Access</description>
+      <value>9</value>
+      <peripheral>DMA</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>DMA10</name>
+      <description>Enhanced Direct Memory Access</description>
+      <value>10</value>
+      <peripheral>DMA</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>DMA11</name>
+      <description>Enhanced Direct Memory Access</description>
+      <value>11</value>
+      <peripheral>DMA</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>DMA12</name>
+      <description>Enhanced Direct Memory Access</description>
+      <value>12</value>
+      <peripheral>DMA</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>DMA13</name>
+      <description>Enhanced Direct Memory Access</description>
+      <value>13</value>
+      <peripheral>DMA</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>DMA14</name>
+      <description>Enhanced Direct Memory Access</description>
+      <value>14</value>
+      <peripheral>DMA</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>DMA15</name>
+      <description>Enhanced Direct Memory Access</description>
+      <value>15</value>
+      <peripheral>DMA</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>DMA_Error</name>
+      <description>Enhanced Direct Memory Access</description>
+      <value>16</value>
+      <peripheral>DMA</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>MCM</name>
+      <description>Core Platform Miscellaneous Control Module</description>
+      <value>17</value>
+      <peripheral>MCM</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTFC</name>
+      <description>FTFC</description>
+      <value>18</value>
+      <peripheral>FTFC</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>Read_Collision</name>
+      <description>FTFC</description>
+      <value>19</value>
+      <peripheral>FTFC</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>LVD_LVW</name>
+      <description>PMC</description>
+      <value>20</value>
+      <peripheral>PMC</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTFC_Fault</name>
+      <description>FTFC</description>
+      <value>21</value>
+      <peripheral>FTFC</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>WDOG_EWM</name>
+      <description>Watchdog timer</description>
+      <value>22</value>
+      <peripheral>WDOG</peripheral>
+      <peripheral>EWM</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>RCM</name>
+      <description>Reset Control Module</description>
+      <value>23</value>
+      <peripheral>RCM</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>LPI2C0_Master</name>
+      <description>The LPI2C Memory Map/Register Definition can be found here</description>
+      <value>24</value>
+      <peripheral>LPI2C0</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>LPI2C0_Slave</name>
+      <description>The LPI2C Memory Map/Register Definition can be found here</description>
+      <value>25</value>
+      <peripheral>LPI2C0</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>LPSPI0</name>
+      <description>The LPSPI Memory Map/Register Definition can be found here</description>
+      <value>26</value>
+      <peripheral>LPSPI0</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>LPSPI1</name>
+      <description>The LPSPI Memory Map/Register Definition can be found here</description>
+      <value>27</value>
+      <peripheral>LPSPI1</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>LPSPI2</name>
+      <description>The LPSPI Memory Map/Register Definition can be found here</description>
+      <value>28</value>
+      <peripheral>LPSPI2</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>LPI2C1_Master</name>
+      <description>The LPI2C Memory Map/Register Definition can be found here</description>
+      <value>29</value>
+      <peripheral>LPI2C1</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>LPI2C1_Slave</name>
+      <description>The LPI2C Memory Map/Register Definition can be found here</description>
+      <value>30</value>
+      <peripheral>LPI2C1</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>LPUART0_RxTx</name>
+      <description>Universal Asynchronous Receiver/Transmitter</description>
+      <value>31</value>
+      <peripheral>LPUART0</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>LPUART1_RxTx</name>
+      <description>Universal Asynchronous Receiver/Transmitter</description>
+      <value>33</value>
+      <peripheral>LPUART1</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>LPUART2_RxTx</name>
+      <description>Universal Asynchronous Receiver/Transmitter</description>
+      <value>35</value>
+      <peripheral>LPUART2</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>ADC0</name>
+      <description>Analog-to-Digital Converter</description>
+      <value>39</value>
+      <peripheral>ADC0</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>ADC1</name>
+      <description>Analog-to-Digital Converter</description>
+      <value>40</value>
+      <peripheral>ADC1</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>CMP0</name>
+      <description>High-Speed Comparator (CMP), Voltage Reference (VREF) Digital-to-Analog Converter (DAC), and Analog Mux</description>
+      <value>41</value>
+      <peripheral>CMP0</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>ERM_single_fault</name>
+      <description>ERM</description>
+      <value>44</value>
+      <peripheral>ERM</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>ERM_double_fault</name>
+      <description>ERM</description>
+      <value>45</value>
+      <peripheral>ERM</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>RTC</name>
+      <description>Secure Real Time Clock</description>
+      <value>46</value>
+      <peripheral>RTC</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>RTC_Seconds</name>
+      <description>Secure Real Time Clock</description>
+      <value>47</value>
+      <peripheral>RTC</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>LPIT0_Ch0</name>
+      <description>Low Power Periodic Interrupt Timer</description>
+      <value>48</value>
+      <peripheral>LPIT0</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>LPIT0_Ch1</name>
+      <description>Low Power Periodic Interrupt Timer</description>
+      <value>49</value>
+      <peripheral>LPIT0</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>LPIT0_Ch2</name>
+      <description>Low Power Periodic Interrupt Timer</description>
+      <value>50</value>
+      <peripheral>LPIT0</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>LPIT0_Ch3</name>
+      <description>Low Power Periodic Interrupt Timer</description>
+      <value>51</value>
+      <peripheral>LPIT0</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>PDB0</name>
+      <description>Programmable Delay Block</description>
+      <value>52</value>
+      <peripheral>PDB0</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>SAI1_Tx</name>
+      <description>Synchronous Serial Interface</description>
+      <value>55</value>
+      <peripheral>SAI1</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>SAI1_Rx</name>
+      <description>Synchronous Serial Interface</description>
+      <value>56</value>
+      <peripheral>SAI1</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>SCG</name>
+      <description>System Clock Generator</description>
+      <value>57</value>
+      <peripheral>SCG</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>LPTMR0</name>
+      <description>Low Power Timer</description>
+      <value>58</value>
+      <peripheral>LPTMR0</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>PORTA</name>
+      <description>Pin Control and Interrupts</description>
+      <value>59</value>
+      <peripheral>PORTA</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>PORTB</name>
+      <description>Pin Control and Interrupts</description>
+      <value>60</value>
+      <peripheral>PORTB</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>PORTC</name>
+      <description>Pin Control and Interrupts</description>
+      <value>61</value>
+      <peripheral>PORTC</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>PORTD</name>
+      <description>Pin Control and Interrupts</description>
+      <value>62</value>
+      <peripheral>PORTD</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>PORTE</name>
+      <description>Pin Control and Interrupts</description>
+      <value>63</value>
+      <peripheral>PORTE</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>SWI</name>
+      <description></description>
+      <value>64</value>
+   </interrupt>
+   <interrupt>
+      <name>QSPI</name>
+      <description>QuadSPI</description>
+      <value>65</value>
+      <peripheral>QuadSPI</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>PDB1</name>
+      <description>Programmable Delay Block</description>
+      <value>68</value>
+      <peripheral>PDB1</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FLEXIO</name>
+      <description>The FLEXIO Memory Map/Register Definition can be found here</description>
+      <value>69</value>
+      <peripheral>FLEXIO</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>SAI0_Tx</name>
+      <description>Synchronous Serial Interface</description>
+      <value>70</value>
+      <peripheral>SAI0</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>SAI0_Rx</name>
+      <description>Synchronous Serial Interface</description>
+      <value>71</value>
+      <peripheral>SAI0</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>ENET_TIMER</name>
+      <description>Ethernet MAC-NET Core</description>
+      <value>72</value>
+      <peripheral>ENET</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>ENET_TX</name>
+      <description>Ethernet MAC-NET Core</description>
+      <value>73</value>
+      <peripheral>ENET</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>ENET_RX</name>
+      <description>Ethernet MAC-NET Core</description>
+      <value>74</value>
+      <peripheral>ENET</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>ENET_ERR</name>
+      <description>Ethernet MAC-NET Core</description>
+      <value>75</value>
+      <peripheral>ENET</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>ENET_STOP</name>
+      <description>Ethernet MAC-NET Core</description>
+      <value>76</value>
+      <peripheral>ENET</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>ENET_WAKE</name>
+      <description>Ethernet MAC-NET Core</description>
+      <value>77</value>
+      <peripheral>ENET</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>CAN0_ORed</name>
+      <description>Flex Controller Area Network module</description>
+      <value>78</value>
+      <peripheral>CAN0</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>CAN0_Error</name>
+      <description>Flex Controller Area Network module</description>
+      <value>79</value>
+      <peripheral>CAN0</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>CAN0_Wake_Up</name>
+      <description>Flex Controller Area Network module</description>
+      <value>80</value>
+      <peripheral>CAN0</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>CAN0_ORed_0_15_MB</name>
+      <description>Flex Controller Area Network module</description>
+      <value>81</value>
+      <peripheral>CAN0</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>CAN0_ORed_16_31_MB</name>
+      <description>Flex Controller Area Network module</description>
+      <value>82</value>
+      <peripheral>CAN0</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>CAN1_ORed</name>
+      <description>Flex Controller Area Network module</description>
+      <value>85</value>
+      <peripheral>CAN1</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>CAN1_Error</name>
+      <description>Flex Controller Area Network module</description>
+      <value>86</value>
+      <peripheral>CAN1</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>CAN1_ORed_0_15_MB</name>
+      <description>Flex Controller Area Network module</description>
+      <value>88</value>
+      <peripheral>CAN1</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>CAN1_ORed_16_31_MB</name>
+      <description>Flex Controller Area Network module</description>
+      <value>89</value>
+      <peripheral>CAN1</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>CAN2_ORed</name>
+      <description>Flex Controller Area Network module</description>
+      <value>92</value>
+      <peripheral>CAN2</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>CAN2_Error</name>
+      <description>Flex Controller Area Network module</description>
+      <value>93</value>
+      <peripheral>CAN2</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>CAN2_ORed_0_15_MB</name>
+      <description>Flex Controller Area Network module</description>
+      <value>95</value>
+      <peripheral>CAN2</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>CAN2_ORed_16_31_MB</name>
+      <description>Flex Controller Area Network module</description>
+      <value>96</value>
+      <peripheral>CAN2</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM0_Ch0_Ch1</name>
+      <description>FlexTimer Module</description>
+      <value>99</value>
+      <peripheral>FTM0</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM0_Ch2_Ch3</name>
+      <description>FlexTimer Module</description>
+      <value>100</value>
+      <peripheral>FTM0</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM0_Ch4_Ch5</name>
+      <description>FlexTimer Module</description>
+      <value>101</value>
+      <peripheral>FTM0</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM0_Ch6_Ch7</name>
+      <description>FlexTimer Module</description>
+      <value>102</value>
+      <peripheral>FTM0</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM0_Fault</name>
+      <description>FlexTimer Module</description>
+      <value>103</value>
+      <peripheral>FTM0</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM0_Ovf_Reload</name>
+      <description>FlexTimer Module</description>
+      <value>104</value>
+      <peripheral>FTM0</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM1_Ch0_Ch1</name>
+      <description>FlexTimer Module</description>
+      <value>105</value>
+      <peripheral>FTM1</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM1_Ch2_Ch3</name>
+      <description>FlexTimer Module</description>
+      <value>106</value>
+      <peripheral>FTM1</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM1_Ch4_Ch5</name>
+      <description>FlexTimer Module</description>
+      <value>107</value>
+      <peripheral>FTM1</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM1_Ch6_Ch7</name>
+      <description>FlexTimer Module</description>
+      <value>108</value>
+      <peripheral>FTM1</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM1_Fault</name>
+      <description>FlexTimer Module</description>
+      <value>109</value>
+      <peripheral>FTM1</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM1_Ovf_Reload</name>
+      <description>FlexTimer Module</description>
+      <value>110</value>
+      <peripheral>FTM1</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM2_Ch0_Ch1</name>
+      <description>FlexTimer Module</description>
+      <value>111</value>
+      <peripheral>FTM2</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM2_Ch2_Ch3</name>
+      <description>FlexTimer Module</description>
+      <value>112</value>
+      <peripheral>FTM2</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM2_Ch4_Ch5</name>
+      <description>FlexTimer Module</description>
+      <value>113</value>
+      <peripheral>FTM2</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM2_Ch6_Ch7</name>
+      <description>FlexTimer Module</description>
+      <value>114</value>
+      <peripheral>FTM2</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM2_Fault</name>
+      <description>FlexTimer Module</description>
+      <value>115</value>
+      <peripheral>FTM2</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM2_Ovf_Reload</name>
+      <description>FlexTimer Module</description>
+      <value>116</value>
+      <peripheral>FTM2</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM3_Ch0_Ch1</name>
+      <description>FlexTimer Module</description>
+      <value>117</value>
+      <peripheral>FTM3</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM3_Ch2_Ch3</name>
+      <description>FlexTimer Module</description>
+      <value>118</value>
+      <peripheral>FTM3</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM3_Ch4_Ch5</name>
+      <description>FlexTimer Module</description>
+      <value>119</value>
+      <peripheral>FTM3</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM3_Ch6_Ch7</name>
+      <description>FlexTimer Module</description>
+      <value>120</value>
+      <peripheral>FTM3</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM3_Fault</name>
+      <description>FlexTimer Module</description>
+      <value>121</value>
+      <peripheral>FTM3</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM3_Ovf_Reload</name>
+      <description>FlexTimer Module</description>
+      <value>122</value>
+      <peripheral>FTM3</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM4_Ch0_Ch1</name>
+      <description>FlexTimer Module</description>
+      <value>123</value>
+      <peripheral>FTM4</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM4_Ch2_Ch3</name>
+      <description>FlexTimer Module</description>
+      <value>124</value>
+      <peripheral>FTM4</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM4_Ch4_Ch5</name>
+      <description>FlexTimer Module</description>
+      <value>125</value>
+      <peripheral>FTM4</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM4_Ch6_Ch7</name>
+      <description>FlexTimer Module</description>
+      <value>126</value>
+      <peripheral>FTM4</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM4_Fault</name>
+      <description>FlexTimer Module</description>
+      <value>127</value>
+      <peripheral>FTM4</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM4_Ovf_Reload</name>
+      <description>FlexTimer Module</description>
+      <value>128</value>
+      <peripheral>FTM4</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM5_Ch0_Ch1</name>
+      <description>FlexTimer Module</description>
+      <value>129</value>
+      <peripheral>FTM5</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM5_Ch2_Ch3</name>
+      <description>FlexTimer Module</description>
+      <value>130</value>
+      <peripheral>FTM5</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM5_Ch4_Ch5</name>
+      <description>FlexTimer Module</description>
+      <value>131</value>
+      <peripheral>FTM5</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM5_Ch6_Ch7</name>
+      <description>FlexTimer Module</description>
+      <value>132</value>
+      <peripheral>FTM5</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM5_Fault</name>
+      <description>FlexTimer Module</description>
+      <value>133</value>
+      <peripheral>FTM5</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM5_Ovf_Reload</name>
+      <description>FlexTimer Module</description>
+      <value>134</value>
+      <peripheral>FTM5</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM6_Ch0_Ch1</name>
+      <description>FlexTimer Module</description>
+      <value>135</value>
+      <peripheral>FTM6</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM6_Ch2_Ch3</name>
+      <description>FlexTimer Module</description>
+      <value>136</value>
+      <peripheral>FTM6</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM6_Ch4_Ch5</name>
+      <description>FlexTimer Module</description>
+      <value>137</value>
+      <peripheral>FTM6</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM6_Ch6_Ch7</name>
+      <description>FlexTimer Module</description>
+      <value>138</value>
+      <peripheral>FTM6</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM6_Fault</name>
+      <description>FlexTimer Module</description>
+      <value>139</value>
+      <peripheral>FTM6</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM6_Ovf_Reload</name>
+      <description>FlexTimer Module</description>
+      <value>140</value>
+      <peripheral>FTM6</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM7_Ch0_Ch1</name>
+      <description>FlexTimer Module</description>
+      <value>141</value>
+      <peripheral>FTM7</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM7_Ch2_Ch3</name>
+      <description>FlexTimer Module</description>
+      <value>142</value>
+      <peripheral>FTM7</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM7_Ch4_Ch5</name>
+      <description>FlexTimer Module</description>
+      <value>143</value>
+      <peripheral>FTM7</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM7_Ch6_Ch7</name>
+      <description>FlexTimer Module</description>
+      <value>144</value>
+      <peripheral>FTM7</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM7_Fault</name>
+      <description>FlexTimer Module</description>
+      <value>145</value>
+      <peripheral>FTM7</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>FTM7_Ovf_Reload</name>
+      <description>FlexTimer Module</description>
+      <value>146</value>
+      <peripheral>FTM7</peripheral>
+   </interrupt>
+</interrupts>
+

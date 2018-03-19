@@ -136,6 +136,18 @@ Devices using this peripheral:
                      <bitOffset>22</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Not pending</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Pending</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>ISRPREEMPT</name>

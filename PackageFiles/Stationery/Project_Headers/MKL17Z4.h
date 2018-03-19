@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2017/12
+ * @date     2018/03
  *
  *******************************************************************************************************/
 
@@ -2736,7 +2736,7 @@ typedef struct LPUART_Type {
 */
 
 /* ================================================================================ */
-/* ================           MCG (file:MCG_LITE_MKL17Z4)          ================ */
+/* ================           MCG (file:MCG_LITE_HIRCLPEN)         ================ */
 /* ================================================================================ */
 
 /**
@@ -2828,6 +2828,9 @@ typedef struct MCG_Type {
 #define MCG_MC_LIRC_DIV2_MASK                    (0x7U)                                              /*!< MCG_MC.LIRC_DIV2 Mask                   */
 #define MCG_MC_LIRC_DIV2_SHIFT                   (0U)                                                /*!< MCG_MC.LIRC_DIV2 Position               */
 #define MCG_MC_LIRC_DIV2(x)                      (((uint8_t)(((uint8_t)(x))<<0U))&0x7UL)             /*!< MCG_MC.LIRC_DIV2 Field                  */
+#define MCG_MC_HIRCLPEN_MASK                     (0x40U)                                             /*!< MCG_MC.HIRCLPEN Mask                    */
+#define MCG_MC_HIRCLPEN_SHIFT                    (6U)                                                /*!< MCG_MC.HIRCLPEN Position                */
+#define MCG_MC_HIRCLPEN(x)                       (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< MCG_MC.HIRCLPEN Field                   */
 #define MCG_MC_HIRCEN_MASK                       (0x80U)                                             /*!< MCG_MC.HIRCEN Mask                      */
 #define MCG_MC_HIRCEN_SHIFT                      (7U)                                                /*!< MCG_MC.HIRCEN Position                  */
 #define MCG_MC_HIRCEN(x)                         (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< MCG_MC.HIRCEN Field                     */
@@ -3734,7 +3737,7 @@ typedef struct PORT_Type {
 */
 
 /* ================================================================================ */
-/* ================           PORTC (derived from PORTB)           ================ */
+/* ================           PORTC (derived from PORTA)           ================ */
 /* ================================================================================ */
 
 /**
@@ -3757,7 +3760,7 @@ typedef struct PORT_Type {
 */
 
 /* ================================================================================ */
-/* ================           PORTD (derived from PORTB)           ================ */
+/* ================           PORTD (derived from PORTA)           ================ */
 /* ================================================================================ */
 
 /**
@@ -3780,7 +3783,7 @@ typedef struct PORT_Type {
 */
 
 /* ================================================================================ */
-/* ================           PORTE (derived from PORTB)           ================ */
+/* ================           PORTE (derived from PORTA)           ================ */
 /* ================================================================================ */
 
 /**

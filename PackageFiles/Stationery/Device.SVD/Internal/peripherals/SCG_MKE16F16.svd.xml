@@ -233,22 +233,22 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0001</name>
-                           <description>System OSC</description>
+                           <description>System OSC (SOSC_CLK)</description>
                            <value>0b0001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0010</name>
-                           <description>Slow IRC</description>
+                           <description>Slow IRC (SIRC_CLK)</description>
                            <value>0b0010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0011</name>
-                           <description>Fast IRC</description>
+                           <description>Fast IRC (FIRC_CLK)</description>
                            <value>0b0011</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0110</name>
-                           <description>System PLL</description>
+                           <description>System PLL (SPLL_CLK)</description>
                            <value>0b0110</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -401,22 +401,22 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0001</name>
-                           <description>System OSC</description>
+                           <description>System OSC (SOSC_CLK)</description>
                            <value>0b0001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0010</name>
-                           <description>Slow IRC</description>
+                           <description>Slow IRC (SIRC_CLK)</description>
                            <value>0b0010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0011</name>
-                           <description>Fast IRC</description>
+                           <description>Fast IRC (FIRC_CLK)</description>
                            <value>0b0011</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0110</name>
-                           <description>System PLL</description>
+                           <description>System PLL (SPLL_CLK)</description>
                            <value>0b0110</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -574,7 +574,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0010</name>
-                           <description>Slow IRC</description>
+                           <description>Slow IRC (SIRC_CLK)</description>
                            <value>0b0010</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -727,22 +727,22 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0001</name>
-                           <description>System OSC</description>
+                           <description>System OSC (SOSC_CLK)</description>
                            <value>0b0001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0010</name>
-                           <description>Slow IRC</description>
+                           <description>Slow IRC (SIRC_CLK)</description>
                            <value>0b0010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0011</name>
-                           <description>Fast IRC</description>
+                           <description>Fast IRC (FIRC_CLK)</description>
                            <value>0b0011</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0110</name>
-                           <description>System PLL</description>
+                           <description>System PLL (SPLL_CLK)</description>
                            <value>0b0110</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -768,22 +768,22 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0001</name>
-                           <description>System OSC</description>
+                           <description>System OSC (SOSC_CLK)</description>
                            <value>0b0001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0010</name>
-                           <description>Slow IRC</description>
+                           <description>Slow IRC (SIRC_CLK)</description>
                            <value>0b0010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0011</name>
-                           <description>Fast IRC</description>
+                           <description>Fast IRC (FIRC_CLK)</description>
                            <value>0b0011</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0110</name>
-                           <description>System PLL Reserved</description>
+                           <description>System PLL (SPLL_CLK)</description>
                            <value>0b0110</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1054,7 +1054,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>1</name>
-                           <description>Internal crystal oscillator of OSC requested</description>
+                           <description>Internal crystal oscillator of OSC selected</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1067,7 +1067,7 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0</name>
-                           <description>Configure crystal oscillaor for low-power operation</description>
+                           <description>Configure crystal oscillator for low-power operation</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>

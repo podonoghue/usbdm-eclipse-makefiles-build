@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2017/12
+ * @date     2018/03
  *
  *******************************************************************************************************/
 
@@ -4561,7 +4561,15 @@ typedef struct PDB_Type {
    } CH[1];                                     /**< 0010: (cluster: size=0x0028, 40)                                   */
         uint8_t   RESERVED_1[344];             
    __IO uint32_t  POEN;                         /**< 0190: Pulse-Out Enable Register                                    */
-   __IO uint32_t  PODLY[2];                     /**< 0194: Pulse-Out  Delay Register                                    */
+   struct {
+      union {                                   /**< 0194: (size=0004)                                                  */
+         __IO uint32_t  PODLY;                  /**< 0194: Pulse-Out  Delay Register                                    */
+         struct {                               /**< 0194: (size=0004)                                                  */
+            __IO uint16_t  DLY2;                /**< 0194: Pulse-Out  Delay Register                                    */
+            __IO uint16_t  DLY1;                /**< 0196: Pulse-Out  Delay Register                                    */
+         };
+      };
+   } POnDLY[1];                                 /**< 0194: (cluster: size=0x0004, 4)                                    */
 } PDB_Type;
 
 /**
@@ -4658,6 +4666,14 @@ typedef struct PDB_Type {
 #define PDB_PODLY_DLY1_MASK                      (0xFFFF0000U)                                       /*!< PDB0_PODLY.DLY1 Mask                    */
 #define PDB_PODLY_DLY1_SHIFT                     (16U)                                               /*!< PDB0_PODLY.DLY1 Position                */
 #define PDB_PODLY_DLY1(x)                        (((uint32_t)(((uint32_t)(x))<<16U))&0xFFFF0000UL)   /*!< PDB0_PODLY.DLY1 Field                   */
+/* ------- DLY2 Bit Fields                          ------ */
+#define PDB_DLY2_DLY2_MASK                       (0xFFFFU)                                           /*!< PDB0_DLY2.DLY2 Mask                     */
+#define PDB_DLY2_DLY2_SHIFT                      (0U)                                                /*!< PDB0_DLY2.DLY2 Position                 */
+#define PDB_DLY2_DLY2(x)                         (((uint16_t)(((uint16_t)(x))<<0U))&0xFFFFUL)        /*!< PDB0_DLY2.DLY2 Field                    */
+/* ------- DLY1 Bit Fields                          ------ */
+#define PDB_DLY1_DLY1_MASK                       (0xFFFFU)                                           /*!< PDB0_DLY1.DLY1 Mask                     */
+#define PDB_DLY1_DLY1_SHIFT                      (0U)                                                /*!< PDB0_DLY1.DLY1 Position                 */
+#define PDB_DLY1_DLY1(x)                         (((uint16_t)(((uint16_t)(x))<<0U))&0xFFFFUL)        /*!< PDB0_DLY1.DLY1 Field                    */
 /**
  * @} */ /* End group PDB_Register_Masks_GROUP 
  */

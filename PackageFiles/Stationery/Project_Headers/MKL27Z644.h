@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2017/12
+ * @date     2018/03
  *
  *******************************************************************************************************/
 
@@ -2459,7 +2459,7 @@ typedef struct LPUART_Type {
 */
 
 /* ================================================================================ */
-/* ================           MCG (file:MCG_LITE_MKL27Z644)        ================ */
+/* ================           MCG (file:MCG_LITE_HIRCLPEN)         ================ */
 /* ================================================================================ */
 
 /**
@@ -2477,8 +2477,15 @@ typedef struct MCG_Type {
    __I  uint8_t   S;                            /**< 0006: Status Register                                              */
         uint8_t   RESERVED_1;                  
    __IO uint8_t   SC;                           /**< 0008: Status and Control Register                                  */
-        uint8_t   RESERVED_2[15];              
+        uint8_t   RESERVED_2[11];              
+   __I  uint8_t   HCTRIM;                       /**< 0014: High-frequency IRC Coarse Trim Register                      */
+   __I  uint8_t   HTTRIM;                       /**< 0015: High-frequency IRC Tempco (Temperature Coefficient) Trim Register */
+   __I  uint8_t   HFTRIM;                       /**< 0016: High-frequency IRC Fine Trim Register                        */
+        uint8_t   RESERVED_3;                  
    __IO uint8_t   MC;                           /**< 0018: Miscellaneous Control Register                               */
+   __I  uint8_t   LTRIMRNG;                     /**< 0019: Low-frequency IRC Trim Range Register                        */
+   __I  uint8_t   LFTRIM;                       /**< 001A: Low-frequency IRC8M Trim Register                            */
+   __I  uint8_t   LSTRIM;                       /**< 001B: Low-frequency IRC2M Trim Register                            */
 } MCG_Type;
 
 /**
@@ -2528,6 +2535,18 @@ typedef struct MCG_Type {
 #define MCG_SC_FCRDIV_MASK                       (0xEU)                                              /*!< MCG_SC.FCRDIV Mask                      */
 #define MCG_SC_FCRDIV_SHIFT                      (1U)                                                /*!< MCG_SC.FCRDIV Position                  */
 #define MCG_SC_FCRDIV(x)                         (((uint8_t)(((uint8_t)(x))<<1U))&0xEUL)             /*!< MCG_SC.FCRDIV Field                     */
+/* ------- HCTRIM Bit Fields                        ------ */
+#define MCG_HCTRIM_COARSE_TRIM_MASK              (0x3FU)                                             /*!< MCG_HCTRIM.COARSE_TRIM Mask             */
+#define MCG_HCTRIM_COARSE_TRIM_SHIFT             (0U)                                                /*!< MCG_HCTRIM.COARSE_TRIM Position         */
+#define MCG_HCTRIM_COARSE_TRIM(x)                (((uint8_t)(((uint8_t)(x))<<0U))&0x3FUL)            /*!< MCG_HCTRIM.COARSE_TRIM Field            */
+/* ------- HTTRIM Bit Fields                        ------ */
+#define MCG_HTTRIM_TEMPCO_TRIM_MASK              (0x1FU)                                             /*!< MCG_HTTRIM.TEMPCO_TRIM Mask             */
+#define MCG_HTTRIM_TEMPCO_TRIM_SHIFT             (0U)                                                /*!< MCG_HTTRIM.TEMPCO_TRIM Position         */
+#define MCG_HTTRIM_TEMPCO_TRIM(x)                (((uint8_t)(((uint8_t)(x))<<0U))&0x1FUL)            /*!< MCG_HTTRIM.TEMPCO_TRIM Field            */
+/* ------- HFTRIM Bit Fields                        ------ */
+#define MCG_HFTRIM_FINE_TRIM_MASK                (0x7FU)                                             /*!< MCG_HFTRIM.FINE_TRIM Mask               */
+#define MCG_HFTRIM_FINE_TRIM_SHIFT               (0U)                                                /*!< MCG_HFTRIM.FINE_TRIM Position           */
+#define MCG_HFTRIM_FINE_TRIM(x)                  (((uint8_t)(((uint8_t)(x))<<0U))&0x7FUL)            /*!< MCG_HFTRIM.FINE_TRIM Field              */
 /* ------- MC Bit Fields                            ------ */
 #define MCG_MC_LIRC_DIV2_MASK                    (0x7U)                                              /*!< MCG_MC.LIRC_DIV2 Mask                   */
 #define MCG_MC_LIRC_DIV2_SHIFT                   (0U)                                                /*!< MCG_MC.LIRC_DIV2 Position               */
@@ -2538,6 +2557,21 @@ typedef struct MCG_Type {
 #define MCG_MC_HIRCEN_MASK                       (0x80U)                                             /*!< MCG_MC.HIRCEN Mask                      */
 #define MCG_MC_HIRCEN_SHIFT                      (7U)                                                /*!< MCG_MC.HIRCEN Position                  */
 #define MCG_MC_HIRCEN(x)                         (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< MCG_MC.HIRCEN Field                     */
+/* ------- LTRIMRNG Bit Fields                      ------ */
+#define MCG_LTRIMRNG_STRIMRNG_MASK               (0x3U)                                              /*!< MCG_LTRIMRNG.STRIMRNG Mask              */
+#define MCG_LTRIMRNG_STRIMRNG_SHIFT              (0U)                                                /*!< MCG_LTRIMRNG.STRIMRNG Position          */
+#define MCG_LTRIMRNG_STRIMRNG(x)                 (((uint8_t)(((uint8_t)(x))<<0U))&0x3UL)             /*!< MCG_LTRIMRNG.STRIMRNG Field             */
+#define MCG_LTRIMRNG_FTRIMRNG_MASK               (0xCU)                                              /*!< MCG_LTRIMRNG.FTRIMRNG Mask              */
+#define MCG_LTRIMRNG_FTRIMRNG_SHIFT              (2U)                                                /*!< MCG_LTRIMRNG.FTRIMRNG Position          */
+#define MCG_LTRIMRNG_FTRIMRNG(x)                 (((uint8_t)(((uint8_t)(x))<<2U))&0xCUL)             /*!< MCG_LTRIMRNG.FTRIMRNG Field             */
+/* ------- LFTRIM Bit Fields                        ------ */
+#define MCG_LFTRIM_LIRC_FTRIM_MASK               (0x7FU)                                             /*!< MCG_LFTRIM.LIRC_FTRIM Mask              */
+#define MCG_LFTRIM_LIRC_FTRIM_SHIFT              (0U)                                                /*!< MCG_LFTRIM.LIRC_FTRIM Position          */
+#define MCG_LFTRIM_LIRC_FTRIM(x)                 (((uint8_t)(((uint8_t)(x))<<0U))&0x7FUL)            /*!< MCG_LFTRIM.LIRC_FTRIM Field             */
+/* ------- LSTRIM Bit Fields                        ------ */
+#define MCG_LSTRIM_LIRC_STRIM_MASK               (0x7FU)                                             /*!< MCG_LSTRIM.LIRC_STRIM Mask              */
+#define MCG_LSTRIM_LIRC_STRIM_SHIFT              (0U)                                                /*!< MCG_LSTRIM.LIRC_STRIM Position          */
+#define MCG_LSTRIM_LIRC_STRIM(x)                 (((uint8_t)(((uint8_t)(x))<<0U))&0x7FUL)            /*!< MCG_LSTRIM.LIRC_STRIM Field             */
 /**
  * @} */ /* End group MCG_Register_Masks_GROUP 
  */

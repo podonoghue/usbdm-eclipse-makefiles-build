@@ -568,31 +568,63 @@ Enables the pulse output. Only lower Y bits are implemented in this MCU</descrip
                   </field>
                </fields>
             </register>
-            <register>
+            <cluster>
                <dim>2</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1</dimIndex>
-               <name>PO%sDLY</name>
-               <description>Pulse-Out %s Delay Register</description>
+               <dimIndex>0.1</dimIndex>
+               <name>POnDLY,@pPOnDLY@i@f</name>
                <addressOffset>0x194</addressOffset>
-               <fields>
-                  <field>
-                     <name>DLY2</name>
-                     <description>PDB Pulse-Out Delay 2 (low change time)\n
+               <register>
+                  <name>PODLY</name>
+                  <description>Pulse-Out %s Delay Register</description>
+                  <addressOffset>0x0</addressOffset>
+                  <fields>
+                     <field>
+                        <name>DLY2</name>
+                        <description>PDB Pulse-Out Delay 2 (low change time)\n
 Pulse-Out goes low when the PDB counter is equal to the DLY2. \n
 Reading these bits returns the value that is effective for the current cycle</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>16</bitWidth>
-                  </field>
-                  <field>
-                     <name>DLY1</name>
-                     <description>PDB Pulse-Out Delay 1 (high change time)\n
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>16</bitWidth>
+                     </field>
+                     <field>
+                        <name>DLY1</name>
+                        <description>PDB Pulse-Out Delay 1 (high change time)\n
 Pulse-Out goes high when the PDB counter is equal to the DLY1. \n
 Reading these bits returns the value that is effective for the current cycle</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>16</bitWidth>
-                  </field>
-               </fields>
-            </register>
+                        <bitOffset>16</bitOffset>
+                        <bitWidth>16</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>DLY2</name>
+                  <description>Pulse-Out %s Delay Register</description>
+                  <addressOffset>0x0</addressOffset>
+                  <size>16</size>
+                  <resetMask>0x0</resetMask>
+                  <fields>
+                     <field>
+                        <name>DLY2</name>
+                        <description>DLY2</description>
+                        <bitOffset>0</bitOffset>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>DLY1</name>
+                  <description>Pulse-Out %s Delay Register</description>
+                  <addressOffset>0x2</addressOffset>
+                  <size>16</size>
+                  <resetMask>0x0</resetMask>
+                  <fields>
+                     <field>
+                        <name>DLY1</name>
+                        <description>DLY1</description>
+                        <bitOffset>0</bitOffset>
+                     </field>
+                  </fields>
+               </register>
+            </cluster>
          </registers>
       </peripheral>

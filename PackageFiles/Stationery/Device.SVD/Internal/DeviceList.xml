@@ -323,5 +323,11 @@
       <device name="TWR_JU128"       svdFileName="MCF51JU"      />
       <device name="MCF51JF"         svdFileName="MCF51JF"      />
       <device name="TWR_JF128"       svdFileName="MCF51JF"      />
+      
+      <device name="S32K142"         svdFileName="S32K142"      />
+      <device name="S32K144"         svdFileName="S32K144"      />
+      <device name="S32K146"         svdFileName="S32K146"      />
+      <device name="S32K148"         svdFileName="S32K148"      />
+
    </deviceList>
 </root>

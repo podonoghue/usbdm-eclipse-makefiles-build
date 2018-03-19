@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE device>
+<device
+   schemaVersion="1.1"
+   xmlns:xi="http://www.w3.org/2001/XInclude"
+   xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd"
+>
+   <name>S32K142</name>
+   <version>1.6</version>
+   <description>S32K142 NXP Microcontroller</description>
+   <cpu>
+      <name>CM4</name>
+      <revision>r0p1</revision>
+      <endian>little</endian>
+      <mpuPresent>false</mpuPresent>
+      <fpuPresent>true</fpuPresent>
+      <vtorPresent>true</vtorPresent>
+      <nvicPrioBits>4</nvicPrioBits>
+      <vendorSystickConfig>false</vendorSystickConfig>
+   </cpu>
+   <addressUnitBits>8</addressUnitBits>
+   <width>32</width>
+   <peripherals>
+      <xi:include href="peripherals/ADC0_S32K142.svd.xml"/>
+      <peripheral derivedFrom="ADC0"><name>ADC1</name><baseAddress>0x40027000</baseAddress></peripheral>
+      <xi:include href="peripherals/AIPS_S32K142.svd.xml"/>
+      <xi:include href="peripherals/CAN0_S32K14x.svd.xml"/>
+      <xi:include href="peripherals/CAN1_S32K14x.svd.xml"/>
+      <xi:include href="peripherals/CMP0_S32K14x.svd.xml"/>
+      <xi:include href="peripherals/CRC_S32K14x.svd.xml"/>
+      <xi:include href="peripherals/CSE_PRAM_S32K14x.svd.xml"/>
+      <xi:include href="peripherals/DMA_S32K142.svd.xml"/>
+      <xi:include href="peripherals/DMAMUX0_16CH_TRIG.svd.xml"/>
+      <xi:include href="peripherals/EIM_S32K14x.svd.xml"/>
+      <xi:include href="peripherals/ERM_S32K14x.svd.xml"/>
+      <xi:include href="peripherals/EWM_S32K14x.svd.xml"/>
+      <xi:include href="peripherals/FLEXIO_S32K14x.svd.xml"/>
+      <xi:include href="peripherals/FTFC_S32K14x.svd.xml"/>
+      <xi:include href="peripherals/FTM0_S32K142.svd.xml"/>
+      <peripheral derivedFrom="FTM0"><name>FTM1</name><baseAddress>0x40039000</baseAddress></peripheral>
+      <peripheral derivedFrom="FTM0"><name>FTM2</name><baseAddress>0x4003A000</baseAddress></peripheral>
+      <peripheral derivedFrom="FTM0"><name>FTM3</name><baseAddress>0x40026000</baseAddress></peripheral>
+      <xi:include href="peripherals/GPIOA_S32K14x.svd.xml"/>
+      <peripheral derivedFrom="GPIOA"><name>GPIOB</name><baseAddress>0x400FF040</baseAddress></peripheral>
+      <peripheral derivedFrom="GPIOA"><name>GPIOC</name><baseAddress>0x400FF080</baseAddress></peripheral>
+      <peripheral derivedFrom="GPIOA"><name>GPIOD</name><baseAddress>0x400FF0C0</baseAddress></peripheral>
+      <peripheral derivedFrom="GPIOA"><name>GPIOE</name><baseAddress>0x400FF100</baseAddress></peripheral>
+      <xi:include href="peripherals/LMEM_S32K14x.svd.xml"/>
+      <xi:include href="peripherals/LPI2C0_S32K14x.svd.xml"/>
+      <xi:include href="peripherals/LPIT0_S32K14x.svd.xml"/>
+      <xi:include href="peripherals/LPSPI0_S32K14x.svd.xml"/>
+      <peripheral derivedFrom="LPSPI0"><name>LPSPI1</name><baseAddress>0x4002D000</baseAddress></peripheral>
+      <xi:include href="peripherals/LPTMR0_S32K14x.svd.xml"/>
+      <xi:include href="peripherals/LPUART0_S32K14x.svd.xml"/>
+      <peripheral derivedFrom="LPUART0"><name>LPUART1</name><baseAddress>0x4006B000</baseAddress></peripheral>
+      <xi:include href="peripherals/MCM_S32K14x.svd.xml"/>
+      <xi:include href="peripherals/MPU_S32K142.svd.xml"/>
+      <xi:include href="peripherals/MSCM_S32K14x.svd.xml"/>
+      <xi:include href="peripherals/NV_S3214x.svd.xml"/>
+      <xi:include href="peripherals/NVIC_CM4.svd.xml"/>
+      <xi:include href="peripherals/PCC_S32K142.svd.xml"/>
+      <xi:include href="peripherals/PDB0_2CH_1TRIG_0DAC_8PO.svd.svd.xml"/>
+      <peripheral derivedFrom="PDB0"><name>PDB1</name><baseAddress>0x40031000</baseAddress></peripheral>
+      <xi:include href="peripherals/PMC_S32K14x.svd.xml"/>
+      <xi:include href="peripherals/PORTA_S32K14x.svd.xml"/>
+      <peripheral derivedFrom="PORTA"><name>PORTB</name><baseAddress>0x4004A000</baseAddress></peripheral>
+      <peripheral derivedFrom="PORTA"><name>PORTC</name><baseAddress>0x4004B000</baseAddress></peripheral>
+      <peripheral derivedFrom="PORTA"><name>PORTD</name><baseAddress>0x4004C000</baseAddress></peripheral>
+      <peripheral derivedFrom="PORTA"><name>PORTE</name><baseAddress>0x4004D000</baseAddress></peripheral>
+      <xi:include href="peripherals/RCM_S32K14x.svd.xml"/>
+      <xi:include href="peripherals/RTC_S32K14x.svd.xml"/>
+      <xi:include href="peripherals/SCB_S32K14x.svd.xml"/>
+      <xi:include href="peripherals/SCG_S32K14x.svd.xml"/>
+      <xi:include href="peripherals/SIM_S32K142.svd.xml"/>
+      <xi:include href="peripherals/SMC_S32K14x.svd.xml"/>
+      <xi:include href="peripherals/SYST.svd.xml"/>
+      <xi:include href="peripherals/TRGMUX_S32K142.svd.xml"/>
+      <xi:include href="peripherals/WDOG_S32K14x.svd.xml"/>
+   </peripherals>
+   <vendorExtensions>
+   <xi:include href="vectorTables/S32K142_VectorTable.svd.xml"/>
+   </vendorExtensions>
+</device>

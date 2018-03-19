@@ -1,0 +1,154 @@
+<!--
+Devices using this peripheral: 
+      S32K142
+      S32K144
+      S32K146
+      S32K148
+-->
+      <peripheral>
+         <?sourceFile "EIM_S32K14x" ?>
+         <name>EIM</name>
+         <description>Error Injection Module</description>
+         <groupName>EIM</groupName>
+         <headerStructName>EIM</headerStructName>
+         <baseAddress>0x40019000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x100</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x200</offset>
+            <size>0x8</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>EIMCR</name>
+               <description>Error Injection Module Configuration Register</description>
+               <addressOffset>0x0</addressOffset>
+               <fields>
+                  <field>
+                     <name>GEIEN</name>
+                     <description>Global Error Injection Enable</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EICHEN</name>
+               <description>Error Injection Channel Enable register</description>
+               <addressOffset>0x4</addressOffset>
+               <fields>
+                  <field>
+                     <name>EICH1EN</name>
+                     <description>Error Injection Channel 1 Enable</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Error injection is disabled on Error Injection Channel 1</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Error injection is enabled on Error Injection Channel 1</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>EICH0EN</name>
+                     <description>Error Injection Channel 0 Enable</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Error injection is disabled on Error Injection Channel 0</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Error injection is enabled on Error Injection Channel 0</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EICHD0_WORD0</name>
+               <description>Error Injection Channel Descriptor n, Word0</description>
+               <addressOffset>0x100</addressOffset>
+               <fields>
+                  <field>
+                     <name>CHKBIT_MASK</name>
+                     <description>Checkbit Mask</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EICHD0_WORD1</name>
+               <description>Error Injection Channel Descriptor n, Word1</description>
+               <addressOffset>0x104</addressOffset>
+               <fields>
+                  <field>
+                     <name>B0_3DATA_MASK</name>
+                     <description>Data Mask Bytes 0-3</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EICHD1_WORD0</name>
+               <description>Error Injection Channel Descriptor n, Word0</description>
+               <addressOffset>0x200</addressOffset>
+               <fields>
+                  <field>
+                     <name>CHKBIT_MASK</name>
+                     <description>Checkbit Mask</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>7</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>EICHD1_WORD1</name>
+               <description>Error Injection Channel Descriptor n, Word1</description>
+               <addressOffset>0x204</addressOffset>
+               <fields>
+                  <field>
+                     <name>B0_3DATA_MASK</name>
+                     <description>Data Mask Bytes 0-3</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

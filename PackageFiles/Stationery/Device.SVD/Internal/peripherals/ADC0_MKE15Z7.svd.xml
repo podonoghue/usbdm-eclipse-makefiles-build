@@ -33,7 +33,7 @@ Devices using this peripheral:
             <register>
                <dim>2</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>A,B</dimIndex>
+               <dimIndex>1,2</dimIndex>
                <name>SC1%s</name>
                <description>ADC Status and Control Register 1</description>
                <addressOffset>0x0</addressOffset>
@@ -41,113 +41,113 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>ADCH</name>
-                     <description>Input channel select</description>
+                     <description>Input Channel Select</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>5</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00000</name>
-                           <description>AD0 is selected as input</description>
+                           <description>AD0</description>
                            <value>0b00000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b00001</name>
-                           <description>AD1 is selected as input</description>
+                           <description>AD1</description>
                            <value>0b00001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b00010</name>
-                           <description>AD2 is selected as input</description>
+                           <description>AD2</description>
                            <value>0b00010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b00011</name>
-                           <description>AD3 is selected as input</description>
+                           <description>AD3</description>
                            <value>0b00011</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b00100</name>
-                           <description>AD4 is selected as input</description>
+                           <description>AD4</description>
                            <value>0b00100</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b00101</name>
-                           <description>AD5 is selected as input</description>
+                           <description>AD5</description>
                            <value>0b00101</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b00110</name>
-                           <description>AD6 is selected as input</description>
+                           <description>AD6</description>
                            <value>0b00110</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b00111</name>
-                           <description>AD7 is selected as input</description>
+                           <description>AD7</description>
                            <value>0b00111</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01000</name>
-                           <description>AD8 is selected as input</description>
+                           <description>AD8</description>
                            <value>0b01000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01001</name>
-                           <description>AD9 is selected as input</description>
+                           <description>AD9</description>
                            <value>0b01001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01010</name>
-                           <description>AD10 is selected as input</description>
+                           <description>AD10</description>
                            <value>0b01010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01011</name>
-                           <description>AD11 is selected as input</description>
+                           <description>AD11</description>
                            <value>0b01011</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01100</name>
-                           <description>AD12 is selected as input</description>
+                           <description>AD12</description>
                            <value>0b01100</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01101</name>
-                           <description>AD13 is selected as input</description>
+                           <description>AD13</description>
                            <value>0b01101</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01110</name>
-                           <description>AD14 is selected as input</description>
+                           <description>AD14</description>
                            <value>0b01110</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01111</name>
-                           <description>AD15 is selected as input</description>
+                           <description>AD15</description>
                            <value>0b01111</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10010</name>
-                           <description>AD18 is selected as input</description>
+                           <description>AD18</description>
                            <value>0b10010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10011</name>
-                           <description>AD19 is selected as input</description>
+                           <description>AD19</description>
                            <value>0b10011</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10101</name>
-                           <description>AD21 is selected as input</description>
+                           <description>AD21</description>
                            <value>0b10101</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10110</name>
-                           <description>AD22 is selected as input</description>
+                           <description>AD22</description>
                            <value>0b10110</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10111</name>
-                           <description>AD23 is selected as input</description>
+                           <description>AD23</description>
                            <value>0b10111</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -172,7 +172,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11100</name>
-                           <description>AD28 is selected as input</description>
+                           <description>AD28</description>
                            <value>0b11100</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -194,18 +194,18 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>AIEN</name>
-                     <description>Interrupt Enable</description>
+                     <description>Conversion Complete Interrupt</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Conversion complete interrupt is disabled</description>
+                           <description>Interrupt disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Conversion complete interrupt is enabled</description>
+                           <description>Interrupt enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -219,12 +219,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Conversion is not completed</description>
+                           <description>Not complete</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Conversion is completed</description>
+                           <description>Complete</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -334,7 +334,7 @@ Devices using this peripheral:
             <register>
                <dim>2</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>A,B</dimIndex>
+               <dimIndex>0,1</dimIndex>
                <name>R%s</name>
                <description>ADC Data Result</description>
                <addressOffset>0x48</addressOffset>
@@ -615,7 +615,7 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>YOFS</name>
-                     <description>Y offset error correction value</description>
+                     <description>Y Offset Error Correction Value</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>8</bitWidth>
                   </field>

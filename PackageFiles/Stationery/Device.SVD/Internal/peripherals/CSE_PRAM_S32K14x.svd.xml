@@ -1,0 +1,1853 @@
+<!--
+Devices using this peripheral: 
+      S32K142
+      S32K144
+      S32K146
+      S32K148
+-->
+      <peripheral>
+         <?sourceFile "CSE_PRAM_S32K14x" ?>
+         <name>CSE_PRAM</name>
+         <description>CSE_PRAM</description>
+         <groupName>CSE_PRAM</groupName>
+         <headerStructName>CSE_PRAM</headerStructName>
+         <baseAddress>0x14001000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x80</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <dim>32</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31</dimIndex>
+               <name>_EmbeddedRAM%s</name>
+               <description>CSE PRAM %s Register</description>
+               <addressOffset>0x0</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>BYTE_3</name>
+                     <description>Data byte 3 of Rx/Tx frame</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>BYTE_2</name>
+                     <description>Data byte 2 of Rx/Tx frame</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>BYTE_1</name>
+                     <description>Data byte 1 of Rx/Tx frame</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
+                     <name>BYTE_0</name>
+                     <description>Data byte 0 of Rx/Tx frame</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM0LL</name>
+               <description>CSE PRAM0LL register</description>
+               <addressOffset>0x0</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LL</name>
+                     <description>RAM_LL stores the first 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM0LU</name>
+               <description>CSE PRAM0LU register</description>
+               <addressOffset>0x1</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LU</name>
+                     <description>RAM_LU stores the second 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM0HL</name>
+               <description>CSE PRAM0HL register</description>
+               <addressOffset>0x2</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HL</name>
+                     <description>RAM_HL stores the third 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM0HU</name>
+               <description>CSE PRAM0HU register</description>
+               <addressOffset>0x3</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HU</name>
+                     <description>RAM_HU stores the fourth 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM1LL</name>
+               <description>CSE PRAM1LL register</description>
+               <addressOffset>0x4</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LL</name>
+                     <description>RAM_LL stores the first 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM1LU</name>
+               <description>CSE PRAM1LU register</description>
+               <addressOffset>0x5</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LU</name>
+                     <description>RAM_LU stores the second 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM1HL</name>
+               <description>CSE PRAM1HL register</description>
+               <addressOffset>0x6</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HL</name>
+                     <description>RAM_HL stores the third 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM1HU</name>
+               <description>CSE PRAM1HU register</description>
+               <addressOffset>0x7</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HU</name>
+                     <description>RAM_HU stores the fourth 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM2LL</name>
+               <description>CSE PRAM2LL register</description>
+               <addressOffset>0x8</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LL</name>
+                     <description>RAM_LL stores the first 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM2LU</name>
+               <description>CSE PRAM2LU register</description>
+               <addressOffset>0x9</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LU</name>
+                     <description>RAM_LU stores the second 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM2HL</name>
+               <description>CSE PRAM2HL register</description>
+               <addressOffset>0xA</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HL</name>
+                     <description>RAM_HL stores the third 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM2HU</name>
+               <description>CSE PRAM2HU register</description>
+               <addressOffset>0xB</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HU</name>
+                     <description>RAM_HU stores the fourth 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM3LL</name>
+               <description>CSE PRAM3LL register</description>
+               <addressOffset>0xC</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LL</name>
+                     <description>RAM_LL stores the first 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM3LU</name>
+               <description>CSE PRAM3LU register</description>
+               <addressOffset>0xD</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LU</name>
+                     <description>RAM_LU stores the second 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM3HL</name>
+               <description>CSE PRAM3HL register</description>
+               <addressOffset>0xE</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HL</name>
+                     <description>RAM_HL stores the third 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM3HU</name>
+               <description>CSE PRAM3HU register</description>
+               <addressOffset>0xF</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HU</name>
+                     <description>RAM_HU stores the fourth 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM4LL</name>
+               <description>CSE PRAM4LL register</description>
+               <addressOffset>0x10</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LL</name>
+                     <description>RAM_LL stores the first 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM4LU</name>
+               <description>CSE PRAM4LU register</description>
+               <addressOffset>0x11</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LU</name>
+                     <description>RAM_LU stores the second 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM4HL</name>
+               <description>CSE PRAM4HL register</description>
+               <addressOffset>0x12</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HL</name>
+                     <description>RAM_HL stores the third 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM4HU</name>
+               <description>CSE PRAM4HU register</description>
+               <addressOffset>0x13</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HU</name>
+                     <description>RAM_HU stores the fourth 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM5LL</name>
+               <description>CSE PRAM5LL register</description>
+               <addressOffset>0x14</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LL</name>
+                     <description>RAM_LL stores the first 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM5LU</name>
+               <description>CSE PRAM5LU register</description>
+               <addressOffset>0x15</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LU</name>
+                     <description>RAM_LU stores the second 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM5HL</name>
+               <description>CSE PRAM5HL register</description>
+               <addressOffset>0x16</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HL</name>
+                     <description>RAM_HL stores the third 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM5HU</name>
+               <description>CSE PRAM5HU register</description>
+               <addressOffset>0x17</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HU</name>
+                     <description>RAM_HU stores the fourth 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM6LL</name>
+               <description>CSE PRAM6LL register</description>
+               <addressOffset>0x18</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LL</name>
+                     <description>RAM_LL stores the first 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM6LU</name>
+               <description>CSE PRAM6LU register</description>
+               <addressOffset>0x19</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LU</name>
+                     <description>RAM_LU stores the second 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM6HL</name>
+               <description>CSE PRAM6HL register</description>
+               <addressOffset>0x1A</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HL</name>
+                     <description>RAM_HL stores the third 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM6HU</name>
+               <description>CSE PRAM6HU register</description>
+               <addressOffset>0x1B</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HU</name>
+                     <description>RAM_HU stores the fourth 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM7LL</name>
+               <description>CSE PRAM7LL register</description>
+               <addressOffset>0x1C</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LL</name>
+                     <description>RAM_LL stores the first 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM7LU</name>
+               <description>CSE PRAM7LU register</description>
+               <addressOffset>0x1D</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LU</name>
+                     <description>RAM_LU stores the second 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM7HL</name>
+               <description>CSE PRAM7HL register</description>
+               <addressOffset>0x1E</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HL</name>
+                     <description>RAM_HL stores the third 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM7HU</name>
+               <description>CSE PRAM7HU register</description>
+               <addressOffset>0x1F</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HU</name>
+                     <description>RAM_HU stores the fourth 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM8LL</name>
+               <description>CSE PRAM8LL register</description>
+               <addressOffset>0x20</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LL</name>
+                     <description>RAM_LL stores the first 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM8LU</name>
+               <description>CSE PRAM8LU register</description>
+               <addressOffset>0x21</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LU</name>
+                     <description>RAM_LU stores the second 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM8HL</name>
+               <description>CSE PRAM8HL register</description>
+               <addressOffset>0x22</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HL</name>
+                     <description>RAM_HL stores the third 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM8HU</name>
+               <description>CSE PRAM8HU register</description>
+               <addressOffset>0x23</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HU</name>
+                     <description>RAM_HU stores the fourth 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM9LL</name>
+               <description>CSE PRAM9LL register</description>
+               <addressOffset>0x24</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LL</name>
+                     <description>RAM_LL stores the first 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM9LU</name>
+               <description>CSE PRAM9LU register</description>
+               <addressOffset>0x25</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LU</name>
+                     <description>RAM_LU stores the second 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM9HL</name>
+               <description>CSE PRAM9HL register</description>
+               <addressOffset>0x26</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HL</name>
+                     <description>RAM_HL stores the third 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM9HU</name>
+               <description>CSE PRAM9HU register</description>
+               <addressOffset>0x27</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HU</name>
+                     <description>RAM_HU stores the fourth 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM10LL</name>
+               <description>CSE PRAM10LL register</description>
+               <addressOffset>0x28</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LL</name>
+                     <description>RAM_LL stores the first 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM10LU</name>
+               <description>CSE PRAM10LU register</description>
+               <addressOffset>0x29</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LU</name>
+                     <description>RAM_LU stores the second 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM10HL</name>
+               <description>CSE PRAM10HL register</description>
+               <addressOffset>0x2A</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HL</name>
+                     <description>RAM_HL stores the third 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM10HU</name>
+               <description>CSE PRAM10HU register</description>
+               <addressOffset>0x2B</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HU</name>
+                     <description>RAM_HU stores the fourth 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM11LL</name>
+               <description>CSE PRAM11LL register</description>
+               <addressOffset>0x2C</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LL</name>
+                     <description>RAM_LL stores the first 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM11LU</name>
+               <description>CSE PRAM11LU register</description>
+               <addressOffset>0x2D</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LU</name>
+                     <description>RAM_LU stores the second 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM11HL</name>
+               <description>CSE PRAM11HL register</description>
+               <addressOffset>0x2E</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HL</name>
+                     <description>RAM_HL stores the third 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM11HU</name>
+               <description>CSE PRAM11HU register</description>
+               <addressOffset>0x2F</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HU</name>
+                     <description>RAM_HU stores the fourth 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM12LL</name>
+               <description>CSE PRAM12LL register</description>
+               <addressOffset>0x30</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LL</name>
+                     <description>RAM_LL stores the first 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM12LU</name>
+               <description>CSE PRAM12LU register</description>
+               <addressOffset>0x31</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LU</name>
+                     <description>RAM_LU stores the second 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM12HL</name>
+               <description>CSE PRAM12HL register</description>
+               <addressOffset>0x32</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HL</name>
+                     <description>RAM_HL stores the third 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM12HU</name>
+               <description>CSE PRAM12HU register</description>
+               <addressOffset>0x33</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HU</name>
+                     <description>RAM_HU stores the fourth 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM13LL</name>
+               <description>CSE PRAM13LL register</description>
+               <addressOffset>0x34</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LL</name>
+                     <description>RAM_LL stores the first 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM13LU</name>
+               <description>CSE PRAM13LU register</description>
+               <addressOffset>0x35</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LU</name>
+                     <description>RAM_LU stores the second 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM13HL</name>
+               <description>CSE PRAM13HL register</description>
+               <addressOffset>0x36</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HL</name>
+                     <description>RAM_HL stores the third 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM13HU</name>
+               <description>CSE PRAM13HU register</description>
+               <addressOffset>0x37</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HU</name>
+                     <description>RAM_HU stores the fourth 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM14LL</name>
+               <description>CSE PRAM14LL register</description>
+               <addressOffset>0x38</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LL</name>
+                     <description>RAM_LL stores the first 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM14LU</name>
+               <description>CSE PRAM14LU register</description>
+               <addressOffset>0x39</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LU</name>
+                     <description>RAM_LU stores the second 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM14HL</name>
+               <description>CSE PRAM14HL register</description>
+               <addressOffset>0x3A</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HL</name>
+                     <description>RAM_HL stores the third 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM14HU</name>
+               <description>CSE PRAM14HU register</description>
+               <addressOffset>0x3B</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HU</name>
+                     <description>RAM_HU stores the fourth 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM15LL</name>
+               <description>CSE PRAM15LL register</description>
+               <addressOffset>0x3C</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LL</name>
+                     <description>RAM_LL stores the first 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM15LU</name>
+               <description>CSE PRAM15LU register</description>
+               <addressOffset>0x3D</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LU</name>
+                     <description>RAM_LU stores the second 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM15HL</name>
+               <description>CSE PRAM15HL register</description>
+               <addressOffset>0x3E</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HL</name>
+                     <description>RAM_HL stores the third 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM15HU</name>
+               <description>CSE PRAM15HU register</description>
+               <addressOffset>0x3F</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HU</name>
+                     <description>RAM_HU stores the fourth 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM16LL</name>
+               <description>CSE PRAM16LL register</description>
+               <addressOffset>0x40</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LL</name>
+                     <description>RAM_LL stores the first 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM16LU</name>
+               <description>CSE PRAM16LU register</description>
+               <addressOffset>0x41</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LU</name>
+                     <description>RAM_LU stores the second 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM16HL</name>
+               <description>CSE PRAM16HL register</description>
+               <addressOffset>0x42</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HL</name>
+                     <description>RAM_HL stores the third 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM16HU</name>
+               <description>CSE PRAM16HU register</description>
+               <addressOffset>0x43</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HU</name>
+                     <description>RAM_HU stores the fourth 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM17LL</name>
+               <description>CSE PRAM17LL register</description>
+               <addressOffset>0x44</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LL</name>
+                     <description>RAM_LL stores the first 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM17LU</name>
+               <description>CSE PRAM17LU register</description>
+               <addressOffset>0x45</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LU</name>
+                     <description>RAM_LU stores the second 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM17HL</name>
+               <description>CSE PRAM17HL register</description>
+               <addressOffset>0x46</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HL</name>
+                     <description>RAM_HL stores the third 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM17HU</name>
+               <description>CSE PRAM17HU register</description>
+               <addressOffset>0x47</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HU</name>
+                     <description>RAM_HU stores the fourth 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM18LL</name>
+               <description>CSE PRAM18LL register</description>
+               <addressOffset>0x48</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LL</name>
+                     <description>RAM_LL stores the first 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM18LU</name>
+               <description>CSE PRAM18LU register</description>
+               <addressOffset>0x49</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LU</name>
+                     <description>RAM_LU stores the second 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM18HL</name>
+               <description>CSE PRAM18HL register</description>
+               <addressOffset>0x4A</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HL</name>
+                     <description>RAM_HL stores the third 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM18HU</name>
+               <description>CSE PRAM18HU register</description>
+               <addressOffset>0x4B</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HU</name>
+                     <description>RAM_HU stores the fourth 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM19LL</name>
+               <description>CSE PRAM19LL register</description>
+               <addressOffset>0x4C</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LL</name>
+                     <description>RAM_LL stores the first 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM19LU</name>
+               <description>CSE PRAM19LU register</description>
+               <addressOffset>0x4D</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LU</name>
+                     <description>RAM_LU stores the second 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM19HL</name>
+               <description>CSE PRAM19HL register</description>
+               <addressOffset>0x4E</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HL</name>
+                     <description>RAM_HL stores the third 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM19HU</name>
+               <description>CSE PRAM19HU register</description>
+               <addressOffset>0x4F</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HU</name>
+                     <description>RAM_HU stores the fourth 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM20LL</name>
+               <description>CSE PRAM20LL register</description>
+               <addressOffset>0x50</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LL</name>
+                     <description>RAM_LL stores the first 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM20LU</name>
+               <description>CSE PRAM20LU register</description>
+               <addressOffset>0x51</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LU</name>
+                     <description>RAM_LU stores the second 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM20HL</name>
+               <description>CSE PRAM20HL register</description>
+               <addressOffset>0x52</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HL</name>
+                     <description>RAM_HL stores the third 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM20HU</name>
+               <description>CSE PRAM20HU register</description>
+               <addressOffset>0x53</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HU</name>
+                     <description>RAM_HU stores the fourth 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM21LL</name>
+               <description>CSE PRAM21LL register</description>
+               <addressOffset>0x54</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LL</name>
+                     <description>RAM_LL stores the first 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM21LU</name>
+               <description>CSE PRAM21LU register</description>
+               <addressOffset>0x55</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LU</name>
+                     <description>RAM_LU stores the second 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM21HL</name>
+               <description>CSE PRAM21HL register</description>
+               <addressOffset>0x56</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HL</name>
+                     <description>RAM_HL stores the third 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM21HU</name>
+               <description>CSE PRAM21HU register</description>
+               <addressOffset>0x57</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HU</name>
+                     <description>RAM_HU stores the fourth 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM22LL</name>
+               <description>CSE PRAM22LL register</description>
+               <addressOffset>0x58</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LL</name>
+                     <description>RAM_LL stores the first 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM22LU</name>
+               <description>CSE PRAM22LU register</description>
+               <addressOffset>0x59</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LU</name>
+                     <description>RAM_LU stores the second 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM22HL</name>
+               <description>CSE PRAM22HL register</description>
+               <addressOffset>0x5A</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HL</name>
+                     <description>RAM_HL stores the third 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM22HU</name>
+               <description>CSE PRAM22HU register</description>
+               <addressOffset>0x5B</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HU</name>
+                     <description>RAM_HU stores the fourth 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM23LL</name>
+               <description>CSE PRAM23LL register</description>
+               <addressOffset>0x5C</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LL</name>
+                     <description>RAM_LL stores the first 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM23LU</name>
+               <description>CSE PRAM23LU register</description>
+               <addressOffset>0x5D</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LU</name>
+                     <description>RAM_LU stores the second 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM23HL</name>
+               <description>CSE PRAM23HL register</description>
+               <addressOffset>0x5E</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HL</name>
+                     <description>RAM_HL stores the third 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM23HU</name>
+               <description>CSE PRAM23HU register</description>
+               <addressOffset>0x5F</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HU</name>
+                     <description>RAM_HU stores the fourth 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM24LL</name>
+               <description>CSE PRAM24LL register</description>
+               <addressOffset>0x60</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LL</name>
+                     <description>RAM_LL stores the first 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM24LU</name>
+               <description>CSE PRAM24LU register</description>
+               <addressOffset>0x61</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LU</name>
+                     <description>RAM_LU stores the second 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM24HL</name>
+               <description>CSE PRAM24HL register</description>
+               <addressOffset>0x62</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HL</name>
+                     <description>RAM_HL stores the third 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM24HU</name>
+               <description>CSE PRAM24HU register</description>
+               <addressOffset>0x63</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HU</name>
+                     <description>RAM_HU stores the fourth 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM25LL</name>
+               <description>CSE PRAM25LL register</description>
+               <addressOffset>0x64</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LL</name>
+                     <description>RAM_LL stores the first 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM25LU</name>
+               <description>CSE PRAM25LU register</description>
+               <addressOffset>0x65</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LU</name>
+                     <description>RAM_LU stores the second 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM25HL</name>
+               <description>CSE PRAM25HL register</description>
+               <addressOffset>0x66</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HL</name>
+                     <description>RAM_HL stores the third 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM25HU</name>
+               <description>CSE PRAM25HU register</description>
+               <addressOffset>0x67</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HU</name>
+                     <description>RAM_HU stores the fourth 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM26LL</name>
+               <description>CSE PRAM26LL register</description>
+               <addressOffset>0x68</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LL</name>
+                     <description>RAM_LL stores the first 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM26LU</name>
+               <description>CSE PRAM26LU register</description>
+               <addressOffset>0x69</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LU</name>
+                     <description>RAM_LU stores the second 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM26HL</name>
+               <description>CSE PRAM26HL register</description>
+               <addressOffset>0x6A</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HL</name>
+                     <description>RAM_HL stores the third 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM26HU</name>
+               <description>CSE PRAM26HU register</description>
+               <addressOffset>0x6B</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HU</name>
+                     <description>RAM_HU stores the fourth 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM27LL</name>
+               <description>CSE PRAM27LL register</description>
+               <addressOffset>0x6C</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LL</name>
+                     <description>RAM_LL stores the first 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM27LU</name>
+               <description>CSE PRAM27LU register</description>
+               <addressOffset>0x6D</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LU</name>
+                     <description>RAM_LU stores the second 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM27HL</name>
+               <description>CSE PRAM27HL register</description>
+               <addressOffset>0x6E</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HL</name>
+                     <description>RAM_HL stores the third 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM27HU</name>
+               <description>CSE PRAM27HU register</description>
+               <addressOffset>0x6F</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HU</name>
+                     <description>RAM_HU stores the fourth 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM28LL</name>
+               <description>CSE PRAM28LL register</description>
+               <addressOffset>0x70</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LL</name>
+                     <description>RAM_LL stores the first 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM28LU</name>
+               <description>CSE PRAM28LU register</description>
+               <addressOffset>0x71</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LU</name>
+                     <description>RAM_LU stores the second 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM28HL</name>
+               <description>CSE PRAM28HL register</description>
+               <addressOffset>0x72</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HL</name>
+                     <description>RAM_HL stores the third 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM28HU</name>
+               <description>CSE PRAM28HU register</description>
+               <addressOffset>0x73</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HU</name>
+                     <description>RAM_HU stores the fourth 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM29LL</name>
+               <description>CSE PRAM29LL register</description>
+               <addressOffset>0x74</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LL</name>
+                     <description>RAM_LL stores the first 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM29LU</name>
+               <description>CSE PRAM29LU register</description>
+               <addressOffset>0x75</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LU</name>
+                     <description>RAM_LU stores the second 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM29HL</name>
+               <description>CSE PRAM29HL register</description>
+               <addressOffset>0x76</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HL</name>
+                     <description>RAM_HL stores the third 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM29HU</name>
+               <description>CSE PRAM29HU register</description>
+               <addressOffset>0x77</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HU</name>
+                     <description>RAM_HU stores the fourth 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM30LL</name>
+               <description>CSE PRAM30LL register</description>
+               <addressOffset>0x78</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LL</name>
+                     <description>RAM_LL stores the first 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM30LU</name>
+               <description>CSE PRAM30LU register</description>
+               <addressOffset>0x79</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LU</name>
+                     <description>RAM_LU stores the second 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM30HL</name>
+               <description>CSE PRAM30HL register</description>
+               <addressOffset>0x7A</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HL</name>
+                     <description>RAM_HL stores the third 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM30HU</name>
+               <description>CSE PRAM30HU register</description>
+               <addressOffset>0x7B</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HU</name>
+                     <description>RAM_HU stores the fourth 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM31LL</name>
+               <description>CSE PRAM31LL register</description>
+               <addressOffset>0x7C</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LL</name>
+                     <description>RAM_LL stores the first 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM31LU</name>
+               <description>CSE PRAM31LU register</description>
+               <addressOffset>0x7D</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_LU</name>
+                     <description>RAM_LU stores the second 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM31HL</name>
+               <description>CSE PRAM31HL register</description>
+               <addressOffset>0x7E</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HL</name>
+                     <description>RAM_HL stores the third 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>_EmbeddedRAM31HU</name>
+               <description>CSE PRAM31HU register</description>
+               <addressOffset>0x7F</addressOffset>
+               <size>8</size>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RAM_HU</name>
+                     <description>RAM_HU stores the fourth 8 bits of the 32 bit CRC</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>
