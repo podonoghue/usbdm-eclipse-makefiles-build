@@ -31,13 +31,15 @@
       <!--======================================================
                Registry searches
       =======================================================-->
-     
+      <!-- OLD KEY 
+                          Key="SOFTWARE\Freescale\S32DS\Product Versions\S32 Design Studio for ARM v1.0"
+      -->     
       <!-- Check for presence of Kinetis Design Studio -->
       <Property Id="P.$(var.ECLIPSE_VER)_INSTALL">
          <RegistrySearch Id="Rs.$(var.ECLIPSE_VER)_INSTALL"
                     Root="HKLM"
                     Win64="no"
-                    Key="SOFTWARE\Freescale\S32DS\Product Versions\S32 Design Studio for ARM v1.0"
+                    Key="SOFTWARE\NXP\S32 Design Studio\Product Versions\S32 Design Studio for ARM Version 2018.R1"
                     Name="Path"
                     Type="directory" />
       </Property>

@@ -11,7 +11,7 @@ OpenSDAv1.sx              Firmware with serial number 0001
 OpenSDAv1_Unique_ID.sx    Firmware with device specific serial number, i.e. each BDM has an unique ID
 Boards: 
 FRDM-KE02Z, FRDM-KE02Z40M, FRDM-KE04Z, FRDM-KE06Z, FRDM-KL02Z, FRDM-KL03Z, FRDM-KL05Z, FRDM-KL25Z, FRDM-KL25Z,  
-FRDM-KL26Z, FRDM-KL27Z, FRDM-KL43Z, FRDM-KL46Z, FRDM-K20D50M
+FRDM-KL26Z, FRDM-KL27Z, FRDM-KL43Z, FRDM-KL46Z, FRDM-K20D50M, S32K144EVM
 
 Open-SDA Version 1 - Used with FRDM boards using OSDAv1 but with target power control e.g. FRDM-KEAZ
 OpenSDAv1_Power.sx              Firmware with serial number 0001
@@ -48,7 +48,7 @@ These are OpenSDA application and are loaded by the following actions:
 (Before doing the following install the USBDM drivers).
 
 *  Unplug FRDM-XXXX board
-*  If the board has a RST Push Button bypass link (e.g. FRDM-KV J25, FRDM-KEA J104) make sure it is in position 1-2
+*  If the board has a RST Push Button bypass link (e.g. FRDM-KV J25, FRDM-KEA J104, S32K144 J104) make sure it is in position 1-2
 *  Whilst holding the reset switch depressed plug in the FRDM-XXXX board.  The
    green LED should start blinking at about 1Hz (OpenSDA V1 only).  
 *  Open a file explorer and locate the USB drive that has now appeared.  It will have
