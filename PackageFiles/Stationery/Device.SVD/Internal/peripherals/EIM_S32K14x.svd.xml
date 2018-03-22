@@ -100,55 +100,37 @@ Devices using this peripheral:
                   </field>
                </fields>
             </register>
-            <register>
-               <name>EICHD0_WORD0</name>
-               <description>Error Injection Channel Descriptor n, Word0</description>
+            <cluster>
+               <dim>2</dim>
+               <dimIncrement>256</dimIncrement>
+               <dimIndex>0,1</dimIndex>
+               <name>EICHDn,@p@f@i</name>
                <addressOffset>0x100</addressOffset>
-               <fields>
-                  <field>
-                     <name>CHKBIT_MASK</name>
-                     <description>Checkbit Mask</description>
-                     <bitOffset>25</bitOffset>
-                     <bitWidth>7</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>EICHD0_WORD1</name>
-               <description>Error Injection Channel Descriptor n, Word1</description>
-               <addressOffset>0x104</addressOffset>
-               <fields>
-                  <field>
-                     <name>B0_3DATA_MASK</name>
-                     <description>Data Mask Bytes 0-3</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>EICHD1_WORD0</name>
-               <description>Error Injection Channel Descriptor n, Word0</description>
-               <addressOffset>0x200</addressOffset>
-               <fields>
-                  <field>
-                     <name>CHKBIT_MASK</name>
-                     <description>Checkbit Mask</description>
-                     <bitOffset>25</bitOffset>
-                     <bitWidth>7</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>EICHD1_WORD1</name>
-               <description>Error Injection Channel Descriptor n, Word1</description>
-               <addressOffset>0x204</addressOffset>
-               <fields>
-                  <field>
-                     <name>B0_3DATA_MASK</name>
-                     <description>Data Mask Bytes 0-3</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
+               <register>
+                  <name>WORD0</name>
+                  <description>Error Injection Channel Descriptor n, Word0</description>
+                  <addressOffset>0x0</addressOffset>
+                  <fields>
+                     <field>
+                        <name>CHKBIT_MASK</name>
+                        <description>Checkbit Mask</description>
+                        <bitOffset>25</bitOffset>
+                        <bitWidth>7</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>WORD1</name>
+                  <description>Error Injection Channel Descriptor n, Word1</description>
+                  <addressOffset>0x4</addressOffset>
+                  <fields>
+                     <field>
+                        <name>B0_3DATA_MASK</name>
+                        <description>Data Mask Bytes 0-3</description>
+                        <bitOffset>0</bitOffset>
+                     </field>
+                  </fields>
+               </register>
+            </cluster>
          </registers>
       </peripheral>

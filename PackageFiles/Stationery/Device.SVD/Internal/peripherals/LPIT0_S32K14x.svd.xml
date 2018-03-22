@@ -10,7 +10,7 @@ Devices using this peripheral:
          <name>LPIT0</name>
          <description>Low Power Periodic Interrupt Timer</description>
          <groupName>LPIT</groupName>
-         <headerStructName>LPIT0</headerStructName>
+         <headerStructName>LPIT</headerStructName>
          <baseAddress>0x40037000</baseAddress>
          <size>32</size>
          <access>read-write</access>
@@ -389,753 +389,199 @@ Devices using this peripheral:
                   </field>
                </fields>
             </register>
-            <register>
-               <name>TVAL0</name>
-               <description>Timer Value Register</description>
+            <cluster>
+               <dim>4</dim>
+               <dimIncrement>16</dimIncrement>
+               <dimIndex>0,1,2,3</dimIndex>
+               <name>TMR,@p@f@i</name>
                <addressOffset>0x20</addressOffset>
-               <fields>
-                  <field>
-                     <name>TMR_VAL</name>
-                     <description>Timer Value</description>
-                     <bitOffset>0</bitOffset>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Invalid load value in compare modes</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Invalid load value in compare modes</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>CVAL0</name>
-               <description>Current Timer Value</description>
-               <addressOffset>0x24</addressOffset>
-               <access>read-only</access>
-               <resetValue>0xFFFFFFFF</resetValue>
-               <fields>
-                  <field>
-                     <name>TMR_CUR_VAL</name>
-                     <description>Current Timer Value</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>TCTRL0</name>
-               <description>Timer Control Register</description>
-               <addressOffset>0x28</addressOffset>
-               <fields>
-                  <field>
-                     <name>T_EN</name>
-                     <description>Timer Enable</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Timer Channel is disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Timer Channel is enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>CHAIN</name>
-                     <description>Chain Channel</description>
-                     <bitOffset>1</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Channel Chaining is disabled. Channel Timer runs independently</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Channel Chaining is enabled. Timer decrements on previous channel&apos;s timeout</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>MODE</name>
-                     <description>Timer Operation Mode</description>
-                     <bitOffset>2</bitOffset>
-                     <bitWidth>2</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>32-bit Periodic Counter</description>
-                           <value>0b00</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Dual 16-bit Periodic Counter</description>
-                           <value>0b01</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>10</name>
-                           <description>32-bit Trigger Accumulator</description>
-                           <value>0b10</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>11</name>
-                           <description>32-bit Trigger Input Capture</description>
-                           <value>0b11</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TSOT</name>
-                     <description>Timer Start On Trigger</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Timer starts to decrement immediately based on restart condition (controlled by TSOI bit)</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Timer starts to decrement when rising edge on selected trigger is detected</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TSOI</name>
-                     <description>Timer Stop On Interrupt</description>
-                     <bitOffset>17</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>The channel timer does not stop after timeout</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>The channel timer will stop after a timeout, and the channel timer will restart based on TSOT. When TSOT = 0, the channel timer will restart after a rising edge on the T_EN bit is detected (which means that the timer channel is disabled and then enabled); when TSOT = 1, the channel timer will restart after a rising edge on the selected trigger is detected</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TROT</name>
-                     <description>Timer Reload On Trigger</description>
-                     <bitOffset>18</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Timer will not reload on selected trigger</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Timer will reload on selected trigger</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TRG_SRC</name>
-                     <description>Trigger Source</description>
-                     <bitOffset>23</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Trigger source selected in external</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Trigger source selected is the internal trigger</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TRG_SEL</name>
-                     <description>Trigger Select</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>4</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>TVAL1</name>
-               <description>Timer Value Register</description>
-               <addressOffset>0x30</addressOffset>
-               <fields>
-                  <field>
-                     <name>TMR_VAL</name>
-                     <description>Timer Value</description>
-                     <bitOffset>0</bitOffset>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Invalid load value in compare modes</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Invalid load value in compare modes</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>CVAL1</name>
-               <description>Current Timer Value</description>
-               <addressOffset>0x34</addressOffset>
-               <access>read-only</access>
-               <resetValue>0xFFFFFFFF</resetValue>
-               <fields>
-                  <field>
-                     <name>TMR_CUR_VAL</name>
-                     <description>Current Timer Value</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>TCTRL1</name>
-               <description>Timer Control Register</description>
-               <addressOffset>0x38</addressOffset>
-               <fields>
-                  <field>
-                     <name>T_EN</name>
-                     <description>Timer Enable</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Timer Channel is disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Timer Channel is enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>CHAIN</name>
-                     <description>Chain Channel</description>
-                     <bitOffset>1</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Channel Chaining is disabled. Channel Timer runs independently</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Channel Chaining is enabled. Timer decrements on previous channel&apos;s timeout</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>MODE</name>
-                     <description>Timer Operation Mode</description>
-                     <bitOffset>2</bitOffset>
-                     <bitWidth>2</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>32-bit Periodic Counter</description>
-                           <value>0b00</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Dual 16-bit Periodic Counter</description>
-                           <value>0b01</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>10</name>
-                           <description>32-bit Trigger Accumulator</description>
-                           <value>0b10</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>11</name>
-                           <description>32-bit Trigger Input Capture</description>
-                           <value>0b11</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TSOT</name>
-                     <description>Timer Start On Trigger</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Timer starts to decrement immediately based on restart condition (controlled by TSOI bit)</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Timer starts to decrement when rising edge on selected trigger is detected</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TSOI</name>
-                     <description>Timer Stop On Interrupt</description>
-                     <bitOffset>17</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>The channel timer does not stop after timeout</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>The channel timer will stop after a timeout, and the channel timer will restart based on TSOT. When TSOT = 0, the channel timer will restart after a rising edge on the T_EN bit is detected (which means that the timer channel is disabled and then enabled); when TSOT = 1, the channel timer will restart after a rising edge on the selected trigger is detected</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TROT</name>
-                     <description>Timer Reload On Trigger</description>
-                     <bitOffset>18</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Timer will not reload on selected trigger</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Timer will reload on selected trigger</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TRG_SRC</name>
-                     <description>Trigger Source</description>
-                     <bitOffset>23</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Trigger source selected in external</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Trigger source selected is the internal trigger</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TRG_SEL</name>
-                     <description>Trigger Select</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>4</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>TVAL2</name>
-               <description>Timer Value Register</description>
-               <addressOffset>0x40</addressOffset>
-               <fields>
-                  <field>
-                     <name>TMR_VAL</name>
-                     <description>Timer Value</description>
-                     <bitOffset>0</bitOffset>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Invalid load value in compare modes</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Invalid load value in compare modes</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>CVAL2</name>
-               <description>Current Timer Value</description>
-               <addressOffset>0x44</addressOffset>
-               <access>read-only</access>
-               <resetValue>0xFFFFFFFF</resetValue>
-               <fields>
-                  <field>
-                     <name>TMR_CUR_VAL</name>
-                     <description>Current Timer Value</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>TCTRL2</name>
-               <description>Timer Control Register</description>
-               <addressOffset>0x48</addressOffset>
-               <fields>
-                  <field>
-                     <name>T_EN</name>
-                     <description>Timer Enable</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Timer Channel is disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Timer Channel is enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>CHAIN</name>
-                     <description>Chain Channel</description>
-                     <bitOffset>1</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Channel Chaining is disabled. Channel Timer runs independently</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Channel Chaining is enabled. Timer decrements on previous channel&apos;s timeout</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>MODE</name>
-                     <description>Timer Operation Mode</description>
-                     <bitOffset>2</bitOffset>
-                     <bitWidth>2</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>32-bit Periodic Counter</description>
-                           <value>0b00</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Dual 16-bit Periodic Counter</description>
-                           <value>0b01</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>10</name>
-                           <description>32-bit Trigger Accumulator</description>
-                           <value>0b10</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>11</name>
-                           <description>32-bit Trigger Input Capture</description>
-                           <value>0b11</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TSOT</name>
-                     <description>Timer Start On Trigger</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Timer starts to decrement immediately based on restart condition (controlled by TSOI bit)</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Timer starts to decrement when rising edge on selected trigger is detected</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TSOI</name>
-                     <description>Timer Stop On Interrupt</description>
-                     <bitOffset>17</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>The channel timer does not stop after timeout</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>The channel timer will stop after a timeout, and the channel timer will restart based on TSOT. When TSOT = 0, the channel timer will restart after a rising edge on the T_EN bit is detected (which means that the timer channel is disabled and then enabled); when TSOT = 1, the channel timer will restart after a rising edge on the selected trigger is detected</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TROT</name>
-                     <description>Timer Reload On Trigger</description>
-                     <bitOffset>18</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Timer will not reload on selected trigger</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Timer will reload on selected trigger</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TRG_SRC</name>
-                     <description>Trigger Source</description>
-                     <bitOffset>23</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Trigger source selected in external</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Trigger source selected is the internal trigger</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TRG_SEL</name>
-                     <description>Trigger Select</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>4</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>TVAL3</name>
-               <description>Timer Value Register</description>
-               <addressOffset>0x50</addressOffset>
-               <fields>
-                  <field>
-                     <name>TMR_VAL</name>
-                     <description>Timer Value</description>
-                     <bitOffset>0</bitOffset>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Invalid load value in compare modes</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Invalid load value in compare modes</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>CVAL3</name>
-               <description>Current Timer Value</description>
-               <addressOffset>0x54</addressOffset>
-               <access>read-only</access>
-               <resetValue>0xFFFFFFFF</resetValue>
-               <fields>
-                  <field>
-                     <name>TMR_CUR_VAL</name>
-                     <description>Current Timer Value</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>TCTRL3</name>
-               <description>Timer Control Register</description>
-               <addressOffset>0x58</addressOffset>
-               <fields>
-                  <field>
-                     <name>T_EN</name>
-                     <description>Timer Enable</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Timer Channel is disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Timer Channel is enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>CHAIN</name>
-                     <description>Chain Channel</description>
-                     <bitOffset>1</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Channel Chaining is disabled. Channel Timer runs independently</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Channel Chaining is enabled. Timer decrements on previous channel&apos;s timeout</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>MODE</name>
-                     <description>Timer Operation Mode</description>
-                     <bitOffset>2</bitOffset>
-                     <bitWidth>2</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>32-bit Periodic Counter</description>
-                           <value>0b00</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Dual 16-bit Periodic Counter</description>
-                           <value>0b01</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>10</name>
-                           <description>32-bit Trigger Accumulator</description>
-                           <value>0b10</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>11</name>
-                           <description>32-bit Trigger Input Capture</description>
-                           <value>0b11</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TSOT</name>
-                     <description>Timer Start On Trigger</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Timer starts to decrement immediately based on restart condition (controlled by TSOI bit)</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Timer starts to decrement when rising edge on selected trigger is detected</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TSOI</name>
-                     <description>Timer Stop On Interrupt</description>
-                     <bitOffset>17</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>The channel timer does not stop after timeout</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>The channel timer will stop after a timeout, and the channel timer will restart based on TSOT. When TSOT = 0, the channel timer will restart after a rising edge on the T_EN bit is detected (which means that the timer channel is disabled and then enabled); when TSOT = 1, the channel timer will restart after a rising edge on the selected trigger is detected</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TROT</name>
-                     <description>Timer Reload On Trigger</description>
-                     <bitOffset>18</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Timer will not reload on selected trigger</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Timer will reload on selected trigger</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TRG_SRC</name>
-                     <description>Trigger Source</description>
-                     <bitOffset>23</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Trigger source selected in external</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Trigger source selected is the internal trigger</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TRG_SEL</name>
-                     <description>Trigger Select</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>4</bitWidth>
-                  </field>
-               </fields>
-            </register>
+               <register>
+                  <name>TVAL</name>
+                  <description>Timer Value Register</description>
+                  <addressOffset>0x0</addressOffset>
+                  <fields>
+                     <field>
+                        <name>TMR_VAL</name>
+                        <description>Timer Value</description>
+                        <bitOffset>0</bitOffset>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0</name>
+                              <description>Invalid load value in compare modes</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>1</name>
+                              <description>Invalid load value in compare modes</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>CVAL</name>
+                  <description>Current Timer Value</description>
+                  <addressOffset>0x4</addressOffset>
+                  <access>read-only</access>
+                  <resetValue>0xFFFFFFFF</resetValue>
+                  <fields>
+                     <field>
+                        <name>TMR_CUR_VAL</name>
+                        <description>Current Timer Value</description>
+                        <bitOffset>0</bitOffset>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>TCTRL</name>
+                  <description>Timer Control Register</description>
+                  <addressOffset>0x8</addressOffset>
+                  <fields>
+                     <field>
+                        <name>T_EN</name>
+                        <description>Timer Enable</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0</name>
+                              <description>Timer Channel is disabled</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>1</name>
+                              <description>Timer Channel is enabled</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>CHAIN</name>
+                        <description>Chain Channel</description>
+                        <bitOffset>1</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0</name>
+                              <description>Channel Chaining is disabled. Channel Timer runs independently</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>1</name>
+                              <description>Channel Chaining is enabled. Timer decrements on previous channel&apos;s timeout</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>MODE</name>
+                        <description>Timer Operation Mode</description>
+                        <bitOffset>2</bitOffset>
+                        <bitWidth>2</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0</name>
+                              <description>32-bit Periodic Counter</description>
+                              <value>0b00</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>1</name>
+                              <description>Dual 16-bit Periodic Counter</description>
+                              <value>0b01</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>10</name>
+                              <description>32-bit Trigger Accumulator</description>
+                              <value>0b10</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>11</name>
+                              <description>32-bit Trigger Input Capture</description>
+                              <value>0b11</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>TSOT</name>
+                        <description>Timer Start On Trigger</description>
+                        <bitOffset>16</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0</name>
+                              <description>Timer starts to decrement immediately based on restart condition (controlled by TSOI bit)</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>1</name>
+                              <description>Timer starts to decrement when rising edge on selected trigger is detected</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>TSOI</name>
+                        <description>Timer Stop On Interrupt</description>
+                        <bitOffset>17</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0</name>
+                              <description>The channel timer does not stop after timeout</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>1</name>
+                              <description>The channel timer will stop after a timeout, and the channel timer will restart based on TSOT. When TSOT = 0, the channel timer will restart after a rising edge on the T_EN bit is detected (which means that the timer channel is disabled and then enabled); when TSOT = 1, the channel timer will restart after a rising edge on the selected trigger is detected</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>TROT</name>
+                        <description>Timer Reload On Trigger</description>
+                        <bitOffset>18</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0</name>
+                              <description>Timer will not reload on selected trigger</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>1</name>
+                              <description>Timer will reload on selected trigger</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>TRG_SRC</name>
+                        <description>Trigger Source</description>
+                        <bitOffset>23</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0</name>
+                              <description>Trigger source selected in external</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>1</name>
+                              <description>Trigger source selected is the internal trigger</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>TRG_SEL</name>
+                        <description>Trigger Select</description>
+                        <bitOffset>24</bitOffset>
+                        <bitWidth>4</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+            </cluster>
          </registers>
       </peripheral>

@@ -195,31 +195,25 @@ Devices using this peripheral:
                   </field>
                </fields>
             </register>
-            <register>
-               <name>EAR0</name>
-               <description>ERM Memory n Error Address Register</description>
+            <cluster>
+               <dim>2</dim>
+               <dimIncrement>16</dimIncrement>
+               <dimIndex>0,1</dimIndex>
+               <name>EARn,@p@f@i</name>
                <addressOffset>0x100</addressOffset>
-               <access>read-only</access>
-               <fields>
-                  <field>
-                     <name>EAR</name>
-                     <description>EAR</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>EAR1</name>
-               <description>ERM Memory n Error Address Register</description>
-               <addressOffset>0x110</addressOffset>
-               <access>read-only</access>
-               <fields>
-                  <field>
-                     <name>EAR</name>
-                     <description>EAR</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
+               <register>
+                  <name>EAR</name>
+                  <description>ERM Memory n Error Address Register</description>
+                  <addressOffset>0x0</addressOffset>
+                  <access>read-only</access>
+                  <fields>
+                     <field>
+                        <name>EAR</name>
+                        <description>EAR</description>
+                        <bitOffset>0</bitOffset>
+                     </field>
+                  </fields>
+               </register>
+            </cluster>
          </registers>
       </peripheral>

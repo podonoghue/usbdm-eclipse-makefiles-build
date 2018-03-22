@@ -571,7 +571,7 @@ Enables the pulse output. Only lower Y bits are implemented in this MCU</descrip
             <cluster>
                <dim>2</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0.1</dimIndex>
+               <dimIndex>0,1</dimIndex>
                <name>POnDLY,@pPOnDLY@i@f</name>
                <addressOffset>0x194</addressOffset>
                <register>

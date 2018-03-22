@@ -28,7 +28,7 @@ Devices using this peripheral:
          </addressBlock>
          <registers>
             <register>
-               <name>LMEM_PCCCR</name>
+               <name>PCCCR</name>
                <description>Cache control register</description>
                <addressOffset>0x0</addressOffset>
                <fields>
@@ -155,7 +155,7 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <name>LMEM_PCCLCR</name>
+               <name>PCCLCR</name>
                <description>Cache line control register</description>
                <addressOffset>0x4</addressOffset>
                <fields>
@@ -304,7 +304,7 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <name>LMEM_PCCSAR</name>
+               <name>PCCSAR</name>
                <description>Cache search address register</description>
                <addressOffset>0x8</addressOffset>
                <fields>
@@ -335,7 +335,7 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <name>LMEM_PCCCVR</name>
+               <name>PCCCVR</name>
                <description>Cache read/write value register</description>
                <addressOffset>0xC</addressOffset>
                <fields>

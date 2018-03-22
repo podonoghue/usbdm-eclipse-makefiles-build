@@ -2246,541 +2246,146 @@ Devices using this peripheral:
                   </field>
                </fields>
             </register>
-            <register>
-               <name>WMB0_CS</name>
-               <description>Wake Up Message Buffer Register for C/S</description>
+            <cluster>
+               <dim>4</dim>
+               <dimIncrement>16</dimIncrement>
+               <dimIndex>0,1,2,3</dimIndex>
+               <name>WMB,@p@f@i</name>
                <addressOffset>0xB40</addressOffset>
-               <access>read-only</access>
-               <fields>
-                  <field>
-                     <name>DLC</name>
-                     <description>Length of Data in Bytes</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>4</bitWidth>
-                  </field>
-                  <field>
-                     <name>RTR</name>
-                     <description>Remote Transmission Request Bit</description>
-                     <bitOffset>20</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Frame is data one (not remote)</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Frame is a remote one</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>IDE</name>
-                     <description>ID Extended Bit</description>
-                     <bitOffset>21</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Frame format is standard</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Frame format is extended</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>SRR</name>
-                     <description>Substitute Remote Request</description>
-                     <bitOffset>22</bitOffset>
-                     <bitWidth>1</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>WMB0_ID</name>
-               <description>Wake Up Message Buffer Register for ID</description>
-               <addressOffset>0xB44</addressOffset>
-               <access>read-only</access>
-               <fields>
-                  <field>
-                     <name>ID</name>
-                     <description>Received ID under Pretended Networking mode</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>29</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>WMB0_D03</name>
-               <description>Wake Up Message Buffer Register for Data 0-3</description>
-               <addressOffset>0xB48</addressOffset>
-               <access>read-only</access>
-               <fields>
-                  <field>
-                     <name>Data_byte_3</name>
-                     <description>Received payload corresponding to the data byte 3 under Pretended Networking mode</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_2</name>
-                     <description>Received payload corresponding to the data byte 2 under Pretended Networking mode</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_1</name>
-                     <description>Received payload corresponding to the data byte 1 under Pretended Networking mode</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_0</name>
-                     <description>Received payload corresponding to the data byte 0 under Pretended Networking mode</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>WMB0_D47</name>
-               <description>Wake Up Message Buffer Register Data 4-7</description>
-               <addressOffset>0xB4C</addressOffset>
-               <access>read-only</access>
-               <fields>
-                  <field>
-                     <name>Data_byte_7</name>
-                     <description>Received payload corresponding to the data byte 7 under Pretended Networking mode</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_6</name>
-                     <description>Received payload corresponding to the data byte 6 under Pretended Networking mode</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_5</name>
-                     <description>Received payload corresponding to the data byte 5 under Pretended Networking mode</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_4</name>
-                     <description>Received payload corresponding to the data byte 4 under Pretended Networking mode</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>WMB1_CS</name>
-               <description>Wake Up Message Buffer Register for C/S</description>
-               <addressOffset>0xB50</addressOffset>
-               <access>read-only</access>
-               <fields>
-                  <field>
-                     <name>DLC</name>
-                     <description>Length of Data in Bytes</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>4</bitWidth>
-                  </field>
-                  <field>
-                     <name>RTR</name>
-                     <description>Remote Transmission Request Bit</description>
-                     <bitOffset>20</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Frame is data one (not remote)</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Frame is a remote one</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>IDE</name>
-                     <description>ID Extended Bit</description>
-                     <bitOffset>21</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Frame format is standard</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Frame format is extended</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>SRR</name>
-                     <description>Substitute Remote Request</description>
-                     <bitOffset>22</bitOffset>
-                     <bitWidth>1</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>WMB1_ID</name>
-               <description>Wake Up Message Buffer Register for ID</description>
-               <addressOffset>0xB54</addressOffset>
-               <access>read-only</access>
-               <fields>
-                  <field>
-                     <name>ID</name>
-                     <description>Received ID under Pretended Networking mode</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>29</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>WMB1_D03</name>
-               <description>Wake Up Message Buffer Register for Data 0-3</description>
-               <addressOffset>0xB58</addressOffset>
-               <access>read-only</access>
-               <fields>
-                  <field>
-                     <name>Data_byte_3</name>
-                     <description>Received payload corresponding to the data byte 3 under Pretended Networking mode</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_2</name>
-                     <description>Received payload corresponding to the data byte 2 under Pretended Networking mode</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_1</name>
-                     <description>Received payload corresponding to the data byte 1 under Pretended Networking mode</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_0</name>
-                     <description>Received payload corresponding to the data byte 0 under Pretended Networking mode</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>WMB1_D47</name>
-               <description>Wake Up Message Buffer Register Data 4-7</description>
-               <addressOffset>0xB5C</addressOffset>
-               <access>read-only</access>
-               <fields>
-                  <field>
-                     <name>Data_byte_7</name>
-                     <description>Received payload corresponding to the data byte 7 under Pretended Networking mode</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_6</name>
-                     <description>Received payload corresponding to the data byte 6 under Pretended Networking mode</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_5</name>
-                     <description>Received payload corresponding to the data byte 5 under Pretended Networking mode</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_4</name>
-                     <description>Received payload corresponding to the data byte 4 under Pretended Networking mode</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>WMB2_CS</name>
-               <description>Wake Up Message Buffer Register for C/S</description>
-               <addressOffset>0xB60</addressOffset>
-               <access>read-only</access>
-               <fields>
-                  <field>
-                     <name>DLC</name>
-                     <description>Length of Data in Bytes</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>4</bitWidth>
-                  </field>
-                  <field>
-                     <name>RTR</name>
-                     <description>Remote Transmission Request Bit</description>
-                     <bitOffset>20</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Frame is data one (not remote)</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Frame is a remote one</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>IDE</name>
-                     <description>ID Extended Bit</description>
-                     <bitOffset>21</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Frame format is standard</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Frame format is extended</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>SRR</name>
-                     <description>Substitute Remote Request</description>
-                     <bitOffset>22</bitOffset>
-                     <bitWidth>1</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>WMB2_ID</name>
-               <description>Wake Up Message Buffer Register for ID</description>
-               <addressOffset>0xB64</addressOffset>
-               <access>read-only</access>
-               <fields>
-                  <field>
-                     <name>ID</name>
-                     <description>Received ID under Pretended Networking mode</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>29</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>WMB2_D03</name>
-               <description>Wake Up Message Buffer Register for Data 0-3</description>
-               <addressOffset>0xB68</addressOffset>
-               <access>read-only</access>
-               <fields>
-                  <field>
-                     <name>Data_byte_3</name>
-                     <description>Received payload corresponding to the data byte 3 under Pretended Networking mode</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_2</name>
-                     <description>Received payload corresponding to the data byte 2 under Pretended Networking mode</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_1</name>
-                     <description>Received payload corresponding to the data byte 1 under Pretended Networking mode</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_0</name>
-                     <description>Received payload corresponding to the data byte 0 under Pretended Networking mode</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>WMB2_D47</name>
-               <description>Wake Up Message Buffer Register Data 4-7</description>
-               <addressOffset>0xB6C</addressOffset>
-               <access>read-only</access>
-               <fields>
-                  <field>
-                     <name>Data_byte_7</name>
-                     <description>Received payload corresponding to the data byte 7 under Pretended Networking mode</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_6</name>
-                     <description>Received payload corresponding to the data byte 6 under Pretended Networking mode</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_5</name>
-                     <description>Received payload corresponding to the data byte 5 under Pretended Networking mode</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_4</name>
-                     <description>Received payload corresponding to the data byte 4 under Pretended Networking mode</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>WMB3_CS</name>
-               <description>Wake Up Message Buffer Register for C/S</description>
-               <addressOffset>0xB70</addressOffset>
-               <access>read-only</access>
-               <fields>
-                  <field>
-                     <name>DLC</name>
-                     <description>Length of Data in Bytes</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>4</bitWidth>
-                  </field>
-                  <field>
-                     <name>RTR</name>
-                     <description>Remote Transmission Request Bit</description>
-                     <bitOffset>20</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Frame is data one (not remote)</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Frame is a remote one</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>IDE</name>
-                     <description>ID Extended Bit</description>
-                     <bitOffset>21</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Frame format is standard</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Frame format is extended</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>SRR</name>
-                     <description>Substitute Remote Request</description>
-                     <bitOffset>22</bitOffset>
-                     <bitWidth>1</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>WMB3_ID</name>
-               <description>Wake Up Message Buffer Register for ID</description>
-               <addressOffset>0xB74</addressOffset>
-               <access>read-only</access>
-               <fields>
-                  <field>
-                     <name>ID</name>
-                     <description>Received ID under Pretended Networking mode</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>29</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>WMB3_D03</name>
-               <description>Wake Up Message Buffer Register for Data 0-3</description>
-               <addressOffset>0xB78</addressOffset>
-               <access>read-only</access>
-               <fields>
-                  <field>
-                     <name>Data_byte_3</name>
-                     <description>Received payload corresponding to the data byte 3 under Pretended Networking mode</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_2</name>
-                     <description>Received payload corresponding to the data byte 2 under Pretended Networking mode</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_1</name>
-                     <description>Received payload corresponding to the data byte 1 under Pretended Networking mode</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_0</name>
-                     <description>Received payload corresponding to the data byte 0 under Pretended Networking mode</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>WMB3_D47</name>
-               <description>Wake Up Message Buffer Register Data 4-7</description>
-               <addressOffset>0xB7C</addressOffset>
-               <access>read-only</access>
-               <fields>
-                  <field>
-                     <name>Data_byte_7</name>
-                     <description>Received payload corresponding to the data byte 7 under Pretended Networking mode</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_6</name>
-                     <description>Received payload corresponding to the data byte 6 under Pretended Networking mode</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_5</name>
-                     <description>Received payload corresponding to the data byte 5 under Pretended Networking mode</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_4</name>
-                     <description>Received payload corresponding to the data byte 4 under Pretended Networking mode</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-               </fields>
-            </register>
+               <register>
+                  <name>WMBn_CS</name>
+                  <description>Wake Up Message Buffer Register for C/S</description>
+                  <addressOffset>0x0</addressOffset>
+                  <access>read-only</access>
+                  <fields>
+                     <field>
+                        <name>DLC</name>
+                        <description>Length of Data in Bytes</description>
+                        <bitOffset>16</bitOffset>
+                        <bitWidth>4</bitWidth>
+                     </field>
+                     <field>
+                        <name>RTR</name>
+                        <description>Remote Transmission Request Bit</description>
+                        <bitOffset>20</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0</name>
+                              <description>Frame is data one (not remote)</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>1</name>
+                              <description>Frame is a remote one</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>IDE</name>
+                        <description>ID Extended Bit</description>
+                        <bitOffset>21</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0</name>
+                              <description>Frame format is standard</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>1</name>
+                              <description>Frame format is extended</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>SRR</name>
+                        <description>Substitute Remote Request</description>
+                        <bitOffset>22</bitOffset>
+                        <bitWidth>1</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>WMBn_ID</name>
+                  <description>Wake Up Message Buffer Register for ID</description>
+                  <addressOffset>0x4</addressOffset>
+                  <access>read-only</access>
+                  <fields>
+                     <field>
+                        <name>ID</name>
+                        <description>Received ID under Pretended Networking mode</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>29</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>WMBn_D03</name>
+                  <description>Wake Up Message Buffer Register for Data 0-3</description>
+                  <addressOffset>0x8</addressOffset>
+                  <access>read-only</access>
+                  <fields>
+                     <field>
+                        <name>Data_byte_3</name>
+                        <description>Received payload corresponding to the data byte 3 under Pretended Networking mode</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                     <field>
+                        <name>Data_byte_2</name>
+                        <description>Received payload corresponding to the data byte 2 under Pretended Networking mode</description>
+                        <bitOffset>8</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                     <field>
+                        <name>Data_byte_1</name>
+                        <description>Received payload corresponding to the data byte 1 under Pretended Networking mode</description>
+                        <bitOffset>16</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                     <field>
+                        <name>Data_byte_0</name>
+                        <description>Received payload corresponding to the data byte 0 under Pretended Networking mode</description>
+                        <bitOffset>24</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>WMBn_D47</name>
+                  <description>Wake Up Message Buffer Register Data 4-7</description>
+                  <addressOffset>0xC</addressOffset>
+                  <access>read-only</access>
+                  <fields>
+                     <field>
+                        <name>Data_byte_7</name>
+                        <description>Received payload corresponding to the data byte 7 under Pretended Networking mode</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                     <field>
+                        <name>Data_byte_6</name>
+                        <description>Received payload corresponding to the data byte 6 under Pretended Networking mode</description>
+                        <bitOffset>8</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                     <field>
+                        <name>Data_byte_5</name>
+                        <description>Received payload corresponding to the data byte 5 under Pretended Networking mode</description>
+                        <bitOffset>16</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                     <field>
+                        <name>Data_byte_4</name>
+                        <description>Received payload corresponding to the data byte 4 under Pretended Networking mode</description>
+                        <bitOffset>24</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+            </cluster>
          </registers>
       </peripheral>

@@ -10,7 +10,7 @@ Devices using this peripheral:
          <name>LPUART0</name>
          <description>Universal Asynchronous Receiver/Transmitter</description>
          <groupName>LPUART</groupName>
-         <headerStructName>LPUART0</headerStructName>
+         <headerStructName>LPUART</headerStructName>
          <baseAddress>0x4006A000</baseAddress>
          <size>32</size>
          <access>read-write</access>

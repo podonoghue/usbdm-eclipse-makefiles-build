@@ -33,7 +33,7 @@ Devices using this peripheral:
             <register>
                <dim>2</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>1,2</dimIndex>
+               <dimIndex>0,1</dimIndex>
                <name>SC1%s</name>
                <description>ADC Status and Control Register 1</description>
                <addressOffset>0x0</addressOffset>

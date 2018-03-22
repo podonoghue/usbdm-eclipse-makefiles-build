@@ -65,7 +65,7 @@
       <xi:include href="peripherals/MCM_S32K14x.svd.xml"/>
       <xi:include href="peripherals/MPU_S32K148.svd.xml"/>
       <xi:include href="peripherals/MSCM_S32K14x.svd.xml"/>
-      <xi:include href="peripherals/NV_S3214x.svd.xml"/>
+      <xi:include href="peripherals/NV_MKV40.svd.xml"/>
       <xi:include href="peripherals/NVIC_CM4.svd.xml"/>
       <xi:include href="peripherals/PCC_S32K148.svd.xml"/>
       <xi:include href="peripherals/PDB0_4CH_1TRIG_0DAC_8PO.svd.svd.xml"/>

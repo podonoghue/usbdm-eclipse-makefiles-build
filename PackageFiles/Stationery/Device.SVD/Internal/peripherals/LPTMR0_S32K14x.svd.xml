@@ -10,7 +10,7 @@ Devices using this peripheral:
          <name>LPTMR0</name>
          <description>Low Power Timer</description>
          <groupName>LPTMR</groupName>
-         <headerStructName>LPTMR0</headerStructName>
+         <headerStructName>LPTMR</headerStructName>
          <baseAddress>0x40040000</baseAddress>
          <size>32</size>
          <access>read-write</access>
