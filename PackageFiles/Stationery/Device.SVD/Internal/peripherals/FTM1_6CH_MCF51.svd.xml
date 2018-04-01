@@ -8,12 +8,15 @@ Devices using this peripheral:
          <name>FTM1</name>
          <description>FlexTimer Module (6 channels)</description>
          <groupName>FTM</groupName>
-         <headerStructName>FTM</headerStructName>
+         <headerStructName>FTM1</headerStructName>
          <baseAddress>0xFFFF8480</baseAddress>
          <size>8</size>
          <access>read-write</access>
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
+         <parameters>
+            <parameter> <value>6</value> <name>CONTROLS_COUNT</name> <description>Number of FTM channels</description></parameter>
+         </parameters>
          <addressBlock>
             <?width "8" ?>
             <offset>0x0</offset>
@@ -253,9 +256,8 @@ An interrupt is generated when TOF equals one</description>
                </fields>
             </register>
             <cluster>
-               <dim>6</dim>
+               <dim>%CONTROLS_COUNT</dim>
                <dimIncrement>3</dimIncrement>
-               <dimIndex>0,1,2,3,4,5</dimIndex>
                <name>CONTROLS,@pC@i@f</name>
                <addressOffset>0x5</addressOffset>
                <register>
@@ -512,8 +514,6 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                   <field derivedFrom="CH0F" > <name>CH3F</name> <description>Channel 3 Event Flag</description> <bitOffset>3</bitOffset> </field>
                   <field derivedFrom="CH0F" > <name>CH4F</name> <description>Channel 4 Event Flag</description> <bitOffset>4</bitOffset> </field>
                   <field derivedFrom="CH0F" > <name>CH5F</name> <description>Channel 5 Event Flag</description> <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="CH0F" > <name>CH6F</name> <description>Channel 6 Event Flag</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="CH0F" > <name>CH7F</name> <description>Channel 7 Event Flag</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -766,8 +766,6 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                   <field derivedFrom="CH0OI" > <name>CH3OI</name> <description>Channel 3 Output Initialization Value</description> <bitOffset>3</bitOffset> </field>
                   <field derivedFrom="CH0OI" > <name>CH4OI</name> <description>Channel 4 Output Initialization Value</description> <bitOffset>4</bitOffset> </field>
                   <field derivedFrom="CH0OI" > <name>CH5OI</name> <description>Channel 5 Output Initialization Value</description> <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="CH0OI" > <name>CH6OI</name> <description>Channel 6 Output Initialization Value</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="CH0OI" > <name>CH7OI</name> <description>Channel 7 Output Initialization Value</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -798,8 +796,6 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                   <field derivedFrom="CH0OM" > <name>CH3OM</name> <description>Channel 3 Output Mask</description> <bitOffset>3</bitOffset> </field>
                   <field derivedFrom="CH0OM" > <name>CH4OM</name> <description>Channel 4 Output Mask</description> <bitOffset>4</bitOffset> </field>
                   <field derivedFrom="CH0OM" > <name>CH5OM</name> <description>Channel 5 Output Mask</description> <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="CH0OM" > <name>CH6OM</name> <description>Channel 6 Output Mask</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="CH0OM" > <name>CH7OM</name> <description>Channel 7 Output Mask</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>

@@ -36,7 +36,7 @@
       <peripheral derivedFrom="GPIOA"><name>GPIOC</name><baseAddress>0x400FF080</baseAddress></peripheral>
       <peripheral derivedFrom="GPIOA"><name>GPIOD</name><baseAddress>0x400FF0C0</baseAddress></peripheral>
       <peripheral derivedFrom="GPIOA"><name>GPIOE</name><baseAddress>0x400FF100</baseAddress></peripheral>
-      <xi:include href="peripherals/I2C0_MKL17.svd.xml"/>
+      <xi:include href="peripherals/I2C0_MK28F15.svd.xml"/>
       <peripheral derivedFrom="I2C0"><name>I2C1</name><baseAddress>0x40067000</baseAddress></peripheral>
       <xi:include href="peripherals/I2S0_MKL_B.svd.xml"/>
       <xi:include href="peripherals/LCD_MKL.svd.xml"/>
@@ -46,8 +46,8 @@
       <peripheral derivedFrom="LPUART0"><name>LPUART1</name><baseAddress>0x40055000</baseAddress></peripheral>
       <xi:include href="peripherals/MCG_LITE.svd.xml"/>
       <xi:include href="peripherals/MCM_MKL02Z4.svd.xml"/>
-      <xi:include href="peripherals/MTB.svd.xml"/>
-      <xi:include href="peripherals/MTBDWT_MKL.svd.xml"/>
+      <xi:include href="peripherals/MTB_MKE15Z7.svd.xml"/>
+      <xi:include href="peripherals/MTBDWT_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/NV_MKL5.svd.xml"/>
       <xi:include href="peripherals/NVIC_CM0.svd.xml"/>
       <xi:include href="peripherals/OSC0_MK.svd.xml"/>

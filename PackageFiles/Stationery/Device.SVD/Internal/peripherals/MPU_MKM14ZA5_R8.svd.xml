@@ -199,7 +199,7 @@ Devices using this peripheral:
                      </field>
                      <field>
                         <name>EPID</name>
-                        <description>Error process identification</description>
+                        <description>Error Process Identification</description>
                         <bitOffset>8</bitOffset>
                         <bitWidth>8</bitWidth>
                      </field>
@@ -262,12 +262,46 @@ Devices using this peripheral:
                         <description>Bus Master 0 Supervisor Mode Access Control</description>
                         <bitOffset>3</bitOffset>
                         <bitWidth>2</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b00</name>
+                              <description>r/w/x; read, write and execute allowed</description>
+                              <value>0b00</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b01</name>
+                              <description>r/x; read and execute allowed, but no write</description>
+                              <value>0b01</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b10</name>
+                              <description>r/w; read and write allowed, but no execute</description>
+                              <value>0b10</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b11</name>
+                              <description>Same as User mode defined in M0UM</description>
+                              <value>0b11</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
                      </field>
                      <field>
                         <name>M0PE</name>
-                        <description>Bus master 0 process identifier enable</description>
+                        <description>Bus Master 0 Process Identifier enable</description>
                         <bitOffset>5</bitOffset>
                         <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Do not include the process identifier in the evaluation</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Include the process identifier and mask (RGDn.RGDAAC) in the region hit evaluation</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
                      </field>
                      <field>
                         <name>M1UM</name>
@@ -280,13 +314,30 @@ Devices using this peripheral:
                         <description>Bus Master 1 Supervisor Mode Access Control</description>
                         <bitOffset>9</bitOffset>
                         <bitWidth>2</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b00</name>
+                              <description>r/w/x; read, write and execute allowed</description>
+                              <value>0b00</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b01</name>
+                              <description>r/x; read and execute allowed, but no write</description>
+                              <value>0b01</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b10</name>
+                              <description>r/w; read and write allowed, but no execute</description>
+                              <value>0b10</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b11</name>
+                              <description>Same as User mode defined in M1UM</description>
+                              <value>0b11</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
                      </field>
-                     <field>
-                        <name>M1PE</name>
-                        <description>Bus master 1 process identifier enable</description>
-                        <bitOffset>11</bitOffset>
-                        <bitWidth>1</bitWidth>
-                     </field>
+                     <field derivedFrom="M0PE" > <name>M1PE</name> <description>Bus Master 1 Process Identifier enable</description> <bitOffset>11</bitOffset> </field>
                      <field>
                         <name>M2UM</name>
                         <description>Bus Master 2 User Mode Access control</description>
@@ -298,12 +349,46 @@ Devices using this peripheral:
                         <description>Bus Master 2 Supervisor Mode Access Control</description>
                         <bitOffset>15</bitOffset>
                         <bitWidth>2</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b00</name>
+                              <description>r/w/x; read, write and execute allowed</description>
+                              <value>0b00</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b01</name>
+                              <description>r/x; read and execute allowed, but no write</description>
+                              <value>0b01</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b10</name>
+                              <description>r/w; read and write allowed, but no execute</description>
+                              <value>0b10</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b11</name>
+                              <description>Same as User mode defined in M2UM</description>
+                              <value>0b11</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
                      </field>
                      <field>
                         <name>M2PE</name>
                         <description>Bus master 2 process identifier enable</description>
                         <bitOffset>17</bitOffset>
                         <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Do not include the process identifier in the evaluation</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Include the process identifier and mask (RGDn_WORD3) in the region hit evaluation</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
                      </field>
                      <field>
                         <name>M3UM</name>
@@ -351,24 +436,7 @@ Devices using this peripheral:
                            </enumeratedValue>
                         </enumeratedValues>
                      </field>
-                     <field>
-                        <name>M3PE</name>
-                        <description>Bus master 3 process identifier enable</description>
-                        <bitOffset>23</bitOffset>
-                        <bitWidth>1</bitWidth>
-                        <enumeratedValues>
-                           <enumeratedValue>
-                              <name>0b0</name>
-                              <description>Do not include the process identifier in the evaluation</description>
-                              <value>0b0</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b1</name>
-                              <description>Include the process identifier and mask (RGDn_WORD3) in the region hit evaluation</description>
-                              <value>0b1</value>
-                           </enumeratedValue>
-                        </enumeratedValues>
-                     </field>
+                     <field derivedFrom="M2PE" > <name>M3PE</name> <description>Bus master 3 process identifier enable</description> <bitOffset>23</bitOffset> </field>
                      <field>
                         <name>M4WE</name>
                         <description>Bus Master 4 Write Enable</description>
@@ -559,7 +627,7 @@ Devices using this peripheral:
                <dimIncrement>4</dimIncrement>
                <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
                <name>RGDAAC%s</name>
-               <description>Region Descriptor Alternate Access Control n</description>
+               <description>Region Descriptor Alternate Access Control %s</description>
                <addressOffset>0x800</addressOffset>
                <resetValue>0x61F7DF</resetValue>
                <fields>
@@ -574,12 +642,46 @@ Devices using this peripheral:
                      <description>Bus Master 0 Supervisor Mode Access Control</description>
                      <bitOffset>3</bitOffset>
                      <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>r/w/x; read, write and execute allowed</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>r/x; read and execute allowed, but no write</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>r/w; read and write allowed, but no execute</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Same as User mode defined in M0UM</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>M0PE</name>
-                     <description>Bus master 0 process identifier enable</description>
+                     <description>Bus Master 0 Process Identifier Enable</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Do not include the process identifier in the evaluation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Include the process identifier and mask (RGDn.RGDAAC) in the region hit evaluation</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>M1UM</name>
@@ -592,13 +694,30 @@ Devices using this peripheral:
                      <description>Bus Master 1 Supervisor Mode Access Control</description>
                      <bitOffset>9</bitOffset>
                      <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>r/w/x; read, write and execute allowed</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>r/x; read and execute allowed, but no write</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>r/w; read and write allowed, but no execute</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Same as User mode defined in M1UM</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
-                  <field>
-                     <name>M1PE</name>
-                     <description>Bus master 1 process identifier enable</description>
-                     <bitOffset>11</bitOffset>
-                     <bitWidth>1</bitWidth>
-                  </field>
+                  <field derivedFrom="M0PE" > <name>M1PE</name> <description>Bus Master 1 Process Identifier Enable</description> <bitOffset>11</bitOffset> </field>
                   <field>
                      <name>M2UM</name>
                      <description>Bus Master 2 User Mode Access Control</description>
@@ -610,13 +729,30 @@ Devices using this peripheral:
                      <description>Bus Master 2 Supervisor Mode Access Control</description>
                      <bitOffset>15</bitOffset>
                      <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>r/w/x; read, write and execute allowed</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>r/x; read and execute allowed, but no write</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>r/w; read and write allowed, but no execute</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Same as User mode defined in M2UM</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
-                  <field>
-                     <name>M2PE</name>
-                     <description>Bus master 2 process identifier enable</description>
-                     <bitOffset>17</bitOffset>
-                     <bitWidth>1</bitWidth>
-                  </field>
+                  <field derivedFrom="M0PE" > <name>M2PE</name> <description>Bus master 2 process identifier enable</description> <bitOffset>17</bitOffset> </field>
                   <field>
                      <name>M3UM</name>
                      <description>Bus Master 3 User Mode Access Control</description>
@@ -663,24 +799,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>M3PE</name>
-                     <description>Bus master 3 process identifier enable</description>
-                     <bitOffset>23</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Do not include the process identifier in the evaluation</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Include the process identifier and mask (RGDn.RGDAAC) in the region hit evaluation</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="M0PE" > <name>M3PE</name> <description>Bus master 3 process identifier enable</description> <bitOffset>23</bitOffset> </field>
                   <field>
                      <name>M4WE</name>
                      <description>Bus Master 4 Write Enable</description>

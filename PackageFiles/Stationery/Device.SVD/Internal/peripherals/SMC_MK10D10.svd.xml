@@ -311,7 +311,7 @@ Controls powering of RAM partition 2 in VLLS2 mode</description>
             </register>
             <register derivedFrom="STOPCTRL"> <name>VLLSCTRL</name><?hide?> <?doDerivedMacros?> <description>VLLS Control Register (old name)
 Provides various control bits allowing the user to fine tune
-power consumption during the stop mode selected by the STOPM field</description> </register>
+power consumption during the stop mode selected by the STOPM field</description> <addressOffset>0x2</addressOffset> </register>
             <register>
                <name>PMSTAT</name>
                <description>Power Mode Status Register</description>

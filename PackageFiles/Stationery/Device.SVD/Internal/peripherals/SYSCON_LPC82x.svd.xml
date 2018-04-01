@@ -1206,23 +1206,7 @@ Devices using this peripheral:
                   </field>
                </fields>
             </register>
-            <register>
-               <dim>7</dim>
-               <dimIncrement>4</dimIncrement>
-               <dimIndex>1,2,3,4,5,6,7</dimIndex>
-               <name>PINTSEL%s</name>
-               <description>GPIO Pin Interrupt Select register 0</description>
-               <addressOffset>0x17C</addressOffset>
-               <resetMask>0x0</resetMask>
-               <fields>
-                  <field>
-                     <name>INTPIN</name>
-                     <description>Pin number select for pin interrupt or pattern match engine input. (PIO0_0 to PIO0_28 correspond to numbers 0 to 28)</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>6</bitWidth>
-                  </field>
-               </fields>
-            </register>
+            <register derivedFrom="PINTSEL0"><dim>7</dim><dimIncrement>4</dimIncrement><dimIndex>1,2,3,4,5,6,7</dimIndex> <name>PINTSEL%s</name> <addressOffset>0x17C</addressOffset> <resetMask>0x0</resetMask> </register>
             <register>
                <name>STARTERP0</name>
                <description>Start logic 0 pin wake-up enable register</description>

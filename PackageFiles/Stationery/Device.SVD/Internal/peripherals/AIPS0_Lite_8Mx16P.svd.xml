@@ -1,0 +1,254 @@
+<!--
+Devices using this peripheral: 
+      MK10D5
+      MK10D7
+      MK10D10
+      MK10DZ10
+      MK10F12
+      MK11D5
+      MK11DA5
+      MK11D5WS
+      MK12D5
+      MK20D5
+      MK20D7
+      MK20D10
+      MK20DZ10
+      MK20F12
+      MK21D5
+      MK21DA5
+      MK21D5WS
+      MK21F12
+      MK21FA12
+      MK22D5
+      MK24F12
+      MK24F25612
+      MK28F15
+      MK30D7
+      MK30D10
+      MK30DZ10
+      MK40D7
+      MK40D10
+      MK40DZ10
+      MK50D7
+      MK50D10
+      MK50DZ10
+      MK51D7
+      MK51D10
+      MK51DZ10
+      MK52D10
+      MK52DZ10
+      MK53D10
+      MK53DZ10
+      MK60D10
+      MK60DZ10
+      MK60F12
+      MK60F15
+      MK61F15
+      MK61F15WS
+      MK63F12
+      MK64F12
+      MK65F18
+      MK66F18
+      MK70F15
+      MK70F15WS
+      MK82F25615
+      MKL82Z7
+      MKV40F16
+      MKV43F16
+      MKV44F16
+      MKV45F16
+      MKV46F16
+-->
+      <peripheral>
+         <?sourceFile "AIPS0_Lite_8Mx16P" ?>
+         <name>AIPS0</name>
+         <description>AIPS-Lite Bridge</description>
+         <groupName>AIPS</groupName>
+         <headerStructName>AIPS</headerStructName>
+         <baseAddress>0x40000000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x0</offset>
+            <size>0x4</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x20</offset>
+            <size>0x40</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <name>MPRA</name>
+               <description>Master Privilege Register A</description>
+               <addressOffset>0x0</addressOffset>
+               <resetValue>0x77700000</resetValue>
+               <fields>
+                  <field>
+                     <name>MPL7</name>
+                     <description>Master 7 Privilege Level</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Accesses forced to user-mode</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Accesses not forced to user-mode</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MTW7</name>
+                     <description>Master 7 Trusted For Writes</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Master not trusted for writes</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Master is trusted for writes</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MTR7</name>
+                     <description>Master 7 Trusted For Read</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Master is not trusted for reads</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Master is trusted for reads</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="MPL7" > <name>MPL6</name> <description>Master 6 Privilege Level</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="MTW7" > <name>MTW6</name> <description>Master 6 Trusted for Writes</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="MTR7" > <name>MTR6</name> <description>Master 6 Trusted for Read</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="MPL7" > <name>MPL5</name> <description>Master 5 Privilege Level</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="MTW7" > <name>MTW5</name> <description>Master 5 Trusted for Writes</description> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="MTR7" > <name>MTR5</name> <description>Master 5 Trusted for Read</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="MPL7" > <name>MPL4</name> <description>Master 4 Privilege Level</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="MTW7" > <name>MTW4</name> <description>Master 4 Trusted for Writes</description> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="MTR7" > <name>MTR4</name> <description>Master 4 Trusted for Read</description> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="MPL7" > <name>MPL3</name> <description>Master 3 Privilege Level</description> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="MTW7" > <name>MTW3</name> <description>Master 3 Trusted for Writes</description> <bitOffset>17</bitOffset> </field>
+                  <field derivedFrom="MTR7" > <name>MTR3</name> <description>Master 3 Trusted for Read</description> <bitOffset>18</bitOffset> </field>
+                  <field derivedFrom="MPL7" > <name>MPL2</name> <description>Master 2 Privilege Level</description> <bitOffset>20</bitOffset> </field>
+                  <field derivedFrom="MTW7" > <name>MTW2</name> <description>Master 2 Trusted for Writes</description> <bitOffset>21</bitOffset> </field>
+                  <field derivedFrom="MTR7" > <name>MTR2</name> <description>Master 2 Trusted for Read</description> <bitOffset>22</bitOffset> </field>
+                  <field derivedFrom="MPL7" > <name>MPL1</name> <description>Master 1 Privilege Level</description> <bitOffset>24</bitOffset> </field>
+                  <field derivedFrom="MTW7" > <name>MTW1</name> <description>Master 1 Trusted for Writes</description> <bitOffset>25</bitOffset> </field>
+                  <field derivedFrom="MTR7" > <name>MTR1</name> <description>Master 1 Trusted for Read</description> <bitOffset>26</bitOffset> </field>
+                  <field derivedFrom="MPL7" > <name>MPL0</name> <description>Master 0 Privilege Level</description> <bitOffset>28</bitOffset> </field>
+                  <field derivedFrom="MTW7" > <name>MTW0</name> <description>Master 0 Trusted For Writes</description> <bitOffset>29</bitOffset> </field>
+                  <field derivedFrom="MTR7" > <name>MTR0</name> <description>Master 0 Trusted For Read</description> <bitOffset>30</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <dim>16</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
+               <name>PACR%s</name>
+               <description>Peripheral Access Control Register %s</description>
+               <addressOffset>0x20</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>TP7</name>
+                     <description>Peripheral 7 Trusted Protect</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Untrusted masters are allowed access</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Untrusted masters are not allowed access</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WP7</name>
+                     <description>Peripheral 7 Write Protect</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Peripheral allows write accesses</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Peripheral is write protected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SP7</name>
+                     <description>Peripheral 7 Supervisor Protect</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Supervisor privilege level is not required for accesses</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Supervisor privilege level is required for accesses</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="TP7" > <name>TP6</name> <description>Peripheral 6 Trusted Protect</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="WP7" > <name>WP6</name> <description>Peripheral 6 Write Protect</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="SP7" > <name>SP6</name> <description>Peripheral 6 Supervisor Protect</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="TP7" > <name>TP5</name> <description>Peripheral 5 Trusted Protect</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="WP7" > <name>WP5</name> <description>Peripheral 5 Write Protect</description> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="SP7" > <name>SP5</name> <description>Peripheral 5 Supervisor Protect</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="TP7" > <name>TP4</name> <description>Peripheral 4 Trusted Protect</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="WP7" > <name>WP4</name> <description>Peripheral 4 Write Protect</description> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="SP7" > <name>SP4</name> <description>Peripheral 4 Supervisor Protect</description> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="TP7" > <name>TP3</name> <description>Peripheral 3 Trusted Protect</description> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="WP7" > <name>WP3</name> <description>Peripheral 3 Write Protect</description> <bitOffset>17</bitOffset> </field>
+                  <field derivedFrom="SP7" > <name>SP3</name> <description>Peripheral 3 Supervisor Protect</description> <bitOffset>18</bitOffset> </field>
+                  <field derivedFrom="TP7" > <name>TP2</name> <description>Peripheral 2 Trusted Protect</description> <bitOffset>20</bitOffset> </field>
+                  <field derivedFrom="WP7" > <name>WP2</name> <description>Peripheral 2 Write Protect</description> <bitOffset>21</bitOffset> </field>
+                  <field derivedFrom="SP7" > <name>SP2</name> <description>Peripheral 2 Supervisor Protect</description> <bitOffset>22</bitOffset> </field>
+                  <field derivedFrom="TP7" > <name>TP1</name> <description>Peripheral 1 Trusted Protect</description> <bitOffset>24</bitOffset> </field>
+                  <field derivedFrom="WP7" > <name>WP1</name> <description>Peripheral 1 Write Protect</description> <bitOffset>25</bitOffset> </field>
+                  <field derivedFrom="SP7" > <name>SP1</name> <description>Peripheral 1 Supervisor Protect</description> <bitOffset>26</bitOffset> </field>
+                  <field derivedFrom="TP7" > <name>TP0</name> <description>Peripheral 0 Trusted Protect</description> <bitOffset>28</bitOffset> </field>
+                  <field derivedFrom="WP7" > <name>WP0</name> <description>Peripheral 0 Write Protect</description> <bitOffset>29</bitOffset> </field>
+                  <field derivedFrom="SP7" > <name>SP0</name> <description>Peripheral 0 Supervisor Protect</description> <bitOffset>30</bitOffset> </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

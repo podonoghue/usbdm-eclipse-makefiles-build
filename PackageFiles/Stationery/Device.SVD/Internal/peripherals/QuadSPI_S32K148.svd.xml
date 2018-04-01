@@ -459,25 +459,7 @@ This field is valid for both SDR and DDR mode</description>
                   </field>
                </fields>
             </register>
-            <register>
-               <name>BUF2CR</name>
-               <description>Buffer2 Configuration Register</description>
-               <addressOffset>0x18</addressOffset>
-               <fields>
-                  <field>
-                     <name>MSTRID</name>
-                     <description>Master ID</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>4</bitWidth>
-                  </field>
-                  <field>
-                     <name>ADATSZ</name>
-                     <description>AHB data transfer size</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-               </fields>
-            </register>
+            <register derivedFrom="BUF1CR"> <name>BUF2CR</name> <description>Buffer2 Configuration Register</description> <addressOffset>0x18</addressOffset> </register>
             <register>
                <name>BUF3CR</name>
                <description>Buffer3 Configuration Register</description>

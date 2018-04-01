@@ -183,24 +183,7 @@ Devices using this peripheral:
                   </field>
                </fields>
             </register>
-            <register>
-               <dim>3</dim>
-               <dimIncrement>4</dimIncrement>
-               <dimIndex>1,2,3</dimIndex>
-               <name>CP0CFG%s</name>
-               <description>Processor 0 Configuration Register</description>
-               <addressOffset>0x34</addressOffset>
-               <access>read-only</access>
-               <resetMask>0x0</resetMask>
-               <fields>
-                  <field>
-                     <name>ICSZ</name>
-                     <description>Level 1 Instruction Cache Size</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-               </fields>
-            </register>
+            <register derivedFrom="CP0CFG0"><dim>3</dim><dimIncrement>4</dimIncrement><dimIndex>1,2,3</dimIndex> <name>CP0CFG%s</name> <addressOffset>0x34</addressOffset> </register>
             <register>
                <dim>4</dim>
                <dimIncrement>4</dimIncrement>

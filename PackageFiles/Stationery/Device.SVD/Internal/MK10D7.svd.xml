@@ -23,7 +23,7 @@
    <peripherals>
       <xi:include href="peripherals/ADC0_DIFF_PGA_A.svd.xml"/>
       <peripheral derivedFrom="ADC0"><name>ADC1</name><baseAddress>0x400BB000</baseAddress></peripheral>
-      <xi:include href="peripherals/AIPS0_3M_A.svd.xml"/>
+      <xi:include href="peripherals/AIPS0_Lite_8Mx16P.svd.xml"/>
       <peripheral derivedFrom="AIPS0"><name>AIPS1</name><baseAddress>0x40080000</baseAddress></peripheral>
       <xi:include href="peripherals/AXBS_3M_4S.svd.xml"/>
       <xi:include href="peripherals/CAN0_2MASK.svd.xml"/>
@@ -62,7 +62,7 @@
       <xi:include href="peripherals/NV_FTFL.svd.xml"/>
       <xi:include href="peripherals/NVIC_CM4.svd.xml"/>
       <xi:include href="peripherals/OSC0_MK.svd.xml"/>
-      <xi:include href="peripherals/PDB0_2CH_2TRIG_1DAC_3PO.svd.xml"/>
+      <xi:include href="peripherals/PDB0_2CH_2PT_1DAC_3PO.svd.xml"/>
       <xi:include href="peripherals/PIT_4CH.svd.xml"/>
       <xi:include href="peripherals/PMC_MK.svd.xml"/>
       <xi:include href="peripherals/PORTA.svd.xml"/>

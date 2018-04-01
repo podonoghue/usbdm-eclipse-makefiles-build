@@ -9,7 +9,6 @@ Devices using this peripheral:
          <name>CRC0</name>
          <description>Cyclic Redundancy Check</description>
          <groupName>CRC</groupName>
-         <prependToName>CRC</prependToName>
          <headerStructName>CRC</headerStructName>
          <baseAddress>0x40034000</baseAddress>
          <size>32</size>

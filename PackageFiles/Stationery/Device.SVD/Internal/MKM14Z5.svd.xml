@@ -23,7 +23,7 @@
    <peripherals>
       <xi:include href="peripherals/ADC0_MKM.svd.xml"/>
       <xi:include href="peripherals/AFE_0.svd.xml"/>
-      <xi:include href="peripherals/AIPS0_MKM.svd.xml"/>
+      <xi:include href="peripherals/AIPS0_Lite_MKM.svd.xml"/>
       <xi:include href="peripherals/CMP0_0x40072000.svd.xml"/>
       <peripheral derivedFrom="CMP0"><name>CMP1</name><baseAddress>0x40072008</baseAddress></peripheral>
       <xi:include href="peripherals/CRC0_0x40034000.svd.xml"/>
@@ -50,8 +50,8 @@
       <xi:include href="peripherals/MCG_MKM335.svd.xml"/>
       <xi:include href="peripherals/MCM_MKM14ZA5.svd.xml"/>
       <xi:include href="peripherals/MPU_MKM14ZA5_R8.svd.xml"/>
-      <xi:include href="peripherals/MTB.svd.xml"/>
-      <xi:include href="peripherals/MTBDWT_MKL.svd.xml"/>
+      <xi:include href="peripherals/MTB_MKE15Z7.svd.xml"/>
+      <xi:include href="peripherals/MTBDWT_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/NV_MKM.svd.xml"/>
       <xi:include href="peripherals/OSC_MKM.svd.xml"/>
       <xi:include href="peripherals/PIT0_2CH_CHAIN_MKM.svd.xml"/>
@@ -66,7 +66,7 @@
       <peripheral derivedFrom="PORTA"><name>PORTG</name><baseAddress>0x4004C000</baseAddress></peripheral>
       <peripheral derivedFrom="PORTA"><name>PORTH</name><baseAddress>0x4004D000</baseAddress></peripheral>
       <peripheral derivedFrom="PORTA"><name>PORTI</name><baseAddress>0x4004E000</baseAddress></peripheral>
-      <xi:include href="peripherals/RCM_MKM14ZA5.svd.xml"/>
+      <xi:include href="peripherals/RCM_MKM_0x4007B000.svd.xml"/>
       <xi:include href="peripherals/RNG_1.svd.xml"/>
       <xi:include href="peripherals/ROM_MKL.svd.xml"/>
       <xi:include href="peripherals/RTC_MKM14ZA5.svd.xml"/>

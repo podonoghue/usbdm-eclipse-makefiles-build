@@ -75,7 +75,7 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>MAXMB</name>
-                     <description>Number Of The Last Message Buffer</description>
+                     <description>Number of the Last Message Buffer</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>7</bitWidth>
                   </field>
@@ -86,22 +86,22 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>Format A: One full ID (standard and extended) per ID Filter Table element</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
+                           <name>0b01</name>
                            <description>Format B: Two full standard IDs or two partial 14-bit (standard and extended) IDs per ID Filter Table element</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
+                           <name>0b10</name>
                            <description>Format C: Four partial 8-bit Standard IDs per ID Filter Table element</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
+                           <name>0b11</name>
                            <description>Format D: All frames rejected</description>
                            <value>0b11</value>
                         </enumeratedValue>
@@ -114,12 +114,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>CAN FD is enabled. FlexCAN is able to receive and transmit messages in both CAN FD and CAN 2.0 formats</description>
                            <value>0b1</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>CAN FD is disabled. FlexCAN is able to receive and transmit messages in CAN 2.0 format</description>
                            <value>0b0</value>
                         </enumeratedValue>
@@ -132,12 +132,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Abort disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Abort enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -150,12 +150,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Local Priority disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Local Priority enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -168,12 +168,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Pretended Networking mode is disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Pretended Networking mode is enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -186,12 +186,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>DMA feature for RX FIFO disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>DMA feature for RX FIFO enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -199,17 +199,17 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>IRMQ</name>
-                     <description>Individual Rx Masking And Queue Enable</description>
+                     <description>Individual Rx Masking and Queue Enable</description>
                      <bitOffset>16</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Individual Rx masking and queue feature are disabled. For backward compatibility with legacy applications, the reading of C/S word locks the MB even if it is EMPTY</description>
+                           <name>0b0</name>
+                           <description>Individual Rx masking and queue feature are disabled. For backward compatibility, the reading of C/S word locks the MB even if it is EMPTY</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Individual Rx masking and queue feature are enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -222,12 +222,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Self reception enabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Self reception disabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -235,19 +235,19 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>LPMACK</name>
-                     <description>Low-Power Mode Acknowledge</description>
+                     <description>Low Power Mode Acknowledge</description>
                      <bitOffset>20</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>FlexCAN is not in a low-power mode</description>
+                           <name>0b0</name>
+                           <description>FlexCAN is not in a low power mode</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>FlexCAN is in a low-power mode</description>
+                           <name>0b1</name>
+                           <description>FlexCAN is in a low power mode</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -259,12 +259,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>TWRNINT and RWRNINT bits are zero, independent of the values in the error counters</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>TWRNINT and RWRNINT bits are set when the respective error counter transitions from less than 96 to greater than or equal to 96</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -275,6 +275,18 @@ Devices using this peripheral:
                      <description>Supervisor Mode</description>
                      <bitOffset>23</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>FlexCAN is in User mode. Affected registers allow both Supervisor and Unrestricted accesses</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>FlexCAN is in Supervisor mode. Affected registers allow only Supervisor access. Unrestricted access behaves as though the access was done to an unimplemented register location</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>FRZACK</name>
@@ -284,12 +296,12 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>FlexCAN not in Freeze mode, prescaler running</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>FlexCAN in Freeze mode, prescaler stopped</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -302,12 +314,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No reset request</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Resets the registers affected by soft reset</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -321,9 +333,14 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>FlexCAN module is either in Normal mode, Listen-Only mode or Loop-Back mode</description>
                            <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>FlexCAN module is in Disabled/Stop/Freeze mode</description>
+                           <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -334,12 +351,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No Freeze mode request</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Enters Freeze mode if the FRZ bit is asserted</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -352,12 +369,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Rx FIFO not enabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Rx FIFO enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -370,12 +387,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Not enabled to enter Freeze mode</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Enabled to enter Freeze mode</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -388,12 +405,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Enable the FlexCAN module</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Disable the FlexCAN module</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -403,7 +420,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>CTRL1</name>
-               <description>Control 1 register</description>
+               <description>Control 1 Register</description>
                <addressOffset>0x4</addressOffset>
                <fields>
                   <field>
@@ -419,13 +436,13 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Listen-Only mode is deactivated</description>
+                           <name>0b0</name>
+                           <description>Listen-Only Mode is deactivated</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>FlexCAN module operates in Listen-Only mode</description>
+                           <name>0b1</name>
+                           <description>FlexCAN module operates in Listen-Only Mode</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -437,12 +454,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Buffer with highest priority is transmitted first</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Lowest number buffer is transmitted first</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -455,12 +472,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Timer Sync feature disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Timer Sync feature enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -473,12 +490,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Automatic recovering from Bus Off state enabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Automatic recovering from Bus Off state disabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -491,12 +508,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Just one sample is used to determine the bit value</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Three samples are used to determine the value of the received bit: the regular one (sample point) and 2 preceding samples; a majority rule is used</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -509,12 +526,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Rx Warning Interrupt disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Rx Warning Interrupt enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -527,12 +544,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Tx Warning Interrupt disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Tx Warning Interrupt enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -545,12 +562,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Loop Back disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Loop Back enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -563,12 +580,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>The CAN engine clock source is the oscillator clock. Under this condition, the oscillator clock frequency must be lower than the bus clock</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>The CAN engine clock source is the peripheral clock</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -581,12 +598,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Error interrupt disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Error interrupt enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -599,12 +616,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Bus Off interrupt disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Bus Off interrupt enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -659,6 +676,18 @@ Devices using this peripheral:
                      <name>MG</name>
                      <description>Rx Mailboxes Global Mask Bits</description>
                      <bitOffset>0</bitOffset>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>The corresponding bit in the filter is &quot;don&apos;t care.&quot;</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The corresponding bit in the filter is checked</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                </fields>
             </register>
@@ -672,6 +701,18 @@ Devices using this peripheral:
                      <name>RX14M</name>
                      <description>Rx Buffer 14 Mask Bits</description>
                      <bitOffset>0</bitOffset>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>The corresponding bit in the filter is &quot;don&apos;t care.&quot;</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The corresponding bit in the filter is checked</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                </fields>
             </register>
@@ -685,6 +726,18 @@ Devices using this peripheral:
                      <name>RX15M</name>
                      <description>Rx Buffer 15 Mask Bits</description>
                      <bitOffset>0</bitOffset>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>The corresponding bit in the filter is &quot;don&apos;t care.&quot;</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The corresponding bit in the filter is checked</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                </fields>
             </register>
@@ -731,12 +784,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No such occurrence</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Indicates setting of any Error Bit in the Error and Status Register</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -749,12 +802,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No such occurrence</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>FlexCAN module entered Bus Off state</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -768,12 +821,12 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>FlexCAN is not receiving a message</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>FlexCAN is receiving a message</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -787,17 +840,17 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>Error Active</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
+                           <name>0b01</name>
                            <description>Error Passive</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1x</name>
+                           <name>0b1x</name>
                            <description>Bus Off</description>
                            <value>0b1x</value>
                         </enumeratedValue>
@@ -811,12 +864,12 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>FlexCAN is not transmitting a message</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>FlexCAN is transmitting a message</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -824,18 +877,18 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>IDLE</name>
-                     <description>IDLE</description>
+                     <description>This bit indicates when CAN bus is in IDLE state</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No such occurrence</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>CAN bus is now IDLE</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -849,12 +902,12 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No such occurrence</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>RXERRCNT is greater than or equal to 96</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -868,12 +921,12 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No such occurrence</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>TXERRCNT is greater than or equal to 96</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -887,12 +940,12 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No such occurrence</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>A Stuffing Error occurred since last read of this register</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -906,12 +959,12 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No such occurrence</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>A Form Error occurred since last read of this register</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -925,12 +978,12 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No such occurrence</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>A CRC error occurred since last read of this register</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -944,12 +997,12 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No such occurrence</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>An ACK error occurred since last read of this register</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -963,12 +1016,12 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No such occurrence</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>At least one bit sent as dominant is received as recessive</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -982,12 +1035,12 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No such occurrence</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>At least one bit sent as recessive is received as dominant</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1000,12 +1053,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No such occurrence</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>The Rx error counter transitioned from less than 96 to greater than or equal to 96</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1018,12 +1071,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No such occurrence</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>The Tx error counter transitioned from less than 96 to greater than or equal to 96</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1037,12 +1090,12 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>FlexCAN is not synchronized to the CAN bus</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>FlexCAN is synchronized to the CAN bus</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1055,12 +1108,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No such occurrence</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>FlexCAN module has completed Bus Off process</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1073,12 +1126,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No such occurrence</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Indicates setting of any Error Bit detected in the Data Phase of CAN FD frames with the BRS bit set</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1091,12 +1144,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Overrun has not occurred</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Overrun has occurred</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1118,6 +1171,18 @@ Devices using this peripheral:
                      <name>BUF31TO0M</name>
                      <description>Buffer MB i Mask</description>
                      <bitOffset>0</bitOffset>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>The corresponding buffer Interrupt is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The corresponding buffer Interrupt is enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                </fields>
             </register>
@@ -1133,12 +1198,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>The corresponding buffer has no occurrence of successfully completed transmission or reception when MCR[RFEN]=0</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>The corresponding buffer has successfully completed transmission or reception when MCR[RFEN]=0</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1149,6 +1214,18 @@ Devices using this peripheral:
                      <description>Buffer MB i Interrupt Or &quot;reserved&quot;</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>The corresponding buffer has no occurrence of successfully completed transmission or reception when MCR[RFEN]=0</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The corresponding buffer has successfully completed transmission or reception when MCR[RFEN]=0</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>BUF5I</name>
@@ -1157,13 +1234,13 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>No occurrence of MB5 completing transmission/reception when MCR[RFEN]=0, or of frame(s) available in the FIFO, when MCR[RFEN]=1</description>
+                           <name>0b0</name>
+                           <description>No occurrence of MB5 completing transmission/reception when MCR[RFEN]=0, or of frame(s) available in the Rx FIFO, when MCR[RFEN]=1</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>MB5 completed transmission/reception when MCR[RFEN]=0, or frame(s) available in the Rx FIFO when MCR[RFEN]=1. It generates a DMA request in case of MCR[RFEN] and MCR[DMA] are enabled</description>
+                           <name>0b1</name>
+                           <description>MB5 completed transmission/reception when MCR[RFEN]=0, or frame(s) available in the Rx FIFO when MCR[RFEN]=1</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1175,12 +1252,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No occurrence of MB6 completing transmission/reception when MCR[RFEN]=0, or of Rx FIFO almost full when MCR[RFEN]=1</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>MB6 completed transmission/reception when MCR[RFEN]=0, or Rx FIFO almost full when MCR[RFEN]=1</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1193,12 +1270,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No occurrence of MB7 completing transmission/reception when MCR[RFEN]=0, or of Rx FIFO overflow when MCR[RFEN]=1</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>MB7 completed transmission/reception when MCR[RFEN]=0, or Rx FIFO overflow when MCR[RFEN]=1</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1209,12 +1286,24 @@ Devices using this peripheral:
                      <description>Buffer MBi Interrupt</description>
                      <bitOffset>8</bitOffset>
                      <bitWidth>24</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>The corresponding buffer has no occurrence of successfully completed transmission or reception</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The corresponding buffer has successfully completed transmission or reception</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                </fields>
             </register>
             <register>
                <name>CTRL2</name>
-               <description>Control 2 register</description>
+               <description>Control 2 Register</description>
                <addressOffset>0x34</addressOffset>
                <resetValue>0xA00000</resetValue>
                <fields>
@@ -1225,12 +1314,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Edge Filter is enabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Edge Filter is disabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1243,12 +1332,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>FlexCAN operates using the non-ISO CAN FD protocol</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>FlexCAN operates using the ISO CAN FD protocol (ISO 11898-1)</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1261,12 +1350,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Protocol Exception is disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Protocol Exception is enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1279,12 +1368,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>The Free Running Timer is clocked by the CAN bit clock, which defines the baud rate on the CAN bus</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>The Free Running Timer is clocked by an external time tick. The period can be either adjusted to be equal to the baud rate on the CAN bus, or a different value as required. See the device specific section for details about the external time tick</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1292,17 +1381,17 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>EACEN</name>
-                     <description>Entire Frame Arbitration Field Comparison Enable For Rx Mailboxes</description>
+                     <description>Entire Frame Arbitration Field Comparison Enable for Rx Mailboxes</description>
                      <bitOffset>16</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Rx Mailbox filter&apos;s IDE bit is always compared and RTR is never compared despite mask bits</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Enables the comparison of both Rx Mailbox filter&apos;s IDE and RTR bit with their corresponding bits within the incoming frame. Mask bits do apply</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1315,12 +1404,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Remote Response Frame is generated</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Remote Request Frame is stored</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1333,12 +1422,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Matching starts from Rx FIFO and continues on Mailboxes</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Matching starts from Mailboxes and continues on Rx FIFO</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1363,12 +1452,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Bus Off Done interrupt disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Bus Off Done interrupt enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1381,12 +1470,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>ERRINT_FAST Error interrupt disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>ERRINT_FAST Error interrupt enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1407,12 +1496,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>If ESR2[VPS] is asserted, the ESR2[LPTM] is not an inactive Mailbox</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>If ESR2[VPS] is asserted, there is at least one inactive Mailbox. LPTM content is the number of the first one</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1425,12 +1514,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Contents of IMB and LPTM are invalid</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Contents of IMB and LPTM are valid</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1474,6 +1563,18 @@ Devices using this peripheral:
                      <name>FGM</name>
                      <description>Rx FIFO Global Mask Bits</description>
                      <bitOffset>0</bitOffset>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>The corresponding bit in the filter is &quot;don&apos;t care.&quot;</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The corresponding bit in the filter is checked</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                </fields>
             </register>
@@ -1534,12 +1635,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Extended bit time definitions disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Extended bit time definitions enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1547,41 +1648,143 @@ Devices using this peripheral:
                   </field>
                </fields>
             </register>
-            <register>
-               <dim>128</dim>
-               <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127</dimIndex>
-               <name>RAMn%s</name>
-               <description>Embedded RAM</description>
+            <cluster>
+               <dim>32</dim>
+               <dimIncrement>16</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31</dimIndex>
+               <name>MB,@p@f@i</name>
                <addressOffset>0x80</addressOffset>
-               <resetMask>0x0</resetMask>
-               <fields>
-                  <field>
-                     <name>DATA_BYTE_3</name>
-                     <description>Data byte 3 of Rx/Tx frame</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>DATA_BYTE_2</name>
-                     <description>Data byte 2 of Rx/Tx frame</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>DATA_BYTE_1</name>
-                     <description>Data byte 1 of Rx/Tx frame</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>DATA_BYTE_0</name>
-                     <description>Data byte 0 of Rx/Tx frame</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-               </fields>
-            </register>
+               <register>
+                  <name>CS</name>
+                  <description>Message Buffer 0 CS Register</description>
+                  <addressOffset>0x0</addressOffset>
+                  <fields>
+                     <field>
+                        <name>TIME_STAMP</name>
+                        <description>Free-Running Counter Time stamp. This 16-bit field is a copy of the Free-Running Timer, captured for Tx and Rx frames at the time when the beginning of the Identifier field appears on the CAN bus</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>16</bitWidth>
+                     </field>
+                     <field>
+                        <name>DLC</name>
+                        <description>Length of the data to be stored/transmitted</description>
+                        <bitOffset>16</bitOffset>
+                        <bitWidth>4</bitWidth>
+                     </field>
+                     <field>
+                        <name>RTR</name>
+                        <description>Remote Transmission Request. One/zero for remote/data frame</description>
+                        <bitOffset>20</bitOffset>
+                        <bitWidth>1</bitWidth>
+                     </field>
+                     <field>
+                        <name>IDE</name>
+                        <description>ID Extended. One/zero for extended/standard format frame</description>
+                        <bitOffset>21</bitOffset>
+                        <bitWidth>1</bitWidth>
+                     </field>
+                     <field>
+                        <name>SRR</name>
+                        <description>Substitute Remote Request. Contains a fixed recessive bit</description>
+                        <bitOffset>22</bitOffset>
+                        <bitWidth>1</bitWidth>
+                     </field>
+                     <field>
+                        <name>CODE</name>
+                        <description>Reserved</description>
+                        <bitOffset>24</bitOffset>
+                        <bitWidth>4</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>ID</name>
+                  <description>Message Buffer 0 ID Register</description>
+                  <addressOffset>0x4</addressOffset>
+                  <fields>
+                     <field>
+                        <name>EXT</name>
+                        <description>Contains extended (LOW word) identifier of message buffer</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>18</bitWidth>
+                     </field>
+                     <field>
+                        <name>STD</name>
+                        <description>Contains standard/extended (HIGH word) identifier of message buffer</description>
+                        <bitOffset>18</bitOffset>
+                        <bitWidth>11</bitWidth>
+                     </field>
+                     <field>
+                        <name>PRIO</name>
+                        <description>Local priority. This 3-bit fieldis only used when LPRIO_EN bit is set in MCR and it only makes sense for Tx buffers. These bits are not transmitted. They are appended to the regular ID to define the transmission priority</description>
+                        <bitOffset>29</bitOffset>
+                        <bitWidth>3</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>WORD0</name>
+                  <description>Message Buffer 0 WORD0 Register</description>
+                  <addressOffset>0x8</addressOffset>
+                  <fields>
+                     <field>
+                        <name>DATA_BYTE_3</name>
+                        <description>Data byte 3 of Rx/Tx frame</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                     <field>
+                        <name>DATA_BYTE_2</name>
+                        <description>Data byte 2 of Rx/Tx frame</description>
+                        <bitOffset>8</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                     <field>
+                        <name>DATA_BYTE_1</name>
+                        <description>Data byte 1 of Rx/Tx frame</description>
+                        <bitOffset>16</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                     <field>
+                        <name>DATA_BYTE_0</name>
+                        <description>Data byte 0 of Rx/Tx frame</description>
+                        <bitOffset>24</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>WORD1</name>
+                  <description>Message Buffer 0 WORD1 Register</description>
+                  <addressOffset>0xC</addressOffset>
+                  <fields>
+                     <field>
+                        <name>DATA_BYTE_7</name>
+                        <description>Data byte 7 of Rx/Tx frame</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                     <field>
+                        <name>DATA_BYTE_6</name>
+                        <description>Data byte 6 of Rx/Tx frame</description>
+                        <bitOffset>8</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                     <field>
+                        <name>DATA_BYTE_5</name>
+                        <description>Data byte 5 of Rx/Tx frame</description>
+                        <bitOffset>16</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                     <field>
+                        <name>DATA_BYTE_4</name>
+                        <description>Data byte 4 of Rx/Tx frame</description>
+                        <bitOffset>24</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+            </cluster>
             <register>
                <dim>32</dim>
                <dimIncrement>4</dimIncrement>
@@ -1595,6 +1798,18 @@ Devices using this peripheral:
                      <name>MI</name>
                      <description>Individual Mask Bits</description>
                      <bitOffset>0</bitOffset>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>The corresponding bit in the filter is &quot;don&apos;t care.&quot;</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The corresponding bit in the filter is checked</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                </fields>
             </register>
@@ -1611,22 +1826,22 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>Message ID filtering only</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
+                           <name>0b01</name>
                            <description>Message ID filtering and payload filtering</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
+                           <name>0b10</name>
                            <description>Message ID filtering occurring a specified number of times</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
+                           <name>0b11</name>
                            <description>Message ID filtering and payload filtering a specified number of times</description>
                            <value>0b11</value>
                         </enumeratedValue>
@@ -1639,22 +1854,22 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>Match upon a ID contents against an exact target value</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
+                           <name>0b01</name>
                            <description>Match upon a ID value greater than or equal to a specified target value</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
+                           <name>0b10</name>
                            <description>Match upon a ID value smaller than or equal to a specified target value</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
+                           <name>0b11</name>
                            <description>Match upon a ID value inside a range, greater than or equal to a specified lower limit and smaller than or equal a specified upper limit</description>
                            <value>0b11</value>
                         </enumeratedValue>
@@ -1667,22 +1882,22 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>Match upon a payload contents against an exact target value</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
+                           <name>0b01</name>
                            <description>Match upon a payload value greater than or equal to a specified target value</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
+                           <name>0b10</name>
                            <description>Match upon a payload value smaller than or equal to a specified target value</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
+                           <name>0b11</name>
                            <description>Match upon a payload value inside a range, greater than or equal to a specified lower limit and smaller than or equal a specified upper limit</description>
                            <value>0b11</value>
                         </enumeratedValue>
@@ -1695,17 +1910,17 @@ Devices using this peripheral:
                      <bitWidth>8</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00000001</name>
+                           <name>0b00000001</name>
                            <description>Received message must match the predefined filtering criteria for ID and/or PL once before generating a wake up event</description>
                            <value>0b1</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>00000010</name>
+                           <name>0b00000010</name>
                            <description>Received message must match the predefined filtering criteria for ID and/or PL twice before generating a wake up event</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11111111</name>
+                           <name>0b11111111</name>
                            <description>Received message must match the predefined filtering criteria for ID and/or PL 255 times before generating a wake up event</description>
                            <value>0b11111111</value>
                         </enumeratedValue>
@@ -1718,12 +1933,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Wake up match event is disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Wake up match event is enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1736,12 +1951,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Timeout wake up event is disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Timeout wake up event is enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1781,12 +1996,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No wake up by match event detected</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Wake up by match event detected</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1799,12 +2014,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No wake up by timeout event detected</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Wake up by timeout event detected</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1830,12 +2045,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Reject remote frame (accept data frame)</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Accept remote frame</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1848,12 +2063,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Accept standard frame format</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Accept extended frame format</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -1961,12 +2176,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>The corresponding bit in the filter is &quot;don&apos;t care&quot;</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>The corresponding bit in the filter is checked</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -2062,12 +2277,12 @@ Devices using this peripheral:
                         <bitWidth>1</bitWidth>
                         <enumeratedValues>
                            <enumeratedValue>
-                              <name>0</name>
+                              <name>0b0</name>
                               <description>Frame is data one (not remote)</description>
                               <value>0b0</value>
                            </enumeratedValue>
                            <enumeratedValue>
-                              <name>1</name>
+                              <name>0b1</name>
                               <description>Frame is a remote one</description>
                               <value>0b1</value>
                            </enumeratedValue>
@@ -2080,12 +2295,12 @@ Devices using this peripheral:
                         <bitWidth>1</bitWidth>
                         <enumeratedValues>
                            <enumeratedValue>
-                              <name>0</name>
+                              <name>0b0</name>
                               <description>Frame format is standard</description>
                               <value>0b0</value>
                            </enumeratedValue>
                            <enumeratedValue>
-                              <name>1</name>
+                              <name>0b1</name>
                               <description>Frame format is extended</description>
                               <value>0b1</value>
                            </enumeratedValue>
@@ -2204,12 +2419,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Measured loop delay is in range</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Measured loop delay is out of range</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -2222,12 +2437,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>TDC is disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>TDC is enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -2240,22 +2455,22 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>Selects 8 bytes per Message Buffer</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
+                           <name>0b01</name>
                            <description>Selects 16 bytes per Message Buffer</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
+                           <name>0b10</name>
                            <description>Selects 32 bytes per Message Buffer</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
+                           <name>0b11</name>
                            <description>Selects 64 bytes per Message Buffer</description>
                            <value>0b11</value>
                         </enumeratedValue>
@@ -2268,12 +2483,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Transmit a frame in nominal rate. The BRS bit in the Tx MB has no effect</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Transmit a frame with bit rate switching if the BRS bit in the Tx MB is recessive</description>
                            <value>0b1</value>
                         </enumeratedValue>

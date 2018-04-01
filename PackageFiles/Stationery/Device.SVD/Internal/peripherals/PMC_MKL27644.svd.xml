@@ -22,7 +22,7 @@ Devices using this peripheral:
          <registers>
             <register>
                <name>LVDSC1</name>
-               <description>Low Voltage Status and Control 1</description>
+               <description>Low Voltage Detect Status and Control 1 Register</description>
                <addressOffset>0x0</addressOffset>
                <size>8</size>
                <resetValue>0x10</resetValue>
@@ -227,7 +227,6 @@ LVWF is set when VSupply transitions below the trip point</description>
                <description>Regulator Status and Control</description>
                <addressOffset>0x2</addressOffset>
                <size>8</size>
-               <resetValue>0x4</resetValue>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
@@ -297,12 +296,12 @@ Allows the bandgap to be enabled in lower power modes of operation</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Bandgap disabled in LP</description>
+                           <description>Bandgap disabled in LP modes</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Bandgap enabled in LP</description>
+                           <description>Bandgap enabled in LP modes</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

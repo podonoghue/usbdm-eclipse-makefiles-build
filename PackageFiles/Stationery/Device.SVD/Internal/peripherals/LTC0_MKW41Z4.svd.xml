@@ -96,7 +96,7 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>ENC</name>
-                     <description>EThis bit selects encryption or decryption</description>
+                     <description>This bit selects encryption or decryption</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -176,7 +176,7 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>KS</name>
-                     <description>Key Size</description>
+                     <description>Key Size. This is the size of a Key measured in bytes</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>5</bitWidth>
                   </field>

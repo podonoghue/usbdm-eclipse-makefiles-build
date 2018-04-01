@@ -1,15 +1,21 @@
 <!--
 Devices using this peripheral: 
       MKE14F16
+      MKE14Z7
+      MKE15Z7
       MKE16F16
       MKE18F16
+      S32K142
+      S32K144
+      S32K146
+      S32K148
 -->
       <peripheral>
          <?sourceFile "LPSPI0_MKE16F16" ?>
          <name>LPSPI0</name>
-         <description>The LPSPI Memory Map/Register Definition can be found here</description>
+         <description>Low power SPI</description>
          <groupName>LPSPI</groupName>
-         <headerStructName>LPSPI0</headerStructName>
+         <headerStructName>LPSPI</headerStructName>
          <baseAddress>0x4002C000</baseAddress>
          <size>32</size>
          <access>read-write</access>
@@ -65,7 +71,7 @@ Devices using this peripheral:
                      <bitWidth>16</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>100</name>
+                           <name>0000000000000100</name>
                            <description>Standard feature set supporting 32-bit shift register</description>
                            <value>0b100</value>
                         </enumeratedValue>
@@ -635,12 +641,12 @@ Devices using this peripheral:
                      <bitWidth>4</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0000</name>
                            <description>The PCSx is active low</description>
                            <value>0b0000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0001</name>
                            <description>The PCSx is active high</description>
                            <value>0b0001</value>
                         </enumeratedValue>
@@ -654,7 +660,7 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>000</name>
-                           <description>Match disabled</description>
+                           <description>Match is disabled</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -883,12 +889,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0</name>
                            <description>Normal transfer</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
+                           <name>1</name>
                            <description>Mask transmit data</description>
                            <value>0b1</value>
                         </enumeratedValue>

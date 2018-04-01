@@ -8,9 +8,9 @@ Devices using this peripheral:
       <peripheral>
          <?sourceFile "LPI2C0_S32K14x" ?>
          <name>LPI2C0</name>
-         <description>The LPI2C Memory Map/Register Definition can be found here</description>
+         <description>Low power I2C</description>
          <groupName>LPI2C</groupName>
-         <headerStructName>LPI2C</headerStructName>
+         <headerStructName>LPI2C0</headerStructName>
          <baseAddress>0x40066000</baseAddress>
          <size>32</size>
          <access>read-write</access>
@@ -101,12 +101,12 @@ Devices using this peripheral:
                      <bitWidth>16</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0000000000000010</name>
+                           <name>10</name>
                            <description>Master only with standard feature set</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0000000000000011</name>
+                           <name>11</name>
                            <description>Master and slave with standard feature set</description>
                            <value>0b11</value>
                         </enumeratedValue>
@@ -502,24 +502,7 @@ Devices using this peripheral:
                   <field derivedFrom="TDIE" > <name>SDIE</name> <description>STOP Detect Interrupt Enable</description> <bitOffset>9</bitOffset> </field>
                   <field derivedFrom="TDIE" > <name>NDIE</name> <description>NACK Detect Interrupt Enable</description> <bitOffset>10</bitOffset> </field>
                   <field derivedFrom="TDIE" > <name>ALIE</name> <description>Arbitration Lost Interrupt Enable</description> <bitOffset>11</bitOffset> </field>
-                  <field>
-                     <name>FEIE</name>
-                     <description>FIFO Error Interrupt Enable</description>
-                     <bitOffset>12</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Interrupt enabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Interrupt disabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="TDIE" > <name>FEIE</name> <description>FIFO Error Interrupt Enable</description> <bitOffset>12</bitOffset> </field>
                   <field derivedFrom="TDIE" > <name>PLTIE</name> <description>Pin Low Timeout Interrupt Enable</description> <bitOffset>13</bitOffset> </field>
                   <field derivedFrom="TDIE" > <name>DMIE</name> <description>Data Match Interrupt Enable</description> <bitOffset>14</bitOffset> </field>
                </fields>
@@ -720,7 +703,7 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>IGNACK</name>
-                     <description>IGNACK</description>
+                     <description>When set, the received NACK field is ignored and assumed to be ACK</description>
                      <bitOffset>9</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -935,37 +918,7 @@ Devices using this peripheral:
                   </field>
                </fields>
             </register>
-            <register>
-               <name>MCCR1</name>
-               <description>Master Clock Configuration Register 1</description>
-               <addressOffset>0x50</addressOffset>
-               <fields>
-                  <field>
-                     <name>CLKLO</name>
-                     <description>Clock Low Period</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>6</bitWidth>
-                  </field>
-                  <field>
-                     <name>CLKHI</name>
-                     <description>Clock High Period</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>6</bitWidth>
-                  </field>
-                  <field>
-                     <name>SETHOLD</name>
-                     <description>Setup Hold Delay</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>6</bitWidth>
-                  </field>
-                  <field>
-                     <name>DATAVD</name>
-                     <description>Data Valid Delay</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>6</bitWidth>
-                  </field>
-               </fields>
-            </register>
+            <register derivedFrom="MCCR0"> <name>MCCR1</name> <description>Master Clock Configuration Register 1</description> <addressOffset>0x50</addressOffset> </register>
             <register>
                <name>MFCR</name>
                <description>Master FIFO Control Register</description>

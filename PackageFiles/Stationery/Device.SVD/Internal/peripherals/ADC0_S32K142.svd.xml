@@ -2,6 +2,8 @@
 Devices using this peripheral: 
       S32K142
       S32K144
+      S32K146
+      S32K148
 -->
       <peripheral>
          <?sourceFile "ADC0_S32K142" ?>
@@ -14,6 +16,9 @@ Devices using this peripheral:
          <access>read-write</access>
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
+         <parameters>
+            <parameter> <value>16</value> <name>SC1_COUNT</name> <description>Number of ADC channels</description></parameter>
+         </parameters>
          <addressBlock>
             <offset>0x0</offset>
             <size>0xEC</size>
@@ -21,9 +26,8 @@ Devices using this peripheral:
          </addressBlock>
          <registers>
             <register>
-               <dim>16</dim>
+               <dim>%SC1_COUNT</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
                <name>SC1%s</name>
                <description>Status and Control Register 1</description>
                <addressOffset>0x0</addressOffset>
@@ -33,142 +37,217 @@ Devices using this peripheral:
                      <name>ADCH</name>
                      <description>Input Channel Select</description>
                      <bitOffset>0</bitOffset>
-                     <bitWidth>5</bitWidth>
+                     <bitWidth>6</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b00000</name>
+                           <name>0b000000</name>
                            <description>AD0</description>
-                           <value>0b00000</value>
+                           <value>0b000000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b00001</name>
+                           <name>0b000001</name>
                            <description>AD1</description>
-                           <value>0b00001</value>
+                           <value>0b000001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b00010</name>
+                           <name>0b000010</name>
                            <description>AD2</description>
-                           <value>0b00010</value>
+                           <value>0b000010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b00011</name>
+                           <name>0b000011</name>
                            <description>AD3</description>
-                           <value>0b00011</value>
+                           <value>0b000011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b00100</name>
+                           <name>0b000100</name>
                            <description>AD4</description>
-                           <value>0b00100</value>
+                           <value>0b000100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b00101</name>
+                           <name>0b000101</name>
                            <description>AD5</description>
-                           <value>0b00101</value>
+                           <value>0b000101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b00110</name>
+                           <name>0b000110</name>
                            <description>AD6</description>
                            <value>0b00110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b00111</name>
+                           <name>0b000111</name>
                            <description>AD7</description>
                            <value>0b00111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b01000</name>
+                           <name>0b001000</name>
                            <description>AD8</description>
-                           <value>0b01000</value>
+                           <value>0b001000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b01001</name>
+                           <name>0b001001</name>
                            <description>AD9</description>
-                           <value>0b01001</value>
+                           <value>0b001001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b01010</name>
+                           <name>0b001010</name>
                            <description>AD10</description>
-                           <value>0b01010</value>
+                           <value>0b001010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b01011</name>
+                           <name>0b001011</name>
                            <description>AD11</description>
-                           <value>0b01011</value>
+                           <value>0b001011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b01100</name>
+                           <name>0b001100</name>
                            <description>AD12</description>
-                           <value>0b01100</value>
+                           <value>0b001100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b01101</name>
+                           <name>0b001101</name>
                            <description>AD13</description>
-                           <value>0b01101</value>
+                           <value>0b001101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b01110</name>
+                           <name>0b001110</name>
                            <description>AD14</description>
-                           <value>0b01110</value>
+                           <value>0b001110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b01111</name>
+                           <name>0b001111</name>
                            <description>AD15</description>
-                           <value>0b01111</value>
+                           <value>0b001111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b10010</name>
-                           <description>AD18</description>
-                           <value>0b10010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b10011</name>
-                           <description>AD19</description>
-                           <value>0b10011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b10101</name>
+                           <name>0b010101</name>
                            <description>Internal channel 0</description>
-                           <value>0b10101</value>
+                           <value>0b010101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b10110</name>
+                           <name>0b010110</name>
                            <description>Internal channel 1</description>
-                           <value>0b10110</value>
+                           <value>0b010110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b10111</name>
+                           <name>0b010111</name>
                            <description>Internal channel 2</description>
-                           <value>0b10111</value>
+                           <value>0b010111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b11010</name>
+                           <name>0b011010</name>
                            <description>Temp Sensor(if present)</description>
-                           <value>0b11010</value>
+                           <value>0b011010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b11011</name>
+                           <name>0b011011</name>
                            <description>Band Gap</description>
-                           <value>0b11011</value>
+                           <value>0b011011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b11100</name>
+                           <name>0b011100</name>
                            <description>Internal channel 3</description>
-                           <value>0b11100</value>
+                           <value>0b011100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b11101</name>
+                           <name>0b011101</name>
                            <description>VREFSH from SC2[REFSEL]</description>
-                           <value>0b11101</value>
+                           <value>0b011101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b11110</name>
+                           <name>0b011110</name>
                            <description>VREFSL from SC2[REFSEL]</description>
-                           <value>0b11110</value>
+                           <value>0b011110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b11111</name>
+                           <name>0b011111</name>
                            <description>Module is disabled</description>
-                           <value>0b11111</value>
+                           <value>0b011111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100000</name>
+                           <description>Internal channel 16</description>
+                           <value>0b100000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100001</name>
+                           <description>AD17</description>
+                           <value>0b100001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100010</name>
+                           <description>AD18</description>
+                           <value>0b100010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100011</name>
+                           <description>AD19</description>
+                           <value>0b100011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100100</name>
+                           <description>AD20</description>
+                           <value>0b100100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100101</name>
+                           <description>AD21</description>
+                           <value>0b100101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100110</name>
+                           <description>AD22</description>
+                           <value>0b100110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b100111</name>
+                           <description>AD23</description>
+                           <value>0b100111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101000</name>
+                           <description>AD24</description>
+                           <value>0b101000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101001</name>
+                           <description>AD25</description>
+                           <value>0b101001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101010</name>
+                           <description>AD26</description>
+                           <value>0b101010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101011</name>
+                           <description>AD27</description>
+                           <value>0b101011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101100</name>
+                           <description>AD28</description>
+                           <value>0b101100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101101</name>
+                           <description>AD29</description>
+                           <value>0b101101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101110</name>
+                           <description>AD30</description>
+                           <value>0b101110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b101111</name>
+                           <description>AD31</description>
+                           <value>0b101111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111111</name>
+                           <description>Module is disabled</description>
+                           <value>0b111111</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -246,23 +325,24 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>MODE</name>
-                     <description>Conversion mode selection</description>
+                     <description>ADC resolution\n
+Single-ended/Differential(if available)</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>8-bit conversion</description>
+                           <description>8-bit/9-bit-2&apos;s complement</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>12-bit conversion</description>
+                           <description>12-bit/13-bit-2&apos;s complement</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>10-bit conversion</description>
+                           <description>10-bit/11-bit-2&apos;s complement</description>
                            <value>0b10</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -308,7 +388,6 @@ Devices using this peripheral:
                <name>CFG2</name>
                <description>Configuration Register 2</description>
                <addressOffset>0x44</addressOffset>
-               <resetValue>0xC</resetValue>
                <fields>
                   <field>
                      <name>SMPLTS</name>
@@ -319,11 +398,10 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>16</dim>
+               <dim>%SC1_COUNT</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
                <name>R%s</name>
-               <description>Data Result</description>
+               <description>Data Result Register</description>
                <addressOffset>0x48</addressOffset>
                <access>read-only</access>
                <resetMask>0x0</resetMask>
@@ -374,6 +452,11 @@ Devices using this peripheral:
                            <description>VALTH and VALTL</description>
                            <value>0b01</value>
                         </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1X</name>
+                           <description>Reserved</description>
+                           <value>0b1X</value>
+                        </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
@@ -389,7 +472,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Enabled</description>
+                           <description>Enabled\t Request will be asserted when conversion completes</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -608,18 +691,18 @@ Enables continuous conversions or sets of conversions (when averaging) after an 
                   <field>
                      <name>CAL</name>
                      <description>Calibration\n
-Begins the calibration sequence when set</description>
+Write 1 to begin the calibration sequence, clears when complete</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Calibration busy</description>
+                           <description>Calibration Idle</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Calibration idle</description>
+                           <description>w1 start/r1 busy</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

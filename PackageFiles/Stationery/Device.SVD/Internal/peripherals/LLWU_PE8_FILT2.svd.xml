@@ -483,7 +483,7 @@ Write 1 to clear the flag</description>
                <fields>
                   <field>
                      <name>WUF0</name>
-                     <description>Wakeup Flag For LLWU 0</description>
+                     <description>Wakeup flag for pin 0</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -657,7 +657,7 @@ To clear this flag it is necessary to clear the flag in the peripheral</descript
             <register>
                <dim>2</dim>
                <dimIncrement>1</dimIncrement>
-               <dimIndex>1,2</dimIndex>
+               <dimIndex>0,1</dimIndex>
                <name>FILT%s</name>
                <description>Pin Filter %s register\n
 Control and status register that is used to enable/disable the digital filter features for an external pin</description>
@@ -730,6 +730,7 @@ To clear the flag write a one to FILTF</description>
                   </field>
                </fields>
             </register>
-            <register derivedFrom="FILT%s"><dimIndex>0,1</dimIndex><?hide?> </register>
+            <register derivedFrom="FILT%s"><dim>0</dim><dimIncrement>0</dimIncrement><dimIndex></dimIndex> <name>FILT1</name> <addressOffset>0xE</addressOffset> </register>
+            <register derivedFrom="FILT%s"><dim>0</dim><dimIncrement>0</dimIncrement><dimIndex></dimIndex> <name>FILT2</name> <addressOffset>0xF</addressOffset> </register>
          </registers>
       </peripheral>

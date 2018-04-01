@@ -112,25 +112,8 @@ Control arbitration for channel selection within each group</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>ERGA</name>
-                     <description>Enable Round Robin Group Arbitration\n
-Control arbitration for selection among the groups</description>
-                     <bitOffset>3</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Fixed</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Round robin</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="ERCA" > <name>ERGA</name> <description>Enable Round Robin Group Arbitration\n
+Control arbitration for selection among the groups</description> <bitOffset>3</bitOffset> </field>
                   <field>
                      <name>HOE</name>
                      <description>Halt On Error\n
@@ -1115,10 +1098,11 @@ Provides a simple memory-mapped mechanism to set the START bit in the TCD of the
                <dimIncrement>1</dimIncrement>
                <dimIndex>3,2,1,0,7,6,5,4,11,10,9,8,15,14,13,12,19,18,17,16,23,22,21,20,27,26,25,24,31,30,29,28</dimIndex>
                <name>DCHPRI%s</name>
+               <?hide?>
                <description>Channel %s Priority Register</description>
                <addressOffset>0x100</addressOffset>
                <size>8</size>
-               <resetMask>0xFF</resetMask>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>CHPRI</name>
@@ -1187,6 +1171,7 @@ Enables suspension of this channel by a higher priority channel</description>
                   </field>
                </fields>
             </register>
+            <register derivedFrom="DCHPRI%s"><dim>32</dim><dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31</dimIndex> <name>DCHPRI</name> <addressOffset>0x100</addressOffset> <resetMask>0xFF</resetMask> </register>
             <cluster>
                <dim>32</dim>
                <dimIncrement>32</dimIncrement>
@@ -1225,7 +1210,7 @@ Enables suspension of this channel by a higher priority channel</description>
                   <description>Transfer Attributes</description>
                   <addressOffset>0x6</addressOffset>
                   <size>16</size>
-                  <resetMask>0xFFFF</resetMask>
+                  <resetMask>0x0</resetMask>
                   <fields>
                      <field>
                         <name>DSIZE</name>

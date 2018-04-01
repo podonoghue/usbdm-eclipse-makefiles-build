@@ -1,15 +1,21 @@
 <!--
 Devices using this peripheral: 
       MKE14F16
+      MKE14Z7
+      MKE15Z7
       MKE16F16
       MKE18F16
+      S32K142
+      S32K144
+      S32K146
+      S32K148
 -->
       <peripheral>
          <?sourceFile "LPIT0_MKE16F16" ?>
          <name>LPIT0</name>
          <description>Low Power Periodic Interrupt Timer</description>
          <groupName>LPIT</groupName>
-         <headerStructName>LPIT0</headerStructName>
+         <headerStructName>LPIT</headerStructName>
          <baseAddress>0x40037000</baseAddress>
          <size>32</size>
          <access>read-write</access>
@@ -101,18 +107,18 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>M_CEN</name>
-                     <description>Module Clock Enable</description>
+                     <description>Peripheral Clock Enable</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0</name>
-                           <description>Protocol clock to timers is disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>1</name>
-                           <description>Protocol clock to timers is enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -409,6 +415,11 @@ Devices using this peripheral:
                               <description>Invalid load value in compare modes</description>
                               <value>0b0</value>
                            </enumeratedValue>
+                           <enumeratedValue>
+                              <name>1</name>
+                              <description>Invalid load value in compare modes</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
                         </enumeratedValues>
                      </field>
                   </fields>
@@ -583,6 +594,11 @@ Devices using this peripheral:
                               <name>1</name>
                               <description>Timer channel 1 trigger source is selected</description>
                               <value>0b0001</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>10</name>
+                              <description>Timer channel 2 trigger source is selected</description>
+                              <value>0b0010</value>
                            </enumeratedValue>
                         </enumeratedValues>
                      </field>

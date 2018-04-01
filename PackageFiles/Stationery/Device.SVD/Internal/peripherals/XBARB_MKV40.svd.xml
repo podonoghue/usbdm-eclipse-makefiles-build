@@ -25,170 +25,26 @@ Devices using this peripheral:
          </addressBlock>
          <registers>
             <register>
-               <name>SEL0</name>
-               <description>Crossbar B Select Register 0</description>
+               <dim>8</dim>
+               <dimIncrement>2</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
+               <name>SEL</name>
+               <description>Crossbar Select Register</description>
                <addressOffset>0x0</addressOffset>
                <size>16</size>
                <resetMask>0xFFFF</resetMask>
                <fields>
                   <field>
                      <name>SEL0</name>
-                     <description>no description available</description>
+                     <description>Input (XBARA_INn) to be muxed to XBARA_OUT %2*s</description>
                      <bitOffset>0</bitOffset>
-                     <bitWidth>5</bitWidth>
+                     <bitWidth>6</bitWidth>
                   </field>
                   <field>
                      <name>SEL1</name>
-                     <description>no description available</description>
+                     <description>Input (XBARA_INn) to be muxed to XBARA_OUT %2*s+1</description>
                      <bitOffset>8</bitOffset>
-                     <bitWidth>5</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>SEL1</name>
-               <description>Crossbar B Select Register 1</description>
-               <addressOffset>0x2</addressOffset>
-               <size>16</size>
-               <resetMask>0xFFFF</resetMask>
-               <fields>
-                  <field>
-                     <name>SEL2</name>
-                     <description>no description available</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>5</bitWidth>
-                  </field>
-                  <field>
-                     <name>SEL3</name>
-                     <description>no description available</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>5</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>SEL2</name>
-               <description>Crossbar B Select Register 2</description>
-               <addressOffset>0x4</addressOffset>
-               <size>16</size>
-               <resetMask>0xFFFF</resetMask>
-               <fields>
-                  <field>
-                     <name>SEL4</name>
-                     <description>no description available</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>5</bitWidth>
-                  </field>
-                  <field>
-                     <name>SEL5</name>
-                     <description>no description available</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>5</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>SEL3</name>
-               <description>Crossbar B Select Register 3</description>
-               <addressOffset>0x6</addressOffset>
-               <size>16</size>
-               <resetMask>0xFFFF</resetMask>
-               <fields>
-                  <field>
-                     <name>SEL6</name>
-                     <description>no description available</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>5</bitWidth>
-                  </field>
-                  <field>
-                     <name>SEL7</name>
-                     <description>no description available</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>5</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>SEL4</name>
-               <description>Crossbar B Select Register 4</description>
-               <addressOffset>0x8</addressOffset>
-               <size>16</size>
-               <resetMask>0xFFFF</resetMask>
-               <fields>
-                  <field>
-                     <name>SEL8</name>
-                     <description>no description available</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>5</bitWidth>
-                  </field>
-                  <field>
-                     <name>SEL9</name>
-                     <description>no description available</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>5</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>SEL5</name>
-               <description>Crossbar B Select Register 5</description>
-               <addressOffset>0xA</addressOffset>
-               <size>16</size>
-               <resetMask>0xFFFF</resetMask>
-               <fields>
-                  <field>
-                     <name>SEL10</name>
-                     <description>no description available</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>5</bitWidth>
-                  </field>
-                  <field>
-                     <name>SEL11</name>
-                     <description>no description available</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>5</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>SEL6</name>
-               <description>Crossbar B Select Register 6</description>
-               <addressOffset>0xC</addressOffset>
-               <size>16</size>
-               <resetMask>0xFFFF</resetMask>
-               <fields>
-                  <field>
-                     <name>SEL12</name>
-                     <description>no description available</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>5</bitWidth>
-                  </field>
-                  <field>
-                     <name>SEL13</name>
-                     <description>no description available</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>5</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>SEL7</name>
-               <description>Crossbar B Select Register 7</description>
-               <addressOffset>0xE</addressOffset>
-               <size>16</size>
-               <resetMask>0xFFFF</resetMask>
-               <fields>
-                  <field>
-                     <name>SEL14</name>
-                     <description>no description available</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>5</bitWidth>
-                  </field>
-                  <field>
-                     <name>SEL15</name>
-                     <description>no description available</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>5</bitWidth>
+                     <bitWidth>6</bitWidth>
                   </field>
                </fields>
             </register>

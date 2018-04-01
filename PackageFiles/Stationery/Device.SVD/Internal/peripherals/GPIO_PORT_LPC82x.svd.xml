@@ -76,99 +76,12 @@ Devices using this peripheral:
          </addressBlock>
          <registers>
             <register>
-               <name>B0</name>
-               <description>Byte pin registers port 0; pins PIO0_0 to PIO0_28</description>
+               <dim>29</dim>
+               <dimIncrement>1</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28</dimIndex>
+               <name>B%s</name>
+               <description>Byte pin registers port %s; pins PIO0_0 to PIO0_28</description>
                <addressOffset>0x0</addressOffset>
-               <size>1</size>
-               <resetMask>0x0</resetMask>
-               <fields>
-                  <field>
-                     <name>PBYTE</name>
-                     <description>Read: state of the pin PIO0_n, regardless of direction, masking, or alternate function, except that pins configured as analog I/O always read as 0. One register for each port pin: n = pin 0 to 28. Write: loads the pin&apos;s output bit</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>B1</name>
-               <description>Byte pin registers port 0; pins PIO0_0 to PIO0_28</description>
-               <addressOffset>0x1</addressOffset>
-               <size>1</size>
-               <resetMask>0x0</resetMask>
-               <fields>
-                  <field>
-                     <name>PBYTE</name>
-                     <description>Read: state of the pin PIO0_n, regardless of direction, masking, or alternate function, except that pins configured as analog I/O always read as 0. One register for each port pin: n = pin 0 to 28. Write: loads the pin&apos;s output bit</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>B2</name>
-               <description>Byte pin registers port 0; pins PIO0_0 to PIO0_28</description>
-               <addressOffset>0x2</addressOffset>
-               <size>1</size>
-               <resetMask>0x0</resetMask>
-               <fields>
-                  <field>
-                     <name>PBYTE</name>
-                     <description>Read: state of the pin PIO0_n, regardless of direction, masking, or alternate function, except that pins configured as analog I/O always read as 0. One register for each port pin: n = pin 0 to 28. Write: loads the pin&apos;s output bit</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <dim>5</dim>
-               <dimIncrement>1</dimIncrement>
-               <dimIndex>3,4,5,6,7</dimIndex>
-               <name>B%s</name>
-               <description>Byte pin registers port 0; pins PIO0_0 to PIO0_28</description>
-               <addressOffset>0x3</addressOffset>
-               <size>1</size>
-               <resetMask>0x0</resetMask>
-               <fields>
-                  <field>
-                     <name>PBYTE</name>
-                     <description>Read: state of the pin PIO0_n, regardless of direction, masking, or alternate function, except that pins configured as analog I/O always read as 0. One register for each port pin: n = pin 0 to 28. Write: loads the pin&apos;s output bit</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>B8</name>
-               <description>Byte pin registers port 0; pins PIO0_0 to PIO0_28</description>
-               <addressOffset>0x8</addressOffset>
-               <size>1</size>
-               <resetMask>0x0</resetMask>
-               <fields>
-                  <field>
-                     <name>PBYTE</name>
-                     <description>Read: state of the pin PIO0_n, regardless of direction, masking, or alternate function, except that pins configured as analog I/O always read as 0. One register for each port pin: n = pin 0 to 28. Write: loads the pin&apos;s output bit</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <dim>19</dim>
-               <dimIncrement>1</dimIncrement>
-               <dimIndex>9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27</dimIndex>
-               <name>B%s</name>
-               <description>Byte pin registers port 0; pins PIO0_0 to PIO0_28</description>
-               <addressOffset>0x9</addressOffset>
-               <size>1</size>
-               <resetMask>0x0</resetMask>
-               <fields>
-                  <field>
-                     <name>PBYTE</name>
-                     <description>Read: state of the pin PIO0_n, regardless of direction, masking, or alternate function, except that pins configured as analog I/O always read as 0. One register for each port pin: n = pin 0 to 28. Write: loads the pin&apos;s output bit</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>B28</name>
-               <description>Byte pin registers port 0; pins PIO0_0 to PIO0_28</description>
-               <addressOffset>0x1C</addressOffset>
                <size>1</size>
                <resetMask>0x0</resetMask>
                <fields>
@@ -192,22 +105,7 @@ Devices using this peripheral:
                   </field>
                </fields>
             </register>
-            <register>
-               <dim>28</dim>
-               <dimIncrement>4</dimIncrement>
-               <dimIndex>1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28</dimIndex>
-               <name>W%s</name>
-               <description>Word pin registers port 0</description>
-               <addressOffset>0x1004</addressOffset>
-               <resetMask>0x0</resetMask>
-               <fields>
-                  <field>
-                     <name>PWORD</name>
-                     <description>Read 0: pin PIOm_n is LOW.  Write 0: clear output bit. Read 0xFFFF FFFF: pin PIOm_n is HIGH.  Write any value 0x0000 0001 to 0xFFFF FFFF: set output bit. Only 0 or 0xFFFF FFFF can be read. Writing any value other than 0 will set the output bit. One register for each port pin: n = pin 0 to 28</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
+            <register derivedFrom="W0"><dim>28</dim><dimIncrement>4</dimIncrement><dimIndex>1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28</dimIndex> <name>W%s</name> <addressOffset>0x1004</addressOffset> </register>
             <register>
                <name>DIR0</name>
                <description>Direction registers port 0</description>

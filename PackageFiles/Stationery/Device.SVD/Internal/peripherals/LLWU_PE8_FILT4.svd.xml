@@ -483,7 +483,7 @@ Write 1 to clear the flag</description>
                <fields>
                   <field>
                      <name>WUF0</name>
-                     <description>Wakeup Flag For LLWU 0</description>
+                     <description>Wakeup flag for pin 0</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -730,6 +730,9 @@ To clear the flag write a one to FILTF</description>
                   </field>
                </fields>
             </register>
-            <register derivedFrom="FILT%s"><dimIndex>0,1,2,3</dimIndex><?hide?> </register>
+            <register derivedFrom="FILT%s"><dim>0</dim><dimIncrement>0</dimIncrement><dimIndex></dimIndex> <name>FILT1</name> <addressOffset>0xE</addressOffset> </register>
+            <register derivedFrom="FILT%s"><dim>0</dim><dimIncrement>0</dimIncrement><dimIndex></dimIndex> <name>FILT2</name> <addressOffset>0xF</addressOffset> </register>
+            <register derivedFrom="FILT%s"><dim>0</dim><dimIncrement>0</dimIncrement><dimIndex></dimIndex> <name>FILT3</name> <addressOffset>0x10</addressOffset> </register>
+            <register derivedFrom="FILT%s"><dim>0</dim><dimIncrement>0</dimIncrement><dimIndex></dimIndex> <name>FILT4</name> <addressOffset>0x11</addressOffset> </register>
          </registers>
       </peripheral>

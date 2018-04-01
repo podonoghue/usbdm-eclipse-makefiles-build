@@ -1466,7 +1466,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>RMON_T_PACKETS</name>
-               <description>Tx Packet Count Statistic Register</description>
+               <description>RMON Tx packet count</description>
                <addressOffset>0x204</addressOffset>
                <access>read-only</access>
                <fields>
@@ -1701,13 +1701,7 @@ Devices using this peripheral:
                   </field>
                </fields>
             </register>
-            <register>
-               <name>IEEE_T_DROP</name>
-               <description>Reserved Statistic Register</description>
-               <addressOffset>0x248</addressOffset>
-               <size>32</size>
-               <access>read-only</access>
-            </register>
+            <register derivedFrom="RMON_T_DROP"> <name>IEEE_T_DROP</name> <addressOffset>0x248</addressOffset> </register>
             <register>
                <name>IEEE_T_FRAME_OK</name>
                <description>Frames Transmitted OK Statistic Register</description>
@@ -1973,13 +1967,7 @@ Devices using this peripheral:
                   </field>
                </fields>
             </register>
-            <register>
-               <name>RMON_R_RESVD_0</name>
-               <description>Reserved Statistic Register</description>
-               <addressOffset>0x2A4</addressOffset>
-               <size>32</size>
-               <access>read-only</access>
-            </register>
+            <register derivedFrom="RMON_T_DROP"> <name>RMON_R_RESVD_0</name> <addressOffset>0x2A4</addressOffset> </register>
             <register>
                <name>RMON_R_P64</name>
                <description>Rx 64-Byte Packets Statistic Register</description>
@@ -2334,7 +2322,7 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>ATIME</name>
-                     <description>A write sets the timer</description>
+                     <description>A write sets the timer. A read returns the last captured value. To read the current value, issue a capture command (set ATCR[CAPTURE]) prior to reading this register</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
@@ -2346,7 +2334,7 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>OFFSET</name>
-                     <description>Offset value for one-shot event generation</description>
+                     <description>Offset value for one-shot event generation. When the timer reaches the value an event can be generated to reset the counter. If the increment value in ATINC is given in true nanoseconds, this value is also given in true nanoseconds</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
@@ -2359,7 +2347,7 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>PERIOD</name>
-                     <description>Value for generating periodic events</description>
+                     <description>Value for generating periodic events. Each instance the timer reaches this value, the period event occurs and the timer restarts. If the increment value in ATINC is given in true nanoseconds, this value is also given in true nanoseconds. The value should be initialized to 1,000,000,000 (1 x 10 9 ) to represent a timer wrap around of one second. The increment value set in ATINC should be set to the true nanoseconds of the period of clock ts_clk, hence implementing a true 1 second counter</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
@@ -2404,7 +2392,7 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>TIMESTAMP</name>
-                     <description>Timestamp of the last frame transmitted by the core that had TxBD[TS] set</description>
+                     <description>Timestamp of the last frame transmitted by the core that had TxBD[TS] set . This register is only valid when EIR[TS_AVAIL] is set</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
@@ -2558,18 +2546,28 @@ Devices using this peripheral:
                            <value>0b0111</value>
                         </enumeratedValue>
                         <enumeratedValue>
+                           <name>0b1000</name>
+                           <description>Reserved</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
                            <name>0b1010</name>
                            <description>Timer Channel is configured for Output Compare - clear output on compare, set output on overflow</description>
                            <value>0b1010</value>
                         </enumeratedValue>
                         <enumeratedValue>
+                           <name>0b1100</name>
+                           <description>Reserved</description>
+                           <value>0b1100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
                            <name>0b1110</name>
-                           <description>Timer Channel is configured for Output Compare - pulse output low on compare for one 1588-clock cycle</description>
+                           <description>Timer Channel is configured for Output Compare - pulse output low on compare for one 1588 clock cycle</description>
                            <value>0b1110</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1111</name>
-                           <description>Timer Channel is configured for Output Compare - pulse output high on compare for one 1588-clock cycle</description>
+                           <description>Timer Channel is configured for Output Compare - pulse output high on compare for one 1588 clock cycle</description>
                            <value>0b1111</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -2624,413 +2622,11 @@ Devices using this peripheral:
                   </field>
                </fields>
             </register>
-            <register>
-               <name>TCSR1</name>
-               <description>Timer Control Status Register</description>
-               <addressOffset>0x610</addressOffset>
-               <fields>
-                  <field>
-                     <name>TDRE</name>
-                     <description>Timer DMA Request Enable</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>DMA request is disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>DMA request is enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TMODE</name>
-                     <description>Timer Mode</description>
-                     <bitOffset>2</bitOffset>
-                     <bitWidth>4</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0000</name>
-                           <description>Timer Channel is disabled</description>
-                           <value>0b0000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0001</name>
-                           <description>Timer Channel is configured for Input Capture on rising edge</description>
-                           <value>0b0001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0010</name>
-                           <description>Timer Channel is configured for Input Capture on falling edge</description>
-                           <value>0b0010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0011</name>
-                           <description>Timer Channel is configured for Input Capture on both edges</description>
-                           <value>0b0011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0100</name>
-                           <description>Timer Channel is configured for Output Compare - software only</description>
-                           <value>0b0100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0101</name>
-                           <description>Timer Channel is configured for Output Compare - toggle output on compare</description>
-                           <value>0b0101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0110</name>
-                           <description>Timer Channel is configured for Output Compare - clear output on compare</description>
-                           <value>0b0110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0111</name>
-                           <description>Timer Channel is configured for Output Compare - set output on compare</description>
-                           <value>0b0111</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1010</name>
-                           <description>Timer Channel is configured for Output Compare - clear output on compare, set output on overflow</description>
-                           <value>0b1010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1110</name>
-                           <description>Timer Channel is configured for Output Compare - pulse output low on compare for one 1588-clock cycle</description>
-                           <value>0b1110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1111</name>
-                           <description>Timer Channel is configured for Output Compare - pulse output high on compare for one 1588-clock cycle</description>
-                           <value>0b1111</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TIE</name>
-                     <description>Timer Interrupt Enable</description>
-                     <bitOffset>6</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Interrupt is disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Interrupt is enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TF</name>
-                     <description>Timer Flag</description>
-                     <bitOffset>7</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Input Capture or Output Compare has not occurred</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Input Capture or Output Compare has occurred</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>TCCR1</name>
-               <description>Timer Compare Capture Register</description>
-               <addressOffset>0x614</addressOffset>
-               <fields>
-                  <field>
-                     <name>TCC</name>
-                     <description>Timer Capture Compare</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>TCSR2</name>
-               <description>Timer Control Status Register</description>
-               <addressOffset>0x618</addressOffset>
-               <fields>
-                  <field>
-                     <name>TDRE</name>
-                     <description>Timer DMA Request Enable</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>DMA request is disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>DMA request is enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TMODE</name>
-                     <description>Timer Mode</description>
-                     <bitOffset>2</bitOffset>
-                     <bitWidth>4</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0000</name>
-                           <description>Timer Channel is disabled</description>
-                           <value>0b0000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0001</name>
-                           <description>Timer Channel is configured for Input Capture on rising edge</description>
-                           <value>0b0001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0010</name>
-                           <description>Timer Channel is configured for Input Capture on falling edge</description>
-                           <value>0b0010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0011</name>
-                           <description>Timer Channel is configured for Input Capture on both edges</description>
-                           <value>0b0011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0100</name>
-                           <description>Timer Channel is configured for Output Compare - software only</description>
-                           <value>0b0100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0101</name>
-                           <description>Timer Channel is configured for Output Compare - toggle output on compare</description>
-                           <value>0b0101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0110</name>
-                           <description>Timer Channel is configured for Output Compare - clear output on compare</description>
-                           <value>0b0110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0111</name>
-                           <description>Timer Channel is configured for Output Compare - set output on compare</description>
-                           <value>0b0111</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1010</name>
-                           <description>Timer Channel is configured for Output Compare - clear output on compare, set output on overflow</description>
-                           <value>0b1010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1110</name>
-                           <description>Timer Channel is configured for Output Compare - pulse output low on compare for one 1588-clock cycle</description>
-                           <value>0b1110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1111</name>
-                           <description>Timer Channel is configured for Output Compare - pulse output high on compare for one 1588-clock cycle</description>
-                           <value>0b1111</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TIE</name>
-                     <description>Timer Interrupt Enable</description>
-                     <bitOffset>6</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Interrupt is disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Interrupt is enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TF</name>
-                     <description>Timer Flag</description>
-                     <bitOffset>7</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Input Capture or Output Compare has not occurred</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Input Capture or Output Compare has occurred</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>TCCR2</name>
-               <description>Timer Compare Capture Register</description>
-               <addressOffset>0x61C</addressOffset>
-               <fields>
-                  <field>
-                     <name>TCC</name>
-                     <description>Timer Capture Compare</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>TCSR3</name>
-               <description>Timer Control Status Register</description>
-               <addressOffset>0x620</addressOffset>
-               <fields>
-                  <field>
-                     <name>TDRE</name>
-                     <description>Timer DMA Request Enable</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>DMA request is disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>DMA request is enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TMODE</name>
-                     <description>Timer Mode</description>
-                     <bitOffset>2</bitOffset>
-                     <bitWidth>4</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0000</name>
-                           <description>Timer Channel is disabled</description>
-                           <value>0b0000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0001</name>
-                           <description>Timer Channel is configured for Input Capture on rising edge</description>
-                           <value>0b0001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0010</name>
-                           <description>Timer Channel is configured for Input Capture on falling edge</description>
-                           <value>0b0010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0011</name>
-                           <description>Timer Channel is configured for Input Capture on both edges</description>
-                           <value>0b0011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0100</name>
-                           <description>Timer Channel is configured for Output Compare - software only</description>
-                           <value>0b0100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0101</name>
-                           <description>Timer Channel is configured for Output Compare - toggle output on compare</description>
-                           <value>0b0101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0110</name>
-                           <description>Timer Channel is configured for Output Compare - clear output on compare</description>
-                           <value>0b0110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0111</name>
-                           <description>Timer Channel is configured for Output Compare - set output on compare</description>
-                           <value>0b0111</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1010</name>
-                           <description>Timer Channel is configured for Output Compare - clear output on compare, set output on overflow</description>
-                           <value>0b1010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1110</name>
-                           <description>Timer Channel is configured for Output Compare - pulse output low on compare for one 1588-clock cycle</description>
-                           <value>0b1110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1111</name>
-                           <description>Timer Channel is configured for Output Compare - pulse output high on compare for one 1588-clock cycle</description>
-                           <value>0b1111</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TIE</name>
-                     <description>Timer Interrupt Enable</description>
-                     <bitOffset>6</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Interrupt is disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Interrupt is enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TF</name>
-                     <description>Timer Flag</description>
-                     <bitOffset>7</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Input Capture or Output Compare has not occurred</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Input Capture or Output Compare has occurred</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>TCCR3</name>
-               <description>Timer Compare Capture Register</description>
-               <addressOffset>0x624</addressOffset>
-               <fields>
-                  <field>
-                     <name>TCC</name>
-                     <description>Timer Capture Compare</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
+            <register derivedFrom="TCSR0"> <name>TCSR1</name> <addressOffset>0x610</addressOffset> </register>
+            <register derivedFrom="TCCR0"> <name>TCCR1</name> <addressOffset>0x614</addressOffset> </register>
+            <register derivedFrom="TCSR0"> <name>TCSR2</name> <addressOffset>0x618</addressOffset> </register>
+            <register derivedFrom="TCCR0"> <name>TCCR2</name> <addressOffset>0x61C</addressOffset> </register>
+            <register derivedFrom="TCSR0"> <name>TCSR3</name> <addressOffset>0x620</addressOffset> </register>
+            <register derivedFrom="TCCR0"> <name>TCCR3</name> <addressOffset>0x624</addressOffset> </register>
          </registers>
       </peripheral>

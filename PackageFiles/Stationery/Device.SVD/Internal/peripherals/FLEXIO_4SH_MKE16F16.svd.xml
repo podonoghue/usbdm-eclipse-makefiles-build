@@ -94,12 +94,12 @@ Devices using this peripheral:
                      <bitWidth>16</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b0</name>
+                           <name>0b0000000000000000</name>
                            <description>Standard features implemented</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b1</name>
+                           <name>0b0000000000000001</name>
                            <description>Supports state, logic and parallel modes</description>
                            <value>0b1</value>
                         </enumeratedValue>

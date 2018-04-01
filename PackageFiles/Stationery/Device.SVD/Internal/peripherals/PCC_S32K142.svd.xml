@@ -24,6 +24,7 @@ Devices using this peripheral:
                <dimIncrement>4</dimIncrement>
                <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127</dimIndex>
                <name>PCCn%s</name>
+               <?hide?>
                <description>PCC Register</description>
                <addressOffset>0x0</addressOffset>
                <resetMask>0x0</resetMask>
@@ -62,12 +63,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>000</name>
-                           <description>Clock is off. An external clock can be enabled for this peripheral</description>
+                           <description>Clock is off.\t An external clock may be enabled for this peripheral</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>XXX</name>
-                           <description>Clock option N</description>
+                           <description>Clock N selected</description>
                            <isDefault>true</isDefault>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -85,7 +86,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>1</name>
-                           <description>Clock enabled. The current clock selection and divider options are locked</description>
+                           <description>Clock enabled.\t The current clock selection and divider options are locked</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -125,7 +126,7 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>000</name>
-                           <description>Clock is off. An external clock can be enabled for this peripheral</description>
+                           <description>Clock is off.\t An external clock may be enabled for this peripheral</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -148,7 +149,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>1</name>
-                           <description>Clock enabled. The current clock selection and divider options are locked</description>
+                           <description>Clock enabled.\t The current clock selection and divider options are locked</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -175,23 +176,32 @@ Devices using this peripheral:
                </fields>
             </register>
             <register derivedFrom="PCC_FTFC"> <name>PCC_DMAMUX</name> <description>PCC DMAMUX Register</description> <addressOffset>0x84</addressOffset> <resetValue>0x80000000</resetValue> </register>
-            <register derivedFrom="PCC_FTFC"><dim>2</dim><dimIncrement>4</dimIncrement><dimIndex>0,1</dimIndex> <name>PCC_FlexCAN%s</name> <description>PCC FlexCAN%s Register</description> <addressOffset>0x90</addressOffset> <resetMask>0x0</resetMask> </register>
+            <register derivedFrom="PCC_FTFC"> <name>PCC_FlexCAN0</name> <description>PCC FlexCAN0 Register</description> <addressOffset>0x90</addressOffset> <resetMask>0x0</resetMask> </register>
+            <register derivedFrom="PCC_FTFC"> <name>PCC_FlexCAN1</name> <description>PCC FlexCAN1 Register</description> <addressOffset>0x94</addressOffset> <resetMask>0x0</resetMask> </register>
             <register derivedFrom="PCC_FTFC"> <name>PCC_FTM3</name> <description>PCC FTM3 Register</description> <addressOffset>0x98</addressOffset> <resetValue>0x80000000</resetValue> </register>
             <register derivedFrom="PCC_FTFC"> <name>PCC_ADC1</name> <description>PCC ADC1 Register</description> <addressOffset>0x9C</addressOffset> <resetValue>0x80000000</resetValue> </register>
-            <register derivedFrom="PCC_FTFC"><dim>2</dim><dimIncrement>4</dimIncrement><dimIndex>0,1</dimIndex> <name>PCC_LPSPI%s</name> <description>PCC LPSPI%s Register</description> <addressOffset>0xB0</addressOffset> <resetMask>0x0</resetMask> </register>
+            <register derivedFrom="PCC_FTFC"> <name>PCC_LPSPI0</name> <description>PCC LPSPI0 Register</description> <addressOffset>0xB0</addressOffset> <resetMask>0x0</resetMask> </register>
+            <register derivedFrom="PCC_FTFC"> <name>PCC_LPSPI1</name> <description>PCC LPSPI1 Register</description> <addressOffset>0xB4</addressOffset> <resetMask>0x0</resetMask> </register>
             <register derivedFrom="PCC_FTFC"> <name>PCC_PDB1</name> <description>PCC PDB1 Register</description> <addressOffset>0xC4</addressOffset> <resetValue>0x80000000</resetValue> </register>
             <register derivedFrom="PCC_FTFC"> <name>PCC_CRC</name> <description>PCC CRC Register</description> <addressOffset>0xC8</addressOffset> <resetValue>0x80000000</resetValue> </register>
             <register derivedFrom="PCC_FTFC"> <name>PCC_PDB0</name> <description>PCC PDB0 Register</description> <addressOffset>0xD8</addressOffset> <resetValue>0x80000000</resetValue> </register>
             <register derivedFrom="PCC_FTFC"> <name>PCC_LPIT</name> <description>PCC LPIT Register</description> <addressOffset>0xDC</addressOffset> <resetValue>0x80000000</resetValue> </register>
-            <register derivedFrom="PCC_FTFC"><dim>3</dim><dimIncrement>4</dimIncrement><dimIndex>0,1,2</dimIndex> <name>PCC_FTM%s</name> <description>PCC FTM%s Register</description> <addressOffset>0xE0</addressOffset> <resetMask>0x0</resetMask> </register>
+            <register derivedFrom="PCC_FTFC"> <name>PCC_FTM0</name> <description>PCC FTM0 Register</description> <addressOffset>0xE0</addressOffset> <resetMask>0x0</resetMask> </register>
+            <register derivedFrom="PCC_FTFC"> <name>PCC_FTM1</name> <description>PCC FTM1 Register</description> <addressOffset>0xE4</addressOffset> <resetMask>0x0</resetMask> </register>
+            <register derivedFrom="PCC_FTFC"> <name>PCC_FTM2</name> <description>PCC FTM2 Register</description> <addressOffset>0xE8</addressOffset> <resetMask>0x0</resetMask> </register>
             <register derivedFrom="PCC_FTFC"> <name>PCC_ADC0</name> <description>PCC ADC0 Register</description> <addressOffset>0xEC</addressOffset> <resetValue>0x80000000</resetValue> </register>
             <register derivedFrom="PCC_FTFC"> <name>PCC_RTC</name> <description>PCC RTC Register</description> <addressOffset>0xF4</addressOffset> <resetValue>0x80000000</resetValue> </register>
             <register derivedFrom="PCC_FTFC"> <name>PCC_LPTMR0</name> <description>PCC LPTMR0 Register</description> <addressOffset>0x100</addressOffset> <resetValue>0x80000000</resetValue> </register>
-            <register derivedFrom="PCC_FTFC"><dim>5</dim><dimIncrement>4</dimIncrement><dimIndex>A,B,C,D,E</dimIndex> <name>PCC_PORT%s</name> <description>PCC PORT%s Register</description> <addressOffset>0x124</addressOffset> <resetMask>0x0</resetMask> </register>
+            <register derivedFrom="PCC_FTFC"> <name>PCC_PORTA</name> <description>PCC PORTA Register</description> <addressOffset>0x124</addressOffset> <resetMask>0x0</resetMask> </register>
+            <register derivedFrom="PCC_FTFC"> <name>PCC_PORTB</name> <description>PCC PORTB Register</description> <addressOffset>0x128</addressOffset> <resetMask>0x0</resetMask> </register>
+            <register derivedFrom="PCC_FTFC"> <name>PCC_PORTC</name> <description>PCC PORTC Register</description> <addressOffset>0x12C</addressOffset> <resetMask>0x0</resetMask> </register>
+            <register derivedFrom="PCC_FTFC"> <name>PCC_PORTD</name> <description>PCC PORTD Register</description> <addressOffset>0x130</addressOffset> <resetMask>0x0</resetMask> </register>
+            <register derivedFrom="PCC_FTFC"> <name>PCC_PORTE</name> <description>PCC PORTE Register</description> <addressOffset>0x134</addressOffset> <resetMask>0x0</resetMask> </register>
             <register derivedFrom="PCC_FTFC"> <name>PCC_FLEXIO</name> <description>PCC FlexIO Register</description> <addressOffset>0x168</addressOffset> <resetValue>0x80000000</resetValue> </register>
             <register derivedFrom="PCC_FTFC"> <name>PCC_EWM</name> <description>PCC EWM Register</description> <addressOffset>0x184</addressOffset> <resetValue>0x80000000</resetValue> </register>
             <register derivedFrom="PCC_FTFC"> <name>PCC_LPI2C0</name> <description>PCC LPI2C0 Register</description> <addressOffset>0x198</addressOffset> <resetValue>0x80000000</resetValue> </register>
-            <register derivedFrom="PCC_FTFC"><dim>2</dim><dimIncrement>4</dimIncrement><dimIndex>0,1</dimIndex> <name>PCC_LPUART%s</name> <description>PCC LPUART%s Register</description> <addressOffset>0x1A8</addressOffset> <resetMask>0x0</resetMask> </register>
+            <register derivedFrom="PCC_FTFC"> <name>PCC_LPUART0</name> <description>PCC LPUART0 Register</description> <addressOffset>0x1A8</addressOffset> <resetMask>0x0</resetMask> </register>
+            <register derivedFrom="PCC_FTFC"> <name>PCC_LPUART1</name> <description>PCC LPUART1 Register</description> <addressOffset>0x1AC</addressOffset> <resetMask>0x0</resetMask> </register>
             <register derivedFrom="PCC_FTFC"> <name>PCC_CMP0</name> <description>PCC CMP0 Register</description> <addressOffset>0x1CC</addressOffset> <resetValue>0x80000000</resetValue> </register>
          </registers>
       </peripheral>

@@ -25,7 +25,7 @@
       <peripheral derivedFrom="ADC0"><name>ADC1</name><baseAddress>0x400BB000</baseAddress></peripheral>
       <peripheral derivedFrom="ADC0"><name>ADC2</name><baseAddress>0x4003C000</baseAddress></peripheral>
       <peripheral derivedFrom="ADC0"><name>ADC3</name><baseAddress>0x400BC000</baseAddress></peripheral>
-      <xi:include href="peripherals/AIPS0_8M_B.svd.xml"/>
+      <xi:include href="peripherals/AIPS0_Lite_8Mx16P.svd.xml"/>
       <peripheral derivedFrom="AIPS0"><name>AIPS1</name><baseAddress>0x40080000</baseAddress></peripheral>
       <xi:include href="peripherals/AXBS_6M012367_5S.svd.xml"/>
       <xi:include href="peripherals/CAN0_2MASK.svd.xml"/>
@@ -80,7 +80,7 @@
       <xi:include href="peripherals/NVIC_CM4.svd.xml"/>
       <xi:include href="peripherals/OSC0_MK.svd.xml"/>
       <peripheral derivedFrom="OSC0"><name>OSC1</name><baseAddress>0x400E5000</baseAddress></peripheral>
-      <xi:include href="peripherals/PDB0_4CH_2TRIG_2DAC_4PO.svd.xml"/>
+      <xi:include href="peripherals/PDB0_4CH_2PT_2DAC_4PO.svd.xml"/>
       <xi:include href="peripherals/PIT_4CH.svd.xml"/>
       <xi:include href="peripherals/PMC_MK10F12.svd.xml"/>
       <xi:include href="peripherals/PORTA_DFER.svd.xml"/>

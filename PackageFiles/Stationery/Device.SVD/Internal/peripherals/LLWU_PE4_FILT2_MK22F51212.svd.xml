@@ -416,54 +416,20 @@ To clear this flag it is necessary to clear the flag in the peripheral</descript
                   <field derivedFrom="MWUF0" > <name>MWUF7</name> <description>Wakeup flag For module 7</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
-            <register>
-               <name>MF</name>
-               <description>Module Flag Register\n
+            <register derivedFrom="F3"> <name>MF</name> <description>Module Flag Register\n
 Contains the flags indicating if an internal wakeup source caused the MCU to exit VLLS mode.\n
 This flag reflects the flag in the related peripheral.\n
-To clear this flag it is necessary to clear the flag in the peripheral</description>
-               <addressOffset>0x7</addressOffset>
-               <size>8</size>
-               <access>read-only</access>
-               <resetMask>0xFF</resetMask>
-               <fields>
-                  <field>
-                     <name>MWUF0</name>
-                     <description>Wakeup flag for module 0</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Not wakeup source</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Is wakeup source</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field derivedFrom="MWUF0" > <name>MWUF1</name> <description>Wakeup flag for module 1</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="MWUF0" > <name>MWUF2</name> <description>Wakeup flag for module 2</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="MWUF0" > <name>MWUF3</name> <description>Wakeup flag for module 3</description> <bitOffset>3</bitOffset> </field>
-                  <field derivedFrom="MWUF0" > <name>MWUF4</name> <description>Wakeup flag for module 4</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="MWUF0" > <name>MWUF5</name> <description>Wakeup flag for module 5</description> <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="MWUF0" > <name>MWUF6</name> <description>Wakeup flag for module 6</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="MWUF0" > <name>MWUF7</name> <description>Wakeup flag for module 7</description> <bitOffset>7</bitOffset> </field>
-               </fields>
-            </register>
+To clear this flag it is necessary to clear the flag in the peripheral</description> <addressOffset>0x7</addressOffset> </register>
             <register>
                <dim>2</dim>
                <dimIncrement>1</dimIncrement>
-               <dimIndex>1,2</dimIndex>
+               <dimIndex>0,1</dimIndex>
                <name>FILT%s</name>
                <description>Pin Filter %s register\n
 Control and status register that is used to enable/disable the digital filter features for an external pin</description>
                <addressOffset>0x8</addressOffset>
                <size>8</size>
-               <resetMask>0x0</resetMask>
+               <resetMask>0xFF</resetMask>
                <fields>
                   <field>
                      <name>FILTSEL</name>
@@ -530,6 +496,7 @@ To clear the flag write a one to FILTF</description>
                   </field>
                </fields>
             </register>
-            <register derivedFrom="FILT%s"><dimIndex>0,1</dimIndex><?hide?> </register>
+            <register derivedFrom="FILT%s"><dim>0</dim><dimIncrement>0</dimIncrement><dimIndex></dimIndex> <name>FILT1</name> <addressOffset>0x8</addressOffset> </register>
+            <register derivedFrom="FILT%s"><dim>0</dim><dimIncrement>0</dimIncrement><dimIndex></dimIndex> <name>FILT2</name> <addressOffset>0x9</addressOffset> </register>
          </registers>
       </peripheral>

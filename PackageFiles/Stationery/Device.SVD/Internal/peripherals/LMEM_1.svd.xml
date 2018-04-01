@@ -2,6 +2,9 @@
 Devices using this peripheral: 
       MK65F18
       MK66F18
+      MKE14F16
+      MKE16F16
+      MKE18F16
 -->
       <peripheral>
          <?sourceFile "LMEM_1" ?>
@@ -74,7 +77,7 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>PCCR3</name>
-                     <description>Forces no allocation on cache misses (must also have ACCR2 asserted)</description>
+                     <description>Forces no allocation on cache misses (must also have PCCR2 asserted)</description>
                      <bitOffset>3</bitOffset>
                      <bitWidth>1</bitWidth>
                   </field>
@@ -197,7 +200,7 @@ Devices using this peripheral:
                      <name>CACHEADDR</name>
                      <description>Cache address</description>
                      <bitOffset>2</bitOffset>
-                     <bitWidth>10</bitWidth>
+                     <bitWidth>12</bitWidth>
                   </field>
                   <field>
                      <name>WSEL</name>

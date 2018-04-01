@@ -62,6 +62,9 @@ Devices using this peripheral:
          <access>read-write</access>
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
+         <parameters>
+            <parameter> <value>2</value> <name>SC1_COUNT</name> <description>Number of ADC channels</description></parameter>
+         </parameters>
          <addressBlock>
             <offset>0x0</offset>
             <size>0x50</size>
@@ -74,9 +77,8 @@ Devices using this peripheral:
          </addressBlock>
          <registers>
             <register>
-               <dim>2</dim>
+               <dim>%SC1_COUNT</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1</dimIndex>
                <name>SC1%s</name>
                <description>Status and Control Register 1</description>
                <addressOffset>0x0</addressOffset>
@@ -527,9 +529,8 @@ Controls whether the Asynchronous clock output is always enabled or only as requ
                </fields>
             </register>
             <register>
-               <dim>2</dim>
+               <dim>%SC1_COUNT</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1</dimIndex>
                <name>R%s</name>
                <description>Data Result Register</description>
                <addressOffset>0x10</addressOffset>
@@ -799,12 +800,12 @@ Write 1 to begin the calibration sequence, clears when complete</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Calibration idle</description>
+                           <description>Calibration Idle</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Calibration busy</description>
+                           <description>w1 start/r1 busy</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

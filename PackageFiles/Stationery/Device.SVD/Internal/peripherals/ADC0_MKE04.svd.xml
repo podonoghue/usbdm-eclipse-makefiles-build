@@ -17,6 +17,9 @@ Devices using this peripheral:
          <access>read-write</access>
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
+         <parameters>
+            <parameter> <value>1</value> <name>SC1_COUNT</name> <description>Number of ADC channels</description></parameter>
+         </parameters>
          <addressBlock>
             <offset>0x0</offset>
             <size>0x20</size>
@@ -24,10 +27,12 @@ Devices using this peripheral:
          </addressBlock>
          <registers>
             <register>
-               <name>SC1</name>
+               <dim>%SC1_COUNT</dim>
+               <dimIncrement>4</dimIncrement>
+               <name>SC1%s</name>
                <description>Status and Control Register 1</description>
                <addressOffset>0x0</addressOffset>
-               <resetValue>0x1F</resetValue>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>ADCH</name>
@@ -587,14 +592,16 @@ This field enables hardware trigger multiple conversion</description>
                </fields>
             </register>
             <register>
-               <name>R</name>
-               <description>Conversion Result Register</description>
+               <dim>%SC1_COUNT</dim>
+               <dimIncrement>4</dimIncrement>
+               <name>R%s</name>
+               <description>Data Result Register</description>
                <addressOffset>0x10</addressOffset>
                <access>read-only</access>
                <fields>
                   <field>
-                     <name>ADR</name>
-                     <description>Conversion Result</description>
+                     <name>D</name>
+                     <description>Data result</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>12</bitWidth>
                   </field>

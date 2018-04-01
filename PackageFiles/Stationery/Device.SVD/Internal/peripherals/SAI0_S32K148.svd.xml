@@ -1429,31 +1429,7 @@ Devices using this peripheral:
                   </field>
                </fields>
             </register>
-            <register>
-               <name>SAI_RCR5</name>
-               <description>SAI Receive Configuration 5 Register</description>
-               <addressOffset>0x9C</addressOffset>
-               <fields>
-                  <field>
-                     <name>FBT</name>
-                     <description>First Bit Shifted</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>5</bitWidth>
-                  </field>
-                  <field>
-                     <name>W0W</name>
-                     <description>Word 0 Width</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>5</bitWidth>
-                  </field>
-                  <field>
-                     <name>WNW</name>
-                     <description>Word N Width</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>5</bitWidth>
-                  </field>
-               </fields>
-            </register>
+            <register derivedFrom="SAI_TCR5"> <name>SAI_RCR5</name> <description>SAI Receive Configuration 5 Register</description> <addressOffset>0x9C</addressOffset> </register>
             <register>
                <dim>4</dim>
                <dimIncrement>4</dimIncrement>

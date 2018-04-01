@@ -9,103 +9,103 @@ Devices using this vector table:
       <name>DMA0</name>
       <description>Enhanced Direct Memory Access</description>
       <value>0</value>
-      <peripheral>DMA</peripheral>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA1</name>
       <description>Enhanced Direct Memory Access</description>
       <value>1</value>
-      <peripheral>DMA</peripheral>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA2</name>
       <description>Enhanced Direct Memory Access</description>
       <value>2</value>
-      <peripheral>DMA</peripheral>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA3</name>
       <description>Enhanced Direct Memory Access</description>
       <value>3</value>
-      <peripheral>DMA</peripheral>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA4</name>
       <description>Enhanced Direct Memory Access</description>
       <value>4</value>
-      <peripheral>DMA</peripheral>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA5</name>
       <description>Enhanced Direct Memory Access</description>
       <value>5</value>
-      <peripheral>DMA</peripheral>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA6</name>
       <description>Enhanced Direct Memory Access</description>
       <value>6</value>
-      <peripheral>DMA</peripheral>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA7</name>
       <description>Enhanced Direct Memory Access</description>
       <value>7</value>
-      <peripheral>DMA</peripheral>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA8</name>
       <description>Enhanced Direct Memory Access</description>
       <value>8</value>
-      <peripheral>DMA</peripheral>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA9</name>
       <description>Enhanced Direct Memory Access</description>
       <value>9</value>
-      <peripheral>DMA</peripheral>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA10</name>
       <description>Enhanced Direct Memory Access</description>
       <value>10</value>
-      <peripheral>DMA</peripheral>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA11</name>
       <description>Enhanced Direct Memory Access</description>
       <value>11</value>
-      <peripheral>DMA</peripheral>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA12</name>
       <description>Enhanced Direct Memory Access</description>
       <value>12</value>
-      <peripheral>DMA</peripheral>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA13</name>
       <description>Enhanced Direct Memory Access</description>
       <value>13</value>
-      <peripheral>DMA</peripheral>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA14</name>
       <description>Enhanced Direct Memory Access</description>
       <value>14</value>
-      <peripheral>DMA</peripheral>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA15</name>
       <description>Enhanced Direct Memory Access</description>
       <value>15</value>
-      <peripheral>DMA</peripheral>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>DMA_Error</name>
       <description>Enhanced Direct Memory Access</description>
       <value>16</value>
-      <peripheral>DMA</peripheral>
+      <peripheral>DMA0</peripheral>
    </interrupt>
    <interrupt>
       <name>MCM</name>

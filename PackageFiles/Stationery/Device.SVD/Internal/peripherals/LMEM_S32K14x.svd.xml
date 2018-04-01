@@ -39,12 +39,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Cache disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Cache enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -69,12 +69,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No operation</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>When setting the GO bit, invalidate all lines in way 0</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -87,12 +87,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No operation</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>When setting the GO bit, push all modified lines in way 0</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -105,12 +105,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No operation</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>When setting the GO bit, invalidate all lines in way 1</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -123,12 +123,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No operation</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>When setting the GO bit, push all modified lines in way 1</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -141,12 +141,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Write: no effect. Read: no cache command active</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Write: initiate command indicated by bits 27-24. Read: cache command active</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -166,12 +166,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Write: no effect. Read: no line command active</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Write: initiate line command indicated by bits 27-24. Read: line command active</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -190,12 +190,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Way 0</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Way 1</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -208,12 +208,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Data</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Tag</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -224,18 +224,21 @@ Devices using this peripheral:
                      <description>Line Command Initial Valid Bit</description>
                      <bitOffset>20</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <access>read-only</access>
                   </field>
                   <field>
                      <name>LCIMB</name>
                      <description>Line Command Initial Modified Bit</description>
                      <bitOffset>21</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <access>read-only</access>
                   </field>
                   <field>
                      <name>LCWAY</name>
                      <description>Line Command Way</description>
                      <bitOffset>22</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <access>read-only</access>
                   </field>
                   <field>
                      <name>LCMD</name>
@@ -244,22 +247,22 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>Search and read or write</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
+                           <name>0b01</name>
                            <description>Invalidate</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
+                           <name>0b10</name>
                            <description>Push</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
+                           <name>0b11</name>
                            <description>Clear</description>
                            <value>0b11</value>
                         </enumeratedValue>
@@ -272,12 +275,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Cache address</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Physical address</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -290,12 +293,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Read</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Write</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -315,12 +318,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Write: no effect. Read: no line command active</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Write: initiate line command indicated by bits CLCR[27:24]. Read: line command active</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -359,22 +362,22 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>Non-cacheable</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
+                           <name>0b01</name>
                            <description>Non-cacheable</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
+                           <name>0b10</name>
                            <description>Write-through</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
+                           <name>0b11</name>
                            <description>Write-back</description>
                            <value>0b11</value>
                         </enumeratedValue>

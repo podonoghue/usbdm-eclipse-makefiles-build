@@ -1,13 +1,15 @@
 <!--
 Devices using this peripheral: 
       MKE14F16
+      MKE14Z7
+      MKE15Z7
       MKE16F16
       MKE18F16
 -->
       <peripheral>
          <?sourceFile "PMC_MKE16F16" ?>
          <name>PMC</name>
-         <description>PMC</description>
+         <description>Power Management Controller</description>
          <groupName>PMC</groupName>
          <headerStructName>PMC</headerStructName>
          <baseAddress>0x4007D000</baseAddress>
@@ -37,7 +39,8 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>LVDRE</name>
-                     <description>Low Voltage Detect Reset Enable</description>
+                     <description>Low-Voltage Detect Reset Enable\n
+This write-once bit enables LVDF events to generate a hardware reset</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -173,7 +176,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>1</name>
-                           <description>Biasing enabled, core logic is slower and there are restrictions in allowed system clock speed (see device level specification for details)</description>
+                           <description>Biasing enabled, core logic is slower and there are restrictions in allowed system clock speed (see Data Sheet for details)</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -191,7 +194,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>1</name>
-                           <description>In STOP or VLPS mode the bias currents and reference voltages for the following clock modules are disabled: SIRC, FIRC, PLL. (if available on device)</description>
+                           <description>In STOP/VLPS mode the bias currents and reference voltages for the following clock modules are disabled: SIRC, FIRC, PLL. (if available on device)</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

@@ -22,7 +22,7 @@
    <width>32</width>
    <peripherals>
       <xi:include href="peripherals/ADC0_DIFF_A.svd.xml"/>
-      <xi:include href="peripherals/AIPS0_8M_B.svd.xml"/>
+      <xi:include href="peripherals/AIPS0_Lite_8Mx16P.svd.xml"/>
       <xi:include href="peripherals/CMP0_PSTM7.svd.xml"/>
       <peripheral derivedFrom="CMP0"><name>CMP1</name><baseAddress>0x40073008</baseAddress></peripheral>
       <xi:include href="peripherals/CMT_0.svd.xml"/>
@@ -57,7 +57,7 @@
       <xi:include href="peripherals/NV_FTFL.svd.xml"/>
       <xi:include href="peripherals/NVIC_CM4.svd.xml"/>
       <xi:include href="peripherals/OSC0_MK.svd.xml"/>
-      <xi:include href="peripherals/PDB0_2CH_2TRIG_1DAC_2PO.svd.xml"/>
+      <xi:include href="peripherals/PDB0_2CH_2PT_1DAC_2PO.svd.xml"/>
       <xi:include href="peripherals/PIT_4CH_CHAIN.svd.xml"/>
       <xi:include href="peripherals/PMC_MK.svd.xml"/>
       <xi:include href="peripherals/PORTA_DFER.svd.xml"/>

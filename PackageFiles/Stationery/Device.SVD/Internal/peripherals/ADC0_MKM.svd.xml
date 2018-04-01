@@ -15,6 +15,9 @@ Devices using this peripheral:
          <access>read-write</access>
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
+         <parameters>
+            <parameter> <value>4</value> <name>SC1_COUNT</name> <description>Number of ADC channels</description></parameter>
+         </parameters>
          <addressBlock>
             <offset>0x0</offset>
             <size>0x40</size>
@@ -27,11 +30,10 @@ Devices using this peripheral:
          </addressBlock>
          <registers>
             <register>
-               <dim>4</dim>
+               <dim>%SC1_COUNT</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3</dimIndex>
                <name>SC1%s</name>
-               <description>Status and Control Registers 1</description>
+               <description>Status and Control Register 1</description>
                <addressOffset>0x0</addressOffset>
                <resetValue>0x1F</resetValue>
                <fields>
@@ -277,23 +279,24 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>MODE</name>
-                     <description>ADC resolution</description>
+                     <description>ADC resolution\n
+Single-ended/Differential(if available)</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>8-bit</description>
+                           <description>8-bit conversion</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>12-bit</description>
+                           <description>12-bit conversion</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>10-bit</description>
+                           <description>10-bit conversion</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -461,9 +464,8 @@ Controls whether the Asynchronous clock output is always enabled or only as requ
                </fields>
             </register>
             <register>
-               <dim>4</dim>
+               <dim>%SC1_COUNT</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3</dimIndex>
                <name>R%s</name>
                <description>Data Result Register</description>
                <addressOffset>0x18</addressOffset>
@@ -732,18 +734,18 @@ Enables continuous conversions or sets of conversions (when averaging) after an 
                   <field>
                      <name>CAL</name>
                      <description>Calibration\n
-Begins the calibration sequence when set</description>
+Write 1 to begin the calibration sequence, clears when complete</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Calibration busy</description>
+                           <description>Calibration Idle</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Calibration idle</description>
+                           <description>w1 start/r1 busy</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

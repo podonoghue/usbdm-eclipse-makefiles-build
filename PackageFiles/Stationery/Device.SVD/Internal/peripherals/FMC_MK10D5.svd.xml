@@ -198,7 +198,7 @@ This bit controls whether data references are loaded into the cache</description
                   <field>
                      <name>CRC</name>
                      <description>Cache Replacement Control\n
-This 3-bit field defines the replacement algorithm for accesses that are cached</description>
+This field defines the replacement algorithm for accesses that are cached</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>3</bitWidth>
                      <enumeratedValues>
@@ -249,7 +249,7 @@ This field defines the width of the memory bank</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>128 bits (if available)</description>
+                           <description>128 bits (if supported)</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>

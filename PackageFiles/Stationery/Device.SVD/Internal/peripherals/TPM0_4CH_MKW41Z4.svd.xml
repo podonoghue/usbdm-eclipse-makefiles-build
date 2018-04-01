@@ -13,6 +13,9 @@ Devices using this peripheral:
          <access>read-write</access>
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
+         <parameters>
+            <parameter> <value>4</value> <name>CONTROLS_COUNT</name> <description>Number of FTM channels</description></parameter>
+         </parameters>
          <addressBlock>
             <offset>0x0</offset>
             <size>0x2C</size>
@@ -229,9 +232,8 @@ An interrupt is generated when TOF equals one</description>
                </fields>
             </register>
             <cluster>
-               <dim>4</dim>
+               <dim>%CONTROLS_COUNT</dim>
                <dimIncrement>8</dimIncrement>
-               <dimIndex>0,1,2,3</dimIndex>
                <name>CONTROLS,@pC@i@f</name>
                <addressOffset>0xC</addressOffset>
                <register>
@@ -400,25 +402,25 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                <fields>
                   <field>
                      <name>CH0F</name>
-                     <description>Channel 0 Flag</description>
+                     <description>Channel 0 Event Flag</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>No channel event</description>
+                           <description>No event</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Channel event</description>
+                           <description>Event</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="CH0F" > <name>CH1F</name> <description>Channel 1 Flag</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="CH0F" > <name>CH2F</name> <description>Channel 2 Flag</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="CH0F" > <name>CH3F</name> <description>Channel 3 Flag</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="CH0F" > <name>CH1F</name> <description>Channel 1 Event Flag</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="CH0F" > <name>CH2F</name> <description>Channel 2 Event Flag</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="CH0F" > <name>CH3F</name> <description>Channel 3 Event Flag</description> <bitOffset>3</bitOffset> </field>
                   <field>
                      <name>TOF</name>
                      <description>Timer Overflow Flag\n

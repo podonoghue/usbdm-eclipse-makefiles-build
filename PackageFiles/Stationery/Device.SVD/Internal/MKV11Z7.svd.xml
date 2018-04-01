@@ -54,12 +54,12 @@
       <xi:include href="peripherals/MCG_NOPLL_MKL02Z4.svd.xml"/>
       <xi:include href="peripherals/MCM_MKL02Z4.svd.xml"/>
       <xi:include href="peripherals/MMDVSQ_0.svd.xml"/>
-      <xi:include href="peripherals/MTB.svd.xml"/>
-      <xi:include href="peripherals/MTBDWT_MKL.svd.xml"/>
+      <xi:include href="peripherals/MTB_MKE15Z7.svd.xml"/>
+      <xi:include href="peripherals/MTBDWT_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/NV_FTFA.svd.xml"/>
       <xi:include href="peripherals/NVIC_CM0.svd.xml"/>
       <xi:include href="peripherals/OSC0_MK.svd.xml"/>
-      <xi:include href="peripherals/PDB0_2CH_2TRIG_2DAC_2PO.svd.xml"/>
+      <xi:include href="peripherals/PDB0_2CH_2PT_2DAC_2PO.svd.xml"/>
       <peripheral derivedFrom="PDB0"><name>PDB1</name><baseAddress>0x40031000</baseAddress></peripheral>
       <xi:include href="peripherals/PMC_MK.svd.xml"/>
       <xi:include href="peripherals/PORTA_MKL_DMA.svd.xml"/>

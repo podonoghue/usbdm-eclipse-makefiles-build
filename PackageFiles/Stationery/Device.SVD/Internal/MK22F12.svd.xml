@@ -67,7 +67,7 @@
       <xi:include href="peripherals/NV_FTFL.svd.xml"/>
       <xi:include href="peripherals/NVIC_CM4.svd.xml"/>
       <xi:include href="peripherals/OSC0_MK.svd.xml"/>
-      <xi:include href="peripherals/PDB0_2CH_2TRIG_2DAC_3PO.svd.xml"/>
+      <xi:include href="peripherals/PDB0_2CH_2PT_2DAC_3PO.svd.xml"/>
       <xi:include href="peripherals/PIT_4CH_CHAIN.svd.xml"/>
       <xi:include href="peripherals/PMC_MK.svd.xml"/>
       <xi:include href="peripherals/PORTA.svd.xml"/>

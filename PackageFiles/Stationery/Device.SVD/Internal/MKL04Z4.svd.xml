@@ -38,8 +38,8 @@
       <xi:include href="peripherals/LPTMR0.svd.xml"/>
       <xi:include href="peripherals/MCG_NOPLL_MKL04Z4.svd.xml"/>
       <xi:include href="peripherals/MCM_MKL02Z4.svd.xml"/>
-      <xi:include href="peripherals/MTB.svd.xml"/>
-      <xi:include href="peripherals/MTBDWT_MKL.svd.xml"/>
+      <xi:include href="peripherals/MTB_MKE15Z7.svd.xml"/>
+      <xi:include href="peripherals/MTBDWT_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/NV_FTFA.svd.xml"/>
       <xi:include href="peripherals/NVIC_CM0.svd.xml"/>
       <xi:include href="peripherals/OSC0_MK.svd.xml"/>

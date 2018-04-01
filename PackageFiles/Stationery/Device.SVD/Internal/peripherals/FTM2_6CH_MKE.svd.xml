@@ -14,12 +14,15 @@ Devices using this peripheral:
          <name>FTM2</name>
          <description>FlexTimer Module (6 channels)</description>
          <groupName>FTM</groupName>
-         <headerStructName>FTM</headerStructName>
+         <headerStructName>FTM2</headerStructName>
          <baseAddress>0x4003A000</baseAddress>
          <size>32</size>
          <access>read-write</access>
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
+         <parameters>
+            <parameter> <value>6</value> <name>CONTROLS_COUNT</name> <description>Number of FTM channels</description></parameter>
+         </parameters>
          <addressBlock>
             <offset>0x0</offset>
             <size>0x3C</size>
@@ -203,9 +206,8 @@ An interrupt is generated when TOF equals one</description>
                </fields>
             </register>
             <cluster>
-               <dim>6</dim>
+               <dim>%CONTROLS_COUNT</dim>
                <dimIncrement>8</dimIncrement>
-               <dimIndex>0,1,2,3,4,5</dimIndex>
                <name>CONTROLS,@pC@i@f</name>
                <addressOffset>0xC</addressOffset>
                <register>
@@ -625,8 +627,6 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                   <field derivedFrom="CH0OI" > <name>CH3OI</name> <description>Channel 3 Output Initialization Value</description> <bitOffset>3</bitOffset> </field>
                   <field derivedFrom="CH0OI" > <name>CH4OI</name> <description>Channel 4 Output Initialization Value</description> <bitOffset>4</bitOffset> </field>
                   <field derivedFrom="CH0OI" > <name>CH5OI</name> <description>Channel 5 Output Initialization Value</description> <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="CH0OI" > <name>CH6OI</name> <description>Channel 6 Output Initialization Value</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="CH0OI" > <name>CH7OI</name> <description>Channel 7 Output Initialization Value</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -657,8 +657,6 @@ Determines Input Capture, Output Compare &amp; Pulse Width Modulation</descripti
                   <field derivedFrom="CH0OM" > <name>CH3OM</name> <description>Channel 3 Output Mask</description> <bitOffset>3</bitOffset> </field>
                   <field derivedFrom="CH0OM" > <name>CH4OM</name> <description>Channel 4 Output Mask</description> <bitOffset>4</bitOffset> </field>
                   <field derivedFrom="CH0OM" > <name>CH5OM</name> <description>Channel 5 Output Mask</description> <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="CH0OM" > <name>CH6OM</name> <description>Channel 6 Output Mask</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="CH0OM" > <name>CH7OM</name> <description>Channel 7 Output Mask</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -888,8 +886,6 @@ Controls whether channels are the some or complement</description>
                   <field derivedFrom="POL0" > <name>POL3</name> <description>Channel 3 Polarity</description> <bitOffset>3</bitOffset> </field>
                   <field derivedFrom="POL0" > <name>POL4</name> <description>Channel 4 Polarity</description> <bitOffset>4</bitOffset> </field>
                   <field derivedFrom="POL0" > <name>POL5</name> <description>Channel 5 Polarity</description> <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="POL0" > <name>POL6</name> <description>Channel 6 Polarity</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="POL0" > <name>POL7</name> <description>Channel 7 Polarity</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -1458,8 +1454,6 @@ Selects the ratio between the number of counter overflows to the number of times
                   <field derivedFrom="CH0OC" > <name>CH3OC</name> <description>Channel 3 Software Output Control Enable</description> <bitOffset>3</bitOffset> </field>
                   <field derivedFrom="CH0OC" > <name>CH4OC</name> <description>Channel 4 Software Output Control Enable</description> <bitOffset>4</bitOffset> </field>
                   <field derivedFrom="CH0OC" > <name>CH5OC</name> <description>Channel 5 Software Output Control Enable</description> <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="CH0OC" > <name>CH6OC</name> <description>Channel 6 Software Output Control Enable</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="CH0OC" > <name>CH7OC</name> <description>Channel 7 Software Output Control Enable</description> <bitOffset>7</bitOffset> </field>
                   <field>
                      <name>CH0OCV</name>
                      <description>Channel 0 Software Output Control Value</description>
@@ -1483,8 +1477,6 @@ Selects the ratio between the number of counter overflows to the number of times
                   <field derivedFrom="CH0OCV" > <name>CH3OCV</name> <description>Channel 3 Software Output Control Value</description> <bitOffset>11</bitOffset> </field>
                   <field derivedFrom="CH0OCV" > <name>CH4OCV</name> <description>Channel 4 Software Output Control Value</description> <bitOffset>12</bitOffset> </field>
                   <field derivedFrom="CH0OCV" > <name>CH5OCV</name> <description>Channel 5 Software Output Control Value</description> <bitOffset>13</bitOffset> </field>
-                  <field derivedFrom="CH0OCV" > <name>CH6OCV</name> <description>Channel 6 Software Output Control Value</description> <bitOffset>14</bitOffset> </field>
-                  <field derivedFrom="CH0OCV" > <name>CH7OCV</name> <description>Channel 7 Software Output Control Value</description> <bitOffset>15</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -1515,8 +1507,6 @@ Selects the ratio between the number of counter overflows to the number of times
                   <field derivedFrom="CH0SEL" > <name>CH3SEL</name> <description>Channel 3 Select</description> <bitOffset>3</bitOffset> </field>
                   <field derivedFrom="CH0SEL" > <name>CH4SEL</name> <description>Channel 4 Select</description> <bitOffset>4</bitOffset> </field>
                   <field derivedFrom="CH0SEL" > <name>CH5SEL</name> <description>Channel 5 Select</description> <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="CH0SEL" > <name>CH6SEL</name> <description>Channel 6 Select</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="CH0SEL" > <name>CH7SEL</name> <description>Channel 7 Select</description> <bitOffset>7</bitOffset> </field>
                   <field>
                      <name>LDOK</name>
                      <description>Load Enable</description>

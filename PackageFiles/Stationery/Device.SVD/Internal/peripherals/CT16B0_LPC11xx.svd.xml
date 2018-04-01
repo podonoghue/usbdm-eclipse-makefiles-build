@@ -214,23 +214,12 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <name>CR0</name>
+               <dim>2</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1</dimIndex>
+               <name>CR%s</name>
                <description>Capture Register (CR). CR is loaded with the value of TC when there is an event on the CT16Bn_CAPm input</description>
                <addressOffset>0x2C</addressOffset>
-               <access>read-only</access>
-               <fields>
-                  <field>
-                     <name>CAP</name>
-                     <description>Timer counter capture value</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>16</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>CR1</name>
-               <description>Capture Register (CR). CR is loaded with the value of TC when there is an event on the CT16Bn_CAPm input</description>
-               <addressOffset>0x30</addressOffset>
                <access>read-only</access>
                <fields>
                   <field>

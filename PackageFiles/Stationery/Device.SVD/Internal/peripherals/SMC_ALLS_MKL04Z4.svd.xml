@@ -327,7 +327,7 @@ These bits control whether a Partial Stop mode is entered when STOPM=STOP</descr
             <register derivedFrom="STOPCTRL"> <name>VLLSCTRL</name><?hide?> <?doDerivedMacros?> <description>VLLS Control Register
 Provides various control bits allowing the user to fine tune
 power consumption during the stop mode selected by the STOPM field
-(Freescale old name)</description> </register>
+(Freescale old name)</description> <addressOffset>0x2</addressOffset> </register>
             <register>
                <name>PMSTAT</name>
                <description>Power Mode Status Register</description>

@@ -236,47 +236,12 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <name>ADR1</name>
+               <dim>3</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>1,2,3</dimIndex>
+               <name>ADR%s</name>
                <description>I2C Slave Address Register. Contains the 7-bit slave address for operation of the I2C interface in slave mode, and is not used in master mode. The least significant bit determines whether a slave responds to the General Call address</description>
                <addressOffset>0x20</addressOffset>
-               <fields>
-                  <field>
-                     <name>GC</name>
-                     <description>General Call enable bit</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>1</bitWidth>
-                  </field>
-                  <field>
-                     <name>Address</name>
-                     <description>The I2C device address for slave mode</description>
-                     <bitOffset>1</bitOffset>
-                     <bitWidth>7</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>ADR2</name>
-               <description>I2C Slave Address Register. Contains the 7-bit slave address for operation of the I2C interface in slave mode, and is not used in master mode. The least significant bit determines whether a slave responds to the General Call address</description>
-               <addressOffset>0x24</addressOffset>
-               <fields>
-                  <field>
-                     <name>GC</name>
-                     <description>General Call enable bit</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>1</bitWidth>
-                  </field>
-                  <field>
-                     <name>Address</name>
-                     <description>The I2C device address for slave mode</description>
-                     <bitOffset>1</bitOffset>
-                     <bitWidth>7</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>ADR3</name>
-               <description>I2C Slave Address Register. Contains the 7-bit slave address for operation of the I2C interface in slave mode, and is not used in master mode. The least significant bit determines whether a slave responds to the General Call address</description>
-               <addressOffset>0x28</addressOffset>
                <fields>
                   <field>
                      <name>GC</name>
@@ -307,48 +272,12 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <name>MASK0</name>
-               <description>I2C Slave address mask register. This mask register is associated with I2ADR0 to determine an address match. The mask register has no effect when comparing to the General Call address (zero)</description>
+               <dim>4</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3</dimIndex>
+               <name>MASK%s</name>
+               <description>I2C Slave address mask register. This mask register is associated with I2ADR%s to determine an address match. The mask register has no effect when comparing to the General Call address (zero)</description>
                <addressOffset>0x30</addressOffset>
-               <fields>
-                  <field>
-                     <name>MASK</name>
-                     <description>Mask bits</description>
-                     <bitOffset>1</bitOffset>
-                     <bitWidth>7</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>MASK1</name>
-               <description>I2C Slave address mask register. This mask register is associated with I2ADR0 to determine an address match. The mask register has no effect when comparing to the General Call address (zero)</description>
-               <addressOffset>0x34</addressOffset>
-               <fields>
-                  <field>
-                     <name>MASK</name>
-                     <description>Mask bits</description>
-                     <bitOffset>1</bitOffset>
-                     <bitWidth>7</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>MASK2</name>
-               <description>I2C Slave address mask register. This mask register is associated with I2ADR0 to determine an address match. The mask register has no effect when comparing to the General Call address (zero)</description>
-               <addressOffset>0x38</addressOffset>
-               <fields>
-                  <field>
-                     <name>MASK</name>
-                     <description>Mask bits</description>
-                     <bitOffset>1</bitOffset>
-                     <bitWidth>7</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>MASK3</name>
-               <description>I2C Slave address mask register. This mask register is associated with I2ADR0 to determine an address match. The mask register has no effect when comparing to the General Call address (zero)</description>
-               <addressOffset>0x3C</addressOffset>
                <fields>
                   <field>
                      <name>MASK</name>

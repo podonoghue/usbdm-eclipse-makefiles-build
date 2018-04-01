@@ -22,7 +22,7 @@ Devices using this peripheral:
          <registers>
             <register>
                <name>LVDSC1</name>
-               <description>Low Voltage Status and Control 1</description>
+               <description>Low Voltage Detect Status and Control 1 Register</description>
                <addressOffset>0x0</addressOffset>
                <size>8</size>
                <resetValue>0x10</resetValue>
@@ -227,7 +227,6 @@ LVWF is set when VSupply transitions below the trip point</description>
                <description>Regulator Status and Control</description>
                <addressOffset>0x2</addressOffset>
                <size>8</size>
-               <resetValue>0x4</resetValue>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>

@@ -46,8 +46,8 @@
       <xi:include href="peripherals/LPTMR0.svd.xml"/>
       <xi:include href="peripherals/MCG_MKL14Z4.svd.xml"/>
       <xi:include href="peripherals/MCM_MKL02Z4.svd.xml"/>
-      <xi:include href="peripherals/MTB.svd.xml"/>
-      <xi:include href="peripherals/MTBDWT_MKL.svd.xml"/>
+      <xi:include href="peripherals/MTB_MKE15Z7.svd.xml"/>
+      <xi:include href="peripherals/MTBDWT_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/NV_FTFA.svd.xml"/>
       <xi:include href="peripherals/NVIC_CM0.svd.xml"/>
       <xi:include href="peripherals/OSC0_MK.svd.xml"/>
@@ -58,7 +58,7 @@
       <peripheral derivedFrom="PORTA"><name>PORTC</name><baseAddress>0x4004B000</baseAddress></peripheral>
       <peripheral derivedFrom="PORTA"><name>PORTD</name><baseAddress>0x4004C000</baseAddress></peripheral>
       <peripheral derivedFrom="PORTA"><name>PORTE</name><baseAddress>0x4004D000</baseAddress></peripheral>
-      <xi:include href="peripherals/RCM_MKL14Z4.svd.xml"/>
+      <xi:include href="peripherals/RCM_MKL_0x4007F000.svd.xml"/>
       <xi:include href="peripherals/ROM_MKL.svd.xml"/>
       <xi:include href="peripherals/RTC_MKL04Z4.svd.xml"/>
       <xi:include href="peripherals/SCB_CM0.svd.xml"/>

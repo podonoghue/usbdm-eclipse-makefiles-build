@@ -1,0 +1,116 @@
+<!--
+Devices using this peripheral: 
+      MKM14Z5
+      MKM33Z5
+      MKM34Z5
+-->
+      <peripheral>
+         <?sourceFile "AIPS0_Lite_MKM" ?>
+         <name>AIPS0</name>
+         <description>AIPS-Lite Bridge</description>
+         <groupName>AIPS</groupName>
+         <headerStructName>AIPS</headerStructName>
+         <baseAddress>0x40000000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <offset>0x20</offset>
+            <size>0x40</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <dim>16</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
+               <name>PACR%s</name>
+               <description>Peripheral Access Control Register %s</description>
+               <addressOffset>0x20</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>AC7</name>
+                     <description>Attribute Check (User nonsecure, User secure, Privileged secure)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>3</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>000</name>
+                           <description>&quot;read/write-read/write-read/write&quot;</description>
+                           <value>0b000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>001</name>
+                           <description>&quot;read-read/write-read/write&quot;</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>010</name>
+                           <description>&quot;none-read/write-read/write&quot;</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>011</name>
+                           <description>&quot;read-read-read/write&quot;</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>100</name>
+                           <description>&quot;none-read-read/write&quot;</description>
+                           <value>0b100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>101</name>
+                           <description>&quot;none-none-read/write&quot;</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>110</name>
+                           <description>&quot;none-none-read&quot;</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>111</name>
+                           <description>&quot;none-none-none&quot;</description>
+                           <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RO7</name>
+                     <description>Read Only - Controls reads to corresponding AC field</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Writes allowed</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Writes ignored</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="AC7" > <name>AC6</name> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="RO7" > <name>RO6</name> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="AC7" > <name>AC5</name> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="RO7" > <name>RO5</name> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="AC7" > <name>AC4</name> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="RO7" > <name>RO4</name> <bitOffset>15</bitOffset> </field>
+                  <field derivedFrom="AC7" > <name>AC3</name> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="RO7" > <name>RO3</name> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="AC7" > <name>AC2</name> <bitOffset>20</bitOffset> </field>
+                  <field derivedFrom="RO7" > <name>RO2</name> <bitOffset>23</bitOffset> </field>
+                  <field derivedFrom="AC7" > <name>AC1</name> <bitOffset>24</bitOffset> </field>
+                  <field derivedFrom="RO7" > <name>RO1</name> <bitOffset>27</bitOffset> </field>
+                  <field derivedFrom="AC7" > <name>AC0</name> <bitOffset>28</bitOffset> </field>
+                  <field derivedFrom="RO7" > <name>RO0</name> <bitOffset>31</bitOffset> </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

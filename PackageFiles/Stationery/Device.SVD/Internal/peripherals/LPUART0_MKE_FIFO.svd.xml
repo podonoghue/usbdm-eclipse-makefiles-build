@@ -5,13 +5,17 @@ Devices using this peripheral:
       MKE15Z7
       MKE16F16
       MKE18F16
+      S32K142
+      S32K144
+      S32K146
+      S32K148
 -->
       <peripheral>
          <?sourceFile "LPUART0_MKE_FIFO" ?>
          <name>LPUART0</name>
          <description>Low Power Universal Asynchronous Receiver/Transmitter</description>
          <groupName>LPUART</groupName>
-         <headerStructName>LPUART0</headerStructName>
+         <headerStructName>LPUART</headerStructName>
          <baseAddress>0x4006A000</baseAddress>
          <size>32</size>
          <access>read-write</access>
@@ -37,12 +41,12 @@ Devices using this peripheral:
                      <bitWidth>16</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b1</name>
+                           <name>0b0000000000000001</name>
                            <description>Standard feature set</description>
                            <value>0b1</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b11</name>
+                           <name>0b0000000000000011</name>
                            <description>Standard feature set with MODEM/IrDA support</description>
                            <value>0b11</value>
                         </enumeratedValue>
@@ -320,6 +324,158 @@ an invalid oversampling ratio will default to an oversampling ratio of 16 (01111
 changed when the transmitter and receiver are both disabled</description>
                      <bitOffset>24</bitOffset>
                      <bitWidth>5</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00000</name>
+                           <description>Oversampling ratio of 16</description>
+                           <value>0b00000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b00011</name>
+                           <description>Oversampling ratio of 4, requires BOTHEDGE to be set</description>
+                           <value>0b00011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b00100</name>
+                           <description>Oversampling ratio of 5, requires BOTHEDGE to be set</description>
+                           <value>0b00100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b00101</name>
+                           <description>Oversampling ratio of 6, requires BOTHEDGE to be set</description>
+                           <value>0b00101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b00110</name>
+                           <description>Oversampling ratio of 7, requires BOTHEDGE to be set</description>
+                           <value>0b00110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b00111</name>
+                           <description>Oversampling ratio of 8</description>
+                           <value>0b00111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01000</name>
+                           <description>Oversampling ratio of 9</description>
+                           <value>0b01000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01001</name>
+                           <description>Oversampling ratio of 10</description>
+                           <value>0b01001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01010</name>
+                           <description>Oversampling ratio of 11</description>
+                           <value>0b01010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01011</name>
+                           <description>Oversampling ratio of 12</description>
+                           <value>0b01011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01100</name>
+                           <description>Oversampling ratio of 13</description>
+                           <value>0b01100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01101</name>
+                           <description>Oversampling ratio of 14</description>
+                           <value>0b01101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01110</name>
+                           <description>Oversampling ratio of 15</description>
+                           <value>0b01110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01111</name>
+                           <description>Oversampling ratio of 16</description>
+                           <value>0b01111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10000</name>
+                           <description>Oversampling ratio of 17</description>
+                           <value>0b10000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10001</name>
+                           <description>Oversampling ratio of 18</description>
+                           <value>0b10001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10010</name>
+                           <description>Oversampling ratio of 19</description>
+                           <value>0b10010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10011</name>
+                           <description>Oversampling ratio of 20</description>
+                           <value>0b10011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10100</name>
+                           <description>Oversampling ratio of 21</description>
+                           <value>0b10100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10101</name>
+                           <description>Oversampling ratio of 22</description>
+                           <value>0b10101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10110</name>
+                           <description>Oversampling ratio of 23</description>
+                           <value>0b10110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10111</name>
+                           <description>Oversampling ratio of 24</description>
+                           <value>0b10111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11000</name>
+                           <description>Oversampling ratio of 25</description>
+                           <value>0b11000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11001</name>
+                           <description>Oversampling ratio of 26</description>
+                           <value>0b11001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11010</name>
+                           <description>Oversampling ratio of 27</description>
+                           <value>0b11010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11011</name>
+                           <description>Oversampling ratio of 28</description>
+                           <value>0b11011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11100</name>
+                           <description>Oversampling ratio of 29</description>
+                           <value>0b11100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11101</name>
+                           <description>Oversampling ratio of 30</description>
+                           <value>0b11101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11110</name>
+                           <description>Oversampling ratio of 31</description>
+                           <value>0b11110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11111</name>
+                           <description>Oversampling ratio of 32</description>
+                           <value>0b11111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>M10</name>

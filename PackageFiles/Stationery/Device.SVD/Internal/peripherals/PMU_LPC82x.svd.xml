@@ -108,22 +108,7 @@ Devices using this peripheral:
                   </field>
                </fields>
             </register>
-            <register>
-               <dim>3</dim>
-               <dimIncrement>4</dimIncrement>
-               <dimIndex>1,2,3</dimIndex>
-               <name>GPREG%s</name>
-               <description>General purpose register 0</description>
-               <addressOffset>0x8</addressOffset>
-               <resetMask>0x0</resetMask>
-               <fields>
-                  <field>
-                     <name>GPDATA</name>
-                     <description>Data retained during Deep power-down mode</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
+            <register derivedFrom="GPREG0"><dim>3</dim><dimIncrement>4</dimIncrement><dimIndex>1,2,3</dimIndex> <name>GPREG%s</name> <addressOffset>0x8</addressOffset> <resetMask>0x0</resetMask> </register>
             <register>
                <name>DPDCTRL</name>
                <description>Deep power-down control register. Also includes bits for general purpose storage</description>

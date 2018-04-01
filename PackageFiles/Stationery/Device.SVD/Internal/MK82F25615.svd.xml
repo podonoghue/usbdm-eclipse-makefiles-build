@@ -22,10 +22,10 @@
    <width>32</width>
    <peripherals>
       <xi:include href="peripherals/ADC0_DIFF_A.svd.xml"/>
-      <xi:include href="peripherals/AIPS0_MK82F25615.svd.xml"/>
-      <xi:include href="peripherals/AIPS1_MK82F25615.svd.xml"/>
+      <xi:include href="peripherals/AIPS0_Lite_8Mx16P.svd.xml"/>
+      <peripheral derivedFrom="AIPS0"><name>AIPS1</name><baseAddress>0x40080000</baseAddress></peripheral>
       <xi:include href="peripherals/AXBS_MK82F25615.svd.xml"/>
-      <xi:include href="peripherals/CAU_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/CAU_0.svd.xml"/>
       <xi:include href="peripherals/CMP0_MKV.svd.xml"/>
       <peripheral derivedFrom="CMP0"><name>CMP1</name><baseAddress>0x40073008</baseAddress></peripheral>
       <xi:include href="peripherals/CMT_0.svd.xml"/>
@@ -33,7 +33,7 @@
       <xi:include href="peripherals/DAC0_16CH_FIFO16_0x400CC000.svd.xml"/>
       <xi:include href="peripherals/DMA0_32CH_EARS.svd.xml"/>
       <xi:include href="peripherals/DMAMUX0_32CH_TRIG_SPLIT_MK82F15.svd.xml"/>
-      <xi:include href="peripherals/EMVSIM0_MK82F25615.svd.xml"/>
+      <xi:include href="peripherals/EMVSIM0_0x400D4000.svd.xml"/>
       <peripheral derivedFrom="EMVSIM0"><name>EMVSIM1</name><baseAddress>0x400D5000</baseAddress></peripheral>
       <xi:include href="peripherals/EWM_INT_PR_CLK.svd.xml"/>
       <xi:include href="peripherals/FB.svd.xml"/>
@@ -41,7 +41,7 @@
       <xi:include href="peripherals/FMC_MK82F25615.svd.xml"/>
       <xi:include href="peripherals/FTFA_XACCH.svd.xml"/>
       <xi:include href="peripherals/FTM0_8CH_ICRST.svd.xml"/>
-      <xi:include href="peripherals/FTM1_8CH_ICRST.svd.xml"/>
+      <xi:include href="peripherals/FTM1_2CH_ICRST.svd.xml"/>
       <peripheral derivedFrom="FTM1"><name>FTM2</name><baseAddress>0x4003A000</baseAddress></peripheral>
       <peripheral derivedFrom="FTM0"><name>FTM3</name><baseAddress>0x400B9000</baseAddress></peripheral>
       <xi:include href="peripherals/GPIOA_0x400FF000.svd.xml"/>
@@ -70,7 +70,7 @@
       <xi:include href="peripherals/NV_MK_BOOTOPT.svd.xml"/>
       <xi:include href="peripherals/OSC0_DIV.svd.xml"/>
       <xi:include href="peripherals/OTFAD_MK82F25615.svd.xml"/>
-      <xi:include href="peripherals/PDB0_1CH_2TRIG_1DAC_2PO.svd.xml"/>
+      <xi:include href="peripherals/PDB0_1CH_2PT_1DAC_2PO.svd.xml"/>
       <xi:include href="peripherals/PIT_4CH_CHAIN.svd.xml"/>
       <xi:include href="peripherals/PMC_HVD.svd.xml"/>
       <xi:include href="peripherals/PORTA.svd.xml"/>

@@ -1163,41 +1163,7 @@ Devices using this peripheral:
                   </field>
                </fields>
             </register>
-            <register>
-               <dim>3</dim>
-               <dimIncrement>4</dimIncrement>
-               <dimIndex>1,2,3</dimIndex>
-               <name>SLVADR%s</name>
-               <description>Slave address 0</description>
-               <addressOffset>0x4C</addressOffset>
-               <resetMask>0x0</resetMask>
-               <fields>
-                  <field>
-                     <name>SADISABLE</name>
-                     <description>Slave Address n Disable</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>ENABLED</name>
-                           <description>Enabled. Slave Address n is enabled and will be recognized with any changes specified by the SLVQUAL0 register</description>
-                           <value>0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>IGNORED_SLAVE_ADDRES</name>
-                           <description>Ignored Slave Address n is ignored</description>
-                           <value>1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>SLVADR</name>
-                     <description>Seven bit slave address that is compared to received addresses if enabled</description>
-                     <bitOffset>1</bitOffset>
-                     <bitWidth>7</bitWidth>
-                  </field>
-               </fields>
-            </register>
+            <register derivedFrom="SLVADR0"><dim>3</dim><dimIncrement>4</dimIncrement><dimIndex>1,2,3</dimIndex> <name>SLVADR%s</name> <addressOffset>0x4C</addressOffset> <resetValue>0x0</resetValue> <resetMask>0x0</resetMask> </register>
             <register>
                <name>SLVQUAL0</name>
                <description>Slave Qualification for address 0</description>

@@ -23,6 +23,10 @@ Devices using this peripheral:
       MKV31F12810
       MKV31F25612
       MKV31F51212
+      S32K142
+      S32K144
+      S32K146
+      S32K148
 -->
       <peripheral>
          <?sourceFile "EWM_INT_PR" ?>

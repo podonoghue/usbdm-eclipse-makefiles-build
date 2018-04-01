@@ -16,6 +16,9 @@ Devices using this peripheral:
          <access>read-write</access>
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
+         <parameters>
+            <parameter> <value>6</value> <name>CONTROLS_COUNT</name> <description>Number of FTM channels</description></parameter>
+         </parameters>
          <addressBlock>
             <offset>0x0</offset>
             <size>0x3C</size>
@@ -194,9 +197,8 @@ An interrupt is generated when TOF equals one</description>
                </fields>
             </register>
             <cluster>
-               <dim>6</dim>
+               <dim>%CONTROLS_COUNT</dim>
                <dimIncrement>8</dimIncrement>
-               <dimIndex>0,1,2,3,4,5</dimIndex>
                <name>CONTROLS,@pC@i@f</name>
                <addressOffset>0xC</addressOffset>
                <register>

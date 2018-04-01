@@ -22,13 +22,13 @@
    <width>32</width>
    <peripherals>
       <xi:include href="peripherals/ADC0_DIFF_A.svd.xml"/>
-      <xi:include href="peripherals/AIPS_MKL82Z7.svd.xml"/>
+      <xi:include href="peripherals/AIPS0_Lite_8Mx16P.svd.xml"/>
       <xi:include href="peripherals/CMP0_MKV.svd.xml"/>
       <xi:include href="peripherals/CRC0_0x40032000.svd.xml"/>
       <xi:include href="peripherals/DAC0_16CH_MKL82Z7.svd.xml"/>
-      <xi:include href="peripherals/DMA0_MKE15Z7.svd.xml"/>
+      <xi:include href="peripherals/DMA0_8CH_EARS_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/DMAMUX0_8CH_MKL82Z7.svd.xml"/>
-      <xi:include href="peripherals/EMVSIM0_MKL82Z7.svd.xml"/>
+      <xi:include href="peripherals/EMVSIM0_0x4004E000.svd.xml"/>
       <peripheral derivedFrom="EMVSIM0"><name>EMVSIM1</name><baseAddress>0x4004F000</baseAddress></peripheral>
       <xi:include href="peripherals/EWM_INT_PR.svd.xml"/>
       <xi:include href="peripherals/FGPIOA_0xF8000000.svd.xml"/>
@@ -56,7 +56,7 @@
       <xi:include href="peripherals/MCG_MK82F25615.svd.xml"/>
       <xi:include href="peripherals/MCM_MKL82Z7.svd.xml"/>
       <xi:include href="peripherals/MPU_MKL82Z7.svd.xml"/>
-      <xi:include href="peripherals/MTB_MKL82Z7.svd.xml"/>
+      <xi:include href="peripherals/MTB_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/MTBDWT_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/NV_MKL82Z7.svd.xml"/>
       <xi:include href="peripherals/OSC_MKL82Z7.svd.xml"/>

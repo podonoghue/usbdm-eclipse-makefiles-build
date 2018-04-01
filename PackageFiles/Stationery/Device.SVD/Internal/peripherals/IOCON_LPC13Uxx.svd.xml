@@ -3600,7 +3600,10 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <name>PIO1_7</name>
+               <dim>2</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>7,8</dimIndex>
+               <name>PIO1_%s</name>
                <description>I/O configuration for pin PIO1_7</description>
                <addressOffset>0x7C</addressOffset>
                <resetMask>0x0</resetMask>
@@ -3703,215 +3706,12 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <name>PIO1_8</name>
-               <description>I/O configuration for pin PIO1_7</description>
-               <addressOffset>0x80</addressOffset>
-               <resetMask>0x0</resetMask>
-               <fields>
-                  <field>
-                     <name>FUNC</name>
-                     <description>Selects pin function. Values 0x2 to 0x7 are reserved</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>3</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>PIO1_7_</name>
-                           <description>PIO1_7</description>
-                           <value>0x0</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>MODE</name>
-                     <description>Selects function mode (on-chip pull-up/pull-down resistor control)</description>
-                     <bitOffset>3</bitOffset>
-                     <bitWidth>2</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>INACTIVE_NO_PULL_DO</name>
-                           <description>Inactive (no pull-down/pull-up resistor enabled)</description>
-                           <value>0x0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>PULL_DOWN_RESISTOR_E</name>
-                           <description>Pull-down resistor enabled</description>
-                           <value>0x1</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>PULL_UP_RESISTOR_ENA</name>
-                           <description>Pull-up resistor enabled</description>
-                           <value>0x2</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>REPEATER_MODE_</name>
-                           <description>Repeater mode</description>
-                           <value>0x3</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>HYS</name>
-                     <description>Hysteresis</description>
-                     <bitOffset>5</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>DISABLE_</name>
-                           <description>Disable</description>
-                           <value>0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>ENABLE_</name>
-                           <description>Enable</description>
-                           <value>1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>INV</name>
-                     <description>Invert input</description>
-                     <bitOffset>6</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>INPUT_NOT_INVERTED_</name>
-                           <description>Input not inverted (HIGH on pin reads as 1, LOW on pin reads as 0)</description>
-                           <value>0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>INPUT_INVERTED_HIGH</name>
-                           <description>Input inverted (HIGH on pin reads as 0, LOW on pin reads as 1)</description>
-                           <value>1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>OD</name>
-                     <description>Open-drain mode</description>
-                     <bitOffset>10</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>DISABLE_</name>
-                           <description>Disable</description>
-                           <value>0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>OPEN_DRAIN_MODE_ENAB</name>
-                           <description>Open-drain mode enabled. This is not a true open-drain mode. Input cannot be pulled up above VDD</description>
-                           <value>1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>PIO1_10</name>
+               <dim>2</dim>
+               <dimIncrement>4</dimIncrement>
+               <dimIndex>10,11</dimIndex>
+               <name>PIO1_%s</name>
                <description>I/O configuration for pin PIO1_10</description>
                <addressOffset>0x88</addressOffset>
-               <resetMask>0x0</resetMask>
-               <fields>
-                  <field>
-                     <name>FUNC</name>
-                     <description>Selects pin function. Values 0x1 to 0x7 are reserved</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>3</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>PIO1_10_</name>
-                           <description>PIO1_10</description>
-                           <value>0x0</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>MODE</name>
-                     <description>Selects function mode (on-chip pull-up/pull-down resistor control)</description>
-                     <bitOffset>3</bitOffset>
-                     <bitWidth>2</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>INACTIVE_NO_PULL_DO</name>
-                           <description>Inactive (no pull-down/pull-up resistor enabled)</description>
-                           <value>0x0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>PULL_DOWN_RESISTOR_E</name>
-                           <description>Pull-down resistor enabled</description>
-                           <value>0x1</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>PULL_UP_RESISTOR_ENA</name>
-                           <description>Pull-up resistor enabled</description>
-                           <value>0x2</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>REPEATER_MODE_</name>
-                           <description>Repeater mode</description>
-                           <value>0x3</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>HYS</name>
-                     <description>Hysteresis</description>
-                     <bitOffset>5</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>DISABLE_</name>
-                           <description>Disable</description>
-                           <value>0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>ENABLE_</name>
-                           <description>Enable</description>
-                           <value>1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>INV</name>
-                     <description>Invert input</description>
-                     <bitOffset>6</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>INPUT_NOT_INVERTED_</name>
-                           <description>Input not inverted (HIGH on pin reads as 1, LOW on pin reads as 0)</description>
-                           <value>0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>INPUT_INVERTED_HIGH</name>
-                           <description>Input inverted (HIGH on pin reads as 0, LOW on pin reads as 1)</description>
-                           <value>1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>OD</name>
-                     <description>Open-drain mode</description>
-                     <bitOffset>10</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>DISABLE_</name>
-                           <description>Disable</description>
-                           <value>0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>OPEN_DRAIN_MODE_ENAB</name>
-                           <description>Open-drain mode enabled. This is not a true open-drain mode. Input cannot be pulled up above VDD</description>
-                           <value>1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>PIO1_11</name>
-               <description>I/O configuration for pin PIO1_10</description>
-               <addressOffset>0x8C</addressOffset>
                <resetMask>0x0</resetMask>
                <fields>
                   <field>

@@ -353,28 +353,12 @@ This field defines the number of wait states required to access the bank 0 flash
                <name>TAGVDW,@pTAGVDW@i@f</name>
                <addressOffset>0x100</addressOffset>
                <register>
-                  <name>S0</name>
+                  <dim>2</dim>
+                  <dimIncrement>4</dimIncrement>
+                  <dimIndex>0,1</dimIndex>
+                  <name>S%s</name>
                   <description>Cache Tag Storage</description>
                   <addressOffset>0x0</addressOffset>
-                  <fields>
-                     <field>
-                        <name>valid</name>
-                        <description>1-bit valid for cache entry</description>
-                        <bitOffset>0</bitOffset>
-                        <bitWidth>1</bitWidth>
-                     </field>
-                     <field>
-                        <name>tag</name>
-                        <description>Tag for cache entry</description>
-                        <bitOffset>5</bitOffset>
-                        <bitWidth>15</bitWidth>
-                     </field>
-                  </fields>
-               </register>
-               <register>
-                  <name>S1</name>
-                  <description>Cache Tag Storage</description>
-                  <addressOffset>0x4</addressOffset>
                   <fields>
                      <field>
                         <name>valid</name>

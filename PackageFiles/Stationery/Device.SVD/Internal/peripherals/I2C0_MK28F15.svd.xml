@@ -2,6 +2,11 @@
 Devices using this peripheral: 
       MK28F15
       MK82F25615
+      MKL17Z4
+      MKL27Z4
+      MKL27Z644
+      MKL33Z4
+      MKL43Z4
 -->
       <peripheral>
          <?sourceFile "I2C0_MK28F15" ?>
@@ -516,7 +521,9 @@ For any glitch whose size is less than or equal to this width setting, the filte
                   </field>
                   <field>
                      <name>STARTF</name>
-                     <description>I2C Bus Start Detect Flag</description>
+                     <description>Bus Start Detect Flag\n
+Hardware sets this bit when the I2C bus&apos;s start status is detected. The STARTF bit must be cleared by
+writing 1 to it</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -534,25 +541,30 @@ For any glitch whose size is less than or equal to this width setting, the filte
                   </field>
                   <field>
                      <name>SSIE</name>
-                     <description>I2C Bus Stop or Start Interrupt Enable</description>
+                     <description>Bus Stop or Start Interrupt Enable
+This bit enables the interrupt for I2C bus stop or start detection.\n
+NOTE: To clear the detection interrupt: In the interrupt service routine, first clear the STOPF or STARTF bit by writing 1 to it,
+ and then clear the IICIF bit in the status register. If this sequence is reversed, the IICIF bit is asserted again</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Stop or start detection interrupt is disabled</description>
+                           <description>Interrupt disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Stop or start detection interrupt is enabled</description>
+                           <description>Interrupt enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>STOPF</name>
-                     <description>I2C Bus Stop Detect Flag</description>
+                     <description>Bus Stop Detect Flag: 
+Hardware sets this bit when the I2C bus&apos;s stop status is detected. The STOPF bit must be cleared by
+writing 1 to it</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -570,7 +582,8 @@ For any glitch whose size is less than or equal to this width setting, the filte
                   </field>
                   <field>
                      <name>SHEN</name>
-                     <description>Stop Hold Enable</description>
+                     <description>Stop Hold Enable\n
+Set this bit to hold off entry to stop mode when any data transmission or reception is occurring</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -796,7 +809,7 @@ This field is used on the device default address or other related addresses</des
             </register>
             <register>
                <name>S2</name>
-               <description>I2C Status register 2</description>
+               <description>Status register 2</description>
                <addressOffset>0xC</addressOffset>
                <size>8</size>
                <resetValue>0x1</resetValue>

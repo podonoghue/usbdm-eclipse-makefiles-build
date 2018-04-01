@@ -683,7 +683,7 @@ Not present in all devices</description>
                <name>RXMGMASK</name>
                <description>Rx Mailboxes Global Mask Register</description>
                <addressOffset>0x10</addressOffset>
-               <resetValue>0xFFFFFFFF</resetValue>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>MG</name>
@@ -708,7 +708,7 @@ Not present in all devices</description>
                <name>RX14MASK</name>
                <description>Rx 14 Mask register</description>
                <addressOffset>0x14</addressOffset>
-               <resetValue>0xFFFFFFFF</resetValue>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>RX14M</name>
@@ -733,7 +733,7 @@ Not present in all devices</description>
                <name>RX15MASK</name>
                <description>Rx 15 Mask register</description>
                <addressOffset>0x18</addressOffset>
-               <resetValue>0xFFFFFFFF</resetValue>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>RX15M</name>
@@ -869,7 +869,7 @@ Not present in all devices</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1x</name>
+                           <name>0b1x</name>
                            <description>Bus Off</description>
                            <value>0b1x</value>
                         </enumeratedValue>
@@ -896,7 +896,7 @@ Not present in all devices</description>
                   </field>
                   <field>
                      <name>IDLE</name>
-                     <description>no description available</description>
+                     <description>This bit indicates when CAN bus is in IDLE state</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
@@ -1495,7 +1495,7 @@ Not present in all devices</description>
                <name>RXFGMASK</name>
                <description>Rx FIFO Global Mask register</description>
                <addressOffset>0x48</addressOffset>
-               <resetValue>0xFFFFFFFF</resetValue>
+               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>FGM</name>

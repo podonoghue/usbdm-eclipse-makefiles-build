@@ -357,87 +357,8 @@ Devices using this peripheral:
                   </field>
                </fields>
             </register>
-            <register>
-               <name>GPTIMER1LD</name>
-               <description>General Purpose Timer n Load Register</description>
-               <addressOffset>0x88</addressOffset>
-               <fields>
-                  <field>
-                     <name>GPTLD</name>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>24</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>GPTIMER1CTL</name>
-               <description>General Purpose Timer n Control Register</description>
-               <addressOffset>0x8C</addressOffset>
-               <fields>
-                  <field>
-                     <name>GPTCNT</name>
-                     <description>Timer Count</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>24</bitWidth>
-                     <access>read-only</access>
-                  </field>
-                  <field>
-                     <name>MODE</name>
-                     <description>Timer Mode</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>One shot</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Repeat</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>RST</name>
-                     <description>Timer Reset</description>
-                     <bitOffset>30</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <access>write-only</access>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>No action</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Load counter value</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>RUN</name>
-                     <description>Timer Run</description>
-                     <bitOffset>31</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Timer stop</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Timer run</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-               </fields>
-            </register>
+            <register derivedFrom="GPTIMER0LD"> <name>GPTIMER1LD</name> <addressOffset>0x88</addressOffset> </register>
+            <register derivedFrom="GPTIMER0CTL"> <name>GPTIMER1CTL</name> <addressOffset>0x8C</addressOffset> </register>
             <register>
                <name>USB_SBUSCFG</name>
                <description>System Bus Interface Configuration Register</description>

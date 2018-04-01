@@ -9,12 +9,15 @@ Devices using this peripheral:
          <name>ADC0</name>
          <description>Analog-to-Digital Converter</description>
          <groupName>ADC</groupName>
-         <headerStructName>ADC0</headerStructName>
+         <headerStructName>ADC</headerStructName>
          <baseAddress>0x4003B000</baseAddress>
          <size>32</size>
          <access>read-write</access>
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
+         <parameters>
+            <parameter> <value>16</value> <name>SC1_COUNT</name> <description>Number of ADC channels</description></parameter>
+         </parameters>
          <addressBlock>
             <offset>0x0</offset>
             <size>0xEC</size>
@@ -22,11 +25,10 @@ Devices using this peripheral:
          </addressBlock>
          <registers>
             <register>
-               <dim>16</dim>
+               <dim>%SC1_COUNT</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
                <name>SC1%s</name>
-               <description>ADC Status and Control Register 1</description>
+               <description>Status and Control Register 1</description>
                <addressOffset>0x0</addressOffset>
                <resetMask>0x0</resetMask>
                <fields>
@@ -168,12 +170,12 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11101</name>
-                           <description>VREFSH is selected as input. Voltage reference selected is determined by SC2[REFSEL]</description>
+                           <description>VREFSH from SC2[REFSEL]</description>
                            <value>0b11101</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11110</name>
-                           <description>VREFSL is selected as input. Voltage reference selected is determined by SC2[REFSEL]</description>
+                           <description>VREFSL from SC2[REFSEL]</description>
                            <value>0b11110</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -224,7 +226,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>CFG1</name>
-               <description>ADC Configuration Register 1</description>
+               <description>Configuration Register 1</description>
                <addressOffset>0x40</addressOffset>
                <fields>
                   <field>
@@ -257,7 +259,8 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>MODE</name>
-                     <description>Conversion mode selection</description>
+                     <description>ADC resolution\n
+Single-ended/Differential(if available)</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
@@ -286,22 +289,22 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>The divide ratio is 1 and the clock rate is input clock</description>
+                           <description>Divide by 1</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>The divide ratio is 2 and the clock rate is (input clock)/2</description>
+                           <description>Divide by 2</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>The divide ratio is 4 and the clock rate is (input clock)/4</description>
+                           <description>Divide by 4</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>The divide ratio is 8 and the clock rate is (input clock)/8</description>
+                           <description>Divide by 8</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -310,7 +313,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>CFG2</name>
-               <description>ADC Configuration Register 2</description>
+               <description>Configuration Register 2</description>
                <addressOffset>0x44</addressOffset>
                <resetValue>0xC</resetValue>
                <fields>
@@ -323,11 +326,10 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>16</dim>
+               <dim>%SC1_COUNT</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
                <name>R%s</name>
-               <description>ADC Data Result</description>
+               <description>Data Result Register</description>
                <addressOffset>0x48</addressOffset>
                <access>read-only</access>
                <resetMask>0x0</resetMask>
@@ -353,7 +355,7 @@ Devices using this peripheral:
                      <name>CV</name>
                      <description>Compare Value</description>
                      <bitOffset>0</bitOffset>
-                     <bitWidth>12</bitWidth>
+                     <bitWidth>16</bitWidth>
                   </field>
                </fields>
             </register>
@@ -370,13 +372,18 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>Default voltage reference pin pair, that is, external pins VREFH and VREFL</description>
+                           <description>VREFH and VREFL</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>Alternate reference voltage, that is, VALTH. This voltage may be additional external pin or internal source depending on the MCU configuration. See the chip configuration information for details specific to this MCU</description>
+                           <description>VALTH and VALTL</description>
                            <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1X</name>
+                           <description>Reserved</description>
+                           <value>0b1X</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -388,48 +395,50 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>DMA is disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>DMA is enabled and will assert the ADC DMA request during an ADC conversion complete event , which is indicated when any SC1n[COCO] flag is asserted</description>
+                           <description>Enabled\t Request will be asserted when conversion completes</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>ACREN</name>
-                     <description>Compare Function Range Enable</description>
+                     <description>Compare Function Range Enable\n
+Controls whether a single threshold is used (CV1) or an range defined by CV1 &amp; CV2</description>
                      <bitOffset>3</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Range function disabled. Only CV1 is compared</description>
+                           <description>Single - CV1</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Range function enabled. Both CV1 and CV2 are compared</description>
+                           <description>Range - CV1 &amp; CV2</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>ACFGT</name>
-                     <description>Compare Function Greater Than Enable</description>
+                     <description>Compare Function Greater Than Enable\n
+Functionality will be based on the values placed in CV1 and CV2</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Configures less than threshold, outside range not inclusive and inside range not inclusive; functionality based on the values placed in CV1 and CV2</description>
+                           <description>Exclusive\t- Configures &lt; threshold, outside and inside range exclusive</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Configures greater than or equal to threshold, outside and inside ranges inclusive; functionality based on the values placed in CV1 and CV2</description>
+                           <description>Inclusive\t- Configures &gt;= threshold, outside and inside ranges inclusive</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -442,12 +451,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Compare function disabled</description>
+                           <description>Compare disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Compare function enabled</description>
+                           <description>Compare enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -460,12 +469,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Software trigger selected</description>
+                           <description>Software trigger</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Hardware trigger selected</description>
+                           <description>Hardware trigger</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -479,12 +488,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Conversion not in progress</description>
+                           <description>Idle</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Conversion in progress</description>
+                           <description>In progress</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -498,28 +507,29 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>AVGS</name>
-                     <description>Hardware Average Select</description>
+                     <description>Hardware Average Select\n
+Selects the number of averages taken if hardware averaging is enabled</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>4 samples averaged</description>
+                           <description>4 samples</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>8 samples averaged</description>
+                           <description>8 samples</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>16 samples averaged</description>
+                           <description>16 samples</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>32 samples averaged</description>
+                           <description>32 samples</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -532,57 +542,53 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Hardware average function disabled</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Hardware average function enabled</description>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>ADCO</name>
-                     <description>Continuous Conversion Enable</description>
+                     <description>Continuous Conversion Enable\n
+Enables continuous conversions or sets of conversions (when averaging) after an initial trigger</description>
                      <bitOffset>3</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>One conversion will be performed (or one set of conversions, if AVGE is set) after a conversion is initiated</description>
+                           <description>One set of conversions</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Continuous conversions will be performed (or continuous sets of conversions, if AVGE is set) after a conversion is initiated</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>CALF</name>
-                     <description>Calibration Failed Flag</description>
-                     <bitOffset>6</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Calibration completed normally</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Calibration failed. ADC accuracy specifications are not guaranteed</description>
+                           <description>Continuous conversions</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>CAL</name>
-                     <description>Calibration</description>
+                     <description>Calibration\n
+Write 1 to begin the calibration sequence, clears when complete</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Calibration Idle</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>w1 start/r1 busy</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                </fields>
             </register>
@@ -590,7 +596,7 @@ Devices using this peripheral:
                <name>BASE_OFS</name>
                <description>BASE Offset Register</description>
                <addressOffset>0x98</addressOffset>
-               <resetValue>0x43</resetValue>
+               <resetValue>0x40</resetValue>
                <fields>
                   <field>
                      <name>BA_OFS</name>
@@ -602,14 +608,14 @@ Devices using this peripheral:
             </register>
             <register>
                <name>OFS</name>
-               <description>ADC Offset Correction Register</description>
+               <description>Offset Correction Register</description>
                <addressOffset>0x9C</addressOffset>
                <fields>
                   <field>
                      <name>OFS</name>
                      <description>Offset Error Correction Value</description>
                      <bitOffset>0</bitOffset>
-                     <bitWidth>12</bitWidth>
+                     <bitWidth>16</bitWidth>
                   </field>
                </fields>
             </register>
@@ -628,9 +634,9 @@ Devices using this peripheral:
             </register>
             <register>
                <name>XOFS</name>
-               <description>ADC X Offset Correction Register</description>
+               <description>X Offset Correction Register</description>
                <addressOffset>0xA4</addressOffset>
-               <resetValue>0x6</resetValue>
+               <resetValue>0x30</resetValue>
                <fields>
                   <field>
                      <name>XOFS</name>
@@ -642,7 +648,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>YOFS</name>
-               <description>ADC Y Offset Correction Register</description>
+               <description>Y Offset Correction Register</description>
                <addressOffset>0xA8</addressOffset>
                <resetValue>0x37</resetValue>
                <fields>
@@ -656,7 +662,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>G</name>
-               <description>ADC Gain Register</description>
+               <description>Gain Register</description>
                <addressOffset>0xAC</addressOffset>
                <resetValue>0x2F0</resetValue>
                <fields>
@@ -670,7 +676,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>UG</name>
-               <description>ADC User Gain Register</description>
+               <description>User Gain Register</description>
                <addressOffset>0xB0</addressOffset>
                <resetValue>0x4</resetValue>
                <fields>
@@ -684,7 +690,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>CLPS</name>
-               <description>ADC General Calibration Value Register S</description>
+               <description>General Calibration Value Register S</description>
                <addressOffset>0xB4</addressOffset>
                <resetValue>0x2E</resetValue>
                <fields>
@@ -698,7 +704,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>CLP3</name>
-               <description>ADC Plus-Side General Calibration Value Register</description>
+               <description>Plus-Side General Calibration Value Register 3</description>
                <addressOffset>0xB8</addressOffset>
                <resetValue>0x180</resetValue>
                <fields>
@@ -711,16 +717,27 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>2</dim>
-               <dimIncrement>4</dimIncrement>
-               <dimIndex>2,1</dimIndex>
-               <name>CLP%s</name>
-               <description>ADC Plus-Side General Calibration Value Register</description>
+               <name>CLP2</name>
+               <description>Plus-Side General Calibration Value Register 2</description>
                <addressOffset>0xBC</addressOffset>
-               <resetMask>0x0</resetMask>
+               <resetValue>0xB8</resetValue>
                <fields>
                   <field>
                      <name>CLP2</name>
+                     <description>Calibration Value</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>CLP1</name>
+               <description>Plus-Side General Calibration Value Register 1</description>
+               <addressOffset>0xC0</addressOffset>
+               <resetValue>0x5C</resetValue>
+               <fields>
+                  <field>
+                     <name>CLP1</name>
                      <description>Calibration Value</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>9</bitWidth>
@@ -729,7 +746,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>CLP0</name>
-               <description>ADC Plus-Side General Calibration Value Register 0</description>
+               <description>Plus-Side General Calibration Value Register 0</description>
                <addressOffset>0xC4</addressOffset>
                <resetValue>0x2E</resetValue>
                <fields>
@@ -743,7 +760,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>CLPX</name>
-               <description>ADC Plus-Side General Calibration Value Register X</description>
+               <description>Plus-Side General Calibration Value Register X</description>
                <addressOffset>0xC8</addressOffset>
                <fields>
                   <field>
@@ -752,17 +769,11 @@ Devices using this peripheral:
                      <bitOffset>0</bitOffset>
                      <bitWidth>7</bitWidth>
                   </field>
-                  <field>
-                     <name>CLPXEN</name>
-                     <description>CLPX compare bit</description>
-                     <bitOffset>7</bitOffset>
-                     <bitWidth>1</bitWidth>
-                  </field>
                </fields>
             </register>
             <register>
                <name>CLP9</name>
-               <description>ADC Plus-Side General Calibration Value Register 9</description>
+               <description>Plus-Side General Calibration Value Register 9</description>
                <addressOffset>0xCC</addressOffset>
                <fields>
                   <field>
@@ -771,17 +782,11 @@ Devices using this peripheral:
                      <bitOffset>0</bitOffset>
                      <bitWidth>7</bitWidth>
                   </field>
-                  <field>
-                     <name>CLP9EN</name>
-                     <description>CLP9 compare bit</description>
-                     <bitOffset>7</bitOffset>
-                     <bitWidth>1</bitWidth>
-                  </field>
                </fields>
             </register>
             <register>
                <name>CLPS_OFS</name>
-               <description>ADC General Calibration Offset Value Register S</description>
+               <description>General Calibration Offset Value Register S</description>
                <addressOffset>0xD0</addressOffset>
                <fields>
                   <field>
@@ -794,7 +799,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>CLP3_OFS</name>
-               <description>ADC Plus-Side General Calibration Offset Value Register 3</description>
+               <description>Plus-Side General Calibration Offset Value Register 3</description>
                <addressOffset>0xD4</addressOffset>
                <fields>
                   <field>
@@ -807,7 +812,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>CLP2_OFS</name>
-               <description>ADC Plus-Side General Calibration Offset Value Register 2</description>
+               <description>Plus-Side General Calibration Offset Value Register 2</description>
                <addressOffset>0xD8</addressOffset>
                <fields>
                   <field>
@@ -820,7 +825,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>CLP1_OFS</name>
-               <description>ADC Plus-Side General Calibration Offset Value Register 1</description>
+               <description>Plus-Side General Calibration Offset Value Register 1</description>
                <addressOffset>0xDC</addressOffset>
                <fields>
                   <field>
@@ -833,7 +838,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>CLP0_OFS</name>
-               <description>ADC Plus-Side General Calibration Offset Value Register 0</description>
+               <description>Plus-Side General Calibration Offset Value Register 0</description>
                <addressOffset>0xE0</addressOffset>
                <fields>
                   <field>
@@ -846,9 +851,9 @@ Devices using this peripheral:
             </register>
             <register>
                <name>CLPX_OFS</name>
-               <description>ADC Plus-Side General Calibration Offset Value Register X</description>
+               <description>Plus-Side General Calibration Offset Value Register X</description>
                <addressOffset>0xE4</addressOffset>
-               <resetValue>0x443</resetValue>
+               <resetValue>0x440</resetValue>
                <fields>
                   <field>
                      <name>CLPX_OFS</name>
@@ -860,9 +865,9 @@ Devices using this peripheral:
             </register>
             <register>
                <name>CLP9_OFS</name>
-               <description>ADC Plus-Side General Calibration Offset Value Register 9</description>
+               <description>Plus-Side General Calibration Offset Value Register 9</description>
                <addressOffset>0xE8</addressOffset>
-               <resetValue>0x243</resetValue>
+               <resetValue>0x240</resetValue>
                <fields>
                   <field>
                      <name>CLP9_OFS</name>

@@ -2,6 +2,31 @@
 Devices using this peripheral: 
       MKE14Z7
       MKE15Z7
+      MKL02Z4
+      MKL03Z4
+      MKL04Z4
+      MKL05Z4
+      MKL14Z4
+      MKL15Z4
+      MKL16Z4
+      MKL17Z4
+      MKL24Z4
+      MKL25Z4
+      MKL26Z4
+      MKL27Z4
+      MKL27Z644
+      MKL33Z4
+      MKL34Z4
+      MKL36Z4
+      MKL43Z4
+      MKL46Z4
+      MKL82Z7
+      MKM14Z5
+      MKM33Z5
+      MKM34Z5
+      MKV10Z7
+      MKV11Z7
+      MKW01Z4
       MKW41Z4
 -->
       <peripheral>
@@ -45,17 +70,16 @@ Devices using this peripheral:
                <name>POSITION</name>
                <description>MTB Position Register</description>
                <addressOffset>0x0</addressOffset>
-               <resetMask>0x3</resetMask>
                <fields>
                   <field>
                      <name>WRAP</name>
-                     <description>WRAP</description>
+                     <description>This bit is set to 1 automatically when the POINTER value wraps as determined by the MTB_MASTER[MASK] field in the MASTER Trace Control Register. A debug agent might use the WRAP bit to determine whether the trace information above and below the pointer address is valid</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>1</bitWidth>
                   </field>
                   <field>
                      <name>POINTER</name>
-                     <description>Trace Packet Address Pointer[28:0]</description>
+                     <description>Trace Packet Address Pointer</description>
                      <bitOffset>3</bitOffset>
                      <bitWidth>29</bitWidth>
                   </field>
@@ -66,7 +90,6 @@ Devices using this peripheral:
                <description>MTB Master Register</description>
                <addressOffset>0x4</addressOffset>
                <resetValue>0x80</resetValue>
-               <resetMask>0xFFFFFFE0</resetMask>
                <fields>
                   <field>
                      <name>MASK</name>
@@ -116,17 +139,16 @@ Devices using this peripheral:
                <name>FLOW</name>
                <description>MTB Flow Register</description>
                <addressOffset>0x8</addressOffset>
-               <resetMask>0x4</resetMask>
                <fields>
                   <field>
                      <name>AUTOSTOP</name>
-                     <description>AUTOSTOP</description>
+                     <description>If this bit is 1 and WATERMARK is equal to MTB_POSITION[POINTER], then the MTB_MASTER[EN] bit is automatically set to 0. This stops tracing</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                   </field>
                   <field>
                      <name>AUTOHALT</name>
-                     <description>AUTOHALT</description>
+                     <description>If this bit is 1 and WATERMARK is equal to MTB_POSITION[POINTER], then the MTB_MASTER[HALTREQ] bit is automatically set to 1. If the DBGEN signal is HIGH, the MTB asserts this halt request to the Cortex-M0+ processor by asserting the EDBGRQ signal</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                   </field>
@@ -143,11 +165,10 @@ Devices using this peripheral:
                <description>MTB Base Register</description>
                <addressOffset>0xC</addressOffset>
                <access>read-only</access>
-               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>BASEADDR</name>
-                     <description>BASEADDR</description>
+                     <description>This value is defined with a hardwired signal and the expression: 0x2000_0000 - (RAM_Size/4). For example, if the total RAM capacity is 16 KB, this field is 0x1FFF_F000</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>

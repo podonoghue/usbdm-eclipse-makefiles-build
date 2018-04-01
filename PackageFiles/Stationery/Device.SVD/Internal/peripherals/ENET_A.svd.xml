@@ -570,6 +570,18 @@ Devices using this peripheral:
                      <description>MIB Clear</description>
                      <bitOffset>29</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>See note above</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>All statistics counters are reset to 0</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>MIB_IDLE</name>
@@ -577,12 +589,36 @@ Devices using this peripheral:
                      <bitOffset>30</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>The MIB block is updating MIB counters</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The MIB block is not currently updating any MIB counters</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>MIB_DIS</name>
                      <description>Disable MIB Logic</description>
                      <bitOffset>31</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>MIB logic is enabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>MIB logic is disabled. The MIB logic halts and does not update any MIB counters</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                </fields>
             </register>
@@ -986,7 +1022,7 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>IADDR1</name>
-                     <description>The upper 32 bits of the 64-bit hash table used in the address recognition process for receive frames with a unicast address. Bit 31 of IADDR1 contains hash index bit 63. Bit 0 of IADDR1 contains hash index bit 32</description>
+                     <description>Contains the upper 32 bits of the 64-bit hash table used in the address recognition process for receive frames with a unicast address</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
@@ -998,7 +1034,7 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>IADDR2</name>
-                     <description>The lower 32 bits of the 64-bit hash table used in the address recognition process for receive frames with a unicast address. Bit 31 of IADDR2 contains hash index bit 31. Bit 0 of IADDR2 contains hash index bit 0</description>
+                     <description>Contains the lower 32 bits of the 64-bit hash table used in the address recognition process for receive frames with a unicast address</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
@@ -1010,7 +1046,7 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>GADDR1</name>
-                     <description>Contains the upper 32 bits of the 64-bit hash table used in the address recognition process for receive frames with a multicast address. Bit 31 of GADDR1 contains hash index bit 63. Bit 0 of GADDR1 contains hash index bit 32</description>
+                     <description>Contains the upper 32 bits of the 64-bit hash table used in the address recognition process for receive frames with a multicast address</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
@@ -1022,7 +1058,7 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>GADDR2</name>
-                     <description>Contains the lower 32 bits of the 64-bit hash table used in the address recognition process for receive frames with a multicast address. Bit 31 of GADDR2 contains hash index bit 31. Bit 0 of GADDR2 contains hash index bit 0</description>
+                     <description>Contains the lower 32 bits of the 64-bit hash table used in the address recognition process for receive frames with a multicast address</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
@@ -1407,439 +1443,726 @@ Devices using this peripheral:
             </register>
             <register>
                <name>RMON_T_DROP</name>
-               <description>Count of frames not counted correctly (RMON_T_DROP). NOTE: Counter not implemented (read 0 always) as not applicable</description>
+               <description>Reserved Statistic Register</description>
                <addressOffset>0x200</addressOffset>
                <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
             </register>
             <register>
                <name>RMON_T_PACKETS</name>
-               <description>RMON Tx packet count (RMON_T_PACKETS)</description>
+               <description>RMON Tx packet count</description>
                <addressOffset>0x204</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>TXPKTS</name>
+                     <description>Packet count</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>RMON_T_BC_PKT</name>
-               <description>RMON Tx Broadcast Packets (RMON_T_BC_PKT)</description>
+               <description>Tx Broadcast Packets Statistic Register</description>
                <addressOffset>0x208</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>TXPKTS</name>
+                     <description>Broadcast packets</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>RMON_T_MC_PKT</name>
-               <description>RMON Tx Multicast Packets (RMON_T_MC_PKT)</description>
+               <description>Tx Multicast Packets Statistic Register</description>
                <addressOffset>0x20C</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>TXPKTS</name>
+                     <description>Multicast packets</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>RMON_T_CRC_ALIGN</name>
-               <description>RMON Tx Packets w CRC/Align error (RMON_T_CRC_ALIGN)</description>
+               <description>Tx Packets with CRC/Align Error Statistic Register</description>
                <addressOffset>0x210</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>TXPKTS</name>
+                     <description>Packets with CRC/align error</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>RMON_T_UNDERSIZE</name>
-               <description>RMON Tx Packets &lt; 64 bytes, good CRC (RMON_T_UNDERSIZE)</description>
+               <description>Tx Packets Less Than Bytes and Good CRC Statistic Register</description>
                <addressOffset>0x214</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>TXPKTS</name>
+                     <description>Number of transmit packets less than 64 bytes with good CRC</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>RMON_T_OVERSIZE</name>
-               <description>RMON Tx Packets &gt; MAX_FL bytes, good CRC (RMON_T_OVERSIZE)</description>
+               <description>Tx Packets GT MAX_FL bytes and Good CRC Statistic Register</description>
                <addressOffset>0x218</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>TXPKTS</name>
+                     <description>Number of transmit packets greater than MAX_FL bytes with good CRC</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>RMON_T_FRAG</name>
-               <description>RMON Tx Packets &lt; 64 bytes, bad CRC (RMON_T_FRAG)</description>
+               <description>Tx Packets Less Than 64 Bytes and Bad CRC Statistic Register</description>
                <addressOffset>0x21C</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>TXPKTS</name>
+                     <description>Number of packets less than 64 bytes with bad CRC</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>RMON_T_JAB</name>
-               <description>RMON Tx Packets &gt; MAX_FL bytes, bad CRC (RMON_T_JAB)</description>
+               <description>Tx Packets Greater Than MAX_FL bytes and Bad CRC Statistic Register</description>
                <addressOffset>0x220</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>TXPKTS</name>
+                     <description>Number of transmit packets greater than MAX_FL bytes and bad CRC</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>RMON_T_COL</name>
-               <description>RMON Tx collision count (RMON_T_COL)</description>
+               <description>Tx Collision Count Statistic Register</description>
                <addressOffset>0x224</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>TXPKTS</name>
+                     <description>Number of transmit collisions</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>RMON_T_P64</name>
-               <description>RMON Tx 64 byte packets (RMON_T_P64)</description>
+               <description>Tx 64-Byte Packets Statistic Register</description>
                <addressOffset>0x228</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>TXPKTS</name>
+                     <description>Number of 64-byte transmit packets</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>RMON_T_P65TO127</name>
-               <description>RMON Tx 65 to 127 byte packets (RMON_T_P65TO127)</description>
+               <description>Tx 65- to 127-byte Packets Statistic Register</description>
                <addressOffset>0x22C</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>TXPKTS</name>
+                     <description>Number of 65- to 127-byte transmit packets</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>RMON_T_P128TO255</name>
-               <description>RMON Tx 128 to 255 byte packets (RMON_T_P128TO255)</description>
+               <description>Tx 128- to 255-byte Packets Statistic Register</description>
                <addressOffset>0x230</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>TXPKTS</name>
+                     <description>Number of 128- to 255-byte transmit packets</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>RMON_T_P256TO511</name>
-               <description>RMON Tx 256 to 511 byte packets (RMON_T_P256TO511)</description>
+               <description>Tx 256- to 511-byte Packets Statistic Register</description>
                <addressOffset>0x234</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>TXPKTS</name>
+                     <description>Number of 256- to 511-byte transmit packets</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>RMON_T_P512TO1023</name>
-               <description>RMON Tx 512 to 1023 byte packets (RMON_T_P512TO1023)</description>
+               <description>Tx 512- to 1023-byte Packets Statistic Register</description>
                <addressOffset>0x238</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>TXPKTS</name>
+                     <description>Number of 512- to 1023-byte transmit packets</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>RMON_T_P1024TO2047</name>
-               <description>RMON Tx 1024 to 2047 byte packets (RMON_T_P1024TO2047)</description>
+               <description>Tx 1024- to 2047-byte Packets Statistic Register</description>
                <addressOffset>0x23C</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>TXPKTS</name>
+                     <description>Number of 1024- to 2047-byte transmit packets</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>RMON_T_P_GTE2048</name>
-               <description>RMON Tx packets w &gt; 2048 bytes (RMON_T_P_GTE2048)</description>
+               <description>Tx Packets Greater Than 2048 Bytes Statistic Register</description>
                <addressOffset>0x240</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>TXPKTS</name>
+                     <description>Number of transmit packets greater than 2048 bytes</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>RMON_T_OCTETS</name>
-               <description>RMON Tx Octets (RMON_T_OCTETS)</description>
+               <description>Tx Octets Statistic Register</description>
                <addressOffset>0x244</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>TXOCTS</name>
+                     <description>Number of transmit octets</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
             </register>
-            <register>
-               <name>IEEE_T_DROP</name>
-               <description>Count of frames not counted correctly (IEEE_T_DROP). NOTE: Counter not implemented (read 0 always) as not applicable</description>
-               <addressOffset>0x248</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
-            </register>
+            <register derivedFrom="RMON_T_DROP"> <name>IEEE_T_DROP</name> <addressOffset>0x248</addressOffset> </register>
             <register>
                <name>IEEE_T_FRAME_OK</name>
-               <description>Frames Transmitted OK (IEEE_T_FRAME_OK)</description>
+               <description>Frames Transmitted OK Statistic Register</description>
                <addressOffset>0x24C</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Number of frames transmitted OK</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>IEEE_T_1COL</name>
-               <description>Frames Transmitted with Single Collision (IEEE_T_1COL)</description>
+               <description>Frames Transmitted with Single Collision Statistic Register</description>
                <addressOffset>0x250</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Number of frames transmitted with one collision</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>IEEE_T_MCOL</name>
-               <description>Frames Transmitted with Multiple Collisions (IEEE_T_MCOL)</description>
+               <description>Frames Transmitted with Multiple Collisions Statistic Register</description>
                <addressOffset>0x254</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Number of frames transmitted with multiple collisions</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>IEEE_T_DEF</name>
-               <description>Frames Transmitted after Deferral Delay (IEEE_T_DEF)</description>
+               <description>Frames Transmitted after Deferral Delay Statistic Register</description>
                <addressOffset>0x258</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Number of frames transmitted with deferral delay</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>IEEE_T_LCOL</name>
-               <description>Frames Transmitted with Late Collision (IEEE_T_LCOL)</description>
+               <description>Frames Transmitted with Late Collision Statistic Register</description>
                <addressOffset>0x25C</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Number of frames transmitted with late collision</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>IEEE_T_EXCOL</name>
-               <description>Frames Transmitted with Excessive Collisions (IEEE_T_EXCOL)</description>
+               <description>Frames Transmitted with Excessive Collisions Statistic Register</description>
                <addressOffset>0x260</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Number of frames transmitted with excessive collisions</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>IEEE_T_MACERR</name>
-               <description>Frames Transmitted with Tx FIFO Underrun (IEEE_T_MACERR)</description>
+               <description>Frames Transmitted with Tx FIFO Underrun Statistic Register</description>
                <addressOffset>0x264</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Number of frames transmitted with transmit FIFO underrun</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>IEEE_T_CSERR</name>
-               <description>Frames Transmitted with Carrier Sense Error (IEEE_T_CSERR)</description>
+               <description>Frames Transmitted with Carrier Sense Error Statistic Register</description>
                <addressOffset>0x268</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Number of frames transmitted with carrier sense error</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>IEEE_T_SQE</name>
-               <description>Frames Transmitted with SQE Error (IEEE_T_SQE). NOTE: Counter not implemented (read 0 always) as no SQE information is available</description>
+               <description>Reserved Statistic Register</description>
                <addressOffset>0x26C</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>This read-only field is reserved and always has the value 0</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>IEEE_T_FDXFC</name>
-               <description>Flow Control Pause frames transmitted (IEEE_T_FDXFC)</description>
+               <description>Flow Control Pause Frames Transmitted Statistic Register</description>
                <addressOffset>0x270</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Number of flow-control pause frames transmitted</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>IEEE_T_OCTETS_OK</name>
-               <description>Octet count for Frames Transmitted w/o Error (IEEE_T_OCTETS_OK). NOTE: Counts total octets (includes header and FCS fields)</description>
+               <description>Octet Count for Frames Transmitted w/o Error Statistic Register</description>
                <addressOffset>0x274</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Octet count for frames transmitted without error Counts total octets (includes header and FCS fields)</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>RMON_R_PACKETS</name>
-               <description>RMON Rx packet count (RMON_R_PACKETS)</description>
+               <description>Rx Packet Count Statistic Register</description>
                <addressOffset>0x284</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Number of packets received</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>RMON_R_BC_PKT</name>
-               <description>RMON Rx Broadcast Packets (RMON_R_BC_PKT)</description>
+               <description>Rx Broadcast Packets Statistic Register</description>
                <addressOffset>0x288</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Number of receive broadcast packets</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>RMON_R_MC_PKT</name>
-               <description>RMON Rx Multicast Packets (RMON_R_MC_PKT)</description>
+               <description>Rx Multicast Packets Statistic Register</description>
                <addressOffset>0x28C</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Number of receive multicast packets</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>RMON_R_CRC_ALIGN</name>
-               <description>RMON Rx Packets w CRC/Align error (RMON_R_CRC_ALIGN)</description>
+               <description>Rx Packets with CRC/Align Error Statistic Register</description>
                <addressOffset>0x290</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Number of receive packets with CRC or align error</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>RMON_R_UNDERSIZE</name>
-               <description>RMON Rx Packets &lt; 64 bytes, good CRC (RMON_R_UNDERSIZE)</description>
+               <description>Rx Packets with Less Than 64 Bytes and Good CRC Statistic Register</description>
                <addressOffset>0x294</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Number of receive packets with less than 64 bytes and good CRC</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>RMON_R_OVERSIZE</name>
-               <description>RMON Rx Packets &gt; MAX_FL bytes, good CRC (RMON_R_OVERSIZE)</description>
+               <description>Rx Packets Greater Than MAX_FL and Good CRC Statistic Register</description>
                <addressOffset>0x298</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Number of receive packets greater than MAX_FL and good CRC</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>RMON_R_FRAG</name>
-               <description>RMON Rx Packets &lt; 64 bytes, bad CRC (RMON_R_FRAG)</description>
+               <description>Rx Packets Less Than 64 Bytes and Bad CRC Statistic Register</description>
                <addressOffset>0x29C</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Number of receive packets with less than 64 bytes and bad CRC</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>RMON_R_JAB</name>
-               <description>RMON Rx Packets &gt; MAX_FL bytes, bad CRC (RMON_R_JAB)</description>
+               <description>Rx Packets Greater Than MAX_FL Bytes and Bad CRC Statistic Register</description>
                <addressOffset>0x2A0</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Number of receive packets greater than MAX_FL and bad CRC</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
-            <register>
-               <name>RMON_R_RESVD_0</name>
-               <description>Reserved (RMON_R_RESVD_0)</description>
-               <addressOffset>0x2A4</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
-            </register>
+            <register derivedFrom="RMON_T_DROP"> <name>RMON_R_RESVD_0</name> <addressOffset>0x2A4</addressOffset> </register>
             <register>
                <name>RMON_R_P64</name>
-               <description>RMON Rx 64 byte packets (RMON_R_P64)</description>
+               <description>Rx 64-Byte Packets Statistic Register</description>
                <addressOffset>0x2A8</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Number of 64-byte receive packets</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>RMON_R_P65TO127</name>
-               <description>RMON Rx 65 to 127 byte packets (RMON_R_P65TO127)</description>
+               <description>Rx 65- to 127-Byte Packets Statistic Register</description>
                <addressOffset>0x2AC</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Number of 65- to 127-byte recieve packets</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>RMON_R_P128TO255</name>
-               <description>RMON Rx 128 to 255 byte packets (RMON_R_P128TO255)</description>
+               <description>Rx 128- to 255-Byte Packets Statistic Register</description>
                <addressOffset>0x2B0</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Number of 128- to 255-byte recieve packets</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>RMON_R_P256TO511</name>
-               <description>RMON Rx 256 to 511 byte packets (RMON_R_P256TO511)</description>
+               <description>Rx 256- to 511-Byte Packets Statistic Register</description>
                <addressOffset>0x2B4</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Number of 256- to 511-byte recieve packets</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>RMON_R_P512TO1023</name>
-               <description>RMON Rx 512 to 1023 byte packets (RMON_R_P512TO1023)</description>
+               <description>Rx 512- to 1023-Byte Packets Statistic Register</description>
                <addressOffset>0x2B8</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Number of 512- to 1023-byte recieve packets</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>RMON_R_P1024TO2047</name>
-               <description>RMON Rx 1024 to 2047 byte packets (RMON_R_P1024TO2047)</description>
+               <description>Rx 1024- to 2047-Byte Packets Statistic Register</description>
                <addressOffset>0x2BC</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Number of 1024- to 2047-byte recieve packets</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>RMON_R_P_GTE2048</name>
-               <description>RMON Rx packets w &gt; 2048 bytes (RMON_R_P_GTE2048)</description>
+               <description>Rx Packets Greater than 2048 Bytes Statistic Register</description>
                <addressOffset>0x2C0</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Number of greater-than-2048-byte recieve packets</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>RMON_R_OCTETS</name>
-               <description>RMON Rx Octets (RMON_R_OCTETS)</description>
+               <description>Rx Octets Statistic Register</description>
                <addressOffset>0x2C4</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Number of receive octets</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>IEEE_R_DROP</name>
-               <description>Count of frames not counted correctly (IEEE_R_DROP). NOTE: Counter increments if a frame with valid/missing SFD character is detected and has been dropped. None of the other counters increments if this counter increments</description>
+               <description>Frames not Counted Correctly Statistic Register</description>
                <addressOffset>0x2C8</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Frame count</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>IEEE_R_FRAME_OK</name>
-               <description>Frames Received OK (IEEE_R_FRAME_OK)</description>
+               <description>Frames Received OK Statistic Register</description>
                <addressOffset>0x2CC</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Number of frames received OK</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>IEEE_R_CRC</name>
-               <description>Frames Received with CRC Error (IEEE_R_CRC)</description>
+               <description>Frames Received with CRC Error Statistic Register</description>
                <addressOffset>0x2D0</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Number of frames received with CRC error</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>IEEE_R_ALIGN</name>
-               <description>Frames Received with Alignment Error (IEEE_R_ALIGN)</description>
+               <description>Frames Received with Alignment Error Statistic Register</description>
                <addressOffset>0x2D4</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Number of frames received with alignment error</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>IEEE_R_MACERR</name>
-               <description>Receive Fifo Overflow count (IEEE_R_MACERR)</description>
+               <description>Receive FIFO Overflow Count Statistic Register</description>
                <addressOffset>0x2D8</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Receive FIFO overflow count</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>IEEE_R_FDXFC</name>
-               <description>Flow Control Pause frames received (IEEE_R_FDXFC)</description>
+               <description>Flow Control Pause Frames Received Statistic Register</description>
                <addressOffset>0x2DC</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Number of flow-control pause frames received</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>16</bitWidth>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>IEEE_R_OCTETS_OK</name>
-               <description>Octet count for Frames Rcvd w/o Error (IEEE_R_OCTETS_OK). Counts total octets (includes header and FCS fields)</description>
+               <description>Octet Count for Frames Received without Error Statistic Register</description>
                <addressOffset>0x2E0</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
-               <resetMask>0x0</resetMask>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>COUNT</name>
+                     <description>Number of octets for frames received without error</description>
+                     <bitOffset>0</bitOffset>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>ATCR</name>
-               <description>Timer Control Register</description>
+               <description>Adjustable Timer Control Register</description>
                <addressOffset>0x400</addressOffset>
                <fields>
                   <field>
@@ -1916,7 +2239,7 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>PINPER</name>
-                     <description>Enables event signal output assertion on period event. Not all devices contain the event signal output. See the Chip Configuration details</description>
+                     <description>Enables event signal output assertion on period event</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -2288,458 +2611,11 @@ Devices using this peripheral:
                   </field>
                </fields>
             </register>
-            <register>
-               <name>TCSR1</name>
-               <description>Timer Control Status Register</description>
-               <addressOffset>0x610</addressOffset>
-               <fields>
-                  <field>
-                     <name>TDRE</name>
-                     <description>Timer DMA Request Enable</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>DMA request is disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>DMA request is enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TMODE</name>
-                     <description>Timer Mode</description>
-                     <bitOffset>2</bitOffset>
-                     <bitWidth>4</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0000</name>
-                           <description>Timer Channel is disabled</description>
-                           <value>0b0000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0001</name>
-                           <description>Timer Channel is configured for Input Capture on rising edge</description>
-                           <value>0b0001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0010</name>
-                           <description>Timer Channel is configured for Input Capture on falling edge</description>
-                           <value>0b0010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0011</name>
-                           <description>Timer Channel is configured for Input Capture on both edges</description>
-                           <value>0b0011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0100</name>
-                           <description>Timer Channel is configured for Output Compare - software only</description>
-                           <value>0b0100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0101</name>
-                           <description>Timer Channel is configured for Output Compare - toggle output on compare</description>
-                           <value>0b0101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0110</name>
-                           <description>Timer Channel is configured for Output Compare - clear output on compare</description>
-                           <value>0b0110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0111</name>
-                           <description>Timer Channel is configured for Output Compare - set output on compare</description>
-                           <value>0b0111</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1000</name>
-                           <description>Reserved</description>
-                           <value>0b1000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1010</name>
-                           <description>Timer Channel is configured for Output Compare - clear output on compare, set output on overflow</description>
-                           <value>0b1010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b10x1</name>
-                           <description>Timer Channel is configured for Output Compare - set output on compare, clear output on overflow</description>
-                           <value>0b10x1</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1100</name>
-                           <description>Reserved</description>
-                           <value>0b1100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1110</name>
-                           <description>Timer Channel is configured for Output Compare - pulse output low on compare for one 1588 clock cycle</description>
-                           <value>0b1110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1111</name>
-                           <description>Timer Channel is configured for Output Compare - pulse output high on compare for one 1588 clock cycle</description>
-                           <value>0b1111</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TIE</name>
-                     <description>Timer Interrupt Enable</description>
-                     <bitOffset>6</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Interrupt is disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Interrupt is enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TF</name>
-                     <description>Timer Flag</description>
-                     <bitOffset>7</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Input Capture or Output Compare has not occurred</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Input Capture or Output Compare has occurred</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>TCCR1</name>
-               <description>Timer Compare Capture Register</description>
-               <addressOffset>0x614</addressOffset>
-               <fields>
-                  <field>
-                     <name>TCC</name>
-                     <description>Timer Capture Compare</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>TCSR2</name>
-               <description>Timer Control Status Register</description>
-               <addressOffset>0x618</addressOffset>
-               <fields>
-                  <field>
-                     <name>TDRE</name>
-                     <description>Timer DMA Request Enable</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>DMA request is disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>DMA request is enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TMODE</name>
-                     <description>Timer Mode</description>
-                     <bitOffset>2</bitOffset>
-                     <bitWidth>4</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0000</name>
-                           <description>Timer Channel is disabled</description>
-                           <value>0b0000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0001</name>
-                           <description>Timer Channel is configured for Input Capture on rising edge</description>
-                           <value>0b0001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0010</name>
-                           <description>Timer Channel is configured for Input Capture on falling edge</description>
-                           <value>0b0010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0011</name>
-                           <description>Timer Channel is configured for Input Capture on both edges</description>
-                           <value>0b0011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0100</name>
-                           <description>Timer Channel is configured for Output Compare - software only</description>
-                           <value>0b0100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0101</name>
-                           <description>Timer Channel is configured for Output Compare - toggle output on compare</description>
-                           <value>0b0101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0110</name>
-                           <description>Timer Channel is configured for Output Compare - clear output on compare</description>
-                           <value>0b0110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0111</name>
-                           <description>Timer Channel is configured for Output Compare - set output on compare</description>
-                           <value>0b0111</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1000</name>
-                           <description>Reserved</description>
-                           <value>0b1000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1010</name>
-                           <description>Timer Channel is configured for Output Compare - clear output on compare, set output on overflow</description>
-                           <value>0b1010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b10x1</name>
-                           <description>Timer Channel is configured for Output Compare - set output on compare, clear output on overflow</description>
-                           <value>0b10x1</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1100</name>
-                           <description>Reserved</description>
-                           <value>0b1100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1110</name>
-                           <description>Timer Channel is configured for Output Compare - pulse output low on compare for one 1588 clock cycle</description>
-                           <value>0b1110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1111</name>
-                           <description>Timer Channel is configured for Output Compare - pulse output high on compare for one 1588 clock cycle</description>
-                           <value>0b1111</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TIE</name>
-                     <description>Timer Interrupt Enable</description>
-                     <bitOffset>6</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Interrupt is disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Interrupt is enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TF</name>
-                     <description>Timer Flag</description>
-                     <bitOffset>7</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Input Capture or Output Compare has not occurred</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Input Capture or Output Compare has occurred</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>TCCR2</name>
-               <description>Timer Compare Capture Register</description>
-               <addressOffset>0x61C</addressOffset>
-               <fields>
-                  <field>
-                     <name>TCC</name>
-                     <description>Timer Capture Compare</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>TCSR3</name>
-               <description>Timer Control Status Register</description>
-               <addressOffset>0x620</addressOffset>
-               <fields>
-                  <field>
-                     <name>TDRE</name>
-                     <description>Timer DMA Request Enable</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>DMA request is disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>DMA request is enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TMODE</name>
-                     <description>Timer Mode</description>
-                     <bitOffset>2</bitOffset>
-                     <bitWidth>4</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0000</name>
-                           <description>Timer Channel is disabled</description>
-                           <value>0b0000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0001</name>
-                           <description>Timer Channel is configured for Input Capture on rising edge</description>
-                           <value>0b0001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0010</name>
-                           <description>Timer Channel is configured for Input Capture on falling edge</description>
-                           <value>0b0010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0011</name>
-                           <description>Timer Channel is configured for Input Capture on both edges</description>
-                           <value>0b0011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0100</name>
-                           <description>Timer Channel is configured for Output Compare - software only</description>
-                           <value>0b0100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0101</name>
-                           <description>Timer Channel is configured for Output Compare - toggle output on compare</description>
-                           <value>0b0101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0110</name>
-                           <description>Timer Channel is configured for Output Compare - clear output on compare</description>
-                           <value>0b0110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0111</name>
-                           <description>Timer Channel is configured for Output Compare - set output on compare</description>
-                           <value>0b0111</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1000</name>
-                           <description>Reserved</description>
-                           <value>0b1000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1010</name>
-                           <description>Timer Channel is configured for Output Compare - clear output on compare, set output on overflow</description>
-                           <value>0b1010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b10x1</name>
-                           <description>Timer Channel is configured for Output Compare - set output on compare, clear output on overflow</description>
-                           <value>0b10x1</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1100</name>
-                           <description>Reserved</description>
-                           <value>0b1100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1110</name>
-                           <description>Timer Channel is configured for Output Compare - pulse output low on compare for one 1588 clock cycle</description>
-                           <value>0b1110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1111</name>
-                           <description>Timer Channel is configured for Output Compare - pulse output high on compare for one 1588 clock cycle</description>
-                           <value>0b1111</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TIE</name>
-                     <description>Timer Interrupt Enable</description>
-                     <bitOffset>6</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Interrupt is disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Interrupt is enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TF</name>
-                     <description>Timer Flag</description>
-                     <bitOffset>7</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Input Capture or Output Compare has not occurred</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Input Capture or Output Compare has occurred</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>TCCR3</name>
-               <description>Timer Compare Capture Register</description>
-               <addressOffset>0x624</addressOffset>
-               <fields>
-                  <field>
-                     <name>TCC</name>
-                     <description>Timer Capture Compare</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
+            <register derivedFrom="TCSR0"> <name>TCSR1</name> <addressOffset>0x610</addressOffset> </register>
+            <register derivedFrom="TCCR0"> <name>TCCR1</name> <addressOffset>0x614</addressOffset> </register>
+            <register derivedFrom="TCSR0"> <name>TCSR2</name> <addressOffset>0x618</addressOffset> </register>
+            <register derivedFrom="TCCR0"> <name>TCCR2</name> <addressOffset>0x61C</addressOffset> </register>
+            <register derivedFrom="TCSR0"> <name>TCSR3</name> <addressOffset>0x620</addressOffset> </register>
+            <register derivedFrom="TCCR0"> <name>TCCR3</name> <addressOffset>0x624</addressOffset> </register>
          </registers>
       </peripheral>

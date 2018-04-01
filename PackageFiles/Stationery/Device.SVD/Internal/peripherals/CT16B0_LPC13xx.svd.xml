@@ -175,25 +175,7 @@ every time MR0 matches the TC</description>
                   </field>
                </fields>
             </register>
-            <register>
-               <dim>3</dim>
-               <dimIncrement>4</dimIncrement>
-               <dimIndex>1,2,3</dimIndex>
-               <name>BMR%s</name>
-               <description>Match Register 0 (MR0). MR0 can be enabled through the MCR
-to reset the TC, stop both the TC and PC, and/or generate an interrupt
-every time MR0 matches the TC</description>
-               <addressOffset>0x1C</addressOffset>
-               <resetMask>0x0</resetMask>
-               <fields>
-                  <field>
-                     <name>MATCH</name>
-                     <description>Timer counter match value</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>16</bitWidth>
-                  </field>
-               </fields>
-            </register>
+            <register derivedFrom="BMR0"><dim>3</dim><dimIncrement>4</dimIncrement><dimIndex>1,2,3</dimIndex> <name>BMR%s</name> <addressOffset>0x1C</addressOffset> <resetMask>0x0</resetMask> </register>
             <register>
                <name>BCCR</name>
                <description>Capture Control Register (CCR). The CCR controls which edges of the capture inputs are used to load the Capture Registers and whether or not an interrupt is generated when a capture takes place</description>

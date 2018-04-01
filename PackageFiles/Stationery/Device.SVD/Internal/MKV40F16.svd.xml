@@ -22,7 +22,7 @@
    <width>32</width>
    <peripherals>
       <xi:include href="peripherals/ADC0_MKV.svd.xml"/>
-      <xi:include href="peripherals/AIPS0_3M_A.svd.xml"/>
+      <xi:include href="peripherals/AIPS0_Lite_8Mx16P.svd.xml"/>
       <xi:include href="peripherals/AOI_0.svd.xml"/>
       <xi:include href="peripherals/CAN0_MKV.svd.xml"/>
       <peripheral derivedFrom="CAN0"><name>CAN1</name><baseAddress>0x40025000</baseAddress></peripheral>
@@ -53,7 +53,7 @@
       <xi:include href="peripherals/NV_MKV40.svd.xml"/>
       <xi:include href="peripherals/NVIC_CM4.svd.xml"/>
       <xi:include href="peripherals/OSC0_DIV.svd.xml"/>
-      <xi:include href="peripherals/PDB0_1CH_4TRIG_1DAC_4PO.svd.xml"/>
+      <xi:include href="peripherals/PDB0_1CH_4PT_1DAC_4PO.svd.xml"/>
       <peripheral derivedFrom="PDB0"><name>PDB1</name><baseAddress>0x40031000</baseAddress></peripheral>
       <xi:include href="peripherals/PIT_4CH_CHAIN.svd.xml"/>
       <xi:include href="peripherals/PMC_MKM.svd.xml"/>

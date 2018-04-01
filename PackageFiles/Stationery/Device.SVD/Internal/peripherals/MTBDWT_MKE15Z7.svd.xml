@@ -2,7 +2,31 @@
 Devices using this peripheral: 
       MKE14Z7
       MKE15Z7
+      MKL02Z4
+      MKL03Z4
+      MKL04Z4
+      MKL05Z4
+      MKL14Z4
+      MKL15Z4
+      MKL16Z4
+      MKL17Z4
+      MKL24Z4
+      MKL25Z4
+      MKL26Z4
+      MKL27Z4
+      MKL27Z644
+      MKL33Z4
+      MKL34Z4
+      MKL36Z4
+      MKL43Z4
+      MKL46Z4
       MKL82Z7
+      MKM14Z5
+      MKM33Z5
+      MKM34Z5
+      MKV10Z7
+      MKV11Z7
+      MKW01Z4
       MKW41Z4
 -->
       <peripheral>
@@ -106,27 +130,27 @@ Devices using this peripheral:
                         <bitWidth>4</bitWidth>
                         <enumeratedValues>
                            <enumeratedValue>
-                              <name>0000</name>
+                              <name>0b0000</name>
                               <description>Disabled</description>
                               <value>0b0000</value>
                            </enumeratedValue>
                            <enumeratedValue>
-                              <name>0100</name>
+                              <name>0b0100</name>
                               <description>Instruction fetch</description>
                               <value>0b0100</value>
                            </enumeratedValue>
                            <enumeratedValue>
-                              <name>0101</name>
+                              <name>0b0101</name>
                               <description>Data operand read</description>
                               <value>0b0101</value>
                            </enumeratedValue>
                            <enumeratedValue>
-                              <name>0110</name>
+                              <name>0b0110</name>
                               <description>Data operand write</description>
                               <value>0b0110</value>
                            </enumeratedValue>
                            <enumeratedValue>
-                              <name>0111</name>
+                              <name>0b0111</name>
                               <description>Data operand (read + write)</description>
                               <value>0b0111</value>
                            </enumeratedValue>
@@ -139,12 +163,12 @@ Devices using this peripheral:
                         <bitWidth>1</bitWidth>
                         <enumeratedValues>
                            <enumeratedValue>
-                              <name>0</name>
+                              <name>0b0</name>
                               <description>Perform address comparison</description>
                               <value>0b0</value>
                            </enumeratedValue>
                            <enumeratedValue>
-                              <name>1</name>
+                              <name>0b1</name>
                               <description>Perform data value comparison</description>
                               <value>0b1</value>
                            </enumeratedValue>
@@ -157,22 +181,22 @@ Devices using this peripheral:
                         <bitWidth>2</bitWidth>
                         <enumeratedValues>
                            <enumeratedValue>
-                              <name>00</name>
+                              <name>0b00</name>
                               <description>Byte</description>
                               <value>0b00</value>
                            </enumeratedValue>
                            <enumeratedValue>
-                              <name>01</name>
+                              <name>0b01</name>
                               <description>Halfword</description>
                               <value>0b01</value>
                            </enumeratedValue>
                            <enumeratedValue>
-                              <name>10</name>
+                              <name>0b10</name>
                               <description>Word</description>
                               <value>0b10</value>
                            </enumeratedValue>
                            <enumeratedValue>
-                              <name>11</name>
+                              <name>0b11</name>
                               <description>Reserved. Any attempts to use this value results in UNPREDICTABLE behavior</description>
                               <value>0b11</value>
                            </enumeratedValue>
@@ -192,12 +216,12 @@ Devices using this peripheral:
                         <access>read-only</access>
                         <enumeratedValues>
                            <enumeratedValue>
-                              <name>0</name>
+                              <name>0b0</name>
                               <description>No match</description>
                               <value>0b0</value>
                            </enumeratedValue>
                            <enumeratedValue>
-                              <name>1</name>
+                              <name>0b1</name>
                               <description>Match occurred</description>
                               <value>0b1</value>
                            </enumeratedValue>
@@ -219,12 +243,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Trigger TSTOP based on the assertion of MTBDWT_FCT0[MATCHED]</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Trigger TSTART based on the assertion of MTBDWT_FCT0[MATCHED]</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -237,12 +261,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Trigger TSTOP based on the assertion of MTBDWT_FCT1[MATCHED]</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Trigger TSTART based on the assertion of MTBDWT_FCT1[MATCHED]</description>
                            <value>0b1</value>
                         </enumeratedValue>

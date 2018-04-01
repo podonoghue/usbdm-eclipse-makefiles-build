@@ -6,7 +6,7 @@ Devices using this peripheral:
       <peripheral>
          <?sourceFile "TRGMUX_S32K142" ?>
          <name>TRGMUX</name>
-         <description>TRGMUX</description>
+         <description>Trigger MUX Control</description>
          <groupName>TRGMUX</groupName>
          <headerStructName>TRGMUX</headerStructName>
          <baseAddress>0x40063000</baseAddress>
@@ -73,73 +73,25 @@ Devices using this peripheral:
                   </field>
                </fields>
             </register>
-            <register>
-               <name>TRGMUX_DMAMUX0</name>
-               <description>TRGMUX DMAMUX0 Register</description>
-               <addressOffset>0x0</addressOffset>
-               <fields>
-                  <field>
-                     <name>SEL0</name>
-                     <description>Trigger MUX Input 0 Source Select</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>6</bitWidth>
-                  </field>
-                  <field>
-                     <name>SEL1</name>
-                     <description>Trigger MUX Input 1 Source Select</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>6</bitWidth>
-                  </field>
-                  <field>
-                     <name>SEL2</name>
-                     <description>Trigger MUX Input 2 Source Select</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>6</bitWidth>
-                  </field>
-                  <field>
-                     <name>SEL3</name>
-                     <description>Trigger MUX Input 3 Source Select</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>6</bitWidth>
-                  </field>
-                  <field>
-                     <name>LK</name>
-                     <description>TRGMUX register lock</description>
-                     <bitOffset>31</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Register can be written</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Register cannot be written until the next system Reset</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-               </fields>
-            </register>
-            <register derivedFrom="TRGMUX_DMAMUX0"> <name>TRGMUX_EXTOUT0</name> <description>TRGMUX EXTOUT0 Register</description> <addressOffset>0x4</addressOffset> </register>
-            <register derivedFrom="TRGMUX_DMAMUX0"> <name>TRGMUX_EXTOUT1</name> <description>TRGMUX EXTOUT1 Register</description> <addressOffset>0x8</addressOffset> </register>
-            <register derivedFrom="TRGMUX_DMAMUX0"> <name>TRGMUX_ADC0</name> <description>TRGMUX ADC0 Register</description> <addressOffset>0xC</addressOffset> </register>
-            <register derivedFrom="TRGMUX_DMAMUX0"> <name>TRGMUX_ADC1</name> <description>TRGMUX ADC1 Register</description> <addressOffset>0x10</addressOffset> </register>
-            <register derivedFrom="TRGMUX_DMAMUX0"> <name>TRGMUX_CMP0</name> <description>TRGMUX CMP0 Register</description> <addressOffset>0x1C</addressOffset> </register>
-            <register derivedFrom="TRGMUX_DMAMUX0"> <name>TRGMUX_FTM0</name> <description>TRGMUX FTM0 Register</description> <addressOffset>0x28</addressOffset> </register>
-            <register derivedFrom="TRGMUX_DMAMUX0"> <name>TRGMUX_FTM1</name> <description>TRGMUX FTM1 Register</description> <addressOffset>0x2C</addressOffset> </register>
-            <register derivedFrom="TRGMUX_DMAMUX0"> <name>TRGMUX_FTM2</name> <description>TRGMUX FTM2 Register</description> <addressOffset>0x30</addressOffset> </register>
-            <register derivedFrom="TRGMUX_DMAMUX0"> <name>TRGMUX_FTM3</name> <description>TRGMUX FTM3 Register</description> <addressOffset>0x34</addressOffset> </register>
-            <register derivedFrom="TRGMUX_DMAMUX0"> <name>TRGMUX_PDB0</name> <description>TRGMUX PDB0 Register</description> <addressOffset>0x38</addressOffset> </register>
-            <register derivedFrom="TRGMUX_DMAMUX0"> <name>TRGMUX_PDB1</name> <description>TRGMUX PDB1 Register</description> <addressOffset>0x3C</addressOffset> </register>
-            <register derivedFrom="TRGMUX_DMAMUX0"> <name>TRGMUX_FLEXIO</name> <description>TRGMUX FLEXIO Register</description> <addressOffset>0x44</addressOffset> </register>
-            <register derivedFrom="TRGMUX_DMAMUX0"> <name>TRGMUX_LPIT0</name> <description>TRGMUX LPIT0 Register</description> <addressOffset>0x48</addressOffset> </register>
-            <register derivedFrom="TRGMUX_DMAMUX0"> <name>TRGMUX_LPUART0</name> <description>TRGMUX LPUART0 Register</description> <addressOffset>0x4C</addressOffset> </register>
-            <register derivedFrom="TRGMUX_DMAMUX0"> <name>TRGMUX_LPUART1</name> <description>TRGMUX LPUART1 Register</description> <addressOffset>0x50</addressOffset> </register>
-            <register derivedFrom="TRGMUX_DMAMUX0"> <name>TRGMUX_LPI2C0</name> <description>TRGMUX LPI2C0 Register</description> <addressOffset>0x54</addressOffset> </register>
-            <register derivedFrom="TRGMUX_DMAMUX0"> <name>TRGMUX_LPSPI0</name> <description>TRGMUX LPSPI0 Register</description> <addressOffset>0x5C</addressOffset> </register>
-            <register derivedFrom="TRGMUX_DMAMUX0"> <name>TRGMUX_LPSPI1</name> <description>TRGMUX LPSPI1 Register</description> <addressOffset>0x60</addressOffset> </register>
-            <register derivedFrom="TRGMUX_DMAMUX0"> <name>TRGMUX_LPTMR0</name> <description>TRGMUX LPTMR0 Register</description> <addressOffset>0x64</addressOffset> </register>
+            <register derivedFrom="TRGMUXn%s"><dim>0</dim><dimIncrement>0</dimIncrement><dimIndex></dimIndex> <name>TRGMUX_DMAMUX0</name> <description>TRGMUX DMAMUX0 Register</description> <addressOffset>0x0</addressOffset> </register>
+            <register derivedFrom="TRGMUXn%s"><dim>0</dim><dimIncrement>0</dimIncrement><dimIndex></dimIndex> <name>TRGMUX_EXTOUT0</name> <description>TRGMUX EXTOUT0 Register</description> <addressOffset>0x4</addressOffset> </register>
+            <register derivedFrom="TRGMUXn%s"><dim>0</dim><dimIncrement>0</dimIncrement><dimIndex></dimIndex> <name>TRGMUX_EXTOUT1</name> <description>TRGMUX EXTOUT1 Register</description> <addressOffset>0x8</addressOffset> </register>
+            <register derivedFrom="TRGMUXn%s"><dim>0</dim><dimIncrement>0</dimIncrement><dimIndex></dimIndex> <name>TRGMUX_ADC0</name> <description>TRGMUX ADC0 Register</description> <addressOffset>0xC</addressOffset> </register>
+            <register derivedFrom="TRGMUXn%s"><dim>0</dim><dimIncrement>0</dimIncrement><dimIndex></dimIndex> <name>TRGMUX_ADC1</name> <description>TRGMUX ADC1 Register</description> <addressOffset>0x10</addressOffset> </register>
+            <register derivedFrom="TRGMUXn%s"><dim>0</dim><dimIncrement>0</dimIncrement><dimIndex></dimIndex> <name>TRGMUX_CMP0</name> <description>TRGMUX CMP0 Register</description> <addressOffset>0x1C</addressOffset> </register>
+            <register derivedFrom="TRGMUXn%s"><dim>0</dim><dimIncrement>0</dimIncrement><dimIndex></dimIndex> <name>TRGMUX_FTM0</name> <description>TRGMUX FTM0 Register</description> <addressOffset>0x28</addressOffset> </register>
+            <register derivedFrom="TRGMUXn%s"><dim>0</dim><dimIncrement>0</dimIncrement><dimIndex></dimIndex> <name>TRGMUX_FTM1</name> <description>TRGMUX FTM1 Register</description> <addressOffset>0x2C</addressOffset> </register>
+            <register derivedFrom="TRGMUXn%s"><dim>0</dim><dimIncrement>0</dimIncrement><dimIndex></dimIndex> <name>TRGMUX_FTM2</name> <description>TRGMUX FTM2 Register</description> <addressOffset>0x30</addressOffset> </register>
+            <register derivedFrom="TRGMUXn%s"><dim>0</dim><dimIncrement>0</dimIncrement><dimIndex></dimIndex> <name>TRGMUX_FTM3</name> <description>TRGMUX FTM3 Register</description> <addressOffset>0x34</addressOffset> </register>
+            <register derivedFrom="TRGMUXn%s"><dim>0</dim><dimIncrement>0</dimIncrement><dimIndex></dimIndex> <name>TRGMUX_PDB0</name> <description>TRGMUX PDB0 Register</description> <addressOffset>0x38</addressOffset> </register>
+            <register derivedFrom="TRGMUXn%s"><dim>0</dim><dimIncrement>0</dimIncrement><dimIndex></dimIndex> <name>TRGMUX_PDB1</name> <description>TRGMUX PDB1 Register</description> <addressOffset>0x3C</addressOffset> </register>
+            <register derivedFrom="TRGMUXn%s"><dim>0</dim><dimIncrement>0</dimIncrement><dimIndex></dimIndex> <name>TRGMUX_FLEXIO</name> <description>TRGMUX FLEXIO Register</description> <addressOffset>0x44</addressOffset> </register>
+            <register derivedFrom="TRGMUXn%s"><dim>0</dim><dimIncrement>0</dimIncrement><dimIndex></dimIndex> <name>TRGMUX_LPIT0</name> <description>TRGMUX LPIT0 Register</description> <addressOffset>0x48</addressOffset> </register>
+            <register derivedFrom="TRGMUXn%s"><dim>0</dim><dimIncrement>0</dimIncrement><dimIndex></dimIndex> <name>TRGMUX_LPUART0</name> <description>TRGMUX LPUART0 Register</description> <addressOffset>0x4C</addressOffset> </register>
+            <register derivedFrom="TRGMUXn%s"><dim>0</dim><dimIncrement>0</dimIncrement><dimIndex></dimIndex> <name>TRGMUX_LPUART1</name> <description>TRGMUX LPUART1 Register</description> <addressOffset>0x50</addressOffset> </register>
+            <register derivedFrom="TRGMUXn%s"><dim>0</dim><dimIncrement>0</dimIncrement><dimIndex></dimIndex> <name>TRGMUX_LPI2C0</name> <description>TRGMUX LPI2C0 Register</description> <addressOffset>0x54</addressOffset> </register>
+            <register derivedFrom="TRGMUXn%s"><dim>0</dim><dimIncrement>0</dimIncrement><dimIndex></dimIndex> <name>TRGMUX_LPSPI0</name> <description>TRGMUX LPSPI0 Register</description> <addressOffset>0x5C</addressOffset> </register>
+            <register derivedFrom="TRGMUXn%s"><dim>0</dim><dimIncrement>0</dimIncrement><dimIndex></dimIndex> <name>TRGMUX_LPSPI1</name> <description>TRGMUX LPSPI1 Register</description> <addressOffset>0x60</addressOffset> </register>
+            <register derivedFrom="TRGMUXn%s"><dim>0</dim><dimIncrement>0</dimIncrement><dimIndex></dimIndex> <name>TRGMUX_LPTMR0</name> <description>TRGMUX LPTMR0 Register</description> <addressOffset>0x64</addressOffset> </register>
          </registers>
       </peripheral>

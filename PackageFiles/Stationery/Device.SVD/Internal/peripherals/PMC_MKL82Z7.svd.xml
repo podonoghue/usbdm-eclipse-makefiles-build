@@ -28,7 +28,7 @@ Devices using this peripheral:
          <registers>
             <register>
                <name>LVDSC1</name>
-               <description>Low Voltage Status and Control 1</description>
+               <description>Low Voltage Detect Status and Control 1 Register</description>
                <addressOffset>0x0</addressOffset>
                <size>8</size>
                <resetValue>0x10</resetValue>
@@ -296,18 +296,19 @@ Writing one to this bit when it is set releases the I/O pads and peripherals to 
                   </field>
                   <field>
                      <name>BGEN</name>
-                     <description>Bandgap Enable In VLPx Operation</description>
+                     <description>Bandgap Enable In VLPx Operation\n
+Allows the bandgap to be enabled in lower power modes of operation</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Bandgap voltage reference is disabled in VLPx , LLS , and VLLSx modes</description>
+                           <name>0b0</name>
+                           <description>Bandgap disabled in LP</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Bandgap voltage reference is enabled in VLPx , LLS , and VLLSx modes</description>
+                           <name>0b1</name>
+                           <description>Bandgap enabled in LP</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

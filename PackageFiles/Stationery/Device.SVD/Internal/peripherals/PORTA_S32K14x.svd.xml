@@ -404,38 +404,7 @@ Each bit controls if the corresponding PCR register is updated (PCR[31..16])</de
                   </field>
                </fields>
             </register>
-            <register>
-               <name>GICHR</name>
-               <description>Global Interrupt Control High Register</description>
-               <addressOffset>0x8C</addressOffset>
-               <access>write-only</access>
-               <fields>
-                  <field>
-                     <name>GIWE</name>
-                     <description>Global Interrupt Write Enable</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>16</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Corresponding Pin Control Register is not updated with the value in GPWD</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Corresponding Pin Control Register is updated with the value in GPWD</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>GIWD</name>
-                     <description>Global Interrupt Write Data</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>16</bitWidth>
-                  </field>
-               </fields>
-            </register>
+            <register derivedFrom="GICLR"> <name>GICHR</name> <description>Global Interrupt Control High Register</description> <addressOffset>0x8C</addressOffset> </register>
             <register>
                <name>ISFR</name>
                <description>Interrupt Status Flag Register\n
