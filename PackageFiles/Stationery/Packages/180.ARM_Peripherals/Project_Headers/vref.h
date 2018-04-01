@@ -66,7 +66,7 @@ public:
     * Basic enable of VREF\n
     * Includes configuring all pins
     */
-   void enable() {
+   static void enable() {
       configureAllPins();
 
       // Enable clock to VREF interface
@@ -76,7 +76,7 @@ public:
    /**
     * Enable the voltage reference with default settings
     */
-   static void configure() {
+   static void defaultConfigure() {
       enable();
 
       // Initialise hardware
@@ -86,6 +86,13 @@ public:
       while ((vref->SC & VREF_SC_VREFST_MASK) == 0) {
          // Wait until stable
       }
+   }
+
+   /**
+    * Configures the voltage reference
+    */
+   static void configure() {
+      defaultConfigure();
    }
 
    /**

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- MK22F12.usbdmProject -->
+<!-- 
+   Settings
+-->
+
+<section name="USBDM">
+   <item key="$$DeviceInfo_Device_Variant"                 value="MK22F12" />
+   <item key="$$DeviceInfo_SubFamily"                      value="MK22F12" />
+   <item key="$$Hardware_Source_Filename"                  value="MK22F12.usbdmHardware" />
+   <item key="/FTFE/peripheral_file"                       value="ftfe_128k_flexrom" />
+   <item key="/LLWU/llwu_rst_llrste"                       value="false" />
+   <item key="/LPTMR0/lptmr_cmr"                           value="0" />
+   <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_PEE_120MHz" />
+   <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_BLPE_4MHz" />
+   <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_FEE_80MHz" />
+   <item key="/MCG/clock_mode[0]"                          value="ClockMode_PEE" />
+   <item key="/MCG/clock_mode[1]"                          value="ClockMode_BLPE" />
+   <item key="/MCG/clock_mode[2]"                          value="ClockMode_FEE" />
+   <item key="/MCG/system_mcgfllclk_clock[2]"              value="80000000" />
+   <item key="/SIM/sim_clkdiv2_usb"                        value="9" />
+   <item key="/SIM/sim_sopt2_clkoutsel"                    value="0" />
+   <item key="/SIM/sim_sopt2_pllfllsel[0]"                 value="1" />
+   <item key="/SIM/system_bus_clock[1]"                    value="4000000" />
+   <item key="/SIM/system_bus_clock[2]"                    value="40000000" />
+   <item key="/SIM/system_core_clock[1]"                   value="4000000" />
+   <item key="/SIM/system_core_clock[2]"                   value="80000000" />
+   <item key="/SIM/system_flash_clock[1]"                  value="4000000" />
+   <item key="/SIM/system_flash_clock[2]"                  value="20000000" />
+   <item key="/SIM/system_flexbus_clock[0]"                value="40000000" />
+   <item key="/SIM/system_flexbus_clock[1]"                value="4000000" />
+   <item key="/SIM/system_flexbus_clock[2]"                value="40000000" />
+   <item key="/SIM/system_usbfs_clock"                     value="48000000" />
+   <item key="/SPI0/speed"                                 value="100000" />
+   <item key="/SPI0/spi_mode"                              value="1" />
+</section>

@@ -226,7 +226,7 @@ public:
     * Includes enabling clock and any pins used.\n
     * Sets PDB to default configuration.
     */
-   static void configure() {
+   static void defaultConfigure() {
       enable();
 
       pdb->MOD  = Info::pdb_mod;
@@ -239,7 +239,7 @@ public:
          pdb->CH[1].DLY[0] = Info::pdb_ch[1].dly0;
          pdb->CH[1].DLY[1] = Info::pdb_ch[1].dly1;
       }
-#ifdef PDB_INT_INT
+#if PDB_DAC_COUNT>0
       if (Info::numDacs>0) {
          pdb->DAC[0].INTC = Info::pdb_dac[0].dacintc;
          pdb->DAC[0].INT  = Info::pdb_dac[0].dacint;
@@ -252,21 +252,31 @@ public:
 #ifdef PDB_POEN_POEN
       pdb->POEN = Info::pdb_poen;
       if (Info::numPulseOutputs>0) {
-         pdb->PODLY[0]     = Info::pdb_podly[0];
+         pdb->POnDLY[0].PODLY     = Info::pdb_podly[0];
       }
       if (Info::numPulseOutputs>1) {
-         pdb->PODLY[1]     = Info::pdb_podly[1];
+         pdb->POnDLY[1].PODLY     = Info::pdb_podly[1];
       }
       if (Info::numPulseOutputs>2) {
-         pdb->PODLY[2]     = Info::pdb_podly[2];
+         pdb->POnDLY[2].PODLY     = Info::pdb_podly[2];
       }
       if (Info::numPulseOutputs>3) {
-         pdb->PODLY[3]     = Info::pdb_podly[3];
+         pdb->POnDLY[3].PODLY     = Info::pdb_podly[3];
       }
 #endif
       // Configure and trigger register load
       pdb->SC = Info::pdb_sc|PDB_SC_PDBEN_MASK|PDB_SC_LDOK_MASK;
       enableNvicInterrupts();
+   }
+
+   /**
+    * Configures the PDB
+    *
+    * Includes enabling clock and any pins used.\n
+    * Sets PDB to default configuration.
+    */
+   static void configure() {
+      defaultConfigure();
    }
 
    /**

@@ -84,12 +84,12 @@ enum AdcResolution {
  * ADC Averaging
  */
 enum AdcAveraging {
-   AdcAveraging_off = ADC_SC3_AVGE(0),                                //!< No averaging - single conversion
-   AdcAveraging_4   = ADC_SC3_AVGE(1)|ADC_SC3_AVGS(0),                //!< Average across 4 conversions
-   AdcAveraging_8   = ADC_SC3_AVGE(1)|ADC_SC3_AVGS(1),                //!< Average across 8 conversions
-   AdcAveraging_16  = ADC_SC3_AVGE(1)|ADC_SC3_AVGS(2),                //!< Average across 16 conversions
-   AdcAveraging_32  = ADC_SC3_AVGE(1)|ADC_SC3_AVGS(3),                //!< Average across 32 conversions
-   AdcAveraging_Cal = ADC_SC3_AVGE(1)|ADC_SC3_AVGS(3)|ADC_SC3_CAL(1), //!< Average across 32 conversions + start calibration
+   AdcAveraging_off = ADC_SC3_AVGE(0),                  //!< No averaging - single conversion
+   AdcAveraging_4   = ADC_SC3_AVGE(1)|ADC_SC3_AVGS(0),  //!< Average across 4 conversions
+   AdcAveraging_8   = ADC_SC3_AVGE(1)|ADC_SC3_AVGS(1),  //!< Average across 8 conversions
+   AdcAveraging_16  = ADC_SC3_AVGE(1)|ADC_SC3_AVGS(2),  //!< Average across 16 conversions
+   AdcAveraging_32  = ADC_SC3_AVGE(1)|ADC_SC3_AVGS(3),  //!< Average across 32 conversions
+   AdcAveraging_Cal = AdcAveraging_32|ADC_SC3_CAL(1),   //!< Average across 32 conversions + start calibration
 };
 
 /**
