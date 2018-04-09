@@ -1037,12 +1037,17 @@ ResetMethodsConstPtr  DeviceData::getResetMethods() const {
 
 void DeviceData::addMemoryRegion(MemoryRegionPtr pMemoryRegion) {
    memoryRegions.push_back(pMemoryRegion);
+
    if (((pMemoryRegion->getMemoryType() == MemRAM)||
-        (pMemoryRegion->getMemoryType() == MemXRAM)) && (ramStart == 0)) {
-      // Set default RAM range to first added RAM memory region
+        (pMemoryRegion->getMemoryType() == MemXRAM))) {
       const MemoryRegion::MemoryRange *mr = pMemoryRegion->getMemoryRange(0);
-      ramStart = mr->start;
-      ramEnd   = mr->end;
+      if ((ramStart == 0) || ((mr->end-mr->start)>(ramEnd-ramStart))) {
+         // Set default RAM range to largest added RAM memory region
+         if ((mr->end-mr->start)>(ramEnd-ramStart)) {
+            ramStart = mr->start;
+            ramEnd   = mr->end;
+         }
+      }
    }
    if (pMemoryRegion->getMemoryType() == MemFlexNVM) {
       // Copy FlexInfo from memory region to device - Only one FlexNVM in device allowed
