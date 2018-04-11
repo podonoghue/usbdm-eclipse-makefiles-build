@@ -306,7 +306,10 @@ public:
       // Add leading padding
       switch (padding) {
          case Padding_None:
-            break;
+            if (isNegative) {
+                *ptr++ = '-';
+             }
+             break;
          case Padding_LeadingSpaces:
             if (isNegative) {
                *ptr++ = '-';
