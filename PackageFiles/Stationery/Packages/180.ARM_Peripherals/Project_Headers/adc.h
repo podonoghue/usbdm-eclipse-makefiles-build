@@ -485,6 +485,7 @@ public:
 
       // Start calibration
       setAveraging(AdcAveraging_Cal);
+      (void)adc->SC3;
 
       // Wait for calibration to complete
       while (adc->SC3 & ADC_SC3_CAL_MASK) {
@@ -623,6 +624,7 @@ protected:
 
       // Trigger conversion
       adc->SC1[0] = sc1Value;
+      (void)adc->SC1[0];
 
       while ((adc->SC1[0]&ADC_SC1_COCO_MASK) == 0) {
          __asm__("nop");
