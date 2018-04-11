@@ -167,7 +167,7 @@ protected:
     *
     * @param mask Mask identifying channel
     */
-   static void unhandledCallback(uint8_t) {
+   static void unhandledChannelCallback(uint8_t) {
       setAndCheckErrorCode(E_NO_HANDLER);
    }
    /**
@@ -1471,15 +1471,17 @@ public:
    /**
     * Enable with default settings\n
     * Includes configuring all pins
+    *
+    * @param prescaler Prescale value applied to the output of the quadrature decode before the counter.
     */
-   static void configure() {
+   static void configure(TpmPrescale prescaler = TpmPrescale_1) {
       Info::InfoQUAD::initPCRs();
 
       // Enable clock to timer
       *clockReg |= Info::clockMask;
       __DMB();
 
-      TpmBase_T<Info>::configure(TpmMode_Quadrature);
+      TpmBase_T<Info>::configure(TpmMode_Quadrature, TpmClockSource_Disabled, prescaler);
 
       tpm->QDCTRL =
             TPM_QDCTRL_QUADEN_MASK|      // Enable Quadrature encoder

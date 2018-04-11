@@ -101,7 +101,7 @@ enum FtmChMode {
  * Control alignment of PWM function
  */
 enum FtmClockSource {
-   FtmClockSource_None        = FTM_SC_CLKS(0),  //!< Timer is disabled
+   FtmClockSource_Disabled    = FTM_SC_CLKS(0),  //!< Timer is disabled
    FtmClockSource_System      = FTM_SC_CLKS(1),  //!< System clock (usually the bus clock)
    FtmClockSource_FixedFreq   = FTM_SC_CLKS(2),  //!< Fixed frequency clock (various sources such as FLL,PLL)
    FtmClockSource_External    = FTM_SC_CLKS(3),  //!< External clock provided to FTM_CLKINx pin
@@ -1233,7 +1233,7 @@ public:
          switch (ftmChMode) {
             case FtmChMode_Disabled :
             case FtmChMode_OutputCompare :
-               // Don't change pin setting
+               // Pin not used - don't map/change pin settings
                break;
             default:
                // Map pin to FTM
@@ -1333,7 +1333,7 @@ public:
 
    /**
     * Set Pin Control Register Value. \n
-    * Pin multiplexor value = FTM selection value. \n
+    * Pin multiplexor value is forced to FTM channel function. \n
     * The clock to the port will be enabled before changing the PCR
     *
     * @param[in] pcrValue PCR value to set
@@ -1647,15 +1647,25 @@ using Ftm3 = FtmBase_T<Ftm3Info>;
  * @tparam info      Information class for FTM
  *
  * @code
- *  QuadEncoder_T<Ftm0Info> encoder0;
+ *  using QuadEncoder = QuadEncoder_T<Ftm0Info>;
+ *
+ *  // Enable encoder
+ *  QuadEncoder::configure();
+ *
+ *  // Set pin filters
+ *  QuadEncoder::enableFilter(15);
+ *
+ *  // Reset position to zero
+ *  // Movement will be +/- relative to this initial position
+ *  QuadEncoder::resetPosition();
  *
  *  for(;;) {
- *     console.write("Position =").writeln(encoder.getPosition());
+ *     console.write("Position =").writeln(QuadEncoder.getPosition());
  *  }
  * @endcode
  */
 template <class Info>
-class QuadEncoder_T : public FtmBase_T<Info> {
+class QuadEncoder_T : private FtmBase_T<Info> {
 
 #ifdef DEBUG_BUILD
    static_assert(Info::InfoQUAD::info[0].gpioBit != UNMAPPED_PCR, "QuadEncoder_T: FTM PHA is not mapped to a pin - Modify Configure.usbdm");
@@ -1663,21 +1673,29 @@ class QuadEncoder_T : public FtmBase_T<Info> {
 #endif
 
 public:
+
+   using FtmBase_T<Info>::setTimerOverflowCallback;
+   using FtmBase_T<Info>::enableTimerOverflowInterrupts;
+   using FtmBase_T<Info>::enableNvicInterrupts;
+
    static constexpr volatile FTM_Type *ftm      = Info::ftm;
+
    static constexpr volatile uint32_t *clockReg = Info::clockReg;
 
    /**
     * Enable with default settings\n
     * Includes configuring all pins
+    *
+    * @param prescaler Prescale value applied to the output of the quadrature decode before the counter.
     */
-   static void configure() {
+   static void configure(FtmPrescale prescaler = FtmPrescale_1) {
       Info::InfoQUAD::initPCRs();
 
       // Enable clock to timer
       *clockReg |= Info::clockMask;
       __DMB();
 
-      FtmBase_T<Info>::configure(FtmMode_Quadrature);
+      FtmBase_T<Info>::configure(FtmMode_Quadrature, FtmClockSource_Disabled, prescaler);
 
       ftm->QDCTRL =
             FTM_QDCTRL_QUADEN_MASK|      // Enable Quadrature encoder
