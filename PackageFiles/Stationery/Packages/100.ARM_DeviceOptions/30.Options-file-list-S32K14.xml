@@ -2,19 +2,19 @@
 <!DOCTYPE root SYSTEM "../package.dtd">
 
 <root version="1.0">
-   <!-- Extra Optional files for MKE1xZ -->
-   <projectActionList id="Options-file-list-MKE1xZ">
+   <!-- Extra Optional files for S32K14 -->
+   <projectActionList id="Options-file-list-S32K14">
       <applyWhen>
          <and>
-            <deviceSubfamilyIs>MKE1xZ7</deviceSubfamilyIs>
+            <deviceSubfamilyIs>S32K14</deviceSubfamilyIs>
             <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
          </and>
       </applyWhen>
       <!-- Clock -->
-      <copy source="Startup_Code/clock-SCG_MKE1xZ7.c"              target="Startup_Code/clock.c"              overwrite="true" />
-      <copy source="Project_Headers/clock_configure-SCG-MKE1xZ7.h" target="Project_Headers/clock_configure.h" overwrite="true" />
+      <copy source="Startup_Code/clock-SCG_S32K14.c"              target="Startup_Code/clock.c"              overwrite="true" />
+      <copy source="Project_Headers/clock_configure-SCG-S32K14.h" target="Project_Headers/clock_configure.h" overwrite="true" />
       <!-- Security with boot -->
-      <copy source="Startup_Code/security-mke-boot.c"   target="Startup_Code/security.c" overwrite="true" />
+      <copy source="Startup_Code/security-s32K14.c"   target="Startup_Code/security.c" overwrite="true" />
       <!-- Console -->
       <copy source="Startup_Code/console-mke-lp.c" target="Startup_Code/console.c"    overwrite="true" />
       <copy source="Project_Headers/console.h"     target="Project_Headers/console.h" overwrite="true" />

@@ -1,11 +1,11 @@
 /*
  *  @file security.c
- *  Derived from security-mkl-boot.c
+ *  Derived from  security-mke-boot.c
  *
  *  Security and NV options for flash with boot options
- *  Reference KL03P24M48SF0RM
+ *  Reference KE1xFP100M168SF0RM, KE1xZP100M72SF0RM
  *  Created on: 20/5/2017
- *  Devices: KL03,KL17,KL27,KL33,KL43
+ *  Devices: KE1xZ, KE1xF
  */
 #include <stdint.h>
 #include <string.h>
@@ -19,8 +19,8 @@ typedef struct {
     uint32_t fprot;
     uint8_t  fsec;
     uint8_t  fopt;
-    uint8_t  reserved1;
-    uint8_t  reserved2;
+    uint8_t  feprot;
+    uint8_t  fdprot;
 } SecurityInfo;
 
 //-------- <<< Use Configuration Wizard in Context Menu >>> -----------------
@@ -70,6 +70,38 @@ typedef struct {
    </h>
 */
 #define FPROT_VALUE 0xFFFFFFFF
+/*
+   <h> EEPROM Region Protect
+      <i> Each bit protects a 1/8 region of the EEPROM memory.
+      <i> (FlexNVM devices only)
+      <info>NV_FEPROT
+      <q.0>   FEPROT.0	<0=>protected  <1=>unprotected   <info> lowest 1/8 block
+      <q.1>   FEPROT.1  <0=>protected  <1=>unprotected
+      <q.2>   FEPROT.2  <0=>protected  <1=>unprotected
+      <q.3>   FEPROT.3  <0=>protected  <1=>unprotected
+      <q.4>   FEPROT.4  <0=>protected  <1=>unprotected
+      <q.5>   FEPROT.5  <0=>protected  <1=>unprotected
+      <q.6>   FEPROT.6  <0=>protected  <1=>unprotected
+      <q.7>   FEPROT.7	<0=>protected  <1=>unprotected   <info> highest 1/8 block
+   </h>
+*/
+#define FEPROT_VALUE 0xFF
+/*
+   <h> Data Flash Region Protect
+      <i> Each bit protects a 1/8 region of the flash memory.
+      <i> (Device with Data flash only)
+      <info>NV_FDPROT
+      <q.0>   FDPROT.0	<0=>protected  <1=>unprotected   <info> lowest 1/8 block
+      <q.1>   FDPROT.1  <0=>protected  <1=>unprotected
+      <q.2>   FDPROT.2  <0=>protected  <1=>unprotected
+      <q.3>   FDPROT.3  <0=>protected  <1=>unprotected
+      <q.4>   FDPROT.4  <0=>protected  <1=>unprotected
+      <q.5>   FDPROT.5  <0=>protected  <1=>unprotected
+      <q.6>   FDPROT.6  <0=>protected  <1=>unprotected
+      <q.7>   FDPROT.7	<0=>protected  <1=>unprotected   <info> highest 1/8 block
+   </h>
+*/
+#define FDPROT_VALUE 0xFF
 
 /*
 <h> Flash security value
@@ -110,66 +142,32 @@ typedef struct {
 Control extended Boot features on these devices
 <h> Flash boot options
    <info>NV_FOPT
-   <e0> Boot ROM Options
-      <i> Only available on devices with internal ROM
-      <0=> Options Disabled
-      <1=> Options Enabled
-   <o1> Boot Source Selection
-      <i> These bits select the boot sources
-      <info>BOOTSRC_SEL
-      <0=> 0: Boot from Flash
-      <64=> 1: Reserved
-      <128=> 2: Boot from ROM
-      <192=> 3: Boot from ROM
-   <q2.1> External pin selects boot options
-      <i> Note: RESET pin must be enabled if BOOTCFG0 is used.
-	  <info>[1] BOOTPIN_OPT
-      <0=> Boot from ROM if BOOTCFG0 (NMI pin) asserted.
-      <1=> Boot source controlled by BOOTSRC_SEL
-   </e>
-
-   <q2.5> Fast initialisation control
-      <i> Selects initialization speed on POR, VLLSx, and system reset.
-	  <info>[5] FAST_INIT
-      <0=> Slow - Slower initialization and reduced average current.
-      <1=> Fast - Faster initialization and higher average current.
-   <q2.3> RESET pin control
+   <q0.3> RESET pin control
       <i> Enables or disables the RESET pin dedicated operation
 	  <info>[3] RESET_PIN_CFG
       <0=> Disabled (available as port pin)
       <1=> Enabled (PUP, open-drain, filtered)
-   <q2.2> NMI pin control
+   <q0.2> NMI pin control
       <i> Enables or disables the NMI function
       <info>[2] NMI_DIS
       <0=> NMI interrupts are always blocked.
       <1=> NMI interrupts default to enabled
-   <o3> Low power boot control
-      <i> Controls the reset value of Core and system clock divider (OUTDIV1) and
-	  <i> execution mode out of reset either RUN or VLPR (SMC_PMCTRL.RUNM).
+   <q0.0> Low power boot control
+      <i> Controls the reset value of clock divider of IRC48M to feed the core clock.
       <i> Larger divide value selections produce lower average power consumption
       <i> during POR and reset sequencing and after reset exit.
       <i> The recovery times are also extended.
-      <info>[4,0]LPBOOT
-      <0=> OUTDIV1 = /8, RUNM = VLPR
-      <1=> OUTDIV1 = /4, RUNM = VLPR
-      <16=> OUTDIV1 = /2, RUNM = RUN
-      <17=> OUTDIV1 = /1, RUNM = RUN
+      <info>[0] LPBOOT
+      <0=> Low-power boot: Core and system clock divider (DIVCORE) is 0x1 (divide by 2).
+      <1=> Normal boot: Core and system clock divider (DIVCORE) is 0x0 (divide by 1).
 </h>
  */
-#define BOOT_ENABLE    (1)      // e0
-#define FOPT_BOOTSRC   (0x0)    // o1
-#define FOPT_MISC      (0x2E)   // q2
-#define FOPT_LPBOOT    (0x11)   // o3
-#define FOPT_RESERVED  (0x00)   // Bits not controlled by above
-#define FOPT_BOOT_OFF  (0xC2)   // Value to use when (BOOT_ENABLE=0)
+#define FOPT_MISC      (0xD)    // q0
+#define FOPT_RESERVED  (0xF2)   // Bits not controlled by above
 
-#if defined(NV_FOPT_BOOTSRC_SEL) && BOOT_ENABLE
-#define FOPT_VALUE (FOPT_RESERVED|FOPT_BOOTSRC|FOPT_MISC|FOPT_LPBOOT)
-#else
-#define FOPT_VALUE (FOPT_RESERVED|FOPT_BOOT_OFF|FOPT_MISC|FOPT_LPBOOT)
-#endif
+#define FOPT_VALUE (FOPT_RESERVED|FOPT_MISC)
 
-/*  
+/*
   <h> Backdoor Comparison Key
   <i> The Verify Backdoor Access Key command releases security if user-supplied keys
   <i> matches the Backdoor Comparison Key bytes
@@ -192,8 +190,8 @@ const SecurityInfo securityInfo = {
     /* fprot    */ FPROT_VALUE,
     /* fsec     */ FSEC_VALUE,
     /* fopt     */ FOPT_VALUE,
-    /* -        */ 0xFF,
-    /* -        */ 0xFF,
+    /* feprot   */ FEPROT_VALUE,
+    /* fdprot   */ FDPROT_VALUE,
 };
 
 #if defined(NV_FOPT_BOOTPIN_OPT_MASK)

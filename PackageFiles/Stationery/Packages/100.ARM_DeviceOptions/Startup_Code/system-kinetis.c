@@ -90,6 +90,10 @@ void SystemInitLowLevel(void) {
    WDOG->CNT    = WDOG_UPDATE_KEY; // Write the unlock word
    WDOG->TOVAL  = -1;              // Setting time-out value
    WDOG->CS     =
+#ifdef WDOG_CS_CMD32EN
+         WDOG_CS_CMD32EN(1) |    // Enable 32 bit writes
+#endif
+         WDOG_CS_EN(0) |         // Disable watch-dog
          WDOG_CS_CLK(1) |        // Setting 1-kHz clock source
          WDOG_CS_UPDATE(1);      // Allow future update
 #endif
