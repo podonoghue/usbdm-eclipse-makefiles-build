@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE section>
-<!-- KL25Z_symbols.xml -->
+<!-- FRDM_KL25Z.xml -->
 
 <section name="DeviceSettings" >
    <!-- Definitions used by example programs -->
