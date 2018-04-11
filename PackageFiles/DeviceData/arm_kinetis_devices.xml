@@ -358,6 +358,9 @@ Test Devices:
       <memory id="kinetis4K_FlexRam" type="flexRAM">
          <memoryRange start="0x14000000" size="4K" name="flexRAM" />
       </memory>
+      <memory id="kinetis256b_csePRAM" type="ram">
+         <memoryRange start="0x14001000" size="128" name="csePRAM" />
+      </memory>
 
       <!-- 
             RAM Memory
@@ -976,6 +979,7 @@ Test Devices:
          <memory type="ram">
             <memoryRange start="0x1FFFC000" end="0x20002FFF" name="ram" />
          </memory>
+         <memoryRef ref="kinetis256b_csePRAM" />
          <memoryRef ref="kinetis4K_FlexRam" />
          <memoryRef ref="FTFE_PFlash0_SEC_256K_2KS" /> <!-- Non-interleaved 256K => 2K sector -->
          <memoryRef ref="FTFC_DFlash0_64K_2KS" />      <!-- Non-interleaved 64K => 2K sector -->
@@ -991,6 +995,7 @@ Test Devices:
          <memory type="ram">
             <memoryRange start="0x1FFF8000" end="0x20006FFF" name="ram" />
          </memory>
+         <memoryRef ref="kinetis256b_csePRAM" />
          <memoryRef ref="kinetis4K_FlexRam" />
          <memoryRef ref="FTFE_PFlash0_SEC_512K_4KS" /> <!-- Interleaved 2x256K => 4K sector -->
          <memoryRef ref="FTFC_DFlash0_64K_2KS" />      <!-- Non-interleaved 64K => 2K sector -->
@@ -1006,6 +1011,7 @@ Test Devices:
          <memory type="ram">
             <memoryRange start="0x1FFF0000" end="0x2000EFFF" name="ram" />
          </memory>
+         <memoryRef ref="kinetis256b_csePRAM" />
          <memoryRef ref="kinetis4K_FlexRam" />
          <memoryRef ref="FTFE_PFlash0_SEC_512K_4KS" /> <!-- Interleaved 2x256K => 4K sector -->
          <memoryRef ref="FTFE_PFlash1_512K_4KS" />     <!-- Interleaved 2x256K => 4K sector -->
@@ -1022,6 +1028,7 @@ Test Devices:
          <memory type="ram">
             <memoryRange start="0x1FFE0000" end="0x2001EFFF" name="ram" />
          </memory>
+         <memoryRef ref="kinetis256b_csePRAM" />
          <memoryRef ref="kinetis4K_FlexRam" />
          <memoryRef ref="FTFE_PFlash0_SEC_512K_4KS" /> <!-- Interleaved 2x256K => 4K sector -->
          <memoryRef ref="FTFE_PFlash1_512K_4KS" />     <!-- Interleaved 2x256K => 4K sector -->
