@@ -17,7 +17,7 @@ using namespace USBDM;
  */
 
 // LED connection - change as required
-using Led   = $(demo.cpp.led:GpioB<3>);
+using Led   = $(demo.cpp.led:GpioB<3,ActiveLow>);
 
 int main() {
    console.writeln("Starting\n");
