@@ -18,6 +18,7 @@
          <value>&quot;${ProjDirPath}/Project_Settings/Linker_Files&quot;</value>
       </projectOption>
       
+      <!-- Predefined symbols for debug build -->
       <projectOption id="net.sourceforge.usbdm.cdt.toolchain.cppAssembler.preprocess.definedSymbols" config="debug">
          <value>DEBUG_BUILD</value>
       </projectOption>
@@ -27,6 +28,8 @@
       <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols" config="debug">
          <value>DEBUG_BUILD</value>
       </projectOption>
+      
+      <!-- Predefined symbols for release build -->
       <projectOption id="net.sourceforge.usbdm.cdt.toolchain.cppAssembler.preprocess.definedSymbols" config="release">
          <value>RELEASE_BUILD</value>
       </projectOption>
@@ -35,6 +38,15 @@
       </projectOption>
       <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols" config="release">
          <value>RELEASE_BUILD</value>
+      </projectOption>
+      <projectOption id="net.sourceforge.usbdm.cdt.toolchain.cppAssembler.preprocess.definedSymbols" config="release">
+         <value>NDEBUG</value>
+      </projectOption>
+      <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols" config="release">
+         <value>NDEBUG</value>
+      </projectOption>
+      <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols" config="release">
+         <value>NDEBUG</value>
       </projectOption>
 
       <!-- C Include paths -->
